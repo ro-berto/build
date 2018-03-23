@@ -528,9 +528,11 @@ class V8SwarmingTest(V8Test):
         self._v8_collect_step(task, coverage_context, **kw))
 
     # Add custom dimensions.
-    if self.api.v8.bot_config.get('swarming_dimensions'):
-      self.task.dimensions.update(
-          self.api.v8.bot_config['swarming_dimensions'])
+    self.task.dimensions.update(
+        self.api.v8.bot_config.get('swarming_dimensions', {}))
+
+    # Override with per-test dimensions.
+    self.task.dimensions.update(self.test_step_config.dimensions or {})
 
     self.api.swarming.trigger_task(self.task)
 

@@ -12,13 +12,14 @@ from testing import V8NoExhaustiveVariants, V8Variant
 class TestStepConfig(object):
   """Per-step test configuration."""
   def __init__(self, name, shards=1, swarming=True, suffix='', test_args=None,
-               variants=None):
+               variants=None, dimensions=None):
     self.name = name
     self.shards = shards
     self.swarming = swarming
     self.suffix = ' - ' + suffix if suffix else ''
     self.test_args = test_args or []
     self.variants = variants
+    self.dimensions = dimensions
     if not suffix and variants:
       # Disambiguate step names if a particular variant is specified and no
       # default suffix is provided.
@@ -82,10 +83,11 @@ V8Testing = TestStepConfig('v8testing')
 Webkit = TestStepConfig('webkit')
 
 
-def with_test_args(suffix, test_args, tests, variants=None):
+def with_test_args(suffix, test_args, tests, variants=None, dimensions=None):
   """Wrapper that runs a list of tests with additional arguments."""
   return [
-    TestStepConfig(t.name, t.shards, t.swarming, suffix, test_args, variants)
+    TestStepConfig(t.name, t.shards, t.swarming, suffix, test_args, variants,
+                   dimensions)
     for t in tests
   ]
 
@@ -98,6 +100,10 @@ def with_extra_variants(tests):
   set.
   """
   return with_variant(tests, 'extra')
+
+def with_dimensions(suffix, tests, dimensions):
+  """Convenience wrapper. As above, but overriding swarming dimensions."""
+  return with_test_args(suffix, None, tests, dimensions=dimensions)
 
 
 SWARMING_FYI_PROPS = {
@@ -1665,7 +1671,15 @@ BUILDERS = {
           V8Testing(2),
           Benchmarks,
           OptimizeForSize,
-        ],
+        ] + with_dimensions(
+            'ODROID',
+            [V8Testing],
+            {
+              'cpu': 'armv7l-32-ODROID-XU3',
+              'cores': '8',
+              'os': 'Ubuntu-16.04',
+            },
+        ),
         'enable_swarming': True,
         'swarming_properties': {
           'default_hard_timeout': 90 * 60,
