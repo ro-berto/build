@@ -345,8 +345,8 @@ class BaremetalTest(Test):
 
     api.m.chromium.runtest(
         test=test, args=args, name=self._name, annotate=None, xvfb=True,
-        flakiness_dash=False, python_mode=True, revision=self._revision,
-        test_type=test_type, **self._runtest_kwargs)
+        python_mode=True, revision=self._revision, test_type=test_type,
+        **self._runtest_kwargs)
 
 
 class PythonTest(Test):

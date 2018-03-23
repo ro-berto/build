@@ -646,7 +646,6 @@ class FactoryCommands(object):
     test_tool_arg_list.append('--annotate=gtest')
 
     factory_properties = factory_properties or {}
-    generate_json = factory_properties.get('generate_gtest_json')
 
     if not arg_list:
       arg_list = []
@@ -670,15 +669,6 @@ class FactoryCommands(object):
       cmd.extend(test_tool_arg_list)
 
     cmd.extend(['--test-type', test_name])
-
-    if generate_json:
-      # test_result_dir (-o) specifies where we put the JSON output locally
-      # on slaves.
-      test_result_dir = 'gtest-results/%s' % test_name
-      cmd.extend(['--generate-json-file',
-                  '-o', test_result_dir,
-                  '--build-number', WithProperties('%(buildnumber)s'),
-                  '--builder-name', WithProperties('%(buildername)s')])
 
     if total_shards and shard_index:
       cmd.extend(['--total-shards', str(total_shards),

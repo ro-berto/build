@@ -27,7 +27,6 @@ def RunSteps(api):
         'annotate': api.properties.get(
             'annotate',
             api.chromium.get_annotate_by_test_name('base_unittests')),
-        'flakiness_dash': True,
         'args': [api.chromium.test_launcher_filter('AtExit*')],
         'test_launcher_summary_output': api.json.output(),
     })

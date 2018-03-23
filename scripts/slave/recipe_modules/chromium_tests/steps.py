@@ -931,8 +931,6 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
 
   def gtest_local_delegate(spec, **kwargs):
     kwargs.update(gtest_delegate_common(spec, **kwargs))
-    # TODO(jbudorick): Stop passing flakiness_dash.
-    kwargs['flakiness_dash'] = True
     kwargs['use_xvfb'] = spec.get('use_xvfb', True)
     return LocalGTestTest(**kwargs)
 

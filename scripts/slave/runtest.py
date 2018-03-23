@@ -44,9 +44,6 @@ sys.path.insert(0, os.path.abspath('src/tools/python'))
 from common import chromium_utils
 from common import gtest_utils
 
-# TODO(crbug.com/403564). We almost certainly shouldn't be importing this.
-import config
-
 from slave import annotation_utils
 from slave import build_directory
 from slave import crash_utils
@@ -206,95 +203,6 @@ def _GetMasterString(master):
   return '[Running for master: "%s"]' % master
 
 
-def _GenerateJSONForTestResults(options, log_processor):
-  """Generates or updates a JSON file from the gtest results XML and upload the
-  file to the archive server.
-
-  The archived JSON file will be placed at:
-    www-dir/DEST_DIR/buildname/testname/results.json
-  on the archive server. NOTE: This will be deprecated.
-
-  Args:
-    options: command-line options that are supposed to have build_dir,
-        results_directory, builder_name, build_name and test_output_xml values.
-    log_processor: An instance of PerformanceLogProcessor or similar class.
-
-  Returns:
-    True upon success, False upon failure.
-  """
-  results_map = None
-  try:
-    if (os.path.exists(options.test_output_xml) and
-        not _UsingGtestJson(options)):
-      results_map = gtest_slave_utils.GetResultsMapFromXML(
-          options.test_output_xml)
-    else:
-      if _UsingGtestJson(options):
-        sys.stderr.write('using JSON summary output instead of gtest XML\n')
-      else:
-        sys.stderr.write(
-            ('"%s" \\ "%s" doesn\'t exist: Unable to generate JSON from XML, '
-             'using log output.\n') % (os.getcwd(), options.test_output_xml))
-      # The file did not get generated. See if we can generate a results map
-      # from the log output.
-      results_map = gtest_slave_utils.GetResultsMap(log_processor)
-  except Exception as e:
-    # This error will be caught by the following 'not results_map' statement.
-    print 'Error: ', e
-
-  if not results_map:
-    print 'No data was available to update the JSON results'
-    # Consider this non-fatal.
-    return True
-
-  build_dir = os.path.abspath(options.build_dir)
-  slave_name = options.builder_name or slave_utils.SlaveBuildName(build_dir)
-
-  generate_json_options = copy.copy(options)
-  generate_json_options.build_name = slave_name
-  generate_json_options.input_results_xml = options.test_output_xml
-  generate_json_options.builder_base_url = '%s/%s/%s/%s' % (
-      config.Master.archive_url, DEST_DIR, slave_name, options.test_type)
-  generate_json_options.master_name = options.master_class_name or _GetMaster()
-  generate_json_options.test_results_server = config.Master.test_results_server
-
-  print _GetMasterString(generate_json_options.master_name)
-
-  generator = None
-
-  try:
-    if options.revision:
-      generate_json_options.chrome_revision = options.revision
-    else:
-      chrome_dir = chromium_utils.FindUpwardParent(build_dir, 'third_party')
-      generate_json_options.chrome_revision = \
-        slave_utils.GetRevision(chrome_dir)
-
-    # Generate results JSON file and upload it to the appspot server.
-    generator = gtest_slave_utils.GenerateJSONResults(
-        results_map, generate_json_options)
-
-  except Exception as e:
-    print 'Unexpected error while generating JSON: %s' % e
-    sys.excepthook(*sys.exc_info())
-    return False
-
-  # The code can throw all sorts of exceptions, including
-  # slave.gtest.networktransaction.NetworkTimeout so just trap everything.
-  # Earlier versions of this code ignored network errors, so until a
-  # retry mechanism is added, continue to do so rather than reporting
-  # an error.
-  try:
-    # Upload results JSON file to the appspot server.
-    gtest_slave_utils.UploadJSONResults(generator)
-  except Exception as e:
-    # Consider this non-fatal for the moment.
-    print 'Unexpected error while uploading JSON: %s' % e
-    sys.excepthook(*sys.exc_info())
-
-  return True
-
-
 def _BuildTestBinaryCommand(_build_dir, test_exe_path, options):
   """Builds a command to run a test binary.
 
@@ -365,15 +273,9 @@ def _SelectLogProcessor(options, is_telemetry):
 
   if options.annotate:
     if options.annotate in LOG_PROCESSOR_CLASSES:
-      if options.generate_json_file and options.annotate != 'gtest':
-        raise NotImplementedError('"%s" doesn\'t make sense with '
-                                  'options.generate_json_file.')
-      else:
         return LOG_PROCESSOR_CLASSES[options.annotate]
     else:
       raise KeyError('"%s" is not a valid GTest parser!' % options.annotate)
-  elif options.generate_json_file:
-    return LOG_PROCESSOR_CLASSES['gtest']
 
   return None
 
@@ -421,9 +323,6 @@ def _CreateLogProcessor(log_processor_class, options, telemetry_info):
         revision=revision,
         build_properties=options.build_properties,
         factory_properties=options.factory_properties)
-
-  if options.annotate and options.generate_json_file:
-    tracker_obj.ProcessLine(_GetMasterString(_GetMaster()))
 
   return tracker_obj
 
@@ -893,11 +792,6 @@ def _MainParse(options, _args):
   log_processor_class = _SelectLogProcessor(options, False)
   log_processor = _CreateLogProcessor(log_processor_class, options, None)
 
-  if options.generate_json_file:
-    if os.path.exists(options.test_output_xml):
-      # remove the old XML output file.
-      os.remove(options.test_output_xml)
-
   if options.parse_input == '-':
     f = sys.stdin
   else:
@@ -911,10 +805,6 @@ def _MainParse(options, _args):
   with f:
     for line in f:
       log_processor.ProcessLine(line)
-
-  if options.generate_json_file:
-    if not _GenerateJSONForTestResults(options, log_processor):
-      return 1
 
   if options.annotate:
     annotation_utils.annotate(
@@ -957,11 +847,6 @@ def _MainMac(options, args, extra_env):
   log_processor = _CreateLogProcessor(
       log_processor_class, options, telemetry_info)
 
-  if options.generate_json_file:
-    if os.path.exists(options.test_output_xml):
-      # remove the old XML output file.
-      os.remove(options.test_output_xml)
-
   try:
     if _UsingGtestJson(options):
       json_file_name = log_processor.PrepareJSONFile(
@@ -983,10 +868,6 @@ def _MainMac(options, args, extra_env):
                               test_exe,
                               options.step_name)
       log_processor.ProcessJSONFile(options.build_dir)
-
-  if options.generate_json_file:
-    if not _GenerateJSONForTestResults(options, log_processor):
-      return 1
 
   if options.annotate:
     annotation_utils.annotate(
@@ -1184,11 +1065,6 @@ def _MainLinux(options, args, extra_env):
   log_processor = _CreateLogProcessor(
       log_processor_class, options, telemetry_info)
 
-  if options.generate_json_file:
-    if os.path.exists(options.test_output_xml):
-      # remove the old XML output file.
-      os.remove(options.test_output_xml)
-
   try:
     start_xvfb = False
     json_file_name = None
@@ -1236,10 +1112,6 @@ def _MainLinux(options, args, extra_env):
                                 test_exe,
                                 options.step_name)
       log_processor.ProcessJSONFile(options.build_dir)
-
-  if options.generate_json_file:
-    if not _GenerateJSONForTestResults(options, log_processor):
-      return result or 1
 
   if options.annotate:
     annotation_utils.annotate(
@@ -1310,11 +1182,6 @@ def _MainWin(options, args, extra_env):
   log_processor = _CreateLogProcessor(
       log_processor_class, options, telemetry_info)
 
-  if options.generate_json_file:
-    if os.path.exists(options.test_output_xml):
-      # remove the old XML output file.
-      os.remove(options.test_output_xml)
-
   try:
     if _UsingGtestJson(options):
       json_file_name = log_processor.PrepareJSONFile(
@@ -1331,10 +1198,6 @@ def _MainWin(options, args, extra_env):
                               test_exe,
                               options.step_name)
       log_processor.ProcessJSONFile(options.build_dir)
-
-  if options.generate_json_file:
-    if not _GenerateJSONForTestResults(options, log_processor):
-      return 1
 
   if options.annotate:
     annotation_utils.annotate(
@@ -1527,9 +1390,6 @@ def main():
                            default=False,
                            help='treat first argument as a python script'
                                 'to run.')
-  option_parser.add_option('--generate-json-file', action='store_true',
-                           default=False,
-                           help='output JSON results file if specified.')
   option_parser.add_option('--xvfb', action='store_true', dest='xvfb',
                            default=True,
                            help='Start virtual X server on Linux.')
@@ -1705,10 +1565,6 @@ def main():
       options.test_output_xml = os.path.normpath(os.path.abspath(os.path.join(
           options.results_directory, '%s.xml' % options.test_type)))
       args.append('--gtest_output=xml:' + options.test_output_xml)
-    elif options.generate_json_file:
-      option_parser.error(
-          '--results-directory is required with --generate-json-file=True')
-      return 1
 
     if options.factory_properties.get('coverage_gtest_exclusions', False):
       _BuildCoverageGtestExclusions(options, args)
