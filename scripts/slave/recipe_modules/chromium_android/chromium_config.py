@@ -75,6 +75,7 @@ def cronet_builder(c):
   c.gn_args.append('enable_reporting=false')
   c.gn_args.append('enable_websockets=false')
   c.gn_args.append('include_transport_security_state_preload_list=false')
+  c.gn_args.append('use_crash_key_stubs=true')
   c.gn_args.append('use_partition_alloc=false')
   c.gn_args.append('use_platform_icu_alternatives=true')
   c.compile_py.default_targets=['cronet_package',
