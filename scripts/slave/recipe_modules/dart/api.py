@@ -472,8 +472,7 @@ class DartApi(recipe_api.RecipeApi):
     # global runtime.
     if (environment['system'] == 'linux' and
         environment.get('runtime') == 'chrome'):
-      args = args + ['--chrome=%s' % self.m.path['checkout'].join(
-        'browsers', 'chrome', 'google-chrome')]
+      args = args + ['--chrome=browsers/chrome/google-chrome']
     if 'exclude_tests' in step:
         args = args + ['--exclude_suite=' + ','.join(step['exclude_tests'])]
     if 'tests' in step:
