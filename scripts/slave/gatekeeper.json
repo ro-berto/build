@@ -7,7 +7,8 @@
     "https://build.chromium.org/p/chromium": [
       {
         "categories": [
-          "chromium_tree_closer"
+          "chromium_tree_closer",
+          "experimental_tests"
         ],
 
         "builders": {
@@ -33,7 +34,8 @@
         "builders": {
           "Android ASAN (dbg)": {
             "categories": [
-              "chromium_tree_closer"
+              "chromium_tree_closer",
+              "experimental_tests"
             ]
           },
           "Android Cronet ARM64 Builder": {
@@ -134,27 +136,32 @@
           },
           "Android arm Builder (dbg)": {
             "categories": [
-              "chromium_tree_closer"
+              "chromium_tree_closer",
+              "experimental_tests"
             ]
           },
           "Android arm64 Builder (dbg)": {
             "categories": [
-              "chromium_tree_closer"
+              "chromium_tree_closer",
+              "experimental_tests"
             ]
           },
           "Cast Android (dbg)": {
             "categories": [
-              "chromium_tree_closer"
+              "chromium_tree_closer",
+              "experimental_tests"
             ]
           },
           "KitKat Phone Tester (rel)": {
             "categories": [
-              "chromium_tree_closer"
+              "chromium_tree_closer",
+              "experimental_tests"
             ]
           },
           "Marshmallow Phone Tester (rel)": {
             "categories": [
-              "chromium_tree_closer"
+              "chromium_tree_closer",
+              "experimental_tests"
             ]
           },
           "*": {}
@@ -179,7 +186,8 @@
     "https://build.chromium.org/p/chromium.chrome": [
       {
         "categories": [
-          "chromium_tree_closer"
+          "chromium_tree_closer",
+          "experimental_tests"
         ],
         "builders": {
           "Google Chrome Linux x64": {
@@ -206,7 +214,8 @@
     "https://build.chromium.org/p/chromium.chromiumos": [
       {
         "categories": [
-          "chromium_tree_closer"
+          "chromium_tree_closer",
+          "experimental_tests"
         ],
         "builders": {
           "*": {}
@@ -233,7 +242,8 @@
         "tree_notify": ["chrome-gpu-build-failures@google.com"],
         "sheriff_classes": ["sheriff", "sheriff_gpu"],
         "categories": [
-          "chromium_tree_closer"
+          "chromium_tree_closer",
+          "experimental_tests"
         ],
         "builders": {
           "Mac 10.8 Release (Intel)": {
@@ -367,7 +377,8 @@
     "https://build.chromium.org/p/chromium.linux": [
       {
         "categories": [
-          "chromium_tree_closer"
+          "chromium_tree_closer",
+          "experimental_tests"
         ],
         "builders": {
           "*": {}
@@ -380,7 +391,8 @@
         "builders": {
           "Fuchsia ARM64": {
             "categories": [
-              "chromium_tree_closer"
+              "chromium_tree_closer",
+              "experimental_tests"
             ]
           },
           "Fuchsia ARM64 Cast Audio": {
@@ -388,7 +400,8 @@
           },
           "Fuchsia x64": {
             "categories": [
-              "chromium_tree_closer"
+              "chromium_tree_closer",
+              "experimental_tests"
             ]
           },
           "Fuchsia x64 Cast Audio": {
@@ -479,7 +492,8 @@
     "https://build.chromium.org/p/chromium.memory": [
       {
         "categories": [
-          "chromium_tree_closer"
+          "chromium_tree_closer",
+          "experimental_tests"
         ],
         "builders": {
           "Linux*": {
@@ -500,49 +514,57 @@
         "builders": {
           "Android Builder": {
             "categories": [
-              "chromium_tree_closer"
+              "chromium_tree_closer",
+              "experimental_tests"
             ],
             "forgiving_optional": []
           },
           "Android Compile": {
             "categories": [
-              "chromium_tree_closer"
+              "chromium_tree_closer",
+              "experimental_tests"
             ],
             "forgiving_optional": []
           },
           "Android arm64 Builder": {
             "categories": [
-              "chromium_tree_closer"
+              "chromium_tree_closer",
+              "experimental_tests"
             ],
             "forgiving_optional": []
           },
           "Android arm64 Compile": {
             "categories": [
-              "chromium_tree_closer"
+              "chromium_tree_closer",
+              "experimental_tests"
             ],
             "forgiving_optional": []
           },
           "Linux Builder": {
             "categories": [
-              "chromium_tree_closer"
+              "chromium_tree_closer",
+              "experimental_tests"
             ],
             "forgiving_optional": []
           },
           "Mac Builder": {
             "categories": [
-              "chromium_tree_closer"
+              "chromium_tree_closer",
+              "experimental_tests"
             ],
             "forgiving_optional": []
           },
           "Win Builder": {
             "categories": [
-              "chromium_tree_closer"
+              "chromium_tree_closer",
+              "experimental_tests"
             ],
             "forgiving_optional": []
           },
           "Win x64 Builder": {
             "categories": [
-              "chromium_tree_closer"
+              "chromium_tree_closer",
+              "experimental_tests"
             ],
             "forgiving_optional": []
           }
@@ -585,7 +607,8 @@
     "https://build.chromium.org/p/chromium.webkit": [
       {
         "categories": [
-          "chromium_tree_closer"
+          "chromium_tree_closer",
+          "experimental_tests"
         ],
         "builders": {
           "*": {}
@@ -727,7 +750,8 @@
           "webrtc-sheriff-sto@grotations.appspotmail.com"
         ],
         "categories": [
-          "chromium_tree_closer"
+          "chromium_tree_closer",
+          "experimental_tests"
         ],
         "builders": {
           "*": { "categories": [ "webrtc_all"] }
