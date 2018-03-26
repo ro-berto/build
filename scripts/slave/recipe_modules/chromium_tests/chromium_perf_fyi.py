@@ -29,18 +29,27 @@ def chromium_perf_clang(c):
 def _AddBuildSpec(name, perf_id, platform, config_name='chromium_perf',
                   target_bits=64,
                   compile_targets=None, extra_compile_targets=None,
-                  force_exparchive=False, run_sizes=True):
+                  force_exparchive=False, run_sizes=True,
+                  use_private_swarming_server=False,
+                  use_private_isolate_server=False):
   SPEC['builders'][name] = chromium_perf.BuildSpec(
       config_name, perf_id, platform, target_bits,
       compile_targets=compile_targets,
       extra_compile_targets=extra_compile_targets,
-      force_exparchive=force_exparchive, run_sizes=run_sizes)
+      force_exparchive=force_exparchive, run_sizes=run_sizes,
+      use_private_swarming_server=use_private_swarming_server,
+      use_private_isolate_server=use_private_isolate_server)
 
 
 def _AddIsolatedTestSpec(name, perf_id, platform,
-                         parent_buildername=None, target_bits=64):
-  spec = chromium_perf.TestSpec('chromium_perf', perf_id, platform, target_bits,
-                                parent_buildername=parent_buildername)
+                         parent_buildername=None, target_bits=64,
+                         use_private_swarming_server=False,
+                         use_private_isolate_server=False):
+  spec = chromium_perf.TestSpec(
+      'chromium_perf', perf_id, platform, target_bits,
+      parent_buildername=parent_buildername,
+      use_private_swarming_server=use_private_swarming_server,
+      use_private_isolate_server=use_private_isolate_server)
   if not parent_buildername:
     spec['parent_mastername'] = 'chromium.perf'
   else:
@@ -100,7 +109,8 @@ _AddIsolatedTestSpec('Mac 10.12 Laptop Low End', '', 'mac',
 _AddIsolatedTestSpec('Mac 10.13 Laptop High End', '', 'mac',
                      parent_buildername='Mac Builder FYI')
 _AddIsolatedTestSpec('Android Go', '', 'android',
-                     parent_buildername='Android Builder FYI')
+                     parent_buildername='Android Builder FYI',
+                     use_private_swarming_server=True)
 
 _AddBuildSpec('Battor Agent Linux', 'linux', 'linux', run_sizes=False,
               compile_targets=['battor_agent'])

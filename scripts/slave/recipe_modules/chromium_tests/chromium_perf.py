@@ -43,6 +43,7 @@ def chromium_perf(c):
 
 
 def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
+              use_private_swarming_server, use_private_isolate_server,
               remove_system_webview=None):
   spec = {
     'bot_type': bot_type,
@@ -66,13 +67,25 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
     spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
     spec['gclient_apply_config'] = ['android']
 
+  # TODO(crbug.com/818319): always set these private servers after we migrate
+  # all perf bots.
+  if use_private_swarming_server:
+    spec['swarming_server'] = 'https://chrome-swarming.appspot.com'
+
+  # TODO(crbug.com/818319): always set these private servers after we migrate
+  # all perf bots.
+  # This will get covered when we convert a builder to upload files to private
+  # isolate server. (crbug.com/818319)
+  if use_private_isolate_server: # pragma: no cover
+    spec['isolate_server'] = 'chrome-isolated.appspot.com'
   return spec
 
 
 def BuildSpec(
   config_name, perf_id, platform, target_bits,
   compile_targets=None, extra_compile_targets=None, force_exparchive=False,
-  run_sizes=True):
+  run_sizes=True, use_private_swarming_server=False,
+  use_private_isolate_server=False):
   if not compile_targets:
     compile_targets = ['chromium_builder_perf']
 
@@ -87,6 +100,8 @@ def BuildSpec(
       platform=platform,
       target_bits=target_bits,
       tests=tests,
+      use_private_swarming_server=use_private_swarming_server,
+      use_private_isolate_server=use_private_isolate_server,
   )
 
   spec['perf_isolate_lookup'] = True
@@ -102,13 +117,17 @@ def BuildSpec(
 
 
 def TestSpec(config_name, perf_id, platform, target_bits,
-             parent_buildername=None, tests=None, remove_system_webview=None):
+             parent_buildername=None, tests=None, remove_system_webview=None,
+             use_private_swarming_server=False,
+             use_private_isolate_server=False):
   spec = _BaseSpec(
       bot_type='tester',
       config_name=config_name,
       platform=platform,
       target_bits=target_bits,
       tests=tests or [],
+      use_private_swarming_server=use_private_swarming_server,
+      use_private_isolate_server=use_private_isolate_server,
       remove_system_webview=remove_system_webview,
   )
 
