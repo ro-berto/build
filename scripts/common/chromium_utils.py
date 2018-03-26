@@ -659,27 +659,28 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
     # These paths are relative to the file_relative_dir.  We need to copy
     # them over maintaining the relative directories, where applicable.
     src_path = os.path.join(file_relative_dir, needed_file)
+    dst_path = os.path.join(archive_dir, needed_file)
     dirname, basename = os.path.split(needed_file)
     dest_dir = os.path.join(archive_dir, dirname)
     if dest_dir != archive_dir:
       MaybeMakeDirectory(dest_dir)
     try:
-      if os.path.isdir(src_path):
-        dst_path = os.path.join(archive_dir, needed_file)
-        if WIN_LINK_FUNC:
-          WIN_LINK_FUNC(src_path, dst_path)
-        else:
-          if os.path.islink(src_path):
-            # Need to re-create symlink at dst_path to preserve build structure.
-            # Otherwise shutil.copytree copies whole dir (crbug.com/693624#c35).
-            os.symlink(os.readlink(src_path), dst_path)
+      if os.path.islink(src_path):
+        # Need to re-create symlink at dst_path to preserve build structure.
+        # Otherwise, shutil.copytree copies whole dir (crbug.com/693624#c35)
+        # or shutil.copy2 copies file contents (crbug.com/825553#c13).
+        os.symlink(os.readlink(src_path), dst_path)
+      else:
+        if os.path.isdir(src_path):
+          if WIN_LINK_FUNC:
+            WIN_LINK_FUNC(src_path, dst_path)
           else:
             shutil.copytree(src_path, dst_path, symlinks=True)
-      else:
-        CopyFileToDir(src_path, dest_dir, basename, link_ok=True)
-        if not IsWindows() and basename in strip_files:
-          cmd = ['strip', os.path.join(dest_dir, basename)]
-          RunCommand(cmd)
+        else:
+          CopyFileToDir(src_path, dest_dir, basename, link_ok=True)
+          if not IsWindows() and basename in strip_files:
+            cmd = ['strip', dst_path]
+            RunCommand(cmd)
     except PathNotFound:
       if raise_error:
         raise
