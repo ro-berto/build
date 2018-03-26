@@ -866,11 +866,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.wrap_chromium_tests(bot_config, tests):
       test_runner()
 
-  def trybot_steps(self):
+  def trybot_steps(self, builders=None, trybots=None):
     with self.m.tryserver.set_failure_hash():
       try:
         (bot_config_object, bot_update_step, affected_files, tests,
-         disable_deapply_patch) = self._trybot_steps_internal()
+         disable_deapply_patch) = self._trybot_steps_internal(
+            builders=builders, trybots=trybots)
       finally:
         self.m.python.succeeding_step('mark: before_tests', '')
 
@@ -879,16 +880,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             bot_config_object, tests, bot_update_step,
             affected_files, disable_deapply_patch=disable_deapply_patch)
 
-  def _trybot_steps_internal(self):
+  def _trybot_steps_internal(self, builders=None, trybots=None):
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
-    bot_config = self.trybots.get(mastername, {}).get(
+    bot_config = (trybots or self.trybots).get(mastername, {}).get(
         'builders', {}).get(buildername)
     assert bot_config, 'No bot config for master/builder [%s / %s]' % (
         mastername, buildername)
 
     bot_config_object = self.create_generalized_bot_config_object(
-        bot_config['bot_ids'])
+        bot_config['bot_ids'], builders=builders)
     self.set_precommit_mode()
     self.configure_build(bot_config_object, override_bot_type='builder_tester')
 
