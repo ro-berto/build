@@ -109,7 +109,7 @@
       "--goma-dir",
       "[CACHE]/goma_client",
       "--swarming-targets-file",
-      "benchmarks\nbot_default\nd8_default\nmjsunit\nmozilla\ntest262\n",
+      "benchmarks\nbot_default\nd8_default\nmjsunit\nmozilla\noptimize_for_size\ntest262\n",
       "//out/Debug"
     ],
     "cwd": "[START_DIR]/v8",
@@ -125,6 +125,7 @@
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@d8_default@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@mjsunit@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@mozilla@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@optimize_for_size@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@test262@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@",
       "@@@STEP_LOG_LINE@captured_stdout@Writing \"\"\"\\@@@",
@@ -203,6 +204,7 @@
       "[START_DIR]/v8/out/Debug/d8_default.isolated.gen.json",
       "[START_DIR]/v8/out/Debug/mjsunit.isolated.gen.json",
       "[START_DIR]/v8/out/Debug/mozilla.isolated.gen.json",
+      "[START_DIR]/v8/out/Debug/optimize_for_size.isolated.gen.json",
       "[START_DIR]/v8/out/Debug/test262.isolated.gen.json"
     ],
     "name": "isolate tests",
@@ -213,6 +215,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"d8_default\": \"[dummy hash for d8_default]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -229,7 +232,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"d8_default\": \"[dummy hash for d8_default]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"test262\": \"[dummy hash for test262]\"}",
+      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"d8_default\": \"[dummy hash for d8_default]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"test262\": \"[dummy hash for test262]\"}",
       "gs://chromium-v8/isolated/client.v8/V8 Linux - debug builder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "infra_step": true,
@@ -289,6 +292,7 @@
             "d8_default": "[dummy hash for d8_default]",
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
+            "optimize_for_size": "[dummy hash for optimize_for_size]",
             "test262": "[dummy hash for test262]"
           }
         }
@@ -309,6 +313,7 @@
             "d8_default": "[dummy hash for d8_default]",
             "mjsunit": "[dummy hash for mjsunit]",
             "mozilla": "[dummy hash for mozilla]",
+            "optimize_for_size": "[dummy hash for optimize_for_size]",
             "test262": "[dummy hash for test262]"
           }
         }

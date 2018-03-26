@@ -247,6 +247,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing(2),
+          OptimizeForSize,
           Benchmarks,
           Test262Variants(4),
           Mozilla,
