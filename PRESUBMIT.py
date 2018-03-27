@@ -46,31 +46,27 @@ def CommonChecks(input_api, output_api):
 
   output = []
 
+  vpython = 'vpython.bat' if input_api.is_windows else 'vpython'
   infra_path = input_api.subprocess.check_output(
-      ['python', 'scripts/common/env.py', 'print']).split()
-  orig_path = sys.path
-  try:
-    sys.path = infra_path + [
-      # Initially, a separate run was done for unit tests but now that
-      # pylint is fetched in memory with setuptools, it seems it caches
-      # sys.path so modifications to sys.path aren't kept.
-      join('scripts', 'master', 'unittests'),
-      join('scripts', 'slave', 'unittests'),
-      join('tests'),
-    ] + sys.path
-
-    disabled_warnings = [
-      'C0301',  # Line too long (NN/80)
-      'C0321',  # More than one statement on a single line
-      'W0613',  # Unused argument
-    ]
-    output.extend(input_api.canned_checks.RunPylint(
-        input_api,
-        output_api,
-        black_list=GetBlackList(input_api),
-        disabled_warnings=disabled_warnings))
-  finally:
-    sys.path = orig_path
+      [vpython, 'scripts/common/env.py', 'print']).split()
+  disabled_warnings = [
+    'C0301',  # Line too long (NN/80)
+    'C0321',  # More than one statement on a single line
+    'W0613',  # Unused argument
+  ]
+  output.extend(input_api.canned_checks.RunPylint(
+      input_api,
+      output_api,
+      black_list=GetBlackList(input_api),
+      disabled_warnings=disabled_warnings,
+      extra_paths_list=infra_path + [
+        # Initially, a separate run was done for unit tests but now that
+        # pylint is fetched in memory with setuptools, it seems it caches
+        # sys.path so modifications to sys.path aren't kept.
+        join('scripts', 'master', 'unittests'),
+        join('scripts', 'slave', 'unittests'),
+        join('tests'),
+      ]))
 
   output.extend(CheckExternalBuildersPylMastersAreInSync(input_api, output_api))
 
