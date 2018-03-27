@@ -636,7 +636,7 @@ class GraphingLogProcessor(PerformanceLogProcessor):
         ('traces', graph.BuildTracesDict()),
         ('rev', str(self._revision)),
         ('git_revision', str(self._git_revision)),
-        ('webrtc_rev', str(self._webrtc_revision)),
+        ('webrtc_git', str(self._webrtc_revision)),
         ('v8_rev', str(self._v8_revision)),
         ('ver', str(self._version)),
         ('chan', str(self._channel)),
