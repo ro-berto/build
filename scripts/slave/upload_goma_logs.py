@@ -184,6 +184,8 @@ def main():
     from slave import goma_bq_utils
     goma_bq_utils.SendCompileEvent(args.goma_stats_file,
                                    args.goma_counterz_file,
+                                   args.json_status,
+                                   args.build_exit_status,
                                    args.goma_crash_report_id_file,
                                    args.build_id,
                                    args.build_step_name,
