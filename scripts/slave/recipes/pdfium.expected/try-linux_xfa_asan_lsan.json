@@ -518,7 +518,7 @@
       "--build-dir",
       "out/debug_xfa_v8_asan",
       "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master tryserver.client.pdfium builder linux_xfa_asan_lsan build_number 1234 issue 456789 patchset 12 patch_storage gerrit",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master tryserver.client.pdfium builder linux_xfa_asan_lsan build_number 1234 buildbucket_build_id 0 issue 456789 patchset 12 patch_storage gerrit",
       "--gold_key",
       "asan true debug true is_standalone true lsan true os linux skia false v8 true xfa true",
       "--gold_output_dir",
