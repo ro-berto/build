@@ -149,6 +149,7 @@ FAKE_BUILDERS = {
         # These have been migrated to LUCI.
         'mac_chromium_compile_dbg_ng',
         'mac_chromium_dbg_ng',
+        'mac_optional_gpu_tests_rel',
     ],
 }
 
