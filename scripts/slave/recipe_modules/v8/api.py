@@ -487,14 +487,12 @@ class V8Api(recipe_api.RecipeApi):
         self._isolate_targets_cached)))
     return self._isolate_targets_cached
 
-  def isolate_tests(self, extra_targets=None):
+  def isolate_tests(self, isolate_targets):
     """Upload isolated tests to isolate server.
 
     Args:
-      extra_targets: More targets to isolate.
+      isolate_targets: Targets to isolate.
     """
-    isolate_targets = sorted(list(set(
-        self.isolate_targets + (extra_targets or []))))
     if isolate_targets:
       self.m.isolate.isolate_tests(
           self.m.chromium.output_dir,
@@ -592,6 +590,15 @@ class V8Api(recipe_api.RecipeApi):
     """
     use_goma = (self.m.chromium.c.compile_py.compiler and
                 'goma' in self.m.chromium.c.compile_py.compiler)
+
+    # Calculate extra targets to isolate from V8-side test specification. The
+    # test_spec contains extra TestStepConfig objects for the current builder
+    # and all its triggered builders.
+    extra_targets = isolate_targets_from_tests(
+        itertools.chain(*(test_spec or {}).values()))
+    isolate_targets = sorted(list(set(
+        self.isolate_targets + (extra_targets or []))))
+
     if self.m.chromium.c.project_generator.tool == 'mb':
       def step_test_data():
         # Fake MB output with GN flags.
@@ -610,7 +617,7 @@ class V8Api(recipe_api.RecipeApi):
             use_goma=use_goma,
             mb_config_path=self.m.path['checkout'].join(
                 'infra', 'mb', 'mb_config.pyl'),
-            isolated_targets=self.isolate_targets,
+            isolated_targets=isolate_targets,
             stdout=self.m.raw_io.output_text(),
             step_test_data=step_test_data,
         )
@@ -662,12 +669,7 @@ class V8Api(recipe_api.RecipeApi):
         tracking_config['category'],
       )
 
-    # Calculate extra targets to isolate from V8-side test specification. The
-    # test_spec contains extra TestStepConfig objects for the current builder
-    # and all its triggered builders.
-    extra_targets = isolate_targets_from_tests(
-        itertools.chain(*(test_spec or {}).values()))
-    self.isolate_tests(extra_targets)
+    self.isolate_tests(isolate_targets)
 
   def _get_default_archive(self):
     archive = self.GS_ARCHIVES[self.bot_config['build_gs_archive']]

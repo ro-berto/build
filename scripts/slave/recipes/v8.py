@@ -506,6 +506,7 @@ def GenTests(api):
     ) +
     api.post_process(Filter(
         'read test spec',
+        'generate_build_files',
         'isolate tests',
         'trigger',
     ))
