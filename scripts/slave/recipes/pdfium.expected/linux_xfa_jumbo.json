@@ -458,7 +458,7 @@
       "--build-dir",
       "out/debug_xfa_v8_jumbo",
       "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux_xfa_jumbo build_number 1234 buildbucket_build_id 0",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux_xfa_jumbo build_number 1234",
       "--gold_key",
       "debug true is_standalone true jumbo_file_merge_limit 50 os linux skia false use_jumbo_build true v8 true xfa true",
       "--gold_output_dir",

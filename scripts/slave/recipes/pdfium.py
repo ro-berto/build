@@ -252,13 +252,11 @@ def get_gold_params(api, build_config, revision):
   These strings can be passed directly into run_corpus_tests.py.
   """
   builder_name = api.m.properties['buildername'].strip()
-  build_bucket = api.m.properties.get('buildbucket', {})
   props = [
     'gitHash', revision,
     'master', api.m.properties['mastername'],
     'builder', builder_name,
-    'build_number', str(api.m.properties['buildnumber']),
-    'buildbucket_build_id', build_bucket.get('build', {}).get('id', '0'),
+    'build_number', str(api.m.properties['buildnumber'])
   ]
 
   # Add the trybot information if this is a trybot run.
@@ -441,8 +439,7 @@ def GenTests(api):
       api.properties(mastername="client.pdfium",
                      buildername='windows',
                      buildnumber='1234',
-                     bot_id="test_slave",
-                     buildbucket={'build':{'id':'8951429979623365328'}})
+                     bot_id="test_slave")
   )
   yield (
       api.test('linux') +
@@ -450,8 +447,7 @@ def GenTests(api):
       api.properties(mastername="client.pdfium",
                      buildername='linux',
                      buildnumber='1234',
-                     bot_id="test_slave",
-                     buildbucket={'build':{'somekey':'value'}})
+                     bot_id="test_slave")
   )
   yield (
       api.test('mac') +
@@ -459,8 +455,7 @@ def GenTests(api):
       api.properties(mastername="client.pdfium",
                      buildername='mac',
                      buildnumber='1234',
-                     bot_id="test_slave",
-                     buildbucket={'somekey':{'somekey':'8951429979623365328'}})
+                     bot_id="test_slave")
   )
 
   yield (
@@ -470,8 +465,7 @@ def GenTests(api):
                      mastername="client.pdfium",
                      buildername='windows_no_v8',
                      buildnumber='1234',
-                     bot_id="test_slave",
-                     buildbucket={})
+                     bot_id="test_slave")
   )
   yield (
       api.test('linux_no_v8') +
