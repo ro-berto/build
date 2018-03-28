@@ -1367,6 +1367,9 @@ class V8Api(recipe_api.RecipeApi):
       step_result.presentation.logs['changes'] = self.m.json.dumps(
         changes, indent=2).splitlines()
     else:
+      # TODO(sergiyb): Migrate to using new Milo API that allows to specify
+      # Buildbucket ID to retrieve build info. This will allow to deprecate
+      # build numbers for builders using V8 recipe.
       url = '%s/p/%s/builders/%s/builds/%s?json=1' % (
           CBE_URL,
           self.m.properties['mastername'],
