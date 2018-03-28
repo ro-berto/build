@@ -701,6 +701,7 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
   workspace. This function provides the following build properties in
   the form of variable substitutions in the tests' argument lists:
 
+      buildbucket_build_id
       buildername
       buildnumber
       got_revision
@@ -733,8 +734,10 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
   # tuple/list concatenation caused by assuming type
   if extra_args:
     args = args + extra_args
+
   # Perform substitution of known variables.
   substitutions = {
+      'buildbucket_build_id': chromium_tests_api.m.buildbucket.build_id,
       'buildername': api.properties.get('buildername'),
       'buildnumber': api.properties.get('buildnumber'),
       'got_revision': (

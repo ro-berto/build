@@ -161,6 +161,7 @@
   * [chromium_tests:tests/steps/generate_isolated_script](#recipes-chromium_tests_tests_steps_generate_isolated_script)
   * [chromium_tests:tests/steps/generate_junit_test](#recipes-chromium_tests_tests_steps_generate_junit_test)
   * [chromium_tests:tests/steps/generate_script](#recipes-chromium_tests_tests_steps_generate_script)
+  * [chromium_tests:tests/steps/get_args_for_test](#recipes-chromium_tests_tests_steps_get_args_for_test)
   * [chromium_tests:tests/steps/gtest_test](#recipes-chromium_tests_tests_steps_gtest_test)
   * [chromium_tests:tests/steps/incremental_coverage_test](#recipes-chromium_tests_tests_steps_incremental_coverage_test)
   * [chromium_tests:tests/steps/json_results_handler](#recipes-chromium_tests_tests_steps_json_results_handler)
@@ -4187,6 +4188,11 @@ Returns: the list of matched targets.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/generate_script.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/generate_script.py#19)(api):**
+### *recipes* / [chromium\_tests:tests/steps/get\_args\_for\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/get_args_for_test.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/get_args_for_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/get_args_for_test.py#15)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/gtest\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/gtest_test.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/gtest_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
