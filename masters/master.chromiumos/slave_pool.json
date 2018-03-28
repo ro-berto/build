@@ -67,6 +67,8 @@
     "build245-m2", 
     "build263-m2", 
     "build323-m2", 
-    "build333-m2"
+    "build333-m2", 
+    "cros-test0-c2", 
+    "cros-test1-c2"
   ]
 }
