@@ -327,6 +327,10 @@ class V8Api(recipe_api.RecipeApi):
       self.m.swarming.add_default_tag('purpose:post-commit')
       self.m.swarming.add_default_tag('purpose:CI')
 
+    if self.m.runtime.is_experimental:
+      # Use lower priority for tasks scheduled from experimental builds.
+      self.m.swarming.default_priority = 60
+
     # Overwrite defaults with per-bot settings.
     for key, value in self.bot_config.get(
         'swarming_properties', {}).iteritems():
@@ -665,19 +669,25 @@ class V8Api(recipe_api.RecipeApi):
         itertools.chain(*(test_spec or {}).values()))
     self.isolate_tests(extra_targets)
 
+  def _get_default_archive(self):
+    archive = self.GS_ARCHIVES[self.bot_config['build_gs_archive']]
+    if self.m.runtime.is_experimental:
+      archive = re.sub(r'^(gs://[^/]+)/(.*)$', r'\1/experimental/\2', archive)
+    return archive
+
   def upload_build(self, name_suffix='', archive=None):
-    archive = archive or self.GS_ARCHIVES[self.bot_config['build_gs_archive']]
     self.m.archive.zip_and_upload_build(
           'package build' + name_suffix,
           self.m.chromium.c.build_config_fs,
-          archive,
+          archive or self._get_default_archive(),
           src_dir=self.checkout_root.join('v8'))
 
   @property
   def isolated_archive_path(self):
     buildername = (self.m.properties.get('parent_buildername') or
                    self.m.properties['buildername'])
-    return 'chromium-v8/isolated/%s/%s' % (
+    return 'chromium-v8/%sisolated/%s/%s' % (
+        'experimental/' if self.m.runtime.is_experimental else '',
         self.m.properties['mastername'],
         buildername,
     )
@@ -711,12 +721,10 @@ class V8Api(recipe_api.RecipeApi):
     self.m.file.rmtree(
           'build directory' + name_suffix,
           self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
-
-    archive = archive or self.GS_ARCHIVES[self.bot_config['build_gs_archive']]
     self.m.archive.download_and_unzip_build(
           'extract build' + name_suffix,
           self.m.chromium.c.build_config_fs,
-          archive,
+          archive or self._get_default_archive(),
           src_dir=self.checkout_root.join('v8'))
 
   def download_isolated_json(self, revision):
@@ -1331,10 +1339,8 @@ class V8Api(recipe_api.RecipeApi):
           ),
         } for builder_name in triggers])
 
-      if triggers_proxy:
-        proxy_properties = {
-          'archive': self.GS_ARCHIVES[self.bot_config['build_gs_archive']],
-        }
+      if triggers_proxy and not self.m.runtime.is_experimental:
+        proxy_properties = {'archive': self._get_default_archive()}
         proxy_properties.update(properties)
         self.m.trigger(*[{
           'builder_name': 'v8_trigger_proxy',

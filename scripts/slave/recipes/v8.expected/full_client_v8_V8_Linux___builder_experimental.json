@@ -1,0 +1,53 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"check-static-initializers\": \"[dummy hash for check-static-initializers]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"perf\": \"[dummy hash for perf]\", \"run-gcmole\": \"[dummy hash for run-gcmole]\", \"test262\": \"[dummy hash for test262]\"}",
+      "gs://chromium-v8/experimental/isolated/client.v8/V8 Linux - builder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/experimental/isolated/client.v8/V8 Linux - builder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/zip_build.py",
+      "--target",
+      "Release",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--staging-dir",
+      "[CACHE]/chrome_staging",
+      "--src-dir",
+      "[START_DIR]/v8",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--build-url",
+      "gs://chromium-v8/experimental/v8-linux-rel",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"V8 Linux - builder\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"V8 Linux - builder\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+    ],
+    "infra_step": true,
+    "name": "package build"
+  }
+]

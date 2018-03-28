@@ -1,0 +1,30 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/extract_build.py",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--target",
+      "Release",
+      "--src-dir",
+      "[START_DIR]/v8",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--build-url",
+      "gs://chromium-v8/experimental/v8-linux-rel",
+      "--master-name",
+      "client.v8",
+      "--build-number",
+      "571"
+    ],
+    "infra_step": true,
+    "name": "extract build"
+  }
+]

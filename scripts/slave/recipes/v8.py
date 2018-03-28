@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.post_process import Filter
+from recipe_engine.post_process import Filter, DoesNotRun
 
 DEPS = [
   'archive',
@@ -523,4 +523,27 @@ def GenTests(api):
         parent_test_spec=[["mjsunit", 2, "sweet"]],
     ) +
     api.post_process(f)
+  )
+
+  # Test that uploading/downloading binaries happens to/from experimental GS
+  # folder when running in LUCI experimental mode and that internal proxy
+  # builder is not triggered.
+  yield (
+      api.v8.test('client.v8', 'V8 Linux - builder', 'experimental') +
+      api.runtime(is_luci=False, is_experimental=True) +
+      api.post_process(DoesNotRun, 'trigger (2)') +
+      api.post_process(Filter('gsutil upload', 'package build'))
+  )
+
+  yield (
+      api.v8.test('client.v8', 'V8 Linux - presubmit', 'experimental') +
+      api.runtime(is_luci=True, is_experimental=True) +
+      api.post_process(Filter('extract build'))
+  )
+
+  # Test that swarming tasks scheduled from experimental builders have low prio.
+  yield (
+      api.v8.test('client.v8', 'V8 Linux', 'experimental') +
+      api.runtime(is_luci=True, is_experimental=True) +
+      api.post_process(Filter('[trigger] Check'))
   )
