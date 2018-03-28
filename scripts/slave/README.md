@@ -1,10 +1,10 @@
 # scripts/slave
 
-This directory contains scripts which run on buildbot 'slave' machines and
-swarming bots. The primary form of these scripts is in [recipes][1], which live
+This directory contains scripts which run on buildbot 'slave' machines.
+The primary form of these scripts is in [recipes][1], which live
 in the `recipes` and `recipe_modules` folders.
 
-[1]: https://github.com/luci/recipes-py
+[1]: https://chromium.googlesource.com/infra/luci/recipes-py
 
 ## Quick How-To-Modify-Recipes
 
