@@ -269,7 +269,8 @@ def get_gold_params(api, build_config, revision):
     props.extend([
       'issue', issue,
       'patchset', patchset,
-      'patch_storage', api.m.properties.get('patch_storage', 'rietveld')
+      'patch_storage', api.m.properties.get('patch_storage', 'rietveld'),
+      'buildbucket_build_id', get_buildbucket_build_id(api)
     ])
 
   # Add the os from the builder name to the set of unique identifers.
@@ -277,6 +278,19 @@ def get_gold_params(api, build_config, revision):
   keys["os"] = builder_name.split("_")[0]
 
   return " ".join(props), dict_to_str(keys)
+
+def get_buildbucket_build_id(api):
+  """Returns the build bucket id or '0' if is not availabe in api"""
+  try:
+    # assume 'buildbucket' is a JSON string with the build bucket information.
+    build_bucket = api.json.loads(api.m.properties.get('buildbucket', None))
+    return build_bucket['build']['id']
+  except Exception:
+    # swallow anything, since we don't want this to be the reason for the
+    # bot to fail. The default return value will cause a failure in the
+    # Gold ingester.
+    pass
+  return '0'
 
 def dict_to_str(props):
   """Returns the given dictionary as a string of space
@@ -431,6 +445,14 @@ def gs_cp(api, name, src, dst, multithreaded=False, extra_args=None):
     except api.step.StepFailure: # pragma: no cover
       if i == UPLOAD_ATTEMPTS - 1:
         raise
+
+# Example of the BuildBucket information encoded as JSON.
+BUILD_BUCKET_INFO = """{"build": {"bucket": "master.tryserver.client.pdfium",
+                                  "created_by": "user:abc@example.com",
+                                  "created_ts": "1522258715088140",
+                                  "id": "8950789761525983376",
+                                  "lease_key": "388700065",
+                                  "tags": ["builder:linux_xfa"]}}"""
 
 def GenTests(api):
   yield (
@@ -735,6 +757,20 @@ def GenTests(api):
 
   yield (
        api.test('try-linux-gerrit_xfa_asan_lsan') +
+       api.platform('linux', 64) +
+       api.properties.tryserver(xfa=True,
+                                memory_tool='asan',
+                                mastername='tryserver.client.pdfium',
+                                buildnumber='1234',
+                                buildername='linux_xfa_asan_lsan',
+                                patch_issue='1234',
+                                patch_set=5,
+                                patch_storage='gerrit',
+                                buildbucket=BUILD_BUCKET_INFO)
+  )
+
+  yield (
+       api.test('try-linux-gerrit_xfa_asan_lsan_fail') +
        api.platform('linux', 64) +
        api.properties.tryserver(xfa=True,
                                 memory_tool='asan',

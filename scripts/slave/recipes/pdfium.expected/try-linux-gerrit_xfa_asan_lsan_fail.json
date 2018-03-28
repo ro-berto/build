@@ -12,7 +12,7 @@
       "--limit",
       "1",
       "-p",
-      "change=456789"
+      "change=1234"
     ],
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -61,7 +61,7 @@
       "--gerrit_repo",
       "https://chromium.googlesource.com/chromium/src",
       "--gerrit_ref",
-      "refs/changes/89/456789/12",
+      "refs/changes/34/1234/5",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -518,7 +518,7 @@
       "--build-dir",
       "out/debug_xfa_v8_asan",
       "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master tryserver.client.pdfium builder linux_xfa_asan_lsan build_number 1234 issue 456789 patchset 12 patch_storage gerrit buildbucket_build_id 0",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master tryserver.client.pdfium builder linux_xfa_asan_lsan build_number 1234 issue 1234 patchset 5 patch_storage gerrit buildbucket_build_id 0",
       "--gold_key",
       "asan true debug true is_standalone true lsan true os linux skia false v8 true xfa true",
       "--gold_output_dir",
@@ -577,7 +577,7 @@
       "-z",
       "json,log",
       "[START_DIR]/pdfium/out/debug_xfa_v8_asan/gold_output/dm.json",
-      "gs://skia-pdfium-gm/trybot/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux_xfa_asan_lsan/1337000003/456789/12/dm.json"
+      "gs://skia-pdfium-gm/trybot/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux_xfa_asan_lsan/1337000003/1234/5/dm.json"
     ],
     "infra_step": true,
     "name": "gsutil upload JSON"
