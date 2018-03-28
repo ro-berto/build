@@ -682,4 +682,4 @@ def DetermineGomaJobs():
     return min(10 * number_of_processors, 200)
 
   # TODO(yyanagisawa): increase the lower limit (crbug.com/822533)
-  return min(10 * number_of_processors, 110)
+  return min(10 * number_of_processors, 140)
