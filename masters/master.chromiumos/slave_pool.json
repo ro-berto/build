@@ -31,6 +31,9 @@
       "daisy-incremental": [
         "cros-beefy427-c2"
       ], 
+      "kevin-full": [
+        "cros-beefy499-c2"
+      ], 
       "lakitu-full": [
         "build174-m2"
       ], 
@@ -64,7 +67,6 @@
     "build245-m2", 
     "build263-m2", 
     "build323-m2", 
-    "build333-m2", 
-    "cros-beefy499-c2"
+    "build333-m2"
   ]
 }
