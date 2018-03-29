@@ -26,6 +26,7 @@ class iOSApi(recipe_api.RecipeApi):
     'iPhone 5s':       'iPhone6,1',
     'iPhone 6s':       'iPhone8,1',
     'iPhone 7':        'iPhone9,1',
+    'iPhone X':        'iPhone10,3',
   }
   # Service account to use in swarming tasks.
   SWARMING_SERVICE_ACCOUNT = \

@@ -2068,13 +2068,13 @@ Return a failing step with the given message.
 
 #### **class [iOSApi](/scripts/slave/recipe_modules/ios/api.py#16)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [bootstrap\_swarming](/scripts/slave/recipe_modules/ios/api.py#522)(self):**
+&mdash; **def [bootstrap\_swarming](/scripts/slave/recipe_modules/ios/api.py#523)(self):**
 
 Bootstraps Swarming.
 
-&emsp; **@property**<br>&mdash; **def [bucket](/scripts/slave/recipe_modules/ios/api.py#56)(self):**
+&emsp; **@property**<br>&mdash; **def [bucket](/scripts/slave/recipe_modules/ios/api.py#57)(self):**
 
-&mdash; **def [build](/scripts/slave/recipe_modules/ios/api.py#303)(self, analyze=False, mb_path=None, suffix=None, use_mb=True):**
+&mdash; **def [build](/scripts/slave/recipe_modules/ios/api.py#304)(self, analyze=False, mb_path=None, suffix=None, use_mb=True):**
 
 Builds from this bot's build config.
 
@@ -2085,59 +2085,59 @@ Args:
   suffix: Suffix to use at the end of step names.
   use_mb: Whether or not to use mb to generate build files.
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/ios/api.py#93)(self, gclient_apply_config=None, \*\*kwargs):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/ios/api.py#94)(self, gclient_apply_config=None, \*\*kwargs):**
 
 Checks out Chromium.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#900)(self, tasks, upload_test_results=True):**
+&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#901)(self, tasks, upload_test_results=True):**
 
 Collects the given Swarming task results.
 
-&emsp; **@property**<br>&mdash; **def [configuration](/scripts/slave/recipe_modules/ios/api.py#61)(self):**
+&emsp; **@property**<br>&mdash; **def [configuration](/scripts/slave/recipe_modules/ios/api.py#62)(self):**
 
-&mdash; **def [ensure\_xcode](/scripts/slave/recipe_modules/ios/api.py#280)(self, xcode_build_version):**
+&mdash; **def [ensure\_xcode](/scripts/slave/recipe_modules/ios/api.py#281)(self, xcode_build_version):**
 
-&mdash; **def [get\_mac\_toolchain\_cmd](/scripts/slave/recipe_modules/ios/api.py#274)(self):**
+&mdash; **def [get\_mac\_toolchain\_cmd](/scripts/slave/recipe_modules/ios/api.py#275)(self):**
 
-&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1074)(self, path):**
+&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1075)(self, path):**
 
-&emsp; **@staticmethod**<br>&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/ios/api.py#529)(test):**
+&emsp; **@staticmethod**<br>&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/ios/api.py#530)(test):**
 
-&mdash; **def [isolate](/scripts/slave/recipe_modules/ios/api.py#689)(self, scripts_dir='src/ios/build/bots/scripts'):**
+&mdash; **def [isolate](/scripts/slave/recipe_modules/ios/api.py#690)(self, scripts_dir='src/ios/build/bots/scripts'):**
 
 Isolates the tests specified in this bot's build config.
 
-&mdash; **def [isolate\_earlgrey\_test](/scripts/slave/recipe_modules/ios/api.py#634)(self, test, shard_size, tmp_dir, isolate_template):**
+&mdash; **def [isolate\_earlgrey\_test](/scripts/slave/recipe_modules/ios/api.py#635)(self, test, shard_size, tmp_dir, isolate_template):**
 
 Isolate earlgrey test into small shards
 
-&mdash; **def [isolate\_test](/scripts/slave/recipe_modules/ios/api.py#546)(self, test, tmp_dir, isolate_template, test_cases=None, shard_num=None):**
+&mdash; **def [isolate\_test](/scripts/slave/recipe_modules/ios/api.py#547)(self, test, tmp_dir, isolate_template, test_cases=None, shard_num=None):**
 
 Isolates a single test.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1159)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1160)(self):**
 
 Returns the path (relative to checkout working dir) of the most recently
 compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1146)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1147)(self):**
 
 Returns the Path to the directory of the most recently compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1174)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1175)(self):**
 
 Returns the path to the most recently compiled iossim.
 
-&mdash; **def [parse\_tests](/scripts/slave/recipe_modules/ios/api.py#111)(self, tests, include_dir, start_index=0):**
+&mdash; **def [parse\_tests](/scripts/slave/recipe_modules/ios/api.py#112)(self, tests, include_dir, start_index=0):**
 
 Parses the tests dict, reading necessary includes.
 
 Args:
   tests: A list of test dicts.
 
-&emsp; **@property**<br>&mdash; **def [platform](/scripts/slave/recipe_modules/ios/api.py#70)(self):**
+&emsp; **@property**<br>&mdash; **def [platform](/scripts/slave/recipe_modules/ios/api.py#71)(self):**
 
-&mdash; **def [read\_build\_config](/scripts/slave/recipe_modules/ios/api.py#172)(self, master_name=None, build_config_base_dir=None, buildername=None):**
+&mdash; **def [read\_build\_config](/scripts/slave/recipe_modules/ios/api.py#173)(self, master_name=None, build_config_base_dir=None, buildername=None):**
 
 Reads the iOS build config for this bot.
 
@@ -2147,7 +2147,7 @@ Args:
   build_config_base_dir: Directory to search for build config master and
     test include directories.
 
-&mdash; **def [symupload](/scripts/slave/recipe_modules/ios/api.py#446)(self, artifact, url):**
+&mdash; **def [symupload](/scripts/slave/recipe_modules/ios/api.py#447)(self, artifact, url):**
 
 Uploads the given symbols file.
 
@@ -2156,19 +2156,19 @@ Args:
     out directory, so must have already been compiled.
   url: URL of the symbol server to upload to.
 
-&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1123)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
+&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1124)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
 
 Runs tests on Swarming as instructed by this bot's build config.
 
-&mdash; **def [trigger](/scripts/slave/recipe_modules/ios/api.py#789)(self, tasks):**
+&mdash; **def [trigger](/scripts/slave/recipe_modules/ios/api.py#790)(self, tasks):**
 
 Triggers the given Swarming tasks.
 
-&mdash; **def [upload](/scripts/slave/recipe_modules/ios/api.py#492)(self, base_path=None):**
+&mdash; **def [upload](/scripts/slave/recipe_modules/ios/api.py#493)(self, base_path=None):**
 
 Uploads built artifacts as instructed by this bot's build config.
 
-&mdash; **def [upload\_tgz](/scripts/slave/recipe_modules/ios/api.py#461)(self, artifact, bucket, path):**
+&mdash; **def [upload\_tgz](/scripts/slave/recipe_modules/ios/api.py#462)(self, artifact, bucket, path):**
 
 Tar gzips and uploads the given artifact to Google Storage.
 
@@ -2178,7 +2178,7 @@ Args:
   bucket: Name of the Google Storage bucket to upload to.
   path: Path to upload the artifact to relative to the bucket.
 
-&emsp; **@property**<br>&mdash; **def [use\_goma](/scripts/slave/recipe_modules/ios/api.py#83)(self):**
+&emsp; **@property**<br>&mdash; **def [use\_goma](/scripts/slave/recipe_modules/ios/api.py#84)(self):**
 ### *recipe_modules* / [isolate](/scripts/slave/recipe_modules/isolate)
 
 [DEPS](/scripts/slave/recipe_modules/isolate/__init__.py#5): [chromium](#recipe_modules-chromium), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]

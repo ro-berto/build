@@ -812,6 +812,7 @@
       "@@@STEP_LOG_LINE@supported devices@iPhone 5s@@@",
       "@@@STEP_LOG_LINE@supported devices@iPhone 6s@@@",
       "@@@STEP_LOG_LINE@supported devices@iPhone 7@@@",
+      "@@@STEP_LOG_LINE@supported devices@iPhone X@@@",
       "@@@STEP_LOG_END@supported devices@@@",
       "@@@STEP_EXCEPTION@@@"
     ]
