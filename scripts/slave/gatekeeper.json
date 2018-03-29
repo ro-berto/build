@@ -949,6 +949,12 @@
               "chromesec-lkgr-failures@google.com"
             ],
             "forgiving_optional": ["*"]
+          },
+          "linux-blink-heap-verification": {
+            "tree_notify": [
+              "mlippautz+fyi-bots@chromium.org"
+            ],
+            "forgiving_optional": ["*"]
           }
         }
       }
