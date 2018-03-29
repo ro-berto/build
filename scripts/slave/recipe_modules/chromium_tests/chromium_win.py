@@ -52,7 +52,7 @@ SPEC = {
       },
       'swarming_dimensions': {
         'cpu': 'x86-64',
-        'os': 'Windows-10-14393',
+        'os': 'Windows-10',
       },
     },
     'Win7 (32) Tests': {
