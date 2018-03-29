@@ -23,8 +23,8 @@ class GCEAuthorizer(object):
   """An Authorizer implementation for GCE hosts."""
   implements(IAuthorizer)
 
-  ACQUIRE_URL = ('http://metadata/computeMetadata/v1/instance/service-accounts/'
-                 'default/token')
+  ACQUIRE_URL = ('http://metadata.google.internal/computeMetadata/v1/instance/'
+                 'service-accounts/default/token')
   ACQUIRE_HEADERS = {"Metadata-Flavor": "Google"}
   ACQUIRE_RETRIES = 5
 
@@ -92,7 +92,8 @@ class GCEAuthorizer(object):
   def is_gce_host(cls):
     if cls._is_gce_host_cache is None:
       for _try in xrange(5):
-        # Based on https://cloud.google.com/compute/docs/metadata#runninggce
+        # Based on
+        # https://cloud.google.com/compute/docs/storing-retrieving-metadata
         try:
           headers = urllib2.urlopen('http://metadata.google.internal').info()
         except urllib2.URLError:
