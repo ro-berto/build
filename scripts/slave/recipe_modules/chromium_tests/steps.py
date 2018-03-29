@@ -2462,7 +2462,7 @@ class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
   name = 'test_installer'
 
   def compile_targets(self, _):
-    return ['mini_installer', 'next_version_mini_installer']
+    return ['mini_installer_tests']
 
   def run_step(self, api, suffix, cmd_args, **kwargs):
     test_path = api.path['checkout'].join('chrome', 'test', 'mini_installer')

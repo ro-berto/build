@@ -20,7 +20,7 @@
     "cmd": [],
     "name": "details",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@details@compile_targets: ['mini_installer', 'next_version_mini_installer']@@@",
+      "@@@STEP_LOG_LINE@details@compile_targets: ['mini_installer_tests']@@@",
       "@@@STEP_LOG_LINE@details@uses_local_devices: False@@@",
       "@@@STEP_LOG_END@details@@@"
     ]
