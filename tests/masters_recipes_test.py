@@ -128,7 +128,12 @@ FAKE_BUILDERS = {
         'linux_chromium_rel_ng',
         'linux_optional_gpu_tests_rel',
     ],
+    'master.tryserver.chromium.android': [
+        # These have been migrated to LUCI.
+        'android_optional_gpu_tests_rel',
+    ],
     'master.tryserver.chromium.angle': [
+        # These have been migrated to LUCI.
         'android_angle_rel_ng',
         'android_angle_deqp_rel_ng',
         'linux_angle_compile_dbg_ng',

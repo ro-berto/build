@@ -209,14 +209,6 @@
       "slavebuilddir": "android",
       "slave_pools": ["ccompute_optional_bots_2"],
     },
-    "android_optional_gpu_tests_rel": {
-      "builder_timeout_s": 10800,  # 60 * 60 * 4
-      "recipe": "chromium_trybot",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slavebuilddir": "android",
-      "slave_pools": ["ccompute_android_launch"],
-    },
     "android_unswarmed_n5_rel": {
       "builder_timeout_s": 36000,  # 60 * 60 * 6
       "recipe": "chromium_trybot",
