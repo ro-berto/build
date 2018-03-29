@@ -522,6 +522,7 @@ def GenTests(api):
           'app': 'fake test',
           'device type': 'fake device',
           'os': '8.1',
+          'priority': 199,
         },
       ],
     })

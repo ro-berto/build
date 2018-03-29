@@ -860,6 +860,8 @@ class iOSApi(recipe_api.RecipeApi):
       if task['pool']:
         swarming_task.dimensions['pool'] = task['pool']
 
+      swarming_task.priority = task['test'].get('priority', 200)
+
       spec = [
         self.m.properties['mastername'],
         self.m.properties['buildername'],

@@ -2089,7 +2089,7 @@ Args:
 
 Checks out Chromium.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#898)(self, tasks, upload_test_results=True):**
+&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#900)(self, tasks, upload_test_results=True):**
 
 Collects the given Swarming task results.
 
@@ -2099,7 +2099,7 @@ Collects the given Swarming task results.
 
 &mdash; **def [get\_mac\_toolchain\_cmd](/scripts/slave/recipe_modules/ios/api.py#274)(self):**
 
-&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1072)(self, path):**
+&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1074)(self, path):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/ios/api.py#529)(test):**
 
@@ -2115,16 +2115,16 @@ Isolate earlgrey test into small shards
 
 Isolates a single test.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1157)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1159)(self):**
 
 Returns the path (relative to checkout working dir) of the most recently
 compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1144)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1146)(self):**
 
 Returns the Path to the directory of the most recently compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1172)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1174)(self):**
 
 Returns the path to the most recently compiled iossim.
 
@@ -2156,7 +2156,7 @@ Args:
     out directory, so must have already been compiled.
   url: URL of the symbol server to upload to.
 
-&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1121)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
+&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1123)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
 
 Runs tests on Swarming as instructed by this bot's build config.
 
@@ -5007,12 +5007,16 @@ Recipe for building and running tests for Libyuv stand-alone.
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/pdfium.py#231)(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel, jumbo, skip_test, target_os):**
 
-&mdash; **def [dict\_to\_str](/scripts/slave/recipes/pdfium.py#281)(props):**
+&mdash; **def [dict\_to\_str](/scripts/slave/recipes/pdfium.py#295)(props):**
 
 Returns the given dictionary as a string of space
 separated key/value pairs sorted by keys.
 
-&mdash; **def [get\_gold\_ignore\_hashes](/scripts/slave/recipes/pdfium.py#316)(api, out_dir):**
+&mdash; **def [get\_buildbucket\_build\_id](/scripts/slave/recipes/pdfium.py#282)(api):**
+
+Returns the build bucket id or '0' if is not availabe in api
+
+&mdash; **def [get\_gold\_ignore\_hashes](/scripts/slave/recipes/pdfium.py#330)(api, out_dir):**
 
 Downloads a list of MD5 hashes from Gold and
 writes them to a file. That file is then used by the
@@ -5027,7 +5031,7 @@ the generated images. Returns:
     (properties_str, key_str)
 These strings can be passed directly into run_corpus_tests.py.
 
-&mdash; **def [gold\_build\_config](/scripts/slave/recipes/pdfium.py#290)(args):**
+&mdash; **def [gold\_build\_config](/scripts/slave/recipes/pdfium.py#304)(args):**
 
 Extracts key value pairs from the arguments handed to 'gn gen'
 and returns them as a dictionary. Since these are used as
@@ -5036,11 +5040,11 @@ some arguments. i.e. 'use_goma' since we don't care about how
 a binary was built.  Only arguments that follow the
 'key=value' pattern are considered.
 
-&mdash; **def [gs\_cp](/scripts/slave/recipes/pdfium.py#419)(api, name, src, dst, multithreaded=False, extra_args=None):**
+&mdash; **def [gs\_cp](/scripts/slave/recipes/pdfium.py#433)(api, name, src, dst, multithreaded=False, extra_args=None):**
 
 Copy the src to dst in Google storage.
 
-&mdash; **def [upload\_dm\_results](/scripts/slave/recipes/pdfium.py#371)(api, results_dir, revision):**
+&mdash; **def [upload\_dm\_results](/scripts/slave/recipes/pdfium.py#385)(api, results_dir, revision):**
 
 Uploads results of the tests to Gold.
 This assumes that results_dir contains a JSON file
