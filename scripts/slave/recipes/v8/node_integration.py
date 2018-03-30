@@ -12,6 +12,12 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/gsutil',
   'depot_tools/tryserver',
+  # TODO(sergiyb): Module puppet_service_account is not LUCI-ready because it
+  # requires puppet configuration to be used. We need to migrate to
+  # recipe_engine/service_account once buildbucket module supports passing
+  # access_token instead of path to JSON file containing credentials.
+  'puppet_service_account',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -182,19 +188,37 @@ def RunSteps(api):
 
   # Trigger performance bots.
   if api.v8.bot_config.get('triggers'):
-    api.trigger(*[{
-      'builder_name': builder_name,
-      'bucket': 'master.internal.client.v8',
-      'properties': {
-        'revision': api.v8.revision,
-        'parent_got_revision': api.v8.revision,
-        'parent_got_revision_cp': api.v8.revision_cp,
-      },
-      'buildbot_changes': [{
-        'author': 'node.js',
-        'revision': api.v8.revision,
-      }]
-    } for builder_name in api.v8.bot_config['triggers']])
+    # TODO(sergiyb): Remove this line after migrating all triggered bots to
+    # swarming. There an implicit task account (specified in the
+    # cr-buildbucket.cfg) will be used instead.
+    api.buildbucket.use_service_account_key(
+        api.puppet_service_account.get_key_path('v8-internal-bot'))
+    api.buildbucket.put(
+      [{
+        'bucket': 'master.internal.client.v8',
+        'tags': {
+          'buildset': 'commit/gitiles/chromium.googlesource.com/v8/v8/+/%s' %
+              api.v8.revision
+        },
+        'parameters': {
+          'builder_name': builder_name,
+          'properties': {
+            'revision': api.v8.revision,
+            'parent_got_revision': api.v8.revision,
+            'parent_got_revision_cp': api.v8.revision_cp,
+          },
+          # This is required by Buildbot to correctly set 'revision' and
+          # 'repository' properties, which are used by Milo and the recipe.
+          # TODO(sergiyb): Remove this after migrating to LUCI/Swarming.
+          'changes': [{
+            'author': {'email': 'node.js'},
+            'revision': api.v8.revision,
+            'repo_url': 'https://chromium.googlesource.com/v8/v8'
+          }],
+        },
+      } for builder_name in api.v8.bot_config['triggers']],
+      name='trigger'
+    )
 
 
 def _sanitize_nonalpha(*chunks):
