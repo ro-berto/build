@@ -135,6 +135,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -157,6 +160,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -179,6 +185,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -200,6 +209,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -222,6 +234,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -244,6 +259,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -266,6 +284,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -287,6 +308,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -308,6 +332,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -329,6 +356,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -352,6 +382,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -372,6 +405,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -392,6 +428,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -413,9 +452,10 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'tests': {
+      'tests': [
+        steps.MiniInstallerTest(),
         steps.SizesStep(RESULTS_URL, 'ToTWinThinLTO64')
-      },
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -433,6 +473,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       'compile_targets': [ 'chromium_builder_asan' ],
       # add_tests_as_compile_targets not needed for the asan bot, it doesn't
       # build everything.
@@ -451,6 +494,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       'compile_targets': [ 'chromium_builder_asan' ],
       # add_tests_as_compile_targets not needed for the asan bot, it doesn't
       # build everything.
@@ -468,6 +514,9 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      'tests': [
+        steps.MiniInstallerTest(),
+      ],
       'compile_targets': [ 'chromium_builder_asan' ],
       # add_tests_as_compile_targets not needed for the asan bot, it doesn't
       # build everything.
@@ -625,7 +674,10 @@ SPEC = {
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
-      'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin') },
+      'tests': [
+        steps.MiniInstallerTest(),
+        steps.SizesStep(RESULTS_URL, 'ToTWin'),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -644,7 +696,10 @@ SPEC = {
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
-      'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin(dbg)') },
+      'tests': [
+        steps.MiniInstallerTest(),
+        steps.SizesStep(RESULTS_URL, 'ToTWin(dbg)'),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -664,7 +719,10 @@ SPEC = {
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
-      'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin(dll)') },
+      'tests': [
+        steps.MiniInstallerTest(),
+        steps.SizesStep(RESULTS_URL, 'ToTWin(dll)'),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -684,7 +742,10 @@ SPEC = {
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
-      'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin64') },
+      'tests': [
+        steps.MiniInstallerTest(),
+        steps.SizesStep(RESULTS_URL, 'ToTWin64'),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -703,7 +764,10 @@ SPEC = {
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
-      'tests': { steps.SizesStep(RESULTS_URL, 'ToTWinLibcxx64') },
+      'tests': [
+        steps.MiniInstallerTest(),
+        steps.SizesStep(RESULTS_URL, 'ToTWinLibcxx64'),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -722,7 +786,10 @@ SPEC = {
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
-      'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin64(dbg)') },
+      'tests': [
+        steps.MiniInstallerTest(),
+        steps.SizesStep(RESULTS_URL, 'ToTWin64(dbg)'),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -742,7 +809,10 @@ SPEC = {
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
-      'tests': { steps.SizesStep(RESULTS_URL, 'ToTWin64(dll)') },
+      'tests': [
+        steps.MiniInstallerTest(),
+        steps.SizesStep(RESULTS_URL, 'ToTWin64(dll)'),
+      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
