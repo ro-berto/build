@@ -1344,19 +1344,66 @@ class V8Api(recipe_api.RecipeApi):
       if triggers_proxy and not self.m.runtime.is_experimental:
         proxy_properties = {'archive': self._get_default_archive()}
         proxy_properties.update(properties)
-        self.m.trigger(*[{
-          'builder_name': 'v8_trigger_proxy',
-          'bucket': 'master.internal.client.v8',
-          'properties': proxy_properties,
-          'buildbot_changes': [{
-            'author': 'trigger_proxy',
-            'revision': self.revision,
-          }]
-        }])
+        self.buildbucket_trigger(
+            'master.internal.client.v8', 'trigger_proxy',
+            [{
+              'properties': proxy_properties,
+              'builder_name': 'v8_trigger_proxy'
+            }]
+        )
 
     if triggered_build_ids:
       output_properties = self.m.step.active_result.presentation.properties
       output_properties['triggered_build_ids'] = triggered_build_ids
+
+  def buildbucket_trigger(self, bucket, author, requests, step_name='trigger',
+                          service_account='v8-bot'):
+    """Triggers builds via buildbucket.
+
+    Args:
+      bucket: Name of the bucket to add builds to.
+      author: Name of the author of the fake change associated with the build
+          request.
+      requests: List of requests, where each request is a dictionary like this:
+          {'builder_name': ..., 'properties': {'revision': ..., ...}}. Note that
+          builder_name and revision are mandatory, whereas additional properties
+          are optional.
+      step_name: Name of the triggering step that appear on the build.
+      service_account: Puppet service account to be used for authentication to
+          buildbucket.
+    """
+    # TODO(sergiyb): Remove this line after migrating all builders to swarming.
+    # There an implicit task account (specified in the cr-buildbucket.cfg) will
+    # be used instead.
+    self.m.buildbucket.use_service_account_key(
+        self.m.puppet_service_account.get_key_path(service_account))
+    self.m.buildbucket.put(
+        [{
+          'bucket': bucket,
+          'tags': {
+            'buildset': 'commit/gitiles/chromium.googlesource.com/v8/v8/+/%s' %
+                request['properties']['revision']
+          },
+          'parameters': {
+            'builder_name': request['builder_name'],
+            'properties': request['properties'],
+            # This is required by Buildbot to correctly set 'revision' and
+            # 'repository' properties, which are used by Milo and the recipe.
+            # TODO(sergiyb): Remove this after migrating to LUCI/Swarming.
+            'changes': [{
+              'author': {'email': author},
+              'revision': request['properties']['revision'],
+              'repo_url': 'https://chromium.googlesource.com/v8/v8'
+            }],
+          },
+        } for request in requests],
+        name=step_name,
+        step_test_data=lambda: self.m.json.test_api.output_stream({
+          'results': [{
+            'id': 10000000 + i,
+          } for i in range(len(requests))]
+        }),
+    )
 
   def get_change_range(self):
     if self.m.properties.get('override_changes'):
