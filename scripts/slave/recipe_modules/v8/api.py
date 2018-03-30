@@ -48,8 +48,6 @@ V8_MINOR = 'V8_MINOR_VERSION'
 V8_BUILD = 'V8_BUILD_NUMBER'
 V8_PATCH = 'V8_PATCH_LEVEL'
 
-BBUCKET_SERVICE_ACCOUNT = 'v8-bot'
-
 
 class V8Version(object):
   """A v8 version as used for tagging (with patch level), e.g. '3.4.5.1'."""
@@ -1288,47 +1286,26 @@ class V8Api(recipe_api.RecipeApi):
             bucket_name = self.m.buildbucket.properties['build']['bucket']
           except (TypeError, KeyError) as e:
             bucket_name = 'master.%s' % self.m.properties['mastername']
-          if not self.m.runtime.is_luci:
-            self.m.buildbucket.use_service_account_key(
-                self.m.puppet_service_account.get_key_path(
-                  BBUCKET_SERVICE_ACCOUNT))
-          else:
-            # LUCI builders are automatically using service account from
-            # swarming env, which is specified in the cr-buildbucket.cfg.
-            pass
-          step_result = self.m.buildbucket.put(
-              [
-                {
-                  'bucket': bucket_name,
-                  'parameters': {
-                    'builder_name': builder_name,
-                    # Attach additional builder-specific test-spec properties.
-                    'properties': dict(
-                        trigger_props,
-                        **self._test_spec_to_properties(builder_name, test_spec)
-                    ),
-                    # Generate a list of fake changes from the blamelist
-                    # property to have correct blamelist displayed on the child
-                    # build. Unfortunately, this only copies author names, but
-                    # additional details about the list of changes associated
-                    # with the build are currently not accessible from the
-                    # recipe code.
-                    'changes': [
-                      {
-                        'author': {
-                          'email': author,
-                        },
-                      }
-                      for author in self.m.properties.get('blamelist', [])
-                    ],
-                  },
-                }
-                for builder_name in triggers
-              ],
-              name='trigger',
-              step_test_data=lambda: self.m.json.test_api.output_stream({}),
+          # Generate a list of fake changes from the blamelist property to have
+          # correct blamelist displayed on the child build. Unfortunately, this
+          # only copies author names, but additional details about the list of
+          # changes associated with the build are currently not accessible from
+          # the recipe code.
+          # TODO(sergiyb): Remove this after migrating all builders to LUCI as
+          # there the revision from the buildset will be used instead.
+          changes = [
+              {'author': email}
+              for email in self.m.properties.get('blamelist', [])]
+          step_result = self.buildbucket_trigger(
+              bucket_name, changes,
+              [{
+                'builder_name': builder_name,
+                'properties': dict(
+                    trigger_props,
+                    **self._test_spec_to_properties(builder_name, test_spec)
+                ),
+              } for builder_name in triggers]
           )
-
           triggered_build_ids.extend(
               build['build']['id'] for build in step_result.stdout['results'])
       else:
@@ -1345,7 +1322,7 @@ class V8Api(recipe_api.RecipeApi):
         proxy_properties = {'archive': self._get_default_archive()}
         proxy_properties.update(properties)
         self.buildbucket_trigger(
-            'master.internal.client.v8', 'trigger_proxy',
+            'master.internal.client.v8', [{'author': 'trigger_proxy'}],
             [{
               'properties': proxy_properties,
               'builder_name': 'v8_trigger_proxy'
@@ -1356,14 +1333,16 @@ class V8Api(recipe_api.RecipeApi):
       output_properties = self.m.step.active_result.presentation.properties
       output_properties['triggered_build_ids'] = triggered_build_ids
 
-  def buildbucket_trigger(self, bucket, author, requests, step_name='trigger',
+  def buildbucket_trigger(self, bucket, changes, requests, step_name='trigger',
                           service_account='v8-bot'):
     """Triggers builds via buildbucket.
 
     Args:
       bucket: Name of the bucket to add builds to.
-      author: Name of the author of the fake change associated with the build
-          request.
+      changes: List of changes to be associated with the scheduled build. Each
+          entry is a dictionary like this: {'author': ..., 'revision': ...}. The
+          revision is optional and will be extracted from build propeties if not
+          provided. The author is an arbitrary string or an email address.
       requests: List of requests, where each request is a dictionary like this:
           {'builder_name': ..., 'properties': {'revision': ..., ...}}. Note that
           builder_name and revision are mandatory, whereas additional properties
@@ -1375,9 +1354,10 @@ class V8Api(recipe_api.RecipeApi):
     # TODO(sergiyb): Remove this line after migrating all builders to swarming.
     # There an implicit task account (specified in the cr-buildbucket.cfg) will
     # be used instead.
-    self.m.buildbucket.use_service_account_key(
-        self.m.puppet_service_account.get_key_path(service_account))
-    self.m.buildbucket.put(
+    if not self.m.runtime.is_luci:
+      self.m.buildbucket.use_service_account_key(
+          self.m.puppet_service_account.get_key_path(service_account))
+    return self.m.buildbucket.put(
         [{
           'bucket': bucket,
           'tags': {
@@ -1391,10 +1371,11 @@ class V8Api(recipe_api.RecipeApi):
             # 'repository' properties, which are used by Milo and the recipe.
             # TODO(sergiyb): Remove this after migrating to LUCI/Swarming.
             'changes': [{
-              'author': {'email': author},
-              'revision': request['properties']['revision'],
+              'author': {'email': change['author']},
+              'revision': change.get(
+                'revision', request['properties']['revision']),
               'repo_url': 'https://chromium.googlesource.com/v8/v8'
-            }],
+            } for change in changes],
           },
         } for request in requests],
         name=step_name,
