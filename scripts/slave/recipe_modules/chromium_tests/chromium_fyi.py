@@ -121,6 +121,7 @@ SPEC = {
       },
     },
     'Chromium Mac 10.13': {
+      'checkout_dir': 'mac',
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
