@@ -110,12 +110,16 @@ FAKE_BUILDERS = {
     ],
     'master.chromium.win': [
         # These have been migrated to LUCI.
+        'Win Builder (dbg)',
+        'Win7 Tests (dbg)(1)',
         'Win10 Tests x64 (dbg)',
     ],
     'master.tryserver.chromium.win' : [
         # FIXME(tansell): Remove fake when BlinkTests are removed.
         'old_chromium_rel_ng',
         # These have been migrated to LUCI.
+        'win_chromium_compile_dbg_ng',
+        'win_chromium_dbg_ng',
         'win10_chromium_x64_dbg_ng',
     ],
     'master.tryserver.chromium.linux': [
