@@ -30,7 +30,7 @@
       "retry",
       "fetch",
       "origin",
-      "release",
+      "master",
       "--recurse-submodules",
       "--progress"
     ],
@@ -182,91 +182,6 @@
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "name": "prepare, create and publish a flutter archive"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]\\flutter\\dev\\bots\\download_android_tools.py",
-      "-t",
-      "sdk"
-    ],
-    "name": "download android tools"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::url]\\resources\\pycurl.py",
-      "--url",
-      "https://services.gradle.org/distributions/gradle-2.14.1-bin.zip",
-      "--status-json",
-      "/path/to/tmp/json",
-      "--outfile",
-      "[START_DIR]\\flutter\\dev\\bots\\gradle-2.14.1-bin.zip"
-    ],
-    "name": "download gradle"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::zip]\\resources\\unzip.py"
-    ],
-    "name": "unzip gradle",
-    "stdin": "{\"output\": \"[START_DIR]\\\\flutter\\\\dev\\\\bots\\\\gradle\", \"quiet\": false, \"zip_file\": \"[START_DIR]\\\\flutter\\\\dev\\\\bots\\\\gradle-2.14.1-bin.zip\"}"
-  },
-  {
-    "cmd": [
-      "cmd.exe",
-      "/C",
-      "[START_DIR]\\flutter\\dev\\bots\\android_tools\\sdk\\tools\\bin\\sdkmanager.bat --list"
-    ],
-    "name": "print installed android SDK components"
-  },
-  {
-    "cmd": [
-      "dart.exe",
-      "[START_DIR]\\flutter\\dev\\bots\\test.dart"
-    ],
-    "cwd": "[START_DIR]\\flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;[START_DIR]\\..\\..\\..\\scripts\\slave;<PATH>",
-      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
-      "SHARD": "tests"
-    },
-    "name": "run test.dart for tests shard"
-  },
-  {
-    "cmd": [
-      "flutter.bat",
-      "-v",
-      "build",
-      "apk"
-    ],
-    "cwd": "[START_DIR]\\flutter\\examples/stocks",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;[START_DIR]\\..\\..\\..\\scripts\\slave;<PATH>",
-      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
-    },
-    "name": "flutter build apk stocks"
-  },
-  {
-    "cmd": [
-      "flutter.bat",
-      "-v",
-      "build",
-      "apk"
-    ],
-    "cwd": "[START_DIR]\\flutter\\examples/flutter_gallery",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;[START_DIR]\\..\\..\\..\\scripts\\slave;<PATH>",
-      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
-    },
-    "name": "flutter build apk flutter_gallery"
   },
   {
     "name": "$result",

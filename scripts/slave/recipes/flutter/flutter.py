@@ -177,9 +177,18 @@ def RunSteps(api):
   if 'clobber' in api.properties:
     api.file.rmcontents('everything', api.path['start_dir'])
 
+  branch = api.properties.get('branch')
+  ref = api.properties.get('revision')
+  packaging_build = branch and PACKAGED_BRANCH_RE.match(branch)
+  if packaging_build:
+    # On the non-master branches, we're only doing packaging, so we want to
+    # check out the master branch to get the latest packaging script. Packaging
+    # will do its own checkout of the branch being packaged.
+    ref = 'master'
+
   git_hash = api.git.checkout(
       'https://chromium.googlesource.com/external/github.com/flutter/flutter',
-      ref=api.properties.get('revision'),
+      ref=ref,
       recursive=True,
       set_got_revision=True)
   checkout = api.path['checkout']
@@ -221,11 +230,14 @@ def RunSteps(api):
   with api.context(env=env, cwd=checkout):
     api.step('flutter doctor', [flutter_executable, 'doctor'])
     api.step('download dependencies', [flutter_executable, 'update-packages'])
-    branch = api.properties.get('branch')
-    if (branch and PACKAGED_BRANCH_RE.match(branch)):
+    if packaging_build:
       CreateAndUploadFlutterPackage(api, git_hash)
     else:
       api.step('Skipping packaging on %s branch.' % branch, cmd=None)
+
+  if packaging_build:
+    # Nothing left to do on non-master branch.
+    return
 
   if api.platform.is_mac:
     SetupXcode(api)
@@ -255,7 +267,7 @@ def GenTests(api):
       test = (
           api.test('%s_%s' % (platform, branch)) + api.platform(platform, 64) +
           api.properties(clobber='', branch=branch))
-      if platform == 'mac':
+      if platform == 'mac' and branch == 'master':
         test += (
             api.step_data('set_xcode_version',
                           api.json.output({
@@ -263,7 +275,7 @@ def GenTests(api):
                                   '/Applications/Xcode9.0.app': '9.0.1 (9A1004)'
                               }
                           })))
-      if platform == 'linux':
+      if platform == 'linux' and branch == 'master':
         test += (
             api.override_step_data('upload coverage data to Coveralls',
                                    api.raw_io.output('')))
