@@ -548,3 +548,10 @@ def GenTests(api):
       api.runtime(is_luci=True, is_experimental=True) +
       api.post_process(Filter('[trigger] Check'))
   )
+
+  # Test triggerring child builders on LUCI.
+  yield (
+      api.v8.test('client.v8', 'V8 Linux - builder', 'trigger_on_luci') +
+      api.runtime(is_luci=True, is_experimental=False) +
+      api.post_process(Filter('trigger'))
+  )

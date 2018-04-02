@@ -27,6 +27,7 @@ DEPS = [
   'recipe_engine/raw_io',
   'recipe_engine/runtime',
   'recipe_engine/step',
+  'recipe_engine/scheduler',
   'recipe_engine/tempfile',
   'recipe_engine/time',
   'recipe_engine/url',

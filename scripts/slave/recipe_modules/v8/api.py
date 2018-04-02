@@ -1309,14 +1309,31 @@ class V8Api(recipe_api.RecipeApi):
           triggered_build_ids.extend(
               build['build']['id'] for build in step_result.stdout['results'])
       else:
-        self.m.trigger(*[{
-          'builder_name': builder_name,
-          # Attach additional builder-specific test-spec properties.
-          'properties': dict(
-              properties,
-              **self._test_spec_to_properties(builder_name, test_spec)
-          ),
-        } for builder_name in triggers])
+        if self.m.runtime.is_luci:
+          self.m.scheduler.emit_triggers(
+              [(
+                self.m.scheduler.BuildbucketTrigger(
+                  properties=dict(
+                    properties,
+                    **self._test_spec_to_properties(builder_name, test_spec)
+                  ),
+                  tags={
+                    'buildset': 'commit/gitiles/chromium.googlesource.com/v8/'
+                                'v8/+/%s' % properties['revision']
+                  }
+                ), 'v8', [builder_name],
+              ) for builder_name in triggers],
+              step_name='trigger'
+          )
+        else:
+          self.m.trigger(*[{
+            'builder_name': builder_name,
+            # Attach additional builder-specific test-spec properties.
+            'properties': dict(
+                properties,
+                **self._test_spec_to_properties(builder_name, test_spec)
+            ),
+          } for builder_name in triggers])
 
       if triggers_proxy and not self.m.runtime.is_experimental:
         proxy_properties = {'archive': self._get_default_archive()}
