@@ -160,12 +160,6 @@ def main(argv):
                       'build/util/LASTCHANGE'], cwd=options.src_dir) != 0:
     print 'Could not run build/util/lastchange.py to update LASTCHANGE.'
     return 1
-  if subprocess.call(['python', 'build/util/lastchange.py', '-s',
-                      'third_party/WebKit', '-o',
-                      'build/util/LASTCHANGE.blink'],
-                     cwd=options.src_dir) != 0:
-    print 'Could not run build/util/lastchange.py to update LASTCHANGE.blink.'
-    return 1
   if subprocess.call(['python', 'build/util/lastchange.py',
                       '-s', 'third_party/skia',
                       '-m', 'SKIA_COMMIT_HASH',
