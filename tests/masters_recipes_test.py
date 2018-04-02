@@ -102,17 +102,23 @@ FAKE_BUILDERS = {
         'Linux Builder (dbg)',
         'Linux Tests',
         'Linux Tests (dbg)(1)',
+        # These are pure LUCI bots, no equivalent buildbot bot.
+        'linux64-jumbo-rel',
     ],
     'master.chromium.mac': [
         # These have been migrated to LUCI.
         'Mac Builder (dbg)',
         'Mac10.13 Tests (dbg)',
+        # These are pure LUCI bots, no equivalent buildbot bot.
+        'mac-jumbo-rel',
     ],
     'master.chromium.win': [
         # These have been migrated to LUCI.
         'Win Builder (dbg)',
         'Win7 Tests (dbg)(1)',
         'Win10 Tests x64 (dbg)',
+        # These are pure LUCI bots, no equivalent buildbot bot.
+        'win64-jumbo-rel',
     ],
     'master.tryserver.chromium.win' : [
         # FIXME(tansell): Remove fake when BlinkTests are removed.
@@ -120,6 +126,7 @@ FAKE_BUILDERS = {
         # These have been migrated to LUCI.
         'win_chromium_compile_dbg_ng',
         'win_chromium_dbg_ng',
+        # These are pure LUCI bots, no equivalent buildbot bot.
         'win10_chromium_x64_dbg_ng',
     ],
     'master.tryserver.chromium.linux': [

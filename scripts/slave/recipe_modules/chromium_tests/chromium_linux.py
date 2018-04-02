@@ -13,6 +13,21 @@ SPEC = {
     'src_side_runtest_py': True,
   },
   'builders': {
+    'linux64-jumbo-rel': {
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+      ],
+      'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+      },
+      'testing': {
+          'platform': 'linux',
+      },
+    },
     'Linux Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
@@ -264,3 +279,4 @@ SPEC = {
     },
   },
 }
+
