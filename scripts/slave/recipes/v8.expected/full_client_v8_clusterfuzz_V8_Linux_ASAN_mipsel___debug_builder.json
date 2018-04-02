@@ -174,7 +174,7 @@
       "-C",
       "[START_DIR]/v8/out/Debug",
       "-j",
-      "50",
+      "20",
       "v8_clusterfuzz"
     ],
     "cwd": "[START_DIR]/v8",
@@ -192,7 +192,7 @@
       "-C",
       "[START_DIR]/v8/out/Debug",
       "-j",
-      "50",
+      "20",
       "v8_clusterfuzz",
       "-d",
       "explain",

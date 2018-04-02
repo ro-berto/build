@@ -292,25 +292,6 @@
     "name": "generate_build_files"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "cwd": "[START_DIR]/src",
     "env": {

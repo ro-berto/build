@@ -41,22 +41,6 @@
     "name": "gn"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "name": "preprocess_for_goma"
   },
@@ -131,7 +115,7 @@
       "-C",
       "out/Release",
       "-j",
-      "50"
+      "20"
     ],
     "name": "ninja"
   },
@@ -240,7 +224,7 @@
       "--ninja-log-outdir",
       "out/Release",
       "--ninja-log-command-file",
-      "[\"ninja\", \"-C\", \"out/Release\", \"-j\", \"50\"]",
+      "[\"ninja\", \"-C\", \"out/Release\", \"-j\", \"20\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

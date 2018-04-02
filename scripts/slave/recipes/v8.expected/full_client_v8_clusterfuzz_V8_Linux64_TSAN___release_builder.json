@@ -150,7 +150,7 @@
       "-C",
       "[START_DIR]/v8/out/Release",
       "-j",
-      "50",
+      "20",
       "v8_clusterfuzz"
     ],
     "cwd": "[START_DIR]/v8",
@@ -168,7 +168,7 @@
       "-C",
       "[START_DIR]/v8/out/Release",
       "-j",
-      "50",
+      "20",
       "v8_clusterfuzz",
       "-d",
       "explain",

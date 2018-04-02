@@ -238,25 +238,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/linux_ubsan_vptr/src",
     "env": {
@@ -357,7 +338,7 @@
       "-C",
       "[BUILDER_CACHE]/linux_ubsan_vptr/src/out/Release",
       "-j",
-      "50"
+      "20"
     ],
     "cwd": "[BUILDER_CACHE]/linux_ubsan_vptr/src",
     "env": {
@@ -374,7 +355,7 @@
       "-C",
       "[BUILDER_CACHE]/linux_ubsan_vptr/src/out/Release",
       "-j",
-      "50",
+      "20",
       "-d",
       "explain",
       "-n"
@@ -494,7 +475,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/linux_ubsan_vptr/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/linux_ubsan_vptr/src/out/Release\", \"-j\", 50]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/linux_ubsan_vptr/src/out/Release\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",

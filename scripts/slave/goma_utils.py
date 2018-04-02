@@ -641,23 +641,3 @@ def MakeGomaFailureReasonCounter(json_file, exit_status,
     print('error while making goma status counter for ts_mon: jons_file=%s: %s'
           % (json_file, ex))
     return None
-
-
-def DetermineGomaJobs():
-  # We would like to speed up build on Windows a bit, since it is slowest.
-  number_of_processors = 0
-  try:
-    number_of_processors = multiprocessing.cpu_count()
-  except NotImplementedError:
-    print 'cpu_count() is not implemented, using default value 50.'
-    return 50
-
-  assert number_of_processors > 0
-
-  # When goma is used, 10 * number_of_processors is basically good in
-  # various situations according to our measurement. Build speed won't
-  # be improved if -j is larger than that.
-  #
-  # For safety, we'd like to set the upper limit to 200.
-  # Note that currently most try-bot build slaves have 8 processors.
-  return min(10 * number_of_processors, 200)

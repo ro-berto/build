@@ -303,26 +303,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
     "env": {
@@ -424,7 +404,7 @@
       "-C",
       "[BUILDER_CACHE]/V8_Blink_Mac/src/out/Release",
       "-j",
-      "50",
+      "20",
       "blink_tests"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
@@ -443,7 +423,7 @@
       "-C",
       "[BUILDER_CACHE]/V8_Blink_Mac/src/out/Release",
       "-j",
-      "50",
+      "20",
       "blink_tests",
       "-d",
       "explain",
@@ -565,7 +545,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/V8_Blink_Mac/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/V8_Blink_Mac/src/out/Release\", \"-j\", 50, \"blink_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/V8_Blink_Mac/src/out/Release\", \"-j\", 20, \"blink_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

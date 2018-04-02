@@ -741,28 +741,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "test r5.calculate the number of recommended jobs",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
@@ -867,7 +845,7 @@
       "-C",
       "[BUILDER_CACHE]/mac/src/out/Release",
       "-j",
-      "50",
+      "20",
       "gl_tests"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
@@ -889,7 +867,7 @@
       "-C",
       "[BUILDER_CACHE]/mac/src/out/Release",
       "-j",
-      "50",
+      "20",
       "gl_tests",
       "-d",
       "explain",
@@ -1017,7 +995,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/mac/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/mac/src/out/Release\", \"-j\", 50, \"gl_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/mac/src/out/Release\", \"-j\", 20, \"gl_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1884,7 +1862,7 @@
       "-C",
       "[BUILDER_CACHE]/mac/src/out/Release",
       "-j",
-      "50",
+      "20",
       "gl_tests"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
@@ -1906,7 +1884,7 @@
       "-C",
       "[BUILDER_CACHE]/mac/src/out/Release",
       "-j",
-      "50",
+      "20",
       "gl_tests",
       "-d",
       "explain",
@@ -2034,7 +2012,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/mac/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/mac/src/out/Release\", \"-j\", 50, \"gl_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/mac/src/out/Release\", \"-j\", 20, \"gl_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -2901,7 +2879,7 @@
       "-C",
       "[BUILDER_CACHE]/mac/src/out/Release",
       "-j",
-      "50",
+      "20",
       "gl_tests"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
@@ -2923,7 +2901,7 @@
       "-C",
       "[BUILDER_CACHE]/mac/src/out/Release",
       "-j",
-      "50",
+      "20",
       "gl_tests",
       "-d",
       "explain",
@@ -3051,7 +3029,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/mac/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/mac/src/out/Release\", \"-j\", 50, \"gl_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/mac/src/out/Release\", \"-j\", 20, \"gl_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -3918,7 +3896,7 @@
       "-C",
       "[BUILDER_CACHE]/mac/src/out/Release",
       "-j",
-      "50",
+      "20",
       "gl_tests"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
@@ -3940,7 +3918,7 @@
       "-C",
       "[BUILDER_CACHE]/mac/src/out/Release",
       "-j",
-      "50",
+      "20",
       "gl_tests",
       "-d",
       "explain",
@@ -4068,7 +4046,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/mac/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/mac/src/out/Release\", \"-j\", 50, \"gl_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/mac/src/out/Release\", \"-j\", 20, \"gl_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

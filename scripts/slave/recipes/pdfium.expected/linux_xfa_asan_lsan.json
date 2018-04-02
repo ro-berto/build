@@ -123,22 +123,6 @@
     "name": "gn gen"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "name": "preprocess_for_goma"
   },
@@ -213,7 +197,7 @@
       "-C",
       "[START_DIR]/pdfium/out/debug_xfa_v8_asan",
       "-j",
-      "50",
+      "20",
       "pdfium_all"
     ],
     "name": "compile with ninja"
@@ -318,7 +302,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/pdfium/out/debug_xfa_v8_asan",
       "--ninja-log-command-file",
-      "[\"ninja\", \"-C\", \"[START_DIR]/pdfium/out/debug_xfa_v8_asan\", \"-j\", 50, \"pdfium_all\"]",
+      "[\"ninja\", \"-C\", \"[START_DIR]/pdfium/out/debug_xfa_v8_asan\", \"-j\", 20, \"pdfium_all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

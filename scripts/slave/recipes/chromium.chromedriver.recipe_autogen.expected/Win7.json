@@ -185,22 +185,6 @@
     "name": "meta build"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "name": "preprocess_for_goma"
   },
@@ -275,7 +259,7 @@
       "-C",
       "[START_DIR]/src/out/Default",
       "-j",
-      "50",
+      "20",
       "chromedriver",
       "chromedriver_tests",
       "chromedriver_unittests"
@@ -382,7 +366,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Default",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/src/out/Default\", \"-j\", 50, \"chromedriver\", \"chromedriver_tests\", \"chromedriver_unittests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/src/out/Default\", \"-j\", 20, \"chromedriver\", \"chromedriver_tests\", \"chromedriver_unittests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

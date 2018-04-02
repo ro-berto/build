@@ -157,7 +157,7 @@
       "-C",
       "[START_DIR]/v8/out/Debug",
       "-j",
-      "50"
+      "20"
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
@@ -174,7 +174,7 @@
       "-C",
       "[START_DIR]/v8/out/Debug",
       "-j",
-      "50",
+      "20",
       "-d",
       "explain",
       "-n"

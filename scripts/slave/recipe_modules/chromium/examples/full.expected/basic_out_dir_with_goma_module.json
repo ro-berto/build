@@ -292,25 +292,6 @@
     "name": "generate_build_files"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -412,7 +393,7 @@
       "-C",
       "/tmp/Debug",
       "-j",
-      "50",
+      "20",
       "All"
     ],
     "cwd": "[START_DIR]/src",
@@ -431,7 +412,7 @@
       "-C",
       "/tmp/Debug",
       "-j",
-      "50",
+      "20",
       "All",
       "-d",
       "explain",
@@ -553,7 +534,7 @@
       "--ninja-log-outdir",
       "/tmp/Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"/tmp/Debug\", \"-j\", 50, \"All\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"/tmp/Debug\", \"-j\", 20, \"All\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

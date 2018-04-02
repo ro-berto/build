@@ -317,25 +317,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -437,7 +418,7 @@
       "-C",
       "[START_DIR]/src/out/Release",
       "-j",
-      "50",
+      "20",
       "cronet_package",
       "cronet_perf_test_apk",
       "cronet_sample_test_apk",
@@ -463,7 +444,7 @@
       "-C",
       "[START_DIR]/src/out/Release",
       "-j",
-      "50",
+      "20",
       "cronet_package",
       "cronet_perf_test_apk",
       "cronet_sample_test_apk",
@@ -592,7 +573,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Release\", \"-j\", 50, \"cronet_package\", \"cronet_perf_test_apk\", \"cronet_sample_test_apk\", \"cronet_smoketests_missing_native_library_instrumentation_apk\", \"cronet_smoketests_platform_only_instrumentation_apk\", \"cronet_test_instrumentation_apk\", \"cronet_unittests_android\", \"net_unittests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Release\", \"-j\", 20, \"cronet_package\", \"cronet_perf_test_apk\", \"cronet_sample_test_apk\", \"cronet_smoketests_missing_native_library_instrumentation_apk\", \"cronet_smoketests_platform_only_instrumentation_apk\", \"cronet_test_instrumentation_apk\", \"cronet_unittests_android\", \"net_unittests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

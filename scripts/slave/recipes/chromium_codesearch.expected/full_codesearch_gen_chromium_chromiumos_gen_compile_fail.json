@@ -234,22 +234,6 @@
     "name": "generate build files for chromeos"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "name": "preprocess_for_goma"
   },
@@ -361,7 +345,7 @@
       "objc",
       "objcxx",
       "-j",
-      "50"
+      "20"
     ],
     "name": "generate compilation database for chromeos",
     "stdout": "/path/to/tmp/",
@@ -470,7 +454,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Debug",
       "--ninja-log-command-file",
-      "[\"ninja\", \"-C\", \"[START_DIR]/src/out/Debug\", \"app_list_unittests\", \"base_unittests\", \"browser_tests\", \"cacheinvalidation_unittests\", \"chromeos_unittests\", \"components_unittests\", \"compositor_unittests\", \"content_browsertests\", \"content_unittests\", \"crypto_unittests\", \"dbus_unittests\", \"device_unittests\", \"gcm_unit_tests\", \"google_apis_unittests\", \"gpu_unittests\", \"interactive_ui_tests\", \"ipc_tests\", \"jingle_unittests\", \"media_unittests\", \"message_center_unittests\", \"nacl_loader_unittests\", \"net_unittests\", \"ppapi_unittests\", \"printing_unittests\", \"remoting_unittests\", \"sandbox_linux_unittests\", \"sql_unittests\", \"ui_base_unittests\", \"unit_tests\", \"url_unittests\", \"views_unittests\", \"-t\", \"compdb\", \"cc\", \"cxx\", \"objc\", \"objcxx\", \"-j\", 50]",
+      "[\"ninja\", \"-C\", \"[START_DIR]/src/out/Debug\", \"app_list_unittests\", \"base_unittests\", \"browser_tests\", \"cacheinvalidation_unittests\", \"chromeos_unittests\", \"components_unittests\", \"compositor_unittests\", \"content_browsertests\", \"content_unittests\", \"crypto_unittests\", \"dbus_unittests\", \"device_unittests\", \"gcm_unit_tests\", \"google_apis_unittests\", \"gpu_unittests\", \"interactive_ui_tests\", \"ipc_tests\", \"jingle_unittests\", \"media_unittests\", \"message_center_unittests\", \"nacl_loader_unittests\", \"net_unittests\", \"ppapi_unittests\", \"printing_unittests\", \"remoting_unittests\", \"sandbox_linux_unittests\", \"sql_unittests\", \"ui_base_unittests\", \"unit_tests\", \"url_unittests\", \"views_unittests\", \"-t\", \"compdb\", \"cc\", \"cxx\", \"objc\", \"objcxx\", \"-j\", 20]",
       "--build-exit-status",
       "1",
       "--ninja-log-compiler",

@@ -234,22 +234,6 @@
     "name": "generate build files for android"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "name": "preprocess_for_goma"
   },
@@ -331,7 +315,7 @@
       "objc",
       "objcxx",
       "-j",
-      "50"
+      "20"
     ],
     "name": "generate compilation database for android",
     "stdout": "/path/to/tmp/"
@@ -436,7 +420,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Debug",
       "--ninja-log-command-file",
-      "[\"ninja\", \"-C\", \"[START_DIR]/src/out/Debug\", \"all\", \"-t\", \"compdb\", \"cc\", \"cxx\", \"objc\", \"objcxx\", \"-j\", 50]",
+      "[\"ninja\", \"-C\", \"[START_DIR]/src/out/Debug\", \"all\", \"-t\", \"compdb\", \"cc\", \"cxx\", \"objc\", \"objcxx\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -628,7 +612,7 @@
       "-k",
       "0",
       "-j",
-      "50",
+      "20",
       "all"
     ],
     "cwd": "[START_DIR]/src",
@@ -648,7 +632,7 @@
       "-k",
       "0",
       "-j",
-      "50",
+      "20",
       "all",
       "-d",
       "explain",
@@ -769,7 +753,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Debug\", \"-k\", \"0\", \"-j\", 50, \"all\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Debug\", \"-k\", \"0\", \"-j\", 20, \"all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

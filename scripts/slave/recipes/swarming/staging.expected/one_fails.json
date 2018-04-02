@@ -316,25 +316,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/Linux_Swarm/src",
     "env": {
@@ -435,7 +416,7 @@
       "-C",
       "[BUILDER_CACHE]/Linux_Swarm/src/out/Release",
       "-j",
-      "50",
+      "20",
       "browser_tests"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Swarm/src",
@@ -453,7 +434,7 @@
       "-C",
       "[BUILDER_CACHE]/Linux_Swarm/src/out/Release",
       "-j",
-      "50",
+      "20",
       "browser_tests",
       "-d",
       "explain",
@@ -574,7 +555,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Linux_Swarm/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/Linux_Swarm/src/out/Release\", \"-j\", 50, \"browser_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/Linux_Swarm/src/out/Release\", \"-j\", 20, \"browser_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

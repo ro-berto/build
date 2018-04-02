@@ -536,26 +536,6 @@
     "name": "generate_build_files (with patch)"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]\\resources\\utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
@@ -662,7 +642,7 @@
       "-C",
       "[BUILDER_CACHE]\\win\\src\\out\\Release",
       "-j",
-      "150",
+      "60",
       "mini_installer_tests"
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",
@@ -681,7 +661,7 @@
       "-C",
       "[BUILDER_CACHE]\\win\\src\\out\\Release",
       "-j",
-      "150",
+      "60",
       "mini_installer_tests",
       "-d",
       "explain",
@@ -810,7 +790,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\win\\src\\out\\Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]\\\\win\\\\src\\\\out\\\\Release\", \"-j\", 150, \"mini_installer_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]\\\\win\\\\src\\\\out\\\\Release\", \"-j\", 60, \"mini_installer_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

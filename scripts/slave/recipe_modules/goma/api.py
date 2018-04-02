@@ -112,17 +112,13 @@ class GomaApi(recipe_api.RecipeApi):
     This function caches the _recommended_jobs.
     """
     if self._recommended_jobs is None:
-      step_result = self.m.build.python(
-        'calculate the number of recommended jobs',
-        self.resource('utils.py'),
-        args=[
-            'jobs',
-            '--file-path', self.m.raw_io.output_text()
-        ],
-        step_test_data=(
-            lambda: self.m.raw_io.test_api.output_text('50'))
-      )
-      self._recommended_jobs = int(step_result.raw_io.output_text)
+      # When goma is used, 10 * self.m.platform.cpu_count is basically good in
+      # various situations according to our measurement. Build speed won't
+      # be improved if -j is larger than that.
+      #
+      # For safety, we'd like to set the upper limit to 200.
+      # Note that currently most try-bot build slaves have 8 processors.
+      self._recommended_jobs = min(10 * self.m.platform.cpu_count, 200)
 
     return self._recommended_jobs
 

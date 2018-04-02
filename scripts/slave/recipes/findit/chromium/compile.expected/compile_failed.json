@@ -610,28 +610,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "test r1.calculate the number of recommended jobs",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
@@ -735,7 +713,7 @@
       "-C",
       "[BUILDER_CACHE]/linux/src/out/Release",
       "-j",
-      "150",
+      "60",
       "base_unittests"
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
@@ -864,7 +842,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/linux/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/linux/src/out/Release\", \"-j\", 150, \"base_unittests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/linux/src/out/Release\", \"-j\", 60, \"base_unittests\"]",
       "--build-exit-status",
       "1",
       "--build-step-name",

@@ -132,25 +132,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -251,7 +232,7 @@
       "-C",
       "[START_DIR]/src/out/intelligibility_enhancer_no_include_tests",
       "-j",
-      "50"
+      "20"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -268,7 +249,7 @@
       "-C",
       "[START_DIR]/src/out/intelligibility_enhancer_no_include_tests",
       "-j",
-      "50",
+      "20",
       "-d",
       "explain",
       "-n"
@@ -388,7 +369,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/intelligibility_enhancer_no_include_tests",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/intelligibility_enhancer_no_include_tests\", \"-j\", 50]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/intelligibility_enhancer_no_include_tests\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -569,7 +550,7 @@
       "-C",
       "[START_DIR]/src/out/bwe_test_logging",
       "-j",
-      "50"
+      "20"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -586,7 +567,7 @@
       "-C",
       "[START_DIR]/src/out/bwe_test_logging",
       "-j",
-      "50",
+      "20",
       "-d",
       "explain",
       "-n"
@@ -706,7 +687,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/bwe_test_logging",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/bwe_test_logging\", \"-j\", 50]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/bwe_test_logging\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -920,7 +901,7 @@
       "-C",
       "[START_DIR]/src/out/dummy_audio_file_devices_no_protobuf",
       "-j",
-      "50"
+      "20"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -937,7 +918,7 @@
       "-C",
       "[START_DIR]/src/out/dummy_audio_file_devices_no_protobuf",
       "-j",
-      "50",
+      "20",
       "-d",
       "explain",
       "-n"
@@ -1057,7 +1038,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/dummy_audio_file_devices_no_protobuf",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/dummy_audio_file_devices_no_protobuf\", \"-j\", 50]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/dummy_audio_file_devices_no_protobuf\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1238,7 +1219,7 @@
       "-C",
       "[START_DIR]/src/out/rtti_no_sctp",
       "-j",
-      "50"
+      "20"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -1255,7 +1236,7 @@
       "-C",
       "[START_DIR]/src/out/rtti_no_sctp",
       "-j",
-      "50",
+      "20",
       "-d",
       "explain",
       "-n"
@@ -1375,7 +1356,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/rtti_no_sctp",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/rtti_no_sctp\", \"-j\", 50]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/rtti_no_sctp\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",

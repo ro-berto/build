@@ -447,25 +447,6 @@
     "name": "generate_build_files (with patch)"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
     "env": {
@@ -566,7 +547,7 @@
       "-C",
       "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/out/Release",
       "-j",
-      "50",
+      "20",
       "base_unittests",
       "blink_tests",
       "extensions_browsertests",
@@ -712,7 +693,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/out/Release\", \"-j\", 50, \"base_unittests\", \"blink_tests\", \"extensions_browsertests\", \"gin_unittests\", \"net_unittests\", \"pdfium_test\", \"postmortem-metadata\", \"unit_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/out/Release\", \"-j\", 20, \"base_unittests\", \"blink_tests\", \"extensions_browsertests\", \"gin_unittests\", \"net_unittests\", \"pdfium_test\", \"postmortem-metadata\", \"unit_tests\"]",
       "--build-exit-status",
       "1",
       "--build-step-name",

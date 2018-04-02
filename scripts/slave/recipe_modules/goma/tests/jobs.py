@@ -10,7 +10,7 @@ DEPS = [
 
 def RunSteps(api):
   jobs = api.goma.jobs
-  assert jobs in (50, 99)
+  assert jobs in (api.platform.cpu_count * 10, 99)
 
 
 def GenTests(api):

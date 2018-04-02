@@ -63,22 +63,6 @@
     "name": "generate build files for linux"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "name": "preprocess_for_goma"
   },
@@ -159,7 +143,7 @@
       "objc",
       "objcxx",
       "-j",
-      "50"
+      "20"
     ],
     "name": "generate compilation database for linux",
     "stdout": "/path/to/tmp/",
@@ -268,7 +252,7 @@
       "--ninja-log-outdir",
       "None/out/Debug",
       "--ninja-log-command-file",
-      "[\"ninja\", \"-C\", \"None/out/Debug\", \"-t\", \"compdb\", \"cc\", \"cxx\", \"objc\", \"objcxx\", \"-j\", 50]",
+      "[\"ninja\", \"-C\", \"None/out/Debug\", \"-t\", \"compdb\", \"cc\", \"cxx\", \"objc\", \"objcxx\", \"-j\", 20]",
       "--build-exit-status",
       "1",
       "--ninja-log-compiler",

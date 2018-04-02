@@ -490,25 +490,6 @@
     "name": "generate_build_files (with patch)"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/utils.py",
-      "jobs",
-      "--file-path",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "calculate the number of recommended jobs"
-  },
-  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
@@ -609,7 +590,7 @@
       "-C",
       "[BUILDER_CACHE]/linux/src/out/Release",
       "-j",
-      "150",
+      "60",
       "base_unittests"
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
@@ -627,7 +608,7 @@
       "-C",
       "[BUILDER_CACHE]/linux/src/out/Release",
       "-j",
-      "150",
+      "60",
       "base_unittests",
       "-d",
       "explain",
@@ -748,7 +729,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/linux/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/linux/src/out/Release\", \"-j\", 150, \"base_unittests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/linux/src/out/Release\", \"-j\", 60, \"base_unittests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1172,7 +1153,7 @@
       "-C",
       "[BUILDER_CACHE]/linux/src/out/Release",
       "-j",
-      "150",
+      "60",
       "base_unittests"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
@@ -1297,7 +1278,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/linux/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/linux/src/out/Release\", \"-j\", 150, \"base_unittests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/linux/src/out/Release\", \"-j\", 60, \"base_unittests\"]",
       "--build-exit-status",
       "1",
       "--build-step-name",

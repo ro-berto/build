@@ -149,7 +149,7 @@
       "-C",
       "[START_DIR]/v8/out/Release",
       "-j",
-      "50"
+      "20"
     ],
     "cwd": "[START_DIR]/v8",
     "env": {
@@ -166,7 +166,7 @@
       "-C",
       "[START_DIR]/v8/out/Release",
       "-j",
-      "50",
+      "20",
       "-d",
       "explain",
       "-n"
@@ -1080,7 +1080,7 @@
       "-C",
       "[START_DIR]/v8/out/Release",
       "-j",
-      "50",
+      "20",
       "All"
     ],
     "cwd": "[START_DIR]/v8",
@@ -1101,7 +1101,7 @@
       "-C",
       "[START_DIR]/v8/out/Release",
       "-j",
-      "50",
+      "20",
       "All",
       "-d",
       "explain",
@@ -1495,7 +1495,7 @@
       "-C",
       "[START_DIR]/v8/out/Release",
       "-j",
-      "50",
+      "20",
       "All"
     ],
     "cwd": "[START_DIR]/v8",
@@ -1516,7 +1516,7 @@
       "-C",
       "[START_DIR]/v8/out/Release",
       "-j",
-      "50",
+      "20",
       "All",
       "-d",
       "explain",

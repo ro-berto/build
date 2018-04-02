@@ -33,7 +33,7 @@
       "-C",
       "[START_DIR]\\v8\\out\\Release",
       "-j",
-      "50",
+      "20",
       "v8_archive"
     ],
     "cwd": "[START_DIR]\\v8",
