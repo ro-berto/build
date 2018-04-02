@@ -155,10 +155,24 @@ def UploadFlutterCoverage(api):
 
 def CreateAndUploadFlutterPackage(api, git_hash):
   """Prepares, builds, and uploads an all-inclusive archive package."""
+  # For creating the packages, we need to have the master branch version of the
+  # script, but we need to know what the revision in git_hash is first. So, we
+  # end up checking out the flutter repo twice: once on the branch we're going
+  # to package, to find out the hash to use, and again here so that we have the
+  # current version of the packaging script.
+  api.git.checkout(
+      'https://chromium.googlesource.com/external/github.com/flutter/flutter',
+      ref='master',
+      recursive=True,
+      set_got_revision=True)
+
+  flutter_executable = 'flutter' if not api.platform.is_win else 'flutter.bat'
   dart_executable = 'dart' if not api.platform.is_win else 'dart.exe'
   work_dir = api.path['start_dir'].join('archive')
   prepare_script = api.path['checkout'].join('dev', 'bots',
                                              'prepare_package.dart')
+  api.step('flutter doctor', [flutter_executable, 'doctor'])
+  api.step('download dependencies', [flutter_executable, 'update-packages'])
   api.file.rmtree('clean archive work directory', work_dir)
   api.file.ensure_directory('(re)create archive work directory', work_dir)
   with api.context(cwd=api.path['start_dir']):
@@ -177,18 +191,9 @@ def RunSteps(api):
   if 'clobber' in api.properties:
     api.file.rmcontents('everything', api.path['start_dir'])
 
-  branch = api.properties.get('branch')
-  ref = api.properties.get('revision')
-  packaging_build = branch and PACKAGED_BRANCH_RE.match(branch)
-  if packaging_build:
-    # On the non-master branches, we're only doing packaging, so we want to
-    # check out the master branch to get the latest packaging script. Packaging
-    # will do its own checkout of the branch being packaged.
-    ref = 'master'
-
   git_hash = api.git.checkout(
       'https://chromium.googlesource.com/external/github.com/flutter/flutter',
-      ref=ref,
+      ref=api.properties.get('revision'),
       recursive=True,
       set_got_revision=True)
   checkout = api.path['checkout']
@@ -226,18 +231,17 @@ def RunSteps(api):
   flutter_executable = 'flutter' if not api.platform.is_win else 'flutter.bat'
   dart_executable = 'dart' if not api.platform.is_win else 'dart.exe'
 
+  branch = api.properties.get('branch')
+  with api.context(env=env):
+    if branch and PACKAGED_BRANCH_RE.match(branch):
+      CreateAndUploadFlutterPackage(api, git_hash)
+      # Nothing left to do on a packaging branch.
+      return
+
   # The context adds dart-sdk tools to PATH and sets PUB_CACHE.
   with api.context(env=env, cwd=checkout):
     api.step('flutter doctor', [flutter_executable, 'doctor'])
     api.step('download dependencies', [flutter_executable, 'update-packages'])
-    if packaging_build:
-      CreateAndUploadFlutterPackage(api, git_hash)
-    else:
-      api.step('Skipping packaging on %s branch.' % branch, cmd=None)
-
-  if packaging_build:
-    # Nothing left to do on non-master branch.
-    return
 
   if api.platform.is_mac:
     SetupXcode(api)
