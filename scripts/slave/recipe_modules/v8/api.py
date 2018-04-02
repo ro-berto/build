@@ -1305,10 +1305,9 @@ class V8Api(recipe_api.RecipeApi):
                     **self._test_spec_to_properties(builder_name, test_spec)
                 ),
               } for builder_name in triggers],
-              # Override revision used for buildset, since tryserver sets
-              # 'revision' property to 'HEAD' to have child builds correctly
-              # recognized by CQ (see comment above).
-              buildset_revision=self.revision,
+              # Tryserver uses custom buildset that is set by the buildbucket
+              # module itself.
+              no_buildset=True,
           )
           triggered_build_ids.extend(
               build['build']['id'] for build in step_result.stdout['results'])
@@ -1355,7 +1354,7 @@ class V8Api(recipe_api.RecipeApi):
       output_properties['triggered_build_ids'] = triggered_build_ids
 
   def buildbucket_trigger(self, bucket, changes, requests, step_name='trigger',
-                          service_account='v8-bot', buildset_revision=None):
+                          service_account='v8-bot', no_buildset=False):
     """Triggers builds via buildbucket.
 
     Args:
@@ -1371,8 +1370,9 @@ class V8Api(recipe_api.RecipeApi):
       step_name: Name of the triggering step that appear on the build.
       service_account: Puppet service account to be used for authentication to
           buildbucket.
-      buildset_revision: Revision to be used for buildset tag. Overrides the value
-          specified in properties via requests argument.
+      no_buildset: Disable setting custom buildset. Useful when one needs to
+          rely on the built-in buildset set by the buildbucket module, e.g. on
+          tryserver.
     """
     # TODO(sergiyb): Remove this line after migrating all builders to swarming.
     # There an implicit task account (specified in the cr-buildbucket.cfg) will
@@ -1384,9 +1384,9 @@ class V8Api(recipe_api.RecipeApi):
     return self.m.buildbucket.put(
         [{
           'bucket': bucket,
-          'tags': {
+          'tags': {} if no_buildset else {
             'buildset': 'commit/gitiles/chromium.googlesource.com/v8/v8/+/%s' %
-               (buildset_revision or request['properties']['revision'])
+               request['properties']['revision']
           },
           'parameters': {
             'builder_name': request['builder_name'],
