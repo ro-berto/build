@@ -117,8 +117,6 @@
       "--verbose",
       "--verbose",
       "--skip_canned",
-      "CheckRietveldTryJobExecution",
-      "--skip_canned",
       "CheckTreeIsOpen",
       "--skip_canned",
       "CheckBuildbotPendingBuilds",
