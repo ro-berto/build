@@ -99,7 +99,8 @@ _AddBuildSpec('Android CFI arm64 Builder FYI', 'android', 'android',
 _AddBuildSpec('Linux Compile FYI', 'linux-fyi', 'linux')
 _AddBuildSpec('Mac Builder FYI', 'mac-fyi', 'mac')
 
-_AddIsolatedTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux')
+_AddIsolatedTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux',
+                     use_private_swarming_server=True)
 _AddIsolatedTestSpec(
     'One Buildbot Step Test Builder', 'buildbot-test', 'linux',
     parent_buildername='Linux Compile FYI')
