@@ -34,7 +34,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}, {'custom_deps': {'src/chrome/test/data/pdf_private': None, 'src/native_client': None, 'src/third_party/WebKit': None, 'src/third_party/skia': None, 'src/third_party/webrtc': None, 'src/tools/valgrind': None, 'src/v8': None}, 'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android', 'win']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}, {'custom_deps': {'src/chrome/test/data/pdf_private': None, 'src/native_client': None, 'src/third_party/WebKit': None, 'src/third_party/blink': None, 'src/third_party/skia': None, 'src/third_party/webrtc': None, 'src/tools/valgrind': None, 'src/v8': None}, 'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android', 'win']",
       "--patch_root",
       "v8",
       "--revision_mapping_file",

@@ -49,6 +49,7 @@ BOT_CONFIGS = {
       'test/wasm-js',
       'testing/gtest',
       'third_party/WebKit/Source/platform/inspector_protocol',
+      'third_party/blink/renderer/platform/inspector_protocol',
     ],
     'reviewers': [
       'machenbach@chromium.org',
@@ -137,6 +138,7 @@ def RunSteps(api):
   s.custom_deps.update({
     'src/chrome/test/data/pdf_private': None,
     'src/native_client': None,
+    'src/third_party/blink': None,
     'src/third_party/skia': None,
     'src/third_party/webrtc': None,
     'src/third_party/WebKit': None,

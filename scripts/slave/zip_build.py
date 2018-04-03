@@ -39,6 +39,7 @@ MOJOM_SEARCH_DIRS = [
   'gen/skia/public/interfaces',
   'gen/third_party/WebKit/public',
   'gen/third_party/WebKit/Source',
+  'gen/third_party/blink/public',
   'gen/third_party/blink/renderer',
   'gen/url/mojo',
   'gen/ui',
