@@ -26,7 +26,7 @@ def GenTests(api):
       api.test('linux_builder') +
       api.properties.generic(
           mastername='chromium.perf',
-          buildername='Linux Builder')
+          buildername='Linux Builder Perf')
   )
 
   yield (
@@ -55,5 +55,5 @@ def GenTests(api):
       api.platform.name('win') +
       api.properties.generic(
           mastername='chromium.perf',
-          buildername='Win x64 Builder')
+          buildername='Win x64 Builder Perf')
   )

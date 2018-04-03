@@ -172,9 +172,9 @@ def _AddBuildSpec(
     SPEC['settings']['bisect_builders'].append(name)
 
 
-_AddBuildSpec('Android Builder', 'android', target_bits=32)
-_AddBuildSpec('Android arm64 Builder', 'android')
-_AddBuildSpec('Android Compile', 'android', target_bits=32,
+_AddBuildSpec('Android Builder Perf', 'android', target_bits=32)
+_AddBuildSpec('Android arm64 Builder Perf', 'android')
+_AddBuildSpec('Android Compile Perf', 'android', target_bits=32,
               extra_compile_targets=['android_tools',
                                      'cc_perftests',
                                      'chrome_public_apk',
@@ -184,7 +184,7 @@ _AddBuildSpec('Android Compile', 'android', target_bits=32,
                                      'push_apps_to_background_apk',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
-_AddBuildSpec('Android arm64 Compile', 'android',
+_AddBuildSpec('Android arm64 Compile Perf', 'android',
               extra_compile_targets=['android_tools',
                                      'cc_perftests',
                                      'chrome_public_apk',
@@ -193,33 +193,33 @@ _AddBuildSpec('Android arm64 Compile', 'android',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
 _AddBuildSpec(
-  'Win Builder', 'win', target_bits=32, force_exparchive=True)
+  'Win Builder Perf', 'win', target_bits=32, force_exparchive=True)
 _AddBuildSpec(
-  'Win x64 Builder', 'win', add_to_bisect=True, force_exparchive=True)
+  'Win x64 Builder Perf', 'win', add_to_bisect=True, force_exparchive=True)
 _AddBuildSpec(
-  'Mac Builder', 'mac', add_to_bisect=True, force_exparchive=True)
+  'Mac Builder Perf', 'mac', add_to_bisect=True, force_exparchive=True)
 _AddBuildSpec(
-  'Linux Builder', 'linux', add_to_bisect=True, force_exparchive=True)
+  'Linux Builder Perf', 'linux', add_to_bisect=True, force_exparchive=True)
 
 
 # 32 bit android swarming
 _AddIsolatedTestSpec('Android Nexus5X Perf', 'android-nexus5X', 'android',
-                     parent_buildername='Android Compile', target_bits=32)
+                     parent_buildername='Android Compile Perf', target_bits=32)
 _AddIsolatedTestSpec('Android Nexus5 Perf', 'android-nexus5', 'android',
-                     target_bits=32, parent_buildername='Android Compile')
+                     target_bits=32, parent_buildername='Android Compile Perf')
 _AddIsolatedTestSpec('Android Nexus6 Perf', 'android-nexus6', 'android',
-                     target_bits=32, parent_buildername='Android Compile')
+                     target_bits=32, parent_buildername='Android Compile Perf')
 _AddIsolatedTestSpec('Android Nexus7v2 Perf', 'android-nexus7v2', 'android',
-                     target_bits=32, parent_buildername='Android Compile')
+                     target_bits=32, parent_buildername='Android Compile Perf')
 _AddIsolatedTestSpec('Android One Perf', 'android-one', 'android',
-                     target_bits=32, parent_buildername='Android Compile')
+                     target_bits=32, parent_buildername='Android Compile Perf')
 
 # Webview
 _AddIsolatedTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
-                     'android', parent_buildername='Android arm64 Compile')
+                     'android', parent_buildername='Android arm64 Compile Perf')
 _AddIsolatedTestSpec('Android Nexus6 WebView Perf', 'android-webview-nexus6',
                      'android', target_bits=32,
-                     parent_buildername='Android Compile')
+                     parent_buildername='Android Compile Perf')
 
 
 _AddIsolatedTestSpec('Win 10 High-DPI Perf', 'win-high-dpi', 'win')

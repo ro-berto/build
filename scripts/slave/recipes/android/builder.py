@@ -20,7 +20,7 @@ DEPS = [
 
 BUILDERS = freeze({
   'chromium.perf': {
-    'Android Builder': {
+    'Android Builder Perf': {
       'recipe_config': 'main_builder_rel_mb',
       'gclient_apply_config': ['android', 'perf'],
       'kwargs': {
@@ -55,7 +55,7 @@ BUILDERS = freeze({
         'system_webview_shell_apk',
       ],
     },
-    'Android arm64 Builder': {
+    'Android arm64 Builder Perf': {
       'recipe_config': 'arm64_builder_rel_mb',
       'gclient_apply_config': ['android', 'perf'],
       'kwargs': {

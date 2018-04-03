@@ -58,7 +58,7 @@ def _AddIsolatedTestSpec(name, perf_id, platform,
   SPEC['builders'][name] = spec
 
 
-_AddBuildSpec('Android Builder FYI', 'android', 'android', target_bits=32,
+_AddBuildSpec('Android Builder Perf FYI', 'android', 'android', target_bits=32,
               extra_compile_targets=['android_tools',
                                      'cc_perftests',
                                      'chrome_public_apk',
@@ -68,9 +68,9 @@ _AddBuildSpec('Android Builder FYI', 'android', 'android', target_bits=32,
                                      'system_webview_shell_apk',])
 
 _AddIsolatedTestSpec('Android Nexus 5X Perf FYI', 'android-n5x-perf-fyi',
-      'android', parent_buildername='Android Builder FYI', target_bits=32)
+      'android', parent_buildername='Android Builder Perf FYI', target_bits=32)
 
-_AddBuildSpec('Android arm64 Builder FYI', 'android', 'android',
+_AddBuildSpec('Android arm64 Builder Perf FYI', 'android', 'android',
               extra_compile_targets=['android_tools',
                                      'cc_perftests',
                                      'chrome_public_apk',
@@ -79,7 +79,8 @@ _AddBuildSpec('Android arm64 Builder FYI', 'android', 'android',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
 
-_AddBuildSpec('Android CFI Builder FYI', 'android', 'android', target_bits=32,
+_AddBuildSpec('Android CFI Builder Perf FYI', 'android', 'android',
+              target_bits=32,
               extra_compile_targets=['android_tools',
                                      'cc_perftests',
                                      'chrome_public_apk',
@@ -87,7 +88,7 @@ _AddBuildSpec('Android CFI Builder FYI', 'android', 'android', target_bits=32,
                                      'push_apps_to_background_apk',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
-_AddBuildSpec('Android CFI arm64 Builder FYI', 'android', 'android',
+_AddBuildSpec('Android CFI arm64 Builder Perf FYI', 'android', 'android',
               extra_compile_targets=['android_tools',
                                      'cc_perftests',
                                      'chrome_public_apk',
@@ -96,8 +97,8 @@ _AddBuildSpec('Android CFI arm64 Builder FYI', 'android', 'android',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
 
-_AddBuildSpec('Linux Compile FYI', 'linux-fyi', 'linux')
-_AddBuildSpec('Mac Builder FYI', 'mac-fyi', 'mac')
+_AddBuildSpec('Linux Compile Perf FYI', 'linux-fyi', 'linux')
+_AddBuildSpec('Mac Builder Perf FYI', 'mac-fyi', 'mac')
 
 _AddIsolatedTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux',
                      use_private_swarming_server=True)
@@ -106,11 +107,11 @@ _AddIsolatedTestSpec(
     parent_buildername='Linux Compile FYI')
 
 _AddIsolatedTestSpec('Mac 10.12 Laptop Low End', '', 'mac',
-                     parent_buildername='Mac Builder FYI')
+                     parent_buildername='Mac Builder Perf FYI')
 _AddIsolatedTestSpec('Mac 10.13 Laptop High End', '', 'mac',
-                     parent_buildername='Mac Builder FYI')
+                     parent_buildername='Mac Builder Perf FYI')
 _AddIsolatedTestSpec('Android Go', '', 'android',
-                     parent_buildername='Android Builder FYI',
+                     parent_buildername='Android Builder Perf FYI',
                      use_private_swarming_server=True)
 
 _AddBuildSpec('Battor Agent Linux', 'linux', 'linux', run_sizes=False,

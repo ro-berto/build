@@ -618,29 +618,29 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.perf': {
     'builders': {
-      'Android Compile': simple_bot({
+      'Android Compile Perf': simple_bot({
         'mastername': 'chromium.perf',
-        'buildername': 'Android Compile',
+        'buildername': 'Android Compile Perf',
       }),
-      'Android arm64 Compile': simple_bot({
+      'Android arm64 Compile Perf': simple_bot({
         'mastername': 'chromium.perf',
-        'buildername': 'Android arm64 Compile',
+        'buildername': 'Android arm64 Compile Perf',
       }),
-      'Linux Builder': simple_bot({
+      'Linux Builder Perf': simple_bot({
         'mastername': 'chromium.perf',
-        'buildername': 'Linux Builder',
+        'buildername': 'Linux Builder Perf',
       }),
-      'Mac Builder': simple_bot({
+      'Mac Builder Perf': simple_bot({
         'mastername': 'chromium.perf',
-        'buildername': 'Mac Builder',
+        'buildername': 'Mac Builder Perf',
       }),
-      'Win Builder': simple_bot({
+      'Win Builder Perf': simple_bot({
         'mastername': 'chromium.perf',
-        'buildername': 'Win Builder',
+        'buildername': 'Win Builder Perf',
       }),
-      'Win x64 Builder': simple_bot({
+      'Win x64 Builder Perf': simple_bot({
         'mastername': 'chromium.perf',
-        'buildername': 'Win x64 Builder',
+        'buildername': 'Win x64 Builder Perf',
       }),
       # Optional One Buildbot Step Tester.
       'obbs_fyi': simple_bot({

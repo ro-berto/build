@@ -67,7 +67,7 @@ def GenTests(api):
       api.test('perf_isolate_lookup') +
       api.properties.generic(
           mastername='chromium.perf',
-          buildername='Linux Builder',
+          buildername='Linux Builder Perf',
           swarming_gtest=True) +
           api.post_process(Filter('pinpoint isolate upload'))
   )
@@ -76,7 +76,7 @@ def GenTests(api):
       api.test('perf_isolate_lookup_tryserver') +
       api.properties.tryserver(
           mastername='tryserver.chromium.perf',
-          buildername='Mac Builder',
+          buildername='Mac Builder Perf',
           deps_revision_overrides={'src': '1234567890abcdef'},
           patch_gerrit_url='https://chromium-review.googlesource.com',
           patch_issue=671632,

@@ -234,7 +234,7 @@
       "--paths",
       "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Android Compile\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"slavename\": \"test_bot\", \"target_platform\": \"android\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Android Compile Perf\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"slavename\": \"test_bot\", \"target_platform\": \"android\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -337,7 +337,7 @@
       "-m",
       "tryserver.chromium.perf",
       "-b",
-      "Android Compile",
+      "Android Compile Perf",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -376,7 +376,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/Android_Compile"
+      "[CACHE]/goma/Android_Compile_Perf"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -400,7 +400,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/Android_Compile",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/Android_Compile_Perf",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -640,7 +640,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--buildbot-buildername",
-      "Android Compile",
+      "Android Compile Perf",
       "--buildbot-mastername",
       "tryserver.chromium.perf",
       "--buildbot-slavename",
@@ -733,7 +733,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://pinpoint-dot-chromeperf.appspot.com/api/isolate",
       "-i",
-      "{\"builder_name\": \"Android Compile\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"repository\\\": \\\"chromium\\\"}]}\", \"isolate_map\": \"{\\\"telemetry_perf_tests\\\": \\\"[dummy hash for telemetry_perf_tests]\\\"}\"}",
+      "{\"builder_name\": \"Android Compile Perf\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"repository\\\": \\\"chromium\\\"}]}\", \"isolate_map\": \"{\\\"telemetry_perf_tests\\\": \\\"[dummy hash for telemetry_perf_tests]\\\"}\"}",
       "-o",
       "/path/to/tmp/json"
     ],

@@ -34,7 +34,7 @@ def GenTests(api):
   yield (
     api.test('basic') +
     api.properties.generic(mastername='tryserver.chromium.perf',
-                           buildername='Android Compile') +
+                           buildername='Android Compile Perf') +
     api.override_step_data(
         'read test spec (chromium.perf.json)',
         api.json.output({
