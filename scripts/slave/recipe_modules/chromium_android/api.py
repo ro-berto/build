@@ -1074,7 +1074,6 @@ class AndroidApi(recipe_api.RecipeApi):
                                   self.m.properties['buildnumber']),
           args=args,
           link_name='logcat dump',
-          version='4.7',
           parallel_upload=True)
 
     else:
@@ -1463,7 +1462,6 @@ class AndroidApi(recipe_api.RecipeApi):
           dest=gs_dest,
           name='upload coverage report',
           link_name='Coverage report',
-          version='4.7',
           **kwargs)
 
   def incremental_coverage_report(self):

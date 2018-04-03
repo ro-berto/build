@@ -1385,8 +1385,6 @@
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--force-version",
-      "4.7",
       "----",
       "cp",
       "[START_DIR]/src/out/Release/coverage/coverage_html.zip",
