@@ -105,22 +105,6 @@
       "category": "1Webview",
       "mergeRequests": True,
     },
-    "Android x64 Builder (dbg)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["builders"],
-      "category": "2Builders",
-      "slavebuilddir": "android_build",
-    },
-    "Android x86 Builder (dbg)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["builders"],
-      "category": "2Builders",
-      "slavebuilddir": "android_build",
-    },
     "Android arm Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
