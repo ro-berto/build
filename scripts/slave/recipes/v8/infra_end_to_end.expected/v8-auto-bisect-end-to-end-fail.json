@@ -68,7 +68,8 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/build/scripts/tools/run_recipe.py",
+      "[START_DIR]/build/scripts/slave/recipes.py",
+      "run",
       "v8",
       "--properties-file",
       "{\"bisect_duration_factor\": 0.5, \"blamelist\": [\"hax@chromium.org\", \"dude@chromium.org\"], \"bot_id\": \"slave4-c3\", \"branch\": \"master\", \"buildbotURL\": \"http://build.chromium.org/p/client.v8/\", \"buildername\": \"V8 Linux - nosnap\", \"buildnumber\": 5472, \"git_revision\": \"c08e952566c3923f8fcbd693dae05f8eae73938b\", \"mastername\": \"client.v8\", \"override_changes\": [{\"revision\": \"469675ee3f137970158305957a76615d33ff253c\"}, {\"revision\": \"d290f204938295bfecc5c8e645ccfcff6e80ddb8\"}, {\"revision\": \"c08e952566c3923f8fcbd693dae05f8eae73938b\"}], \"parent_buildername\": \"V8 Linux - nosnap builder\", \"parent_buildnumber\": 9423, \"parent_got_revision\": \"c08e952566c3923f8fcbd693dae05f8eae73938b\", \"parent_got_revision_cp\": \"refs/heads/master@{#32376}\", \"parent_got_swarming_client_revision\": \"df99a00d96fae932bae824dccba13156bf7eddd0\", \"project\": \"v8\", \"recipe\": \"v8\", \"repository\": \"https://chromium.googlesource.com/v8/v8\", \"requestedAt\": 1448632553, \"revision\": \"c08e952566c3923f8fcbd693dae05f8eae73938b\", \"swarm_hashes\": {\"bot_default\": \"3726ca899b099c077b9551f7163c05ea0f160a7b\", \"mozilla\": \"ba5f8a4aeee89b1fe88c764416ee9875584a10d3\", \"simdjs\": \"55aa4085d018aaf24dc2bc07421515e23cd8a006\"}, \"testfilter\": [\"cctest/test-serialize/ContextDeserialization\"], \"workdir\": \"/b/build/slave/linux\"}"

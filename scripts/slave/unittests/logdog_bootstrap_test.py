@@ -174,7 +174,7 @@ class LogDogBootstrapTest(unittest.TestCase):
   @mock.patch('slave.robust_tempdir.RobustTempdir.tempdir')
   def test_bootstrap_command_linux_stable(self, tempdir, get_params, isfile):
     gce.Authenticator.is_gce.return_value = True
-    recipe_cmd = ['run_recipe.py', 'recipe_params...']
+    recipe_cmd = ['recipes.py', 'recipe_params...']
 
     tempdir.return_value = 'foo'
     get_params.return_value = ldbs.Params(
@@ -241,7 +241,7 @@ class LogDogBootstrapTest(unittest.TestCase):
                                         service_account, isfile):
     infra_platform.get.return_value = ('win', 'x86_64', 64)
 
-    recipe_cmd = ['run_recipe.py', 'recipe_params...']
+    recipe_cmd = ['recipes.py', 'recipe_params...']
 
     tempdir.return_value = 'foo'
     get_params.return_value = ldbs.Params(
@@ -311,7 +311,7 @@ class LogDogBootstrapTest(unittest.TestCase):
                                         service_account, isfile):
     infra_platform.get.return_value = ('mac', 'x86_64', 64)
 
-    recipe_cmd = ['run_recipe.py', 'recipe_params...']
+    recipe_cmd = ['recipes.py', 'recipe_params...']
 
     tempdir.return_value = 'foo'
     get_params.return_value = ldbs.Params(
@@ -379,7 +379,7 @@ class LogDogBootstrapTest(unittest.TestCase):
                                         service_account, isfile):
     infra_platform.get.return_value = ('win', 'x86_64', 64)
 
-    recipe_cmd = ['run_recipe.py', 'recipe_params...']
+    recipe_cmd = ['recipes.py', 'recipe_params...']
 
     tempdir.return_value = 'foo'
     get_params.return_value = ldbs.Params(

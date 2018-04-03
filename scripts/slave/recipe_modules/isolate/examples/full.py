@@ -40,7 +40,7 @@ def RunSteps(api, use_exparchive):
   build_path = api.isolate.package_repo_resource()
   # Generates code coverage for find_isolated_tests corner cases.
   # TODO(vadimsh): This step doesn't actually make any sense when the recipe
-  # is running for real via run_recipe.py.
+  # is running for real.
   api.isolate.find_isolated_tests(build_path, expected_targets)
 
   # Code coverage for 'isolate_tests'. 'isolated_test' doesn't support discovery

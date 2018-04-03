@@ -6,7 +6,7 @@
 
 To be tested using a command-line like:
 
-  /build/scripts/tools/run_recipe.py syzygy/continuous
+  /build/scripts/slave/recipes.py run syzygy/continuous
       revision=0e9f25b1098271be2b096fd1c095d6d907cf86f7
       mastername=master.client.syzygy
       "buildername=Syzygy Coverage"

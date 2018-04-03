@@ -75,8 +75,9 @@ def RunSteps(api):
       api.python(
           name=test['name'],
           script=api.path['checkout'].join(
-              'scripts', 'tools', 'run_recipe.py'),
+              'scripts', 'slave', 'recipes.py'),
           args=[
+            'run',
             'v8',
             '--properties-file',
             api.json.input(test['properties'])

@@ -5185,7 +5185,7 @@ Buildbot recipe definition for the various Syzygy continuous builders.
 
 To be tested using a command-line like:
 
-  /build/scripts/tools/run_recipe.py syzygy/continuous
+  /build/scripts/slave/recipes.py run syzygy/continuous
       revision=0e9f25b1098271be2b096fd1c095d6d907cf86f7
       mastername=master.client.syzygy
       "buildername=Syzygy Debug"
@@ -5205,7 +5205,7 @@ Buildbot recipe definition for the various Syzygy coverage builder.
 
 To be tested using a command-line like:
 
-  /build/scripts/tools/run_recipe.py syzygy/continuous
+  /build/scripts/slave/recipes.py run syzygy/continuous
       revision=0e9f25b1098271be2b096fd1c095d6d907cf86f7
       mastername=master.client.syzygy
       "buildername=Syzygy Coverage"
@@ -5229,7 +5229,7 @@ Buildbot recipe definition for the official Kasko builder.
 
 To be tested using a command-line like:
 
-  /build/scripts/tools/run_recipe.py syzygy/official_kasko
+  /build/scripts/slave/recipes.py run syzygy/official_kasko
       revision=0e9f25b1098271be2b096fd1c095d6d907cf86f7
       mastername=master.client.syzygy
       "buildername=Kasko Official"
@@ -5249,7 +5249,7 @@ Buildbot recipe definition for the various Syzygy Smoke Test builder.
 
 To be tested using a command-line like:
 
-  /build/scripts/tools/run_recipe.py syzygy/continuous
+  /build/scripts/slave/recipes.py run syzygy/continuous
       revision=0e9f25b1098271be2b096fd1c095d6d907cf86f7
       mastername=master.client.syzygy
       "buildername=Syzygy Smoke Test"
