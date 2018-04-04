@@ -68,7 +68,8 @@ _AddBuildSpec('Android Builder Perf FYI', 'android', 'android', target_bits=32,
                                      'system_webview_shell_apk',])
 
 _AddIsolatedTestSpec('Android Nexus 5X Perf FYI', 'android-n5x-perf-fyi',
-      'android', parent_buildername='Android Builder Perf FYI', target_bits=32)
+      'android', parent_buildername='Android Builder Perf FYI', target_bits=32,
+      use_private_swarming_server=True)
 
 _AddBuildSpec('Android arm64 Builder Perf FYI', 'android', 'android',
               extra_compile_targets=['android_tools',
