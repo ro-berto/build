@@ -23,8 +23,10 @@ def RunSteps(api):
   master_ref_json = api.url.get_json(
       url,
       step_name='Get hash of HEAD commit on master',
+      strip_prefix=api.url.GERRIT_JSON_PREFIX,
       default_test_data={'refs/heads/master': {'value': 'deadbeef'}}).output
-  commit_hash = master_ref_json['refs/heads/master']['value']
+  commit_hash = master_ref_json.get(
+      'refs/heads/master', {}).get('value', 'HEAD')
   api.step('Print revision', ['echo', commit_hash])
 
   # Trigger the chromium_codesearch builders.

@@ -9,7 +9,9 @@
       "--status-json",
       "/path/to/tmp/json",
       "--outfile",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--strip-prefix",
+      "\")]}'\\n\""
     ],
     "name": "Get hash of HEAD commit on master"
   },
