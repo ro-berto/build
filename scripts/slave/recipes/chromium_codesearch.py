@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.recipe_api import Property
 from recipe_engine.types import freeze
 
 DEPS = [
@@ -100,7 +101,14 @@ SPEC = freeze({
   },
 })
 
-def RunSteps(api):
+PROPERTIES = {
+    'root_solution_revision': Property(
+        kind=str,
+        help="The revision to checkout and build.",
+        default=None),
+}
+
+def RunSteps(api, root_solution_revision):
   buildername = api.properties.get('buildername')
 
   bot_config = SPEC.get('builders', {}).get(buildername)
@@ -129,7 +137,8 @@ def RunSteps(api):
     solution.name = name
     solution.url = url
   api.gclient.c = gclient_config
-  update_step = api.bot_update.ensure_checkout()
+  update_step = api.bot_update.ensure_checkout(
+      root_solution_revision=root_solution_revision)
   api.chromium.set_build_properties(update_step.json.output['properties'])
 
   # Remove the llvm-build directory, so that gclient runhooks will download
@@ -193,6 +202,20 @@ def GenTests(api):
                             stdout=api.raw_io.output_text('some compilation data'))
     test += api.properties.generic(buildername=buildername,
                                    mastername='chromium.infra.codesearch')
+
+    yield test
+
+  for buildername, config in SPEC['builders'].iteritems():
+    platform = config.get('platform')
+    test = api.test('full_%s_with_revision' % (_sanitize_nonalpha(buildername)))
+    test += api.step_data('generate compilation database for %s' % platform,
+                          stdout=api.raw_io.output_text('some compilation data'))
+    if platform == 'chromeos':
+      test += api.step_data('generate compilation database for linux',
+                            stdout=api.raw_io.output_text('some compilation data'))
+    test += api.properties.generic(buildername=buildername,
+                                   mastername='chromium.infra.codesearch')
+    test += api.properties(root_solution_revision="deadbeef")
 
     yield test
 
