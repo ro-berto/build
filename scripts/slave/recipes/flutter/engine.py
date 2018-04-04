@@ -35,7 +35,9 @@ def Build(api, config, *targets):
   build_dir = checkout.join('out/%s' % config)
   ninja_args = ['ninja', '-j', GOMA_JOBS, '-C', build_dir]
   ninja_args.extend(targets)
-  api.step('build %s' % ' '.join([config] + list(targets)), ninja_args)
+  api.goma.build_with_goma(
+    name='build %s' % ' '.join([config] + list(targets)),
+    ninja_command=ninja_args)
 
 
 def RunHostTests(api, out_dir, exe_extension=''):
@@ -473,25 +475,22 @@ def RunSteps(api):
 
   # The context adds dart to the path, only needed for the analyze step for now.
   with api.context(env=env):
-    try:
-      if api.platform.is_linux:
-        AnalyzeDartUI(api)
-        BuildLinux(api)
-        TestObservatory(api)
-        TestEngine(api)
-        BuildLinuxAndroid(api)
-        BuildJavadoc(api)
+    if api.platform.is_linux:
+      AnalyzeDartUI(api)
+      BuildLinux(api)
+      TestObservatory(api)
+      TestEngine(api)
+      BuildLinuxAndroid(api)
+      BuildJavadoc(api)
 
-      if api.platform.is_mac:
-        SetupXcode(api)
-        BuildMac(api)
-        BuildIOS(api)
-        BuildObjcDoc(api)
+    if api.platform.is_mac:
+      SetupXcode(api)
+      BuildMac(api)
+      BuildIOS(api)
+      BuildObjcDoc(api)
 
-      if api.platform.is_win:
-        BuildWindows(api)
-    finally:
-      api.goma.stop(ninja_log_compiler='goma')
+    if api.platform.is_win:
+      BuildWindows(api)
 
 
 def GenTests(api):
@@ -516,6 +515,7 @@ def GenTests(api):
     api.platform('mac', 64) +
     api.properties(revision='1234abcd') +
     api.properties(clobber='') +
+    api.properties(buildername='Mac Engine') +
     api.step_data('set_xcode_version', api.json.output({
       'matches': {}
     }))
