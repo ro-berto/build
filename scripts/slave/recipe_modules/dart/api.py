@@ -1,3 +1,6 @@
+# Copyright 2018 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
 
 from recipe_engine import recipe_api
 
@@ -6,6 +9,14 @@ BLACKLIST = '^(out|xcodebuild)[/\\\\](Release|Debug|Product)\w*[/\\\\]generated_
 SWARMING_CLIENT_PATH = 'tools/swarming_client'
 SWARMING_CLIENT_REPO = 'https://chromium.googlesource.com/infra/luci/client-py.git'
 SWARMING_CLIENT_REV = '88229872dd17e71658fe96763feaa77915d8cbd6'
+
+CHROME_PATH_ARGUMENT = {
+  'linux': '--chrome=browsers/chrome/google-chrome',
+  'mac': '--chrome=browsers/Google Chrome.app/Contents/MacOS/Google Chrome',
+  'win7': '--chrome=browsers\\Chrome\\Application\\chrome.exe',
+  'win10': '--chrome=browsers\\Chrome\\Application\\chrome.exe',
+  'win': '--chrome=browsers\\Chrome\\Application\\chrome.exe'
+}
 
 class DartApi(recipe_api.RecipeApi):
   """Recipe module for code commonly used in dart recipes. Shouldn't be used elsewhere."""
@@ -127,8 +138,7 @@ class DartApi(recipe_api.RecipeApi):
     if os is None:
       os = self.m.platform.name
     cipd_packages = []
-    if os == 'linux' and (
-          '-rchrome' in test_args or '--runtime=chrome' in test_args):
+    if '-rchrome' in test_args or '--runtime=chrome' in test_args:
       cipd_packages.append(('browsers',
                             'dart/browsers/chrome/${platform}',
                             'stable'))
@@ -297,7 +307,7 @@ class DartApi(recipe_api.RecipeApi):
     builder_fragments = builder_name.split('-')
     system = self._get_option(
       builder_fragments,
-      ['linux', 'mac', 'win7', 'win8', 'win10'],
+      ['linux', 'mac', 'win7', 'win8', 'win10', 'win'],
       'linux')
     mode = self._get_option(
       builder_fragments,
@@ -318,7 +328,7 @@ class DartApi(recipe_api.RecipeApi):
                    'arch': arch}
     if runtime is not None:
       environment['runtime'] = runtime
-      if runtime == 'chrome' and system == 'linux':
+      if runtime == 'chrome':
         self._download_browser(runtime)
     channel = 'try'
     if 'branch' in self.m.properties:
@@ -390,7 +400,7 @@ class DartApi(recipe_api.RecipeApi):
     # there is an argument to the swarming module task creation api for this.
     self.m.file.ensure_directory('create browser cache',
         self.m.path['checkout'].join('browsers'))
-    self.m.cipd.set_service_account_credentials( None )
+    self.m.cipd.set_service_account_credentials(None)
     self.m.cipd.ensure(self.m.path['checkout'].join('browsers'),
                        {'dart/browsers/chrome/${platform}': 'stable'})
 
@@ -470,9 +480,8 @@ class DartApi(recipe_api.RecipeApi):
     # here (perhaps checking if it is already done) so we catch
     # specific test steps with runtime chrome in a bot without that
     # global runtime.
-    if (environment['system'] == 'linux' and
-        environment.get('runtime') == 'chrome'):
-      args = args + ['--chrome=browsers/chrome/google-chrome']
+    if environment.get('runtime') == 'chrome':
+      args = args + [CHROME_PATH_ARGUMENT[environment['system']]]
     if 'exclude_tests' in step:
         args = args + ['--exclude_suite=' + ','.join(step['exclude_tests'])]
     if 'tests' in step:

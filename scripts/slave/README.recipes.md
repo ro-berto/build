@@ -1557,39 +1557,39 @@ Fetches a commit position string given a commit hash.
 
 [DEPS](/scripts/slave/recipe_modules/dart/__init__.py#1): [goma](#recipe_modules-goma), [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [DartApi](/scripts/slave/recipe_modules/dart/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [DartApi](/scripts/slave/recipe_modules/dart/api.py#21)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 Recipe module for code commonly used in dart recipes. Shouldn't be used elsewhere.
 
-&mdash; **def [build](/scripts/slave/recipe_modules/dart/api.py#37)(self, build_args=[], isolate=None, name='build dart'):**
+&mdash; **def [build](/scripts/slave/recipe_modules/dart/api.py#48)(self, build_args=[], isolate=None, name='build dart'):**
 
 Builds dart using the specified build_args
 and optionally isolates the sdk for testing using the specified isolate.
 If an isolate is specified, it returns the hash of the isolated archive.
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/dart/api.py#13)(self, clobber=False):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/dart/api.py#24)(self, clobber=False):**
 
 Checks out the dart code and prepares it for building.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/dart/api.py#160)(self, tasks):**
+&mdash; **def [collect](/scripts/slave/recipe_modules/dart/api.py#170)(self, tasks):**
 
 Collects the results of a sharded test run.
 
-&mdash; **def [collect\_all](/scripts/slave/recipe_modules/dart/api.py#177)(self, deferred_tasks):**
+&mdash; **def [collect\_all](/scripts/slave/recipe_modules/dart/api.py#187)(self, deferred_tasks):**
 
 Collects the results of a sharded test run.
 
-&mdash; **def [download\_parent\_isolate](/scripts/slave/recipe_modules/dart/api.py#103)(self):**
+&mdash; **def [download\_parent\_isolate](/scripts/slave/recipe_modules/dart/api.py#114)(self):**
 
-&mdash; **def [kill\_tasks](/scripts/slave/recipe_modules/dart/api.py#30)(self):**
+&mdash; **def [kill\_tasks](/scripts/slave/recipe_modules/dart/api.py#41)(self):**
 
 Kills leftover tasks from previous runs or steps.
 
-&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#212)(self):**
+&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#222)(self):**
 
 Reads the debug.log file
 
-&mdash; **def [read\_result\_file](/scripts/slave/recipe_modules/dart/api.py#193)(self, name, log_name, test_data=''):**
+&mdash; **def [read\_result\_file](/scripts/slave/recipe_modules/dart/api.py#203)(self, name, log_name, test_data=''):**
 
 Reads the result.log file
 Args:
@@ -1600,7 +1600,7 @@ Args:
 Returns (str) - The content of the file.
 Raises file.Error
 
-&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#486)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks):**
+&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#495)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks):**
 
 Runs a specific script with current working directory to be checkout. If
 the runtime (passed in environment) is a browser, and the system is linux,
@@ -1615,7 +1615,7 @@ Args:
   * environment (dict) - Environment with runtime, arch, system etc
   * tasks ([task]) - placeholder to put all swarming tasks in
 
-&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#431)(self, step_name, append_logs, step, isolate_hash, shards, local_shard, environment, tasks):**
+&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#441)(self, step_name, append_logs, step, isolate_hash, shards, local_shard, environment, tasks):**
 
 Runs test.py with default arguments, based on configuration from.
 Args:
@@ -1629,22 +1629,22 @@ Args:
   * environment (dict) - Environment with runtime, arch, system etc
   * tasks ([task]) - placeholder to put all swarming tasks in
 
-&mdash; **def [run\_trigger](/scripts/slave/recipe_modules/dart/api.py#397)(self, step_name, step, isolate_hash):**
+&mdash; **def [run\_trigger](/scripts/slave/recipe_modules/dart/api.py#407)(self, step_name, step, isolate_hash):**
 
-&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#117)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='dart.tests', num_shards=0, last_shard_is_local=False):**
+&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#128)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='dart.tests', num_shards=0, last_shard_is_local=False):**
 
 Runs test.py in the given isolate, sharded over several swarming tasks.
 Requires the 'shards' build property to be set to the number of tasks.
 Returns the created task(s), which are meant to be passed into collect().
 
-&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#223)(self, test_data):**
+&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#233)(self, test_data):**
 
 Reads the test-matrix.json file in checkout and performs each step listed
 in the file
 
 Raises StepFailure.
 
-&mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/dart/api.py#85)(self, isolate_fileset):**
+&mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/dart/api.py#96)(self, isolate_fileset):**
 
 Builds an isolate
 ### *recipe_modules* / [disk](/scripts/slave/recipe_modules/disk)
