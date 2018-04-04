@@ -19,6 +19,7 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'trigger',
   'v8',
@@ -131,12 +132,15 @@ def _build_and_upload(api):
   package.zip('zipping')
 
   # Upload to google storage bucket.
-  api.gsutil.upload(
-    zip_file,
-    'chromium-v8/node-%s-rel' % api.platform.name,
-    archive_name,
-    args=['-a', 'public-read'],
-  )
+  if api.runtime.is_experimental:
+    api.step('fake upload to GS', cmd=None)
+  else:
+    api.gsutil.upload(
+      zip_file,
+      'chromium-v8/node-%s-rel' % api.platform.name,
+      archive_name,
+      args=['-a', 'public-read'],
+    )
 
   api.step('Archive link', cmd=None)
   api.step.active_result.presentation.links['download'] = (
@@ -182,19 +186,24 @@ def RunSteps(api):
 
   # Trigger performance bots.
   if api.v8.bot_config.get('triggers'):
-    api.v8.buildbucket_trigger(
-        'master.internal.client.v8', [{'author': 'node.js'}],
-        [
-          {
-            'properties': {
-              'revision': api.v8.revision,
-              'parent_got_revision': api.v8.revision,
-              'parent_got_revision_cp': api.v8.revision_cp,
-            },
-            'builder_name': builder_name,
-          } for builder_name in api.v8.bot_config['triggers']
-        ]
-    )
+    if api.runtime.is_experimental:
+      # TODO(sergiyb): Replace this with a trigger to corresponding LUCI builder
+      # once it's configured.
+      api.step('fake trigger', cmd=None)
+    else:
+      api.v8.buildbucket_trigger(
+          'master.internal.client.v8', [{'author': 'node.js'}],
+          [
+            {
+              'properties': {
+                'revision': api.v8.revision,
+                'parent_got_revision': api.v8.revision,
+                'parent_got_revision_cp': api.v8.revision_cp,
+              },
+              'builder_name': builder_name,
+            } for builder_name in api.v8.bot_config['triggers']
+          ]
+      )
 
 
 def _sanitize_nonalpha(*chunks):
@@ -221,3 +230,16 @@ def GenTests(api):
           ) +
           api.platform(bot_config['testing']['platform'], 64)
       )
+
+  yield (
+    api.test('experimental') +
+    api.properties.generic(
+      mastername='client.v8.fyi',
+      buildername='V8 Linux64 - node.js integration',
+      branch='refs/heads/master',
+      revision='deadbeef',
+    ) +
+    api.runtime(is_luci=True, is_experimental=True) +
+    api.platform('linux', 64)
+  )
+
