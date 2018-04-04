@@ -590,6 +590,11 @@ def open_tree_if_possible(build_db, master_jsons, successful_builder_steps,
 
 def generate_build_url(build):
   """Creates a URL to reference the build."""
+
+  # Luci builds have a view_path.
+  if 'view_path' in build['build']:
+    return 'https://ci.chromium.org%s' % build['build']['view_path']
+
   return '%s/builders/%s/builds/%d' % (
       build['base_url'].rstrip('/'),
       urllib.quote(build['build']['builderName']),
