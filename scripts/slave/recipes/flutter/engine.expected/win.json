@@ -91,13 +91,47 @@
     "name": "gclient runhooks"
   },
   {
+    "cmd": [],
+    "name": "ensure_goma"
+  },
+  {
+    "cmd": [
+      "cipd.bat",
+      "ensure",
+      "-root",
+      "[CACHE]\\goma_client",
+      "-ensure-file",
+      "infra_internal/goma/client/windows-amd64 release",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-service-account-json",
+      "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    ],
+    "infra_step": true,
+    "name": "ensure_goma.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/windows-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "[START_DIR]\\src\\flutter/tools/gn",
+      "--goma",
       "--runtime-mode",
       "debug"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "gn --runtime-mode debug"
@@ -106,11 +140,13 @@
     "cmd": [
       "python",
       "[START_DIR]\\src\\flutter/tools/gn",
+      "--goma",
       "--runtime-mode",
       "debug",
       "--unoptimized"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "gn --runtime-mode debug --unoptimized"
@@ -119,11 +155,13 @@
     "cmd": [
       "python",
       "[START_DIR]\\src\\flutter/tools/gn",
+      "--goma",
       "--runtime-mode",
       "profile",
       "--android"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "gn --runtime-mode profile --android"
@@ -132,12 +170,14 @@
     "cmd": [
       "python",
       "[START_DIR]\\src\\flutter/tools/gn",
+      "--goma",
       "--runtime-mode",
       "profile",
       "--android",
       "--android-cpu=arm64"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "gn --runtime-mode profile --android --android-cpu=arm64"
@@ -146,11 +186,13 @@
     "cmd": [
       "python",
       "[START_DIR]\\src\\flutter/tools/gn",
+      "--goma",
       "--runtime-mode",
       "release",
       "--android"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "gn --runtime-mode release --android"
@@ -159,12 +201,14 @@
     "cmd": [
       "python",
       "[START_DIR]\\src\\flutter/tools/gn",
+      "--goma",
       "--runtime-mode",
       "release",
       "--android",
       "--android-cpu=arm64"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "gn --runtime-mode release --android --android-cpu=arm64"
@@ -172,10 +216,13 @@
   {
     "cmd": [
       "ninja",
+      "-j",
+      "200",
       "-C",
       "[START_DIR]\\src\\out/host_debug_unopt"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "build host_debug_unopt"
@@ -183,10 +230,13 @@
   {
     "cmd": [
       "ninja",
+      "-j",
+      "200",
       "-C",
       "[START_DIR]\\src\\out/host_debug"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "build host_debug"
@@ -194,11 +244,14 @@
   {
     "cmd": [
       "ninja",
+      "-j",
+      "200",
       "-C",
       "[START_DIR]\\src\\out/android_profile",
       "gen_snapshot"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "build android_profile gen_snapshot"
@@ -206,11 +259,14 @@
   {
     "cmd": [
       "ninja",
+      "-j",
+      "200",
       "-C",
       "[START_DIR]\\src\\out/android_profile_arm64",
       "gen_snapshot"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "build android_profile_arm64 gen_snapshot"
@@ -218,11 +274,14 @@
   {
     "cmd": [
       "ninja",
+      "-j",
+      "200",
       "-C",
       "[START_DIR]\\src\\out/android_release",
       "gen_snapshot"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "build android_release gen_snapshot"
@@ -230,11 +289,14 @@
   {
     "cmd": [
       "ninja",
+      "-j",
+      "200",
       "-C",
       "[START_DIR]\\src\\out/android_release_arm64",
       "gen_snapshot"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "build android_release_arm64 gen_snapshot"
@@ -245,6 +307,7 @@
     ],
     "cwd": "[START_DIR]\\src\\out\\host_debug",
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "Test FXL"
@@ -255,6 +318,7 @@
     ],
     "cwd": "[START_DIR]\\src\\out\\host_debug",
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "Test Flow"
@@ -266,6 +330,7 @@
     ],
     "cwd": "[START_DIR]\\src\\out\\host_debug",
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "Test FML"
@@ -276,6 +341,7 @@
     ],
     "cwd": "[START_DIR]\\src\\out\\host_debug",
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "Test Synchronization"
@@ -286,6 +352,7 @@
     ],
     "cwd": "[START_DIR]\\src\\out\\host_debug",
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "Test WTF"
@@ -297,6 +364,7 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "Zip windows-x64 artifacts.zip",
@@ -315,6 +383,7 @@
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/windows-x64/artifacts.zip"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "infra_step": true,
@@ -334,6 +403,7 @@
       "[TMP_BASE]\\tmp_tmp_1"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "infra_step": true,
@@ -346,6 +416,7 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "Zip android-arm-profile windows-x64.zip",
@@ -364,6 +435,7 @@
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/windows-x64.zip"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "infra_step": true,
@@ -383,6 +455,7 @@
       "[TMP_BASE]\\tmp_tmp_2"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "infra_step": true,
@@ -395,6 +468,7 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "Zip android-arm64-profile windows-x64.zip",
@@ -413,6 +487,7 @@
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm64-profile/windows-x64.zip"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "infra_step": true,
@@ -432,6 +507,7 @@
       "[TMP_BASE]\\tmp_tmp_3"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "infra_step": true,
@@ -444,6 +520,7 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "Zip android-arm-release windows-x64.zip",
@@ -462,6 +539,7 @@
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/windows-x64.zip"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "infra_step": true,
@@ -481,6 +559,7 @@
       "[TMP_BASE]\\tmp_tmp_4"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "infra_step": true,
@@ -493,6 +572,7 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "Zip android-arm64-release windows-x64.zip",
@@ -511,6 +591,7 @@
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm64-release/windows-x64.zip"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "infra_step": true,
@@ -530,6 +611,7 @@
       "[TMP_BASE]\\tmp_tmp_5"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "infra_step": true,
@@ -542,6 +624,7 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "name": "Zip dart-sdk",
@@ -560,6 +643,7 @@
       "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/dart-sdk-windows-x64.zip"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "infra_step": true,
@@ -579,10 +663,122 @@
       "[TMP_BASE]\\tmp_tmp_6"
     ],
     "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
     },
     "infra_step": true,
     "name": "temp dir for Upload Dart SDK"
+  },
+  {
+    "cmd": [],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "postprocess_for_goma"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]\\goma_client\\goma_ctl.py",
+      "jsonstatus",
+      "[TMP_BASE]\\goma_jsonstatus.json"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "postprocess_for_goma.goma_jsonstatus",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]\\goma_client\\goma_ctl.py",
+      "stat"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "postprocess_for_goma.goma_stat",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]\\goma_client\\goma_ctl.py",
+      "stop"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "postprocess_for_goma.stop_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "--upload-compiler-proxy-info",
+      "--log-url-json-file",
+      "/path/to/tmp/json",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "--bigquery-service-account-json",
+      "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
+      "--json-status",
+      "[TMP_BASE]\\goma_jsonstatus.json",
+      "--ninja-log-compiler",
+      "goma",
+      "--buildbot-buildername",
+      "Win Engine",
+      "--buildbot-mastername",
+      "client.flutter",
+      "--buildbot-slavename",
+      "fake-m1",
+      "--buildbot-clobber",
+      ""
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "postprocess_for_goma.upload_log",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compiler_proxy_log\": \"https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@compiler_proxy_log@https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@"
+    ]
   },
   {
     "name": "$result",

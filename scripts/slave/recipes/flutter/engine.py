@@ -9,6 +9,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/gsutil',
+  'goma',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -20,6 +21,7 @@ DEPS = [
 ]
 
 BUCKET_NAME = 'flutter_infra'
+GOMA_JOBS = '200'
 
 def GetCloudPath(api, path):
   # TODO(eseidel): api.bot_update.last_returned_properties is supposedly a known
@@ -31,7 +33,7 @@ def GetCloudPath(api, path):
 def Build(api, config, *targets):
   checkout = api.path['start_dir'].join('src')
   build_dir = checkout.join('out/%s' % config)
-  ninja_args = ['ninja', '-C', build_dir]
+  ninja_args = ['ninja', '-j', GOMA_JOBS, '-C', build_dir]
   ninja_args.extend(targets)
   api.step('build %s' % ' '.join([config] + list(targets)), ninja_args)
 
@@ -58,7 +60,7 @@ def RunHostTests(api, out_dir, exe_extension=''):
 
 def RunGN(api, *args):
   checkout = api.path['start_dir'].join('src')
-  gn_cmd = ['python', checkout.join('flutter/tools/gn')]
+  gn_cmd = ['python', checkout.join('flutter/tools/gn'), '--goma']
   gn_cmd.extend(args)
   api.step('gn %s' % ' '.join(args), gn_cmd)
 
@@ -461,27 +463,35 @@ def RunSteps(api):
 
   checkout = api.path['start_dir'].join('src')
   dart_bin = checkout.join('third_party', 'dart', 'tools', 'sdks', 'linux', 'dart-sdk', 'bin')
-  env = { 'PATH': api.path.pathsep.join((str(dart_bin), '%(PATH)s')) }
+
+  api.goma.ensure_goma()
+
+  env = {
+    'PATH': api.path.pathsep.join((str(dart_bin), '%(PATH)s')),
+    'GOMA_DIR': api.goma.goma_dir,
+  }
 
   # The context adds dart to the path, only needed for the analyze step for now.
   with api.context(env=env):
+    try:
+      if api.platform.is_linux:
+        AnalyzeDartUI(api)
+        BuildLinux(api)
+        TestObservatory(api)
+        TestEngine(api)
+        BuildLinuxAndroid(api)
+        BuildJavadoc(api)
 
-    if api.platform.is_linux:
-      AnalyzeDartUI(api)
-      BuildLinux(api)
-      TestObservatory(api)
-      TestEngine(api)
-      BuildLinuxAndroid(api)
-      BuildJavadoc(api)
+      if api.platform.is_mac:
+        SetupXcode(api)
+        BuildMac(api)
+        BuildIOS(api)
+        BuildObjcDoc(api)
 
-    if api.platform.is_mac:
-      SetupXcode(api)
-      BuildMac(api)
-      BuildIOS(api)
-      BuildObjcDoc(api)
-
-    if api.platform.is_win:
-      BuildWindows(api)
+      if api.platform.is_win:
+        BuildWindows(api)
+    finally:
+      api.goma.stop(ninja_log_compiler='goma')
 
 
 def GenTests(api):
