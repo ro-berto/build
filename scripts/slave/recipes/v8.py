@@ -183,18 +183,6 @@ def GenTests(api):
     api.post_process(Filter('trigger'))
   )
 
-  # Test triggered builds when running on LUCI.
-  yield (
-    api.v8.test(
-        'tryserver.v8',
-        'v8_win64_rel_ng',
-        'test_triggered_build_luci',
-    ) +
-    api.properties(buildbucket={'build': {'bucket': 'luci.v8.try'}}) +
-    api.runtime(is_luci=True, is_experimental=False) +
-    api.post_process(Filter('trigger'))
-  )
-
   # Test using extra flags with a bot that already uses some extra flags as
   # positional argument.
   yield (
@@ -549,7 +537,7 @@ def GenTests(api):
       api.post_process(Filter('[trigger] Check'))
   )
 
-  # Test triggerring child builders on LUCI.
+  # Test triggering CI child builders on LUCI.
   yield (
       api.v8.test('client.v8', 'V8 Linux - builder', 'trigger_on_luci') +
       api.runtime(is_luci=True, is_experimental=False) +
