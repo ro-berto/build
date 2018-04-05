@@ -107,8 +107,6 @@ _AddIsolatedTestSpec(
     'One Buildbot Step Test Builder', 'buildbot-test', 'linux',
     parent_buildername='Linux Compile Perf FYI')
 
-_AddIsolatedTestSpec('Mac 10.12 Laptop Low End', '', 'mac',
-                     parent_buildername='Mac Builder Perf FYI')
 _AddIsolatedTestSpec('Mac 10.13 Laptop High End', '', 'mac',
                      parent_buildername='Mac Builder Perf FYI')
 _AddIsolatedTestSpec('Android Go', '', 'android',
