@@ -43,6 +43,12 @@
       "oak-full": [
         "cros-beefy428-c2"
       ], 
+      "tael-full": [
+        "cros-test0-c2"
+      ], 
+      "tael-paladin": [
+        "cros-test1-c2"
+      ], 
       "tatl-full": [
         "cros-beefy500-c2"
       ], 
@@ -67,8 +73,6 @@
     "build245-m2", 
     "build263-m2", 
     "build323-m2", 
-    "build333-m2", 
-    "cros-test0-c2", 
-    "cros-test1-c2"
+    "build333-m2"
   ]
 }
