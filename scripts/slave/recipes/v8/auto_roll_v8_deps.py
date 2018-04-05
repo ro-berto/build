@@ -196,9 +196,9 @@ def RunSteps(api):
     # Check if an update is necessary.
     if v8_rev != new_rev:
       with api.context(cwd=api.path['checkout']):
-        step_result = api.step(
-            'roll dependency %s' % name.replace('/', '_'),
-            ['roll-dep-svn', '--no-verify-revision', 'v8/%s' % name, new_rev],
+        step_result = api.gclient(
+            'setdep %s' % name.replace('/', '_'),
+            ['setdep', '-r', 'v8/%s@%s' % (name, new_rev)],
             ok_ret='any',
         )
       if step_result.retcode == 0:
@@ -265,7 +265,7 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
   yield (
       template('roll', 'Auto-roll - v8 deps') +
       api.override_step_data(
-          'roll dependency base_trace_event_common',
+          'gclient setdep base_trace_event_common',
           retcode=1,
       ) +
       api.override_step_data(

@@ -293,13 +293,19 @@
   },
   {
     "cmd": [
-      "roll-dep-svn",
-      "--no-verify-revision",
-      "v8/base/trace_event/common",
-      "deadbeef"
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "setdep",
+      "-r",
+      "v8/base/trace_event/common@deadbeef"
     ],
     "cwd": "[START_DIR]/v8",
-    "name": "roll dependency base_trace_event_common",
+    "env": {
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "name": "gclient setdep base_trace_event_common",
     "~followup_annotations": [
       "@@@STEP_WARNINGS@@@"
     ]
@@ -321,33 +327,51 @@
   },
   {
     "cmd": [
-      "roll-dep-svn",
-      "--no-verify-revision",
-      "v8/build",
-      "deadbeef"
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "setdep",
+      "-r",
+      "v8/build@deadbeef"
     ],
     "cwd": "[START_DIR]/v8",
-    "name": "roll dependency build"
+    "env": {
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "name": "gclient setdep build"
   },
   {
     "cmd": [
-      "roll-dep-svn",
-      "--no-verify-revision",
-      "v8/tools/gyp",
-      "e7079f0e0e14108ab0dba58728ff219637458563"
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "setdep",
+      "-r",
+      "v8/tools/gyp@e7079f0e0e14108ab0dba58728ff219637458563"
     ],
     "cwd": "[START_DIR]/v8",
-    "name": "roll dependency tools_gyp"
+    "env": {
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "name": "gclient setdep tools_gyp"
   },
   {
     "cmd": [
-      "roll-dep-svn",
-      "--no-verify-revision",
-      "v8/tools/swarming_client",
-      "380e32662312eb107f06fcba6409b0409f8fe001"
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "setdep",
+      "-r",
+      "v8/tools/swarming_client@380e32662312eb107f06fcba6409b0409f8fe001"
     ],
     "cwd": "[START_DIR]/v8",
-    "name": "roll dependency tools_swarming_client"
+    "env": {
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "name": "gclient setdep tools_swarming_client"
   },
   {
     "cmd": [
