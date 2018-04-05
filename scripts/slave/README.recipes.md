@@ -5143,13 +5143,13 @@ Recipe to test the deterministic build.
 
 Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 
-&mdash; **def [ConfigureAndroidBuilder](/scripts/slave/recipes/swarming/deterministic_build.py#130)(api, recipe_config):**
+&mdash; **def [ConfigureAndroidBuilder](/scripts/slave/recipes/swarming/deterministic_build.py#156)(api, recipe_config):**
 
-&mdash; **def [ConfigureChromiumBuilder](/scripts/slave/recipes/swarming/deterministic_build.py#118)(api, recipe_config):**
+&mdash; **def [ConfigureChromiumBuilder](/scripts/slave/recipes/swarming/deterministic_build.py#144)(api, recipe_config):**
 
-&mdash; **def [MoveBuildDirectory](/scripts/slave/recipes/swarming/deterministic_build.py#106)(api, src_dir, dst_dir):**
+&mdash; **def [MoveBuildDirectory](/scripts/slave/recipes/swarming/deterministic_build.py#132)(api, src_dir, dst_dir):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/swarming/deterministic_build.py#150)(api, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/swarming/deterministic_build.py#176)(api, buildername):**
 ### *recipes* / [swarming/heartbeat](/scripts/slave/recipes/swarming/heartbeat.py)
 
 [DEPS](/scripts/slave/recipes/swarming/heartbeat.py#11): [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [swarming\_heartbeat](#recipe_modules-swarming_heartbeat), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

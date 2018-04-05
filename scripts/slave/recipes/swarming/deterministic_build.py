@@ -27,6 +27,8 @@ DEPS = [
 ]
 
 DETERMINISTIC_BUILDERS = freeze({
+  # TODO(qyearsley): Remove "{Android,Linux} deterministic{, (dbg)}"
+  # after LUCI migration.
   'Android deterministic': {
     'chromium_config': 'android',
     'chromium_config_kwargs': {
@@ -62,7 +64,7 @@ DETERMINISTIC_BUILDERS = freeze({
     'targets': ['all'],
   },
 
-  # Debug builder.
+  # Debug builders
   'Android deterministic (dbg)': {
     'chromium_config': 'android',
     'chromium_config_kwargs': {
@@ -86,17 +88,41 @@ DETERMINISTIC_BUILDERS = freeze({
     'targets': ['all'],
   },
 
-  # runs in tryserver.chromium.linux.
+  'Deterministic Linux': {
+    'chromium_config': 'chromium',
+    'gclient_config': 'chromium',
+    'platform': 'linux',
+    'targets': ['all'],
+  },
   'linux_chromium_clobber_deterministic': {
     'chromium_config': 'chromium',
     'gclient_config': 'chromium',
     'platform': 'linux',
     'targets': ['all'],
   },
-  # runs in chromium.linux.
-  'Deterministic Linux': {
+  'Deterministic Linux (dbg)': {
     'chromium_config': 'chromium',
     'gclient_config': 'chromium',
+    'platform': 'linux',
+    'targets': ['all'],
+  },
+  'Deterministic Android': {
+    'chromium_config': 'android',
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Release',
+      'TARGET_BITS': 32,
+      'TARGET_PLATFORM': 'android',
+    },
+    'platform': 'linux',
+    'targets': ['all'],
+  },
+  'Deterministic Android (dbg)': {
+    'chromium_config': 'android',
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': 'Debug',
+      'TARGET_BITS': 32,
+      'TARGET_PLATFORM': 'android',
+    },
     'platform': 'linux',
     'targets': ['all'],
   },
