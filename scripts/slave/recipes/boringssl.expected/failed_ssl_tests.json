@@ -1,6 +1,13 @@
 [
   {
     "cmd": [
+      "uname",
+      "-a"
+    ],
+    "name": "uname"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",

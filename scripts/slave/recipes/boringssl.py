@@ -193,6 +193,11 @@ PROPERTIES = {
 
 def RunSteps(api, buildername):
   with api.context(env=_GetBuilderEnv(buildername)):
+    # Print the kernel version on Linux builders. BoringSSL is sensitive to
+    # whether the kernel has getrandom support.
+    if api.platform.is_linux:
+      api.step('uname', ['uname', '-a'])
+
     # Sync and pull in everything.
     api.gclient.set_config('boringssl')
     if _HasToken(buildername, 'android'):

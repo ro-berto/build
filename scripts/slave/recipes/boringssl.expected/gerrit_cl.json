@@ -1,6 +1,13 @@
 [
   {
     "cmd": [
+      "uname",
+      "-a"
+    ],
+    "name": "uname"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gerrit_client.py",
