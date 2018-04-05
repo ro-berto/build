@@ -96,7 +96,7 @@ SPEC = freeze({
       'platform': 'android',
       'sync_generated_files': True,
       'gen_repo_branch': 'android',
-      'corpus': 'chromium',
+      'corpus': 'chromium-android',
     },
   },
 })

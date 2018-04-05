@@ -858,7 +858,7 @@
       "--index-pack-format",
       "kythe",
       "--corpus",
-      "chromium",
+      "chromium-android",
       "--revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
     ],
