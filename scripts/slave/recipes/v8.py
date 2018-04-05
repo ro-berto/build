@@ -521,7 +521,8 @@ def GenTests(api):
       api.v8.test('client.v8', 'V8 Linux - builder', 'experimental') +
       api.runtime(is_luci=False, is_experimental=True) +
       api.post_process(DoesNotRun, 'trigger (2)') +
-      api.post_process(Filter('gsutil upload', 'package build'))
+      api.post_process(Filter(
+        'gsutil upload', 'package build', 'perf dashboard post'))
   )
 
   yield (

@@ -523,7 +523,7 @@ class V8Api(recipe_api.RecipeApi):
     }
     points = []
     root = '/'.join([
-      'v8.infra',
+      'v8.infra.experimental' if self.m.runtime.is_experimental else 'v8.infra',
       'build_dependencies',
       '',
     ])
@@ -563,7 +563,13 @@ class V8Api(recipe_api.RecipeApi):
         'r_v8_git': self.revision,
       },
     }
-    trace_prefix = ['v8.infra', 'binary_size']
+
+    if self.m.runtime.is_experimental:
+      trace_prefix = ['v8.infra.experimental']
+    else:
+      trace_prefix = ['v8.infra']
+
+    trace_prefix.append('binary_size')
 
     points = []
     for path_pieces, size in zip(path_pieces_list, sizes):
