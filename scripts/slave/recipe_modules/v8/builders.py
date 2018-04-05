@@ -222,7 +222,9 @@ BUILDERS = {
             [V8Testing],
         ) + with_test_args(
             'nosse3',
-            ['--extra-flags', '--noenable-sse3 --noenable-avx'],
+            ['--extra-flags',
+             '--noenable-sse3 --noenable-ssse3 --noenable-sse4-1 --noenable-avx'
+            ],
             [V8Testing, Mozilla],
         ) + with_test_args(
             'nosse4',
@@ -258,7 +260,9 @@ BUILDERS = {
             [V8Testing(2)],
         ) + with_test_args(
             'nosse3',
-            ['--extra-flags', '--noenable-sse3 --noenable-avx'],
+            ['--extra-flags',
+             '--noenable-sse3 --noenable-ssse3 --noenable-sse4-1 --noenable-avx'
+            ],
             [V8Testing(2), Test262, Mozilla],
         ) + with_test_args(
             'nosse4',
