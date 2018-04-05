@@ -304,7 +304,7 @@ def BuildMac(api):
   UploadDartSdk(api, archive_name='dart-sdk-darwin-x64.zip')
 
 
-def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
+def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
   checkout = api.path['start_dir'].join('src')
   out_dir = checkout.join('out')
 
@@ -313,8 +313,10 @@ def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
     checkout.join('flutter/sky/tools/create_ios_framework.py'),
     '--dst',
     label_dir,
-    '--device-out-dir',
-    api.path.join(out_dir, device_out),
+    '--arm64-out-dir',
+    api.path.join(out_dir, arm64_out),
+    '--armv7-out-dir',
+    api.path.join(out_dir, armv7_out),
     '--simulator-out-dir',
     api.path.join(out_dir, sim_out),
   ]
@@ -332,13 +334,13 @@ def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
     'flutter/runtime/dart_vm_entry_points.txt',
     'flutter/lib/snapshot/snapshot.dart',
     'flutter/shell/platform/darwin/ios/framework/Flutter.podspec',
-    'out/%s/clang_x64/gen_snapshot' % device_out,
+    'out/%s/clang_x64/gen_snapshot' % arm64_out,
     'out/%s/Flutter.framework.zip' % label,
   ]
   if label in ['profile', 'release']:
-    artifacts.append('out/%s/dart_entry_points/entry_points.json' % device_out)
+    artifacts.append('out/%s/dart_entry_points/entry_points.json' % arm64_out)
     artifacts.append(
-      'out/%s/dart_entry_points/entry_points_extra.json' % device_out)
+      'out/%s/dart_entry_points/entry_points_extra.json' % arm64_out)
 
   UploadArtifacts(api, bucket_name, artifacts)
 
@@ -346,23 +348,29 @@ def PackageIOSVariant(api, label, device_out, sim_out, bucket_name):
 def BuildIOS(api):
   # Generate Ninja files for all valid configurations.
   RunGN(api, '--ios', '--runtime-mode', 'debug')
-  RunGN(api, '--ios', '--runtime-mode', 'profile')
-  RunGN(api, '--ios', '--runtime-mode', 'release')
+  RunGN(api, '--ios', '--runtime-mode', 'debug', '--ios-cpu=arm')
   RunGN(api, '--ios', '--runtime-mode', 'debug', '--simulator')
+  RunGN(api, '--ios', '--runtime-mode', 'profile')
+  RunGN(api, '--ios', '--runtime-mode', 'profile', '--ios-cpu=arm')
+  RunGN(api, '--ios', '--runtime-mode', 'release')
+  RunGN(api, '--ios', '--runtime-mode', 'release', '--ios-cpu=arm')
 
   # Build all configurations.
-  Build(api, 'ios_debug_sim')
   Build(api, 'ios_debug')
+  Build(api, 'ios_debug_arm')
+  Build(api, 'ios_debug_sim')
   Build(api, 'ios_profile')
+  Build(api, 'ios_profile_arm')
   Build(api, 'ios_release')
+  Build(api, 'ios_release_arm')
 
   # Package all variants
   PackageIOSVariant(api,
-      'debug',   'ios_debug',   'ios_debug_sim', 'ios')
+      'debug',   'ios_debug',   'ios_debug_arm',   'ios_debug_sim', 'ios')
   PackageIOSVariant(api,
-      'profile', 'ios_profile', 'ios_debug_sim', 'ios-profile')
+      'profile', 'ios_profile', 'ios_profile_arm', 'ios_debug_sim', 'ios-profile')
   PackageIOSVariant(api,
-      'release', 'ios_release', 'ios_debug_sim', 'ios-release')
+      'release', 'ios_release', 'ios_release_arm', 'ios_debug_sim', 'ios-release')
 
 
 def BuildWindows(api):
