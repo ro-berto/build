@@ -13,17 +13,17 @@ DEPS = [
 
 def RunSteps(api):
   # Get parameters specified in the tryjob description.
-  tryjob_args = api.properties.get('cbb_extra_args', [])
+  cbb_extra_args = api.properties.get('cbb_extra_args', [])
 
-  # If tryjob_args is a string, translate from json to list.
-  if isinstance(tryjob_args, basestring):
-    tryjob_args = json.loads(tryjob_args)
+  # If cbb_extra_args is a non-empty string, translate from json to list.
+  if cbb_extra_args and isinstance(cbb_extra_args, basestring):
+    cbb_extra_args = json.loads(cbb_extra_args)
 
   # Apply our adjusted configuration.
   api.chromite.configure(
       api.properties,
       {},
-      CBB_EXTRA_ARGS=tryjob_args)
+      CBB_EXTRA_ARGS=cbb_extra_args)
 
   # Fetch chromite and pinned depot tools.
   api.chromite.checkout_chromite()
@@ -97,6 +97,17 @@ def GenTests(api):
           cbb_branch='slave_branch',
           cbb_config='slave_config',
           cbb_master_build_id=123,
+          **common_properties
+      )
+  )
+
+  # Test empty string args.
+  yield (
+      api.test('empty_string_args')
+      + api.properties(
+          cbb_config='tryjob_config',
+          cbb_extra_args='',
+          email='user@google.com',
           **common_properties
       )
   )
