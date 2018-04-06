@@ -832,7 +832,7 @@ BUILDERS = {
         'enable_swarming': True,
         'tests': [
           V8Testing(2),
-          Test262Variants(4),
+          Test262Variants(5),
         ] + with_extra_variants([V8Testing]),
         'testing': {'platform': 'linux'},
       },
@@ -845,7 +845,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing(3),
+          V8Testing(4),
           Test262(2),
           Mozilla,
           Benchmarks,
