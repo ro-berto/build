@@ -95,9 +95,6 @@
       "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.dart\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ], @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/client.dart.fyi\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"open-tree\": false, @@@",
@@ -601,8 +598,7 @@
       "/creds/service_accounts/service-account-gatekeeper.json",
       "--build-db",
       "dart_build_db.json",
-      "https://build.chromium.org/p/client.dart",
-      "https://build.chromium.org/p/client.dart.fyi"
+      "https://build.chromium.org/p/client.dart"
     ],
     "name": "gatekeeper: dart"
   },

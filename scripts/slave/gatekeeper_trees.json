@@ -113,8 +113,7 @@
         "build-db": "dart_build_db.json",
         "config": "dart/gatekeeper_dart.json",
         "masters": {
-            "https://build.chromium.org/p/client.dart": ["*"],
-            "https://build.chromium.org/p/client.dart.fyi": ["*"]
+            "https://build.chromium.org/p/client.dart": ["*"]
         },
         "set-status": false,
         "open-tree": false
