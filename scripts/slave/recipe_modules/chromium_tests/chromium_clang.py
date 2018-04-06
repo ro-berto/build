@@ -308,9 +308,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'tests': [
-        steps.MiniInstallerTest(),
-      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -382,9 +379,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'tests': [
-        steps.MiniInstallerTest(),
-      ],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -697,7 +691,6 @@ SPEC = {
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
       'tests': [
-        steps.MiniInstallerTest(),
         steps.SizesStep(RESULTS_URL, 'ToTWin(dbg)'),
       ],
       # Workaround so that recipes doesn't add random build targets to our
