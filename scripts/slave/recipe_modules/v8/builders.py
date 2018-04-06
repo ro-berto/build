@@ -107,7 +107,7 @@ def with_dimensions(suffix, tests, dimensions):
 
 
 SWARMING_FYI_PROPS = {
-  'default_expiration': 2 * 60 * 60,
+  'default_expiration': 4 * 60 * 60,
   'default_hard_timeout': 60 * 60,
   'default_priority': 35,
 }
@@ -1861,7 +1861,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'swarming_properties': {
-          'default_expiration': 2 * 60 * 60,
+          'default_expiration': 4 * 60 * 60,
           'default_hard_timeout': 2 * 60 * 60,
           'default_priority': 35,
         },
@@ -3200,7 +3200,7 @@ def AddBranchBuilder(name, build_config, bits, presubmit=False,
     'tests': tests,
     'testing': {'platform': 'linux'},
     'swarming_properties': {
-      'default_expiration': 2 * 60 * 60,
+      'default_expiration': 4 * 60 * 60,
       'default_hard_timeout': 90 * 60,
       'default_priority': 35,
     },
