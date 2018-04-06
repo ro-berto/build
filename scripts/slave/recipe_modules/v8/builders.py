@@ -2511,6 +2511,42 @@ BUILDERS = {
         ] + with_extra_variants([V8Testing(2)]),
         'testing': {'platform': 'linux'},
       },
+      'v8_linux64_cfi_rel_ng': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'clang',
+          'goma',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'enable_swarming': True,
+        'slim_swarming_builder': True,
+        'triggers': [
+          'v8_linux64_cfi_rel_ng_triggered',
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_cfi_rel_ng_triggered': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'v8_linux64_cfi_rel_ng',
+        'enable_swarming': True,
+        'tests': [
+          V8Testing(2),
+          OptimizeForSize,
+          Benchmarks,
+          Test262,
+          Mozilla,
+        ],
+        'testing': {'platform': 'linux'},
+      },
       'v8_linux64_jumbo_compile_rel': {
         'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {

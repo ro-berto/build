@@ -2686,14 +2686,6 @@ Tags can be added per individual task.
 
 Yields steps to verify compatibility with swarming_client version.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/swarming/api.py#840)(self, tasks, \*\*kwargs):**
-
-Batch version of 'collect_task'.
-
-Deprecated, to be removed soon. Use 'collect_task' in a loop instead,
-properly handling exceptions. This method doesn't handle collect failures
-well (it aborts on a first failure).
-
 &mdash; **def [collect\_task](/scripts/slave/recipe_modules/swarming/api.py#803)(self, task, \*\*kwargs):**
 
 Waits for a single triggered task to finish.
@@ -2740,11 +2732,11 @@ This value can be changed per individual task.
 
 &emsp; **@default_user.setter**<br>&mdash; **def [default\_user](/scripts/slave/recipe_modules/swarming/api.py#326)(self, value):**
 
-&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/swarming/api.py#1221)(self, task):**
+&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/swarming/api.py#1200)(self, task):**
 
 SwarmingTask -> argument list for 'swarming.py' command.
 
-&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1151)(self, prefix, task):**
+&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1130)(self, prefix, task):**
 
 SwarmingTask -> name of a step of a waterfall.
 
@@ -2878,14 +2870,6 @@ Args:
   * env_prefixes: a dict {ENVVAR: [relative, paths]} which instructs
       swarming to prepend the given relative paths to the PATH-style ENVVAR
       specified.
-
-&mdash; **def [trigger](/scripts/slave/recipe_modules/swarming/api.py#831)(self, tasks, \*\*kwargs):**
-
-Batch version of 'trigger_task'.
-
-Deprecated, to be removed soon. Use 'trigger_task' in a loop instead,
-properly handling exceptions. This method doesn't handle trigger failures
-well (it aborts on a first failure).
 
 &mdash; **def [trigger\_task](/scripts/slave/recipe_modules/swarming/api.py#621)(self, task, \*\*kwargs):**
 
