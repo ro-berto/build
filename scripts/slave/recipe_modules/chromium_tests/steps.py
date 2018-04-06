@@ -182,8 +182,8 @@ class Test(object):
     raise NotImplementedError()
 
   @property
-  def uses_swarming(self):
-    """Returns true if the test uses swarming."""
+  def uses_isolate(self):
+    """Returns true if the test is run via an isolate."""
     return False
 
   @property
@@ -263,8 +263,8 @@ class TestWrapper(Test):  # pragma: no cover
     return self._test.failures(api, suffix)
 
   @property
-  def uses_swarming(self):
-    return self._test.uses_swarming
+  def uses_isolate(self):
+    return self._test.uses_isolate
 
   @property
   def uses_local_devices(self):
@@ -1497,7 +1497,7 @@ class SwarmingTest(Test):
     return self._results[suffix]['failures']
 
   @property
-  def uses_swarming(self):
+  def uses_isolate(self):
     return True
 
   def step_metadata(self, api, suffix=None):
@@ -1672,7 +1672,7 @@ class LocalIsolatedScriptTest(Test):
     return self.target_name
 
   @property
-  def uses_swarming(self):
+  def uses_isolate(self):
     return True
 
   def compile_targets(self, _):
@@ -1762,7 +1762,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     return [self.target_name]
 
   @property
-  def uses_swarming(self):
+  def uses_isolate(self):
     return True
 
   def create_task(self, api, suffix, isolated_hash):

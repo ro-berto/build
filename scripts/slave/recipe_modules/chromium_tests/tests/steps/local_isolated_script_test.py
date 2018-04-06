@@ -26,7 +26,7 @@ def RunSteps(api):
       'compile_targets: %r' % test.compile_targets(api),
       'isolate_target: %r' % test.isolate_target(api),
       'uses_local_devices: %r' % test.uses_local_devices,
-      'uses_swarming: %r' % test.uses_swarming,
+      'uses_isolate: %r' % test.uses_isolate,
   ]
 
 

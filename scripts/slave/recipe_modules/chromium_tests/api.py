@@ -336,7 +336,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if bot_type in ['builder', 'builder_tester']:
       isolated_targets = [
           t.isolate_target(self.m)
-          for t in tests_including_triggered if t.uses_swarming
+          for t in tests_including_triggered if t.uses_isolate
       ]
 
       if isolated_targets:
@@ -618,7 +618,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if bot_type in ('tester', 'builder_tester'):
         isolated_targets = [
             t.isolate_target(self.m)
-            for t in tests if t.uses_swarming]
+            for t in tests if t.uses_isolate]
         if isolated_targets:
           self.m.isolate.find_isolated_tests(self.m.chromium.output_dir)
 
@@ -696,7 +696,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         compile_targets = sorted(set(compile_targets))
         failing_swarming_tests = [
             t.isolate_target(self.m)
-            for t in failing_tests if t.uses_swarming]
+            for t in failing_tests if t.uses_isolate]
         if failing_swarming_tests:
           self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
         self.run_mb_and_compile(compile_targets, failing_swarming_tests,

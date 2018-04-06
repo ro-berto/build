@@ -559,7 +559,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@details@compile_targets: ['base_unittests']@@@",
       "@@@STEP_LOG_LINE@details@uses_local_devices: False@@@",
-      "@@@STEP_LOG_LINE@details@uses_swarming: True@@@",
+      "@@@STEP_LOG_LINE@details@uses_isolate: True@@@",
       "@@@STEP_LOG_END@details@@@"
     ]
   },
