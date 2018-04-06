@@ -477,9 +477,10 @@ SPEC = {
     'Mac Builder (dbg) Goma Canary (clobber)': chromium_apply_configs(
         chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
         ['goma_canary', 'clobber']),
+    # Mac has less disks, so use small localoutputcache. crbug.com/825536
     'Mac Goma Canary LocalOutputCache': chromium_apply_configs(
         no_archive(chromium.SPEC['builders']['Mac']),
-        ['goma_canary', 'goma_localoutputcache']),
+        ['goma_canary', 'goma_localoutputcache_small']),
 
     'Win Builder (ANGLE)': {
       'chromium_config': 'chromium',

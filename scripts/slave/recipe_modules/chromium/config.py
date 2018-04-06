@@ -44,6 +44,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       goma_failfast = Single(bool, empty_val=False, required=False),
       goma_max_active_fail_fallback_tasks = Single(int, empty_val=None, required=False),
       goma_enable_localoutputcache = Single(bool, empty_val=False, required=False),
+      goma_enable_localoutputcache_small = Single(bool, empty_val=False, required=False),
       goma_enable_global_file_id_cache = Single(bool, empty_val=False, required=False),
       ninja_confirm_noop = Single(bool, empty_val=False, required=False),
       set_build_data_dir = Single(bool, empty_val=False, required=False),
@@ -71,6 +72,8 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       LLVM_FORCE_HEAD_REVISION = Single(basestring, required=False),
       GOMA_STUBBY_PROXY_IP_ADDRESS = Single(basestring, required=False),
       GOMA_SETTINGS_SERVER = Single(basestring, required=False),
+      GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB = Single(int, required=False),
+      GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB = Single(int, required=False),
       FORCE_MAC_TOOLCHAIN = Single(int, required=False),
     ),
     mac_toolchain = ConfigGroup(
@@ -309,6 +312,12 @@ def goma_hermetic_fallback(c):
 @config_ctx()
 def goma_localoutputcache(c):
   c.compile_py.goma_enable_localoutputcache = True
+
+@config_ctx()
+def goma_localoutputcache_small(c):
+  c.compile_py.goma_enable_localoutputcache = True
+  c.env.GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB = 10*1024
+  c.env.GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB = 5*1024
 
 @config_ctx()
 def ninja_confirm_noop(c):

@@ -64,6 +64,13 @@ def GenTests(api):
   )
 
   yield (
+      api.test('goma_localoutputcache_small') +
+      api.properties(
+          buildername='test_buildername',
+          chromium_apply_config=['goma_localoutputcache_small'])
+  )
+
+  yield (
       api.test('goma_custom_jobs') +
       api.properties(buildername='test_buildername') +
       api.goma(jobs=500) + api.runtime(is_luci=True, is_experimental=False)
