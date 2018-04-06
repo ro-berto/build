@@ -883,7 +883,6 @@ SPEC = {
         'cpu': 'x86-64',
         'os': 'Ubuntu-16.04',
       },
-      'serialize_tests': True,
     },
   },
 }
