@@ -1843,7 +1843,7 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'enable_swarming': True,
         'tests': [
-          V8Testing(5),
+          V8Testing(6),
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
