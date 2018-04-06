@@ -61,6 +61,7 @@
 **[Recipes](#Recipes)**
   * [adb:examples/full](#recipes-adb_examples_full)
   * [android/builder](#recipes-android_builder)
+  * [angle](#recipes-angle)
   * [annotated_run_test](#recipes-annotated_run_test) &mdash; Checks that properties get to recipes from annotated_run properly.
   * [archive:examples/full](#recipes-archive_examples_full)
   * [archive:tests/download_and_unzip_build](#recipes-archive_tests_download_and_unzip_build)
@@ -3623,6 +3624,11 @@ Args:
 [DEPS](/scripts/slave/recipes/android/builder.py#9): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/android/builder.py#211)(api, mastername, buildername, revision):**
+### *recipes* / [angle](/scripts/slave/recipes/angle.py)
+
+[DEPS](/scripts/slave/recipes/angle.py#5): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/angle.py#84)(api, target_cpu, msvc, rel):**
 ### *recipes* / [annotated\_run\_test](/scripts/slave/recipes/annotated_run_test.py)
 
 [DEPS](/scripts/slave/recipes/annotated_run_test.py#9): [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
