@@ -167,7 +167,7 @@
         "[START_DIR]/python_bin"
       ]
     },
-    "name": "cbuildbot [slave_config]"
+    "name": "cbuildbot_launch [slave_config]"
   },
   {
     "name": "$result",

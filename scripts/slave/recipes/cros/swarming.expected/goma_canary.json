@@ -169,7 +169,7 @@
         "[START_DIR]/python_bin"
       ]
     },
-    "name": "cbuildbot [amd64-generic-goma-canary-chromium-pfq-informational]"
+    "name": "cbuildbot_launch [amd64-generic-goma-canary-chromium-pfq-informational]"
   },
   {
     "name": "$result",

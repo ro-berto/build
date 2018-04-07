@@ -365,6 +365,6 @@ class ChromiteApi(recipe_api.RecipeApi):
         'cwd': self.m.path['start_dir'],
         context_key: {'PATH': [self.depot_tools_path]},
         'env': {'DEPOT_TOOLS_UPDATE': '0'}}):
-      return self.cbuildbot(str('cbuildbot [%s]' % (self.c.cbb.config,)),
+      return self.cbuildbot(str('cbuildbot_launch [%s]' % (self.c.cbb.config,)),
                             self.c.cbb.config,
                             args=cbb_args)

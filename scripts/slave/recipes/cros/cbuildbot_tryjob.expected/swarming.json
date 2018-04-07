@@ -110,7 +110,7 @@
         "[START_DIR]/depot_tools"
       ]
     },
-    "name": "cbuildbot [internal-paladin]"
+    "name": "cbuildbot_launch [internal-paladin]"
   },
   {
     "name": "$result",

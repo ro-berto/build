@@ -112,7 +112,7 @@
         "[START_DIR]/depot_tools"
       ]
     },
-    "name": "cbuildbot [binhost-pre-cq]"
+    "name": "cbuildbot_launch [binhost-pre-cq]"
   },
   {
     "name": "$result",

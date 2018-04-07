@@ -112,7 +112,7 @@
         "[START_DIR]/depot_tools"
       ]
     },
-    "name": "cbuildbot [x86-generic-full]"
+    "name": "cbuildbot_launch [x86-generic-full]"
   },
   {
     "name": "$result",

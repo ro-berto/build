@@ -107,7 +107,7 @@
         "[START_DIR]/depot_tools"
       ]
     },
-    "name": "cbuildbot [swarming-build-config]"
+    "name": "cbuildbot_launch [swarming-build-config]"
   },
   {
     "name": "$result",

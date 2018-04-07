@@ -163,7 +163,7 @@
         "[START_DIR]/python_bin"
       ]
     },
-    "name": "cbuildbot [swarming-build-config]"
+    "name": "cbuildbot_launch [swarming-build-config]"
   },
   {
     "name": "$result",

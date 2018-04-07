@@ -110,7 +110,7 @@
         "[START_DIR]/depot_tools"
       ]
     },
-    "name": "cbuildbot [xxx-fakeboard-fakebuild]"
+    "name": "cbuildbot_launch [xxx-fakeboard-fakebuild]"
   },
   {
     "name": "$result",

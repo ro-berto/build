@@ -165,7 +165,7 @@
         "[START_DIR]/python_bin"
       ]
     },
-    "name": "cbuildbot [tryjob_config]"
+    "name": "cbuildbot_launch [tryjob_config]"
   },
   {
     "name": "$result",
