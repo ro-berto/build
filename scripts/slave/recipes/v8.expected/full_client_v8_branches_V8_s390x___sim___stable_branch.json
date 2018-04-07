@@ -264,6 +264,8 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
+      "build_is_experimental:false",
+      "--tag",
       "buildername:V8 s390x - sim - stable branch",
       "--tag",
       "buildnumber:571",

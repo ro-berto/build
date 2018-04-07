@@ -1732,6 +1732,8 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
+      "build_is_experimental:false",
+      "--tag",
       "buildername:analyzer-linux-release-be",
       "--tag",
       "data:test isolate hash",

@@ -531,6 +531,8 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
+      "build_is_experimental:false",
+      "--tag",
       "buildername:vm-kernel-mac-release-x64-be",
       "--tag",
       "buildnumber:571",

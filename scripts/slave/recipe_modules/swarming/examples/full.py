@@ -169,20 +169,23 @@ def GenTests(api):
           stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
       api.properties(platforms=('win', 'linux', 'mac')))
 
-  yield (
-      api.test('basic_luci') +
-      api.runtime(is_luci=True, is_experimental=False) +
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'archive for linux',
-          stdout=api.raw_io.output_text(
-            'hash_for_linux hello_world.isolated')) +
-      api.step_data(
-          'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
-      api.properties(platforms=('win', 'linux', 'mac')))
+  for exp in [True, False]:
+    yield (
+        api.test('basic_luci' + ('_experimental' if exp else '')) +
+        api.runtime(is_luci=True, is_experimental=exp) +
+        api.step_data(
+            'archive for win',
+            stdout=api.raw_io.output_text(
+              'hash_for_win hello_world.isolated')) +
+        api.step_data(
+            'archive for linux',
+            stdout=api.raw_io.output_text(
+              'hash_for_linux hello_world.isolated')) +
+        api.step_data(
+            'archive for mac',
+            stdout=api.raw_io.output_text(
+              'hash_for_mac hello_world.isolated')) +
+        api.properties(platforms=('win', 'linux', 'mac')))
 
   yield (
       api.test('named_caches') +

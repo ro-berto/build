@@ -935,6 +935,8 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
+      "build_is_experimental:false",
+      "--tag",
       "buildername:this-name-does-not-exist-in-test-matrix",
       "--tag",
       "data:",

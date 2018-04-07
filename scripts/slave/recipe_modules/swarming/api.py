@@ -57,6 +57,7 @@ def safe(f, *args, **kw):
   except Exception:
     return False
 
+
 def filter_outdir(dumps, output_dir, text_files=('.txt', '.json', ''),
                 msize=1024):
   """Create a summary of contents of a raw_io.output_dir."""
@@ -203,6 +204,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._show_shards_in_collect_step = False
     self._swarming_server = 'https://chromium-swarm.appspot.com'
     self._verbose = False
+
+  def initialize(self):
+    self.add_default_tag(
+        'build_is_experimental:' + str(self.m.runtime.is_experimental).lower())
 
   @recipe_util.returns_placeholder
   def summary(self):

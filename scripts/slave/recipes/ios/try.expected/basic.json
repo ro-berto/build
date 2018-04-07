@@ -672,6 +672,8 @@
       "--service-account",
       "ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com",
       "--tag",
+      "build_is_experimental:false",
+      "--tag",
       "buildername:ios-simulator",
       "--tag",
       "buildnumber:0",

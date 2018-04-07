@@ -714,6 +714,8 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
+      "build_is_experimental:false",
+      "--tag",
       "buildername:Linux Swarm",
       "--tag",
       "buildnumber:123",

@@ -1746,6 +1746,8 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
+      "build_is_experimental:false",
+      "--tag",
       "buildername:dart2js-win10-debug-x64-ff-stable",
       "--tag",
       "data:test isolate hash",

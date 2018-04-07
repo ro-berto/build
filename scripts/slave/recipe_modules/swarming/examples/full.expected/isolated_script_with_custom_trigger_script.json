@@ -43,6 +43,8 @@
       "--auth-service-account-json",
       "/creds/service_accounts/service-account-chromium-builder.json",
       "--tag",
+      "build_is_experimental:false",
+      "--tag",
       "data:hash_for_win",
       "--tag",
       "master:tryserver",
