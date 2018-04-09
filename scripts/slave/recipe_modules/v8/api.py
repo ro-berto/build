@@ -546,8 +546,7 @@ class V8Api(recipe_api.RecipeApi):
           linux32 or linux64.
     """
     files = [
-      self.m.chromium.c.build_dir.join(
-          *([self.m.chromium.c.build_config_fs] + list(path_pieces)))
+      self.build_output_dir.join(*path_pieces)
       for path_pieces in path_pieces_list
     ]
 
@@ -651,8 +650,7 @@ class V8Api(recipe_api.RecipeApi):
           name='track build dependencies (fyi)',
           script=self.resource('build-dep-stats.py'),
           args=[
-            '-C', self.m.chromium.c.build_dir.join(
-                self.m.chromium.c.build_config_fs),
+            '-C', self.build_output_dir,
             '-x', '/third_party/',
             '-o', self.m.json.output(),
           ],
@@ -711,8 +709,7 @@ class V8Api(recipe_api.RecipeApi):
         kwargs['bitness'] = self.bot_config['cf_archive_bitness']
       self.m.archive.clusterfuzz_archive(
           revision_dir='v8',
-          build_dir=self.m.chromium.c.build_dir.join(
-              self.m.chromium.c.build_config_fs),
+          build_dir=self.build_output_dir,
           update_properties=update_step.presentation.properties,
           gs_bucket=self.bot_config.get('cf_gs_bucket'),
           gs_acl=self.bot_config.get('cf_gs_acl'),
@@ -721,9 +718,7 @@ class V8Api(recipe_api.RecipeApi):
       )
 
   def download_build(self, name_suffix='', archive=None):
-    self.m.file.rmtree(
-          'build directory' + name_suffix,
-          self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
+    self.m.file.rmtree('build directory' + name_suffix, self.build_output_dir)
     self.m.archive.download_and_unzip_build(
           'extract build' + name_suffix,
           self.m.chromium.c.build_config_fs,
@@ -744,10 +739,7 @@ class V8Api(recipe_api.RecipeApi):
 
   @property
   def build_output_dir(self):
-    return self.m.path.join(
-        self.m.chromium.c.build_dir,
-        self.m.chromium.c.build_config_fs,
-    )
+    return self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs)
 
   @property
   def generate_gcov_coverage(self):
