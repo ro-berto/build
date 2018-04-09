@@ -96,9 +96,6 @@ def isolate_targets_from_tests(tests):
   """
   targets = []
   for test in tests:
-    if not test.swarming:  # pragma: no cover
-      # Skip tests that explicitly disable swarming.
-      continue
     config = testing.TEST_CONFIGS.get(test.name) or {}
 
     # Tests either define an explicit isolate target or use the test

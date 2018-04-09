@@ -11,11 +11,10 @@ from testing import V8NoExhaustiveVariants, V8Variant
 
 class TestStepConfig(object):
   """Per-step test configuration."""
-  def __init__(self, name, shards=1, swarming=True, suffix='', test_args=None,
-               variants=None, dimensions=None):
+  def __init__(self, name, shards=1, suffix='', test_args=None, variants=None,
+               dimensions=None):
     self.name = name
     self.shards = shards
-    self.swarming = swarming
     self.suffix = ' - ' + suffix if suffix else ''
     self.test_args = test_args or []
     self.variants = variants
@@ -26,8 +25,8 @@ class TestStepConfig(object):
       self.suffix = ' - %s' % variants
 
   def __call__(self, shards):
-    return TestStepConfig(self.name, shards, self.swarming, self.suffix,
-                          self.test_args, self.variants)
+    return TestStepConfig(self.name, shards, self.suffix, self.test_args,
+                          self.variants)
 
   def __str__(self):
     return '%s(%d) %s' % (self.name, self.shards, self.variants)
@@ -86,8 +85,7 @@ Webkit = TestStepConfig('webkit')
 def with_test_args(suffix, test_args, tests, variants=None, dimensions=None):
   """Wrapper that runs a list of tests with additional arguments."""
   return [
-    TestStepConfig(t.name, t.shards, t.swarming, suffix, test_args, variants,
-                   dimensions)
+    TestStepConfig(t.name, t.shards, suffix, test_args, variants, dimensions)
     for t in tests
   ]
 
