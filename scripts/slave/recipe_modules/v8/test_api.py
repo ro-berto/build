@@ -435,7 +435,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           parent_build_environment={
             'useful': 'envvars', 'from': 'the', 'parent': 'bot'},
       )
-      if bot_config.get('enable_swarming'):
+      if bot_config.get('enable_swarming', True):
         # Assume each tester is triggered with the required hashes for all
         # tests. Assume extra_isolate hashes for each extra test specified by
         # parent_test_spec property.

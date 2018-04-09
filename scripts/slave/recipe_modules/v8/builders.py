@@ -125,7 +125,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux_rel_archive',
-        'enable_swarming': True,
         'testing': {
           'platform': 'linux',
         },
@@ -148,7 +147,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux - gc stress',
@@ -164,7 +162,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux_nosnap_rel_archive',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux - nosnap',
@@ -179,7 +176,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux_nosnap_dbg_archive',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux - nosnap - debug',
@@ -192,6 +188,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'tester',
+        'enable_swarming': False,
         'parent_buildername': 'V8 Linux - builder',
         'build_gs_archive': 'linux_rel_archive',
         'tests': [Presubmit],
@@ -231,7 +228,6 @@ BUILDERS = {
         ) + with_extra_variants(
             [V8Testing, Mozilla, Test262Variants, Benchmarks]),
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'cpu': 'x86-64-avx2',
         },
@@ -244,7 +240,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'enable_swarming': True,
         'tests': [
           V8Testing(2),
           OptimizeForSize,
@@ -281,7 +276,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [V8Testing, Test262, Mozilla],
         'testing': {'platform': 'linux'},
         'binary_size_tracking': {
@@ -297,7 +291,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - nosnap builder',
         'build_gs_archive': 'linux_nosnap_rel_archive',
-        'enable_swarming': True,
         'tests': [
           V8Testing(3),
           Test262(2),
@@ -315,7 +308,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - nosnap debug builder',
         'build_gs_archive': 'linux_nosnap_dbg_archive',
-        'enable_swarming': True,
         'tests': [V8Testing(7)],
         'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
@@ -329,6 +321,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': False,
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
@@ -341,7 +334,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [V8Testing, Mozilla, Test262],
         'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
@@ -354,7 +346,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
@@ -368,7 +359,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'linux64_rel_archive',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'track_build_dependencies': True,
         'binary_size_tracking': {
@@ -392,7 +382,6 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'linux64_dbg_archive',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'triggers': [
           'V8 Fuzzer',
           'V8 Linux64 - debug',
@@ -409,7 +398,6 @@ BUILDERS = {
         'bot_type': 'builder',
         'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'triggers': [
           'V8 Linux64 - custom snapshot - debug',
           'V8 Linux64 GC Stress - custom snapshot',
@@ -423,7 +411,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - builder',
         'build_gs_archive': 'linux64_rel_archive',
-        'enable_swarming': True,
         'tests': [
           V8Initializers,
           V8Testing,
@@ -449,7 +436,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - debug builder',
         'build_gs_archive': 'linux64_dbg_archive',
-        'enable_swarming': True,
         'tests': [
           V8Testing(2),
           OptimizeForSize,
@@ -475,7 +461,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
@@ -486,7 +471,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
-        'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 - custom snapshot - debug builder',
         'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
         'tests': [Mjsunit],
@@ -500,7 +484,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
@@ -512,7 +495,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 Jumbo - debug': {
@@ -522,7 +504,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
       },
 ####### Category: Windows
@@ -539,7 +520,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'win32_rel_archive',
-        'enable_swarming': True,
         'binary_size_tracking': {
           'path_pieces_list': [['d8.exe']],
           'category': 'win32'
@@ -562,7 +542,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'win32_dbg_archive',
-        'enable_swarming': True,
         'testing': {'platform': 'win'},
         'triggers': [
           'V8 Win32 - debug',
@@ -576,7 +555,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'build_gs_archive': 'win32_rel_archive',
         'parent_buildername': 'V8 Win32 - builder',
-        'enable_swarming': True,
         'tests': [V8Testing, Test262, Mozilla],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
@@ -597,7 +575,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [V8Testing(2)],
         'variants': V8NoExhaustiveVariants,
         'swarming_dimensions': {
@@ -614,7 +591,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'build_gs_archive': 'win32_dbg_archive',
         'parent_buildername': 'V8 Win32 - debug builder',
-        'enable_swarming': True,
         'tests': [
           V8Testing(4),
           Test262,
@@ -638,7 +614,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
         },
@@ -665,7 +640,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
         },
@@ -688,7 +662,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
         },
@@ -708,7 +681,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'binary_size_tracking': {
           'path_pieces_list': [['d8']],
           'category': 'mac64'
@@ -732,7 +704,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [
           V8Testing(3),
           Test262,
@@ -751,7 +722,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
-        'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 - debug builder',
         'build_gs_archive': 'linux64_dbg_archive',
         'tests': [Fuzz],
@@ -767,7 +737,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - debug builder',
         'build_gs_archive': 'linux_dbg_archive',
-        'enable_swarming': True,
         'tests': [D8Testing(5)],
         'testing': {'platform': 'linux'},
       },
@@ -780,7 +749,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [D8Testing(4)],
         'swarming_dimensions': {
           'os': 'Mac-10.13',
@@ -797,7 +765,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - custom snapshot - debug builder',
         'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
-        'enable_swarming': True,
         'tests': [Mjsunit(3)],
         'testing': {'platform': 'linux'},
       },
@@ -808,6 +775,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': False,
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
@@ -818,6 +786,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': False,
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 ASAN': {
@@ -827,7 +796,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [
           V8Testing(2),
           Test262Variants(5),
@@ -841,7 +809,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [
           V8Testing(4),
           Test262(2),
@@ -858,7 +825,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [
           V8Testing(4),
           Test262(4),
@@ -881,7 +847,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [
           V8Testing(4),
           Test262(2),
@@ -896,7 +861,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [
           V8Testing,
           OptimizeForSize,
@@ -914,7 +878,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
@@ -925,7 +888,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [V8Testing(5)],
         'swarming_dimensions': {
           'os': 'Mac-10.13',
@@ -940,7 +902,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [V8Testing(5)],
         'swarming_dimensions': {
           'os': 'Windows-10',
@@ -956,7 +917,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
       },
       'V8 Fuchsia - debug': {
@@ -967,7 +927,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - fyi': {
@@ -978,7 +937,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - builder',
         'build_gs_archive': 'linux64_rel_archive',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
       },
@@ -990,7 +948,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux64 - debug builder',
         'build_gs_archive': 'linux64_dbg_archive',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
       },
@@ -1004,6 +961,7 @@ BUILDERS = {
         },
         'bot_type': 'builder_tester',
         'gcov_coverage_folder': 'linux64_gcov_rel',
+        'enable_swarming': False,
         'disable_auto_bisect': True,
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
@@ -1026,6 +984,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': False,
         'tests': [D8Testing, Benchmarks, Mozilla],
         'testing': {'platform': 'linux'},
       },
@@ -1037,6 +996,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': False,
         'tests': [V8Testing],
         'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
@@ -1060,7 +1020,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'slim_swarming_builder': True,
-        'enable_swarming': True,
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-asan',
         'cf_gs_acl': 'public-read',
@@ -1084,7 +1043,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'slim_swarming_builder': True,
-        'enable_swarming': True,
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-asan',
         'cf_gs_acl': 'public-read',
@@ -1108,7 +1066,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'slim_swarming_builder': True,
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 NumFuzz - nosnap',
@@ -1128,7 +1085,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'slim_swarming_builder': True,
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 NumFuzz - nosnap debug',
@@ -1307,7 +1263,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'slim_swarming_builder': True,
-        'enable_swarming': True,
         'triggers': [
           'V8 NumFuzz - TSAN',
         ],
@@ -1416,7 +1371,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
-        'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 - release builder',
         'tests': with_test_args(
             'deopt',
@@ -1435,7 +1389,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
-        'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 - debug builder',
         'tests': [D8TestingRandomGC] + with_test_args(
             'marking',
@@ -1502,7 +1455,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
-        'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 TSAN - release builder',
         'tests': [D8TestingRandomGC(2)] + with_test_args(
             'marking',
@@ -1561,7 +1513,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
-        'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 - nosnap release builder',
         'tests': with_test_args(
             'interrupt-budget',
@@ -1581,7 +1532,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'tester',
-        'enable_swarming': True,
         'parent_buildername': 'V8 Linux64 - nosnap debug builder',
         'tests': with_test_args(
             'interrupt-budget',
@@ -1612,7 +1562,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'arm_rel_archive',
-        'enable_swarming': True,
         'binary_size_tracking': {
           'path_pieces_list': [['d8']],
           'category': 'linux_arm32'
@@ -1634,7 +1583,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'arm_dbg_archive',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Arm - debug',
@@ -1653,7 +1601,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'android_arm_rel_archive',
-        'enable_swarming': True,
         'binary_size_tracking': {
           'path_pieces_list': [['d8']],
           'category': 'android_arm32'
@@ -1683,7 +1630,6 @@ BUILDERS = {
               'os': 'Ubuntu-16.04',
             },
         ),
-        'enable_swarming': True,
         'swarming_properties': {
           'default_hard_timeout': 90 * 60,
           'default_expiration': 6 * 60 * 60,
@@ -1709,7 +1655,6 @@ BUILDERS = {
           OptimizeForSize,
         ],
         'variants': V8NoExhaustiveVariants,
-        'enable_swarming': True,
         'swarming_properties': {
           'default_hard_timeout': 60 * 60,
           'default_expiration': 6 * 60 * 60,
@@ -1732,7 +1677,6 @@ BUILDERS = {
         'parent_buildername': 'V8 Arm - debug builder',
         'tests': [D8Testing(3)],
         'variants': V8Variant('default'),
-        'enable_swarming': True,
         'swarming_properties': {
           'default_hard_timeout': 2 * 60 * 60,
           'default_expiration': 6 * 60 * 60,
@@ -1751,7 +1695,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [
           V8Testing(4),
           Test262,
@@ -1775,7 +1718,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [
           V8Testing(5),
           Test262,
@@ -1806,7 +1748,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'android_arm64_rel_archive',
-        'enable_swarming': True,
         'binary_size_tracking': {
           'path_pieces_list': [['d8']],
           'category': 'android_arm64'
@@ -1822,7 +1763,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [
           V8Testing(3),
           Test262,
@@ -1839,7 +1779,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [
           V8Testing(6),
           Test262,
@@ -1857,7 +1796,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'swarming_properties': {
           'default_expiration': 4 * 60 * 60,
           'default_hard_timeout': 2 * 60 * 60,
@@ -1876,6 +1814,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
+        'enable_swarming': False,
         'build_gs_archive': 'mips_rel_archive',
         'testing': {'platform': 'linux'},
         'triggers': [
@@ -1892,6 +1831,7 @@ BUILDERS = {
           'SHARD_RUN': 1,
         },
         'bot_type': 'tester',
+        'enable_swarming': False,
         'parent_buildername': 'V8 Mips - builder',
         'build_gs_archive': 'mips_rel_archive',
         'tests': [V8Testing],
@@ -1907,6 +1847,7 @@ BUILDERS = {
           'SHARD_RUN': 2,
         },
         'bot_type': 'tester',
+        'enable_swarming': False,
         'parent_buildername': 'V8 Mips - builder',
         'build_gs_archive': 'mips_rel_archive',
         'tests': [V8Testing],
@@ -1922,7 +1863,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'mipsel_sim_rel_archive',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux - mipsel - sim',
@@ -1937,7 +1877,6 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'build_gs_archive': 'mips64el_sim_rel_archive',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux - mips64el - sim',
@@ -1951,7 +1890,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - mipsel - sim - builder',
         'build_gs_archive': 'mipsel_sim_rel_archive',
-        'enable_swarming': True,
         'tests': [V8Testing(4), Test262],
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
@@ -1964,7 +1902,6 @@ BUILDERS = {
         'bot_type': 'tester',
         'parent_buildername': 'V8 Linux - mips64el - sim - builder',
         'build_gs_archive': 'mips64el_sim_rel_archive',
-        'enable_swarming': True,
         'tests': [V8Testing(4), Test262],
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
@@ -1978,7 +1915,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
@@ -1991,7 +1927,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
@@ -2005,7 +1940,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
@@ -2018,7 +1952,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
@@ -2148,7 +2081,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_linux_rel_ng_triggered',
@@ -2162,7 +2094,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_linux_rel_ng',
-        'enable_swarming': True,
         'tests': [
           V8Testing,
           OptimizeForSize,
@@ -2186,7 +2117,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_linux_verify_csa_rel_ng_triggered',
@@ -2200,7 +2130,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_linux_verify_csa_rel_ng',
-        'enable_swarming': True,
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
@@ -2212,7 +2141,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_linux_nodcheck_rel_ng_triggered',
@@ -2226,7 +2154,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_linux_nodcheck_rel_ng',
-        'enable_swarming': True,
         'tests': [
           V8Testing,
           Test262Variants(2),
@@ -2247,7 +2174,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_linux_dbg_ng_triggered',
@@ -2261,7 +2187,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_linux_dbg_ng',
-        'enable_swarming': True,
         'tests': [
           V8Testing(3),
           Test262,
@@ -2283,7 +2208,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_linux_noi18n_rel_ng_triggered',
@@ -2297,7 +2221,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_linux_noi18n_rel_ng',
-        'enable_swarming': True,
         'tests': [
           V8Testing(2),
           Test262,
@@ -2314,7 +2237,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [V8Testing(4)],
         'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
@@ -2327,7 +2249,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [V8Testing(5)],
         'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
@@ -2343,6 +2264,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': False,
         'testing': {'platform': 'linux'},
       },
       'v8_linux_gcc_rel': {
@@ -2353,6 +2275,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': False,
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
@@ -2364,7 +2287,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_gcc_compile_dbg': {
@@ -2375,6 +2297,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
+        'enable_swarming': False,
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_rel_ng': {
@@ -2385,7 +2308,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_linux64_rel_ng_triggered',
@@ -2399,7 +2321,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_linux64_rel_ng',
-        'enable_swarming': True,
         'tests': [
           V8Initializers,
           V8Testing,
@@ -2420,7 +2341,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_linux64_fyi_rel_ng_triggered',
@@ -2434,7 +2354,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_linux64_fyi_rel_ng',
-        'enable_swarming': True,
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_verify_csa_rel_ng': {
@@ -2445,7 +2364,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_linux64_verify_csa_rel_ng_triggered',
@@ -2459,7 +2377,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_linux64_verify_csa_rel_ng',
-        'enable_swarming': True,
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
@@ -2472,7 +2389,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [D8Testing(5)],
         'testing': {'platform': 'linux'},
       },
@@ -2488,7 +2404,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_linux64_asan_rel_ng_triggered',
@@ -2502,7 +2417,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_linux64_asan_rel_ng',
-        'enable_swarming': True,
         'tests': [
           V8Testing(3),
           Test262Variants(7),
@@ -2521,7 +2435,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_linux64_cfi_rel_ng_triggered',
@@ -2535,7 +2448,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_linux64_cfi_rel_ng',
-        'enable_swarming': True,
         'tests': [
           V8Testing(2),
           OptimizeForSize,
@@ -2567,7 +2479,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [
           V8Testing(5),
           Test262(2),
@@ -2586,7 +2497,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [
           V8Testing(4),
           Test262(2),
@@ -2607,7 +2517,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_linux64_ubsan_rel_ng_triggered',
@@ -2626,7 +2535,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_linux64_ubsan_rel_ng',
-        'enable_swarming': True,
         'tests': [V8Testing(2)],
         'testing': {'platform': 'linux'},
       },
@@ -2643,7 +2551,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'sanitizer_coverage_folder': 'linux64',
         'tests': [
           V8Testing(3),
@@ -2662,7 +2569,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -2699,7 +2605,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_win_rel_ng_triggered',
@@ -2716,7 +2621,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_win_rel_ng',
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -2737,7 +2641,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_win_nosnap_shared_rel_ng_triggered',
@@ -2754,7 +2657,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_win_nosnap_shared_rel_ng',
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -2775,7 +2677,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_win64_asan_rel_ng_triggered',
@@ -2792,7 +2693,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_win64_asan_rel_ng',
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-10',
         },
@@ -2825,7 +2725,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_win64_msvc_rel_ng_triggered',
@@ -2842,7 +2741,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_win64_msvc_rel_ng',
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -2866,7 +2764,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_win64_rel_ng_triggered',
@@ -2883,7 +2780,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_win64_rel_ng',
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -2903,7 +2799,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
         },
@@ -2922,7 +2817,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_mac64_rel_ng_triggered',
@@ -2936,7 +2830,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_mac64_rel_ng',
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.13',
           'cpu': 'x86-64',
@@ -2956,7 +2849,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_mac64_dbg_ng_triggered',
@@ -2970,7 +2862,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_mac64_dbg_ng',
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.13',
           'cpu': 'x86-64',
@@ -2991,7 +2882,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [D8Testing(4)],
         'swarming_dimensions': {
           'os': 'Mac-10.13',
@@ -3011,7 +2901,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [V8Testing(4)],
         'swarming_dimensions': {
           'os': 'Mac-10.13',
@@ -3027,7 +2916,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_linux_arm_rel_ng_triggered',
@@ -3041,7 +2929,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_linux_arm_rel_ng',
-        'enable_swarming': True,
         'tests': [
           V8Testing(7),
           Test262,
@@ -3058,7 +2945,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [
           V8Testing(5),
           Test262,
@@ -3075,7 +2961,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'enable_swarming': True,
         'slim_swarming_builder': True,
         'triggers': [
           'v8_linux_arm64_rel_ng_triggered',
@@ -3089,7 +2974,6 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'parent_buildername': 'v8_linux_arm64_rel_ng',
-        'enable_swarming': True,
         'tests': [
           V8Testing(7),
           Test262,
@@ -3106,7 +2990,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [
           V8Testing(4),
           Test262,
@@ -3124,7 +3007,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'enable_swarming': True,
         'tests': [D8Testing(6)],
         'testing': {'platform': 'linux'},
       },
@@ -3193,7 +3075,6 @@ def AddBranchBuilder(name, build_config, bits, presubmit=False,
       'BUILD_CONFIG': build_config,
       'TARGET_BITS': bits,
     },
-    'enable_swarming': True,
     'bot_type': 'builder_tester',
     'tests': tests,
     'testing': {'platform': 'linux'},

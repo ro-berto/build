@@ -163,7 +163,7 @@ class V8Api(recipe_api.RecipeApi):
     for c in self.bot_config.get('v8_apply_config', []):
       self.apply_config(c)
 
-    if self.bot_config.get('enable_swarming'):
+    if self.bot_config.get('enable_swarming', True):
       self.m.gclient.c.got_revision_reverse_mapping[
           'got_swarming_client_revision'] = ('v8/tools/swarming_client')
 
@@ -283,7 +283,7 @@ class V8Api(recipe_api.RecipeApi):
     return commits[-1]['parents'][0]
 
   def set_up_swarming(self):
-    if self.bot_config.get('enable_swarming'):
+    if self.bot_config.get('enable_swarming', True):
       self.m.swarming.check_client_version()
 
     self.m.swarming.set_default_dimension('pool', 'Chrome')
@@ -463,7 +463,7 @@ class V8Api(recipe_api.RecipeApi):
     if self._isolate_targets_cached:
       return self._isolate_targets_cached
 
-    if self.bot_config.get('enable_swarming'):
+    if self.bot_config.get('enable_swarming', True):
       mastername = self.m.properties['mastername']
       buildername = self.m.properties['buildername']
 
@@ -836,7 +836,7 @@ class V8Api(recipe_api.RecipeApi):
 
   def is_pure_swarming_tester(self, tests):
     return (self.bot_type == 'tester' and
-            self.bot_config.get('enable_swarming') and
+            self.bot_config.get('enable_swarming', True) and
             all(map(lambda x: x.uses_swarming, tests)))
 
   def runtests(self, tests):

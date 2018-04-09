@@ -755,7 +755,7 @@ def create_test(test_step_config, api):
   test_cls = V8_NON_STANDARD_TESTS.get(test_step_config.name)
   if not test_cls:
     # TODO(machenbach): Implement swarming for non-standard tests.
-    if api.v8.bot_config.get('enable_swarming'):
+    if api.v8.bot_config.get('enable_swarming', True):
       tools_mapping = TOOL_TO_TEST_SWARMING
     else:
       tools_mapping = TOOL_TO_TEST
