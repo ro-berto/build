@@ -120,25 +120,25 @@
         }
       },
       {
-        "builder_name": "dart2js-linux-chromeff-1-4-be",
+        "builder_name": "dart2js-linux-ff-1-4-be",
         "properties": {
           "revision": "abcd1234efef5656"
         }
       },
       {
-        "builder_name": "dart2js-linux-chromeff-2-4-be",
+        "builder_name": "dart2js-linux-ff-2-4-be",
         "properties": {
           "revision": "abcd1234efef5656"
         }
       },
       {
-        "builder_name": "dart2js-linux-chromeff-3-4-be",
+        "builder_name": "dart2js-linux-ff-3-4-be",
         "properties": {
           "revision": "abcd1234efef5656"
         }
       },
       {
-        "builder_name": "dart2js-linux-chromeff-4-4-be",
+        "builder_name": "dart2js-linux-ff-4-4-be",
         "properties": {
           "revision": "abcd1234efef5656"
         }
@@ -187,7 +187,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@analyze-linux-be<br />analyzer-linux-release-be<br />analyzer-linux-release-strong-be<br />dart2js-linux-chrome-csp-minified-be<br />dart2js-linux-chromeff-1-4-be<br />dart2js-linux-chromeff-2-4-be<br />dart2js-linux-chromeff-3-4-be<br />dart2js-linux-chromeff-4-4-be<br />dart2js-linux-d8-minified-1-5-be<br />dart2js-linux-d8-minified-2-5-be<br />dart2js-linux-d8-minified-3-5-be<br />dart2js-linux-d8-minified-4-5-be<br />dart2js-linux-d8-minified-5-5-be<br />pkg-linux-release-be@@@"
+      "@@@STEP_TEXT@analyze-linux-be<br />analyzer-linux-release-be<br />analyzer-linux-release-strong-be<br />dart2js-linux-chrome-csp-minified-be<br />dart2js-linux-d8-minified-1-5-be<br />dart2js-linux-d8-minified-2-5-be<br />dart2js-linux-d8-minified-3-5-be<br />dart2js-linux-d8-minified-4-5-be<br />dart2js-linux-d8-minified-5-5-be<br />dart2js-linux-ff-1-4-be<br />dart2js-linux-ff-2-4-be<br />dart2js-linux-ff-3-4-be<br />dart2js-linux-ff-4-4-be<br />pkg-linux-release-be@@@"
     ]
   },
   {
