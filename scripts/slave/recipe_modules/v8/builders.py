@@ -506,6 +506,24 @@ BUILDERS = {
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux64 Jumbo - limited': {
+        'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux64 Jumbo - limited - debug': {
+        'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
 ####### Category: Windows
       'V8 Win32 - builder': {
         'chromium_apply_config': [
@@ -2458,6 +2476,15 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_jumbo_compile_rel': {
+        'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_jumbo_limited_compile_rel': {
         'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
