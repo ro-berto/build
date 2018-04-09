@@ -1981,6 +1981,7 @@ BUILDERS = {
     'builders': {
       'V8 Arm32': {
         'recipe': 'v8/archive',
+        'gclient_apply_config': ['arm'],
         'chromium_apply_config': [
           'arm_hard_float', 'clobber', 'default_compiler',
           'default_target_v8_archive', 'v8_static_library', 'v8_ninja', 'goma',

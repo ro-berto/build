@@ -153,6 +153,11 @@ def GenTests(api):
       test += api.v8.check_in_param(
           'bot_update', '--spec-path', 'target_os = [\'android\']')
 
+    if buildername == 'V8 Arm32':
+      # Make sure bot_update specifies target_cpu on Arm builders.
+      test += api.v8.check_in_param(
+          'bot_update', '--spec-path', 'target_cpu = [\'arm\']')
+
     test += api.post_process(Filter(
         'gn', 'compile', 'filter build files', 'zipping', 'gsutil upload',
         'archive link', 'filter build files (libs)', 'zipping (libs)',
