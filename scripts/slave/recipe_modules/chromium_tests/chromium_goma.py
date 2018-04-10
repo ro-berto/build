@@ -97,5 +97,20 @@ SPEC = {
        'platform': 'win',
      },
    },
+   'Chromium Linux Goma RBE Staging': {
+     'chromium_config': 'chromium',
+     # use canary until client ready for RBE is released.
+     # TODO(ukai): remove this. crbug.com/831046
+     'chromium_apply_config': ['goma_gce', 'goma_canary', 'clobber', 'mb'],
+     'gclient_config': 'chromium',
+     'chromium_config_kwargs': {
+       'BUILD_CONFIG': 'Release',
+       'TARGET_BITS': 64,
+     },
+     'goma_staging': True,
+     'testing': {
+       'platform': 'linux',
+     },
+   },
  },
 }
