@@ -131,6 +131,7 @@
     "v8_compile": {
       "closing_optional": [
         "compile",
+        "generate_build_files",
         "gn",
         "gclient runhooks"
       ],
