@@ -11,6 +11,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'recipe_engine/url',
   'v8',
@@ -35,13 +36,13 @@ def RunSteps(api):
   with api.context(cwd=api.path['checkout']):
     safe_buildername = ''.join(
       c if c.isalnum() else '_' for c in api.properties['buildername'])
+    push_arg = [] if api.runtime.is_experimental else ['--push']
     api.python(
         'push candidate',
         api.path['checkout'].join(
             'tools', 'release', 'auto_push.py'),
-        ['--author', 'v8-autoroll@chromium.org',
+        push_arg + ['--author', 'v8-autoroll@chromium.org',
          '--reviewer', 'v8-autoroll@chromium.org',
-         '--push',
          '--work-dir', api.path['cache'].join(safe_buildername, 'workdir')],
       )
 

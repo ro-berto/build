@@ -89,11 +89,11 @@
       "python",
       "-u",
       "[START_DIR]/v8/tools/release/auto_push.py",
+      "--push",
       "--author",
       "v8-autoroll@chromium.org",
       "--reviewer",
       "v8-autoroll@chromium.org",
-      "--push",
       "--work-dir",
       "[CACHE]/TestBuilder/workdir"
     ],

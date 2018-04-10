@@ -12,6 +12,7 @@ DEPS = [
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'v8',
 ]
@@ -37,12 +38,22 @@ def RunSteps(api):
          '--branch', 'recent',
          '--work-dir', api.path['cache'].join(safe_buildername, 'workdir')],
       )
-  api.gsutil.upload(api.path['cleanup'].join('v8-releases-update.json'),
-                    'chromium-v8-auto-roll',
-                    api.path.join('v8rel', 'v8-releases-update.json'))
+  if api.runtime.is_experimental:
+    api.step('fake v8rel upload', cmd=None)
+  else:
+    api.gsutil.upload(api.path['cleanup'].join('v8-releases-update.json'),
+                      'chromium-v8-auto-roll',
+                      api.path.join('v8rel', 'v8-releases-update.json'))
 
 
 def GenTests(api):
-  yield api.test('standard') + api.properties.generic(
-      mastername='client.v8.fyi')
+  yield (
+      api.test('standard') +
+      api.properties.generic(mastername='client.v8.fyi')
+  )
 
+  yield (
+      api.test('standard_experimental') +
+      api.properties.generic(mastername='client.v8.fyi') +
+      api.runtime(is_luci=True, is_experimental=True)
+  )

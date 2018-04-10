@@ -18,6 +18,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'v8',
 ]
@@ -216,17 +217,20 @@ def RunSteps(api):
 
   # Commit deps change and send to CQ.
   if diff:
-    args = ['commit', '-a', '-m', bot_config['subject']]
-    for message in commit_message:
-      args.extend(['-m', message])
-    args.extend(['-m', 'TBR=%s' % ','.join(bot_config['reviewers'])])
-    kwargs = {'stdout': api.raw_io.output_text()}
-    with api.context(cwd=api.path['checkout']):
-      api.git(*args, **kwargs)
-      api.git(
-          'cl', 'upload', '-f', '--use-commit-queue', '--bypass-hooks',
-          '--email', 'v8-autoroll@chromium.org', '--gerrit', '--send-mail',
-      )
+    if api.runtime.is_experimental:
+      api.step('fake commit and send to CQ', cmd=None)
+    else:
+      args = ['commit', '-a', '-m', bot_config['subject']]
+      for message in commit_message:
+        args.extend(['-m', message])
+      args.extend(['-m', 'TBR=%s' % ','.join(bot_config['reviewers'])])
+      kwargs = {'stdout': api.raw_io.output_text()}
+      with api.context(cwd=api.path['checkout']):
+        api.git(*args, **kwargs)
+        api.git(
+            'cl', 'upload', '-f', '--use-commit-queue', '--bypass-hooks',
+            '--email', 'v8-autoroll@chromium.org', '--gerrit', '--send-mail',
+        )
 
 
 def GenTests(api):
@@ -296,4 +300,9 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
       api.post_process(MustRun, 'Existing rolls found.') +
       api.post_process(DoesNotRun, 'look up build') +
       api.post_process(DropExpectation)
+  )
+
+  yield (
+      template('experimental_roll_v8_deps', 'Auto-roll - v8 deps') +
+      api.runtime(is_luci=True, is_experimental=True)
   )

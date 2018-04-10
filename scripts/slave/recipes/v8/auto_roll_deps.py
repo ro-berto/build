@@ -17,6 +17,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'recipe_engine/url',
 ]
@@ -86,7 +87,10 @@ def RunSteps(api):
       if not cq_commits:
         api.bot_update.ensure_checkout(no_shallow=True)
         with api.context(cwd=api.path['checkout']):
-          api.git('cl', 'set-commit', '--gerrit', '-i', commits[0]['_number'])
+          if api.runtime.is_experimental:
+            api.step('fake resubmit to CQ', cmd=None)
+          else:
+            api.git('cl', 'set-commit', '--gerrit', '-i', commits[0]['_number'])
           api.step.active_result.presentation.step_text = (
             'Stale roll found. Resubmitted to CQ.')
           monitoring_state = 'stale_roll'
@@ -134,40 +138,44 @@ def RunSteps(api):
     with api.context(cwd=api.path['checkout'].join('v8')):
       safe_buildername = ''.join(
         c if c.isalnum() else '_' for c in api.properties['buildername'])
-      result = api.python(
-          'roll deps',
-          api.path['checkout'].join(
-              'v8', 'tools', 'release', 'auto_roll.py'),
-          ['--chromium', api.path['checkout'],
-           '--author', 'v8-autoroll@chromium.org',
-           '--reviewer',
-           'hablich@chromium.org,machenbach@chromium.org,'
-           'kozyatinskiy@chromium.org,sergiyb@chromium.org',
-           '--roll',
-           '--json-output', api.json.output(),
-           '--work-dir', api.path['cache'].join(safe_buildername, 'workdir')],
-          step_test_data=lambda: api.json.test_api.output(
-              {'monitoring_state': 'success'}),
-      )
-    monitoring_state = result.json.output['monitoring_state']
+      if api.runtime.is_experimental:
+        api.step('fake roll deps', cmd=None)
+      else:
+        result = api.python(
+            'roll deps',
+            api.path['checkout'].join(
+                'v8', 'tools', 'release', 'auto_roll.py'),
+            ['--chromium', api.path['checkout'],
+             '--author', 'v8-autoroll@chromium.org',
+             '--reviewer',
+             'hablich@chromium.org,machenbach@chromium.org,'
+             'kozyatinskiy@chromium.org,sergiyb@chromium.org',
+             '--roll',
+             '--json-output', api.json.output(),
+             '--work-dir', api.path['cache'].join(safe_buildername, 'workdir')],
+            step_test_data=lambda: api.json.test_api.output(
+                {'monitoring_state': 'success'}),
+        )
+        monitoring_state = result.json.output['monitoring_state']
   finally:
-    counter_config = {
-      'name': '/v8/autoroller/count',
-      'project': 'v8-roll',
-      'result': monitoring_state,
-      'value': 1,
-    }
-    api.python(
-        'upload stats',
-        _RUN_PY,
-        [
-          'infra.tools.send_ts_mon_values',
-          '--ts-mon-target-type', 'task',
-          '--ts-mon-task-service-name', 'auto-roll',
-          '--ts-mon-task-job-name', 'roll',
-          '--counter', api.json.dumps(counter_config),
-        ],
-    )
+    if not api.runtime.is_experimental:
+      counter_config = {
+        'name': '/v8/autoroller/count',
+        'project': 'v8-roll',
+        'result': monitoring_state,
+        'value': 1,
+      }
+      api.python(
+          'upload stats',
+          _RUN_PY,
+          [
+            'infra.tools.send_ts_mon_values',
+            '--ts-mon-target-type', 'task',
+            '--ts-mon-task-service-name', 'auto-roll',
+            '--ts-mon-task-job-name', 'roll',
+            '--counter', api.json.dumps(counter_config),
+          ],
+      )
 
 
 def GenTests(api):
@@ -198,4 +206,16 @@ def GenTests(api):
       api.override_step_data(
           'git cat-file', api.raw_io.stream_output(
               TEST_DEPS_FILE % 'beefdead'))
+    )
+  yield (api.test('standard_experimental') + api.properties.generic(
+      mastername='client.v8.fyi') +
+      api.override_step_data('gerrit changes', api.json.output([])) +
+      api.runtime(is_luci=True, is_experimental=True)
+    )
+  yield (api.test('stale_roll_experimental') +
+      api.properties.generic(mastername='client.v8') +
+      api.override_step_data(
+          'gerrit changes', api.json.output([{'_number': '123'}])) +
+      api.override_step_data('gerrit changes (2)', api.json.output([])) +
+      api.runtime(is_luci=True, is_experimental=True)
     )
