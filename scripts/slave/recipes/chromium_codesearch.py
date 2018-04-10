@@ -94,7 +94,8 @@ SPEC = freeze({
       ],
       'package_filename': 'chromium-android-src',
       'platform': 'android',
-      'sync_generated_files': True,
+      # Don't push generated files to git until we can ignore APKs.
+      'sync_generated_files': False,
       'gen_repo_branch': 'android',
       'corpus': 'chromium-android',
     },
