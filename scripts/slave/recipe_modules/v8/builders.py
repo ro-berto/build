@@ -928,21 +928,21 @@ BUILDERS = {
       },
 ####### Category: FYI
       'V8 Fuchsia': {
-        'gclient_apply_config': ['fuchsia'],
         'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
+          'TARGET_PLATFORM': 'fuchsia',
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'V8 Fuchsia - debug': {
-        'gclient_apply_config': ['fuchsia'],
         'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
+          'TARGET_PLATFORM': 'fuchsia',
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
@@ -2075,11 +2075,11 @@ BUILDERS = {
   'tryserver.v8': {
     'builders': {
       'v8_fuchsia_rel_ng': {
-        'gclient_apply_config': ['fuchsia'],
         'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
+          'TARGET_PLATFORM': 'fuchsia',
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
