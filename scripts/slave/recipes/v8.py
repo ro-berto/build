@@ -2,7 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.post_process import Filter, DoesNotRun
+from recipe_engine.post_process import Filter, DoesNotRun, DropExpectation
+from recipe_engine.recipe_api import Property
 
 DEPS = [
   'archive',
@@ -24,10 +25,15 @@ DEPS = [
   'v8',
 ]
 
+PROPERTIES = {
+  # Name of a gclient custom_var to set to 'True'.
+  'set_gclient_var': Property(default=None, kind=str),
+}
 
-def RunSteps(api):
+def RunSteps(api, set_gclient_var):
   v8 = api.v8
   v8.apply_bot_config(v8.BUILDERS)
+  v8.set_gclient_custom_var(set_gclient_var)
 
   additional_trigger_properties = {}
   test_spec = {}
@@ -543,4 +549,14 @@ def GenTests(api):
       api.v8.test('client.v8', 'V8 Linux - builder', 'trigger_on_luci') +
       api.runtime(is_luci=True, is_experimental=False) +
       api.post_process(Filter('trigger'))
+  )
+
+  # Test using set_gclient_var property.
+  yield (
+      api.v8.test('client.v8', 'V8 Linux - builder', 'set_gclient_var',
+                  set_gclient_var='download_gcmole') +
+      api.v8.check_in_param(
+          'bot_update',
+          '--spec-path', '\'custom_vars\': {\'download_gcmole\': \'True\'}') +
+      api.post_process(DropExpectation)
   )
