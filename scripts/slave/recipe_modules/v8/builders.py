@@ -1606,7 +1606,6 @@ BUILDERS = {
         ],
       },
       'V8 Android Arm - builder': {
-        'gclient_apply_config': ['android'],
         'chromium_apply_config': [
           'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
@@ -1753,7 +1752,6 @@ BUILDERS = {
       },
 ####### Category: ARM64
       'V8 Android Arm64 - builder': {
-        'gclient_apply_config': ['android'],
         'chromium_apply_config': [
           'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
@@ -1992,7 +1990,6 @@ BUILDERS = {
       },
       'V8 Android Arm32': {
         'recipe': 'v8/archive',
-        'gclient_apply_config': ['android'],
         'chromium_apply_config': [
           'clobber', 'default_compiler', 'default_target_v8_archive',
           'v8_android', 'v8_static_library', 'v8_ninja', 'goma', 'gn'],
@@ -2006,7 +2003,6 @@ BUILDERS = {
       },
       'V8 Android Arm64': {
         'recipe': 'v8/archive',
-        'gclient_apply_config': ['android'],
         'chromium_apply_config': [
           'clobber', 'default_compiler', 'default_target_v8_archive',
           'v8_android', 'v8_static_library', 'v8_ninja', 'goma', 'gn'],
@@ -3036,7 +3032,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_android_arm_compile_rel': {
-        'gclient_apply_config': ['android'],
         'chromium_apply_config': [
           'v8_ninja',
           'default_compiler',
