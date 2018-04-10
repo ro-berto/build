@@ -1570,7 +1570,6 @@ BUILDERS = {
     'builders': {
 ####### Category: Arm
       'V8 Arm - builder': {
-        'gclient_apply_config': ['arm'],
         'chromium_apply_config': [
             'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
@@ -1591,7 +1590,6 @@ BUILDERS = {
         'triggers_proxy': True,
       },
       'V8 Arm - debug builder': {
-        'gclient_apply_config': ['arm'],
         'chromium_apply_config': [
             'v8_ninja', 'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
@@ -1981,7 +1979,6 @@ BUILDERS = {
     'builders': {
       'V8 Arm32': {
         'recipe': 'v8/archive',
-        'gclient_apply_config': ['arm'],
         'chromium_apply_config': [
           'arm_hard_float', 'clobber', 'default_compiler',
           'default_target_v8_archive', 'v8_static_library', 'v8_ninja', 'goma',

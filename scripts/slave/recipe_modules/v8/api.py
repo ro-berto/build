@@ -163,6 +163,12 @@ class V8Api(recipe_api.RecipeApi):
     for c in self.bot_config.get('v8_apply_config', []):
       self.apply_config(c)
 
+    # Infer gclient variable that instructs sysroot download.
+    if (self.m.chromium.c.TARGET_PLATFORM != 'android' and
+        self.m.chromium.c.TARGET_ARCH == 'arm'):
+      target_cpu = 'arm64' if self.m.chromium.c.TARGET_BITS == 64 else 'arm'
+      self.m.gclient.c.target_cpu.add(target_cpu)
+
     if self.bot_config.get('enable_swarming', True):
       self.m.gclient.c.got_revision_reverse_mapping[
           'got_swarming_client_revision'] = ('v8/tools/swarming_client')
