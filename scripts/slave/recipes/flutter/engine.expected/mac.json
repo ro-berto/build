@@ -4503,6 +4503,23 @@
   },
   {
     "cmd": [
+      "[START_DIR]/src/flutter/sky/tools/create_macos_gen_snapshot.py",
+      "--dst",
+      "[START_DIR]/src/out/debug",
+      "--arm64-out-dir",
+      "[START_DIR]/src/out/ios_debug",
+      "--armv7-out-dir",
+      "[START_DIR]/src/out/ios_debug_arm"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma_client",
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
+    },
+    "name": "Create macOS debug gen_snapshot"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
@@ -4512,7 +4529,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
     "name": "Zip ios artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[START_DIR]/src/third_party/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"snapshot.dart\", \"path\": \"[START_DIR]/src/flutter/lib/snapshot/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/ios_debug/clang_x64/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/debug/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_8/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[START_DIR]/src/third_party/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"snapshot.dart\", \"path\": \"[START_DIR]/src/flutter/lib/snapshot/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/debug/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/debug/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_8/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -4587,6 +4604,23 @@
   },
   {
     "cmd": [
+      "[START_DIR]/src/flutter/sky/tools/create_macos_gen_snapshot.py",
+      "--dst",
+      "[START_DIR]/src/out/profile",
+      "--arm64-out-dir",
+      "[START_DIR]/src/out/ios_profile",
+      "--armv7-out-dir",
+      "[START_DIR]/src/out/ios_profile_arm"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma_client",
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
+    },
+    "name": "Create macOS profile gen_snapshot"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
@@ -4596,7 +4630,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
     "name": "Zip ios-profile artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[START_DIR]/src/third_party/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"snapshot.dart\", \"path\": \"[START_DIR]/src/flutter/lib/snapshot/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/ios_profile/clang_x64/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/profile/Flutter.framework.zip\", \"type\": \"file\"}, {\"archive_name\": \"entry_points.json\", \"path\": \"[START_DIR]/src/out/ios_profile/dart_entry_points/entry_points.json\", \"type\": \"file\"}, {\"archive_name\": \"entry_points_extra.json\", \"path\": \"[START_DIR]/src/out/ios_profile/dart_entry_points/entry_points_extra.json\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_9/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[START_DIR]/src/third_party/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"snapshot.dart\", \"path\": \"[START_DIR]/src/flutter/lib/snapshot/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/profile/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/profile/Flutter.framework.zip\", \"type\": \"file\"}, {\"archive_name\": \"entry_points.json\", \"path\": \"[START_DIR]/src/out/ios_profile/dart_entry_points/entry_points.json\", \"type\": \"file\"}, {\"archive_name\": \"entry_points_extra.json\", \"path\": \"[START_DIR]/src/out/ios_profile/dart_entry_points/entry_points_extra.json\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_9/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -4671,6 +4705,23 @@
   },
   {
     "cmd": [
+      "[START_DIR]/src/flutter/sky/tools/create_macos_gen_snapshot.py",
+      "--dst",
+      "[START_DIR]/src/out/release",
+      "--arm64-out-dir",
+      "[START_DIR]/src/out/ios_release",
+      "--armv7-out-dir",
+      "[START_DIR]/src/out/ios_release_arm"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma_client",
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
+    },
+    "name": "Create macOS release gen_snapshot"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
@@ -4680,7 +4731,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
     "name": "Zip ios-release artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[START_DIR]/src/third_party/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"snapshot.dart\", \"path\": \"[START_DIR]/src/flutter/lib/snapshot/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/ios_release/clang_x64/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/release/Flutter.framework.zip\", \"type\": \"file\"}, {\"archive_name\": \"entry_points.json\", \"path\": \"[START_DIR]/src/out/ios_release/dart_entry_points/entry_points.json\", \"type\": \"file\"}, {\"archive_name\": \"entry_points_extra.json\", \"path\": \"[START_DIR]/src/out/ios_release/dart_entry_points/entry_points_extra.json\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_10/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"dart_io_entries.txt\", \"path\": \"[START_DIR]/src/third_party/dart/runtime/bin/dart_io_entries.txt\", \"type\": \"file\"}, {\"archive_name\": \"dart_vm_entry_points.txt\", \"path\": \"[START_DIR]/src/flutter/runtime/dart_vm_entry_points.txt\", \"type\": \"file\"}, {\"archive_name\": \"snapshot.dart\", \"path\": \"[START_DIR]/src/flutter/lib/snapshot/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/release/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/release/Flutter.framework.zip\", \"type\": \"file\"}, {\"archive_name\": \"entry_points.json\", \"path\": \"[START_DIR]/src/out/ios_release/dart_entry_points/entry_points.json\", \"type\": \"file\"}, {\"archive_name\": \"entry_points_extra.json\", \"path\": \"[START_DIR]/src/out/ios_release/dart_entry_points/entry_points_extra.json\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_10/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [

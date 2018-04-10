@@ -308,6 +308,7 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
   checkout = api.path['start_dir'].join('src')
   out_dir = checkout.join('out')
 
+  # Package the multi-arch framework for iOS.
   label_dir = out_dir.join(label)
   create_ios_framework_cmd = [
     checkout.join('flutter/sky/tools/create_ios_framework.py'),
@@ -324,24 +325,38 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
     api.step('Create iOS %s Flutter.framework' % label,
       create_ios_framework_cmd)
 
-  # Zip Flutter.framework and upload it to cloud storage:
+  # Zip Flutter.framework.
   api.zip.directory('Archive Flutter.framework for %s' % label,
     label_dir.join('Flutter.framework'),
     label_dir.join('Flutter.framework.zip'))
 
+  # Package the multi-arch gen_snapshot for macOS.
+  create_macos_gen_snapshot_cmd = [
+    checkout.join('flutter/sky/tools/create_macos_gen_snapshot.py'),
+    '--dst',
+    label_dir,
+    '--arm64-out-dir',
+    api.path.join(out_dir, arm64_out),
+    '--armv7-out-dir',
+    api.path.join(out_dir, armv7_out),
+  ]
+  with api.context(cwd=checkout):
+    api.step('Create macOS %s gen_snapshot' % label,
+      create_macos_gen_snapshot_cmd)
+
+  # Upload the artifacts to cloud storage.
   artifacts = [
     'third_party/dart/runtime/bin/dart_io_entries.txt',
     'flutter/runtime/dart_vm_entry_points.txt',
     'flutter/lib/snapshot/snapshot.dart',
     'flutter/shell/platform/darwin/ios/framework/Flutter.podspec',
-    'out/%s/clang_x64/gen_snapshot' % arm64_out,
+    'out/%s/gen_snapshot' % label,
     'out/%s/Flutter.framework.zip' % label,
   ]
   if label in ['profile', 'release']:
     artifacts.append('out/%s/dart_entry_points/entry_points.json' % arm64_out)
     artifacts.append(
       'out/%s/dart_entry_points/entry_points_extra.json' % arm64_out)
-
   UploadArtifacts(api, bucket_name, artifacts)
 
 
