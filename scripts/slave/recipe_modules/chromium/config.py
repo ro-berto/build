@@ -66,6 +66,9 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       GYP_USE_SEPARATE_MSPDBSRV = Single(int, jsonish_fn=str, required=False),
       LLVM_DOWNLOAD_GOLD_PLUGIN = Single(int, required=False),
     ),
+    # This allows clients to opt out of using GYP variables in the environment.
+    # TODO(machenbach): This does not expand to Chromium's runtests yet.
+    use_gyp_env = Single(bool, empty_val=True, required=False),
     env = ConfigGroup(
       PATH = List(Path),
       ADB_VENDOR_KEYS = Single(Path, required=False),

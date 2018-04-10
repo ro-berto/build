@@ -363,7 +363,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
 
-    if self.c.gyp_env.GYP_DEFINES.get('clang', 0) == 1:
+    if self.c.use_gyp_env and self.c.gyp_env.GYP_DEFINES.get('clang', 0) == 1:
       # Get the Clang revision before compiling.
       self._clang_version = self.get_clang_version()
 
@@ -740,15 +740,17 @@ class ChromiumApi(recipe_api.RecipeApi):
     elif no_goma_compiler == 'goma':
       no_goma_compiler = None
 
-    if ('use_goma' in self.c.gyp_env.GYP_DEFINES and
+    if (self.c.use_gyp_env and
+        'use_goma' in self.c.gyp_env.GYP_DEFINES and
         self.c.gyp_env.GYP_DEFINES['use_goma'] == 0):
       self.c.compile_py.compiler = no_goma_compiler
       return
 
     goma_dir = self.m.goma.ensure_goma(canary=canary)
 
-    self.c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
-    self.c.gyp_env.GYP_DEFINES['use_goma'] = 1
+    if self.c.use_gyp_env:
+      self.c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
+      self.c.gyp_env.GYP_DEFINES['use_goma'] = 1
     self.c.compile_py.goma_dir = goma_dir
 
   def get_mac_toolchain_installer(self):
@@ -843,7 +845,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     # CrOS "chrome_sdk" builds fully override GYP_DEFINES in the wrapper. Zero
     # it to not show confusing information in the build logs.
-    if not self.c.TARGET_CROS_BOARD:
+    if self.c.use_gyp_env and not self.c.TARGET_CROS_BOARD:
       # TODO(sbc): Ideally we would not need gyp_env set during runhooks when
       # we are not running gyp, but there are some hooks (such as sysroot
       # installation that peek at GYP_DEFINES and modify thier behaviour
@@ -1010,7 +1012,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     env.update(self.m.context.env)
 
-    if self.c.gyp_env.GYP_MSVS_VERSION:
+    if self.c.use_gyp_env and self.c.gyp_env.GYP_MSVS_VERSION:
       # TODO(machenbach): Remove this as soon as it's not read anymore by
       # vs_toolchain.py (currently called by gn).
       env['GYP_MSVS_VERSION'] = self.c.gyp_env.GYP_MSVS_VERSION
