@@ -105,7 +105,8 @@ _AddIsolatedTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux',
                      use_private_swarming_server=True)
 _AddIsolatedTestSpec(
     'One Buildbot Step Test Builder', 'buildbot-test', 'linux',
-    parent_buildername='Linux Compile Perf FYI')
+    parent_buildername='Linux Compile Perf FYI',
+    use_private_swarming_server=True)
 
 _AddIsolatedTestSpec('Mac 10.13 Laptop High End', '', 'mac',
                      parent_buildername='Mac Builder Perf FYI')
