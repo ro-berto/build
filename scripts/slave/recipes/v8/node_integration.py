@@ -192,7 +192,8 @@ def RunSteps(api):
       api.step('fake trigger', cmd=None)
     else:
       api.v8.buildbucket_trigger(
-          'master.internal.client.v8', [{'author': 'node.js'}],
+          'master.internal.client.v8',
+          api.v8.get_changes(),
           [
             {
               'properties': {

@@ -1295,13 +1295,8 @@ class V8Api(recipe_api.RecipeApi):
           # only copies author names, but additional details about the list of
           # changes associated with the build are currently not accessible from
           # the recipe code.
-          # TODO(sergiyb): Remove this after migrating all builders to LUCI as
-          # there the revision from the buildset will be used instead.
-          changes = [
-              {'author': email}
-              for email in self.m.properties.get('blamelist', [])]
           step_result = self.buildbucket_trigger(
-              bucket_name, changes,
+              bucket_name, self.get_changes(),
               [{
                 'builder_name': builder_name,
                 'properties': dict(
@@ -1346,7 +1341,7 @@ class V8Api(recipe_api.RecipeApi):
         proxy_properties = {'archive': self._get_default_archive()}
         proxy_properties.update(properties)
         self.buildbucket_trigger(
-            'master.internal.client.v8', [{'author': 'trigger_proxy'}],
+            'master.internal.client.v8', self.get_changes(),
             [{
               'properties': proxy_properties,
               'builder_name': 'v8_trigger_proxy'
@@ -1356,6 +1351,12 @@ class V8Api(recipe_api.RecipeApi):
     if triggered_build_ids:
       output_properties = self.m.step.active_result.presentation.properties
       output_properties['triggered_build_ids'] = triggered_build_ids
+
+  def get_changes(self):
+    # TODO(sergiyb): Remove this after migrating all builders to LUCI as
+    # there the revision from the buildset will be used instead.
+    return [
+        {'author': email} for email in self.m.properties.get('blamelist', [])]
 
   def buildbucket_trigger(self, bucket, changes, requests, step_name='trigger',
                           service_account='v8-bot', no_buildset=False):
