@@ -11,7 +11,11 @@
             "respect_build_status": true,
             "close_tree": false
           }
-        }
+        },
+        "excluded_builders": [
+          "*-dev",
+          "*-stable"
+        ]
       }
     ]
   }
