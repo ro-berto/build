@@ -17,7 +17,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@refs/branch-heads/4.2:20123",
+      "v8@refs/branch-heads/4.2:deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
       "--no_shallow",
       "--with_branch_heads"
     ],
@@ -33,7 +33,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"v8\": \"refs/branch-heads/4.2:20123\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"v8\": \"refs/branch-heads/4.2:deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"v8\": {@@@",
@@ -263,9 +263,9 @@
       "--build-url",
       "gs://chromium-v8/v8-for-dart-rel",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"4.2\", \"buildername\": \"v8-mac-release\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.dart.fyi\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"4.2\", \"buildername\": \"v8-mac-release\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.dart.fyi\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"4.2\", \"buildername\": \"v8-mac-release\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.dart.fyi\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"4.2\", \"buildername\": \"v8-mac-release\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.dart.fyi\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "infra_step": true,
     "name": "package build"

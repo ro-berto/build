@@ -84,7 +84,7 @@
       "--",
       "tools/jsfunfuzz/fuzz-harness.sh",
       "out/Debug/d8",
-      "${ISOLATED_OUTDIR}/fuzz-results-54321.tar.bz2"
+      "${ISOLATED_OUTDIR}/fuzz-results-deafbeefdeafbeefdeafbeefdeafbeefdeafbeef.tar.bz2"
     ],
     "name": "[trigger] Fuzz"
   },

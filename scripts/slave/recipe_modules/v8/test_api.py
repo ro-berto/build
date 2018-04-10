@@ -418,7 +418,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
             buildername=buildername,
             branch=branch,
             parent_buildername=parent_buildername,
-            revision='20123',
+            revision='deadbeef'*5,
             gerrit_project='v8/v8',
             **kwargs
         ) +
@@ -429,8 +429,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     )
     if parent_buildername:
       test += self.m.properties(
-          # TODO(machenbach): Turn that into a git hash.
-          parent_got_revision='54321',
+          parent_got_revision='deafbeef'*5,
           parent_got_revision_cp='refs/heads/master@{#20123}',
           parent_build_environment={
             'useful': 'envvars', 'from': 'the', 'parent': 'bot'},
@@ -453,14 +452,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           master='tryserver.v8',
           patch_project='v8',
           reason='CQ',
-          revision='12345',
+          revision='deadbeef'*5,
           try_job_key='1234',
       )
-
-    if 'triggers' in bot_config:
-      num_triggers = len(bot_config['triggers'])
-      test += self.step_data('trigger', stdout=self.m.json.output({
-        'results': [{'build': {'id': '1234567890'}}] * num_triggers}))
 
     # Skip some goma and swarming related steps in expectations.
     skip_fragments = map(re.escape, [
@@ -534,3 +528,12 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
   def check_in_param(self, step, param, value):
     """Check if a given value is a substring of a step's parmeter."""
     return self.post_process(V8TestApi._check_in_param, step, param, value)
+
+  def buildbucket_test_data(self, num_requests):
+    return self.m.json.output_stream({
+      'results': [{
+        'build': {
+          'id': 10000000 + i,
+        },
+      } for i in range(num_requests)]
+    })

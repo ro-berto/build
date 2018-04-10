@@ -1404,11 +1404,8 @@ class V8Api(recipe_api.RecipeApi):
           },
         } for request in requests],
         name=step_name,
-        step_test_data=lambda: self.m.json.test_api.output_stream({
-          'results': [{
-            'id': 10000000 + i,
-          } for i in range(len(requests))]
-        }),
+        step_test_data=lambda: (
+          self.m.v8.test_api.buildbucket_test_data(len(requests))),
     )
 
   def get_change_range(self):

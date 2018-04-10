@@ -84,7 +84,7 @@
       "--",
       "tools/jsfunfuzz/fuzz-harness.sh",
       "out/Debug/d8",
-      "${ISOLATED_OUTDIR}/fuzz-results-54321.tar.bz2"
+      "${ISOLATED_OUTDIR}/fuzz-results-deafbeefdeafbeefdeafbeefdeafbeefdeafbeef.tar.bz2"
     ],
     "name": "[trigger] Fuzz"
   },
@@ -180,13 +180,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/swarming_output_tmp_1/0/fuzz-results-54321.tar.bz2",
-      "gs://chromium-v8/fuzzer-archives/fuzz-results-54321.tar.bz2"
+      "[TMP_BASE]/swarming_output_tmp_1/0/fuzz-results-deafbeefdeafbeefdeafbeefdeafbeefdeafbeef.tar.bz2",
+      "gs://chromium-v8/fuzzer-archives/fuzz-results-deafbeefdeafbeefdeafbeefdeafbeefdeafbeef.tar.bz2"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/fuzzer-archives/fuzz-results-54321.tar.bz2@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/fuzzer-archives/fuzz-results-deafbeefdeafbeefdeafbeefdeafbeefdeafbeef.tar.bz2@@@"
     ]
   },
   {
