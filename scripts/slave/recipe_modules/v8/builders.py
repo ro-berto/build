@@ -116,7 +116,6 @@ BUILDERS = {
     'builders': {
 ####### Category: Linux
       'V8 Linux - builder': {
-        'gclient_apply_config': ['download_gcmole'],
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
@@ -372,7 +371,6 @@ BUILDERS = {
         'triggers_proxy': True,
       },
       'V8 Linux64 - debug builder': {
-        'gclient_apply_config': ['download_jsfunfuzz'],
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
@@ -853,7 +851,6 @@ BUILDERS = {
         'swarming_properties': SWARMING_FYI_PROPS,
       },
       'V8 Linux - arm64 - sim - MSAN': {
-        'gclient_apply_config': ['checkout_instrumented_libraries'],
         'chromium_apply_config': [
           'v8_ninja',
           'clang',
@@ -1228,7 +1225,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux MSAN no origins': {
-        'gclient_apply_config': ['checkout_instrumented_libraries'],
         'chromium_apply_config': [
           'v8_ninja',
           'clang',
@@ -1248,7 +1244,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux MSAN chained origins': {
-        'gclient_apply_config': ['checkout_instrumented_libraries'],
         'chromium_apply_config': [
           'v8_ninja',
           'clang',
@@ -1820,7 +1815,6 @@ BUILDERS = {
       },
 ####### Category: MIPS
       'V8 Mips - builder': {
-        'gclient_apply_config': ['download_mips_toolchain'],
         'chromium_apply_config': ['default_compiler', 'v8_ninja', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -2085,7 +2079,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_rel_ng': {
-        'gclient_apply_config': ['download_gcmole'],
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'mb'],
         'v8_config_kwargs': {
@@ -2488,7 +2481,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_msan_rel': {
-        'gclient_apply_config': ['checkout_instrumented_libraries'],
         'chromium_apply_config': [
           'v8_ninja',
           'clang',

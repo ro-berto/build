@@ -28,21 +28,6 @@ def llvm_compiler_rt(c):
     ChromiumGitURL(c, 'external', 'llvm.org', 'compiler-rt'))
 
 
-@CONFIG_CTX(includes=['v8'])
-def download_gcmole(c):
-  c.solutions[0].custom_vars['download_gcmole'] = 'True'
-
-
-@CONFIG_CTX(includes=['v8'])
-def download_jsfunfuzz(c):
-  c.solutions[0].custom_vars['download_jsfunfuzz'] = 'True'
-
-
-@CONFIG_CTX()
-def download_mips_toolchain(c):
-  c.solutions[0].custom_vars['download_mips_toolchain'] = 'True'
-
-
 @CONFIG_CTX()
 def node_js(c):
   soln = c.solutions.add()
