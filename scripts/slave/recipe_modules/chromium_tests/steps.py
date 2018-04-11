@@ -1480,9 +1480,10 @@ class SwarmingTest(Test):
       valid, failures = self.validate_task_results(api, api.step.active_result)
       self._results[suffix] = {'valid': valid, 'failures': failures}
 
-      api.step.active_result.presentation.logs['step_metadata'] = (
-          json.dumps(self.step_metadata(api, suffix), sort_keys=True, indent=2)
-      ).splitlines()
+      if api.step.active_result:
+        api.step.active_result.presentation.logs['step_metadata'] = (
+            json.dumps(self.step_metadata(api, suffix), sort_keys=True, indent=2)
+        ).splitlines()
 
   def has_valid_results(self, api, suffix):
     # Test wasn't triggered or wasn't collected.
