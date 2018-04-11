@@ -29,12 +29,19 @@ def main():
       '--delete-excluded',
       '--prune-empty-dirs',
 
-      # Exclude some common binary files.
+      # Exclude some common binary files and other junk.
       '--exclude=*.bin',
       '--exclude=*.cache',
       '--exclude=*.pak',
       '--exclude=*.pyc',
       '--exclude=*.srcjar',
+      '--exclude=*.zip',
+      '--exclude=*.jar',
+      '--exclude=*.apk',
+      '--exclude=*.ap_',
+      '--exclude=*.md5.stamp',
+      '--exclude=*.info',
+      '--exclude=*.d',
 
       # Treat the '/./' in the SRC as the beginning of the path, so a
       # 'Debug/gen' directory is created in the destination.
