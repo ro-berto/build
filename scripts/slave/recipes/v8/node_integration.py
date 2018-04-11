@@ -150,6 +150,8 @@ def _build_and_upload(api):
 def RunSteps(api):
   v8 = api.v8
   v8.apply_bot_config(BUILDERS)
+  # Opt out of using gyp environment variables.
+  api.chromium.c.use_gyp_env = False
   api.gclient.apply_config('node_js')
   v8.checkout()
   v8.runhooks()

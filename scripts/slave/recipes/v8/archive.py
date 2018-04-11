@@ -107,6 +107,8 @@ def RunSteps(api):
     return
 
   api.v8.apply_bot_config(api.v8.BUILDERS)
+  # Opt out of using gyp environment variables.
+  api.chromium.c.use_gyp_env = False
   api.v8.checkout()
 
   version = str(api.v8.read_version_from_ref(api.v8.revision, 'head'))
