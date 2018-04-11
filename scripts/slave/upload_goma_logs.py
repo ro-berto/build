@@ -196,7 +196,7 @@ def main():
     # goma_utils.SendGomaStats, since SendGomaStats removes stats file.
     counter = goma_utils.MakeGomaExitStatusCounter(
         args.goma_stats_file,
-        args.build_data_dir,
+        goma_crash_report=args.goma_crash_report_id_file,
         builder=args.buildbot_buildername,
         master=args.buildbot_mastername,
         slave=args.buildbot_slavename,
