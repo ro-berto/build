@@ -56,9 +56,6 @@ SUPPRESSIONS = {
         'Linux Release (NVIDIA)',  # linux_chromium_rel_ng migrated to LUCI.
         'Win10 Debug (NVIDIA)',
     ],
-    'master.chromium.linux': [
-        'Deterministic Linux',
-    ],
     'master.chromium.mac': [
         'ios-device', # these are covered, just by the iOS recipes instead.
         'ios-device-xcode-clang',
