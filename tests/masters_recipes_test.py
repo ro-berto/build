@@ -51,12 +51,15 @@ SUPPRESSIONS = {
     'master.chromium.gpu': [
         'GPU Linux Builder',  # linux_chromium_compile_rel_ng migrated to LUCI.
         'GPU Linux Builder (dbg)',
+        'GPU Mac Builder',  # mac_chromium_rel_ng migrated to LUCI.
         'GPU Mac Builder (dbg)',
         'GPU Win Builder (dbg)',
         'Linux Debug (NVIDIA)',
         'Linux Release (NVIDIA)',  # linux_chromium_rel_ng migrated to LUCI.
         'Mac Debug (Intel)',
+        'Mac Release (Intel)',  # mac_chromium_rel_ng migrated to LUCI.
         'Mac Retina Debug (AMD)',
+        'Mac Retina Release (AMD)',  # mac_chromium_rel_ng migrated to LUCI.
         'Win10 Debug (NVIDIA)',
     ],
     'master.chromium.linux': [
@@ -165,6 +168,7 @@ FAKE_BUILDERS = {
         # These have been migrated to LUCI.
         'mac_chromium_compile_dbg_ng',
         'mac_chromium_dbg_ng',
+        'mac_chromium_rel_ng',
         'mac_optional_gpu_tests_rel',
     ],
 }
