@@ -120,6 +120,7 @@
     },
     "V8 Linux MSAN no origins": {
       "recipe": "v8",
+      "properties": {"set_gclient_var": "checkout_instrumented_libraries"},
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
@@ -128,6 +129,7 @@
     },
     "V8 Linux MSAN chained origins": {
       "recipe": "v8",
+      "properties": {"set_gclient_var": "checkout_instrumented_libraries"},
       "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
