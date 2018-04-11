@@ -681,11 +681,6 @@ TRYBOTS = freeze({
       'win7_chromium_rel_ng': {
         'bot_ids': [
           {
-            'mastername': 'chromium.webkit',
-            'buildername': 'WebKit Win Builder',
-            'tester': 'WebKit Win7',
-          },
-          {
             'mastername': 'chromium.win',
             'buildername': 'Win Builder',
             'tester': 'Win7 Tests (1)',

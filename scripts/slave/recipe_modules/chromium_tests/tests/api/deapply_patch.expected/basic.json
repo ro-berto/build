@@ -313,21 +313,6 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]\\src\\testing\\buildbot\\chromium.webkit.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read test spec (chromium.webkit.json)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@path: [START_DIR]\\src\\testing\\buildbot\\chromium.webkit.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[START_DIR]\\src\\testing\\buildbot\\chromium.win.json",
       "/path/to/tmp/json"
     ],
