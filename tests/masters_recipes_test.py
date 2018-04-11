@@ -68,8 +68,6 @@ SUPPRESSIONS = {
         'ios-simulator',
         'ios-simulator-full-configs',
         'ios-simulator-xcode-clang',
-
-        'Mac10.11 Tests',
     ],
     'master.chromium.memory': [
         'Linux ASan Tests (sandboxed)',
@@ -109,7 +107,12 @@ FAKE_BUILDERS = {
     'master.chromium.mac': [
         # These have been migrated to LUCI.
         'Mac Builder (dbg)',
+        'Mac Builder',
+        'Mac10.10 Tests',
+        'Mac10.11 Tests',
+        'Mac10.12 Tests',
         'Mac10.13 Tests (dbg)',
+        'Mac10.13 Tests',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'mac-jumbo-rel',
     ],
