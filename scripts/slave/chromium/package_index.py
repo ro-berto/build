@@ -41,6 +41,9 @@ class IndexPack(object):
         raise Exception('ERROR: --corpus required when using kythe format')
       if revision is None:
         raise Exception('ERROR: --revision required when using kythe format')
+    else:
+      raise Exception('ERROR: Kythe is now the only supported format. '
+                      'Please run with --index-pack-format kythe')
 
     with open(compdb_path, 'rb') as json_commands_file:
       # The list of JSON dictionaries, each describing one compilation unit.
