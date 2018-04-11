@@ -1782,6 +1782,11 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         build_properties=api.chromium.build_properties, extra_args=args)
 
   def validate_task_results(self, api, step_result):
+    # If we didn't get a step_result object at all, we can safely
+    # assume that something definitely went wrong.
+    if step_result is None:  # pragma: no cover
+      return False, None
+
     results = getattr(step_result, 'isolated_script_results', None) or {}
 
     valid, failures = self.results_handler.validate_results(api, results)
