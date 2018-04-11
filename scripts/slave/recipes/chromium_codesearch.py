@@ -115,6 +115,7 @@ def RunSteps(api, root_solution_revision):
   bot_config = SPEC.get('builders', {}).get(buildername)
   platform = bot_config.get('platform', 'linux')
   corpus = bot_config.get('corpus', 'chromium-linux')
+  root = bot_config.get('root', '')
   targets = bot_config.get('compile_targets', [])
 
   api.codesearch.set_config(
@@ -125,6 +126,7 @@ def RunSteps(api, root_solution_revision):
       SYNC_GENERATED_FILES=bot_config['sync_generated_files'],
       GEN_REPO_BRANCH=bot_config['gen_repo_branch'],
       CORPUS=corpus,
+      ROOT=root,
   )
 
   # Checkout the repositories that are either directly needed or should be

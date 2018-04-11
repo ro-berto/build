@@ -23,14 +23,17 @@ class IndexPack(object):
   """Class used to create an index pack to be indexed by Grok or Kythe."""
 
   def __init__(self, compdb_path, index_pack_format='grok', corpus=None,
-               revision=None):
+               root=None, revision=None):
     """Initializes IndexPack.
 
     Args:
       compdb_path: path to the compilation database.
       index_pack_format: format in which to generate the index pack
         ('grok' or 'kythe').
-      corpus: the kythe corpus to use for the vname, eg. chromium-linux
+      corpus: the corpus to use for the generated Kythe VNames, e.g. 'chromium'.
+        A VName identifies a node in the Kythe index. For more details, see:
+        https://kythe.io/docs/kythe-storage.html
+      root: the root to use for the generated Kythe VNames (optional)
       revision: the revision of the files being indexed
     """
     if index_pack_format == 'kythe':
@@ -44,6 +47,7 @@ class IndexPack(object):
       self.json_dictionaries = json.load(json_commands_file)
     self.index_pack_format = index_pack_format
     self.corpus = corpus
+    self.root = root
     self.revision = revision
     # Maps from source file name to the SHA256 hash of its content.
     self.filehashes = {}
@@ -248,6 +252,11 @@ class IndexPack(object):
                 'corpus': self.corpus,
                 'path': normalized_fname,
             }
+
+            # Add the VName root only if it was specified.
+            if self.root:
+              required_input['v_name']['root'] = self.root
+
             required_input['info'] = {
                 'path': fname,
                 'digest': self.filehashes[fname_fullpath],
@@ -265,6 +274,9 @@ class IndexPack(object):
         unit_dictionary['v_name'] = {
             'corpus': self.corpus,
         }
+        # Add the VName root only if it was specified.
+        if self.root:
+          unit_dictionary['v_name']['root'] = self.root
         unit_dictionary['revision'] = self.revision
 
       # Add the include paths to the list of compile arguments; also disable all
@@ -354,6 +366,8 @@ def main():
   parser.add_argument('--corpus',
                       default='chromium-linux',
                       help='the kythe corpus to use for the vname')
+  parser.add_argument('--root',
+                      help='the kythe root to use for the vname')
   parser.add_argument('--revision',
                       help='the revision of the files being indexed')
   parser.add_argument('--keep-filepaths-files',
@@ -364,7 +378,7 @@ def main():
 
   print '%s: Index generation...' % time.strftime('%X')
   index_pack = IndexPack(options.path_to_compdb, options.index_pack_format,
-                         options.corpus, options.revision)
+                         options.corpus, options.root, options.revision)
   index_pack.GenerateIndexPack()
 
   if not options.keep_filepaths_files:

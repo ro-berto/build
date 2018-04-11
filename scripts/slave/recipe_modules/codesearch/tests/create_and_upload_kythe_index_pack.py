@@ -25,7 +25,8 @@ def RunSteps(api):
       PLATFORM=api.properties.get('platform', 'linux'),
       SYNC_GENERATED_FILES=api.properties.get('sync_generated_files', True),
       GEN_REPO_BRANCH=api.properties.get('gen_repo_branch', 'master'),
-      CORPUS=api.properties.get('corpus', 'chromium-linux'),
+      CORPUS=api.properties.get('corpus', 'chromium'),
+      ROOT=api.properties.get('root', 'linux'),
   )
   api.codesearch.create_and_upload_kythe_index_pack()
 
@@ -44,4 +45,9 @@ def GenTests(api):
   yield (
       api.test('basic_without_got_revision_cp') +
       api.properties(set_got_revision_cp_to_none=True)
+  )
+
+  yield (
+      api.test('basic_without_kythe_root') +
+      api.properties(root='')
   )

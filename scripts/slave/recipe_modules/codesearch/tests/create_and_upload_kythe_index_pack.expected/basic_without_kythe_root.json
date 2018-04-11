@@ -167,9 +167,7 @@
       "--corpus",
       "chromium",
       "--revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--root",
-      "linux"
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
     ],
     "name": "create kythe index pack"
   },
@@ -183,12 +181,12 @@
       "----",
       "cp",
       "[START_DIR]/src/out/Debug/index_pack_linux_kythe.zip",
-      "gs://chrome-codesearch/prod/index_pack_linux_kythe_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
+      "gs://chrome-codesearch/prod/index_pack_linux_kythe_170242.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload kythe index pack",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/index_pack_linux_kythe_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/index_pack_linux_kythe_170242.zip@@@"
     ]
   },
   {

@@ -149,15 +149,18 @@ class CodesearchApi(recipe_api.RecipeApi):
     Args:
       index_pack_kythe_name: Name of the Kythe index pack
     """
+    args = ['--path-to-compdb', self.c.compile_commands_json_file,
+            '--path-to-archive-output',
+            self.c.debug_path.join(index_pack_kythe_name),
+            '--index-pack-format', 'kythe',
+            '--corpus', self.c.CORPUS,
+            '--revision', self._get_revision()]
+    if self.c.ROOT:
+      args.extend(['--root', self.c.ROOT])
     self.m.build.python('create kythe index pack',
                         self.package_repo_resource('scripts', 'slave', 'chromium',
                                                    'package_index.py'),
-                        ['--path-to-compdb', self.c.compile_commands_json_file,
-                         '--path-to-archive-output',
-                         self.c.debug_path.join(index_pack_kythe_name),
-                         '--index-pack-format', 'kythe',
-                         '--corpus', self.c.CORPUS,
-                         '--revision', self._get_revision()])
+                        args)
 
   def _upload_kythe_index_pack(self, bucket_name, index_pack_kythe_name,
                               index_pack_kythe_name_with_revision):

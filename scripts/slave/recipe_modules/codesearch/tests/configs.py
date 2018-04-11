@@ -12,13 +12,14 @@ DEPS = [
 
 def RunSteps(api):
   api.codesearch.set_config(
-  	  api.properties.get('codesearch_config', 'base'),
+      api.properties.get('codesearch_config', 'base'),
       COMPILE_TARGETS=api.properties.get('compile_targets', []),
       PACKAGE_FILENAME=api.properties.get('package_filename', 'chromium-src'),
       PLATFORM=api.properties.get('platform', 'linux'),
       SYNC_GENERATED_FILES=api.properties.get('sync_generated_files', True),
       GEN_REPO_BRANCH=api.properties.get('gen_repo_branch', 'master'),
-      CORPUS=api.properties.get('corpus', 'chromium-linux'),
+      CORPUS=api.properties.get('corpus', 'chromium'),
+      ROOT=api.properties.get('root', 'linux'),
   )
   for config in api.properties.get('codesearch_apply_config', []):
     api.codesearch.apply_config(config)

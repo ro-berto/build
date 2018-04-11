@@ -8,9 +8,9 @@ from recipe_engine.config import config_item_context, ConfigGroup
 from recipe_engine.config import Single, Static, Dict, List
 from recipe_engine.config_types import Path
 
-def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=[], PACKAGE_FILENAME=None, PLATFORM=None,
-               SYNC_GENERATED_FILES=False, GEN_REPO_BRANCH='master', CORPUS=None,
-               **_kwargs):
+def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=[], PACKAGE_FILENAME=None,
+               PLATFORM=None, SYNC_GENERATED_FILES=False,
+               GEN_REPO_BRANCH='master', CORPUS=None, ROOT=None, **_kwargs):
   """Filter out duplicate compilation units.
 
   Args:
@@ -21,6 +21,7 @@ def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=[], PACKAGE_FILENAME=None, PLATFOR
     SYNC_GENERATED_FILES: Whether to sync generated files into a git repo.
     GEN_REPO_BRANCH: Which branch in the generated files repo to sync to.
     CORPUS: Kythe corpus to generate index packs under.
+    ROOT: Kythe root to generate index packs under.
   """
   return ConfigGroup(
     CHECKOUT_PATH = Static(CHECKOUT_PATH),
@@ -30,6 +31,7 @@ def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=[], PACKAGE_FILENAME=None, PLATFOR
     SYNC_GENERATED_FILES = Static(SYNC_GENERATED_FILES),
     GEN_REPO_BRANCH = Static(GEN_REPO_BRANCH),
     CORPUS = Static(CORPUS),
+    ROOT = Static(ROOT),
     debug_path = Single(Path),
     compile_commands_json_file = Single(Path),
     bucket_name = Single(basestring, required=False),
