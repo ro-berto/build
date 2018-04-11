@@ -359,8 +359,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     )
 
   def _get_test_branch_name(self, mastername, buildername):
-    if mastername == 'client.dart.fyi':
-      return STABLE_BRANCH
     if re.search(r'stable branch', buildername):
       return STABLE_BRANCH
     if re.search(r'beta branch', buildername):

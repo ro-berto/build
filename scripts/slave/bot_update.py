@@ -286,11 +286,6 @@ ENABLED_MASTERS = [
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
 
 ENABLED_BUILDERS = {
-    'client.dart.fyi': [
-        'v8-linux-release',
-        'v8-mac-release',
-        'v8-win-release',
-    ],
 }
 ENABLED_BUILDERS.update(internal_data.get('ENABLED_BUILDERS', {}))
 
