@@ -35,6 +35,9 @@ def RunSteps(api, set_gclient_var):
   v8.apply_bot_config(v8.BUILDERS)
   v8.set_gclient_custom_var(set_gclient_var)
 
+  # Opt out of using gyp environment variables.
+  api.chromium.c.use_gyp_env = False
+
   additional_trigger_properties = {}
   test_spec = {}
   tests = v8.create_tests()
