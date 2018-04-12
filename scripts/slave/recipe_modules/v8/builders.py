@@ -123,6 +123,10 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'build_gs_archive': 'linux_rel_archive',
+        # TODO(machenbach): Get presubmit on swarming. Currently this builder
+        # needs to upload a legacy build because of presubmit. It currently
+        # uploads anyways because of the triggers_proxy specification.
+        'should_upload_build': True,
         'testing': {
           'platform': 'linux',
         },
@@ -143,7 +147,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
-        'build_gs_archive': 'linux_dbg_archive',
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux - gc stress',
@@ -157,7 +160,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'build_gs_archive': 'linux_nosnap_rel_archive',
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux - nosnap',
@@ -170,7 +172,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
-        'build_gs_archive': 'linux_nosnap_dbg_archive',
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux - nosnap - debug',
@@ -194,7 +195,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'parent_buildername': 'V8 Linux - builder',
-        'build_gs_archive': 'linux_rel_archive',
         'tests': [
           V8Initializers,
           V8Testing,
@@ -231,7 +231,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'parent_buildername': 'V8 Linux - debug builder',
-        'build_gs_archive': 'linux_dbg_archive',
         'tests': [
           V8Testing(2),
           OptimizeForSize,
@@ -280,7 +279,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'parent_buildername': 'V8 Linux - nosnap builder',
-        'build_gs_archive': 'linux_nosnap_rel_archive',
         'tests': [
           V8Testing(3),
           Test262(2),
@@ -296,7 +294,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'parent_buildername': 'V8 Linux - nosnap debug builder',
-        'build_gs_archive': 'linux_nosnap_dbg_archive',
         'tests': [V8Testing(7)],
         'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
@@ -363,7 +360,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
-        'build_gs_archive': 'linux64_dbg_archive',
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Fuzzer',
@@ -378,7 +374,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
-        'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux64 - custom snapshot - debug',
@@ -391,7 +386,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'parent_buildername': 'V8 Linux64 - builder',
-        'build_gs_archive': 'linux64_rel_archive',
         'tests': [
           V8Initializers,
           V8Testing,
@@ -417,7 +411,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'parent_buildername': 'V8 Linux64 - debug builder',
-        'build_gs_archive': 'linux64_dbg_archive',
         'tests': [
           V8Testing(2),
           OptimizeForSize,
@@ -454,7 +447,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'parent_buildername': 'V8 Linux64 - custom snapshot - debug builder',
-        'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
         'tests': [Mjsunit],
         'testing': {'platform': 'linux'},
       },
@@ -513,7 +505,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'build_gs_archive': 'win32_rel_archive',
         'binary_size_tracking': {
           'path_pieces_list': [['d8.exe']],
           'category': 'win32'
@@ -534,7 +525,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
-        'build_gs_archive': 'win32_dbg_archive',
         'testing': {'platform': 'win'},
         'triggers': [
           'V8 Win32 - debug',
@@ -545,7 +535,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'build_gs_archive': 'win32_rel_archive',
         'parent_buildername': 'V8 Win32 - builder',
         'tests': [V8Testing, Test262, Mozilla],
         'testing': {'platform': 'linux'},
@@ -579,7 +568,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
-        'build_gs_archive': 'win32_dbg_archive',
         'parent_buildername': 'V8 Win32 - debug builder',
         'tests': [
           V8Testing(4),
@@ -707,7 +695,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'parent_buildername': 'V8 Linux64 - debug builder',
-        'build_gs_archive': 'linux64_dbg_archive',
         'tests': [Fuzz],
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
@@ -719,7 +706,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'parent_buildername': 'V8 Linux - debug builder',
-        'build_gs_archive': 'linux_dbg_archive',
         'tests': [D8Testing(5)],
         'testing': {'platform': 'linux'},
       },
@@ -745,7 +731,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'parent_buildername': 'V8 Linux64 - custom snapshot - debug builder',
-        'build_gs_archive': 'linux64_custom_snapshot_dbg_archive',
         'tests': [Mjsunit(3)],
         'testing': {'platform': 'linux'},
       },
@@ -903,7 +888,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'parent_buildername': 'V8 Linux64 - builder',
-        'build_gs_archive': 'linux64_rel_archive',
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
       },
@@ -913,7 +897,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'parent_buildername': 'V8 Linux64 - debug builder',
-        'build_gs_archive': 'linux64_dbg_archive',
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
       },
@@ -980,7 +963,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-asan',
         'cf_gs_acl': 'public-read',
@@ -1002,7 +984,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-asan',
         'cf_gs_acl': 'public-read',
@@ -1024,7 +1005,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 NumFuzz - nosnap',
@@ -1042,7 +1022,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 NumFuzz - nosnap debug',
@@ -1209,7 +1188,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'V8 NumFuzz - TSAN',
         ],
@@ -1515,7 +1493,6 @@ BUILDERS = {
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'build_gs_archive': 'arm_dbg_archive',
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Arm - debug',
@@ -1545,7 +1522,6 @@ BUILDERS = {
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'build_gs_archive': 'arm_rel_archive',
         'parent_buildername': 'V8 Arm - builder',
         'tests': [
           V8Testing(2),
@@ -1577,7 +1553,6 @@ BUILDERS = {
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'build_gs_archive': 'arm_dbg_archive',
         'parent_buildername': 'V8 Arm - debug builder',
         'tests': [
           V8Testing(3),
@@ -1601,7 +1576,6 @@ BUILDERS = {
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'build_gs_archive': 'arm_dbg_archive',
         'parent_buildername': 'V8 Arm - debug builder',
         'tests': [D8Testing(3)],
         'variants': V8Variant('default'),
@@ -1735,6 +1709,7 @@ BUILDERS = {
         },
         'enable_swarming': False,
         'build_gs_archive': 'mips_rel_archive',
+        'should_upload_build': True,
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Mips - big endian - nosnap - 1',
@@ -1778,7 +1753,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'build_gs_archive': 'mipsel_sim_rel_archive',
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux - mipsel - sim',
@@ -1791,7 +1765,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'build_gs_archive': 'mips64el_sim_rel_archive',
         'testing': {'platform': 'linux'},
         'triggers': [
           'V8 Linux - mips64el - sim',
@@ -1803,7 +1776,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'parent_buildername': 'V8 Linux - mipsel - sim - builder',
-        'build_gs_archive': 'mipsel_sim_rel_archive',
         'tests': [V8Testing(4), Test262],
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
@@ -1814,7 +1786,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'parent_buildername': 'V8 Linux - mips64el - sim - builder',
-        'build_gs_archive': 'mips64el_sim_rel_archive',
         'tests': [V8Testing(4), Test262],
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
@@ -1985,7 +1956,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_linux_rel_ng_triggered',
         ],
@@ -2019,7 +1989,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_linux_verify_csa_rel_ng_triggered',
         ],
@@ -2041,7 +2010,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_linux_nodcheck_rel_ng_triggered',
         ],
@@ -2072,7 +2040,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_linux_dbg_ng_triggered',
         ],
@@ -2104,7 +2071,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_linux_noi18n_rel_ng_triggered',
         ],
@@ -2186,7 +2152,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_linux64_dbg_ng_triggered',
         ],
@@ -2228,7 +2193,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_linux64_rel_ng_triggered',
         ],
@@ -2259,7 +2223,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_linux64_fyi_rel_ng_triggered',
         ],
@@ -2280,7 +2243,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_linux64_verify_csa_rel_ng_triggered',
         ],
@@ -2317,7 +2279,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_linux64_asan_rel_ng_triggered',
         ],
@@ -2346,7 +2307,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_linux64_cfi_rel_ng_triggered',
         ],
@@ -2430,7 +2390,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_linux64_ubsan_rel_ng_triggered',
         ],
@@ -2513,7 +2472,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_win_rel_ng_triggered',
         ],
@@ -2547,7 +2505,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_win_nosnap_shared_rel_ng_triggered',
         ],
@@ -2581,7 +2538,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_win64_asan_rel_ng_triggered',
         ],
@@ -2626,7 +2582,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_win64_msvc_rel_ng_triggered',
         ],
@@ -2663,7 +2618,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_win64_rel_ng_triggered',
         ],
@@ -2713,7 +2667,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_mac64_rel_ng_triggered',
         ],
@@ -2743,7 +2696,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_mac64_dbg_ng_triggered',
         ],
@@ -2806,7 +2758,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_linux_arm_rel_ng_triggered',
         ],
@@ -2848,7 +2799,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'slim_swarming_builder': True,
         'triggers': [
           'v8_linux_arm64_rel_ng_triggered',
         ],

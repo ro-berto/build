@@ -117,23 +117,9 @@ class V8Api(recipe_api.RecipeApi):
     'android_arm_rel_archive': 'gs://chromium-v8/v8-android-arm-rel',
     'android_arm64_rel_archive': 'gs://chromium-v8/v8-android-arm64-rel',
     'arm_rel_archive': 'gs://chromium-v8/v8-arm-rel',
-    'arm_dbg_archive': 'gs://chromium-v8/v8-arm-dbg',
     'linux_rel_archive': 'gs://chromium-v8/v8-linux-rel',
-    'linux_dbg_archive': 'gs://chromium-v8/v8-linux-dbg',
-    'linux_nosnap_rel_archive': 'gs://chromium-v8/v8-linux-nosnap-rel',
-    'linux_nosnap_dbg_archive': 'gs://chromium-v8/v8-linux-nosnap-dbg',
-    'linux_swarming_staging_archive':
-        'gs://chromium-v8/v8-linux-swarming-staging',
     'linux64_rel_archive': 'gs://chromium-v8/v8-linux64-rel',
-    'linux64_dbg_archive': 'gs://chromium-v8/v8-linux64-dbg',
-    'linux64_custom_snapshot_dbg_archive':
-        'gs://chromium-v8/v8-linux64-custom-snapshot-dbg',
     'mips_rel_archive': 'gs://chromium-v8/v8-mips-rel',
-    'mipsel_sim_rel_archive': 'gs://chromium-v8/v8-mipsel-sim-rel',
-    'mips64el_sim_rel_archive': 'gs://chromium-v8/v8-mips64el-sim-rel',
-    'win32_rel_archive': 'gs://chromium-v8/v8-win32-rel',
-    'win32_dbg_archive': 'gs://chromium-v8/v8-win32-dbg',
-    'v8_for_dart_archive': 'gs://chromium-v8/v8-for-dart-rel',
   }
 
   VERSION_FILE = 'include/v8-version.h'
@@ -378,12 +364,12 @@ class V8Api(recipe_api.RecipeApi):
 
   @property
   def should_upload_build(self):
-    return (self.bot_type == 'builder' and
-            not self.bot_config.get('slim_swarming_builder'))
+    return (self.bot_config.get('triggers_proxy') or
+            self.bot_config.get('should_upload_build'))
 
   @property
   def should_download_build(self):
-    return self.bot_type == 'tester'
+    return self.bot_type == 'tester' and not self.is_pure_swarming_tester
 
   @property
   def relative_path_to_d8(self):
