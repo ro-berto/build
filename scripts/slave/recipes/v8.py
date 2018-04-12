@@ -563,3 +563,10 @@ def GenTests(api):
           '--spec-path', '\'custom_vars\': {\'download_gcmole\': \'True\'}') +
       api.post_process(DropExpectation)
   )
+
+  # Test uploading coverage reports is done to experimental bucket.
+  yield (
+      api.v8.test('client.v8', 'V8 Linux64 - gcov coverage', 'experimental') +
+      api.runtime(is_luci=True, is_experimental=True) +
+      api.post_process(Filter('gsutil coverage report'))
+  )
