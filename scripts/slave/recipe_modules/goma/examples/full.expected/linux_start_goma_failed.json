@@ -73,10 +73,10 @@
       "restart"
     ],
     "env": {
-      "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -98,10 +98,10 @@
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
-      "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -130,10 +130,10 @@
       "stop"
     ],
     "env": {
-      "GOMACTL_CRASH_REPORT_ID_FILE": "build_data_dir/crash_report_id_file",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "build_data_dir/goma_stats_proto",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -161,14 +161,12 @@
       "/creds/service_accounts/service-account-goma-bigquery.json",
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
-      "--build-data-dir",
-      "build_data_dir",
       "--goma-stats-file",
-      "build_data_dir/goma_stats_proto",
+      "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
-      "build_data_dir/crash_report_id_file",
+      "[TMP_BASE]/crash_report_id",
       "--build-id",
       "1",
       "--buildbot-buildername",

@@ -168,10 +168,6 @@ class GomaApi(recipe_api.RecipeApi):
     assert self._goma_dir
     return self._goma_dir
 
-  @property
-  def build_data_dir(self):
-    return self.m.properties.get('build_data_dir')
-
   def _make_goma_cache_dir(self, goma_cache_dir):
     """Ensure goma_cache_dir exist. Make it if not exists."""
 
@@ -244,16 +240,10 @@ class GomaApi(recipe_api.RecipeApi):
       env = {}
 
     with self.m.step.nest('preprocess_for_goma') as nested_result:
-      if self.build_data_dir:
-        self._goma_ctl_env['GOMA_DUMP_STATS_FILE'] = (
-            self.m.path.join(self.build_data_dir, 'goma_stats_proto'))
-        self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'] = (
-            self.m.path.join(self.build_data_dir, 'crash_report_id_file'))
-      else:
-        self._goma_ctl_env['GOMA_DUMP_STATS_FILE'] = (
-            self.m.path['tmp_base'].join('goma_stats'))
-        self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'] = (
-            self.m.path['tmp_base'].join('crash_report_id'))
+      self._goma_ctl_env['GOMA_DUMP_STATS_FILE'] = (
+          self.m.path['tmp_base'].join('goma_stats'))
+      self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'] = (
+          self.m.path['tmp_base'].join('crash_report_id'))
 
       if not self._is_local:
         self._goma_ctl_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
@@ -425,11 +415,6 @@ class GomaApi(recipe_api.RecipeApi):
 
     if ninja_log_compiler:
       args.extend(['--ninja-log-compiler', ninja_log_compiler])
-
-    if self.build_data_dir:
-      args.extend([
-          '--build-data-dir', self.build_data_dir,
-      ])
 
     if self._goma_ctl_env.get('GOMA_DUMP_STATS_FILE'):
       args.extend([

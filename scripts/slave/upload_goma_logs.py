@@ -90,9 +90,6 @@ def main():
   parser.add_argument('--goma-crash-report-id-file',
                       metavar='FILENAME',
                       help='Filename that has a crash report id.')
-  parser.add_argument('--build-data-dir',
-                      metavar='DIR',
-                      help='Directory that has build data used by event_mon.')
 
   parser.add_argument('--json-status',
                       metavar='JSON',
@@ -191,9 +188,7 @@ def main():
                                    args.build_step_name,
                                    bqclient)
 
-  if args.build_data_dir:
-    # MakeGomaExitStatusCounter should be callbed before
-    # goma_utils.SendGomaStats, since SendGomaStats removes stats file.
+  if args.goma_stats_file:
     counter = goma_utils.MakeGomaExitStatusCounter(
         args.goma_stats_file,
         goma_crash_report=args.goma_crash_report_id_file,
@@ -203,9 +198,6 @@ def main():
         clobber=args.buildbot_clobber)
     if counter:
       tsmon_counters.append(counter)
-    goma_utils.SendGomaStats(args.goma_stats_file,
-                             args.goma_crash_report_id_file,
-                             args.build_data_dir)
 
   if not args.skip_sendgomatsmon:
     # In the case of goma_start is failed,
