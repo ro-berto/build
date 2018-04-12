@@ -3456,7 +3456,7 @@ in the test spec of the current builder.
 
 Delete all gcov counter files.
 
-&mdash; **def [is\_pure\_swarming\_tester](/scripts/slave/recipe_modules/v8/api.py#875)(self, tests):**
+&emsp; **@property**<br>&mdash; **def [is\_pure\_swarming\_tester](/scripts/slave/recipe_modules/v8/api.py#875)(self):**
 
 &emsp; **@property**<br>&mdash; **def [isolate\_targets](/scripts/slave/recipe_modules/v8/api.py#485)(self):**
 

@@ -872,10 +872,10 @@ class V8Api(recipe_api.RecipeApi):
   def create_tests(self):
     return [self.create_test(t) for t in self.bot_config.get('tests', [])]
 
-  def is_pure_swarming_tester(self, tests):
+  @property
+  def is_pure_swarming_tester(self):
     return (self.bot_type == 'tester' and
-            self.bot_config.get('enable_swarming', True) and
-            all(map(lambda x: x.uses_swarming, tests)))
+            self.bot_config.get('enable_swarming', True))
 
   def runtests(self, tests):
     if self.extra_flags:
@@ -971,7 +971,7 @@ class V8Api(recipe_api.RecipeApi):
 
     def is_bad(revision):
       with self.m.step.nest('Bisect ' + revision[:8]):
-        if not self.is_pure_swarming_tester([test]):
+        if not self.is_pure_swarming_tester:
           self.checkout(revision, update_presentation=False)
         if self.bot_type == 'builder_tester':
           self.runhooks()

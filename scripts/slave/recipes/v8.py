@@ -43,7 +43,7 @@ def RunSteps(api, set_gclient_var):
   tests = v8.create_tests()
   tests += v8.extra_tests_from_properties()
 
-  if v8.is_pure_swarming_tester(tests):
+  if v8.is_pure_swarming_tester:
     api.swarming_client.checkout()
 
     # Simulate a v8 update on slim swarming testers. The revision
