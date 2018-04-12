@@ -71,7 +71,7 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
   # all perf bots.
   if use_private_swarming_server:
     spec['swarming_server'] = 'https://chrome-swarming.appspot.com'
-    spec['swarming_service_account'] = 'chrome-perf-ci-builder'
+    spec['swarming_service_account'] = 'chrome-perf-buildbot'
 
   # TODO(crbug.com/818319): always set these private servers after we migrate
   # all perf bots.
@@ -79,7 +79,7 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
   # isolate server. (crbug.com/818319)
   if use_private_isolate_server: # pragma: no cover
     spec['isolate_server'] = 'chrome-isolated.appspot.com'
-    spec['isolate_service_account'] = 'chrome-perf-ci-builder'
+    spec['isolate_service_account'] = 'chrome-perf-buildbot'
   return spec
 
 
