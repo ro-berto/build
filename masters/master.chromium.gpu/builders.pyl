@@ -53,63 +53,6 @@
       "category": "0Windows",
     },
 
-    "GPU Mac Builder": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["mac_rel_builders"],
-      "builder_timeout_s": 10800,
-      "category": "1Mac",
-    },
-    "GPU Mac Builder (dbg)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["mac_dbg_builders"],
-      "builder_timeout_s": 3600,
-      "category": "1Mac",
-    },
-    "Mac Release (Intel)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      # It's crucial to merge build requests on the testers.
-      "mergeRequests": True,
-      "slave_pools": ["mac_rel_intel"],
-      "builder_timeout_s": 7200,
-      "category": "1Mac",
-    },
-    "Mac Debug (Intel)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      # It's crucial to merge build requests on the testers.
-      "mergeRequests": True,
-      "slave_pools": ["mac_dbg_intel"],
-      "builder_timeout_s": 7200,
-      "category": "1Mac",
-    },
-    "Mac Retina Release (AMD)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      # It's crucial to merge build requests on the testers.
-      "mergeRequests": True,
-      "slave_pools": ["mac_retina_rel_amd"],
-      "builder_timeout_s": 7200,
-      "category": "1Mac",
-    },
-    "Mac Retina Debug (AMD)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      # It's crucial to merge build requests on the testers.
-      "mergeRequests": True,
-      "slave_pools": ["mac_retina_dbg_amd"],
-      "builder_timeout_s": 7200,
-      "category": "1Mac",
-    },
-
     "GPU Linux Builder": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -196,57 +139,6 @@
         "version": "win7",
       },
       "slaves": ["vm91-m1"],
-    },
-    "mac_rel_builders": {
-      "slave_data": {
-        "bits": 64,
-        "os": "mac",
-        "version": "10.9",
-      },
-      "slaves": ["vm612-m1"],
-    },
-    "mac_dbg_builders": {
-      "slave_data": {
-        "bits": 64,
-        "os": "mac",
-        "version": "10.9",
-      },
-      "slaves": ["vm616-m1"],
-    },
-    "mac_rel_intel": {
-      "slave_data": {
-        "bits": 64,
-        "os": "mac",
-        "version": "10.9",
-      },
-      "slaves": ["vm75-m1"],
-    },
-    "mac_dbg_intel": {
-      "slave_data": {
-        "bits": 64,
-        "os": "mac",
-        "version": "10.9",
-      },
-      "slaves": ["vm76-m1"],
-    },
-    "mac_retina_rel_amd": {
-      "slave_data": {
-        "bits": 64,
-        "os": "mac",
-        "version": "10.9",
-      },
-      "slaves": ["vm79-m1"],
-    },
-    "mac_retina_dbg_amd": {
-      "slave_data": {
-        "bits": 64,
-        "os": "mac",
-        "version": "10.9",
-      },
-      # TODO(kbr): consider switching this to a VM and putting this
-      # Mac Mini in the swarming pool. Or is the Mini less expensive
-      # than a Mac VM?
-      "slaves": ["build180-m1"],
     },
     "linux_rel_builders": {
       "slave_data": {
