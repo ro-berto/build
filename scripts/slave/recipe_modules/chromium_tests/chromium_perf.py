@@ -143,9 +143,13 @@ def TestSpec(config_name, perf_id, platform, target_bits,
 
 
 def _AddIsolatedTestSpec(name, perf_id, platform, target_bits=64,
-                         parent_buildername=None):
+                         parent_buildername=None,
+                         use_private_swarming_server=False,
+                         use_private_isolate_server=False):
   spec = TestSpec('chromium_perf', perf_id, platform, target_bits,
-                  parent_buildername=parent_buildername)
+                  parent_buildername=parent_buildername,
+                  use_private_swarming_server=use_private_swarming_server,
+                  use_private_isolate_server=use_private_isolate_server)
   SPEC['builders'][name] = spec
 
 
@@ -241,4 +245,5 @@ _AddIsolatedTestSpec('Mac Air 10.11 Perf', 'chromium-rel-mac11-air', 'mac')
 _AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', '', 'mac')
 
 
-_AddIsolatedTestSpec('Linux Perf', 'linux-release', 'linux')
+_AddIsolatedTestSpec('Linux Perf', 'linux-release', 'linux',
+    use_private_swarming_server=True)
