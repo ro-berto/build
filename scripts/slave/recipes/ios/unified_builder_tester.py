@@ -7,19 +7,25 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
+  'recipe_engine/runtime',
+  'recipe_engine/step',
 ]
 
 def RunSteps(api):
   api.ios.checkout()
   api.ios.read_build_config()
   api.ios.build()
-  api.ios.upload()
+  if api.runtime.is_experimental:
+    result = api.step('Skip upload', [])
+    result.presentation.step_text = (
+        'Running in experimental mode, skipping upload.')
+  else:
+    api.ios.upload()
   api.ios.test_swarming()
 
 def GenTests(api):
-  yield (
-    api.test('basic')
-    + api.platform('mac', 64)
+  basic_common = (
+    api.platform('mac', 64)
     + api.properties(
       buildername='ios',
       buildnumber='0',
@@ -71,6 +77,18 @@ def GenTests(api):
         'bootstrap swarming.swarming.py --version',
         stdout=api.raw_io.output_text('1.2.3'),
     )
+  )
+
+  yield (
+    api.test('basic')
+    + basic_common
+    + api.runtime(is_luci=False, is_experimental=False)
+  )
+
+  yield (
+    api.test('basic_experimental')
+    + basic_common
+    + api.runtime(is_luci=True, is_experimental=True)
   )
 
   yield (

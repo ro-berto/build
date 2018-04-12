@@ -282,7 +282,7 @@ class iOSApi(recipe_api.RecipeApi):
     xcode_build_version = xcode_build_version.lower()
 
     # TODO(sergeyberezin): for LUCI migration, this must be a requested named
-    # cache. Make sure it exists, to avoid downloading Xcode on every build.
+    # cache. Make sure it exists, to avoid installing Xcode on every build.
     xcode_app_path = self.m.path['cache'].join(
         'xcode_ios_%s.app' % xcode_build_version)
     with self.m.step.nest('ensure xcode') as step_result:
