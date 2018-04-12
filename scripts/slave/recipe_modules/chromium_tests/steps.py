@@ -1733,7 +1733,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                perf_dashboard_id=None, io_timeout=None,
                waterfall_mastername=None, waterfall_buildername=None,
                merge=None, trigger_script=None, results_handler=None,
-               set_up=None, tear_down=None):
+               set_up=None, tear_down=None, only_retry_failed_tests=False):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name, dimensions, tags, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -1750,6 +1750,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._merge = merge
     self._trigger_script = trigger_script
     self._ignore_task_failure = ignore_task_failure
+    self._only_retry_failed_tests = only_retry_failed_tests
     self.results_handler = results_handler or JSONResultsHandler(
         ignore_task_failure=ignore_task_failure)
 
@@ -1767,11 +1768,15 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     return True
 
   def create_task(self, api, suffix, isolated_hash):
-    browser_config = api.chromium.c.build_config_fs.lower()
     args = self._args[:]
 
-    # TODO(nednguyen): only rerun the tests that failed for the "without patch"
-    # suffix.
+    # We've run into issues in the past with command lines hitting a character
+    # limit on windows. Do a sanity check, and only pass this list if we failed
+    # less than 100 tests.
+    if suffix == 'without patch' and self._only_retry_failed_tests and len(
+        self.failures(api, 'with patch')) < 100:
+      test_list = "::".join(self.failures(api, 'with patch'))
+      args.extend(['--isolated-script-test-filter', test_list])
 
     # For the time being, we assume all isolated_script_test are not idempotent
     # TODO(nednguyen): make this configurable in isolated_scripts's spec.
@@ -2004,6 +2009,8 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
     kwargs['results_url'] = bot_config.get('results-url')
     kwargs['waterfall_buildername'] = buildername
     kwargs['waterfall_mastername'] = mastername
+    kwargs['only_retry_failed_tests'] = spec.get(
+        'only_retry_failed_tests', False)
 
     return SwarmingIsolatedScriptTest(**kwargs)
 

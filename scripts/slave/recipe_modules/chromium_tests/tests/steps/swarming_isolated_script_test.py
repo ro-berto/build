@@ -25,6 +25,8 @@ DEPS = [
     'test_utils',
 ]
 
+from recipe_engine import post_process
+
 
 def RunSteps(api):
   api.chromium.set_build_properties({
@@ -51,16 +53,25 @@ def RunSteps(api):
       priority='lower',
       dimensions=api.properties.get('dimensions', {'gpu': '8086'}))
 
-  test.pre_run(api, '')
-  test.run(api, '')
-  test.post_run(api, '')
+  try:
+    test.pre_run(api, 'with patch')
+    test.run(api, 'with patch')
+    test.post_run(api, 'with patch')
 
-  api.step('details', [])
-  api.step.active_result.presentation.logs['details'] = [
-      'compile_targets: %r' % test.compile_targets(api),
-      'uses_local_devices: %r' % test.uses_local_devices,
-      'uses_isolate: %r' % test.uses_isolate,
-  ]
+    api.step('details', [])
+    api.step.active_result.presentation.logs['details'] = [
+        'compile_targets: %r' % test.compile_targets(api),
+        'uses_local_devices: %r' % test.uses_local_devices,
+        'uses_isolate: %r' % test.uses_isolate,
+    ]
+
+  finally:
+    if api.properties.get('run_without_patch'):
+      test._only_retry_failed_tests = True
+
+      test.pre_run(api, 'without patch')
+      test.run(api, 'without patch')
+      test.post_run(api, 'without patch')
 
 
 def GenTests(api):
@@ -77,6 +88,31 @@ def GenTests(api):
           git_revision='test_sha',
           version='test-version',
           got_revision_cp=123456)
+  )
+
+  yield (
+      api.test('without_patch_filter') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
+      api.properties(
+          buildnumber=123,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp=123456,
+          run_without_patch='a') +
+      api.override_step_data(
+          'base_unittests on Intel GPU on Linux (with patch)',
+          api.swarming.canned_summary_output(failure=True)
+          + api.test_utils.canned_isolated_script_output(
+              passing=False, swarming=True, benchmark_enabled=True,
+              isolated_script_passing=False,
+              shards=4, use_json_test_format=True),
+          retcode=1) +
+      api.post_process(post_process.Filter('[trigger] base_unittests on Intel GPU on Linux (without patch)'))
   )
 
   yield (
@@ -111,7 +147,7 @@ def GenTests(api):
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
-          'base_unittests on Intel GPU on Linux',
+          'base_unittests on Intel GPU on Linux (with patch)',
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
@@ -140,7 +176,7 @@ def GenTests(api):
           results_url='https://example/url',
           ignore_task_failure=True) +
       api.override_step_data(
-          'base_unittests on Intel GPU on Linux',
+          'base_unittests on Intel GPU on Linux (with patch)',
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=False, swarming=True,
@@ -165,7 +201,7 @@ def GenTests(api):
           results_url='https://example/url',
           ignore_task_failure=True) +
       api.override_step_data(
-          'base_unittests on Intel GPU on Linux',
+          'base_unittests on Intel GPU on Linux (with patch)',
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=False, swarming=True,
@@ -191,7 +227,7 @@ def GenTests(api):
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
-          'base_unittests on Intel GPU on Linux',
+          'base_unittests on Intel GPU on Linux (with patch)',
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
@@ -216,7 +252,7 @@ def GenTests(api):
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
-          'base_unittests on Intel GPU on Linux',
+          'base_unittests on Intel GPU on Linux (with patch)',
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
@@ -257,7 +293,8 @@ def GenTests(api):
           got_revision_cp=123456,
           perf_id='test-perf-id',
           results_url='https://example/url') +
-      api.override_step_data('base_unittests on Intel GPU on Linux', retcode=1)
+      api.override_step_data(
+          'base_unittests on Intel GPU on Linux (with patch)', retcode=1)
   )
 
   yield (
@@ -274,7 +311,7 @@ def GenTests(api):
           version='test-version',
           got_revision_cp=123456) +
       api.override_step_data(
-          'base_unittests on Intel GPU on Linux',
+          'base_unittests on Intel GPU on Linux (with patch)',
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
@@ -299,7 +336,7 @@ def GenTests(api):
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
-          'base_unittests on Intel GPU on Linux',
+          'base_unittests on Intel GPU on Linux (with patch)',
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
@@ -328,7 +365,7 @@ def GenTests(api):
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
-          'base_unittests on Intel GPU on Linux',
+          'base_unittests on Intel GPU on Linux (with patch)',
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
@@ -356,7 +393,7 @@ def GenTests(api):
           perf_dashboard_machine_group='ChromePerf',
           results_url='https://example/url') +
       api.override_step_data(
-          'base_unittests on Intel GPU on Linux',
+          'base_unittests on Intel GPU on Linux (with patch)',
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
@@ -386,7 +423,7 @@ def GenTests(api):
           perf_id='test-perf-id',
           results_url='https://example/url') +
       api.override_step_data(
-          'base_unittests on Intel GPU on Linux',
+          'base_unittests on Intel GPU on Linux (with patch)',
           api.swarming.canned_summary_output(2)
           + api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
