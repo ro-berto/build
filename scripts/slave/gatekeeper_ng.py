@@ -593,7 +593,9 @@ def generate_build_url(build):
 
   # Luci builds have a view_path.
   if 'view_path' in build['build']:
-    return 'https://ci.chromium.org%s' % build['build']['view_path']
+    return 'https://ci.chromium.org%s' % (
+      urllib.quote(build['build']['view_path'])
+    )
 
   return '%s/builders/%s/builds/%d' % (
       build['base_url'].rstrip('/'),
