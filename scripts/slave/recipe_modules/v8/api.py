@@ -360,7 +360,11 @@ class V8Api(recipe_api.RecipeApi):
 
   @property
   def bot_type(self):
-    return self.bot_config.get('bot_type', 'builder_tester')
+    if self.bot_config.get('triggers') or self.bot_config.get('triggers_proxy'):
+      return 'builder'
+    if self.bot_config.get('parent_buildername'):
+      return 'tester'
+    return 'builder_tester'
 
   @property
   def should_build(self):

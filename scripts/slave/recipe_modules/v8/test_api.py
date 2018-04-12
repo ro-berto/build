@@ -400,9 +400,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     parent_buildername = bot_config.get('parent_buildername')
     branch=self._get_test_branch_name(mastername, buildername)
 
-    if bot_config.get('bot_type') in ['builder', 'builder_tester']:
-      assert parent_buildername is None
-
     if mastername.startswith('tryserver'):
       properties_fn = self.m.properties.tryserver
     else:
