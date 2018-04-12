@@ -108,7 +108,7 @@
       "--goma-dir",
       "[CACHE]/goma_client",
       "--swarming-targets-file",
-      "bot_default\ncheck-static-initializers\nmjsunit\nmozilla\noptimize_for_size\nperf\ntest262\n",
+      "benchmarks\nbot_default\ncheck-static-initializers\nmjsunit\nmozilla\noptimize_for_size\nperf\ntest262\n",
       "//out/Release"
     ],
     "cwd": "[START_DIR]/v8",
@@ -119,6 +119,7 @@
     "name": "generate_build_files",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@benchmarks@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@bot_default@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@check-static-initializers@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@mjsunit@@@",
@@ -287,6 +288,7 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
+      "[START_DIR]/v8/out/Release/benchmarks.isolated.gen.json",
       "[START_DIR]/v8/out/Release/bot_default.isolated.gen.json",
       "[START_DIR]/v8/out/Release/check-static-initializers.isolated.gen.json",
       "[START_DIR]/v8/out/Release/mjsunit.isolated.gen.json",
@@ -298,6 +300,7 @@
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"benchmarks\": \"[dummy hash for benchmarks]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"check-static-initializers\": \"[dummy hash for check-static-initializers]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\", @@@",
@@ -320,7 +323,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"bot_default\": \"[dummy hash for bot_default]\", \"check-static-initializers\": \"[dummy hash for check-static-initializers]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"perf\": \"[dummy hash for perf]\", \"test262\": \"[dummy hash for test262]\"}",
+      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"check-static-initializers\": \"[dummy hash for check-static-initializers]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"perf\": \"[dummy hash for perf]\", \"test262\": \"[dummy hash for test262]\"}",
       "gs://chromium-v8/isolated/client.v8/V8 Linux64 - builder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "infra_step": true,
@@ -375,6 +378,7 @@
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
+            "benchmarks": "[dummy hash for benchmarks]",
             "bot_default": "[dummy hash for bot_default]",
             "check-static-initializers": "[dummy hash for check-static-initializers]",
             "mjsunit": "[dummy hash for mjsunit]",
@@ -396,6 +400,7 @@
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
+            "benchmarks": "[dummy hash for benchmarks]",
             "bot_default": "[dummy hash for bot_default]",
             "check-static-initializers": "[dummy hash for check-static-initializers]",
             "mjsunit": "[dummy hash for mjsunit]",
@@ -419,7 +424,7 @@
       "cr-buildbucket.appspot.com",
       "-service-account-json",
       "/creds/service_accounts/service-account-v8-bot.json",
-      "{\"bucket\": \"master.internal.client.v8\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_trigger_proxy\\\", \\\"changes\\\": [{\\\"author\\\": {\\\"email\\\": \\\"cool_dev1337@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}, {\\\"author\\\": {\\\"email\\\": \\\"hax@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}], \\\"properties\\\": {\\\"archive\\\": \\\"gs://chromium-v8/v8-linux64-rel\\\", \\\"parent_build_environment\\\": {\\\"gn_args\\\": \\\"target_cpu = \\\\\\\"x86\\\\\\\" use_goma = true\\\"}, \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"swarm_hashes\\\": {\\\"bot_default\\\": \\\"[dummy hash for bot_default]\\\", \\\"check-static-initializers\\\": \\\"[dummy hash for check-static-initializers]\\\", \\\"mjsunit\\\": \\\"[dummy hash for mjsunit]\\\", \\\"mozilla\\\": \\\"[dummy hash for mozilla]\\\", \\\"optimize_for_size\\\": \\\"[dummy hash for optimize_for_size]\\\", \\\"perf\\\": \\\"[dummy hash for perf]\\\", \\\"test262\\\": \\\"[dummy hash for test262]\\\"}}}\", \"tags\": [\"builder:v8_trigger_proxy\", \"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"master:internal.client.v8\", \"parent_buildername:V8 Linux64 - builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"master.internal.client.v8\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_trigger_proxy\\\", \\\"changes\\\": [{\\\"author\\\": {\\\"email\\\": \\\"cool_dev1337@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}, {\\\"author\\\": {\\\"email\\\": \\\"hax@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}], \\\"properties\\\": {\\\"archive\\\": \\\"gs://chromium-v8/v8-linux64-rel\\\", \\\"parent_build_environment\\\": {\\\"gn_args\\\": \\\"target_cpu = \\\\\\\"x86\\\\\\\" use_goma = true\\\"}, \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"swarm_hashes\\\": {\\\"benchmarks\\\": \\\"[dummy hash for benchmarks]\\\", \\\"bot_default\\\": \\\"[dummy hash for bot_default]\\\", \\\"check-static-initializers\\\": \\\"[dummy hash for check-static-initializers]\\\", \\\"mjsunit\\\": \\\"[dummy hash for mjsunit]\\\", \\\"mozilla\\\": \\\"[dummy hash for mozilla]\\\", \\\"optimize_for_size\\\": \\\"[dummy hash for optimize_for_size]\\\", \\\"perf\\\": \\\"[dummy hash for perf]\\\", \\\"test262\\\": \\\"[dummy hash for test262]\\\"}}}\", \"tags\": [\"builder:v8_trigger_proxy\", \"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"master:internal.client.v8\", \"parent_buildername:V8 Linux64 - builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
     "name": "trigger (2)",

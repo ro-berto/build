@@ -399,11 +399,13 @@ BUILDERS = {
           Test262Variants(2),
           Mozilla,
           MjsunitSPFrameAccess,
+          Benchmarks,
         ] + with_test_args(
             'noavx',
             ['--extra-flags', '--noenable-avx'],
             [V8Testing, Test262, Mozilla],
-        ) + with_extra_variants([V8Testing, Mozilla, Test262Variants]),
+        ) + with_extra_variants([
+          V8Testing, Mozilla, Test262Variants, Benchmarks]),
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'cpu': 'x86-64-avx2',
@@ -422,11 +424,13 @@ BUILDERS = {
           Test262Variants(5),
           Mozilla,
           MjsunitSPFrameAccess,
+          Benchmarks,
         ] + with_test_args(
             'noavx',
             ['--extra-flags', '--noenable-avx'],
             [V8Testing(2), Test262, Mozilla],
-        ) + with_extra_variants([V8Testing, Mozilla, Test262Variants(2)]),
+        ) + with_extra_variants([
+          V8Testing, Mozilla, Test262Variants(2), Benchmarks]),
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
           'cpu': 'x86-64-avx2',
@@ -2174,6 +2178,38 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_dbg_ng': {
+        'chromium_apply_config': [
+          'default_compiler', 'v8_ninja', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'slim_swarming_builder': True,
+        'triggers': [
+          'v8_linux64_dbg_ng_triggered',
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'v8_linux64_dbg_ng_triggered': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'parent_buildername': 'v8_linux64_dbg_ng',
+        'tests': [
+          V8Testing(3),
+          Test262,
+          Mozilla,
+          Benchmarks,
+          MjsunitSPFrameAccess,
+        ] + with_extra_variants(
+            [V8Testing(2), Test262Variants(3), Mozilla, Benchmarks]),
+        'testing': {'platform': 'linux'},
+        'swarming_dimensions': {
+          'cpu': 'x86-64-avx2',
+        },
       },
       'v8_linux64_gcc_compile_dbg': {
         'chromium_apply_config': [
