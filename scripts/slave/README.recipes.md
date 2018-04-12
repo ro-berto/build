@@ -315,7 +315,6 @@
   * [v8/auto_roll_push](#recipes-v8_auto_roll_push)
   * [v8/auto_roll_release_process](#recipes-v8_auto_roll_release_process)
   * [v8/auto_roll_v8_deps](#recipes-v8_auto_roll_v8_deps)
-  * [v8/auto_roll_v8rel](#recipes-v8_auto_roll_v8rel)
   * [v8/auto_tag](#recipes-v8_auto_tag) &mdash; This recipe checks if a version update on branch <B> is necessary, where 'version' refers to the contents of the v8 version file (part of the v8 sources).
   * [v8/infra_end_to_end](#recipes-v8_infra_end_to_end)
   * [v8/node_integration](#recipes-v8_node_integration) &mdash; Recipe to test v8/node.
@@ -5360,11 +5359,6 @@ Recipe for archiving officially tagged v8 builds.
 &mdash; **def [GetDEPS](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#63)(api, name, repo):**
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#104)(api):**
-### *recipes* / [v8/auto\_roll\_v8rel](/scripts/slave/recipes/v8/auto_roll_v8rel.py)
-
-[DEPS](/scripts/slave/recipes/v8/auto_roll_v8rel.py#5): [chromium](#recipe_modules-chromium), [v8](#recipe_modules-v8), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_v8rel.py#20)(api):**
 ### *recipes* / [v8/auto\_tag](/scripts/slave/recipes/v8/auto_tag.py)
 
 [DEPS](/scripts/slave/recipes/v8/auto_tag.py#21): [v8](#recipe_modules-v8), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
