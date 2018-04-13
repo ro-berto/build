@@ -746,7 +746,7 @@ class iOSApi(recipe_api.RecipeApi):
     tmp_dir = self.m.path.mkdtemp('isolate')
 
     for test in self.__config['tests']:
-      if test.get('shard size'):
+      if test.get('shard size') and 'skip' not in test:
         tasks += self.isolate_earlgrey_test(test, test['shard size'],
                                             tmp_dir, isolate_template)
       else:
