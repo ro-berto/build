@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'chromite',
   'chromium',
   'depot_tools/git',
   'goma',

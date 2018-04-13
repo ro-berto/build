@@ -409,9 +409,12 @@ class ChromiumApi(recipe_api.RecipeApi):
     else:
       goma_env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
 
+    optional_system_python = contextlib.contextmanager(
+        lambda: (x for x in [None]))()
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'compile' through 'cros chrome-sdk'
       kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper()
+      optional_system_python = self.m.chromite.with_system_python()
 
     if self.m.platform.is_linux and self.c.TARGET_CROS_BOARD:
       out_dir = 'out_%s' % self.c.TARGET_CROS_BOARD
@@ -461,13 +464,14 @@ class ChromiumApi(recipe_api.RecipeApi):
     if not use_goma_module:
       compile_exit_status = 1
       try:
-        with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
-          self._run_ninja(
-              ninja_command=command,
-              name=name or 'compile',
-              ninja_env=ninja_env,
-              ninja_confirm_noop=self.c.compile_py.ninja_confirm_noop,
-              **kwargs)
+        with optional_system_python:
+          with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
+            self._run_ninja(
+                ninja_command=command,
+                name=name or 'compile',
+                ninja_env=ninja_env,
+                ninja_confirm_noop=self.c.compile_py.ninja_confirm_noop,
+                **kwargs)
         compile_exit_status = 0
       except self.m.step.StepFailure as e:
         compile_exit_status = e.retcode
@@ -491,16 +495,17 @@ class ChromiumApi(recipe_api.RecipeApi):
       return
 
     try:
-      with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
-        self._run_ninja_with_goma(
-            ninja_command=command,
-            ninja_env=ninja_env,
-            name=name or 'compile',
-            goma_env=goma_env,
-            ninja_log_outdir=target_output_dir,
-            ninja_log_compiler=self.c.compile_py.compiler or 'goma',
-            ninja_confirm_noop=self.c.compile_py.ninja_confirm_noop,
-            **kwargs)
+      with optional_system_python:
+        with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
+          self._run_ninja_with_goma(
+              ninja_command=command,
+              ninja_env=ninja_env,
+              name=name or 'compile',
+              goma_env=goma_env,
+              ninja_log_outdir=target_output_dir,
+              ninja_log_compiler=self.c.compile_py.compiler or 'goma',
+              ninja_confirm_noop=self.c.compile_py.ninja_confirm_noop,
+              **kwargs)
     except self.m.step.StepFailure as e:
       # Handle failures caused by goma.
       step_result = self.m.step.active_result
@@ -852,11 +857,15 @@ class ChromiumApi(recipe_api.RecipeApi):
       # accordingly.
       runhooks_env.update(self.c.gyp_env.as_jsonish())
 
+    optional_system_python = contextlib.contextmanager(
+        lambda: (x for x in [None]))()
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'runhooks' through 'cros chrome-sdk'
       kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
-    with self.m.context(env=runhooks_env):
-      self.m.gclient.runhooks(**kwargs)
+      optional_system_python = self.m.chromite.with_system_python()
+    with optional_system_python:
+      with self.m.context(env=runhooks_env):
+        self.m.gclient.runhooks(**kwargs)
 
   # No cover because internal recipes use this.
   @_with_chromium_layout
@@ -994,9 +1003,12 @@ class ChromiumApi(recipe_api.RecipeApi):
       'args': args,
     }
 
+    optional_system_python = contextlib.contextmanager(
+        lambda: (x for x in [None]))()
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'runhooks' through 'cros chrome-sdk'
       step_kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
+      optional_system_python = self.m.chromite.with_system_python()
 
     # This runs with an almost-bare env being passed along, so we get a clean
     # environment without any GYP_DEFINES being present to cause confusion.
@@ -1018,11 +1030,12 @@ class ChromiumApi(recipe_api.RecipeApi):
       env['GYP_MSVS_VERSION'] = self.c.gyp_env.GYP_MSVS_VERSION
 
     step_kwargs.update(kwargs)
-    with self.m.context(
-        # TODO(phajdan.jr): get cwd from context, not kwargs.
-        cwd=kwargs.get('cwd', self.m.path['checkout']),
-        env=env):
-      self.m.python(**step_kwargs)
+    with optional_system_python:
+      with self.m.context(
+          # TODO(phajdan.jr): get cwd from context, not kwargs.
+          cwd=kwargs.get('cwd', self.m.path['checkout']),
+          env=env):
+        self.m.python(**step_kwargs)
 
     # Comes after self.m.python so the log appears in the correct step result.
     result = self.m.step.active_result

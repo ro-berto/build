@@ -60,9 +60,120 @@
   },
   {
     "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "system_python"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/python_bin"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "system_python.create_dir",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/python_bin/python"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "system_python.remove_link",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/python_bin/python2"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "system_python.remove_link (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "symlink",
+      "/usr/bin/python",
+      "[START_DIR]/python_bin/python"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "system_python.create_link",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "symlink",
+      "/usr/bin/python2",
+      "[START_DIR]/python_bin/python2"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "system_python.create_link (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/python_bin"
+      ]
     },
     "name": "preprocess_for_goma"
   },
@@ -81,6 +192,11 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/python_bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -111,6 +227,11 @@
       "GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/python_bin"
+      ]
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
@@ -139,6 +260,11 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/python_bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
@@ -173,6 +299,11 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/python_bin"
+      ]
+    },
     "name": "compile"
   },
   {
@@ -194,6 +325,11 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/python_bin"
+      ]
+    },
     "name": "compile confirm no-op",
     "stdout": "/path/to/tmp/"
   },
@@ -202,6 +338,11 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/python_bin"
+      ]
     },
     "name": "postprocess_for_goma"
   },
@@ -222,6 +363,11 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/python_bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
     "~followup_annotations": [
@@ -256,6 +402,11 @@
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/python_bin"
+      ]
+    },
     "name": "postprocess_for_goma.goma_stat",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -277,6 +428,11 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/python_bin"
+      ]
     },
     "name": "postprocess_for_goma.stop_goma",
     "~followup_annotations": [
@@ -324,6 +480,11 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/python_bin"
+      ]
+    },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -353,6 +514,11 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/python_bin"
+      ]
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",

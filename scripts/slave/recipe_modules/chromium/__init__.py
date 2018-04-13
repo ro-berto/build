@@ -9,6 +9,7 @@ DEPS = [
 
   'adb',
   'build',
+  'chromite',
   'commit_position',
   'goma',
 
