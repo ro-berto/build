@@ -7,13 +7,9 @@ from buildbot.scheduler import Periodic
 from buildbot.schedulers.basic import SingleBranchScheduler
 
 from master.factory import remote_run_factory
-from master.factory import annotator_factory
 
 import master_site_config
 ActiveMaster = master_site_config.ChromiumWebRTCFYI
-
-
-m_annotator = annotator_factory.AnnotatorFactory()
 
 
 def m_remote_run(recipe, **kwargs):
@@ -96,8 +92,7 @@ def Update(c):
     recipe = spec.get('recipe', 'chromium')
     builder_dict = {
       'name': spec['name'],
-      'factory': m_annotator.BaseFactory(recipe) if 'ios' in recipe else
-          m_remote_run(recipe),
+      'factory': m_remote_run(recipe),
       'category': spec['category'],
       'notify_on_missing': True,
     }

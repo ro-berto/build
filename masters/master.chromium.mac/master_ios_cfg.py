@@ -4,9 +4,18 @@
 
 from buildbot.schedulers.basic import SingleBranchScheduler
 
-from master.factory import annotator_factory
+from master.factory import remote_run_factory
 
-m_annotator = annotator_factory.AnnotatorFactory()
+import master_site_config
+ActiveMaster = master_site_config.ChromiumMac
+
+
+unified_builder_tester = remote_run_factory.RemoteRunFactory(
+  active_master=ActiveMaster,
+  repository='https://chromium.googlesource.com/chromium/tools/build.git',
+  recipe='ios/unified_builder_tester',
+  factory_properties={'path_config': 'kitchen'})
+
 
 def Update(config, active_master, c):
   c['schedulers'].extend([
@@ -32,9 +41,7 @@ def Update(config, active_master, c):
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory(
-            'ios/unified_builder_tester',
-            factory_properties=spec.get('factory_properties')),
+        'factory': unified_builder_tester,
         'notify_on_missing': True,
         'category': '3mac',
       } for spec in specs
