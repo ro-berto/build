@@ -193,7 +193,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
       "[START_DIR]/pdfium/out/debug_xfa_v8",
       "-j",
@@ -302,7 +302,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/pdfium/out/debug_xfa_v8",
       "--ninja-log-command-file",
-      "[\"ninja\", \"-C\", \"[START_DIR]/pdfium/out/debug_xfa_v8\", \"-j\", 20, \"pdfium_all\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/pdfium/out/debug_xfa_v8\", \"-j\", 20, \"pdfium_all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

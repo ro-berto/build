@@ -194,7 +194,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-C",
       "[START_DIR]\\angle\\out\\debug",
       "-j",
@@ -305,7 +305,7 @@
       "--ninja-log-outdir",
       "[START_DIR]\\angle\\out\\debug",
       "--ninja-log-command-file",
-      "[\"ninja\", \"-C\", \"[START_DIR]\\\\angle\\\\out\\\\debug\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-C\", \"[START_DIR]\\\\angle\\\\out\\\\debug\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",

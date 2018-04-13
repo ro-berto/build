@@ -147,7 +147,7 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
 
 def _BuildSteps(api, clang, out_dir):
   debug_path = api.path['checkout'].join('out', out_dir)
-  ninja_cmd = ['ninja', '-C', debug_path,
+  ninja_cmd = [api.depot_tools.ninja_path, '-C', debug_path,
                '-j', api.goma.recommended_goma_jobs, 'pdfium_all']
 
   api.goma.build_with_goma(

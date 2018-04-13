@@ -72,7 +72,7 @@ def _GNGenBuilds(api, target_cpu, msvc, rel, out_dir):
 
 def _BuildSteps(api, msvc, out_dir):
   debug_path = api.path['checkout'].join('out', out_dir)
-  ninja_cmd = ['ninja', '-C', debug_path,
+  ninja_cmd = [api.depot_tools.ninja_path, '-C', debug_path,
                '-j', api.goma.recommended_goma_jobs]
   api.goma.build_with_goma(
       name='compile with ninja',
