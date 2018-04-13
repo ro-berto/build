@@ -242,7 +242,8 @@ _AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'chromium-rel-win7-gpu-nvidia',
 _AddIsolatedTestSpec('Mac 10.12 Perf', 'chromium-rel-mac12', 'mac')
 _AddIsolatedTestSpec('Mac Pro 10.11 Perf', 'chromium-rel-mac11-pro', 'mac')
 _AddIsolatedTestSpec('Mac Air 10.11 Perf', 'chromium-rel-mac11-air', 'mac')
-_AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', '', 'mac')
+_AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', '', 'mac',
+                     use_private_swarming_server=True)
 
 
 _AddIsolatedTestSpec('Linux Perf', 'linux-release', 'linux',
