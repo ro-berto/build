@@ -72,7 +72,17 @@ def _merge_arg(args, flag, value):
     return args + [flag]
 
 
-def _merge_args_and_test_options(args, options):
+def _merge_args_and_test_options(test, args, options):
+  args = args[:]
+
+  if not any(
+      isinstance(test, test_class) for test_class in [
+          SwarmingGTestTest, LocalGTestTest]
+  ) and 'webkit_layout_tests' not in test.target_name:
+    # The args that are being merged by this function are only supported
+    # by gtest and webkit_layout_tests.
+    return args
+
   if options.test_filter:
     args = _merge_arg(args, '--gtest_filter', ':'.join(options.test_filter))
   if options.repeat_count and options.repeat_count > 1:
@@ -616,7 +626,7 @@ class LocalGTestTest(Test):
     is_android = api.chromium.c.TARGET_PLATFORM == 'android'
     is_fuchsia = api.chromium.c.TARGET_PLATFORM == 'fuchsia'
 
-    args = _merge_args_and_test_options(self._args, self.test_options)
+    args = _merge_args_and_test_options(self, self._args, self.test_options)
     args = _merge_failures_for_retry(args, self, api, suffix)
 
     gtest_results_file = api.test_utils.gtest_results(add_json_log=False)
@@ -1558,7 +1568,7 @@ class SwarmingGTestTest(SwarmingTest):
     # For local tests test_args are added inside api.chromium.runtest.
     args = self._args + api.chromium.c.runtests.test_args
 
-    args = _merge_args_and_test_options(args, self.test_options)
+    args = _merge_args_and_test_options(self, args, self.test_options)
     args = _merge_failures_for_retry(args, self, api, suffix)
     args.extend(api.chromium.c.runtests.swarming_extra_args)
 
@@ -1681,12 +1691,14 @@ class LocalIsolatedScriptTest(Test):
       return self._override_compile_targets
     return [self.target_name]
 
+  @Test.test_options.setter
+  def test_options(self, value):
+    self._test_options = value
+
   # TODO(nednguyen, kbr): figure out what to do with Android.
   # (crbug.com/533480)
   def run(self, api, suffix):
-    # Copy the list because run can be invoked multiple times and we modify
-    # the local copy.
-    args = self._args[:]
+    args = _merge_args_and_test_options(self, self._args, self.test_options)
 
     # TODO(nednguyen, kbr): define contract with the wrapper script to rerun
     # a subset of the tests. (crbug.com/533481)
@@ -1767,8 +1779,13 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
   def uses_isolate(self):
     return True
 
+  @Test.test_options.setter
+  def test_options(self, value):
+    self._test_options = value
+
   def create_task(self, api, suffix, isolated_hash):
-    args = self._args[:]
+
+    args = _merge_args_and_test_options(self, self._args, self.test_options)
 
     # We've run into issues in the past with command lines hitting a character
     # limit on windows. Do a sanity check, and only pass this list if we failed

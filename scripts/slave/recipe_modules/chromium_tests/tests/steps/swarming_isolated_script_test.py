@@ -40,8 +40,10 @@ def RunSteps(api):
   api.chromium_tests.configure_build(bot_config_object)
   api.chromium_tests.prepare_checkout(bot_config_object)
 
+  test_repeat_count = api.properties.get('repeat_count')
+  test_name = 'webkit_layout_tests' if test_repeat_count else 'base_unittests'
   test = api.chromium_tests.steps.SwarmingIsolatedScriptTest(
-      'base_unittests',
+      test_name,
       perf_id=api.properties.get('perf_id'),
       perf_dashboard_id='test-perf-dashboard-id',
       results_url=api.properties.get('results_url'),
@@ -52,6 +54,14 @@ def RunSteps(api):
       expiration=7200,
       priority='lower',
       dimensions=api.properties.get('dimensions', {'gpu': '8086'}))
+
+  if test_repeat_count:
+      test.test_options = api.chromium_tests.steps.TestOptions(
+          test_filter=api.properties.get('test_filter'),
+          repeat_count=test_repeat_count,
+          retry_limit=0,
+          run_disabled=bool(test_repeat_count)
+      )
 
   try:
     test.pre_run(api, 'with patch')
@@ -113,6 +123,23 @@ def GenTests(api):
               shards=4, use_json_test_format=True),
           retcode=1) +
       api.post_process(post_process.Filter('[trigger] base_unittests on Intel GPU on Linux (without patch)'))
+  )
+
+  yield (
+      api.test('customized_test_options') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
+      api.properties(
+          buildnumber=123,
+          swarm_hashes={
+            'webkit_layout_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp=123456,
+          test_filter=['test1', 'test2'],
+          repeat_count=20)
   )
 
   yield (
