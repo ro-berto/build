@@ -1,0 +1,42 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "[CLEANUP]/archive.zip",
+      "gs://chromium-v8/official/canary/v8-linux64-rel-3.4.3.1.zip"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/canary/v8-linux64-rel-3.4.3.1.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "{\"version\": \"3.4.3.1\"}",
+      "gs://chromium-v8/official/canary/v8-linux64-rel-latest.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload json",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/canary/v8-linux64-rel-latest.json@@@"
+    ]
+  }
+]

@@ -5369,7 +5369,7 @@ Example of using the Syzygy recipe module.
 
 Recipe for archiving officially tagged v8 builds.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/archive.py#102)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/archive.py#111)(api):**
 
 &mdash; **def [make\_archive](/scripts/slave/recipes/v8/archive.py#37)(api, branch, version, archive_type, step_suffix='', archive_suffix=''):**
 ### *recipes* / [v8/auto\_roll\_deps](/scripts/slave/recipes/v8/auto_roll_deps.py)

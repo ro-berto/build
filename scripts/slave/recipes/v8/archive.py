@@ -65,19 +65,30 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
     arch_name = '-%s' % api.chromium.c.TARGET_ARCH
   else:
     arch_name = ''
-  archive_name = (
-      'v8-%s%s%s%s-rel-%s.zip' %
+  archive_prefix = (
+      'v8-%s%s%s%s-rel' %
       (api.chromium.c.TARGET_PLATFORM, arch_name, api.chromium.c.TARGET_BITS,
-       archive_suffix, version)
+       archive_suffix)
   )
+  archive_name = '%s-%s.zip' % (archive_prefix, version)
   gs_path_suffix = branch if RELEASE_BRANCH_RE.match(branch) else 'canary'
+  gs_path = 'chromium-v8/official/%s' % gs_path_suffix
   api.gsutil.upload(
       zip_file,
-      'chromium-v8/official/%s' % gs_path_suffix,
+      gs_path,
       archive_name,
       args=['-a', 'public-read'],
       name='upload' + step_suffix,
   )
+
+  if gs_path_suffix == 'canary':
+    api.gsutil.upload(
+        api.json.input({'version': version}),
+        gs_path,
+        '%s-latest.json' % archive_prefix,
+        args=['-a', 'public-read'],
+        name='upload json' + step_suffix,
+    )
 
   # Upload first build for the latest milestone to a known location. We use
   # these binaries for running reference perf tests.
@@ -91,8 +102,6 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
         args=['-a', 'public-read'],
         name='update refbuild binaries' + step_suffix,
     )
-
-
 
   api.step('archive link' + step_suffix, cmd=None)
   api.step.active_result.presentation.links['download'] = (
@@ -210,9 +219,25 @@ def GenTests(api):
                              branch='3.4', revision='deadbeef') +
       api.v8.version_file(0, 'head') +
       api.override_step_data(
-        'git describe', api.raw_io.stream_output('3.4.3')) +
+          'git describe', api.raw_io.stream_output('3.4.3')) +
       api.post_process(Filter(
-        'gsutil update refbuild binaries',
-        'gsutil update refbuild binaries (libs)',
+          'gsutil update refbuild binaries',
+          'gsutil update refbuild binaries (libs)',
+      ))
+  )
+
+  # Test canary upload.
+  mastername = 'client.v8.official'
+  buildername = 'V8 Linux64'
+  yield (
+      api.test(api.v8.test_name(mastername, buildername, 'canary')) +
+      api.properties.generic(mastername=mastername, buildername=buildername,
+                             branch='3.4.3', revision='deadbeef') +
+      api.v8.version_file(1, 'head') +
+      api.override_step_data(
+          'git describe', api.raw_io.stream_output('3.4.3.1')) +
+      api.post_process(Filter(
+          'gsutil upload',
+          'gsutil upload json',
       ))
   )
