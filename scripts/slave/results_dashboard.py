@@ -486,11 +486,11 @@ def _SendResultsJson(url, results_json):
   except (urllib2.HTTPError, urllib2.URLError, httplib.HTTPException):
     error = traceback.format_exc()
 
-    if 'HTTPError: 400' in error:
+    if 'HTTPError: 400' in error or 'HTTP Error 400' in error:
       # If the remote app rejects the JSON, it's probably malformed,
       # so we don't want to retry it.
       raise SendResultsFatalException('Discarding JSON, error:\n%s' % error)
-    raise SendResultsRetryException()
+    raise SendResultsRetryException(error)
 
 def _Httplib2Request(url, data, oauth_token):
   data = urllib.urlencode({'data': data})
