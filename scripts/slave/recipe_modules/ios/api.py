@@ -226,6 +226,7 @@ class iOSApi(recipe_api.RecipeApi):
     self.__config.setdefault('additional_compile_targets', [])
     self.__config.setdefault('clobber', False)
     self.__config.setdefault('compiler flags', [])
+    self.__config.setdefault('device check', True)
     self.__config.setdefault('env', {})
     self.__config.setdefault('explain', False)
     self.__config.setdefault('gn_args', [])
@@ -843,7 +844,8 @@ class iOSApi(recipe_api.RecipeApi):
         swarming_task.dimensions['os'] = task['test'].get('host os') or 'Mac'
       elif self.platform == 'device':
         swarming_task.dimensions['os'] = 'iOS-%s' % str(task['test']['os'])
-        swarming_task.dimensions['device_status'] = 'available'
+        if self.__config.get('device check'):
+          swarming_task.dimensions['device_status'] = 'available'
         swarming_task.dimensions['device'] = self.PRODUCT_TYPES.get(
           task['test']['device type'])
         if not swarming_task.dimensions['device']:

@@ -627,3 +627,33 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
   )
+
+  yield (
+    api.test('device_check_false')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios',
+      buildnumber='0',
+      mastername='chromium.fyi',
+      bot_id='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode build version': '9a123',
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="arm64"',
+      ],
+      'device check': False,
+      'tests': [
+        {
+          'app': 'build-global xcode build version',
+          'device type': 'iPhone X',
+          'os': '10.0',
+        },
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output_text('1.2.3'),
+    )
+  )
