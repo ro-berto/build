@@ -43,6 +43,28 @@ PERF_BROWSER_TESTS_FILTER = [
   'WebRtcVideoQualityBrowserTests*',
 ]
 
+CONTENT_UNITTESTS_FILTER = [
+  # This filter is intentionally broad so we cover most things that could be
+  # affected by WebRTC changes in content/.
+  'Audio*',
+  'Canvas*',
+  'HTMLAudioElement*',
+  'HTMLVideoElement*',
+  'FilteringNetwork*',
+  'IpcNetwork*',
+  'P2PSocketHost*',
+  'PeerConnection*',
+  'PepperToVideo*',
+  'Media*',
+  'Rtc*',
+  'Stun*',
+  'UserMedia*',
+  'Video*',
+  'WebMedia*',
+  'WebRtc*',
+  'WebRTC*',
+]
+
 
 def BaseSpec(bot_type, chromium_apply_config, gclient_config, platform,
              target_bits, build_config='Release'):
@@ -178,7 +200,9 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
                   '--test-launcher-jobs=1',
                   '--test-launcher-print-test-stdio=always']))
 
-      tests.append(MakeTest('content_unittests'))
+      tests.append(MakeTest(
+          'content_unittests',
+          args=['--gtest_filter=%s' % ':'.join(CONTENT_UNITTESTS_FILTER)]))
       tests.append(MakeTest('jingle_unittests'))
       tests.append(MakeTest(
           'remoting_unittests', args=['--gtest_filter=Webrtc*']))
