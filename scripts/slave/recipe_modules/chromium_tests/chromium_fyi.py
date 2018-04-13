@@ -884,6 +884,25 @@ SPEC = {
         'os': 'Ubuntu-16.04',
       },
     },
+    'chromeos-amd64-generic-rel-vm-tests': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'chromeos', 'mb', 'ninja_confirm_noop',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_ARCH': 'intel',
+        'TARGET_BITS': 64,
+        'TARGET_CROS_BOARD': 'amd64-generic',
+        'TARGET_PLATFORM': 'chromeos',
+      },
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'linux',
+      },
+      'tests': {},
+    },
   },
 }
 
