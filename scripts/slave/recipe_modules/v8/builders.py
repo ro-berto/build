@@ -2896,9 +2896,12 @@ def AddBranchBuilder(name, build_config, bits, presubmit=False,
       tests.append(V8Testing(3))
     elif 'arm' in name:
       tests.append(V8Testing(2))
+    elif 'mips' in name:
+      tests.append(V8Testing(4))
     else:
       tests.append(V8Testing)
-    tests.extend([Test262, Mozilla])
+    if 'mips' not in name:
+      tests.extend([Test262, Mozilla])
   return {
     'chromium_apply_config': ['default_compiler', 'v8_ninja', 'goma', 'mb'],
     'v8_config_kwargs': {
@@ -2927,7 +2930,7 @@ for build_config, name_suffix in (('Release', ''), ('Debug', ' - debug')):
 for branch_name in ('stable branch', 'beta branch'):
   name = 'V8 mipsel - sim - %s' % branch_name
   BRANCH_BUILDERS[name] = AddBranchBuilder(
-      name, 'Release', 32, unittests_only=True)
+      name, 'Release', 32)
 
   name = 'V8 mips64el - sim - %s' % branch_name
   BRANCH_BUILDERS[name] = AddBranchBuilder(

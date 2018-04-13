@@ -109,7 +109,7 @@
       "--goma-dir",
       "[CACHE]/goma_client",
       "--swarming-targets-file",
-      "unittests\n",
+      "bot_default\n",
       "//out/Release"
     ],
     "cwd": "[START_DIR]/v8",
@@ -120,7 +120,7 @@
     "name": "generate_build_files",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@unittests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@bot_default@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@",
       "@@@STEP_LOG_LINE@captured_stdout@Writing \"\"\"\\@@@",
       "@@@STEP_LOG_LINE@captured_stdout@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
@@ -193,12 +193,12 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "[START_DIR]/v8/out/Release/unittests.isolated.gen.json"
+      "[START_DIR]/v8/out/Release/bot_default.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"unittests\": \"[dummy hash for unittests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -214,7 +214,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"unittests\": \"[dummy hash for unittests]\"}",
+      "{\"bot_default\": \"[dummy hash for bot_default]\"}",
       "gs://chromium-v8/isolated/client.v8.branches/V8 mipsel - sim - stable branch/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "infra_step": true,
@@ -236,9 +236,9 @@
       "--priority",
       "35",
       "--shards",
-      "1",
+      "4",
       "--task-name",
-      "Unittests/Ubuntu-14.04/[dummy has/V8 mipsel - sim - stable branch/571",
+      "Check/Ubuntu-14.04/[dummy has/V8 mipsel - sim - stable branch/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -269,11 +269,11 @@
       "--tag",
       "buildnumber:571",
       "--tag",
-      "data:[dummy hash for unittests]",
+      "data:[dummy hash for bot_default]",
       "--tag",
       "master:client.v8.branches",
       "--tag",
-      "name:Unittests",
+      "name:Check",
       "--tag",
       "project:v8",
       "--tag",
@@ -283,7 +283,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Unittests",
+      "stepname:Check",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -303,7 +303,7 @@
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
       "--isolated",
-      "[dummy hash for unittests]",
+      "[dummy hash for bot_default]",
       "--raw-cmd",
       "--",
       "tools/run-tests.py",
@@ -314,15 +314,15 @@
       "out",
       "--buildbot",
       "--timeout=200",
-      "--random-seed=1037194807",
-      "unittests",
+      "--random-seed=-976563914",
+      "bot_default",
       "--variants=more,dev",
       "--rerun-failures-count=2",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Unittests"
+    "name": "[trigger] Check"
   },
   {
     "allow_subannotations": true,
@@ -348,10 +348,10 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Unittests/Ubuntu-14.04/[dummy has/V8 mipsel - sim - stable branch/571\", \"tasks\": {\"Unittests/Ubuntu-14.04/[dummy has/V8 mipsel - sim - stable branch/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 mipsel - sim - stable branch/571\", \"tasks\": {\"Check/Ubuntu-14.04/[dummy has/V8 mipsel - sim - stable branch/571:4:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check/Ubuntu-14.04/[dummy has/V8 mipsel - sim - stable branch/571:4:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Check/Ubuntu-14.04/[dummy has/V8 mipsel - sim - stable branch/571:4:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"Check/Ubuntu-14.04/[dummy has/V8 mipsel - sim - stable branch/571:4:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}}}"
     ],
     "infra_step": true,
-    "name": "Unittests",
+    "name": "Check",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
