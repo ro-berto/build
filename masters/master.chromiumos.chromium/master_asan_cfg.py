@@ -27,7 +27,6 @@ def Builder(active_master, board):
 
 def Update(_config, active_master, c):
   builders = [
-      Builder(active_master, 'amd64-generic'),
   ]
 
   c['schedulers'] += [
