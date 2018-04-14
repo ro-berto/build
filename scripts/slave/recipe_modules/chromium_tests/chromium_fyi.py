@@ -455,7 +455,27 @@ SPEC = {
         chromium_win.SPEC['builders']['Win Builder (dbg)'],
         ['goma_canary']),
     'WinMSVC64 Goma Canary': chromium_apply_configs(
-        chromium_win.SPEC['builders']['WinMSVC64'],
+        {
+          'chromium_config': 'chromium',
+          'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+          'gclient_config': 'chromium',
+          'chromium_config_kwargs': {
+            'BUILD_CONFIG': 'Release',
+            'TARGET_PLATFORM': 'win',
+            'TARGET_BITS': 64,
+          },
+          'compile_targets': [
+            'all',
+          ],
+          'bot_type': 'builder',
+          'checkout_dir': 'win',
+          'testing': {
+            'platform': 'win',
+          },
+          # Workaround so that recipes doesn't add random build targets to our
+          # compile line. We want to build everything.
+          'add_tests_as_compile_targets': False,
+        },
         ['goma_canary']),
     'chromeos-amd64-generic-rel-goma-canary': chromium_apply_configs(
         chromium_chromiumos.SPEC['builders'][

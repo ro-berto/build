@@ -94,7 +94,7 @@ def GenTests(api):
       api.platform.name('win') +
       api.properties.generic(
           mastername='chromium.clang',
-          buildername='CrWinClang64(dbg)')
+          buildername='CrWinClangLLD')
   )
 
   yield (

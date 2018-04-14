@@ -19,7 +19,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/page_cycler': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'custom_vars': {'checkout_google_internal': 'True', 'checkout_src_internal': 'True', 'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
@@ -163,38 +163,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "ensure_goma"
-  },
-  {
-    "cmd": [
-      "cipd.bat",
-      "ensure",
-      "-root",
-      "[CACHE]\\goma_client",
-      "-ensure-file",
-      "infra_internal/goma/client/windows-amd64 release",
-      "-json-output",
-      "/path/to/tmp/json",
-      "-service-account-json",
-      "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    ],
-    "infra_step": true,
-    "name": "ensure_goma.ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/windows-amd64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -218,7 +186,8 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 target_arch=ia32 use_lld=1",
+      "LLVM_FORCE_HEAD_REVISION": "YES",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -232,11 +201,11 @@
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
-      "Debug_x64",
+      "Release",
       "--paths",
       "{\"checkout\": \"[START_DIR]\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"CrWinClang64(dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.clang\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"CrWinClangLLD\", \"buildnumber\": 571, \"mastername\": \"chromium.clang\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -263,35 +232,21 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\clang\\scripts\\update.py"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "name": "update_clang"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[START_DIR]\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "chromium.clang",
       "-b",
-      "CrWinClang64(dbg)",
+      "CrWinClangLLD",
       "--config-file",
       "[START_DIR]\\src\\tools\\mb\\mb_config.pyl",
-      "--goma-dir",
-      "[CACHE]\\goma_client",
-      "//out/Debug_x64"
+      "//out/Release"
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GOMA_USE_LOCAL": "false"
+      "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "generate_build_files"
   },
@@ -313,7 +268,8 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
+      "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "clang_revision",
     "~followup_annotations": [
@@ -321,96 +277,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]\\src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "name": "preprocess_for_goma"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[CACHE]\\goma\\CrWinClang64_dbg_"
-    ],
-    "cwd": "[START_DIR]\\src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
-      "restart"
-    ],
-    "cwd": "[START_DIR]\\src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\CrWinClang64_dbg_",
-      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
-    "infra_step": true,
-    "name": "preprocess_for_goma.start_goma",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:21.500000@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]\\resources\\cloudtail_utils.py",
-      "start",
-      "--cloudtail-path",
-      "cloudtail.exe",
-      "--cloudtail-service-account-json",
-      "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json",
-      "--pid-file",
-      "[TMP_BASE]\\cloudtail.pid"
-    ],
-    "cwd": "[START_DIR]\\src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -427,16 +293,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\src\\out\\Debug_x64",
-      "-j",
-      "20",
+      "[START_DIR]\\src\\out\\Release",
       "base_unittests"
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GOMA_USE_LOCAL": "false"
+      "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "compile"
   },
@@ -446,9 +310,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\src\\out\\Debug_x64",
-      "-j",
-      "20",
+      "[START_DIR]\\src\\out\\Release",
       "base_unittests",
       "-d",
       "explain",
@@ -458,103 +320,10 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GOMA_USE_LOCAL": "false"
+      "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "compile confirm no-op",
     "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [],
-    "cwd": "[START_DIR]\\src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "name": "postprocess_for_goma"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
-      "jsonstatus",
-      "[TMP_BASE]\\goma_jsonstatus.json"
-    ],
-    "cwd": "[START_DIR]\\src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
-    "name": "postprocess_for_goma.goma_jsonstatus",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
-      "stat"
-    ],
-    "cwd": "[START_DIR]\\src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
-    "name": "postprocess_for_goma.goma_stat",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
-      "stop"
-    ],
-    "cwd": "[START_DIR]\\src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
-    },
-    "name": "postprocess_for_goma.stop_goma",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
   },
   {
     "cmd": [
@@ -565,79 +334,23 @@
       "--",
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
-      "--upload-compiler-proxy-info",
-      "--log-url-json-file",
-      "/path/to/tmp/json",
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "--bigquery-service-account-json",
-      "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
-      "--json-status",
-      "[TMP_BASE]\\goma_jsonstatus.json",
+      "--skip-sendgomatsmon",
       "--ninja-log-outdir",
-      "[START_DIR]\\src\\out\\Debug_x64",
+      "[START_DIR]\\src\\out\\Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]\\\\src\\\\out\\\\Debug_x64\", \"-j\", 20, \"base_unittests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]\\\\src\\\\out\\\\Release\", \"base_unittests\"]",
       "--build-exit-status",
       "0",
-      "--build-step-name",
-      "compile",
       "--ninja-log-compiler",
-      "goma-clang",
-      "--goma-stats-file",
-      "[TMP_BASE]\\goma_stats",
-      "--goma-counterz-file",
-      "[TMP_BASE]\\goma_counterz",
-      "--goma-crash-report-id-file",
-      "[TMP_BASE]\\crash_report_id",
-      "--buildbot-buildername",
-      "CrWinClang64(dbg)",
-      "--buildbot-mastername",
-      "chromium.clang",
-      "--buildbot-slavename",
-      "test_bot"
+      "clang"
     ],
-    "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
-    "name": "postprocess_for_goma.upload_log",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compiler_proxy_log\": \"https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"ninja_log\": \"https://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@compiler_proxy_log@https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@",
-      "@@@STEP_LINK@ninja_log@https://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]\\resources\\cloudtail_utils.py",
-      "stop",
-      "--killed-pid-file",
-      "[TMP_BASE]\\cloudtail.pid"
-    ],
-    "cwd": "[START_DIR]\\src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "upload_ninja_log"
   },
   {
     "name": "$result",

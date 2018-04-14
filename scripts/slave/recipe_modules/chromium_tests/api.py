@@ -342,10 +342,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if isolated_targets:
         self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
 
-      if self.m.chromium.c.project_generator.tool == 'mb':
-        if bot_config.get('chromium_config') == 'chromium_win_clang':
-          self.m.chromium.update_clang()
-
       try:
         name_suffix = ''
         if self.m.tryserver.is_tryserver:

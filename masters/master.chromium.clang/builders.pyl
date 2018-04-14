@@ -198,31 +198,6 @@
       "category": "3ToTWindows",
     },
 
-    "CrWinClang": {
-      "mixins": ["win7"],
-      "bot": "build29-m1",
-      "category": "4Windows",
-    },
-    "CrWinClang(dbg)": {
-      "bot_pool": "build60-m1",
-      "category": "4Windows",
-    },
-    "CrWinClang(shared)": {
-      "bot_pool": "build60-m1",
-      "category": "4Windows",
-    },
-    "CrWinClang64(dbg)": {
-      "bot_pool": "build70-m1",
-      "category": "4Windows",
-    },
-    "CrWinClang64": {
-      "bot_pool": "build70-m1",
-      "category": "4Windows",
-    },
-    "CrWinClang64(dll)": {
-      "bot_pool": "build70-m1",
-      "category": "4Windows",
-    },
     "linux-win_cross-rel": {
       "mixins": ["trusty"],
       "bot": "slave169-c1",
@@ -274,16 +249,6 @@
       "os": "win",
       "version": "win7",
       "bots": "build27-m1",
-    },
-    "build60-m1": {
-      "os": "win",
-      "version": "win7",
-      "bots": "build60-m1",
-    },
-    "build70-m1": {
-      "os": "win",
-      "version": "win7",
-      "bots": "build70-m1",
     },
     "build98-m1": {
       "os": "mac",
