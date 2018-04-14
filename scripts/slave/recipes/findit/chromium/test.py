@@ -1379,3 +1379,59 @@ def GenTests(api):
               flaky_test_names=['Test.One'],
               failed_test_names=['Test.Two']))
   )
+
+  yield (
+      api.test('webkit_layout_tests') +
+      props({'webkit_layout_tests': [
+                'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js']},
+            'mac', 'Mac10.13 Tests') +
+      api.override_step_data(
+          'test r0.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.13 Tests': {
+                  'isolated_scripts': [
+                    {
+                      'isolate_name': 'webkit_layout_tests',
+                      'name': 'webkit_layout_tests',
+                      'swarming': {
+                        'can_use_on_swarming_builders': True,
+                        'shards': 1,
+                      },
+                    },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+        'test r0.webkit_layout_tests (r0)',
+        api.swarming.canned_summary_output(failure=True) +
+        api.test_utils.simulated_isolated_script_output(
+              failed_test_names=['fast/Test/One.html'],
+              passed_test_names=['fast/Test/Two.html']),
+              path_delimiter='/'
+      ) +
+      api.override_step_data(
+          'test r1.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.13 Tests': {
+                  'isolated_scripts': [
+                    {
+                      'isolate_name': 'webkit_layout_tests',
+                      'name': 'webkit_layout_tests',
+                      'swarming': {
+                        'can_use_on_swarming_builders': True,
+                        'shards': 1,
+                      },
+                    },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r1.webkit_layout_tests (r1)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.simulated_isolated_script_output(
+              failed_test_names=['fast/Test/One.html', 'fast/Test/Two.html'],
+              passed_test_names=['dummy/Three.js'],
+              path_delimiter='/'))
+  )

@@ -507,6 +507,7 @@
       "@@@STEP_LOG_LINE@details@compile_targets: ['webkit_layout_tests']@@@",
       "@@@STEP_LOG_LINE@details@uses_local_devices: False@@@",
       "@@@STEP_LOG_LINE@details@uses_isolate: True@@@",
+      "@@@STEP_LOG_LINE@details@pass_fail_counts: {'test_common.Test1': {'pass_count': 1, 'fail_count': 2}, 'test1.Test1': {'pass_count': 1, 'fail_count': 0}, 'test1.Test2': {'pass_count': 1, 'fail_count': 0}, 'test1.Test3': {'pass_count': 0, 'fail_count': 0}}@@@",
       "@@@STEP_LOG_END@details@@@"
     ]
   },

@@ -40,6 +40,11 @@ def RunSteps(api):
       'uses_isolate: %r' % test.uses_isolate,
   ]
 
+  if api.properties.get('log_pass_fail_counts'):
+    api.step.active_result.presentation.logs['details'].append(
+      'pass_fail_counts: %r' % test.pass_fail_counts('')
+    )
+
 
 def GenTests(api):
   yield (
@@ -57,6 +62,15 @@ def GenTests(api):
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           override_compile_targets=['base_unittests_run'])
+  )
+
+  yield (
+      api.test('log_pass_fail_counts') +
+      api.properties(
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          log_pass_fail_counts=True)
   )
 
   yield (

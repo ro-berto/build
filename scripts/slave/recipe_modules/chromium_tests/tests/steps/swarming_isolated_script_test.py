@@ -75,6 +75,11 @@ def RunSteps(api):
         'uses_isolate: %r' % test.uses_isolate,
     ]
 
+    if test_repeat_count:
+        api.step.active_result.presentation.logs['details'].append(
+            'pass_fail_counts: %r' % test.pass_fail_counts('with patch')
+        )
+
   finally:
     if api.properties.get('run_without_patch'):
       test._only_retry_failed_tests = True

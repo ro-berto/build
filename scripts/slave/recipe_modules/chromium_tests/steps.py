@@ -72,17 +72,17 @@ def _merge_arg(args, flag, value):
     return args + [flag]
 
 
-def _merge_args_and_test_options(test, args, options):
+def _merge_args_and_test_options(test, args):
   args = args[:]
 
-  if not any(
-      isinstance(test, test_class) for test_class in [
-          SwarmingGTestTest, LocalGTestTest]
-  ) and 'webkit_layout_tests' not in test.target_name:
+  if not (isinstance(test, (SwarmingGTestTest, LocalGTestTest)) or (isinstance(
+              test, (SwarmingIsolatedScriptTest, LocalIsolatedScriptTest)) and
+              'webkit_layout_tests' in test.target_name)):
     # The args that are being merged by this function are only supported
     # by gtest and webkit_layout_tests.
     return args
 
+  options = test.test_options
   if options.test_filter:
     args = _merge_arg(args, '--gtest_filter', ':'.join(options.test_filter))
   if options.repeat_count and options.repeat_count > 1:
@@ -609,7 +609,7 @@ class LocalGTestTest(Test):
 
   @property
   def uses_local_devices(self):
-    return True # pragma: no cover
+    return True  # pragma: no cover
 
   def isolate_target(self, _api):  # pragma: no cover
     if self._override_isolate_target:
@@ -626,7 +626,7 @@ class LocalGTestTest(Test):
     is_android = api.chromium.c.TARGET_PLATFORM == 'android'
     is_fuchsia = api.chromium.c.TARGET_PLATFORM == 'fuchsia'
 
-    args = _merge_args_and_test_options(self, self._args, self.test_options)
+    args = _merge_args_and_test_options(self, self._args)
     args = _merge_failures_for_retry(args, self, api, suffix)
 
     gtest_results_file = api.test_utils.gtest_results(add_json_log=False)
@@ -1568,7 +1568,7 @@ class SwarmingGTestTest(SwarmingTest):
     # For local tests test_args are added inside api.chromium.runtest.
     args = self._args + api.chromium.c.runtests.test_args
 
-    args = _merge_args_and_test_options(self, args, self.test_options)
+    args = _merge_args_and_test_options(self, args)
     args = _merge_failures_for_retry(args, self, api, suffix)
     args.extend(api.chromium.c.runtests.swarming_extra_args)
 
@@ -1662,6 +1662,7 @@ class LocalIsolatedScriptTest(Test):
     self._set_up = set_up
     self._tear_down = tear_down
     self.results_handler = results_handler or JSONResultsHandler()
+    self._test_results = {}
 
   @property
   def set_up(self):
@@ -1691,6 +1692,10 @@ class LocalIsolatedScriptTest(Test):
       return self._override_compile_targets
     return [self.target_name]
 
+  def pass_fail_counts(self, suffix):
+    if suffix in self._test_results:
+      return self._test_results[suffix].pass_fail_counts
+
   @Test.test_options.setter
   def test_options(self, value):
     self._test_options = value
@@ -1698,7 +1703,7 @@ class LocalIsolatedScriptTest(Test):
   # TODO(nednguyen, kbr): figure out what to do with Android.
   # (crbug.com/533480)
   def run(self, api, suffix):
-    args = _merge_args_and_test_options(self, self._args, self.test_options)
+    args = _merge_args_and_test_options(self, self._args)
 
     # TODO(nednguyen, kbr): define contract with the wrapper script to rerun
     # a subset of the tests. (crbug.com/533481)
@@ -1725,6 +1730,11 @@ class LocalIsolatedScriptTest(Test):
       presentation = self._test_runs[suffix].presentation
 
       valid, failures = self.results_handler.validate_results(api, results)
+
+      self._test_results[suffix] = (
+          api.test_utils.create_results_from_json_if_needed(
+              results) if valid else {})
+
       self.results_handler.render_results(api, results, presentation)
 
       if api.step.active_result.retcode == 0 and not valid:
@@ -1765,6 +1775,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._only_retry_failed_tests = only_retry_failed_tests
     self.results_handler = results_handler or JSONResultsHandler(
         ignore_task_failure=ignore_task_failure)
+    self._test_results = {}
 
   @property
   def target_name(self):
@@ -1785,7 +1796,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
   def create_task(self, api, suffix, isolated_hash):
 
-    args = _merge_args_and_test_options(self, self._args, self.test_options)
+    args = _merge_args_and_test_options(self, self._args)
 
     # We've run into issues in the past with command lines hitting a character
     # limit on windows. Do a sanity check, and only pass this list if we failed
@@ -1803,6 +1814,10 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         isolated_hash=isolated_hash, shards=self._shards, idempotent=False,
         merge=self._merge, trigger_script=self._trigger_script,
         build_properties=api.chromium.build_properties, extra_args=args)
+
+  def pass_fail_counts(self, suffix):
+    if suffix in self._test_results:
+      return self._test_results[suffix].pass_fail_counts
 
   def validate_task_results(self, api, step_result):
     # If we didn't get a step_result object at all, we can safely
@@ -1845,6 +1860,12 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       super(SwarmingIsolatedScriptTest, self).post_run(api, suffix)
     finally:
       results = self._isolated_script_results
+
+      valid = self._results.get(suffix, {}).get('valid')
+      self._test_results[suffix] = (
+          api.test_utils.create_results_from_json_if_needed(
+              results) if valid else {})
+
       if results and self._upload_test_results:
         self.results_handler.upload_results(
             api, results, self._step_name(suffix), suffix)

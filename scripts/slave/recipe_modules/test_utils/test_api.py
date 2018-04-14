@@ -323,3 +323,58 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
 
     return self.raw_gtest_output(
         canned_jsonish, 1 if failed_test_names else 0)
+
+  def simulated_isolated_script_output(
+      self, failed_test_names=(), passed_test_names=(),
+      flaky_test_names=(), path_delimiter='.'):
+
+    flat_tests = {}
+    for test_name in failed_test_names:
+      flat_tests[test_name] = {
+        'expected': 'PASS',
+        'actual': 'FAIL',
+        'is_unexpected': True,
+      }
+    for test_name in passed_test_names:
+      flat_tests[test_name] = {
+        'expected': 'PASS',
+        'actual': 'PASS'
+      }
+
+    for test_name in flaky_test_names:
+      flat_tests[test_name] = {
+        'expected': 'PASS',
+        'actual': 'FAIL PASS'
+      }
+
+    tests = {}
+    def convert_flat_test_to_trie(test_name_parts, test_result, trie_test):
+      if len(test_name_parts) == 1:
+        trie_test[test_name_parts[0]] = test_result
+      else:
+        trie_test[test_name_parts[0]] = trie_test.get(test_name_parts[0]) or {}
+        convert_flat_test_to_trie(
+          test_name_parts[1:], test_result, trie_test[test_name_parts[0]])
+
+    for test_name, test_result in flat_tests.iteritems():
+      parts = test_name.split(path_delimiter)
+      convert_flat_test_to_trie(
+        parts, test_result, tests)
+
+    canned_jsonish = {
+        'tests': tests,
+        'interrupted': False,
+        'path_delimiter': path_delimiter,
+        'version': 3,
+    }
+
+    jsonish_summary = {
+        'shards': [canned_jsonish],
+        'failure': bool(failed_test_names),
+        'internal_failure': False,
+        'exit_code': 1 if failed_test_names else 0,
+    }
+    files_dict = {'summary.json': json.dumps(jsonish_summary)}
+    retcode = 1 if failed_test_names else 0
+    return (self.m.raw_io.output_dir(files_dict) +
+            self.m.json.output(canned_jsonish, retcode))

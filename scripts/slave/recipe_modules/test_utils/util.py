@@ -34,6 +34,8 @@ class TestResults(object):
     self.skipped = {}
     self.unknown = {}
 
+    self.pass_fail_counts = {}
+
     # TODO(dpranke): https://crbug.com/357866 - we should simplify the handling
     # of both the return code and parsing the actual results.
 
@@ -113,8 +115,13 @@ class TestResults(object):
       last_result = actual_results[-1]
       expected_results = result['expected'].split()
 
-      if (len(actual_results) > 1 and
-          (last_result in expected_results or last_result in passing_statuses)):
+      # Checks len(set(actial_results)) to accommodate repeat case: if repeat,
+      # test will run n iterations as told and not stop when test passes.
+      distinct_results = set(actual_results)
+      results_inconsistent = len(distinct_results) > 1
+      if (results_inconsistent and
+          any(result in (expected_results + list(passing_statuses))
+          for result in distinct_results)):
         key += 'flakes'
       elif last_result in passing_statuses:
         key += 'passes'
@@ -130,6 +137,20 @@ class TestResults(object):
         # Unknown test state was found.
         key = 'unknown'
       getattr(self, key)[test] = data
+
+      # Goes through actual_results to get pass_fail_counts for each test.
+      self.pass_fail_counts.setdefault(
+          test, {'pass_count': 0, 'fail_count': 0})
+      for actual_result in actual_results:
+        if (actual_result in failing_statuses and
+            actual_result not in expected_results):
+          # Only considers an unexpected failure as failure.
+          self.pass_fail_counts[test]['fail_count'] += 1
+        elif actual_result not in skipping_statuses:
+          # Considers passing runs (expected or unexpected) and expected failing
+          # runs as pass.
+          # Skipped tests are not counted.
+          self.pass_fail_counts[test]['pass_count'] += 1
 
   def add_result(self, name, expected, actual=None):
     """Adds a test result to a 'json test results' compatible object.
