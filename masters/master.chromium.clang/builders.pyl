@@ -170,19 +170,22 @@
       "no_output_timeout_s": 24000,
     },
     "CrWinAsan": {
-      "bot_pool": "build4-m1",
+      "mixins": ["win7"],
+      "bot": "build29-m1",
       "category": "3ToTWindows",
     },
     "CrWinAsanCov": {
-      "bot_pool": "build4-m1",
-      "category": "3ToTWindows",
-    },
-    "CrWinClangLLD": {
-      "bot_pool": "build4-m1",
+      "mixins": ["win7"],
+      "bot": "build4-m1",
       "category": "3ToTWindows",
     },
     "CrWinAsan(dll)": {
       "bot_pool": "build27-m1",
+      "category": "3ToTWindows",
+    },
+    "CrWinClangLLD": {
+      "mixins": ["win7"],
+      "bot": "build60-m1",
       "category": "3ToTWindows",
     },
     "CrWinClangLLD64": {
@@ -190,11 +193,13 @@
       "category": "3ToTWindows",
     },
     "CrWinClngLLDdbg": {
-      "bot_pool": "build154-m1",
+      "mixins": ["win7"],
+      "bot": "build70-m1",
       "category": "3ToTWindows",
     },
     "CrWinClngLLD64dbg": {
-      "bot_pool": "build154-m1",
+      "mixins": ["win7"],
+      "bot": "build154-m1",
       "category": "3ToTWindows",
     },
 
@@ -240,11 +245,6 @@
   },
 
   "bot_pools": {
-    "build4-m1": {
-      "os": "win",
-      "version": "win7",
-      "bots": "build4-m1",
-    },
     "build27-m1": {
       "os": "win",
       "version": "win7",
@@ -269,11 +269,6 @@
       "os": "win",
       "version": "win7",
       "bots": "build130-m1",
-    },
-    "build154-m1": {
-      "os": "win",
-      "version": "win7",
-      "bots": "build154-m1",
     },
     "build155-m1": {
       "os": "mac",
