@@ -92,7 +92,7 @@ def blink_merged(c):  # pragma: no cover
   c.solutions[0].url = \
       'https://chromium.googlesource.com/playground/chromium-blink-merge.git'
 
-@CONFIG_CTX(includes=['chrome_internal'])
+@CONFIG_CTX(includes=['chromium'])
 def ios(c):
   c.target_os.add('ios')
 
