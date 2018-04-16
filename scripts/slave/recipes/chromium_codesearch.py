@@ -100,6 +100,18 @@ SPEC = freeze({
       'gen_repo_out_dir': 'out/chromium-android',
       'corpus': 'chromium-android',
     },
+    'codesearch-gen-chromium-win': {
+      'gclient_config': 'chromium',
+      'compile_targets': [
+        'all',
+      ],
+      'package_filename': 'chromium-win-src',
+      'platform': 'win',
+      # Don't push generated files to git until we've verified their contents.
+      'sync_generated_files': False,
+      'gen_repo_branch': 'win',
+      'corpus': 'chromium-win',
+    },
   },
 })
 
