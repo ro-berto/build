@@ -241,7 +241,6 @@ ENABLED_MASTERS = [
     'chromium.fyi',
     'chromium.goma',
     'chromium.gpu',
-    'chromium.gpu.fyi',
     'chromium.infra',
     'chromium.infra.cron',
     'chromium.linux',
