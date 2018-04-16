@@ -122,7 +122,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'build_gs_archive': 'linux_rel_archive',
         # TODO(machenbach): Get presubmit on swarming. Currently this builder
         # needs to upload a legacy build because of presubmit. It currently
         # uploads anyways because of the triggers_proxy specification.
@@ -185,7 +184,6 @@ BUILDERS = {
         },
         'enable_swarming': False,
         'parent_buildername': 'V8 Linux - builder',
-        'build_gs_archive': 'linux_rel_archive',
         'tests': [Presubmit],
         'testing': {'platform': 'linux'},
       },
@@ -340,7 +338,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'build_gs_archive': 'linux64_rel_archive',
         'testing': {'platform': 'linux'},
         'track_build_dependencies': True,
         'binary_size_tracking': {
@@ -1474,7 +1471,6 @@ BUILDERS = {
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'build_gs_archive': 'arm_rel_archive',
         'binary_size_tracking': {
           'path_pieces_list': [['d8']],
           'category': 'linux_arm32'
@@ -1508,7 +1504,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
           'TARGET_PLATFORM': 'android',
         },
-        'build_gs_archive': 'android_arm_rel_archive',
         'binary_size_tracking': {
           'path_pieces_list': [['d8']],
           'category': 'android_arm32'
@@ -1645,7 +1640,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
           'TARGET_PLATFORM': 'android',
         },
-        'build_gs_archive': 'android_arm64_rel_archive',
         'binary_size_tracking': {
           'path_pieces_list': [['d8']],
           'category': 'android_arm64'
@@ -1708,7 +1702,6 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'enable_swarming': False,
-        'build_gs_archive': 'mips_rel_archive',
         'should_upload_build': True,
         'testing': {'platform': 'linux'},
         'triggers': [
@@ -1726,7 +1719,6 @@ BUILDERS = {
         },
         'enable_swarming': False,
         'parent_buildername': 'V8 Mips - builder',
-        'build_gs_archive': 'mips_rel_archive',
         'tests': [V8Testing],
         'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},
@@ -1741,7 +1733,6 @@ BUILDERS = {
         },
         'enable_swarming': False,
         'parent_buildername': 'V8 Mips - builder',
-        'build_gs_archive': 'mips_rel_archive',
         'tests': [V8Testing],
         'variants': V8NoExhaustiveVariants,
         'testing': {'platform': 'linux'},

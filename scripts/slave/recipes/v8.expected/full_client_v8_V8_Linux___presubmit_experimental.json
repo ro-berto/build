@@ -18,7 +18,7 @@
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",
-      "gs://chromium-v8/experimental/v8-linux-rel",
+      "gs://dummy-path-to-archive",
       "--master-name",
       "client.v8",
       "--build-number",

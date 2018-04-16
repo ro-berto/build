@@ -111,17 +111,6 @@ def isolate_targets_from_tests(tests):
 
 class V8Api(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
-
-  # Map of GS archive names to urls.
-  GS_ARCHIVES = {
-    'android_arm_rel_archive': 'gs://chromium-v8/v8-android-arm-rel',
-    'android_arm64_rel_archive': 'gs://chromium-v8/v8-android-arm64-rel',
-    'arm_rel_archive': 'gs://chromium-v8/v8-arm-rel',
-    'linux_rel_archive': 'gs://chromium-v8/v8-linux-rel',
-    'linux64_rel_archive': 'gs://chromium-v8/v8-linux64-rel',
-    'mips_rel_archive': 'gs://chromium-v8/v8-mips-rel',
-  }
-
   VERSION_FILE = 'include/v8-version.h'
 
   def apply_bot_config(self, builders):
@@ -681,10 +670,11 @@ class V8Api(recipe_api.RecipeApi):
     self.isolate_tests(isolate_targets)
 
   def _get_default_archive(self):
-    archive = self.GS_ARCHIVES[self.bot_config['build_gs_archive']]
-    if self.m.runtime.is_experimental:
-      archive = re.sub(r'^(gs://[^/]+)/(.*)$', r'\1/experimental/\2', archive)
-    return archive
+    return 'gs://chromium-v8/%sarchives/%s/%s' % (
+        'experimental/' if self.m.runtime.is_experimental else '',
+        self.m.properties['mastername'],
+        self.m.properties['buildername'],
+    )
 
   def upload_build(self, name_suffix='', archive=None):
     self.m.archive.zip_and_upload_build(
@@ -732,7 +722,7 @@ class V8Api(recipe_api.RecipeApi):
     self.m.archive.download_and_unzip_build(
           'extract build' + name_suffix,
           self.m.chromium.c.build_config_fs,
-          archive or self._get_default_archive(),
+          archive or self.m.properties.get('archive'),
           src_dir=self.checkout_root.join('v8'))
 
   def download_isolated_json(self, revision):
@@ -1334,17 +1324,20 @@ class V8Api(recipe_api.RecipeApi):
           triggered_build_ids.extend(
               build['build']['id'] for build in step_result.stdout['results'])
       else:
+        ci_properties = dict(properties)
+        if self.should_upload_build:
+          ci_properties['archive'] = self._get_default_archive()
         if self.m.runtime.is_luci:
           self.m.scheduler.emit_triggers(
               [(
                 self.m.scheduler.BuildbucketTrigger(
                   properties=dict(
-                    properties,
+                    ci_properties,
                     **self._test_spec_to_properties(builder_name, test_spec)
                   ),
                   tags={
                     'buildset': 'commit/gitiles/chromium.googlesource.com/v8/'
-                                'v8/+/%s' % properties['revision']
+                                'v8/+/%s' % ci_properties['revision']
                   }
                 ), 'v8', [builder_name],
               ) for builder_name in triggers],
@@ -1355,7 +1348,7 @@ class V8Api(recipe_api.RecipeApi):
             'builder_name': builder_name,
             # Attach additional builder-specific test-spec properties.
             'properties': dict(
-                properties,
+                ci_properties,
                 **self._test_spec_to_properties(builder_name, test_spec)
             ),
           } for builder_name in triggers])

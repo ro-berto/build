@@ -440,6 +440,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           parent_got_swarming_client_revision='[dummy swarming client hash]',
           swarm_hashes=swarm_hashes,
         )
+      else:
+        # Testers not on swarming need to download an archive.
+        test += self.m.properties(archive='gs://dummy-path-to-archive')
 
     if mastername.startswith('tryserver'):
       test += self.m.properties(

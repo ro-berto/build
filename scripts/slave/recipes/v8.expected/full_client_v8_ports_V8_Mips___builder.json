@@ -199,7 +199,7 @@
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",
-      "gs://chromium-v8/v8-mips-rel",
+      "gs://chromium-v8/archives/client.v8.ports/V8 Mips - builder",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"V8 Mips - builder\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.v8.ports\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
@@ -215,6 +215,7 @@
       {
         "builder_name": "V8 Mips - big endian - nosnap - 1",
         "properties": {
+          "archive": "gs://chromium-v8/archives/client.v8.ports/V8 Mips - builder",
           "parent_build_environment": {
             "gn_args": "target_cpu = \"x86\" use_goma = true"
           },
@@ -226,6 +227,7 @@
       {
         "builder_name": "V8 Mips - big endian - nosnap - 2",
         "properties": {
+          "archive": "gs://chromium-v8/archives/client.v8.ports/V8 Mips - builder",
           "parent_build_environment": {
             "gn_args": "target_cpu = \"x86\" use_goma = true"
           },

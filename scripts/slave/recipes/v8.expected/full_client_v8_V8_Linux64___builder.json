@@ -354,7 +354,7 @@
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",
-      "gs://chromium-v8/v8-linux64-rel",
+      "gs://chromium-v8/archives/client.v8/V8 Linux64 - builder",
       "--factory-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"V8 Linux64 - builder\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.v8\", \"parent_buildername\": null, \"recipe\": \"v8\", \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
@@ -370,6 +370,7 @@
       {
         "builder_name": "V8 Linux64",
         "properties": {
+          "archive": "gs://chromium-v8/archives/client.v8/V8 Linux64 - builder",
           "parent_build_environment": {
             "gn_args": "target_cpu = \"x86\" use_goma = true"
           },
@@ -392,6 +393,7 @@
       {
         "builder_name": "V8 Linux64 - fyi",
         "properties": {
+          "archive": "gs://chromium-v8/archives/client.v8/V8 Linux64 - builder",
           "parent_build_environment": {
             "gn_args": "target_cpu = \"x86\" use_goma = true"
           },
@@ -424,7 +426,7 @@
       "cr-buildbucket.appspot.com",
       "-service-account-json",
       "/creds/service_accounts/service-account-v8-bot.json",
-      "{\"bucket\": \"master.internal.client.v8\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_trigger_proxy\\\", \\\"changes\\\": [{\\\"author\\\": {\\\"email\\\": \\\"cool_dev1337@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}, {\\\"author\\\": {\\\"email\\\": \\\"hax@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}], \\\"properties\\\": {\\\"archive\\\": \\\"gs://chromium-v8/v8-linux64-rel\\\", \\\"parent_build_environment\\\": {\\\"gn_args\\\": \\\"target_cpu = \\\\\\\"x86\\\\\\\" use_goma = true\\\"}, \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"swarm_hashes\\\": {\\\"benchmarks\\\": \\\"[dummy hash for benchmarks]\\\", \\\"bot_default\\\": \\\"[dummy hash for bot_default]\\\", \\\"check-static-initializers\\\": \\\"[dummy hash for check-static-initializers]\\\", \\\"mjsunit\\\": \\\"[dummy hash for mjsunit]\\\", \\\"mozilla\\\": \\\"[dummy hash for mozilla]\\\", \\\"optimize_for_size\\\": \\\"[dummy hash for optimize_for_size]\\\", \\\"perf\\\": \\\"[dummy hash for perf]\\\", \\\"test262\\\": \\\"[dummy hash for test262]\\\"}}}\", \"tags\": [\"builder:v8_trigger_proxy\", \"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"master:internal.client.v8\", \"parent_buildername:V8 Linux64 - builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"master.internal.client.v8\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_trigger_proxy\\\", \\\"changes\\\": [{\\\"author\\\": {\\\"email\\\": \\\"cool_dev1337@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}, {\\\"author\\\": {\\\"email\\\": \\\"hax@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}], \\\"properties\\\": {\\\"archive\\\": \\\"gs://chromium-v8/archives/client.v8/V8 Linux64 - builder\\\", \\\"parent_build_environment\\\": {\\\"gn_args\\\": \\\"target_cpu = \\\\\\\"x86\\\\\\\" use_goma = true\\\"}, \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"swarm_hashes\\\": {\\\"benchmarks\\\": \\\"[dummy hash for benchmarks]\\\", \\\"bot_default\\\": \\\"[dummy hash for bot_default]\\\", \\\"check-static-initializers\\\": \\\"[dummy hash for check-static-initializers]\\\", \\\"mjsunit\\\": \\\"[dummy hash for mjsunit]\\\", \\\"mozilla\\\": \\\"[dummy hash for mozilla]\\\", \\\"optimize_for_size\\\": \\\"[dummy hash for optimize_for_size]\\\", \\\"perf\\\": \\\"[dummy hash for perf]\\\", \\\"test262\\\": \\\"[dummy hash for test262]\\\"}}}\", \"tags\": [\"builder:v8_trigger_proxy\", \"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"master:internal.client.v8\", \"parent_buildername:V8 Linux64 - builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
     "name": "trigger (2)",
