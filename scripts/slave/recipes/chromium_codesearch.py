@@ -167,13 +167,11 @@ def RunSteps(api, root_solution_revision):
   # being left in the out directory.
   api.codesearch.cleanup_old_generated()
 
-  try:
-    api.chromium.compile(targets, use_goma_module=True, out_dir=gen_repo_out_dir)
-  except api.step.StepFailure: # pragma: no cover
-    # Even if compilation fails, the Kythe indexer may still be able to extract
-    # (almost) all cross references. And the downside of failing on compile
-    # error is that Codesearch gets stale.
-    pass
+  # If the compile fails, abort execution and don't upload the pack. When we
+  # upload an incomplete (due to compile failures) pack to Kythe, it fails
+  # validation and doesn't get pushed out anyway, so there's no point in
+  # uploading at all.
+  api.chromium.compile(targets, use_goma_module=True, out_dir=gen_repo_out_dir)
 
   # Copy the created output to the correct directory. When running the clang
   # tool, it is assumed by the scripts that the compilation database is in the
@@ -228,7 +226,18 @@ def GenTests(api):
 
   yield (
     api.test(
-        'full_%s_fail' % _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
+        'full_%s_compile_fail' %
+        _sanitize_nonalpha('codesearch-gen-chromium-linux')) +
+    api.step_data('generate compilation database for linux',
+                  stdout=api.raw_io.output_text('some compilation data')) +
+    api.step_data('compile', retcode=1) +
+    api.properties.generic(buildername='codesearch-gen-chromium-linux',
+                           mastername='chromium.infra.codesearch')
+  )
+
+  yield (
+    api.test(
+        'full_%s_translation_unit_fail' % _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
     api.step_data('generate compilation database for chromeos',
                   stdout=api.raw_io.output_text('some compilation data')) +
     api.step_data('generate compilation database for linux',
@@ -240,7 +249,7 @@ def GenTests(api):
 
   yield (
     api.test(
-        'full_%s_gen_compile_fail' %
+        'full_%s_generate_compile_database_fail' %
         _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
     api.step_data('generate compilation database for chromeos',
                   stdout=api.raw_io.output_text('some compilation data'),
