@@ -2859,6 +2859,16 @@ BUILDERS = {
         },
         'testing': {'platform': 'linux'},
       },
+      'v8_mips_compile_rel': {
+        'chromium_apply_config': ['default_compiler', 'v8_ninja', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_ARCH': 'mips',
+          'TARGET_BITS': 32,
+        },
+        'enable_swarming': False,
+        'testing': {'platform': 'linux'},
+      },
       'v8_linux_mipsel_compile_rel': {
         'chromium_apply_config': [
           'default_compiler', 'v8_ninja', 'goma', 'mb'],
