@@ -18,6 +18,8 @@ The recipe will:
 
 import re
 
+from recipe_engine.post_process import DropExpectation, MustRun
+
 DEPS = [
   'depot_tools/gclient',
   'depot_tools/git',
@@ -27,6 +29,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'v8',
 ]
@@ -116,7 +119,7 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
   with api.context(cwd=api.path['checkout']):
     api.git('commit', '-am', 'Version %s' % latest_version)
 
-  if api.properties.get('dry_run'):
+  if api.properties.get('dry_run') or api.runtime.is_experimental:
     api.step('Dry-run commit', cmd=None)
     return
 
@@ -196,7 +199,7 @@ def RunSteps(api):
 
   if tag != str(head_version):
     # Tag latest version.
-    if api.properties.get('dry_run'):
+    if api.properties.get('dry_run') or api.runtime.is_experimental:
       api.step('Dry-run tag %s' % head_version, cmd=None)
     else:
       with api.context(cwd=api.path['checkout']):
@@ -215,7 +218,7 @@ def UpdateRef(api, repo, head, lkgr_ref):
   # If the lkgr_ref doesn't exist, it's an empty string. In this case the push
   # ref command will create it.
   if head != current_lkgr:
-    if api.properties.get('dry_run'):
+    if api.properties.get('dry_run') or api.runtime.is_experimental:
       api.step('Dry-run lkgr update %s' % head, cmd=None)
     else:
       PushRef(api, repo, lkgr_ref, head)
@@ -233,7 +236,8 @@ def GenTests(api):
 
   def test(name, patch_level_previous, patch_level_latest,
            patch_level_after_commit, current_lkgr, head, head_tag,
-           wait_count=0, commit_found_count=0, dry_run=False):
+           wait_count=0, commit_found_count=0, dry_run=False,
+           commit_loop_test_data=True):
     test_data = (
         api.test(name) +
         api.properties.generic(mastername='client.v8.fyi',
@@ -255,7 +259,7 @@ def GenTests(api):
     )
     if dry_run:
       test_data += api.properties(dry_run=True)
-    else:
+    elif commit_loop_test_data:
       # Test data for the loop waiting for the version-increment commit.
       for count in range(1, wait_count + 1):
         test_data += api.v8.version_file(
@@ -330,4 +334,27 @@ def GenTests(api):
       api.test('missing_branch') +
       api.properties.generic(mastername='client.v8.fyi',
                              buildername='Auto-tag')
+  )
+  # Experimental mode.
+  yield (
+      test(
+        'experimental',
+        patch_level_previous=2,
+        patch_level_latest=2,
+        patch_level_after_commit=3,
+        current_lkgr=hsh_old,
+        head=hsh_new,
+        head_tag='3.4.3.2-sometext',
+        wait_count=2,
+        commit_found_count=2,
+        commit_loop_test_data=False
+      ) +
+      api.runtime(is_luci=True, is_experimental=True) +
+      api.post_process(
+        MustRun,
+        'Dry-run commit',
+        'Dry-run tag 3.4.3.3',
+        'Dry-run lkgr update c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6',
+        'Dry-run lkgr update c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6 (2)') +
+      api.post_process(DropExpectation)
   )

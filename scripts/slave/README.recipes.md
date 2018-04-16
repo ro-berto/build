@@ -5400,7 +5400,7 @@ Recipe for archiving officially tagged v8 builds.
 &mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_roll_v8_deps.py#104)(api):**
 ### *recipes* / [v8/auto\_tag](/scripts/slave/recipes/v8/auto_tag.py)
 
-[DEPS](/scripts/slave/recipes/v8/auto_tag.py#21): [v8](#recipe_modules-v8), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/v8/auto_tag.py#23): [v8](#recipe_modules-v8), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 This recipe checks if a version update on branch <B> is necessary, where
 'version' refers to the contents of the v8 version file (part of the v8
@@ -5414,13 +5414,13 @@ The recipe will:
 - Update a ref called <B>-lkgr to point to the latest commit that has a unique,
   incremented version and that is tagged with that version.
 
-&mdash; **def [GetCommitForRef](/scripts/slave/recipes/v8/auto_tag.py#57)(api, repo, ref):**
+&mdash; **def [GetCommitForRef](/scripts/slave/recipes/v8/auto_tag.py#60)(api, repo, ref):**
 
-&mdash; **def [Git](/scripts/slave/recipes/v8/auto_tag.py#47)(api, \*args, \*\*kwargs):**
+&mdash; **def [Git](/scripts/slave/recipes/v8/auto_tag.py#50)(api, \*args, \*\*kwargs):**
 
 Convenience wrapper.
 
-&mdash; **def [IncrementVersion](/scripts/slave/recipes/v8/auto_tag.py#79)(api, ref, latest_version, latest_version_file):**
+&mdash; **def [IncrementVersion](/scripts/slave/recipes/v8/auto_tag.py#82)(api, ref, latest_version, latest_version_file):**
 
 Increment the version on branch 'ref' to the next patch level and wait
 for the committed ref to be gnumbd-ed or time out.
@@ -5432,17 +5432,17 @@ Args:
   latest_version: The currently latest version to be incremented.
   latest_version_file: The content of the current version file.
 
-&mdash; **def [InitClean](/scripts/slave/recipes/v8/auto_tag.py#39)(api):**
+&mdash; **def [InitClean](/scripts/slave/recipes/v8/auto_tag.py#42)(api):**
 
 Ensures a clean state of the git checkout.
 
-&mdash; **def [LogStep](/scripts/slave/recipes/v8/auto_tag.py#75)(api, text):**
+&mdash; **def [LogStep](/scripts/slave/recipes/v8/auto_tag.py#78)(api, text):**
 
-&mdash; **def [PushRef](/scripts/slave/recipes/v8/auto_tag.py#70)(api, repo, ref, hsh):**
+&mdash; **def [PushRef](/scripts/slave/recipes/v8/auto_tag.py#73)(api, repo, ref, hsh):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_tag.py#155)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_tag.py#158)(api):**
 
-&mdash; **def [UpdateRef](/scripts/slave/recipes/v8/auto_tag.py#212)(api, repo, head, lkgr_ref):**
+&mdash; **def [UpdateRef](/scripts/slave/recipes/v8/auto_tag.py#215)(api, repo, head, lkgr_ref):**
 ### *recipes* / [v8/infra\_end\_to\_end](/scripts/slave/recipes/v8/infra_end_to_end.py)
 
 [DEPS](/scripts/slave/recipes/v8/infra_end_to_end.py#7): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
