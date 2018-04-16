@@ -100,6 +100,7 @@ _AddBuildSpec('Android CFI arm64 Builder Perf FYI', 'android', 'android',
 
 _AddBuildSpec('Linux Compile Perf FYI', 'linux-fyi', 'linux')
 _AddBuildSpec('Mac Builder Perf FYI', 'mac-fyi', 'mac')
+_AddBuildSpec('Win Builder Perf FYI', 'win-fyi', 'win')
 
 _AddIsolatedTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux',
                      use_private_swarming_server=True)
