@@ -714,6 +714,17 @@
   },
   {
     "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/cros",
+      "chrome-sdk",
+      "--nogn-gen",
+      "--board=arm-generic",
+      "--nocolor",
+      "--log-level=debug",
+      "--use-external-config",
+      "--gomadir",
+      "[CACHE]/goma_client",
+      "--nostart-goma",
+      "--",
       "python",
       "-u",
       "[CACHE]/goma_client/goma_ctl.py",

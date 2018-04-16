@@ -246,8 +246,12 @@ class GomaApi(recipe_api.RecipeApi):
           self.m.path['tmp_base'].join('crash_report_id'))
 
       if not self._is_local:
-        self._goma_ctl_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
-            self.service_account_json_path)
+        if 'GOMA_SERVICE_ACCOUNT_JSON_FILE' in env:
+          self._goma_ctl_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
+              env['GOMA_SERVICE_ACCOUNT_JSON_FILE'])
+        else:
+          self._goma_ctl_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
+              self.service_account_json_path)
 
       # Do not continue to build when unsupported compiler is used.
       self._goma_ctl_env['GOMA_HERMETIC'] = 'error'
@@ -494,7 +498,7 @@ class GomaApi(recipe_api.RecipeApi):
 
     # TODO(tikuta): Remove -j flag from ninja_command and set appropriate value.
 
-    self.start(goma_env)
+    self.start(env=goma_env, **kwargs)
 
     build_step_name = name or 'compile'
     try:

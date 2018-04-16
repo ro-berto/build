@@ -48,7 +48,8 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "GOMA_SETTINGS_SERVER": "https://cxx-compiler-service.appspot.com/settings"
     },
     "name": "clang_revision",
     "~followup_annotations": [
@@ -60,120 +61,9 @@
   },
   {
     "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "system_python"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[START_DIR]/python_bin"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "system_python.create_dir",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[START_DIR]/python_bin/python"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "system_python.remove_link",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[START_DIR]/python_bin/python2"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "system_python.remove_link (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "symlink",
-      "/usr/bin/python",
-      "[START_DIR]/python_bin/python"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "system_python.create_link",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "symlink",
-      "/usr/bin/python2",
-      "[START_DIR]/python_bin/python2"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "system_python.create_link (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [],
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/python_bin"
-      ]
     },
     "name": "preprocess_for_goma"
   },
@@ -193,11 +83,6 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/python_bin"
-      ]
-    },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
     "~followup_annotations": [
@@ -206,17 +91,6 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/cros",
-      "chrome-sdk",
-      "--nogn-gen",
-      "--board=x86-generic",
-      "--nocolor",
-      "--log-level=debug",
-      "--use-external-config",
-      "--gomadir",
-      "[CACHE]/goma_client",
-      "--nostart-goma",
-      "--",
       "python",
       "-u",
       "[CACHE]/goma_client/goma_ctl.py",
@@ -226,22 +100,18 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]/goma/test_buildername",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_ENABLE_GLOBAL_FILE_ID_CACHE": "true",
+      "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "fallback",
       "GOMA_LOCAL_OUTPUT_CACHE_DIR": "[CACHE]/goma/localoutputcache",
       "GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS": "1",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/python_bin"
-      ]
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-rbe.json",
+      "GOMA_SETTINGS_SERVER": "https://cxx-compiler-service.appspot.com/settings"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
@@ -272,11 +142,6 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/python_bin"
-      ]
-    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -285,22 +150,19 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/cros",
-      "chrome-sdk",
-      "--nogn-gen",
-      "--board=x86-generic",
-      "--nocolor",
-      "--log-level=debug",
-      "--use-external-config",
-      "--gomadir",
-      "[CACHE]/goma_client",
-      "--nostart-goma",
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
-      "None/out_x86-generic/Release",
+      "None/out/Release",
       "-j",
       "60",
       "all"
@@ -308,12 +170,8 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SETTINGS_SERVER": "https://cxx-compiler-service.appspot.com/settings",
       "GOMA_USE_LOCAL": "false"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/python_bin"
-      ]
     },
     "name": "compile"
   },
@@ -323,7 +181,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "None/out_x86-generic/Release",
+      "None/out/Release",
       "-j",
       "60",
       "all",
@@ -334,12 +192,8 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_SETTINGS_SERVER": "https://cxx-compiler-service.appspot.com/settings",
       "GOMA_USE_LOCAL": "false"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/python_bin"
-      ]
     },
     "name": "compile confirm no-op",
     "stdout": "/path/to/tmp/"
@@ -349,11 +203,6 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/python_bin"
-      ]
     },
     "name": "postprocess_for_goma"
   },
@@ -373,12 +222,7 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/python_bin"
-      ]
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-rbe.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
     "~followup_annotations": [
@@ -411,12 +255,7 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/python_bin"
-      ]
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-rbe.json"
     },
     "name": "postprocess_for_goma.goma_stat",
     "~followup_annotations": [
@@ -438,12 +277,7 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/python_bin"
-      ]
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-rbe.json"
     },
     "name": "postprocess_for_goma.stop_goma",
     "~followup_annotations": [
@@ -469,9 +303,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "None/out_x86-generic/Release",
+      "None/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"None/out_x86-generic/Release\", \"-j\", 60, \"all\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"None/out/Release\", \"-j\", 60, \"all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -490,11 +324,6 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/python_bin"
-      ]
     },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
@@ -525,11 +354,6 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/python_bin"
-      ]
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
