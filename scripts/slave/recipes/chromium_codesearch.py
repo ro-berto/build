@@ -166,7 +166,7 @@ def RunSteps(api, root_solution_revision):
   try:
     api.chromium.compile(targets, use_goma_module=True)
   except api.step.StepFailure: # pragma: no cover
-    # Even if compilation fails, the Grok indexer may still be able to extract
+    # Even if compilation fails, the Kythe indexer may still be able to extract
     # (almost) all cross references. And the downside of failing on compile
     # error is that Codesearch gets stale.
     pass

@@ -152,7 +152,6 @@ class CodesearchApi(recipe_api.RecipeApi):
     args = ['--path-to-compdb', self.c.compile_commands_json_file,
             '--path-to-archive-output',
             self.c.debug_path.join(index_pack_kythe_name),
-            '--index-pack-format', 'kythe',
             '--corpus', self.c.CORPUS,
             '--revision', self._get_revision()]
     if self.c.ROOT:

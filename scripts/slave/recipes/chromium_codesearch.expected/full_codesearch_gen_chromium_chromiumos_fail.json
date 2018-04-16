@@ -1261,8 +1261,6 @@
       "[START_DIR]/src/out/Debug/compile_commands.json",
       "--path-to-archive-output",
       "[START_DIR]/src/out/Debug/index_pack_chromeos_kythe.zip",
-      "--index-pack-format",
-      "kythe",
       "--corpus",
       "chromium",
       "--revision",

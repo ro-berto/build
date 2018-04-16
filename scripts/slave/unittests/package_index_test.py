@@ -57,8 +57,8 @@ class PackageIndexTest(unittest.TestCase):
                                       '%s//stdio.h' % INCLUDE_PATH]))
 
     self.index_pack = package_index.IndexPack(
-        os.path.realpath(self.compdb_file.name), index_pack_format='kythe',
-        corpus=CORPUS, root=VNAME_ROOT, revision=REVISION)
+        os.path.realpath(self.compdb_file.name), corpus=CORPUS, root=VNAME_ROOT,
+        revision=REVISION)
     self.assertTrue(os.path.exists(self.index_pack.index_directory))
     self.assertTrue(os.path.exists(
         os.path.join(self.index_pack.index_directory, 'files')))
@@ -80,8 +80,8 @@ class PackageIndexTest(unittest.TestCase):
       actual_content = data_file.read()
     self.assertEquals(content, actual_content)
 
-  def _CheckRequiredInputKythe(self, required_input, filename, content, corpus,
-                               root):
+  def _CheckRequiredInput(self, required_input, filename, content, corpus,
+                          root):
     self.assertEquals(required_input['info']['digest'],
                       hashlib.sha256(content).hexdigest())
     self.assertEquals(required_input['info']['path'], filename)
@@ -144,10 +144,10 @@ class PackageIndexTest(unittest.TestCase):
 
         self.assertEquals(len(compilation_unit_dictionary['required_input']),
                           len(self.index_pack.filesizes))
-        self._CheckRequiredInputKythe(
+        self._CheckRequiredInput(
             compilation_unit_dictionary['required_input'][0],
             self.test_cc_file.name, TEST_CC_FILE_CONTENT, CORPUS, VNAME_ROOT)
-        self._CheckRequiredInputKythe(
+        self._CheckRequiredInput(
             compilation_unit_dictionary['required_input'][1],
             self.test_h_file.name, TEST_H_FILE_CONTENT, CORPUS, VNAME_ROOT)
 
