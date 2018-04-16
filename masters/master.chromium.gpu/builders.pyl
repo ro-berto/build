@@ -53,30 +53,12 @@
       "category": "0Windows",
     },
 
-    "GPU Linux Builder": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["linux_rel_builders"],
-      "builder_timeout_s": 3600,
-      "category": "2Linux",
-    },
     "GPU Linux Builder (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": "chromium_commits",
       "slave_pools": ["linux_dbg_builders"],
       "builder_timeout_s": 3600,
-      "category": "2Linux",
-    },
-    "Linux Release (NVIDIA)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      # It's crucial to merge build requests on the testers.
-      "mergeRequests": True,
-      "slave_pools": ["linux_rel_nvidia"],
-      "builder_timeout_s": 7200,
       "category": "2Linux",
     },
     "Linux Debug (NVIDIA)": {
@@ -140,14 +122,6 @@
       },
       "slaves": ["vm91-m1"],
     },
-    "linux_rel_builders": {
-      "slave_data": {
-        "bits": 64,
-        "os": "linux",
-        "version": "trusty",
-      },
-      "slaves": ["slave62-c1"],
-    },
     "linux_dbg_builders": {
       "slave_data": {
         "bits": 64,
@@ -155,14 +129,6 @@
         "version": "trusty",
       },
       "slaves": ["slave63-c1"],
-    },
-    "linux_rel_nvidia": {
-      "slave_data": {
-        "bits": 64,
-        "os": "linux",
-        "version": "trusty",
-      },
-      "slaves": ["slave65-c1"],
     },
     "linux_dbg_nvidia": {
       "slave_data": {
