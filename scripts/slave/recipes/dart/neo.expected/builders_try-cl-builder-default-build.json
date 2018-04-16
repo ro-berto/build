@@ -420,7 +420,7 @@
       "-mrelease"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "xvfb tools/test.py -mrelease 0"
+    "name": "xvfb tools/test.py  -mrelease 0"
   },
   {
     "cmd": [

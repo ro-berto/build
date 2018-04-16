@@ -88,7 +88,7 @@ def RunSteps(api):
 
   if try_build_args or try_commands:
     if try_build_args:
-      build_args = try_build_args.split(' ')
+      build_args = try_build_args.split()
       api.dart.build(build_args)
     elif 'parent_fileset' not in api.properties:
       api.dart.build()
@@ -96,7 +96,7 @@ def RunSteps(api):
     with api.step.defer_results():
       with api.context(cwd=api.path['checkout']):
         for cmd_key in try_commands:
-          try_test_cmd = api.properties[cmd_key].split(' ')
+          try_test_cmd = api.properties[cmd_key].split()
           if try_test_cmd[0] == "xvfb":
             try_test_cmd = ['/usr/bin/xvfb-run','-a',
               '--server-args=-screen 0 1024x768x24'] + try_test_cmd[1:]
@@ -131,7 +131,7 @@ def GenTests(api):
       api.test('builders/try-cl-builder') +
       api.properties.generic(
           buildername='builders/vm-linux-release-x64-try',
-          try_build_args='runtime,sdk',
+          try_build_args='  runtime,sdk',
           try_cmd_1='tools/test.py -rchrome',
           try_cmd_2='tools/test.py -mdebug',
           try_cmd_2_repeat='2')
@@ -140,7 +140,7 @@ def GenTests(api):
       api.test('builders/try-cl-builder-default-build') +
       api.properties.generic(
           buildername='builders/vm-linux-release-x64-try',
-          try_cmd_1='xvfb tools/test.py -mrelease',
+          try_cmd_1='xvfb tools/test.py  -mrelease',
           try_cmd_1_repeat='1',
           try_cmd_2='tools/test.py language_2/some_test',
           try_cmd_2_repeat='3')
