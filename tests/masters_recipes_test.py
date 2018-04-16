@@ -133,6 +133,7 @@ FAKE_BUILDERS = {
         # These have been migrated to LUCI.
         'win_chromium_compile_dbg_ng',
         'win_chromium_dbg_ng',
+        'win_optional_gpu_tests_rel',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'win10_chromium_x64_dbg_ng',
     ],
