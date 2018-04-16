@@ -224,7 +224,7 @@
       "android",
       "--goma-dir",
       "[CACHE]/goma_client",
-      "[START_DIR]/src/out/Debug"
+      "[START_DIR]/src/out/chromium-android/Debug"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -306,7 +306,7 @@
     "cmd": [
       "ninja",
       "-C",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/chromium-android/Debug",
       "all",
       "-t",
       "compdb",
@@ -418,9 +418,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/chromium-android/Debug",
       "--ninja-log-command-file",
-      "[\"ninja\", \"-C\", \"[START_DIR]/src/out/Debug\", \"all\", \"-t\", \"compdb\", \"cc\", \"cxx\", \"objc\", \"objcxx\", \"-j\", 20]",
+      "[\"ninja\", \"-C\", \"[START_DIR]/src/out/chromium-android/Debug\", \"all\", \"-t\", \"compdb\", \"cc\", \"cxx\", \"objc\", \"objcxx\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -608,7 +608,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/chromium-android/Debug",
       "-k",
       "0",
       "-j",
@@ -628,7 +628,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/chromium-android/Debug",
       "-k",
       "0",
       "-j",
@@ -751,9 +751,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/chromium-android/Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Debug\", \"-k\", \"0\", \"-j\", 20, \"all\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/chromium-android/Debug\", \"-k\", \"0\", \"-j\", 20, \"all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -817,7 +817,7 @@
     "cmd": [
       "cp",
       "some compilation data",
-      "[START_DIR]/src/out/Debug/compile_commands.json"
+      "[START_DIR]/src/out/chromium-android/Debug/compile_commands.json"
     ],
     "name": "copy compilation database"
   },
@@ -836,7 +836,7 @@
       "--tool",
       "[START_DIR]/src/third_party/llvm-build/Release+Asserts/bin/translation_unit",
       "-p",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/chromium-android/Debug",
       "--all"
     ],
     "name": "run translation_unit clang tool"
@@ -852,9 +852,9 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/package_index.py",
       "--path-to-compdb",
-      "[START_DIR]/src/out/Debug/compile_commands.json",
+      "[START_DIR]/src/out/chromium-android/Debug/compile_commands.json",
       "--path-to-archive-output",
-      "[START_DIR]/src/out/Debug/index_pack_android_kythe.zip",
+      "[START_DIR]/src/out/chromium-android/Debug/index_pack_android_kythe.zip",
       "--corpus",
       "chromium-android",
       "--revision",
@@ -871,7 +871,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[START_DIR]/src/out/Debug/index_pack_android_kythe.zip",
+      "[START_DIR]/src/out/chromium-android/Debug/index_pack_android_kythe.zip",
       "gs://chrome-codesearch/prod/index_pack_android_kythe_170242.zip"
     ],
     "infra_step": true,

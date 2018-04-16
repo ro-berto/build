@@ -96,7 +96,8 @@ SPEC = freeze({
       'platform': 'android',
       # Don't push generated files to git until we can ignore APKs.
       'sync_generated_files': False,
-      'gen_repo_branch': 'android',
+      # Generated files will end up in out/chromium-android/Debug/gen.
+      'gen_repo_out_dir': 'out/chromium-android',
       'corpus': 'chromium-android',
     },
   },
@@ -117,6 +118,8 @@ def RunSteps(api, root_solution_revision):
   corpus = bot_config.get('corpus', 'chromium-linux')
   root = bot_config.get('root', '')
   targets = bot_config.get('compile_targets', [])
+  gen_repo_branch = bot_config.get('gen_repo_branch', 'master')
+  gen_repo_out_dir = bot_config.get('gen_repo_out_dir', 'out')
 
   api.codesearch.set_config(
       'chromium',
@@ -124,7 +127,8 @@ def RunSteps(api, root_solution_revision):
       PACKAGE_FILENAME=bot_config['package_filename'],
       PLATFORM=platform,
       SYNC_GENERATED_FILES=bot_config['sync_generated_files'],
-      GEN_REPO_BRANCH=bot_config['gen_repo_branch'],
+      GEN_REPO_BRANCH=gen_repo_branch,
+      GEN_REPO_OUT_DIR=gen_repo_out_dir,
       CORPUS=corpus,
       ROOT=root,
   )
@@ -164,7 +168,7 @@ def RunSteps(api, root_solution_revision):
   api.codesearch.cleanup_old_generated()
 
   try:
-    api.chromium.compile(targets, use_goma_module=True)
+    api.chromium.compile(targets, use_goma_module=True, out_dir=gen_repo_out_dir)
   except api.step.StepFailure: # pragma: no cover
     # Even if compilation fails, the Kythe indexer may still be able to extract
     # (almost) all cross references. And the downside of failing on compile
