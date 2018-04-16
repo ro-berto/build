@@ -55,7 +55,6 @@
 
     # Chromium tryservers.
     'tryserver.chromium.android': {},
-    'tryserver.chromium.angle': {},
     'tryserver.chromium.chromiumos': {},
     'tryserver.chromium.linux': {},
     'tryserver.chromium.mac': {},

@@ -234,7 +234,6 @@ RECOGNIZED_PATHS.update(internal_data.get('RECOGNIZED_PATHS', {}))
 ENABLED_MASTERS = [
     'bot_update.always_on',
     'chromium.android',
-    'chromium.angle',
     'chromium.chrome',
     'chromium.chromedriver',
     'chromium.chromiumos',
@@ -274,7 +273,6 @@ ENABLED_MASTERS = [
     'tryserver.blink',
     'tryserver.client.catapult',
     'tryserver.chromium.android',
-    'tryserver.chromium.angle',
     'tryserver.chromium.linux',
     'tryserver.chromium.mac',
     'tryserver.chromium.perf',

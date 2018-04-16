@@ -31,7 +31,6 @@ MAIN_WATERFALL_MASTERS = [
 TRYSERVER_MASTERS = [
     'master.tryserver.blink',
     'master.tryserver.chromium.android',
-    'master.tryserver.chromium.angle',
     'master.tryserver.chromium.chromiumos',
     'master.tryserver.chromium.linux',
     'master.tryserver.chromium.mac',
@@ -151,19 +150,6 @@ FAKE_BUILDERS = {
     'master.tryserver.chromium.android': [
         # These have been migrated to LUCI.
         'android_optional_gpu_tests_rel',
-    ],
-    'master.tryserver.chromium.angle': [
-        # These have been migrated to LUCI.
-        'android_angle_rel_ng',
-        'android_angle_deqp_rel_ng',
-        'linux_angle_compile_dbg_ng',
-        'linux_angle_dbg_ng',
-        'linux_angle_deqp_rel_ng',
-        'linux_angle_ozone_rel_ng',
-        'linux_angle_rel_ng',
-        'mac_angle_rel_ng',
-        'mac_angle_dbg_ng',
-        'mac_angle_compile_dbg_ng',
     ],
     'master.tryserver.chromium.mac': [
         # These have been migrated to LUCI.
