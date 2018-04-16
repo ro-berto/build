@@ -90,10 +90,9 @@
     "cmd": [
       "ninja",
       "-C",
-      "[START_DIR]/src/out/host_debug_unopt",
-      "generate_dart_ui"
+      "[START_DIR]/src/out/host_debug_unopt"
     ],
-    "name": "build host_debug_unopt generate_dart_ui"
+    "name": "build host_debug_unopt"
   },
   {
     "cmd": [

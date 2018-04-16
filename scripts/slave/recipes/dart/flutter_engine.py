@@ -50,7 +50,7 @@ def BuildLinuxAndroidArm(api):
 
 def BuildLinux(api):
   RunGN(api, '--unoptimized')
-  Build(api, 'host_debug_unopt', 'generate_dart_ui')
+  Build(api, 'host_debug_unopt')
 
 def TestObservatory(api):
   checkout = api.path['start_dir'].join('src')
@@ -122,12 +122,12 @@ def RunSteps(api):
 
   # The context adds dart-sdk/bin to the path.
   with api.context(env=env):
-    AnalyzeDartUI(api)
-
-    TestObservatory(api)
-    BuildLinuxAndroidArm(api)
-    BuildLinuxAndroidx86(api)
-    TestFlutter(api)
+    with api.step.defer_results():
+      AnalyzeDartUI(api)
+      TestObservatory(api)
+      BuildLinuxAndroidArm(api)
+      BuildLinuxAndroidx86(api)
+      TestFlutter(api)
 
 def GenTests(api):
   yield (api.test('flutter-engine-linux') + api.platform('linux', 64)
