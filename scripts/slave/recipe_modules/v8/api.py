@@ -443,9 +443,14 @@ class V8Api(recipe_api.RecipeApi):
     test_spec = {}
     for iter_buildername, _ in iter_builder_set(mastername, buildername):
       if full_test_spec.get(iter_buildername):
+        tests = full_test_spec[iter_buildername]
+        # TODO(machenbach): Remove condition, once default switched to dict on
+        # v8 side.
+        if isinstance(tests, dict):  # pragma: no cover
+          tests = tests.get('tests', [])
         test_spec[iter_buildername] = [
           TestStepConfig.from_test_spec(t)
-          for t in full_test_spec[iter_buildername]
+          for t in tests
         ]
 
     # Log test spec for debuggability.
