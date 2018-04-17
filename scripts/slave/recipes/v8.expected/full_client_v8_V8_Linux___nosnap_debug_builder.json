@@ -232,6 +232,7 @@
           "parent_build_environment": {
             "gn_args": "target_cpu = \"x86\" use_goma = true"
           },
+          "parent_buildername": "V8 Linux - nosnap debug builder",
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",

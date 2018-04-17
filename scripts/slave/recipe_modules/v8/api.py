@@ -1251,6 +1251,7 @@ class V8Api(recipe_api.RecipeApi):
       # whitelisted or their name should be prefixed with 'parent_'.
       properties = {
         'parent_got_revision': self.revision,
+        'parent_buildername': self.m.properties['buildername'],
       }
       if self.revision_cp:
         properties['parent_got_revision_cp'] = self.revision_cp
