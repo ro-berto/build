@@ -9,6 +9,7 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
+  'recipe_engine/runtime',
   'swarming',
 ]
 
@@ -587,9 +588,8 @@ def GenTests(api):
     )
  )
 
-  yield (
-    api.test('xcode_build_version')
-    + api.platform('mac', 64)
+  xcode_build_version = (
+    api.platform('mac', 64)
     + api.properties(
       buildername='ios',
       buildnumber='0',
@@ -626,6 +626,18 @@ def GenTests(api):
         'bootstrap swarming.swarming.py --version',
         stdout=api.raw_io.output_text('1.2.3'),
     )
+  )
+
+  yield (
+    api.test('xcode_build_version')
+    +api.runtime(is_luci=False, is_experimental=False)
+    + xcode_build_version
+  )
+
+  yield (
+    api.test('xcode_build_version_luci')
+    +api.runtime(is_luci=True, is_experimental=True)
+    + xcode_build_version
   )
 
   yield (

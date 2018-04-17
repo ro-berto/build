@@ -292,13 +292,17 @@ class iOSApi(recipe_api.RecipeApi):
               xcode_build_version, xcode_app_path))
 
       mac_toolchain_cmd = self.get_mac_toolchain_cmd()
-      self.m.step('install xcode', [
+      install_xcode_cmd = [
           mac_toolchain_cmd, 'install',
           '-kind', 'ios',
           '-xcode-version', xcode_build_version,
           '-output-dir', xcode_app_path,
-          '-service-account-json', self.CIPD_CREDENTIALS,
-      ])
+      ]
+      if not self.m.runtime.is_luci:
+        install_xcode_cmd.extend([
+            '-service-account-json', self.CIPD_CREDENTIALS,
+        ])
+      self.m.step('install xcode', install_xcode_cmd)
       self.m.step('select xcode', [
           'sudo', 'xcode-select', '-switch', xcode_app_path])
 
