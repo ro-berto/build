@@ -204,7 +204,6 @@
   * [cros/swarming](#recipes-cros_swarming)
   * [crrev:examples/full](#recipes-crrev_examples_full)
   * [custom_tabs_client](#recipes-custom_tabs_client)
-  * [dart/analyzer_swarming](#recipes-dart_analyzer_swarming)
   * [dart/dart](#recipes-dart_dart)
   * [dart/dart2js](#recipes-dart_dart2js)
   * [dart/dart2js_nobuild](#recipes-dart_dart2js_nobuild)
@@ -220,7 +219,6 @@
   * [dart/misc_nobuild](#recipes-dart_misc_nobuild)
   * [dart/neo](#recipes-dart_neo)
   * [dart/packagebot](#recipes-dart_packagebot)
-  * [dart/packages](#recipes-dart_packages)
   * [dart/sdk_builder](#recipes-dart_sdk_builder)
   * [dart/sdk_gn](#recipes-dart_sdk_gn)
   * [dart/sdk_swarming](#recipes-dart_sdk_swarming)
@@ -4522,13 +4520,6 @@ Generates the sequence of steps that will be run by the slave.
 [DEPS](/scripts/slave/recipes/custom_tabs_client.py#5): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/custom_tabs_client.py#20)(api):**
-### *recipes* / [dart/analyzer\_swarming](/scripts/slave/recipes/dart/analyzer_swarming.py)
-
-[DEPS](/scripts/slave/recipes/dart/analyzer_swarming.py#5): [dart](#recipe_modules-dart), [test\_utils](#recipe_modules-test_utils), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/analyzer_swarming.py#39)(api):**
-
-&mdash; **def [RunTests](/scripts/slave/recipes/dart/analyzer_swarming.py#19)(api, test_args, test_specs):**
 ### *recipes* / [dart/dart](/scripts/slave/recipes/dart/dart.py)
 
 [DEPS](/scripts/slave/recipes/dart/dart.py#7): [dart](#recipe_modules-dart), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4640,15 +4631,6 @@ Generates the sequence of steps that will be run by the slave.
 [DEPS](/scripts/slave/recipes/dart/packagebot.py#7): [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/packagebot.py#24)(api, target, repo, project):**
-### *recipes* / [dart/packages](/scripts/slave/recipes/dart/packages.py)
-
-[DEPS](/scripts/slave/recipes/dart/packages.py#5): [dart](#recipe_modules-dart), [test\_utils](#recipe_modules-test_utils), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/packages.py#56)(api):**
-
-&mdash; **def [RunTests](/scripts/slave/recipes/dart/packages.py#26)(api, test_args, test_specs):**
-
-&mdash; **def [sdk\_url](/scripts/slave/recipes/dart/packages.py#45)(channel, platform, arch, mode, revision):**
 ### *recipes* / [dart/sdk\_builder](/scripts/slave/recipes/dart/sdk_builder.py)
 
 [DEPS](/scripts/slave/recipes/dart/sdk_builder.py#7): [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
