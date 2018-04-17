@@ -160,7 +160,7 @@
       "bot_pools": ["linux6"],
       "category": "2Linux",
     },
-    "V8 Clusterfuzz NumFuzz": {
+    "V8 NumFuzz": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": None,
@@ -172,7 +172,7 @@
       "auto_reboot" : False,
       "category": "3Fuzzers",
     },
-    "V8 Clusterfuzz NumFuzz - debug": {
+    "V8 NumFuzz - debug": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": None,
@@ -184,7 +184,7 @@
       "auto_reboot" : False,
       "category": "3Fuzzers",
     },
-    "V8 Clusterfuzz NumFuzz - TSAN": {
+    "V8 NumFuzz - TSAN": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": None,
@@ -196,7 +196,7 @@
       "auto_reboot" : False,
       "category": "3Fuzzers",
     },
-    "V8 Clusterfuzz NumFuzz - nosnap": {
+    "V8 NumFuzz - nosnap": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": None,
@@ -208,7 +208,7 @@
       "auto_reboot" : False,
       "category": "3Fuzzers",
     },
-    "V8 Clusterfuzz NumFuzz - nosnap debug": {
+    "V8 NumFuzz - nosnap debug": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": None,
