@@ -25,6 +25,8 @@ import tarfile
 
 NONESSENTIAL_DIRS = (
     'chrome/common/extensions/docs',
+    'third_party/blink/tools',
+    'third_party/blink/web_tests',
     'third_party/findbugs',
     'third_party/hunspell_dictionaries',
     'third_party/hunspell/tests',
