@@ -136,6 +136,7 @@ PACKAGES = [
   Package(github_repo='stack_trace'),
   Package(github_repo='string_scanner'),
   Package(github_repo='test'),
+  Package(github_repo='test_reflectable'),
   Package(github_repo='typed_data'),
   Package(github_repo='vm_service_client'),
   Package(github_repo='watcher'),
