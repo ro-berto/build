@@ -948,6 +948,519 @@ BUILDERS = {
 ####### Waterfall: client.v8.clusterfuzz
   'client.v8.clusterfuzz': {
     'builders': {
+      'V8 Clusterfuzz Linux64 - release builder': {
+        'chromium_apply_config': [
+          'clang',
+          'v8_ninja',
+          'goma',
+          'mb',
+          'default_target_v8_clusterfuzz',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'cf_archive_build': True,
+        'cf_gs_bucket': 'v8-asan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8',
+        'triggers': [
+          'V8 NumFuzz',
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Clusterfuzz Linux64 - debug builder': {
+        'chromium_apply_config': [
+          'clang',
+          'v8_ninja',
+          'goma',
+          'mb',
+          'default_target_v8_clusterfuzz',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'cf_archive_build': True,
+        'cf_gs_bucket': 'v8-asan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8',
+        'triggers': [
+          'V8 NumFuzz - debug',
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Clusterfuzz Linux64 - nosnap release builder': {
+        'chromium_apply_config': [
+          'clang',
+          'v8_ninja',
+          'goma',
+          'mb',
+          'default_target_v8_clusterfuzz',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 NumFuzz - nosnap',
+        ],
+      },
+      'V8 Clusterfuzz Linux64 - nosnap debug builder': {
+        'chromium_apply_config': [
+          'clang',
+          'v8_ninja',
+          'goma',
+          'mb',
+          'default_target_v8_clusterfuzz',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 NumFuzz - nosnap debug',
+        ],
+      },
+      'V8 Clusterfuzz Linux64 ASAN no inline - release builder': {
+        'chromium_apply_config': [
+          'clang',
+          'v8_ninja',
+          'goma',
+          'mb',
+          'clobber',
+          'default_target_v8_clusterfuzz',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'cf_archive_build': True,
+        'cf_gs_bucket': 'v8-asan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8-asan-no-inline',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Clusterfuzz Linux64 ASAN - debug builder': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'clang',
+          'clobber',
+          'default_target_v8_clusterfuzz',
+          'goma',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'cf_archive_build': True,
+        'cf_gs_bucket': 'v8-asan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8-asan',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Clusterfuzz Linux64 ASAN arm64 - debug builder': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'clang',
+          'clobber',
+          'default_target_v8_clusterfuzz',
+          'goma',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'cf_archive_build': True,
+        'cf_gs_bucket': 'v8-asan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8-arm64-asan',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Clusterfuzz Linux ASAN arm - debug builder': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'clang',
+          'clobber',
+          'default_target_v8_clusterfuzz',
+          'goma',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'cf_archive_build': True,
+        'cf_gs_bucket': 'v8-asan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8-arm-asan',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Clusterfuzz Linux ASAN mipsel - debug builder': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'clang',
+          'clobber',
+          'default_target_v8_clusterfuzz',
+          'goma',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'cf_archive_build': True,
+        'cf_gs_bucket': 'v8-asan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8-mipsel-asan',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Clusterfuzz Linux64 CFI - release builder': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'clang',
+          'default_target_v8_clusterfuzz',
+          'goma',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'cf_archive_build': True,
+        'cf_gs_bucket': 'v8-cfi',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8-cfi',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Clusterfuzz Linux MSAN no origins': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'clang',
+          'default_target_v8_clusterfuzz',
+          'goma',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'cf_archive_build': True,
+        'cf_gs_bucket': 'v8-msan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8-msan-no-origins',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Clusterfuzz Linux MSAN chained origins': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'clang',
+          'default_target_v8_clusterfuzz',
+          'goma',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'cf_archive_build': True,
+        'cf_gs_bucket': 'v8-msan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8-msan-chained-origins',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Clusterfuzz Linux64 TSAN - release builder': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'default_compiler',
+          'goma',
+          'default_target_v8_clusterfuzz',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'triggers': [
+          'V8 NumFuzz - TSAN',
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Clusterfuzz Linux64 UBSanVptr - release builder': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'default_compiler',
+          'goma',
+          'default_target_v8_clusterfuzz',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'cf_archive_build': True,
+        'cf_gs_bucket': 'v8-ubsan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8-ubsan-vptr',
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Clusterfuzz Mac64 ASAN - release builder': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'default_compiler',
+          'goma',
+          'default_target_v8_clusterfuzz',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'cf_archive_build': True,
+        'cf_gs_bucket': 'v8-asan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8-asan',
+        'testing': {'platform': 'mac'},
+      },
+      'V8 Clusterfuzz Mac64 ASAN - debug builder': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'default_compiler',
+          'goma',
+          'default_target_v8_clusterfuzz',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'cf_archive_build': True,
+        'cf_gs_bucket': 'v8-asan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8-asan',
+        'testing': {'platform': 'mac'},
+      },
+      'V8 Clusterfuzz Win64 ASAN - release builder': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'default_compiler',
+          'goma',
+          'default_target_v8_clusterfuzz',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'cf_archive_build': True,
+        'cf_archive_bitness': 64,
+        'cf_gs_bucket': 'v8-asan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8-asan',
+        'testing': {'platform': 'win'},
+      },
+      'V8 Clusterfuzz Win64 ASAN - debug builder': {
+        'chromium_apply_config': [
+          'v8_ninja',
+          'default_compiler',
+          'goma',
+          'default_target_v8_clusterfuzz',
+          'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'cf_archive_build': True,
+        'cf_archive_bitness': 64,
+        'cf_gs_bucket': 'v8-asan',
+        'cf_gs_acl': 'public-read',
+        'cf_archive_name': 'd8-asan',
+        'testing': {'platform': 'win'},
+      },
+      'V8 NumFuzz': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'parent_buildername': 'V8 Clusterfuzz Linux64 - release builder',
+        'tests': with_test_args(
+            'deopt',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-deopt=1',
+            ],
+            [NumFuzz],
+        ),
+        'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
+      },
+      'V8 NumFuzz - debug': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'parent_buildername': 'V8 Clusterfuzz Linux64 - debug builder',
+        'tests': [D8TestingRandomGC] + with_test_args(
+            'marking',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-marking=1',
+            ],
+            [NumFuzz(2)],
+        ) + with_test_args(
+            'scavenge',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-scavenge=1',
+            ],
+            [NumFuzz],
+        ) + with_test_args(
+            'threads',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-thread-pool-size=1',
+            ],
+            [NumFuzz],
+        ) + with_test_args(
+            'combined',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-deopt=2',
+              '--stress-compaction=2',
+              '--stress-gc=4',
+              '--stress-marking=4',
+              '--stress-scavenge=4',
+              '--stress-thread-pool-size=2',
+            ],
+            [NumFuzz(3)],
+        ) + with_test_args(
+            'endurance',
+            [
+              '--total-timeout-sec=1200', # 20 minutes
+              '--combine-tests',
+              '--combine-min=30',
+              '--combine-max=50',
+              '--stress-deopt=2',
+              '--stress-compaction=2',
+              '--stress-gc=6',
+              '--stress-marking=6',
+              '--stress-scavenge=4',
+              '--stress-thread-pool-size=1',
+            ],
+            [NumFuzz],
+        ) + with_test_args(
+            'deopt',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-deopt=1',
+            ],
+            [NumFuzz(2)],
+        ),
+        'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
+      },
+      'V8 NumFuzz - TSAN': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'parent_buildername': 'V8 Clusterfuzz Linux64 TSAN - release builder',
+        'tests': [D8TestingRandomGC(2)] + with_test_args(
+            'marking',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-marking=1',
+            ],
+            [NumFuzz],
+        ) + with_test_args(
+            'scavenge',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-scavenge=1',
+            ],
+            [NumFuzz],
+        ) + with_test_args(
+            'threads',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-thread-pool-size=1',
+            ],
+            [NumFuzz],
+        ) + with_test_args(
+            'combined',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-deopt=2',
+              '--stress-compaction=2',
+              '--stress-gc=4',
+              '--stress-marking=4',
+              '--stress-scavenge=4',
+              '--stress-thread-pool-size=2',
+            ],
+            [NumFuzz(4)],
+        ) + with_test_args(
+            'endurance',
+            [
+              '--total-timeout-sec=1200', # 20 minutes
+              '--combine-tests',
+              '--combine-min=10',
+              '--combine-max=30',
+              '--stress-compaction=2',
+              '--stress-gc=6',
+              '--stress-marking=6',
+              '--stress-scavenge=4',
+              '--stress-thread-pool-size=1',
+            ],
+            [NumFuzz],
+        ),
+        'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
+      },
+      'V8 NumFuzz - nosnap': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'parent_buildername': 'V8 Clusterfuzz Linux64 - nosnap release builder',
+        'tests': with_test_args(
+            'interrupt-budget',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-interrupt-budget=10',
+              '--stress-deopt=5',
+            ],
+            [NumFuzz],
+        ),
+        'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
+      },
+      'V8 NumFuzz - nosnap debug': {
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'parent_buildername': 'V8 Clusterfuzz Linux64 - nosnap debug builder',
+        'tests': with_test_args(
+            'interrupt-budget',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-interrupt-budget=10',
+              '--stress-deopt=5',
+            ],
+            [NumFuzz],
+        ),
+        'testing': {'platform': 'linux'},
+        'swarming_properties': SWARMING_FYI_PROPS,
+      },
+      # DO NOT MAKE CHANGES to any builder configs below. Instead modify
+      # corresponding builders above.
+      # TODO(sergiyb): Remove after renaming all clusterfuzz builders on master
+      # side.
       'V8 Linux64 - release builder': {
         'chromium_apply_config': [
           'clang',

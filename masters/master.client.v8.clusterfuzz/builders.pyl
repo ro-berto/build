@@ -14,7 +14,7 @@
   },
 
   "builders": {
-    "V8 Win64 ASAN - release builder": {
+    "V8 Clusterfuzz Win64 ASAN - release builder": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": "v8_commits",
@@ -22,7 +22,7 @@
       "bot_pools": ["win"],
       "category": "0Windows",
     },
-    "V8 Win64 ASAN - debug builder": {
+    "V8 Clusterfuzz Win64 ASAN - debug builder": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": "v8_commits",
@@ -30,7 +30,7 @@
       "bot_pools": ["win"],
       "category": "0Windows",
     },
-    "V8 Mac64 ASAN - release builder": {
+    "V8 Clusterfuzz Mac64 ASAN - release builder": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": "v8_commits",
@@ -38,7 +38,7 @@
       "bot_pools": ["mac"],
       "category": "1Mac",
     },
-    "V8 Mac64 ASAN - debug builder": {
+    "V8 Clusterfuzz Mac64 ASAN - debug builder": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": "v8_commits",
@@ -46,7 +46,7 @@
       "bot_pools": ["mac"],
       "category": "1Mac",
     },
-    "V8 Linux64 - release builder": {
+    "V8 Clusterfuzz Linux64 - release builder": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": "v8_commits",
@@ -54,7 +54,7 @@
       "bot_pools": ["linux1"],
       "category": "2Linux",
     },
-    "V8 Linux64 - debug builder": {
+    "V8 Clusterfuzz Linux64 - debug builder": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": "v8_commits",
@@ -62,7 +62,7 @@
       "bot_pools": ["linux1"],
       "category": "2Linux",
     },
-    "V8 Linux64 - nosnap release builder": {
+    "V8 Clusterfuzz Linux64 - nosnap release builder": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": "v8_commits",
@@ -70,7 +70,7 @@
       "bot_pools": ["linux1"],
       "category": "2Linux",
     },
-    "V8 Linux64 - nosnap debug builder": {
+    "V8 Clusterfuzz Linux64 - nosnap debug builder": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": "v8_commits",
@@ -78,7 +78,7 @@
       "bot_pools": ["linux1"],
       "category": "2Linux",
     },
-    "V8 Linux64 ASAN no inline - release builder": {
+    "V8 Clusterfuzz Linux64 ASAN no inline - release builder": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": "v8_commits",
@@ -86,7 +86,7 @@
       "bot_pools": ["linux2"],
       "category": "2Linux",
     },
-    "V8 Linux64 ASAN - debug builder": {
+    "V8 Clusterfuzz Linux64 ASAN - debug builder": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": "v8_commits",
@@ -94,7 +94,7 @@
       "bot_pools": ["linux2"],
       "category": "2Linux",
     },
-    "V8 Linux64 ASAN arm64 - debug builder": {
+    "V8 Clusterfuzz Linux64 ASAN arm64 - debug builder": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": "v8_commits",
@@ -102,7 +102,7 @@
       "bot_pools": ["linux3"],
       "category": "2Linux",
     },
-    "V8 Linux ASAN arm - debug builder": {
+    "V8 Clusterfuzz Linux ASAN arm - debug builder": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": "v8_commits",
@@ -110,7 +110,7 @@
       "bot_pools": ["linux3"],
       "category": "2Linux",
     },
-    "V8 Linux ASAN mipsel - debug builder": {
+    "V8 Clusterfuzz Linux ASAN mipsel - debug builder": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": "v8_commits",
@@ -118,7 +118,7 @@
       "bot_pools": ["linux3"],
       "category": "2Linux",
     },
-    "V8 Linux MSAN no origins": {
+    "V8 Clusterfuzz Linux MSAN no origins": {
       "recipe": "v8",
       "properties": {"set_gclient_var": "checkout_instrumented_libraries"},
       "use_remote_run": True,
@@ -127,7 +127,7 @@
       "bot_pools": ["linux4"],
       "category": "2Linux",
     },
-    "V8 Linux MSAN chained origins": {
+    "V8 Clusterfuzz Linux MSAN chained origins": {
       "recipe": "v8",
       "properties": {"set_gclient_var": "checkout_instrumented_libraries"},
       "use_remote_run": True,
@@ -136,7 +136,7 @@
       "bot_pools": ["linux4"],
       "category": "2Linux",
     },
-    "V8 Linux64 CFI - release builder": {
+    "V8 Clusterfuzz Linux64 CFI - release builder": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": "v8_commits",
@@ -144,7 +144,7 @@
       "bot_pools": ["linux5"],
       "category": "2Linux",
     },
-    "V8 Linux64 TSAN - release builder": {
+    "V8 Clusterfuzz Linux64 TSAN - release builder": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": "v8_commits",
@@ -152,7 +152,7 @@
       "bot_pools": ["linux6"],
       "category": "2Linux",
     },
-    "V8 Linux64 UBSanVptr - release builder": {
+    "V8 Clusterfuzz Linux64 UBSanVptr - release builder": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": "v8_commits",
@@ -160,7 +160,7 @@
       "bot_pools": ["linux6"],
       "category": "2Linux",
     },
-    "V8 NumFuzz": {
+    "V8 Clusterfuzz NumFuzz": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": None,
@@ -172,7 +172,7 @@
       "auto_reboot" : False,
       "category": "3Fuzzers",
     },
-    "V8 NumFuzz - debug": {
+    "V8 Clusterfuzz NumFuzz - debug": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": None,
@@ -184,7 +184,7 @@
       "auto_reboot" : False,
       "category": "3Fuzzers",
     },
-    "V8 NumFuzz - TSAN": {
+    "V8 Clusterfuzz NumFuzz - TSAN": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": None,
@@ -196,7 +196,7 @@
       "auto_reboot" : False,
       "category": "3Fuzzers",
     },
-    "V8 NumFuzz - nosnap": {
+    "V8 Clusterfuzz NumFuzz - nosnap": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": None,
@@ -208,7 +208,7 @@
       "auto_reboot" : False,
       "category": "3Fuzzers",
     },
-    "V8 NumFuzz - nosnap debug": {
+    "V8 Clusterfuzz NumFuzz - nosnap debug": {
       "recipe": "v8",
       "use_remote_run": True,
       "scheduler": None,
