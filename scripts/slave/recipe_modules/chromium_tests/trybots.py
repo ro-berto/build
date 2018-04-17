@@ -349,6 +349,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'linux-blink-heap-verification',
       }),
+      'linux-jumbo-rel': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'linux-jumbo-rel',
+      }),
       'linux_arm': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Linux ARM',
@@ -529,6 +533,10 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.mac': {
     'builders': {
+      'mac-jumbo-rel': simple_bot({
+        'mastername': 'chromium.mac',
+        'buildername': 'mac-jumbo-rel',
+      }),
       'mac_chromium_archive_rel_ng': simple_bot({
         'mastername': 'chromium',
         'buildername': 'Mac',
@@ -651,6 +659,10 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.win': {
     'builders': {
+      'win-jumbo-rel': simple_bot({
+        'mastername': 'chromium.win',
+        'buildername': 'win-jumbo-rel',
+      }),
       'win_archive': simple_bot({
         'mastername': 'chromium',
         'buildername': 'Win',

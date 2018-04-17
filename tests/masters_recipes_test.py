@@ -135,6 +135,7 @@ FAKE_BUILDERS = {
         'win_optional_gpu_tests_rel',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'win10_chromium_x64_dbg_ng',
+        'win-jumbo-rel',
     ],
     'master.tryserver.chromium.linux': [
         # These have been migrated to LUCI.
@@ -146,6 +147,8 @@ FAKE_BUILDERS = {
         'linux_chromium_dbg_ng',
         'linux_chromium_rel_ng',
         'linux_optional_gpu_tests_rel',
+        # These are pure LUCI bots, no equivalent buildbot bot.
+        'linux-jumbo-rel',
     ],
     'master.tryserver.chromium.android': [
         # These have been migrated to LUCI.
@@ -161,6 +164,8 @@ FAKE_BUILDERS = {
         'mac_chromium_dbg_ng',
         'mac_chromium_rel_ng',
         'mac_optional_gpu_tests_rel',
+        # These are pure LUCI bots, no equivalent buildbot bot.
+        'mac-jumbo-rel',
     ],
 }
 
