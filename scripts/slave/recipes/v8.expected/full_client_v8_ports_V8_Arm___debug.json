@@ -91,6 +91,7 @@
       "--random-seed=-2061016444",
       "bot_default",
       "--extra-flags=--verify-heap-skip-remembered-set",
+      "--variants=default",
       "--rerun-failures-count=2",
       "--mastername",
       "client.v8.ports",

@@ -9,7 +9,7 @@
 from collections import defaultdict
 
 from recipe_engine.types import freeze
-from testing import V8NoExhaustiveVariants, V8Variant
+from testing import V8Variant
 
 
 class TestStepConfig(object):
@@ -281,7 +281,7 @@ BUILDERS = {
           Test262(2),
           Mozilla,
         ],
-        'variants': V8NoExhaustiveVariants,
+        'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
       },
@@ -291,7 +291,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'tests': [V8Testing(7)],
-        'variants': V8NoExhaustiveVariants,
+        'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
         'swarming_properties': SWARMING_FYI_PROPS,
       },
@@ -315,7 +315,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'tests': [V8Testing, Mozilla, Test262],
-        'variants': V8NoExhaustiveVariants,
+        'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - verify csa': {
@@ -544,7 +544,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'tests': [V8Testing(2)],
-        'variants': V8NoExhaustiveVariants,
+        'variants': V8Variant('default'),
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -921,7 +921,7 @@ BUILDERS = {
         },
         'enable_swarming': False,
         'tests': [V8Testing],
-        'variants': V8NoExhaustiveVariants,
+        'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
       },
     },
@@ -1509,7 +1509,7 @@ BUILDERS = {
           V8Testing(3),
           OptimizeForSize,
         ],
-        'variants': V8NoExhaustiveVariants,
+        'variants': V8Variant('default'),
         'swarming_properties': {
           'default_hard_timeout': 60 * 60,
           'default_expiration': 6 * 60 * 60,
@@ -1581,7 +1581,7 @@ BUILDERS = {
             'novfp3',
             ['--novfp3'],
             [V8Testing(5), Test262, Mozilla],
-            V8NoExhaustiveVariants,
+            V8Variant('default'),
         ) + with_extra_variants([V8Testing(2)]),
         'testing': {'platform': 'linux'},
       },
@@ -1674,7 +1674,7 @@ BUILDERS = {
         },
         'enable_swarming': False,
         'tests': [V8Testing],
-        'variants': V8NoExhaustiveVariants,
+        'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
       },
       'V8 Mips - big endian - nosnap - 2': {
@@ -1687,7 +1687,7 @@ BUILDERS = {
         },
         'enable_swarming': False,
         'tests': [V8Testing],
-        'variants': V8NoExhaustiveVariants,
+        'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - mipsel - sim - builder': {
@@ -2024,7 +2024,7 @@ BUILDERS = {
           Test262,
           Mozilla,
         ],
-        'variants': V8NoExhaustiveVariants,
+        'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_rel': {
@@ -2035,7 +2035,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'tests': [V8Testing(4)],
-        'variants': V8NoExhaustiveVariants,
+        'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_dbg': {
@@ -2046,7 +2046,7 @@ BUILDERS = {
           'TARGET_BITS': 32,
         },
         'tests': [V8Testing(5)],
-        'variants': V8NoExhaustiveVariants,
+        'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
         'swarming_properties': {
           'default_hard_timeout': 60 * 60,
@@ -2441,7 +2441,7 @@ BUILDERS = {
           'cpu': 'x86-64',
         },
         'tests': [V8Testing(3)],
-        'variants': V8NoExhaustiveVariants,
+        'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
       },
       'v8_win64_asan_rel_ng': {

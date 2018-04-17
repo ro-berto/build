@@ -30,29 +30,21 @@ class V8Variant(object):
     """
     return V8Variant(*(packed or '').split(' '))
 
-# Spectial marker to indicate bots or tests that should only run with standard
-# or specific variants.
-V8NoExhaustiveVariants = object()
 
 def test_args_from_variants(*variants):
   """Merge variant specification from bot, test type and test step.
 
   Returns: Flags for the v8 test driver with either 1) all specific
-      variants if any, or 2) the exhaustive testing default if the
-      V8NoExhaustiveVariants marker wasn't used (e.g. on slow bots), or 3)
-      the default (no parameters).
+      variants if any, or 2) flags for exhaustive testing.
   """
-  specific_variants = [
-    v for v in variants if v and v != V8NoExhaustiveVariants]
-  _variants = []
+  specific_variants = [v for v in variants if v]
   if specific_variants:
     _variants = sorted(list(set(itertools.chain(
         *[v.variants for v in specific_variants]))))
-  elif V8NoExhaustiveVariants not in variants:
+  else:
     _variants = ['more', 'dev']
-  if _variants:
-    return ['--variants=' + ','.join(_variants)]
-  return []
+  assert _variants
+  return ['--variants=' + ','.join(_variants)]
 
 
 TEST_CONFIGS = freeze({
@@ -113,7 +105,7 @@ TEST_CONFIGS = freeze({
     'isolated_target': 'run-num-fuzzer',
     'idempotent': False,
     'use_random_seed': False,
-    'variants': V8NoExhaustiveVariants,
+    'variants': V8Variant('default'),
   },
   'optimize_for_size': {
     'name': 'OptimizeForSize',

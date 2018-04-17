@@ -89,6 +89,7 @@
       "out",
       "--buildbot",
       "--timeout=200",
+      "--variants=default",
       "--total-timeout-sec=2100",
       "--stress-interrupt-budget=10",
       "--stress-deopt=5",

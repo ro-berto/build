@@ -333,6 +333,7 @@
       "--timeout=200",
       "--random-seed=-976563914",
       "bot_default",
+      "--variants=default",
       "--rerun-failures-count=2",
       "--mastername",
       "client.v8",

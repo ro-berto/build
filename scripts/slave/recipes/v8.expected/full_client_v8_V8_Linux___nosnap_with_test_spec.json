@@ -92,7 +92,7 @@
       "--timeout=200",
       "--random-seed=-677923763",
       "mjsunit",
-      "--variants=sweet",
+      "--variants=default,sweet",
       "--rerun-failures-count=2",
       "--mastername",
       "client.v8",
