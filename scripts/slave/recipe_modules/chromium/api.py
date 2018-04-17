@@ -730,7 +730,13 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.cros_sdk.external:
       wrapper += ['--use-external-config']
     if clean:
-      wrapper += ['--clear-sdk-cache']
+      # Current LKGM is broken for daisy. Clearing it's cache every build makes
+      # the chrome-sdk fallback logic take over 10min on an empty cache. This
+      # keeps the cache around after builds to avoid that 10min overhead.
+      # TODO(bpastene): Remove this once the LKGM gets rolled to a working
+      # version.
+      if self.c.TARGET_CROS_BOARD != 'daisy':
+        wrapper += ['--clear-sdk-cache']
     if self.c.compile_py.goma_dir:
       wrapper += ['--gomadir', self.c.compile_py.goma_dir]
       # Since we are very sure api.chromium.compile starts compiler_proxy,
