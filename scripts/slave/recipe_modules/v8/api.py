@@ -339,7 +339,7 @@ class V8Api(recipe_api.RecipeApi):
   def bot_type(self):
     if self.bot_config.get('triggers') or self.bot_config.get('triggers_proxy'):
       return 'builder'
-    if self.bot_config.get('parent_buildername'):
+    if self.m.properties.get('parent_buildername'):
       return 'tester'
     return 'builder_tester'
 

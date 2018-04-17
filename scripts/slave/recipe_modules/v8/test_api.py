@@ -397,7 +397,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     builders_list = builders.BUILDERS[mastername]['builders']
     bot_config = builders_list[buildername]
     v8_config_kwargs = bot_config.get('v8_config_kwargs', {})
-    parent_buildername = bot_config.get('parent_buildername')
+    parent_buildername = builders.PARENT_MAP[mastername].get(buildername)
     branch=self._get_test_branch_name(mastername, buildername)
 
     if mastername.startswith('tryserver'):
