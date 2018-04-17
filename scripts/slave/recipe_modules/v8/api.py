@@ -139,7 +139,9 @@ class V8Api(recipe_api.RecipeApi):
     for c in self.bot_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
     for c in self.bot_config.get('chromium_apply_config', []):
-      self.m.chromium.apply_config(c)
+      # TODO(machenbach): Remove condition after cleaning build_limited.
+      if c != 'v8_ninja':
+        self.m.chromium.apply_config(c)
     for c in self.bot_config.get('v8_apply_config', []):
       self.apply_config(c)
 

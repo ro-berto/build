@@ -10,15 +10,15 @@ import DEPS
 CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
 
 
-@CONFIG_CTX()
+@CONFIG_CTX(includes=['ninja'])
 def v8(c):
   c.project_generator.tool = 'mb'
   c.build_dir = c.CHECKOUT_PATH.join('out')
 
-  # Chromium adds '_x64' to the output folder, which is only understood when
-  # compiling v8 standalone with ninja.
   if c.HOST_PLATFORM == 'win' and c.TARGET_BITS == 64:
-    c.build_config_fs = c.BUILD_CONFIG
+    # Windows requires 64-bit builds to be in <dir>_x64 with ninja. See
+    # crbug.com/470681.
+    c.build_config_fs = c.BUILD_CONFIG + '_x64'
 
 
 @CONFIG_CTX(includes=['v8'])
@@ -34,14 +34,6 @@ def default_target_v8_clusterfuzz(c):
 @CONFIG_CTX(includes=['v8'])
 def default_target_v8_archive(c):
   c.compile_py.default_targets = ['v8_archive']
-
-
-@CONFIG_CTX(includes=['ninja'])
-def v8_ninja(c):
-  if c.HOST_PLATFORM == 'win' and c.TARGET_BITS == 64:
-    # Windows requires 64-bit builds to be in <dir>_x64 with ninja. See
-    # crbug.com/470681.
-    c.build_config_fs = c.BUILD_CONFIG + '_x64'
 
 
 # Work-around for obtaining the right build dir on linux slave that trigger
