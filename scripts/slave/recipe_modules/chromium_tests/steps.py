@@ -1798,6 +1798,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
     args = _merge_args_and_test_options(self, self._args)
 
+    shards = self._shards
+
     # We've run into issues in the past with command lines hitting a character
     # limit on windows. Do a sanity check, and only pass this list if we failed
     # less than 100 tests.
@@ -1806,12 +1808,16 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       test_list = "::".join(self.failures(api, 'with patch'))
       args.extend(['--isolated-script-test-filter', test_list])
 
+      # Only run the tests on one shard; we don't need more, and layout tests
+      # complain if you run a shard which doesn't run tests.
+      shards = 1
+
     # For the time being, we assume all isolated_script_test are not idempotent
     # TODO(nednguyen): make this configurable in isolated_scripts's spec.
     return api.swarming.isolated_script_task(
         title=self._step_name(suffix),
         ignore_task_failure=self._ignore_task_failure,
-        isolated_hash=isolated_hash, shards=self._shards, idempotent=False,
+        isolated_hash=isolated_hash, shards=shards, idempotent=False,
         merge=self._merge, trigger_script=self._trigger_script,
         build_properties=api.chromium.build_properties, extra_args=args)
 
