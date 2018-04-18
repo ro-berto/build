@@ -157,13 +157,14 @@
       "[START_DIR]/src/flutter/tools/gn",
       "--goma",
       "--runtime-mode",
-      "debug"
+      "debug",
+      "--no-lto"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma_client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
-    "name": "gn --runtime-mode debug"
+    "name": "gn --runtime-mode debug --no-lto"
   },
   {
     "cmd": [
@@ -172,13 +173,14 @@
       "--goma",
       "--runtime-mode",
       "debug",
-      "--unoptimized"
+      "--unoptimized",
+      "--no-lto"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma_client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
-    "name": "gn --runtime-mode debug --unoptimized"
+    "name": "gn --runtime-mode debug --unoptimized --no-lto"
   },
   {
     "cmd": [
@@ -2540,13 +2542,14 @@
       "--goma",
       "--ios",
       "--runtime-mode",
-      "debug"
+      "debug",
+      "--no-lto"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma_client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
-    "name": "gn --ios --runtime-mode debug"
+    "name": "gn --ios --runtime-mode debug --no-lto"
   },
   {
     "cmd": [
@@ -2556,13 +2559,14 @@
       "--ios",
       "--runtime-mode",
       "debug",
-      "--ios-cpu=arm"
+      "--ios-cpu=arm",
+      "--no-lto"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma_client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
-    "name": "gn --ios --runtime-mode debug --ios-cpu=arm"
+    "name": "gn --ios --runtime-mode debug --ios-cpu=arm --no-lto"
   },
   {
     "cmd": [
@@ -2572,13 +2576,14 @@
       "--ios",
       "--runtime-mode",
       "debug",
-      "--simulator"
+      "--simulator",
+      "--no-lto"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma_client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
-    "name": "gn --ios --runtime-mode debug --simulator"
+    "name": "gn --ios --runtime-mode debug --simulator --no-lto"
   },
   {
     "cmd": [

@@ -249,8 +249,8 @@ def SetupXcode(api):
 
 
 def BuildMac(api):
-  RunGN(api, '--runtime-mode', 'debug')
-  RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
+  RunGN(api, '--runtime-mode', 'debug', '--no-lto')
+  RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto')
   RunGN(api, '--runtime-mode', 'profile', '--android')
   RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
   RunGN(api, '--runtime-mode', 'release', '--android')
@@ -362,9 +362,9 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
 
 def BuildIOS(api):
   # Generate Ninja files for all valid configurations.
-  RunGN(api, '--ios', '--runtime-mode', 'debug')
-  RunGN(api, '--ios', '--runtime-mode', 'debug', '--ios-cpu=arm')
-  RunGN(api, '--ios', '--runtime-mode', 'debug', '--simulator')
+  RunGN(api, '--ios', '--runtime-mode', 'debug', '--no-lto')
+  RunGN(api, '--ios', '--runtime-mode', 'debug', '--ios-cpu=arm', '--no-lto')
+  RunGN(api, '--ios', '--runtime-mode', 'debug', '--simulator', '--no-lto')
   RunGN(api, '--ios', '--runtime-mode', 'profile')
   RunGN(api, '--ios', '--runtime-mode', 'profile', '--ios-cpu=arm')
   RunGN(api, '--ios', '--runtime-mode', 'release')
