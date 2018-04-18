@@ -23,9 +23,8 @@ import sys
 import tarfile
 
 
-NONESSENTIAL_DIRS = (
+nonessential_dirs = (
     'chrome/common/extensions/docs',
-    'third_party/blink/tools',
     'third_party/blink/web_tests',
     'third_party/findbugs',
     'third_party/hunspell_dictionaries',
@@ -116,7 +115,7 @@ class MyTarFile(tarfile.TarFile):
 
       # Remove contents of non-essential directories.
       if not keep_file:
-        for nonessential_dir in (NONESSENTIAL_DIRS + TEST_DIRS):
+        for nonessential_dir in (nonessential_dirs + TEST_DIRS):
           if rel_name.startswith(nonessential_dir) and os.path.isfile(name):
             self.__report_skipped(name)
             return
@@ -180,6 +179,10 @@ def main(argv):
       print('Could not run build/util/lastchange.py to update '
             'gpu_lists_version.h.')
       return 1
+
+  # Some versions prior to M68 need third_party/blink/tools.
+  if version_major >= 68:
+    nonessential_dirs.add('third_party/blink/tools')
 
   output_fullname = args[0] + '.tar'
   output_basename = options.basename or os.path.basename(args[0])
