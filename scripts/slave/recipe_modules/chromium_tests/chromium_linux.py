@@ -13,7 +13,7 @@ SPEC = {
     'src_side_runtest_py': True,
   },
   'builders': {
-    'linux64-jumbo-rel': {
+    'linux-jumbo-rel': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
       'chromium_apply_config': [
