@@ -113,14 +113,6 @@
       "category": "2Builders",
       "slavebuilddir": "android_build",
     },
-    "Android arm64 Builder (dbg)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["builders"],
-      "category": "2Builders",
-      "slavebuilddir": "android_build",
-    },
     "KitKat Phone Tester (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -151,14 +143,6 @@
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["lollipop_tablet"],
-      "category": "3Testers",
-      "mergeRequests": True,
-    },
-    "Marshmallow 64 bit Tester": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["marshmallow_64"],
       "category": "3Testers",
       "mergeRequests": True,
     },
@@ -237,10 +221,6 @@
         "bits": 64,
       },
       "slaves": [
-          "slave36-c1",
-          "slave37-c1",
-          "slave38-c1",
-          "slave39-c1",
           "slave41-c1",
           "slave125-c1",
           "slave126-c1",
@@ -366,14 +346,6 @@
         "bits": "64",
       },
       "slaves": ["slave217-c1"],
-    },
-    "marshmallow_64": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["slave46-c1"],
     },
     "marshmallow_phone": {
       "slave_data": {
