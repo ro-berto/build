@@ -220,7 +220,8 @@ _AddIsolatedTestSpec('Android One Perf', 'android-one', 'android',
 
 # Webview
 _AddIsolatedTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
-                     'android', parent_buildername='Android arm64 Compile Perf')
+                     'android', parent_buildername='Android arm64 Compile Perf',
+                     use_private_swarming_server=True)
 _AddIsolatedTestSpec('Android Nexus6 WebView Perf', 'android-webview-nexus6',
                      'android', target_bits=32,
                      parent_buildername='Android Compile Perf')
