@@ -856,9 +856,11 @@
       "--path-to-archive-output",
       "[START_DIR]/src/out/chromium-android/Debug/index_pack_android_kythe.zip",
       "--corpus",
-      "chromium-android",
+      "chromium",
       "--revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--root",
+      "chromium-android"
     ],
     "name": "create kythe index pack"
   },

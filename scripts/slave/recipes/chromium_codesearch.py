@@ -98,7 +98,8 @@ SPEC = freeze({
       'gen_repo_branch': 'android',
       # Generated files will end up in out/chromium-android/Debug/gen.
       'gen_repo_out_dir': 'out/chromium-android',
-      'corpus': 'chromium-android',
+      'corpus': 'chromium',
+      'root': 'chromium-android',
     },
     'codesearch-gen-chromium-win': {
       'gclient_config': 'chromium',
@@ -110,7 +111,8 @@ SPEC = freeze({
       # Don't push generated files to git until we've verified their contents.
       'sync_generated_files': False,
       'gen_repo_branch': 'win',
-      'corpus': 'chromium-win',
+      'corpus': 'chromium',
+      'root': 'chromium-win',
     },
   },
 })
