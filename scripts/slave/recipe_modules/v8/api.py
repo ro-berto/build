@@ -7,12 +7,11 @@ import ast
 import contextlib
 import datetime
 import difflib
-import itertools
 import random
 import re
 import urllib
 
-from builders import TestStepConfig, iter_builder_set
+from builders import EmptyTestSpec, TestStepConfig, TestSpec, iter_builder_set
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 from . import bisection
@@ -112,6 +111,7 @@ def isolate_targets_from_tests(tests):
 class V8Api(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
   VERSION_FILE = 'include/v8-version.h'
+  EMPTY_TEST_SPEC = EmptyTestSpec
 
   def apply_bot_config(self, builders):
     """Entry method for using the v8 api.
@@ -364,39 +364,13 @@ class V8Api(recipe_api.RecipeApi):
   def relative_path_to_d8(self):
     return self.m.path.join('out', self.m.chromium.c.build_config_fs, 'd8')
 
-  def _test_spec_to_properties(self, buildername, test_spec):
-    """Packs a test spec and returns it as a properties dict to be passed to
-    another builder.
-
-    This method is the counterpart to the method below.
-    """
-    packed_spec = [t.pack() for t in (test_spec or {}).get(buildername, [])]
-    # TODO(machenbach): Remove this restriction post-buildbot.
-    assert len(self.m.json.dumps(packed_spec)) < 1024
-    if packed_spec:
-      return {'parent_test_spec': packed_spec}
-    return {}
-
-  def _test_spec_from_properties(self):
-    """Unpacks a test spec provided by another builder via properties.
-
-    This method is the counterpart to the method above.
-    """
-    return [
-      TestStepConfig.unpack(packed_spec)
-      for packed_spec in self.m.properties.get('parent_test_spec', [])
-    ]
-
   def extra_tests_from_properties(self):
     """Returns runnable testing.BaseTest objects for each extra test specified
     by parent_test_spec property.
-
-    The parent_test_spec property is expected to contain a list of packed
-    builders.TestStepConfig objects.
     """
     return [
       testing.create_test(test, self.m)
-      for test in self._test_spec_from_properties()
+      for test in TestSpec.from_properties_dict(self.m.properties)
     ]
 
   def extra_tests_from_test_spec(self, test_spec):
@@ -405,16 +379,14 @@ class V8Api(recipe_api.RecipeApi):
     """
     return [
       testing.create_test(test, self.m)
-      for test in test_spec.get(self.m.properties['buildername'], [])
+      for test in test_spec.get_tests(self.m.properties['buildername'])
     ]
 
   def read_test_spec(self):
     """Reads a test specification file under v8/infra/testing/<mastername>.pyl.
 
-    Returns: Test spec, filtered by interesting builders (current builder and
-        all its triggered testers). The format is a mapping of builder name
-        to list of builders.TestStepConfig objects. The test-step configs
-        can be used by the V8 api to create runnable test steps.
+    Returns: TestSpec object, filtered by interesting builders (current builder
+        and all its triggered testers).
     """
     mastername = self.m.properties['mastername']
     buildername = self.m.properties['buildername']
@@ -424,7 +396,7 @@ class V8Api(recipe_api.RecipeApi):
     # Source-side test spec is opt-in. Just ignore it if the file doesn't
     # exist for the current master.
     if not self.m.path.exists(test_spec_file):
-      return {}
+      return EmptyTestSpec
 
     try:
       # Eval python literal file.
@@ -437,29 +409,14 @@ class V8Api(recipe_api.RecipeApi):
       raise self.m.step.InfraFailure(
           'Failed to parse test specification "%s": %s' % (test_spec_file, e))
 
-    # Iterate over the current builder and all its triggered testers. Transform
-    # the pyl structure into a test-step configuration with TestStepConfig
-    # objects for all builders that apply.
-    test_spec = {}
-    for iter_buildername, _ in iter_builder_set(mastername, buildername):
-      if full_test_spec.get(iter_buildername):
-        tests = full_test_spec[iter_buildername]
-        # TODO(machenbach): Remove condition, once default switched to dict on
-        # v8 side.
-        if isinstance(tests, dict):  # pragma: no cover
-          tests = tests.get('tests', [])
-        test_spec[iter_buildername] = [
-          TestStepConfig.from_test_spec(t)
-          for t in tests
-        ]
+    # Transform into object.
+    test_spec = TestSpec.from_python_literal(
+        full_test_spec, mastername, buildername)
 
     # Log test spec for debuggability.
-    log = []
-    for builder, tests in sorted(test_spec.iteritems()):
-      log.append(builder)
-      for test in tests:
-        log.append('  ' + str(test))
-    self.m.step.active_result.presentation.logs['test_spec'] = log
+    self.m.step.active_result.presentation.logs['test_spec'] = (
+        test_spec.log_lines())
+
     return test_spec
 
   @property
@@ -583,14 +540,14 @@ class V8Api(recipe_api.RecipeApi):
       points.append(p)
     self.m.perf_dashboard.add_point(points)
 
-  def compile(self, test_spec=None, **kwargs):
+  def compile(self, test_spec=EmptyTestSpec, **kwargs):
     """Compile all desired targets and isolate tests.
 
     Args:
-      test_spec: Optional test specification in the format returned by
-          read_test_spec(). Expected to contain only specifications for the
-          current builder and all triggered builders. All corrensponding extra
-          targets will also be isolated.
+      test_spec: Optional TestSpec object as returned by read_test_spec().
+          Expected to contain only specifications for the current builder and
+          all triggered builders. All corrensponding extra targets will also be
+          isolated.
     """
     use_goma = (self.m.chromium.c.compile_py.compiler and
                 'goma' in self.m.chromium.c.compile_py.compiler)
@@ -598,10 +555,8 @@ class V8Api(recipe_api.RecipeApi):
     # Calculate extra targets to isolate from V8-side test specification. The
     # test_spec contains extra TestStepConfig objects for the current builder
     # and all its triggered builders.
-    extra_targets = isolate_targets_from_tests(
-        itertools.chain(*(test_spec or {}).values()))
-    isolate_targets = sorted(list(set(
-        self.isolate_targets + (extra_targets or []))))
+    extra_targets = isolate_targets_from_tests(test_spec.get_all_tests())
+    isolate_targets = sorted(list(set(self.isolate_targets + extra_targets)))
 
     if self.m.chromium.c.project_generator.tool == 'mb':
       def step_test_data():
@@ -1246,7 +1201,7 @@ class V8Api(recipe_api.RecipeApi):
     if key in src:
       dest[key] = src[key]
 
-  def maybe_trigger(self, test_spec=None, **additional_properties):
+  def maybe_trigger(self, test_spec=EmptyTestSpec, **additional_properties):
     triggers = self.bot_config.get('triggers', [])
     triggers_proxy = self.bot_config.get('triggers_proxy', False)
     triggered_build_ids = []
@@ -1320,7 +1275,7 @@ class V8Api(recipe_api.RecipeApi):
                 'builder_name': builder_name,
                 'properties': dict(
                     trigger_props,
-                    **self._test_spec_to_properties(builder_name, test_spec)
+                    **test_spec.as_properties_dict(builder_name)
                 ),
               } for builder_name in triggers],
               # Tryserver uses custom buildset that is set by the buildbucket
@@ -1339,7 +1294,7 @@ class V8Api(recipe_api.RecipeApi):
                 self.m.scheduler.BuildbucketTrigger(
                   properties=dict(
                     ci_properties,
-                    **self._test_spec_to_properties(builder_name, test_spec)
+                    **test_spec.as_properties_dict(builder_name)
                   ),
                   tags={
                     'buildset': 'commit/gitiles/chromium.googlesource.com/v8/'
@@ -1355,7 +1310,7 @@ class V8Api(recipe_api.RecipeApi):
             # Attach additional builder-specific test-spec properties.
             'properties': dict(
                 ci_properties,
-                **self._test_spec_to_properties(builder_name, test_spec)
+                **test_spec.as_properties_dict(builder_name)
             ),
           } for builder_name in triggers])
 

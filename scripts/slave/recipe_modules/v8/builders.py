@@ -7,6 +7,8 @@
 
 
 from collections import defaultdict
+import itertools
+import json
 
 from recipe_engine.types import freeze
 from testing import V8Variant
@@ -56,13 +58,100 @@ class TestStepConfig(object):
     )
 
   @staticmethod
-  def from_test_spec(spec):
+  def from_python_literal(spec):
     """Constructs a test-step config from the V8-side pyl test spec."""
     return TestStepConfig(
         name=spec['name'],
         shards=spec.get('shards', 1),
         variants=V8Variant(spec['variant'])
     )
+
+
+class TestSpec(object):
+  """Represents a V8-side test specification with extra tests to run on a
+  set of builers.
+
+  The builder set is comprised of the parent builder and all triggered child
+  builders.
+  """
+  def __init__(self):
+    self._test_spec = {}
+
+  def as_properties_dict(self, buildername):
+    """Packs a test spec and returns it as a properties dict to be passed to
+    another builder.
+
+    This method is the counterpart to the method below.
+
+    Args:
+      buildername: The name of the builder to which the property is passed. The
+          spec will contain the data for that builder only.
+    Returns: A dict to be used to update recipe properties of the triggered
+        child builders.
+    """
+    packed_spec = [t.pack() for t in self._test_spec.get(buildername, [])]
+    # TODO(machenbach): Remove this restriction post-buildbot.
+    assert len(json.dumps(packed_spec)) < 1024
+    if packed_spec:
+      return {'parent_test_spec': packed_spec}
+    return {}
+
+  @staticmethod
+  def from_properties_dict(properties):
+    """Unpacks a test spec provided by another builder via properties.
+
+    This method is the counterpart to the method above.
+
+    Returns: A list of TestStepConfig objects representing extra test.
+    """
+    return [
+      TestStepConfig.unpack(packed_spec)
+      for packed_spec in properties.get('parent_test_spec', [])
+    ]
+
+  @staticmethod
+  def from_python_literal(full_test_spec, mastername, buildername):
+    """Constructs a test spec from the raw V8-side pyl."""
+    result = TestSpec()
+    # Iterate over the current builder and all its triggered testers. Transform
+    # the pyl structure into a test-step configuration with TestStepConfig
+    # objects for all builders that apply.
+    for iter_buildername, _ in iter_builder_set(mastername, buildername):
+      if full_test_spec.get(iter_buildername):
+        tests = full_test_spec[iter_buildername]
+        # TODO(machenbach): Remove condition, once default switched to dict on
+        # v8 side.
+        if isinstance(tests, dict):  # pragma: no cover
+          tests = tests.get('tests', [])
+        result._test_spec[iter_buildername] = [
+          TestStepConfig.from_python_literal(t)
+          for t in tests
+        ]
+    return result
+
+  def log_lines(self):
+    """Readable representation of this test spec for recipe log lines.
+
+    Returns: List of strings.
+    """
+    log = []
+    for builder, tests in sorted(self._test_spec.iteritems()):
+      log.append(builder)
+      for test in tests:
+        log.append('  ' + str(test))
+    return log
+
+  def get_tests(self, buildername):
+    """Get all TestStepConfig objects filtered by `buildername`."""
+    return self._test_spec.get(buildername, [])
+
+  def get_all_tests(self):
+    """Get all TestStepConfig objects for all builders."""
+    return itertools.chain(*self._test_spec.values())
+
+
+# Empty test spec, usable as null object.
+EmptyTestSpec = TestSpec()
 
 
 # Top-level test configs for convenience.

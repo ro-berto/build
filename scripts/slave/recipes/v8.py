@@ -39,7 +39,7 @@ def RunSteps(api, set_gclient_var):
   api.chromium.c.use_gyp_env = False
 
   additional_trigger_properties = {}
-  test_spec = {}
+  test_spec = v8.EMPTY_TEST_SPEC
   tests = v8.create_tests()
   tests += v8.extra_tests_from_properties()
 
