@@ -632,7 +632,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=sizes",
       "--perf-id=android_cronet_l_builder",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/sizes.py",
+      "[START_DIR]/src/infra/scripts/legacy/scripts/slave/chromium/sizes.py",
       "--target",
       "Release",
       "--platform",

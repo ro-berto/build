@@ -122,7 +122,7 @@
       "--perf-dashboard-id=sizes",
       "--perf-id=test-perf-id",
       "--perf-config={'r_clang_rev': '123456'}",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/sizes.py",
+      "None/infra/scripts/legacy/scripts/slave/chromium/sizes.py",
       "--target",
       "Release",
       "--platform",

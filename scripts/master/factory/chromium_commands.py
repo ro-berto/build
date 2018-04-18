@@ -63,7 +63,8 @@ class ChromiumCommands(commands.FactoryCommands):
     self._test_webkitpy_tool = J(s_dir, 'test_webkitpy_wrapper.py')
     self._archive_coverage = J(s_dir, 'archive_coverage.py')
     self._archive_tool = J(s_dir, 'archive_build.py')
-    self._sizes_tool = J(s_dir, 'sizes.py')
+    self._sizes_tool = J('src', 'infra', 'scripts', 'legacy', 'scripts',
+                         'slave', 'chromium', 'sizes.py')
     self._checkbins_tool = J(s_dir, 'checkbins_wrapper.py')
     self._mini_installer_tests_tool = J(s_dir, 'test_mini_installer_wrapper.py')
     self._device_status_check = J(self._bb_dir, 'bb_device_status_check.py')

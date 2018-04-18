@@ -26,7 +26,7 @@
       "--results-url=https://example/url",
       "--perf-dashboard-id=sizes",
       "--perf-id=test-perf-id",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/sizes.py",
+      "None/infra/scripts/legacy/scripts/slave/chromium/sizes.py",
       "--target",
       "Release",
       "--platform",

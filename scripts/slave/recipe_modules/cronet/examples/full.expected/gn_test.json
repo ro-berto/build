@@ -675,7 +675,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=sizes",
       "--perf-id=sample-perf-id",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/sizes.py",
+      "[START_DIR]/src/infra/scripts/legacy/scripts/slave/chromium/sizes.py",
       "--target",
       "Debug",
       "--platform",

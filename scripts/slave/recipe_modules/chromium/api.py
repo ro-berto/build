@@ -659,7 +659,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   def sizes(self, results_url=None, perf_id=None, platform=None, **kwargs):
     """Return a sizes.py invocation.
     This uses runtests.py to upload the results to the perf dashboard."""
-    sizes_script = self.package_repo_resource(
+    sizes_script = self.m.path['checkout'].join('infra', 'scripts', 'legacy',
         'scripts', 'slave', 'chromium', 'sizes.py')
     sizes_args = ['--target', self.c.build_config_fs]
     if platform:
