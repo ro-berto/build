@@ -84,9 +84,10 @@ ARCHIVE_LINK = ('https://storage.googleapis.com'
 
 def _build_and_test(api, suffix=''):
   with api.context(cwd=api.v8.checkout_root.join('node.js')):
-    api.step(
-      'configure node.js%s' % suffix,
-      [api.v8.checkout_root.join('node.js', 'configure'), '--build-v8-with-gn'],
+    api.python(
+      name='configure node.js%s' % suffix,
+      script=api.v8.checkout_root.join('node.js', 'configure'),
+      args=['--build-v8-with-gn'],
     )
 
     api.step(
@@ -101,10 +102,10 @@ def _build_and_test(api, suffix=''):
 
 def _build_and_upload(api):
   with api.context(cwd=api.v8.checkout_root.join('node.js')):
-    api.step(
-      'configure node.js - install',
-      [
-        api.v8.checkout_root.join('node.js', 'configure'),
+    api.python(
+      name='configure node.js - install',
+      script=api.v8.checkout_root.join('node.js', 'configure'),
+      args=[
         '--prefix=/',
         '--tag=v8-build-%s' % api.v8.revision,
         '--build-v8-with-gn',

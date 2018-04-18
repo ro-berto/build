@@ -122,6 +122,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/node.js/configure",
       "--build-v8-with-gn"
     ],
@@ -147,6 +149,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/node.js/configure",
       "--prefix=/",
       "--tag=v8-build-f2cbea7e89a45f46819777bb78a1f5bd0241f64c",

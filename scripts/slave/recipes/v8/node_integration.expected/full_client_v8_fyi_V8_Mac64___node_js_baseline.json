@@ -142,6 +142,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/node.js/configure",
       "--build-v8-with-gn"
     ],
