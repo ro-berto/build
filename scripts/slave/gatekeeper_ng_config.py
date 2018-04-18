@@ -42,6 +42,7 @@ reproduced here:
   %(reason): reason for launching the build
   %(revision): build revision
   %(buildnumber): buildnumber
+  %(steps): comma-separated list of failed steps
 
 The 'status_template' is what is sent to the status app if the tree is set to be
 closed. Its formatting arguments are found in gatekeeper_ng.py's
