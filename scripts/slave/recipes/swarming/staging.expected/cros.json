@@ -529,7 +529,6 @@
       "--nocolor",
       "--log-level=debug",
       "--use-external-config",
-      "--clear-sdk-cache",
       "--gomadir",
       "[CACHE]/goma_client",
       "--nostart-goma",

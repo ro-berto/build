@@ -1016,8 +1016,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     optional_system_python = contextlib.contextmanager(
         lambda: (x for x in [None]))()
     if self.c.TARGET_CROS_BOARD:
-      # Wrap 'runhooks' through 'cros chrome-sdk'
-      step_kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
+      # Wrap 'mb' through 'cros chrome-sdk'
+      step_kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper()
       optional_system_python = self.m.chromite.with_system_python()
 
     # This runs with an almost-bare env being passed along, so we get a clean
