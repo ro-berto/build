@@ -247,5 +247,5 @@ _AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', '', 'mac',
                      use_private_swarming_server=True)
 
 
-_AddIsolatedTestSpec('Linux Perf', 'linux-release', 'linux',
+_AddIsolatedTestSpec('linux-perf', '', 'linux',
     use_private_swarming_server=True)

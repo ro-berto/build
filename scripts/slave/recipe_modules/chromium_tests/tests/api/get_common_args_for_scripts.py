@@ -26,6 +26,6 @@ def GenTests(api):
       api.test('basic') +
       api.properties.generic(
           mastername='chromium.perf',
-          buildername='Linux Perf',
+          buildername='linux-perf',
           builders=api.chromium_tests.builders)
   )

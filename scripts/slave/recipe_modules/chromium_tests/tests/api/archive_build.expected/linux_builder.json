@@ -322,7 +322,7 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "Linux Perf",
+        "builder_name": "linux-perf",
         "properties": {
           "parent_got_angle_revision": "fac9503c46405f77757b9a728eb85b8d7bc6080c",
           "parent_got_angle_revision_cp": "refs/heads/master@{#297276}",
@@ -385,7 +385,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@Histogram Pipeline Linux Perf<br />Linux Perf<br />Mojo Linux Perf@@@"
+      "@@@STEP_TEXT@Histogram Pipeline Linux Perf<br />Mojo Linux Perf<br />linux-perf@@@"
     ]
   },
   {

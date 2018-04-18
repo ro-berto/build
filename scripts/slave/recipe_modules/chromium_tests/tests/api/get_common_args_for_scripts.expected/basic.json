@@ -9,7 +9,7 @@
       "--paths",
       "{\"checkout\": \"None\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux Perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"perf-id\": \"linux-release\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"linux-perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"results-url\": \"https://chromeperf.appspot.com\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
     "name": "sample script"
   },
