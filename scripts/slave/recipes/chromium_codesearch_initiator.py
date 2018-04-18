@@ -49,6 +49,12 @@ def RunSteps(api):
               'root_solution_revision': commit_hash,
           },
       },
+      {
+          'builder_name': 'codesearch-gen-chromium-win',
+          'properties': {
+              'root_solution_revision': commit_hash,
+          },
+      },
   )
 
 def GenTests(api):
