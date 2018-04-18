@@ -477,7 +477,7 @@ def GenTests(api):
         'read test spec',
         api.v8.example_test_spec(
             'V8 Mac64',
-            '[{"name": "mjsunit", "variant": "sweet", "shards": 2}]',
+            '{"tests": [{"name": "mjsunit", "variant": "sweet", "shards": 2}]}',
         ),
     ) +
     api.post_process(f)
@@ -498,7 +498,7 @@ def GenTests(api):
         'read test spec',
         api.v8.example_test_spec(
             'V8 Linux - nosnap',
-            '[{"name": "mjsunit", "variant": "sweet", "shards": 2}]',
+            '{"tests": [{"name": "mjsunit", "variant": "sweet", "shards": 2}]}',
         ),
     ) +
     api.post_process(Filter(
@@ -518,7 +518,7 @@ def GenTests(api):
         'client.v8',
         'V8 Linux - nosnap',
         'with_test_spec',
-        parent_test_spec=[["mjsunit", 2, "sweet"]],
+        parent_test_spec={"tests": [["mjsunit", 2, "sweet"]]},
     ) +
     api.post_process(f)
   )

@@ -7,7 +7,6 @@
 
 
 from collections import defaultdict
-import itertools
 import json
 
 from recipe_engine.types import freeze
@@ -89,10 +88,13 @@ class TestSpec(object):
     Returns: A dict to be used to update recipe properties of the triggered
         child builders.
     """
-    packed_spec = [t.pack() for t in self._test_spec.get(buildername, [])]
+    builder_spec = self._test_spec.get(buildername, {})
+    packed_spec = {
+      'tests': [t.pack() for t in builder_spec.get('tests', [])],
+    }
     # TODO(machenbach): Remove this restriction post-buildbot.
     assert len(json.dumps(packed_spec)) < 1024
-    if packed_spec:
+    if packed_spec['tests']:
       return {'parent_test_spec': packed_spec}
     return {}
 
@@ -106,7 +108,7 @@ class TestSpec(object):
     """
     return [
       TestStepConfig.unpack(packed_spec)
-      for packed_spec in properties.get('parent_test_spec', [])
+      for packed_spec in properties.get('parent_test_spec', {}).get('tests', [])
     ]
 
   @staticmethod
@@ -117,16 +119,14 @@ class TestSpec(object):
     # the pyl structure into a test-step configuration with TestStepConfig
     # objects for all builders that apply.
     for iter_buildername, _ in iter_builder_set(mastername, buildername):
-      if full_test_spec.get(iter_buildername):
-        tests = full_test_spec[iter_buildername]
-        # TODO(machenbach): Remove condition, once default switched to dict on
-        # v8 side.
-        if isinstance(tests, dict):  # pragma: no cover
-          tests = tests.get('tests', [])
-        result._test_spec[iter_buildername] = [
-          TestStepConfig.from_python_literal(t)
-          for t in tests
-        ]
+      builder_spec = full_test_spec.get(iter_buildername)
+      if builder_spec:
+        result._test_spec[iter_buildername] = {
+          'tests': [
+            TestStepConfig.from_python_literal(t)
+            for t in builder_spec.get('tests', [])
+          ],
+        }
     return result
 
   def log_lines(self):
@@ -135,19 +135,23 @@ class TestSpec(object):
     Returns: List of strings.
     """
     log = []
-    for builder, tests in sorted(self._test_spec.iteritems()):
+    for builder, builder_spec in sorted(self._test_spec.iteritems()):
       log.append(builder)
-      for test in tests:
+      for test in builder_spec['tests']:
         log.append('  ' + str(test))
     return log
 
   def get_tests(self, buildername):
     """Get all TestStepConfig objects filtered by `buildername`."""
-    return self._test_spec.get(buildername, [])
+    return self._test_spec.get(buildername, {}).get('tests', [])
 
   def get_all_tests(self):
     """Get all TestStepConfig objects for all builders."""
-    return itertools.chain(*self._test_spec.values())
+    return [
+      test
+      for builder_spec in self._test_spec.values()
+      for test in builder_spec.get('tests', [])
+    ]
 
 
 # Empty test spec, usable as null object.

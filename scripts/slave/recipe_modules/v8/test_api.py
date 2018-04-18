@@ -434,7 +434,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         # tests. Assume extra_isolate hashes for each extra test specified by
         # parent_test_spec property.
         swarm_hashes = self._make_dummy_swarm_hashes(bot_config)
-        for name, _, _ in kwargs.get('parent_test_spec', []):
+        for name, _, _ in kwargs.get('parent_test_spec', {}).get('tests', []):
           swarm_hashes[name] = '[dummy hash for %s]' % name
         test += self.m.properties(
           parent_got_swarming_client_revision='[dummy swarming client hash]',
