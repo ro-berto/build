@@ -115,6 +115,18 @@ def v8_tot(c):
   c.revisions['src/v8'] = 'HEAD'
 
 @CONFIG_CTX()
+def chromeos(c):
+  c.target_os.add('chromeos')
+
+@CONFIG_CTX(includes=['chromeos'])
+def chromeos_amd64_generic(c):
+  c.solutions[0].custom_vars['cros_board'] = 'amd64-generic'
+
+@CONFIG_CTX(includes=['chromeos'])
+def chromeos_daisy(c):  # pragma: no cover
+  c.solutions[0].custom_vars['cros_board'] = 'daisy'
+
+@CONFIG_CTX()
 def fuchsia(c):
   c.target_os.add('fuchsia')
 

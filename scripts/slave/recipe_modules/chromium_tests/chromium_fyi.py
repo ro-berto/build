@@ -910,6 +910,7 @@ SPEC = {
         'chromeos', 'mb', 'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['chromeos_amd64_generic'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_ARCH': 'intel',

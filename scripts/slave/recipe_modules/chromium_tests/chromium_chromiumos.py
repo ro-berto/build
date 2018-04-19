@@ -74,14 +74,15 @@ def _config(name,
             cros_board=None,
             target_arch='intel',
             target_bits=64,
-            gclient_config='chromium'):
+            gclient_apply_config=['chromeos']):
   build_config = 'Release' if '-rel' in name else 'Debug'
   cfg = {
     'chromium_config': 'chromium',
     'chromium_apply_config': [
       'chromeos', 'mb', 'ninja_confirm_noop',
     ],
-    'gclient_config': gclient_config,
+    'gclient_config': 'chromium',
+    'gclient_apply_config': gclient_apply_config,
     'chromium_config_kwargs': {
       'BUILD_CONFIG': build_config,
       'TARGET_ARCH': target_arch,
@@ -103,10 +104,9 @@ SPEC['builders'].update([
     _config('linux-chromeos-rel'),
     _config('linux-chromeos-dbg'),
 
-    # TODO(crbug.com/781413): remove the custom gclient config and go
-    # back to using 'chromium' once the hook is working reliably.
     _config('chromeos-amd64-generic-rel', cros_board='amd64-generic',
-            gclient_config='chromium_no_telemetry_dependencies'),
+            gclient_apply_config=['chromeos_amd64_generic']),
     _config('chromeos-daisy-rel', cros_board='daisy',
-            target_arch='arm', target_bits=32),
+            target_arch='arm', target_bits=32,
+            gclient_apply_config=['chromeos_daisy']),
 ])

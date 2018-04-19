@@ -120,6 +120,8 @@
       "--board=x86=generic",
       "--nocolor",
       "--log-level=debug",
+      "--cache-dir",
+      "None/build/cros_cache",
       "--use-external-config",
       "--",
       "python",

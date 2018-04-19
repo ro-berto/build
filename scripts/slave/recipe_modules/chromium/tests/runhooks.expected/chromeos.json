@@ -107,15 +107,6 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/cros",
-      "chrome-sdk",
-      "--nogn-gen",
-      "--board=x86-generic",
-      "--nocolor",
-      "--log-level=debug",
-      "--use-external-config",
-      "--clear-sdk-cache",
-      "--",
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",

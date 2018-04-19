@@ -413,6 +413,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       goma_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
           self.m.puppet_service_account.get_key_path('goma-rbe'))
 
+    # TODO(crbug.com/810460): Remove the system python wrapping.
     optional_system_python = contextlib.contextmanager(
         lambda: (x for x in [None]))()
     if self.c.TARGET_CROS_BOARD:
@@ -712,7 +713,7 @@ class ChromiumApi(recipe_api.RecipeApi):
           **kwargs)
     return step_result.json.output['clang_revision']
 
-  def get_cros_chrome_sdk_wrapper(self, clean=False):
+  def get_cros_chrome_sdk_wrapper(self):
     """Returns: a wrapper command for 'cros chrome-sdk'
 
     Args:
@@ -725,18 +726,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     wrapper = [
         self.m.depot_tools.cros_path, 'chrome-sdk', '--nogn-gen',
         '--board=%s' % (self.c.TARGET_CROS_BOARD,),
-        '--nocolor', '--log-level=debug',]
+        '--nocolor', '--log-level=debug',
+        '--cache-dir', self.m.path['checkout'].join('build', 'cros_cache')]
     wrapper += self.c.cros_sdk.args
     if self.c.cros_sdk.external:
       wrapper += ['--use-external-config']
-    if clean:
-      # Current LKGM is broken for daisy. Clearing it's cache every build makes
-      # the chrome-sdk fallback logic take over 10min on an empty cache. This
-      # keeps the cache around after builds to avoid that 10min overhead.
-      # TODO(bpastene): Remove this once the LKGM gets rolled to a working
-      # version.
-      if self.c.TARGET_CROS_BOARD != 'daisy':
-        wrapper += ['--clear-sdk-cache']
     if self.c.compile_py.goma_dir:
       wrapper += ['--gomadir', self.c.compile_py.goma_dir]
       # Since we are very sure api.chromium.compile starts compiler_proxy,
@@ -867,11 +861,13 @@ class ChromiumApi(recipe_api.RecipeApi):
       # accordingly.
       runhooks_env.update(self.c.gyp_env.as_jsonish())
 
+    # runhooks will invoke the 'cros chrome-sdk' if we're building for a cros
+    # board, so use system python if this is the case.
+    # TODO(crbug.com/810460): Remove the system python wrapping.
     optional_system_python = contextlib.contextmanager(
         lambda: (x for x in [None]))()
     if self.c.TARGET_CROS_BOARD:
       # Wrap 'runhooks' through 'cros chrome-sdk'
-      kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper(clean=True)
       optional_system_python = self.m.chromite.with_system_python()
     with optional_system_python:
       with self.m.context(env=runhooks_env):
@@ -1013,6 +1009,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       'args': args,
     }
 
+    # TODO(crbug.com/810460): Remove the system python wrapping.
     optional_system_python = contextlib.contextmanager(
         lambda: (x for x in [None]))()
     if self.c.TARGET_CROS_BOARD:

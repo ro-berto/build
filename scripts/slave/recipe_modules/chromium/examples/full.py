@@ -227,3 +227,14 @@ def GenTests(api):
              configs=['mac_toolchain'],
          )
   )
+
+  yield (api.test('chromeos_simplechrome') +
+         api.platform('linux', 64) +
+         api.properties(
+             mastername='chromium.chromiumos',
+             buildername='chromeos-amd64-generic-rel',
+             bot_id='build1-a1',
+             buildnumber='77457',
+             out_dir='/tmp',
+         )
+  )
