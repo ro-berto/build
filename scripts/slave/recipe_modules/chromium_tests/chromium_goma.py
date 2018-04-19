@@ -84,19 +84,6 @@ SPEC = {
        'platform': 'win',
      },
    },
-   'CrWinClexeGomaGCEStaging': {
-     'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_gce', 'clobber', 'mb'],
-     'gclient_config': 'chromium',
-     'chromium_config_kwargs': {
-       'BUILD_CONFIG': 'Release',
-       'TARGET_BITS': 64,
-     },
-     'goma_staging': True,
-     'testing': {
-       'platform': 'win',
-     },
-   },
    'Chromium Linux Goma RBE Staging': {
      'chromium_config': 'chromium',
      # use canary until client ready for RBE is released.

@@ -50,12 +50,6 @@
        "bot": "vm343-m1",
        "category": "gce",
      },
-     "CrWinClexeGomaGCEStaging": {
-       "os": "win",
-       "version": "win10",
-       "bot": "vm342-m1",
-       "category": "gce",
-     },
      "Chromium Linux Goma RBE Staging": {
        "os": "linux",
        "version": "trusty",
