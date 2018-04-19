@@ -43,9 +43,7 @@ def Build(api, config, *targets):
 def RunHostTests(api, out_dir, exe_extension=''):
   directory = api.path['start_dir'].join('src', out_dir)
   with api.context(cwd=directory):
-    if api.platform.is_mac:
-      api.step('Test Flutter Channels',
-        [directory.join('flutter_channels_unittests' + exe_extension)])
+    # Cross platform tests.
     api.step('Test FXL',
       [directory.join('fxl_unittests' + exe_extension)])
     api.step('Test Flow',
@@ -58,7 +56,20 @@ def RunHostTests(api, out_dir, exe_extension=''):
       [directory.join('synchronization_unittests' + exe_extension)])
     api.step('Test WTF',
       [directory.join('wtf_unittests' + exe_extension)])
+    api.step('Test Runtime',
+      [directory.join('runtime_unittests' + exe_extension)])
+    api.step('Test Shell',
+      [directory.join('shell_unittests' + exe_extension)])
 
+    # Platform specific tests.
+    if not api.platform.is_win:
+      # TODO(chinmaygarde): Enable the Embedder on Windows and remove this.
+      api.step('Test Embedder API',
+        [directory.join('embedder_unittests' + exe_extension)])
+
+    if api.platform.is_mac:
+      api.step('Test Flutter Channels',
+        [directory.join('flutter_channels_unittests' + exe_extension)])
 
 def RunGN(api, *args):
   checkout = api.path['start_dir'].join('src')

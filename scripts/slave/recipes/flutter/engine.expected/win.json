@@ -1865,6 +1865,28 @@
   },
   {
     "cmd": [
+      "[START_DIR]\\src\\out\\host_debug\\runtime_unittests.exe"
+    ],
+    "cwd": "[START_DIR]\\src\\out\\host_debug",
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "Test Runtime"
+  },
+  {
+    "cmd": [
+      "[START_DIR]\\src\\out\\host_debug\\shell_unittests.exe"
+    ],
+    "cwd": "[START_DIR]\\src\\out\\host_debug",
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma_client",
+      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
+    },
+    "name": "Test Shell"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
