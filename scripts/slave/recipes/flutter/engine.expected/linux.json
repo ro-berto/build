@@ -1485,6 +1485,7 @@
   {
     "cmd": [
       "dart",
+      "--preview-dart-2",
       "[START_DIR]/src/flutter/shell/testing/observatory/test.dart",
       "[START_DIR]/src/out/host_debug_unopt/flutter_tester",
       "[START_DIR]/src/flutter/shell/testing/observatory/empty_main.dart"
