@@ -240,7 +240,6 @@ def main(argv):
       'master.chromium.webrtc.fyi': 'ChromiumWebRTCFYI',
       'master.chromium.win': 'ChromiumWin',
       'master.chromiumos': 'ChromiumOS',
-      'master.chromiumos.chromium': 'ChromiumOSChromium',
       'master.chromiumos.tryserver': 'ChromiumOSTryServer',
       'master.client.art': 'ART',
       'master.client.boringssl': 'Boringssl',
