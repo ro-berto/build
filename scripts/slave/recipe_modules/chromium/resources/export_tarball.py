@@ -23,7 +23,7 @@ import sys
 import tarfile
 
 
-nonessential_dirs = (
+nonessential_dirs = {
     'chrome/common/extensions/docs',
     'third_party/blink/web_tests',
     'third_party/findbugs',
@@ -46,13 +46,13 @@ nonessential_dirs = (
     'third_party/WebKit/Tools/Scripts',
     'tools/gyp/test',
     'v8/test',
-)
+}
 
 ESSENTIAL_FILES = (
     'chrome/test/data/webui/i18n_process_css_test.html',
 )
 
-TEST_DIRS = (
+TEST_DIRS = {
     # This can be removed once we no longer need to build M62.
     'breakpad/src/processor/testdata',
 
@@ -64,7 +64,7 @@ TEST_DIRS = (
     'native_client/src/trusted/service_runtime/testdata',
     'third_party/breakpad/breakpad/src/processor/testdata',
     'third_party/catapult/tracing/test_data',
-)
+}
 
 
 # Workaround lack of the exclude parameter in add method in python-2.4.
@@ -115,7 +115,7 @@ class MyTarFile(tarfile.TarFile):
 
       # Remove contents of non-essential directories.
       if not keep_file:
-        for nonessential_dir in (nonessential_dirs + TEST_DIRS):
+        for nonessential_dir in (nonessential_dirs | TEST_DIRS):
           if rel_name.startswith(nonessential_dir) and os.path.isfile(name):
             self.__report_skipped(name)
             return
