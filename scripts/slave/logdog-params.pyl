@@ -121,7 +121,6 @@
 
   'chromiumos': {
     'chromiumos': {},
-    'chromiumos.chromium': {},
   },
 
   # chromium.perf logs are considered "internal" for viewing purposes, even
