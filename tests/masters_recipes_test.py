@@ -143,6 +143,7 @@ FAKE_BUILDERS = {
         # These have been migrated to LUCI.
         'cast_shell_linux',
         'fuchsia_arm64',
+        'linux-blink-heap-incremental-marking',
         'linux-blink-heap-verification-try',
         'linux_chromium_compile_dbg_ng',
         'linux_chromium_compile_rel_ng',
