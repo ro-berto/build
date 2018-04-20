@@ -133,10 +133,39 @@
     "cmd": [
       "make",
       "-j8",
-      "test-ci"
+      "clear-stalled",
+      "build-addons",
+      "build-addons-napi",
+      "doc-only"
     ],
     "cwd": "[START_DIR]\\node.js",
-    "name": "build addons and test node.js"
+    "name": "build addons"
+  },
+  {
+    "cmd": [
+      "out\\Release\\cctest"
+    ],
+    "cwd": "[START_DIR]\\node.js",
+    "name": "run cctest"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]\\node.js\\tools\\test.py",
+      "-p",
+      "tap",
+      "-j8",
+      "--mode=release",
+      "--flaky-tests",
+      "run",
+      "default",
+      "addons",
+      "addons-napi",
+      "doctool"
+    ],
+    "cwd": "[START_DIR]\\node.js",
+    "name": "run tests"
   },
   {
     "name": "$result",

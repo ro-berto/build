@@ -5431,7 +5431,7 @@ Ensures a clean state of the git checkout.
 
 Recipe to test v8/node.js integration.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/node_integration.py#151)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/node_integration.py#181)(api):**
 ### *recipes* / [wasm\_llvm](/scripts/slave/recipes/wasm_llvm.py)
 
 [DEPS](/scripts/slave/recipes/wasm_llvm.py#5): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]

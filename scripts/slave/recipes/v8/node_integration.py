@@ -95,9 +95,39 @@ def _build_and_test(api, suffix=''):
       ['make', '-j8'],
     )
 
+    # TODO(machenbach): This contains all targets test-ci depends on.
+    # Split this further up and migrate to ninja.
     api.step(
-      'build addons and test node.js%s' % suffix,
-      ['make', '-j8', 'test-ci'],
+      'build addons%s' % suffix,
+      [
+        'make', '-j8',
+        'clear-stalled',
+        'build-addons',
+        'build-addons-napi',
+        'doc-only',
+      ],
+    )
+
+    api.step(
+      'run cctest%s' % suffix,
+      [
+        api.path.join('out', 'Release', 'cctest'),
+      ],
+    )
+
+    api.python(
+      name='run tests%s' % suffix,
+      script=api.v8.checkout_root.join('node.js', 'tools', 'test.py'),
+      args=[
+        '-p', 'tap',
+        '-j8',
+        '--mode=release',
+        '--flaky-tests', 'run',
+        'default',
+        'addons',
+        'addons-napi',
+        'doctool',
+      ]
     )
 
 def _build_and_upload(api):
