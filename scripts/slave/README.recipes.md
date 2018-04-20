@@ -1821,7 +1821,7 @@ Args:
       If True, do not actually run the tests. Useful when we only want to
       isolate the targets for running elsewhere.
 
-&mdash; **def [configure\_and\_sync](/scripts/slave/recipe_modules/findit/api.py#311)(self, api, tests, buildbucket, target_mastername, target_testername, revision):**
+&mdash; **def [configure\_and\_sync](/scripts/slave/recipe_modules/findit/api.py#314)(self, api, tests, buildbucket, target_mastername, target_testername, revision):**
 
 Loads tests from buildbucket, applies bot/swarming configs & syncs code.
 
@@ -1874,7 +1874,7 @@ Args:
   solution_name (str): the gclient solution name, eg:
       "src" for chromium, "src/third_party/pdfium" for pdfium.
 
-&mdash; **def [record\_previous\_revision](/scripts/slave/recipe_modules/findit/api.py#390)(self, api, bot_config):**
+&mdash; **def [record\_previous\_revision](/scripts/slave/recipe_modules/findit/api.py#393)(self, api, bot_config):**
 
 Records the latest checked out and cached revisions.
 

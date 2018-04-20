@@ -166,8 +166,10 @@ class FinditApi(recipe_api.RecipeApi):
       # Checkout code at the given revision to recompile.
       bot_id = {
           'mastername': target_mastername,
-          'buildername': target_buildername,
-          'tester': target_testername}
+          'buildername': target_buildername}
+      if target_buildername != target_testername:
+        bot_id['tester'] = target_testername
+
       debug_info['bot_id'] = bot_id
       bot_config = api.m.chromium_tests.create_generalized_bot_config_object(
           [bot_id])

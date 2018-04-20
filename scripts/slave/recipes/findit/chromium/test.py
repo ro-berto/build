@@ -1435,3 +1435,26 @@ def GenTests(api):
               passed_test_names=['dummy/Three.js'],
               path_delimiter='/'))
   )
+
+  yield (
+      api.test('builder_as_tester') +
+      props({'services_unittests': ['Test.One']}, 'linux', 'Ozone Linux') +
+      api.override_step_data(
+          'test r1.read test spec (chromium.linux.json)',
+          api.json.output({
+              'Ozone Linux': {
+                  'gtest_tests': [
+                      {
+                          'test': 'services_unittests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r1.services_unittests (r1)',
+          api.swarming.canned_summary_output() +
+          api.test_utils.simulated_gtest_output(passed_test_names=['Test.One'])
+      )
+  )
