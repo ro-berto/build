@@ -101,8 +101,10 @@ FAKE_BUILDERS = {
         'Fuchsia ARM64',
         'Linux Builder',
         'Linux Builder (dbg)',
+        'Linux Builder (dbg)(32)',
         'Linux Tests',
         'Linux Tests (dbg)(1)',
+        'Linux Tests (dbg)(1)(32)',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'linux-jumbo-rel',
     ],

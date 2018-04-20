@@ -28,7 +28,6 @@ def Update(_config, active_master, c):
                             branch='master',
                             treeStableTimer=60,
                             builderNames=[
-          'Linux Builder (dbg)(32)',
           'Cast Audio Linux',
           'Fuchsia ARM64 Cast Audio',
           'Fuchsia x64 Cast Audio',
@@ -43,8 +42,6 @@ def Update(_config, active_master, c):
   # recipe (str): optional (default: 'chromium'), the recipe to use for
   #   this builder.
   specs = [
-    {'name': 'Linux Builder (dbg)(32)'},
-    {'name': 'Linux Tests (dbg)(1)(32)'},
     {'name': 'Cast Audio Linux'},
     {'name': 'Fuchsia ARM64 Cast Audio', 'category': '5fuchsia'},
     {'name': 'Fuchsia x64 Cast Audio', 'category': '5fuchsia'},
