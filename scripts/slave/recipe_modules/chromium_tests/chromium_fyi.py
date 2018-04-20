@@ -98,6 +98,23 @@ def no_archive(base_config):
   return config
 
 
+def no_compile_targets(base_config):
+  """no_compile_targets returns new config from base config without
+  compile_targets.
+
+  Args:
+    base_config: config obj in SPEC['builders'][x].
+  Returns:
+    new config obj.
+  """
+
+  config = copy.deepcopy(base_config)
+  if 'compile_targets' in config:
+    del(config['compile_targets'])
+
+  return config
+
+
 SPEC = {
   'settings': {
     'build_gs_bucket': 'chromium-fyi-archive',
@@ -447,7 +464,7 @@ SPEC = {
         no_archive(chromium.SPEC['builders']['Win']),
         ['goma_canary', 'goma_localoutputcache']),
     'Win cl.exe Goma Canary LocalOutputCache': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['Win']),
+        no_compile_targets(no_archive(chromium.SPEC['builders']['Win'])),
         ['goma_canary', 'goma_localoutputcache']),
     'Win7 Builder Goma Canary': chromium_apply_configs(
         chromium_win.SPEC['builders']['Win Builder'], ['goma_canary']),
@@ -464,9 +481,6 @@ SPEC = {
             'TARGET_PLATFORM': 'win',
             'TARGET_BITS': 64,
           },
-          'compile_targets': [
-            'all',
-          ],
           'bot_type': 'builder',
           'checkout_dir': 'win',
           'testing': {
