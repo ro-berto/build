@@ -82,23 +82,23 @@ ARCHIVE_LINK = ('https://storage.googleapis.com'
                 '/chromium-v8/node-%s-rel/%s')
 
 
-def _build_and_test(api, suffix=''):
+def _build_and_test(api):
   with api.context(cwd=api.v8.checkout_root.join('node.js')):
     api.python(
-      name='configure node.js%s' % suffix,
+      name='configure node.js',
       script=api.v8.checkout_root.join('node.js', 'configure'),
       args=['--build-v8-with-gn'],
     )
 
     api.step(
-      'build node.js%s' % suffix,
+      'build node.js',
       ['make', '-j8'],
     )
 
     # TODO(machenbach): This contains all targets test-ci depends on.
     # Split this further up and migrate to ninja.
     api.step(
-      'build addons%s' % suffix,
+      'build addons',
       [
         'make', '-j8',
         'clear-stalled',
@@ -109,14 +109,14 @@ def _build_and_test(api, suffix=''):
     )
 
     api.step(
-      'run cctest%s' % suffix,
+      'run cctest',
       [
         api.path.join('out', 'Release', 'cctest'),
       ],
     )
 
     api.python(
-      name='run tests%s' % suffix,
+      name='run tests',
       script=api.v8.checkout_root.join('node.js', 'tools', 'test.py'),
       args=[
         '-p', 'tap',
