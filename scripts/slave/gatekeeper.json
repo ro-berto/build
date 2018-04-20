@@ -415,6 +415,10 @@
       {
         "builders": {
           "Deterministic Linux": {
+            "categories": [
+              "chromium_tree_closer",
+              "experimental_tests"
+            ],
             "tree_notify": [
               "shinyak@chromium.org",
               "tikuta@chromium.org",
@@ -424,6 +428,10 @@
             "forgiving_optional": ["*"]
           },
           "Ozone Linux": {
+            "categories": [
+              "chromium_tree_closer",
+              "experimental_tests"
+            ],
             "tree_notify": [
               "fwang@chromium.org",
               "maksim.sisov@chromium.org",
