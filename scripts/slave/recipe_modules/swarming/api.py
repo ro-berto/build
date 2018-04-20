@@ -956,6 +956,10 @@ class SwarmingApi(recipe_api.RecipeApi):
             links = step_result.test_utils.gtest_results.raw.get('links', {})
           for k, v in links.iteritems():
             step_result.presentation.links[k] = v
+      except self.m.step.StepFailure:
+        # Make sure that, if _handle_summary_json raises an StepFailure, it
+        # correctly propogates.
+        raise
       except Exception as e:
         if step_result is not None:
           step_result.presentation.logs['no_results_exc'] = [
@@ -1198,11 +1202,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     if infra_failures:
       template = 'Shard #%s failed: %s'
 
-      # Done so that raising an InfraFailure doesn't cause an error.
-      # TODO(martiniss): Remove this hack. Requires recipe engine change
-      step_result._retcode = 2
       step_result.presentation.status = self.m.step.EXCEPTION
-      raise recipe_api.InfraFailure(
+      raise recipe_api.StepFailure(
           '\n'.join(template % f for f in infra_failures), result=step_result)
 
   def get_collect_cmd_args(self, task):

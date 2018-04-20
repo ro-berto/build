@@ -289,36 +289,13 @@
       "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@swarming.summary@}@@@",
       "@@@STEP_LOG_END@swarming.summary@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@Infra Failure in Shard #0 failed: There isn't enough capacity to run your test@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@Traceback (most recent call last):@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/swarming/api.py\", line NA, in _default_collect_step@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    self._handle_summary_json(task, summary_json, step_result)@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_engine/recipe_api.py\", line NA, in _inner@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    return func(*a, **kw)@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/swarming/api.py\", line NA, in _handle_summary_json@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    '\\n'.join(template % f for f in infra_failures), result=step_result)@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@InfraFailure: Infra Failure in Shard #0 failed: There isn't enough capacity to run your test@@@",
-      "@@@STEP_LOG_END@no_results_exc@@@",
       "@@@STEP_EXCEPTION@@@"
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[TMP_BASE]/hello_isolated_world_tmp_1"
-    ],
-    "infra_step": true,
-    "name": "remove temp dir"
-  },
-  {
     "name": "$result",
+    "reason": "Step(\"Shard #0 failed: There isn't enough capacity to run your test\") failed with return_code 0",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]
