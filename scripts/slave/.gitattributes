@@ -3,6 +3,7 @@
 /bootstrap.py                 recipes
 /build_directory.py           recipes
 /clang_revision.py            recipes
+/daemonizer.py                recipes
 /extract_build.py             recipes
 /goma_bq_utils.py             recipes
 /goma_utils.py                recipes
