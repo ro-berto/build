@@ -31,7 +31,6 @@ def Update(_config, active_master, c):
           'Cast Audio Linux',
           'Fuchsia ARM64 Cast Audio',
           'Fuchsia x64 Cast Audio',
-          'Fuchsia x64',
           'Leak Detection Linux',
           'Ozone Linux',
           'linux-gcc-rel',
@@ -45,7 +44,6 @@ def Update(_config, active_master, c):
     {'name': 'Cast Audio Linux'},
     {'name': 'Fuchsia ARM64 Cast Audio', 'category': '5fuchsia'},
     {'name': 'Fuchsia x64 Cast Audio', 'category': '5fuchsia'},
-    {'name': 'Fuchsia x64', 'category': '5fuchsia'},
     {'name': 'Leak Detection Linux'},
     {'name': 'Ozone Linux'},
     {'name': 'linux-gcc-rel'}
