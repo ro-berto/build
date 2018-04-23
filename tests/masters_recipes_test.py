@@ -121,11 +121,6 @@ FAKE_BUILDERS = {
         # These are pure LUCI bots, no equivalent buildbot bot.
         'mac-jumbo-rel',
     ],
-    'master.chromium.memory': [
-        # These have been migrated to LUCI.
-        'Linux TSan Builder',
-        'Linux TSan Tests',
-    ],
     'master.chromium.win': [
         # These have been migrated to LUCI.
         'Win Builder (dbg)',
@@ -156,7 +151,6 @@ FAKE_BUILDERS = {
         'linux_chromium_compile_rel_ng',
         'linux_chromium_dbg_ng',
         'linux_chromium_rel_ng',
-        'linux_chromium_tsan_rel_ng',
         'linux_optional_gpu_tests_rel',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'linux-jumbo-rel',

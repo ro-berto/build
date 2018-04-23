@@ -32,6 +32,7 @@ def Update(_config, active_master, c):
           'Linux CFI',
           'Linux ChromiumOS MSan Builder',
           'Linux MSan Builder',
+          'Linux TSan Builder',
       ]),
       Triggerable(name='linux_asan_rel_trigger', builderNames=[
           'Linux ASan LSan Tests (1)',
@@ -41,6 +42,8 @@ def Update(_config, active_master, c):
                   builderNames=['Linux ChromiumOS MSan Tests']),
       Triggerable(name='linux_msan_rel_trigger',
                   builderNames=['Linux MSan Tests']),
+      Triggerable(name='linux_tsan_rel_trigger',
+                  builderNames=['Linux TSan Tests']),
   ])
   specs = [
     {
@@ -81,6 +84,15 @@ def Update(_config, active_master, c):
     {
       'name': 'Linux MSan Tests',
       'category': '1linux asan lsan msan',
+    },
+    {
+      'name': 'Linux TSan Builder',
+      'triggers': ['linux_tsan_rel_trigger'],
+      'category': '10TSan v2|compile',
+    },
+    {
+      'name': 'Linux TSan Tests',
+      'category': '10TSan v2',
     },
   ]
 
