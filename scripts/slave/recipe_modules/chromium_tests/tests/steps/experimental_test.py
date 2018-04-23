@@ -75,6 +75,10 @@ def GenTests(api):
           patch_issue='456',
           experiment_percentage='100',
           has_valid_results=False) +
+      api.post_process(post_process.MustRun,
+                       'has_valid_results inner_test (experimental)') +
+      api.post_process(post_process.DoesNotRun,
+                       'failures inner_test (experimental)') +
       api.post_process(post_process.DropExpectation))
 
   yield (

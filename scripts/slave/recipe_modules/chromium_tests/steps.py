@@ -380,7 +380,11 @@ class ExperimentalTest(TestWrapper):
 
   #override
   def failures(self, api, suffix):
-    if self._is_in_experiment(api):
+    if (self._is_in_experiment(api)
+        # Only call into the implementation if we have valid results to avoid
+        # violating wrapped class implementations' preconditions.
+        and super(ExperimentalTest, self).has_valid_results(
+            api, self._experimental_suffix(suffix))):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
       super(ExperimentalTest, self).failures(
@@ -2779,9 +2783,11 @@ class MockTest(Test):
       api.step('post_run %s%s' % (self.name, self._mock_suffix(suffix)), None)
 
   def has_valid_results(self, api, suffix):
+    api.step('has_valid_results %s%s' % (self.name, self._mock_suffix(suffix)), None)
     return self._has_valid_results
 
   def failures(self, api, suffix):
+    api.step('failures %s%s' % (self.name, self._mock_suffix(suffix)), None)
     return self._failures
 
   @property
