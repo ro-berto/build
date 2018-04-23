@@ -784,6 +784,7 @@
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_chromium_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -905,6 +906,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -938,6 +940,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -960,6 +963,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -1838,6 +1842,7 @@
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_chromium_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
+      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -1959,6 +1964,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -1992,6 +1998,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -2014,6 +2021,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
