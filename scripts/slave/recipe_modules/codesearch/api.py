@@ -199,15 +199,18 @@ class CodesearchApi(recipe_api.RecipeApi):
       self.m.git('config', 'user.name', self.c.generated_author_name)
 
     # Sync the generated files into this checkout.
+    args = ['--message',
+            'Generated files from "%s" build %s, revision %s' % (
+                self.m.properties['buildername'],
+                self.m.properties['buildnumber'],
+                self._get_revision()),
+            '--dest-branch',
+            self.c.GEN_REPO_BRANCH,
+            'src/out',
+            generated_repo_dir]
+    if self.c.GEN_REPO_OUT_DIR:
+      args = ['--debug-dir', self.c.GEN_REPO_OUT_DIR] + args
     self.m.build.python('sync generated files',
                         self.package_repo_resource('scripts','slave',
                                                    'sync_generated_files_codesearch.py'),
-                        ['--message',
-                         'Generated files from "%s" build %s, revision %s' % (
-                             self.m.properties['buildername'],
-                             self.m.properties['buildnumber'],
-                             self._get_revision()),
-                         '--dest-branch',
-                         self.c.GEN_REPO_BRANCH,
-                         'src/out',
-                         generated_repo_dir])
+                        args)

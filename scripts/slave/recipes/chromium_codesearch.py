@@ -97,7 +97,7 @@ SPEC = freeze({
       'sync_generated_files': True,
       'gen_repo_branch': 'android',
       # Generated files will end up in out/chromium-android/Debug/gen.
-      'gen_repo_out_dir': 'out/chromium-android',
+      'gen_repo_out_dir': 'chromium-android',
       'corpus': 'chromium',
       'root': 'chromium-android',
     },
@@ -133,7 +133,8 @@ def RunSteps(api, root_solution_revision):
   root = bot_config.get('root', '')
   targets = bot_config.get('compile_targets', [])
   gen_repo_branch = bot_config.get('gen_repo_branch', 'master')
-  gen_repo_out_dir = bot_config.get('gen_repo_out_dir', 'out')
+  gen_repo_out_dir = bot_config.get('gen_repo_out_dir', '')
+  joined_gen_repo_out_dir = api.path.join('out', gen_repo_out_dir)
 
   api.codesearch.set_config(
       'chromium',
@@ -185,7 +186,8 @@ def RunSteps(api, root_solution_revision):
   # upload an incomplete (due to compile failures) pack to Kythe, it fails
   # validation and doesn't get pushed out anyway, so there's no point in
   # uploading at all.
-  api.chromium.compile(targets, use_goma_module=True, out_dir=gen_repo_out_dir)
+  api.chromium.compile(targets, use_goma_module=True,
+                       out_dir=joined_gen_repo_out_dir)
 
   # Copy the created output to the correct directory. When running the clang
   # tool, it is assumed by the scripts that the compilation database is in the

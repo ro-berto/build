@@ -10,7 +10,7 @@ from recipe_engine.config_types import Path
 
 def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=[], PACKAGE_FILENAME=None,
                PLATFORM=None, SYNC_GENERATED_FILES=False,
-               GEN_REPO_BRANCH='master', GEN_REPO_OUT_DIR='out', CORPUS=None,
+               GEN_REPO_BRANCH='master', GEN_REPO_OUT_DIR=None, CORPUS=None,
                ROOT=None, **_kwargs):
   """Filter out duplicate compilation units.
 
@@ -52,7 +52,10 @@ config_ctx = config_item_context(BaseConfig)
 
 @config_ctx(is_root=True)
 def base(c):
-  c.debug_path = c.CHECKOUT_PATH.join(c.GEN_REPO_OUT_DIR, 'Debug')
+  if c.GEN_REPO_OUT_DIR:
+    c.debug_path = c.CHECKOUT_PATH.join('out', c.GEN_REPO_OUT_DIR, 'Debug')
+  else:
+    c.debug_path = c.CHECKOUT_PATH.join('out', 'Debug')
   c.compile_commands_json_file = c.debug_path.join('compile_commands.json')
 
 @config_ctx(includes=['chromium_additional_repos', 'generate_file', 'chromium_gs'])

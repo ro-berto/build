@@ -4,6 +4,7 @@
 # found in the LICENSE file.
 
 import argparse
+import os.path
 import subprocess
 import sys
 
@@ -14,10 +15,20 @@ def main():
   parser.add_argument('--dest-branch',
                       help='git branch in the destination repo to sync to',
                       default='master')
+  parser.add_argument('--debug-dir',
+                      help='optional dir containing the Debug folder to include'
+                           'in the checked-in repo',
+                      default='')
   parser.add_argument('source', help='directory to copy files from')
   parser.add_argument('dest', help='git checkout to copy files to')
   opts = parser.parse_args()
 
+
+  # We pass --relative to rsync below, which treats the '/./' as the beginning
+  # of the path for copying purposes. Everything after the '.' is recreated in
+  # the destination directory.
+  relative_source_path = os.path.join(opts.source, '.', opts.debug_dir,
+                                      'Debug/gen')
   check_call([
       'rsync',
       '--recursive',
@@ -62,7 +73,7 @@ def main():
       # 'Debug/gen' directory is created in the destination.
       '--relative',
 
-      '%s/./Debug/gen' % opts.source,
+      relative_source_path,
       opts.dest,
   ])
 

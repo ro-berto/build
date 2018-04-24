@@ -22,6 +22,7 @@ def RunSteps(api):
       PLATFORM=api.properties.get('platform', 'linux'),
       SYNC_GENERATED_FILES=api.properties.get('sync_generated_files', True),
       GEN_REPO_BRANCH=api.properties.get('gen_repo_branch', 'master'),
+      GEN_REPO_OUT_DIR=api.properties.get('gen_repo_out_dir', ''),
       CORPUS=api.properties.get('corpus', 'chromium-linux'),
   )
   api.codesearch.checkout_generated_files_repo_and_sync()
@@ -33,6 +34,15 @@ def GenTests(api):
       api.properties(
           buildername='test_buildername',
           buildnumber=123)
+  )
+
+  yield (
+      api.test('specified_branch_and_out_dir') +
+      api.properties(
+          buildername='test_buildername',
+          buildnumber=123,
+          gen_repo_branch='android',
+          gen_repo_out_dir='chromium-android')
   )
 
   yield (
