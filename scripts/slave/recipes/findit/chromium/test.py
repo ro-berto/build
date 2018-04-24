@@ -770,10 +770,6 @@ def GenTests(api):
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
-                          'test': 'gl_tests',
-                          'swarming': {'can_use_on_swarming_builders': True},
-                      },
-                      {
                         'test': 'gl_tests',
                         'swarming': {'can_use_on_swarming_builders': True},
                       },

@@ -572,33 +572,6 @@
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "name": "test r1.debug_get_requested_tests_to_run",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@{@@@",
-      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@  \"actual_tests_to_run\": {@@@",
-      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@    \"services_unittests\": [@@@",
-      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@      {@@@",
-      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@        \"waterfall_mastername\": \"chromium.linux\", @@@",
-      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@        \"canonical_step_name\": \"services_unittests\", @@@",
-      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@        \"waterfall_buildername\": \"Ozone Linux\"@@@",
-      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@      }@@@",
-      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@    ]@@@",
-      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@  }, @@@",
-      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@  \"bot_id\": {@@@",
-      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@    \"mastername\": \"chromium.linux\", @@@",
-      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@    \"buildername\": \"Ozone Linux\"@@@",
-      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@  }@@@",
-      "@@@STEP_LOG_LINE@debug_get_requested_tests_to_run@}@@@",
-      "@@@STEP_LOG_END@debug_get_requested_tests_to_run@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
       "[BUILDER_CACHE]/linux/src/out/Release",

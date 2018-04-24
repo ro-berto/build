@@ -160,7 +160,6 @@ class FinditApi(recipe_api.RecipeApi):
     """
 
     results = {}
-    debug_info = {}
     abbreviated_revision = revision[:7]
     with api.m.step.nest('test %s' % str(abbreviated_revision)):
       # Checkout code at the given revision to recompile.
@@ -170,7 +169,6 @@ class FinditApi(recipe_api.RecipeApi):
       if target_buildername != target_testername:
         bot_id['tester'] = target_testername
 
-      debug_info['bot_id'] = bot_id
       bot_config = api.m.chromium_tests.create_generalized_bot_config_object(
           [bot_id])
       bot_update_step, bot_db = api.m.chromium_tests.prepare_checkout(
@@ -178,21 +176,8 @@ class FinditApi(recipe_api.RecipeApi):
 
       # Figure out which test steps to run.
       all_tests, _ = api.m.chromium_tests.get_tests(bot_config, bot_db)
-
-      # Makes sure there are no steps with the same step name.
-      requested_tests_to_run_dict = {}
-      tests_metadata = defaultdict(list)
-      for test in all_tests:
-        if test.name in requested_tests:
-          if not requested_tests_to_run_dict.get(test.name):
-            requested_tests_to_run_dict[test.name] = test
-          tests_metadata[test.name].append(test.step_metadata(api))
-      debug_info['actual_tests_to_run'] = tests_metadata
-      requested_tests_to_run = requested_tests_to_run_dict.values()
-
-      api.python.succeeding_step(
-        'debug_get_requested_tests_to_run', [json.dumps(debug_info, indent=2)],
-        as_log='debug_get_requested_tests_to_run')
+      requested_tests_to_run = [
+          test for test in all_tests if test.name in requested_tests]
 
       # Figure out the test targets to be compiled.
       requested_test_targets = []
