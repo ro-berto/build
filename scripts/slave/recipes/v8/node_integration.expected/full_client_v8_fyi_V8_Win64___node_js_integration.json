@@ -127,9 +127,13 @@
       "-u",
       "[START_DIR]\\node.js\\configure",
       "--build-v8-with-gn",
-      "--ninja"
+      "--ninja",
+      "--use-clang-cl"
     ],
     "cwd": "[START_DIR]\\node.js",
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN": "1"
+    },
     "name": "configure node.js"
   },
   {

@@ -105,15 +105,21 @@ def _build_and_test(api, use_goma=False):
 
     # TODO(machenbach): Add goma flags to configure.
     args = ['--build-v8-with-gn']
+    env = {}
     if api.platform.is_win:
       # TODO(machenbach): Also switch other platforms to ninja eventually.
-      # TODO(machenbach): For using win-clang set CC or use --use-clang-cl.
-      args += ['--ninja']
-    api.python(
-      name='configure node.js',
-      script=api.v8.checkout_root.join('node.js', 'configure'),
-      args=args,
-    )
+      # TODO(machenbach): Also linux/mac should be built with either all clang
+      # or all gcc. Currently, the node.js part is built with gcc, while v8 is
+      # built with clang.
+      args += ['--ninja', '--use-clang-cl']
+      # Configure script sets this to 0 by default.
+      env['DEPOT_TOOLS_WIN_TOOLCHAIN'] = '1'
+    with api.context(env=env):
+      api.python(
+        name='configure node.js',
+        script=api.v8.checkout_root.join('node.js', 'configure'),
+        args=args,
+      )
 
     with goma_wrapper(api, use_goma):
       if api.platform.is_win:
