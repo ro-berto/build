@@ -126,30 +126,20 @@
       "python",
       "-u",
       "[START_DIR]\\node.js\\configure",
-      "--build-v8-with-gn"
+      "--build-v8-with-gn",
+      "--ninja"
     ],
     "cwd": "[START_DIR]\\node.js",
     "name": "configure node.js"
   },
   {
     "cmd": [
-      "make",
-      "-j8"
+      "ninja",
+      "-C",
+      "out\\Release"
     ],
     "cwd": "[START_DIR]\\node.js",
     "name": "build node.js"
-  },
-  {
-    "cmd": [
-      "make",
-      "-j8",
-      "clear-stalled",
-      "build-addons",
-      "build-addons-napi",
-      "doc-only"
-    ],
-    "cwd": "[START_DIR]\\node.js",
-    "name": "build addons"
   },
   {
     "cmd": [
@@ -169,86 +159,10 @@
       "--mode=release",
       "--flaky-tests",
       "run",
-      "default",
-      "addons",
-      "addons-napi",
-      "doctool"
+      "default"
     ],
     "cwd": "[START_DIR]\\node.js",
     "name": "run tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]\\node.js\\configure",
-      "--prefix=/",
-      "--tag=v8-build-f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-      "--build-v8-with-gn"
-    ],
-    "cwd": "[START_DIR]\\node.js",
-    "name": "configure node.js - install"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[CLEANUP]\\archive-build"
-    ],
-    "infra_step": true,
-    "name": "install directory"
-  },
-  {
-    "cmd": [
-      "make",
-      "-j8",
-      "install",
-      "DESTDIR=[CLEANUP]\\archive-build"
-    ],
-    "cwd": "[START_DIR]\\node.js",
-    "name": "build and install node.js"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::zip]\\resources\\zip.py"
-    ],
-    "name": "zipping",
-    "stdin": "{\"entries\": [{\"path\": \"[CLEANUP]\\\\archive-build\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\node-win-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip\", \"root\": \"[CLEANUP]\\\\archive-build\"}"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "----",
-      "cp",
-      "-a",
-      "public-read",
-      "[CLEANUP]\\node-win-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip",
-      "gs://chromium-v8/node-win-rel/node-win-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/node-win-rel/node-win-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "Archive link",
-    "~followup_annotations": [
-      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/node-win-rel/node-win-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip@@@"
-    ]
   },
   {
     "name": "$result",

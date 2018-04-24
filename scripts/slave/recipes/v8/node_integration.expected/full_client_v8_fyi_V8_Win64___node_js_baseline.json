@@ -116,30 +116,20 @@
       "python",
       "-u",
       "[START_DIR]\\node.js\\configure",
-      "--build-v8-with-gn"
+      "--build-v8-with-gn",
+      "--ninja"
     ],
     "cwd": "[START_DIR]\\node.js",
     "name": "configure node.js"
   },
   {
     "cmd": [
-      "make",
-      "-j8"
+      "ninja",
+      "-C",
+      "out\\Release"
     ],
     "cwd": "[START_DIR]\\node.js",
     "name": "build node.js"
-  },
-  {
-    "cmd": [
-      "make",
-      "-j8",
-      "clear-stalled",
-      "build-addons",
-      "build-addons-napi",
-      "doc-only"
-    ],
-    "cwd": "[START_DIR]\\node.js",
-    "name": "build addons"
   },
   {
     "cmd": [
@@ -159,10 +149,7 @@
       "--mode=release",
       "--flaky-tests",
       "run",
-      "default",
-      "addons",
-      "addons-napi",
-      "doctool"
+      "default"
     ],
     "cwd": "[START_DIR]\\node.js",
     "name": "run tests"

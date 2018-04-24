@@ -84,29 +84,41 @@ ARCHIVE_LINK = ('https://storage.googleapis.com'
 
 def _build_and_test(api):
   with api.context(cwd=api.v8.checkout_root.join('node.js')):
+    args = ['--build-v8-with-gn']
+    if api.platform.is_win:
+      # TODO(machenbach): Also switch other platforms to ninja eventually.
+      # TODO(machenbach): For using win-clang set CC or use --use-clang-cl.
+      args += ['--ninja']
     api.python(
       name='configure node.js',
       script=api.v8.checkout_root.join('node.js', 'configure'),
-      args=['--build-v8-with-gn'],
+      args=args,
     )
 
-    api.step(
-      'build node.js',
-      ['make', '-j8'],
-    )
+    if api.platform.is_win:
+      # TODO(machenbach): Figure out what to do with clear-stalled and addons.
+      api.step(
+        'build node.js',
+        ['ninja', '-C', api.path.join('out', 'Release')],
+      )
+    else:
+      api.step(
+        'build node.js',
+        ['make', '-j8'],
+      )
 
-    # TODO(machenbach): This contains all targets test-ci depends on.
-    # Split this further up and migrate to ninja.
-    api.step(
-      'build addons',
-      [
-        'make', '-j8',
-        'clear-stalled',
-        'build-addons',
-        'build-addons-napi',
-        'doc-only',
-      ],
-    )
+      # TODO(machenbach): This contains all targets test-ci depends on.
+      # Split this further up and migrate to ninja.
+      api.step(
+        'build addons',
+        [
+          'make', '-j8',
+          'clear-stalled',
+          'build-addons',
+          'build-addons-napi',
+          'doc-only',
+        ],
+      )
 
     api.step(
       'run cctest',
@@ -114,6 +126,15 @@ def _build_and_test(api):
         api.path.join('out', 'Release', 'cctest'),
       ],
     )
+
+    suites = ['default']
+    if not api.platform.is_win:
+      # TODO(machenbach): Add those suites on windows once they are built.
+      suites += [
+        'addons',
+        'addons-napi',
+        'doctool',
+      ]
 
     api.python(
       name='run tests',
@@ -123,11 +144,7 @@ def _build_and_test(api):
         '-j8',
         '--mode=release',
         '--flaky-tests', 'run',
-        'default',
-        'addons',
-        'addons-napi',
-        'doctool',
-      ]
+      ] + suites,
     )
 
 def _build_and_upload(api):
@@ -215,7 +232,8 @@ def RunSteps(api):
     return
 
   # Build and upload node.js distribution with the checked-out v8.
-  _build_and_upload(api)
+  if not api.platform.is_win:
+    _build_and_upload(api)
 
   # Trigger performance bots.
   if api.v8.bot_config.get('triggers'):
