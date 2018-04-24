@@ -4,6 +4,8 @@
 
 """Recipe to test v8/node.js integration."""
 
+from contextlib import contextmanager
+
 from recipe_engine.types import freeze
 
 
@@ -12,6 +14,7 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/gsutil',
   'depot_tools/tryserver',
+  'goma',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -82,8 +85,25 @@ ARCHIVE_LINK = ('https://storage.googleapis.com'
                 '/chromium-v8/node-%s-rel/%s')
 
 
-def _build_and_test(api):
+@contextmanager
+def goma_wrapper(api, use_goma):
+  if not use_goma:
+    yield
+    return
+
+  api.goma.start()
+  try:
+    yield
+  finally:
+    api.goma.stop()
+
+
+def _build_and_test(api, use_goma=False):
   with api.context(cwd=api.v8.checkout_root.join('node.js')):
+    if use_goma:
+      api.goma.ensure_goma()
+
+    # TODO(machenbach): Add goma flags to configure.
     args = ['--build-v8-with-gn']
     if api.platform.is_win:
       # TODO(machenbach): Also switch other platforms to ninja eventually.
@@ -95,30 +115,31 @@ def _build_and_test(api):
       args=args,
     )
 
-    if api.platform.is_win:
-      # TODO(machenbach): Figure out what to do with clear-stalled and addons.
-      api.step(
-        'build node.js',
-        ['ninja', '-C', api.path.join('out', 'Release')],
-      )
-    else:
-      api.step(
-        'build node.js',
-        ['make', '-j8'],
-      )
+    with goma_wrapper(api, use_goma):
+      if api.platform.is_win:
+        # TODO(machenbach): Figure out what to do with clear-stalled and addons.
+        api.step(
+          'build node.js',
+          ['ninja', '-C', api.path.join('out', 'Release')],
+        )
+      else:
+        api.step(
+          'build node.js',
+          ['make', '-j8'],
+        )
 
-      # TODO(machenbach): This contains all targets test-ci depends on.
-      # Split this further up and migrate to ninja.
-      api.step(
-        'build addons',
-        [
-          'make', '-j8',
-          'clear-stalled',
-          'build-addons',
-          'build-addons-napi',
-          'doc-only',
-        ],
-      )
+        # TODO(machenbach): This contains all targets test-ci depends on.
+        # Split this further up and migrate to ninja.
+        api.step(
+          'build addons',
+          [
+            'make', '-j8',
+            'clear-stalled',
+            'build-addons',
+            'build-addons-napi',
+            'doc-only',
+          ],
+        )
 
     api.step(
       'run cctest',
@@ -205,7 +226,7 @@ def RunSteps(api):
   v8.runhooks()
 
   if v8.bot_config.get('baseline_only', False):
-    _build_and_test(api)
+    _build_and_test(api, use_goma=True)
     return
 
   args = [
