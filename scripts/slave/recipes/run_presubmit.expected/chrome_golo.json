@@ -129,7 +129,9 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
+      "-vpython-spec",
+      "[START_DIR]/chrome_golo/.vpython",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/presubmit_support.py",
       "--issue",

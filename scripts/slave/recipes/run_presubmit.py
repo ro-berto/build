@@ -84,7 +84,7 @@ def _RunStepsInternal(api):
 
   # Repos that have '.vpython' spec.
   venv = None
-  if repo_name == 'luci_py':
+  if repo_name in ('luci_py', 'chrome_golo'):
     venv = abs_root.join('.vpython')
 
   try:
