@@ -29,19 +29,34 @@ def main():
       '--delete-excluded',
       '--prune-empty-dirs',
 
-      # Exclude some common binary files and other junk.
-      '--exclude=*.bin',
-      '--exclude=*.cache',
-      '--exclude=*.pak',
-      '--exclude=*.pyc',
-      '--exclude=*.srcjar',
-      '--exclude=*.zip',
-      '--exclude=*.jar',
-      '--exclude=*.apk',
-      '--exclude=*.ap_',
-      '--exclude=*.md5.stamp',
-      '--exclude=*.info',
-      '--exclude=*.d',
+      # Exclude everything except generated source code.
+      # Note that we use a whitelist here instead of a blacklist, because:
+      # 1. If we whitelist, the problem is that some legit files might be
+      #    excluded. The solution to this is simple; we just whitelist the
+      #    filetype and then they show up in CS a few hours later.
+      # 2. If we blacklist, the problem is that some large binary files of a new
+      #    filetype may show up. This could go undetected for a long time,
+      #    causing the Git repo to start expanding until it gets too big for the
+      #    builders to fetch. The fix in this case is essentially to blow away
+      #    the generated Git repo and start again.
+      # Since the problems caused by whitelisting are more easily managed than
+      # those caused by blacklisting, we whitelist below.
+      '--include=*.c',
+      '--include=*.cc',
+      '--include=*.cpp',
+      '--include=*.css',
+      '--include=*.h',
+      '--include=*.html',
+      '--include=*.java',
+      '--include=*.js',
+      '--include=*.json',
+      '--include=*.proto',
+      '--include=*.py',
+      '--include=*.strings',
+      '--include=*.txt',
+      '--include=*.xml',
+      '--include=*/',
+      '--exclude=*',
 
       # Treat the '/./' in the SRC as the beginning of the path, so a
       # 'Debug/gen' directory is created in the destination.
