@@ -489,9 +489,7 @@ SPEC = {
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'mac', },
-      'tests': {
-        steps.SizesStep(RESULTS_URL, 'ToTMacASan')
-      },
+      'tests': [],
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
