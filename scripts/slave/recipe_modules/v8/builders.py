@@ -847,7 +847,7 @@ BUILDERS = {
         },
         'tests': [
           V8Testing(4),
-          Test262(2),
+          Test262(3),
           Mozilla,
           Benchmarks,
         ] + with_extra_variants([V8Testing(2)]),
@@ -2393,7 +2393,7 @@ BUILDERS = {
         },
         'tests': [
           V8Testing(4),
-          Test262(2),
+          Test262(3),
           Mozilla,
           Benchmarks,
         ] + with_extra_variants([V8Testing(3)]),

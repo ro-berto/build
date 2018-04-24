@@ -349,7 +349,7 @@
       "--priority",
       "25",
       "--shards",
-      "2",
+      "3",
       "--task-name",
       "Test262 - no variants/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571",
       "--dump-json",
@@ -825,7 +825,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test262 - no variants/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571\", \"tasks\": {\"Test262 - no variants/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Test262 - no variants/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
+      "{\"base_task_name\": \"Test262 - no variants/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571\", \"tasks\": {\"Test262 - no variants/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571:3:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Test262 - no variants/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571:3:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Test262 - no variants/Ubuntu-14.04/[dummy has/V8 Linux64 TSAN/571:3:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}}}"
     ],
     "infra_step": true,
     "name": "Test262 - no variants",
