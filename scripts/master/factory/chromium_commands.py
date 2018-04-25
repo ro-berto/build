@@ -656,7 +656,7 @@ class ChromiumCommands(commands.FactoryCommands):
                                 do_step_if=self.TestStepFilter)
 
   def AddWebkitPythonTests(self, factory_properties=None):
-    """Adds a step to the factory to run test-webkitpy."""
+    """Adds a step to the factory to run run_blinkpy_tests.py."""
     cmd = [self._python, self._test_webkitpy_tool,
            '--target', self._target]
     self.AddTestStep(shell.ShellCommand,
@@ -665,7 +665,7 @@ class ChromiumCommands(commands.FactoryCommands):
                      do_step_if=self.TestStepFilter)
 
   def AddBuildrunnerWebkitPythonTests(self, factory_properties=None):
-    """Adds a step to the factory to run test-webkitpy."""
+    """Adds a step to the factory to run run_blinkpy_tests.py."""
     cmd = [self._python, self._test_webkitpy_tool,
            '--target', self._target]
     self.AddBuildrunnerTestStep(shell.ShellCommand,

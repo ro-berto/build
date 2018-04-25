@@ -2127,7 +2127,7 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
         api.platform.normalize_platform_name(api.platform.name)])
     args = cmd_args
     path = api.path['checkout'].join(
-        'third_party', 'WebKit', 'Tools', 'Scripts', 'run-webkit-tests')
+        'third_party', 'blink', 'tools', 'run_web_tests.py')
     args.extend(['--platform', platform_arg])
 
     env = {}
@@ -2478,8 +2478,8 @@ class BlinkTest(Test):
     try:
       step_result = api.python(
         step_name,
-        api.path['checkout'].join('third_party', 'WebKit', 'Tools',
-                                  'Scripts', 'run-webkit-tests'),
+        api.path['checkout'].join('third_party', 'blink', 'tools',
+                                  'run_web_tests.py'),
         args,
         step_test_data=lambda: api.test_utils.test_api.canned_test_output(
             passing=True, minimal=True))

@@ -582,7 +582,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64/src/third_party/WebKit/Tools/Scripts/run-webkit-tests",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64/src/third_party/blink/tools/run_web_tests.py",
       "--target",
       "Release",
       "--results-directory",
@@ -1146,7 +1146,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64/src/third_party/WebKit/Tools/Scripts/run-webkit-tests",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64/src/third_party/blink/tools/run_web_tests.py",
       "--target",
       "Release",
       "--results-directory",

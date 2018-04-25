@@ -18,8 +18,8 @@ def layout_test(options, args):
   """Parse options and call run-webkit-tests, using Python from the tree."""
   build_dir = os.path.abspath(options.build_dir)
   blink_scripts_dir = chromium_utils.FindUpward(build_dir,
-    'third_party', 'WebKit', 'Tools', 'Scripts')
-  lint_tests_script = os.path.join(blink_scripts_dir, 'lint-test-expectations')
+    'third_party', 'blink', 'tools')
+  lint_tests_script = os.path.join(blink_scripts_dir, 'lint_test_expectations.py')
 
   return slave_utils.RunPythonCommandInBuildDir(build_dir, options.target,
                                                 [lint_tests_script])

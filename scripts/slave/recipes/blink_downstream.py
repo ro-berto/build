@@ -236,10 +236,10 @@ def GenTests(api):
 
 
   # This tests what happens if something goes horribly wrong in
-  # run-webkit-tests and we return an internal error; the step should
+  # run_web_tests.py and we return an internal error; the step should
   # be considered a hard failure and we shouldn't try to compare the
   # lists of failing tests.
-  # 255 == test_run_results.UNEXPECTED_ERROR_EXIT_STATUS in run-webkit-tests.
+  # 255 == test_run_results.UNEXPECTED_ERROR_EXIT_STATUS in run_web_tests.py.
   yield (
     api.test('webkit_tests_unexpected_error') +
     properties('client.v8.fyi', 'V8-Blink Linux 64') +
@@ -250,7 +250,7 @@ def GenTests(api):
   # number of failures specified with --exit-after-n-crashes-or-times or
   # --exit-after-n-failures; the step should be considered a hard failure and
   # we shouldn't try to compare the lists of failing tests.
-  # 130 == test_run_results.INTERRUPTED_EXIT_STATUS in run-webkit-tests.
+  # 130 == test_run_results.INTERRUPTED_EXIT_STATUS in run_web_tests.py.
   yield (
     api.test('webkit_tests_interrupted') +
     properties('client.v8.fyi', 'V8-Blink Linux 64') +

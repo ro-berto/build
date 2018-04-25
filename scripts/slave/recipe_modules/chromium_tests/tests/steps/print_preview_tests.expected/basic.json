@@ -20,7 +20,7 @@
       "--builder-name=test_buildername",
       "--slave-name=test_bot_id",
       "--run-python-script",
-      "None/third_party/WebKit/Tools/Scripts/run-webkit-tests",
+      "None/third_party/blink/tools/run_web_tests.py",
       "--write-full-results-to",
       "/path/to/tmp/json",
       "--platform",

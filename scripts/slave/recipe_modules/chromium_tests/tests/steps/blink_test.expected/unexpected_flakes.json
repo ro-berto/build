@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "None/third_party/WebKit/Tools/Scripts/run-webkit-tests",
+      "None/third_party/blink/tools/run_web_tests.py",
       "--target",
       "Release",
       "--results-directory",
@@ -103,7 +103,7 @@
     "cmd": [
       "python",
       "-u",
-      "None/third_party/WebKit/Tools/Scripts/run-webkit-tests",
+      "None/third_party/blink/tools/run_web_tests.py",
       "--target",
       "Release",
       "--results-directory",
