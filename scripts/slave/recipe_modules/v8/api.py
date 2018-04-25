@@ -93,11 +93,11 @@ def isolate_targets_from_tests(tests):
   """Returns the isolated targets associated with a list of tests.
 
   Args:
-    tests: A list of builders.TestStepConfig objects.
+    tests: A list of test names used as keys in testing.TEST_CONFIGS.
   """
   targets = []
   for test in tests:
-    config = testing.TEST_CONFIGS.get(test.name) or {}
+    config = testing.TEST_CONFIGS.get(test) or {}
 
     # Tests either define an explicit isolate target or use the test
     # names for convenience.
@@ -427,7 +427,8 @@ class V8Api(recipe_api.RecipeApi):
       # master).
       for _, bot_config in iter_builder_set(mastername, buildername):
         self._isolate_targets_cached.extend(
-            isolate_targets_from_tests(bot_config.get('tests', [])))
+            isolate_targets_from_tests(
+                [test.name for test in bot_config.get('tests', [])]))
 
       # Add the performance-tests isolate everywhere, where the perf-bot proxy
       # is triggered.
@@ -550,7 +551,7 @@ class V8Api(recipe_api.RecipeApi):
     # Calculate extra targets to isolate from V8-side test specification. The
     # test_spec contains extra TestStepConfig objects for the current builder
     # and all its triggered builders.
-    extra_targets = isolate_targets_from_tests(test_spec.get_all_tests())
+    extra_targets = isolate_targets_from_tests(test_spec.get_all_test_names())
     isolate_targets = sorted(list(set(self.isolate_targets + extra_targets)))
 
     if self.m.chromium.c.project_generator.tool == 'mb':

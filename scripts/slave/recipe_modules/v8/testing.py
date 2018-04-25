@@ -371,7 +371,7 @@ class V8Test(BaseTest):
     ]
     with self.api.context(cwd=self.api.path['checkout'], env=env):
       self.api.python(
-        test['name'] + self.test_step_config.suffix,
+        test['name'] + self.test_step_config.step_name_suffix,
         self.api.path['checkout'].join('tools', 'run-tests.py'),
         full_args,
         step_test_data=lambda: self.api.v8.test_api.output_json(),
@@ -408,7 +408,8 @@ class V8Test(BaseTest):
       # Emit a separate step to show flakes from the previous step
       # to not close the tree.
       step_result = self.api.step(
-          test['name'] + self.test_step_config.suffix + ' (flakes)', cmd=None)
+          test['name'] + self.test_step_config.step_name_suffix + ' (flakes)',
+          cmd=None)
       step_result.presentation.status = self.api.step.WARNING
       self.api.v8._update_failure_presentation(
             flake_log, flakes, step_result.presentation)
@@ -465,10 +466,14 @@ def _trigger_swarming_task(api, task, test_step_config):
   task.dimensions.update(api.v8.bot_config.get('swarming_dimensions', {}))
 
   # Override with per-test dimensions.
-  task.dimensions.update(test_step_config.dimensions or {})
+  task.dimensions.update(test_step_config.swarming_dimensions or {})
 
   # Add custom attributes.
   for k, v in api.v8.bot_config.get('swarming_task_attrs', {}).iteritems():
+    setattr(task, k, v)
+
+  # Override attributes with per-test settings.
+  for k, v in test_step_config.swarming_task_attrs.iteritems():
     setattr(task, k, v)
 
   api.swarming.trigger_task(task)
@@ -497,7 +502,7 @@ class V8SwarmingTest(V8Test):
     args.extend(self.api.swarming.get_collect_cmd_args(task))
 
     return self.api.build.python(
-        name=self.test['name'] + self.test_step_config.suffix,
+        name=self.test['name'] + self.test_step_config.step_name_suffix,
         script=self.api.v8.resource('collect_v8_task.py'),
         args=args,
         allow_subannotations=True,
@@ -532,7 +537,7 @@ class V8SwarmingTest(V8Test):
     # Initialize swarming task with custom data-collection step for v8
     # test-runner output.
     self.task = self.api.swarming.task(
-        title=self.test['name'] + self.test_step_config.suffix,
+        title=self.test['name'] + self.test_step_config.step_name_suffix,
         idempotent=idempotent,
         isolated_hash=self._get_isolated_hash(self.test),
         shards=shards,
@@ -583,7 +588,7 @@ class V8GenericSwarmingTest(BaseTest):
 
   @property
   def title(self):
-    return self._title + self.test_step_config.suffix
+    return self._title + self.test_step_config.step_name_suffix
 
   @property
   def command(self):

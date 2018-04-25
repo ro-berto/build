@@ -4,8 +4,8 @@
 
 # Exposes the builder and recipe configurations to GenTests in recipes.
 
-
 import argparse
+import ast
 from collections import OrderedDict
 import re
 
@@ -346,7 +346,28 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     })
 
   def example_test_spec(self, builder, spec):
+    """Simulates reading a simple test-spec file with one builder.
+
+    Args:
+      builder: Key the spec by this builder.
+      spec: The raw test spec pyl text.
+    """
     return self.m.file.read_text('{"%s": %s}' % (builder, spec))
+
+  def example_parent_test_spec_properties(self, mastername, buildername, spec):
+    """Properties dict containing an example parent_test_spec.
+
+    Args:
+      mastername: Master name of the builder that should get this property.
+      buildername: Name of the builder that should get this property.
+      spec: The raw test spec pyl text.
+    Returns: A dict with a parent_test_spec key set to a packed test spec.
+    """
+    return builders.TestSpec.from_python_literal(
+        {buildername: ast.literal_eval(spec)},
+        mastername,
+        buildername,
+    ).as_properties_dict(buildername)
 
   def version_file(self, patch_level, desc, count=1):
     # Recipe step name disambiguation.
@@ -434,7 +455,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         # tests. Assume extra_isolate hashes for each extra test specified by
         # parent_test_spec property.
         swarm_hashes = self._make_dummy_swarm_hashes(bot_config)
-        for name, _, _ in kwargs.get('parent_test_spec', {}).get('tests', []):
+        buider_spec = kwargs.get('parent_test_spec', {})
+        for name, _, _, _, _, _, _ in buider_spec.get('tests', []):
           swarm_hashes[name] = '[dummy hash for %s]' % name
         test += self.m.properties(
           parent_got_swarming_client_revision='[dummy swarming client hash]',

@@ -465,6 +465,35 @@ def GenTests(api):
   f = f.include('read test spec')
   f = f.include('isolate tests')
   f = f.include_re(r'.*Mjsunit.*')
+  test_spec = """
+    {
+      "swarming_dimensions": {
+        "pool": "noodle",
+        "gpu": "quantum",
+      },
+      "swarming_task_attrs": {
+        "priority": 25,
+        "hard_timeout": 7200,
+      },
+      "tests": [
+        {
+          "name": "mjsunit",
+          "variant": "sweet",
+          "shards": 2,
+        },
+        {
+          "name": "mjsunit",
+          "variant": "sour",
+          "suffix": "everything",
+          "test_args": ["--extra-flags", "--flag1 --flag2"],
+          # This tests that the default pool dimension above is overridden.
+          "swarming_dimensions": {"pool": "override"},
+          # This tests that the default priority above is overridden.
+          "swarming_task_attrs": {"priority": 100},
+        },
+      ],
+    }
+  """.strip()
   yield (
     api.v8.test(
         'client.v8',
@@ -475,10 +504,7 @@ def GenTests(api):
         'infra', 'testing', 'client.v8.pyl')) +
     api.override_step_data(
         'read test spec',
-        api.v8.example_test_spec(
-            'V8 Mac64',
-            '{"tests": [{"name": "mjsunit", "variant": "sweet", "shards": 2}]}',
-        ),
+        api.v8.example_test_spec('V8 Mac64', test_spec),
     ) +
     api.post_process(f)
   )
@@ -496,10 +522,7 @@ def GenTests(api):
         'infra', 'testing', 'client.v8.pyl')) +
     api.override_step_data(
         'read test spec',
-        api.v8.example_test_spec(
-            'V8 Linux - nosnap',
-            '{"tests": [{"name": "mjsunit", "variant": "sweet", "shards": 2}]}',
-        ),
+        api.v8.example_test_spec('V8 Linux - nosnap', test_spec),
     ) +
     api.post_process(Filter(
         'read test spec',
@@ -518,7 +541,8 @@ def GenTests(api):
         'client.v8',
         'V8 Linux - nosnap',
         'with_test_spec',
-        parent_test_spec={"tests": [["mjsunit", 2, "sweet"]]},
+        **api.v8.example_parent_test_spec_properties(
+          'client.v8', 'V8 Linux - nosnap', test_spec)
     ) +
     api.post_process(f)
   )

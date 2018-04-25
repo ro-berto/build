@@ -15,6 +15,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test_spec@V8 Linux - nosnap@@@",
       "@@@STEP_LOG_LINE@test_spec@  mjsunit(2) sweet@@@",
+      "@@@STEP_LOG_LINE@test_spec@  mjsunit(1) sour@@@",
       "@@@STEP_LOG_END@test_spec@@@"
     ]
   },
@@ -105,11 +106,39 @@
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
           "parent_test_spec": {
+            "swarming_dimensions": {
+              "gpu": "quantum",
+              "pool": "noodle"
+            },
+            "swarming_task_attrs": {
+              "hard_timeout": 7200,
+              "priority": 25
+            },
             "tests": [
               [
                 "mjsunit",
                 2,
-                "sweet"
+                "sweet",
+                "sweet",
+                [],
+                {},
+                {}
+              ],
+              [
+                "mjsunit",
+                1,
+                "sour",
+                "everything",
+                [
+                  "--extra-flags",
+                  "--flag1 --flag2"
+                ],
+                {
+                  "pool": "override"
+                },
+                {
+                  "priority": 100
+                }
               ]
             ]
           },
