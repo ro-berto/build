@@ -496,7 +496,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             },
         }
         if mastername != loop_mastername:
-          trigger_spec['bucket'] = 'master.' + loop_mastername
+          trigger_spec['bucket'] = 'master.' + loop_mastername # pragma: no cover
         for name, value in update_step.presentation.properties.iteritems():
           if name.startswith('got_'):
             trigger_spec['properties']['parent_' + name] = value

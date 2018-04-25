@@ -51,7 +51,7 @@ def _AddIsolatedTestSpec(name, perf_id, platform,
       use_private_swarming_server=use_private_swarming_server,
       use_private_isolate_server=use_private_isolate_server)
   if not parent_buildername:
-    spec['parent_mastername'] = 'chromium.perf'
+    spec['parent_mastername'] = 'chromium.perf' #pragma: no cover
   else:
     spec['parent_mastername'] = 'chromium.perf.fyi'
 
@@ -103,6 +103,7 @@ _AddBuildSpec('Mac Builder Perf FYI', 'mac-fyi', 'mac')
 _AddBuildSpec('Win Builder Perf FYI', 'win-fyi', 'win')
 
 _AddIsolatedTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux',
+                     parent_buildername='Linux Compile Perf FYI',
                      use_private_swarming_server=True)
 _AddIsolatedTestSpec(
     'One Buildbot Step Test Builder', 'buildbot-test', 'linux',
@@ -124,4 +125,5 @@ _AddBuildSpec('Battor Agent Win', 'win', 'win', run_sizes=False,
 
 _AddIsolatedTestSpec('Histogram Pipeline Linux Perf',
                      'histogram-pipeline-linux-perf',
-                     'linux')
+                     'linux',
+                     parent_buildername='Linux Compile Perf FYI')
