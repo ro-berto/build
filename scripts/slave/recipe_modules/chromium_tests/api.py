@@ -25,7 +25,6 @@ RECIPE_CONFIG_PATHS = [
   'testing/buildbot/.*pyl$',
 ]
 
-
 class ChromiumTestsApi(recipe_api.RecipeApi):
   def __init__(self, *args, **kwargs):
     super(ChromiumTestsApi, self).__init__(*args, **kwargs)
@@ -44,6 +43,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   @property
   def trybots(self):
     return self.test_api.trybots
+
+
+  def log(self, message):
+    presentation = self.m.step.active_result.presentation
+    presentation.logs.setdefault('stdout', []).append(message)
 
   def add_builders(self, builders):
     """Adds builders to our builder map"""
@@ -347,11 +351,27 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         if self.m.tryserver.is_tryserver:
           name_suffix=' (with patch)'
 
+        android_version_code = None
+        android_version_name = None
+        if bot_config.get('android_version'):
+          version = self._convert_version(self.m.file.read_text('get version',
+              self.m.path['checkout'].join(bot_config.get('android_version')),
+              test_data='MAJOR=51\nMINOR=0\nBUILD=2704\nPATCH=0\n'))
+          self.log('version:%s' % version)
+          android_version_name = ('%s.%s.%s.%s'
+              % (version['MAJOR'], version['MINOR'], version['BUILD'], version['PATCH']))
+          self.log('android_version_name:%s' % android_version_name)
+          # TODO: Consider CPU architecture
+          android_version_code = '%d%03d' % (int(version['BUILD']), int(version['PATCH']))
+          self.log('android_version_code:%s' % android_version_code)
+
         self.run_mb_and_compile(compile_targets, isolated_targets,
                                 name_suffix=name_suffix,
                                 mb_mastername=mb_mastername,
                                 mb_buildername=mb_buildername,
-                                mb_config_path=mb_config_path)
+                                mb_config_path=mb_config_path,
+                                android_version_code=android_version_code,
+                                android_version_name=android_version_name)
       except self.m.step.StepFailure:
         self.m.tryserver.set_compile_failure_tryjob_result()
         raise
@@ -532,7 +552,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def run_mb_and_compile(self, compile_targets, isolated_targets, name_suffix,
                          mb_mastername=None, mb_buildername=None,
-                         mb_config_path=None):
+                         mb_config_path=None, android_version_code=None,
+                         android_version_name=None):
     use_goma_module=False
     if self.m.chromium.c.project_generator.tool == 'mb':
       mb_mastername = mb_mastername or self.m.properties['mastername']
@@ -543,7 +564,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                              mb_config_path=mb_config_path,
                              use_goma=use_goma,
                              isolated_targets=isolated_targets,
-                             name='generate_build_files%s' % name_suffix)
+                             name='generate_build_files%s' % name_suffix,
+                             android_version_code=android_version_code,
+                             android_version_name=android_version_name)
       if use_goma:
         use_goma_module = True
 
@@ -971,3 +994,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           not test_compile_targets):
         result.append(test)
     return result
+
+  def _convert_version(self, version):
+    """ Convert the version string to a dict. """
+    output = {}
+    for line in version.splitlines():
+      [k,v] = line.split('=', 1)
+      output[k] = v
+    return output
+

@@ -5,6 +5,7 @@
 from recipe_engine.post_process import Filter
 
 DEPS = [
+    'chromium',
     'chromium_tests',
     'depot_tools/tryserver',
     'recipe_engine/path',
@@ -13,6 +14,22 @@ DEPS = [
     'recipe_engine/python',
 ]
 
+BASIC_CONFIG = {
+  'android_config': 'main_builder_mb',
+  'chromium_config': 'chromium',
+  'gclient_config': 'chromium',
+  'test_results_config': 'public_server',
+}
+
+BUILDERS = {
+  'fake.master': {
+    'builders': {
+      'Test Version': dict(BASIC_CONFIG, **{
+        'android_version': 'chrome/Version',
+      }),
+    },
+  },
+}
 
 def RunSteps(api):
   tests = []
@@ -25,6 +42,9 @@ def RunSteps(api):
         mastername]['builders'][api.properties['buildername']]
     bot_config_object = api.chromium_tests.create_generalized_bot_config_object(
         bot_config['bot_ids'])
+  elif 'fake.master' in mastername :
+    bot_config_object = api.chromium_tests.create_bot_config_object(
+        mastername, api.properties['buildername'], builders=BUILDERS)
   else:
     bot_config_object = api.chromium_tests.create_bot_config_object(
         mastername, api.properties['buildername'])
@@ -102,4 +122,13 @@ def GenTests(api):
       api.properties.generic(
           mastername='chromium.android',
           buildername='Android Cronet Builder')
+  )
+
+  yield (
+      api.test('android_version') +
+      api.properties.generic(
+          mastername='fake.master',
+          buildername='Test Version') +
+      api.chromium.override_version(
+          major=123, minor=1, build=9876, patch=2)
   )
