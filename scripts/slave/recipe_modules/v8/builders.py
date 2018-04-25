@@ -846,7 +846,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'tests': [
-          V8Testing(4),
+          V8Testing(5),
           Test262(3),
           Mozilla,
           Benchmarks,
@@ -2392,7 +2392,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'tests': [
-          V8Testing(4),
+          V8Testing(5),
           Test262(3),
           Mozilla,
           Benchmarks,
