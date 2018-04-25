@@ -200,10 +200,10 @@ def with_dimensions(suffix, tests, dimensions):
   return with_test_args(suffix, None, tests, dimensions=dimensions)
 
 
-SWARMING_FYI_PROPS = {
-  'default_expiration': 4 * 60 * 60,
-  'default_hard_timeout': 60 * 60,
-  'default_priority': 35,
+SWARMING_FYI_TASK_ATTRS = {
+  'expiration': 4 * 60 * 60,
+  'hard_timeout': 60 * 60,
+  'priority': 35,
 }
 
 BUILDERS = {
@@ -376,7 +376,7 @@ BUILDERS = {
         ],
         'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - nosnap - debug': {
         'v8_config_kwargs': {
@@ -386,7 +386,7 @@ BUILDERS = {
         'tests': [V8Testing(7)],
         'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - interpreted regexp': {
         'chromium_apply_config': [
@@ -398,7 +398,7 @@ BUILDERS = {
         'enable_swarming': False,
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - noi18n - debug': {
         'chromium_apply_config': [
@@ -773,7 +773,7 @@ BUILDERS = {
         },
         'tests': [Fuzz],
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - gc stress': {
         'v8_apply_config': ['gc_stress'],
@@ -867,7 +867,7 @@ BUILDERS = {
           Benchmarks,
         ],
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - arm64 - sim - MSAN': {
         'chromium_apply_config': [
@@ -961,7 +961,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux64 - debug - fyi': {
         'v8_config_kwargs': {
@@ -969,7 +969,7 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux64 - gcov coverage': {
         'chromium_apply_config': [
@@ -1352,7 +1352,7 @@ BUILDERS = {
             [NumFuzz],
         ),
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 NumFuzz - debug': {
         'v8_config_kwargs': {
@@ -1416,7 +1416,7 @@ BUILDERS = {
             [NumFuzz(2)],
         ),
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 NumFuzz - TSAN': {
         'v8_config_kwargs': {
@@ -1472,7 +1472,7 @@ BUILDERS = {
             [NumFuzz],
         ),
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 NumFuzz - nosnap': {
         'v8_config_kwargs': {
@@ -1489,7 +1489,7 @@ BUILDERS = {
             [NumFuzz],
         ),
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 NumFuzz - nosnap debug': {
         'v8_config_kwargs': {
@@ -1506,7 +1506,7 @@ BUILDERS = {
             [NumFuzz],
         ),
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
     },
   },
@@ -1581,9 +1581,9 @@ BUILDERS = {
               'os': 'Ubuntu-16.04',
             },
         ),
-        'swarming_properties': {
-          'default_hard_timeout': 90 * 60,
-          'default_expiration': 6 * 60 * 60,
+        'swarming_task_attrs': {
+          'hard_timeout': 90 * 60,
+          'expiration': 6 * 60 * 60,
         },
         'swarming_dimensions': {
           'cpu': 'armv7l',
@@ -1603,9 +1603,9 @@ BUILDERS = {
           OptimizeForSize,
         ],
         'variants': V8Variant('default'),
-        'swarming_properties': {
-          'default_hard_timeout': 60 * 60,
-          'default_expiration': 6 * 60 * 60,
+        'swarming_task_attrs': {
+          'hard_timeout': 60 * 60,
+          'expiration': 6 * 60 * 60,
         },
         'swarming_dimensions': {
           'cpu': 'armv7l',
@@ -1622,9 +1622,9 @@ BUILDERS = {
         },
         'tests': [D8Testing(3)],
         'variants': V8Variant('default'),
-        'swarming_properties': {
-          'default_hard_timeout': 2 * 60 * 60,
-          'default_expiration': 6 * 60 * 60,
+        'swarming_task_attrs': {
+          'hard_timeout': 2 * 60 * 60,
+          'expiration': 6 * 60 * 60,
         },
         'swarming_dimensions': {
           'cpu': 'armv7l',
@@ -1733,10 +1733,10 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
-        'swarming_properties': {
-          'default_expiration': 4 * 60 * 60,
-          'default_hard_timeout': 2 * 60 * 60,
-          'default_priority': 35,
+        'swarming_task_attrs': {
+          'expiration': 4 * 60 * 60,
+          'hard_timeout': 2 * 60 * 60,
+          'priority': 35,
         },
         'tests': [D8Testing(5)],
         'testing': {'platform': 'linux'},
@@ -1814,7 +1814,7 @@ BUILDERS = {
         },
         'tests': [V8Testing(4), Test262],
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - mips64el - sim': {
         'v8_config_kwargs': {
@@ -1823,7 +1823,7 @@ BUILDERS = {
         },
         'tests': [V8Testing(4), Test262],
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
 ####### Category: PPC
       'V8 Linux - ppc - sim': {
@@ -1835,7 +1835,7 @@ BUILDERS = {
         },
         'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - ppc64 - sim': {
         'chromium_apply_config': [
@@ -1846,7 +1846,7 @@ BUILDERS = {
         },
         'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
 ####### Category: S390
       'V8 Linux - s390 - sim': {
@@ -1858,7 +1858,7 @@ BUILDERS = {
         },
         'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - s390x - sim': {
         'chromium_apply_config': [
@@ -1869,7 +1869,7 @@ BUILDERS = {
         },
         'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
-        'swarming_properties': SWARMING_FYI_PROPS,
+        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
     },
   },
@@ -2141,8 +2141,8 @@ BUILDERS = {
         'tests': [V8Testing(5)],
         'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
-        'swarming_properties': {
-          'default_hard_timeout': 60 * 60,
+        'swarming_task_attrs': {
+          'hard_timeout': 60 * 60,
         },
       },
       'v8_linux_gcc_compile_rel': {
@@ -2916,10 +2916,10 @@ def AddBranchBuilder(name, build_config, bits, presubmit=False,
     },
     'tests': tests,
     'testing': {'platform': 'linux'},
-    'swarming_properties': {
-      'default_expiration': 4 * 60 * 60,
-      'default_hard_timeout': 90 * 60,
-      'default_priority': 35,
+    'swarming_task_attrs': {
+      'expiration': 4 * 60 * 60,
+      'hard_timeout': 90 * 60,
+      'priority': 35,
     },
   }
 

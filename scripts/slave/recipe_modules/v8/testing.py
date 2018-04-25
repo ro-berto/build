@@ -452,6 +452,28 @@ class V8Test(BaseTest):
     return self.run(test=self._setup_rerun_config(failure_dict), **kwargs)
 
 
+def _trigger_swarming_task(api, task, test_step_config):
+  """Triggers a task on swarming setting custom dimensions and task attributes.
+
+  Args:
+    api: Recipe modules api.
+    task: Task object from swarming recipe module.
+    test_step_config: Configuration object used to configure this task. Contains
+        e.g. dimension and task-attribute overrides.
+  """
+  # Add custom dimensions.
+  task.dimensions.update(api.v8.bot_config.get('swarming_dimensions', {}))
+
+  # Override with per-test dimensions.
+  task.dimensions.update(test_step_config.dimensions or {})
+
+  # Add custom attributes.
+  for k, v in api.v8.bot_config.get('swarming_task_attrs', {}).iteritems():
+    setattr(task, k, v)
+
+  api.swarming.trigger_task(task)
+
+
 class V8SwarmingTest(V8Test):
   @property
   def uses_swarming(self):
@@ -519,14 +541,7 @@ class V8SwarmingTest(V8Test):
     self.task.collect_step = lambda task, **kw: (
         self._v8_collect_step(task, coverage_context, **kw))
 
-    # Add custom dimensions.
-    self.task.dimensions.update(
-        self.api.v8.bot_config.get('swarming_dimensions', {}))
-
-    # Override with per-test dimensions.
-    self.task.dimensions.update(self.test_step_config.dimensions or {})
-
-    self.api.swarming.trigger_task(self.task)
+    _trigger_swarming_task(self.api, self.task, self.test_step_config)
 
   def run(self, coverage_context=NULL_COVERAGE, **kwargs):
     # TODO(machenbach): Soften this when softening 'assert isolated_hash'
@@ -593,7 +608,7 @@ class V8GenericSwarmingTest(BaseTest):
         raw_cmd=self.command,
     )
 
-    self.api.swarming.trigger_task(self.task)
+    _trigger_swarming_task(self.api, self.task, self.test_step_config)
 
   def run(self, **kwargs):
     assert self.task

@@ -321,11 +321,6 @@ class V8Api(recipe_api.RecipeApi):
       # Use lower priority for tasks scheduled from experimental builds.
       self.m.swarming.default_priority = 60
 
-    # Overwrite defaults with per-bot settings.
-    for key, value in self.bot_config.get(
-        'swarming_properties', {}).iteritems():
-      setattr(self.m.swarming, key, value)
-
   def runhooks(self, **kwargs):
     if (self.m.chromium.c.compile_py.compiler and
         self.m.chromium.c.compile_py.compiler.startswith('goma')):
