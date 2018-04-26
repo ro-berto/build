@@ -15,6 +15,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/step',
+  'depot_tools/gerrit',
   'depot_tools/tryserver',
   'v8',
   'webrtc',
@@ -109,6 +110,13 @@ def RunSteps(api):
   try:
     safe_buildername = ''.join(
         c if c.isalnum() else '_' for c in api.properties['buildername'])
+    # HACK to avoid invalidating caches when PRESUBMIT running
+    # on special infra/config branch, which is typically orphan.
+    if 'infra/config' == api.gerrit.get_change_destination_branch(
+        name='get_patch_destination_branch',
+        host=api.properties['patch_gerrit_url'],
+        change=api.properties['patch_issue']):
+      safe_buildername += '_infra_config'
     cwd = api.path['builder_cache'].join(safe_buildername)
     api.file.ensure_directory('ensure builder cache dir', cwd)
   except KeyError:
@@ -254,4 +262,18 @@ def GenTests(api):
         gerrit_project='v8/v8',
         runhooks=True,
         path_config='generic')
+  )
+
+  yield (
+    api.test('v8_with_cache_infra_config_branch') +
+    api.properties.tryserver(
+        mastername='tryserver.v8',
+        buildername='v8_presubmit',
+        repo_name='v8',
+        gerrit_project='v8/v8',
+        runhooks=True,
+        path_config='generic') +
+    api.step_data(
+      'gerrit get_patch_destination_branch',
+      api.gerrit.get_one_change_response_data(branch='infra/config'))
   )

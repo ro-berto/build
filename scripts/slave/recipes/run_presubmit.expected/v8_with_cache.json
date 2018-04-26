@@ -3,21 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/v8_presubmit"
-    ],
-    "infra_step": true,
-    "name": "ensure builder cache dir"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
@@ -29,7 +14,6 @@
       "-p",
       "change=456789"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_presubmit",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -58,6 +42,21 @@
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[BUILDER_CACHE]/v8_presubmit"
+    ],
+    "infra_step": true,
+    "name": "ensure builder cache dir"
   },
   {
     "cmd": [
