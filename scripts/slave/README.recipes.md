@@ -3770,11 +3770,11 @@ Summary of the recipe flow:
 Revision Y will be the revision property as provided by buildbot or HEAD (i.e.
 in a forced build with no revision provided).
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/blink_downstream.py#109)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/blink_downstream.py#108)(api):**
 
 &mdash; **def [V8Builder](/scripts/slave/recipes/blink_downstream.py#45)(config, bits, platform):**
 
-&mdash; **def [determine\_new\_future\_failures](/scripts/slave/recipes/blink_downstream.py#80)(caller_api, extra_args):**
+&mdash; **def [determine\_new\_future\_failures](/scripts/slave/recipes/blink_downstream.py#79)(caller_api, extra_args):**
 ### *recipes* / [boringssl](/scripts/slave/recipes/boringssl.py)
 
 [DEPS](/scripts/slave/recipes/boringssl.py#7): [chromium](#recipe_modules-chromium), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]

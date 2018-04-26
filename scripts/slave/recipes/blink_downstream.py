@@ -55,7 +55,6 @@ def V8Builder(config, bits, platform):
       'BUILD_CONFIG': config,
       'TARGET_BITS': bits,
     },
-    'test_args': ['--no-pixel-tests'],
     'additional_expectations': [
       'v8', 'tools', 'blink_tests', 'TestExpectations',
     ],
@@ -165,7 +164,7 @@ def RunSteps(api):
           name_suffix=' (without patch)',
       )
 
-    extra_args = list(bot_config.get('test_args', []))
+    extra_args = []
     if bot_config.get('additional_expectations'):
       extra_args.extend([
         '--additional-expectations',

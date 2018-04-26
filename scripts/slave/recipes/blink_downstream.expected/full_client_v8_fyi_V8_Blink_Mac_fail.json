@@ -673,7 +673,6 @@
       "--exit-after-n-crashes-or-timeouts",
       "100",
       "--debug-rwt-logging",
-      "--no-pixel-tests",
       "--additional-expectations",
       "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations"
     ],
@@ -1272,7 +1271,6 @@
       "--exit-after-n-crashes-or-timeouts",
       "100",
       "--debug-rwt-logging",
-      "--no-pixel-tests",
       "--additional-expectations",
       "[BUILDER_CACHE]/V8_Blink_Mac/src/v8/tools/blink_tests/TestExpectations",
       "--test-list",
