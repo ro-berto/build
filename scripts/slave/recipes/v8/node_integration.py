@@ -107,7 +107,7 @@ def _build_and_test(api, use_goma=False):
       args += [
         '--build-v8-with-gn-max-jobs=%d' % api.goma.recommended_goma_jobs,
         '--build-v8-with-gn-extra-gn-args',
-        'use_goma=true goma_dir=%s' % goma_dir,
+        'use_goma=true goma_dir="%s"' % goma_dir,
       ]
 
     env = {}

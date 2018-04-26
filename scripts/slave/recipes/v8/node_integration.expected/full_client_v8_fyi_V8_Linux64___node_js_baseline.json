@@ -152,7 +152,7 @@
       "--build-v8-with-gn",
       "--build-v8-with-gn-max-jobs=20",
       "--build-v8-with-gn-extra-gn-args",
-      "use_goma=true goma_dir=[CACHE]/goma_client"
+      "use_goma=true goma_dir=\"[CACHE]/goma_client\""
     ],
     "cwd": "[START_DIR]/node.js",
     "name": "configure node.js"
