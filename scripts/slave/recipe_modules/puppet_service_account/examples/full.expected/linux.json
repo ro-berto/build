@@ -6,8 +6,9 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-fake-account.json",
       "-lifetime",
-      "600s"
+      "3m"
     ],
+    "infra_step": true,
     "name": "get access token for service-account-fake-account.json",
     "stdout": "/path/to/tmp/"
   },

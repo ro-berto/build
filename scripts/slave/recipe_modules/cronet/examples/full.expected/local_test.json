@@ -1370,8 +1370,9 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-cronet-perf.json",
       "-lifetime",
-      "600s"
+      "3m"
     ],
+    "infra_step": true,
     "name": "get access token for service-account-cronet-perf.json",
     "stdout": "/path/to/tmp/"
   },

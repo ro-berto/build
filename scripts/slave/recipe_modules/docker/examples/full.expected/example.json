@@ -6,8 +6,9 @@
       "-scopes",
       "https://www.googleapis.com/auth/cloud-platform",
       "-lifetime",
-      "600s"
+      "3m"
     ],
+    "infra_step": true,
     "name": "get access token for default account",
     "stdout": "/path/to/tmp/"
   },

@@ -689,13 +689,14 @@
       "-service-account-json",
       "C:\\creds\\service_accounts\\service-account-chromium-perf-histograms.json",
       "-lifetime",
-      "600s"
+      "3m"
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
+    "infra_step": true,
     "name": "get access token for service-account-chromium-perf-histograms.json",
     "stdout": "/path/to/tmp/"
   },
