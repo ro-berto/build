@@ -1236,6 +1236,7 @@ class LayoutTestResultsHandler(JSONResultsHandler):
       None,
       '',
       'with patch',
+      'experimental',
   )
 
   def upload_results(self, api, results, step_name, step_suffix=None):
