@@ -26,14 +26,14 @@ class PuppetServiceAccountApi(recipe_api.RecipeApi):
     """Path to a particular JSON key (as str)."""
     return self.m.path.join(self.keys_path, 'service-account-%s.json' % account)
 
-  def get_access_token(self, account, scopes=None, lifetime_sec=None):
+  def get_access_token(self, account, scopes=None):
     """Returns an access token for a service account.
+
+    Token's lifetime is guaranteed to be at least 3 minutes and at most 45.
 
     Args:
       account: a name of the service account, as defined in Puppet config.
       scopes: list of OAuth scopes for new token, default is [userinfo.email].
-      lifetime_sec: minimum allowed lifetime of the returned token (the token
-          may live longer). Should be under 45m. Default is 10m.
     """
     return self.m.service_account.from_credentials_json(
-        self.get_key_path(account)).get_access_token(scopes, lifetime_sec)
+        self.get_key_path(account)).get_access_token(scopes)

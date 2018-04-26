@@ -26,7 +26,7 @@ class DockerApi(recipe_api.RecipeApi):
     self._project = project
     self._server = server
     token = self.m.service_account.default().get_access_token(
-        ['https://www.googleapis.com/auth/cloud-platform'], 300)
+        ['https://www.googleapis.com/auth/cloud-platform'])
     self.m.python(
         step_name or 'docker login',
         self.resource('docker_login.py'),

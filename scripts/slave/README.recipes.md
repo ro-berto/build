@@ -2619,15 +2619,15 @@ exposed through 'recipe_engine/service_account' module.
 
 #### **class [PuppetServiceAccountApi](/scripts/slave/recipe_modules/puppet_service_account/api.py#17)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [get\_access\_token](/scripts/slave/recipe_modules/puppet_service_account/api.py#29)(self, account, scopes=None, lifetime_sec=None):**
+&mdash; **def [get\_access\_token](/scripts/slave/recipe_modules/puppet_service_account/api.py#29)(self, account, scopes=None):**
 
 Returns an access token for a service account.
+
+Token's lifetime is guaranteed to be at least 3 minutes and at most 45.
 
 Args:
   account: a name of the service account, as defined in Puppet config.
   scopes: list of OAuth scopes for new token, default is [userinfo.email].
-  lifetime_sec: minimum allowed lifetime of the returned token (the token
-      may live longer). Should be under 45m. Default is 10m.
 
 &mdash; **def [get\_key\_path](/scripts/slave/recipe_modules/puppet_service_account/api.py#25)(self, account):**
 

@@ -6,7 +6,7 @@
       "-scopes",
       "https://www.googleapis.com/auth/cloud-platform",
       "-lifetime",
-      "300s"
+      "600s"
     ],
     "name": "get access token for default account",
     "stdout": "/path/to/tmp/"
