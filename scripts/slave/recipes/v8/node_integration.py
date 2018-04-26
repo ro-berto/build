@@ -100,11 +100,16 @@ def goma_wrapper(api, use_goma):
 
 def _build_and_test(api, use_goma=False):
   with api.context(cwd=api.v8.checkout_root.join('node.js')):
-    if use_goma:
-      api.goma.ensure_goma()
-
-    # TODO(machenbach): Add goma flags to configure.
     args = ['--build-v8-with-gn']
+
+    if use_goma:
+      goma_dir = api.goma.ensure_goma()
+      args += [
+        '--build-v8-with-gn-max-jobs=%d' % api.goma.recommended_goma_jobs,
+        '--build-v8-with-gn-extra-gn-args',
+        'use_goma=true goma_dir=%s' % goma_dir,
+      ]
+
     env = {}
     if api.platform.is_win:
       # TODO(machenbach): Also switch other platforms to ninja eventually.
