@@ -441,6 +441,20 @@ class GomaApi(recipe_api.RecipeApi):
     if build_id:
       args.extend(['--build-id', build_id])
 
+    builder_id = self.m.buildbucket.builder_id
+    if builder_id:
+      args.extend(['--builder-id-json',
+                   self.m.json.input({
+                       'project': builder_id.project,
+                       'bucket': builder_id.bucket,
+                       'builder': builder_id.builder,
+                   })])
+    if self.m.runtime.is_luci:
+      args.append('--is-luci')
+
+    if self.m.runtime.is_experimental:
+      args.append('--is-experimental')
+
     # Set buildbot info used in goma_utils.MakeGomaStatusCounter etc.
     keys = [
       ('buildername', 'buildername'),

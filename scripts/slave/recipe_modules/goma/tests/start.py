@@ -5,6 +5,7 @@
 DEPS = [
   'goma',
   'recipe_engine/properties',
+  'recipe_engine/runtime',
 ]
 
 
@@ -26,4 +27,10 @@ def GenTests(api):
   yield (
       api.test('custom_service_account') +
       api.properties(buildername='test_buildername', service_account=True)
+  )
+
+  yield (
+      api.test('luci_and_experimental') +
+      api.properties(buildername='test_buildername') +
+      api.runtime(is_luci=True, is_experimental=True)
   )

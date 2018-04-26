@@ -1981,7 +1981,7 @@ Returns: (dict) If 'remote_name' is supplied, a dictionary mapping the
     that repository's bundle was uploaded.
 ### *recipe_modules* / [goma](/scripts/slave/recipe_modules/goma)
 
-[DEPS](/scripts/slave/recipe_modules/goma/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
+[DEPS](/scripts/slave/recipe_modules/goma/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
 #### **class [GomaApi](/scripts/slave/recipe_modules/goma/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -1993,7 +1993,7 @@ set local goma dir like below at the beginning of recipe running.
 
 &emsp; **@property**<br>&mdash; **def [bigquery\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#56)(self):**
 
-&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#469)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
+&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#483)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
 
 Build with ninja_command using goma
 
@@ -4902,9 +4902,9 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/goma/tests/recommended_goma_jobs.py#10)(api):**
 ### *recipes* / [goma:tests/start](/scripts/slave/recipe_modules/goma/tests/start.py)
 
-[DEPS](/scripts/slave/recipe_modules/goma/tests/start.py#5): [goma](#recipe_modules-goma), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/goma/tests/start.py#5): [goma](#recipe_modules-goma), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/goma/tests/start.py#11)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/goma/tests/start.py#12)(api):**
 ### *recipes* / [goma\_client](/scripts/slave/recipes/goma_client.py)
 
 [DEPS](/scripts/slave/recipes/goma_client.py#5): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]

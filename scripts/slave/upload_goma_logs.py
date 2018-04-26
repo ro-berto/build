@@ -6,6 +6,7 @@
 """upload goma related logs."""
 
 import argparse
+import collections
 import json
 import os
 import sys
@@ -117,12 +118,27 @@ def main():
   parser.add_argument('--buildbot-clobber', default='',
                       help='buildbot clobber')
 
+  # For ComipleEvents.
   parser.add_argument('--build-id', default=0, type=long,
                       help='unique ID of the current build')
   parser.add_argument('--build-step-name', default='',
                       help='step name of the current build')
   parser.add_argument('--bigquery-service-account-json', default='',
+                      metavar='FILENAME',
                       help='Service account json for BigQuery')
+
+  # Builder ID.
+  parser.add_argument('--builder-id-json', default='',
+                      metavar='FILENAME',
+                      help='path to Builder ID json file')
+
+  # From Runtime API.
+  parser.add_argument('--is-luci',
+                      action='store_true',
+                      help='True if this runs on LUCI')
+  parser.add_argument('--is-experimental',
+                      action='store_true',
+                      help='True if experimental')
 
   args = parser.parse_args()
   tsmon_counters = []
@@ -134,12 +150,20 @@ def main():
 
   viewer_urls = {}
 
+  builder_id = {}
+  if args.builder_id_json:
+    with open(args.builder_id_json) as f:
+      builder_id = json.load(f)
+
   if args.upload_compiler_proxy_info:
     viewer_url = goma_utils.UploadGomaCompilerProxyInfo(
         builder=args.buildbot_buildername,
         master=args.buildbot_mastername,
         slave=args.buildbot_slavename,
         clobber=args.buildbot_clobber,
+        builder_id=builder_id,
+        is_luci=args.is_luci,
+        is_experimental=args.is_experimental,
         override_gsutil=override_gsutil
     )
     if viewer_url is not None:

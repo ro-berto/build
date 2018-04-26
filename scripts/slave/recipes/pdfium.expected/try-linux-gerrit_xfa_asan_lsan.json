@@ -369,6 +369,8 @@
       "[TMP_BASE]/crash_report_id",
       "--build-id",
       "8950789761525983376",
+      "--builder-id-json",
+      "{\"bucket\": \"master.tryserver.client.pdfium\", \"builder\": \"linux_xfa\", \"project\": null}",
       "--buildbot-buildername",
       "linux_xfa_asan_lsan",
       "--buildbot-mastername",

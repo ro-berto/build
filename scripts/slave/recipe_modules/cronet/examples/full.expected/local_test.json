@@ -1302,6 +1302,8 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--builder-id-json",
+      "{\"bucket\": null, \"builder\": null, \"project\": null}",
       "--buildbot-buildername",
       "local_test",
       "--buildbot-mastername",

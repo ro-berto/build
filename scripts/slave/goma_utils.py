@@ -157,7 +157,9 @@ def UploadToGomaLogGS(file_path, gs_filename,
 
 def UploadGomaCompilerProxyInfo(override_gsutil=None,
                                 builder='unknown', master='unknown',
-                                slave='unknown', clobber=''):
+                                slave='unknown', clobber='',
+                                builder_id=None, is_luci=False,
+                                is_experimental=False):
   """Upload compiler_proxy{,-subproc}.INFO and gomacc.INFO to Google Storage.
 
   Args:
@@ -166,6 +168,9 @@ def UploadGomaCompilerProxyInfo(override_gsutil=None,
     master: a string name of a master.
     slave: a string name of a slave.
     clobber: set something if clobber (to be removed)
+    builder_id: a dictionary that represents BuilderID.
+    is_luci: True if this is LUCI.
+    is_experimental: True if this is experimental build.
   """
   latest_subproc_info = GetLatestGomaCompilerProxySubprocInfo()
 
@@ -175,7 +180,12 @@ def UploadGomaCompilerProxyInfo(override_gsutil=None,
     'slave': slave,
     'clobber': True if clobber else False,
     'os': chromium_utils.PlatformName(),
+    'is_luci': is_luci,
+    'is_experimental': is_experimental,
   }
+  if builder_id:
+    builderinfo['builder_id'] = builder_id
+
   # Needs to begin with x-goog-meta for custom metadata.
   # https://cloud.google.com/storage/docs/gsutil/addlhelp/WorkingWithObjectMetadata#custom-metadata
   metadata = {

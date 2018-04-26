@@ -467,6 +467,8 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--builder-id-json",
+      "{\"bucket\": null, \"builder\": null, \"project\": null}",
       "--buildbot-buildername",
       "this-name-does-not-exist-in-test-matrix"
     ],
@@ -772,6 +774,8 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--builder-id-json",
+      "{\"bucket\": null, \"builder\": null, \"project\": null}",
       "--buildbot-buildername",
       "this-name-does-not-exist-in-test-matrix"
     ],
