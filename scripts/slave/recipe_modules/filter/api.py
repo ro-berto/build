@@ -72,6 +72,7 @@ class FilterApi(recipe_api.RecipeApi):
                                  use_mb=False,
                                  mb_mastername=None,
                                  mb_buildername=None,
+                                 mb_config_path=None,
                                  build_output_dir=None,
                                  cros_board=None,
                                  **kwargs):
@@ -90,6 +91,7 @@ class FilterApi(recipe_api.RecipeApi):
       conconfig_file_name: the config file to look up exclusions in.
       mb_mastername: the mastername to pass over to run MB.
       mb_buildername: the buildername to pass over to run MB.
+      mb_config_path: the path to the MB config file.
 
     Within the file we concatenate "base.exclusions" and
     "|additional_names|.exclusions" (if |additional_names| is not none) to
@@ -192,18 +194,23 @@ class FilterApi(recipe_api.RecipeApi):
         if use_mb:
           mb_mastername = mb_mastername or self.m.properties['mastername']
           mb_buildername = mb_buildername or self.m.properties['buildername']
+          mb_arguments = [
+              'analyze',
+              '-m', mb_mastername,
+              '-b', mb_buildername,
+          ]
+          if mb_config_path:
+            mb_arguments += ['-f', mb_config_path]
+          mb_arguments += [
+              '-v',
+              build_output_dir,
+              self.m.json.input(analyze_input),
+              self.m.json.output()
+          ]
           step_result = self.m.python(
               'analyze',
               self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
-              args=['analyze',
-                    '-m',
-                    mb_mastername,
-                    '-b',
-                    mb_buildername,
-                    '-v',
-                    build_output_dir,
-                    self.m.json.input(analyze_input),
-                    self.m.json.output()],
+              args=mb_arguments,
               step_test_data=lambda: self.m.json.test_api.output(
                 test_output),
               **kwargs)
@@ -262,7 +269,7 @@ class FilterApi(recipe_api.RecipeApi):
   # TODO(phajdan.jr): Merge with does_patch_require_compile.
   def analyze(self, affected_files, test_targets, additional_compile_targets,
               config_file_name, mb_mastername=None, mb_buildername=None,
-              additional_names=None):
+              mb_config_path=None, additional_names=None):
     """Runs "analyze" step to determine targets affected by the patch.
 
     Returns a tuple of:
@@ -283,6 +290,7 @@ class FilterApi(recipe_api.RecipeApi):
         use_mb=use_mb,
         mb_mastername=mb_mastername,
         mb_buildername=mb_buildername,
+        mb_config_path=mb_config_path,
         build_output_dir=build_output_dir,
         cros_board=self.m.chromium.c.TARGET_CROS_BOARD)
 

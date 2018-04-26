@@ -935,9 +935,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       additional_compile_targets = sorted(
           set(compile_targets) - set(test_targets))
       analyze_names = ['chromium'] + list(bot_config.get('analyze_names', []))
+      mb_config_path = (
+          self.m.chromium.c.project_generator.config_path
+          or self.m.path['checkout'].join('tools', 'mb', 'mb_config.pyl'))
       test_targets, compile_targets = self.m.filter.analyze(
           affected_files, test_targets, additional_compile_targets,
           'trybot_analyze_config.json',
+          mb_mastername=mastername,
+          mb_buildername=buildername,
+          mb_config_path=mb_config_path,
           additional_names=analyze_names)
 
     if bot_config.get('analyze_mode') == 'compile':

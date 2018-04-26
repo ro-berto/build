@@ -443,6 +443,8 @@
       "tryserver.chromium.win",
       "-b",
       "win7_chromium_rel_ng",
+      "-f",
+      "[BUILDER_CACHE]\\win\\src\\tools\\mb\\mb_config.pyl",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"third_party/skia/foo.cc\"], \"test_targets\": [\"mini_installer_tests\"]}",

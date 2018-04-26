@@ -427,6 +427,8 @@
       "tryserver.blink",
       "-b",
       "mac10.12_blink_rel",
+      "-f",
+      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"v8/foo.cc\"], \"test_targets\": []}",

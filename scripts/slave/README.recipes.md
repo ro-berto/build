@@ -1727,7 +1727,7 @@ Args:
 
 #### **class [FilterApi](/scripts/slave/recipe_modules/filter/api.py#13)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [analyze](/scripts/slave/recipe_modules/filter/api.py#263)(self, affected_files, test_targets, additional_compile_targets, config_file_name, mb_mastername=None, mb_buildername=None, additional_names=None):**
+&mdash; **def [analyze](/scripts/slave/recipe_modules/filter/api.py#270)(self, affected_files, test_targets, additional_compile_targets, config_file_name, mb_mastername=None, mb_buildername=None, mb_config_path=None, additional_names=None):**
 
 Runs "analyze" step to determine targets affected by the patch.
 
@@ -1740,7 +1740,7 @@ Returns a tuple of:
 Returns the set of targets that need to be compiled based on the set of
 files that have changed.
 
-&mdash; **def [does\_patch\_require\_compile](/scripts/slave/recipe_modules/filter/api.py#66)(self, affected_files, test_targets=None, additional_compile_targets=None, additional_names=None, config_file_name='trybot_analyze_config.json', use_mb=False, mb_mastername=None, mb_buildername=None, build_output_dir=None, cros_board=None, \*\*kwargs):**
+&mdash; **def [does\_patch\_require\_compile](/scripts/slave/recipe_modules/filter/api.py#66)(self, affected_files, test_targets=None, additional_compile_targets=None, additional_names=None, config_file_name='trybot_analyze_config.json', use_mb=False, mb_mastername=None, mb_buildername=None, mb_config_path=None, build_output_dir=None, cros_board=None, \*\*kwargs):**
 
 Check to see if the affected files require a compile or tests.
 
@@ -1757,6 +1757,7 @@ Args:
   conconfig_file_name: the config file to look up exclusions in.
   mb_mastername: the mastername to pass over to run MB.
   mb_buildername: the buildername to pass over to run MB.
+  mb_config_path: the path to the MB config file.
 
 Within the file we concatenate "base.exclusions" and
 "|additional_names|.exclusions" (if |additional_names| is not none) to
@@ -4696,9 +4697,9 @@ Generates the sequence of steps that will be run by the slave.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/filter/examples/full.py#16)(api):**
 ### *recipes* / [filter:tests/analyze](/scripts/slave/recipe_modules/filter/tests/analyze.py)
 
-[DEPS](/scripts/slave/recipe_modules/filter/tests/analyze.py#5): [chromium](#recipe_modules-chromium), [filter](#recipe_modules-filter), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/filter/tests/analyze.py#7): [chromium](#recipe_modules-chromium), [filter](#recipe_modules-filter), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/filter/tests/analyze.py#13)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/filter/tests/analyze.py#15)(api):**
 ### *recipes* / [filter:tests/analyze\_mac](/scripts/slave/recipe_modules/filter/tests/analyze_mac.py)
 
 [DEPS](/scripts/slave/recipe_modules/filter/tests/analyze_mac.py#5): [chromium](#recipe_modules-chromium), [filter](#recipe_modules-filter), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

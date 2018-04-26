@@ -420,6 +420,8 @@
       "tryserver.chromium.win",
       "-b",
       "old_chromium_rel_ng",
+      "-f",
+      "[START_DIR]\\src\\tools\\mb\\mb_config.pyl",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"README.md\", \"foo/bar/baz.py\"], \"test_targets\": [\"mini_installer_tests\"]}",

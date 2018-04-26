@@ -353,6 +353,8 @@
       "tryserver.v8",
       "-b",
       "v8_linux_chromium_gn_rel",
+      "-f",
+      "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/tools/mb/mb_config.pyl",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [\"base_unittests\", \"blink_tests\", \"extensions_browsertests\", \"gin_unittests\", \"net_unittests\", \"pdfium_test\", \"postmortem-metadata\", \"unit_tests\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",

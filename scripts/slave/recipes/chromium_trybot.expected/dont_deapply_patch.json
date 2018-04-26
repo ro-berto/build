@@ -432,6 +432,8 @@
       "tryserver.chromium.mac",
       "-b",
       "mac_optional_gpu_tests_rel",
+      "-f",
+      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
