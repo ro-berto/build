@@ -390,7 +390,13 @@
       "-u",
       "[START_DIR]\\pdfium\\testing\\tools\\run_javascript_tests.py",
       "--build-dir",
-      "out\\release_xfa_v8_clang_asan"
+      "out\\release_xfa_v8_clang_asan",
+      "--gold_properties",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_xfa_asan build_number 1234",
+      "--gold_key",
+      "asan true clang true debug false is_standalone true os windows skia false target_cpu \"x86\" v8 true xfa true",
+      "--gold_output_dir",
+      "[START_DIR]\\pdfium\\out\\release_xfa_v8_clang_asan\\gold_output"
     ],
     "cwd": "[START_DIR]\\pdfium",
     "env": {
@@ -404,7 +410,13 @@
       "-u",
       "[START_DIR]\\pdfium\\testing\\tools\\run_pixel_tests.py",
       "--build-dir",
-      "out\\release_xfa_v8_clang_asan"
+      "out\\release_xfa_v8_clang_asan",
+      "--gold_properties",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_xfa_asan build_number 1234",
+      "--gold_key",
+      "asan true clang true debug false is_standalone true os windows skia false target_cpu \"x86\" v8 true xfa true",
+      "--gold_output_dir",
+      "[START_DIR]\\pdfium\\out\\release_xfa_v8_clang_asan\\gold_output"
     ],
     "cwd": "[START_DIR]\\pdfium",
     "env": {

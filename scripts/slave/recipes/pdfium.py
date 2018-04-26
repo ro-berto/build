@@ -196,17 +196,6 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
 
   script_args = ['--build-dir', api.path.join('out', out_dir)]
 
-  if v8:
-    javascript_path = str(api.path['checkout'].join('testing', 'tools',
-                                                    'run_javascript_tests.py'))
-    with api.context(cwd=api.path['checkout'], env=env):
-      api.python('javascript tests', javascript_path, script_args)
-
-  pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
-                                                   'run_pixel_tests.py'))
-  with api.context(cwd=api.path['checkout'], env=env):
-    api.python('pixel tests', pixel_tests_path, script_args)
-
   # Add the arguments needed to upload the resulting images.
   gold_output_dir = api.path['checkout'].join('out', out_dir, 'gold_output')
   gold_props, gold_key = get_gold_params(api, build_config, revision)
@@ -216,6 +205,27 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
     '--gold_output_dir', gold_output_dir,
   ])
 
+  if v8:
+    javascript_path = str(api.path['checkout'].join('testing', 'tools',
+                                                    'run_javascript_tests.py'))
+    with api.context(cwd=api.path['checkout'], env=env):
+      try:
+        api.python('javascript tests', javascript_path, script_args)
+      except api.step.StepFailure:
+        # Swallow the exception. The step will still show up as
+        # failed, but processing will continue.
+        pass
+
+  pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
+                                                   'run_pixel_tests.py'))
+  with api.context(cwd=api.path['checkout'], env=env):
+    try:
+      api.python('pixel tests', pixel_tests_path, script_args)
+    except api.step.StepFailure:
+      # Swallow the exception. The step will still show up as
+      # failed, but processing will continue.
+      pass
+
   ignore_hashes_file = get_gold_ignore_hashes(api, out_dir)
   if ignore_hashes_file:
     script_args.extend(['--gold_ignore_hashes',
@@ -224,7 +234,13 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
   corpus_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_corpus_tests.py'))
   with api.context(cwd=api.path['checkout'], env=env):
-    api.python('corpus tests', corpus_tests_path, script_args)
+    try:
+      api.python('corpus tests', corpus_tests_path, script_args)
+    except api.step.StepFailure:
+      # Swallow the exception. The step will still show up as
+      # failed, but processing will continue.
+      pass
+
   upload_dm_results(api, gold_output_dir, revision)
 
 
@@ -817,4 +833,37 @@ def GenTests(api):
                    buildnumber='1234') +
     api.step_data(
           'get uninteresting hashes', retcode=1)
+  )
+
+  yield (
+    api.test('fail-javascript-tests') +
+    api.platform('linux', 64) +
+    api.properties(mastername="client.pdfium",
+                   buildername='linux',
+                   buildnumber='1234',
+                   bot_id="test_slave") +
+    api.step_data(
+          'javascript tests', retcode=1)
+  )
+
+  yield (
+    api.test('fail-pixel-tests') +
+    api.platform('linux', 64) +
+    api.properties(mastername="client.pdfium",
+                   buildername='linux',
+                   buildnumber='1234',
+                   bot_id="test_slave") +
+    api.step_data(
+          'pixel tests', retcode=1)
+  )
+
+  yield (
+    api.test('fail-corpus-tests') +
+    api.platform('linux', 64) +
+    api.properties(mastername="client.pdfium",
+                   buildername='linux',
+                   buildnumber='1234',
+                   bot_id="test_slave") +
+    api.step_data(
+          'corpus tests', retcode=1)
   )

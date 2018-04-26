@@ -389,7 +389,11 @@
       "[START_DIR]/pdfium/out/debug_v8/gold_output"
     ],
     "cwd": "[START_DIR]/pdfium",
-    "name": "javascript tests"
+    "name": "javascript tests",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [

@@ -380,7 +380,13 @@
       "-u",
       "[START_DIR]/pdfium/testing/tools/run_pixel_tests.py",
       "--build-dir",
-      "out/debug"
+      "out/debug",
+      "--gold_properties",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder mac_no_v8 build_number 1234",
+      "--gold_key",
+      "debug true is_standalone true os mac skia false v8 false xfa false",
+      "--gold_output_dir",
+      "[START_DIR]/pdfium/out/debug/gold_output"
     ],
     "cwd": "[START_DIR]/pdfium",
     "name": "pixel tests"
