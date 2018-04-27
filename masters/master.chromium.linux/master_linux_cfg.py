@@ -29,8 +29,6 @@ def Update(_config, active_master, c):
                             treeStableTimer=60,
                             builderNames=[
           'Cast Audio Linux',
-          'Fuchsia ARM64 Cast Audio',
-          'Fuchsia x64 Cast Audio',
           'Leak Detection Linux',
           'Ozone Linux',
           'linux-gcc-rel',
@@ -42,8 +40,6 @@ def Update(_config, active_master, c):
   #   this builder.
   specs = [
     {'name': 'Cast Audio Linux'},
-    {'name': 'Fuchsia ARM64 Cast Audio', 'category': '5fuchsia'},
-    {'name': 'Fuchsia x64 Cast Audio', 'category': '5fuchsia'},
     {'name': 'Leak Detection Linux'},
     {'name': 'Ozone Linux'},
     {'name': 'linux-gcc-rel'}
