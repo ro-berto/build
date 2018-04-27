@@ -739,7 +739,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://pinpoint-dot-chromeperf.appspot.com/api/isolate",
       "-i",
-      "{\"builder_name\": \"Android Compile Perf\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"repository\\\": \\\"chromium\\\"}]}\", \"isolate_map\": \"{\\\"telemetry_perf_tests\\\": \\\"[dummy hash for telemetry_perf_tests]\\\"}\"}",
+      "{\"builder_name\": \"Android Compile Perf\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"repository\\\": \\\"chromium\\\"}]}\", \"isolate_map\": \"{\\\"telemetry_perf_tests\\\": \\\"[dummy hash for telemetry_perf_tests]\\\"}\", \"isolate_server\": \"https://isolateserver.appspot.com\"}",
       "-o",
       "/path/to/tmp/json"
     ],

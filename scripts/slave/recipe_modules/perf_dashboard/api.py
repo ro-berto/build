@@ -73,11 +73,12 @@ class PerfDashboardApi(recipe_api.RecipeApi):
                      '%s/post_bisect_results' % _BASE_URL,
                      {'data': json.dumps(data)}, halt_on_failure, **kwargs)
 
-  def upload_isolate(self, builder_name, change, isolate_map,
-                     halt_on_failure=False, **kwargs):
+  def upload_isolate(self, builder_name, change, isolate_server,
+                     isolate_map, halt_on_failure=False, **kwargs):
     data = {
         'builder_name': builder_name,
         'change': json.dumps(change),
+        'isolate_server': isolate_server,
         'isolate_map': json.dumps(isolate_map),
     }
     return self.post('pinpoint isolate upload',

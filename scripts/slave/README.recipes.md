@@ -1434,7 +1434,7 @@ are committed.
 
 &mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#890)(self, mb_config_path=None, bot_config=None):**
 
-&mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#419)(self, mastername, buildername, update_step, bot_db):**
+&mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#420)(self, mastername, buildername, update_step, bot_db):**
 
 Zip and upload the build to google storage.
 
@@ -2537,9 +2537,9 @@ Args:
 
 &mdash; **def [get\_skeleton\_point](/scripts/slave/recipe_modules/perf_dashboard/api.py#20)(self, test, revision, value, bot=None):**
 
-&mdash; **def [halt](/scripts/slave/recipe_modules/perf_dashboard/api.py#114)(self, step_result, reason):**
+&mdash; **def [halt](/scripts/slave/recipe_modules/perf_dashboard/api.py#115)(self, step_result, reason):**
 
-&mdash; **def [post](/scripts/slave/recipe_modules/perf_dashboard/api.py#87)(self, name, url, data, halt_on_failure, \*\*kwargs):**
+&mdash; **def [post](/scripts/slave/recipe_modules/perf_dashboard/api.py#88)(self, name, url, data, halt_on_failure, \*\*kwargs):**
 
 Send a POST request to a URL with a payload.
 
@@ -2556,9 +2556,9 @@ Posts bisect results to Perf Dashboard.
 
 &mdash; **def [set\_default\_config](/scripts/slave/recipe_modules/perf_dashboard/api.py#62)(self):**
 
-&mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/perf_dashboard/api.py#76)(self, builder_name, change, isolate_map, halt_on_failure=False, \*\*kwargs):**
+&mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/perf_dashboard/api.py#76)(self, builder_name, change, isolate_server, isolate_map, halt_on_failure=False, \*\*kwargs):**
 
-&mdash; **def [warning](/scripts/slave/recipe_modules/perf_dashboard/api.py#119)(self, step_result, reason):**
+&mdash; **def [warning](/scripts/slave/recipe_modules/perf_dashboard/api.py#120)(self, step_result, reason):**
 ### *recipe_modules* / [perf\_try](/scripts/slave/recipe_modules/perf_try)
 
 [DEPS](/scripts/slave/recipe_modules/perf_try/__init__.py#1): [bisect\_tester](#recipe_modules-bisect_tester), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [halt](#recipe_modules-halt), [math\_utils](#recipe_modules-math_utils), [perf\_dashboard](#recipe_modules-perf_dashboard), [puppet\_service\_account](#recipe_modules-puppet_service_account), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]

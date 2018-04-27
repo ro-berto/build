@@ -414,6 +414,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self.m.perf_dashboard.upload_isolate(
               self.m.properties['buildername'],
               change,
+              self.m.isolate.isolate_server,
               self.m.isolate.isolated_tests)
 
   def package_build(self, mastername, buildername, update_step, bot_db):
