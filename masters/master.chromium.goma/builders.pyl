@@ -50,10 +50,28 @@
        "bot": "vm343-m1",
        "category": "gce",
      },
+     "Chromium Linux Goma RBE Staging (clobber)": {
+       "os": "linux",
+       "version": "trusty",
+       "bot": "slave36-c1",
+       "category": "rbe",
+     },
      "Chromium Linux Goma RBE Staging": {
        "os": "linux",
        "version": "trusty",
        "bot": "slave29-c1",
+       "category": "rbe",
+     },
+     "Chromium Linux Goma RBE Staging (dbg) (clobber)": {
+       "os": "linux",
+       "version": "trusty",
+       "bot": "slave37-c1",
+       "category": "rbe",
+     },
+     "Chromium Linux Goma RBE Staging (dbg)": {
+       "os": "linux",
+       "version": "trusty",
+       "bot": "slave38-c1",
        "category": "rbe",
      },
   },
