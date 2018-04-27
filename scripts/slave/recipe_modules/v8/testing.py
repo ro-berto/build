@@ -305,11 +305,17 @@ class SanitizerCoverageContext(object):
           ok_ret='any',
       )
 
+
 class BaseTest(object):
   def __init__(self, test_step_config, api):
     self.test_step_config = test_step_config
     self.name = test_step_config.name
     self.api = api
+
+  @property
+  def id(self):
+    """Identifier for deduping identical test configs."""
+    return self.test_step_config.name + self.test_step_config.step_name_suffix
 
   def _get_isolated_hash(self, test):
     isolated = test.get('isolated_target')

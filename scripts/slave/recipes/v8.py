@@ -41,7 +41,9 @@ def RunSteps(api, set_gclient_var):
   additional_trigger_properties = {}
   test_spec = v8.EMPTY_TEST_SPEC
   tests = v8.create_tests()
-  tests += v8.extra_tests_from_properties()
+
+  # Tests from V8-side test specs have precedence.
+  tests = v8.dedupe_tests(v8.extra_tests_from_properties(), tests)
 
   if v8.is_pure_swarming_tester:
     api.swarming_client.checkout()
@@ -83,7 +85,9 @@ def RunSteps(api, set_gclient_var):
       v8.init_gcov_coverage()
 
     test_spec = v8.read_test_spec()
-    tests += v8.extra_tests_from_test_spec(test_spec)
+
+    # Tests from V8-side test specs have precedence.
+    tests =  v8.dedupe_tests(v8.extra_tests_from_test_spec(test_spec), tests)
 
     if v8.should_build:
       v8.compile(test_spec)

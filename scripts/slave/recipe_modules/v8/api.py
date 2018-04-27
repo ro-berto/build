@@ -377,6 +377,12 @@ class V8Api(recipe_api.RecipeApi):
       for test in test_spec.get_tests(self.m.properties['buildername'])
     ]
 
+  def dedupe_tests(self, high_prec_tests, low_prec_tests):
+    """Dedupe tests with lower precedence."""
+    high_prec_ids = set([test.id for test in high_prec_tests])
+    return high_prec_tests + [
+      test for test in low_prec_tests if test.id not in high_prec_ids]
+
   def read_test_spec(self):
     """Reads a test specification file under v8/infra/testing/<mastername>.pyl.
 
