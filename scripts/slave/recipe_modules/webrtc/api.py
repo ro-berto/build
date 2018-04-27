@@ -204,6 +204,23 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.isolate.isolate_tests(self.m.chromium.output_dir,
                                    targets=self._isolated_targets)
 
+  def get_binary_sizes(self, files=None, base_dir=None):
+    if files is None:
+      files = self.bot_config.get('binary_size_files')
+    if not files:
+      return
+
+    result = self.m.build.python(
+      'get binary sizes',
+      self.package_repo_resource('scripts', 'slave', 'webrtc',
+                                 'binary_sizes.py'),
+      ['--base-dir', base_dir or self.m.chromium.output_dir,
+       '--output', self.m.json.output(),
+       '--'] + list(files),
+      infra_step=True,
+      step_test_data=self.test_api.example_binary_sizes)
+    result.presentation.properties['binary_sizes'] = result.json.output
+
   def runtests(self):
     """Add a suite of test steps.
 

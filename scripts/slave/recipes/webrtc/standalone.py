@@ -53,6 +53,8 @@ def RunSteps(api):
   if webrtc.should_build:
     webrtc.compile()
 
+  webrtc.get_binary_sizes()
+
   if webrtc.should_upload_build:
     webrtc.package_build()
   if webrtc.should_download_build:

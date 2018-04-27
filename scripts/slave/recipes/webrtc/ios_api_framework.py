@@ -56,8 +56,11 @@ def RunSteps(api):
     api.goma.stop(ninja_log_compiler='goma',
                   build_exit_status=build_exit_status)
 
+  output_dir = api.path['checkout'].join('out_ios_libs')
+
+  api.webrtc.get_binary_sizes(files=['WebRTC.framework'], base_dir=output_dir)
+
   if not api.tryserver.is_tryserver:
-    output_dir = api.path['checkout'].join('out_ios_libs')
     zip_out = api.path['start_dir'].join('webrtc_ios_api_framework.zip')
     pkg = api.zip.make_package(output_dir, zip_out)
     pkg.add_directory(output_dir.join('WebRTC.framework'))

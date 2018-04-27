@@ -432,6 +432,33 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/webrtc/binary_sizes.py",
+      "--base-dir",
+      "[BUILDER_CACHE]/iOS_API_Framework_Builder/src/out_ios_libs",
+      "--output",
+      "/path/to/tmp/json",
+      "--",
+      "WebRTC.framework"
+    ],
+    "infra_step": true,
+    "name": "get binary sizes",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"some_binary\": 123456@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@binary_sizes@{\"some_binary\": 123456}@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "zip archive",

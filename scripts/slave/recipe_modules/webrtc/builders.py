@@ -87,6 +87,9 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
+        'binary_size_files': [
+          'webrtc_perf_tests.exe'
+        ],
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
@@ -316,6 +319,9 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'binary_size_files': [
+          'webrtc_perf_tests'
+        ],
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
@@ -551,6 +557,11 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'binary_size_files': [
+          'libjingle_peerconnection_so.so',
+          'libjingle_peerconnection_datachannelonly_so.so',
+          'apks/AppRTCMobile.apk'
+        ],
         'archive_apprtc': True,
         'enable_swarming': True,
         'use_isolate': True,
@@ -1647,6 +1658,11 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'binary_size_files': [
+          'libjingle_peerconnection_so.so',
+          'libjingle_peerconnection_datachannelonly_so.so',
+          'apks/AppRTCMobile.apk'
+        ],
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
