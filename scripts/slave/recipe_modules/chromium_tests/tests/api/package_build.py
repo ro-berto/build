@@ -16,22 +16,29 @@ def RunSteps(api):
       api.properties['mastername'], api.properties['buildername'])
   api.chromium_tests.configure_build(bot_config)
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
-  api.chromium_tests.archive_build(
+  api.chromium_tests.package_build(
       api.properties['mastername'], api.properties['buildername'],
       update_step, bot_db)
 
 
 def GenTests(api):
   yield (
-      api.test('cf_archive_build') +
+      api.test('linux_builder') +
       api.properties.generic(
-          mastername='chromium.lkgr',
-          buildername='ASAN Release')
+          mastername='chromium.linux',
+          buildername='Linux Builder')
   )
 
   yield (
-      api.test('archive_build') +
+      api.test('linux_perf_builder') +
       api.properties.generic(
-          mastername='chromium',
-          buildername='Linux x64')
+          mastername='chromium.perf',
+          buildername='Linux Builder Perf')
+  )
+
+  yield (
+      api.test('linux_perf_bisect_builder') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.perf',
+          buildername='linux_perf_bisect_builder')
   )

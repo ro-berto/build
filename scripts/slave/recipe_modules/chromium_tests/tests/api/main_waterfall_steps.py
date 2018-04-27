@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
+
 DEPS = [
     'chromium_tests',
     'recipe_engine/json',
@@ -10,9 +12,56 @@ DEPS = [
     'recipe_engine/runtime',
 ]
 
+CUSTOM_BUILDERS = {
+  'chromium.example': {
+    'settings': {
+      'build_gs_bucket': 'chromium-example-archive',
+    },
+    'builders': {
+      'Isolated Transfer Builder': {
+        'bot_type': 'builder',
+        'chromium_apply_config': ['mb'],
+        'chromium_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'chromium_tests_apply_config': ['staging'],
+        'gclient_config': 'chromium',
+        'test_results_config': 'staging_server',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Isolated Transfer Tester': {
+        'bot_type': 'tester',
+        'chromium_apply_config': ['mb'],
+        'chromium_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'chromium_tests_apply_config': ['staging'],
+        'gclient_config': 'chromium',
+        'parent_buildername': 'Isolated Transfer Builder',
+        'test_results_config': 'staging_server',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+    },
+  },
+}
+
 
 def RunSteps(api):
-  api.chromium_tests.main_waterfall_steps()
+  bot_config = None
+  if api.properties.get('custom_bot_config'):
+    bot_config = api.chromium_tests.create_bot_config_object(
+        api.properties['mastername'],
+        api.properties['buildername'],
+        builders=CUSTOM_BUILDERS)
+  api.chromium_tests.main_waterfall_steps(bot_config=bot_config)
 
 
 def GenTests(api):
@@ -72,4 +121,81 @@ def GenTests(api):
               },
           })
       )
+  )
+
+  def TriggersBuilderWithProperties(check, step_odict, builder='', properties=None):
+    trigger_specs = step_odict['trigger']['trigger_specs']
+    for t in trigger_specs:
+      if t['builder_name'] == builder:
+        check(all(p in t['properties'] for p in properties))
+        return step_odict
+    else:  # pragma: no cover
+      check('"%s" not triggered' % builder, False)
+
+  yield (
+      api.test('isolate_transfer_builder') +
+      api.properties(
+          bot_id='isolated_transfer_builder_id',
+          buildername='Isolated Transfer Builder',
+          buildnumber=123,
+          custom_bot_config=True,
+          mastername='chromium.example') +
+      api.override_step_data(
+          'read test spec (chromium.example.json)',
+          api.json.output({
+              'Isolated Transfer Tester': {
+                  'gtest_tests': [
+                      {
+                          'args': ['--sample-argument'],
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          },
+                          'test': 'base_unittests',
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.post_process(post_process.DoesNotRun, 'package build') +
+      api.post_process(
+          TriggersBuilderWithProperties,
+          builder='Isolated Transfer Tester',
+          properties=['swarm_hashes']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('isolate_transfer_tester') +
+      api.properties(
+          bot_id='isolated_transfer_tester_id',
+          buildername='Isolated Transfer Tester',
+          buildnumber=123,
+          custom_bot_config=True,
+          mastername='chromium.example',
+          parent_buildername='Isolated Transfer Builder',
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'read test spec (chromium.example.json)',
+          api.json.output({
+              'Isolated Transfer Tester': {
+                  'gtest_tests': [
+                      {
+                          'args': ['--sample-argument'],
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          },
+                          'test': 'base_unittests',
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'find isolated tests',
+          api.json.output({})
+      ) +
+      api.post_process(post_process.DoesNotRun, 'extract build') +
+      api.post_process(post_process.DropExpectation)
   )

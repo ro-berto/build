@@ -416,49 +416,74 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               change,
               self.m.isolate.isolated_tests)
 
-  def archive_build(self, mastername, buildername, update_step, bot_db):
+  def package_build(self, mastername, buildername, update_step, bot_db):
+    """Zip and upload the build to google storage.
+
+    This is currently used for transfer between builder and tester,
+    including bisect testers.
+
+    Note that:
+      - this will only upload when called from pure builders. On builder_testers
+        and testers, this is a no-op.
+      - this is a no-op for builders that upload to clusterfuzz; those are
+        handled in archive_build.
+      - this may upload twice on perf builders.
+    """
     bot_config = bot_db.get_bot_config(mastername, buildername)
 
-    if bot_config.get('bot_type') == 'builder':
-      if not bot_config.get('cf_archive_build'):
-        master_config = bot_db.get_master_settings(mastername)
-        build_revision = update_step.presentation.properties.get(
-            'got_revision',
-            update_step.presentation.properties.get('got_src_revision'))
+    bot_type = bot_config.get('bot_type')
+    assert bot_type == 'builder', (
+        'package_build for %s:%s, which is a %s. '
+        'This is a bug in your recipe.' % (mastername, buildername, bot_type))
+
+    if not bot_config.get('cf_archive_build'):
+      master_config = bot_db.get_master_settings(mastername)
+      build_revision = update_step.presentation.properties.get(
+          'got_revision',
+          update_step.presentation.properties.get('got_src_revision'))
 
 
-        # For archiving 'chromium.perf', the builder also archives a version
-        # without perf test files for manual bisect.
-        # (https://bugs.chromium.org/p/chromium/issues/detail?id=604452)
-        if (master_config.get('bisect_builders') and
-            buildername in master_config.get('bisect_builders')):
-          self.m.archive.zip_and_upload_build(
-              'package build for bisect',
-              self.m.chromium.c.build_config_fs,
-              build_url=self._build_bisect_gs_archive_url(master_config),
-              build_revision=build_revision,
-              cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
-              update_properties=update_step.presentation.properties,
-              exclude_perf_test_files=True,
-              store_by_hash=False,
-              platform=self.m.chromium.c.HOST_PLATFORM
-          )
-
+      # For archiving 'chromium.perf', the builder also archives a version
+      # without perf test files for manual bisect.
+      # (https://bugs.chromium.org/p/chromium/issues/detail?id=604452)
+      if (master_config.get('bisect_builders') and
+          buildername in master_config.get('bisect_builders')):
         self.m.archive.zip_and_upload_build(
-            'package build',
+            'package build for bisect',
             self.m.chromium.c.build_config_fs,
-            build_url=self._build_gs_archive_url(
-                mastername, master_config, buildername),
+            build_url=self._build_bisect_gs_archive_url(master_config),
             build_revision=build_revision,
             cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
-            # TODO(machenbach): Make asan a configuration switch.
-            package_dsym_files=(
-                self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan') and
-                self.m.chromium.c.HOST_PLATFORM == 'mac'),
+            update_properties=update_step.presentation.properties,
+            exclude_perf_test_files=True,
+            store_by_hash=False,
+            platform=self.m.chromium.c.HOST_PLATFORM
         )
 
-      # TODO(phajdan.jr): Triggering should be separate from archiving.
-      self._trigger_child_builds(mastername, buildername, bot_db, update_step)
+      self.m.archive.zip_and_upload_build(
+          'package build',
+          self.m.chromium.c.build_config_fs,
+          build_url=self._build_gs_archive_url(
+              mastername, master_config, buildername),
+          build_revision=build_revision,
+          cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
+          # TODO(machenbach): Make asan a configuration switch.
+          package_dsym_files=(
+              self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan') and
+              self.m.chromium.c.HOST_PLATFORM == 'mac'),
+      )
+
+
+  def archive_build(self, mastername, buildername, update_step, bot_db):
+    """Archive the build if the bot is configured to do so.
+
+    See api.archive.clusterfuzz_archive and archive_build.py for more
+    information.
+
+    This is currently used to store builds long-term and to transfer them
+    to clusterfuzz.
+    """
+    bot_config = bot_db.get_bot_config(mastername, buildername)
 
     if bot_config.get('archive_build') and not self.m.tryserver.is_tryserver:
       self.m.chromium.archive_build(
@@ -479,7 +504,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
          revision_dir=bot_config.get('cf_revision_dir'),
        )
 
-  def _trigger_child_builds(self, mastername, buildername, bot_db, update_step):
+  def trigger_child_builds(self, mastername, buildername, update_step, bot_db,
+                           additional_properties=None):
+    additional_properties = additional_properties or {}
+
     # If you modify parameters or properties, make sure to modify it for both
     # legacy and LUCI cases below.
     if not self.m.runtime.is_luci:
@@ -496,10 +524,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             },
         }
         if mastername != loop_mastername:
-          trigger_spec['bucket'] = 'master.' + loop_mastername # pragma: no cover
+          trigger_spec['bucket'] = 'master.' + loop_mastername
         for name, value in update_step.presentation.properties.iteritems():
           if name.startswith('got_'):
             trigger_spec['properties']['parent_' + name] = value
+        trigger_spec['properties'].update(additional_properties)
         trigger_specs.append(trigger_spec)
       if trigger_specs:
         self.m.trigger(*trigger_specs)
@@ -517,6 +546,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # buildset's revision and needs actual 'revision' property.
     if 'parent_got_revision' in properties:
       properties['revision'] = properties['parent_got_revision']
+
+    properties.update(additional_properties)
 
     scheduler_jobs = []
     for loop_mastername, loop_buildername, builder_dict in sorted(
@@ -871,9 +902,30 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         bot_config, update_step, bot_db,
         compile_targets, tests_including_triggered,
         mb_config_path=mb_config_path)
-    self.archive_build(
-        mastername, buildername, update_step, bot_db)
-    self.download_and_unzip_build(mastername, buildername, update_step, bot_db)
+
+    isolate_transfer = (
+        all(t.uses_isolate for t in tests_including_triggered)
+        # TODO(jbudorick): Promote this to stable.
+        and self.c.staging)
+
+    additional_trigger_properties = {}
+    if isolate_transfer:
+      additional_trigger_properties['swarm_hashes'] = (
+          self.m.isolate.isolated_tests)
+    elif bot_config.get('bot_type') == 'builder':
+      self.package_build(mastername, buildername, update_step, bot_db)
+
+    self.trigger_child_builds(
+        mastername, buildername, update_step, bot_db,
+        additional_properties=additional_trigger_properties)
+    self.archive_build(mastername, buildername, update_step, bot_db)
+
+    if isolate_transfer and bot_config.get('bot_type') == 'tester':
+      self.m.file.rmtree(
+        'build directory',
+        self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
+    else:
+      self.download_and_unzip_build(mastername, buildername, update_step, bot_db)
 
     if not tests:
       return
