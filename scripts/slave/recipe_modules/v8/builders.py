@@ -7,7 +7,6 @@
 
 
 from collections import defaultdict
-import json
 
 from recipe_engine.types import freeze
 from testing import V8Variant
@@ -132,8 +131,6 @@ class TestSpec(object):
       'swarming_task_attrs': builder_spec.get('swarming_task_attrs', {}),
       'tests': [t.pack() for t in builder_spec.get('tests', [])],
     }
-    # TODO(machenbach): Remove this restriction post-buildbot.
-    assert len(json.dumps(packed_spec)) < 1024
     if packed_spec['tests']:
       return {'parent_test_spec': packed_spec}
     return {}
