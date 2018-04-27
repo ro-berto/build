@@ -22,7 +22,6 @@ import sys
 # Excluded top level directories located exactly inside the build dir. Example:
 # 'obj' will filter out 'out/Release/obj' but not 'out/Release/x64/obj'.
 EXCLUDED_TOP_LEVEL_DIRS_ALL_PLATFORMS = [
-  'gen',
   'obj',
 ]
 
@@ -61,7 +60,6 @@ EXCLUDED_TOP_LEVEL_DIRS = {
 # Subdirectories located anywhere inside of build_dir. For example, 'obj' will
 # filter out all subdirectories named 'obj' of any depth inside the build dir.
 EXCLUDED_SUBDIRS_ALL_PLATFORMS = [
-  'gen',
   'obj',
 ]
 
@@ -115,6 +113,30 @@ EXCLUDED_FILES_PATTERN = {
   'linux': re.compile(r'^.+\.(o|a|d|ninja|stamp)$'),
 }
 
+# Pattern for whitelisted files in a subdirectory.
+INCLUDED_FILES_IN_SUBDIR_PATTERN = {
+  'gen': [
+      # Include Mojo JS bindings and manifests for fuzzing.
+      re.compile(r'.*\.(js|json)$'),
+  ],
+}
+
+
+def filter_files_in_subdir(relative_root, filename):
+  relative_root_components = relative_root.split(os.sep)
+
+  for subdir, patterns in INCLUDED_FILES_IN_SUBDIR_PATTERN.iteritems():
+    if subdir not in relative_root_components:
+      continue
+
+    for pattern in patterns:
+      if pattern.match(filename):
+        return False
+
+    return True
+
+  return False
+
 
 def walk_and_filter(dir_path, platform_name):
   result = []
@@ -145,6 +167,10 @@ def walk_and_filter(dir_path, platform_name):
 
     # Filter out unneeded files.
     for filename in filenames:
+      # Filter files by whitelist.
+      if filter_files_in_subdir(relative_root, filename):
+        continue
+
       # Filter files by filename pattern.
       if EXCLUDED_FILES_PATTERN[platform_name].match(filename):
         continue
