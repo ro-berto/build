@@ -86,11 +86,7 @@ ARCHIVE_LINK = ('https://storage.googleapis.com'
 
 
 @contextmanager
-def goma_wrapper(api, use_goma):
-  if not use_goma:
-    yield
-    return
-
+def goma_wrapper(api):
   api.goma.start()
   try:
     yield
@@ -98,18 +94,14 @@ def goma_wrapper(api, use_goma):
     api.goma.stop()
 
 
-def _build_and_test(api, use_goma=False):
+def _build_and_test(api, goma_dir):
   with api.context(cwd=api.v8.checkout_root.join('node.js')):
-    args = ['--build-v8-with-gn']
-
-    if use_goma:
-      goma_dir = api.goma.ensure_goma()
-      args += [
-        '--build-v8-with-gn-max-jobs=%d' % api.goma.recommended_goma_jobs,
-        '--build-v8-with-gn-extra-gn-args',
-        'use_goma=true goma_dir="%s"' % goma_dir,
-      ]
-
+    args = [
+      '--build-v8-with-gn',
+      '--build-v8-with-gn-max-jobs=%d' % api.goma.recommended_goma_jobs,
+      '--build-v8-with-gn-extra-gn-args',
+      'use_goma=true goma_dir="%s"' % goma_dir,
+    ]
     env = {}
     if api.platform.is_win:
       # TODO(machenbach): Also switch other platforms to ninja eventually.
@@ -126,7 +118,7 @@ def _build_and_test(api, use_goma=False):
         args=args,
       )
 
-    with goma_wrapper(api, use_goma):
+    with goma_wrapper(api):
       if api.platform.is_win:
         # TODO(machenbach): Figure out what to do with clear-stalled and addons.
         api.step(
@@ -179,7 +171,7 @@ def _build_and_test(api, use_goma=False):
       ] + suites,
     )
 
-def _build_and_upload(api):
+def _build_and_upload(api, goma_dir):
   with api.context(cwd=api.v8.checkout_root.join('node.js')):
     api.python(
       name='configure node.js - install',
@@ -188,6 +180,9 @@ def _build_and_upload(api):
         '--prefix=/',
         '--tag=v8-build-%s' % api.v8.revision,
         '--build-v8-with-gn',
+        '--build-v8-with-gn-max-jobs=%d' % api.goma.recommended_goma_jobs,
+        '--build-v8-with-gn-extra-gn-args',
+        'use_goma=true goma_dir="%s"' % goma_dir,
       ],
     )
 
@@ -200,11 +195,12 @@ def _build_and_upload(api):
   api.file.ensure_directory('install directory', archive_dir)
 
   # Build and install.
-  with api.context(cwd=api.v8.checkout_root.join('node.js')):
-    api.step(
-      'build and install node.js',
-      ['make', '-j8', 'install', 'DESTDIR=%s' % archive_dir],
-    )
+  with goma_wrapper(api):
+    with api.context(cwd=api.v8.checkout_root.join('node.js')):
+      api.step(
+        'build and install node.js',
+        ['make', '-j8', 'install', 'DESTDIR=%s' % archive_dir],
+      )
 
   # Zip build.
   package = api.zip.make_package(archive_dir, zip_file)
@@ -236,8 +232,10 @@ def RunSteps(api):
   v8.checkout()
   v8.runhooks()
 
+  goma_dir = api.goma.ensure_goma()
+
   if v8.bot_config.get('baseline_only', False):
-    _build_and_test(api, use_goma=True)
+    _build_and_test(api, goma_dir)
     return
 
   args = [
@@ -257,7 +255,7 @@ def RunSteps(api):
   )
 
   # Build and test node.js with the checked-out v8.
-  _build_and_test(api)
+  _build_and_test(api, goma_dir)
 
   # Don't upload on tryserver.
   if api.tryserver.is_tryserver:
@@ -265,7 +263,7 @@ def RunSteps(api):
 
   # Build and upload node.js distribution with the checked-out v8.
   if not api.platform.is_win:
-    _build_and_upload(api)
+    _build_and_upload(api, goma_dir)
 
   # Trigger performance bots.
   if api.v8.bot_config.get('triggers'):
