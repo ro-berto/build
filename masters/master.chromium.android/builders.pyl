@@ -14,13 +14,6 @@
   },
 
   "builders": {
-    "Android Cronet Builder": {
-      "recipe": "chromium",
-      "scheduler": "chromium_commits",
-      "slave_pools": ["builders"],
-      "slavebuilddir": "cronet",
-      "category": "0Cronet",
-    },
     "Android Cronet KitKat Builder": {
       "recipe": "cronet",
       "scheduler": "chromium_commits",
@@ -196,19 +189,6 @@
       },
       "slaves": [
           "slave35-c1",
-        ],
-    },
-    "builders": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": [
-          "slave41-c1",
-          "slave125-c1",
-          "slave126-c1",
-          "slave127-c1",
         ],
     },
     "cast_builder": {

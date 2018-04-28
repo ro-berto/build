@@ -92,14 +92,6 @@
       "slavebuilddir": "android",
       "slave_pools": ["slaves_with_n5s"],
     },
-    "android_cronet": {
-      "builder_timeout_s": 14400,  # 60 * 60 * 4
-      "recipe": "chromium_trybot",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slavebuildder": "cronet",
-      "slave_pools": ["ccompute_bots_cq"],
-    },
     "android_cronet_tester": {
       "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "cronet",
@@ -404,20 +396,6 @@
         "bits": 64,
       },
       "slaves": [
-        "slave478-c4",
-        "slave479-c4",
-        "slave480-c4",
-        "slave481-c4",
-        "slave482-c4",
-        "slave483-c4",
-        "slave484-c4",
-        "slave485-c4",
-        "slave486-c4",
-        "slave487-c4",
-        "slave488-c4",
-        "slave489-c4",
-        "slave490-c4",
-        "slave491-c4",
         "slave540-c4",
         "slave541-c4",
         "slave542-c4",

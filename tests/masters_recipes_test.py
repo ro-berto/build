@@ -84,6 +84,10 @@ SUPPRESSIONS = {
 
 # TODO(hinoka): Remove this after LUCI migration.
 FAKE_BUILDERS = {
+    'master.chromium.android': [
+        # These have been migrated to LUCI.
+        'Android Cronet Builder',
+    ],
     'master.chromium.gpu': [
         # These have been migrated to LUCI.
         'GPU Linux Builder',
@@ -168,6 +172,7 @@ FAKE_BUILDERS = {
     'master.tryserver.chromium.android': [
         # These have been migrated to LUCI.
         'android_arm64_dbg_recipe',
+        'android_cronet',
         'android_n5x_swarming_dbg',
         'android_optional_gpu_tests_rel',
     ],
