@@ -849,8 +849,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.HOST_PLATFORM == 'mac' and not self.c.mac_toolchain.enabled:
       runhooks_env['MAC_TOOLCHAIN_INSTALLER'] = (
           self.get_mac_toolchain_installer())
-      runhooks_env['MAC_TOOLCHAIN_CREDS'] = (
-          self.c.mac_toolchain.cipd_credentials)
+      if not self.m.runtime.is_luci:
+        runhooks_env['MAC_TOOLCHAIN_CREDS'] = (
+            self.c.mac_toolchain.cipd_credentials)
 
     # CrOS "chrome_sdk" builds fully override GYP_DEFINES in the wrapper. Zero
     # it to not show confusing information in the build logs.

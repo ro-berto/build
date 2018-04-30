@@ -2,13 +2,16 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.post_process import Filter
+
 DEPS = [
   'chromium',
   'chromium_tests',
   'recipe_engine/json',
   'recipe_engine/platform',
-  'recipe_engine/properties',
+ 'recipe_engine/properties',
   'recipe_engine/raw_io',
+  'recipe_engine/runtime',
   'recipe_engine/step',
 ]
 
@@ -213,6 +216,20 @@ def GenTests(api):
              out_dir='/tmp',
              target_platform='mac',
          )
+  )
+
+  yield (api.test('mac_basic_luci') +
+         api.platform('mac', 64) +
+         api.properties(
+             mastername='chromium.mac',
+             buildername='Mac Builder',
+             bot_id='build1-a1',
+             buildnumber='77457',
+             out_dir='/tmp',
+             target_platform='mac',
+         ) +
+         api.runtime(is_luci=True, is_experimental=False) +
+         api.post_process(Filter('gclient runhooks'))
   )
 
   yield (api.test('mac_toolchain') +
