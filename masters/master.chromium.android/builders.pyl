@@ -74,14 +74,6 @@
       "slave_pools": ["cronet_m_bullhead_perf"],
       "category": "0Cronet",
     },
-    "Android WebView L (dbg)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["webview_l"],
-      "category": "1Webview",
-      "mergeRequests": True,
-    },
     "Android WebView M (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -326,14 +318,6 @@
         "bits": "64",
       },
       "slaves": ["slave218-c1"],
-    },
-    "webview_l": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": ["build62-b1"],
     },
     "webview_m": {
       "slave_data": {
