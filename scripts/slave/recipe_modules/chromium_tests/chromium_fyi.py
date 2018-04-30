@@ -787,6 +787,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['chromeos', 'mb'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['chromeos'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_PLATFORM': 'linux',

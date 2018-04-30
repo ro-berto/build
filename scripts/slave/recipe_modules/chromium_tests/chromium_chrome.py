@@ -12,7 +12,7 @@ SPEC = {
       'chromium_config': 'chromium_official',
       'chromium_apply_config': ['mb', 'chromeos'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal'],
+      'gclient_apply_config': ['chrome_internal', 'chromeos'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

@@ -110,6 +110,7 @@ SPEC = {
     'Linux ChromiumOS MSan Builder': {
       'chromium_config': 'chromium_msan',
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['chromeos'],
       'chromium_apply_config': ['mb', 'prebuilt_instrumented_libraries'],
       'GYP_DEFINES': {
         'msan_track_origins': 2,
@@ -125,6 +126,7 @@ SPEC = {
     'Linux ChromiumOS MSan Tests': {
       'chromium_config': 'chromium_msan',
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['chromeos'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -189,6 +191,7 @@ SPEC = {
     'Linux Chromium OS ASan LSan Builder': {
       'chromium_config': 'chromium_chromiumos_asan',
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['chromeos'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -200,6 +203,7 @@ SPEC = {
     'Linux Chromium OS ASan LSan Tests (1)': {
       'chromium_config': 'chromium_chromiumos_asan',
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['chromeos'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

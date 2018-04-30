@@ -154,6 +154,7 @@ SPEC = {
                                 'enable_ipc_fuzzer', 'sanitizer_coverage',
                                 'chromiumos'],
       'gclient_config': 'chromium',
+      'gclient_apply_config': ['chromeos'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

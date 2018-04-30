@@ -74,7 +74,7 @@ def _config(name,
             cros_board=None,
             target_arch='intel',
             target_bits=64,
-            gclient_apply_config=None):
+            gclient_apply_config=['chromeos']):
   build_config = 'Release' if '-rel' in name else 'Debug'
   cfg = {
     'chromium_config': 'chromium',
@@ -82,6 +82,7 @@ def _config(name,
       'chromeos', 'mb', 'ninja_confirm_noop',
     ],
     'gclient_config': 'chromium',
+    'gclient_apply_config': gclient_apply_config,
     'chromium_config_kwargs': {
       'BUILD_CONFIG': build_config,
       'TARGET_ARCH': target_arch,
@@ -93,8 +94,6 @@ def _config(name,
     },
     'tests': {},
   }
-  if gclient_apply_config:
-    cfg['gclient_apply_config'] = gclient_apply_config
   if cros_board:
     cfg['chromium_config_kwargs']['TARGET_CROS_BOARD'] = cros_board
     cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'chromeos'
