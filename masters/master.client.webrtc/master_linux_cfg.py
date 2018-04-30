@@ -85,8 +85,7 @@ def Update(c):
   c['builders'].extend([
       {
         'name': spec['name'],
-        'factory': m_annotator.BaseFactory(spec['recipe'])
-                   if 'recipe' in spec
+        'factory': m_remote_run(spec['recipe']) if 'recipe' in spec
                    else m_remote_run('webrtc/standalone'),
         'notify_on_missing': True,
         'category': 'linux',

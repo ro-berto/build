@@ -4,7 +4,6 @@
 
 from buildbot.schedulers.basic import SingleBranchScheduler
 
-from master.factory import annotator_factory
 from master.factory import remote_run_factory
 
 import master_site_config
@@ -18,9 +17,6 @@ def m_remote_run(recipe, **kwargs):
       recipe=recipe,
       factory_properties={'path_config': 'kitchen'},
       **kwargs)
-
-
-m_annotator = annotator_factory.AnnotatorFactory()
 
 
 def Update(c):
@@ -99,10 +95,8 @@ def Update(c):
   c['builders'].extend([
       {
         'name': spec['name'],
-        # remote_run is not working for the webrtc/ios recipe: crbug.com/637666.
-        'factory': m_annotator.BaseFactory(spec['recipe'])
-                   if 'recipe' in spec and spec['recipe'] == 'webrtc/ios'
-                   else m_remote_run(spec.get('recipe', 'webrtc/standalone')),
+        'factory': m_remote_run(spec['recipe']) if 'recipe' in spec
+                   else m_remote_run('webrtc/standalone'),
         'notify_on_missing': True,
         'category': 'ios' if 'ios' in spec['name'].lower() else 'mac',
         'slavebuilddir': spec['slavebuilddir'],
