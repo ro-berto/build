@@ -13,6 +13,23 @@ SPEC = {
     'src_side_runtest_py': True,
   },
   'builders': {
+    'linux-gcc-rel': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'checkout_dir': 'linux',
+    },
     'linux-jumbo-rel': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
@@ -26,6 +43,21 @@ SPEC = {
       },
       'testing': {
           'platform': 'linux',
+      },
+    },
+    'linux-ozone-rel': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ozone'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'compile_targets': [],
+      'checkout_dir': 'linux',
+      'testing': {
+        'platform': 'linux',
       },
     },
     'Linux Builder': {
@@ -89,23 +121,6 @@ SPEC = {
       'GYP_DEFINES': {
         'fastbuild': 2,
       },
-    },
-    'linux-gcc-rel': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-        'ninja_confirm_noop',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder',
-      'testing': {
-        'platform': 'linux',
-      },
-      'checkout_dir': 'linux',
     },
     'Linux Tests (dbg)(1)(32)': {
       'chromium_config': 'chromium',

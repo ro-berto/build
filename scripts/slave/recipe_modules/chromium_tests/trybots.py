@@ -353,9 +353,17 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'linux-blink-heap-verification',
       }),
+      'linux-gcc-rel': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'linux-gcc-rel',
+      }),
       'linux-jumbo-rel': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'linux-jumbo-rel',
+      }),
+      'linux-ozone-rel': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'linux-ozone-rel',
       }),
       'linux_arm': simple_bot({
         'mastername': 'chromium.fyi',
@@ -427,10 +435,6 @@ TRYBOTS = freeze({
       'linux_chromium_compile_dbg_32_ng': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Linux Builder (dbg)(32)',
-      }, analyze_mode='compile'),
-      'linux-gcc-rel': simple_bot({
-        'mastername': 'chromium.linux',
-        'buildername': 'linux-gcc-rel',
       }, analyze_mode='compile'),
       'linux_chromium_msan_rel_ng': simple_bot({
         'mastername': 'chromium.memory',
