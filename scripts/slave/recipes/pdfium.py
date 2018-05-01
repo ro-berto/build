@@ -205,26 +205,30 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
     '--gold_output_dir', gold_output_dir,
   ])
 
+  # Cannot use the standard deferred result mechanism, since some of the
+  # operations related to uploading to Gold depend on non-deferred results.
+  test_exception = None
+
   if v8:
     javascript_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_javascript_tests.py'))
     with api.context(cwd=api.path['checkout'], env=env):
       try:
         api.python('javascript tests', javascript_path, script_args)
-      except api.step.StepFailure:
+      except api.step.StepFailure as e:
         # Swallow the exception. The step will still show up as
         # failed, but processing will continue.
-        pass
+        test_exception = e
 
   pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                    'run_pixel_tests.py'))
   with api.context(cwd=api.path['checkout'], env=env):
     try:
       api.python('pixel tests', pixel_tests_path, script_args)
-    except api.step.StepFailure:
+    except api.step.StepFailure as e:
       # Swallow the exception. The step will still show up as
       # failed, but processing will continue.
-      pass
+      test_exception = e
 
   ignore_hashes_file = get_gold_ignore_hashes(api, out_dir)
   if ignore_hashes_file:
@@ -236,12 +240,14 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
   with api.context(cwd=api.path['checkout'], env=env):
     try:
       api.python('corpus tests', corpus_tests_path, script_args)
-    except api.step.StepFailure:
+    except api.step.StepFailure as e:
       # Swallow the exception. The step will still show up as
       # failed, but processing will continue.
-      pass
+      test_exception = e
 
   upload_dm_results(api, gold_output_dir, revision)
+  if test_exception:
+    raise test_exception # pylint: disable-msg=E0702
 
 
 def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
