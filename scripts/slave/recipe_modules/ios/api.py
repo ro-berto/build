@@ -37,7 +37,7 @@ class iOSApi(recipe_api.RecipeApi):
   # Pinned version of
   # https://chromium.googlesource.com/infra/infra/+/master/go/src/infra/cmd/mac_toolchain
   MAC_TOOLCHAIN_PACKAGE = 'infra/tools/mac_toolchain/${platform}'
-  MAC_TOOLCHAIN_VERSION = 'git_revision:d4dc0c29a004b59dcca1e69ae84eba0c932eb010'
+  MAC_TOOLCHAIN_VERSION = 'git_revision:43cbee503a3e2e30ea40078df9a14a0906956f2e'
   MAC_TOOLCHAIN_ROOT    = '.'
   XCODE_APP_PATH        = 'Xcode.app'
 

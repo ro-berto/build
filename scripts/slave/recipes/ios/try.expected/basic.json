@@ -697,7 +697,7 @@
       "--tag",
       "test:fake tests",
       "--cipd-package",
-      ".:infra/tools/mac_toolchain/${platform}:git_revision:d4dc0c29a004b59dcca1e69ae84eba0c932eb010",
+      ".:infra/tools/mac_toolchain/${platform}:git_revision:43cbee503a3e2e30ea40078df9a14a0906956f2e",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
