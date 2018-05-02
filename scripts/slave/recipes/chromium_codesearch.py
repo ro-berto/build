@@ -154,6 +154,8 @@ def RunSteps(api, root_solution_revision):
   gclient_config = api.gclient.make_config(bot_config['gclient_config'])
   if platform == 'android':
     gclient_config.target_os = ['android']
+  elif platform == 'chromeos':
+    gclient_config.target_os = ['chromeos']
   for name, url in api.codesearch.c.additional_repos.iteritems():
     solution = gclient_config.solutions.add()
     solution.name = name
