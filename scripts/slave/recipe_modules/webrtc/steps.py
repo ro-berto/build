@@ -429,7 +429,8 @@ class SwarmingAndroidPerfTest(AndroidTest):
       logcats = _MergeFiles(task_output_dir, 'logcats')
       step_result.presentation.logs['logcats'] = logcats.splitlines()
 
-      _UploadToPerfDashboard(self.name, api, task_output_dir)
+      if not api.runtime.is_experimental:
+        _UploadToPerfDashboard(self.name, api, task_output_dir)
 
 
 class SwarmingPerfTest(SwarmingIsolatedScriptTest):
@@ -437,7 +438,8 @@ class SwarmingPerfTest(SwarmingIsolatedScriptTest):
     # We use our own custom upload mechanism.
     # TODO(phoglund): investigate if we can move off our custom mechanism.
     task_output_dir = step_result.raw_io.output_dir
-    _UploadToPerfDashboard(self.name, api, task_output_dir)
+    if not api.runtime.is_experimental:
+      _UploadToPerfDashboard(self.name, api, task_output_dir)
 
 
 class SwarmingWebRtcGtestTest(SwarmingIsolatedScriptTest):

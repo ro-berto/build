@@ -16,6 +16,7 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'webrtc',
   'zip',
@@ -66,13 +67,14 @@ def RunSteps(api):
     pkg.add_directory(output_dir.join('WebRTC.framework'))
     pkg.zip('zip archive')
 
-    api.gsutil.upload(
-        zip_out,
-        'chromium-webrtc',
-        ('ios_api_framework/webrtc_ios_api_framework_%s.zip' %
-         api.webrtc.revision_number),
-        args=['-a', 'public-read'],
-        unauthenticated_url=True)
+    if not api.runtime.is_experimental:
+      api.gsutil.upload(
+          zip_out,
+          'chromium-webrtc',
+          ('ios_api_framework/webrtc_ios_api_framework_%s.zip' %
+           api.webrtc.revision_number),
+          args=['-a', 'public-read'],
+          unauthenticated_url=True)
 
 
 def GenTests(api):
