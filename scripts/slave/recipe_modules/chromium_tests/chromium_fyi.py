@@ -36,7 +36,7 @@ KITCHEN_TEST_SPEC = {
   },
 }
 
-def stock_config(name, config='Release'):
+def stock_config(name, config='Release', **kwargs):
   if 'mac' in name.lower():
     platform = 'mac'
   elif 'win' in name.lower():
@@ -45,7 +45,7 @@ def stock_config(name, config='Release'):
     platform = 'linux'
   assert(platform)
 
-  return name, {
+  bot_config = {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
       'chromium_apply_config': [
@@ -62,6 +62,8 @@ def stock_config(name, config='Release'):
           'platform': platform,
       },
   }
+  bot_config.update(**kwargs)
+  return name, bot_config
 
 
 def chromium_apply_configs(base_config, config_names):
@@ -953,8 +955,13 @@ SPEC['builders'].update([
     stock_config('Jumbo Win x64'),
     stock_config('VR Linux'),
     stock_config('Linux Viz'),
+    stock_config('linux-annotator-rel'),
     stock_config('linux-blink-heap-incremental-marking', config='Debug'),
     stock_config('linux-blink-heap-verification'),
+    stock_config('linux-chromium-tests-staging-builder',
+                 builder_type='builder'),
+    stock_config('linux-chromium-tests-stating-tests',
+                 builder_type='tester',
+                 parent_buildername='linux-chromium-tests-staging-builder'),
     stock_config('linux-gcc-rel'),
-    stock_config('linux-annotator-rel'),
 ])
