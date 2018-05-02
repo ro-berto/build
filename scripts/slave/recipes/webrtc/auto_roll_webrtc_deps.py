@@ -28,6 +28,7 @@ def RunSteps(api):
   # Make sure the checkout contains all deps for all platforms.
   for os in ['linux', 'android', 'mac', 'ios', 'win', 'unix']:
     api.gclient.c.target_os.add(os)
+  api.gclient.c.solutions[0].custom_vars['roll_chromium_into_webrtc'] = True
 
   step_result = api.python(
         'check roll status',

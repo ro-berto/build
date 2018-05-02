@@ -20,7 +20,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]\ntarget_os = ['android', 'ios', 'linux', 'mac', 'unix', 'win']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'roll_chromium_into_webrtc': True}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]\ntarget_os = ['android', 'ios', 'linux', 'mac', 'unix', 'win']",
       "--patch_root",
       "src",
       "--revision_mapping_file",
