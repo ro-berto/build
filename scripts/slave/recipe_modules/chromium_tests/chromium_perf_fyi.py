@@ -115,6 +115,12 @@ _AddIsolatedTestSpec('Mac 10.13 Laptop High End', '', 'mac',
 _AddIsolatedTestSpec('Android Go', '', 'android',
                      parent_buildername='Android Builder Perf FYI',
                      use_private_swarming_server=True)
+_AddIsolatedTestSpec('android-pixel2-perf', '', 'android',
+                     parent_buildername='Android Builder Perf FYI',
+                     use_private_swarming_server=True)
+_AddIsolatedTestSpec('android-pixel2_webview-perf', '', 'android',
+                     parent_buildername='Android Builder Perf FYI',
+                     use_private_swarming_server=True)
 
 _AddBuildSpec('Battor Agent Linux', 'linux', 'linux', run_sizes=False,
               compile_targets=['battor_agent'])
