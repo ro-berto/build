@@ -89,7 +89,7 @@
       "tools/run-tests.py",
       "--progress=verbose",
       "--mode",
-      "Release_x64",
+      "Release",
       "--outdir",
       "out",
       "--buildbot",

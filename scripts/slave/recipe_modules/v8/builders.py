@@ -2535,9 +2535,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win_rel_ng_triggered': {
-        'chromium_apply_config': [
-          'use_windows_swarming_slaves',
-        ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -2566,9 +2563,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win_nosnap_shared_rel_ng_triggered': {
-        'chromium_apply_config': [
-          'use_windows_swarming_slaves',
-        ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -2597,9 +2591,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_asan_rel_ng_triggered': {
-        'chromium_apply_config': [
-          'use_windows_swarming_slaves',
-        ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -2638,9 +2629,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_msvc_rel_ng_triggered': {
-        'chromium_apply_config': [
-          'use_windows_swarming_slaves',
-        ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -2672,9 +2660,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_rel_ng_triggered': {
-        'chromium_apply_config': [
-          'use_windows_swarming_slaves',
-        ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

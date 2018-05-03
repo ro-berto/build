@@ -6,7 +6,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gn.py",
       "--root=[START_DIR]\\v8",
       "gen",
-      "//out/Release_x64",
+      "//out/Release",
       "--args=is_clang=true v8_static_library=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\goma_client\""
     ],
     "cwd": "[START_DIR]\\v8",
@@ -31,7 +31,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\v8\\out\\Release_x64",
+      "[START_DIR]\\v8\\out\\Release",
       "-j",
       "20",
       "v8_archive"
@@ -50,7 +50,7 @@
       "-u",
       "[START_DIR]\\v8\\tools\\release\\filter_build_files.py",
       "--dir",
-      "[START_DIR]\\v8\\out\\Release_x64",
+      "[START_DIR]\\v8\\out\\Release",
       "--platform",
       "win",
       "--type",
@@ -62,8 +62,8 @@
     "name": "filter build files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[START_DIR]\\\\v8\\\\out\\\\Release_x64\\\\d8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[START_DIR]\\\\v8\\\\out\\\\Release_x64\\\\icudtl.dat\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\d8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\icudtl.dat\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -75,7 +75,7 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "name": "zipping",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release_x64\\\\d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release_x64\\\\icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\archive.zip\", \"root\": \"[START_DIR]\\\\v8\\\\out\\\\Release_x64\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\archive.zip\", \"root\": \"[START_DIR]\\\\v8\\\\out\\\\Release\"}"
   },
   {
     "cmd": [
@@ -110,7 +110,7 @@
       "-u",
       "[START_DIR]\\v8\\tools\\release\\filter_build_files.py",
       "--dir",
-      "[START_DIR]\\v8\\out\\Release_x64",
+      "[START_DIR]\\v8\\out\\Release",
       "--platform",
       "win",
       "--type",
@@ -122,8 +122,8 @@
     "name": "filter build files (libs)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[START_DIR]\\\\v8\\\\out\\\\Release_x64\\\\d8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[START_DIR]\\\\v8\\\\out\\\\Release_x64\\\\icudtl.dat\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\d8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\icudtl.dat\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -135,7 +135,7 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "name": "zipping (libs)",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release_x64\\\\d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release_x64\\\\icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\archive.zip\", \"root\": \"[START_DIR]\\\\v8\\\\out\\\\Release_x64\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\archive.zip\", \"root\": \"[START_DIR]\\\\v8\\\\out\\\\Release\"}"
   },
   {
     "cmd": [

@@ -16,9 +16,9 @@ def v8(c):
   c.build_dir = c.CHECKOUT_PATH.join('out')
 
   if c.HOST_PLATFORM == 'win' and c.TARGET_BITS == 64:
-    # Windows requires 64-bit builds to be in <dir>_x64 with ninja. See
-    # crbug.com/470681.
-    c.build_config_fs = c.BUILD_CONFIG + '_x64'
+    # TODO(machenbach): This resets Chromium's defauls, which add a _x64 suffix.
+    # We sould remove it when crbug.com/470681 is resolved.
+    c.build_config_fs = c.BUILD_CONFIG
 
 
 @CONFIG_CTX(includes=['v8'])
@@ -34,14 +34,6 @@ def default_target_v8_clusterfuzz(c):
 @CONFIG_CTX(includes=['v8'])
 def default_target_v8_archive(c):
   c.compile_py.default_targets = ['v8_archive']
-
-
-# Work-around for obtaining the right build dir on linux slave that trigger
-# windows 64 bit swarming jobs.
-@CONFIG_CTX(includes=['v8'])
-def use_windows_swarming_slaves(c):
-  if c.TARGET_BITS == 64:
-    c.build_config_fs = c.BUILD_CONFIG + '_x64'
 
 
 @CONFIG_CTX(includes=['v8'])

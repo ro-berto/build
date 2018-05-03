@@ -124,7 +124,7 @@
       "[CACHE]\\goma_client",
       "--swarming-targets-file",
       "bot_default\nmozilla\ntest262\n",
-      "//out/Release_x64"
+      "//out/Release"
     ],
     "cwd": "[START_DIR]\\v8",
     "env": {
@@ -164,7 +164,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\v8\\out\\Release_x64",
+      "[START_DIR]\\v8\\out\\Release",
       "-j",
       "20"
     ],
@@ -182,7 +182,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\v8\\out\\Release_x64",
+      "[START_DIR]\\v8\\out\\Release",
       "-j",
       "20",
       "-d",
@@ -212,9 +212,9 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "[START_DIR]\\v8\\out\\Release_x64\\bot_default.isolated.gen.json",
-      "[START_DIR]\\v8\\out\\Release_x64\\mozilla.isolated.gen.json",
-      "[START_DIR]\\v8\\out\\Release_x64\\test262.isolated.gen.json"
+      "[START_DIR]\\v8\\out\\Release\\bot_default.isolated.gen.json",
+      "[START_DIR]\\v8\\out\\Release\\mozilla.isolated.gen.json",
+      "[START_DIR]\\v8\\out\\Release\\test262.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -332,7 +332,7 @@
       "tools/run-tests.py",
       "--progress=verbose",
       "--mode",
-      "Release_x64",
+      "Release",
       "--outdir",
       "out",
       "--buildbot",
@@ -437,7 +437,7 @@
       "tools/run-tests.py",
       "--progress=verbose",
       "--mode",
-      "Release_x64",
+      "Release",
       "--outdir",
       "out",
       "--buildbot",
@@ -542,7 +542,7 @@
       "tools/run-tests.py",
       "--progress=verbose",
       "--mode",
-      "Release_x64",
+      "Release",
       "--outdir",
       "out",
       "--buildbot",
