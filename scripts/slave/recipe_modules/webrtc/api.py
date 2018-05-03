@@ -210,10 +210,9 @@ class WebRTCApi(recipe_api.RecipeApi):
     if not files:
       return
 
-    result = self.m.build.python(
+    result = self.m.python(
       'get binary sizes',
-      self.package_repo_resource('scripts', 'slave', 'webrtc',
-                                 'binary_sizes.py'),
+      self.resource('binary_sizes.py'),
       ['--base-dir', base_dir or self.m.chromium.output_dir,
        '--output', self.m.json.output(),
        '--'] + list(files),
