@@ -281,6 +281,7 @@ def RunSteps(api):
                 'revision': api.v8.revision,
                 'parent_got_revision': api.v8.revision,
                 'parent_got_revision_cp': api.v8.revision_cp,
+                'parent_buildername': api.properties.get('buildername'),
               },
               'builder_name': builder_name,
             } for builder_name in api.v8.bot_config['triggers']
