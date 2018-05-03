@@ -509,8 +509,12 @@ def GenTests(api):
         'V8 Mac64',
         'with_test_spec',
     ) +
-    api.path.exists(api.path['checkout'].join(
-        'infra', 'testing', 'client.v8.pyl')) +
+    # On the recipe side, we use api.path['checkout'].join('infra', ...),
+    # however due to the way path module's test_api works, this has to be
+    # manually expanded to path in terms of builder_cache as it is done by the
+    # bot_update.ensure_checkout step.
+    api.path.exists(api.path['builder_cache'].join(
+        'V8_Mac64', 'v8', 'infra', 'testing', 'client.v8.pyl')) +
     api.override_step_data(
         'read test spec',
         api.v8.example_test_spec('V8 Mac64', test_spec),
@@ -532,8 +536,13 @@ def GenTests(api):
         'V8 Linux - nosnap builder',
         'with_test_spec',
     ) +
-    api.path.exists(api.path['checkout'].join(
-        'infra', 'testing', 'client.v8.pyl')) +
+    # On the recipe side, we use api.path['checkout'].join('infra', ...),
+    # however due to the way path module's test_api works, this has to be
+    # manually expanded to path in terms of builder_cache as it is done by the
+    # bot_update.ensure_checkout step.
+    api.path.exists(api.path['builder_cache'].join(
+        'V8_Linux___nosnap_builder', 'v8', 'infra', 'testing',
+        'client.v8.pyl')) +
     api.override_step_data(
         'read test spec',
         api.v8.example_test_spec('V8 Linux - nosnap', test_spec),

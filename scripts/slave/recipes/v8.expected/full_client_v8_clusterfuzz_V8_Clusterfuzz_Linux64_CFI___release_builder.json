@@ -5,13 +5,13 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--patch_root",
       "v8",
       "--revision_mapping_file",
       "{\"got_revision\": \"v8\", \"got_swarming_client_revision\": \"v8/tools/swarming_client\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[GIT_CACHE]",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
@@ -20,6 +20,7 @@
       "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
       "--no_shallow"
     ],
+    "cwd": "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64_CFI___release_builder",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -86,7 +87,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64_CFI___release_builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -97,19 +98,19 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64_CFI___release_builder/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8.clusterfuzz",
       "-b",
       "V8 Clusterfuzz Linux64 CFI - release builder",
       "--config-file",
-      "[START_DIR]/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64_CFI___release_builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64_CFI___release_builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -142,12 +143,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64_CFI___release_builder/v8/out/Release",
       "-j",
       "20",
       "v8_clusterfuzz"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64_CFI___release_builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -160,7 +161,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64_CFI___release_builder/v8/out/Release",
       "-j",
       "20",
       "v8_clusterfuzz",
@@ -168,7 +169,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64_CFI___release_builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -197,7 +198,7 @@
       "-u",
       "RECIPE_MODULE[build::archive]/resources/filter_build_files.py",
       "--dir",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64_CFI___release_builder/v8/out/Release",
       "--platform",
       "linux",
       "--output",
@@ -226,7 +227,7 @@
       "[CLEANUP]/chrome_staging",
       "d8-cfi-linux-release-v8-component-50110",
       "[\"file1\", \"file2\"]",
-      "[START_DIR]/v8/out/Release"
+      "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64_CFI___release_builder/v8/out/Release"
     ],
     "infra_step": true,
     "name": "zipping"

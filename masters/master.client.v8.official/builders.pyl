@@ -11,12 +11,15 @@
 
   "builder_defaults": {
     "remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
+    "use_remote_run": True,
+    "properties": {
+      "path_config": "kitchen",
+    },
   },
 
   "builders": {
     "V8 Arm32": {
       "recipe": "v8/archive",
-      "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["linux"],
@@ -24,7 +27,6 @@
     },
     "V8 Android Arm32": {
       "recipe": "v8/archive",
-      "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["linux"],
@@ -32,7 +34,6 @@
     },
     "V8 Android Arm64": {
       "recipe": "v8/archive",
-      "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["linux"],
@@ -40,7 +41,6 @@
     },
     "V8 Linux32": {
       "recipe": "v8/archive",
-      "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["linux"],
@@ -48,7 +48,6 @@
     },
     "V8 Linux64": {
       "recipe": "v8/archive",
-      "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["linux"],
@@ -56,7 +55,6 @@
     },
     "V8 Win32": {
       "recipe": "v8/archive",
-      "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["win"],
@@ -64,7 +62,6 @@
     },
     "V8 Win64": {
       "recipe": "v8/archive",
-      "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["win"],
@@ -72,7 +69,6 @@
     },
     "V8 Mac64": {
       "recipe": "v8/archive",
-      "use_remote_run": False,
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["mac"],

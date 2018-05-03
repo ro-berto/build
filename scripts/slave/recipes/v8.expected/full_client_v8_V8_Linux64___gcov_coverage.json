@@ -5,13 +5,13 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--patch_root",
       "v8",
       "--revision_mapping_file",
       "{\"got_revision\": \"v8\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[GIT_CACHE]",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
@@ -20,6 +20,7 @@
       "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
       "--no_shallow"
     ],
+    "cwd": "[BUILDER_CACHE]/V8_Linux64___gcov_coverage",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -73,7 +74,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[START_DIR]/v8/out/Release"
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8/out/Release"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -88,7 +89,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -132,12 +133,12 @@
       "--image",
       "gcr.io/chromium-container-registry/lcov:2018-01-18_17-03",
       "--dir-map",
-      "[START_DIR]/v8/out/Release",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8/out/Release",
       "--",
       "lcov",
       "--directory",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8/out/Release",
       "--zerocounters"
     ],
     "name": "lcov zero counters"
@@ -146,19 +147,19 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Linux64 - gcov coverage",
       "--config-file",
-      "[START_DIR]/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -191,11 +192,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8/out/Release",
       "-j",
       "20"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -208,14 +209,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8/out/Release",
       "-j",
       "20",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -227,7 +228,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/run-tests.py",
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -246,7 +247,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8",
     "name": "Check",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -275,8 +276,8 @@
       "--image",
       "gcr.io/chromium-container-registry/lcov:2018-01-18_17-03",
       "--dir-map",
-      "[START_DIR]/v8",
-      "[START_DIR]/v8",
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8",
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8",
       "--dir-map",
       "[TMP_BASE]/gcov_coverage_tmp_1",
       "[TMP_BASE]/gcov_coverage_tmp_1",
@@ -286,7 +287,7 @@
       "--",
       "lcov",
       "--directory",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8/out/Release",
       "--capture",
       "--output-file",
       "[TMP_BASE]/gcov_coverage_tmp_1/app.info"
@@ -303,8 +304,8 @@
       "--image",
       "gcr.io/chromium-container-registry/lcov:2018-01-18_17-03",
       "--dir-map",
-      "[START_DIR]/v8",
-      "[START_DIR]/v8",
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8",
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8",
       "--dir-map",
       "[TMP_BASE]/gcov_coverage_tmp_1",
       "[TMP_BASE]/gcov_coverage_tmp_1",
@@ -314,7 +315,7 @@
       "--",
       "lcov",
       "--directory",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8/out/Release",
       "--remove",
       "[TMP_BASE]/gcov_coverage_tmp_1/app.info",
       "third_party/*",
@@ -336,8 +337,8 @@
       "--image",
       "gcr.io/chromium-container-registry/lcov:2018-01-18_17-03",
       "--dir-map",
-      "[START_DIR]/v8",
-      "[START_DIR]/v8",
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8",
+      "[BUILDER_CACHE]/V8_Linux64___gcov_coverage/v8",
       "--dir-map",
       "[TMP_BASE]/gcov_coverage_tmp_1",
       "[TMP_BASE]/gcov_coverage_tmp_1",

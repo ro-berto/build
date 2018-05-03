@@ -5,13 +5,13 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--patch_root",
       "v8",
       "--revision_mapping_file",
       "{\"got_revision\": \"v8\", \"got_swarming_client_revision\": \"v8/tools/swarming_client\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[GIT_CACHE]",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
@@ -21,6 +21,7 @@
       "--no_shallow",
       "--with_branch_heads"
     ],
+    "cwd": "[BUILDER_CACHE]/V8_s390x___sim___stable_branch",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -87,7 +88,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_s390x___sim___stable_branch/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -98,21 +99,21 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/V8_s390x___sim___stable_branch/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8.branches",
       "-b",
       "V8 s390x - sim - stable branch",
       "--config-file",
-      "[START_DIR]/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/V8_s390x___sim___stable_branch/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
       "--swarming-targets-file",
       "unittests\n",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_s390x___sim___stable_branch/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -147,11 +148,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_s390x___sim___stable_branch/v8/out/Release",
       "-j",
       "20"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_s390x___sim___stable_branch/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -164,14 +165,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_s390x___sim___stable_branch/v8/out/Release",
       "-j",
       "20",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_s390x___sim___stable_branch/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -184,7 +185,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[START_DIR]/v8/tools/swarming_client",
+      "[BUILDER_CACHE]/V8_s390x___sim___stable_branch/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -193,7 +194,7 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "[START_DIR]/v8/out/Release/unittests.isolated.gen.json"
+      "[BUILDER_CACHE]/V8_s390x___sim___stable_branch/v8/out/Release/unittests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -227,7 +228,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/V8_s390x___sim___stable_branch/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -336,7 +337,7 @@
       "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[START_DIR]/v8/tools/swarming_client",
+      "[BUILDER_CACHE]/V8_s390x___sim___stable_branch/v8/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",

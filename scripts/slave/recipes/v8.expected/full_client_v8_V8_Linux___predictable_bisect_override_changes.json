@@ -5,13 +5,13 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--patch_root",
       "v8",
       "--revision_mapping_file",
       "{\"got_revision\": \"v8\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[GIT_CACHE]",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
@@ -20,6 +20,7 @@
       "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
       "--no_shallow"
     ],
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -72,7 +73,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -83,19 +84,19 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Linux - predictable",
       "--config-file",
-      "[START_DIR]/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -128,11 +129,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/out/Release",
       "-j",
       "20"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -145,14 +146,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/out/Release",
       "-j",
       "20",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -164,7 +165,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/run-tests.py",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -183,7 +184,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "name": "Check - d8",
     "~followup_annotations": [
       "@@@STEP_TEXT@failures: 2<br/>@@@",
@@ -248,7 +249,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/run-tests.py",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -267,7 +268,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "name": "Benchmarks",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -290,7 +291,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/run-tests.py",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -309,7 +310,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "name": "Mozilla",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -402,13 +403,13 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--patch_root",
       "v8",
       "--revision_mapping_file",
       "{\"got_revision\": \"v8\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[GIT_CACHE]",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
@@ -417,6 +418,7 @@
       "v8@a0",
       "--no_shallow"
     ],
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -468,7 +470,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -482,19 +484,19 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Linux - predictable",
       "--config-file",
-      "[START_DIR]/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -528,12 +530,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/out/Release",
       "-j",
       "20",
       "d8"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -549,7 +551,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/out/Release",
       "-j",
       "20",
       "d8",
@@ -557,7 +559,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -572,7 +574,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/run-tests.py",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -592,7 +594,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "name": "Bisect a0.Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -631,13 +633,13 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--patch_root",
       "v8",
       "--revision_mapping_file",
       "{\"got_revision\": \"v8\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[GIT_CACHE]",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
@@ -646,6 +648,7 @@
       "v8@a2",
       "--no_shallow"
     ],
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -697,7 +700,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -711,19 +714,19 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Linux - predictable",
       "--config-file",
-      "[START_DIR]/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -757,12 +760,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/out/Release",
       "-j",
       "20",
       "d8"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -778,7 +781,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/out/Release",
       "-j",
       "20",
       "d8",
@@ -786,7 +789,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -801,7 +804,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/run-tests.py",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -821,7 +824,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "name": "Bisect a2.Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -893,13 +896,13 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--patch_root",
       "v8",
       "--revision_mapping_file",
       "{\"got_revision\": \"v8\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[GIT_CACHE]",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
@@ -908,6 +911,7 @@
       "v8@a1",
       "--no_shallow"
     ],
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -959,7 +963,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -973,19 +977,19 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Linux - predictable",
       "--config-file",
-      "[START_DIR]/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma_client",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1019,12 +1023,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/out/Release",
       "-j",
       "20",
       "d8"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1040,7 +1044,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/out/Release",
       "-j",
       "20",
       "d8",
@@ -1048,7 +1052,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1063,7 +1067,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/v8/tools/run-tests.py",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -1083,7 +1087,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
     "name": "Bisect a1.Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

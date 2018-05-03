@@ -431,6 +431,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     else:
       properties_fn = self.m.properties.generic
 
+    kwargs.setdefault('path_config', 'kitchen')
     test = (
         recipe_test_api.RecipeTestApi.test(
             self.test_name(mastername, buildername, suffix)) +
@@ -485,6 +486,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
 
     # Skip some goma and swarming related steps in expectations.
     skip_fragments = map(re.escape, [
+      'ensure builder cache dir',
       'ensure_goma',
       'calculate the number of recommended jobs',
       'preprocess_for_goma',
