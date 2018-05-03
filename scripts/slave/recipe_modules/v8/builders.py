@@ -1622,7 +1622,6 @@ BUILDERS = {
       'V8 Arm': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
         'tests': [
@@ -1652,7 +1651,6 @@ BUILDERS = {
         'v8_apply_config': ['verify_heap_skip_remembered_set'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
         'tests': [
@@ -1674,7 +1672,6 @@ BUILDERS = {
         'v8_apply_config': ['gc_stress', 'verify_heap_skip_remembered_set'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
         'tests': [D8Testing(3)],
@@ -1817,7 +1814,6 @@ BUILDERS = {
       'V8 Mips - big endian - nosnap - 1': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'mips',
           'TARGET_BITS': 32,
           'SHARD_COUNT': 2,
           'SHARD_RUN': 1,
@@ -1830,7 +1826,6 @@ BUILDERS = {
       'V8 Mips - big endian - nosnap - 2': {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'mips',
           'TARGET_BITS': 32,
           'SHARD_COUNT': 2,
           'SHARD_RUN': 2,
