@@ -386,14 +386,14 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       return BETA_BRANCH
     return 'master'
 
-  def _make_dummy_swarm_hashes(self, bot_config):
+  def _make_dummy_swarm_hashes(self, test_names):
     """Makes dummy isolate hashes for all tests of a bot.
 
     Either an explicit isolate target must be defined or the naming
     convention "test name == isolate target name" will be used.
     """
-    def gen_isolate_targets(test_config):
-      config = testing.TEST_CONFIGS.get(test_config.name, {})
+    def gen_isolate_targets(test_name):
+      config = testing.TEST_CONFIGS.get(test_name, {})
       if config.get('isolated_target'):
         yield config['isolated_target']
       else:
@@ -402,8 +402,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
 
     return dict(
         (target, '[dummy hash for %s]' % target)
-        for test_config in bot_config.get('tests', [])
-        for target in gen_isolate_targets(test_config)
+        for test_name in test_names
+        for target in gen_isolate_targets(test_name)
     )
 
   def test_name(self, mastername, buildername, suffix=''):
@@ -414,12 +414,17 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       suffix,
     ]))
 
-  def test(self, mastername, buildername, suffix='', **kwargs):
+  def test(self, mastername, buildername, suffix='', parent_test_spec=None,
+           **kwargs):
     builders_list = builders.BUILDERS[mastername]['builders']
     bot_config = builders_list[buildername]
     v8_config_kwargs = bot_config.get('v8_config_kwargs', {})
     parent_buildername = builders.PARENT_MAP[mastername].get(buildername)
     branch=self._get_test_branch_name(mastername, buildername)
+
+    if parent_test_spec:
+      kwargs.update(self.example_parent_test_spec_properties(
+          mastername, buildername, parent_test_spec))
 
     if mastername.startswith('tryserver'):
       properties_fn = self.m.properties.tryserver
@@ -454,10 +459,12 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         # Assume each tester is triggered with the required hashes for all
         # tests. Assume extra_isolate hashes for each extra test specified by
         # parent_test_spec property.
-        swarm_hashes = self._make_dummy_swarm_hashes(bot_config)
+        swarm_hashes = self._make_dummy_swarm_hashes(
+            test.name for test in bot_config.get('tests', []))
         buider_spec = kwargs.get('parent_test_spec', {})
-        for name, _, _, _, _, _, _ in buider_spec.get('tests', []):
-          swarm_hashes[name] = '[dummy hash for %s]' % name
+        swarm_hashes.update(
+            self._make_dummy_swarm_hashes(
+                test[0] for test in buider_spec.get('tests', [])))
         test += self.m.properties(
           parent_got_swarming_client_revision='[dummy swarming client hash]',
           swarm_hashes=swarm_hashes,

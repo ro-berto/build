@@ -2058,20 +2058,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'tests': [
-          V8Testing,
-          OptimizeForSize,
-          Test262Variants(4),
-          Mozilla,
-          Benchmarks,
-          MjsunitSPFrameAccess,
-          GCMole,
-        ] + with_extra_variants(
-            [V8Testing, Test262Variants(2), Mozilla, Benchmarks]),
         'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'cpu': 'x86-64-avx2',
-        },
       },
       'v8_linux_verify_csa_rel_ng': {
         'chromium_apply_config': [

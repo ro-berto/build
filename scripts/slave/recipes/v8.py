@@ -140,6 +140,16 @@ def GenTests(api):
     api.step_data('Check', retcode=1)
   )
 
+  # Minimal v8-side test spec for simulating most recipe features.
+  test_spec = """
+    {
+      "tests": [
+        {"name": "v8testing"},
+        {"name": "test262_variants", "test_args": ["--extra-flags=--flag"]},
+      ],
+    }
+  """.strip()
+
   # Simulate a tryjob triggered by the CQ for setting up different swarming
   # default tags.
   yield (
@@ -147,6 +157,7 @@ def GenTests(api):
         'tryserver.v8',
         'v8_linux_rel_ng_triggered',
         'triggered_by_cq',
+        parent_test_spec=test_spec,
         requester='commit-bot@chromium.org',
         patch_project='v8',
         blamelist=['dude@chromium.org'],
@@ -160,6 +171,7 @@ def GenTests(api):
         'tryserver.v8',
         'v8_linux_rel_ng_triggered',
         'triggered_by_ts',
+        parent_test_spec=test_spec,
         requester='dude@chromium.org',
         patch_project='v8',
         blamelist=['dude@chromium.org'],
@@ -174,9 +186,8 @@ def GenTests(api):
         'tryserver.v8',
         'v8_linux_rel_ng_triggered',
         'test_filter',
-    ) +
-    api.properties(
-        testfilter=['mjsunit/regression/*', 'test262/foo', 'test262/bar'],
+        parent_test_spec=test_spec,
+        testfilter=['mjsunit/regression/*', 'intl/foo', 'intl/bar'],
         extra_flags='--trace_gc --turbo_stats',
     )
   )
@@ -188,9 +199,7 @@ def GenTests(api):
         'tryserver.v8',
         'v8_win64_rel_ng',
         'test_filter_builder',
-    ) +
-    api.properties(
-        testfilter=['mjsunit/regression/*', 'test262/foo', 'test262/bar'],
+        testfilter=['mjsunit/regression/*', 'intl/foo', 'intl/bar'],
         extra_flags='--trace_gc --turbo_stats',
     ) +
     api.post_process(Filter('trigger'))
@@ -203,8 +212,7 @@ def GenTests(api):
         'tryserver.v8',
         'v8_linux_rel_ng_triggered',
         'positional_extra_flags',
-    ) +
-    api.properties(
+        parent_test_spec=test_spec,
         extra_flags=['--trace_gc', '--turbo_stats'],
     )
   )
@@ -214,6 +222,7 @@ def GenTests(api):
         'tryserver.v8',
         'v8_linux_rel_ng_triggered',
         'failures',
+        parent_test_spec=test_spec,
     ) +
     api.override_step_data(
         'Check', api.v8.output_json(has_failures=True))
@@ -224,6 +233,7 @@ def GenTests(api):
         'tryserver.v8',
         'v8_linux_rel_ng_triggered',
         'flakes',
+        parent_test_spec=test_spec,
     ) +
     api.override_step_data(
         'Check', api.v8.output_json(has_failures=True, flakes=True))
@@ -384,8 +394,6 @@ def GenTests(api):
 
   # Same as above with a windows bot. Regression test making sure that
   # the swarming hashes are searched in a windows bucket.
-  f = Filter()
-  f = f.include_re(r'.*check build.*')
   yield (
     api.v8.test(
         'client.v8',
@@ -393,7 +401,7 @@ def GenTests(api):
         'bisect',
     ) +
     api.v8.fail('Check') +
-    api.post_process(f) +
+    api.post_process(Filter().include_re(r'.*check build.*')) +
     api.time.step(120)
   )
 
@@ -433,6 +441,7 @@ def GenTests(api):
         'tryserver.v8',
         'v8_linux_rel_ng_triggered',
         'slow_tests',
+        parent_test_spec=test_spec,
         requester='commit-bot@chromium.org',
         patch_project='v8',
         blamelist=['dude@chromium.org'],
@@ -465,10 +474,6 @@ def GenTests(api):
 
   # Test reading a pyl test-spec from the V8 repository. The additional test
   # targets should be isolated and the tests should be executed.
-  f = Filter()
-  f = f.include('read test spec')
-  f = f.include('isolate tests')
-  f = f.include_re(r'.*Mjsunit.*')
   test_spec = """
     {
       "swarming_dimensions": {
@@ -510,7 +515,12 @@ def GenTests(api):
         'read test spec',
         api.v8.example_test_spec('V8 Mac64', test_spec),
     ) +
-    api.post_process(f)
+    api.post_process(
+        Filter()
+            .include('read test spec')
+            .include('isolate tests')
+            .include_re(r'.*Mjsunit.*')
+    )
   )
 
   # As above but on a builder. The additional test targets should be isolated
@@ -538,17 +548,14 @@ def GenTests(api):
 
   # As above but on a tester. The additional tests passed as property from the
   # builder should be executed.
-  f = Filter()
-  f = f.include_re(r'.*Mjsunit.*')
   yield (
     api.v8.test(
         'client.v8',
         'V8 Linux - nosnap',
         'with_test_spec',
-        **api.v8.example_parent_test_spec_properties(
-          'client.v8', 'V8 Linux - nosnap', test_spec)
+        parent_test_spec=test_spec,
     ) +
-    api.post_process(f)
+    api.post_process(Filter().include_re(r'.*Mjsunit.*'))
   )
 
   # Test that uploading/downloading binaries happens to/from experimental GS
