@@ -330,20 +330,11 @@ BUILDERS = {
         ],
       },
       'V8 Linux - presubmit': {
-        'chromium_apply_config': ['gn'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
         'enable_swarming': False,
         'tests': [Presubmit],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
         'tests': [
           V8Initializers,
           V8Testing,
@@ -375,10 +366,6 @@ BUILDERS = {
         },
       },
       'V8 Linux - debug': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
         'tests': [
           V8Testing(2),
           OptimizeForSize,
@@ -422,10 +409,6 @@ BUILDERS = {
         },
       },
       'V8 Linux - nosnap': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
         'tests': [
           V8Testing(3),
           Test262(2),
@@ -436,10 +419,6 @@ BUILDERS = {
         'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - nosnap - debug': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
         'tests': [V8Testing(7)],
         'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
@@ -526,10 +505,6 @@ BUILDERS = {
         ],
       },
       'V8 Linux64': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'tests': [
           V8Initializers,
           V8Testing,
@@ -550,10 +525,6 @@ BUILDERS = {
         },
       },
       'V8 Linux64 - debug': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
         'tests': [
           V8Testing(2),
           OptimizeForSize,
@@ -585,10 +556,6 @@ BUILDERS = {
       },
       'V8 Linux64 - custom snapshot - debug': {
         'v8_apply_config': ['no_harness'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
         'tests': [Mjsunit],
         'testing': {'platform': 'linux'},
       },
@@ -671,10 +638,6 @@ BUILDERS = {
         ],
       },
       'V8 Win32': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
         'tests': [V8Testing, Test262, Mozilla],
         'testing': {'platform': 'linux'},
         'swarming_dimensions': {
@@ -702,10 +665,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'V8 Win32 - debug': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
         'tests': [
           V8Testing(4),
           Test262,
@@ -824,20 +783,12 @@ BUILDERS = {
       },
 ####### Category: Misc
       'V8 Fuzzer': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
         'tests': [Fuzz],
         'testing': {'platform': 'linux'},
         'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - gc stress': {
         'v8_apply_config': ['gc_stress'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
         'tests': [D8Testing(5)],
         'testing': {'platform': 'linux'},
       },
@@ -858,10 +809,6 @@ BUILDERS = {
       },
       'V8 Linux64 GC Stress - custom snapshot': {
         'v8_apply_config': ['gc_stress', 'no_harness'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
         'tests': [Mjsunit(3)],
         'testing': {'platform': 'linux'},
       },
@@ -1013,18 +960,10 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - fyi': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'testing': {'platform': 'linux'},
         'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux64 - debug - fyi': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
         'testing': {'platform': 'linux'},
         'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
@@ -1396,10 +1335,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'V8 NumFuzz': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'tests': with_test_args(
             'deopt',
             [
@@ -1412,10 +1347,6 @@ BUILDERS = {
         'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 NumFuzz - debug': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
         'tests': [D8TestingRandomGC] + with_test_args(
             'marking',
             [
@@ -1476,10 +1407,6 @@ BUILDERS = {
         'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 NumFuzz - TSAN': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'tests': [D8TestingRandomGC(2)] + with_test_args(
             'marking',
             [
@@ -1532,10 +1459,6 @@ BUILDERS = {
         'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 NumFuzz - nosnap': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'tests': with_test_args(
             'interrupt-budget',
             [
@@ -1549,10 +1472,6 @@ BUILDERS = {
         'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 NumFuzz - nosnap debug': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
         'tests': with_test_args(
             'interrupt-budget',
             [
@@ -1620,10 +1539,6 @@ BUILDERS = {
         'triggers_proxy': True,
       },
       'V8 Arm': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
         'tests': [
           V8Testing(2),
           Benchmarks,
@@ -1649,10 +1564,6 @@ BUILDERS = {
       },
       'V8 Arm - debug': {
         'v8_apply_config': ['verify_heap_skip_remembered_set'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
         'tests': [
           V8Testing(3),
           OptimizeForSize,
@@ -1670,10 +1581,6 @@ BUILDERS = {
       },
       'V8 Arm GC Stress': {
         'v8_apply_config': ['gc_stress', 'verify_heap_skip_remembered_set'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
         'tests': [D8Testing(3)],
         'variants': V8Variant('default'),
         'swarming_task_attrs': {
@@ -1813,8 +1720,6 @@ BUILDERS = {
       },
       'V8 Mips - big endian - nosnap - 1': {
         'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
           'SHARD_COUNT': 2,
           'SHARD_RUN': 1,
         },
@@ -1825,8 +1730,6 @@ BUILDERS = {
       },
       'V8 Mips - big endian - nosnap - 2': {
         'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
           'SHARD_COUNT': 2,
           'SHARD_RUN': 2,
         },
@@ -1860,19 +1763,11 @@ BUILDERS = {
         ],
       },
       'V8 Linux - mipsel - sim': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
         'tests': [V8Testing(4), Test262],
         'testing': {'platform': 'linux'},
         'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - mips64el - sim': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'tests': [V8Testing(4), Test262],
         'testing': {'platform': 'linux'},
         'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
@@ -2049,10 +1944,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
         'testing': {'platform': 'linux'},
       },
       'v8_linux_verify_csa_rel_ng': {
@@ -2068,10 +1959,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_verify_csa_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
@@ -2088,10 +1975,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nodcheck_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
         'tests': [
           V8Testing,
           Test262Variants(2),
@@ -2117,10 +2000,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_dbg_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
         'tests': [
           V8Testing(3),
           Test262,
@@ -2147,10 +2026,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_noi18n_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
         'tests': [
           V8Testing(2),
           Test262,
@@ -2227,10 +2102,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_dbg_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
         'tests': [
           V8Testing(3),
           Test262,
@@ -2267,10 +2138,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'tests': [
           V8Initializers,
           V8Testing,
@@ -2296,10 +2163,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_fyi_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_verify_csa_rel_ng': {
@@ -2315,10 +2178,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_verify_csa_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
@@ -2349,10 +2208,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_asan_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'tests': [
           V8Testing(3),
           Test262Variants(7),
@@ -2375,10 +2230,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_cfi_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'tests': [
           V8Testing(2),
           OptimizeForSize,
@@ -2454,14 +2305,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_ubsan_rel_ng_triggered': {
-        'chromium_apply_config': [
-          'clang',
-          'goma',
-        ],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'tests': [V8Testing(2)],
         'testing': {'platform': 'linux'},
       },
@@ -2530,10 +2373,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -2558,10 +2397,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win_nosnap_shared_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -2586,10 +2421,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_asan_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'swarming_dimensions': {
           'os': 'Windows-10',
         },
@@ -2624,10 +2455,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_msvc_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -2655,10 +2482,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -2699,10 +2522,6 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_mac64_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'swarming_dimensions': {
           'os': 'Mac-10.13',
           'cpu': 'x86-64',
@@ -2727,10 +2546,6 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_mac64_dbg_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
         'swarming_dimensions': {
           'os': 'Mac-10.13',
           'cpu': 'x86-64',
@@ -2787,10 +2602,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
         'tests': [
           V8Testing(7),
           Test262,
@@ -2827,10 +2638,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_rel_ng_triggered': {
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
         'tests': [
           V8Testing(7),
           Test262,
@@ -3003,10 +2810,11 @@ def iter_builders(recipe='v8'):
 
 
 # Map from mastername to map from buildername to its parent if specified.
+# The parent is encoded as a tuple of buildername,bot_config.
 PARENT_MAP = defaultdict(dict)
 for master, _, builder, bot_config in iter_builders():
   for triggered in bot_config.get('triggers', []):
-    PARENT_MAP[master][triggered] = builder
+    PARENT_MAP[master][triggered] = (builder, bot_config)
 
 
 def iter_builder_set(mastername, buildername):
@@ -3018,7 +2826,7 @@ def iter_builder_set(mastername, buildername):
         same master (triggered testers).
   """
   for it_mastername, _, it_buildername, bot_config in iter_builders('v8'):
+    parent, _ = PARENT_MAP[mastername].get(it_buildername, (None, None))
     if (it_mastername == mastername and
-        (PARENT_MAP[mastername].get(it_buildername) == buildername or
-         it_buildername == buildername)):
+        (parent == buildername or it_buildername == buildername)):
       yield it_buildername, bot_config

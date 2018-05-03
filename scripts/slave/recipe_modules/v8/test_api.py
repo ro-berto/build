@@ -419,7 +419,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     builders_list = builders.BUILDERS[mastername]['builders']
     bot_config = builders_list[buildername]
     v8_config_kwargs = bot_config.get('v8_config_kwargs', {})
-    parent_buildername = builders.PARENT_MAP[mastername].get(buildername)
+    parent_buildername, parent_bot_config = (
+        builders.PARENT_MAP[mastername].get(buildername, (None, None)))
     branch=self._get_test_branch_name(mastername, buildername)
 
     if parent_test_spec:
@@ -455,6 +456,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           parent_got_revision_cp='refs/heads/master@{#20123}',
           parent_build_environment={
             'useful': 'envvars', 'from': 'the', 'parent': 'bot'},
+          parent_build_config=parent_bot_config.get(
+              'v8_config_kwargs', {}).get('BUILD_CONFIG'),
       )
       if bot_config.get('enable_swarming', True):
         # Assume each tester is triggered with the required hashes for all

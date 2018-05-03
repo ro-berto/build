@@ -128,7 +128,11 @@ class V8Api(recipe_api.RecipeApi):
         'Unrecognized builder name %r for master %r.' % (
             buildername, mastername))
 
-    kwargs = self.bot_config.get('v8_config_kwargs', {})
+    kwargs = {}
+    if self.m.properties.get('parent_build_config'):
+      kwargs['BUILD_CONFIG'] = self.m.properties['parent_build_config']
+    kwargs.update(self.bot_config.get('v8_config_kwargs', {}))
+
     self.set_config('v8', optional=True, **kwargs)
     self.m.chromium.set_config('v8', **kwargs)
     self.m.gclient.set_config('v8', **kwargs)
