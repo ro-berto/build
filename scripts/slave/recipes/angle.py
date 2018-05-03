@@ -23,8 +23,11 @@ from recipe_engine.recipe_api import Property
 
 PROPERTIES = {
   'target_cpu': Property(default=None, kind=str),
+  'debug': Property(default=False, kind=bool),
+  'clang': Property(default=None, kind=bool),
+
+  # TODO(jmadill): Remove this property when migrated. http://crbug.com/833999
   'msvc': Property(default=False, kind=bool),
-  'rel': Property(default=False, kind=bool),
 }
 
 
@@ -42,15 +45,19 @@ def _CheckoutSteps(api):
   api.gclient.runhooks()
 
 
-def _OutPath(msvc, rel):
-  out_dir = 'release' if rel else 'debug'
+def _OutPath(target_cpu, debug, clang, msvc):
+  out_dir = 'debug' if debug else 'release'
+  if clang:
+    out_dir += '_clang'
   if msvc:
     out_dir += '_msvc'
+  if target_cpu:
+    out_dir += '_' + target_cpu
   return out_dir
 
 
 # _GNGenBuilds calls 'gn gen'.
-def _GNGenBuilds(api, target_cpu, msvc, rel, out_dir):
+def _GNGenBuilds(api, target_cpu, debug, clang, msvc, out_dir):
   api.goma.ensure_goma()
   gn_bool = {True: 'true', False: 'false'}
   # Generate build files by GN.
@@ -59,16 +66,19 @@ def _GNGenBuilds(api, target_cpu, msvc, rel, out_dir):
 
   # Prepare the arguments to pass in.
   args = [
-      'is_debug=%s' % gn_bool[not rel],
+      'is_debug=%s' % gn_bool[debug],
       'is_component_build=false',
       'use_goma=true',
       'goma_dir="%s"' % api.goma.goma_dir,
   ]
-  if api.platform.is_win:
-    if msvc:
-      args.append('is_clang=false')
-  else:
-    assert not msvc
+  if clang is not None:
+    args.append('is_clang=%s' % gn_bool[clang])
+
+  if msvc is not None:
+    args.append('is_clang=%s' % gn_bool[not msvc])
+
+  if target_cpu:
+    args.append('target_cpu="%s"' % target_cpu)
 
   with api.context(cwd=checkout):
     api.python('gn gen', gn_cmd,
@@ -87,10 +97,10 @@ def _BuildSteps(api, msvc, out_dir):
       ninja_log_compiler='clang' if not msvc else 'unknown')
 
 
-def RunSteps(api, target_cpu, msvc, rel):
+def RunSteps(api, target_cpu, debug, clang, msvc):
   _CheckoutSteps(api)
-  out_dir = _OutPath(msvc, rel)
-  _GNGenBuilds(api, target_cpu, msvc, rel, out_dir)
+  out_dir = _OutPath(target_cpu, debug, clang, msvc)
+  _GNGenBuilds(api, target_cpu, debug, clang, msvc, out_dir)
   _BuildSteps(api, msvc, out_dir)
 
 
@@ -112,10 +122,19 @@ def GenTests(api):
                      bot_id='test_slave')
   )
   yield (
+      api.test('win_clang') +
+      api.platform('win', 64) +
+      api.properties(clang=True,
+                     mastername='client.angle',
+                     buildername='windows',
+                     buildnumber='1234',
+                     bot_id='test_slave')
+  )
+  yield (
       api.test('win_rel_msvc_x86') +
       api.platform('win', 64) +
       api.properties(msvc=True,
-                     rel=True,
+                     debug=False,
                      target_cpu='x86',
                      mastername='client.angle',
                      buildername='windows',

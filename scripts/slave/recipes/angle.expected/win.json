@@ -116,8 +116,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gn.py",
       "--root=[START_DIR]\\angle",
       "gen",
-      "//out/debug",
-      "--args=is_debug=true is_component_build=false use_goma=true goma_dir=\"[CACHE]\\goma_client\""
+      "//out/release",
+      "--args=is_debug=false is_component_build=false use_goma=true goma_dir=\"[CACHE]\\goma_client\" is_clang=true"
     ],
     "cwd": "[START_DIR]\\angle",
     "name": "gn gen"
@@ -197,7 +197,7 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-C",
-      "[START_DIR]\\angle\\out\\debug",
+      "[START_DIR]\\angle\\out\\release",
       "-j",
       "20"
     ],
@@ -307,9 +307,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]\\angle\\out\\debug",
+      "[START_DIR]\\angle\\out\\release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-C\", \"[START_DIR]\\\\angle\\\\out\\\\debug\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-C\", \"[START_DIR]\\\\angle\\\\out\\\\release\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
