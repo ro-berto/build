@@ -34,6 +34,15 @@ class iOSApi(recipe_api.RecipeApi):
   CIPD_CREDENTIALS = \
     '/creds/service_accounts/service-account-xcode-cipd-access.json'
 
+  # Map Xcode short version to Xcode build version.
+  XCODE_BUILD_VERSIONS = {
+      '8.0':   '8a218a',
+      '8.3.3': '8e3004b',
+      '9.0':   '9a235',
+      '9.2':   '9c40b',
+  }
+  XCODE_BUILD_VERSION_DEFAULT = '9c40b'
+
   # Pinned version of
   # https://chromium.googlesource.com/infra/infra/+/master/go/src/infra/cmd/mac_toolchain
   MAC_TOOLCHAIN_PACKAGE = 'infra/tools/mac_toolchain/${platform}'
@@ -53,6 +62,7 @@ class iOSApi(recipe_api.RecipeApi):
     self._include_cache = {}
     self.compilation_targets = None
     self._checkout_dir = None
+    self._xcode_build_version = None
 
   @property
   def bucket(self):
@@ -85,6 +95,31 @@ class iOSApi(recipe_api.RecipeApi):
   def use_goma(self):
     assert self.__config is not None
     return 'use_goma=true' in self.__config['gn_args']
+
+  @property
+  def xcode_build_version(self):
+    if not self._xcode_build_version:
+      self._xcode_build_version = self.__config.get('xcode build version')
+    if not self._xcode_build_version:
+      self._xcode_build_version = self._deprecate_xcode_version(
+          self.__config.get('xcode version'))
+    if not self._xcode_build_version:  # pragma: no cover
+      raise self.m.step.StepFailure('Missing required "xcode build version"')
+    return self._xcode_build_version
+
+  def _deprecate_xcode_version(self, xcode_version, location='top level'):
+    # Let the caller handle the missing "xcode version".
+    if not xcode_version:  # pragma: no cover
+      return None
+    xcode_build_version = self.XCODE_BUILD_VERSIONS.get(
+        xcode_version, self.XCODE_BUILD_VERSION_DEFAULT)
+    step_result = self.m.step('"xcode version" is DEPRECATED', None)
+    step_result.presentation.status = self.m.step.FAILURE
+    step_result.presentation.step_text = (
+        'Implicitly using "xcode build version": "%s" at %s.<br />'
+        'Please update your configs.') % (
+        xcode_build_version, location)
+    return xcode_build_version
 
   def _ensure_checkout_dir(self):
     if not self._checkout_dir:
@@ -329,12 +364,9 @@ class iOSApi(recipe_api.RecipeApi):
     env = {
       'LANDMINES_VERBOSE': '1',
     }
-    if self.__config.get('xcode build version'):
-      self.ensure_xcode(self.__config['xcode build version'])
-      self.m.chromium.c.env.FORCE_MAC_TOOLCHAIN = 0
-      env['FORCE_MAC_TOOLCHAIN'] = ''
-    else:
-      env['FORCE_MAC_TOOLCHAIN'] = '1'
+    self.ensure_xcode(self.xcode_build_version)
+    self.m.chromium.c.env.FORCE_MAC_TOOLCHAIN = 0
+    env['FORCE_MAC_TOOLCHAIN'] = ''
 
     env.update(self.__config['env'])
 
@@ -543,11 +575,15 @@ class iOSApi(recipe_api.RecipeApi):
       task['xcode build version'] = task['xcode build version'].lower()
       return
     if task.get('xcode version'):
+      task['xcode build version'] = self._deprecate_xcode_version(
+        task['xcode version'], location=task['step name'])
+      # Keep task['xcode version'] for backwards compatibility.
       return
-    task['xcode version'] = self.__config.get('xcode version')
-    task['xcode build version'] = self.__config.get(
-        'xcode build version', '').lower()
-    assert task['xcode build version'] or task['xcode version']
+    # If there is build-global "xcode version", add it here for backwards
+    # compatibility.
+    if self.__config.get('xcode version'):
+      task['xcode version'] = self.__config.get('xcode version')
+    task['xcode build version'] = self.xcode_build_version
 
   def isolate_test(self, test, tmp_dir, isolate_template,
                    test_cases=None, shard_num=None):
@@ -598,18 +634,10 @@ class iOSApi(recipe_api.RecipeApi):
       '--path-variable', 'app_path', app_path,
     ]
 
-    # Prefer xcode build version. TODO(sergeyberezin): remove "xcode version"
-    # path when all builds are migrated to "xcode build version".
-    if task['xcode build version']:
-      args.extend([
-        '--config-variable', 'xcode_arg_name', 'xcode-build-version',
-        '--config-variable', 'xcode_version', task['xcode build version'],
-      ])
-    else:
-      args.extend([
-        '--config-variable', 'xcode_arg_name', 'xcode-version',
-        '--config-variable', 'xcode_version', task['xcode version'],
-      ])
+    args.extend([
+      '--config-variable', 'xcode_arg_name', 'xcode-build-version',
+      '--config-variable', 'xcode_version', task['xcode build version'],
+    ])
 
     if self.platform == 'simulator':
       args.extend([
@@ -832,12 +860,17 @@ class iOSApi(recipe_api.RecipeApi):
       swarming_task.dimensions = {
         'pool': 'Chrome',
       }
+
+      # TODO(crbug.com/835036): remove this when all configs are migrated to
+      # "xcode build version". Otherwise keep it for backwards compatibility;
+      # otherwise we may receive an older Mac OS which does not support the
+      # requested Xcode version.
       if task.get('xcode version'):
         swarming_task.dimensions['xcode_version'] = task['xcode version']
 
-      if task.get('xcode build version'):
-        named_cache = cache_name(task['xcode build version'])
-        swarming_task.named_caches[named_cache] = self.XCODE_APP_PATH
+      assert task.get('xcode build version')
+      named_cache = cache_name(task['xcode build version'])
+      swarming_task.named_caches[named_cache] = self.XCODE_APP_PATH
 
       if self.platform == 'simulator':
         swarming_task.dimensions['os'] = task['test'].get('host os') or 'Mac'
@@ -871,11 +904,8 @@ class iOSApi(recipe_api.RecipeApi):
         self.platform,
         task['test']['device type'],
         task['test']['os'],
+        task['xcode build version'],
       ]
-      if task.get('xcode build version'):
-        spec.append(task['xcode build version'])
-      else:
-        spec.append(task['xcode version'])
 
       # e.g.
       # chromium.mac:ios-simulator:base_unittests:simulator:iPad Air:10.0:8.0

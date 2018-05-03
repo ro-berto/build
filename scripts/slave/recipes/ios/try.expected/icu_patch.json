@@ -195,6 +195,76 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "\"xcode version\" is DEPRECATED",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Implicitly using \"xcode build version\": \"9c40b\" at top level.<br />Please update your configs.@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "ensure xcode",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Ensuring Xcode version 9c40b in [CACHE]/xcode_ios_9c40b.app@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:479e512785754360721dbb36e47859be1a0b1b82",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "ensure xcode.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-git_revision:479\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/mac_toolchain/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/mac_toolchain",
+      "install",
+      "-kind",
+      "ios",
+      "-xcode-version",
+      "9c40b",
+      "-output-dir",
+      "[CACHE]/xcode_ios_9c40b.app",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-xcode-cipd-access.json"
+    ],
+    "name": "ensure xcode.install xcode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "sudo",
+      "xcode-select",
+      "-switch",
+      "[CACHE]/xcode_ios_9c40b.app"
+    ],
+    "name": "ensure xcode.select xcode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -203,7 +273,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
+      "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -226,7 +296,7 @@
     "cwd": "[BUILDER_CACHE]/ios_simulator/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
+      "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
     },
     "name": "generate build files (mb) (with patch)"

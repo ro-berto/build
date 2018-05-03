@@ -36,7 +36,7 @@ def GenTests(api):
         'target_cpu="x64"',
         'use_goma=true',
       ],
-      'xcode version': '6.1.1',
+      'xcode build version': '9abc',
       'bucket': 'mock-gcs-bucket',
       'upload': [
         {
@@ -146,7 +146,7 @@ def GenTests(api):
       bot_id='fake-vm',
     )
     + api.ios.make_test_build_config({
-      'xcode version': '6.1.1',
+      'xcode build version': '9abc',
       'gn_args': [
         'is_debug=false',
         'target_cpu="arm64"',
@@ -198,7 +198,7 @@ def GenTests(api):
       bot_id='fake-vm',
     )
     + api.ios.make_test_build_config({
-      'xcode version': '6.1.1',
+      'xcode build version': '9abc',
       'gn_args': [
         'is_debug=true',
         'target_cpu="x86"',
@@ -238,7 +238,7 @@ def GenTests(api):
       got_revision_cp='123456',
     )
     + api.ios.make_test_build_config({
-      'xcode version': '6.1.1',
+      'xcode build version': '9abc',
       'gn_args': [
         'is_debug=true',
         'target_cpu="x86"',
@@ -272,7 +272,7 @@ def GenTests(api):
       bot_id='fake-vm',
     )
     + api.ios.make_test_build_config({
-      'xcode version': '6.1.1',
+      'xcode build version': '9abc',
       'gn_args': [
         'is_debug=true',
         'target_cpu="x86"',
@@ -311,7 +311,7 @@ def GenTests(api):
       bot_id='fake-vm',
     )
     + api.ios.make_test_build_config({
-      'xcode version': '6.1.1',
+      'xcode build version': '9abc',
       'gn_args': [
         'is_debug=true',
         'target_cpu="x86"',
@@ -349,7 +349,7 @@ def GenTests(api):
       bot_id='fake-vm',
     )
     + api.ios.make_test_build_config({
-      'xcode version': '6.1.1',
+      'xcode build version': '9abc',
       'gn_args': [
         'is_debug=true',
         'target_cpu="x86"',
@@ -387,7 +387,7 @@ def GenTests(api):
       bot_id='fake-vm',
     )
     + api.ios.make_test_build_config({
-      'xcode version': '6.1.1',
+      'xcode build version': '9abc',
       'gn_args': [
         'is_debug=true',
         'target_cpu="x86"',
@@ -425,7 +425,7 @@ def GenTests(api):
       bot_id='fake-vm',
     )
     + api.ios.make_test_build_config({
-      'xcode version': '6.1.1',
+      'xcode build version': '9abc',
       'gn_args': [
         'target_cpu="x86"',
       ],
@@ -444,7 +444,7 @@ def GenTests(api):
       bot_id='fake-vm',
     )
     + api.ios.make_test_build_config({
-      'xcode version': '6.1.1',
+      'xcode build version': '9abc',
       'gn_args': [
         'is_debug=true',
       ],
@@ -464,7 +464,7 @@ def GenTests(api):
       bot_id='fake-vm',
     )
     + api.ios.make_test_build_config({
-      'xcode version': '6.1.1',
+      'xcode build version': '9abc',
       'gn_args': [
         'is_debug=true',
         'target_cpu="x86"',
@@ -488,7 +488,7 @@ def GenTests(api):
       bot_id='fake-vm',
     )
     + api.ios.make_test_build_config({
-      'xcode version': '6.1.1',
+      'xcode build version': '9abc',
       'gn_args': [
         'is_debug=true',
         'target_cpu="x86"',
@@ -513,7 +513,7 @@ def GenTests(api):
       bot_id='fake-vm',
     )
     + api.ios.make_test_build_config({
-      'xcode version': '6.1.1',
+      'xcode build version': '9abc',
       'gn_args': [
         'is_debug=true',
         'target_cpu="x86"',
@@ -543,6 +543,7 @@ def GenTests(api):
       bot_id='fake-vm',
     )
     + api.ios.make_test_build_config({
+      'xcode build version': '9abc',
       'gn_args': [
         'is_debug=true',
         'target_cpu="x86"',
@@ -566,7 +567,7 @@ def GenTests(api):
       bot_id='fake-vm',
     )
     + api.ios.make_test_build_config({
-      'xcode version': '6.1.1',
+      'xcode build version': '9abc',
       'gn_args': [
         'is_debug=true',
         'target_cpu="x86"',
@@ -661,6 +662,42 @@ def GenTests(api):
           'app': 'build-global xcode build version',
           'device type': 'iPhone X',
           'os': '10.0',
+        },
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output_text('1.2.3'),
+    )
+  )
+
+  yield (
+    api.test('deprecate_xcode_version')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios',
+      buildnumber='0',
+      mastername='chromium.fyi',
+      bot_id='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode version': '8.0',
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="arm64"',
+      ],
+      'device check': False,
+      'tests': [
+        {
+          'app': 'build-global xcode version',
+          'device type': 'iPhone X',
+          'os': '10.0',
+        },
+        {
+          'app': 'test-local xcode version',
+          'device type': 'iPhone X',
+          'os': '11.0',
+          'xcode version': '9.0',
         },
       ],
     })

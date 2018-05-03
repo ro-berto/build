@@ -203,6 +203,74 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "\"xcode version\" is DEPRECATED",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Implicitly using \"xcode build version\": \"9c40b\" at top level.<br />Please update your configs.@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "ensure xcode",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Ensuring Xcode version 9c40b in [CACHE]/xcode_ios_9c40b.app@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:479e512785754360721dbb36e47859be1a0b1b82",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "ensure xcode.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-git_revision:479\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/mac_toolchain/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/mac_toolchain",
+      "install",
+      "-kind",
+      "ios",
+      "-xcode-version",
+      "9c40b",
+      "-output-dir",
+      "[CACHE]/xcode_ios_9c40b.app"
+    ],
+    "name": "ensure xcode.install xcode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "sudo",
+      "xcode-select",
+      "-switch",
+      "[CACHE]/xcode_ios_9c40b.app"
+    ],
+    "name": "ensure xcode.select xcode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -211,7 +279,7 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
+      "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]",
       "fake env var 1": "fake env value 1",
@@ -236,7 +304,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
+      "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1",
       "fake env var 1": "fake env value 1",
       "fake env var 2": "fake env value 2"
@@ -254,7 +322,7 @@
     ],
     "cwd": "[CACHE]/builder/src/out/Debug-iphonesimulator",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "1",
+      "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1",
       "fake env var 1": "fake env value 1",
       "fake env var 2": "fake env value 2"
@@ -468,7 +536,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests 1.app\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests 1.app\", \n    \"--config-variable\", \n    \"xcode_arg_name\", \n    \"xcode-version\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"fake xcode version\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"8.0\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests 1.app\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests 1.app\", \n    \"--config-variable\", \n    \"xcode_arg_name\", \n    \"xcode-build-version\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"9c40b\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"8.0\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/0.isolate.gen.json"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -509,10 +577,10 @@
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"src/out/Debug-iphonesimulator/fake tests 1.app\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"xcode_arg_name\", @@@",
-      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"xcode-version\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"xcode-build-version\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"xcode_version\", @@@",
-      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"fake xcode version\", @@@",
+      "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"9c40b\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"platform\", @@@",
       "@@@STEP_LOG_LINE@0.isolate.gen.json@    \"fake device\", @@@",
@@ -534,7 +602,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests 2.app\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/1.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests 2.app\", \n    \"--config-variable\", \n    \"xcode_arg_name\", \n    \"xcode-version\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"fake xcode version\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"7.1\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests 2.app\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/1.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests 2.app\", \n    \"--config-variable\", \n    \"xcode_arg_name\", \n    \"xcode-build-version\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"9c40b\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"7.1\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/1.isolate.gen.json"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -575,10 +643,10 @@
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"src/out/Debug-iphonesimulator/fake tests 2.app\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"xcode_arg_name\", @@@",
-      "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"xcode-version\", @@@",
+      "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"xcode-build-version\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"xcode_version\", @@@",
-      "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"fake xcode version\", @@@",
+      "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"9c40b\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"platform\", @@@",
       "@@@STEP_LOG_LINE@1.isolate.gen.json@    \"fake device\", @@@",
@@ -600,7 +668,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake_eg_test_host.app\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"true\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/2.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake_eg_test_host.app\", \n    \"--config-variable\", \n    \"xcode_arg_name\", \n    \"xcode-version\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"fake xcode version\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device 3\", \n    \"--config-variable\", \n    \"version\", \n    \"9.3\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake_eg_test_host.app\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"true\", \n    \"--isolate\", \n    \"[CACHE]/builder/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/2.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake_eg_test_host.app\", \n    \"--config-variable\", \n    \"xcode_arg_name\", \n    \"xcode-build-version\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"9c40b\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device 3\", \n    \"--config-variable\", \n    \"version\", \n    \"9.3\"\n  ], \n  \"dir\": \"[CACHE]/builder\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/2.isolate.gen.json"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -641,10 +709,10 @@
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"src/out/Debug-iphonesimulator/fake_eg_test_host.app\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"xcode_arg_name\", @@@",
-      "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"xcode-version\", @@@",
+      "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"xcode-build-version\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"xcode_version\", @@@",
-      "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"fake xcode version\", @@@",
+      "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"9c40b\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"platform\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"fake device 3\", @@@",
@@ -725,6 +793,9 @@
       "--named-cache",
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
+      "--named-cache",
+      "xcode_ios_9c40b",
+      "Xcode.app",
       "--service-account",
       "ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com",
       "--tag",
@@ -748,7 +819,7 @@
       "--tag",
       "slavename:fake-vm",
       "--tag",
-      "spec_name:chromium.fake:ios:fake tests 1:simulator:fake device:8.0:fake xcode version",
+      "spec_name:chromium.fake:ios:fake tests 1:simulator:fake device:8.0:9c40b",
       "--tag",
       "stepname:fake tests 1 (fake device iOS 8.0)",
       "--tag",
@@ -831,6 +902,9 @@
       "--named-cache",
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
+      "--named-cache",
+      "xcode_ios_9c40b",
+      "Xcode.app",
       "--service-account",
       "ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com",
       "--tag",
@@ -854,7 +928,7 @@
       "--tag",
       "slavename:fake-vm",
       "--tag",
-      "spec_name:chromium.fake:ios:fake tests 2:simulator:fake device:7.1:fake xcode version",
+      "spec_name:chromium.fake:ios:fake tests 2:simulator:fake device:7.1:9c40b",
       "--tag",
       "stepname:fake tests 2 (fake device iOS 7.1)",
       "--tag",
@@ -937,6 +1011,9 @@
       "--named-cache",
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
+      "--named-cache",
+      "xcode_ios_9c40b",
+      "Xcode.app",
       "--service-account",
       "ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com",
       "--tag",
@@ -960,7 +1037,7 @@
       "--tag",
       "slavename:fake-vm",
       "--tag",
-      "spec_name:chromium.fake:ios:fake_eg_test_host:simulator:fake device 3:9.3:fake xcode version",
+      "spec_name:chromium.fake:ios:fake_eg_test_host:simulator:fake device 3:9.3:9c40b",
       "--tag",
       "stepname:fake_eg_test_host (fake device 3 iOS 9.3)",
       "--tag",

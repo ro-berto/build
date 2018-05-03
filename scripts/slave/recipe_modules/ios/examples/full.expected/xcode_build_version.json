@@ -651,6 +651,16 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[START_DIR]/src",
+    "name": "isolate.\"xcode version\" is DEPRECATED",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Implicitly using \"xcode build version\": \"9c40b\" at task-local xcode version (fake device 3 iOS 11.0).<br />Please update your configs.@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -658,7 +668,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/task-local xcode version.app\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/2.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/task-local xcode version.app\", \n    \"--config-variable\", \n    \"xcode_arg_name\", \n    \"xcode-version\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"9.2\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device 3\", \n    \"--config-variable\", \n    \"version\", \n    \"11.0\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/task-local xcode version.app\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/2.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/task-local xcode version.app\", \n    \"--config-variable\", \n    \"xcode_arg_name\", \n    \"xcode-build-version\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"9c40b\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device 3\", \n    \"--config-variable\", \n    \"version\", \n    \"11.0\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/2.isolate.gen.json"
     ],
     "cwd": "[START_DIR]/src",
@@ -699,10 +709,10 @@
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"src/out/Debug-iphonesimulator/task-local xcode version.app\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"xcode_arg_name\", @@@",
-      "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"xcode-version\", @@@",
+      "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"xcode-build-version\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"xcode_version\", @@@",
-      "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"9.2\", @@@",
+      "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"9c40b\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"--config-variable\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"platform\", @@@",
       "@@@STEP_LOG_LINE@2.isolate.gen.json@    \"fake device 3\", @@@",
@@ -995,6 +1005,9 @@
       "--named-cache",
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
+      "--named-cache",
+      "xcode_ios_9c40b",
+      "Xcode.app",
       "--service-account",
       "ios-isolated-tester@chops-service-accounts.iam.gserviceaccount.com",
       "--tag",
@@ -1018,7 +1031,7 @@
       "--tag",
       "slavename:fake-vm",
       "--tag",
-      "spec_name:chromium.fyi:ios:task-local xcode version:simulator:fake device 3:11.0:9.2",
+      "spec_name:chromium.fyi:ios:task-local xcode version:simulator:fake device 3:11.0:9c40b",
       "--tag",
       "stepname:task-local xcode version (fake device 3 iOS 11.0)",
       "--tag",
