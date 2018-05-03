@@ -960,7 +960,7 @@ SPEC['builders'].update([
     stock_config('linux-blink-heap-verification'),
     stock_config('linux-chromium-tests-staging-builder',
                  builder_type='builder'),
-    stock_config('linux-chromium-tests-stating-tests',
+    stock_config('linux-chromium-tests-staging-tests',
                  builder_type='tester',
                  parent_buildername='linux-chromium-tests-staging-builder'),
     stock_config('linux-gcc-rel'),
