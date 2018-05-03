@@ -1434,11 +1434,11 @@ def GenTests(api):
 
   yield (
       api.test('builder_as_tester') +
-      props({'services_unittests': ['Test.One']}, 'linux', 'Ozone Linux') +
+      props({'services_unittests': ['Test.One']}, 'linux', 'linux-ozone-rel') +
       api.override_step_data(
           'test r1.read test spec (chromium.linux.json)',
           api.json.output({
-              'Ozone Linux': {
+              'linux-ozone-rel': {
                   'gtest_tests': [
                       {
                           'test': 'services_unittests',

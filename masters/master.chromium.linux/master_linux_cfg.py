@@ -30,7 +30,6 @@ def Update(_config, active_master, c):
                             builderNames=[
           'Cast Audio Linux',
           'Leak Detection Linux',
-          'Ozone Linux',
       ]),
   ])
 
@@ -40,7 +39,6 @@ def Update(_config, active_master, c):
   specs = [
     {'name': 'Cast Audio Linux'},
     {'name': 'Leak Detection Linux'},
-    {'name': 'Ozone Linux'},
   ]
 
   c['builders'].extend([

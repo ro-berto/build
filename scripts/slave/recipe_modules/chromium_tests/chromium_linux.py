@@ -276,22 +276,6 @@ SPEC = {
           'platform': 'linux',
       },
     },
-    'Ozone Linux': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ozone'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder',
-      'compile_targets': [],
-      'checkout_dir': 'linux',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
   },
 }
 
