@@ -210,6 +210,18 @@
   },
   {
     "cmd": [
+      "find",
+      "[START_DIR]/src/out",
+      "-mtime",
+      "+7",
+      "-type",
+      "f",
+      "-delete"
+    ],
+    "name": "delete old generated files"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[START_DIR]/src/tools/mb/mb.py",
@@ -505,18 +517,6 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
-  },
-  {
-    "cmd": [
-      "find",
-      "[START_DIR]/src/out",
-      "-mtime",
-      "+7",
-      "-type",
-      "f",
-      "-delete"
-    ],
-    "name": "delete old generated files"
   },
   {
     "allow_subannotations": true,

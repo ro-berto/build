@@ -210,6 +210,18 @@
   },
   {
     "cmd": [
+      "find",
+      "[START_DIR]/src/out",
+      "-mtime",
+      "+7",
+      "-type",
+      "f",
+      "-delete"
+    ],
+    "name": "delete old generated files"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[START_DIR]/src/tools/mb/mb.py",

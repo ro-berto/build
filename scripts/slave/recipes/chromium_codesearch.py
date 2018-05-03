@@ -178,11 +178,13 @@ def RunSteps(api, root_solution_revision):
   with api.context(env={'CHROME_HEADLESS': '1'}):
     api.chromium.runhooks()
 
-  result = api.codesearch.generate_compilation_database(targets, platform)
-
   # Cleans up generated files. This is to prevent old generated files from
-  # being left in the out directory.
+  # being left in the out directory. Note that this needs to be run *before*
+  # generating the compilation database, otherwise some of the files generated
+  # by that step may be deleted (if they've been unchanged for the past week).
   api.codesearch.cleanup_old_generated()
+
+  result = api.codesearch.generate_compilation_database(targets, platform)
 
   # If the compile fails, abort execution and don't upload the pack. When we
   # upload an incomplete (due to compile failures) pack to Kythe, it fails
