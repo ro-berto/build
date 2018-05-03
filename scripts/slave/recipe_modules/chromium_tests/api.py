@@ -905,7 +905,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         mb_config_path=mb_config_path)
 
     isolate_transfer = (
-        all(t.uses_isolate for t in tests_including_triggered)
+        # Only check whether all tests on triggered testers are isolated.
+        # TODO(jbudorick): Clean this up prior to promoting to stable.
+        # get_tests should return something more sophisticated than just
+        # (tests, tests_including_triggered).
+        all(t.uses_isolate
+            for t in tests_including_triggered[len(tests):])
+
         # TODO(jbudorick): Promote this to stable.
         and self.c.staging)
 
