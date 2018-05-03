@@ -1214,6 +1214,7 @@ class V8Api(recipe_api.RecipeApi):
       properties = {
         'parent_got_revision': self.revision,
         'parent_buildername': self.m.properties['buildername'],
+        'parent_build_config': self.m.chromium.c.BUILD_CONFIG,
       }
       if self.revision_cp:
         properties['parent_got_revision_cp'] = self.revision_cp

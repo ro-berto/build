@@ -230,6 +230,7 @@
       {
         "builder_name": "V8 Linux64 - custom snapshot - debug",
         "properties": {
+          "parent_build_config": "Debug",
           "parent_build_environment": {
             "gn_args": "target_cpu = \"x86\" use_goma = true"
           },
@@ -246,6 +247,7 @@
       {
         "builder_name": "V8 Linux64 GC Stress - custom snapshot",
         "properties": {
+          "parent_build_config": "Debug",
           "parent_build_environment": {
             "gn_args": "target_cpu = \"x86\" use_goma = true"
           },

@@ -217,6 +217,7 @@
         "builder_name": "V8 Mips - big endian - nosnap - 1",
         "properties": {
           "archive": "gs://chromium-v8/archives/client.v8.ports/V8 Mips - builder",
+          "parent_build_config": "Release",
           "parent_build_environment": {
             "gn_args": "target_cpu = \"x86\" use_goma = true"
           },
@@ -230,6 +231,7 @@
         "builder_name": "V8 Mips - big endian - nosnap - 2",
         "properties": {
           "archive": "gs://chromium-v8/archives/client.v8.ports/V8 Mips - builder",
+          "parent_build_config": "Release",
           "parent_build_environment": {
             "gn_args": "target_cpu = \"x86\" use_goma = true"
           },

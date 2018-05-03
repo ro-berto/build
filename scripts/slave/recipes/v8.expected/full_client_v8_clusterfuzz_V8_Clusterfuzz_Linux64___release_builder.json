@@ -324,6 +324,7 @@
       {
         "builder_name": "V8 NumFuzz",
         "properties": {
+          "parent_build_config": "Release",
           "parent_build_environment": {
             "gn_args": "target_cpu = \"x86\" use_goma = true"
           },
