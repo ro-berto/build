@@ -31,7 +31,6 @@ def Update(_config, active_master, c):
           'Cast Audio Linux',
           'Leak Detection Linux',
           'Ozone Linux',
-          'linux-gcc-rel',
       ]),
   ])
 
@@ -42,7 +41,6 @@ def Update(_config, active_master, c):
     {'name': 'Cast Audio Linux'},
     {'name': 'Leak Detection Linux'},
     {'name': 'Ozone Linux'},
-    {'name': 'linux-gcc-rel'}
   ]
 
   c['builders'].extend([
