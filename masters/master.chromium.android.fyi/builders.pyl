@@ -32,30 +32,6 @@
       "mergeRequests": True,
     },
 
-    "Android Tests (trial)(dbg)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["trial_device_slave"],
-      "category": "2Testers",
-      "mergeRequests": True,
-    },
-    "Android Tests with Tracing": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["trial_device_slave"],
-      "category": "2Testers",
-      "mergeRequests": True,
-    },
-    "Jelly Bean Tester": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["jelly_bean_tester"],
-      "category": "2Testers",
-      "mergeRequests": True,
-    },
     "Lollipop Consumer Tester": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -139,14 +115,6 @@
       "category": "2Testers",
       "mergeRequests": True,
     },
-    "x86 Emulator Tester": {
-      "recipe": "emulator",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["trial_device_slave"],
-      "category": "2Testers",
-      "mergeRequests": True,
-    },
   },
 
   "schedulers": {
@@ -172,14 +140,6 @@
         "bits": "64",
       },
       "slaves": ["slave221-c1"],
-    },
-    "jelly_bean_tester": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["build40-b1"],
     },
     "lollipop_consumer": {
       "slave_data": {
@@ -237,16 +197,6 @@
       },
       "slaves": [
         "slave240-c1",
-      ],
-    },
-    "trial_device_slave": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": [
-        "build64-b1",
       ],
     },
     "x64_ccompute_launcher": {
