@@ -15,8 +15,7 @@ def syzygy(c):
   # Configure the checkout of the Syzygy repository.
   s = c.solutions.add()
   s.name = 'src'
-  s.url = ('https://chromium.googlesource.com/external/' +
-           'github.com/google/syzygy.git/')
+  s.url = 'https://chromium.googlesource.com/syzygy.git'
   s.deps_file = 'DEPS'
   s.managed = False
 
