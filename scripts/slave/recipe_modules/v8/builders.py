@@ -1823,7 +1823,7 @@ BUILDERS = {
 ####### Waterfall: client.v8.official
   'client.v8.official': {
     'builders': {
-      'V8 Arm32': {
+      'V8 Official Arm32': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
           'arm_hard_float', 'clobber', 'default_compiler',
@@ -1836,7 +1836,7 @@ BUILDERS = {
         },
         'testing': {'platform': 'linux'},
       },
-      'V8 Android Arm32': {
+      'V8 Official Android Arm32': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
           'clobber', 'default_compiler', 'default_target_v8_archive',
@@ -1849,7 +1849,7 @@ BUILDERS = {
         },
         'testing': {'platform': 'linux'},
       },
-      'V8 Android Arm64': {
+      'V8 Official Android Arm64': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
           'clobber', 'default_compiler', 'default_target_v8_archive',
@@ -1862,7 +1862,7 @@ BUILDERS = {
         },
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux32': {
+      'V8 Official Linux32': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
           'clobber', 'clang', 'default_target_v8_archive',
@@ -1873,7 +1873,7 @@ BUILDERS = {
         },
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux64': {
+      'V8 Official Linux64': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
           'clobber', 'clang', 'default_target_v8_archive',
@@ -1884,7 +1884,7 @@ BUILDERS = {
         },
         'testing': {'platform': 'linux'},
       },
-      'V8 Win32': {
+      'V8 Official Win32': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
           'clobber', 'clang', 'default_target_v8_archive',
@@ -1895,7 +1895,7 @@ BUILDERS = {
         },
         'testing': {'platform': 'win'},
       },
-      'V8 Win64': {
+      'V8 Official Win64': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
           'clobber', 'clang', 'default_target_v8_archive',
@@ -1906,7 +1906,7 @@ BUILDERS = {
         },
         'testing': {'platform': 'win'},
       },
-      'V8 Mac64': {
+      'V8 Official Mac64': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
           'clobber', 'clang', 'default_target_v8_archive',

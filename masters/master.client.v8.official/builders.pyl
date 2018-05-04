@@ -18,56 +18,56 @@
   },
 
   "builders": {
-    "V8 Arm32": {
+    "V8 Official Arm32": {
       "recipe": "v8/archive",
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["linux"],
       "category": "0Linux",
     },
-    "V8 Android Arm32": {
+    "V8 Official Android Arm32": {
       "recipe": "v8/archive",
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["linux"],
       "category": "0Linux",
     },
-    "V8 Android Arm64": {
+    "V8 Official Android Arm64": {
       "recipe": "v8/archive",
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["linux"],
       "category": "0Linux",
     },
-    "V8 Linux32": {
+    "V8 Official Linux32": {
       "recipe": "v8/archive",
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["linux"],
       "category": "0Linux",
     },
-    "V8 Linux64": {
+    "V8 Official Linux64": {
       "recipe": "v8/archive",
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["linux"],
       "category": "0Linux",
     },
-    "V8 Win32": {
+    "V8 Official Win32": {
       "recipe": "v8/archive",
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["win"],
       "category": "1Windows",
     },
-    "V8 Win64": {
+    "V8 Official Win64": {
       "recipe": "v8/archive",
       "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["win"],
       "category": "1Windows",
     },
-    "V8 Mac64": {
+    "V8 Official Mac64": {
       "recipe": "v8/archive",
       "scheduler": "v8_commits",
       "mergeRequests": False,

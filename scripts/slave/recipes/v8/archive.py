@@ -164,7 +164,7 @@ def GenTests(api):
       test += api.v8.check_in_param(
           'bot_update', '--spec-path', 'target_os = [\'android\']')
 
-    if buildername == 'V8 Arm32':
+    if buildername == 'V8 Official Arm32':
       # Make sure bot_update specifies target_cpu on Arm builders.
       test += api.v8.check_in_param(
           'bot_update', '--spec-path', 'target_cpu = [\'arm\']')
@@ -178,7 +178,7 @@ def GenTests(api):
 
   # Test bailout on missing branch.
   mastername = 'client.v8.official'
-  buildername = 'V8 Linux64'
+  buildername = 'V8 Official Linux64'
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'no_branch')) +
       api.properties.generic(mastername=mastername,
@@ -193,7 +193,7 @@ def GenTests(api):
 
   # Test bailout on missing tag.
   mastername = 'client.v8.official'
-  buildername = 'V8 Linux64'
+  buildername = 'V8 Official Linux64'
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'no_tag')) +
       api.properties.generic(mastername=mastername,
@@ -212,7 +212,7 @@ def GenTests(api):
 
   # Upload beta binaries to a known location.
   mastername = 'client.v8.official'
-  buildername = 'V8 Linux64'
+  buildername = 'V8 Official Linux64'
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'update_beta')) +
       api.properties.generic(mastername=mastername, buildername=buildername,
@@ -228,7 +228,7 @@ def GenTests(api):
 
   # Test canary upload.
   mastername = 'client.v8.official'
-  buildername = 'V8 Linux64'
+  buildername = 'V8 Official Linux64'
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'canary')) +
       api.properties.generic(mastername=mastername, buildername=buildername,
