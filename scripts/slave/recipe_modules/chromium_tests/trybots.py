@@ -756,6 +756,12 @@ TRYBOTS = freeze({
           },
         ],
       },
+      # Manually triggered GPU bots.
+      'gpu_manual_try_win7_nvidia_rel': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'GPU FYI Win Builder',
+        'tester': 'Win7 FYI Release (NVIDIA)',
+      }),
       # Optional Official trybot.
       'win_chrome_official': simple_bot({
         'mastername': 'chromium.chrome',
