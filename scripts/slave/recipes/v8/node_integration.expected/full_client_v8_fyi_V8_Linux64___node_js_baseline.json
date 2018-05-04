@@ -112,6 +112,7 @@
   },
   {
     "cmd": [],
+    "cwd": "[START_DIR]/node.js",
     "name": "ensure_goma"
   },
   {
@@ -127,6 +128,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
+    "cwd": "[START_DIR]/node.js",
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
