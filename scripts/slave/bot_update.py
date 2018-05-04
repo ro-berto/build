@@ -681,7 +681,7 @@ def gclient_sync(with_branch_heads, shallow):
          '--output-json', gclient_output_file,
          '--nohooks', '--noprehooks', '--delete_unversioned_trees']
   if with_branch_heads:
-    cmd += ['--with_branch_heads']
+    cmd += ['--with_branch_heads', '--with_tags']
   if shallow:
     cmd += ['--shallow']
 
