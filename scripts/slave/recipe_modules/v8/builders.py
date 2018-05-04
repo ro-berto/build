@@ -1959,7 +1959,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_verify_csa_rel_ng_triggered': {
-        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nodcheck_rel_ng': {
@@ -1975,17 +1974,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nodcheck_rel_ng_triggered': {
-        'tests': [
-          V8Testing,
-          Test262Variants(2),
-          Mozilla,
-          Benchmarks,
-        ] + with_extra_variants(
-            [V8Testing, Test262Variants(2), Mozilla, Benchmarks]),
         'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'cpu': 'x86-64-avx2',
-        },
       },
       'v8_linux_dbg_ng': {
         'chromium_apply_config': [
@@ -2000,18 +1989,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_dbg_ng_triggered': {
-        'tests': [
-          V8Testing(3),
-          Test262,
-          Mozilla,
-          Benchmarks,
-          MjsunitSPFrameAccess,
-        ] + with_extra_variants(
-            [V8Testing(2), Test262Variants(3), Mozilla, Benchmarks]),
         'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'cpu': 'x86-64-avx2',
-        },
       },
       'v8_linux_noi18n_rel_ng': {
         'chromium_apply_config': [
@@ -2026,12 +2004,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_noi18n_rel_ng_triggered': {
-        'tests': [
-          V8Testing(2),
-          Test262,
-          Mozilla,
-        ],
-        'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_rel': {
@@ -2102,18 +2074,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_dbg_ng_triggered': {
-        'tests': [
-          V8Testing(3),
-          Test262,
-          Mozilla,
-          Benchmarks,
-          MjsunitSPFrameAccess,
-        ] + with_extra_variants(
-            [V8Testing(2), Test262Variants(3), Mozilla, Benchmarks]),
         'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'cpu': 'x86-64-avx2',
-        },
       },
       'v8_linux64_gcc_compile_dbg': {
         'chromium_apply_config': [
@@ -2138,17 +2099,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_rel_ng_triggered': {
-        'tests': [
-          V8Initializers,
-          V8Testing,
-          OptimizeForSize,
-          Test262Variants(4),
-          MjsunitSPFrameAccess,
-        ] + with_extra_variants([V8Testing, Test262Variants(2)]),
         'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'cpu': 'x86-64-avx2',
-        },
       },
       'v8_linux64_fyi_rel_ng': {
         'chromium_apply_config': [
@@ -2178,7 +2129,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_verify_csa_rel_ng_triggered': {
-        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'v8_linux_gc_stress_dbg': {
@@ -2208,10 +2158,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_asan_rel_ng_triggered': {
-        'tests': [
-          V8Testing(3),
-          Test262Variants(7),
-        ] + with_extra_variants([V8Testing(2)]),
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_cfi_rel_ng': {
@@ -2230,13 +2176,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_cfi_rel_ng_triggered': {
-        'tests': [
-          V8Testing(2),
-          OptimizeForSize,
-          Benchmarks,
-          Test262,
-          Mozilla,
-        ],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_jumbo_compile_rel': {
@@ -2305,7 +2244,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_ubsan_rel_ng_triggered': {
-        'tests': [V8Testing(2)],
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_sanitizer_coverage_rel': {
@@ -2373,11 +2311,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win_rel_ng_triggered': {
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-          'cpu': 'x86-64',
-        },
-        'tests': [V8Testing,Test262],
         'testing': {'platform': 'linux'},
       },
       'v8_win_nosnap_shared_rel_ng': {
@@ -2397,12 +2330,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win_nosnap_shared_rel_ng_triggered': {
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-          'cpu': 'x86-64',
-        },
-        'tests': [V8Testing(3)],
-        'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
       },
       'v8_win64_asan_rel_ng': {
@@ -2421,10 +2348,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_asan_rel_ng_triggered': {
-        'swarming_dimensions': {
-          'os': 'Windows-10',
-        },
-        'tests': [V8Testing(5)],
         'testing': {'platform': 'linux'},
       },
       'v8_win64_msvc_compile_rel': {
@@ -2455,15 +2378,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_msvc_rel_ng_triggered': {
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-          'cpu': 'x86-64',
-        },
-        'tests': [
-          V8Testing,
-          Test262,
-          Mozilla,
-        ],
         'testing': {'platform': 'linux'},
       },
       'v8_win64_rel_ng': {
@@ -2482,11 +2396,6 @@ BUILDERS = {
         'testing': {'platform': 'win'},
       },
       'v8_win64_rel_ng_triggered': {
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-          'cpu': 'x86-64',
-        },
-        'tests': [V8Testing, Test262] + with_extra_variants([V8Testing]),
         'testing': {'platform': 'linux'},
       },
       'v8_win64_dbg': {
@@ -2522,15 +2431,6 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_mac64_rel_ng_triggered': {
-        'swarming_dimensions': {
-          'os': 'Mac-10.13',
-          'cpu': 'x86-64',
-        },
-        'tests': [
-          V8Testing,
-          Test262,
-          Mozilla,
-        ] + with_extra_variants([V8Testing]),
         'testing': {'platform': 'linux'},
       },
       'v8_mac64_dbg_ng': {
@@ -2546,15 +2446,6 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
       'v8_mac64_dbg_ng_triggered': {
-        'swarming_dimensions': {
-          'os': 'Mac-10.13',
-          'cpu': 'x86-64',
-        },
-        'tests': [
-          V8Testing(3),
-          Test262,
-          Mozilla,
-        ] + with_extra_variants([V8Testing(2)]),
         'testing': {'platform': 'linux'},
       },
       'v8_mac64_gc_stress_dbg': {
@@ -2602,12 +2493,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm_rel_ng_triggered': {
-        'tests': [
-          V8Testing(7),
-          Test262,
-          Mozilla,
-          MjsunitSPFrameAccess,
-        ] + with_extra_variants([V8Testing(3)]),
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm_dbg': {
@@ -2638,12 +2523,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_rel_ng_triggered': {
-        'tests': [
-          V8Testing(7),
-          Test262,
-          Mozilla,
-          MjsunitSPFrameAccess,
-        ] + with_extra_variants([V8Testing(3)]),
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_dbg': {
