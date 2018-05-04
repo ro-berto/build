@@ -2795,6 +2795,17 @@ BUILDERS = freeze(BUILDERS)
 BRANCH_BUILDERS = freeze(BRANCH_BUILDERS)
 
 
+# TODO(machenbach): Temporary code to migrate to flattened builder configs.
+# Clean up the config above and remove this after testing in prod.
+FLATTENED_BUILDERS = {}
+for mastername, master_config in BUILDERS.iteritems():
+    builders = master_config['builders']
+    for buildername, bot_config in builders.iteritems():
+      assert buildername not in FLATTENED_BUILDERS, buildername
+      FLATTENED_BUILDERS[buildername] = bot_config
+FLATTENED_BUILDERS = freeze(FLATTENED_BUILDERS)
+
+
 def iter_builders(recipe='v8'):
   """Iterates tuples of (mastername, builders, buildername, bot_config).
 

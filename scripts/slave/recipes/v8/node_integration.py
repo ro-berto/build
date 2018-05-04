@@ -81,6 +81,16 @@ BUILDERS = freeze({
   },
 })
 
+# TODO(machenbach): Temporary code to migrate to flattened builder configs.
+# Clean up the config above and remove this after testing in prod.
+FLATTENED_BUILDERS = {}
+for _, master_config in BUILDERS.iteritems():
+    builders = master_config['builders']
+    for _buildername, _bot_config in builders.iteritems():
+      assert _buildername not in FLATTENED_BUILDERS, _buildername
+      FLATTENED_BUILDERS[_buildername] = _bot_config
+FLATTENED_BUILDERS = freeze(FLATTENED_BUILDERS)
+
 ARCHIVE_LINK = ('https://storage.googleapis.com'
                 '/chromium-v8/node-%s-rel/%s')
 
@@ -225,7 +235,7 @@ def _build_and_upload(api, goma_dir):
 
 def RunSteps(api):
   v8 = api.v8
-  v8.apply_bot_config(BUILDERS)
+  v8.apply_bot_config(flattened_builders=FLATTENED_BUILDERS)
   # Opt out of using gyp environment variables.
   api.chromium.c.use_gyp_env = False
   api.gclient.apply_config('node_js')

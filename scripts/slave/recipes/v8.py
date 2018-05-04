@@ -32,7 +32,7 @@ PROPERTIES = {
 
 def RunSteps(api, set_gclient_var):
   v8 = api.v8
-  v8.apply_bot_config(v8.BUILDERS)
+  v8.apply_bot_config(flattened_builders=v8.FLATTENED_BUILDERS)
   v8.set_gclient_custom_var(set_gclient_var)
 
   # Opt out of using gyp environment variables.

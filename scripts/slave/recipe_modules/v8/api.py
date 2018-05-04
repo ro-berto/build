@@ -110,20 +110,25 @@ def isolate_targets_from_tests(tests):
 
 class V8Api(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
+  FLATTENED_BUILDERS = builders.FLATTENED_BUILDERS
   VERSION_FILE = 'include/v8-version.h'
   EMPTY_TEST_SPEC = EmptyTestSpec
 
-  def apply_bot_config(self, builders):
+  def apply_bot_config(self, builders=None, flattened_builders=None):
     """Entry method for using the v8 api.
 
     Requires the presence of a bot_config dict for any master/builder pair.
     This bot_config will be used to refine other api methods.
     """
-
+    builders = builders or {}
+    flattened_builders = flattened_builders or {}
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
-    master_dict = builders.get(mastername, {})
-    self.bot_config = master_dict.get('builders', {}).get(buildername)
+    if flattened_builders:
+      self.bot_config = flattened_builders.get(buildername)
+    else:  # pragma: no cover
+      master_dict = builders.get(mastername, {})
+      self.bot_config = master_dict.get('builders', {}).get(buildername)
     assert self.bot_config, (
         'Unrecognized builder name %r for master %r.' % (
             buildername, mastername))
