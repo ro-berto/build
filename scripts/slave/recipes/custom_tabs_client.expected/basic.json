@@ -5,7 +5,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'custom_tabs_client', 'url': 'https://chromium.googlesource.com/external/github.com/GoogleChrome/custom-tabs-client.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'custom_tabs_client', 'url': 'https://chromium.googlesource.com/custom-tabs-client'}]",
       "--patch_root",
       "custom_tabs_client",
       "--revision_mapping_file",
