@@ -117,7 +117,7 @@
       "--root=[START_DIR]\\angle",
       "gen",
       "//out/release_clang",
-      "--args=is_debug=false is_component_build=false use_goma=true goma_dir=\"[CACHE]\\goma_client\" is_clang=true is_clang=true"
+      "--args=is_debug=false is_component_build=false use_goma=true goma_dir=\"[CACHE]\\goma_client\" is_clang=true"
     ],
     "cwd": "[START_DIR]\\angle",
     "name": "gn gen"

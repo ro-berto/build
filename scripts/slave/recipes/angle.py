@@ -27,7 +27,7 @@ PROPERTIES = {
   'clang': Property(default=None, kind=bool),
 
   # TODO(jmadill): Remove this property when migrated. http://crbug.com/833999
-  'msvc': Property(default=False, kind=bool),
+  'msvc': Property(default=None, kind=bool),
 }
 
 
