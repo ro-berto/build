@@ -106,6 +106,7 @@ FAKE_BUILDERS = {
     ],
     'master.chromium.linux': [
         # These have been migrated to LUCI.
+        'Cast Audio Linux',
         'Cast Linux',
         'Fuchsia ARM64',
         'Fuchsia ARM64 Cast Audio',
@@ -113,6 +114,7 @@ FAKE_BUILDERS = {
         'Fuchsia x64 Cast Audio',
         'linux-gcc-rel',
         'linux-ozone-rel',
+        'Leak Detection Linux',
         'Linux Builder',
         'Linux Builder (dbg)',
         'Linux Builder (dbg)(32)',
@@ -161,11 +163,13 @@ FAKE_BUILDERS = {
     ],
     'master.tryserver.chromium.linux': [
         # These have been migrated to LUCI.
+        'cast_shell_audio_linux',
         'cast_shell_linux',
         'fuchsia_arm64',
         'fuchsia_arm64_cast_audio',
         'fuchsia_x64',
         'fuchsia_x64_cast_audio',
+        'leak_detection_linux',
         'linux-blink-heap-incremental-marking',
         'linux-blink-heap-verification-try',
         'linux-gcc-rel',

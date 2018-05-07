@@ -23,29 +23,4 @@ def m_remote_run(recipe, **kwargs):
 
 
 def Update(_config, active_master, c):
-  c['schedulers'].extend([
-      SingleBranchScheduler(name='linux_src',
-                            branch='master',
-                            treeStableTimer=60,
-                            builderNames=[
-          'Cast Audio Linux',
-          'Leak Detection Linux',
-      ]),
-  ])
-
-  # name (str): required, must match string in schedulers above
-  # recipe (str): optional (default: 'chromium'), the recipe to use for
-  #   this builder.
-  specs = [
-    {'name': 'Cast Audio Linux'},
-    {'name': 'Leak Detection Linux'},
-  ]
-
-  c['builders'].extend([
-      {
-        'name': spec['name'],
-        'factory': m_remote_run(spec.get('recipe', 'chromium')),
-        'notify_on_missing': True,
-        'category': spec.get('category', '4linux'),
-      } for spec in specs
-  ])
+  pass
