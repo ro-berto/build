@@ -240,6 +240,14 @@
   {
     "cmd": [
       "make",
+      "test-addons-clean"
+    ],
+    "cwd": "[START_DIR]/node.js",
+    "name": "build addons"
+  },
+  {
+    "cmd": [
+      "make",
       "-j8",
       "clear-stalled",
       "build-addons",
@@ -247,7 +255,7 @@
       "doc-only"
     ],
     "cwd": "[START_DIR]/node.js",
-    "name": "build addons"
+    "name": "build addons (2)"
   },
   {
     "cmd": [],
