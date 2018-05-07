@@ -234,6 +234,7 @@ class V8Api(recipe_api.RecipeApi):
     if RELEASE_BRANCH_RE.match(branch):
       revision = 'refs/branch-heads/%s:%s' % (branch, revision)
       needs_branch_heads = True
+    kwargs.setdefault('with_branch_heads', needs_branch_heads)
     solution.revision = revision
 
     try:
@@ -249,10 +250,7 @@ class V8Api(recipe_api.RecipeApi):
       # migrated to LUCI.
       self.checkout_root = self.m.path['start_dir']
     with self.m.context(cwd=self.checkout_root):
-      update_step = self.m.bot_update.ensure_checkout(
-          no_shallow=True,
-          with_branch_heads=needs_branch_heads,
-          **kwargs)
+      update_step = self.m.bot_update.ensure_checkout(no_shallow=True, **kwargs)
 
     assert update_step.json.output['did_run']
 
