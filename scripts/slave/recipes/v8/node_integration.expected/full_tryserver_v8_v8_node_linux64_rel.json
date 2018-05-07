@@ -258,7 +258,7 @@
       "test-addons-clean"
     ],
     "cwd": "[START_DIR]/node.js",
-    "name": "build addons"
+    "name": "clean addons"
   },
   {
     "cmd": [
@@ -270,7 +270,7 @@
       "doc-only"
     ],
     "cwd": "[START_DIR]/node.js",
-    "name": "build addons (2)"
+    "name": "build addons"
   },
   {
     "cmd": [],

@@ -142,7 +142,7 @@ def _build_and_test(api, goma_dir):
         )
 
         api.step(
-          'build addons', ['make', 'test-addons-clean'],
+          'clean addons', ['make', 'test-addons-clean'],
         )
 
         # TODO(machenbach): This contains all targets test-ci depends on.
