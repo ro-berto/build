@@ -92,7 +92,7 @@ AUX_BINARY_PACKAGES = {
       # The Git package installs its binaries into "bin/".
       cipd.CipdPackage(
           name='infra/git/${os=linux,mac}-${arch=386,amd64}',
-          version='version:2.17.0.chromium12'),
+          version='version:2.17.0.chromium14'),
 
       # Note: pinned to same version as *nix above, but kept separate because
       # this is a coincidence and not the norm.
