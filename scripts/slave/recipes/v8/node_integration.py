@@ -148,7 +148,6 @@ def _build_and_test(api, goma_dir):
           [
             'make', '-j8',
             'clear-stalled',
-            'test-addons-clean',
             'build-addons',
             'build-addons-napi',
             'doc-only',

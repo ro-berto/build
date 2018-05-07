@@ -257,7 +257,6 @@
       "make",
       "-j8",
       "clear-stalled",
-      "test-addons-clean",
       "build-addons",
       "build-addons-napi",
       "doc-only"
