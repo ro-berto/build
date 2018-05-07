@@ -70,7 +70,6 @@
     'chromium.clang': {},
     'chromium.goma': {},
     'chromium.mac': {},
-    'chromium.linux': {},
     'chromium.lkgr': {},
     'chromium.win': {},
     'chromium.fyi': {},

@@ -227,7 +227,6 @@ def main(argv):
       'master.chromium.infra': 'Infra',
       'master.chromium.infra.codesearch': 'InfraCodesearch',
       'master.chromium.infra.cron': 'InfraCron',
-      'master.chromium.linux': 'ChromiumLinux',
       'master.chromium.lkgr': 'ChromiumLKGR',
       'master.chromium.mac': 'ChromiumMac',
       'master.chromium.memory': 'ChromiumMemory',

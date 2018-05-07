@@ -20,7 +20,6 @@ MAIN_WATERFALL_MASTERS = [
     'master.chromium.chrome',
     'master.chromium.chromiumos',
     'master.chromium.gpu',
-    'master.chromium.linux',
     'master.chromium.mac',
     'master.chromium.memory',
     'master.chromium.webkit',
@@ -103,26 +102,6 @@ FAKE_BUILDERS = {
         'Mac Release (Intel)',
         'Mac Retina Debug (AMD)',
         'Mac Retina Release (AMD)',
-    ],
-    'master.chromium.linux': [
-        # These have been migrated to LUCI.
-        'Cast Audio Linux',
-        'Cast Linux',
-        'Fuchsia ARM64',
-        'Fuchsia ARM64 Cast Audio',
-        'Fuchsia x64',
-        'Fuchsia x64 Cast Audio',
-        'linux-gcc-rel',
-        'linux-ozone-rel',
-        'Leak Detection Linux',
-        'Linux Builder',
-        'Linux Builder (dbg)',
-        'Linux Builder (dbg)(32)',
-        'Linux Tests',
-        'Linux Tests (dbg)(1)',
-        'Linux Tests (dbg)(1)(32)',
-        # These are pure LUCI bots, no equivalent buildbot bot.
-        'linux-jumbo-rel',
     ],
     'master.chromium.mac': [
         # These have been migrated to LUCI.
