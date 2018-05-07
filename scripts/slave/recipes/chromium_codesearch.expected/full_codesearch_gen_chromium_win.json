@@ -210,13 +210,16 @@
   },
   {
     "cmd": [
-      "find",
+      "forfiles",
+      "/p",
       "[START_DIR]/src/out",
-      "-mtime",
-      "+7",
-      "-type",
-      "f",
-      "-delete"
+      "/s",
+      "/m",
+      "*",
+      "/d",
+      "-7",
+      "/c",
+      "\"cmd /c if @isdir==FALSE del @path\""
     ],
     "name": "delete old generated files"
   },

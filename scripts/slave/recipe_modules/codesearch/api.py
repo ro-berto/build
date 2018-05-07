@@ -16,14 +16,32 @@ class CodesearchApi(recipe_api.RecipeApi):
     }
 
   def cleanup_old_generated(self, age_days=7):
-    """Clean up old generated files.
+    """Clean up generated files older than the specified number of days.
 
     Args:
-      age_days: Ages in days on the form +days, e.g., '+30'.
+      age_days: Minimum age in days for files to delete (integer).
     """
-    self.m.step('delete old generated files',
-                ['find', self.m.path['checkout'].join('out'),
-                 '-mtime', ('+%d' % age_days), '-type', 'f', '-delete'])
+    if self.c.PLATFORM.startswith('win'):
+      # Flag explanations for the Windows command:
+      # /p <path>  -- Search files in the given path
+      # /s         -- Search recursively
+      # /m *       -- Use the search mask *. This includes files without an
+      #               extension (the default is *.*).
+      # /d -<age>  -- Find files last modified before <age> days ago
+      # /c <cmd>   -- Run <cmd> for each file. In our case we delete the file if
+      #               it's not a directory.
+      delete_command = ['forfiles', '/p', self.m.path['checkout'].join('out'),
+                        '/s', '/m', '*', '/d', ('-%d' % age_days),
+                        '/c', '"cmd /c if @isdir==FALSE del @path"']
+    else:
+      # Flag explanations for the Linux command:
+      # find <path>    -- Find files recursively in the given path
+      # -mtime +<age>  -- Find files last modified before <age> days ago
+      # -type f        -- Find files only (not directories)
+      # -delete        -- Delete the found files
+      delete_command = ['find', self.m.path['checkout'].join('out'),
+                        '-mtime', ('+%d' % age_days), '-type', 'f', '-delete']
+    self.m.step('delete old generated files', delete_command)
 
   def generate_compilation_database(self, targets, platform, mb_config_path=None):
     mastername = self.m.properties['mastername']

@@ -40,6 +40,16 @@ BUILDERS = freeze({
     'gen_repo_branch': 'master',
     'corpus': 'chromium-linux',
   },
+  'codesearch-gen-chromium-win': {
+    'compile_targets': [
+      'all',
+    ],
+    'package_filename': 'chromium-src',
+    'platform': 'win',
+    'sync_generated_files': True,
+    'gen_repo_branch': 'win',
+    'corpus': 'chromium-win',
+  },
 })
 
 PROPERTIES = {

@@ -17,7 +17,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@deadbeef"
+      "src@HEAD"
     ],
     "env_prefixes": {
       "PATH": [
@@ -31,7 +31,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"deadbeef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -210,27 +210,12 @@
   },
   {
     "cmd": [
-      "forfiles",
-      "/p",
-      "[START_DIR]/src/out",
-      "/s",
-      "/m",
-      "*",
-      "/d",
-      "-7",
-      "/c",
-      "\"cmd /c if @isdir==FALSE del @path\""
-    ],
-    "name": "delete old generated files"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[START_DIR]/src/tools/mb/mb.py",
       "gen",
       "-m",
-      "chromium.infra.codesearch",
+      "chromium.testing.master",
       "-b",
       "codesearch-gen-chromium-win",
       "--config-file",
@@ -455,7 +440,7 @@
       "--buildbot-buildername",
       "codesearch-gen-chromium-win",
       "--buildbot-mastername",
-      "chromium.infra.codesearch",
+      "chromium.testing.master",
       "--buildbot-slavename",
       "test_bot"
     ],
@@ -490,6 +475,21 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
+  },
+  {
+    "cmd": [
+      "forfiles",
+      "/p",
+      "[START_DIR]/src/out",
+      "/s",
+      "/m",
+      "*",
+      "/d",
+      "-7",
+      "/c",
+      "\"cmd /c if @isdir==FALSE del @path\""
+    ],
+    "name": "delete old generated files"
   },
   {
     "allow_subannotations": true,
@@ -784,7 +784,7 @@
       "--buildbot-buildername",
       "codesearch-gen-chromium-win",
       "--buildbot-mastername",
-      "chromium.infra.codesearch",
+      "chromium.testing.master",
       "--buildbot-slavename",
       "test_bot"
     ],
@@ -831,7 +831,7 @@
   {
     "cmd": [
       "cp",
-      "some compilation data",
+      "",
       "[START_DIR]/src/out/Debug/compile_commands.json"
     ],
     "name": "copy compilation database"
@@ -871,11 +871,9 @@
       "--path-to-archive-output",
       "[START_DIR]/src/out/Debug/index_pack_win_kythe.zip",
       "--corpus",
-      "chromium",
+      "chromium-win",
       "--revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--root",
-      "chromium-win"
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
     ],
     "name": "create kythe index pack"
   },
@@ -896,6 +894,112 @@
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/index_pack_win_kythe_170242.zip@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
+      "--path",
+      "[START_DIR]/generated",
+      "--url",
+      "https://chromium.googlesource.com/chromium/src/out"
+    ],
+    "name": "git setup"
+  },
+  {
+    "cmd": [
+      "git",
+      "retry",
+      "fetch",
+      "origin",
+      "win",
+      "--progress"
+    ],
+    "cwd": "[START_DIR]/generated",
+    "env": {
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:<PATH>"
+    },
+    "infra_step": true,
+    "name": "git fetch"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "FETCH_HEAD"
+    ],
+    "cwd": "[START_DIR]/generated",
+    "infra_step": true,
+    "name": "git checkout"
+  },
+  {
+    "cmd": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "[START_DIR]/generated",
+    "infra_step": true,
+    "name": "read revision",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "cwd": "[START_DIR]/generated",
+    "infra_step": true,
+    "name": "git clean"
+  },
+  {
+    "cmd": [
+      "git",
+      "config",
+      "user.email",
+      "git-generated-files-sync@chromium.org"
+    ],
+    "cwd": "[START_DIR]/generated",
+    "infra_step": true,
+    "name": "git config"
+  },
+  {
+    "cmd": [
+      "git",
+      "config",
+      "user.name",
+      "Automatic Generated Files Sync"
+    ],
+    "cwd": "[START_DIR]/generated",
+    "infra_step": true,
+    "name": "git config (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/sync_generated_files_codesearch.py",
+      "--message",
+      "Generated files from \"codesearch-gen-chromium-win\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--dest-branch",
+      "win",
+      "src/out",
+      "[START_DIR]/generated"
+    ],
+    "name": "sync generated files"
   },
   {
     "name": "$result",
