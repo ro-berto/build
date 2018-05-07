@@ -46,7 +46,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       goma_enable_localoutputcache = Single(bool, empty_val=False, required=False),
       goma_enable_localoutputcache_small = Single(bool, empty_val=False, required=False),
       goma_enable_global_file_id_cache = Single(bool, empty_val=False, required=False),
-      goma_rbe = Single(bool, empty_val=False, required=False),
       ninja_confirm_noop = Single(bool, empty_val=False, required=False),
       set_build_data_dir = Single(bool, empty_val=False, required=False),
       # TODO(tandrii): delete goma_high_parallel from here and use goma recipe
@@ -305,13 +304,6 @@ def goma_staging(c):
 
 @config_ctx()
 def goma_gce(c):
-  c.compile_py.goma_failfast = True
-  c.env.GOMA_SETTINGS_SERVER = (
-      'https://cxx-compiler-service.appspot.com/settings')
-
-@config_ctx()
-def goma_rbe(c):
-  c.compile_py.goma_rbe = True
   c.compile_py.goma_failfast = True
   c.env.GOMA_SETTINGS_SERVER = (
       'https://cxx-compiler-service.appspot.com/settings')

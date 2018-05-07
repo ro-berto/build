@@ -12,7 +12,6 @@ DEPS = [
   'chromite',
   'commit_position',
   'goma',
-  'puppet_service_account',
 
   'recipe_engine/context',
   'recipe_engine/file',

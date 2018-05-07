@@ -333,7 +333,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     build_exit_status = None
 
-    self.m.goma.start(env=goma_env, **kwargs)
+    self.m.goma.start(goma_env)
 
     try:
       if 'GOMA_USE_LOCAL' not in ninja_env:
@@ -408,10 +408,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       goma_env['GOMA_FAIL_FAST'] = 'true'
     else:
       goma_env['GOMA_ALLOWED_NETWORK_ERROR_DURATION'] = '1800'
-
-    if self.c.compile_py.goma_rbe:
-      goma_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
-          self.m.puppet_service_account.get_key_path('goma-rbe'))
 
     # TODO(crbug.com/810460): Remove the system python wrapping.
     optional_system_python = contextlib.contextmanager(
