@@ -401,12 +401,17 @@ class V8Api(recipe_api.RecipeApi):
     mastername = self.m.properties['mastername']
     buildername = self.m.properties['buildername']
     test_spec_file = self.m.path['checkout'].join(
-        'infra', 'testing', mastername + '.pyl')
+        'infra', 'testing', 'builders.pyl')
 
-    # Source-side test spec is opt-in. Just ignore it if the file doesn't
-    # exist for the current master.
+    # TODO(machenbach): Legacy fallback. Remove when v8-side has landed.
     if not self.m.path.exists(test_spec_file):
-      return EmptyTestSpec
+      test_spec_file = self.m.path['checkout'].join(
+          'infra', 'testing', mastername + '.pyl')
+
+      # Source-side test spec is opt-in. Just ignore it if the file doesn't
+      # exist for the current master.
+      if not self.m.path.exists(test_spec_file):
+        return EmptyTestSpec
 
     try:
       # Eval python literal file.
