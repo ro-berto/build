@@ -114,24 +114,15 @@ class V8Api(recipe_api.RecipeApi):
   VERSION_FILE = 'include/v8-version.h'
   EMPTY_TEST_SPEC = EmptyTestSpec
 
-  def apply_bot_config(self, builders=None, flattened_builders=None):
+  def apply_bot_config(self, flattened_builders):
     """Entry method for using the v8 api.
 
     Requires the presence of a bot_config dict for any master/builder pair.
     This bot_config will be used to refine other api methods.
     """
-    builders = builders or {}
-    flattened_builders = flattened_builders or {}
-    mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
-    if flattened_builders:
-      self.bot_config = flattened_builders.get(buildername)
-    else:  # pragma: no cover
-      master_dict = builders.get(mastername, {})
-      self.bot_config = master_dict.get('builders', {}).get(buildername)
-    assert self.bot_config, (
-        'Unrecognized builder name %r for master %r.' % (
-            buildername, mastername))
+    self.bot_config = flattened_builders.get(buildername)
+    assert self.bot_config, 'Unrecognized builder name %r .' % buildername
 
     kwargs = {}
     if self.m.properties.get('parent_build_config'):
@@ -396,20 +387,13 @@ class V8Api(recipe_api.RecipeApi):
     Returns: TestSpec object, filtered by interesting builders (current builder
         and all its triggered testers).
     """
-    mastername = self.m.properties['mastername']
     buildername = self.m.properties['buildername']
     test_spec_file = self.m.path['checkout'].join(
         'infra', 'testing', 'builders.pyl')
 
-    # TODO(machenbach): Legacy fallback. Remove when v8-side has landed.
+    # Fallback for branch builders.
     if not self.m.path.exists(test_spec_file):
-      test_spec_file = self.m.path['checkout'].join(
-          'infra', 'testing', mastername + '.pyl')
-
-      # Source-side test spec is opt-in. Just ignore it if the file doesn't
-      # exist for the current master.
-      if not self.m.path.exists(test_spec_file):
-        return EmptyTestSpec
+      return EmptyTestSpec
 
     try:
       # Eval python literal file.
@@ -423,8 +407,7 @@ class V8Api(recipe_api.RecipeApi):
           'Failed to parse test specification "%s": %s' % (test_spec_file, e))
 
     # Transform into object.
-    test_spec = TestSpec.from_python_literal(
-        full_test_spec, mastername, buildername)
+    test_spec = TestSpec.from_python_literal(full_test_spec, buildername)
 
     # Log test spec for debuggability.
     self.m.step.active_result.presentation.logs['test_spec'] = (
@@ -438,12 +421,10 @@ class V8Api(recipe_api.RecipeApi):
       return self._isolate_targets_cached
 
     if self.bot_config.get('enable_swarming', True):
-      mastername = self.m.properties['mastername']
       buildername = self.m.properties['buildername']
 
-      # Find tests to isolate on builders (requires builder and tester on same
-      # master).
-      for _, bot_config in iter_builder_set(mastername, buildername):
+      # Find tests to isolate on builders.
+      for _, bot_config in iter_builder_set(buildername):
         self._isolate_targets_cached.extend(
             isolate_targets_from_tests(
                 [test.name for test in bot_config.get('tests', [])]))

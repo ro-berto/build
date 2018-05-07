@@ -32,7 +32,7 @@ PROPERTIES = {
 
 def RunSteps(api, set_gclient_var):
   v8 = api.v8
-  v8.apply_bot_config(flattened_builders=v8.FLATTENED_BUILDERS)
+  v8.apply_bot_config(v8.FLATTENED_BUILDERS)
   v8.set_gclient_custom_var(set_gclient_var)
 
   # Opt out of using gyp environment variables.
@@ -514,7 +514,7 @@ def GenTests(api):
     # manually expanded to path in terms of builder_cache as it is done by the
     # bot_update.ensure_checkout step.
     api.path.exists(api.path['builder_cache'].join(
-        'V8_Mac64', 'v8', 'infra', 'testing', 'client.v8.pyl')) +
+        'V8_Mac64', 'v8', 'infra', 'testing', 'builders.pyl')) +
     api.override_step_data(
         'read test spec',
         api.v8.example_test_spec('V8 Mac64', test_spec),
@@ -542,7 +542,7 @@ def GenTests(api):
     # bot_update.ensure_checkout step.
     api.path.exists(api.path['builder_cache'].join(
         'V8_Linux___nosnap_builder', 'v8', 'infra', 'testing',
-        'client.v8.pyl')) +
+        'builders.pyl')) +
     api.override_step_data(
         'read test spec',
         api.v8.example_test_spec('V8 Linux - nosnap', test_spec),

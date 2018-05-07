@@ -354,18 +354,16 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     """
     return self.m.file.read_text('{"%s": %s}' % (builder, spec))
 
-  def example_parent_test_spec_properties(self, mastername, buildername, spec):
+  def example_parent_test_spec_properties(self, buildername, spec):
     """Properties dict containing an example parent_test_spec.
 
     Args:
-      mastername: Master name of the builder that should get this property.
       buildername: Name of the builder that should get this property.
       spec: The raw test spec pyl text.
     Returns: A dict with a parent_test_spec key set to a packed test spec.
     """
     return builders.TestSpec.from_python_literal(
         {buildername: ast.literal_eval(spec)},
-        mastername,
         buildername,
     ).as_properties_dict(buildername)
 
@@ -420,12 +418,12 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     bot_config = builders_list[buildername]
     v8_config_kwargs = bot_config.get('v8_config_kwargs', {})
     parent_buildername, parent_bot_config = (
-        builders.PARENT_MAP[mastername].get(buildername, (None, None)))
+        builders.PARENT_MAP.get(buildername, (None, None)))
     branch=self._get_test_branch_name(mastername, buildername)
 
     if parent_test_spec:
       kwargs.update(self.example_parent_test_spec_properties(
-          mastername, buildername, parent_test_spec))
+          buildername, parent_test_spec))
 
     if mastername.startswith('tryserver'):
       properties_fn = self.m.properties.tryserver

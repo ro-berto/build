@@ -154,13 +154,13 @@ class TestSpec(object):
     ]
 
   @staticmethod
-  def from_python_literal(full_test_spec, mastername, buildername):
+  def from_python_literal(full_test_spec, buildername):
     """Constructs a test spec from the raw V8-side pyl."""
     result = TestSpec()
     # Iterate over the current builder and all its triggered testers. Transform
     # the pyl structure into a test-step configuration with TestStepConfig
     # objects for all builders that apply.
-    for iter_buildername, _ in iter_builder_set(mastername, buildername):
+    for iter_buildername, _ in iter_builder_set(buildername):
       builder_spec = full_test_spec.get(iter_buildername)
       if builder_spec:
         result._test_spec[iter_buildername] = {
@@ -2700,23 +2700,21 @@ def iter_builders(recipe='v8'):
 
 
 # Map from mastername to map from buildername to its parent if specified.
-# The parent is encoded as a tuple of buildername,bot_config.
-PARENT_MAP = defaultdict(dict)
-for master, _, builder, bot_config in iter_builders():
+# The parent is encoded as a tuple of (buildername, bot_config).
+PARENT_MAP = {}
+for _, _, builder, bot_config in iter_builders():
   for triggered in bot_config.get('triggers', []):
-    PARENT_MAP[master][triggered] = (builder, bot_config)
+    PARENT_MAP[triggered] = (builder, bot_config)
 
 
-def iter_builder_set(mastername, buildername):
+def iter_builder_set(buildername):
   """Iterates tuples of (buildername, bot_config).
 
   Args:
-    mastername: Limits iteration to builders on the same master.
-    buildername: Limits iteration to this builder and all its children on the
-        same master (triggered testers).
+    buildername: Limits iteration to this builder and all its children
+        (triggered testers).
   """
-  for it_mastername, _, it_buildername, bot_config in iter_builders('v8'):
-    parent, _ = PARENT_MAP[mastername].get(it_buildername, (None, None))
-    if (it_mastername == mastername and
-        (parent == buildername or it_buildername == buildername)):
+  for _, _, it_buildername, bot_config in iter_builders('v8'):
+    parent, _ = PARENT_MAP.get(it_buildername, (None, None))
+    if parent == buildername or it_buildername == buildername:
       yield it_buildername, bot_config

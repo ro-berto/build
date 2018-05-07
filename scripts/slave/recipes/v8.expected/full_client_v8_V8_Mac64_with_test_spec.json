@@ -7,7 +7,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[BUILDER_CACHE]/V8_Mac64/v8/infra/testing/client.v8.pyl",
+      "[BUILDER_CACHE]/V8_Mac64/v8/infra/testing/builders.pyl",
       "/path/to/tmp/"
     ],
     "infra_step": true,
