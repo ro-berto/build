@@ -163,6 +163,7 @@ FAKE_BUILDERS = {
         'fuchsia_x64',
         'fuchsia_x64_cast_audio',
         'leak_detection_linux',
+        'linux-blink-gen-property-trees',
         'linux-blink-heap-incremental-marking',
         'linux-blink-heap-verification-try',
         'linux-gcc-rel',

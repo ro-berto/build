@@ -325,6 +325,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'linux-annotator-rel',
       }),
+      'linux-blink-gen-property-trees': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'linux-blink-gen-property-trees',
+      }),
       'linux-blink-heap-incremental-marking': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'linux-blink-heap-incremental-marking',
