@@ -144,18 +144,9 @@ class V8Api(recipe_api.RecipeApi):
         bot_config['v8_config_kwargs'][k] = v
     return bot_config
 
-  def apply_bot_config(self, bot_config=None, flattened_builders=None):
-    """Entry method for using the v8 api.
-
-    Requires the presence of a bot_config dict for any master/builder pair.
-    This bot_config will be used to refine other api methods.
-    """
-    if bot_config is not None:
-      self.bot_config = bot_config
-    else:  # pragma: no cover
-      # TODO(machenbach): Remove after changing internal.
-      self.bot_config = flattened_builders.get(
-          self.m.properties.get('buildername'), {})
+  def apply_bot_config(self, bot_config):
+    """Entry method for using the v8 api."""
+    self.bot_config = bot_config
 
     kwargs = {}
     if self.m.properties.get('parent_build_config'):
