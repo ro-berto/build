@@ -121,8 +121,7 @@ class V8Api(recipe_api.RecipeApi):
     This bot_config will be used to refine other api methods.
     """
     buildername = self.m.properties.get('buildername')
-    self.bot_config = flattened_builders.get(buildername)
-    assert self.bot_config, 'Unrecognized builder name %r .' % buildername
+    self.bot_config = flattened_builders.get(buildername, {})
 
     kwargs = {}
     if self.m.properties.get('parent_build_config'):

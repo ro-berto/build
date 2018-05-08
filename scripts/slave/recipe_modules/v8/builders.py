@@ -1943,9 +1943,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
-      'v8_linux_rel_ng_triggered': {
-        'testing': {'platform': 'linux'},
-      },
       'v8_linux_verify_csa_rel_ng': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
@@ -2707,6 +2704,16 @@ for _, _, builder, bot_config in iter_builders():
     PARENT_MAP[triggered] = (builder, bot_config)
 
 
+# Map from builder to a list of itself and all it's triggered children.
+# The lists are comprised of tubles of (buildername, bot_config).
+BUILDER_SETS = {}
+for _, _, builder, bot_config in iter_builders():
+  BUILDER_SETS[builder] = [(builder, bot_config)]
+  for triggered in bot_config.get('triggers', []):
+    BUILDER_SETS[builder].append(
+        (triggered, FLATTENED_BUILDERS.get(triggered, {})))
+
+
 def iter_builder_set(buildername):
   """Iterates tuples of (buildername, bot_config).
 
@@ -2714,7 +2721,6 @@ def iter_builder_set(buildername):
     buildername: Limits iteration to this builder and all its children
         (triggered testers).
   """
-  for _, _, it_buildername, bot_config in iter_builders('v8'):
-    parent, _ = PARENT_MAP.get(it_buildername, (None, None))
-    if parent == buildername or it_buildername == buildername:
-      yield it_buildername, bot_config
+  for buildername, bot_config in BUILDER_SETS.get(
+      buildername, [(buildername, {})]):
+    yield buildername, bot_config

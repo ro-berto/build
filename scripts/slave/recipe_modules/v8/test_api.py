@@ -414,8 +414,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
 
   def test(self, mastername, buildername, suffix='', parent_test_spec=None,
            **kwargs):
-    builders_list = builders.BUILDERS[mastername]['builders']
-    bot_config = builders_list[buildername]
+    bot_config = builders.FLATTENED_BUILDERS.get(buildername, {})
     v8_config_kwargs = bot_config.get('v8_config_kwargs', {})
     parent_buildername, parent_bot_config = (
         builders.PARENT_MAP.get(buildername, (None, None)))
@@ -444,7 +443,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
             **kwargs
         ) +
         self.m.platform(
-            bot_config['testing']['platform'],
+            bot_config.get('testing', {}).get('platform', 'linux'),
             v8_config_kwargs.get('TARGET_BITS', 64),
         )
     )
