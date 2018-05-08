@@ -145,8 +145,10 @@ class V8Api(recipe_api.RecipeApi):
     # Infer gclient variable that instructs sysroot download.
     if (self.m.chromium.c.TARGET_PLATFORM != 'android' and
         self.m.chromium.c.TARGET_ARCH == 'arm'):
-      target_cpu = 'arm64' if self.m.chromium.c.TARGET_BITS == 64 else 'arm'
-      self.m.gclient.c.target_cpu.add(target_cpu)
+      # This grabs both sysroots to not be dependent on additional bitness
+      # setting.
+      self.m.gclient.c.target_cpu.add('arm')
+      self.m.gclient.c.target_cpu.add('arm64')
 
     if self.bot_config.get('enable_swarming', True):
       self.m.gclient.c.got_revision_reverse_mapping[

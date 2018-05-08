@@ -167,7 +167,7 @@ def GenTests(api):
     if buildername == 'V8 Official Arm32':
       # Make sure bot_update specifies target_cpu on Arm builders.
       test += api.v8.check_in_param(
-          'bot_update', '--spec-path', 'target_cpu = [\'arm\']')
+          'bot_update', '--spec-path', 'target_cpu = [\'arm\', \'arm64\']')
 
     test += api.post_process(Filter(
         'gn', 'compile', 'filter build files', 'zipping', 'gsutil upload',
