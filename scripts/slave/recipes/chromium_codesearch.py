@@ -246,6 +246,15 @@ def GenTests(api):
 
   yield (
     api.test(
+        'full_%s_delete_generated_files_fail' %
+        _sanitize_nonalpha('codesearch-gen-chromium-win')) +
+    api.step_data('delete old generated files', retcode=1) +
+    api.properties.generic(buildername='codesearch-gen-chromium-win',
+                           mastername='chromium.infra.codesearch')
+  )
+
+  yield (
+    api.test(
         'full_%s_compile_fail' %
         _sanitize_nonalpha('codesearch-gen-chromium-linux')) +
     api.step_data('generate compilation database for linux',

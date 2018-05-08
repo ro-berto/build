@@ -1482,7 +1482,7 @@ be undone.
 
 #### **class [CodesearchApi](/scripts/slave/recipe_modules/codesearch/api.py#12)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#199)(self):**
+&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#206)(self):**
 
 Check out the generated files repo and sync the generated files
 into this checkout.
@@ -1494,30 +1494,30 @@ Clean up generated files older than the specified number of days.
 Args:
   age_days: Minimum age in days for files to delete (integer).
 
-&mdash; **def [copy\_compilation\_output](/scripts/slave/recipe_modules/codesearch/api.py#83)(self, result):**
+&mdash; **def [copy\_compilation\_output](/scripts/slave/recipe_modules/codesearch/api.py#90)(self, result):**
 
 Copy the created output to the correct directory.
 
 Args:
   result: Result output of the generated compilation database.
 
-&mdash; **def [create\_and\_upload\_kythe\_index\_pack](/scripts/slave/recipe_modules/codesearch/api.py#150)(self):**
+&mdash; **def [create\_and\_upload\_kythe\_index\_pack](/scripts/slave/recipe_modules/codesearch/api.py#157)(self):**
 
 Create the kythe index pack and upload it to google storage.
     
 
-&mdash; **def [filter\_compilation](/scripts/slave/recipe_modules/codesearch/api.py#93)(self, result):**
+&mdash; **def [filter\_compilation](/scripts/slave/recipe_modules/codesearch/api.py#100)(self, result):**
 
 Filter out duplicate compilation units.
 
 Args:
   result: Result output of the generated compilation database.
 
-&mdash; **def [generate\_compilation\_database](/scripts/slave/recipe_modules/codesearch/api.py#46)(self, targets, platform, mb_config_path=None):**
+&mdash; **def [generate\_compilation\_database](/scripts/slave/recipe_modules/codesearch/api.py#53)(self, targets, platform, mb_config_path=None):**
 
 &mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/codesearch/api.py#13)(self):**
 
-&mdash; **def [run\_clang\_tool](/scripts/slave/recipe_modules/codesearch/api.py#107)(self):**
+&mdash; **def [run\_clang\_tool](/scripts/slave/recipe_modules/codesearch/api.py#114)(self):**
 
 Download and run the clang tool.
     

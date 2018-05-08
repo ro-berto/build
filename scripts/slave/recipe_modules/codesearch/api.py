@@ -33,6 +33,13 @@ class CodesearchApi(recipe_api.RecipeApi):
       delete_command = ['forfiles', '/p', self.m.path['checkout'].join('out'),
                         '/s', '/m', '*', '/d', ('-%d' % age_days),
                         '/c', '"cmd /c if @isdir==FALSE del @path"']
+      try:
+        self.m.step('delete old generated files', delete_command)
+      except self.m.step.StepFailure as f:
+        # On Windows, forfiles returns an error code if it found no files. We
+        # don't want to fail if this happens, so convert it to a warning.
+        self.m.step.active_result.presentation.step_text = f.reason_message()
+        self.m.step.active_result.presentation.status = self.m.step.WARNING
     else:
       # Flag explanations for the Linux command:
       # find <path>    -- Find files recursively in the given path
@@ -41,7 +48,7 @@ class CodesearchApi(recipe_api.RecipeApi):
       # -delete        -- Delete the found files
       delete_command = ['find', self.m.path['checkout'].join('out'),
                         '-mtime', ('+%d' % age_days), '-type', 'f', '-delete']
-    self.m.step('delete old generated files', delete_command)
+      self.m.step('delete old generated files', delete_command)
 
   def generate_compilation_database(self, targets, platform, mb_config_path=None):
     mastername = self.m.properties['mastername']

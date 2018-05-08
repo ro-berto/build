@@ -125,3 +125,11 @@ def GenTests(api):
   for buildername in BUILDERS:
     yield (api.test('%s_test_basic' % sanitize(buildername)) +
            api.properties.generic(buildername=buildername))
+
+  yield (
+    api.test(
+        '%s_delete_generated_files_fail' %
+        sanitize('codesearch-gen-chromium-win')) +
+    api.step_data('delete old generated files', retcode=1) +
+    api.properties.generic(buildername='codesearch-gen-chromium-win')
+  )
