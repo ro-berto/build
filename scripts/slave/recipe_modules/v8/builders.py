@@ -1955,9 +1955,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
-      'v8_linux_verify_csa_rel_ng_triggered': {
-        'testing': {'platform': 'linux'},
-      },
       'v8_linux_nodcheck_rel_ng': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
@@ -1968,9 +1965,6 @@ BUILDERS = {
         'triggers': [
           'v8_linux_nodcheck_rel_ng_triggered',
         ],
-        'testing': {'platform': 'linux'},
-      },
-      'v8_linux_nodcheck_rel_ng_triggered': {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_dbg_ng': {
@@ -1985,9 +1979,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
-      'v8_linux_dbg_ng_triggered': {
-        'testing': {'platform': 'linux'},
-      },
       'v8_linux_noi18n_rel_ng': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
@@ -1998,9 +1989,6 @@ BUILDERS = {
         'triggers': [
           'v8_linux_noi18n_rel_ng_triggered',
         ],
-        'testing': {'platform': 'linux'},
-      },
-      'v8_linux_noi18n_rel_ng_triggered': {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_nosnap_rel': {
@@ -2070,9 +2058,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
-      'v8_linux64_dbg_ng_triggered': {
-        'testing': {'platform': 'linux'},
-      },
       'v8_linux64_gcc_compile_dbg': {
         'chromium_apply_config': [
           'gcc', 'goma', 'mb'],
@@ -2095,9 +2080,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
-      'v8_linux64_rel_ng_triggered': {
-        'testing': {'platform': 'linux'},
-      },
       'v8_linux64_fyi_rel_ng': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
@@ -2110,9 +2092,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
-      'v8_linux64_fyi_rel_ng_triggered': {
-        'testing': {'platform': 'linux'},
-      },
       'v8_linux64_verify_csa_rel_ng': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
@@ -2123,9 +2102,6 @@ BUILDERS = {
         'triggers': [
           'v8_linux64_verify_csa_rel_ng_triggered',
         ],
-        'testing': {'platform': 'linux'},
-      },
-      'v8_linux64_verify_csa_rel_ng_triggered': {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_gc_stress_dbg': {
@@ -2154,9 +2130,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
-      'v8_linux64_asan_rel_ng_triggered': {
-        'testing': {'platform': 'linux'},
-      },
       'v8_linux64_cfi_rel_ng': {
         'chromium_apply_config': [
           'clang',
@@ -2170,9 +2143,6 @@ BUILDERS = {
         'triggers': [
           'v8_linux64_cfi_rel_ng_triggered',
         ],
-        'testing': {'platform': 'linux'},
-      },
-      'v8_linux64_cfi_rel_ng_triggered': {
         'testing': {'platform': 'linux'},
       },
       'v8_linux64_jumbo_compile_rel': {
@@ -2240,9 +2210,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
-      'v8_linux64_ubsan_rel_ng_triggered': {
-        'testing': {'platform': 'linux'},
-      },
       'v8_linux64_sanitizer_coverage_rel': {
         'gclient_apply_config': ['llvm_compiler_rt'],
         'chromium_apply_config': [
@@ -2307,9 +2274,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'win'},
       },
-      'v8_win_rel_ng_triggered': {
-        'testing': {'platform': 'linux'},
-      },
       'v8_win_nosnap_shared_rel_ng': {
         'chromium_apply_config': [
           'default_compiler',
@@ -2344,9 +2308,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'win'},
       },
-      'v8_win64_asan_rel_ng_triggered': {
-        'testing': {'platform': 'linux'},
-      },
       'v8_win64_msvc_compile_rel': {
         'chromium_apply_config': [
           'default_compiler',
@@ -2374,9 +2335,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'win'},
       },
-      'v8_win64_msvc_rel_ng_triggered': {
-        'testing': {'platform': 'linux'},
-      },
       'v8_win64_rel_ng': {
         'chromium_apply_config': [
           'default_compiler',
@@ -2391,9 +2349,6 @@ BUILDERS = {
           'v8_win64_rel_ng_triggered',
         ],
         'testing': {'platform': 'win'},
-      },
-      'v8_win64_rel_ng_triggered': {
-        'testing': {'platform': 'linux'},
       },
       'v8_win64_dbg': {
         'chromium_apply_config': [
@@ -2427,9 +2382,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'mac'},
       },
-      'v8_mac64_rel_ng_triggered': {
-        'testing': {'platform': 'linux'},
-      },
       'v8_mac64_dbg_ng': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
@@ -2441,9 +2393,6 @@ BUILDERS = {
           'v8_mac64_dbg_ng_triggered',
         ],
         'testing': {'platform': 'mac'},
-      },
-      'v8_mac64_dbg_ng_triggered': {
-        'testing': {'platform': 'linux'},
       },
       'v8_mac64_gc_stress_dbg': {
         'chromium_apply_config': [
@@ -2489,9 +2438,6 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
-      'v8_linux_arm_rel_ng_triggered': {
-        'testing': {'platform': 'linux'},
-      },
       'v8_linux_arm_dbg': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
@@ -2517,9 +2463,6 @@ BUILDERS = {
         'triggers': [
           'v8_linux_arm64_rel_ng_triggered',
         ],
-        'testing': {'platform': 'linux'},
-      },
-      'v8_linux_arm64_rel_ng_triggered': {
         'testing': {'platform': 'linux'},
       },
       'v8_linux_arm64_dbg': {
