@@ -25,11 +25,13 @@
       "[START_DIR]\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
-      "https://chromium-swarm.appspot.com",
+      "https://chrome-swarming.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Perf/1234\", \"tasks\": {\"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Perf/1234:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Perf/1234:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}",
+      "{\"base_task_name\": \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Perf/1234\", \"tasks\": {\"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Perf/1234:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chrome-swarming.appspot.com/user/task/10000\"}, \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Perf/1234:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chrome-swarming.appspot.com/user/task/10100\"}}}",
+      "--auth-service-account-json",
+      "C:\\creds\\service_accounts\\service-account-chrome-perf-buildbot.json",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -159,9 +161,9 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0@https://chrome-swarming.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
+      "@@@STEP_LINK@shard #1@https://chrome-swarming.appspot.com/user/task/10100@@@"
     ]
   }
 ]

@@ -226,7 +226,8 @@ _AddIsolatedTestSpec('Android Nexus6 WebView Perf', 'android-webview-nexus6',
 
 _AddIsolatedTestSpec('Win 10 High-DPI Perf', 'win-high-dpi', 'win',
                       use_private_swarming_server=True)
-_AddIsolatedTestSpec('Win 10 Perf', 'chromium-rel-win10', 'win')
+_AddIsolatedTestSpec('Win 10 Perf', 'chromium-rel-win10', 'win',
+                      use_private_swarming_server=True)
 _AddIsolatedTestSpec('Win 7 Perf', 'chromium-rel-win7-dual', 'win',
                      target_bits=32)
 _AddIsolatedTestSpec('Win 7 Intel GPU Perf', 'chromium-rel-win7-gpu-intel',

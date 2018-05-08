@@ -402,7 +402,7 @@
       "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
-      "https://chromium-swarm.appspot.com",
+      "https://chrome-swarming.appspot.com",
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--priority",
@@ -437,6 +437,8 @@
       "--named-cache",
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
+      "--auth-service-account-json",
+      "C:\\creds\\service_accounts\\service-account-chrome-perf-buildbot.json",
       "--tag",
       "build_is_experimental:false",
       "--tag",
@@ -500,18 +502,18 @@
       "@@@STEP_LOG_LINE@json.output@    \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Perf/1234:2:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chrome-swarming.appspot.com/user/task/10000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Perf/1234:2:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chrome-swarming.appspot.com/user/task/10100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
+      "@@@STEP_LINK@shard #0@https://chrome-swarming.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #1@https://chrome-swarming.appspot.com/user/task/10100@@@"
     ]
   },
   {
@@ -540,11 +542,13 @@
       "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
-      "https://chromium-swarm.appspot.com",
+      "https://chrome-swarming.appspot.com",
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Perf/1234\", \"tasks\": {\"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Perf/1234:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Perf/1234:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}",
+      "{\"base_task_name\": \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Perf/1234\", \"tasks\": {\"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Perf/1234:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chrome-swarming.appspot.com/user/task/10000\"}, \"benchmark on Intel GPU on Windows/Windows-10-10586/eeeeeeeeee/Win 10 Perf/1234:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chrome-swarming.appspot.com/user/task/10100\"}}}",
+      "--auth-service-account-json",
+      "C:\\creds\\service_accounts\\service-account-chrome-perf-buildbot.json",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -677,9 +681,9 @@
       "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
       "@@@STEP_LOG_END@chartjson_info@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0@https://chrome-swarming.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
+      "@@@STEP_LINK@shard #1@https://chrome-swarming.appspot.com/user/task/10100@@@"
     ]
   },
   {
