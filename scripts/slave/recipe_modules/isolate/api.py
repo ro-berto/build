@@ -98,6 +98,7 @@ class IsolateApi(recipe_api.RecipeApi):
 
   def isolate_tests(self, build_dir, targets=None, verbose=False,
                     set_swarm_hashes=True, use_exparchive=False,
+                    swarm_hashes_property_name='swarm_hashes',
                     **kwargs):
     """Archives prepared tests in |build_dir| to isolate server.
 
@@ -226,7 +227,8 @@ class IsolateApi(recipe_api.RecipeApi):
         self._isolated_tests = swarm_hashes
 
       if set_swarm_hashes:
-        step_result.presentation.properties['swarm_hashes'] = swarm_hashes
+        step_result.presentation.properties[
+            swarm_hashes_property_name] = swarm_hashes
 
       missing = sorted(
           t for t, h in self._isolated_tests.iteritems() if not h)
