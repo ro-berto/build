@@ -273,7 +273,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         # TODO(machenbach): Get presubmit on swarming. Currently this builder
         # needs to upload a legacy build because of presubmit. It currently
@@ -297,7 +296,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
         },
         'testing': {'platform': 'linux'},
         'triggers': [
@@ -310,7 +308,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'testing': {'platform': 'linux'},
         'triggers': [
@@ -322,7 +319,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
         },
         'testing': {'platform': 'linux'},
         'triggers': [
@@ -399,7 +395,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'shared_library', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'tests': [V8Testing, Test262, Mozilla],
         'testing': {'platform': 'linux'},
@@ -429,7 +424,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'enable_swarming': False,
         'tests': [V8Testing],
@@ -441,7 +435,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
         },
         'tests': [V8Testing, Mozilla, Test262],
         'variants': V8Variant('default'),
@@ -452,7 +445,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
@@ -463,7 +455,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'linux'},
         'track_build_dependencies': True,
@@ -482,7 +473,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'linux'},
         'triggers': [
@@ -496,7 +486,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'linux'},
         'triggers': [
@@ -549,7 +538,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
@@ -564,7 +552,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
@@ -574,7 +561,6 @@ BUILDERS = {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'linux'},
       },
@@ -582,7 +568,6 @@ BUILDERS = {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'linux'},
       },
@@ -590,7 +575,6 @@ BUILDERS = {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'linux'},
       },
@@ -598,7 +582,6 @@ BUILDERS = {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'linux'},
       },
@@ -611,7 +594,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'binary_size_tracking': {
           'path_pieces_list': [['d8.exe']],
@@ -630,7 +612,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
         },
         'testing': {'platform': 'win'},
         'triggers': [
@@ -654,7 +635,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'tests': [V8Testing(2)],
         'variants': V8Variant('default'),
@@ -684,7 +664,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -708,7 +687,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -728,7 +706,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -746,7 +723,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'binary_size_tracking': {
           'path_pieces_list': [['d8']],
@@ -768,7 +744,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'tests': [
           V8Testing(3),
@@ -798,7 +773,6 @@ BUILDERS = {
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'tests': [D8Testing(4)],
         'swarming_dimensions': {
@@ -816,7 +790,6 @@ BUILDERS = {
         'chromium_apply_config': ['gcc', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'enable_swarming': False,
         'tests': [V8Testing],
@@ -826,7 +799,6 @@ BUILDERS = {
         'chromium_apply_config': ['gcc', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'enable_swarming': False,
         'testing': {'platform': 'linux'},
@@ -835,7 +807,6 @@ BUILDERS = {
         'chromium_apply_config': ['clang', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'tests': [
           V8Testing(2),
@@ -847,7 +818,6 @@ BUILDERS = {
         'chromium_apply_config': ['clang', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'tests': [
           V8Testing(5),
@@ -862,7 +832,6 @@ BUILDERS = {
         'v8_apply_config': ['stress_incremental_marking'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'tests': [
           V8Testing(4),
@@ -881,7 +850,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'tests': [
           V8Testing(4),
@@ -894,7 +862,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'tests': [
           V8Testing,
@@ -910,7 +877,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
@@ -919,7 +885,6 @@ BUILDERS = {
         'chromium_apply_config': ['clang', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'tests': [V8Testing(5)],
         'swarming_dimensions': {
@@ -932,7 +897,6 @@ BUILDERS = {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'tests': [V8Testing(5)],
         'swarming_dimensions': {
@@ -945,7 +909,6 @@ BUILDERS = {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
           'TARGET_PLATFORM': 'fuchsia',
         },
         'testing': {'platform': 'linux'},
@@ -954,7 +917,6 @@ BUILDERS = {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
           'TARGET_PLATFORM': 'fuchsia',
         },
         'testing': {'platform': 'linux'},
@@ -973,7 +935,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'gcov_coverage_folder': 'linux64_gcov_rel',
         'enable_swarming': False,
@@ -986,7 +947,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
         },
         'testing': {'platform': 'linux'},
       },
@@ -995,7 +955,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'enable_swarming': False,
         'tests': [D8Testing, Benchmarks, Mozilla],
@@ -1006,7 +965,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
         },
         'enable_swarming': False,
         'tests': [V8Testing],
@@ -1027,7 +985,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-asan',
@@ -1047,7 +1004,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-asan',
@@ -1067,7 +1023,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'linux'},
         'triggers': [
@@ -1083,7 +1038,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'linux'},
         'triggers': [
@@ -1100,7 +1054,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-asan',
@@ -1118,7 +1071,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-asan',
@@ -1136,7 +1088,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-asan',
@@ -1154,7 +1105,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
         },
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-asan',
@@ -1172,7 +1122,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
         },
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-asan',
@@ -1189,7 +1138,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-cfi',
@@ -1206,7 +1154,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-msan',
@@ -1223,7 +1170,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-msan',
@@ -1240,7 +1186,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'triggers': [
           'V8 NumFuzz - TSAN',
@@ -1256,7 +1201,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-ubsan',
@@ -1273,7 +1217,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-asan',
@@ -1290,7 +1233,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'cf_archive_build': True,
         'cf_gs_bucket': 'v8-asan',
@@ -1307,7 +1249,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'cf_archive_build': True,
         'cf_archive_bitness': 64,
@@ -1325,7 +1266,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'cf_archive_build': True,
         'cf_archive_bitness': 64,
@@ -1496,7 +1436,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
         },
         'binary_size_tracking': {
           'path_pieces_list': [['d8']],
@@ -1514,7 +1453,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
         },
         'testing': {'platform': 'linux'},
         'triggers': [
@@ -1528,7 +1466,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
           'TARGET_PLATFORM': 'android',
         },
         'binary_size_tracking': {
@@ -1598,7 +1535,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'tests': [
           V8Testing(4),
@@ -1620,7 +1556,6 @@ BUILDERS = {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
         },
         'tests': [
           V8Testing(5),
@@ -1646,7 +1581,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 64,
           'TARGET_PLATFORM': 'android',
         },
         'binary_size_tracking': {
@@ -1661,7 +1595,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'tests': [
           V8Testing(3),
@@ -1676,7 +1609,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'tests': [
           V8Testing(6),
@@ -1692,7 +1624,6 @@ BUILDERS = {
         'v8_apply_config': ['gc_stress', 'verify_heap_skip_remembered_set'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'swarming_task_attrs': {
           'expiration': 4 * 60 * 60,
@@ -1708,7 +1639,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'mips',
-          'TARGET_BITS': 32,
         },
         'enable_swarming': False,
         'should_upload_build': True,
@@ -1743,7 +1673,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'testing': {'platform': 'linux'},
         'triggers': [
@@ -1755,7 +1684,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'linux'},
         'triggers': [
@@ -1778,7 +1706,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
@@ -1789,7 +1716,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
@@ -1801,7 +1727,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
@@ -1812,7 +1737,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
@@ -1926,7 +1850,6 @@ BUILDERS = {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
           'TARGET_PLATFORM': 'fuchsia',
         },
         'testing': {'platform': 'linux'},
@@ -1936,7 +1859,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'triggers': [
           'v8_linux_rel_ng_triggered',
@@ -1948,7 +1870,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'triggers': [
           'v8_linux_verify_csa_rel_ng_triggered',
@@ -1960,7 +1881,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'triggers': [
           'v8_linux_nodcheck_rel_ng_triggered',
@@ -1972,7 +1892,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
         },
         'triggers': [
           'v8_linux_dbg_ng_triggered',
@@ -1984,7 +1903,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'triggers': [
           'v8_linux_noi18n_rel_ng_triggered',
@@ -1996,7 +1914,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'tests': [V8Testing(4)],
         'variants': V8Variant('default'),
@@ -2007,7 +1924,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
         },
         'tests': [V8Testing(5)],
         'variants': V8Variant('default'),
@@ -2021,7 +1937,6 @@ BUILDERS = {
           'gcc', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'enable_swarming': False,
         'testing': {'platform': 'linux'},
@@ -2031,7 +1946,6 @@ BUILDERS = {
           'gcc', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'enable_swarming': False,
         'tests': [V8Testing],
@@ -2042,7 +1956,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'testing': {'platform': 'linux'},
       },
@@ -2051,7 +1964,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'triggers': [
           'v8_linux64_dbg_ng_triggered',
@@ -2063,7 +1975,6 @@ BUILDERS = {
           'gcc', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'enable_swarming': False,
         'testing': {'platform': 'linux'},
@@ -2073,7 +1984,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'triggers': [
           'v8_linux64_rel_ng_triggered',
@@ -2085,7 +1995,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'triggers': [
           'v8_linux64_fyi_rel_ng_triggered',
@@ -2097,7 +2006,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'triggers': [
           'v8_linux64_verify_csa_rel_ng_triggered',
@@ -2110,7 +2018,6 @@ BUILDERS = {
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
         },
         'tests': [D8Testing(5)],
         'testing': {'platform': 'linux'},
@@ -2123,7 +2030,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'triggers': [
           'v8_linux64_asan_rel_ng_triggered',
@@ -2138,7 +2044,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'triggers': [
           'v8_linux64_cfi_rel_ng_triggered',
@@ -2149,7 +2054,6 @@ BUILDERS = {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'linux'},
       },
@@ -2157,7 +2061,6 @@ BUILDERS = {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'linux'},
       },
@@ -2169,7 +2072,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'tests': [
           V8Testing(5),
@@ -2185,7 +2087,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'tests': [
           V8Testing(5),
@@ -2203,7 +2104,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'triggers': [
           'v8_linux64_ubsan_rel_ng_triggered',
@@ -2219,7 +2119,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'sanitizer_coverage_folder': 'linux64',
         'tests': [
@@ -2235,7 +2134,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
         },
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -2255,7 +2153,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
         },
         'testing': {'platform': 'win'},
       },
@@ -2267,7 +2164,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'triggers': [
           'v8_win_rel_ng_triggered',
@@ -2283,7 +2179,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'triggers': [
           'v8_win_nosnap_shared_rel_ng_triggered',
@@ -2301,7 +2196,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'triggers': [
           'v8_win64_asan_rel_ng_triggered',
@@ -2316,7 +2210,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'win'},
       },
@@ -2328,7 +2221,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'triggers': [
           'v8_win64_msvc_rel_ng_triggered',
@@ -2343,7 +2235,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'triggers': [
           'v8_win64_rel_ng_triggered',
@@ -2358,7 +2249,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -2375,7 +2265,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'triggers': [
           'v8_mac64_rel_ng_triggered',
@@ -2387,7 +2276,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'triggers': [
           'v8_mac64_dbg_ng_triggered',
@@ -2400,7 +2288,6 @@ BUILDERS = {
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'tests': [D8Testing(4)],
         'swarming_dimensions': {
@@ -2417,7 +2304,6 @@ BUILDERS = {
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'tests': [V8Testing(4)],
         'swarming_dimensions': {
@@ -2431,7 +2317,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'triggers': [
           'v8_linux_arm_rel_ng_triggered',
@@ -2443,7 +2328,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
         },
         'tests': [
           V8Testing(5),
@@ -2458,7 +2342,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'triggers': [
           'v8_linux_arm64_rel_ng_triggered',
@@ -2470,7 +2353,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'tests': [
           V8Testing(4),
@@ -2486,7 +2368,6 @@ BUILDERS = {
         'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
         },
         'tests': [D8Testing(6)],
         'testing': {'platform': 'linux'},
@@ -2500,7 +2381,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
           'TARGET_PLATFORM': 'android',
         },
         'testing': {'platform': 'linux'},
@@ -2510,7 +2390,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'mips',
-          'TARGET_BITS': 32,
         },
         'enable_swarming': False,
         'testing': {'platform': 'linux'},
@@ -2520,7 +2399,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
         },
         'testing': {'platform': 'linux'},
       },
@@ -2529,7 +2407,6 @@ BUILDERS = {
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
         },
         'testing': {'platform': 'linux'},
       },
@@ -2562,7 +2439,6 @@ def AddBranchBuilder(name, build_config, bits, presubmit=False,
     'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
     'v8_config_kwargs': {
       'BUILD_CONFIG': build_config,
-      'TARGET_BITS': bits,
     },
     'tests': tests,
     'testing': {'platform': 'linux'},
