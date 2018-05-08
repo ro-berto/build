@@ -1503,7 +1503,7 @@ BUILDERS = {
         'v8_apply_config': ['verify_heap_skip_remembered_set'],
         'tests': [
           V8Testing(3),
-          OptimizeForSize,
+          OptimizeForSize(2),
         ],
         'variants': V8Variant('default'),
         'swarming_task_attrs': {
