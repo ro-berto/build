@@ -122,11 +122,8 @@ FAKE_BUILDERS = {
     ],
     'master.chromium.win': [
         # These have been migrated to LUCI.
-        'Win x64 Builder',
         'Win Builder (dbg)',
         'Win7 Tests (dbg)(1)',
-        'Win 7 Tests x64 (1)',
-        'Win10 Tests x64',
         'Win10 Tests x64 (dbg)',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'win-jumbo-rel',
@@ -138,8 +135,6 @@ FAKE_BUILDERS = {
         'win_chromium_compile_dbg_ng',
         'win_chromium_dbg_ng',
         'win_optional_gpu_tests_rel',
-        'win_chromium_x64_rel_ng',
-        'win10_chromium_x64_rel_ng',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'gpu_manual_try_win7_nvidia_rel',
         'win10_chromium_x64_dbg_ng',
