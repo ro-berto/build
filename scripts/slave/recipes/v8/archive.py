@@ -115,7 +115,8 @@ def RunSteps(api):
     api.step('Skipping due to missing release branch.', cmd=None)
     return
 
-  api.v8.apply_bot_config(flattened_builders=api.v8.FLATTENED_BUILDERS)
+  api.v8.apply_bot_config(api.v8.bot_config_by_buildername())
+
   # Opt out of using gyp environment variables.
   api.chromium.c.use_gyp_env = False
   api.v8.checkout()

@@ -239,7 +239,7 @@ def _build_and_upload(api, goma_dir):
 
 def RunSteps(api):
   v8 = api.v8
-  v8.apply_bot_config(flattened_builders=FLATTENED_BUILDERS)
+  v8.apply_bot_config(v8.bot_config_by_buildername(FLATTENED_BUILDERS))
   # Opt out of using gyp environment variables.
   api.chromium.c.use_gyp_env = False
   api.gclient.apply_config('node_js')
