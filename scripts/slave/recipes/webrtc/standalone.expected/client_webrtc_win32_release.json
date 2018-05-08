@@ -618,7 +618,7 @@
       "--output",
       "/path/to/tmp/json",
       "--",
-      "webrtc_perf_tests.exe"
+      "obj/webrtc.lib"
     ],
     "infra_step": true,
     "name": "get binary sizes",

@@ -88,7 +88,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'binary_size_files': [
-          'webrtc_perf_tests.exe'
+          'obj/webrtc.lib'
         ],
         'use_isolate': True,
         'enable_swarming': True,
@@ -320,7 +320,7 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'binary_size_files': [
-          'webrtc_perf_tests'
+          'obj/libwebrtc.a'
         ],
         'use_isolate': True,
         'enable_swarming': True,
@@ -514,6 +514,11 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'binary_size_files': [
+          'libjingle_peerconnection_so.so',
+          'libjingle_peerconnection_datachannelonly_so.so',
+          'apks/AppRTCMobile.apk'
+        ],
         'archive_apprtc': True,
         'build_android_archive': True,
         # TODO(bugs.webrtc.org/8642): Re-enable when it is fixed and stable.
@@ -1035,6 +1040,9 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
+        'binary_size_files': [
+          'obj/webrtc.lib'
+        ],
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
@@ -1307,6 +1315,9 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'binary_size_files': [
+          'obj/libwebrtc.a'
+        ],
         'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
@@ -1636,6 +1647,11 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
+        'binary_size_files': [
+          'libjingle_peerconnection_so.so',
+          'libjingle_peerconnection_datachannelonly_so.so',
+          'apks/AppRTCMobile.apk'
+        ],
         'build_android_archive': True,
         # TODO(bugs.webrtc.org/8642): Re-enable when it is fixed and stable.
         # 'test_android_studio_project_generation': True,
