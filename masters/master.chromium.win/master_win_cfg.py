@@ -27,7 +27,6 @@ def Update(config, active_master, c):
                             treeStableTimer=60,
                             builderNames=[
           'Win Builder',
-          'Win x64 Builder',
           'Win x64 Builder (dbg)',
       ]),
   ])
@@ -35,10 +34,7 @@ def Update(config, active_master, c):
     {'name': 'Win Builder'},
     {'name': 'Win7 (32) Tests'},
     {'name': 'Win7 Tests (1)'},
-    {'name': 'Win x64 Builder'},
-    {'name': 'Win 7 Tests x64 (1)'},
     {'name': 'Win x64 Builder (dbg)'},
-    {'name': 'Win10 Tests x64'},
   ]
 
   c['builders'].extend([
