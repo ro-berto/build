@@ -117,6 +117,33 @@ class V8Api(recipe_api.RecipeApi):
   def bot_config_by_buildername(self, builders=FLATTENED_BUILDERS):
     return builders.get(self.m.properties.get('buildername'), {})
 
+  def update_bot_config(self, bot_config, build_config, target_arch,
+                        target_platform):
+    """Update bot_config dict with src-side properties.
+
+    Args:
+      bot_config: The bot_config dict to update.
+      build_config: Config value for BUILD_CONFIG in chromium recipe module.
+      target_arch: Config value for TARGET_ARCH in chromium recipe module.
+      target_platform: Config value for TARGET_PLATFORM in chromium recipe
+          module.
+
+    Returns:
+      An updated copy of the bot_config dict.
+    """
+    # Make mutable copy.
+    bot_config = dict(bot_config)
+    bot_config['v8_config_kwargs'] = dict(
+        bot_config.get('v8_config_kwargs', {}))
+    # Update only specified properties.
+    for k, v in (
+        ('BUILD_CONFIG', build_config),
+        ('TARGET_ARCH', target_arch),
+        ('TARGET_PLATFORM', target_platform)):
+      if v is not None:
+        bot_config['v8_config_kwargs'][k] = v
+    return bot_config
+
   def apply_bot_config(self, bot_config=None, flattened_builders=None):
     """Entry method for using the v8 api.
 

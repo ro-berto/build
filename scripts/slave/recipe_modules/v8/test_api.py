@@ -550,13 +550,20 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     check(value in V8TestApi._get_param(check, steps, step, param))
 
   def check_param_equals(self, step, param, value):
-    """Check if a step has a particular parmeter matching a given value."""
+    """Check if a step has a particular parameter matching a given value."""
     return self.post_process(
         V8TestApi._check_param_equals, step, param, value)
 
   def check_in_param(self, step, param, value):
-    """Check if a given value is a substring of a step's parmeter."""
+    """Check if a given value is a substring of a step's parameter."""
     return self.post_process(V8TestApi._check_in_param, step, param, value)
+
+  def check_in_any_arg(self, step, value):
+    """Check if a given value is a substring of any argument in a step."""
+    def check_any(check, steps, step, value):
+      check(step in steps)
+      check(any(value in arg for arg in steps[step]['cmd']))
+    return self.post_process(check_any, step, value)
 
   def buildbucket_test_data(self, num_requests):
     return self.m.json.output_stream({

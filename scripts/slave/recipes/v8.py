@@ -26,13 +26,24 @@ DEPS = [
 ]
 
 PROPERTIES = {
+  # One of Release|Debug.
+  'build_config': Property(default=None, kind=str),
   # Name of a gclient custom_var to set to 'True'.
   'set_gclient_var': Property(default=None, kind=str),
+  # One of intel|arm|mips.
+  'target_arch': Property(default=None, kind=str),
+  # One of android|fuchsia|linux|mac|win.
+  'target_platform': Property(default=None, kind=str),
 }
 
-def RunSteps(api, set_gclient_var):
+
+def RunSteps(api, build_config, set_gclient_var, target_arch, target_platform):
   v8 = api.v8
-  v8.apply_bot_config(v8.bot_config_by_buildername())
+  bot_config = v8.update_bot_config(
+      v8.bot_config_by_buildername(),
+      build_config, target_arch, target_platform,
+  )
+  v8.apply_bot_config(bot_config)
   v8.set_gclient_custom_var(set_gclient_var)
 
   # Opt out of using gyp environment variables.
@@ -605,6 +616,22 @@ def GenTests(api):
       api.v8.check_in_param(
           'bot_update',
           '--spec-path', '\'custom_vars\': {\'download_gcmole\': \'True\'}') +
+      api.post_process(DropExpectation)
+  )
+
+  # Test using source side properties. The properties we set make no sense at
+  # all. We merely test that they will override the properties specified on
+  # the infra side.
+  yield (
+      api.v8.test('client.v8', 'V8 Linux - builder', 'src_side_properties',
+                  build_config='Debug', target_arch='arm',
+                  target_platform='fuchsia') +
+      api.v8.check_in_param(
+          'bot_update', '--spec-path', 'target_cpu = [\'arm\', \'arm64\']') +
+      api.v8.check_in_param(
+          'bot_update', '--spec-path', 'target_os = [\'fuchsia\']') +
+      api.v8.check_in_any_arg('generate_build_files', 'Debug') +
+      api.v8.check_in_any_arg('compile', 'Debug') +
       api.post_process(DropExpectation)
   )
 
