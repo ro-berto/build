@@ -95,21 +95,6 @@ SPEC = {
       },
       'serialize_tests': True,
     },
-    'Win7 FYI Debug (NVIDIA)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win Builder (dbg)',
-      'testing': {
-        'platform': 'win',
-      },
-      'serialize_tests': True,
-    },
     'Win10 FYI dEQP Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
@@ -323,21 +308,6 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'GPU FYI Win x64 Builder',
-      'testing': {
-        'platform': 'win',
-      },
-      'serialize_tests': True,
-    },
-    'Win7 FYI x64 Debug (NVIDIA)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win x64 Builder (dbg)',
       'testing': {
         'platform': 'win',
       },
