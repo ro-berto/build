@@ -365,12 +365,6 @@ class V8Test(BaseTest):
 
     full_args, env = self.api.v8._setup_test_runner(
         test, self.applied_test_filter, self.test_step_config)
-    if (self.api.v8.c.testing.may_shard and
-        self.api.v8.c.testing.SHARD_COUNT > 1):
-      full_args += [
-        '--shard-count=%d' % self.api.v8.c.testing.SHARD_COUNT,
-        '--shard-run=%d' % self.api.v8.c.testing.SHARD_RUN,
-      ]
     full_args += [
       '--json-test-results',
       self.api.json.output(add_json_log=False),
@@ -534,8 +528,6 @@ class V8SwarmingTest(V8Test):
     shards = 1
     if self.api.v8.c.testing.may_shard:
       shards = self.test_step_config.shards
-      if self.api.v8.c.testing.SHARD_COUNT > 1:  # pragma: no cover
-        shards = self.api.v8.c.testing.SHARD_COUNT
 
     command = 'tools/%s.py' % self.test.get('tool', 'run-tests')
     idempotent = self.test.get('idempotent')

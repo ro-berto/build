@@ -7,21 +7,12 @@ from recipe_engine.config import List, Single, Static
 
 
 def BaseConfig(**_kwargs):
-  shard_count = _kwargs.get('SHARD_COUNT', 1)
-  shard_run = _kwargs.get('SHARD_RUN', 1)
-  assert shard_count >= 1
-  assert shard_run >= 1
-  assert shard_run <= shard_count
-
   return ConfigGroup(
-    # Test configuration that is the equal for all tests of a builder. It
+    # Test configuration that is equal for all tests of a builder. It
     # might be refined later in the test runner for distinct tests.
     testing = ConfigGroup(
       test_args = List(basestring),
       may_shard = Single(bool, empty_val=True, required=False),
-
-      SHARD_COUNT = Static(shard_count),
-      SHARD_RUN = Static(shard_run),
     ),
   )
 

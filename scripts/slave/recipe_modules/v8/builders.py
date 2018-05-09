@@ -1640,33 +1640,23 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'mips',
         },
-        'enable_swarming': False,
-        'should_upload_build': True,
         'testing': {'platform': 'linux'},
         'triggers': [
-          'V8 Mips - big endian - nosnap - 1',
-          'V8 Mips - big endian - nosnap - 2',
+          'V8 Mips - big endian - nosnap',
         ],
       },
-      'V8 Mips - big endian - nosnap - 1': {
-        'v8_config_kwargs': {
-          'SHARD_COUNT': 2,
-          'SHARD_RUN': 1,
-        },
-        'enable_swarming': False,
-        'tests': [V8Testing],
+      'V8 Mips - big endian - nosnap': {
+        'tests': [V8Testing(2)],
         'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
-      },
-      'V8 Mips - big endian - nosnap - 2': {
-        'v8_config_kwargs': {
-          'SHARD_COUNT': 2,
-          'SHARD_RUN': 2,
+        'swarming_dimensions': {
+          'os': 'Debian-8.7',
+          'cpu': 'mips-32',
         },
-        'enable_swarming': False,
-        'tests': [V8Testing],
-        'variants': V8Variant('default'),
-        'testing': {'platform': 'linux'},
+        'swarming_task_attrs': {
+          'expiration': 5 * 60 * 60,
+          'hard_timeout': 5 * 60 * 60,
+        },
       },
       'V8 Linux - mipsel - sim - builder': {
         'chromium_apply_config': [
