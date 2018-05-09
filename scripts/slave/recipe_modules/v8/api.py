@@ -311,7 +311,9 @@ class V8Api(recipe_api.RecipeApi):
     # with tasks not specifying cores=8. See http://crbug.com/735388
     # self.m.swarming.set_default_dimension('cores', '8')
     self.m.swarming.add_default_tag('project:v8')
-    self.m.swarming.default_hard_timeout = 45 * 60
+    # TODO(sergiyb): Decrease timeout back to 45 minutes after figuring out why
+    # tests started timing out (https://crbug.com/841284).
+    self.m.swarming.default_hard_timeout = 60 * 60
 
     self.m.swarming.default_idempotent = True
 

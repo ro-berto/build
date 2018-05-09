@@ -286,7 +286,7 @@
       "--io-timeout",
       "1200",
       "--hard-timeout",
-      "2700",
+      "3600",
       "--dimension",
       "cpu",
       "x86-64",
