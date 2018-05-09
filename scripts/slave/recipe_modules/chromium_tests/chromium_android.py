@@ -220,6 +220,27 @@ SPEC = {
       },
     },
 
+    'android-kitkat-arm-rel': {
+      'chromium_config': 'android',
+      'chromium_apply_config': [
+        'chrome_with_codecs',
+        'download_vr_test_apks',
+        'mb'
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'main_builder',
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
     'Cast Android (dbg)' : {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs', 'mb'],
