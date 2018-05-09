@@ -167,7 +167,7 @@
           "*": {}
         },
         "excluded_builders": [
-          "Android MIPS Builder (dbg)"
+          "android-kitkat-arm-rel"
         ]
       }
     ],
