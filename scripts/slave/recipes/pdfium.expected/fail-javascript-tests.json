@@ -378,44 +378,6 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/pdfium/testing/tools/run_javascript_tests.py",
-      "--build-dir",
-      "out/debug_v8",
-      "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux build_number 1234",
-      "--gold_key",
-      "debug true is_standalone true os linux skia false v8 true xfa false",
-      "--gold_output_dir",
-      "[START_DIR]/pdfium/out/debug_v8/gold_output"
-    ],
-    "cwd": "[START_DIR]/pdfium",
-    "name": "javascript tests",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/pdfium/testing/tools/run_pixel_tests.py",
-      "--build-dir",
-      "out/debug_v8",
-      "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux build_number 1234",
-      "--gold_key",
-      "debug true is_standalone true os linux skia false v8 true xfa false",
-      "--gold_output_dir",
-      "[START_DIR]/pdfium/out/debug_v8/gold_output"
-    ],
-    "cwd": "[START_DIR]/pdfium",
-    "name": "pixel tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "\nimport contextlib\nimport math\nimport socket\nimport sys\nimport time\nimport urllib2\n\nHASHES_URL = 'https://pdfium-gold.skia.org/_/hashes'\nRETRIES = 5\nTIMEOUT = 60\nWAIT_BASE = 15\n\nsocket.setdefaulttimeout(TIMEOUT)\nfor retry in range(RETRIES):\n  try:\n    with contextlib.closing(\n        urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:\n      hashes = w.read()\n      with open(sys.argv[1], 'w') as f:\n        f.write(hashes)\n        break\n  except Exception as e:\n    print 'Failed to get uninteresting hashes from %s:' % HASHES_URL\n    print e\n    if retry == RETRIES:\n      raise\n    waittime = WAIT_BASE * math.pow(2, retry)\n    print 'Retry in %d seconds.' % waittime\n    time.sleep(waittime)\n",
       "[START_DIR]/pdfium/out/debug_v8/ignore_hashes.txt"
     ],
@@ -460,7 +422,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/pdfium/testing/tools/run_corpus_tests.py",
+      "[START_DIR]/pdfium/testing/tools/run_javascript_tests.py",
       "--build-dir",
       "out/debug_v8",
       "--gold_properties",
@@ -471,7 +433,11 @@
       "[START_DIR]/pdfium/out/debug_v8/gold_output"
     ],
     "cwd": "[START_DIR]/pdfium",
-    "name": "corpus tests"
+    "name": "javascript tests",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -520,10 +486,148 @@
       "-z",
       "json,log",
       "[START_DIR]/pdfium/out/debug_v8/gold_output/dm.json",
-      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux/1337000003/dm.json"
+      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux/1337000003/javascript/dm.json"
     ],
     "infra_step": true,
     "name": "gsutil upload JSON"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/pdfium/testing/tools/run_pixel_tests.py",
+      "--build-dir",
+      "out/debug_v8",
+      "--gold_properties",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux build_number 1234",
+      "--gold_key",
+      "debug true is_standalone true os linux skia false v8 true xfa false",
+      "--gold_output_dir",
+      "[START_DIR]/pdfium/out/debug_v8/gold_output"
+    ],
+    "cwd": "[START_DIR]/pdfium",
+    "name": "pixel tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "glob",
+      "[START_DIR]/pdfium/out/debug_v8/gold_output",
+      "*.png"
+    ],
+    "infra_step": true,
+    "name": "find images (2)",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@glob@[START_DIR]/pdfium/out/debug_v8/gold_output/someimage.png@@@",
+      "@@@STEP_LOG_END@glob@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "-m",
+      "----",
+      "cp",
+      "[START_DIR]/pdfium/out/debug_v8/gold_output/*.png",
+      "gs://skia-pdfium-gm/dm-images-v1"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload images (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-z",
+      "json,log",
+      "[START_DIR]/pdfium/out/debug_v8/gold_output/dm.json",
+      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux/1337000006/pixel/dm.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload JSON (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/pdfium/testing/tools/run_corpus_tests.py",
+      "--build-dir",
+      "out/debug_v8",
+      "--gold_properties",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux build_number 1234",
+      "--gold_key",
+      "debug true is_standalone true os linux skia false v8 true xfa false",
+      "--gold_output_dir",
+      "[START_DIR]/pdfium/out/debug_v8/gold_output"
+    ],
+    "cwd": "[START_DIR]/pdfium",
+    "name": "corpus tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "glob",
+      "[START_DIR]/pdfium/out/debug_v8/gold_output",
+      "*.png"
+    ],
+    "infra_step": true,
+    "name": "find images (3)",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@glob@[START_DIR]/pdfium/out/debug_v8/gold_output/someimage.png@@@",
+      "@@@STEP_LOG_END@glob@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "-m",
+      "----",
+      "cp",
+      "[START_DIR]/pdfium/out/debug_v8/gold_output/*.png",
+      "gs://skia-pdfium-gm/dm-images-v1"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload images (3)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-z",
+      "json,log",
+      "[START_DIR]/pdfium/out/debug_v8/gold_output/dm.json",
+      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux/1337000009/corpus/dm.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload JSON (3)"
   },
   {
     "name": "$result",

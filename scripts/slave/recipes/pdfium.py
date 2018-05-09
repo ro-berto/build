@@ -205,6 +205,11 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
     '--gold_output_dir', gold_output_dir,
   ])
 
+  ignore_hashes_file = get_gold_ignore_hashes(api, out_dir)
+  if ignore_hashes_file:
+    script_args.extend(['--gold_ignore_hashes',
+                        ignore_hashes_file]) # pragma: no cover
+
   # Cannot use the standard deferred result mechanism, since some of the
   # operations related to uploading to Gold depend on non-deferred results.
   test_exception = None
@@ -219,6 +224,8 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
         # Swallow the exception. The step will still show up as
         # failed, but processing will continue.
         test_exception = e
+    # Upload immediately, since tests below will overwrite the output directory
+    upload_dm_results(api, gold_output_dir, revision, 'javascript')
 
   pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                    'run_pixel_tests.py'))
@@ -229,11 +236,8 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
       # Swallow the exception. The step will still show up as
       # failed, but processing will continue.
       test_exception = e
-
-  ignore_hashes_file = get_gold_ignore_hashes(api, out_dir)
-  if ignore_hashes_file:
-    script_args.extend(['--gold_ignore_hashes',
-                        ignore_hashes_file]) # pragma: no cover
+  # Upload immediately, since tests below will overwrite the output directory
+  upload_dm_results(api, gold_output_dir, revision, 'pixel')
 
   corpus_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                     'run_corpus_tests.py'))
@@ -244,8 +248,8 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
       # Swallow the exception. The step will still show up as
       # failed, but processing will continue.
       test_exception = e
+  upload_dm_results(api, gold_output_dir, revision, 'corpus')
 
-  upload_dm_results(api, gold_output_dir, revision)
   if test_exception:
     raise test_exception # pylint: disable-msg=E0702
 
@@ -404,12 +408,13 @@ def get_gold_ignore_hashes(api, out_dir):
     return host_hashes_file
   return None
 
-def upload_dm_results(api, results_dir, revision):
+def upload_dm_results(api, results_dir, revision, test_type):
   """ Uploads results of the tests to Gold.
   This assumes that results_dir contains a JSON file
   and a set of PNGs.
   Adapted from:
   https://skia.googlesource.com/skia/+/master/infra/bots/recipes/upload_dm_results.py
+  test_type is expected to be 'corpus', 'javascript', or 'pixel'
   """
   builder_name = api.m.properties['buildername'].strip()
 
@@ -427,15 +432,16 @@ def upload_dm_results(api, results_dir, revision):
   # Upload the JSON summary and verbose.log.
   sec_str = str(int(api.time.time()))
   now = api.time.utcnow()
-  summary_dest_path = '/'.join([
-      'dm-json-v1',
-      str(now.year ).zfill(4),
-      str(now.month).zfill(2),
-      str(now.day  ).zfill(2),
-      str(now.hour ).zfill(2),
-      revision,
-      builder_name,
-      sec_str])
+  summary_dest_path = '/'.join(
+      ['dm-json-v1',
+       str(now.year).zfill(4),
+       str(now.month).zfill(2),
+       str(now.day).zfill(2),
+       str(now.hour).zfill(2),
+       revision,
+       builder_name,
+       sec_str,
+       test_type])
 
   # Trybot results are further siloed by issue/patchset.
   issue = str(api.m.properties.get('issue', ''))
