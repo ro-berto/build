@@ -2248,7 +2248,7 @@ Args:
 
 APIs for interacting with isolates.
 
-&mdash; **def [archive\_differences](/scripts/slave/recipe_modules/isolate/api.py#295)(self, first_dir, second_dir, values):**
+&mdash; **def [archive\_differences](/scripts/slave/recipe_modules/isolate/api.py#297)(self, first_dir, second_dir, values):**
 
 Archive different files of 2 builds.
 
@@ -2259,7 +2259,7 @@ preparation for the compile. Needed in order to ensure isolates
 are rebuilt properly because their dependencies are currently not
 completely described to gyp.
 
-&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#324)(self, first_dir, second_dir):**
+&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#326)(self, first_dir, second_dir):**
 
 Compare the artifacts from 2 builds.
 
@@ -2282,7 +2282,7 @@ them. If some expected targets are missing, will abort the build.
 
 Changes URL of Isolate server to use.
 
-&mdash; **def [isolate\_tests](/scripts/slave/recipe_modules/isolate/api.py#99)(self, build_dir, targets=None, verbose=False, set_swarm_hashes=True, use_exparchive=False, \*\*kwargs):**
+&mdash; **def [isolate\_tests](/scripts/slave/recipe_modules/isolate/api.py#99)(self, build_dir, targets=None, verbose=False, set_swarm_hashes=True, use_exparchive=False, swarm_hashes_property_name='swarm_hashes', \*\*kwargs):**
 
 Archives prepared tests in |build_dir| to isolate server.
 
@@ -2306,18 +2306,18 @@ Args:
         enable/disable exparchive, or provide a number (between 0 and 100)
         to have n% of builds run with exparchive. IGNORED (deprecated).
 
-&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#242)(self):**
+&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#244)(self):**
 
 The dictionary of 'target name -> isolated hash' for this run.
 
 These come either from the incoming swarm_hashes build property,
 or from calling find_isolated_tests, above, at some point during the run.
 
-&mdash; **def [remove\_build\_metadata](/scripts/slave/recipe_modules/isolate/api.py#276)(self):**
+&mdash; **def [remove\_build\_metadata](/scripts/slave/recipe_modules/isolate/api.py#278)(self):**
 
 Removes the build metadata embedded in the build artifacts.
 
-&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#264)(self, name, isolate_hash, args=None, \*\*kwargs):**
+&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#266)(self, name, isolate_hash, args=None, \*\*kwargs):**
 
 Runs an isolated test.
 
@@ -5552,17 +5552,17 @@ The changes are:
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/zip/examples/full.py#14)(api):**
 
-[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/6f3c1c82d48ba8c9cee1d15d1406f47973aa88fa/recipes/README.recipes.md#recipe_modules-bot_update
-[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/6f3c1c82d48ba8c9cee1d15d1406f47973aa88fa/recipes/README.recipes.md#recipe_modules-cipd
-[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/6f3c1c82d48ba8c9cee1d15d1406f47973aa88fa/recipes/README.recipes.md#recipe_modules-depot_tools
-[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/6f3c1c82d48ba8c9cee1d15d1406f47973aa88fa/recipes/README.recipes.md#recipe_modules-gclient
-[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/6f3c1c82d48ba8c9cee1d15d1406f47973aa88fa/recipes/README.recipes.md#recipe_modules-gerrit
-[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/6f3c1c82d48ba8c9cee1d15d1406f47973aa88fa/recipes/README.recipes.md#recipe_modules-git
-[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/6f3c1c82d48ba8c9cee1d15d1406f47973aa88fa/recipes/README.recipes.md#recipe_modules-gitiles
-[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/6f3c1c82d48ba8c9cee1d15d1406f47973aa88fa/recipes/README.recipes.md#recipe_modules-gsutil
-[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/6f3c1c82d48ba8c9cee1d15d1406f47973aa88fa/recipes/README.recipes.md#recipe_modules-infra_paths
-[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/6f3c1c82d48ba8c9cee1d15d1406f47973aa88fa/recipes/README.recipes.md#recipe_modules-presubmit
-[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/6f3c1c82d48ba8c9cee1d15d1406f47973aa88fa/recipes/README.recipes.md#recipe_modules-tryserver
+[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/276da0b4d90aad69aa0adcf3e6a792b5e364c1ee/recipes/README.recipes.md#recipe_modules-bot_update
+[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/276da0b4d90aad69aa0adcf3e6a792b5e364c1ee/recipes/README.recipes.md#recipe_modules-cipd
+[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/276da0b4d90aad69aa0adcf3e6a792b5e364c1ee/recipes/README.recipes.md#recipe_modules-depot_tools
+[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/276da0b4d90aad69aa0adcf3e6a792b5e364c1ee/recipes/README.recipes.md#recipe_modules-gclient
+[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/276da0b4d90aad69aa0adcf3e6a792b5e364c1ee/recipes/README.recipes.md#recipe_modules-gerrit
+[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/276da0b4d90aad69aa0adcf3e6a792b5e364c1ee/recipes/README.recipes.md#recipe_modules-git
+[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/276da0b4d90aad69aa0adcf3e6a792b5e364c1ee/recipes/README.recipes.md#recipe_modules-gitiles
+[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/276da0b4d90aad69aa0adcf3e6a792b5e364c1ee/recipes/README.recipes.md#recipe_modules-gsutil
+[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/276da0b4d90aad69aa0adcf3e6a792b5e364c1ee/recipes/README.recipes.md#recipe_modules-infra_paths
+[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/276da0b4d90aad69aa0adcf3e6a792b5e364c1ee/recipes/README.recipes.md#recipe_modules-presubmit
+[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/276da0b4d90aad69aa0adcf3e6a792b5e364c1ee/recipes/README.recipes.md#recipe_modules-tryserver
 [recipe_engine/recipe_modules/buildbucket]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/c17eef1bc11c5f44462101e8ceaa0f76c9e872bf/README.recipes.md#recipe_modules-buildbucket
 [recipe_engine/recipe_modules/context]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/c17eef1bc11c5f44462101e8ceaa0f76c9e872bf/README.recipes.md#recipe_modules-context
 [recipe_engine/recipe_modules/file]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/c17eef1bc11c5f44462101e8ceaa0f76c9e872bf/README.recipes.md#recipe_modules-file
