@@ -18,8 +18,6 @@
       "/path/to/tmp/json",
       "--revision",
       "v8@refs/branch-heads/4.3:deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-      "--refs",
-      "refs/branch-heads/4.3",
       "--no_shallow",
       "--with_branch_heads"
     ],
