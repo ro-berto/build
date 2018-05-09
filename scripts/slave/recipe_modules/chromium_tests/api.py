@@ -378,13 +378,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if isolated_targets:
         self.m.isolate.remove_build_metadata()
+        swarm_hashes_property_name = 'swarm_hashes_%s' % (
+            update_step.presentation.properties['got_revision_cp'].replace(
+                '@', '(at)'))  # At sign may clash with annotations format.
+
         # 'compile' just prepares all information needed for the isolation,
         # and the isolation is a separate step.
         self.m.isolate.isolate_tests(
             self.m.chromium.output_dir,
             targets=list(set(isolated_targets)),
             verbose=True,
-            set_swarm_hashes=False,
+            swarm_hashes_property_name=swarm_hashes_property_name,
             use_exparchive=bot_config.get('force_exparchive', False))
 
         if bot_config.get('perf_isolate_lookup'):

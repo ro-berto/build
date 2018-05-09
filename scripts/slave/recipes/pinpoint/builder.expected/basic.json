@@ -729,7 +729,8 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"telemetry_perf_tests\": \"[dummy hash for telemetry_perf_tests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}@{\"telemetry_perf_tests\": \"[dummy hash for telemetry_perf_tests]\"}@@@"
     ]
   },
   {

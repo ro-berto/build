@@ -477,7 +477,7 @@ class V8Api(recipe_api.RecipeApi):
           self.m.chromium.output_dir,
           targets=isolate_targets,
           verbose=True,
-          set_swarm_hashes=False,
+          swarm_hashes_property_name=None,
       )
       self.upload_isolated_json()
 

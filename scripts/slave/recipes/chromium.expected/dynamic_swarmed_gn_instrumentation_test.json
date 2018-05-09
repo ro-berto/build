@@ -725,7 +725,8 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"chrome_public_test_apk\": \"[dummy hash for chrome_public_test_apk]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}@{\"chrome_public_test_apk\": \"[dummy hash for chrome_public_test_apk]\"}@@@"
     ]
   },
   {

@@ -97,9 +97,8 @@ class IsolateApi(recipe_api.RecipeApi):
       step_result.presentation.status = self.m.step.WARNING
 
   def isolate_tests(self, build_dir, targets=None, verbose=False,
-                    set_swarm_hashes=True, use_exparchive=False,
                     swarm_hashes_property_name='swarm_hashes',
-                    **kwargs):
+                    use_exparchive=False, **kwargs):
     """Archives prepared tests in |build_dir| to isolate server.
 
     src/tools/mb/mb.py is invoked to produce *.isolated.gen.json files that
@@ -114,10 +113,11 @@ class IsolateApi(recipe_api.RecipeApi):
         targets: List of targets to use instead of finding .isolated.gen.json
             files.
         verbose (bool): Isolate command should be verbose in output.
-        set_swarm_hashes (bool): On true, assigns the dict
-            {target name -> *.isolated file hash} to the swarm_hashes build
-            property (also accessible as 'isolated_tests' property). This
-            implies this step can currently only be run once per recipe.
+        swarm_hashes_property_name (str): If set, assigns the dict
+            {target name -> *.isolated file hash} to the named build
+            property (also accessible as 'isolated_tests' property). If this
+            needs to be run more than once per recipe run, make sure to pass
+            different propery names for each invocation.
         use_exparchive (bool, int, float, long): Provide a boolean to
             enable/disable exparchive, or provide a number (between 0 and 100)
             to have n% of builds run with exparchive. IGNORED (deprecated).
@@ -226,7 +226,7 @@ class IsolateApi(recipe_api.RecipeApi):
       if swarm_hashes:
         self._isolated_tests = swarm_hashes
 
-      if set_swarm_hashes:
+      if swarm_hashes_property_name:
         step_result.presentation.properties[
             swarm_hashes_property_name] = swarm_hashes
 

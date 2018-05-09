@@ -1049,7 +1049,8 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"webkit_layout_tests\": \"[dummy hash for webkit_layout_tests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}@{\"webkit_layout_tests\": \"[dummy hash for webkit_layout_tests]\"}@@@"
     ]
   },
   {
