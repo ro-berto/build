@@ -1890,17 +1890,6 @@
   },
   {
     "cmd": [
-      "[START_DIR]\\src\\out\\host_debug\\wtf_unittests.exe"
-    ],
-    "cwd": "[START_DIR]\\src\\out\\host_debug",
-    "env": {
-      "GOMA_DIR": "[CACHE]\\goma_client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\linux\\dart-sdk\\bin;<PATH>"
-    },
-    "name": "Test WTF"
-  },
-  {
-    "cmd": [
       "[START_DIR]\\src\\out\\host_debug\\runtime_unittests.exe"
     ],
     "cwd": "[START_DIR]\\src\\out\\host_debug",

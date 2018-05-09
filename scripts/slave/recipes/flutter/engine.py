@@ -54,8 +54,6 @@ def RunHostTests(api, out_dir, exe_extension=''):
     ])
     api.step('Test Synchronization',
       [directory.join('synchronization_unittests' + exe_extension)])
-    api.step('Test WTF',
-      [directory.join('wtf_unittests' + exe_extension)])
     api.step('Test Runtime',
       [directory.join('runtime_unittests' + exe_extension)])
     api.step('Test Shell',
