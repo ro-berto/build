@@ -1,0 +1,248 @@
+[
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
+      "--url",
+      "https://chocolatey.org/install.ps1",
+      "--status-json",
+      "/path/to/tmp/json",
+      "--outfile",
+      "[CLEANUP]/install.ps1"
+    ],
+    "name": "download chocolatey installer"
+  },
+  {
+    "cmd": [
+      "C:\\\\WINDOWS\\\\system32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+      "[CLEANUP]/install.ps1"
+    ],
+    "env": {
+      "ChocolateyBinRoot": "[CLEANUP]/bin_root",
+      "ChocolateyInstall": "[CLEANUP]/chocolatey"
+    },
+    "name": "install chocolatey"
+  },
+  {
+    "cmd": [
+      "[CLEANUP]/chocolatey/choco",
+      "--version"
+    ],
+    "env": {
+      "ChocolateyBinRoot": "[CLEANUP]/bin_root",
+      "ChocolateyInstall": "[CLEANUP]/chocolatey"
+    },
+    "name": "choco --version"
+  },
+  {
+    "cmd": [
+      "[CLEANUP]/chocolatey/choco",
+      "config",
+      "set",
+      "cacheLocation",
+      "[CLEANUP]/cache"
+    ],
+    "env": {
+      "ChocolateyBinRoot": "[CLEANUP]/bin_root",
+      "ChocolateyInstall": "[CLEANUP]/chocolatey"
+    },
+    "name": "choco set package directory"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]/cloudkms",
+      "-ensure-file",
+      "infra/tools/luci/cloudkms/${platform} latest",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "ChocolateyBinRoot": "[CLEANUP]/bin_root",
+      "ChocolateyInstall": "[CLEANUP]/chocolatey"
+    },
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/luci/cloudkms/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-ci-credentials/chocolatey.encrypted",
+      "chocolatey.encrypted"
+    ],
+    "env": {
+      "ChocolateyBinRoot": "[CLEANUP]/bin_root",
+      "ChocolateyInstall": "[CLEANUP]/chocolatey"
+    },
+    "infra_step": true,
+    "name": "gsutil download"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/cloudkms/cloudkms.exe",
+      "decrypt",
+      "-input",
+      "chocolatey.encrypted",
+      "-output",
+      "[CLEANUP]/chocolatey.key",
+      "dart-ci/us-central1/dart-ci/dart-ci"
+    ],
+    "env": {
+      "ChocolateyBinRoot": "[CLEANUP]/bin_root",
+      "ChocolateyInstall": "[CLEANUP]/chocolatey"
+    },
+    "name": "cloudkms get API key"
+  },
+  {
+    "cmd": [
+      "git",
+      "clone",
+      "https://github.com/dart-lang/chocolatey-packages.git"
+    ],
+    "env": {
+      "ChocolateyBinRoot": "[CLEANUP]/bin_root",
+      "ChocolateyInstall": "[CLEANUP]/chocolatey"
+    },
+    "name": "checkout chocolatey-packages"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
+      "--url",
+      "https://storage.googleapis.com/dart-archive/channels/stable/release/1.24.3/sdk/dartsdk-windows-ia32-release.zip.sha256sum",
+      "--status-json",
+      "/path/to/tmp/json",
+      "--outfile",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "ChocolateyBinRoot": "[CLEANUP]/bin_root",
+      "ChocolateyInstall": "[CLEANUP]/chocolatey"
+    },
+    "name": "GET https://storage.googleapis.com/dart-archive/channels/stable/release/1.24.3/sdk/dartsdk-windows-ia32-release.zip.sha256sum"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
+      "--url",
+      "https://storage.googleapis.com/dart-archive/channels/stable/release/1.24.3/sdk/dartsdk-windows-x64-release.zip.sha256sum",
+      "--status-json",
+      "/path/to/tmp/json",
+      "--outfile",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "ChocolateyBinRoot": "[CLEANUP]/bin_root",
+      "ChocolateyInstall": "[CLEANUP]/chocolatey"
+    },
+    "name": "GET https://storage.googleapis.com/dart-archive/channels/stable/release/1.24.3/sdk/dartsdk-windows-x64-release.zip.sha256sum"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/chocolatey-packages/dart-sdk/chocolateyInstall.ps1",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "ChocolateyBinRoot": "[CLEANUP]/bin_root",
+      "ChocolateyInstall": "[CLEANUP]/chocolatey"
+    },
+    "infra_step": true,
+    "name": "read installer"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[START_DIR]/chocolatey-packages/dart-sdk/chocolateyInstall.ps1"
+    ],
+    "env": {
+      "ChocolateyBinRoot": "[CLEANUP]/bin_root",
+      "ChocolateyInstall": "[CLEANUP]/chocolatey"
+    },
+    "infra_step": true,
+    "name": "write installer"
+  },
+  {
+    "cmd": [
+      "[CLEANUP]/chocolatey/choco",
+      "pack",
+      "version=1.24.3"
+    ],
+    "cwd": "[START_DIR]/chocolatey-packages/dart-sdk",
+    "env": {
+      "ChocolateyBinRoot": "[CLEANUP]/bin_root",
+      "ChocolateyInstall": "[CLEANUP]/chocolatey"
+    },
+    "name": "choco pack"
+  },
+  {
+    "cmd": [
+      "[CLEANUP]/chocolatey/choco",
+      "install",
+      "dart-sdk",
+      "--pre",
+      "-y",
+      "-dv",
+      "-s",
+      "."
+    ],
+    "cwd": "[START_DIR]/chocolatey-packages/dart-sdk",
+    "env": {
+      "ChocolateyBinRoot": "[CLEANUP]/bin_root",
+      "ChocolateyInstall": "[CLEANUP]/chocolatey"
+    },
+    "name": "verify with choco install"
+  },
+  {
+    "cmd": [
+      "C:\\\\WINDOWS\\\\system32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+      "-Command",
+      "$secret = cat [CLEANUP]/chocolatey.key; [CLEANUP]/chocolatey/choco push -k=\"$secret\" dart-sdk.1.24.3.nupkg"
+    ],
+    "cwd": "[START_DIR]/chocolatey-packages/dart-sdk",
+    "env": {
+      "ChocolateyBinRoot": "[CLEANUP]/bin_root",
+      "ChocolateyInstall": "[CLEANUP]/chocolatey"
+    },
+    "name": "choco push"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

@@ -206,6 +206,7 @@
   * [cros/swarming](#recipes-cros_swarming)
   * [crrev:examples/full](#recipes-crrev_examples_full)
   * [custom_tabs_client](#recipes-custom_tabs_client)
+  * [dart/chocolatey](#recipes-dart_chocolatey)
   * [dart/dart](#recipes-dart_dart)
   * [dart/dart2js](#recipes-dart_dart2js)
   * [dart/dart2js_nobuild](#recipes-dart_dart2js_nobuild)
@@ -4579,6 +4580,11 @@ Generates the sequence of steps that will be run by the slave.
 [DEPS](/scripts/slave/recipes/custom_tabs_client.py#5): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/custom_tabs_client.py#20)(api):**
+### *recipes* / [dart/chocolatey](/scripts/slave/recipes/dart/chocolatey.py)
+
+[DEPS](/scripts/slave/recipes/dart/chocolatey.py#7): [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/chocolatey.py#25)(api):**
 ### *recipes* / [dart/dart](/scripts/slave/recipes/dart/dart.py)
 
 [DEPS](/scripts/slave/recipes/dart/dart.py#7): [dart](#recipe_modules-dart), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
