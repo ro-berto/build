@@ -213,11 +213,11 @@ class IndexPack(object):
           if fname_fullpath not in self.filesizes:
             print 'No information about required input file %s' % fname_fullpath
             continue
-          # Only normalize the path if it is an absolute path. Otherwise, it can
-          # happen that includes of headers relative to the current filepath do
-          # not work anymore.
+
+          # Handle absolute paths - when normalizing we assume paths are
+          # relative to src/out/Debug.
           if os.path.isabs(fname):
-            fname = os.path.normpath(fname)
+            fname = os.path.relpath(fname, entry['directory'])
 
           normalized_fname = os.path.normpath(os.path.join('src/out/Debug',
                                                            fname))
