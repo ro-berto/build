@@ -25,9 +25,6 @@ PROPERTIES = {
   'target_cpu': Property(default=None, kind=str),
   'debug': Property(default=False, kind=bool),
   'clang': Property(default=None, kind=bool),
-
-  # TODO(jmadill): Remove this property when migrated. http://crbug.com/833999
-  'msvc': Property(default=None, kind=bool),
 }
 
 
@@ -45,19 +42,17 @@ def _CheckoutSteps(api):
   api.gclient.runhooks()
 
 
-def _OutPath(target_cpu, debug, clang, msvc):
+def _OutPath(target_cpu, debug, clang):
   out_dir = 'debug' if debug else 'release'
   if clang:
     out_dir += '_clang'
-  if msvc:
-    out_dir += '_msvc'
   if target_cpu:
     out_dir += '_' + target_cpu
   return out_dir
 
 
 # _GNGenBuilds calls 'gn gen'.
-def _GNGenBuilds(api, target_cpu, debug, clang, msvc, out_dir):
+def _GNGenBuilds(api, target_cpu, debug, clang, out_dir):
   api.goma.ensure_goma()
   gn_bool = {True: 'true', False: 'false'}
   # Generate build files by GN.
@@ -74,9 +69,6 @@ def _GNGenBuilds(api, target_cpu, debug, clang, msvc, out_dir):
   if clang is not None:
     args.append('is_clang=%s' % gn_bool[clang])
 
-  if msvc is not None:
-    args.append('is_clang=%s' % gn_bool[not msvc])
-
   if target_cpu:
     args.append('target_cpu="%s"' % target_cpu)
 
@@ -86,7 +78,17 @@ def _GNGenBuilds(api, target_cpu, debug, clang, msvc, out_dir):
                 '--args=' + ' '.join(args)])
 
 
-def _BuildSteps(api, msvc, out_dir):
+def _GetCompilerName(api, clang):
+  # Clang is used as the default compiler.
+  if clang or clang is None:
+    return 'clang'
+  # The non-Clang compiler is OS-dependent.
+  if api.platform.is_win:
+    return 'msvc'
+  else:
+    return 'gcc'
+
+def _BuildSteps(api, out_dir, clang):
   debug_path = api.path['checkout'].join('out', out_dir)
   ninja_cmd = [api.depot_tools.ninja_path, '-C', debug_path,
                '-j', api.goma.recommended_goma_jobs]
@@ -94,14 +96,14 @@ def _BuildSteps(api, msvc, out_dir):
       name='compile with ninja',
       ninja_command=ninja_cmd,
       ninja_log_outdir=debug_path,
-      ninja_log_compiler='clang' if not msvc else 'unknown')
+      ninja_log_compiler=_GetCompilerName(api, clang))
 
 
-def RunSteps(api, target_cpu, debug, clang, msvc):
+def RunSteps(api, target_cpu, debug, clang):
   _CheckoutSteps(api)
-  out_dir = _OutPath(target_cpu, debug, clang, msvc)
-  _GNGenBuilds(api, target_cpu, debug, clang, msvc, out_dir)
-  _BuildSteps(api, msvc, out_dir)
+  out_dir = _OutPath(target_cpu, debug, clang)
+  _GNGenBuilds(api, target_cpu, debug, clang, out_dir)
+  _BuildSteps(api, out_dir, clang)
 
 
 def GenTests(api):
@@ -109,6 +111,15 @@ def GenTests(api):
       api.test('linux') +
       api.platform('linux', 64) +
       api.properties(mastername='client.angle',
+                     buildername='linux',
+                     buildnumber='1234',
+                     bot_id='test_slave')
+  )
+  yield (
+      api.test('linux_gcc') +
+      api.platform('linux', 64) +
+      api.properties(clang=False,
+                     mastername='client.angle',
                      buildername='linux',
                      buildnumber='1234',
                      bot_id='test_slave')
@@ -133,7 +144,7 @@ def GenTests(api):
   yield (
       api.test('win_rel_msvc_x86') +
       api.platform('win', 64) +
-      api.properties(msvc=True,
+      api.properties(clang=False,
                      debug=False,
                      target_cpu='x86',
                      mastername='client.angle',
