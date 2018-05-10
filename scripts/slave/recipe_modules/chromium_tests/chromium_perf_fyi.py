@@ -63,6 +63,7 @@ _AddBuildSpec('Android Builder Perf FYI', 'android', 'android', target_bits=32,
                                      'cc_perftests',
                                      'chrome_public_apk',
                                      'gpu_perftests',
+                                     'monochrome_public_apk',
                                      'push_apps_to_background_apk',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
