@@ -232,8 +232,6 @@ _AddIsolatedTestSpec('Win 10 Perf', 'chromium-rel-win10', 'win',
                       use_private_swarming_server=True)
 _AddIsolatedTestSpec('Win 7 Perf', 'chromium-rel-win7-dual', 'win',
                      target_bits=32)
-_AddIsolatedTestSpec('Win 7 Intel GPU Perf', 'chromium-rel-win7-gpu-intel',
-                     'win')
 _AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'chromium-rel-win7-gpu-nvidia',
                      'win')
 
