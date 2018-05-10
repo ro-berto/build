@@ -59,9 +59,6 @@ SUPPRESSIONS = {
         'ios-simulator-full-configs',
         'ios-simulator-xcode-clang',
     ],
-    'master.chromium.memory': [
-        'Linux ASan Tests (sandboxed)',
-    ],
     'master.chromium.webkit': [
         # TODO(crbug.com/736257) Spin up 10.12 (dbg) trybots once we've
         # finished shutting down the 10.9 bots.
@@ -117,6 +114,9 @@ FAKE_BUILDERS = {
     ],
     'master.chromium.memory': [
         # These have been migrated to LUCI.
+        'Linux ASan LSan Builder',
+        'Linux ASan LSan Tests (1)',
+        'Linux ASan Tests (sandboxed)',
         'Linux TSan Builder',
         'Linux TSan Tests',
     ],
@@ -158,6 +158,7 @@ FAKE_BUILDERS = {
         'linux-blink-heap-verification-try',
         'linux-gcc-rel',
         'linux-ozone-rel',
+        'linux_chromium_asan_rel_ng',
         'linux_chromium_compile_dbg_ng',
         'linux_chromium_compile_rel_ng',
         'linux_chromium_dbg_ng',

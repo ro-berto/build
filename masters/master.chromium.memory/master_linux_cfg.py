@@ -28,14 +28,9 @@ def Update(_config, active_master, c):
                 treeStableTimer=60,
                 builderNames=[
           'Android CFI',
-          'Linux ASan LSan Builder',
           'Linux CFI',
           'Linux ChromiumOS MSan Builder',
           'Linux MSan Builder',
-      ]),
-      Triggerable(name='linux_asan_rel_trigger', builderNames=[
-          'Linux ASan LSan Tests (1)',
-          'Linux ASan Tests (sandboxed)',
       ]),
       Triggerable(name='linux_chromiumos_msan_rel_trigger',
                   builderNames=['Linux ChromiumOS MSan Tests']),
@@ -46,19 +41,6 @@ def Update(_config, active_master, c):
     {
       'name': 'Android CFI',
       'category': '2android cfi',
-    },
-    {
-      'name': 'Linux ASan LSan Builder',
-      'triggers': ['linux_asan_rel_trigger'],
-      'category': '1linux asan lsan msan',
-    },
-    {
-      'name': 'Linux ASan LSan Tests (1)',
-      'category': '1linux asan lsan msan',
-    },
-    {
-      'name': 'Linux ASan Tests (sandboxed)',
-      'category': '1linux asan lsan msan',
     },
     {
       'name': 'Linux CFI',
