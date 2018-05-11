@@ -247,11 +247,8 @@ class V8Api(recipe_api.RecipeApi):
         'parent_got_revision', self.m.properties.get('revision', 'HEAD'))
     solution = self.m.gclient.c.solutions[0]
     branch = self.m.properties.get('branch', 'master')
-    needs_branch_heads = False
     if RELEASE_BRANCH_RE.match(branch):
       revision = 'refs/branch-heads/%s:%s' % (branch, revision)
-      needs_branch_heads = True
-    kwargs.setdefault('with_branch_heads', needs_branch_heads)
     solution.revision = revision
 
     try:

@@ -532,7 +532,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     """Returns the value of the given step's cmd-line parameter."""
     check(step in steps)
     parser = argparse.ArgumentParser()
-    if action:
+    # TODO(machenbach): Add test case for this branch or delete code.
+    if action:  # pragma: no cover
       parser.add_argument(param, dest='param', action=action)
     else:
       parser.add_argument(param, dest='param')

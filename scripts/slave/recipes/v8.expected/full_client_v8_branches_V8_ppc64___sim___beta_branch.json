@@ -20,8 +20,7 @@
       "v8@refs/branch-heads/4.3:deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
       "--refs",
       "refs/branch-heads/4.3",
-      "--no_shallow",
-      "--with_branch_heads"
+      "--no_shallow"
     ],
     "cwd": "[BUILDER_CACHE]/V8_ppc64___sim___beta_branch",
     "env_prefixes": {

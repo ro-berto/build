@@ -153,8 +153,6 @@ def GenTests(api):
             'git describe', api.raw_io.stream_output('3.4.3.17')) +
         api.v8.check_param_equals(
             'bot_update', '--revision', 'v8@refs/branch-heads/3.4:deadbeef') +
-        api.v8.check_param_equals(
-            'bot_update', '--with_branch_heads', True) +
         api.post_process(
             MustRun, 'clobber', 'gclient runhooks', 'gn', 'compile',
             'zipping', 'gsutil upload', 'archive link')
