@@ -164,15 +164,6 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'win'},
       },
-      'Win32 Release [large tests]': {
-        'recipe_config': 'webrtc_baremetal',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
       'Win32 ASan': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['asan'],
@@ -234,15 +225,6 @@ BUILDERS = freeze({
           'os': 'Mac-10.11',
           'cpu': 'x86-64',
         }
-      },
-      'Mac64 Release [large tests]': {
-        'recipe_config': 'webrtc_baremetal',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
       },
       'Linux32 Debug': {
         'recipe_config': 'webrtc',
@@ -441,15 +423,6 @@ BUILDERS = freeze({
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
-      },
-      'Linux64 Release [large tests]': {
-        'recipe_config': 'webrtc_baremetal',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
       },
       'Android32 Builder x86': {
         'recipe_config': 'webrtc_android',

@@ -44,7 +44,6 @@ def Update(c):
           'Linux UBSan',
           'Linux UBSan vptr',
           'Linux (more configs)',
-          'Linux64 Release [large tests]',
           'Linux64 Release (Libfuzzer)',
       ]),
   ])
@@ -70,10 +69,6 @@ def Update(c):
       'name': 'Linux (more configs)',
       'recipe': 'webrtc/more_configs',
       'slavebuilddir': 'linux64',
-    },
-    {
-      'name': 'Linux64 Release [large tests]',
-      'slavebuilddir': 'linux_baremetal',
     },
     {
       'name': 'Linux64 Release (Libfuzzer)',

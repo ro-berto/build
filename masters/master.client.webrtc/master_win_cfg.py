@@ -29,7 +29,6 @@ def Update(c):
           'Win32 Release',
           'Win64 Debug',
           'Win64 Release',
-          'Win32 Release [large tests]',
           'Win32 Debug (Clang)',
           'Win32 Release (Clang)',
           'Win64 Debug (Clang)',
@@ -46,10 +45,6 @@ def Update(c):
     {'name': 'Win32 Release'},
     {'name': 'Win64 Debug'},
     {'name': 'Win64 Release'},
-    {
-      'name': 'Win32 Release [large tests]',
-      'slavebuilddir': 'win_baremetal',
-    },
     {'name': 'Win32 Debug (Clang)', 'slavebuilddir': 'win_clang'},
     {'name': 'Win32 Release (Clang)', 'slavebuilddir': 'win_clang'},
     {'name': 'Win64 Debug (Clang)', 'slavebuilddir': 'win_clang'},
