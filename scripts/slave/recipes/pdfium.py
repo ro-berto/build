@@ -205,11 +205,6 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
     '--gold_output_dir', gold_output_dir,
   ])
 
-  ignore_hashes_file = get_gold_ignore_hashes(api, out_dir)
-  if ignore_hashes_file:
-    script_args.extend(['--gold_ignore_hashes',
-                        ignore_hashes_file]) # pragma: no cover
-
   # Cannot use the standard deferred result mechanism, since some of the
   # operations related to uploading to Gold depend on non-deferred results.
   test_exception = None
@@ -224,8 +219,13 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
         # Swallow the exception. The step will still show up as
         # failed, but processing will continue.
         test_exception = e
-    # Upload immediately, since tests below will overwrite the output directory
-    upload_dm_results(api, gold_output_dir, revision, 'javascript')
+
+  # Setup uploading results to Gold after the javascript tests, since they do
+  # not produce interesting result images
+  ignore_hashes_file = get_gold_ignore_hashes(api, out_dir)
+  if ignore_hashes_file:
+    script_args.extend(['--gold_ignore_hashes',
+                        ignore_hashes_file]) # pragma: no cover
 
   pixel_tests_path = str(api.path['checkout'].join('testing', 'tools',
                                                    'run_pixel_tests.py'))
