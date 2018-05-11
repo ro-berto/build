@@ -222,7 +222,8 @@ _AddIsolatedTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
                      use_private_swarming_server=True)
 _AddIsolatedTestSpec('Android Nexus6 WebView Perf', 'android-webview-nexus6',
                      'android', target_bits=32,
-                     parent_buildername='Android Compile Perf')
+                     parent_buildername='Android Compile Perf',
+                     use_private_swarming_server=True)
 
 
 _AddIsolatedTestSpec('Win 10 High-DPI Perf', 'win-high-dpi', 'win',
