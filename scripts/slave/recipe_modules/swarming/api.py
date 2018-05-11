@@ -654,7 +654,9 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     # HACK(crbug.com/812693) - we don't support cpython on arm yet, so remove
     # it from packages to inject.
-    if 'arm' in task.dimensions.get('cpu', ''):
+    # HACK(crbug.com/842234): We also don't support CPython on mips.
+    cpu_dimension = task.dimensions.get('cpu', '')
+    if 'arm' in cpu_dimension or 'mips' in cpu_dimension:
       for k in to_add.keys():
         if 'cpython' in k:
           to_add.pop(k)
