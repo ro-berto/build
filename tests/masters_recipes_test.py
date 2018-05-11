@@ -83,6 +83,12 @@ FAKE_BUILDERS = {
         # These have been migrated to LUCI.
         'Android Cronet Builder',
     ],
+    'master.chromium.chromiumos': [
+        # These have been migrated to LUCI.
+        'chromeos-amd64-generic-rel',
+        'chromeos-daisy-rel',
+        'linux-chromeos-rel',
+    ],
     'master.chromium.fyi': [
         # These are on LUCI.
         'linux-chromium-tests-staging-builder',
@@ -129,6 +135,12 @@ FAKE_BUILDERS = {
         'Win10 Tests x64 (dbg)',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'win-jumbo-rel',
+    ],
+    'master.tryserver.chromium.chromiumos': [
+        # These have been migrated to LUCI.
+        'chromeos-amd64-generic-rel',
+        'chromeos-daisy-rel',
+        'linux-chromeos-rel',
     ],
     'master.tryserver.chromium.win' : [
         # FIXME(tansell): Remove fake when BlinkTests are removed.

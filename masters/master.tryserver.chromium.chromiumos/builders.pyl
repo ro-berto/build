@@ -19,37 +19,17 @@
   },
 
   "builders": {
-    "chromeos-amd64-generic-rel": {
-      "bot_pool": "cq",
-    },
-    "chromeos-daisy-rel": {
-      "bot_pool": "cq",
-    },
     "linux-chromeos-compile-dbg": {
-      "bot_pool": "cq",
+      "bot_pool": "optional",
     },
     "linux-chromeos-dbg": {
       "bot_pool": "optional",
-    },
-    "linux-chromeos-rel": {
-      "bot_pool": "cq",
     },
   },
 
   "schedulers": {},
 
   "bot_pools": {
-    "cq": {
-      "os": "linux",
-      "version": "trusty",
-      "bots": [
-        "slave{556..567}-c4",
-        "slave1201-c4",
-        "slave{1276..1335}-c4",
-        "slave{1389..1395}-c4",
-        "slave{1528..1583}-c4",
-      ],
-    },
     "optional": {
       "os": "linux",
       "version": "trusty",

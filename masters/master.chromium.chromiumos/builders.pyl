@@ -27,21 +27,9 @@
       "category": "1default",
       "bot": "build18-m1",
     },
-    "linux-chromeos-rel": {
-      "category": "1default",
-      "bot": "slave230-c1",
-    },
     "linux-chromeos-dbg": {
       "category": "4debug",
       "bot": "slave231-c1",
-    },
-    "chromeos-amd64-generic-rel": {
-      "category": "5simplechrome",
-      "bot": "slave232-c1",
-    },
-    "chromeos-daisy-rel": {
-      "category": "5simplechrome",
-      "bot": "slave234-c1",
     },
   },
 
