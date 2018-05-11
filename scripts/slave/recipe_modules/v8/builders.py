@@ -1615,7 +1615,7 @@ BUILDERS = {
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
-        ] + with_extra_variants([V8Testing(2)]),
+        ] + with_extra_variants([V8Testing(3)]),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - gc stress': {
