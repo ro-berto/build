@@ -24,7 +24,6 @@ def Update(config, active_master, c):
                             treeStableTimer=60,
                             builderNames=[
           'ios-device',
-          'ios-simulator',
           'ios-simulator-full-configs',
           'ios-device-xcode-clang',
           'ios-simulator-xcode-clang',
@@ -32,7 +31,6 @@ def Update(config, active_master, c):
   ])
   specs = [
     {'name': 'ios-device'},
-    {'name': 'ios-simulator'},
     {'name': 'ios-simulator-full-configs'},
     {'name': 'ios-device-xcode-clang'},
     {'name': 'ios-simulator-xcode-clang'},

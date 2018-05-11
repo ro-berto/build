@@ -55,7 +55,6 @@ SUPPRESSIONS = {
     'master.chromium.mac': [
         'ios-device', # these are covered, just by the iOS recipes instead.
         'ios-device-xcode-clang',
-        'ios-simulator',
         'ios-simulator-full-configs',
         'ios-simulator-xcode-clang',
     ],
