@@ -21,6 +21,7 @@ class WebRTCApi(recipe_api.RecipeApi):
   RECIPE_CONFIGS = builders.RECIPE_CONFIGS
 
   NORMAL_TESTS = steps.NORMAL_TESTS
+  BAREMETAL_TESTS = steps.BAREMETAL_TESTS
   ANDROID_DEVICE_TESTS = steps.ANDROID_DEVICE_TESTS
   ANDROID_INSTRUMENTATION_TESTS = steps.ANDROID_INSTRUMENTATION_TESTS
   ANDROID_JUNIT_TESTS = steps.ANDROID_JUNIT_TESTS
@@ -110,6 +111,9 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.c.use_isolate:
       if self.c.TEST_SUITE == 'webrtc':
         self._isolated_targets = (self.NORMAL_TESTS.keys())
+      elif self.c.TEST_SUITE == 'webrtc_and_baremetal':
+        self._isolated_targets = (self.NORMAL_TESTS.keys() +
+                                  list(self.BAREMETAL_TESTS))
       elif self.c.TEST_SUITE == 'android':
         self._isolated_targets = (self.ANDROID_DEVICE_TESTS.keys() +
                                   self.ANDROID_INSTRUMENTATION_TESTS.keys() +

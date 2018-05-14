@@ -13,6 +13,12 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'webrtc',
     'test_suite': 'webrtc',
   },
+  'webrtc_and_baremetal': {
+    'chromium_config': 'webrtc_default',
+    'gclient_config': 'webrtc',
+    'test_suite': 'webrtc_and_baremetal',
+  },
+  # TODO(oprypin): migrate try builders to webrtc_and_baremetal (swarming).
   'webrtc_baremetal': {
     'chromium_config': 'webrtc_default',
     'gclient_config': 'webrtc_with_limited',
@@ -80,7 +86,7 @@ BUILDERS = freeze({
         }
       },
       'Win32 Release': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_and_baremetal',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -196,7 +202,7 @@ BUILDERS = freeze({
         }
       },
       'Mac64 Release': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_and_baremetal',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -294,7 +300,7 @@ BUILDERS = freeze({
         }
       },
       'Linux64 Release': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_and_baremetal',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

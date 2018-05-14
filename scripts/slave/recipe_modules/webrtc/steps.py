@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import functools
 import os
 import sys
 
@@ -77,6 +78,12 @@ ANDROID_DEVICE_TESTS = freeze({
   'webrtc_nonparallel_tests': {},
 })
 
+BAREMETAL_TESTS = freeze([
+  'isac_fix_test',
+  'video_capture_tests',
+  'webrtc_perf_tests',
+])
+
 ANDROID_INSTRUMENTATION_TESTS = freeze({
   'AppRTCMobileTest': {},
   'libjingle_peerconnection_android_unittest': {},
@@ -127,9 +134,10 @@ def generate_tests(api, test_suite, revision):
   build_out_dir = api.m.path['checkout'].join(
       'out', api.m.chromium.c.build_config_fs)
 
-  if test_suite == 'webrtc':
+  if test_suite in ('webrtc', 'webrtc_and_baremetal'):
     for test, extra_args in sorted(NORMAL_TESTS.items()):
       tests.append(SwarmingWebRtcGtestTest(test, **extra_args))
+
     if api.mastername == 'client.webrtc.fyi' and api.m.platform.is_win:
       tests.append(BaremetalTest(
           'modules_tests',
@@ -137,19 +145,24 @@ def generate_tests(api, test_suite, revision):
           gtest_args=['--gtest_filter=ScreenCapturerIntegrationTest.*',
                       '--gtest_also_run_disabled_tests'],
           parallel=True))
-  elif test_suite == 'webrtc_baremetal':
-    api.virtual_webcam_check()  # Needed for video_capture_tests below.
 
-    tests.extend([
-        BaremetalTest('video_capture_tests', revision=revision),
-    ])
+  if test_suite in ('webrtc_baremetal', 'webrtc_and_baremetal'):
+    # TODO(oprypin): migrate try builders to webrtc_and_baremetal (swarming).
+    if test_suite == 'webrtc_baremetal':
+      test_type = functools.partial(BaremetalTest,
+                                    revision=revision)
+      api.virtual_webcam_check()
+    else:
+      test_type = functools.partial(SwarmingWebRtcGtestTest,
+                                    dimensions={'pool': 'WebRTC-baremetal'})
+
+    tests.append(test_type('video_capture_tests'))
 
     # Cover tests only running on perf tests on our trybots:
     if api.m.tryserver.is_tryserver:
       if api.m.platform.is_linux:
-        tests.append(BaremetalTest(
+        tests.append(test_type(
             'isac_fix_test',
-            revision=revision,
             args=[
                 '32000', api.m.path['checkout'].join(
                     'resources', 'speech_and_misc_wb.pcm'),
@@ -157,15 +170,16 @@ def generate_tests(api, test_suite, revision):
 
       # TODO(kjellander): Enable on Mac when bugs.webrtc.org/7322 is fixed.
       if not api.m.platform.is_mac:
-        tests.append(BaremetalTest('webrtc_perf_tests', revision=revision,
+        tests.append(test_type('webrtc_perf_tests',
             args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
-  elif test_suite == 'desktop_perf_swarming':
+
+  if test_suite == 'desktop_perf_swarming':
     for test, extra_args in sorted(PERF_TESTS.items()):
       tests.append(SwarmingPerfTest(test, **extra_args))
-  elif test_suite == 'android_perf_swarming' and api.c.PERF_ID:
+  if test_suite == 'android_perf_swarming' and api.c.PERF_ID:
     for test, extra_args in sorted(ANDROID_PERF_TESTS.items()):
       tests.append(SwarmingAndroidPerfTest(test, **extra_args))
-  elif test_suite == 'android_perf' and api.c.PERF_ID:
+  if test_suite == 'android_perf' and api.c.PERF_ID:
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest(
         'webrtc_perf_tests',
@@ -197,7 +211,7 @@ def generate_tests(api, test_suite, revision):
           revision_number=api.revision_number,
           perf_id=api.c.PERF_ID))
 
-  elif test_suite == 'android':
+  if test_suite == 'android':
     for test, extra_args in sorted(ANDROID_DEVICE_TESTS.items() +
                                    ANDROID_INSTRUMENTATION_TESTS.items()):
       tests.append(AndroidTest(test, **extra_args))
