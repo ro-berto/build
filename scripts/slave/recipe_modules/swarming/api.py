@@ -947,8 +947,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         step_result = self.m.step.active_result
         if step_result is not None:
           step_result.presentation.step_text = text_for_task(task)
-          summary_json = step_result.swarming.summary
-          self._handle_summary_json(task, summary_json, step_result)
 
           links = {}
           if hasattr(step_result, 'json') and hasattr(step_result.json, 'output'):
@@ -958,6 +956,10 @@ class SwarmingApi(recipe_api.RecipeApi):
             links = step_result.test_utils.gtest_results.raw.get('links', {})
           for k, v in links.iteritems():
             step_result.presentation.links[k] = v
+
+          summary_json = step_result.swarming.summary
+          self._handle_summary_json(task, summary_json, step_result)
+
       except self.m.step.StepFailure:
         # Make sure that, if _handle_summary_json raises an StepFailure, it
         # correctly propogates.
