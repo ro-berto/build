@@ -74,23 +74,6 @@
       "slave_pools": ["cronet_m_bullhead_perf"],
       "category": "0Cronet",
     },
-    "Android arm Builder (dbg)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["arm_builder"],
-      "category": "2Builders",
-      "slavebuilddir": "android_build",
-    },
-    "KitKat Phone Tester (dbg)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["kit_kat_phone_dbg"],
-      "category": "3Testers",
-      "slavebuilddir": "android_build",
-      "mergeRequests": True,
-    },
     "KitKat Tablet Tester": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -165,16 +148,6 @@
   },
 
   "slave_pools": {
-    "arm_builder": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": [
-          "slave35-c1",
-        ],
-    },
     "cast_builder": {
       "slave_data": {
         "os": "linux",
@@ -254,14 +227,6 @@
         "bits": "64",
       },
       "slaves": ["build88-b1"],
-    },
-    "kit_kat_phone_dbg": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["slave154-c1"],
     },
     "kit_kat_phone_rel": {
       "slave_data": {
