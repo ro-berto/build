@@ -153,9 +153,9 @@ def generate_tests(api, test_suite, revision):
                                     revision=revision)
       api.virtual_webcam_check()
     else:
-      test_type = functools.partial(SwarmingWebRtcGtestTest,
-                                    dimensions={'pool': 'WebRTC-baremetal',
-                                                'gpu': None})
+      test_type = functools.partial(
+          SwarmingWebRtcGtestTest,
+          dimensions=api.bot_config['baremetal_swarming_dimensions'])
 
     tests.append(test_type('video_capture_tests'))
 

@@ -101,6 +101,11 @@ BUILDERS = freeze({
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86',
+        },
+        'baremetal_swarming_dimensions': {
+          'pool': 'WebRTC-baremetal',
+          'os': 'Windows',
+          'gpu': None,
         }
       },
       'Win64 Debug': {
@@ -214,6 +219,11 @@ BUILDERS = freeze({
         'swarming_dimensions': {
           'os': 'Mac-10.11',
           'cpu': 'x86-64',
+        },
+        'baremetal_swarming_dimensions': {
+          'pool': 'WebRTC-baremetal',
+          'os': 'Mac',
+          'gpu': None,
         }
       },
       'Mac Asan': {
@@ -315,6 +325,11 @@ BUILDERS = freeze({
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
+        },
+        'baremetal_swarming_dimensions': {
+          'pool': 'WebRTC-baremetal',
+          'os': 'Ubuntu',
+          'gpu': None,
         }
       },
       'Linux64 Debug (ARM)': {
