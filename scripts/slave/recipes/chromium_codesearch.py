@@ -95,9 +95,9 @@ SPEC = freeze({
       'package_filename': 'chromium-android-src',
       'platform': 'android',
       'sync_generated_files': True,
-      'gen_repo_branch': 'master',
-      # Generated files will end up in out/android/Debug/gen.
-      'gen_repo_out_dir': 'android',
+      'gen_repo_branch': 'android',
+      # Generated files will end up in out/chromium-android/Debug/gen.
+      'gen_repo_out_dir': 'chromium-android',
       'corpus': 'chromium',
       'root': 'chromium-android',
     },
