@@ -182,6 +182,7 @@ FAKE_BUILDERS = {
     'master.tryserver.chromium.android': [
         # These have been migrated to LUCI.
         'android_arm64_dbg_recipe',
+        'android_compile_dbg',
         'android_cronet',
         'android_n5x_swarming_dbg',
         'android_optional_gpu_tests_rel',

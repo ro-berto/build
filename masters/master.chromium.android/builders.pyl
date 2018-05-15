@@ -74,38 +74,6 @@
       "slave_pools": ["cronet_m_bullhead_perf"],
       "category": "0Cronet",
     },
-    "KitKat Tablet Tester": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["kit_kat_tablet"],
-      "category": "3Testers",
-      "mergeRequests": True,
-    },
-    "Lollipop Phone Tester": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["lollipop_phone"],
-      "category": "3Testers",
-      "mergeRequests": True,
-    },
-    "Lollipop Tablet Tester": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["lollipop_tablet"],
-      "category": "3Testers",
-      "mergeRequests": True,
-    },
-    "Marshmallow Tablet Tester": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["marshmallow_tablet"],
-      "category": "3Testers",
-      "mergeRequests": True,
-    },
     "Android ASAN (dbg)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -236,30 +204,6 @@
       },
       "slaves": ["slave155-c1"],
     },
-    "kit_kat_tablet": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["slave216-c1"],
-    },
-    "lollipop_phone": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["slave145-c1"],
-    },
-    "lollipop_tablet": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["slave217-c1"],
-    },
     "marshmallow_phone": {
       "slave_data": {
         "os": "linux",
@@ -267,14 +211,6 @@
         "bits": "64",
       },
       "slaves": ["slave200-c1"],
-    },
-    "marshmallow_tablet": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["slave218-c1"],
     },
   }
 }
