@@ -63,7 +63,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[CACHE]/goma/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-amd64 candidate",
       "-json-output",
@@ -187,7 +187,7 @@
       "--git-cache-dir",
       "[CACHE]/git",
       "--goma_dir",
-      "[CACHE]/goma_client",
+      "[CACHE]/goma/client",
       "--goma_client_json",
       "/creds/service_accounts/service-account-goma-client.json",
       "amd64-generic-goma-canary-chromium-pfq-informational"

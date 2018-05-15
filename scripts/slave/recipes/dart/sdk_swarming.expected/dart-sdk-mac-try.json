@@ -8,7 +8,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[CACHE]/goma/client",
       "-ensure-file",
       "infra_internal/goma/client/mac-amd64 release",
       "-json-output",
@@ -53,7 +53,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "GOMA_DIR": "[CACHE]/goma_client"
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -91,7 +91,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "GOMA_DIR": "[CACHE]/goma_client"
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "name": "clobber"
   },
@@ -104,7 +104,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "GOMA_DIR": "[CACHE]/goma_client",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -151,7 +151,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/dart_sdk_mac_try"
+      "[CACHE]/goma/data/dart_sdk_mac_try"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -172,14 +172,14 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/dart_sdk_mac_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart_sdk_mac_try",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -272,7 +272,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
@@ -280,7 +280,7 @@
     "env": {
       "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/dart_sdk_mac_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart_sdk_mac_try",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -313,14 +313,14 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/dart_sdk_mac_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart_sdk_mac_try",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -342,14 +342,14 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/dart_sdk_mac_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart_sdk_mac_try",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -492,7 +492,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/dart_sdk_mac_try"
+      "[CACHE]/goma/data/dart_sdk_mac_try"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -513,14 +513,14 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/dart_sdk_mac_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart_sdk_mac_try",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -613,7 +613,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
@@ -621,7 +621,7 @@
     "env": {
       "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/dart_sdk_mac_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart_sdk_mac_try",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -654,14 +654,14 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/dart_sdk_mac_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart_sdk_mac_try",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -683,14 +683,14 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/dart_sdk_mac_try",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart_sdk_mac_try",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",

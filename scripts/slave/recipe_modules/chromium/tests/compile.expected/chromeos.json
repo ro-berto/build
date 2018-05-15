@@ -8,7 +8,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[CACHE]/goma/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -187,7 +187,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/test_buildername"
+      "[CACHE]/goma/data/test_buildername"
     ],
     "cwd": "None",
     "env": {
@@ -208,7 +208,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
     "cwd": "None",
@@ -216,7 +216,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/test_buildername",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/test_buildername",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -285,7 +285,7 @@
       "None/build/cros_cache",
       "--use-external-config",
       "--gomadir",
-      "[CACHE]/goma_client",
+      "[CACHE]/goma/client",
       "--nostart-goma",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
@@ -353,7 +353,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
@@ -393,7 +393,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
     "cwd": "None",
@@ -421,7 +421,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
     "cwd": "None",

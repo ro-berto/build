@@ -107,7 +107,7 @@
       "--config-file",
       "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64_CFI___release_builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64_CFI___release_builder/v8",

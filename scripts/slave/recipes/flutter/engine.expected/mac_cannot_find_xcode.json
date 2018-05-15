@@ -99,7 +99,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[CACHE]/goma/client",
       "-ensure-file",
       "infra_internal/goma/client/mac-amd64 release",
       "-json-output",
@@ -138,7 +138,7 @@
       "9.0.1"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]/goma_client",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
     "name": "set_xcode_version",

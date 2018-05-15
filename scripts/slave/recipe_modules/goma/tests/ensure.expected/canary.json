@@ -12,7 +12,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[CACHE]/goma/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-amd64 candidate",
       "-json-output",

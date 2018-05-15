@@ -143,7 +143,7 @@
       "--config-file",
       "[BUILDER_CACHE]/v8_mac64_dbg_ng/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "//out/Debug"
     ],
     "cwd": "[BUILDER_CACHE]/v8_mac64_dbg_ng/v8",

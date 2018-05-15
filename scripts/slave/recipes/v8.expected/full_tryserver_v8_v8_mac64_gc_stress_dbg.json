@@ -143,7 +143,7 @@
       "--config-file",
       "[BUILDER_CACHE]/v8_mac64_gc_stress_dbg/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "d8_default\n",
       "//out/Debug"

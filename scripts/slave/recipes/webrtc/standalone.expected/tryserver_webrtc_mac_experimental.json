@@ -114,7 +114,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "-ensure-file",
       "infra_internal/goma/client/mac-amd64 release",
       "-json-output",
@@ -177,7 +177,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1",
       "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -210,7 +210,7 @@
       "--config-file",
       "[BUILDER_CACHE]/mac_experimental/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "audio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nlow_bandwidth_audio_test\nmodules_tests\nmodules_unittests\nortc_unittests\npeerconnection_unittests\nrtc_media_unittests\nrtc_pc_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nwebrtc_nonparallel_tests\n",
       "//out/Release"
@@ -289,7 +289,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/mac_experimental"
+      "[GOMA_CACHE]/data/mac_experimental"
     ],
     "cwd": "[BUILDER_CACHE]/mac_experimental/src",
     "env": {
@@ -305,7 +305,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[BUILDER_CACHE]/mac_experimental/src",
@@ -313,7 +313,7 @@
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/mac_experimental",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/mac_experimental",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -418,7 +418,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
@@ -453,7 +453,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[BUILDER_CACHE]/mac_experimental/src",
@@ -476,7 +476,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[BUILDER_CACHE]/mac_experimental/src",

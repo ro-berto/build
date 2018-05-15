@@ -7,7 +7,7 @@
       "--root=[START_DIR]\\v8",
       "gen",
       "//out/Release",
-      "--args=is_clang=true v8_static_library=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\goma_client\""
+      "--args=is_clang=true v8_static_library=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\goma\\client\""
     ],
     "cwd": "[START_DIR]\\v8",
     "env": {

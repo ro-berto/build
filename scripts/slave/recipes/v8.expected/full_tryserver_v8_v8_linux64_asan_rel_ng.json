@@ -111,7 +111,7 @@
       "--config-file",
       "[BUILDER_CACHE]/v8_linux64_asan_rel_ng/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/v8_linux64_asan_rel_ng/v8",

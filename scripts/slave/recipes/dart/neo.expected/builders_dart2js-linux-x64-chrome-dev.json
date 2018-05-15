@@ -8,7 +8,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[CACHE]/goma/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -53,7 +53,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "GOMA_DIR": "[CACHE]/goma_client"
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -92,7 +92,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "GOMA_DIR": "[CACHE]/goma_client",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"

@@ -308,7 +308,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[CACHE]/goma/client",
       "-ensure-file",
       "infra_internal/goma/client/mac-amd64 release",
       "-json-output",
@@ -433,13 +433,13 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "is_debug=true\ntarget_cpu=\"x64\"\nuse_goma=true\ngoma_dir=\"[CACHE]/goma_client\"\n",
+      "is_debug=true\ntarget_cpu=\"x64\"\nuse_goma=true\ngoma_dir=\"[CACHE]/goma/client\"\n",
       "[START_DIR]/src/out/Debug-iphonesimulator/args.gn"
     ],
     "infra_step": true,
     "name": "write args.gn",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br />is_debug=true<br />target_cpu=\"x64\"<br />use_goma=true<br />goma_dir=\"[CACHE]/goma_client\"@@@"
+      "@@@STEP_TEXT@<br />is_debug=true<br />target_cpu=\"x64\"<br />use_goma=true<br />goma_dir=\"[CACHE]/goma/client\"@@@"
     ]
   },
   {
@@ -470,7 +470,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/ios"
+      "[CACHE]/goma/data/ios"
     ],
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -482,12 +482,12 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/ios",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ios",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -554,13 +554,13 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/ios",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ios",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -588,12 +588,12 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/ios",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ios",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -610,12 +610,12 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/ios",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/ios",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",

@@ -122,7 +122,7 @@
       "--config-file",
       "[BUILDER_CACHE]\\V8_Clusterfuzz_Win64_ASAN___debug_builder\\v8\\infra\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[CACHE]\\goma_client",
+      "[GOMA_CACHE]\\client",
       "//out/Debug"
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Clusterfuzz_Win64_ASAN___debug_builder\\v8",

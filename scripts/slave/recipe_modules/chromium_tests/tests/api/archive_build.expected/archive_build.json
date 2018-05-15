@@ -157,7 +157,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[CACHE]/goma/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -219,7 +219,7 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/goma_client' linux_dump_symbols=0 target_arch=x64 test_isolation_mode=noop use_goma=1",
+      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/goma/client' linux_dump_symbols=0 target_arch=x64 test_isolation_mode=noop use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -279,7 +279,7 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"gclient_env\": {\"GYP_DEFINES\": \"component=static_library gomadir='[CACHE]/goma_client' linux_dump_symbols=0 target_arch=x64 test_isolation_mode=noop use_goma=1\"}, \"gs_acl\": \"public-read\", \"gs_bucket\": \"gs://chromium-browser-snapshots\"}",
+      "{\"gclient_env\": {\"GYP_DEFINES\": \"component=static_library gomadir='[CACHE]/goma/client' linux_dump_symbols=0 target_arch=x64 test_isolation_mode=noop use_goma=1\"}, \"gs_acl\": \"public-read\", \"gs_bucket\": \"gs://chromium-browser-snapshots\"}",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-properties",

@@ -91,7 +91,12 @@ class GomaApi(recipe_api.RecipeApi):
   def default_cache_path(self):
     safe_buildername = re.sub(r'[^a-zA-Z0-9]', '_',
                               self.m.properties['buildername'])
-    return self.default_cache_path_per_slave.join(safe_buildername)
+    data_cache = self.default_cache_path_per_slave.join('data')
+    return data_cache.join(safe_buildername)
+
+  @property
+  def default_client_path(self):
+    return self.default_cache_path_per_slave.join('client')
 
   @property
   def jobs(self):
@@ -154,7 +159,7 @@ class GomaApi(recipe_api.RecipeApi):
         ref='release'
         if canary:
           ref='candidate'
-        self._goma_dir = self.m.path['cache'].join('goma_client')
+        self._goma_dir = self.default_client_path
 
         self.m.cipd.ensure(self._goma_dir, {goma_package: ref})
         return self._goma_dir

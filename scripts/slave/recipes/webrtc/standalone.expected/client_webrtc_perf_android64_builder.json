@@ -123,7 +123,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -157,7 +157,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/goma_client' target_arch=arm64 use_goma=1",
+      "GYP_DEFINES": "component=static_library gomadir='[GOMA_CACHE]/client' target_arch=arm64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -175,7 +175,7 @@
       "--config-file",
       "[BUILDER_CACHE]/Android64_Builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/Android64_Builder/src",
@@ -203,7 +203,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/Android64_Builder"
+      "[GOMA_CACHE]/data/Android64_Builder"
     ],
     "cwd": "[BUILDER_CACHE]/Android64_Builder/src",
     "env": {
@@ -219,7 +219,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[BUILDER_CACHE]/Android64_Builder/src",
@@ -227,7 +227,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/Android64_Builder",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/Android64_Builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -335,7 +335,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
@@ -370,7 +370,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[BUILDER_CACHE]/Android64_Builder/src",
@@ -393,7 +393,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[BUILDER_CACHE]/Android64_Builder/src",

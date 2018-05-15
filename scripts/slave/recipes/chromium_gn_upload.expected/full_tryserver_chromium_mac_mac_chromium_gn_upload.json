@@ -205,7 +205,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[CACHE]/goma/client",
       "-ensure-file",
       "infra_internal/goma/client/mac-amd64 release",
       "-json-output",
@@ -284,7 +284,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1",
       "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -304,7 +304,7 @@
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma_client",
+      "[CACHE]/goma/client",
       "//out/Release"
     ],
     "cwd": "[START_DIR]/src",
@@ -361,7 +361,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/mac_chromium_gn_upload"
+      "[CACHE]/goma/data/mac_chromium_gn_upload"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -377,7 +377,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[START_DIR]/src",
@@ -385,7 +385,7 @@
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/mac_chromium_gn_upload",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/mac_chromium_gn_upload",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -494,7 +494,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
@@ -529,7 +529,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[START_DIR]/src",
@@ -552,7 +552,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[START_DIR]/src",

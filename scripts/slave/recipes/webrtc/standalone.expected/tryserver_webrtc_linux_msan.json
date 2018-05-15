@@ -114,7 +114,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -147,7 +147,7 @@
     "cwd": "[BUILDER_CACHE]/linux_msan/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/goma_client' msan=1 msan_track_origins=2 target_arch=x64 use_goma=1 use_prebuilt_instrumented_libraries=1",
+      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[GOMA_CACHE]/client' msan=1 msan_track_origins=2 target_arch=x64 use_goma=1 use_prebuilt_instrumented_libraries=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -178,7 +178,7 @@
       "--config-file",
       "[BUILDER_CACHE]/linux_msan/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "audio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nlow_bandwidth_audio_test\nmodules_tests\nmodules_unittests\nortc_unittests\npeerconnection_unittests\nrtc_media_unittests\nrtc_pc_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nwebrtc_nonparallel_tests\n",
       "//out/Release"
@@ -255,7 +255,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/linux_msan"
+      "[GOMA_CACHE]/data/linux_msan"
     ],
     "cwd": "[BUILDER_CACHE]/linux_msan/src",
     "env": {
@@ -271,14 +271,14 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[BUILDER_CACHE]/linux_msan/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/linux_msan",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux_msan",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -381,7 +381,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
@@ -416,7 +416,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[BUILDER_CACHE]/linux_msan/src",
@@ -439,7 +439,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[BUILDER_CACHE]/linux_msan/src",

@@ -202,7 +202,7 @@
       "cipd.bat",
       "ensure",
       "-root",
-      "[CACHE]\\goma_client",
+      "[GOMA_CACHE]\\client",
       "-ensure-file",
       "infra_internal/goma/client/windows-amd64 release",
       "-json-output",
@@ -249,7 +249,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GYP_DEFINES": "component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\goma_client' proprietary_codecs=1 target_arch=ia32 use_goma=1",
+      "GYP_DEFINES": "component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]\\client' proprietary_codecs=1 target_arch=ia32 use_goma=1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -509,7 +509,7 @@
       "cipd.bat",
       "ensure",
       "-root",
-      "[CACHE]\\goma_client",
+      "[GOMA_CACHE]\\client",
       "-ensure-file",
       "infra_internal/goma/client/windows-amd64 release",
       "-json-output",
@@ -543,7 +543,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GYP_DEFINES": "component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\goma_client' proprietary_codecs=1 target_arch=ia32 use_goma=1",
+      "GYP_DEFINES": "component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]\\client' proprietary_codecs=1 target_arch=ia32 use_goma=1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r1.gclient runhooks",
@@ -628,7 +628,7 @@
       "--config-file",
       "[BUILDER_CACHE]\\win\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[CACHE]\\goma_client",
+      "[GOMA_CACHE]\\client",
       "--swarming-targets-file",
       "gl_tests\n",
       "//out/Release"
@@ -668,7 +668,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]\\win_chromium_variable"
+      "[GOMA_CACHE]\\data\\win_chromium_variable"
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
@@ -685,7 +685,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "restart"
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",
@@ -693,7 +693,7 @@
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\win_chromium_variable",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\win_chromium_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
@@ -813,7 +813,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
@@ -850,7 +850,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stat"
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",
@@ -875,7 +875,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stop"
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",
@@ -1491,7 +1491,7 @@
       "cipd.bat",
       "ensure",
       "-root",
-      "[CACHE]\\goma_client",
+      "[GOMA_CACHE]\\client",
       "-ensure-file",
       "infra_internal/goma/client/windows-amd64 release",
       "-json-output",
@@ -1525,7 +1525,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GYP_DEFINES": "component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\goma_client' proprietary_codecs=1 target_arch=ia32 use_goma=1",
+      "GYP_DEFINES": "component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]\\client' proprietary_codecs=1 target_arch=ia32 use_goma=1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "test r0.gclient runhooks",
@@ -1610,7 +1610,7 @@
       "--config-file",
       "[BUILDER_CACHE]\\win\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[CACHE]\\goma_client",
+      "[GOMA_CACHE]\\client",
       "--swarming-targets-file",
       "gl_tests\n",
       "//out/Release"
@@ -1650,7 +1650,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]\\win_chromium_variable"
+      "[GOMA_CACHE]\\data\\win_chromium_variable"
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
@@ -1667,7 +1667,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "restart"
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",
@@ -1675,7 +1675,7 @@
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\win_chromium_variable",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\win_chromium_variable",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
@@ -1795,7 +1795,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
@@ -1832,7 +1832,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stat"
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",
@@ -1857,7 +1857,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stop"
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",

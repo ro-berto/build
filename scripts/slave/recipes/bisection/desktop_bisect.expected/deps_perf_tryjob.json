@@ -181,7 +181,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -227,7 +227,7 @@
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (with patch)"
@@ -706,7 +706,7 @@
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[CACHE]/goma_client' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "De-applying patch.gclient runhooks (without patch)",

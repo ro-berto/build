@@ -183,7 +183,7 @@
       "cipd.bat",
       "ensure",
       "-root",
-      "[CACHE]\\goma_client",
+      "[CACHE]\\goma\\client",
       "-ensure-file",
       "infra_internal/goma/client/windows-amd64 release",
       "-json-output",
@@ -238,7 +238,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=ia32 use_goma=1",
+      "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[CACHE]\\goma\\client' target_arch=ia32 use_goma=1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"

@@ -109,7 +109,7 @@
       "--config-file",
       "[BUILDER_CACHE]/V8_mips64el___sim___beta_branch/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "unittests\n",
       "//out/Release"

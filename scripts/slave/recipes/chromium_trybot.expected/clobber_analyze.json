@@ -232,7 +232,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -300,7 +300,7 @@
     "cwd": "[BUILDER_CACHE]/linux_clobber/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[CACHE]/goma_client' linux_dump_symbols=0 target_arch=x64 test_isolation_mode=noop use_goma=1",
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[GOMA_CACHE]/client' linux_dump_symbols=0 target_arch=x64 test_isolation_mode=noop use_goma=1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks (with patch)"
@@ -458,7 +458,7 @@
       "--config-file",
       "[BUILDER_CACHE]/linux_clobber/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/linux_clobber/src",
@@ -486,7 +486,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/linux_chromium_clobber_rel_ng"
+      "[GOMA_CACHE]/data/linux_chromium_clobber_rel_ng"
     ],
     "cwd": "[BUILDER_CACHE]/linux_clobber/src",
     "env": {
@@ -502,14 +502,14 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[BUILDER_CACHE]/linux_clobber/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/linux_chromium_clobber_rel_ng",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux_chromium_clobber_rel_ng",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -616,7 +616,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
@@ -651,7 +651,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[BUILDER_CACHE]/linux_clobber/src",
@@ -674,7 +674,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[BUILDER_CACHE]/linux_clobber/src",

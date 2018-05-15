@@ -73,7 +73,7 @@
       "cipd.bat",
       "ensure",
       "-root",
-      "[CACHE]\\goma_client",
+      "[CACHE]\\goma\\client",
       "-ensure-file",
       "infra_internal/goma/client/windows-amd64 release",
       "-json-output",
@@ -107,7 +107,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GYP_DEFINES": "component=shared_library fastbuild=1 gomadir='[CACHE]\\goma_client' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "component=shared_library fastbuild=1 gomadir='[CACHE]\\goma\\client' target_arch=x64 use_goma=1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -120,7 +120,7 @@
       "--root=[START_DIR]\\src",
       "gen",
       "//out/intelligibility_enhancer_no_include_tests",
-      "--args=rtc_enable_intelligibility_enhancer=true rtc_include_tests=false is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\goma_client\""
+      "--args=rtc_enable_intelligibility_enhancer=true rtc_include_tests=false is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\goma\\client\""
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
@@ -152,7 +152,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\Win__more_configs_"
+      "[CACHE]\\goma\\data\\Win__more_configs_"
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
@@ -169,7 +169,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
     "cwd": "[START_DIR]\\src",
@@ -178,7 +178,7 @@
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\Win__more_configs_",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
@@ -285,7 +285,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
@@ -322,7 +322,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
     "cwd": "[START_DIR]\\src",
@@ -347,7 +347,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
     "cwd": "[START_DIR]\\src",
@@ -461,7 +461,7 @@
       "--root=[START_DIR]\\src",
       "gen",
       "//out/bwe_test_logging",
-      "--args=rtc_enable_bwe_test_logging=true is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\goma_client\""
+      "--args=rtc_enable_bwe_test_logging=true is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\goma\\client\""
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
@@ -493,7 +493,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\Win__more_configs_"
+      "[CACHE]\\goma\\data\\Win__more_configs_"
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
@@ -510,7 +510,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
     "cwd": "[START_DIR]\\src",
@@ -519,7 +519,7 @@
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\Win__more_configs_",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
@@ -626,7 +626,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
@@ -663,7 +663,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
     "cwd": "[START_DIR]\\src",
@@ -688,7 +688,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
     "cwd": "[START_DIR]\\src",
@@ -835,7 +835,7 @@
       "--root=[START_DIR]\\src",
       "gen",
       "//out/dummy_audio_file_devices_no_protobuf",
-      "--args=rtc_use_dummy_audio_file_devices=true rtc_enable_protobuf=false is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\goma_client\""
+      "--args=rtc_use_dummy_audio_file_devices=true rtc_enable_protobuf=false is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\goma\\client\""
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
@@ -867,7 +867,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\Win__more_configs_"
+      "[CACHE]\\goma\\data\\Win__more_configs_"
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
@@ -884,7 +884,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
     "cwd": "[START_DIR]\\src",
@@ -893,7 +893,7 @@
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\Win__more_configs_",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
@@ -1000,7 +1000,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
@@ -1037,7 +1037,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
     "cwd": "[START_DIR]\\src",
@@ -1062,7 +1062,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
     "cwd": "[START_DIR]\\src",
@@ -1176,7 +1176,7 @@
       "--root=[START_DIR]\\src",
       "gen",
       "//out/rtti_no_sctp",
-      "--args=use_rtti=true rtc_enable_sctp=false is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\goma_client\""
+      "--args=use_rtti=true rtc_enable_sctp=false is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[CACHE]\\goma\\client\""
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
@@ -1208,7 +1208,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\Win__more_configs_"
+      "[CACHE]\\goma\\data\\Win__more_configs_"
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
@@ -1225,7 +1225,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
     "cwd": "[START_DIR]\\src",
@@ -1234,7 +1234,7 @@
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\Win__more_configs_",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Win__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
@@ -1341,7 +1341,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
@@ -1378,7 +1378,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
     "cwd": "[START_DIR]\\src",
@@ -1403,7 +1403,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma_client\\goma_ctl.py",
+      "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
     "cwd": "[START_DIR]\\src",

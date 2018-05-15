@@ -59,7 +59,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -137,7 +137,7 @@
       "--git-cache-dir",
       "[CACHE]/git",
       "--goma_dir",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "--goma_client_json",
       "/creds/service_accounts/service-account-goma-client.json",
       "x86-generic-paladin"

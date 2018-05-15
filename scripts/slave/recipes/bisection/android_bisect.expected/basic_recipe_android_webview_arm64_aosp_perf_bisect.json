@@ -8,7 +8,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -562,7 +562,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[GOMA_CACHE]/client' target_arch=arm use_goma=1",
       "PATH": "[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_webview_arm64_aosp_perf_bisect/src/build/android:<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"

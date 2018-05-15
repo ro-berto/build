@@ -93,7 +93,7 @@
       "--config-file",
       "[BUILDER_CACHE]/V8_Linux___predictable/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",
@@ -491,7 +491,7 @@
       "--config-file",
       "[BUILDER_CACHE]/V8_Linux___predictable/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux___predictable/v8",

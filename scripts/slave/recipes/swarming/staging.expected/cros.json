@@ -243,7 +243,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -520,7 +520,7 @@
       "[BUILDER_CACHE]/ChromeOS_Swarm/src/build/cros_cache",
       "--use-external-config",
       "--gomadir",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "--nostart-goma",
       "--",
       "python",
@@ -534,7 +534,7 @@
       "--config-file",
       "[BUILDER_CACHE]/ChromeOS_Swarm/src/tools/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "browser_tests\n",
       "//out_arm-generic/Release"
@@ -684,7 +684,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/ChromeOS_Swarm"
+      "[GOMA_CACHE]/data/ChromeOS_Swarm"
     ],
     "cwd": "[BUILDER_CACHE]/ChromeOS_Swarm/src",
     "env": {
@@ -705,7 +705,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[BUILDER_CACHE]/ChromeOS_Swarm/src",
@@ -713,7 +713,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/ChromeOS_Swarm",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/ChromeOS_Swarm",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -779,7 +779,7 @@
       "[BUILDER_CACHE]/ChromeOS_Swarm/src/build/cros_cache",
       "--use-external-config",
       "--gomadir",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "--nostart-goma",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
@@ -847,7 +847,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
@@ -887,7 +887,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[BUILDER_CACHE]/ChromeOS_Swarm/src",
@@ -915,7 +915,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[BUILDER_CACHE]/ChromeOS_Swarm/src",

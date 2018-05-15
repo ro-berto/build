@@ -134,7 +134,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-386 release",
       "-json-output",
@@ -168,7 +168,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/goma_client' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[GOMA_CACHE]/client' target_arch=arm use_goma=1",
       "PATH": "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/Android32__M_Nexus5X_/src/build/android:<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
@@ -199,7 +199,7 @@
       "--config-file",
       "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "AppRTCMobileTest\nandroid_junit_tests\naudio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nlibjingle_peerconnection_android_unittest\nmodules_tests\nmodules_unittests\nortc_unittests\npeerconnection_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nwebrtc_nonparallel_tests\n",
       "//out/Release"
@@ -250,7 +250,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/Android32__M_Nexus5X_"
+      "[GOMA_CACHE]/data/Android32__M_Nexus5X_"
     ],
     "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X_/src",
     "env": {
@@ -266,7 +266,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X_/src",
@@ -274,7 +274,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/Android32__M_Nexus5X_",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/Android32__M_Nexus5X_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -379,7 +379,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
@@ -414,7 +414,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X_/src",
@@ -437,7 +437,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X_/src",
@@ -2483,7 +2483,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma_client",
+      "[GOMA_CACHE]/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-386 release",
       "-json-output",
@@ -2522,7 +2522,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/Android32__M_Nexus5X_"
+      "[GOMA_CACHE]/data/Android32__M_Nexus5X_"
     ],
     "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X_",
     "infra_step": true,
@@ -2535,13 +2535,13 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X_",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/Android32__M_Nexus5X_",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/Android32__M_Nexus5X_",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -2589,7 +2589,7 @@
       "--use-goma",
       "--verbose",
       "--extra-gn-args",
-      "goma_dir=\"[CACHE]/goma_client\""
+      "goma_dir=\"[GOMA_CACHE]/client\""
     ],
     "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X_/src",
     "env_prefixes": {
@@ -2612,14 +2612,14 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X_",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/Android32__M_Nexus5X_",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/Android32__M_Nexus5X_",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -2647,13 +2647,13 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X_",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/Android32__M_Nexus5X_",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/Android32__M_Nexus5X_",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -2670,13 +2670,13 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma_client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X_",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/Android32__M_Nexus5X_",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/Android32__M_Nexus5X_",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
