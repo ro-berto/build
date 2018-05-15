@@ -159,8 +159,8 @@ class CodesearchApi(recipe_api.RecipeApi):
     """
     commit_position = self._get_commit_position()
     index_pack_kythe_name = 'index_pack_%s_kythe.zip' % self.c.PLATFORM
-    index_pack_kythe_name_with_revision = 'index_pack_%s_kythe_%s.zip' % (
-        self.c.PLATFORM, commit_position)
+    index_pack_kythe_name_with_revision = 'index_pack_%s_kythe_%s_%s.zip' % (
+        self.c.PLATFORM, commit_position, self._get_revision())
     self._create_kythe_index_pack(index_pack_kythe_name)
 
     assert self.c.bucket_name, (
