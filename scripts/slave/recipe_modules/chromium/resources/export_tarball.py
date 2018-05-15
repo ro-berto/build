@@ -50,6 +50,7 @@ nonessential_dirs = {
 
 ESSENTIAL_FILES = (
     'chrome/test/data/webui/i18n_process_css_test.html',
+    'v8/test/torque/test-torque.tq',
 )
 
 TEST_DIRS = {
