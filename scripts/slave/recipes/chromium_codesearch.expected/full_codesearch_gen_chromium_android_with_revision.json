@@ -912,7 +912,7 @@
       "retry",
       "fetch",
       "origin",
-      "android",
+      "master",
       "--progress"
     ],
     "cwd": "[START_DIR]/generated",
@@ -996,7 +996,7 @@
       "--message",
       "Generated files from \"codesearch-gen-chromium-android\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
-      "android",
+      "master",
       "src/out",
       "[START_DIR]/generated"
     ],
