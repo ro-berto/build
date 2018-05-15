@@ -414,7 +414,7 @@ BUILDERS = {
         'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - nosnap - debug': {
-        'tests': [V8Testing(7)],
+        'tests': [V8Testing(9)],
         'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
         'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
