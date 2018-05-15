@@ -111,6 +111,8 @@ SPEC = freeze({
       # Don't push generated files to git until we've verified their contents.
       'sync_generated_files': False,
       'gen_repo_branch': 'win',
+      # Generated files will end up in out/chromium-win/Debug/gen.
+      'gen_repo_out_dir': 'chromium-win',
       'corpus': 'chromium',
       'root': 'chromium-win',
     },
