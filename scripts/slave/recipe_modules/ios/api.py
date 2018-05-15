@@ -561,7 +561,9 @@ class iOSApi(recipe_api.RecipeApi):
     """Bootstraps Swarming."""
     self.m.swarming.show_isolated_out_in_collect_step = False
     self.m.swarming.show_shards_in_collect_step = True
-    self.m.swarming_client.checkout('stable')
+    # TODO(huangml): Remove the FYI condition after verification.
+    if not self.m.properties['mastername'] == 'chromium.fyi':
+      self.m.swarming_client.checkout('stable')
     self.m.swarming_client.query_script_version('swarming.py')
 
   @staticmethod
