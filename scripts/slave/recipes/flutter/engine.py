@@ -214,6 +214,9 @@ def BuildLinux(api):
     'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
     'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
   ])
+  UploadArtifacts(api, 'linux-x64', [
+    'out/host_debug/libflutter_engine.so',
+  ], archive_name='linux-x64-embedder')
   UploadFlutterPatchedSdk(api)
   UploadDartSdk(api, archive_name='dart-sdk-linux-x64.zip')
 
