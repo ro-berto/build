@@ -81,18 +81,17 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/flutter/tools/gn",
-      "--unoptimized"
+      "[START_DIR]/src/flutter/tools/gn"
     ],
-    "name": "gn --unoptimized"
+    "name": "gn "
   },
   {
     "cmd": [
       "ninja",
       "-C",
-      "[START_DIR]/src/out/host_debug_unopt"
+      "[START_DIR]/src/out/host_debug"
     ],
-    "name": "build host_debug_unopt"
+    "name": "build host_debug"
   },
   {
     "cmd": [
@@ -101,7 +100,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "analyze dart_ui"
   },
@@ -110,12 +109,12 @@
       "dart",
       "--preview-dart-2",
       "[START_DIR]/src/flutter/shell/testing/observatory/test.dart",
-      "[START_DIR]/src/out/host_debug_unopt/flutter_tester",
+      "[START_DIR]/src/out/host_debug/flutter_tester",
       "[START_DIR]/src/flutter/shell/testing/observatory/empty_main.dart"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "test observatory and service protocol"
   },
@@ -125,7 +124,7 @@
       "--android"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "gn --android"
   },
@@ -136,7 +135,7 @@
       "[START_DIR]/src/out/android_debug"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "build android_debug"
   },
@@ -148,7 +147,7 @@
       ":dist"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "build android_debug :dist"
   },
@@ -159,7 +158,7 @@
       "--runtime-mode=profile"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "gn --android --runtime-mode=profile"
   },
@@ -170,7 +169,7 @@
       "[START_DIR]/src/out/android_profile"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "build android_profile"
   },
@@ -181,7 +180,7 @@
       "--runtime-mode=release"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "gn --android --runtime-mode=release"
   },
@@ -192,7 +191,7 @@
       "[START_DIR]/src/out/android_release"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "build android_release"
   },
@@ -203,7 +202,7 @@
       "--android-cpu=x64"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "gn --android --android-cpu=x64"
   },
@@ -214,7 +213,7 @@
       "[START_DIR]/src/out/android_debug_x64"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "build android_debug_x64"
   },
@@ -225,7 +224,7 @@
       "--android-cpu=x86"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "gn --android --android-cpu=x86"
   },
@@ -236,7 +235,7 @@
       "[START_DIR]/src/out/android_debug_x86"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "build android_debug_x86"
   },
@@ -247,7 +246,7 @@
       "--no-analytics"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "disable flutter analytics"
   },
@@ -258,7 +257,7 @@
     ],
     "cwd": "[START_DIR]/flutter/dev/bots",
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "pub get in dev/bots before flutter test"
   },
@@ -266,12 +265,12 @@
     "cmd": [
       "[START_DIR]/flutter/bin/flutter",
       "update-packages",
-      "--local-engine=host_debug_unopt",
+      "--local-engine=host_debug",
       "--local-engine-src-path=[START_DIR]/src"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "flutter update-packages"
   },
@@ -280,12 +279,12 @@
       "dart",
       "--preview-dart-2",
       "dev/bots/test.dart",
-      "--local-engine=host_debug_unopt",
+      "--local-engine=host_debug",
       "--local-engine-src-path=[START_DIR]/src"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug_unopt/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
     },
     "name": "flutter test"
   },

@@ -49,12 +49,12 @@ def BuildLinuxAndroidArm(api):
     Build(api, build_output_dir)
 
 def BuildLinux(api):
-  RunGN(api, '--unoptimized')
-  Build(api, 'host_debug_unopt')
+  RunGN(api)
+  Build(api, 'host_debug')
 
 def TestObservatory(api):
   checkout = api.path['start_dir'].join('src')
-  flutter_tester_path = checkout.join('out/host_debug_unopt/flutter_tester')
+  flutter_tester_path = checkout.join('out/host_debug/flutter_tester')
   empty_main_path = checkout.join(
       'flutter/shell/testing/observatory/empty_main.dart')
   test_path = checkout.join('flutter/shell/testing/observatory/test.dart')
@@ -92,7 +92,7 @@ def TestFlutter(api):
   flutter = api.path['start_dir'].join('flutter')
   flutter_cmd = flutter.join('bin/flutter')
   test_args = [
-      '--local-engine=host_debug_unopt',
+      '--local-engine=host_debug',
       '--local-engine-src-path=%s' % engine_src,
   ]
   test_cmd = [
@@ -117,7 +117,7 @@ def RunSteps(api):
   BuildLinux(api)
   checkout = api.path['start_dir'].join('src')
   dart_bin = checkout.join(
-      'out', 'host_debug_unopt', 'dart-sdk', 'bin')
+      'out', 'host_debug', 'dart-sdk', 'bin')
   env = { 'PATH': api.path.pathsep.join((str(dart_bin), '%(PATH)s')) }
 
   # The context adds dart-sdk/bin to the path.
