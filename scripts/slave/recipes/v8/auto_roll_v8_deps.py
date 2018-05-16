@@ -51,6 +51,8 @@ BOT_CONFIGS = {
       'testing/gtest',
       'third_party/WebKit/Source/platform/inspector_protocol',
       'third_party/blink/renderer/platform/inspector_protocol',
+      # TODO(sergiyb): Remove after https://crbug.com/v8/7723 is resolved.
+      'third_party/icu',
     ],
     'reviewers': [
       'machenbach@chromium.org',
