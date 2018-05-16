@@ -24,14 +24,6 @@
       "builder_timeout_s": 3600,
       "category": "0Windows",
     },
-    "GPU Win Builder (dbg)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["win_dbg_builders"],
-      "builder_timeout_s": 7200,
-      "category": "0Windows",
-    },
     "Win10 Release (NVIDIA)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -41,35 +33,6 @@
       "slave_pools": ["win10_rel_nvidia"],
       "builder_timeout_s": 10800,
       "category": "0Windows",
-    },
-    "Win10 Debug (NVIDIA)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      # It's crucial to merge build requests on the testers.
-      "mergeRequests": True,
-      "slave_pools": ["win10_dbg_nvidia"],
-      "builder_timeout_s": 21600,
-      "category": "0Windows",
-    },
-
-    "GPU Linux Builder (dbg)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["linux_dbg_builders"],
-      "builder_timeout_s": 3600,
-      "category": "2Linux",
-    },
-    "Linux Debug (NVIDIA)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      # It's crucial to merge build requests on the testers.
-      "mergeRequests": True,
-      "slave_pools": ["linux_dbg_nvidia"],
-      "builder_timeout_s": 10800,
-      "category": "2Linux",
     },
 
     "Android Release (Nexus 5X)": {
@@ -98,14 +61,6 @@
       },
       "slaves": ["vm88-m1"],
     },
-    "win_dbg_builders": {
-      "slave_data": {
-        "bits": 64,
-        "os": "win",
-        "version": "win7",
-      },
-      "slaves": ["vm89-m1"],
-    },
     "win10_rel_nvidia": {
       "slave_data": {
         "bits": 64,
@@ -113,30 +68,6 @@
         "version": "win7",
       },
       "slaves": ["vm90-m1"],
-    },
-    "win10_dbg_nvidia": {
-      "slave_data": {
-        "bits": 64,
-        "os": "win",
-        "version": "win7",
-      },
-      "slaves": ["vm91-m1"],
-    },
-    "linux_dbg_builders": {
-      "slave_data": {
-        "bits": 64,
-        "os": "linux",
-        "version": "trusty",
-      },
-      "slaves": ["slave63-c1"],
-    },
-    "linux_dbg_nvidia": {
-      "slave_data": {
-        "bits": 64,
-        "os": "linux",
-        "version": "trusty",
-      },
-      "slaves": ["slave48-c1"],
     },
     "android_rel_nexus_5x": {
       "slave_data": {

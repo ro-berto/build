@@ -46,12 +46,6 @@ SUPPRESSIONS = {
     'master.chromium.chromiumos': [
         'Linux ChromiumOS Full',
     ],
-    'master.chromium.gpu': [
-        'GPU Linux Builder (dbg)',
-        'GPU Win Builder (dbg)',
-        'Linux Debug (NVIDIA)',
-        'Win10 Debug (NVIDIA)',
-    ],
     'master.chromium.mac': [
         'ios-device', # these are covered, just by the iOS recipes instead.
         'ios-device-xcode-clang',
@@ -96,14 +90,18 @@ FAKE_BUILDERS = {
     ],
     'master.chromium.gpu': [
         # These have been migrated to LUCI.
+        'GPU Linux Builder (dbg)',
         'GPU Linux Builder',
         'GPU Mac Builder (dbg)',
         'GPU Mac Builder',
+        'GPU Win Builder (dbg)',
+        'Linux Debug (NVIDIA)',
         'Linux Release (NVIDIA)',
         'Mac Debug (Intel)',
         'Mac Release (Intel)',
         'Mac Retina Debug (AMD)',
         'Mac Retina Release (AMD)',
+        'Win10 Debug (NVIDIA)',
     ],
     'master.chromium.mac': [
         # These have been migrated to LUCI.
