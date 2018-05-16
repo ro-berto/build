@@ -320,6 +320,15 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::codesearch]/resources/redirect_stdout_to_file.py",
+      "[START_DIR]/src/out/chromium-win/Debug/compile_commands.json",
       "ninja",
       "-C",
       "[START_DIR]/src/out/chromium-win/Debug",
@@ -333,8 +342,7 @@
       "-j",
       "20"
     ],
-    "name": "generate compilation database for win",
-    "stdout": "/path/to/tmp/"
+    "name": "generate compilation database for win"
   },
   {
     "cmd": [],
@@ -827,14 +835,6 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
-  },
-  {
-    "cmd": [
-      "cp",
-      "some compilation data",
-      "[START_DIR]/src/out/chromium-win/Debug/compile_commands.json"
-    ],
-    "name": "copy compilation database"
   },
   {
     "cmd": [

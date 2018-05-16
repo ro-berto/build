@@ -186,7 +186,7 @@ def RunSteps(api, root_solution_revision):
   # by that step may be deleted (if they've been unchanged for the past week).
   api.codesearch.cleanup_old_generated()
 
-  result = api.codesearch.generate_compilation_database(targets, platform)
+  api.codesearch.generate_compilation_database(targets, platform)
 
   # If the compile fails, abort execution and don't upload the pack. When we
   # upload an incomplete (due to compile failures) pack to Kythe, it fails
@@ -195,14 +195,16 @@ def RunSteps(api, root_solution_revision):
   api.chromium.compile(targets, use_goma_module=True,
                        out_dir=joined_gen_repo_out_dir)
 
-  # Copy the created output to the correct directory. When running the clang
-  # tool, it is assumed by the scripts that the compilation database is in the
-  # out/Debug directory, and named 'compile_commands.json'.
-  api.codesearch.copy_compilation_output(result)
-
   if platform == 'chromeos':
-    result = api.codesearch.generate_compilation_database(targets, 'linux')
-    api.codesearch.filter_compilation(result)
+    # Generate a compilation database for Linux at a temporary location, then
+    # use this to filter the ChromeOS compilation database.
+    try:
+      temp_file = api.path.mkstemp(prefix='compdb_filter')
+      api.codesearch.generate_compilation_database(
+          targets, 'linux', output_file=temp_file)
+      api.codesearch.filter_compilation(temp_file)
+    finally:
+      api.file.remove('remove temporary compilation database', temp_file)
 
   # Download and run the clang tool.
   api.codesearch.run_clang_tool()

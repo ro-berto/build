@@ -50,7 +50,8 @@ class CodesearchApi(recipe_api.RecipeApi):
                         '-mtime', ('+%d' % age_days), '-type', 'f', '-delete']
       self.m.step('delete old generated files', delete_command)
 
-  def generate_compilation_database(self, targets, platform, mb_config_path=None):
+  def generate_compilation_database(self, targets, platform, output_file=None,
+                                    mb_config_path=None):
     mastername = self.m.properties['mastername']
     buildername = self.m.properties['buildername']
     mb_config_path = mb_config_path or self.c.CHECKOUT_PATH.join('tools', 'mb',
@@ -73,8 +74,13 @@ class CodesearchApi(recipe_api.RecipeApi):
 
     build_exit_status = 1
     try:
-      step_result = self.m.step('generate compilation database for %s' % platform,
-                                command, stdout=self.m.raw_io.output_text())
+      # The Ninja compdb tool doesn't support writing to a file, so we wrap it
+      # in a script which redirects stdout to the compile_commands_json_file.
+      output_file = output_file or self.c.compile_commands_json_file
+      step_result = self.m.build.python(
+          'generate compilation database for %s' % platform,
+          self.resource('redirect_stdout_to_file.py'),
+          [output_file] + command)
       build_exit_status = step_result.retcode
     except self.m.step.StepFailure as e:
       build_exit_status = e.retcode
@@ -87,28 +93,18 @@ class CodesearchApi(recipe_api.RecipeApi):
 
     return step_result
 
-  def copy_compilation_output(self, result):
-    """Copy the created output to the correct directory.
-
-    Args:
-      result: Result output of the generated compilation database.
-    """
-    self.m.step('copy compilation database',
-                ['cp', self.m.raw_io.input_text(data=result.stdout),
-                 self.c.compile_commands_json_file])
-
-  def filter_compilation(self, result):
+  def filter_compilation(self, filter_file):
     """Filter out duplicate compilation units.
 
     Args:
-      result: Result output of the generated compilation database.
+      filter_file: Path to the compilation database to use for filtering.
     """
     compile_file = self.c.compile_commands_json_file
     self.m.build.python('Filter out duplicate compilation units',
                         self.package_repo_resource('scripts', 'slave', 'chromium',
                                                    'filter_compilations.py'),
                         ['--compdb-input', compile_file,
-                         '--compdb-filter', self.m.raw_io.input_text(data=result.stdout),
+                         '--compdb-filter', filter_file,
                          '--compdb-output', compile_file])
 
   def run_clang_tool(self):

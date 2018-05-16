@@ -94,7 +94,7 @@ def RunSteps(api, buildername):
   api.chromium.ensure_goma()
   api.chromium.runhooks()
 
-  result = api.codesearch.generate_compilation_database(targets, platform)
+  api.codesearch.generate_compilation_database(targets, platform)
 
   api.codesearch.cleanup_old_generated()
 
@@ -105,9 +105,6 @@ def RunSteps(api, buildername):
     # (almost) all cross references. And the downside of failing on compile
     # error is that Codesearch gets stale.
     pass
-
-  # Copy the created output to the correct directory.
-  api.codesearch.copy_compilation_output(result)
 
   # Download and run the clang tool.
   api.codesearch.run_clang_tool()

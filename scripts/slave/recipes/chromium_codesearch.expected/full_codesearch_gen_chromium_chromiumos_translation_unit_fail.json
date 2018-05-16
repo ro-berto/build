@@ -317,6 +317,15 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::codesearch]/resources/redirect_stdout_to_file.py",
+      "[START_DIR]/src/out/Debug/compile_commands.json",
       "ninja",
       "-C",
       "[START_DIR]/src/out/Debug",
@@ -360,8 +369,7 @@
       "-j",
       "20"
     ],
-    "name": "generate compilation database for chromeos",
-    "stdout": "/path/to/tmp/"
+    "name": "generate compilation database for chromeos"
   },
   {
     "cmd": [],
@@ -917,14 +925,6 @@
   },
   {
     "cmd": [
-      "cp",
-      "some compilation data",
-      "[START_DIR]/src/out/Debug/compile_commands.json"
-    ],
-    "name": "copy compilation database"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[START_DIR]/src/tools/mb/mb.py",
@@ -1020,6 +1020,15 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::codesearch]/resources/redirect_stdout_to_file.py",
+      "[TMP_BASE]/compdb_filter_tmp_1",
       "ninja",
       "-C",
       "[START_DIR]/src/out/Debug",
@@ -1063,8 +1072,7 @@
       "-j",
       "20"
     ],
-    "name": "generate compilation database for linux",
-    "stdout": "/path/to/tmp/"
+    "name": "generate compilation database for linux"
   },
   {
     "cmd": [],
@@ -1234,11 +1242,24 @@
       "--compdb-input",
       "[START_DIR]/src/out/Debug/compile_commands.json",
       "--compdb-filter",
-      "some compilation data",
+      "[TMP_BASE]/compdb_filter_tmp_1",
       "--compdb-output",
       "[START_DIR]/src/out/Debug/compile_commands.json"
     ],
     "name": "Filter out duplicate compilation units"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[TMP_BASE]/compdb_filter_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "remove temporary compilation database"
   },
   {
     "cmd": [

@@ -134,6 +134,15 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::codesearch]/resources/redirect_stdout_to_file.py",
+      "None/out/Debug/compile_commands.json",
       "ninja",
       "-C",
       "None/out/Debug",
@@ -146,8 +155,7 @@
       "-j",
       "20"
     ],
-    "name": "generate compilation database for linux",
-    "stdout": "/path/to/tmp/"
+    "name": "generate compilation database for linux"
   },
   {
     "cmd": [],

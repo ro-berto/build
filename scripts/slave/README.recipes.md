@@ -189,7 +189,6 @@
   * [codesearch:examples/full](#recipes-codesearch_examples_full)
   * [codesearch:tests/checkout_generated_files_repo_and_sync](#recipes-codesearch_tests_checkout_generated_files_repo_and_sync)
   * [codesearch:tests/configs](#recipes-codesearch_tests_configs)
-  * [codesearch:tests/copy_compilation_output](#recipes-codesearch_tests_copy_compilation_output)
   * [codesearch:tests/create_and_upload_kythe_index_pack](#recipes-codesearch_tests_create_and_upload_kythe_index_pack)
   * [codesearch:tests/filter_compilation](#recipes-codesearch_tests_filter_compilation)
   * [codesearch:tests/generate_compilation_database](#recipes-codesearch_tests_generate_compilation_database)
@@ -1483,7 +1482,7 @@ be undone.
 
 #### **class [CodesearchApi](/scripts/slave/recipe_modules/codesearch/api.py#12)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#206)(self):**
+&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#202)(self):**
 
 Check out the generated files repo and sync the generated files
 into this checkout.
@@ -1495,30 +1494,23 @@ Clean up generated files older than the specified number of days.
 Args:
   age_days: Minimum age in days for files to delete (integer).
 
-&mdash; **def [copy\_compilation\_output](/scripts/slave/recipe_modules/codesearch/api.py#90)(self, result):**
-
-Copy the created output to the correct directory.
-
-Args:
-  result: Result output of the generated compilation database.
-
-&mdash; **def [create\_and\_upload\_kythe\_index\_pack](/scripts/slave/recipe_modules/codesearch/api.py#157)(self):**
+&mdash; **def [create\_and\_upload\_kythe\_index\_pack](/scripts/slave/recipe_modules/codesearch/api.py#153)(self):**
 
 Create the kythe index pack and upload it to google storage.
     
 
-&mdash; **def [filter\_compilation](/scripts/slave/recipe_modules/codesearch/api.py#100)(self, result):**
+&mdash; **def [filter\_compilation](/scripts/slave/recipe_modules/codesearch/api.py#96)(self, filter_file):**
 
 Filter out duplicate compilation units.
 
 Args:
-  result: Result output of the generated compilation database.
+  filter_file: Path to the compilation database to use for filtering.
 
-&mdash; **def [generate\_compilation\_database](/scripts/slave/recipe_modules/codesearch/api.py#53)(self, targets, platform, mb_config_path=None):**
+&mdash; **def [generate\_compilation\_database](/scripts/slave/recipe_modules/codesearch/api.py#53)(self, targets, platform, output_file=None, mb_config_path=None):**
 
 &mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/codesearch/api.py#13)(self):**
 
-&mdash; **def [run\_clang\_tool](/scripts/slave/recipe_modules/codesearch/api.py#114)(self):**
+&mdash; **def [run\_clang\_tool](/scripts/slave/recipe_modules/codesearch/api.py#110)(self):**
 
 Download and run the clang tool.
     
@@ -4494,11 +4486,6 @@ Returns: the list of matched targets.
 [DEPS](/scripts/slave/recipe_modules/codesearch/tests/configs.py#7): [chromium](#recipe_modules-chromium), [codesearch](#recipe_modules-codesearch), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/codesearch/tests/configs.py#13)(api):**
-### *recipes* / [codesearch:tests/copy\_compilation\_output](/scripts/slave/recipe_modules/codesearch/tests/copy_compilation_output.py)
-
-[DEPS](/scripts/slave/recipe_modules/codesearch/tests/copy_compilation_output.py#5): [chromium](#recipe_modules-chromium), [codesearch](#recipe_modules-codesearch), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/codesearch/tests/copy_compilation_output.py#12)(api):**
 ### *recipes* / [codesearch:tests/create\_and\_upload\_kythe\_index\_pack](/scripts/slave/recipe_modules/codesearch/tests/create_and_upload_kythe_index_pack.py)
 
 [DEPS](/scripts/slave/recipe_modules/codesearch/tests/create_and_upload_kythe_index_pack.py#5): [chromium](#recipe_modules-chromium), [codesearch](#recipe_modules-codesearch), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -4506,9 +4493,9 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/codesearch/tests/create_and_upload_kythe_index_pack.py#14)(api):**
 ### *recipes* / [codesearch:tests/filter\_compilation](/scripts/slave/recipe_modules/codesearch/tests/filter_compilation.py)
 
-[DEPS](/scripts/slave/recipe_modules/codesearch/tests/filter_compilation.py#5): [chromium](#recipe_modules-chromium), [codesearch](#recipe_modules-codesearch), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/codesearch/tests/filter_compilation.py#5): [chromium](#recipe_modules-chromium), [codesearch](#recipe_modules-codesearch), [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/codesearch/tests/filter_compilation.py#12)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/codesearch/tests/filter_compilation.py#14)(api):**
 ### *recipes* / [codesearch:tests/generate\_compilation\_database](/scripts/slave/recipe_modules/codesearch/tests/generate_compilation_database.py)
 
 [DEPS](/scripts/slave/recipe_modules/codesearch/tests/generate_compilation_database.py#5): [chromium](#recipe_modules-chromium), [codesearch](#recipe_modules-codesearch), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

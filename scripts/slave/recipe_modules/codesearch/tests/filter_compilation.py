@@ -5,6 +5,8 @@
 DEPS = [
   'chromium',
   'codesearch',
+  'recipe_engine/file',
+  'recipe_engine/path',
   'recipe_engine/properties',
 ]
 
@@ -20,9 +22,14 @@ def RunSteps(api):
       GEN_REPO_BRANCH=api.properties.get('gen_repo_branch', 'master'),
       CORPUS=api.properties.get('corpus', 'chromium-linux'),
   )
-  result = api.codesearch.generate_compilation_database(api.codesearch.c.COMPILE_TARGETS,
-                                                        api.codesearch.c.PLATFORM)
-  api.codesearch.filter_compilation(result)
+  try:
+    temp_file = api.path.mkstemp(prefix='compdb_filter')
+    api.codesearch.generate_compilation_database(
+        api.codesearch.c.COMPILE_TARGETS, api.codesearch.c.PLATFORM,
+        output_file=temp_file)
+    api.codesearch.filter_compilation(temp_file)
+  finally:
+    api.file.remove('remove temporary compilation database', temp_file)
 
 
 def GenTests(api):
