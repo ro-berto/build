@@ -32,7 +32,7 @@ class CodesearchApi(recipe_api.RecipeApi):
       #               it's not a directory.
       delete_command = ['forfiles', '/p', self.m.path['checkout'].join('out'),
                         '/s', '/m', '*', '/d', ('-%d' % age_days),
-                        '/c', '"cmd /c if @isdir==FALSE del @path"']
+                        '/c', 'cmd /c if @isdir==FALSE del @path']
       try:
         self.m.step('delete old generated files', delete_command)
       except self.m.step.StepFailure as f:

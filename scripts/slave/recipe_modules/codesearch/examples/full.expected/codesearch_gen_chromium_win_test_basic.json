@@ -495,7 +495,7 @@
       "/d",
       "-7",
       "/c",
-      "\"cmd /c if @isdir==FALSE del @path\""
+      "cmd /c if @isdir==FALSE del @path"
     ],
     "name": "delete old generated files"
   },
