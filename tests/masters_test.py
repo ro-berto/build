@@ -233,7 +233,6 @@ def main(argv):
       'master.chromium.perf': 'ChromiumPerf',
       'master.chromium.perf.fyi': 'ChromiumPerfFyi',
       'master.chromium.swarm': 'ChromiumSwarm',
-      'master.chromium.tools.build': 'ChromiumToolsBuild',
       'master.chromium.webkit': 'ChromiumWebkit',
       'master.chromium.webrtc': 'ChromiumWebRTC',
       'master.chromium.webrtc.fyi': 'ChromiumWebRTCFYI',
