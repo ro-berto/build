@@ -211,6 +211,7 @@ class Test(object):
         'waterfall_mastername': self._waterfall_mastername,
         'waterfall_buildername': self._waterfall_buildername,
         'canonical_step_name': self.name,
+        'isolate_target_name': self.isolate_target(api),
     }
     if suffix is not None:
       data['patched'] = (suffix == 'with patch')

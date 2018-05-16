@@ -64,7 +64,7 @@
     "name": "details",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@details@compile_targets: ['base_unittests']@@@",
-      "@@@STEP_LOG_LINE@details@step_metadata: {'waterfall_mastername': None, 'canonical_step_name': 'base_unittests', 'patched': False, 'waterfall_buildername': None}@@@",
+      "@@@STEP_LOG_LINE@details@step_metadata: {'waterfall_mastername': None, 'patched': False, 'canonical_step_name': 'base_unittests', 'isolate_target_name': 'base_unittests', 'waterfall_buildername': None}@@@",
       "@@@STEP_LOG_LINE@details@pass_fail_counts: None@@@",
       "@@@STEP_LOG_LINE@details@uses_local_devices: True@@@",
       "@@@STEP_LOG_END@details@@@"

@@ -1280,6 +1280,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"ChromeOS\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"browser_tests on ChromeOS\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"browser_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",

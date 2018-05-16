@@ -463,6 +463,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"base_unittests on Intel GPU on Linux (with patch)\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"base_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": true, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
