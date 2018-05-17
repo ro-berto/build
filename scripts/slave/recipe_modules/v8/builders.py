@@ -1611,7 +1611,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
         },
         'tests': [
-          V8Testing(6),
+          V8Testing(8),
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
