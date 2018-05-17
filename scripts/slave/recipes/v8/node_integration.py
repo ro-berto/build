@@ -6,6 +6,7 @@
 
 from contextlib import contextmanager
 
+from recipe_engine.post_process import Filter
 from recipe_engine.types import freeze
 
 
@@ -340,3 +341,15 @@ def GenTests(api):
     api.platform('linux', 64)
   )
 
+  yield (
+    api.test('trigger_fail') +
+    api.properties.generic(
+      mastername='client.v8.fyi',
+      buildername='V8 Linux64 - node.js integration',
+      branch='refs/heads/master',
+      revision='deadbeef',
+    ) +
+    api.override_step_data(
+      'trigger', api.json.output_stream({'error': {'message': 'foobar'}})) +
+    api.post_process(Filter('trigger'))
+  )

@@ -1387,7 +1387,7 @@ class V8Api(recipe_api.RecipeApi):
       self.m.buildbucket.use_service_account_key(
           self.m.puppet_service_account.get_key_path(service_account))
 
-    return self.m.buildbucket.put(
+    step_result = self.m.buildbucket.put(
         [{
           'bucket': bucket,
           'tags': {} if no_buildset else {
@@ -1412,6 +1412,11 @@ class V8Api(recipe_api.RecipeApi):
         step_test_data=lambda: (
           self.m.v8.test_api.buildbucket_test_data(len(requests))),
     )
+
+    if 'error' in step_result.stdout:
+      step_result.presentation.status = self.m.step.FAILURE
+
+    return step_result
 
   def get_change_range(self):
     if self.m.properties.get('override_changes'):
