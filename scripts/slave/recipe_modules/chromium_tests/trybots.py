@@ -349,6 +349,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'linux-ozone-rel',
       }),
+      'linux-xenial-rel': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'linux-xenial-rel',
+      }),
       'linux_arm': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Linux ARM',

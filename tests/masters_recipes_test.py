@@ -168,6 +168,7 @@ FAKE_BUILDERS = {
         'linux-blink-heap-verification-try',
         'linux-gcc-rel',
         'linux-ozone-rel',
+        'linux-xenial-rel',
         'linux_chromium_asan_rel_ng',
         'linux_chromium_compile_dbg_ng',
         'linux_chromium_compile_rel_ng',
