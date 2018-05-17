@@ -20,7 +20,6 @@ MAIN_WATERFALL_MASTERS = [
     'master.chromium.chrome',
     'master.chromium.chromiumos',
     'master.chromium.gpu',
-    'master.chromium.mac',
     'master.chromium.memory',
     'master.chromium.webkit',
     'master.chromium.win',
@@ -45,12 +44,6 @@ SUPPRESSIONS = {
     ],
     'master.chromium.chromiumos': [
         'Linux ChromiumOS Full',
-    ],
-    'master.chromium.mac': [
-        'ios-device', # these are covered, just by the iOS recipes instead.
-        'ios-device-xcode-clang',
-        'ios-simulator-full-configs',
-        'ios-simulator-xcode-clang',
     ],
     'master.chromium.webkit': [
         # TODO(crbug.com/736257) Spin up 10.12 (dbg) trybots once we've
