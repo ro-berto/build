@@ -146,33 +146,30 @@ def generate_tests(api, test_suite, revision):
                       '--gtest_also_run_disabled_tests'],
           parallel=True))
 
-  if test_suite in ('webrtc_baremetal', 'webrtc_and_baremetal'):
+  if test_suite == 'webrtc_and_baremetal':
+    dim = api.bot_config['baremetal_swarming_dimensions']
+
+    tests.append(SwarmingWebRtcGtestTest('video_capture_tests', dimensions=dim))
+
     # TODO(oprypin): migrate try builders to webrtc_and_baremetal (swarming).
-    if test_suite == 'webrtc_baremetal':
-      test_type = functools.partial(BaremetalTest,
-                                    revision=revision)
-      api.virtual_webcam_check()
-    else:
-      test_type = functools.partial(
-          SwarmingWebRtcGtestTest,
-          dimensions=api.bot_config['baremetal_swarming_dimensions'])
 
-    tests.append(test_type('video_capture_tests'))
-
-    # Cover tests only running on perf tests on our trybots:
-    if api.m.tryserver.is_tryserver:
-      if api.m.platform.is_linux:
-        tests.append(test_type(
-            'isac_fix_test',
-            args=[
-                '32000', api.m.path['checkout'].join(
-                    'resources', 'speech_and_misc_wb.pcm'),
-                'isac_speech_and_misc_wb.pcm']))
-
-      # TODO(kjellander): Enable on Mac when bugs.webrtc.org/7322 is fixed.
-      if not api.m.platform.is_mac:
-        tests.append(test_type('webrtc_perf_tests',
-            args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
+    # # Cover tests only running on perf tests on our trybots:
+    # if api.m.tryserver.is_tryserver:
+    #   if api.m.platform.is_linux:
+    #     tests.append(SwarmingWebRtcGtestTest(
+    #         'isac_fix_test',
+    #         args=[
+    #             '32000', api.m.path['checkout'].join(
+    #                 'resources', 'speech_and_misc_wb.pcm'),
+    #             'isac_speech_and_misc_wb.pcm'],
+    #         dimensions=dim))
+    #
+    #   # TODO(kjellander): Enable on Mac when bugs.webrtc.org/7322 is fixed.
+    #   if not api.m.platform.is_mac:
+    #     tests.append(SwarmingWebRtcGtestTest(
+    #         'webrtc_perf_tests',
+    #         args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/'],
+    #         dimensions=dim))
 
   if test_suite == 'desktop_perf_swarming':
     for test, extra_args in sorted(PERF_TESTS.items()):
@@ -334,10 +331,9 @@ class Test(object):
 class BaremetalTest(Test):
   """A WebRTC test that uses audio and/or video devices."""
   def __init__(self, test, name=None, revision=None, parallel=False,
-               gtest_args=None, args=None, **runtest_kwargs):
+               gtest_args=None, **runtest_kwargs):
     super(BaremetalTest, self).__init__(test, name)
     self._parallel = parallel
-    self._args = args or []
     self._gtest_args = gtest_args or []
     self._revision = revision
     self._runtest_kwargs = runtest_kwargs
@@ -351,11 +347,8 @@ class BaremetalTest(Test):
       api.m.chromium.c.build_config_fs, self._test + test_ext)
 
     args = [test_executable]
-    if not self._parallel:
-      args.append('--workers=1')
+    if not self._parallel: args.append('--workers=1')
     args += self._gtest_args
-    if self._args:
-      args += ['--'] + self._args
 
     api.m.chromium.runtest(
         test=test, args=args, name=self._name, annotate=None, xvfb=True,

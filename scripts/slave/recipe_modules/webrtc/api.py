@@ -261,10 +261,9 @@ class WebRTCApi(recipe_api.RecipeApi):
                 force_latest_version=True)
 
 
-  def run_baremetal_test(self, test, name=None, gtest_args=None,
-                         args=None, parallel=True):
-    steps.BaremetalTest(test, name, gtest_args=gtest_args,
-                        args=args, parallel=parallel).run(self, suffix='')
+  def run_baremetal_test(self, test, name=None, gtest_args=None, parallel=True):
+    steps.BaremetalTest(test, name, gtest_args=gtest_args, parallel=parallel
+                       ).run(self, suffix='')
 
   def maybe_trigger(self):
     triggers = self.bot_config.get('triggers')
@@ -381,6 +380,3 @@ class WebRTCApi(recipe_api.RecipeApi):
                   script=self.resource('cleanup_files.py'),
                   args=[out_dir],
                   infra_step=True)
-
-  def virtual_webcam_check(self):
-    self.m.python('webcam_check', self.resource('ensure_webcam_is_running.py'))

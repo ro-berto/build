@@ -18,12 +18,6 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'webrtc',
     'test_suite': 'webrtc_and_baremetal',
   },
-  # TODO(oprypin): migrate try builders to webrtc_and_baremetal (swarming).
-  'webrtc_baremetal': {
-    'chromium_config': 'webrtc_default',
-    'gclient_config': 'webrtc_with_limited',
-    'test_suite': 'webrtc_baremetal',
-  },
   'webrtc_desktop_perf_swarming': {
     'chromium_config': 'webrtc_desktop_perf',
     'gclient_config': 'webrtc',
@@ -1110,15 +1104,6 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'win'},
       },
-      'win_baremetal': {
-        'recipe_config': 'webrtc_baremetal',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-      },
       'win_asan': {
         'recipe_config': 'webrtc_clang',
         'chromium_apply_config': ['asan'],
@@ -1243,15 +1228,6 @@ BUILDERS = freeze({
           'os': 'Mac-10.11',
           'cpu': 'x86-64',
         }
-      },
-      'mac_baremetal': {
-        'recipe_config': 'webrtc_baremetal',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
       },
       'linux_compile_dbg': {
         'recipe_config': 'webrtc',
@@ -1499,15 +1475,6 @@ BUILDERS = freeze({
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
         }
-      },
-      'linux_baremetal': {
-        'recipe_config': 'webrtc_baremetal',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
       },
       'linux_experimental': {
         'recipe_config': 'webrtc',

@@ -14,13 +14,6 @@ def WebRTCGitURL(_c, *pieces):
 def webrtc(c):
   pass
 
-@CONFIG_CTX(includes=['_webrtc', '_webrtc_limited'])
-def webrtc_with_limited(c):
-  # This is only used by Win7 bots that are builder+tester and not just testers.
-  # It's used to get DirectX, which is built into the Win8 SDK but not Win7.
-  # Remove this when we no longer have Win7 builder+testers.
-  pass
-
 @CONFIG_CTX(includes=['webrtc'])
 def webrtc_ios(c):
   # WebRTC for iOS depends on the src/third_party/openmax_dl in Chromium, which
@@ -47,14 +40,3 @@ def _webrtc(c):
   s.url = WebRTCGitURL(c, 'src')
   s.deps_file = 'DEPS'
   c.got_revision_mapping['src'] = 'got_revision'
-
-@CONFIG_CTX()
-def _webrtc_limited(c):
-  """Helper config for loading the webrtc-limited solution.
-
-  The webrtc-limited solution contains non-redistributable code.
-  """
-  s = c.solutions.add()
-  s.name = 'webrtc-limited'
-  s.url = ChromeInternalGitURL(c, 'chrome', 'deps', 'webrtc-limited')
-  s.deps_file = 'DEPS'
