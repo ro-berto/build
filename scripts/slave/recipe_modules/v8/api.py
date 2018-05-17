@@ -115,7 +115,12 @@ class V8Api(recipe_api.RecipeApi):
   EMPTY_TEST_SPEC = EmptyTestSpec
 
   def bot_config_by_buildername(self, builders=FLATTENED_BUILDERS):
-    return builders.get(self.m.properties.get('buildername'), {})
+    default = {}
+    if not self.m.properties.get('parent_buildername'):
+      # Builders and builder_testers both build and need the following set of
+      # default chromium configs:
+      default['chromium_apply_config'] = ['default_compiler', 'goma', 'mb']
+    return builders.get(self.m.properties.get('buildername'), default)
 
   def update_bot_config(self, bot_config, build_config, target_arch,
                         target_platform):
