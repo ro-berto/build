@@ -78,7 +78,8 @@ class ChromiumSwarmingApi(recipe_api.RecipeApi):
       self.m.swarming.add_default_tag('purpose:CI')
 
     if self.m.runtime.is_experimental:
-      # The experimental half of LUCI conversions should be lower than the CQ.
-      self.m.swarming.default_priority = 35
+      # The experimental half of LUCI conversions should be lower than
+      # everything else.
+      self.m.swarming.default_priority = 40
     if self.m.runtime.is_luci:
       self.m.swarming.add_default_tag('purpose:luci')
