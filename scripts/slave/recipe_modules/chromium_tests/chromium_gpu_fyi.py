@@ -215,6 +215,21 @@ SPEC = {
       },
       'serialize_tests': True,
     },
+    'Win10 FYI dEQP Release (Intel HD 630)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Win dEQP Builder',
+      'testing': {
+        'platform': 'win',
+      },
+      'serialize_tests': True,
+    },
     'Win10 FYI Exp Release (Intel HD 630)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['ninja_confirm_noop'],
@@ -490,6 +505,21 @@ SPEC = {
       },
       'bot_type': 'tester',
       'parent_buildername': 'GPU FYI Linux Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'serialize_tests': True,
+    },
+    'Linux FYI dEQP Release (Intel HD 630)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Linux dEQP Builder',
       'testing': {
         'platform': 'linux',
       },
