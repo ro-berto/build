@@ -444,6 +444,19 @@ class RevisionState(object):
     self.bisector.last_tested_revision = self
     overrides = perf_test_properties['properties']
 
+    # Replace command here if android-chrome
+    if self.depot_name == 'android-chrome':  # pragma: no cover
+      git_hash = self.deps.get('chromium')
+      if git_hash:
+        try:
+          commit_position = api.m.crrev.to_commit_position(git_hash)
+        except api.m.step.StepFailure:  # pragma: no cover
+          pass
+        if commit_position < 558465:
+          cmd = overrides['bisect_config']['command']
+          cmd = cmd.replace('android-webview-google', 'android-webview')
+          overrides['bisect_config']['command'] = cmd
+
     def run_test_step_test_data():
       """Returns a single step data object when called.
 
