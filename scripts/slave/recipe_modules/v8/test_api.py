@@ -424,6 +424,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       kwargs.update(self.example_parent_test_spec_properties(
           buildername, parent_test_spec))
 
+    # Simulate properties defined in the V8 repo.
+    kwargs.update(bot_config.get('testing', {}).get('properties', {}))
+
     if mastername.startswith('tryserver'):
       properties_fn = self.m.properties.tryserver
     else:
