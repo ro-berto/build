@@ -1021,7 +1021,7 @@ BUILDERS = freeze({
         }
       },
       'win_rel': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_and_baremetal',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1036,6 +1036,11 @@ BUILDERS = freeze({
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86',
+        },
+        'baremetal_swarming_dimensions': {
+          'pool': 'WebRTC-baremetal-try',
+          'os': 'Windows',
+          'gpu': None,
         }
       },
       'win_x64_dbg': {
@@ -1199,7 +1204,7 @@ BUILDERS = freeze({
         }
       },
       'mac_rel': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_and_baremetal',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1211,6 +1216,11 @@ BUILDERS = freeze({
         'swarming_dimensions': {
           'os': 'Mac-10.11',
           'cpu': 'x86-64',
+        },
+        'baremetal_swarming_dimensions': {
+          'pool': 'WebRTC-baremetal-try',
+          'os': 'Mac',
+          'gpu': None,
         }
       },
       'mac_asan': {
@@ -1278,7 +1288,7 @@ BUILDERS = freeze({
         }
       },
       'linux_rel': {
-        'recipe_config': 'webrtc',
+        'recipe_config': 'webrtc_and_baremetal',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -1293,6 +1303,11 @@ BUILDERS = freeze({
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
+        },
+        'baremetal_swarming_dimensions': {
+          'pool': 'WebRTC-baremetal-try',
+          'os': 'Linux',
+          'gpu': None,
         }
       },
       'linux_arm64_dbg': {

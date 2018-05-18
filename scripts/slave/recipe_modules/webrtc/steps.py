@@ -151,25 +151,19 @@ def generate_tests(api, test_suite, revision):
 
     tests.append(SwarmingWebRtcGtestTest('video_capture_tests', dimensions=dim))
 
-    # TODO(oprypin): migrate try builders to webrtc_and_baremetal (swarming).
+    # Cover tests only running on perf tests on our trybots:
+    if api.m.tryserver.is_tryserver:
+      if api.m.platform.is_linux:
+        tests.append(SwarmingWebRtcGtestTest(
+            'isac_fix_test',
+            dimensions=dim))
 
-    # # Cover tests only running on perf tests on our trybots:
-    # if api.m.tryserver.is_tryserver:
-    #   if api.m.platform.is_linux:
-    #     tests.append(SwarmingWebRtcGtestTest(
-    #         'isac_fix_test',
-    #         args=[
-    #             '32000', api.m.path['checkout'].join(
-    #                 'resources', 'speech_and_misc_wb.pcm'),
-    #             'isac_speech_and_misc_wb.pcm'],
-    #         dimensions=dim))
-    #
-    #   # TODO(kjellander): Enable on Mac when bugs.webrtc.org/7322 is fixed.
-    #   if not api.m.platform.is_mac:
-    #     tests.append(SwarmingWebRtcGtestTest(
-    #         'webrtc_perf_tests',
-    #         args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/'],
-    #         dimensions=dim))
+      # TODO(kjellander): Enable on Mac when bugs.webrtc.org/7322 is fixed.
+      if not api.m.platform.is_mac:
+        tests.append(SwarmingWebRtcGtestTest(
+            'webrtc_perf_tests',
+            args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/'],
+            dimensions=dim))
 
   if test_suite == 'desktop_perf_swarming':
     for test, extra_args in sorted(PERF_TESTS.items()):
