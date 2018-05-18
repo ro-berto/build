@@ -513,3 +513,24 @@ def GenTests(api):
           got_revision_cp=123456,
           dimensions={'gpu': '8086', 'os': 'Mac', 'hidpi': '1'})
   )
+
+  yield (
+      api.test('dimensions_android') +
+      api.properties.generic(
+          mastername='chromium.android',
+          buildername='Lollipop Phone Tester') +
+      api.properties(
+          buildnumber=123,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp=123456,
+          dimensions={
+              'device_type': 'hammerhead',
+              'device_os': 'LOL123',
+              'os': 'Android'
+          }
+      )
+  )

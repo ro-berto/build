@@ -1160,7 +1160,8 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     bot_os = self.prefered_os_dimension(self.m.platform.name)
     suffix = ('' if (
-        task_os == bot_os or task_os.lower() == self.m.platform.name.lower())
+        task_os == bot_os or task_os.lower() == self.m.platform.name.lower() or
+        task_os in task.title)
               else ' on %s' % task_os)
     # Note: properly detecting dimensions of the bot the recipe is running
     # on is somewhat non-trivial. It is not safe to assume it uses default

@@ -1334,12 +1334,13 @@ class SwarmingTest(Test):
     self._set_up = set_up
     self._tear_down = tear_down
     if dimensions and not extra_suffix:
-      self._extra_suffix = self._get_gpu_suffix(dimensions)
+      if dimensions.get('gpu'):
+        self._extra_suffix = self._get_gpu_suffix(dimensions)
+      elif 'Android' == dimensions.get('os') and dimensions.get('device_type'):
+        self._extra_suffix = self._get_android_suffix(dimensions)
 
   @staticmethod
   def _get_gpu_suffix(dimensions):
-    if not dimensions.get('gpu'):
-      return None
     gpu_vendor_id = dimensions.get('gpu', '').split(':')[0].lower()
     vendor_ids = {
       '8086': 'Intel',
@@ -1360,6 +1361,38 @@ class SwarmingTest(Test):
       os_name = 'Linux'
 
     return 'on %s GPU on %s' % (gpu_vendor, os_name)
+
+  @staticmethod
+  def _get_android_suffix(dimensions):
+    device_codenames = {
+      'angler': 'Nexus 6P',
+      'athene': 'Moto G4',
+      'bullhead': 'Nexus 5X',
+      'dragon': 'Pixel C',
+      'flo': 'Nexus 7 [2013]',
+      'flounder': 'Nexus 9',
+      'foster': 'NVIDIA Shield',
+      'fugu': 'Nexus Player',
+      'goyawifi': 'Galaxy Tab 3',
+      'grouper': 'Nexus 7 [2012]',
+      'hammerhead': 'Nexus 5',
+      'herolte': 'Galaxy S7 [Global]',
+      'heroqlteatt': 'Galaxy S7 [AT&T]',
+      'j5xnlte': 'Galaxy J5',
+      'm0': 'Galaxy S3',
+      'mako': 'Nexus 4',
+      'manta': 'Nexus 10',
+      'marlin': 'Pixel 1 XL',
+      'sailfish': 'Pixel 1',
+      'shamu': 'Nexus 6',
+      'sprout': 'Android One',
+      'taimen': 'Pixel 2 XL',
+      'walleye': 'Pixel 2',
+      'zerofltetmo': 'Galaxy S6',
+    }
+    targetted_device = dimensions['device_type']
+    product_name = device_codenames.get(targetted_device, targetted_device)
+    return 'on Android device %s' % product_name
 
   @property
   def set_up(self):

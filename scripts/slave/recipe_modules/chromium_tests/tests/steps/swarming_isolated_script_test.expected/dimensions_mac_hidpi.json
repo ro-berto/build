@@ -299,7 +299,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:base_unittests on Intel GPU on Mac Retina (with patch) on Mac",
+      "stepname:base_unittests on Intel GPU on Mac Retina (with patch)",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
@@ -324,7 +324,7 @@
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "infra_step": true,
-    "name": "[trigger] base_unittests on Intel GPU on Mac Retina (with patch) on Mac",
+    "name": "[trigger] base_unittests on Intel GPU on Mac Retina (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -375,7 +375,7 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "base_unittests on Intel GPU on Mac Retina (with patch) on Mac",
+    "name": "base_unittests on Intel GPU on Mac Retina (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -466,7 +466,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"hidpi\": \"1\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Mac\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"base_unittests on Intel GPU on Mac Retina (with patch) on Mac\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"base_unittests on Intel GPU on Mac Retina (with patch)\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"base_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": true, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",

@@ -457,7 +457,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:telemetry_gpu_unittests on NVIDIA GPU on Windows on Windows",
+      "stepname:telemetry_gpu_unittests on NVIDIA GPU on Windows",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
@@ -486,7 +486,7 @@
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
-    "name": "test_pre_run.[trigger] telemetry_gpu_unittests on NVIDIA GPU on Windows on Windows",
+    "name": "test_pre_run.[trigger] telemetry_gpu_unittests on NVIDIA GPU on Windows",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
@@ -564,7 +564,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:telemetry_gpu_unittests on ATI GPU on Windows on Windows",
+      "stepname:telemetry_gpu_unittests on ATI GPU on Windows",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
@@ -593,7 +593,7 @@
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
-    "name": "test_pre_run.[trigger] telemetry_gpu_unittests on ATI GPU on Windows on Windows",
+    "name": "test_pre_run.[trigger] telemetry_gpu_unittests on ATI GPU on Windows",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
@@ -671,7 +671,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:telemetry_gpu_unittests on (15ad) GPU on Windows on Windows",
+      "stepname:telemetry_gpu_unittests on (15ad) GPU on Windows",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
@@ -700,7 +700,7 @@
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
-    "name": "test_pre_run.[trigger] telemetry_gpu_unittests on (15ad) GPU on Windows on Windows",
+    "name": "test_pre_run.[trigger] telemetry_gpu_unittests on (15ad) GPU on Windows",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
@@ -777,7 +777,7 @@
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
-    "name": "telemetry_gpu_unittests on NVIDIA GPU on Windows on Windows",
+    "name": "telemetry_gpu_unittests on NVIDIA GPU on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -868,7 +868,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Windows\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests on NVIDIA GPU on Windows on Windows\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests on NVIDIA GPU on Windows\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"telemetry_gpu_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -946,7 +946,7 @@
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
-    "name": "telemetry_gpu_unittests on ATI GPU on Windows on Windows",
+    "name": "telemetry_gpu_unittests on ATI GPU on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1037,7 +1037,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Windows\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests on ATI GPU on Windows on Windows\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests on ATI GPU on Windows\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"telemetry_gpu_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
@@ -1115,7 +1115,7 @@
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
-    "name": "telemetry_gpu_unittests on (15ad) GPU on Windows on Windows",
+    "name": "telemetry_gpu_unittests on (15ad) GPU on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1206,7 +1206,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Windows\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests on (15ad) GPU on Windows on Windows\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests on (15ad) GPU on Windows\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"telemetry_gpu_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
