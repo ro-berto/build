@@ -399,9 +399,12 @@ class ArchiveBuildStep(Test):
     self.gs_acl = gs_acl
 
   def run(self, api, suffix):
+    bucket = self.gs_bucket
+    if api.chromium.m.runtime.is_experimental:
+      bucket += "/experimental"
     return api.chromium.archive_build(
         'archive build',
-        self.gs_bucket,
+        bucket,
         gs_acl=self.gs_acl,
     )
 

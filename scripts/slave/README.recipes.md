@@ -4239,9 +4239,9 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/android_junit_test.py#18)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/archive\_build\_step](/scripts/slave/recipe_modules/chromium_tests/tests/steps/archive_build_step.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/archive_build_step.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/archive_build_step.py#7): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/archive_build_step.py#13)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/archive_build_step.py#19)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/bisect\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/bisect_test.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/bisect_test.py#5): [bisect\_tester](#recipe_modules-bisect_tester), [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
