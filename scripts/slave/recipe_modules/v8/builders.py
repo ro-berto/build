@@ -1836,13 +1836,6 @@ BUILDERS = {
 ####### Waterfall: tryserver.v8
   'tryserver.v8': {
     'builders': {
-      # TODO(machenbach): Remove this config as simulation data is not
-      # representative anymore. Requires chromium_apply_config to be set by
-      # default.
-      'v8_fuchsia_rel_ng': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {'platform': 'linux'},
-      },
       'v8_linux_rel_ng': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],

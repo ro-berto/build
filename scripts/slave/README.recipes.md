@@ -3404,7 +3404,7 @@ Args:
       rely on the built-in buildset set by the buildbucket module, e.g. on
       tryserver.
 
-&mdash; **def [calc\_missing\_values\_in\_sequence](/scripts/slave/recipe_modules/v8/api.py#1490)(self, sequence, subsequence, value):**
+&mdash; **def [calc\_missing\_values\_in\_sequence](/scripts/slave/recipe_modules/v8/api.py#1495)(self, sequence, subsequence, value):**
 
 Calculate a list of missing values from a subsequence.
 
@@ -3469,9 +3469,9 @@ in the test spec of the current builder.
 
 &emsp; **@property**<br>&mdash; **def [generate\_sanitizer\_coverage](/scripts/slave/recipe_modules/v8/api.py#814)(self):**
 
-&mdash; **def [get\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1466)(self, bisect_range, use_swarming=False):**
+&mdash; **def [get\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1471)(self, bisect_range, use_swarming=False):**
 
-&mdash; **def [get\_change\_range](/scripts/slave/recipe_modules/v8/api.py#1416)(self):**
+&mdash; **def [get\_change\_range](/scripts/slave/recipe_modules/v8/api.py#1421)(self):**
 
 &mdash; **def [get\_changes](/scripts/slave/recipe_modules/v8/api.py#1356)(self):**
 
@@ -3494,7 +3494,7 @@ Args:
 
 &emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/v8/api.py#219)(self):**
 
-&mdash; **def [log\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1512)(self, available_bisect_range):**
+&mdash; **def [log\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1517)(self, available_bisect_range):**
 
 &mdash; **def [maybe\_bisect](/scripts/slave/recipe_modules/v8/api.py#894)(self, test_results):**
 
@@ -3511,17 +3511,17 @@ Reads a test specification file under v8/infra/testing/<mastername>.pyl.
 Returns: TestSpec object, filtered by interesting builders (current builder
     and all its triggered testers).
 
-&mdash; **def [read\_version\_file](/scripts/slave/recipe_modules/v8/api.py#1528)(self, ref, step_name_desc):**
+&mdash; **def [read\_version\_file](/scripts/slave/recipe_modules/v8/api.py#1533)(self, ref, step_name_desc):**
 
 Read and return the version-file content at a paricular ref.
 
-&mdash; **def [read\_version\_from\_ref](/scripts/slave/recipe_modules/v8/api.py#1537)(self, ref, step_name_desc):**
+&mdash; **def [read\_version\_from\_ref](/scripts/slave/recipe_modules/v8/api.py#1542)(self, ref, step_name_desc):**
 
 Read and return the version at a paricular ref.
 
 &emsp; **@property**<br>&mdash; **def [relative\_path\_to\_d8](/scripts/slave/recipe_modules/v8/api.py#384)(self):**
 
-&mdash; **def [report\_culprits](/scripts/slave/recipe_modules/v8/api.py#1517)(self, culprit_range):**
+&mdash; **def [report\_culprits](/scripts/slave/recipe_modules/v8/api.py#1522)(self, culprit_range):**
 
 &mdash; **def [runhooks](/scripts/slave/recipe_modules/v8/api.py#350)(self, \*\*kwargs):**
 
@@ -3576,7 +3576,7 @@ Capture coverage data and upload a report.
 
 &mdash; **def [upload\_isolated\_json](/scripts/slave/recipe_modules/v8/api.py#679)(self):**
 
-&emsp; **@staticmethod**<br>&mdash; **def [version\_from\_file](/scripts/slave/recipe_modules/v8/api.py#1541)(blob):**
+&emsp; **@staticmethod**<br>&mdash; **def [version\_from\_file](/scripts/slave/recipe_modules/v8/api.py#1546)(blob):**
 ### *recipe_modules* / [webrtc](/scripts/slave/recipe_modules/webrtc)
 
 [DEPS](/scripts/slave/recipe_modules/webrtc/__init__.py#1): [adb](#recipe_modules-adb), [archive](#recipe_modules-archive), [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [goma](#recipe_modules-goma), [isolate](#recipe_modules-isolate), [swarming](#recipe_modules-swarming), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
@@ -4239,9 +4239,9 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/android_junit_test.py#18)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/archive\_build\_step](/scripts/slave/recipe_modules/chromium_tests/tests/steps/archive_build_step.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/archive_build_step.py#7): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/archive_build_step.py#7): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/archive_build_step.py#19)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/archive_build_step.py#18)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/bisect\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/bisect_test.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/bisect_test.py#5): [bisect\_tester](#recipe_modules-bisect_tester), [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
