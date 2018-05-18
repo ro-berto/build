@@ -208,8 +208,9 @@ class AndroidApi(recipe_api.RecipeApi):
           infra_step=True,
           **kwargs)
 
-  def resource_sizes(self, apk_path, chartjson_file=False, perf_id=None):
-    test_name = 'resource_sizes (%s)' % self.m.path.basename(apk_path)
+  def resource_sizes(self, apk_path, chartjson_file=False, perf_id=None,
+                     step_suffix=''):
+    test_name = 'resource_sizes ({})'.format(self.m.path.basename(apk_path))
     resource_sizes_args = [str(apk_path)]
     if chartjson_file:
       resource_sizes_args.append('--chartjson')
@@ -218,17 +219,19 @@ class AndroidApi(recipe_api.RecipeApi):
       self.m.chromium.runtest(
         self.c.resource_sizes,
         resource_sizes_args,
-        name=test_name,
+        name=test_name + step_suffix,
         perf_dashboard_id=test_name,
         point_id=None,
-        test_type=test_name,
+        test_type='resource_sizes',
         annotate=self.m.chromium.get_annotate_by_test_name(test_name),
         results_url='https://chromeperf.appspot.com',
         perf_id=perf_id or self.m.properties['buildername'],
         chartjson_file=chartjson_file)
 
-  def create_supersize_archive(self, apk_path, size_path):
+  def supersize_archive(self, apk_path, size_path, step_suffix=''):
     """Creates a .size file for the given .apk."""
+    step_name = 'supersize archive ({}){}'.format(
+        self.m.path.basename(apk_path), step_suffix)
     download_objdump_path = self.m.path['checkout'].join(
         'tools', 'clang', 'scripts', 'download_objdump.py')
     supersize_path = self.m.path['checkout'].join(
@@ -236,9 +239,8 @@ class AndroidApi(recipe_api.RecipeApi):
     with self.m.context(env=self.m.chromium.get_env()):
       self.m.python('download objdump', download_objdump_path)
       return self.m.step(
-          'supersize_archive',
-          [supersize_path, 'archive', size_path, '--apk-file', apk_path, '-v']
-      )
+          step_name,
+          [supersize_path, 'archive', size_path, '--apk-file', apk_path, '-v'])
 
   def upload_apks_for_bisect(self, update_properties, bucket, path):
     """Uploads android apks for functional bisects."""

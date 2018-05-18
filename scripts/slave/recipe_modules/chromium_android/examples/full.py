@@ -240,7 +240,7 @@ def RunSteps(api, buildername):
     api.chromium_android.resource_sizes(
         apk_path=api.chromium_android.apk_path('Example.apk'),
         chartjson_file=True)
-    api.chromium_android.create_supersize_archive(
+    api.chromium_android.supersize_archive(
         apk_path=api.chromium_android.apk_path('Example.apk'),
         size_path=api.chromium_android.apk_path('Example.apk.size'))
 

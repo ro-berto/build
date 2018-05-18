@@ -988,7 +988,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=resource_sizes (Example.apk)",
       "--perf-id=resource_size_builder",
-      "--test-type=resource_sizes (Example.apk)",
+      "--test-type=resource_sizes",
       "--step-name=resource_sizes (Example.apk)",
       "--chartjson-file",
       "/path/to/tmp/json",
@@ -1033,7 +1033,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "supersize_archive"
+    "name": "supersize archive (Example.apk)"
   },
   {
     "cmd": [

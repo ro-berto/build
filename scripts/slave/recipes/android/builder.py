@@ -194,7 +194,7 @@ def _RunStepsInternal(api, mastername, buildername, revision):
     apk_path = api.chromium_android.apk_path(apk_name)
     size_path = api.chromium_android.apk_path(apk_name + '.size')
     api.chromium_android.resource_sizes(apk_path, chartjson_file=True)
-    api.chromium_android.create_supersize_archive(apk_path, size_path)
+    api.chromium_android.supersize_archive(apk_path, size_path)
 
   upload_for_bisect = bot_config.get('upload_for_bisect')
   if upload_for_bisect:

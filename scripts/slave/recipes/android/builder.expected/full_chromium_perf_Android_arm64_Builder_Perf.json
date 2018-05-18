@@ -633,7 +633,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=resource_sizes (ChromeModernPublic.apk)",
       "--perf-id=Android arm64 Builder Perf",
-      "--test-type=resource_sizes (ChromeModernPublic.apk)",
+      "--test-type=resource_sizes",
       "--step-name=resource_sizes (ChromeModernPublic.apk)",
       "--chartjson-file",
       "/path/to/tmp/json",
@@ -678,7 +678,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "supersize_archive"
+    "name": "supersize archive (ChromeModernPublic.apk)"
   },
   {
     "allow_subannotations": true,
@@ -704,7 +704,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=resource_sizes (ChromePublic.apk)",
       "--perf-id=Android arm64 Builder Perf",
-      "--test-type=resource_sizes (ChromePublic.apk)",
+      "--test-type=resource_sizes",
       "--step-name=resource_sizes (ChromePublic.apk)",
       "--chartjson-file",
       "/path/to/tmp/json",
@@ -749,7 +749,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "supersize_archive (2)"
+    "name": "supersize archive (ChromePublic.apk)"
   },
   {
     "allow_subannotations": true,
@@ -775,7 +775,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=resource_sizes (SystemWebView.apk)",
       "--perf-id=Android arm64 Builder Perf",
-      "--test-type=resource_sizes (SystemWebView.apk)",
+      "--test-type=resource_sizes",
       "--step-name=resource_sizes (SystemWebView.apk)",
       "--chartjson-file",
       "/path/to/tmp/json",
@@ -820,7 +820,7 @@
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "supersize_archive (3)"
+    "name": "supersize archive (SystemWebView.apk)"
   },
   {
     "cmd": [

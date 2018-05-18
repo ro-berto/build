@@ -21,7 +21,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=resource_sizes (test.apk)",
       "--perf-id=test_buildername",
-      "--test-type=resource_sizes (test.apk)",
+      "--test-type=resource_sizes",
       "--step-name=resource_sizes (test.apk)",
       "--builder-name=test_buildername",
       "--slave-name=test_bot_id",
