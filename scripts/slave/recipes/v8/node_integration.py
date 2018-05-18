@@ -13,6 +13,7 @@ from recipe_engine.types import freeze
 DEPS = [
   'chromium',
   'depot_tools/gclient',
+  'depot_tools/git',
   'depot_tools/gsutil',
   'depot_tools/tryserver',
   'goma',
@@ -246,6 +247,10 @@ def RunSteps(api):
   api.gclient.apply_config('node_js')
   v8.checkout()
   v8.runhooks()
+
+  # Clean up files from a previous run.
+  with api.context(cwd=api.v8.checkout_root.join('node.js')):
+    api.git('clean', '-fxd')
 
   goma_dir = api.goma.ensure_goma()
 

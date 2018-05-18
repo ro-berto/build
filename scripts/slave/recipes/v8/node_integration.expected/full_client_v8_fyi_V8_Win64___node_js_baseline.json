@@ -112,6 +112,16 @@
     "name": "gclient runhooks"
   },
   {
+    "cmd": [
+      "git",
+      "clean",
+      "-fxd"
+    ],
+    "cwd": "[START_DIR]\\node.js",
+    "infra_step": true,
+    "name": "git clean"
+  },
+  {
     "cmd": [],
     "name": "ensure_goma"
   },
