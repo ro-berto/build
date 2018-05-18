@@ -1659,27 +1659,6 @@ def GenTests(api):
   )
 
   yield (
-    api.test('dynamic_instrumentation_test_with_timeout_scale') +
-    api.properties.generic(mastername='chromium.android.fyi',
-                           buildername='Lollipop Low-end Tester',
-                           parent_mastername='chromium.android',
-                           parent_buildername='Android arm Builder (dbg)') +
-    api.override_step_data(
-        'read test spec (chromium.android.fyi.json)',
-        api.json.output({
-            'Lollipop Low-end Tester': {
-                'instrumentation_tests': [
-                    {
-                      'test': 'ChromePublicTest',
-                      'timeout_scale': 2,
-                    }
-                ],
-            },
-        })
-    )
-  )
-
-  yield (
     api.test('dynamic_junit_test') +
     api.properties.generic(mastername='chromium.android',
                            buildername='KitKat Phone Tester (rel)') +

@@ -12,10 +12,63 @@ DEPS = [
     'recipe_engine/python',
 ]
 
+CUSTOM_BUILDERS = {
+  'chromium.example': {
+    'settings': {
+      'build_gs_bucket': 'chromium-example-archive',
+    },
+    'builders': {
+      'Fake Builder': {
+        'chromium_config': 'android',
+        'chromium_apply_config': [
+          'chrome_with_codecs',
+          'download_vr_test_apks',
+        ],
+        'gclient_config': 'chromium',
+        'gclient_apply_config': ['android'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+          'TARGET_PLATFORM': 'android',
+        },
+        'android_config': 'main_builder_mb',
+        'bot_type': 'builder',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+    },
+  },
+  'chromium.example2': {
+    'settings': {
+      'build_gs_bucket': 'chromium-example-archive',
+    },
+    'builders': {
+      'Fake Tester': {
+        'chromium_config': 'android',
+        'gclient_config': 'chromium',
+        'gclient_apply_config': ['android'],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'android',
+        },
+        'parent_buildername': 'Fake Builder',
+        'parent_mastername': 'chromium.example',
+        'bot_type': 'tester',
+        'android_config': 'main_builder_mb',
+        'android_apply_config': ['use_devil_provision'],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+    },
+  },
+}
 
 def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object(
-      api.properties['mastername'], api.properties['buildername'])
+      api.properties['mastername'], api.properties['buildername'],
+      builders=CUSTOM_BUILDERS)
   api.chromium_tests.configure_build(bot_config)
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
   api.chromium_tests.trigger_child_builds(
@@ -34,11 +87,13 @@ def GenTests(api):
       api.test('cross_master_trigger') +
       api.platform.name('linux') +
       api.properties.generic(
-          mastername='chromium.android',
-          buildername='Android arm Builder (dbg)') +
+          buildername='Fake Builder',
+          mastername='chromium.example',
+          parent_buildername='Android arm Builder (dbg)',
+          parent_mastername='chromium.android') +
       api.post_process(post_process.StatusCodeIn, 0) +
       api.post_process(trigger_includes_bucket,
-                       builder='Lollipop Low-end Tester',
-                       bucket='master.chromium.android.fyi') +
+                       builder='Fake Tester',
+                       bucket='master.chromium.example2') +
       api.post_process(post_process.DropExpectation)
   )
