@@ -998,8 +998,8 @@
       "[START_DIR]/art/tools/run-jdwp-tests.sh",
       "--mode=device",
       "--variant=X32",
-      "--no-jit",
-      "--debug"
+      "--debug",
+      "--no-jit"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
@@ -1112,6 +1112,125 @@
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test jdwp aot: adb clear log"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/art/tools/run-libjdwp-tests.sh",
+      "--mode=device",
+      "--variant=X32",
+      "--debug"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
+      "ANDROID_ROOT": "/data/local/tmp/system",
+      "ANDROID_SERIAL": "84B7N15B03000729",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "false",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_NO_SYNC": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_READ_BARRIER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "arm_krait",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test libjdwp jit"
+  },
+  {
+    "cmd": [
+      "adb",
+      "logcat",
+      "-d",
+      "-v",
+      "threadtime"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
+      "ANDROID_SERIAL": "84B7N15B03000729",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "false",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_READ_BARRIER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "arm_krait",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test libjdwp jit: adb logcat"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
+      "ANDROID_SERIAL": "84B7N15B03000729",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "false",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_READ_BARRIER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "arm_krait",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test libjdwp jit: crashes"
+  },
+  {
+    "cmd": [
+      "adb",
+      "logcat",
+      "-c"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
+      "ANDROID_SERIAL": "84B7N15B03000729",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "false",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_READ_BARRIER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "arm_krait",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test libjdwp jit: adb clear log"
   },
   {
     "cmd": [
@@ -1232,125 +1351,6 @@
       "USE_DEX2OAT_DEBUG": "false"
     },
     "name": "test libjdwp aot: adb clear log"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/art/tools/run-libjdwp-tests.sh",
-      "--mode=device",
-      "--variant=X32",
-      "--debug"
-    ],
-    "env": {
-      "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_ROOT": "/data/local/tmp/system",
-      "ANDROID_SERIAL": "84B7N15B03000729",
-      "ART_BUILD_HOST_DEBUG": "false",
-      "ART_HEAP_POISONING": "false",
-      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
-      "ART_TEST_FULL": "false",
-      "ART_TEST_KEEP_GOING": "true",
-      "ART_TEST_NO_SYNC": "true",
-      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
-      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
-      "JACK_SERVER": "false",
-      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
-      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
-      "TARGET_BUILD_TYPE": "release",
-      "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "arm_krait",
-      "USE_DEX2OAT_DEBUG": "false"
-    },
-    "name": "test libjdwp jit"
-  },
-  {
-    "cmd": [
-      "adb",
-      "logcat",
-      "-d",
-      "-v",
-      "threadtime"
-    ],
-    "env": {
-      "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000729",
-      "ART_BUILD_HOST_DEBUG": "false",
-      "ART_HEAP_POISONING": "false",
-      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
-      "ART_TEST_FULL": "false",
-      "ART_TEST_KEEP_GOING": "true",
-      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
-      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
-      "JACK_SERVER": "false",
-      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
-      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
-      "TARGET_BUILD_TYPE": "release",
-      "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "arm_krait",
-      "USE_DEX2OAT_DEBUG": "false"
-    },
-    "name": "test libjdwp jit: adb logcat"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
-    ],
-    "env": {
-      "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000729",
-      "ART_BUILD_HOST_DEBUG": "false",
-      "ART_HEAP_POISONING": "false",
-      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
-      "ART_TEST_FULL": "false",
-      "ART_TEST_KEEP_GOING": "true",
-      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
-      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
-      "JACK_SERVER": "false",
-      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
-      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
-      "TARGET_BUILD_TYPE": "release",
-      "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "arm_krait",
-      "USE_DEX2OAT_DEBUG": "false"
-    },
-    "name": "test libjdwp jit: crashes"
-  },
-  {
-    "cmd": [
-      "adb",
-      "logcat",
-      "-c"
-    ],
-    "env": {
-      "ANDROID_BUILD_TOP": "[START_DIR]",
-      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/arm_krait",
-      "ANDROID_SERIAL": "84B7N15B03000729",
-      "ART_BUILD_HOST_DEBUG": "false",
-      "ART_HEAP_POISONING": "false",
-      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
-      "ART_TEST_FULL": "false",
-      "ART_TEST_KEEP_GOING": "true",
-      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
-      "ART_USE_READ_BARRIER": "true",
-      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
-      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
-      "JACK_SERVER": "false",
-      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
-      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
-      "TARGET_BUILD_TYPE": "release",
-      "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "arm_krait",
-      "USE_DEX2OAT_DEBUG": "false"
-    },
-    "name": "test libjdwp jit: adb clear log"
   },
   {
     "name": "$result",

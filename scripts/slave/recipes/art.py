@@ -111,7 +111,9 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
 
   env.update({ 'ART_DEFAULT_COMPACT_DEX_LEVEL' : cdex_level })
 
+  # Common options passed to testrunner.py.
   common_options = ['--verbose', '--host']
+
   if debug:
     common_options += ['--debug']
   else:
@@ -175,49 +177,33 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
                          '--variant=X%d' % bitness]
       if debug:
         libcore_command.append('--debug')
-
       if gcstress:
         libcore_command += ['--vm-arg', '-Xgc:gcstress']
 
       api.step('test libcore', libcore_command)
 
-      jdwp_jit_command = [art_tools.join('run-jdwp-tests.sh'),
+      jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
                       '--mode=host',
                       '--variant=X%d' % bitness]
       if debug:
-        jdwp_jit_command.append('--debug')
-
+        jdwp_command.append('--debug')
       if gcstress:
-        jdwp_jit_command += ['--vm-arg', '-Xgc:gcstress']
+        jdwp_command += ['--vm-arg', '-Xgc:gcstress']
 
-      api.step('test jdwp jit', jdwp_jit_command)
-
-      jdwp_aot_command = [art_tools.join('run-jdwp-tests.sh'),
-                      '--mode=host',
-                      '--variant=X%d' % bitness,
-                      '--no-jit']
-      if debug:
-        jdwp_aot_command.append('--debug')
-
-      if gcstress:
-        jdwp_aot_command += ['--vm-arg', '-Xgc:gcstress']
-
-      api.step('test jdwp aot', jdwp_aot_command)
+      api.step('test jdwp jit', jdwp_command)
+      api.step('test jdwp aot', jdwp_command + ['--no-jit'])
 
       libjdwp_run = art_tools.join('run-libjdwp-tests.sh')
-      libjdwp_common_command = [
-          libjdwp_run,
-          '--mode=host',
-          '--variant=X%d' % bitness]
-
+      libjdwp_common_command = [libjdwp_run,
+                                '--mode=host',
+                                '--variant=X%d' % bitness]
       if debug:
         libjdwp_common_command.append('--debug')
-
       if gcstress:
         libjdwp_common_command += ['--vm-arg', '-Xgc:gcstress']
 
-      api.step('test libjdwp aot', libjdwp_common_command + ['--no-jit'])
       api.step('test libjdwp jit', libjdwp_common_command)
+      api.step('test libjdwp aot', libjdwp_common_command + ['--no-jit'])
 
       api.step('test dx', ['./dalvik/dx/tests/run-all-tests'])
 
@@ -316,7 +302,9 @@ def setup_target(api,
     if not debug and device == 'fugu':
       optimizing_make_jobs = 1
 
+    # Common options passed to testrunner.py.
     common_options = ['--target', '--verbose']
+
     if debug:
       common_options += ['--debug']
     else:
@@ -375,36 +363,25 @@ def setup_target(api,
       api.step('test jdwp jit', jdwp_command)
     test_logging(api, 'test jdwp jit')
 
-    jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
-                    '--mode=device',
-                    '--variant=X%d' % bitness,
-                    '--no-jit']
-    if debug:
-      jdwp_command.append('--debug')
-    if gcstress:
-      jdwp_command += ['--vm-arg', '-Xgc:gcstress']
-
     with api.context(env=test_env):
-      api.step('test jdwp aot', jdwp_command)
+      api.step('test jdwp aot', jdwp_command + ['--no-jit'])
     test_logging(api, 'test jdwp aot')
 
-    libjdwp_command = [
-        art_tools.join('run-libjdwp-tests.sh'),
-        '--mode=device',
-        '--variant=X%d' % bitness]
-
+    libjdwp_command = [art_tools.join('run-libjdwp-tests.sh'),
+                       '--mode=device',
+                       '--variant=X%d' % bitness]
     if debug:
       libjdwp_command.append('--debug')
     if gcstress:
       libjdwp_command += ['--vm-arg', '-Xgc:gcstress']
 
     with api.context(env=test_env):
-      api.step('test libjdwp aot', libjdwp_command + ['--no-jit'])
-    test_logging(api, 'test libjdwp aot')
-
-    with api.context(env=test_env):
       api.step('test libjdwp jit', libjdwp_command)
     test_logging(api, 'test libjdwp jit')
+
+    with api.context(env=test_env):
+      api.step('test libjdwp aot', libjdwp_command + ['--no-jit'])
+    test_logging(api, 'test libjdwp aot')
 
 def setup_aosp_builder(api, read_barrier):
   full_checkout(api)
