@@ -791,7 +791,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'enable_swarming': False,
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
@@ -800,7 +799,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'enable_swarming': False,
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 ASAN': {
@@ -1931,7 +1929,6 @@ BUILDERS = {
       'v8_linux_gcc_compile_rel': {
         'chromium_apply_config': [
           'gcc', 'goma', 'mb'],
-        'enable_swarming': False,
         'testing': {
           'properties': {
             'build_config': 'Release',
@@ -1942,7 +1939,6 @@ BUILDERS = {
       'v8_linux_gcc_rel': {
         'chromium_apply_config': [
           'gcc', 'goma', 'mb'],
-        'enable_swarming': False,
         'tests': [V8Testing],
         'testing': {
           'properties': {
@@ -1977,7 +1973,6 @@ BUILDERS = {
       'v8_linux64_gcc_compile_dbg': {
         'chromium_apply_config': [
           'gcc', 'goma', 'mb'],
-        'enable_swarming': False,
         'testing': {
           'properties': {
             'build_config': 'Debug',
