@@ -148,15 +148,29 @@ def _build_and_test(api, goma_dir):
         )
 
         # TODO(machenbach): This contains all targets test-ci depends on.
-        # Split this further up and migrate to ninja.
+        # Migrate this to ninja.
+        api.step(
+          'clear stalled',
+          [
+            'make', '-j8', 'clear-stalled',
+          ],
+        )
         api.step(
           'build addons',
           [
-            'make', '-j8',
-            'clear-stalled',
-            'build-addons',
-            'build-addons-napi',
-            'doc-only',
+            'make', '-j8', 'build-addons',
+          ],
+        )
+        api.step(
+          'build addons-napi',
+          [
+            'make', '-j8', 'build-addons-napi',
+          ],
+        )
+        api.step(
+          'build doc-only',
+          [
+            'make', '-j8', 'doc-only',
           ],
         )
 

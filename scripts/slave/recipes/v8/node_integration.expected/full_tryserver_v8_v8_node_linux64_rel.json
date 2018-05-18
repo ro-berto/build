@@ -274,13 +274,37 @@
     "cmd": [
       "make",
       "-j8",
-      "clear-stalled",
-      "build-addons",
-      "build-addons-napi",
-      "doc-only"
+      "clear-stalled"
+    ],
+    "cwd": "[START_DIR]/node.js",
+    "name": "clear stalled"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "build-addons"
     ],
     "cwd": "[START_DIR]/node.js",
     "name": "build addons"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "build-addons-napi"
+    ],
+    "cwd": "[START_DIR]/node.js",
+    "name": "build addons-napi"
+  },
+  {
+    "cmd": [
+      "make",
+      "-j8",
+      "doc-only"
+    ],
+    "cwd": "[START_DIR]/node.js",
+    "name": "build doc-only"
   },
   {
     "cmd": [],
