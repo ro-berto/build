@@ -1902,8 +1902,6 @@ BUILDERS = {
       'v8_linux_nosnap_rel': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
-        'tests': [V8Testing(4)],
-        'variants': V8Variant('default'),
         'testing': {
           'properties': {
             'build_config': 'Release',
@@ -1914,8 +1912,6 @@ BUILDERS = {
       'v8_linux_nosnap_dbg': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
-        'tests': [V8Testing(5)],
-        'variants': V8Variant('default'),
         'testing': {
           'properties': {
             'build_config': 'Debug',
@@ -1939,7 +1935,6 @@ BUILDERS = {
       'v8_linux_gcc_rel': {
         'chromium_apply_config': [
           'gcc', 'goma', 'mb'],
-        'tests': [V8Testing],
         'testing': {
           'properties': {
             'build_config': 'Release',
@@ -2022,8 +2017,6 @@ BUILDERS = {
       'v8_linux_gc_stress_dbg': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
-        'v8_apply_config': ['gc_stress'],
-        'tests': [D8Testing(5)],
         'testing': {
           'properties': {
             'build_config': 'Debug',
@@ -2087,10 +2080,6 @@ BUILDERS = {
           'goma',
           'mb',
         ],
-        'tests': [
-          V8Testing(5),
-          Test262(2),
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
@@ -2104,12 +2093,6 @@ BUILDERS = {
           'goma',
           'mb',
         ],
-        'tests': [
-          V8Testing(5),
-          Test262(3),
-          Mozilla,
-          Benchmarks,
-        ] + with_extra_variants([V8Testing(3)]),
         'testing': {
           'properties': {
             'build_config': 'Release',
@@ -2156,14 +2139,6 @@ BUILDERS = {
           'default_compiler',
           'goma',
           'mb',
-        ],
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-          'cpu': 'x86-64',
-        },
-        'tests': [
-          V8Testing(3),
-          Mozilla,
         ],
         'testing': {
           'properties': {
@@ -2293,14 +2268,6 @@ BUILDERS = {
           'goma',
           'mb',
         ],
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-        },
-        'tests': [
-          V8Testing(3),
-          Test262(2),
-          Mozilla,
-        ] + with_extra_variants([V8Testing(2)]),
         'testing': {
           'properties': {
             'build_config': 'Debug',
@@ -2337,12 +2304,6 @@ BUILDERS = {
       'v8_mac64_gc_stress_dbg': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
-        'v8_apply_config': ['gc_stress'],
-        'tests': [D8Testing(4)],
-        'swarming_dimensions': {
-          'os': 'Mac-10.13',
-          'cpu': 'x86-64',
-        },
         'testing': {
           'properties': {
             'build_config': 'Debug',
@@ -2356,11 +2317,6 @@ BUILDERS = {
           'goma',
           'mb',
         ],
-        'tests': [V8Testing(4)],
-        'swarming_dimensions': {
-          'os': 'Mac-10.13',
-          'cpu': 'x86-64',
-        },
         'testing': {
           'properties': {
             'build_config': 'Release',
@@ -2384,12 +2340,6 @@ BUILDERS = {
       'v8_linux_arm_dbg': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
-        'tests': [
-          V8Testing(5),
-          Test262,
-          Mozilla,
-          MjsunitSPFrameAccess,
-        ] + with_extra_variants([V8Testing(3)]),
         'testing': {
           'properties': {
             'build_config': 'Debug',
@@ -2413,12 +2363,6 @@ BUILDERS = {
       'v8_linux_arm64_dbg': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
-        'tests': [
-          V8Testing(4),
-          Test262,
-          Mozilla,
-          MjsunitSPFrameAccess,
-        ] + with_extra_variants([V8Testing(3)]),
         'testing': {
           'properties': {
             'build_config': 'Debug',
@@ -2429,8 +2373,6 @@ BUILDERS = {
       'v8_linux_arm64_gc_stress_dbg': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
-        'v8_apply_config': ['gc_stress'],
-        'tests': [D8Testing(6)],
         'testing': {
           'properties': {
             'build_config': 'Debug',
