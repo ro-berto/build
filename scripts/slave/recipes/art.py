@@ -54,10 +54,6 @@ _TARGET_DEVICE_MAP = {
       },
     }
 
-_ANDROID_CLEAN_DIRS = ['/data/local/tmp', '/data/art-test',
-                       '/data/nativetest', '/data/nativetest64',
-                       '/data/misc/trace/*']
-
 def checkout(api):
   api.repo.init('https://android.googlesource.com/platform/manifest',
       '-b', 'master-art')
@@ -211,11 +207,17 @@ def setup_target(api,
     serial,
     debug,
     device,
+    chroot=False,
     concurrent_collector=True,
     heap_poisoning=False,
     gcstress=False):
   build_top_dir = api.path['start_dir']
   art_tools = api.path['start_dir'].join('art', 'tools')
+  # The path to the chroot directory on the device where ART and its
+  # dependencies are installed, in case of chroot-based testing.
+  chroot_dir='/data/local/art-test-chroot'
+  # The path to the local directory on the device where ART and its
+  # dependencies are installed, if case no chroot is used.
   android_root = '/data/local/tmp/system'
 
   env = {'TARGET_BUILD_VARIANT': 'eng',
@@ -230,7 +232,6 @@ def setup_target(api,
                  api.path.pathsep + '%(PATH)s',
          'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
          'ART_TEST_FULL': 'false',
-         'ART_TEST_ANDROID_ROOT': android_root,
          'USE_DEX2OAT_DEBUG': 'false',
          'ART_BUILD_HOST_DEBUG': 'false',
          'ART_TEST_KEEP_GOING': 'true'}
@@ -254,10 +255,14 @@ def setup_target(api,
          _TARGET_DEVICE_MAP[device]['product'])
       })
 
-  if bitness == 32:
-    env.update({ 'CUSTOM_TARGET_LINKER': '%s/bin/linker' % android_root  })
+  if chroot:
+    env.update({ 'ART_TEST_CHROOT' : chroot_dir }) # pragma: no cover
   else:
-    env.update({ 'CUSTOM_TARGET_LINKER': '%s/bin/linker64' % android_root  })
+    env.update({ 'ART_TEST_ANDROID_ROOT' : android_root })
+    if bitness == 32:
+      env.update({ 'CUSTOM_TARGET_LINKER': '%s/bin/linker' % android_root  })
+    else:
+      env.update({ 'CUSTOM_TARGET_LINKER': '%s/bin/linker64' % android_root  })
 
   checkout(api)
   clobber(api)
@@ -274,8 +279,7 @@ def setup_target(api,
     with api.context(env=env):
       api.step('setup device', [art_tools.join('setup-buildbot-device.sh')])
 
-      api.step('device cleanup', ['adb', 'shell', 'rm', '-rf'] +
-                                 _ANDROID_CLEAN_DIRS)
+      api.step('device cleanup', [art_tools.join('cleanup-buildbot-device.sh')])
 
       api.step('sync target', ['make', 'test-art-target-sync'])
 
@@ -313,6 +317,9 @@ def setup_target(api,
     if gcstress:
       common_options += ['--gcstress']
 
+    if chroot:
+      common_options += ['--chroot', '"$ART_TEST_CHROOT"'] # pragma: no cover
+
     with api.context(env=test_env):
       api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
                                    '-j%d' % (optimizing_make_jobs),
@@ -346,6 +353,8 @@ def setup_target(api,
       libcore_command.append('--debug')
     if gcstress:
       libcore_command += ['--vm-arg', '-Xgc:gcstress']
+    if chroot:
+      libcore_command += ['--chroot', '"$ART_TEST_CHROOT"'] # pragma: no cover
 
     with api.context(env=test_env):
       api.step('test libcore', libcore_command)
@@ -358,6 +367,8 @@ def setup_target(api,
       jdwp_command.append('--debug')
     if gcstress:
       jdwp_command += ['--vm-arg', '-Xgc:gcstress']
+    if chroot:
+      jdwp_command += ['--chroot', '"$ART_TEST_CHROOT"'] # pragma: no cover
 
     with api.context(env=test_env):
       api.step('test jdwp jit', jdwp_command)
@@ -374,6 +385,8 @@ def setup_target(api,
       libjdwp_command.append('--debug')
     if gcstress:
       libjdwp_command += ['--vm-arg', '-Xgc:gcstress']
+    if chroot:
+      libjdwp_command += ['--chroot', '"$ART_TEST_CHROOT"'] # pragma: no cover
 
     with api.context(env=test_env):
       api.step('test libjdwp jit', libjdwp_command)

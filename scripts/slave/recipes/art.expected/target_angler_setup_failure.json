@@ -81,15 +81,7 @@
   },
   {
     "cmd": [
-      "adb",
-      "shell",
-      "rm",
-      "-rf",
-      "/data/local/tmp",
-      "/data/art-test",
-      "/data/nativetest",
-      "/data/nativetest64",
-      "/data/misc/trace/*"
+      "[START_DIR]/art/tools/cleanup-buildbot-device.sh"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
