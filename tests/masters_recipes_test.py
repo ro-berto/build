@@ -174,6 +174,8 @@ FAKE_BUILDERS = {
     ],
     'master.tryserver.chromium.android': [
         # These have been migrated to LUCI.
+        'android-kitkat-arm-rel',
+        'android-marshmallow-arm64-rel',
         'android_arm64_dbg_recipe',
         'android_compile_dbg',
         'android_cronet',

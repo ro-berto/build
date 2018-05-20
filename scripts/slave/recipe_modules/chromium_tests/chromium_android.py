@@ -241,6 +241,30 @@ SPEC = {
       },
     },
 
+    'android-marshmallow-arm64-rel': {
+      'chromium_config': 'android',
+      'chromium_apply_config': [
+        'chrome_with_codecs',
+        'download_vr_test_apks',
+
+        # This is specified because 'android-marshmallow-arm64-rel' builder
+        # is one of the slowest builder in CQ (crbug.com/804251).
+        'goma_high_parallel',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['android'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'android',
+      },
+      'android_config': 'main_builder_mb',
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
     'Cast Android (dbg)' : {
       'chromium_config': 'android',
       'chromium_apply_config': ['chrome_with_codecs', 'mb'],

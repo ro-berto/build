@@ -83,6 +83,22 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.android': {
     'builders': {
+      'android-kitkat-arm-rel': simple_bot({
+        'mastername': 'chromium.android',
+        'buildername': 'android-kitkat-arm-rel',
+      }),
+      'android-marshmallow-arm64-rel': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.android',
+            'buildername': 'android-marshmallow-arm64-rel',
+          },
+          {
+            'mastername': 'chromium.gpu',
+            'buildername': 'Android Release (Nexus 5X)',
+          },
+        ],
+      },
       'android_archive_rel_ng': simple_bot({
         'mastername': 'chromium',
         'buildername': 'Android',
