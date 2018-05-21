@@ -875,7 +875,9 @@
       "--revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--root",
-      "chromium-win"
+      "chromium-win",
+      "--out_dir",
+      "src/out/chromium-win/Debug"
     ],
     "name": "create kythe index pack"
   },

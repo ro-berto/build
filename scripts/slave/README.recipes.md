@@ -1483,7 +1483,7 @@ be undone.
 
 #### **class [CodesearchApi](/scripts/slave/recipe_modules/codesearch/api.py#12)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#202)(self):**
+&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#204)(self):**
 
 Check out the generated files repo and sync the generated files
 into this checkout.
@@ -4484,7 +4484,7 @@ Returns: the list of matched targets.
 
 [DEPS](/scripts/slave/recipe_modules/codesearch/examples/full.py#9): [chromium](#recipe_modules-chromium), [codesearch](#recipe_modules-codesearch), [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/codesearch/examples/full.py#59)(api, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/codesearch/examples/full.py#60)(api, buildername):**
 ### *recipes* / [codesearch:tests/checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/tests/checkout_generated_files_repo_and_sync.py)
 
 [DEPS](/scripts/slave/recipe_modules/codesearch/tests/checkout_generated_files_repo_and_sync.py#5): [chromium](#recipe_modules-chromium), [codesearch](#recipe_modules-codesearch), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

@@ -28,16 +28,18 @@ COMPILE_ARGUMENTS = 'clang++ -fsyntax-only -std=c++11 -c test.cc -o test.o'
 CORPUS = 'chromium-test'
 VNAME_ROOT = 'linux'
 REVISION = '0123456789'
+OUT_DIR = 'src/out/chromium-linux/Debug'
 
 class PackageIndexTest(unittest.TestCase):
 
   def setUp(self):
     # Emulate the chromium build directory setup: a root dir named "src" which
-    # contains the code in subdirectories, along with an "out/Debug" build
-    # directory which all the compilation DB entries are relative to.
+    # contains the code in subdirectories, along with an
+    # "out/chromium-linux/Debug" build directory which all the compilation DB
+    # entries are relative to.
     self.root_dir = tempfile.mkdtemp()
     src_dir = os.path.join(self.root_dir, 'src/')
-    self.build_dir = os.path.join(src_dir, 'out/Debug/')
+    self.build_dir = os.path.join(src_dir, 'out/chromium-linux/Debug/')
     os.makedirs(self.build_dir)
 
     def set_content(file_name, content):
@@ -55,7 +57,7 @@ class PackageIndexTest(unittest.TestCase):
     compdb_dictionary = {
         'directory': self.build_dir,
         'command': COMPILE_ARGUMENTS,
-        'file': '../../test.cc',
+        'file': '../../../test.cc',
     }
     # Write a compilation database to a file.
     with tempfile.NamedTemporaryFile(
@@ -66,14 +68,14 @@ class PackageIndexTest(unittest.TestCase):
     # database
     with open(self.test_cc_file_name + '.filepaths', 'wb') as filepaths_file:
       filepaths_file.write('\n'.join([
-          os.path.join('../../', self.test_cc_file_name),
-          os.path.join('../../', self.test_h_file_name),
-          os.path.join('../../', self.test2_h_file_name),
+          os.path.join('../../../', self.test_cc_file_name),
+          os.path.join('../../../', self.test_h_file_name),
+          os.path.join('../../../', self.test2_h_file_name),
       ]))
 
     self.index_pack = package_index.IndexPack(
         os.path.realpath(self.compdb_file.name), corpus=CORPUS, root=VNAME_ROOT,
-        revision=REVISION)
+        revision=REVISION, out_dir=OUT_DIR)
     self.assertTrue(os.path.exists(self.index_pack.index_directory))
     self.assertTrue(os.path.exists(
         os.path.join(self.index_pack.index_directory, 'files')))
@@ -140,7 +142,7 @@ class PackageIndexTest(unittest.TestCase):
         self.assertEquals(compilation_unit_dictionary['v_name']['root'],
                           VNAME_ROOT)
         self.assertEquals(compilation_unit_dictionary['source_file'],
-                          ['../../test.cc'])
+                          ['../../../test.cc'])
         self.assertEquals(compilation_unit_dictionary['revision'],
                           REVISION)
         self.assertEquals(compilation_unit_dictionary['output_key'], 'test.o')
@@ -151,7 +153,7 @@ class PackageIndexTest(unittest.TestCase):
         test_cc_entry = compilation_unit_dictionary['required_input'][0]
         self.assertEquals(test_cc_entry['info']['digest'],
                           hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest())
-        self.assertEquals(test_cc_entry['info']['path'], '../../test.cc')
+        self.assertEquals(test_cc_entry['info']['path'], '../../../test.cc')
         self.assertEquals(test_cc_entry['v_name']['path'], 'src/test.cc')
         self.assertEquals(test_cc_entry['v_name']['corpus'], CORPUS)
         self.assertEquals(test_cc_entry['v_name']['root'], VNAME_ROOT)
@@ -159,7 +161,7 @@ class PackageIndexTest(unittest.TestCase):
         test_h_entry = compilation_unit_dictionary['required_input'][1]
         self.assertEquals(test_h_entry['info']['digest'],
                           hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest())
-        self.assertEquals(test_h_entry['info']['path'], '../../test.h')
+        self.assertEquals(test_h_entry['info']['path'], '../../../test.h')
         self.assertEquals(test_h_entry['v_name']['path'], 'src/test.h')
         self.assertEquals(test_h_entry['v_name']['corpus'], CORPUS)
         self.assertEquals(test_h_entry['v_name']['root'], VNAME_ROOT)
@@ -167,7 +169,7 @@ class PackageIndexTest(unittest.TestCase):
         test2_h_entry = compilation_unit_dictionary['required_input'][2]
         self.assertEquals(test2_h_entry['info']['digest'],
                           hashlib.sha256(TEST2_H_FILE_CONTENT).hexdigest())
-        self.assertEquals(test2_h_entry['info']['path'], '../../test2.h')
+        self.assertEquals(test2_h_entry['info']['path'], '../../../test2.h')
         self.assertEquals(test2_h_entry['v_name']['path'], 'src/test2.h')
         self.assertEquals(test2_h_entry['v_name']['corpus'], CORPUS)
         self.assertEquals(test2_h_entry['v_name']['root'], VNAME_ROOT)

@@ -224,7 +224,7 @@
       "win",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "[START_DIR]/src/out/Debug"
+      "[START_DIR]/src/out/chromium-win/Debug"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -313,10 +313,10 @@
       "--",
       "python",
       "RECIPE_MODULE[build::codesearch]/resources/redirect_stdout_to_file.py",
-      "[START_DIR]/src/out/Debug/compile_commands.json",
+      "[START_DIR]/src/out/chromium-win/Debug/compile_commands.json",
       "ninja",
       "-C",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/chromium-win/Debug",
       "all",
       "-t",
       "compdb",
@@ -430,9 +430,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/chromium-win/Debug",
       "--ninja-log-command-file",
-      "[\"ninja\", \"-C\", \"[START_DIR]/src/out/Debug\", \"all\", \"-t\", \"compdb\", \"cc\", \"cxx\", \"objc\", \"objcxx\", \"-j\", 20]",
+      "[\"ninja\", \"-C\", \"[START_DIR]/src/out/chromium-win/Debug\", \"all\", \"-t\", \"compdb\", \"cc\", \"cxx\", \"objc\", \"objcxx\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -851,7 +851,7 @@
       "--tool",
       "[START_DIR]/src/third_party/llvm-build/Release+Asserts/bin/translation_unit",
       "-p",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/chromium-win/Debug",
       "--all"
     ],
     "name": "run translation_unit clang tool"
@@ -867,13 +867,15 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/package_index.py",
       "--path-to-compdb",
-      "[START_DIR]/src/out/Debug/compile_commands.json",
+      "[START_DIR]/src/out/chromium-win/Debug/compile_commands.json",
       "--path-to-archive-output",
-      "[START_DIR]/src/out/Debug/index_pack_win_kythe.zip",
+      "[START_DIR]/src/out/chromium-win/Debug/index_pack_win_kythe.zip",
       "--corpus",
       "chromium-win",
       "--revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--out_dir",
+      "src/out/chromium-win/Debug"
     ],
     "name": "create kythe index pack"
   },
@@ -886,7 +888,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[START_DIR]/src/out/Debug/index_pack_win_kythe.zip",
+      "[START_DIR]/src/out/chromium-win/Debug/index_pack_win_kythe.zip",
       "gs://chrome-codesearch/prod/index_pack_win_kythe_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
     ],
     "infra_step": true,
@@ -992,6 +994,8 @@
       "--",
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/sync_generated_files_codesearch.py",
+      "--debug-dir",
+      "chromium-win",
       "--message",
       "Generated files from \"codesearch-gen-chromium-win\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",

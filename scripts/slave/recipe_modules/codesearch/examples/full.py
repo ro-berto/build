@@ -48,6 +48,7 @@ BUILDERS = freeze({
     'platform': 'win',
     'sync_generated_files': True,
     'gen_repo_branch': 'win',
+    'gen_repo_out_dir': 'chromium-win',
     'corpus': 'chromium-win',
   },
 })
@@ -62,6 +63,7 @@ def RunSteps(api, buildername):
   platform = builder.get('platform', 'linux')
   corpus = builder.get('corpus', 'chromium-linux')
   targets = builder.get('compile_targets', [])
+  gen_repo_out_dir = builder.get('gen_repo_out_dir', '')
 
   api.codesearch.set_config(
       'chromium',
@@ -70,6 +72,7 @@ def RunSteps(api, buildername):
       PLATFORM=platform,
       SYNC_GENERATED_FILES=builder['sync_generated_files'],
       GEN_REPO_BRANCH=builder['gen_repo_branch'],
+      GEN_REPO_OUT_DIR=gen_repo_out_dir,
       CORPUS=corpus,
   )
 
