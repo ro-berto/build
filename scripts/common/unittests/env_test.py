@@ -94,14 +94,6 @@ class PythonPathTestCase(_CommonSystemTestCase):
             env.PythonPath.FromPaths('c', 'b')),
         env.PythonPath.FromPaths('c', 'b', 'a'))
 
-  def testHermetic(self):
-    base_path = env.PythonPath.FromPaths('a', 'b')
-    self.assertTrue(base_path.IsHermetic())
-
-    path = base_path.Append(os.path.join('python', 'dist-packages'))
-    self.assertFalse(path.IsHermetic())
-    self.assertEqual(path.GetHermetic(), env.PythonPath.FromPaths('a', 'b'))
-
   def testInstall(self):
     orig_path = sys.path
     orig_pythonpath = os.environ.get('PYTHONPATH')
@@ -109,7 +101,8 @@ class PythonPathTestCase(_CommonSystemTestCase):
     try:
       path.Install()
 
-      self.assertEqual(sys.path, [os.path.abspath(p) for p in ('a', 'b')])
+      self.assertEqual(sys.path,
+                       [os.path.abspath(p) for p in ('a', 'b')]+orig_path)
       self.assertEqual(os.environ.get('PYTHONPATH'), '%s:%s' % (
           os.path.abspath('a'), os.path.abspath('b')))
     finally:
@@ -121,7 +114,8 @@ class PythonPathTestCase(_CommonSystemTestCase):
     orig_pythonpath = os.environ.get('PYTHONPATH')
     path = env.PythonPath.FromPaths('a', 'b')
     with path.Enter():
-      self.assertEqual(sys.path, [os.path.abspath(p) for p in ('a', 'b')])
+      self.assertEqual(sys.path,
+                       [os.path.abspath(p) for p in ('a', 'b')]+orig_path)
       self.assertEqual(os.environ.get('PYTHONPATH'), '%s:%s' % (
           os.path.abspath('a'), os.path.abspath('b')))
 
@@ -148,39 +142,6 @@ class NoEnvPythonPathTestCase(PythonPathTestCase):
 
   def testNoPythonPath(self):
     self.assertIsNone(os.environ.get('PYTHONPATH'))
-
-
-class SysPythonPathTestCase(_CommonSystemTestCase):
-
-  def setUp(self):
-    super(SysPythonPathTestCase, self).setUp()
-    self._orig_sys_path = sys.path[:]
-
-  def tearDown(self):
-    super(SysPythonPathTestCase, self).tearDown()
-    sys.path = self._orig_sys_path
-
-  def testEmptyPath(self):
-    sys.path = []
-    self.assertEqual(len(env.GetSysPythonPath()), 0)
-
-  def testDuplicatePythonPathElements_OnlyOccurOnce(self):
-    sys.path = [os.path.abspath(p) for p in ('a', 'b', 'a', 'c')]
-    self.assertEqual(
-        list(env.GetSysPythonPath()),
-        [os.path.abspath(p) for p in ('a', 'b', 'c')])
-
-  def testPythonPathElements_BecomeAbsolute(self):
-    sys.path = ['a', 'b']
-    self.assertEqual(
-        list(env.GetSysPythonPath()),
-        [os.path.abspath(p) for p in ('a', 'b')])
-
-  def testHermetic(self):
-    sys.path = ['a', 'b', os.path.join('python', 'site-packages', 'mytool')]
-    self.assertEqual(
-        env.GetSysPythonPath(hermetic=True),
-        env.PythonPath.FromPaths('a', 'b'))
 
 
 class GetEnvPythonPathTestCase(_CommonSystemTestCase):
@@ -222,8 +183,7 @@ class BuildPythonPathIsValidTestCase(unittest.TestCase):
 class InfraPythonPathTestCase(unittest.TestCase):
 
   def testGenerate(self):
-    self.assertIsNotNone(env.GetInfraPythonPath(hermetic=True))
-    self.assertIsNotNone(env.GetInfraPythonPath(hermetic=False))
+    self.assertIsNotNone(env.GetInfraPythonPath())
     self.assertIsNotNone(env.GetInfraPythonPath(
         master_dir=os.path.join(env.Build, 'masters', 'master.chromium')))
 

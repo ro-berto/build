@@ -160,23 +160,6 @@ def ExtendPath(base, root_dir, with_third_party):
   return base
 
 
-def IsSystemPythonPath(path):
-  """Returns (bool): If a python path is user-installed.
-
-  Paths that are known to be user-installed paths can be ignored when setting
-  up a hermetic Python path environment to avoid user libraries that would not
-  be present in other environments falsely affecting code.
-
-  This function can be updated as-needed to exclude other non-system paths
-  encountered on bots and in the wild.
-  """
-  components = SplitPath(path)
-  for component in components:
-    if component in ('dist-packages', 'site-packages'):
-      return False
-  return True
-
-
 class PythonPath(collections.Sequence):
   """An immutable set of Python path elements.
 
@@ -259,15 +242,6 @@ class PythonPath(collections.Sequence):
     """Returns (str): A path string for the instance's path elements."""
     return os.pathsep.join(self)
 
-  def IsHermetic(self):
-    """Returns (bool): True if this instance contains only system paths."""
-    return all(IsSystemPythonPath(p) for p in self)
-
-  def GetHermetic(self):
-    """Returns (PythonPath): derivative PythonPath containing only system paths.
-    """
-    return type(self).FromPaths(*(p for p in self if IsSystemPythonPath(p)))
-
   def Append(self, *paths):
     """Returns (PythonPath): derivative PythonPath with paths added to the end.
 
@@ -289,11 +263,11 @@ class PythonPath(collections.Sequence):
     """Overwrites Python runtime variables based on the current instance.
 
     Performs the following operations:
-      - Replaces sys.path with the current instance's path.
+      - Prepends sys.path with the current instance's path.
       - Replaces os.environ['PYTHONPATH'] with the current instance's path
             string.
     """
-    sys.path = list(self)
+    sys.path = list(self) + sys.path
     SetPythonPathEnv(self.pathstr)
 
   @contextlib.contextmanager
@@ -311,20 +285,6 @@ class PythonPath(collections.Sequence):
     finally:
       sys.path = orig_sys_path
       SetPythonPathEnv(orig_pythonpath)
-
-
-def GetSysPythonPath(hermetic=True):
-  """Returns (PythonPath): A path based on 'sys.path'.
-
-  Args:
-    hermetic (bool): If True, prune any non-system path.
-  """
-  sys_paths = [p for p in sys.path
-               if p != _env_module_path]
-  path = PythonPath.FromPaths(*sys_paths)
-  if hermetic:
-    path = path.GetHermetic()
-  return path
 
 
 def GetEnvPythonPath():
@@ -361,7 +321,7 @@ def GetBuildPythonPath(with_third_party):
   return build_path
 
 
-def GetInfraPythonPath(hermetic=True, master_dir=None, with_third_party=True):
+def GetInfraPythonPath(master_dir=None, with_third_party=True):
   """Returns (PythonPath): The full working Chrome Infra utility path.
 
   This path is consistent for master, slave, and tool usage. It includes (in
@@ -372,7 +332,6 @@ def GetInfraPythonPath(hermetic=True, master_dir=None, with_third_party=True):
     - The system python path.
 
   Args:
-    hermetic (bool): True, prune any non-system path from the system path.
     master_dir (str): If not None, include a master path component.
     with_third_party (bool): True, use third_party libraries in the build path.
   """
@@ -380,7 +339,11 @@ def GetInfraPythonPath(hermetic=True, master_dir=None, with_third_party=True):
   if master_dir:
     path += GetMasterPythonPath(master_dir)
   path += GetBuildPythonPath(with_third_party)
-  path += GetSysPythonPath(hermetic=hermetic)
+
+  # workaround for official builder (crbug.com/843012)
+  if with_third_party:
+    path += GetEnvPythonPath()
+
   return path
 
 
