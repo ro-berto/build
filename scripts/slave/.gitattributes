@@ -14,6 +14,7 @@
 /performance_log_processor.py recipes
 /process_dumps.py             recipes
 /results_dashboard.py         recipes
+/runisolatedtest.py           recipes
 /runtest.py                   recipes
 /slave_utils.py               recipes
 /telemetry_utils.py           recipes
