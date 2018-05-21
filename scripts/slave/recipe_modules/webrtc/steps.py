@@ -158,9 +158,12 @@ def generate_tests(api, test_suite, revision):
             'isac_fix_test',
             dimensions=dim))
 
+      is_win_clang = (api.m.platform.is_win and
+                      'clang' in api.bot_config['recipe_config'])
+
       # TODO(kjellander): Enable on Mac when bugs.webrtc.org/7322 is fixed.
-      # TODO(oprypin): Enable on Windows when bugs.webrtc.org/9290 is fixed.
-      if api.m.platform.is_linux:
+      # TODO(oprypin): Enable on MSVC when bugs.webrtc.org/9290 is fixed.
+      if api.m.platform.is_linux or is_win_clang:
         tests.append(SwarmingWebRtcGtestTest(
             'webrtc_perf_tests',
             args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/'],

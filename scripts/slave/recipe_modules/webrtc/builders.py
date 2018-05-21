@@ -28,6 +28,11 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'webrtc',
     'test_suite': 'webrtc',
   },
+  'webrtc_and_baremetal_clang': {
+    'chromium_config': 'webrtc_clang',
+    'gclient_config': 'webrtc',
+    'test_suite': 'webrtc_and_baremetal',
+  },
   'webrtc_android': {
     'chromium_config': 'android',
     'chromium_android_config': 'webrtc',
@@ -143,13 +148,24 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'Win32 Release (Clang)': {
-        'recipe_config': 'webrtc_clang',
+        'recipe_config': 'webrtc_and_baremetal_clang',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder',
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86',
+        },
+        'baremetal_swarming_dimensions': {
+          'pool': 'WebRTC-baremetal-try',
+          'os': 'Windows',
+          'gpu': None,
+        }
       },
       'Win64 Debug (Clang)': {
         'recipe_config': 'webrtc_clang',
@@ -1083,13 +1099,24 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'win_clang_rel': {
-        'recipe_config': 'webrtc_clang',
+        'recipe_config': 'webrtc_and_baremetal_clang',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'bot_type': 'builder',
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
+        'use_isolate': True,
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'os': 'Windows-7-SP1',
+          'cpu': 'x86',
+        },
+        'baremetal_swarming_dimensions': {
+          'pool': 'WebRTC-baremetal-try',
+          'os': 'Windows',
+          'gpu': None,
+        }
       },
       'win_x64_clang_dbg': {
         'recipe_config': 'webrtc_clang',
