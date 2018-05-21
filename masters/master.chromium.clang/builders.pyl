@@ -56,6 +56,12 @@
       "bot": "slave163-c1",
       "category": "0ToTLinux",
     },
+    "ToTLinuxCoverage": {
+      "recipe": "chromium_clang_coverage_tot",
+      "mixins": ["trusty"],
+      "bot": "slave0-c1",
+      "category": "0ToTLinux",
+    },
     "ToTLinuxMSan": {
       "mixins": ["trusty"],
       "bot": "slave166-c1",
@@ -119,6 +125,13 @@
     },
     "ToTMacASan": {
       "bot_pool": "build99-m1",
+      "category": "2ToTMac",
+    },
+    "ToTMacCoverage": {
+      "recipe": "chromium_clang_coverage_tot",
+      "bot": "build2-m1",
+      "os": "mac",
+      "version": "10.13.3",
       "category": "2ToTMac",
     },
     "ToTiOS": {
