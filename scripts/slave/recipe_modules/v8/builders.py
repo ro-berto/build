@@ -1835,8 +1835,7 @@ BUILDERS = {
   'tryserver.v8': {
     'builders': {
       'v8_linux_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_linux_rel_ng_triggered',
         ],
@@ -1848,8 +1847,7 @@ BUILDERS = {
         },
       },
       'v8_linux_verify_csa_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_linux_verify_csa_rel_ng_triggered',
         ],
@@ -1861,8 +1859,7 @@ BUILDERS = {
         },
       },
       'v8_linux_nodcheck_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_linux_nodcheck_rel_ng_triggered',
         ],
@@ -1874,8 +1871,7 @@ BUILDERS = {
         },
       },
       'v8_linux_dbg_ng': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_linux_dbg_ng_triggered',
         ],
@@ -1887,8 +1883,7 @@ BUILDERS = {
         },
       },
       'v8_linux_noi18n_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_linux_noi18n_rel_ng_triggered',
         ],
@@ -1900,8 +1895,7 @@ BUILDERS = {
         },
       },
       'v8_linux_nosnap_rel': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Release',
@@ -1910,8 +1904,7 @@ BUILDERS = {
         },
       },
       'v8_linux_nosnap_dbg': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Debug',
@@ -1923,8 +1916,7 @@ BUILDERS = {
         },
       },
       'v8_linux_gcc_compile_rel': {
-        'chromium_apply_config': [
-          'gcc', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Release',
@@ -1933,8 +1925,7 @@ BUILDERS = {
         },
       },
       'v8_linux_gcc_rel': {
-        'chromium_apply_config': [
-          'gcc', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Release',
@@ -1943,8 +1934,7 @@ BUILDERS = {
         },
       },
       'v8_linux_shared_compile_rel': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Release',
@@ -1953,8 +1943,7 @@ BUILDERS = {
         },
       },
       'v8_linux64_dbg_ng': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_linux64_dbg_ng_triggered',
         ],
@@ -1966,8 +1955,7 @@ BUILDERS = {
         },
       },
       'v8_linux64_gcc_compile_dbg': {
-        'chromium_apply_config': [
-          'gcc', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Debug',
@@ -1976,8 +1964,7 @@ BUILDERS = {
         },
       },
       'v8_linux64_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_linux64_rel_ng_triggered',
         ],
@@ -1989,8 +1976,7 @@ BUILDERS = {
         },
       },
       'v8_linux64_fyi_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_linux64_fyi_rel_ng_triggered',
         ],
@@ -2002,8 +1988,7 @@ BUILDERS = {
         },
       },
       'v8_linux64_verify_csa_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_linux64_verify_csa_rel_ng_triggered',
         ],
@@ -2015,8 +2000,7 @@ BUILDERS = {
         },
       },
       'v8_linux_gc_stress_dbg': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Debug',
@@ -2025,11 +2009,7 @@ BUILDERS = {
         },
       },
       'v8_linux64_asan_rel_ng': {
-        'chromium_apply_config': [
-          'clang',
-          'goma',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_linux64_asan_rel_ng_triggered',
         ],
@@ -2041,11 +2021,7 @@ BUILDERS = {
         },
       },
       'v8_linux64_cfi_rel_ng': {
-        'chromium_apply_config': [
-          'clang',
-          'goma',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_linux64_cfi_rel_ng_triggered',
         ],
@@ -2075,11 +2051,7 @@ BUILDERS = {
         },
       },
       'v8_linux64_msan_rel': {
-        'chromium_apply_config': [
-          'clang',
-          'goma',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Release',
@@ -2088,11 +2060,7 @@ BUILDERS = {
         },
       },
       'v8_linux64_tsan_rel': {
-        'chromium_apply_config': [
-          'clang',
-          'goma',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Release',
@@ -2101,11 +2069,7 @@ BUILDERS = {
         },
       },
       'v8_linux64_ubsan_rel_ng': {
-        'chromium_apply_config': [
-          'clang',
-          'goma',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_linux64_ubsan_rel_ng_triggered',
         ],
@@ -2118,11 +2082,7 @@ BUILDERS = {
       },
       'v8_linux64_sanitizer_coverage_rel': {
         'gclient_apply_config': ['llvm_compiler_rt'],
-        'chromium_apply_config': [
-          'clang',
-          'goma',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'sanitizer_coverage_folder': 'linux64',
         'tests': [
           V8Testing(3),
@@ -2135,11 +2095,7 @@ BUILDERS = {
         },
       },
       'v8_win_dbg': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'goma',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Debug',
@@ -2148,11 +2104,7 @@ BUILDERS = {
         },
       },
       'v8_win_compile_dbg': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'goma',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Debug',
@@ -2161,11 +2113,7 @@ BUILDERS = {
         },
       },
       'v8_win_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'goma',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_win_rel_ng_triggered',
         ],
@@ -2177,12 +2125,7 @@ BUILDERS = {
         },
       },
       'v8_win_nosnap_shared_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'goma',
-          'shared_library',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_win_nosnap_shared_rel_ng_triggered',
         ],
@@ -2202,11 +2145,7 @@ BUILDERS = {
         },
       },
       'v8_win64_asan_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'goma',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_win64_asan_rel_ng_triggered',
         ],
@@ -2218,11 +2157,7 @@ BUILDERS = {
         },
       },
       'v8_win64_msvc_compile_rel': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'goma',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Release',
@@ -2231,11 +2166,7 @@ BUILDERS = {
         },
       },
       'v8_win64_msvc_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'goma',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_win64_msvc_rel_ng_triggered',
         ],
@@ -2247,11 +2178,7 @@ BUILDERS = {
         },
       },
       'v8_win64_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'goma',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_win64_rel_ng_triggered',
         ],
@@ -2263,11 +2190,7 @@ BUILDERS = {
         },
       },
       'v8_win64_dbg': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'goma',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Debug',
@@ -2276,8 +2199,7 @@ BUILDERS = {
         },
       },
       'v8_mac64_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_mac64_rel_ng_triggered',
         ],
@@ -2289,8 +2211,7 @@ BUILDERS = {
         },
       },
       'v8_mac64_dbg_ng': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_mac64_dbg_ng_triggered',
         ],
@@ -2302,8 +2223,7 @@ BUILDERS = {
         },
       },
       'v8_mac64_gc_stress_dbg': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Debug',
@@ -2312,11 +2232,7 @@ BUILDERS = {
         },
       },
       'v8_mac64_asan_rel': {
-        'chromium_apply_config': [
-          'clang',
-          'goma',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Release',
@@ -2325,8 +2241,7 @@ BUILDERS = {
         },
       },
       'v8_linux_arm_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_linux_arm_rel_ng_triggered',
         ],
@@ -2338,8 +2253,7 @@ BUILDERS = {
         },
       },
       'v8_linux_arm_dbg': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Debug',
@@ -2348,8 +2262,7 @@ BUILDERS = {
         },
       },
       'v8_linux_arm64_rel_ng': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'triggers': [
           'v8_linux_arm64_rel_ng_triggered',
         ],
@@ -2361,8 +2274,7 @@ BUILDERS = {
         },
       },
       'v8_linux_arm64_dbg': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Debug',
@@ -2371,8 +2283,7 @@ BUILDERS = {
         },
       },
       'v8_linux_arm64_gc_stress_dbg': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Debug',
@@ -2381,11 +2292,7 @@ BUILDERS = {
         },
       },
       'v8_android_arm_compile_rel': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'goma',
-          'mb',
-        ],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Release',
@@ -2407,8 +2314,7 @@ BUILDERS = {
         },
       },
       'v8_linux_mipsel_compile_rel': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Release',
@@ -2417,8 +2323,7 @@ BUILDERS = {
         },
       },
       'v8_linux_mips64el_compile_rel': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
             'build_config': 'Release',
