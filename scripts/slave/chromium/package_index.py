@@ -341,6 +341,7 @@ def main():
   parser.add_argument('--revision',
                       help='the revision of the files being indexed')
   parser.add_argument('--out_dir',
+                      default='src/out/Debug',
                       help='the output directory from which compilation is run')
   parser.add_argument('--keep-filepaths-files',
                       help='keep the .filepaths files used for index pack '
