@@ -113,7 +113,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         self._isolated_targets = (self.NORMAL_TESTS.keys())
       elif self.c.TEST_SUITE == 'webrtc_and_baremetal':
         self._isolated_targets = (self.NORMAL_TESTS.keys() +
-                                  list(self.BAREMETAL_TESTS))
+                                  self.BAREMETAL_TESTS.keys())
       elif self.c.TEST_SUITE == 'android':
         self._isolated_targets = (self.ANDROID_DEVICE_TESTS.keys() +
                                   self.ANDROID_INSTRUMENTATION_TESTS.keys() +

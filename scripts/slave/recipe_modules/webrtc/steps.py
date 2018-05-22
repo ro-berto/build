@@ -78,11 +78,13 @@ ANDROID_DEVICE_TESTS = freeze({
   'webrtc_nonparallel_tests': {},
 })
 
-BAREMETAL_TESTS = freeze([
-  'isac_fix_test',
-  'video_capture_tests',
-  'webrtc_perf_tests',
-])
+BAREMETAL_TESTS = freeze({
+  'isac_fix_test': {},
+  'video_capture_tests': {},
+  'webrtc_perf_tests': {
+      'args': ['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/'],
+  },
+})
 
 ANDROID_INSTRUMENTATION_TESTS = freeze({
   'AppRTCMobileTest': {},
@@ -147,16 +149,18 @@ def generate_tests(api, test_suite, revision):
           parallel=True))
 
   if test_suite == 'webrtc_and_baremetal':
-    dim = api.bot_config['baremetal_swarming_dimensions']
+    def add_test(name):
+      tests.append(SwarmingWebRtcGtestTest(
+          name,
+          dimensions=api.bot_config['baremetal_swarming_dimensions'],
+          **BAREMETAL_TESTS[name]))
 
-    tests.append(SwarmingWebRtcGtestTest('video_capture_tests', dimensions=dim))
+    add_test('video_capture_tests')
 
     # Cover tests only running on perf tests on our trybots:
     if api.m.tryserver.is_tryserver:
       if api.m.platform.is_linux:
-        tests.append(SwarmingWebRtcGtestTest(
-            'isac_fix_test',
-            dimensions=dim))
+        add_test('isac_fix_test')
 
       is_win_clang = (api.m.platform.is_win and
                       'clang' in api.bot_config['recipe_config'])
@@ -164,10 +168,7 @@ def generate_tests(api, test_suite, revision):
       # TODO(kjellander): Enable on Mac when bugs.webrtc.org/7322 is fixed.
       # TODO(oprypin): Enable on MSVC when bugs.webrtc.org/9290 is fixed.
       if api.m.platform.is_linux or is_win_clang:
-        tests.append(SwarmingWebRtcGtestTest(
-            'webrtc_perf_tests',
-            args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/'],
-            dimensions=dim))
+        add_test('webrtc_perf_tests')
 
   if test_suite == 'desktop_perf_swarming':
     for test, extra_args in sorted(PERF_TESTS.items()):
