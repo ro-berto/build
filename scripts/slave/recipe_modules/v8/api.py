@@ -11,7 +11,7 @@ import random
 import re
 import urllib
 
-from builders import EmptyTestSpec, TestStepConfig, TestSpec, iter_builder_set
+from builders import EmptyTestSpec, TestStepConfig, TestSpec
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 from . import bisection
@@ -365,6 +365,14 @@ class V8Api(recipe_api.RecipeApi):
     return 'builder_tester'
 
   @property
+  def builderset(self):
+    """Returns a list of names of this builder and all its triggered testers."""
+    return (
+        [self.m.properties['buildername']] +
+        list(self.bot_config.get('triggers', []))
+    )
+
+  @property
   def should_build(self):
     return self.bot_type in ['builder', 'builder_tester']
 
@@ -415,7 +423,6 @@ class V8Api(recipe_api.RecipeApi):
     Returns: TestSpec object, filtered by interesting builders (current builder
         and all its triggered testers).
     """
-    buildername = self.m.properties['buildername']
     test_spec_file = self.m.path['checkout'].join(
         'infra', 'testing', 'builders.pyl')
 
@@ -435,7 +442,7 @@ class V8Api(recipe_api.RecipeApi):
           'Failed to parse test specification "%s": %s' % (test_spec_file, e))
 
     # Transform into object.
-    test_spec = TestSpec.from_python_literal(full_test_spec, buildername)
+    test_spec = TestSpec.from_python_literal(full_test_spec, self.builderset)
 
     # Log test spec for debuggability.
     self.m.step.active_result.presentation.logs['test_spec'] = (
@@ -445,14 +452,14 @@ class V8Api(recipe_api.RecipeApi):
 
   @property
   def isolate_targets(self):
+    """Returns the isolate targets statically known from builders.py."""
     if self._isolate_targets_cached:
       return self._isolate_targets_cached
 
     if self.bot_config.get('enable_swarming', True):
-      buildername = self.m.properties['buildername']
-
       # Find tests to isolate on builders.
-      for _, bot_config in iter_builder_set(buildername):
+      for buildername in self.builderset:
+        bot_config = builders.FLATTENED_BUILDERS.get(buildername, {})
         self._isolate_targets_cached.extend(
             isolate_targets_from_tests(
                 [test.name for test in bot_config.get('tests', [])]))

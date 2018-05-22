@@ -364,7 +364,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     """
     return builders.TestSpec.from_python_literal(
         {buildername: ast.literal_eval(spec)},
-        buildername,
+        [buildername],
     ).as_properties_dict(buildername)
 
   def version_file(self, patch_level, desc, count=1):

@@ -154,16 +154,23 @@ class TestSpec(object):
     ]
 
   @staticmethod
-  def from_python_literal(full_test_spec, buildername):
-    """Constructs a test spec from the raw V8-side pyl."""
+  def from_python_literal(full_test_spec, builderset):
+    """Constructs a filtered test spec from the raw V8-side pyl.
+
+    Args:
+      full_test_spec: Full unfiltered test spec from python literal.
+      builderset: Iterable with builder names (comprising the current builder
+          and all its triggered testers).
+    Returns:
+      A test spec dict (buildername->builder spec dict) filtered by the
+      builders in the given builderset. The tests in each builder spec are
+      defined by TestStepConfig objects.
+    """
     result = TestSpec()
-    # Iterate over the current builder and all its triggered testers. Transform
-    # the pyl structure into a test-step configuration with TestStepConfig
-    # objects for all builders that apply.
-    for iter_buildername, _ in iter_builder_set(buildername):
-      builder_spec = full_test_spec.get(iter_buildername)
+    for buildername in builderset:
+      builder_spec = full_test_spec.get(buildername)
       if builder_spec:
-        result._test_spec[iter_buildername] = {
+        result._test_spec[buildername] = {
           'swarming_dimensions': builder_spec.get('swarming_dimensions', {}),
           'swarming_task_attrs': builder_spec.get('swarming_task_attrs', {}),
           'tests': [
@@ -2439,25 +2446,3 @@ PARENT_MAP = {}
 for _, _, builder, bot_config in iter_builders():
   for triggered in bot_config.get('triggers', []):
     PARENT_MAP[triggered] = (builder, bot_config)
-
-
-# Map from builder to a list of itself and all it's triggered children.
-# The lists are comprised of tubles of (buildername, bot_config).
-BUILDER_SETS = {}
-for _, _, builder, bot_config in iter_builders():
-  BUILDER_SETS[builder] = [(builder, bot_config)]
-  for triggered in bot_config.get('triggers', []):
-    BUILDER_SETS[builder].append(
-        (triggered, FLATTENED_BUILDERS.get(triggered, {})))
-
-
-def iter_builder_set(buildername):
-  """Iterates tuples of (buildername, bot_config).
-
-  Args:
-    buildername: Limits iteration to this builder and all its children
-        (triggered testers).
-  """
-  for buildername, bot_config in BUILDER_SETS.get(
-      buildername, [(buildername, {})]):
-    yield buildername, bot_config
