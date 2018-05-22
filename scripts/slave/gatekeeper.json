@@ -164,6 +164,18 @@
               "experimental_tests"
             ]
           },
+          "android-kitkat-arm-rel": {
+            "categories": [
+              "chromium_tree_closer",
+              "experimental_tests"
+            ]
+          },
+          "android-marshmallow-arm64-rel": {
+            "categories": [
+              "chromium_tree_closer",
+              "experimental_tests"
+            ]
+          },
           "*": {}
         },
         "excluded_builders": [
@@ -427,7 +439,7 @@
             ],
             "forgiving_optional": ["*"]
           },
-          "Ozone Linux": {
+          "linux-ozone-rel": {
             "categories": [
               "chromium_tree_closer",
               "experimental_tests"
