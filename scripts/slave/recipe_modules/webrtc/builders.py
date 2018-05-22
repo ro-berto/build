@@ -162,7 +162,7 @@ BUILDERS = freeze({
           'cpu': 'x86',
         },
         'baremetal_swarming_dimensions': {
-          'pool': 'WebRTC-baremetal-try',
+          'pool': 'WebRTC-baremetal',
           'os': 'Windows',
           'gpu': None,
         }
