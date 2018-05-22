@@ -195,7 +195,7 @@
       "--goma-dir",
       "[GOMA_CACHE]\\client",
       "--swarming-targets-file",
-      "audio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nisac_fix_test\nlow_bandwidth_audio_test\nmodules_tests\nmodules_unittests\nortc_unittests\npeerconnection_unittests\nrtc_media_unittests\nrtc_pc_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_capture_tests\nvideo_engine_tests\nwebrtc_nonparallel_tests\nwebrtc_perf_tests\n",
+      "audio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nlow_bandwidth_audio_test\nmodules_tests\nmodules_unittests\nortc_unittests\npeerconnection_unittests\nrtc_media_unittests\nrtc_pc_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_capture_tests\nvideo_engine_tests\nwebrtc_nonparallel_tests\nwebrtc_perf_tests\n",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]\\win_clang_rel\\src",
@@ -209,7 +209,6 @@
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@audio_decoder_unittests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_audio_unittests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_video_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@isac_fix_test@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@low_bandwidth_audio_test@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@modules_tests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@modules_unittests@@@",
@@ -603,7 +602,6 @@
       "[BUILDER_CACHE]\\win_clang_rel\\src\\out\\Release\\audio_decoder_unittests.isolated.gen.json",
       "[BUILDER_CACHE]\\win_clang_rel\\src\\out\\Release\\common_audio_unittests.isolated.gen.json",
       "[BUILDER_CACHE]\\win_clang_rel\\src\\out\\Release\\common_video_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]\\win_clang_rel\\src\\out\\Release\\isac_fix_test.isolated.gen.json",
       "[BUILDER_CACHE]\\win_clang_rel\\src\\out\\Release\\low_bandwidth_audio_test.isolated.gen.json",
       "[BUILDER_CACHE]\\win_clang_rel\\src\\out\\Release\\modules_tests.isolated.gen.json",
       "[BUILDER_CACHE]\\win_clang_rel\\src\\out\\Release\\modules_unittests.isolated.gen.json",
@@ -627,7 +625,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"common_audio_unittests\": \"[dummy hash for common_audio_unittests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"common_video_unittests\": \"[dummy hash for common_video_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"isac_fix_test\": \"[dummy hash for isac_fix_test]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"low_bandwidth_audio_test\": \"[dummy hash for low_bandwidth_audio_test]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"modules_tests\": \"[dummy hash for modules_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"modules_unittests\": \"[dummy hash for modules_unittests]\", @@@",
@@ -646,7 +643,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests]\", \"common_audio_unittests\": \"[dummy hash for common_audio_unittests]\", \"common_video_unittests\": \"[dummy hash for common_video_unittests]\", \"isac_fix_test\": \"[dummy hash for isac_fix_test]\", \"low_bandwidth_audio_test\": \"[dummy hash for low_bandwidth_audio_test]\", \"modules_tests\": \"[dummy hash for modules_tests]\", \"modules_unittests\": \"[dummy hash for modules_unittests]\", \"ortc_unittests\": \"[dummy hash for ortc_unittests]\", \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\", \"rtc_media_unittests\": \"[dummy hash for rtc_media_unittests]\", \"rtc_pc_unittests\": \"[dummy hash for rtc_pc_unittests]\", \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests]\", \"rtc_unittests\": \"[dummy hash for rtc_unittests]\", \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests]\", \"test_support_unittests\": \"[dummy hash for test_support_unittests]\", \"tools_unittests\": \"[dummy hash for tools_unittests]\", \"video_capture_tests\": \"[dummy hash for video_capture_tests]\", \"video_engine_tests\": \"[dummy hash for video_engine_tests]\", \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests]\", \"common_audio_unittests\": \"[dummy hash for common_audio_unittests]\", \"common_video_unittests\": \"[dummy hash for common_video_unittests]\", \"low_bandwidth_audio_test\": \"[dummy hash for low_bandwidth_audio_test]\", \"modules_tests\": \"[dummy hash for modules_tests]\", \"modules_unittests\": \"[dummy hash for modules_unittests]\", \"ortc_unittests\": \"[dummy hash for ortc_unittests]\", \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\", \"rtc_media_unittests\": \"[dummy hash for rtc_media_unittests]\", \"rtc_pc_unittests\": \"[dummy hash for rtc_pc_unittests]\", \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests]\", \"rtc_unittests\": \"[dummy hash for rtc_unittests]\", \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests]\", \"test_support_unittests\": \"[dummy hash for test_support_unittests]\", \"tools_unittests\": \"[dummy hash for tools_unittests]\", \"video_capture_tests\": \"[dummy hash for video_capture_tests]\", \"video_engine_tests\": \"[dummy hash for video_engine_tests]\", \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"}@@@"
     ]
   },
   {

@@ -2,9 +2,19 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import os
+import sys
+
 from recipe_engine import recipe_api
+
 from . import builders
 from . import steps
+
+THIS_DIR = os.path.dirname(__file__)
+sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
+
+from chromium_tests.steps import SwarmingTest
+
 
 
 class WebRTCApi(recipe_api.RecipeApi):
@@ -19,14 +29,6 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   BUILDERS = builders.BUILDERS
   RECIPE_CONFIGS = builders.RECIPE_CONFIGS
-
-  NORMAL_TESTS = steps.NORMAL_TESTS
-  BAREMETAL_TESTS = steps.BAREMETAL_TESTS
-  ANDROID_DEVICE_TESTS = steps.ANDROID_DEVICE_TESTS
-  ANDROID_INSTRUMENTATION_TESTS = steps.ANDROID_INSTRUMENTATION_TESTS
-  ANDROID_JUNIT_TESTS = steps.ANDROID_JUNIT_TESTS
-  PERF_TESTS = steps.PERF_TESTS
-  ANDROID_PERF_TESTS = steps.ANDROID_PERF_TESTS
 
   WEBRTC_GS_BUCKET = 'chromium-webrtc'
 
@@ -106,29 +108,16 @@ class WebRTCApi(recipe_api.RecipeApi):
       assert self.m.chromium.c.BUILD_CONFIG == 'Release', (
         'Perf tests should only be run with Release builds.')
 
+  def configure_isolate(self, phase=None):
+    if self.c.use_isolate:
+      tests = steps.generate_tests(self, self.c.TEST_SUITE, phase,
+                                   self.revision)
+      self._isolated_targets = [test._name for test in tests
+                                if isinstance(test, SwarmingTest)]
+      self._isolated_targets.sort()
+
   def configure_swarming(self):
     self.c.use_isolate = self.bot_config.get('use_isolate')
-    if self.c.use_isolate:
-      if self.c.TEST_SUITE == 'webrtc':
-        self._isolated_targets = (self.NORMAL_TESTS.keys())
-      elif self.c.TEST_SUITE == 'webrtc_and_baremetal':
-        self._isolated_targets = (self.NORMAL_TESTS.keys() +
-                                  self.BAREMETAL_TESTS.keys())
-      elif self.c.TEST_SUITE == 'android':
-        self._isolated_targets = (self.ANDROID_DEVICE_TESTS.keys() +
-                                  self.ANDROID_INSTRUMENTATION_TESTS.keys() +
-                                  self.ANDROID_JUNIT_TESTS.keys())
-        if self.m.tryserver.is_tryserver:
-          self._isolated_targets += ('webrtc_perf_tests',)
-      elif self.c.TEST_SUITE == 'desktop_perf_swarming':
-        self._isolated_targets = self.PERF_TESTS
-      elif self.c.TEST_SUITE == 'android_perf_swarming':
-        self._isolated_targets = self.ANDROID_PERF_TESTS
-      self._isolated_targets = sorted(self._isolated_targets)
-      if not self._isolated_targets: # pragma: no cover
-        raise self.m.step.StepFailure('Isolation and swarming are only '
-                                      'supported for webrtc and '
-                                      'android test suites.')
 
     self.c.enable_swarming = self.bot_config.get('enable_swarming')
     if self.c.enable_swarming:

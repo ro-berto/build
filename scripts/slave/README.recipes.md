@@ -3583,62 +3583,64 @@ Capture coverage data and upload a report.
 
 [DEPS](/scripts/slave/recipe_modules/webrtc/__init__.py#1): [adb](#recipe_modules-adb), [archive](#recipe_modules-archive), [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [goma](#recipe_modules-goma), [isolate](#recipe_modules-isolate), [swarming](#recipe_modules-swarming), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
 
-#### **class [WebRTCApi](/scripts/slave/recipe_modules/webrtc/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [WebRTCApi](/scripts/slave/recipe_modules/webrtc/api.py#20)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/webrtc/api.py#63)(self, builders, recipe_configs):**
+&mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/webrtc/api.py#65)(self, builders, recipe_configs):**
 
-&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#291)(self):**
+&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#280)(self):**
 
-&mdash; **def [check\_swarming\_version](/scripts/slave/recipe_modules/webrtc/api.py#192)(self):**
+&mdash; **def [check\_swarming\_version](/scripts/slave/recipe_modules/webrtc/api.py#181)(self):**
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#150)(self, \*\*kwargs):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#139)(self, \*\*kwargs):**
 
-&mdash; **def [clean\_test\_output](/scripts/slave/recipe_modules/webrtc/api.py#376)(self):**
+&mdash; **def [clean\_test\_output](/scripts/slave/recipe_modules/webrtc/api.py#365)(self):**
 
 Remove all test output in out/, since we have tests leaking files.
 
-&mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#369)(self):**
+&mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#358)(self):**
 
-&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#206)(self, phase=None):**
+&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#195)(self, phase=None):**
 
-&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/webrtc/api.py#109)(self):**
+&mdash; **def [configure\_isolate](/scripts/slave/recipe_modules/webrtc/api.py#111)(self, phase=None):**
 
-&mdash; **def [download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#164)(self):**
+&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/webrtc/api.py#119)(self):**
 
-&mdash; **def [download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#172)(self):**
+&mdash; **def [download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#153)(self):**
 
-&mdash; **def [extract\_build](/scripts/slave/recipe_modules/webrtc/api.py#348)(self):**
+&mdash; **def [download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#161)(self):**
 
-&mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#215)(self, files=None, base_dir=None):**
+&mdash; **def [extract\_build](/scripts/slave/recipe_modules/webrtc/api.py#337)(self):**
 
-&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#268)(self):**
+&mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#204)(self, files=None, base_dir=None):**
 
-&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#332)(self):**
+&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#257)(self):**
 
-&mdash; **def [package\_build](/scripts/slave/recipe_modules/webrtc/api.py#281)(self):**
+&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#321)(self):**
 
-&mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#196)(self, phase=None):**
+&mdash; **def [package\_build](/scripts/slave/recipe_modules/webrtc/api.py#270)(self):**
 
-&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#231)(self, phase=None):**
+&mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#185)(self, phase=None):**
+
+&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#220)(self, phase=None):**
 
 Add a suite of test steps.
 
 Args:
   test_suite=The name of the test suite.
 
-&emsp; **@property**<br>&mdash; **def [should\_build](/scripts/slave/recipe_modules/webrtc/api.py#33)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_build](/scripts/slave/recipe_modules/webrtc/api.py#35)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#53)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#55)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_download\_build](/scripts/slave/recipe_modules/webrtc/api.py#49)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_download\_build](/scripts/slave/recipe_modules/webrtc/api.py#51)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#58)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#60)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_test](/scripts/slave/recipe_modules/webrtc/api.py#37)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_test](/scripts/slave/recipe_modules/webrtc/api.py#39)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_test\_android\_studio\_project\_generation](/scripts/slave/recipe_modules/webrtc/api.py#45)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_test\_android\_studio\_project\_generation](/scripts/slave/recipe_modules/webrtc/api.py#47)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_upload\_build](/scripts/slave/recipe_modules/webrtc/api.py#41)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_upload\_build](/scripts/slave/recipe_modules/webrtc/api.py#43)(self):**
 ### *recipe_modules* / [zip](/scripts/slave/recipe_modules/zip)
 
 [DEPS](/scripts/slave/recipe_modules/zip/__init__.py#5): [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python]

@@ -201,7 +201,7 @@
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
-      "AppRTCMobileTest\nandroid_junit_tests\naudio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nlibjingle_peerconnection_android_unittest\nmodules_tests\nmodules_unittests\nortc_unittests\npeerconnection_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nwebrtc_nonparallel_tests\n",
+      "AppRTCMobileTest\naudio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nlibjingle_peerconnection_android_unittest\nmodules_tests\nmodules_unittests\nortc_unittests\npeerconnection_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nwebrtc_nonparallel_tests\n",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/Android32__M_Nexus5X_/src",
@@ -213,7 +213,6 @@
     "name": "generate_build_files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@AppRTCMobileTest@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@android_junit_tests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@audio_decoder_unittests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_audio_unittests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_video_unittests@@@",
@@ -563,7 +562,6 @@
       "--eventlog-endpoint",
       "prod",
       "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/out/Release/AppRTCMobileTest.isolated.gen.json",
-      "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/out/Release/android_junit_tests.isolated.gen.json",
       "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/out/Release/audio_decoder_unittests.isolated.gen.json",
       "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/out/Release/common_audio_unittests.isolated.gen.json",
       "[BUILDER_CACHE]/Android32__M_Nexus5X_/src/out/Release/common_video_unittests.isolated.gen.json",
@@ -584,7 +582,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"AppRTCMobileTest\": \"[dummy hash for AppRTCMobileTest]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"android_junit_tests\": \"[dummy hash for android_junit_tests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"common_audio_unittests\": \"[dummy hash for common_audio_unittests]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"common_video_unittests\": \"[dummy hash for common_video_unittests]\", @@@",
@@ -602,7 +599,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"AppRTCMobileTest\": \"[dummy hash for AppRTCMobileTest]\", \"android_junit_tests\": \"[dummy hash for android_junit_tests]\", \"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests]\", \"common_audio_unittests\": \"[dummy hash for common_audio_unittests]\", \"common_video_unittests\": \"[dummy hash for common_video_unittests]\", \"libjingle_peerconnection_android_unittest\": \"[dummy hash for libjingle_peerconnection_android_unittest]\", \"modules_tests\": \"[dummy hash for modules_tests]\", \"modules_unittests\": \"[dummy hash for modules_unittests]\", \"ortc_unittests\": \"[dummy hash for ortc_unittests]\", \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\", \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests]\", \"rtc_unittests\": \"[dummy hash for rtc_unittests]\", \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests]\", \"test_support_unittests\": \"[dummy hash for test_support_unittests]\", \"tools_unittests\": \"[dummy hash for tools_unittests]\", \"video_engine_tests\": \"[dummy hash for video_engine_tests]\", \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"AppRTCMobileTest\": \"[dummy hash for AppRTCMobileTest]\", \"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests]\", \"common_audio_unittests\": \"[dummy hash for common_audio_unittests]\", \"common_video_unittests\": \"[dummy hash for common_video_unittests]\", \"libjingle_peerconnection_android_unittest\": \"[dummy hash for libjingle_peerconnection_android_unittest]\", \"modules_tests\": \"[dummy hash for modules_tests]\", \"modules_unittests\": \"[dummy hash for modules_unittests]\", \"ortc_unittests\": \"[dummy hash for ortc_unittests]\", \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\", \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests]\", \"rtc_unittests\": \"[dummy hash for rtc_unittests]\", \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests]\", \"test_support_unittests\": \"[dummy hash for test_support_unittests]\", \"tools_unittests\": \"[dummy hash for tools_unittests]\", \"video_engine_tests\": \"[dummy hash for video_engine_tests]\", \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\"}@@@"
     ]
   },
   {

@@ -51,6 +51,7 @@ def RunSteps(api):
   webrtc.check_swarming_version()
 
   if webrtc.should_build:
+    webrtc.configure_isolate()
     webrtc.compile()
 
   webrtc.get_binary_sizes()
