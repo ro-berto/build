@@ -69,6 +69,7 @@ FAKE_BUILDERS = {
     'master.chromium.android': [
         # These have been migrated to LUCI.
         'Android Cronet Builder',
+        'Cast Android (dbg)',
     ],
     'master.chromium.chromiumos': [
         # These have been migrated to LUCI.

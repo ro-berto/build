@@ -82,14 +82,6 @@
       "category": "4OnCQ",
       "slavebuilddir": "android_build",
     },
-    "Cast Android (dbg)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["cast_builder"],
-      "category": "4OnCQ",
-      "slavebuilddir": "android_build",
-    },
     "KitKat Phone Tester (rel)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -116,14 +108,6 @@
   },
 
   "slave_pools": {
-    "cast_builder": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": ["slave198-c1"],
-    },
     "clang_builder": {
       "slave_data": {
         "os": "linux",
