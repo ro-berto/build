@@ -3599,7 +3599,7 @@ Remove all test output in out/, since we have tests leaking files.
 
 &mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#369)(self):**
 
-&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#202)(self):**
+&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#206)(self, phase=None):**
 
 &mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/webrtc/api.py#109)(self):**
 
@@ -3609,7 +3609,7 @@ Remove all test output in out/, since we have tests leaking files.
 
 &mdash; **def [extract\_build](/scripts/slave/recipe_modules/webrtc/api.py#348)(self):**
 
-&mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#211)(self, files=None, base_dir=None):**
+&mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#215)(self, files=None, base_dir=None):**
 
 &mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#268)(self):**
 
@@ -3617,11 +3617,9 @@ Remove all test output in out/, since we have tests leaking files.
 
 &mdash; **def [package\_build](/scripts/slave/recipe_modules/webrtc/api.py#281)(self):**
 
-&mdash; **def [run\_baremetal\_test](/scripts/slave/recipe_modules/webrtc/api.py#264)(self, test, name=None, gtest_args=None, parallel=True):**
+&mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#196)(self, phase=None):**
 
-&mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#196)(self):**
-
-&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#227)(self):**
+&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#231)(self, phase=None):**
 
 Add a suite of test steps.
 
@@ -5529,9 +5527,7 @@ The changes are:
 
 [DEPS](/scripts/slave/recipes/webrtc/more_configs.py#8): [chromium](#recipe_modules-chromium), [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [BuildSteps](/scripts/slave/recipes/webrtc/more_configs.py#97)(api, name, \*gn_args):**
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/more_configs.py#105)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/more_configs.py#99)(api):**
 ### *recipes* / [webrtc/noop](/scripts/slave/recipes/webrtc/noop.py)
 
 [DEPS](/scripts/slave/recipes/webrtc/noop.py#5): [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

@@ -193,14 +193,18 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.c.enable_swarming:
       self.m.swarming.check_client_version()
 
-  def run_mb(self):
+  def run_mb(self, phase=None):
+    if phase:
+      # Set the out folder to be the same as the phase name, so caches of
+      # consecutive builds don't interfere with each other.
+      self.m.chromium.c.build_config_fs = phase
     self.m.chromium.run_mb(
-      self.mastername, self.buildername, use_goma=True,
+      self.mastername, self.buildername, phase=phase, use_goma=True,
       mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
       isolated_targets=self._isolated_targets)
 
-  def compile(self):
-    self.run_mb()
+  def compile(self, phase=None):
+    self.run_mb(phase)
     self.m.chromium.compile(use_goma_module=True)
 
     if self.c.use_isolate:
@@ -224,14 +228,15 @@ class WebRTCApi(recipe_api.RecipeApi):
       step_test_data=self.test_api.example_binary_sizes)
     result.presentation.properties['binary_sizes'] = result.json.output
 
-  def runtests(self):
+  def runtests(self, phase=None):
     """Add a suite of test steps.
 
     Args:
       test_suite=The name of the test suite.
     """
     with self.m.context(cwd=self._working_dir):
-      tests = steps.generate_tests(self, self.c.TEST_SUITE, self.revision)
+      tests = steps.generate_tests(self, self.c.TEST_SUITE, phase,
+                                   self.revision)
       with self.m.step.defer_results():
         if tests:
           run_android_device_steps = (not self.c.enable_swarming and
@@ -259,11 +264,6 @@ class WebRTCApi(recipe_api.RecipeApi):
             self.m.chromium_android.common_tests_final_steps(
                 logcat_gs_bucket=self.master_config.get('build_gs_bucket'),
                 force_latest_version=True)
-
-
-  def run_baremetal_test(self, test, name=None, gtest_args=None, parallel=True):
-    steps.BaremetalTest(test, name, gtest_args=gtest_args, parallel=parallel
-                       ).run(self, suffix='')
 
   def maybe_trigger(self):
     triggers = self.bot_config.get('triggers')

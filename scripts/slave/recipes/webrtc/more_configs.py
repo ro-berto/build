@@ -16,11 +16,13 @@ RECIPE_CONFIGS = freeze({
   'webrtc_default': {
     'chromium_config': 'webrtc_default',
     'gclient_config': 'webrtc',
+    'test_suite': 'more_configs',
   },
   'webrtc_android': {
     'chromium_config': 'android',
     'gclient_config': 'webrtc',
     'gclient_apply_config': ['android'],
+    'test_suite': 'more_configs',
   },
 })
 
@@ -33,7 +35,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder',
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'Android32 (more configs)': {
@@ -53,7 +55,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder',
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
     },
@@ -66,7 +68,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder',
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
       },
       'android_more_configs': {
@@ -86,7 +88,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
-        'bot_type': 'builder',
+        'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
       },
     },
@@ -94,40 +96,24 @@ BUILDERS = freeze({
 })
 
 
-def BuildSteps(api, name, *gn_args):
-  api.chromium.c.build_config_fs = name
-  api.chromium.c.gn_args = list(gn_args)
-  api.chromium.run_gn(use_goma=True)
-  api.step.active_result.presentation.step_text = 'gn (%s)' % (name)
-  api.chromium.compile(use_goma_module=True)
-
-
 def RunSteps(api):
-  api.webrtc.apply_bot_config(BUILDERS, RECIPE_CONFIGS)
+  webrtc = api.webrtc
+  webrtc.apply_bot_config(BUILDERS, RECIPE_CONFIGS)
 
-  api.webrtc.checkout()
+  webrtc.checkout()
+
   api.chromium.ensure_goma()
   api.chromium.runhooks()
 
-  BuildSteps(api, 'intelligibility_enhancer_no_include_tests',
-             'rtc_enable_intelligibility_enhancer=true',
-             'rtc_include_tests=false')
-  BuildSteps(api, 'bwe_test_logging',
-             'rtc_enable_bwe_test_logging=true')
-  if api.chromium.c.TARGET_PLATFORM != 'android':
-    # Sanity check for the rtc_enable_bwe_test_logging=true build.
-    api.webrtc.run_baremetal_test('bwe_simulations_tests',
-        gtest_args=['--gtest_filter=VideoSendersTest/'
-                    'BweSimulation.Choke1000kbps500kbps1000kbps/1'])
-  BuildSteps(api, 'dummy_audio_file_devices_no_protobuf',
-             'rtc_use_dummy_audio_file_devices=true',
-             'rtc_enable_protobuf=false')
-  BuildSteps(api, 'rtti_no_sctp',
-             'use_rtti=true',
-             'rtc_enable_sctp=false')
-  if api.chromium.c.TARGET_PLATFORM != 'android':
-    # Sanity check for the rtc_enable_sctp=false build.
-    api.webrtc.run_baremetal_test('peerconnection_unittests')
+  phases = ['intelligibility_enhancer_no_include_tests',
+            'bwe_test_logging',
+            'dummy_audio_file_devices_no_protobuf',
+            'rtti_no_sctp']
+  for phase in phases:
+    webrtc.compile(phase)
+
+    if webrtc.should_test:
+      webrtc.runtests(phase)
 
 
 def GenTests(api):

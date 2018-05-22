@@ -116,11 +116,19 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
-      "--root=[START_DIR]/src",
+      "[START_DIR]/src/tools_webrtc/mb/mb.py",
       "gen",
-      "//out/intelligibility_enhancer_no_include_tests",
-      "--args=rtc_enable_intelligibility_enhancer=true rtc_include_tests=false is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
+      "-m",
+      "client.webrtc",
+      "-b",
+      "Android32 (more configs)",
+      "--config-file",
+      "[START_DIR]/src/tools_webrtc/mb/mb_config.pyl",
+      "--phase",
+      "intelligibility_enhancer_no_include_tests",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "//out/intelligibility_enhancer_no_include_tests"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -128,10 +136,7 @@
       "GOMA_USE_LOCAL": "false",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "gn",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@gn (intelligibility_enhancer_no_include_tests)@@@"
-    ]
+    "name": "generate_build_files"
   },
   {
     "cmd": [],
@@ -444,11 +449,19 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
-      "--root=[START_DIR]/src",
+      "[START_DIR]/src/tools_webrtc/mb/mb.py",
       "gen",
-      "//out/bwe_test_logging",
-      "--args=rtc_enable_bwe_test_logging=true is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
+      "-m",
+      "client.webrtc",
+      "-b",
+      "Android32 (more configs)",
+      "--config-file",
+      "[START_DIR]/src/tools_webrtc/mb/mb_config.pyl",
+      "--phase",
+      "bwe_test_logging",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "//out/bwe_test_logging"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -456,10 +469,7 @@
       "GOMA_USE_LOCAL": "false",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "gn (2)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@gn (bwe_test_logging)@@@"
-    ]
+    "name": "generate_build_files (2)"
   },
   {
     "cmd": [],
@@ -772,11 +782,19 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
-      "--root=[START_DIR]/src",
+      "[START_DIR]/src/tools_webrtc/mb/mb.py",
       "gen",
-      "//out/dummy_audio_file_devices_no_protobuf",
-      "--args=rtc_use_dummy_audio_file_devices=true rtc_enable_protobuf=false is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
+      "-m",
+      "client.webrtc",
+      "-b",
+      "Android32 (more configs)",
+      "--config-file",
+      "[START_DIR]/src/tools_webrtc/mb/mb_config.pyl",
+      "--phase",
+      "dummy_audio_file_devices_no_protobuf",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "//out/dummy_audio_file_devices_no_protobuf"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -784,10 +802,7 @@
       "GOMA_USE_LOCAL": "false",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "gn (3)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@gn (dummy_audio_file_devices_no_protobuf)@@@"
-    ]
+    "name": "generate_build_files (3)"
   },
   {
     "cmd": [],
@@ -1100,11 +1115,19 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
-      "--root=[START_DIR]/src",
+      "[START_DIR]/src/tools_webrtc/mb/mb.py",
       "gen",
-      "//out/rtti_no_sctp",
-      "--args=use_rtti=true rtc_enable_sctp=false is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
+      "-m",
+      "client.webrtc",
+      "-b",
+      "Android32 (more configs)",
+      "--config-file",
+      "[START_DIR]/src/tools_webrtc/mb/mb_config.pyl",
+      "--phase",
+      "rtti_no_sctp",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "//out/rtti_no_sctp"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -1112,10 +1135,7 @@
       "GOMA_USE_LOCAL": "false",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "gn (4)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@gn (rtti_no_sctp)@@@"
-    ]
+    "name": "generate_build_files (4)"
   },
   {
     "cmd": [],
