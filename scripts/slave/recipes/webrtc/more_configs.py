@@ -37,12 +37,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-          'cpu': 'x86-64',
-        },
       },
       'Android32 (more configs)': {
         'recipe_config': 'webrtc_android',
@@ -63,12 +57,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-          'cpu': 'x86-64',
-        },
       },
     },
   },
@@ -82,12 +70,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Ubuntu-14.04',
-          'cpu': 'x86-64',
-        },
       },
       'android_more_configs': {
         'recipe_config': 'webrtc_android',
@@ -108,12 +90,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-          'cpu': 'x86-64',
-        },
       },
     },
   },
@@ -123,8 +99,6 @@ BUILDERS = freeze({
 def RunSteps(api):
   webrtc = api.webrtc
   webrtc.apply_bot_config(BUILDERS, RECIPE_CONFIGS)
-
-  webrtc.configure_swarming()
 
   webrtc.checkout()
 
@@ -136,7 +110,6 @@ def RunSteps(api):
             'dummy_audio_file_devices_no_protobuf',
             'rtti_no_sctp']
   for phase in phases:
-    webrtc.configure_isolate(phase)
     webrtc.compile(phase)
 
     if webrtc.should_test:

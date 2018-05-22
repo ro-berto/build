@@ -232,12 +232,12 @@ def generate_tests(api, test_suite, phase, revision):
 
   if test_suite == 'more_configs':
     if 'bwe_test_logging' in phase:
-      tests.append(SwarmingWebRtcGtestTest(
+      tests.append(BaremetalTest(
           'bwe_simulations_tests',
-          args=['--gtest_filter=VideoSendersTest/'
-                'BweSimulation.Choke1000kbps500kbps1000kbps/1']))
+          gtest_args=['--gtest_filter=VideoSendersTest/'
+                      'BweSimulation.Choke1000kbps500kbps1000kbps/1']))
     if 'no_sctp' in phase:
-      tests.append(SwarmingWebRtcGtestTest('peerconnection_unittests'))
+      tests.append(BaremetalTest('peerconnection_unittests'))
 
   return tests
 
