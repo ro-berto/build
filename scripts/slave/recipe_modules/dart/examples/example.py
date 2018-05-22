@@ -47,6 +47,10 @@ TEST_MATRIX = {
     "fileset1": "[]",
     "nameoffileset": "[]"
   },
+  "global": {
+    "chrome": "66.0.3359.139",
+    "ff": "60.0.1"
+  },
   "configurations": [
     {
       "builders": [

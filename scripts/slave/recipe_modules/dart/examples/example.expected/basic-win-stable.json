@@ -1113,6 +1113,10 @@
       "@@@STEP_LOG_LINE@json.output@  \"filesets\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"fileset1\": \"[]\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"nameoffileset\": \"[]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"global\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chrome\": \"66.0.3359.139\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ff\": \"60.0.1\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -1145,6 +1149,45 @@
     ],
     "infra_step": true,
     "name": "write fileset fileset1 to sdk root"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]\\builder\\sdk\\browsers"
+    ],
+    "infra_step": true,
+    "name": "create browser cache"
+  },
+  {
+    "cmd": [
+      "cipd.bat",
+      "ensure",
+      "-root",
+      "[CACHE]\\builder\\sdk\\browsers",
+      "-ensure-file",
+      "dart/browsers/ff/${platform} version:60.0.1",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-version:60.0.1--\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"dart/browsers/ff/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [

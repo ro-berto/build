@@ -1445,6 +1445,10 @@
       "@@@STEP_LOG_LINE@json.output@  \"filesets\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"fileset1\": \"[]\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"nameoffileset\": \"[]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"global\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"chrome\": \"66.0.3359.139\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ff\": \"60.0.1\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -1500,7 +1504,7 @@
       "-root",
       "[CACHE]/builder/sdk/browsers",
       "-ensure-file",
-      "dart/browsers/chrome/${platform} stable",
+      "dart/browsers/chrome/${platform} version:66.0.3359.139",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -1509,7 +1513,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-stable----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-version:66.0.335\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"package\": \"dart/browsers/chrome/${platform}\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",

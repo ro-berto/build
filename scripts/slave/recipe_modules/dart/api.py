@@ -248,10 +248,11 @@ class DartApi(recipe_api.RecipeApi):
     if builder.endswith(('-be', '-try', '-stable', 'dev')):
       builder = builder[0:builder.rfind('-')]
     isolate_hashes = {}
+    global_config = test_matrix['global']
     for config in test_matrix['configurations']:
       if builder in config['builders']:
         self._write_file_sets(test_matrix['filesets'])
-        self._run_steps(config, isolate_hashes, builder)
+        self._run_steps(config, isolate_hashes, builder, global_config)
         return
     raise self.m.step.StepFailure(
         'Error, could not find builder by name %s in test-matrix' % builder)
@@ -300,7 +301,7 @@ class DartApi(recipe_api.RecipeApi):
   def _has_specific_argument(self, arguments, options):
     return self._get_specific_argument(arguments, options) is not None
 
-  def _run_steps(self, config, isolate_hashes, builder_name):
+  def _run_steps(self, config, isolate_hashes, builder_name, global_config):
     """Executes all steps from a json test-matrix builder entry"""
     # Find information from the builder name. It should be in the form
     # <info>-<os>-<mode>-<arch>-<runtime> or <info>-<os>-<mode>-<arch>.
@@ -328,8 +329,8 @@ class DartApi(recipe_api.RecipeApi):
                    'arch': arch}
     if runtime is not None:
       environment['runtime'] = runtime
-      if runtime == 'chrome':
-        self._download_browser(runtime)
+      if runtime == 'chrome' or runtime == 'ff':
+        self._download_browser(runtime, global_config[runtime])
     channel = 'try'
     if 'branch' in self.m.properties:
       channels = {
@@ -391,18 +392,19 @@ class DartApi(recipe_api.RecipeApi):
     if key in src:
       dest[key] = src[key]
 
-  def _download_browser(self, runtime):
+  def _download_browser(self, runtime, version):
     # Download CIPD package
-    #  dart/browsers/chrome/${platform} stable
+    #  dart/browsers/<runtime>/${platform} <version>
     # to directory
     #  [sdk root]/browsers
     # Shards must install this CIPD package to the same location -
     # there is an argument to the swarming module task creation api for this.
-    self.m.file.ensure_directory('create browser cache',
-        self.m.path['checkout'].join('browsers'))
+    browser_path = self.m.path['checkout'].join('browsers')
+    self.m.file.ensure_directory('create browser cache', browser_path)
     self.m.cipd.set_service_account_credentials(None)
-    self.m.cipd.ensure(self.m.path['checkout'].join('browsers'),
-                       {'dart/browsers/chrome/${platform}': 'stable'})
+    version_tag = 'version:%s' % version
+    package = 'dart/browsers/%s/${platform}' % runtime
+    self.m.cipd.ensure(browser_path, { package: version_tag })
 
   def run_trigger(self, step_name, step, isolate_hash):
     trigger_props = {}
