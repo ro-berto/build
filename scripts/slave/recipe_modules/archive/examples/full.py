@@ -8,6 +8,7 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
+  'recipe_engine/runtime',
 ]
 
 TEST_HASH_MAIN='5e3250aadda2b170692f8e762d43b7e8deadbeef'
@@ -77,6 +78,19 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'filter build_dir', api.json.output(['chrome']))
+  )
+
+  yield (
+    api.test('cf_archiving_win64_exp') +
+    api.platform('win', 64) +
+    api.properties(
+        bitness=64,
+        update_properties=update_properties,
+        use_legacy=False,
+    ) +
+    api.override_step_data(
+        'filter build_dir', api.json.output(['chrome'])) +
+    api.runtime(is_luci=True, is_experimental=True)
   )
 
   # A component build with git.

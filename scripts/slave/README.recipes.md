@@ -375,6 +375,8 @@ and revision attached. The zip file follows the naming pattern used by
 clusterfuzz. The file pattern is:
 <archive name>-<platform>-<target><optional component>-<sort-key>.zip
 
+If the build is experimental, -experimental is appended in the name.
+
 Example: cool-project-linux-release-refs_heads_b1-12345.zip
 The archive name is "cool-project" and there's no component build. The
 commit is on a branch called b1 at commit position number 12345.
@@ -402,12 +404,12 @@ Args:
   use_legacy: Specify if legacy paths and archive names should be used. Set
               to false for new builders.
 
-&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/archive/api.py#296)(self, step_name, target, build_url, src_dir=None, build_revision=None, build_archive_url=None, \*\*kwargs):**
+&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/archive/api.py#300)(self, step_name, target, build_url, src_dir=None, build_revision=None, build_archive_url=None, \*\*kwargs):**
 
 Returns a step invoking extract_build.py to download and unzip
 a Chromium build.
 
-&mdash; **def [legacy\_download\_url](/scripts/slave/recipe_modules/archive/api.py#405)(self, gs_bucket_name, extra_url_components=None):**
+&mdash; **def [legacy\_download\_url](/scripts/slave/recipe_modules/archive/api.py#409)(self, gs_bucket_name, extra_url_components=None):**
 
 Returns a url suitable for downloading a Chromium build from
 Google Storage.
@@ -418,11 +420,11 @@ trailing '/' which is inserted in the middle of the URL.
 The builder_name, or parent_buildername, is always automatically
 inserted into the URL.
 
-&mdash; **def [legacy\_platform\_name](/scripts/slave/recipe_modules/archive/api.py#344)(self):**
+&mdash; **def [legacy\_platform\_name](/scripts/slave/recipe_modules/archive/api.py#348)(self):**
 
 Replicates the behavior of PlatformName() in chromium_utils.py.
 
-&mdash; **def [legacy\_upload\_url](/scripts/slave/recipe_modules/archive/api.py#394)(self, gs_bucket_name, extra_url_components=None):**
+&mdash; **def [legacy\_upload\_url](/scripts/slave/recipe_modules/archive/api.py#398)(self, gs_bucket_name, extra_url_components=None):**
 
 Returns a url suitable for uploading a Chromium build to Google
 Storage.
@@ -3718,9 +3720,9 @@ Checks that properties get to recipes from annotated_run properly
 &mdash; **def [RunSteps](/scripts/slave/recipes/annotated_run_test.py#21)(api, true_prop, num_prop, string_prop, dict_prop):**
 ### *recipes* / [archive:examples/full](/scripts/slave/recipe_modules/archive/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/archive/examples/full.py#5): [archive](#recipe_modules-archive), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/archive/examples/full.py#5): [archive](#recipe_modules-archive), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/archive/examples/full.py#20)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/archive/examples/full.py#21)(api):**
 ### *recipes* / [archive:tests/download\_and\_unzip\_build](/scripts/slave/recipe_modules/archive/tests/download_and_unzip_build.py)
 
 [DEPS](/scripts/slave/recipe_modules/archive/tests/download_and_unzip_build.py#5): [archive](#recipe_modules-archive), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

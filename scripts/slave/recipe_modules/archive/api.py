@@ -150,6 +150,8 @@ class ArchiveApi(recipe_api.RecipeApi):
     clusterfuzz. The file pattern is:
     <archive name>-<platform>-<target><optional component>-<sort-key>.zip
 
+    If the build is experimental, -experimental is appended in the name.
+
     Example: cool-project-linux-release-refs_heads_b1-12345.zip
     The archive name is "cool-project" and there's no component build. The
     commit is on a branch called b1 at commit position number 12345.
@@ -255,6 +257,8 @@ class ArchiveApi(recipe_api.RecipeApi):
                                             target_name,
                                             component,
                                             sortkey_path)
+    if self.m.runtime.is_experimental:
+      zip_file_base_name += ('-experimental')
     zip_file_name = '%s.zip' % zip_file_base_name
 
     self.m.build.python(
