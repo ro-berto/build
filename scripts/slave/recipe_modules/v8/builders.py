@@ -1911,9 +1911,6 @@ BUILDERS = {
           },
           'platform': 'linux',
         },
-        'swarming_task_attrs': {
-          'hard_timeout': 60 * 60,
-        },
       },
       'v8_linux_gcc_compile_rel': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
