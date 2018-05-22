@@ -835,9 +835,10 @@
   },
   {
     "cmd": [
-      "build/download_translation_unit_tool.py"
+      "python",
+      "-u",
+      "[START_DIR]/src/build/download_translation_unit_tool.py"
     ],
-    "cwd": "[START_DIR]/src",
     "name": "download translation_unit clang tool"
   },
   {

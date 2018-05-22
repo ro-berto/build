@@ -1514,7 +1514,6 @@ Args:
 &mdash; **def [run\_clang\_tool](/scripts/slave/recipe_modules/codesearch/api.py#110)(self):**
 
 Download and run the clang tool.
-    
 ### *recipe_modules* / [commit\_position](/scripts/slave/recipe_modules/commit_position)
 
 [DEPS](/scripts/slave/recipe_modules/commit_position/__init__.py#1): [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]

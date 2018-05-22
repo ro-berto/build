@@ -108,12 +108,12 @@ class CodesearchApi(recipe_api.RecipeApi):
                          '--compdb-output', compile_file])
 
   def run_clang_tool(self):
-    """Download and run the clang tool.
-    """
+    """Download and run the clang tool."""
     # Download the clang tool.
-    script_path = self.m.path.sep.join(['build', 'download_translation_unit_tool.py'])
-    with self.m.context(cwd=self.m.path['checkout']):
-      self.m.step('download translation_unit clang tool', [script_path])
+    self.m.python(
+        'download translation_unit clang tool',
+        self.m.path['checkout'].join('build',
+                                     'download_translation_unit_tool.py'))
 
     # Run the clang tool
     args = ['--tool', self.m.path['checkout'].join('third_party', 'llvm-build',

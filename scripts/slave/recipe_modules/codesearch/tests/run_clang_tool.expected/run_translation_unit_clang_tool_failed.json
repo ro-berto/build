@@ -1,9 +1,10 @@
 [
   {
     "cmd": [
-      "build/download_translation_unit_tool.py"
+      "python",
+      "-u",
+      "None/build/download_translation_unit_tool.py"
     ],
-    "cwd": "None",
     "name": "download translation_unit clang tool"
   },
   {
