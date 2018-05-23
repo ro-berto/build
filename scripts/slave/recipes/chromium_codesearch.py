@@ -26,18 +26,18 @@ DEPS = [
 SPEC = freeze({
   # The builders have the following parameters:
   # - compile_targets: the compile targets.
-  # - package_filename: The prefix of the name of the source archive.
   # - platform: The platform for which the code is compiled.
   # - sync_generated_files: Whether to sync generated files into a git repo.
   # - corpus: Kythe corpus to generate index packs under.
+  # - root: Kythe VName root to generate index packs under.
   # - gen_repo_branch: Which branch in the generated files repo to sync to.
+  # - gen_repo_out_dir: Which directory under src/out to write gen files to.
   'builders': {
     'codesearch-gen-chromium-linux': {
       'gclient_config': 'chromium',
       'compile_targets': [
         'all',
       ],
-      'package_filename': 'chromium-src',
       'platform': 'linux',
       'sync_generated_files': True,
       'gen_repo_branch': 'master',
@@ -81,7 +81,6 @@ SPEC = freeze({
         'url_unittests',
         'views_unittests',
       ],
-      'package_filename': 'chromiumos-src',
       'platform': 'chromeos',
       'sync_generated_files': True,
       'gen_repo_branch': 'chromiumos',
@@ -92,7 +91,6 @@ SPEC = freeze({
       'compile_targets': [
         'all',
       ],
-      'package_filename': 'chromium-android-src',
       'platform': 'android',
       'sync_generated_files': True,
       'gen_repo_branch': 'master',
@@ -106,7 +104,6 @@ SPEC = freeze({
       'compile_targets': [
         'all',
       ],
-      'package_filename': 'chromium-win-src',
       'platform': 'win',
       # Don't push generated files to git until we've verified their contents.
       'sync_generated_files': False,
@@ -143,7 +140,6 @@ def RunSteps(api, root_solution_revision):
   api.codesearch.set_config(
       'chromium',
       COMPILE_TARGETS=targets,
-      PACKAGE_FILENAME=bot_config['package_filename'],
       PLATFORM=platform,
       SYNC_GENERATED_FILES=bot_config['sync_generated_files'],
       GEN_REPO_BRANCH=gen_repo_branch,

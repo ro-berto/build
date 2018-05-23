@@ -8,16 +8,14 @@ from recipe_engine.config import config_item_context, ConfigGroup
 from recipe_engine.config import Single, Static, Dict, List
 from recipe_engine.config_types import Path
 
-def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=[], PACKAGE_FILENAME=None,
-               PLATFORM=None, SYNC_GENERATED_FILES=False,
-               GEN_REPO_BRANCH='master', GEN_REPO_OUT_DIR=None, CORPUS=None,
-               ROOT=None, **_kwargs):
+def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=[], PLATFORM=None,
+               SYNC_GENERATED_FILES=False, GEN_REPO_BRANCH='master',
+               GEN_REPO_OUT_DIR=None, CORPUS=None, ROOT=None, **_kwargs):
   """Filter out duplicate compilation units.
 
   Args:
     CHECKOUT_PATH: the source checkout path.
     COMPILE_TARGETS: the compile targets.
-    PACKAGE_FILENAME: The prefix of the name of the source archive.
     PLATFORM: The platform for which the code is compiled.
     SYNC_GENERATED_FILES: Whether to sync generated files into a git repo.
     GEN_REPO_BRANCH: Which branch in the generated files repo to sync to.
@@ -28,7 +26,6 @@ def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=[], PACKAGE_FILENAME=None,
   return ConfigGroup(
     CHECKOUT_PATH = Static(CHECKOUT_PATH),
     COMPILE_TARGETS = List(COMPILE_TARGETS),
-    PACKAGE_FILENAME = Static(PACKAGE_FILENAME),
     PLATFORM = Static(PLATFORM),
     SYNC_GENERATED_FILES = Static(SYNC_GENERATED_FILES),
     GEN_REPO_BRANCH = Static(GEN_REPO_BRANCH),

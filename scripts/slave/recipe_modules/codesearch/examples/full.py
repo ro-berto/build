@@ -25,7 +25,6 @@ DEPS = [
 BUILDERS = freeze({
   # The builders have the following parameters:
   # - compile_targets: the compile targets.
-  # - package_filename: The prefix of the name of the source archive.
   # - platform: The platform for which the code is compiled.
   # - sync_generated_files: Whether to sync generated files into a git repo.
   # - corpus: Kythe corpus to generate index packs under.
@@ -34,7 +33,6 @@ BUILDERS = freeze({
     'compile_targets': [
       'all',
     ],
-    'package_filename': 'chromium-src',
     'platform': 'linux',
     'sync_generated_files': True,
     'gen_repo_branch': 'master',
@@ -44,7 +42,6 @@ BUILDERS = freeze({
     'compile_targets': [
       'all',
     ],
-    'package_filename': 'chromium-src',
     'platform': 'win',
     'sync_generated_files': True,
     'gen_repo_branch': 'win',
@@ -68,7 +65,6 @@ def RunSteps(api, buildername):
   api.codesearch.set_config(
       'chromium',
       COMPILE_TARGETS=targets,
-      PACKAGE_FILENAME=builder['compile_targets'],
       PLATFORM=platform,
       SYNC_GENERATED_FILES=builder['sync_generated_files'],
       GEN_REPO_BRANCH=builder['gen_repo_branch'],
