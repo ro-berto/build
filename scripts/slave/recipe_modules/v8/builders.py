@@ -1487,9 +1487,9 @@ BUILDERS = {
           OptimizeForSize,
         ] + with_dimensions(
             'ODROID',
-            [V8Testing],
+            [V8Testing(2), Benchmarks, OptimizeForSize],
             {
-              'cpu': 'armv7l-32-ODROID-XU3',
+              'cpu': 'armv7l-32-ODROID-XU4',
               'cores': '8',
               'os': 'Ubuntu-16.04',
             },
