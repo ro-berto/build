@@ -42,8 +42,9 @@ BUILDERS = freeze({
 
 # Sample targets that are used to test the coverage script against clang tot
 # coverage tools.
-SAMPLE_TARGETS = ['base_unittests', 'url_unittests']
-SAMPLE_FUZZER_TARGETS = ['pdfium_fuzzer']
+SAMPLE_TARGETS = ['base_unittests', 'boringssl_crypto_tests',
+                  'boringssl_ssl_tests']
+SAMPLE_FUZZER_TARGETS = ['pdfium_fuzzer', 'third_party_re2_fuzzer']
 
 
 def RunSteps(api):
@@ -75,8 +76,8 @@ def RunSteps(api):
     for fuzzer_target in SAMPLE_FUZZER_TARGETS:
       cmd_args.extend([
           '-c',
-          '%s -runs=1' % api.path['checkout'].join('out', 'Release',
-                                                   fuzzer_target)
+          '%s -runs=1000' % api.path['checkout'].join('out', 'Release',
+                                                      fuzzer_target)
       ])
 
   cmd_args.extend(['-b', api.path['checkout'].join('out', 'Release')])

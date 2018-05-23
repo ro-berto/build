@@ -226,14 +226,20 @@
       "-u",
       "[START_DIR]/src/tools/code_coverage/coverage.py",
       "base_unittests",
-      "url_unittests",
+      "boringssl_crypto_tests",
+      "boringssl_ssl_tests",
       "pdfium_fuzzer",
+      "third_party_re2_fuzzer",
       "-c",
       "[START_DIR]/src/out/Release/base_unittests",
       "-c",
-      "[START_DIR]/src/out/Release/url_unittests",
+      "[START_DIR]/src/out/Release/boringssl_crypto_tests",
       "-c",
-      "[START_DIR]/src/out/Release/pdfium_fuzzer -runs=1",
+      "[START_DIR]/src/out/Release/boringssl_ssl_tests",
+      "-c",
+      "[START_DIR]/src/out/Release/pdfium_fuzzer -runs=1000",
+      "-c",
+      "[START_DIR]/src/out/Release/third_party_re2_fuzzer -runs=1000",
       "-b",
       "[START_DIR]/src/out/Release",
       "-o",
@@ -271,15 +277,34 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[START_DIR]/src/out/clang_tot_coverage_report/linux/logs/url_unittests_output.log",
+      "[START_DIR]/src/out/clang_tot_coverage_report/linux/logs/boringssl_crypto_tests_output.log",
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "read log output of url_unittests",
+    "name": "read log output of boringssl_crypto_tests",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@url_unittests_output.log@aaa@@@",
-      "@@@STEP_LOG_LINE@url_unittests_output.log@bbb@@@",
-      "@@@STEP_LOG_END@url_unittests_output.log@@@"
+      "@@@STEP_LOG_LINE@boringssl_crypto_tests_output.log@aaa@@@",
+      "@@@STEP_LOG_LINE@boringssl_crypto_tests_output.log@bbb@@@",
+      "@@@STEP_LOG_END@boringssl_crypto_tests_output.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/src/out/clang_tot_coverage_report/linux/logs/boringssl_ssl_tests_output.log",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "read log output of boringssl_ssl_tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@boringssl_ssl_tests_output.log@aaa@@@",
+      "@@@STEP_LOG_LINE@boringssl_ssl_tests_output.log@bbb@@@",
+      "@@@STEP_LOG_END@boringssl_ssl_tests_output.log@@@"
     ]
   },
   {
@@ -299,6 +324,25 @@
       "@@@STEP_LOG_LINE@pdfium_fuzzer_output.log@aaa@@@",
       "@@@STEP_LOG_LINE@pdfium_fuzzer_output.log@bbb@@@",
       "@@@STEP_LOG_END@pdfium_fuzzer_output.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/src/out/clang_tot_coverage_report/linux/logs/third_party_re2_fuzzer_output.log",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "read log output of third_party_re2_fuzzer",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@third_party_re2_fuzzer_output.log@aaa@@@",
+      "@@@STEP_LOG_LINE@third_party_re2_fuzzer_output.log@bbb@@@",
+      "@@@STEP_LOG_END@third_party_re2_fuzzer_output.log@@@"
     ]
   },
   {
