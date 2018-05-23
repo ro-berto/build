@@ -1509,7 +1509,15 @@ BUILDERS = {
         'tests': [
           V8Testing(3),
           OptimizeForSize(2),
-        ],
+        ] + with_dimensions(
+            'ODROID',
+            [V8Testing(3), OptimizeForSize(2)],
+            {
+              'cpu': 'armv7l-32-ODROID-XU4',
+              'cores': '8',
+              'os': 'Ubuntu-16.04',
+            },
+        ),
         'variants': V8Variant('default'),
         'swarming_task_attrs': {
           'hard_timeout': 60 * 60,
@@ -1523,7 +1531,15 @@ BUILDERS = {
       },
       'V8 Arm GC Stress': {
         'v8_apply_config': ['gc_stress', 'verify_heap_skip_remembered_set'],
-        'tests': [D8Testing(3)],
+        'tests': [D8Testing(3)] + with_dimensions(
+            'ODROID',
+            [D8Testing(3)],
+            {
+              'cpu': 'armv7l-32-ODROID-XU4',
+              'cores': '8',
+              'os': 'Ubuntu-16.04',
+            },
+        ),
         'variants': V8Variant('default'),
         'swarming_task_attrs': {
           'hard_timeout': 2 * 60 * 60,
