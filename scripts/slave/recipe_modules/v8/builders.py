@@ -2009,12 +2009,12 @@ BUILDERS = {
       },
       'v8_linux64_verify_csa_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_linux64_verify_csa_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_linux64_verify_csa_rel_ng_triggered',
+            ],
           },
           'platform': 'linux',
         },
