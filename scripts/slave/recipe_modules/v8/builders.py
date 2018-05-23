@@ -829,7 +829,7 @@ BUILDERS = {
           Test262(3),
           Mozilla,
           Benchmarks,
-        ] + with_extra_variants([V8Testing(2)]),
+        ] + with_extra_variants([V8Testing(3)]),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 TSAN - concurrent marking': {
