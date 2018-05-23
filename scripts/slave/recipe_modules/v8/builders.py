@@ -2090,12 +2090,12 @@ BUILDERS = {
       },
       'v8_linux64_ubsan_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_linux64_ubsan_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_linux64_ubsan_rel_ng_triggered',
+            ],
           },
           'platform': 'linux',
         },
@@ -2467,8 +2467,6 @@ for _, _, builder, bot_config in iter_builders():
   for triggered in bot_config.get('triggers', []):
     PARENT_MAP[triggered] = (builder, bot_config)
   # Simulated dynamically defined triggers.
-  # TODO(machenbach): Remove pragma when first static trigger properties are
-  # removed.
   for triggered in bot_config.get('testing', {}).get('properties', {}).get(
-      'triggers', []):  # pragma: no cover
+      'triggers', []):
     PARENT_MAP[triggered] = (builder, bot_config)

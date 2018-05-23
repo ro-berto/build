@@ -426,6 +426,11 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
 
     # Simulate properties defined in the V8 repo.
     kwargs.update(bot_config.get('testing', {}).get('properties', {}))
+    if 'triggers' in kwargs:
+      # Freezing the structure in builders.py turns lists into tuples. But
+      # the recipe properties api requires type list for triggers just like in
+      # prod.
+      kwargs['triggers'] = list(kwargs['triggers'])
 
     if mastername.startswith('tryserver'):
       properties_fn = self.m.properties.tryserver
