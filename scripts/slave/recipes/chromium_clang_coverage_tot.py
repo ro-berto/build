@@ -100,8 +100,9 @@ def RunSteps(api):
                                          log_file_name)
 
     log_content = api.file.read_text('read log output of %s' % target,
-                                     log_file_path)
-    api.step.active_result.presentation.logs[log_file_name] = log_content
+                                     log_file_path, test_data='aaa\nbbb')
+    log_content_lines = log_content.splitlines()
+    api.step.active_result.presentation.logs[log_file_name] = log_content_lines
 
   summary_file_name = 'summary.json'
   summary_file_path = output_dir_path.join(api.platform.name, summary_file_name)

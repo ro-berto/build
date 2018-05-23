@@ -258,6 +258,8 @@
     "infra_step": true,
     "name": "read log output of base_unittests",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@base_unittests_output.log@aaa@@@",
+      "@@@STEP_LOG_LINE@base_unittests_output.log@bbb@@@",
       "@@@STEP_LOG_END@base_unittests_output.log@@@"
     ]
   },
@@ -275,6 +277,8 @@
     "infra_step": true,
     "name": "read log output of url_unittests",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@url_unittests_output.log@aaa@@@",
+      "@@@STEP_LOG_LINE@url_unittests_output.log@bbb@@@",
       "@@@STEP_LOG_END@url_unittests_output.log@@@"
     ]
   },
@@ -292,6 +296,8 @@
     "infra_step": true,
     "name": "read log output of pdfium_fuzzer",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@pdfium_fuzzer_output.log@aaa@@@",
+      "@@@STEP_LOG_LINE@pdfium_fuzzer_output.log@bbb@@@",
       "@@@STEP_LOG_END@pdfium_fuzzer_output.log@@@"
     ]
   },
