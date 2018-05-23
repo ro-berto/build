@@ -34,14 +34,17 @@ PROPERTIES = {
   'target_arch': Property(default=None, kind=str),
   # One of android|fuchsia|linux|mac|win.
   'target_platform': Property(default=None, kind=str),
+  # List of tester names to trigger.
+  'triggers': Property(default=None, kind=list),
 }
 
 
-def RunSteps(api, build_config, set_gclient_var, target_arch, target_platform):
+def RunSteps(api, build_config, set_gclient_var, target_arch, target_platform,
+             triggers):
   v8 = api.v8
   bot_config = v8.update_bot_config(
       v8.bot_config_by_buildername(),
-      build_config, target_arch, target_platform,
+      build_config, target_arch, target_platform, triggers,
   )
   v8.apply_bot_config(bot_config)
   v8.set_gclient_custom_var(set_gclient_var)
@@ -625,13 +628,17 @@ def GenTests(api):
   yield (
       api.v8.test('client.v8', 'V8 Linux - builder', 'src_side_properties',
                   build_config='Debug', target_arch='arm',
-                  target_platform='fuchsia') +
+                  target_platform='fuchsia',
+                  triggers=['V8 Foobar', 'V8 Linux']) +
       api.v8.check_in_param(
           'bot_update', '--spec-path', 'target_cpu = [\'arm\', \'arm64\']') +
       api.v8.check_in_param(
           'bot_update', '--spec-path', 'target_os = [\'fuchsia\']') +
       api.v8.check_in_any_arg('generate_build_files', 'Debug') +
       api.v8.check_in_any_arg('compile', 'Debug') +
+      # 'V8 Linux' and 'V8 Linux - presubmit' are statically defined. Check that
+      # 'V8 Foobar' is added and that 'V8 Linux' is deduped.
+      api.v8.check_triggers('V8 Foobar', 'V8 Linux', 'V8 Linux - presubmit') +
       api.post_process(DropExpectation)
   )
 

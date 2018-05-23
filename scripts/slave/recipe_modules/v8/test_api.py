@@ -451,13 +451,19 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         )
     )
     if parent_buildername:
+      # The parent build config (Release or Debug) is either statically defined
+      # or simulated dynamically defined.
+      parent_build_config = (
+          parent_bot_config.get('v8_config_kwargs', {}).get('BUILD_CONFIG') or
+          parent_bot_config.get('testing', {}).get('properties', {}).get(
+              'build_config')
+      )
       test += self.m.properties(
           parent_got_revision='deafbeef'*5,
           parent_got_revision_cp='refs/heads/master@{#20123}',
           parent_build_environment={
             'useful': 'envvars', 'from': 'the', 'parent': 'bot'},
-          parent_build_config=parent_bot_config.get(
-              'v8_config_kwargs', {}).get('BUILD_CONFIG'),
+          parent_build_config=parent_build_config,
       )
       if bot_config.get('enable_swarming', True):
         # Assume each tester is triggered with the required hashes for all
@@ -568,6 +574,17 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       check(step in steps)
       check(any(value in arg for arg in steps[step]['cmd']))
     return self.post_process(check_any, step, value)
+
+  def check_triggers(self, *expected_builders):
+    """Verify expected triggered builders."""
+    def check_triggers_internal(check, steps):
+      check('trigger' in steps)
+      actual_builders = [
+        spec['builder_name'] for spec in steps['trigger']['trigger_specs']]
+      check(len(actual_builders) == len(expected_builders))
+      for expected, actual in zip(expected_builders, actual_builders):
+        check(expected == actual)
+    return self.post_process(check_triggers_internal)
 
   def buildbucket_test_data(self, num_requests):
     return self.m.json.output_stream({

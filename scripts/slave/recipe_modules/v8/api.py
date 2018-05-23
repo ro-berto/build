@@ -123,7 +123,7 @@ class V8Api(recipe_api.RecipeApi):
     return builders.get(self.m.properties.get('buildername'), default)
 
   def update_bot_config(self, bot_config, build_config, target_arch,
-                        target_platform):
+                        target_platform, triggers):
     """Update bot_config dict with src-side properties.
 
     Args:
@@ -132,6 +132,7 @@ class V8Api(recipe_api.RecipeApi):
       target_arch: Config value for TARGET_ARCH in chromium recipe module.
       target_platform: Config value for TARGET_PLATFORM in chromium recipe
           module.
+      triggers: List of tester names to trigger on success.
 
     Returns:
       An updated copy of the bot_config dict.
@@ -147,6 +148,12 @@ class V8Api(recipe_api.RecipeApi):
         ('TARGET_PLATFORM', target_platform)):
       if v is not None:
         bot_config['v8_config_kwargs'][k] = v
+    # Make mutable copy.
+    bot_config['triggers'] = list(bot_config.get('triggers', []))
+    bot_config['triggers'].extend(triggers or [])
+    # TODO(machenbach): Temporarily also dedupe, during migrating triggers src
+    # side. Should be removed when everything has migrated.
+    bot_config['triggers'] = sorted(list(set(bot_config['triggers'])))
     return bot_config
 
   def apply_bot_config(self, bot_config):
