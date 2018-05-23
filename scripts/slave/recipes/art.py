@@ -277,9 +277,9 @@ def setup_target(api,
 
   with api.step.defer_results():
     with api.context(env=env):
-      api.step('setup device', [art_tools.join('setup-buildbot-device.sh')])
+      api.step('device pre-run cleanup', [art_tools.join('cleanup-buildbot-device.sh')])
 
-      api.step('device cleanup', [art_tools.join('cleanup-buildbot-device.sh')])
+      api.step('setup device', [art_tools.join('setup-buildbot-device.sh')])
 
       api.step('sync target', ['make', 'test-art-target-sync'])
 
@@ -393,6 +393,9 @@ def setup_target(api,
     with api.context(env=test_env):
       api.step('test libjdwp aot', libjdwp_command + ['--no-jit'])
     test_logging(api, 'test libjdwp aot')
+
+    with api.context(env=test_env):
+      api.step('device post-run cleanup', [art_tools.join('cleanup-buildbot-device.sh')])
 
 def setup_aosp_builder(api, read_barrier):
   full_checkout(api)
@@ -661,13 +664,13 @@ def GenTests(api):
       ) +
       api.step_data('test jdwp aot', retcode=1))
   yield (
-      api.test('target_angler_device_cleanup_failure') +
+      api.test('target_angler_device_pre_run_cleanup_failure') +
       api.properties(
         mastername='client.art',
         buildername='angler-armv7-ndebug',
         bot_id='TestSlave',
       ) +
-      api.step_data('device cleanup', retcode=1))
+      api.step_data('device pre-run cleanup', retcode=1))
   yield (
       api.test('aosp_x86_build_failure') +
       api.properties(
