@@ -306,8 +306,8 @@ BUILDERS = {
         },
         'testing': {'platform': 'linux'},
         'triggers': [
-          'V8 Linux - gc stress',
           'V8 Linux - debug',
+          'V8 Linux - gc stress',
         ],
       },
       'V8 Linux - nosnap builder': {
