@@ -293,7 +293,8 @@ def setup_target(api,
 
     test_env = env.copy()
     test_env.update({ 'ART_TEST_NO_SYNC': 'true' })
-    test_env.update({ 'ANDROID_ROOT': android_root })
+    if not chroot:
+      test_env.update({ 'ANDROID_ROOT': android_root })
 
     with api.context(env=test_env):
       api.step('test gtest', ['make', '-j%d' % (make_jobs),
@@ -316,9 +317,6 @@ def setup_target(api,
 
     if gcstress:
       common_options += ['--gcstress']
-
-    if chroot:
-      common_options += ['--chroot', '"$ART_TEST_CHROOT"'] # pragma: no cover
 
     with api.context(env=test_env):
       api.step('test optimizing', ['./art/test/testrunner/testrunner.py',
@@ -354,7 +352,7 @@ def setup_target(api,
     if gcstress:
       libcore_command += ['--vm-arg', '-Xgc:gcstress']
     if chroot:
-      libcore_command += ['--chroot', '"$ART_TEST_CHROOT"'] # pragma: no cover
+      libcore_command += ['--chroot', '$ART_TEST_CHROOT'] # pragma: no cover
 
     with api.context(env=test_env):
       api.step('test libcore', libcore_command)
@@ -368,7 +366,7 @@ def setup_target(api,
     if gcstress:
       jdwp_command += ['--vm-arg', '-Xgc:gcstress']
     if chroot:
-      jdwp_command += ['--chroot', '"$ART_TEST_CHROOT"'] # pragma: no cover
+      jdwp_command += ['--chroot', '$ART_TEST_CHROOT'] # pragma: no cover
 
     with api.context(env=test_env):
       api.step('test jdwp jit', jdwp_command)
@@ -386,7 +384,7 @@ def setup_target(api,
     if gcstress:
       libjdwp_command += ['--vm-arg', '-Xgc:gcstress']
     if chroot:
-      libjdwp_command += ['--chroot', '"$ART_TEST_CHROOT"'] # pragma: no cover
+      libjdwp_command += ['--chroot', '$ART_TEST_CHROOT'] # pragma: no cover
 
     with api.context(env=test_env):
       api.step('test libjdwp jit', libjdwp_command)
