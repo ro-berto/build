@@ -11,6 +11,7 @@ DEPS = [
   'chromium_tests',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/gerrit',
   'depot_tools/tryserver',
   'filter',
   'recipe_engine/context',
@@ -50,7 +51,6 @@ def RunSteps(api):
     bot_update_step = api.bot_update.ensure_checkout(suffix=suffix, patch=True)
     api.chromium.runhooks(name='runhooks' + suffix)
 
-    # TODO(agrieve): Also grep for tools/binary_size in affected files.
     affected_files = api.chromium_checkout.get_files_affected_by_patch()
     if not api.filter.analyze(affected_files, _ANALYZE_TARGETS, None,
                               'trybot_analyze_config.json')[0]:
@@ -71,10 +71,10 @@ def RunSteps(api):
                                    _PATCH_FIXED_BUILD_STEP_NAME)
         return
 
-      _ResourceSizesDiff(api, without_results_dir, with_results_dir)
+      resource_sizes_diff_path = _ResourceSizesDiff(
+          api, without_results_dir, with_results_dir)
       _SupersizeDiff(api, without_results_dir, with_results_dir)
-      # TODO(agrieve): Check diff sizes and fail builds that don't document a
-      #     large growth in their commit descriptions (when there is one).
+      _CheckForUnexpectedIncrease(api, resource_sizes_diff_path)
 
 
 def _BuildAndMeasure(api, with_patch):
@@ -87,8 +87,12 @@ def _BuildAndMeasure(api, with_patch):
   api.file.ensure_directory('mkdir ' + results_basename, results_dir)
 
   apk_path = api.chromium_android.apk_path(_APK_NAME)
-  api.chromium_android.resource_sizes(
-      apk_path, chartjson_file=True, step_suffix=suffix)
+  # Can't use api.chromium_android.resource_sizes() without it trying to upload
+  # the results.
+  api.python(
+      'resource_sizes ({}){}'.format(api.path.basename(apk_path), suffix),
+      api.chromium_android.c.resource_sizes,
+      [str(apk_path), '--chartjson'])
   api.file.move('mv results-chart.json' + suffix, api.chromium.output_dir.join(
       'results-chart.json'), results_dir.join('results-chart.json'))
 
@@ -101,57 +105,100 @@ def _BuildAndMeasure(api, with_patch):
 def _SupersizeDiff(api, without_results_dir, with_results_dir):
   diagnose_bloat = api.path['checkout'].join(
       'tools', 'binary_size', 'diagnose_bloat.py')
-  diff_output = api.chromium.output_dir.join('supersize_diff.txt')
+  diff_output_path = api.chromium.output_dir.join('supersize_diff.txt')
   api.python('Supersize diff', diagnose_bloat, [
       'diff',
       '--apk-name', _APK_NAME,
       '--diff-type', 'native',
       '--before-dir', without_results_dir,
       '--after-dir', with_results_dir,
-      '--diff-output', diff_output,
+      '--diff-output', diff_output_path,
   ])
-  diff_text = api.file.read_text('Show Supersize Diff', diff_output)
+  diff_text = api.file.read_text('Show Supersize Diff', diff_output_path)
   api.step.active_result.presentation.logs['diff'] = diff_text
 
 
 def _ResourceSizesDiff(api, without_results_dir, with_results_dir):
   diagnose_bloat = api.path['checkout'].join(
       'tools', 'binary_size', 'diagnose_bloat.py')
-  diff_output = api.chromium.output_dir.join('resource_sizes_diff.txt')
+  diff_output_path = api.chromium.output_dir.join('resource_sizes_diff.txt')
   api.python('resource_sizes diff', diagnose_bloat, [
       'diff',
       '--apk-name', _APK_NAME,
       '--diff-type', 'sizes',
       '--before-dir', without_results_dir,
       '--after-dir', with_results_dir,
-      '--diff-output', diff_output,
+      '--diff-output', diff_output_path,
   ])
-  diff_text = api.file.read_text('Show Resource Sizes Diff', diff_output)
+  diff_text = api.file.read_text('Show Resource Sizes Diff', diff_output_path)
   api.step.active_result.presentation.logs['diff'] = diff_text
+  return diff_output_path
+
+
+def _CheckForUnexpectedIncrease(api, resource_sizes_diff_path):
+  revision_info = api.gerrit.get_revision_info(
+      api.properties['patch_gerrit_url'],
+      api.properties['patch_issue'],
+      api.properties['patch_set'])
+  author = revision_info['commit']['author']['email']
+  size_footer = ''.join(
+      api.tryserver.get_footer('Binary-Size',
+                               patch_text=revision_info['commit']['message']))
+  checker_script = api.path['checkout'].join(
+      'tools', 'binary_size', 'trybot_commit_size_checker.py')
+  api.python('check for undocumented increase', checker_script, [
+      '--author', author,
+      '--size-footer', size_footer,
+      '--resource-sizes-diff', resource_sizes_diff_path,
+  ])
 
 
 def GenTests(api):
+  _REVISION = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
   def props(name, **kwargs):
     kwargs.setdefault('path_config', 'kitchen')
-    kwargs.setdefault('revision', None)
+    kwargs['revision'] = _REVISION
     return (
         api.test(name) +
         api.properties.tryserver(
             build_config='Release',
             mastername='tryserver.chromium.android',
             buildername='android_binary_size',
+            patch_set=1,
             **kwargs) +
         api.platform('linux', 64)
     )
 
+  def override_revision_info():
+    _REVISION_INFO = {
+        '_number': 1,
+        'commit': {
+            'author': {
+                'email': 'foo@bar.com',
+            },
+            'message': 'message',
+        }
+    }
+    return (
+        api.override_step_data(
+            'gerrit changes',
+            api.json.output([{
+                'revisions': {
+                    _REVISION: _REVISION_INFO
+                }
+            }])) +
+        api.override_step_data('parse description', api.json.output({}))
+    )
+
+
   def override_analyze(no_changes=False):
     """Overrides analyze step data so that targets get compiled."""
     return api.override_step_data(
-      'analyze',
-      api.json.output({
-          'status': 'Found dependency',
-          'compile_targets': _ANALYZE_TARGETS,
-          'test_targets': [] if no_changes else _COMPILE_TARGETS}))
+        'analyze',
+        api.json.output({
+            'status': 'Found dependency',
+            'compile_targets': _ANALYZE_TARGETS,
+            'test_targets': [] if no_changes else _COMPILE_TARGETS}))
 
   yield (
       props('noop_because_of_analyze') +
@@ -169,5 +216,6 @@ def GenTests(api):
   )
   yield (
       props('normal_build') +
-      override_analyze()
+      override_analyze() +
+      override_revision_info()
   )
