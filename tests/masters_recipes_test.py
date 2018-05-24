@@ -68,6 +68,7 @@ SUPPRESSIONS = {
 FAKE_BUILDERS = {
     'master.chromium.android': [
         # These have been migrated to LUCI.
+        'Android ASAN (dbg)',
         'Android Cronet Builder',
         'Cast Android (dbg)',
     ],
@@ -178,6 +179,7 @@ FAKE_BUILDERS = {
         'android-kitkat-arm-rel',
         'android-marshmallow-arm64-rel',
         'android_arm64_dbg_recipe',
+        'android_clang_dbg_recipe',
         'android_compile_dbg',
         'android_cronet',
         'android_n5x_swarming_dbg',

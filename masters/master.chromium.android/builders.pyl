@@ -74,14 +74,6 @@
       "slave_pools": ["cronet_m_bullhead_perf"],
       "category": "0Cronet",
     },
-    "Android ASAN (dbg)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["clang_builder"],
-      "category": "4OnCQ",
-      "slavebuilddir": "android_build",
-    },
     "KitKat Phone Tester (rel)": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -108,14 +100,6 @@
   },
 
   "slave_pools": {
-    "clang_builder": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": ["slave199-c1"],
-    },
     "cronet_arm64": {
       "slave_data": {
         "os": "linux",
