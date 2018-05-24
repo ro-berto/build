@@ -845,58 +845,6 @@ class FactoryCommands(object):
         primary_repo=primary_repo,
         blink_config=blink_config)
 
-  def AddApplyIssueStep(self, timeout, server, revision_mapping):
-    """Adds a step to the factory to apply an issues from Rietveld.
-
-    It is a conditional step that is only run on the try server if the following
-    conditions are all true:
-    - There are both build properties issue and patchset
-    - There is no patch attached
-
-    Args:
-      timeout: Timeout to use on the slave when running apply_issue.py.
-      server: The Rietveld server to grab the patch from.
-    """
-
-    def do_step_if(bStep):
-      build = bStep.build
-      properties = build.getProperties()
-      for prop in ('issue', 'patchset'):
-        if prop not in properties or not properties.getProperty(prop):
-          return False
-      if build.getSourceStamp().patch:
-        return False
-      return True
-
-    apply_issue = 'apply_issue'
-    if self._target_platform and self._target_platform == 'win32':
-      apply_issue += '.bat'
-
-    cmd = [
-        apply_issue,
-        '-r', WithProperties('%(root:~src)s'),
-        '-i', WithProperties('%(issue:-)s'),
-        '-p', WithProperties('%(patchset:-)s'),
-        '-e', 'commit-bot@chromium.org',
-        '--no-auth',
-    ]
-
-    if server:
-      cmd.extend(['-s', server])
-
-    if revision_mapping:
-      cmd.extend(['--revision-mapping=%s' % json.dumps(revision_mapping)])
-
-    self._factory.addStep(
-        chromium_step.AnnotatedCommand,
-        haltOnFailure=True,
-        flunkOnFailure=True,
-        name='apply_issue',
-        timeout=timeout or 600,
-        workdir=self.working_dir,
-        doStepIf=do_step_if,
-        command=cmd)
-
   def AddBotUpdateStep(self, env, gclient_specs, revision_mapping,
                        server=None, blink_config=False):
     """Add a step to force checkout to some state.

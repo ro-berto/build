@@ -375,12 +375,5 @@ class GClientFactory(object):
         gclient_jobs=gclient_jobs,
         blink_config=blink_config)
 
-    if slave_type in ('AnnotatedTrybot', 'CrosTrybot', 'Trybot', 'Bisect',
-                      'TrybotTester', 'TrybotBuilder'):
-      factory_cmd_obj.AddApplyIssueStep(
-          timeout=timeout,
-          server=config.Master.Master4.code_review_site,
-          revision_mapping=self._revision_mapping)
-
     if not self._nohooks_on_update:
       factory_cmd_obj.AddRunHooksStep(env=env, timeout=timeout, options=options)
