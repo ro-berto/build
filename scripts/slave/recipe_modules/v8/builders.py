@@ -1859,60 +1859,60 @@ BUILDERS = {
     'builders': {
       'v8_linux_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_linux_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_linux_rel_ng_triggered',
+            ],
           },
           'platform': 'linux',
         },
       },
       'v8_linux_verify_csa_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_linux_verify_csa_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_linux_verify_csa_rel_ng_triggered',
+            ],
           },
           'platform': 'linux',
         },
       },
       'v8_linux_nodcheck_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_linux_nodcheck_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_linux_nodcheck_rel_ng_triggered',
+            ],
           },
           'platform': 'linux',
         },
       },
       'v8_linux_dbg_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_linux_dbg_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Debug',
+            'triggers': [
+              'v8_linux_dbg_ng_triggered',
+            ],
           },
           'platform': 'linux',
         },
       },
       'v8_linux_noi18n_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_linux_noi18n_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_linux_noi18n_rel_ng_triggered',
+            ],
           },
           'platform': 'linux',
         },
@@ -1964,12 +1964,12 @@ BUILDERS = {
       },
       'v8_linux64_dbg_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_linux64_dbg_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Debug',
+            'triggers': [
+              'v8_linux64_dbg_ng_triggered',
+            ],
           },
           'platform': 'linux',
         },
@@ -1985,24 +1985,24 @@ BUILDERS = {
       },
       'v8_linux64_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_linux64_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_linux64_rel_ng_triggered',
+            ],
           },
           'platform': 'linux',
         },
       },
       'v8_linux64_fyi_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_linux64_fyi_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_linux64_fyi_rel_ng_triggered',
+            ],
           },
           'platform': 'linux',
         },
@@ -2030,24 +2030,24 @@ BUILDERS = {
       },
       'v8_linux64_asan_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_linux64_asan_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_linux64_asan_rel_ng_triggered',
+            ],
           },
           'platform': 'linux',
         },
       },
       'v8_linux64_cfi_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_linux64_cfi_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_linux64_cfi_rel_ng_triggered',
+            ],
           },
           'platform': 'linux',
         },
@@ -2134,24 +2134,24 @@ BUILDERS = {
       },
       'v8_win_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_win_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_win_rel_ng_triggered',
+            ],
           },
           'platform': 'win',
         },
       },
       'v8_win_nosnap_shared_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_win_nosnap_shared_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_win_nosnap_shared_rel_ng_triggered',
+            ],
           },
           'platform': 'win',
         },
@@ -2166,12 +2166,12 @@ BUILDERS = {
       },
       'v8_win64_asan_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_win64_asan_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_win64_asan_rel_ng_triggered',
+            ],
           },
           'platform': 'win',
         },
@@ -2187,24 +2187,24 @@ BUILDERS = {
       },
       'v8_win64_msvc_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_win64_msvc_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_win64_msvc_rel_ng_triggered',
+            ],
           },
           'platform': 'win',
         },
       },
       'v8_win64_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_win64_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_win64_rel_ng_triggered',
+            ],
           },
           'platform': 'win',
         },
@@ -2220,24 +2220,24 @@ BUILDERS = {
       },
       'v8_mac64_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_mac64_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_mac64_rel_ng_triggered',
+            ],
           },
           'platform': 'mac',
         },
       },
       'v8_mac64_dbg_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_mac64_dbg_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Debug',
+            'triggers': [
+              'v8_mac64_dbg_ng_triggered',
+            ],
           },
           'platform': 'mac',
         },
@@ -2262,12 +2262,12 @@ BUILDERS = {
       },
       'v8_linux_arm_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_linux_arm_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_linux_arm_rel_ng_triggered',
+            ],
           },
           'platform': 'linux',
         },
@@ -2283,12 +2283,12 @@ BUILDERS = {
       },
       'v8_linux_arm64_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'triggers': [
-          'v8_linux_arm64_rel_ng_triggered',
-        ],
         'testing': {
           'properties': {
             'build_config': 'Release',
+            'triggers': [
+              'v8_linux_arm64_rel_ng_triggered',
+            ],
           },
           'platform': 'linux',
         },
