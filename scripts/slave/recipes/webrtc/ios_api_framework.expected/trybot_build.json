@@ -480,7 +480,7 @@
       "--output",
       "/path/to/tmp/json",
       "--",
-      "WebRTC.framework"
+      "WebRTC.framework/WebRTC"
     ],
     "infra_step": true,
     "name": "get binary sizes",
