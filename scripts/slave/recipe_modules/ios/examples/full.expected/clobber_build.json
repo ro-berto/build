@@ -184,7 +184,7 @@
       "-root",
       "[START_DIR]",
       "-ensure-file",
-      "infra/tools/mac_toolchain/${platform} git_revision:479e512785754360721dbb36e47859be1a0b1b82",
+      "infra/tools/mac_toolchain/${platform} git_revision:478dc9dbbaa60dd9827f2b1106c5e70f1f6b429c",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -194,7 +194,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-git_revision:479\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-git_revision:478\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/mac_toolchain/${platform}\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
