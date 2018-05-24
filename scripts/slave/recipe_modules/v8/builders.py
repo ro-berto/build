@@ -2156,14 +2156,6 @@ BUILDERS = {
           'platform': 'win',
         },
       },
-      'v8_win_nosnap_shared_rel_ng_triggered': {
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
-          },
-          'platform': 'linux',
-        },
-      },
       'v8_win64_asan_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
