@@ -309,7 +309,16 @@
       "@@@STEP_LOG_LINE@swarming.summary@}@@@",
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm-dev.appspot.com/user/task/10000@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Tests statistics",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Total shards: 1<br/>",
+      "Total runtime: 5s <br/>",
+      "Min/mean/max: 5s / 5s / 5s@@@"
     ]
   },
   {

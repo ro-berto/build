@@ -150,6 +150,8 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
         assert 'Completed' == state_name, state_name
     assert step_result.swarming_task in tasks
 
+  api.swarming.report_stats()
+
   # Cleanup.
   api.file.rmtree('remove temp dir', temp_dir)
 

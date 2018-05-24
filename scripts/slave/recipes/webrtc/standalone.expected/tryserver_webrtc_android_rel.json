@@ -3034,7 +3034,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -3158,7 +3158,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -3282,7 +3282,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -3406,7 +3406,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -3530,7 +3530,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -3636,7 +3636,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        8.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -3691,9 +3691,9 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
+      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@"
     ]
   },
   {
@@ -3799,7 +3799,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        8.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -3835,7 +3835,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        11.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -3871,7 +3871,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        14.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -3907,7 +3907,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        17.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -3943,7 +3943,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        20.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -4002,17 +4002,17 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@",
       "@@@STEP_LINK@shard #2 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
+      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/10200@@@",
       "@@@STEP_LINK@shard #3 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@",
+      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/10300@@@",
       "@@@STEP_LINK@shard #4 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #4@https://chromium-swarm.appspot.com/user/task/10400@@@",
+      "@@@STEP_LINK@shard #4 (17.7 sec)@https://chromium-swarm.appspot.com/user/task/10400@@@",
       "@@@STEP_LINK@shard #5 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #5@https://chromium-swarm.appspot.com/user/task/10500@@@"
+      "@@@STEP_LINK@shard #5 (20.7 sec)@https://chromium-swarm.appspot.com/user/task/10500@@@"
     ]
   },
   {
@@ -4136,7 +4136,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -4242,7 +4242,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        8.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -4278,7 +4278,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        11.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -4314,7 +4314,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        14.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -4371,13 +4371,13 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@",
       "@@@STEP_LINK@shard #2 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
+      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/10200@@@",
       "@@@STEP_LINK@shard #3 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@"
+      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/10300@@@"
     ]
   },
   {
@@ -4501,7 +4501,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -4607,7 +4607,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        8.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -4643,7 +4643,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        11.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -4679,7 +4679,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        14.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -4715,7 +4715,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        17.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -4751,7 +4751,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        20.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -4810,17 +4810,17 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@",
       "@@@STEP_LINK@shard #2 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
+      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/10200@@@",
       "@@@STEP_LINK@shard #3 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@",
+      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/10300@@@",
       "@@@STEP_LINK@shard #4 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #4@https://chromium-swarm.appspot.com/user/task/10400@@@",
+      "@@@STEP_LINK@shard #4 (17.7 sec)@https://chromium-swarm.appspot.com/user/task/10400@@@",
       "@@@STEP_LINK@shard #5 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #5@https://chromium-swarm.appspot.com/user/task/10500@@@"
+      "@@@STEP_LINK@shard #5 (20.7 sec)@https://chromium-swarm.appspot.com/user/task/10500@@@"
     ]
   },
   {
@@ -4944,7 +4944,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -5068,7 +5068,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -5192,7 +5192,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -5298,7 +5298,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        8.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -5334,7 +5334,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        11.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -5370,7 +5370,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        14.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -5427,13 +5427,13 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@",
       "@@@STEP_LINK@shard #2 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
+      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/10200@@@",
       "@@@STEP_LINK@shard #3 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@"
+      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/10300@@@"
     ]
   },
   {
@@ -5557,7 +5557,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -5681,7 +5681,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {

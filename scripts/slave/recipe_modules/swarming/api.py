@@ -205,6 +205,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._swarming_server = 'https://chromium-swarm.appspot.com'
     self._verbose = False
 
+    # Record all durations of shards for aggregation.
+    self._shards_durations = []
+
   def initialize(self):
     self.add_default_tag(
         'build_is_experimental:' + str(self.m.runtime.is_experimental).lower())
@@ -835,6 +838,24 @@ class SwarmingApi(recipe_api.RecipeApi):
         # so we eat this exception and let that one propagate.
         pass
 
+  def report_stats(self):
+    """Report statistics on all tasks ran so far."""
+    if not self._shards_durations:
+      return
+    result = self.m.step('Tests statistics', [])
+    stats = ['Total shards: %d' % len(self._shards_durations)]
+    total = sum(self._shards_durations)
+    mean = total / len(self._shards_durations)
+    stats.extend([
+      'Total runtime: %s ' % fmt_time(total),
+      'Min/mean/max: %s / %s / %s' % (
+          fmt_time(min(self._shards_durations)),
+          fmt_time(total / len(self._shards_durations)),
+          fmt_time(max(self._shards_durations)),
+      ),
+    ])
+    result.presentation.step_text = '<br/>\n'.join(stats)
+
   @staticmethod
   def _display_pending(shards, step_presentation):
     """Shows max pending time in seconds across all shards if it exceeds 10s,
@@ -1176,7 +1197,12 @@ class SwarmingApi(recipe_api.RecipeApi):
     links = step_result.presentation.links
     for index, shard in enumerate(summary['shards']):
       url = task.get_shard_view_url(index)
-      display_text = 'shard #%d' % index
+      if shard and shard.get('durations'):
+        duration = shard["durations"][0]
+        display_text = 'shard #%d (%.1f sec)' % (index, duration)
+        self._shards_durations.append(duration)
+      else:
+        display_text = 'shard #%d' % index
 
       if not shard or shard.get('internal_failure'):
         display_text = (

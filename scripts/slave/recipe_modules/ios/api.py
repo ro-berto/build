@@ -1095,6 +1095,7 @@ class iOSApi(recipe_api.RecipeApi):
           step_result.presentation.links['Results Dashboard'] = (
               step_result.json.outputs.get('dashboard_url', ''))
 
+    self.m.swarming.report_stats()
 
     if failures:
       failure = self.m.step.StepFailure

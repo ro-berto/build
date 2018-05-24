@@ -631,7 +631,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        8.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -691,9 +691,9 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chrome-swarming.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chrome-swarming.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1@https://chrome-swarming.appspot.com/user/task/10100@@@"
+      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chrome-swarming.appspot.com/user/task/10100@@@"
     ]
   },
   {
@@ -721,6 +721,19 @@
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Upload to test-results [benchmark on Intel GPU on Windows]"
+  },
+  {
+    "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "name": "Tests statistics",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Total shards: 2<br/>",
+      "Total runtime: 14s <br/>",
+      "Min/mean/max: 5s / 7s / 8s@@@"
+    ]
   },
   {
     "cmd": [

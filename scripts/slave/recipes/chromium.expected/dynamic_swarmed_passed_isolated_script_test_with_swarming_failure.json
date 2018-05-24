@@ -584,6 +584,18 @@
     ]
   },
   {
+    "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "Tests statistics",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Total shards: 1<br/>",
+      "Total runtime: 5s <br/>",
+      "Min/mean/max: 5s / 5s / 5s@@@"
+    ]
+  },
+  {
     "name": "$result",
     "reason": "1 tests failed: ['telemetry_gpu_unittests']",
     "recipe_result": null,

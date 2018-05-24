@@ -879,7 +879,7 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -1048,7 +1048,7 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -1217,7 +1217,7 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -1245,6 +1245,19 @@
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Upload to test-results [telemetry_gpu_unittests on (15ad) GPU on Windows]"
+  },
+  {
+    "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "name": "Tests statistics",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Total shards: 3<br/>",
+      "Total runtime: 17s <br/>",
+      "Min/mean/max: 5s / 5s / 5s@@@"
+    ]
   },
   {
     "cmd": [

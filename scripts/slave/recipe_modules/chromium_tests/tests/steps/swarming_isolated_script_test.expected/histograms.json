@@ -454,7 +454,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        8.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",

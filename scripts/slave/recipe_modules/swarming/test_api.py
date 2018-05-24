@@ -21,7 +21,7 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
           'bot_id': 'vm30',
           'completed_ts': '2014-09-25T01:43:11.123',
           'created_ts': '2014-09-25T01:41:00.123',
-          'durations': [5.7, 31.5],
+          'durations': [5.7 + 3*i, 31.5],
           'exit_codes': [0, 0],
           'failure': failure,
           'id': '148aa78d7aa%02d00' % i,

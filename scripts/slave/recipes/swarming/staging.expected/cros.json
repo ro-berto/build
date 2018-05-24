@@ -1316,6 +1316,16 @@
     "name": "Upload to test-results [browser_tests on ChromeOS]"
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/ChromeOS_Swarm",
+    "name": "Tests statistics",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Total shards: 1<br/>",
+      "Total runtime: 5s <br/>",
+      "Min/mean/max: 5s / 5s / 5s@@@"
+    ]
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

@@ -309,7 +309,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        8.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -345,7 +345,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:49:23.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"durations\": [@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        5.7, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        11.7, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        31.5@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      ], @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"exit_codes\": [@@@",
@@ -381,6 +381,15 @@
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
       "@@@STEP_LINK@shard #2 isolated out@blah@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Tests statistics",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Total shards: 3<br/>",
+      "Total runtime: 26s <br/>",
+      "Min/mean/max: 5s / 8s / 11s@@@"
     ]
   },
   {

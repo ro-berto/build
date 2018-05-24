@@ -761,7 +761,7 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -931,7 +931,7 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -959,6 +959,19 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "name": "Upload to test-results [telemetry_gpu_unittests on NVIDIA GPU on Mac Retina]"
+  },
+  {
+    "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "name": "Tests statistics",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Total shards: 2<br/>",
+      "Total runtime: 11s <br/>",
+      "Min/mean/max: 5s / 5s / 5s@@@"
+    ]
   },
   {
     "name": "$result",

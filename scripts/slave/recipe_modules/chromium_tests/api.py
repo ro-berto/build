@@ -285,6 +285,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         failed_ts = self.m.test_utils.run_tests(self.m, tl, suffix)
         failed_tests.extend(failed_ts)
 
+      self.m.swarming.report_stats()
+
       if failed_tests:
         failed_tests_names = [t.name for t in failed_tests]
         raise self.m.step.StepFailure(
