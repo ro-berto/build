@@ -1869,18 +1869,6 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'v8_linux_verify_csa_rel_ng': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
-            'triggers': [
-              'v8_linux_verify_csa_rel_ng_triggered',
-            ],
-          },
-          'platform': 'linux',
-        },
-      },
       'v8_linux_nodcheck_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
