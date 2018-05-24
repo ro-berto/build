@@ -256,7 +256,7 @@ def setup_target(api,
       })
 
   if chroot:
-    env.update({ 'ART_TEST_CHROOT' : chroot_dir }) # pragma: no cover
+    env.update({ 'ART_TEST_CHROOT' : chroot_dir })
   else:
     env.update({ 'ART_TEST_ANDROID_ROOT' : android_root })
     if bitness == 32:
@@ -352,7 +352,7 @@ def setup_target(api,
     if gcstress:
       libcore_command += ['--vm-arg', '-Xgc:gcstress']
     if chroot:
-      libcore_command += ['--chroot', '$ART_TEST_CHROOT'] # pragma: no cover
+      libcore_command += ['--chroot', '$ART_TEST_CHROOT']
 
     with api.context(env=test_env):
       api.step('test libcore', libcore_command)
@@ -366,7 +366,7 @@ def setup_target(api,
     if gcstress:
       jdwp_command += ['--vm-arg', '-Xgc:gcstress']
     if chroot:
-      jdwp_command += ['--chroot', '$ART_TEST_CHROOT'] # pragma: no cover
+      jdwp_command += ['--chroot', '$ART_TEST_CHROOT']
 
     with api.context(env=test_env):
       api.step('test jdwp jit', jdwp_command)
@@ -384,7 +384,7 @@ def setup_target(api,
     if gcstress:
       libjdwp_command += ['--vm-arg', '-Xgc:gcstress']
     if chroot:
-      libjdwp_command += ['--chroot', '$ART_TEST_CHROOT'] # pragma: no cover
+      libjdwp_command += ['--chroot', '$ART_TEST_CHROOT']
 
     with api.context(env=test_env):
       api.step('test libjdwp jit', libjdwp_command)
@@ -541,6 +541,7 @@ _CONFIG_MAP = {
         'serial': '84B7N16728001299',
         'device': 'angler-armv8',
         'debug': False,
+        'chroot': True,
       },
       'angler-armv8-debug': {
         'serial': '84B7N15B03000660',
