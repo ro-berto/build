@@ -67,14 +67,16 @@ def RunSteps(api):
     pkg.add_directory(output_dir.join('WebRTC.framework'))
     pkg.zip('zip archive')
 
-    if not api.runtime.is_experimental:
-      api.gsutil.upload(
-          zip_out,
-          'chromium-webrtc',
-          ('ios_api_framework/webrtc_ios_api_framework_%s.zip' %
-           api.webrtc.revision_number),
-          args=['-a', 'public-read'],
-          unauthenticated_url=True)
+    experimental = '_experimental' if api.runtime.is_experimental else ''
+    framework_upload_path = (
+        'ios_api_framework/webrtc_ios_api_framework_%s%s.zip' % (
+            api.webrtc.revision_number, experimental))
+    api.gsutil.upload(
+        zip_out,
+        'chromium-webrtc',
+        framework_upload_path,
+        args=['-a', 'public-read'],
+        unauthenticated_url=True)
 
 
 def GenTests(api):
