@@ -7,18 +7,54 @@
 """
 
 import argparse
-import os
-import sys
 import json
+import os
+import re
+import subprocess
+import sys
+
+
+READELF_LINE_RE = re.compile(r'''
+    ^\s* \[\s*\d+\]  # [Nr]
+    \s+  (\.\S*)     # Name
+    \s+  \S+         # Type
+    \s+  [a-f0-9]+   # Addr
+    \s+  [a-f0-9]+   # Off
+    \s+  ([a-f0-9]+) # Size
+    \s+  .+$         # (several other columns)
+''', flags=re.VERBOSE | re.MULTILINE)
+
+
+def _get_elf_section_size_map(path_to_binary):
+  """Parse raw readelf output and return a map {section name: size in bytes}."""
+  output = subprocess.check_output(['readelf', '-S', '-W', path_to_binary])
+
+  elf_map = {}
+  for m in READELF_LINE_RE.finditer(output):
+    elf_map[m.group(1)] = int(m.group(2), 16)
+  return elf_map
+
+
+def get_elf_file_size(path):
+  # The total size is the sum of the size of each section -- except the BSS
+  # segment, which isn't actually stored in the file.
+  elf_map = _get_elf_section_size_map(path)
+  return sum(size for (name, size) in elf_map.items() if name != '.bss')
+
+
+def get_directory_size(path):
+  total = 0
+  for root, _, files in os.walk(path):
+    for f in files:
+      total += os.path.getsize(os.path.join(root, f))
+  return total
 
 
 def get_size(path):
   if os.path.isdir(path):
-    total = 0
-    for root, _, files in os.walk(path):
-      for f in files:
-        total += os.path.getsize(os.path.join(root, f))
-    return total
+    return get_directory_size(path)
+  elif path.endswith('.so'):
+    return get_elf_file_size(path)
   else:
     return os.path.getsize(path)
 
