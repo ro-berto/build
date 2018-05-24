@@ -89,15 +89,11 @@ PACKAGES = [
   Package(github_repo='args'),
   Package(github_repo='appengine'),
   Package(github_repo='async'),
-  Package(github_repo='barback'),
   Package(github_repo='boolean_selector'),
-  Package(github_repo='code-transformers'),
   Package(github_repo='collection'),
   Package(github_repo='convert'),
   Package(github_repo='csslib'),
   Package(github_repo='crypto'),
-  Package(github_repo='custom-element-apigen'),
-  Package(github_repo='dart-protobuf', name='protobuf'),
   Package(github_repo='dart_style'),
   Package(github_repo='gcloud'),
   Package(github_repo='glob'),
@@ -109,23 +105,18 @@ PACKAGES = [
   Package(github_repo='http_parser'),
   Package(github_repo='http_server'),
   Package(github_repo='http_throttle'),
-  Package(github_repo='initialize'),
   Package(github_repo='intl'),
   Package(github_repo='json_rpc_2'),
   Package(github_repo='logging'),
   Package(github_repo='matcher'),
-  Package(github_repo='metatest'),
   Package(github_repo='mime'),
-  Package(github_repo='mock'),
   Package(github_repo='oauth2'),
-  Package(github_repo='observe'),
   Package(github_repo='path'),
   Package(github_repo='pool'),
   Package(github_repo='pub'),
   Package(github_repo='pub_semver'),
   Package(github_repo='reflectable'),
   Package(github_repo='rpc'),
-  Package(github_repo='scheduled_test'),
   Package(github_repo='shelf'),
   Package(github_repo='shelf_proxy'),
   Package(github_repo='shelf_static'),
@@ -140,7 +131,6 @@ PACKAGES = [
   Package(github_repo='typed_data'),
   Package(github_repo='vm_service_client'),
   Package(github_repo='watcher'),
-  Package(github_repo='web-components'),
   Package(github_repo='yaml'),
 
   # These are living in the same repository but under a sub-directory.
@@ -148,11 +138,6 @@ PACKAGES = [
   # disable tests for googleapis/googleapis_beta.
   Package(name='googleapis', run_tests=False),
   Package(name='googleapis_beta', run_tests=False),
-
-  # Packages in the 'google' github project which are published.
-  Package(name='serialization',
-          github_project='google',
-          github_repo='serialization.dart'),
 
   # Dart repository packages in dart/pkg/* which are published
   Package(name="analysis_server", dart_repo_package=True),
@@ -162,7 +147,6 @@ PACKAGES = [
   Package(name="analyzer_cli", dart_repo_package=True),
   Package(name="browser", dart_repo_package=True),
   Package(name="compiler_unsupported", dart_repo_package=True),
-  Package(name="custom_element", dart_repo_package=True),
   Package(name="docgen", dart_repo_package=True),
   Package(name="fixnum", dart_repo_package=True),
   Package(name="http_base", dart_repo_package=True),
@@ -179,4 +163,3 @@ GITHUB_TESTING_PACKAGES = [
     p for p in PACKAGES if p.isGithubPackage() and p.run_tests]
 
 PUBLISHED_PACKAGE_NAMES = [p.name for p in PACKAGES if p.published]
-
