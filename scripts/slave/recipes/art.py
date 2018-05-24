@@ -394,7 +394,9 @@ def setup_target(api,
       api.step('test libjdwp aot', libjdwp_command + ['--no-jit'])
     test_logging(api, 'test libjdwp aot')
 
-    with api.context(env=test_env):
+    with api.context(env=env):
+      api.step('tear down device', [art_tools.join('teardown-buildbot-device.sh')])
+
       api.step('device post-run cleanup', [art_tools.join('cleanup-buildbot-device.sh')])
 
 def setup_aosp_builder(api, read_barrier):

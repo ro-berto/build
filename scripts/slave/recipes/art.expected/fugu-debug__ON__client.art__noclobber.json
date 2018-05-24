@@ -1333,19 +1333,44 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/cleanup-buildbot-device.sh"
+      "[START_DIR]/art/tools/teardown-buildbot-device.sh"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/silvermont",
-      "ANDROID_ROOT": "/data/local/tmp/system",
       "ANDROID_SERIAL": "E6B27F19",
       "ART_BUILD_HOST_DEBUG": "false",
       "ART_HEAP_POISONING": "false",
       "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
       "ART_TEST_FULL": "false",
       "ART_TEST_KEEP_GOING": "true",
-      "ART_TEST_NO_SYNC": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_READ_BARRIER": "true",
+      "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
+      "JACK_REPOSITORY": "[START_DIR]/prebuilts/sdk/tools/jacks",
+      "JACK_SERVER": "false",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "silvermont",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "tear down device"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/art/tools/cleanup-buildbot-device.sh"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/silvermont",
+      "ANDROID_SERIAL": "E6B27F19",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "false",
+      "ART_TEST_ANDROID_ROOT": "/data/local/tmp/system",
+      "ART_TEST_FULL": "false",
+      "ART_TEST_KEEP_GOING": "true",
       "ART_TEST_RUN_TEST_2ND_ARCH": "false",
       "ART_USE_READ_BARRIER": "true",
       "CUSTOM_TARGET_LINKER": "/data/local/tmp/system/bin/linker",
