@@ -222,7 +222,7 @@ class AndroidApi(recipe_api.RecipeApi):
         name=test_name + step_suffix,
         perf_dashboard_id=test_name,
         point_id=None,
-        test_type='resource_sizes',
+        test_type=test_name,
         annotate=self.m.chromium.get_annotate_by_test_name(test_name),
         results_url='https://chromeperf.appspot.com',
         perf_id=perf_id or self.m.properties['buildername'],

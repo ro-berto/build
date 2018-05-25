@@ -673,7 +673,7 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=resource_sizes (CronetSample.apk)",
       "--perf-id=android_cronet_l_builder",
-      "--test-type=resource_sizes",
+      "--test-type=resource_sizes (CronetSample.apk)",
       "--step-name=resource_sizes (CronetSample.apk)",
       "--chartjson-file",
       "/path/to/tmp/json",
