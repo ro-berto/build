@@ -665,6 +665,7 @@
       "-u",
       "[START_DIR]/src/build/android/resource_sizes.py",
       "[START_DIR]/src/out/Release/apks/MonochromePublic.apk",
+      "--chartjson",
       "--output-dir",
       "[START_DIR]/src/out/Release/with_patch",
       "--chromium-output-directory",
@@ -674,6 +675,24 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "resource_sizes (MonochromePublic.apk) (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/src/out/Release/with_patch/results-chart.json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "resource_sizes result (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
   },
   {
     "cmd": [
@@ -1207,6 +1226,7 @@
       "-u",
       "[START_DIR]/src/build/android/resource_sizes.py",
       "[START_DIR]/src/out/Release/apks/MonochromePublic.apk",
+      "--chartjson",
       "--output-dir",
       "[START_DIR]/src/out/Release/without_patch",
       "--chromium-output-directory",
@@ -1217,6 +1237,25 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "resource_sizes (MonochromePublic.apk) (without patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[START_DIR]/src/out/Release/without_patch/results-chart.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "resource_sizes result (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
   },
   {
     "cmd": [
