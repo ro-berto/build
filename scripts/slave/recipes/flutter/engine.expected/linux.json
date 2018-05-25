@@ -1119,7 +1119,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
     "name": "Zip linux-x64 linux-x64-embedder",
-    "stdin": "{\"entries\": [{\"archive_name\": \"libflutter_engine.so\", \"path\": \"[START_DIR]/src/out/host_debug/libflutter_engine.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_2/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"flutter_embedder.h\", \"path\": \"[START_DIR]/src/out/host_debug/flutter_embedder.h\", \"type\": \"file\"}, {\"archive_name\": \"libflutter_engine.so\", \"path\": \"[START_DIR]/src/out/host_debug/libflutter_engine.so\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_2/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [

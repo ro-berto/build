@@ -213,6 +213,7 @@ def BuildLinux(api):
     'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
   ])
   UploadArtifacts(api, 'linux-x64', [
+    'out/host_debug/flutter_embedder.h',
     'out/host_debug/libflutter_engine.so',
   ], archive_name='linux-x64-embedder')
   UploadFlutterPatchedSdk(api)
