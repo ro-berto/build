@@ -351,8 +351,6 @@ def setup_target(api,
       libcore_command.append('--debug')
     if gcstress:
       libcore_command += ['--vm-arg', '-Xgc:gcstress']
-    if chroot:
-      libcore_command += ['--chroot', '$ART_TEST_CHROOT'] # pragma: no cover
 
     with api.context(env=test_env):
       api.step('test libcore', libcore_command)
@@ -365,8 +363,6 @@ def setup_target(api,
       jdwp_command.append('--debug')
     if gcstress:
       jdwp_command += ['--vm-arg', '-Xgc:gcstress']
-    if chroot:
-      jdwp_command += ['--chroot', '$ART_TEST_CHROOT'] # pragma: no cover
 
     with api.context(env=test_env):
       api.step('test jdwp jit', jdwp_command)
@@ -383,8 +379,6 @@ def setup_target(api,
       libjdwp_command.append('--debug')
     if gcstress:
       libjdwp_command += ['--vm-arg', '-Xgc:gcstress']
-    if chroot:
-      libjdwp_command += ['--chroot', '$ART_TEST_CHROOT'] # pragma: no cover
 
     with api.context(env=test_env):
       api.step('test libjdwp jit', libjdwp_command)
