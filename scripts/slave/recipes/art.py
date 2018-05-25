@@ -256,7 +256,7 @@ def setup_target(api,
       })
 
   if chroot:
-    env.update({ 'ART_TEST_CHROOT' : chroot_dir }) # pragma: no cover
+    env.update({ 'ART_TEST_CHROOT' : chroot_dir })
   else:
     env.update({ 'ART_TEST_ANDROID_ROOT' : android_root })
     if bitness == 32:
@@ -537,6 +537,7 @@ _CONFIG_MAP = {
         'serial': '84B7N16728001299',
         'device': 'angler-armv8',
         'debug': False,
+        'chroot': True,
       },
       'angler-armv8-debug': {
         'serial': '84B7N15B03000660',
