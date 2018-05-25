@@ -112,7 +112,8 @@ _AddIsolatedTestSpec(
     use_private_swarming_server=True)
 
 _AddIsolatedTestSpec('Mac 10.13 Laptop High End', '', 'mac',
-                     parent_buildername='Mac Builder Perf FYI')
+                     parent_buildername='Mac Builder Perf FYI',
+                     use_private_swarming_server=True)
 _AddIsolatedTestSpec('Android Go', '', 'android',
                      parent_buildername='Android Builder Perf FYI',
                      use_private_swarming_server=True)
