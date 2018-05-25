@@ -71,6 +71,14 @@ def RunSteps(api):
                                    _PATCH_FIXED_BUILD_STEP_NAME)
         return
 
+    # Re-apply patch so that the diff scripts can be tested via tryjobs.
+    # We could build without-patch first to avoid having to apply the patch
+    # twice, but it's nicer to fail fast when the patch does not compile.
+    suffix = ' (with patch again)'
+    api.bot_update.ensure_checkout(suffix=suffix, patch=True)
+    api.chromium.runhooks(name='runhooks' + suffix)
+
+    with api.context(cwd=api.path['checkout']):
       resource_sizes_diff_path = _ResourceSizesDiff(
           api, without_results_dir, with_results_dir)
       _SupersizeDiff(api, without_results_dir, with_results_dir)
