@@ -14,7 +14,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Check/Ubuntu-14.04/[dummy has/v8_linux_rel_ng_triggered/571",
+      "Check/Ubuntu-14.04/[dummy has/v8_foobar_rel_ng_triggered/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -41,7 +41,7 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:v8_linux_rel_ng_triggered",
+      "buildername:v8_foobar_rel_ng_triggered",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -101,7 +101,7 @@
       "--mastername",
       "tryserver.v8",
       "--buildername",
-      "v8_linux_rel_ng_triggered",
+      "v8_foobar_rel_ng_triggered",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -123,7 +123,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test262/Ubuntu-14.04/[dummy has/v8_linux_rel_ng_triggered/571",
+      "Test262/Ubuntu-14.04/[dummy has/v8_foobar_rel_ng_triggered/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -150,7 +150,7 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:v8_linux_rel_ng_triggered",
+      "buildername:v8_foobar_rel_ng_triggered",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -211,7 +211,7 @@
       "--mastername",
       "tryserver.v8",
       "--buildername",
-      "v8_linux_rel_ng_triggered",
+      "v8_foobar_rel_ng_triggered",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
@@ -242,7 +242,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/v8_linux_rel_ng_triggered/571\", \"tasks\": {\"Check/Ubuntu-14.04/[dummy has/v8_linux_rel_ng_triggered/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/v8_foobar_rel_ng_triggered/571\", \"tasks\": {\"Check/Ubuntu-14.04/[dummy has/v8_foobar_rel_ng_triggered/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "infra_step": true,
     "name": "Check",
@@ -817,7 +817,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test262/Ubuntu-14.04/[dummy has/v8_linux_rel_ng_triggered/571\", \"tasks\": {\"Test262/Ubuntu-14.04/[dummy has/v8_linux_rel_ng_triggered/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Test262/Ubuntu-14.04/[dummy has/v8_foobar_rel_ng_triggered/571\", \"tasks\": {\"Test262/Ubuntu-14.04/[dummy has/v8_foobar_rel_ng_triggered/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "infra_step": true,
     "name": "Test262",

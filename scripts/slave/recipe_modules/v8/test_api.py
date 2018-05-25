@@ -413,11 +413,25 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     ]))
 
   def test(self, mastername, buildername, suffix='', parent_test_spec=None,
-           **kwargs):
+           parent_buildername=None, parent_bot_config=None, **kwargs):
+    """Convenience method to generate test data for V8 recipe runs.
+
+    Args:
+      mastername: Mastername property as passed to the recipe.
+      buildername: Buildername property as passed to the recipe.
+      suffix: Test name suffix.
+      parent_test_spec: Test-spec property passed to testers.
+      parent_buildername: Name of the parent builder when simulating a child
+          tester. Default value if no static config exists in builders.py.
+      parent_bot_config: Content of the parent's bot_config when simulating a
+          child tester. Default value if no static config exists in builders.py.
+
+    """
     bot_config = builders.FLATTENED_BUILDERS.get(buildername, {})
     v8_config_kwargs = bot_config.get('v8_config_kwargs', {})
     parent_buildername, parent_bot_config = (
-        builders.PARENT_MAP.get(buildername, (None, None)))
+        builders.PARENT_MAP.get(
+            buildername, (parent_buildername, parent_bot_config)))
     branch=self._get_test_branch_name(mastername, buildername)
 
     if parent_test_spec:

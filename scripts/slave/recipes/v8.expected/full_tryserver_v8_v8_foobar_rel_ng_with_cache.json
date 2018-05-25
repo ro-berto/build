@@ -24,7 +24,7 @@
       "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
       "--no_shallow"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng",
+    "cwd": "[BUILDER_CACHE]/v8_foobar_rel_ng",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -91,7 +91,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
+    "cwd": "[BUILDER_CACHE]/v8_foobar_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -102,19 +102,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8_foobar_rel_ng/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "tryserver.v8",
       "-b",
-      "v8_linux_rel_ng",
+      "v8_foobar_rel_ng",
       "--config-file",
-      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8_foobar_rel_ng/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
+    "cwd": "[BUILDER_CACHE]/v8_foobar_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -147,11 +147,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/Release",
+      "[BUILDER_CACHE]/v8_foobar_rel_ng/v8/out/Release",
       "-j",
       "20"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
+    "cwd": "[BUILDER_CACHE]/v8_foobar_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -164,14 +164,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8_linux_rel_ng/v8/out/Release",
+      "[BUILDER_CACHE]/v8_foobar_rel_ng/v8/out/Release",
       "-j",
       "20",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_rel_ng/v8",
+    "cwd": "[BUILDER_CACHE]/v8_foobar_rel_ng/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -187,7 +187,7 @@
       "cr-buildbucket.appspot.com",
       "-service-account-json",
       "/creds/service_accounts/service-account-v8-bot.json",
-      "{\"bucket\": \"master.tryserver.v8\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_linux_rel_ng_triggered\\\", \\\"changes\\\": [{\\\"author\\\": {\\\"email\\\": \\\"dude@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\\\"}], \\\"properties\\\": {\\\"category\\\": \\\"cq\\\", \\\"master\\\": \\\"tryserver.v8\\\", \\\"parent_build_config\\\": \\\"Release\\\", \\\"parent_build_environment\\\": {\\\"gn_args\\\": \\\"target_cpu = \\\\\\\"x86\\\\\\\" use_goma = true\\\"}, \\\"parent_buildername\\\": \\\"v8_linux_rel_ng\\\", \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"patch_gerrit_url\\\": \\\"https://chromium-review.googlesource.com\\\", \\\"patch_issue\\\": \\\"456789\\\", \\\"patch_project\\\": \\\"v8\\\", \\\"patch_ref\\\": \\\"refs/changes/89/456789/12\\\", \\\"patch_repository_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"patch_set\\\": \\\"12\\\", \\\"patch_storage\\\": \\\"gerrit\\\", \\\"reason\\\": \\\"CQ\\\", \\\"requester\\\": \\\"commit-bot@chromium.org\\\", \\\"revision\\\": \\\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\\\"}}\", \"tags\": [\"builder:v8_linux_rel_ng_triggered\", \"master:tryserver.v8\", \"parent_buildername:v8_linux_rel_ng\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"master.tryserver.v8\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_foobar_rel_ng_triggered\\\", \\\"changes\\\": [{\\\"author\\\": {\\\"email\\\": \\\"dude@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\\\"}], \\\"properties\\\": {\\\"category\\\": \\\"cq\\\", \\\"master\\\": \\\"tryserver.v8\\\", \\\"parent_build_config\\\": \\\"Release\\\", \\\"parent_build_environment\\\": {\\\"gn_args\\\": \\\"target_cpu = \\\\\\\"x86\\\\\\\" use_goma = true\\\"}, \\\"parent_buildername\\\": \\\"v8_foobar_rel_ng\\\", \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"patch_gerrit_url\\\": \\\"https://chromium-review.googlesource.com\\\", \\\"patch_issue\\\": \\\"456789\\\", \\\"patch_project\\\": \\\"v8\\\", \\\"patch_ref\\\": \\\"refs/changes/89/456789/12\\\", \\\"patch_repository_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"patch_set\\\": \\\"12\\\", \\\"patch_storage\\\": \\\"gerrit\\\", \\\"reason\\\": \\\"CQ\\\", \\\"requester\\\": \\\"commit-bot@chromium.org\\\", \\\"revision\\\": \\\"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\\\"}}\", \"tags\": [\"builder:v8_foobar_rel_ng_triggered\", \"master:tryserver.v8\", \"parent_buildername:v8_foobar_rel_ng\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
     "name": "trigger",

@@ -154,6 +154,17 @@ def GenTests(api):
     api.step_data('Check', retcode=1)
   )
 
+  # Minimal bot config for a release builder. Used to simulate test data for
+  # triggered testers.
+  release_bot_config = {
+    'testing': {
+      'properties': {
+        'build_config': 'Release',
+      },
+      'platform': 'linux',
+    },
+  }
+
   # Minimal v8-side test spec for simulating most recipe features.
   test_spec = """
     {
@@ -169,8 +180,10 @@ def GenTests(api):
   yield (
     api.v8.test(
         'tryserver.v8',
-        'v8_linux_rel_ng_triggered',
+        'v8_foobar_rel_ng_triggered',
         'triggered_by_cq',
+        parent_buildername='v8_foobar_rel_ng',
+        parent_bot_config=release_bot_config,
         parent_test_spec=test_spec,
         requester='commit-bot@chromium.org',
         patch_project='v8',
@@ -183,8 +196,10 @@ def GenTests(api):
   yield (
     api.v8.test(
         'tryserver.v8',
-        'v8_linux_rel_ng_triggered',
+        'v8_foobar_rel_ng_triggered',
         'triggered_by_ts',
+        parent_buildername='v8_foobar_rel_ng',
+        parent_bot_config=release_bot_config,
         parent_test_spec=test_spec,
         requester='dude@chromium.org',
         patch_project='v8',
@@ -198,8 +213,10 @@ def GenTests(api):
   yield (
     api.v8.test(
         'tryserver.v8',
-        'v8_linux_rel_ng_triggered',
+        'v8_foobar_rel_ng_triggered',
         'test_filter',
+        parent_buildername='v8_foobar_rel_ng',
+        parent_bot_config=release_bot_config,
         parent_test_spec=test_spec,
         testfilter=['mjsunit/regression/*', 'intl/foo', 'intl/bar'],
         extra_flags='--trace_gc --turbo_stats',
@@ -224,8 +241,10 @@ def GenTests(api):
   yield (
     api.v8.test(
         'tryserver.v8',
-        'v8_linux_rel_ng_triggered',
+        'v8_foobar_rel_ng_triggered',
         'positional_extra_flags',
+        parent_buildername='v8_foobar_rel_ng',
+        parent_bot_config=release_bot_config,
         parent_test_spec=test_spec,
         extra_flags=['--trace_gc', '--turbo_stats'],
     )
@@ -234,8 +253,10 @@ def GenTests(api):
   yield (
     api.v8.test(
         'tryserver.v8',
-        'v8_linux_rel_ng_triggered',
+        'v8_foobar_rel_ng_triggered',
         'failures',
+        parent_buildername='v8_foobar_rel_ng',
+        parent_bot_config=release_bot_config,
         parent_test_spec=test_spec,
     ) +
     api.override_step_data(
@@ -245,8 +266,10 @@ def GenTests(api):
   yield (
     api.v8.test(
         'tryserver.v8',
-        'v8_linux_rel_ng_triggered',
+        'v8_foobar_rel_ng_triggered',
         'flakes',
+        parent_buildername='v8_foobar_rel_ng',
+        parent_bot_config=release_bot_config,
         parent_test_spec=test_spec,
     ) +
     api.override_step_data(
@@ -453,8 +476,10 @@ def GenTests(api):
   yield (
     api.v8.test(
         'tryserver.v8',
-        'v8_linux_rel_ng_triggered',
+        'v8_foobar_rel_ng_triggered',
         'slow_tests',
+        parent_buildername='v8_foobar_rel_ng',
+        parent_bot_config=release_bot_config,
         parent_test_spec=test_spec,
         requester='commit-bot@chromium.org',
         patch_project='v8',
@@ -468,11 +493,13 @@ def GenTests(api):
   yield (
     api.v8.test(
         'tryserver.v8',
-        'v8_linux_rel_ng',
+        'v8_foobar_rel_ng',
         'with_cache',
-        requester='commit-bot@chromium.org',
         blamelist=['dude@chromium.org'],
+        build_config='Release',
         path_config='generic',
+        requester='commit-bot@chromium.org',
+        triggers=['v8_foobar_rel_ng_triggered'],
     )
   )
 
@@ -480,9 +507,11 @@ def GenTests(api):
   yield (
     api.v8.test(
         'tryserver.v8',
-        'v8_linux_rel_ng',
+        'v8_foobar_rel_ng',
         'with_build_id',
+        build_config='Release',
         build_id='buildbucket/cr-buildbucket.appspot.com/1234567890',
+        triggers=['v8_foobar_rel_ng_triggered'],
     )
   )
 
