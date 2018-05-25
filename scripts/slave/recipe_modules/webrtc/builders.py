@@ -77,7 +77,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -95,7 +94,6 @@ BUILDERS = freeze({
         'binary_size_files': [
           'obj/webrtc.lib'
         ],
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -116,7 +114,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -131,7 +128,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -155,7 +151,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -194,7 +189,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -209,7 +203,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.11',
@@ -224,7 +217,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.11',
@@ -245,7 +237,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.11',
@@ -260,7 +251,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -275,7 +265,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -312,7 +301,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -330,7 +318,6 @@ BUILDERS = freeze({
         'binary_size_files': [
           'obj/libwebrtc.a'
         ],
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -383,7 +370,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -400,7 +386,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -416,7 +401,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -432,7 +416,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -448,7 +431,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -500,7 +482,6 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
         'archive_apprtc': True,
         'enable_swarming': True,
-        'use_isolate': True,
         'swarming_dimensions': {
           'device_os': 'MMB29Q', # 6.0.1
           'device_type': 'bullhead', # Nexus 5X
@@ -528,7 +509,6 @@ BUILDERS = freeze({
         # TODO(bugs.webrtc.org/8642): Re-enable when it is fixed and stable.
         # 'test_android_studio_project_generation': True,
         'enable_swarming': True,
-        'use_isolate': True,
         'swarming_dimensions': {
           'device_os': 'MMB29Q', # 6.0.1
           'device_type': 'bullhead', # Nexus 5X
@@ -548,7 +528,6 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
         'archive_apprtc': True,
         'enable_swarming': True,
-        'use_isolate': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
           'device_os': 'MMB29Q', # 6.0.1
@@ -573,7 +552,6 @@ BUILDERS = freeze({
         ],
         'archive_apprtc': True,
         'enable_swarming': True,
-        'use_isolate': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
           'device_os': 'MMB29Q', # 6.0.1
@@ -596,7 +574,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -611,7 +588,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -626,7 +602,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.12',
@@ -641,7 +616,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.12',
@@ -656,7 +630,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -671,7 +644,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -693,7 +665,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-8.1-SP0',
@@ -708,7 +679,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-10',
@@ -725,7 +695,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Android',
@@ -746,7 +715,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Android',
@@ -772,7 +740,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC',
@@ -793,7 +760,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC',
@@ -814,7 +780,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC',
@@ -1029,7 +994,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -1047,7 +1011,6 @@ BUILDERS = freeze({
         'binary_size_files': [
           'obj/webrtc.lib'
         ],
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -1067,7 +1030,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -1082,7 +1044,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -1106,7 +1067,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -1145,7 +1105,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -1160,7 +1119,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-8.1-SP0',
@@ -1175,7 +1133,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-10',
@@ -1190,7 +1147,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -1223,7 +1179,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.11',
@@ -1238,7 +1193,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.11',
@@ -1259,7 +1213,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.11',
@@ -1283,7 +1236,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.11',
@@ -1307,7 +1259,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -1325,7 +1276,6 @@ BUILDERS = freeze({
         'binary_size_files': [
           'obj/libwebrtc.a'
         ],
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -1367,7 +1317,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -1382,7 +1331,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -1420,7 +1368,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -1446,7 +1393,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -1463,7 +1409,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -1479,7 +1424,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -1495,7 +1439,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -1511,7 +1454,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -1526,7 +1468,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -1631,7 +1572,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
@@ -1658,7 +1598,6 @@ BUILDERS = freeze({
         'build_android_archive': True,
         # TODO(bugs.webrtc.org/8642): Re-enable when it is fixed and stable.
         # 'test_android_studio_project_generation': True,
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
@@ -1682,7 +1621,6 @@ BUILDERS = freeze({
           'libjingle_peerconnection_datachannelonly_so.so',
           'apks/AppRTCMobile.apk'
         ],
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
@@ -1702,7 +1640,6 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'test_android_studio_project_generation': True,
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X

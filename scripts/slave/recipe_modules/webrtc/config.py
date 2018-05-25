@@ -12,7 +12,6 @@ def BaseConfig(PERF_ID=None, PERF_CONFIG=None, TEST_SUITE=None, **_kwargs):
     PERF_CONFIG = Static(PERF_CONFIG),
     TEST_SUITE = Static(TEST_SUITE),
 
-    use_isolate = Single(bool, False),
     enable_swarming = Single(bool, False),
   )
 

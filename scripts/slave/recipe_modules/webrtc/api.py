@@ -109,7 +109,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         'Perf tests should only be run with Release builds.')
 
   def configure_isolate(self, phase=None):
-    if self.c.use_isolate:
+    if self.c.enable_swarming:
       tests = steps.generate_tests(self, self.c.TEST_SUITE, phase,
                                    self.revision)
       self._isolated_targets = [test._name for test in tests
@@ -117,8 +117,6 @@ class WebRTCApi(recipe_api.RecipeApi):
       self._isolated_targets.sort()
 
   def configure_swarming(self):
-    self.c.use_isolate = self.bot_config.get('use_isolate')
-
     self.c.enable_swarming = self.bot_config.get('enable_swarming')
     if self.c.enable_swarming:
       self.m.chromium_swarming.configure_swarming(
@@ -196,7 +194,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.run_mb(phase)
     self.m.chromium.compile(use_goma_module=True)
 
-    if self.c.use_isolate:
+    if self.c.enable_swarming:
       self.m.isolate.remove_build_metadata()
       self.m.isolate.isolate_tests(self.m.chromium.output_dir,
                                    targets=self._isolated_targets)
@@ -361,7 +359,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.clean_test_output()
     if self.m.chromium.c.TARGET_PLATFORM == 'android':
       self.m.chromium_android.clean_local_files(clean_pyc_files=False)
-    if self.c.use_isolate:
+    if self.c.enable_swarming:
       self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
 
   def clean_test_output(self):

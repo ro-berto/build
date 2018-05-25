@@ -37,7 +37,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -63,7 +62,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -82,7 +80,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -108,7 +105,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'use_isolate': True,
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
