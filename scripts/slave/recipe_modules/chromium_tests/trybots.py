@@ -209,6 +209,11 @@ TRYBOTS = freeze({
             'buildername': 'GPU FYI Linux Builder',
             'tester': 'Linux FYI Release (Intel HD 630)',
           },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Linux Builder',
+            'tester': 'Linux FYI dEQP Release (Intel HD 630)',
+          },
         ],
       },
       'linux_angle_dbg_ng': simple_bot({
@@ -301,6 +306,11 @@ TRYBOTS = freeze({
             'mastername': 'chromium.gpu.fyi',
             'buildername': 'GPU FYI Win dEQP Builder',
             'tester': 'Win7 FYI dEQP Release (AMD)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Win dEQP Builder',
+            'tester': 'Win10 FYI dEQP Release (Intel HD 630)',
           },
         ],
       },
