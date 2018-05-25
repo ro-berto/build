@@ -91,10 +91,11 @@ def _BuildAndMeasure(api, with_patch):
   # the results.
   api.python(
       'resource_sizes ({}){}'.format(api.path.basename(apk_path), suffix),
-      api.chromium_android.c.resource_sizes,
-      [str(apk_path), '--chartjson'])
-  api.file.move('mv results-chart.json' + suffix, api.chromium.output_dir.join(
-      'results-chart.json'), results_dir.join('results-chart.json'))
+      api.chromium_android.c.resource_sizes, [
+          str(apk_path),
+          '--output-dir', results_dir,
+          '--chromium-output-directory', api.chromium.output_dir,
+      ])
 
   size_path = results_dir.join(_APK_NAME + '.size')
   api.chromium_android.supersize_archive(

@@ -665,29 +665,15 @@
       "-u",
       "[START_DIR]/src/build/android/resource_sizes.py",
       "[START_DIR]/src/out/Release/apks/MonochromePublic.apk",
-      "--chartjson"
+      "--output-dir",
+      "[START_DIR]/src/out/Release/with_patch",
+      "--chromium-output-directory",
+      "[START_DIR]/src/out/Release"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
     },
     "name": "resource_sizes (MonochromePublic.apk) (with patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "move",
-      "[START_DIR]/src/out/Release/results-chart.json",
-      "[START_DIR]/src/out/Release/with_patch/results-chart.json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "mv results-chart.json (with patch)"
   },
   {
     "cmd": [
@@ -1221,31 +1207,16 @@
       "-u",
       "[START_DIR]/src/build/android/resource_sizes.py",
       "[START_DIR]/src/out/Release/apks/MonochromePublic.apk",
-      "--chartjson"
+      "--output-dir",
+      "[START_DIR]/src/out/Release/without_patch",
+      "--chromium-output-directory",
+      "[START_DIR]/src/out/Release"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
     "name": "resource_sizes (MonochromePublic.apk) (without patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "move",
-      "[START_DIR]/src/out/Release/results-chart.json",
-      "[START_DIR]/src/out/Release/without_patch/results-chart.json"
-    ],
-    "cwd": "[START_DIR]/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "mv results-chart.json (without patch)"
   },
   {
     "cmd": [
