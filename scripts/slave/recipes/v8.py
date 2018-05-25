@@ -42,6 +42,7 @@ PROPERTIES = {
 def RunSteps(api, build_config, set_gclient_var, target_arch, target_platform,
              triggers):
   v8 = api.v8
+  v8.load_test_configs()
   bot_config = v8.update_bot_config(
       v8.bot_config_by_buildername(),
       build_config, target_arch, target_platform, triggers,

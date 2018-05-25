@@ -353,15 +353,15 @@ class BaseTest(object):
 
 class V8Test(BaseTest):
   def apply_filter(self):
-    self.applied_test_filter = self.api.v8._applied_test_filter(
-        TEST_CONFIGS[self.name])
+    test_config = self.api.v8.test_configs[self.name]
+    self.applied_test_filter = self.api.v8._applied_test_filter(test_config)
     if self.api.v8.test_filter and not self.applied_test_filter:
-      self.api.step(TEST_CONFIGS[self.name]['name'] + ' - skipped', cmd=None)
+      self.api.step(test_config['name'] + ' - skipped', cmd=None)
       return False
     return True
 
   def run(self, test=None, coverage_context=NULL_COVERAGE, **kwargs):
-    test = test or TEST_CONFIGS[self.name]
+    test = test or self.api.v8.test_configs[self.name]
 
     full_args, env = self.api.v8._setup_test_runner(
         test, self.applied_test_filter, self.test_step_config)
@@ -425,7 +425,7 @@ class V8Test(BaseTest):
     assert failure_dict.get('variant')
     assert failure_dict.get('random_seed')
 
-    orig_config = TEST_CONFIGS[self.name]
+    orig_config = self.api.v8.test_configs[self.name]
 
     # If not specified, the isolated target is the same as the first test of
     # the original list. We need to set it explicitly now, as the tests
@@ -512,7 +512,7 @@ class V8SwarmingTest(V8Test):
 
   def pre_run(self, test=None, coverage_context=NULL_COVERAGE, **kwargs):
     # Set up arguments for test runner.
-    self.test = test or TEST_CONFIGS[self.name]
+    self.test = test or self.api.v8.test_configs[self.name]
     extra_args, _ = self.api.v8._setup_test_runner(
         self.test, self.applied_test_filter, self.test_step_config)
 
@@ -582,7 +582,9 @@ class V8GenericSwarmingTest(BaseTest):
   def __init__(self, test_step_config, api, title=None, command=None):
     super(V8GenericSwarmingTest, self).__init__(test_step_config, api)
     self._command = command or []
-    self._title = title or TEST_CONFIGS[self.name].get('name', 'Generic test')
+    self._title = (
+        title or
+        self.api.v8.test_configs[self.name].get('name', 'Generic test'))
 
   @property
   def title(self):
@@ -603,7 +605,7 @@ class V8GenericSwarmingTest(BaseTest):
     return True
 
   def pre_run(self, test=None, **kwargs):
-    self.test = test or TEST_CONFIGS[self.name]
+    self.test = test or self.api.v8.test_configs[self.name]
     self.task = self.api.swarming.task(
         title=self.title,
         isolated_hash=self._get_isolated_hash(self.test),
@@ -771,6 +773,6 @@ def create_test(test_step_config, api):
       tools_mapping = TOOL_TO_TEST
 
     # The tool the test is going to use. Default: V8 test runner (run-tests).
-    tool = TEST_CONFIGS[test_step_config.name].get('tool', 'run-tests')
+    tool = api.v8.test_configs[test_step_config.name].get('tool', 'run-tests')
     test_cls = tools_mapping[tool]
   return test_cls(test_step_config, api)

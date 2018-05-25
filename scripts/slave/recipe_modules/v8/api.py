@@ -89,25 +89,6 @@ class V8Version(object):
     return sub(V8_PATCH, self.patch, blob)
 
 
-def isolate_targets_from_tests(tests):
-  """Returns the isolated targets associated with a list of tests.
-
-  Args:
-    tests: A list of test names used as keys in testing.TEST_CONFIGS.
-  """
-  targets = []
-  for test in tests:
-    config = testing.TEST_CONFIGS.get(test) or {}
-
-    # Tests either define an explicit isolate target or use the test
-    # names for convenience.
-    if config.get('isolated_target'):
-      targets.append(config['isolated_target'])
-    elif config.get('tests'):
-      targets.extend(config['tests'])
-  return targets
-
-
 class V8Api(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
   FLATTENED_BUILDERS = builders.FLATTENED_BUILDERS
@@ -155,6 +136,10 @@ class V8Api(recipe_api.RecipeApi):
     # side. Should be removed when everything has migrated.
     bot_config['triggers'] = sorted(list(set(bot_config['triggers'])))
     return bot_config
+
+  def load_test_configs(self):
+    # TODO(machenbach): Add V8 side test configs.
+    self.test_configs = testing.TEST_CONFIGS
 
   def apply_bot_config(self, bot_config):
     """Entry method for using the v8 api."""
@@ -457,6 +442,24 @@ class V8Api(recipe_api.RecipeApi):
 
     return test_spec
 
+  def isolate_targets_from_tests(self, tests):
+    """Returns the isolated targets associated with a list of tests.
+
+    Args:
+      tests: A list of test names used as keys in the V8 API's test config.
+    """
+    targets = []
+    for test in tests:
+      config = self.test_configs.get(test) or {}
+
+      # Tests either define an explicit isolate target or use the test
+      # names for convenience.
+      if config.get('isolated_target'):
+        targets.append(config['isolated_target'])
+      elif config.get('tests'):
+        targets.extend(config['tests'])
+    return targets
+
   @property
   def isolate_targets(self):
     """Returns the isolate targets statically known from builders.py."""
@@ -468,7 +471,7 @@ class V8Api(recipe_api.RecipeApi):
       for buildername in self.builderset:
         bot_config = builders.FLATTENED_BUILDERS.get(buildername, {})
         self._isolate_targets_cached.extend(
-            isolate_targets_from_tests(
+            self.isolate_targets_from_tests(
                 [test.name for test in bot_config.get('tests', [])]))
 
       # Add the performance-tests isolate everywhere, where the perf-bot proxy
@@ -592,7 +595,8 @@ class V8Api(recipe_api.RecipeApi):
     # Calculate extra targets to isolate from V8-side test specification. The
     # test_spec contains extra TestStepConfig objects for the current builder
     # and all its triggered builders.
-    extra_targets = isolate_targets_from_tests(test_spec.get_all_test_names())
+    extra_targets = self.isolate_targets_from_tests(
+        test_spec.get_all_test_names())
     isolate_targets = sorted(list(set(self.isolate_targets + extra_targets)))
 
     if self.m.chromium.c.project_generator.tool == 'mb':
