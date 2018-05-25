@@ -58,13 +58,9 @@ def RunHostTests(api, out_dir, exe_extension=''):
       [directory.join('runtime_unittests' + exe_extension)])
     api.step('Test Shell',
       [directory.join('shell_unittests' + exe_extension)])
-
-    # Platform specific tests.
-    if not api.platform.is_win:
-      # TODO(chinmaygarde): Enable the Embedder on Windows and remove this.
-      api.step('Test Embedder API',
-        [directory.join('embedder_unittests' + exe_extension)])
-
+    api.step('Test Embedder API',
+      [directory.join('embedder_unittests' + exe_extension)])
+      
     if api.platform.is_mac:
       api.step('Test Flutter Channels',
         [directory.join('flutter_channels_unittests' + exe_extension)])
@@ -422,6 +418,14 @@ def BuildWindows(api):
     'out/host_debug/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
     'out/host_debug/gen/frontend_server.dart.snapshot',
   ])
+
+  UploadArtifacts(api, 'windows-x64', [
+    'out/host_debug/flutter_embedder.h',
+    'out/host_debug/flutter_engine.dll',
+    'out/host_debug/flutter_engine.dll.exp',
+    'out/host_debug/flutter_engine.dll.lib',
+    'out/host_debug/flutter_engine.dll.pdb',
+  ], archive_name='windows-x64-embedder.zip')
 
   UploadArtifacts(api, "android-arm-profile" , [
     'out/android_profile/gen_snapshot.exe',
