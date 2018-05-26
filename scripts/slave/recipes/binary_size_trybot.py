@@ -128,7 +128,7 @@ def _SupersizeDiff(api, without_results_dir, with_results_dir):
       '--diff-output', diff_output_path,
   ])
   diff_text = api.file.read_text('Show Supersize Diff', diff_output_path)
-  api.step.active_result.presentation.logs['diff'] = diff_text
+  api.step.active_result.presentation.logs['diff'] = diff_text.splitlines()
 
 
 def _ResourceSizesDiff(api, without_results_dir, with_results_dir):
@@ -144,7 +144,7 @@ def _ResourceSizesDiff(api, without_results_dir, with_results_dir):
       '--diff-output', diff_output_path,
   ])
   diff_text = api.file.read_text('Show Resource Sizes Diff', diff_output_path)
-  api.step.active_result.presentation.logs['diff'] = diff_text
+  api.step.active_result.presentation.logs['diff'] = diff_text.splitlines()
   return diff_output_path
 
 
