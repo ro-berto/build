@@ -209,11 +209,6 @@ TRYBOTS = freeze({
             'buildername': 'GPU FYI Linux Builder',
             'tester': 'Linux FYI Release (Intel HD 630)',
           },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Linux Builder',
-            'tester': 'Linux FYI dEQP Release (Intel HD 630)',
-          },
         ],
       },
       'linux_angle_dbg_ng': simple_bot({
@@ -227,11 +222,20 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Linux Ozone Builder',
       }, analyze_mode='compile'),
-      'linux_angle_deqp_rel_ng': simple_bot({
-        'mastername': 'chromium.gpu.fyi',
-        'buildername': 'GPU FYI Linux dEQP Builder',
-        'tester': 'Linux FYI dEQP Release (NVIDIA)',
-      }),
+      'linux_angle_deqp_rel_ng': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Linux dEQP Builder',
+            'tester': 'Linux FYI dEQP Release (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Linux dEQP Builder',
+            'tester': 'Linux FYI dEQP Release (Intel HD 630)',
+          },
+        ],
+      },
       'mac_angle_rel_ng': {
         'bot_ids': [
           {
