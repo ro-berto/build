@@ -385,6 +385,8 @@
       "/creds/service_accounts/service-account-goma-bigquery.json",
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
+      "--build-exit-status",
+      "0",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",

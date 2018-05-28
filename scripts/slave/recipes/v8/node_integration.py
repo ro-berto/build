@@ -101,8 +101,10 @@ def goma_wrapper(api):
   api.goma.start()
   try:
     yield
-  finally:
-    api.goma.stop()
+    api.goma.stop(build_exit_status=0)
+  except api.step.StepFailure as e: # pragma: no cover
+    api.goma.stop(build_exit_status=e.retcode)
+    raise
 
 
 def _build_and_test(api, goma_dir):
