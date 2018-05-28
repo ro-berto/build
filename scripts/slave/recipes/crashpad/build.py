@@ -96,10 +96,6 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
       args += ' clang_path="//third_party/linux/clang/linux-amd64"'
       args += ' target_sysroot="//third_party/linux/sysroot"'
 
-      # There's no libcurl in the sysroot, stub out the HTTPTransport
-      # implementation that relies on it.
-      args += ' crashpad_enable_http_transport_libcurl=false'
-
       # The 14.04 systems do not include a compatible libstdc++ that can deal
       # with -std=c++14, so force static linkage of libstdc++ from the sysroot.
       args += ' link_libstdcpp_statically = true'
