@@ -187,7 +187,7 @@
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "AppRTCMobileTest\naudio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nlibjingle_peerconnection_android_unittest\nmodules_tests\nmodules_unittests\nortc_unittests\npeerconnection_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nwebrtc_nonparallel_tests\n",
-      "//out/Debug"
+      "//out/Android64_M_Nexus5X_dbg"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -317,7 +317,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg",
       "-j",
       "20"
     ],
@@ -335,7 +335,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg",
       "-j",
       "20",
       "-d",
@@ -459,9 +459,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Debug\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -530,7 +530,7 @@
       "-u",
       "[CACHE]/builder/src/tools/determinism/remove_build_metadata.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/Debug"
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg"
     ],
     "name": "remove_build_metadata"
   },
@@ -547,22 +547,22 @@
       "https://isolateserver.appspot.com",
       "--eventlog-endpoint",
       "prod",
-      "[CACHE]/builder/src/out/Debug/AppRTCMobileTest.isolated.gen.json",
-      "[CACHE]/builder/src/out/Debug/audio_decoder_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Debug/common_audio_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Debug/common_video_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Debug/libjingle_peerconnection_android_unittest.isolated.gen.json",
-      "[CACHE]/builder/src/out/Debug/modules_tests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Debug/modules_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Debug/ortc_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Debug/peerconnection_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Debug/rtc_stats_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Debug/rtc_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Debug/system_wrappers_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Debug/test_support_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Debug/tools_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Debug/video_engine_tests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Debug/webrtc_nonparallel_tests.isolated.gen.json"
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/AppRTCMobileTest.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/audio_decoder_unittests.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/common_audio_unittests.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/common_video_unittests.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/libjingle_peerconnection_android_unittest.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/modules_tests.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/modules_unittests.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/ortc_unittests.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/peerconnection_unittests.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/rtc_stats_unittests.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/rtc_unittests.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/system_wrappers_unittests.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/test_support_unittests.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/tools_unittests.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/video_engine_tests.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/webrtc_nonparallel_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -2454,7 +2454,7 @@
     "cmd": [
       "vpython",
       "-u",
-      "[CACHE]/builder/src/out/Debug/bin/run_android_junit_tests",
+      "[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/bin/run_android_junit_tests",
       "--verbose"
     ],
     "cwd": "[CACHE]/builder",
@@ -2471,7 +2471,7 @@
     ],
     "cwd": "[CACHE]/builder",
     "name": "AppRTCMobile zip archive",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CACHE]/builder/src/out/Debug/apks/AppRTCMobile.apk\", \"type\": \"file\"}], \"output\": \"[START_DIR]/AppRTCMobile_apk.zip\", \"root\": \"[CACHE]/builder/src/out/Debug/apks\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/apks/AppRTCMobile.apk\", \"type\": \"file\"}], \"output\": \"[START_DIR]/AppRTCMobile_apk.zip\", \"root\": \"[CACHE]/builder/src/out/Android64_M_Nexus5X_dbg/apks\"}"
   },
   {
     "cmd": [

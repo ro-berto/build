@@ -207,7 +207,7 @@
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "isac_fix_test\nlow_bandwidth_audio_perf_test\nwebrtc_perf_tests\n",
-      "//out/Release"
+      "//out/Mac_10_11"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -352,7 +352,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Mac_10_11",
       "-j",
       "20",
       "isac_fix_test",
@@ -373,7 +373,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Mac_10_11",
       "-j",
       "20",
       "isac_fix_test",
@@ -500,9 +500,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Mac_10_11",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 20, \"isac_fix_test\", \"low_bandwidth_audio_test\", \"webrtc_perf_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Mac_10_11\", \"-j\", 20, \"isac_fix_test\", \"low_bandwidth_audio_test\", \"webrtc_perf_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -571,7 +571,7 @@
       "-u",
       "[CACHE]/builder/src/tools/determinism/remove_build_metadata.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/Release"
+      "[CACHE]/builder/src/out/Mac_10_11"
     ],
     "name": "remove_build_metadata"
   },
@@ -588,9 +588,9 @@
       "https://isolateserver.appspot.com",
       "--eventlog-endpoint",
       "prod",
-      "[CACHE]/builder/src/out/Release/isac_fix_test.isolated.gen.json",
-      "[CACHE]/builder/src/out/Release/low_bandwidth_audio_perf_test.isolated.gen.json",
-      "[CACHE]/builder/src/out/Release/webrtc_perf_tests.isolated.gen.json"
+      "[CACHE]/builder/src/out/Mac_10_11/isac_fix_test.isolated.gen.json",
+      "[CACHE]/builder/src/out/Mac_10_11/low_bandwidth_audio_perf_test.isolated.gen.json",
+      "[CACHE]/builder/src/out/Mac_10_11/webrtc_perf_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [

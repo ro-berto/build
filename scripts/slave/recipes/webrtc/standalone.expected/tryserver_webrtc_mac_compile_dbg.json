@@ -171,7 +171,7 @@
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
-      "//out/Debug"
+      "//out/mac_compile_dbg"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -310,7 +310,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/mac_compile_dbg",
       "-j",
       "20"
     ],
@@ -328,7 +328,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/mac_compile_dbg",
       "-j",
       "20",
       "-d",
@@ -452,9 +452,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/mac_compile_dbg",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Debug\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/mac_compile_dbg\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",

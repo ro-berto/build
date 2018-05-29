@@ -247,7 +247,7 @@
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "low_bandwidth_audio_perf_test\nvideo_quality_loopback_test\nwebrtc_perf_tests\n",
-      "//out/Release"
+      "//out/Android_Perf_swarming"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -362,7 +362,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Android_Perf_swarming",
       "-j",
       "20",
       "AppRTCMobileTestStubbedVideoIO",
@@ -382,7 +382,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Android_Perf_swarming",
       "-j",
       "20",
       "AppRTCMobileTestStubbedVideoIO",
@@ -508,9 +508,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Release",
+      "[CACHE]/builder/src/out/Android_Perf_swarming",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 20, \"AppRTCMobileTestStubbedVideoIO\", \"low_bandwidth_audio_test\", \"webrtc_perf_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Android_Perf_swarming\", \"-j\", 20, \"AppRTCMobileTestStubbedVideoIO\", \"low_bandwidth_audio_test\", \"webrtc_perf_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -579,7 +579,7 @@
       "-u",
       "[CACHE]/builder/src/tools/determinism/remove_build_metadata.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/Release"
+      "[CACHE]/builder/src/out/Android_Perf_swarming"
     ],
     "name": "remove_build_metadata"
   },
@@ -596,9 +596,9 @@
       "https://isolateserver.appspot.com",
       "--eventlog-endpoint",
       "prod",
-      "[CACHE]/builder/src/out/Release/low_bandwidth_audio_perf_test.isolated.gen.json",
-      "[CACHE]/builder/src/out/Release/video_quality_loopback_test.isolated.gen.json",
-      "[CACHE]/builder/src/out/Release/webrtc_perf_tests.isolated.gen.json"
+      "[CACHE]/builder/src/out/Android_Perf_swarming/low_bandwidth_audio_perf_test.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android_Perf_swarming/video_quality_loopback_test.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android_Perf_swarming/webrtc_perf_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [

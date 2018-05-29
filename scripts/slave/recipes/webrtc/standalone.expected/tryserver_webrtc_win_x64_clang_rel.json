@@ -155,7 +155,7 @@
       "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]\\client",
-      "//out/Release_x64"
+      "//out/win_x64_clang_rel"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -298,7 +298,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Release_x64",
+      "[CACHE]\\builder\\src\\out\\win_x64_clang_rel",
       "-j",
       "20"
     ],
@@ -316,7 +316,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Release_x64",
+      "[CACHE]\\builder\\src\\out\\win_x64_clang_rel",
       "-j",
       "20",
       "-d",
@@ -447,9 +447,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]\\builder\\src\\out\\Release_x64",
+      "[CACHE]\\builder\\src\\out\\win_x64_clang_rel",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release_x64\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\win_x64_clang_rel\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
