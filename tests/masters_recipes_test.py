@@ -18,7 +18,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MAIN_WATERFALL_MASTERS = [
     'master.chromium',
     'master.chromium.chrome',
-    'master.chromium.chromiumos',
     'master.chromium.gpu',
     'master.chromium.memory',
     'master.chromium.webkit',
@@ -29,7 +28,6 @@ MAIN_WATERFALL_MASTERS = [
 TRYSERVER_MASTERS = [
     'master.tryserver.blink',
     'master.tryserver.chromium.android',
-    'master.tryserver.chromium.chromiumos',
     'master.tryserver.chromium.linux',
     'master.tryserver.chromium.mac',
     'master.tryserver.chromium.win',
@@ -41,9 +39,6 @@ SUPPRESSIONS = {
         'Google Chrome ChromeOS',
         'Google Chrome Linux x64',
         'Google Chrome Mac',
-    ],
-    'master.chromium.chromiumos': [
-        'Linux ChromiumOS Full',
     ],
     'master.chromium.webkit': [
         # TODO(crbug.com/736257) Spin up 10.12 (dbg) trybots once we've
@@ -72,12 +67,6 @@ FAKE_BUILDERS = {
         'Android Cronet Builder',
         'Cast Android (dbg)',
     ],
-    'master.chromium.chromiumos': [
-        # These have been migrated to LUCI.
-        'chromeos-amd64-generic-rel',
-        'chromeos-daisy-rel',
-        'linux-chromeos-rel',
-    ],
     'master.chromium.fyi': [
         # These are on LUCI.
         'linux-chromium-tests-staging-builder',
@@ -99,18 +88,6 @@ FAKE_BUILDERS = {
         'Mac Retina Release (AMD)',
         'Win10 Debug (NVIDIA)',
     ],
-    'master.chromium.mac': [
-        # These have been migrated to LUCI.
-        'Mac Builder (dbg)',
-        'Mac Builder',
-        'Mac10.10 Tests',
-        'Mac10.11 Tests',
-        'Mac10.12 Tests',
-        'Mac10.13 Tests (dbg)',
-        'Mac10.13 Tests',
-        # These are pure LUCI bots, no equivalent buildbot bot.
-        'mac-jumbo-rel',
-    ],
     'master.chromium.memory': [
         # These have been migrated to LUCI.
         'Linux ASan LSan Builder',
@@ -129,12 +106,6 @@ FAKE_BUILDERS = {
         'Win10 Tests x64 (dbg)',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'win-jumbo-rel',
-    ],
-    'master.tryserver.chromium.chromiumos': [
-        # These have been migrated to LUCI.
-        'chromeos-amd64-generic-rel',
-        'chromeos-daisy-rel',
-        'linux-chromeos-rel',
     ],
     'master.tryserver.chromium.win' : [
         # FIXME(tansell): Remove fake when BlinkTests are removed.

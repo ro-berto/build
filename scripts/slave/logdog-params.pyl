@@ -55,7 +55,6 @@
 
     # Chromium tryservers.
     'tryserver.chromium.android': {},
-    'tryserver.chromium.chromiumos': {},
     'tryserver.chromium.linux': {},
     'tryserver.chromium.mac': {},
     'tryserver.chromium.win': {},
@@ -66,7 +65,6 @@
     'chromium.android.fyi': {},
     'chromium.chrome': {},
     'chromium.chromedriver': {},
-    'chromium.chromiumos': {},
     'chromium.clang': {},
     'chromium.goma': {},
     'chromium.lkgr': {},
