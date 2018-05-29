@@ -185,6 +185,7 @@ FAKE_BUILDERS = {
         'android_cronet',
         'android_n5x_swarming_dbg',
         'android_optional_gpu_tests_rel',
+        'cast_shell_android',
     ],
     'master.tryserver.chromium.mac': [
         # These have been migrated to LUCI.

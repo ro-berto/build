@@ -48,13 +48,6 @@
       "slavebuilddir": "android",
       "slave_pools": ["ccompute_bots_cq"],
     },
-    "cast_shell_android": {
-      "builder_timeout_s": 14400,  # 60 * 60 * 4
-      "recipe": "chromium_trybot",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["ccompute_bots_cq"],
-    },
     "android_blink_rel": {
       "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
