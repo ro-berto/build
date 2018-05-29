@@ -34,6 +34,8 @@ _COMPILE_TARGETS = [
 _APK_NAME = 'MonochromePublic.apk'
 _PATCH_FIXED_BUILD_STEP_NAME = (
     'Not measuring binary size because build is broken without patch.')
+_FOOTER_PRESENT_STEP_NAME = (
+    'Not measuring binary size because Binary-Size justification was provided.')
 
 
 def RunSteps(api):
@@ -45,7 +47,23 @@ def RunSteps(api):
     api.chromium.set_config('chromium')
     api.chromium.apply_config('mb')
     api.chromium_android.set_config('base_config')
-    api.chromium.ensure_goma()
+
+    revision_info = api.gerrit.get_revision_info(
+        api.properties['patch_gerrit_url'],
+        api.properties['patch_issue'],
+        api.properties['patch_set'])
+    author = revision_info['commit']['author']['email']
+    # get_footer returns a list of footer values.
+    size_footers = api.tryserver.get_footer(
+        'Binary-Size', patch_text=revision_info['commit']['message'])
+    # Short-circuit early so that the bot is fast when disabled via header.
+    # Although the bot is also meant to test compiles of official builds,
+    # headers are generally only added when a previous job compiles fine and
+    # fails with the "You need to add the header" message.
+    if size_footers:
+      api.python.succeeding_step(_FOOTER_PRESENT_STEP_NAME,
+                                 _FOOTER_PRESENT_STEP_NAME)
+      return
 
     suffix = ' (with patch)'
     bot_update_step = api.bot_update.ensure_checkout(suffix=suffix, patch=True)
@@ -56,6 +74,7 @@ def RunSteps(api):
                               'trybot_analyze_config.json')[0]:
       return
 
+    api.chromium.ensure_goma()
     with_results_dir = _BuildAndMeasure(api, True)
 
     with api.context(cwd=api.chromium_checkout.working_dir):
@@ -82,7 +101,7 @@ def RunSteps(api):
       resource_sizes_diff_path = _ResourceSizesDiff(
           api, without_results_dir, with_results_dir)
       _SupersizeDiff(api, without_results_dir, with_results_dir)
-      _CheckForUnexpectedIncrease(api, resource_sizes_diff_path)
+      _CheckForUnexpectedIncrease(api, resource_sizes_diff_path, author)
 
 
 def _BuildAndMeasure(api, with_patch):
@@ -148,42 +167,20 @@ def _ResourceSizesDiff(api, without_results_dir, with_results_dir):
   return diff_output_path
 
 
-def _CheckForUnexpectedIncrease(api, resource_sizes_diff_path):
-  revision_info = api.gerrit.get_revision_info(
-      api.properties['patch_gerrit_url'],
-      api.properties['patch_issue'],
-      api.properties['patch_set'])
-  author = revision_info['commit']['author']['email']
-  size_footer = ''.join(
-      api.tryserver.get_footer('Binary-Size',
-                               patch_text=revision_info['commit']['message']))
+def _CheckForUnexpectedIncrease(api, resource_sizes_diff_path, author):
   checker_script = api.path['checkout'].join(
       'tools', 'binary_size', 'trybot_commit_size_checker.py')
   api.python('check for undocumented increase', checker_script, [
       '--author', author,
-      '--size-footer', size_footer,
       '--resource-sizes-diff', resource_sizes_diff_path,
   ])
 
 
 def GenTests(api):
-  _REVISION = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-  def props(name, **kwargs):
+  def props(name, size_footer=False, **kwargs):
     kwargs.setdefault('path_config', 'kitchen')
-    kwargs['revision'] = _REVISION
-    return (
-        api.test(name) +
-        api.properties.tryserver(
-            build_config='Release',
-            mastername='tryserver.chromium.android',
-            buildername='android_binary_size',
-            patch_set=1,
-            **kwargs) +
-        api.platform('linux', 64)
-    )
-
-  def override_revision_info():
-    _REVISION_INFO = {
+    kwargs['revision'] = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+    revision_info = {
         '_number': 1,
         'commit': {
             'author': {
@@ -192,15 +189,27 @@ def GenTests(api):
             'message': 'message',
         }
     }
+    footer_json = {}
+    if size_footer:
+      footer_json['Binary-Size'] = ['Totally worth it.']
     return (
+        api.test(name) +
+        api.properties.tryserver(
+            build_config='Release',
+            mastername='tryserver.chromium.android',
+            buildername='android_binary_size',
+            patch_set=1,
+            **kwargs) +
+        api.platform('linux', 64) +
         api.override_step_data(
             'gerrit changes',
             api.json.output([{
                 'revisions': {
-                    _REVISION: _REVISION_INFO
+                    kwargs['revision']: revision_info
                 }
             }])) +
-        api.override_step_data('parse description', api.json.output({}))
+        api.override_step_data('parse description',
+                               api.json.output(footer_json))
     )
 
 
@@ -213,6 +222,11 @@ def GenTests(api):
             'compile_targets': _ANALYZE_TARGETS,
             'test_targets': [] if no_changes else _COMPILE_TARGETS}))
 
+  yield (
+      props('noop_because_of_size_footer', size_footer=True) +
+      api.post_process(post_process.MustRun, _FOOTER_PRESENT_STEP_NAME) +
+      api.post_process(post_process.DropExpectation)
+  )
   yield (
       props('noop_because_of_analyze') +
       override_analyze(no_changes=True) +
@@ -229,6 +243,5 @@ def GenTests(api):
   )
   yield (
       props('normal_build') +
-      override_analyze() +
-      override_revision_info()
+      override_analyze()
   )
