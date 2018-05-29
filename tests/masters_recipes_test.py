@@ -169,6 +169,7 @@ FAKE_BUILDERS = {
         'linux_chromium_compile_dbg_ng',
         'linux_chromium_compile_rel_ng',
         'linux_chromium_dbg_ng',
+        'linux_chromium_headless_rel',
         'linux_chromium_rel_ng',
         'linux_chromium_tsan_rel_ng',
         'linux_optional_gpu_tests_rel',
