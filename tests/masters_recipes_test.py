@@ -85,6 +85,7 @@ FAKE_BUILDERS = {
     ],
     'master.chromium.gpu': [
         # These have been migrated to LUCI.
+        'Android Release (Nexus 5X)',
         'GPU Linux Builder (dbg)',
         'GPU Linux Builder',
         'GPU Mac Builder (dbg)',

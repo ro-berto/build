@@ -82,14 +82,6 @@
       "category": "4OnCQ",
       "slavebuilddir": "android_build",
     },
-    "Marshmallow Phone Tester (rel)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["marshmallow_phone"],
-      "category": "4OnCQ",
-      "mergeRequests": True,
-    },
   },
 
   "schedulers": {
@@ -171,14 +163,6 @@
         "bits": "64",
       },
       "slaves": ["slave155-c1"],
-    },
-    "marshmallow_phone": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["slave200-c1"],
     },
   }
 }

@@ -149,18 +149,6 @@ TRYBOTS = freeze({
         'buildername': 'Android arm64 Builder (dbg)',
         'tester': 'Marshmallow 64 bit Tester',
        }),
-      'android_n5x_swarming_rel': {
-        'bot_ids': [
-          {
-            'mastername': 'chromium.android',
-            'buildername': 'Marshmallow Phone Tester (rel)',
-          },
-          {
-            'mastername': 'chromium.gpu',
-            'buildername': 'Android Release (Nexus 5X)',
-          },
-        ],
-      },
       'android_optional_gpu_tests_rel': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Optional Android Release (Nexus 5X)',

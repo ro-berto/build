@@ -34,15 +34,6 @@
       "builder_timeout_s": 10800,
       "category": "0Windows",
     },
-
-    "Android Release (Nexus 5X)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["android_rel_nexus_5x"],
-      "builder_timeout_s": 21600,
-      "category": "3Android",
-    },
   },
 
   "schedulers": {
@@ -68,14 +59,6 @@
         "version": "win7",
       },
       "slaves": ["vm90-m1"],
-    },
-    "android_rel_nexus_5x": {
-      "slave_data": {
-        "bits": 64,
-        "os": "linux",
-        "version": "trusty",
-      },
-      "slaves": ["slave19-c1"],
     },
   },
 }

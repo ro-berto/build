@@ -99,14 +99,6 @@
       "slavebuilddir": "android",
       "slave_pools": ["ccompute_android_launch"],
     },
-    "android_n5x_swarming_rel": {
-      "builder_timeout_s": 14400,  # 60 * 60 * 4
-      "recipe": "chromium_trybot",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slavebuilddir": "android_arm64",
-      "slave_pools": ["ccompute_android_launch"],
-    },
     "android_chromium_variable": {
       "builder_timeout_s": 36000,  # 60 * 600
       "recipe": "findit/chromium/compile",
