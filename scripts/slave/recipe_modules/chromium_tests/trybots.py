@@ -181,9 +181,25 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI Release (Nexus 5X)',
       }),
+      'android_angle_vk32_rel_ng': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI 32 Vk Release (Nexus 5X)',
+      }),
+      'android_angle_vk64_rel_ng': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI 64 Vk Release (Nexus 5X)',
+      }),
       'android_angle_deqp_rel_ng': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI dEQP Release (Nexus 5X)',
+      }),
+      'android_angle_vk32_deqp_rel_ng': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI 32 dEQP Vk Release (Nexus 5X)',
+      }),
+      'android_angle_vk64_deqp_rel_ng': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI 64 dEQP Vk Release (Nexus 5X)',
       }),
       'linux_angle_rel_ng': {
         'bot_ids': [
