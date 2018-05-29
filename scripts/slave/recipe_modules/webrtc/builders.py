@@ -91,6 +91,9 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
+        'binary_size_files': [
+          'obj/webrtc.lib'
+        ],
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
@@ -1005,6 +1008,9 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
+        'binary_size_files': [
+          'obj/webrtc.lib'
+        ],
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
