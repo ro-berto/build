@@ -125,6 +125,7 @@
   * [chromium_android:tests/upload_build](#recipes-chromium_android_tests_upload_build)
   * [chromium_android:tests/zip_and_upload_build](#recipes-chromium_android_tests_zip_and_upload_build)
   * [chromium_checkout:tests/full](#recipes-chromium_checkout_tests_full)
+  * [chromium_clang_coverage_reports](#recipes-chromium_clang_coverage_reports)
   * [chromium_clang_coverage_tot](#recipes-chromium_clang_coverage_tot)
   * [chromium_codesearch](#recipes-chromium_codesearch)
   * [chromium_codesearch_initiator](#recipes-chromium_codesearch_initiator) &mdash; A recipe for picking a stable HEAD revision for chromium/src.
@@ -4094,6 +4095,11 @@ Returns: the list of matched targets.
 [DEPS](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#5): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#16)(api):**
+### *recipes* / [chromium\_clang\_coverage\_reports](/scripts/slave/recipes/chromium_clang_coverage_reports.py)
+
+[DEPS](/scripts/slave/recipes/chromium_clang_coverage_reports.py#6): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_clang_coverage_reports.py#32)(api):**
 ### *recipes* / [chromium\_clang\_coverage\_tot](/scripts/slave/recipes/chromium_clang_coverage_tot.py)
 
 [DEPS](/scripts/slave/recipes/chromium_clang_coverage_tot.py#6): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
