@@ -17,21 +17,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_"
-    ],
-    "infra_step": true,
-    "name": "makedirs checkout path"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]",
@@ -48,8 +33,8 @@
       "--revision",
       "src@12345"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
-    "env_prefixes": {
+    "cwd": "[CACHE]\\builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -99,7 +84,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]\\resources\\cleanup_files.py",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out"
+      "[CACHE]\\builder\\src\\out"
     ],
     "infra_step": true,
     "name": "clean test output files"
@@ -110,7 +95,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files"
@@ -154,7 +139,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -167,7 +152,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -180,21 +165,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools_webrtc\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb.py",
       "gen",
       "-m",
       "client.webrtc",
       "-b",
       "Win32 Release (Clang)",
       "--config-file",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools_webrtc\\mb\\mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]\\client",
       "--swarming-targets-file",
       "audio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nlow_bandwidth_audio_test\nmodules_tests\nmodules_unittests\nortc_unittests\npeerconnection_unittests\nrtc_media_unittests\nrtc_pc_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_capture_tests\nvideo_engine_tests\nwebrtc_nonparallel_tests\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -235,7 +220,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\clang_revision.py",
       "--src-dir",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src",
+      "[CACHE]\\builder\\src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -253,7 +238,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -272,7 +257,7 @@
       "0777",
       "[GOMA_CACHE]\\data\\Win32_Release__Clang_"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -290,7 +275,7 @@
       "[GOMA_CACHE]\\client\\goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -331,7 +316,7 @@
       "--pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -356,11 +341,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "-j",
       "20"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -374,14 +359,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "-j",
       "20",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -392,7 +377,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -407,7 +392,7 @@
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -443,7 +428,7 @@
       "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -468,7 +453,7 @@
       "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -505,9 +490,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]\\\\Win32_Release__Clang_\\\\src\\\\out\\\\Release\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -522,6 +507,7 @@
       "[TMP_BASE]\\crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "--is-luci",
       "--buildbot-buildername",
       "Win32 Release (Clang)",
       "--buildbot-mastername",
@@ -529,7 +515,7 @@
       "--buildbot-slavename",
       "bot_id"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -560,7 +546,7 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -575,9 +561,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\determinism\\remove_build_metadata.py",
+      "[CACHE]\\builder\\src\\tools\\determinism\\remove_build_metadata.py",
       "--build-dir",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release"
+      "[CACHE]\\builder\\src\\out\\Release"
     ],
     "name": "remove_build_metadata"
   },
@@ -586,7 +572,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client",
+      "[CACHE]\\builder\\src\\tools\\swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -594,24 +580,24 @@
       "https://isolateserver.appspot.com",
       "--eventlog-endpoint",
       "prod",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\audio_decoder_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\common_audio_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\common_video_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\low_bandwidth_audio_test.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\modules_tests.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\modules_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\ortc_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\peerconnection_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\rtc_media_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\rtc_pc_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\rtc_stats_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\rtc_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\system_wrappers_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\test_support_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\tools_unittests.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\video_capture_tests.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\video_engine_tests.isolated.gen.json",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\out\\Release\\webrtc_nonparallel_tests.isolated.gen.json"
+      "[CACHE]\\builder\\src\\out\\Release\\audio_decoder_unittests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\common_audio_unittests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\common_video_unittests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\low_bandwidth_audio_test.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\modules_tests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\modules_unittests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\ortc_unittests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\peerconnection_unittests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\rtc_media_unittests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\rtc_pc_unittests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\rtc_stats_unittests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\rtc_unittests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\system_wrappers_unittests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\test_support_unittests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\tools_unittests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\video_capture_tests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\video_engine_tests.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\webrtc_nonparallel_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -643,7 +629,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -695,6 +681,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -723,7 +711,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] audio_decoder_unittests",
     "~followup_annotations": [
@@ -746,7 +734,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -798,6 +786,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -826,7 +816,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] common_audio_unittests",
     "~followup_annotations": [
@@ -849,7 +839,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -901,6 +891,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -929,7 +921,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] common_video_unittests",
     "~followup_annotations": [
@@ -952,7 +944,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1004,6 +996,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -1032,7 +1026,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] low_bandwidth_audio_test",
     "~followup_annotations": [
@@ -1055,7 +1049,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1107,6 +1101,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -1135,7 +1131,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] modules_tests",
     "~followup_annotations": [
@@ -1164,7 +1160,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1216,6 +1212,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -1244,7 +1242,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] modules_unittests",
     "~followup_annotations": [
@@ -1297,7 +1295,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1349,6 +1347,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -1377,7 +1377,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] ortc_unittests",
     "~followup_annotations": [
@@ -1400,7 +1400,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1452,6 +1452,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -1480,7 +1482,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] peerconnection_unittests",
     "~followup_annotations": [
@@ -1521,7 +1523,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1573,6 +1575,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -1601,7 +1605,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] rtc_media_unittests",
     "~followup_annotations": [
@@ -1624,7 +1628,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1676,6 +1680,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -1704,7 +1710,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] rtc_pc_unittests",
     "~followup_annotations": [
@@ -1727,7 +1733,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1779,6 +1785,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -1807,7 +1815,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] rtc_stats_unittests",
     "~followup_annotations": [
@@ -1830,7 +1838,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1882,6 +1890,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -1910,7 +1920,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] rtc_unittests",
     "~followup_annotations": [
@@ -1963,7 +1973,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2015,6 +2025,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -2043,7 +2055,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] system_wrappers_unittests",
     "~followup_annotations": [
@@ -2066,7 +2078,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2118,6 +2130,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -2146,7 +2160,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] test_support_unittests",
     "~followup_annotations": [
@@ -2169,7 +2183,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2221,6 +2235,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -2249,7 +2265,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] tools_unittests",
     "~followup_annotations": [
@@ -2272,7 +2288,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2324,6 +2340,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -2352,7 +2370,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] video_engine_tests",
     "~followup_annotations": [
@@ -2393,7 +2411,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2445,6 +2463,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -2473,7 +2493,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] webrtc_nonparallel_tests",
     "~followup_annotations": [
@@ -2496,7 +2516,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2545,6 +2565,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -2573,7 +2595,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] video_capture_tests on Windows",
     "~followup_annotations": [
@@ -2613,7 +2635,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2749,7 +2771,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [audio_decoder_unittests]"
   },
   {
@@ -2773,7 +2795,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2909,7 +2931,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [common_audio_unittests]"
   },
   {
@@ -2933,7 +2955,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -3069,7 +3091,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [common_video_unittests]"
   },
   {
@@ -3093,7 +3115,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -3229,7 +3251,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [low_bandwidth_audio_test]"
   },
   {
@@ -3253,7 +3275,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -3429,7 +3451,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [modules_tests]"
   },
   {
@@ -3453,7 +3475,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -3789,7 +3811,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [modules_unittests]"
   },
   {
@@ -3813,7 +3835,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -3949,7 +3971,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [ortc_unittests]"
   },
   {
@@ -3973,7 +3995,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -4229,7 +4251,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [peerconnection_unittests]"
   },
   {
@@ -4253,7 +4275,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -4389,7 +4411,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [rtc_media_unittests]"
   },
   {
@@ -4413,7 +4435,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -4549,7 +4571,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [rtc_pc_unittests]"
   },
   {
@@ -4573,7 +4595,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -4709,7 +4731,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [rtc_stats_unittests]"
   },
   {
@@ -4733,7 +4755,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -5069,7 +5091,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [rtc_unittests]"
   },
   {
@@ -5093,7 +5115,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -5229,7 +5251,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [system_wrappers_unittests]"
   },
   {
@@ -5253,7 +5275,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -5389,7 +5411,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [test_support_unittests]"
   },
   {
@@ -5413,7 +5435,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -5549,7 +5571,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [tools_unittests]"
   },
   {
@@ -5573,7 +5595,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -5829,7 +5851,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [video_engine_tests]"
   },
   {
@@ -5853,7 +5875,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -5989,7 +6011,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [webrtc_nonparallel_tests]"
   },
   {
@@ -6013,7 +6035,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]\\Win32_Release__Clang_\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -6148,7 +6170,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]\\Win32_Release__Clang_",
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [video_capture_tests]"
   },
   {

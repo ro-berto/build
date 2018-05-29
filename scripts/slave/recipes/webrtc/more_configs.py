@@ -8,6 +8,7 @@ from recipe_engine.types import freeze
 DEPS = [
   'depot_tools/bot_update',
   'chromium',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'webrtc',
 ]
@@ -141,4 +142,4 @@ def RunSteps(api):
 
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
-    yield test
+    yield test + api.runtime(is_luci=True, is_experimental=False)

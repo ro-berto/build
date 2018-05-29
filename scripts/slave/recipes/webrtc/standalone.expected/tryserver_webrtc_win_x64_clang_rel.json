@@ -17,21 +17,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]\\win_x64_clang_rel"
-    ],
-    "infra_step": true,
-    "name": "makedirs checkout path"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]",
@@ -52,8 +37,8 @@
       "--revision",
       "src@12345"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_x64_clang_rel",
-    "env_prefixes": {
+    "cwd": "[CACHE]\\builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -103,7 +88,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]\\resources\\cleanup_files.py",
-      "[BUILDER_CACHE]\\win_x64_clang_rel\\src\\out"
+      "[CACHE]\\builder\\src\\out"
     ],
     "infra_step": true,
     "name": "clean test output files"
@@ -147,7 +132,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_x64_clang_rel\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -160,19 +145,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\win_x64_clang_rel\\src\\tools_webrtc\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb.py",
       "gen",
       "-m",
       "tryserver.webrtc",
       "-b",
       "win_x64_clang_rel",
       "--config-file",
-      "[BUILDER_CACHE]\\win_x64_clang_rel\\src\\tools_webrtc\\mb\\mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]\\client",
       "//out/Release_x64"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_x64_clang_rel\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -192,7 +177,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\clang_revision.py",
       "--src-dir",
-      "[BUILDER_CACHE]\\win_x64_clang_rel\\src",
+      "[CACHE]\\builder\\src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -210,7 +195,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]\\win_x64_clang_rel\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -229,7 +214,7 @@
       "0777",
       "[GOMA_CACHE]\\data\\win_x64_clang_rel"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_x64_clang_rel\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -247,7 +232,7 @@
       "[GOMA_CACHE]\\client\\goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_x64_clang_rel\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -288,7 +273,7 @@
       "--pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_x64_clang_rel\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -313,11 +298,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]\\win_x64_clang_rel\\src\\out\\Release_x64",
+      "[CACHE]\\builder\\src\\out\\Release_x64",
       "-j",
       "20"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_x64_clang_rel\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -331,14 +316,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]\\win_x64_clang_rel\\src\\out\\Release_x64",
+      "[CACHE]\\builder\\src\\out\\Release_x64",
       "-j",
       "20",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_x64_clang_rel\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -349,7 +334,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]\\win_x64_clang_rel\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -364,7 +349,7 @@
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_x64_clang_rel\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -400,7 +385,7 @@
       "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_x64_clang_rel\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -425,7 +410,7 @@
       "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_x64_clang_rel\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -462,9 +447,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]\\win_x64_clang_rel\\src\\out\\Release_x64",
+      "[CACHE]\\builder\\src\\out\\Release_x64",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]\\\\win_x64_clang_rel\\\\src\\\\out\\\\Release_x64\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release_x64\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -479,6 +464,7 @@
       "[TMP_BASE]\\crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "--is-luci",
       "--buildbot-buildername",
       "win_x64_clang_rel",
       "--buildbot-mastername",
@@ -486,7 +472,7 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_x64_clang_rel\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -517,7 +503,7 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]\\win_x64_clang_rel\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"

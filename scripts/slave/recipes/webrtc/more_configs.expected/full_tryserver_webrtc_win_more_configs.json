@@ -14,6 +14,7 @@
       "-p",
       "change=456789"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -67,7 +68,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "env_prefixes": {
+    "cwd": "[CACHE]\\builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -151,7 +153,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -164,21 +166,21 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools_webrtc\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb.py",
       "gen",
       "-m",
       "tryserver.webrtc",
       "-b",
       "win_more_configs",
       "--config-file",
-      "[START_DIR]\\src\\tools_webrtc\\mb\\mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--phase",
       "intelligibility_enhancer_no_include_tests",
       "--goma-dir",
       "[CACHE]\\goma\\client",
       "//out/intelligibility_enhancer_no_include_tests"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -188,7 +190,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -207,7 +209,7 @@
       "0777",
       "[CACHE]\\goma\\data\\win_more_configs"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -225,7 +227,7 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -266,7 +268,7 @@
       "--pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -291,11 +293,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\src\\out\\intelligibility_enhancer_no_include_tests",
+      "[CACHE]\\builder\\src\\out\\intelligibility_enhancer_no_include_tests",
       "-j",
       "20"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -309,14 +311,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\src\\out\\intelligibility_enhancer_no_include_tests",
+      "[CACHE]\\builder\\src\\out\\intelligibility_enhancer_no_include_tests",
       "-j",
       "20",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -327,7 +329,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -342,7 +344,7 @@
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -378,7 +380,7 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -403,7 +405,7 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -440,9 +442,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]\\src\\out\\intelligibility_enhancer_no_include_tests",
+      "[CACHE]\\builder\\src\\out\\intelligibility_enhancer_no_include_tests",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]\\\\src\\\\out\\\\intelligibility_enhancer_no_include_tests\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\intelligibility_enhancer_no_include_tests\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -457,6 +459,7 @@
       "[TMP_BASE]\\crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "--is-luci",
       "--buildbot-buildername",
       "win_more_configs",
       "--buildbot-mastername",
@@ -464,7 +467,7 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -495,7 +498,7 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -510,9 +513,9 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\determinism\\remove_build_metadata.py",
+      "[CACHE]\\builder\\src\\tools\\determinism\\remove_build_metadata.py",
       "--build-dir",
-      "[START_DIR]\\src\\out\\intelligibility_enhancer_no_include_tests"
+      "[CACHE]\\builder\\src\\out\\intelligibility_enhancer_no_include_tests"
     ],
     "name": "remove_build_metadata"
   },
@@ -520,14 +523,14 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools_webrtc\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb.py",
       "gen",
       "-m",
       "tryserver.webrtc",
       "-b",
       "win_more_configs",
       "--config-file",
-      "[START_DIR]\\src\\tools_webrtc\\mb\\mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--phase",
       "bwe_test_logging",
       "--goma-dir",
@@ -536,7 +539,7 @@
       "bwe_simulations_tests\n",
       "//out/bwe_test_logging"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -550,7 +553,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -569,7 +572,7 @@
       "0777",
       "[CACHE]\\goma\\data\\win_more_configs"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -587,7 +590,7 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -628,7 +631,7 @@
       "--pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -653,11 +656,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\src\\out\\bwe_test_logging",
+      "[CACHE]\\builder\\src\\out\\bwe_test_logging",
       "-j",
       "20"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -671,14 +674,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\src\\out\\bwe_test_logging",
+      "[CACHE]\\builder\\src\\out\\bwe_test_logging",
       "-j",
       "20",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -689,7 +692,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -704,7 +707,7 @@
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -740,7 +743,7 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -765,7 +768,7 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -802,9 +805,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]\\src\\out\\bwe_test_logging",
+      "[CACHE]\\builder\\src\\out\\bwe_test_logging",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]\\\\src\\\\out\\\\bwe_test_logging\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\bwe_test_logging\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -819,6 +822,7 @@
       "[TMP_BASE]\\crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "--is-luci",
       "--buildbot-buildername",
       "win_more_configs",
       "--buildbot-mastername",
@@ -826,7 +830,7 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -857,7 +861,7 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -872,9 +876,9 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\determinism\\remove_build_metadata.py",
+      "[CACHE]\\builder\\src\\tools\\determinism\\remove_build_metadata.py",
       "--build-dir",
-      "[START_DIR]\\src\\out\\bwe_test_logging"
+      "[CACHE]\\builder\\src\\out\\bwe_test_logging"
     ],
     "name": "remove_build_metadata (2)"
   },
@@ -883,7 +887,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
-      "[START_DIR]\\src\\tools\\swarming_client",
+      "[CACHE]\\builder\\src\\tools\\swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -891,7 +895,7 @@
       "https://isolateserver.appspot.com",
       "--eventlog-endpoint",
       "prod",
-      "[START_DIR]\\src\\out\\bwe_test_logging\\bwe_simulations_tests.isolated.gen.json"
+      "[CACHE]\\builder\\src\\out\\bwe_test_logging\\bwe_simulations_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -906,7 +910,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -962,6 +966,8 @@
       "--tag",
       "purpose:ManualTS",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:pre-commit",
       "--tag",
       "slavename:test_bot",
@@ -991,6 +997,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] bwe_simulations_tests",
     "~followup_annotations": [
@@ -1030,7 +1037,7 @@
       "--",
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1166,27 +1173,28 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [bwe_simulations_tests]"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools_webrtc\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb.py",
       "gen",
       "-m",
       "tryserver.webrtc",
       "-b",
       "win_more_configs",
       "--config-file",
-      "[START_DIR]\\src\\tools_webrtc\\mb\\mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--phase",
       "dummy_audio_file_devices_no_protobuf",
       "--goma-dir",
       "[CACHE]\\goma\\client",
       "//out/dummy_audio_file_devices_no_protobuf"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -1196,7 +1204,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -1215,7 +1223,7 @@
       "0777",
       "[CACHE]\\goma\\data\\win_more_configs"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -1233,7 +1241,7 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -1274,7 +1282,7 @@
       "--pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -1299,11 +1307,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\src\\out\\dummy_audio_file_devices_no_protobuf",
+      "[CACHE]\\builder\\src\\out\\dummy_audio_file_devices_no_protobuf",
       "-j",
       "20"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -1317,14 +1325,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\src\\out\\dummy_audio_file_devices_no_protobuf",
+      "[CACHE]\\builder\\src\\out\\dummy_audio_file_devices_no_protobuf",
       "-j",
       "20",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -1335,7 +1343,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -1350,7 +1358,7 @@
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -1386,7 +1394,7 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -1411,7 +1419,7 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -1448,9 +1456,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]\\src\\out\\dummy_audio_file_devices_no_protobuf",
+      "[CACHE]\\builder\\src\\out\\dummy_audio_file_devices_no_protobuf",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]\\\\src\\\\out\\\\dummy_audio_file_devices_no_protobuf\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\dummy_audio_file_devices_no_protobuf\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1465,6 +1473,7 @@
       "[TMP_BASE]\\crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "--is-luci",
       "--buildbot-buildername",
       "win_more_configs",
       "--buildbot-mastername",
@@ -1472,7 +1481,7 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -1503,7 +1512,7 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -1518,9 +1527,9 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\determinism\\remove_build_metadata.py",
+      "[CACHE]\\builder\\src\\tools\\determinism\\remove_build_metadata.py",
       "--build-dir",
-      "[START_DIR]\\src\\out\\dummy_audio_file_devices_no_protobuf"
+      "[CACHE]\\builder\\src\\out\\dummy_audio_file_devices_no_protobuf"
     ],
     "name": "remove_build_metadata (3)"
   },
@@ -1528,14 +1537,14 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools_webrtc\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb.py",
       "gen",
       "-m",
       "tryserver.webrtc",
       "-b",
       "win_more_configs",
       "--config-file",
-      "[START_DIR]\\src\\tools_webrtc\\mb\\mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--phase",
       "rtti_no_sctp",
       "--goma-dir",
@@ -1544,7 +1553,7 @@
       "peerconnection_unittests\n",
       "//out/rtti_no_sctp"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -1558,7 +1567,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -1577,7 +1586,7 @@
       "0777",
       "[CACHE]\\goma\\data\\win_more_configs"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -1595,7 +1604,7 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -1636,7 +1645,7 @@
       "--pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -1661,11 +1670,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\src\\out\\rtti_no_sctp",
+      "[CACHE]\\builder\\src\\out\\rtti_no_sctp",
       "-j",
       "20"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -1679,14 +1688,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\src\\out\\rtti_no_sctp",
+      "[CACHE]\\builder\\src\\out\\rtti_no_sctp",
       "-j",
       "20",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -1697,7 +1706,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -1712,7 +1721,7 @@
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -1748,7 +1757,7 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -1773,7 +1782,7 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -1810,9 +1819,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]\\src\\out\\rtti_no_sctp",
+      "[CACHE]\\builder\\src\\out\\rtti_no_sctp",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]\\\\src\\\\out\\\\rtti_no_sctp\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\rtti_no_sctp\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1827,6 +1836,7 @@
       "[TMP_BASE]\\crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "--is-luci",
       "--buildbot-buildername",
       "win_more_configs",
       "--buildbot-mastername",
@@ -1834,7 +1844,7 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -1865,7 +1875,7 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
@@ -1880,9 +1890,9 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\determinism\\remove_build_metadata.py",
+      "[CACHE]\\builder\\src\\tools\\determinism\\remove_build_metadata.py",
       "--build-dir",
-      "[START_DIR]\\src\\out\\rtti_no_sctp"
+      "[CACHE]\\builder\\src\\out\\rtti_no_sctp"
     ],
     "name": "remove_build_metadata (4)"
   },
@@ -1891,7 +1901,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
-      "[START_DIR]\\src\\tools\\swarming_client",
+      "[CACHE]\\builder\\src\\tools\\swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -1899,7 +1909,7 @@
       "https://isolateserver.appspot.com",
       "--eventlog-endpoint",
       "prod",
-      "[START_DIR]\\src\\out\\rtti_no_sctp\\peerconnection_unittests.isolated.gen.json"
+      "[CACHE]\\builder\\src\\out\\rtti_no_sctp\\peerconnection_unittests.isolated.gen.json"
     ],
     "name": "isolate tests (2)",
     "~followup_annotations": [
@@ -1914,7 +1924,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1970,6 +1980,8 @@
       "--tag",
       "purpose:ManualTS",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:pre-commit",
       "--tag",
       "slavename:test_bot",
@@ -1998,6 +2010,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "[trigger] peerconnection_unittests",
     "~followup_annotations": [
@@ -2037,7 +2050,7 @@
       "--",
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2173,6 +2186,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
+    "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [peerconnection_unittests]"
   },
   {

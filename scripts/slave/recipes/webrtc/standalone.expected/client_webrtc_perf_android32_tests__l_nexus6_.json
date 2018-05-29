@@ -3,21 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_"
-    ],
-    "infra_step": true,
-    "name": "makedirs checkout path"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]\ntarget_os = ['android']",
@@ -34,8 +19,8 @@
       "--revision",
       "src@12345"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -84,10 +69,10 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/tools_webrtc/download_tools.py",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/tools_webrtc/audio_quality"
+      "[CACHE]/builder/src/tools_webrtc/download_tools.py",
+      "[CACHE]/builder/src/tools_webrtc/audio_quality"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -98,10 +83,10 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/tools_webrtc/download_tools.py",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/tools_webrtc/video_quality_toolchain/linux"
+      "[CACHE]/builder/src/tools_webrtc/download_tools.py",
+      "[CACHE]/builder/src/tools_webrtc/video_quality_toolchain/linux"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -115,9 +100,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py",
       "--bucket=chromium-webrtc-resources",
       "--directory",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/rtc_tools/testing"
+      "[CACHE]/builder/src/rtc_tools/testing"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -131,9 +116,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py",
       "--bucket=chromium-webrtc-resources",
       "--directory",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/rtc_tools/testing/golang/linux"
+      "[CACHE]/builder/src/rtc_tools/testing/golang/linux"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -145,7 +130,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out"
+      "[CACHE]/builder/src/out"
     ],
     "infra_step": true,
     "name": "clean test output files"
@@ -155,10 +140,10 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\n",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/Release/debug_info_dumps",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/Release/test_logs",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/build_product.zip",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src"
+      "[CACHE]/builder/src/out/Release/debug_info_dumps",
+      "[CACHE]/builder/src/out/Release/test_logs",
+      "[CACHE]/builder/src/out/build_product.zip",
+      "[CACHE]/builder/src"
     ],
     "infra_step": true,
     "name": "clean local files",
@@ -181,7 +166,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_CROSSCOMPILE": "1",
@@ -198,7 +183,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/Release"
+      "[CACHE]/builder/src/out/Release"
     ],
     "infra_step": true,
     "name": "build directory"
@@ -218,7 +203,7 @@
       "--target",
       "Release",
       "--src-dir",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src",
+      "[CACHE]/builder/src",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",
@@ -237,12 +222,12 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/build/symlink.py",
+      "[CACHE]/builder/src/build/symlink.py",
       "-f",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb",
       "~/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "create adb symlink"
   },
@@ -257,11 +242,11 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
       "--",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/build/android/adb_logcat_monitor.py",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/logcat",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[CACHE]/builder/src/build/android/adb_logcat_monitor.py",
+      "[CACHE]/builder/src/out/logcat",
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "spawn_logcat_monitor"
   },
@@ -280,13 +265,13 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid",
       "--",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "[CACHE]/builder/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
       "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/bad_devices.json"
+      "[CACHE]/builder/src/out/bad_devices.json"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "spawn_device_monitor"
   },
@@ -302,24 +287,24 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "authorize_adb_devices"
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
+      "[CACHE]/builder/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/bad_devices.json",
+      "[CACHE]/builder/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "device_recovery"
   },
@@ -327,38 +312,38 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/third_party/catapult/devil/devil/android/tools/provision_devices.py",
+      "[CACHE]/builder/src/third_party/catapult/devil/devil/android/tools/provision_devices.py",
       "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/bad_devices.json",
+      "[CACHE]/builder/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "-t",
       "Release",
       "-v"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "provision_devices"
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/third_party/catapult/devil/devil/android/tools/device_status.py",
+      "[CACHE]/builder/src/third_party/catapult/devil/devil/android/tools/device_status.py",
       "--json-output",
       "/path/to/tmp/json",
       "--blacklist-file",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/bad_devices.json",
+      "[CACHE]/builder/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--buildbot-path",
       "/home/chrome-bot/.adb_device_info",
       "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v",
       "--overwrite-known-devices-files"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "device_status",
     "~followup_annotations": [
@@ -489,7 +474,7 @@
       "--build-number=1337",
       "--run-python-script",
       "--revision=170242",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/Release/bin/run_webrtc_perf_tests",
+      "[CACHE]/builder/src/out/Release/bin/run_webrtc_perf_tests",
       "--save_worst_frame",
       "--verbose",
       "--gs-test-artifacts-bucket",
@@ -497,12 +482,12 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -513,7 +498,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/build/android/pylib/results/presentation/test_results_presentation.py",
+      "[CACHE]/builder/src/build/android/pylib/results/presentation/test_results_presentation.py",
       "--json-file",
       "{}",
       "--test-name",
@@ -527,7 +512,7 @@
       "--bucket",
       "chromium-result-details"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "name": "webrtc_perf_tests: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -567,19 +552,19 @@
       "--build-number=1337",
       "--run-python-script",
       "--revision=170242",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/audio/test/low_bandwidth_audio_test.py",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/Release",
+      "[CACHE]/builder/src/audio/test/low_bandwidth_audio_test.py",
+      "[CACHE]/builder/src/out/Release",
       "--remove",
       "--android",
       "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -619,17 +604,17 @@
       "--build-number=1337",
       "--run-python-script",
       "--revision=170242",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/examples/androidtests/video_quality_loopback_test.py",
+      "[CACHE]/builder/src/examples/androidtests/video_quality_loopback_test.py",
       "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/Release"
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[CACHE]/builder/src/out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -651,7 +636,7 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "shutdown_device_monitor"
   },
@@ -659,12 +644,12 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/build/android/adb_logcat_printer.py",
+      "[CACHE]/builder/src/build/android/adb_logcat_printer.py",
       "--output-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/Release/full_log",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/logcat"
+      "[CACHE]/builder/src/out/Release/full_log",
+      "[CACHE]/builder/src/out/logcat"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "logcat_dump"
   },
@@ -679,10 +664,10 @@
       "GSUtil:parallel_composite_upload_threshold=50M",
       "----",
       "cp",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/Release/full_log",
+      "[CACHE]/builder/src/out/Release/full_log",
       "gs://chromium-webrtc/logcat_dumps/Android32 Tests (L Nexus6)/1337"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
@@ -691,31 +676,31 @@
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/third_party/android_platform/development/scripts/stack",
+      "[CACHE]/builder/src/third_party/android_platform/development/scripts/stack",
       "--arch",
       "arm",
       "--more-info",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/Release/full_log"
+      "[CACHE]/builder/src/out/Release/full_log"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/Release"
+      "CHROMIUM_OUTPUT_DIR": "[CACHE]/builder/src/out/Release"
     },
     "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
   },
   {
     "cmd": [
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/build/android/tombstones.py",
+      "[CACHE]/builder/src/build/android/tombstones.py",
       "-a",
       "-s",
       "-w",
       "--adb-path",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/Release"
+      "CHROMIUM_OUTPUT_DIR": "[CACHE]/builder/src/out/Release"
     },
     "infra_step": true,
     "name": "stack_tool_for_tombstones"
@@ -725,9 +710,9 @@
       "python",
       "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_/src/out/Release/test_logs/*.log"
+      "[CACHE]/builder/src/out/Release/test_logs/*.log"
     ],
-    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus6_",
+    "cwd": "[CACHE]/builder",
     "name": "test_report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
