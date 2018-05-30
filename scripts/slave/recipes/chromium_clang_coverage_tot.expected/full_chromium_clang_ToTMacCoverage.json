@@ -232,6 +232,23 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/src/third_party/llvm-build/cr_build_revision",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "Read clang revision",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@332838-1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/src/tools/mb/mb.py",
       "gen",
       "-m",

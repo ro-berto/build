@@ -54,6 +54,12 @@ def RunSteps(api):
 
   api.chromium.ensure_goma()
   api.chromium.runhooks()
+  clang_revision_file = api.path['checkout'].join('third_party', 'llvm-build',
+                                                  'cr_build_revision')
+  revision = api.file.read_text('Read clang revision', clang_revision_file,
+                                test_data='332838-1')
+  api.step.active_result.presentation.step_text = revision
+
   api.chromium.run_mb(mastername, buildername, use_goma=True)
 
   coverage_script = 'coverage.py'
