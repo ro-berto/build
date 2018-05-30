@@ -74,14 +74,6 @@
       "slave_pools": ["cronet_m_bullhead_perf"],
       "category": "0Cronet",
     },
-    "KitKat Phone Tester (rel)": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["kit_kat_phone_rel"],
-      "category": "4OnCQ",
-      "slavebuilddir": "android_build",
-    },
   },
 
   "schedulers": {
@@ -155,14 +147,6 @@
         "bits": "64",
       },
       "slaves": ["build88-b1"],
-    },
-    "kit_kat_phone_rel": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["slave155-c1"],
     },
   }
 }

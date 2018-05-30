@@ -161,10 +161,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.android',
         'buildername': 'KitKat Phone Tester (dbg)',
       }),
-      'linux_android_rel_ng': simple_bot({
-        'mastername': 'chromium.android',
-        'buildername': 'KitKat Phone Tester (rel)',
-      }),
       'android_unswarmed_n5_rel': simple_bot({
         'mastername': 'chromium.android.fyi',
         'buildername': 'Unswarmed N5 Tests Dummy Builder',
