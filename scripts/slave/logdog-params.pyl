@@ -67,7 +67,6 @@
     'chromium.chromedriver': {},
     'chromium.clang': {},
     'chromium.goma': {},
-    'chromium.lkgr': {},
     'chromium.win': {},
     'chromium.fyi': {},
     'chromium.gpu': {},
