@@ -177,10 +177,7 @@
             ]
           },
           "*": {}
-        },
-        "excluded_builders": [
-          "android-kitkat-arm-rel"
-        ]
+        }
       }
     ],
     "https://build.chromium.org/p/chromium.android.fyi": [
