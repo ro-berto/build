@@ -318,14 +318,11 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.goma.stop(ninja_log_compiler='goma',
                        build_exit_status=build_exit_status)
 
-    experimental = '_experimental' if self.m.runtime.is_experimental else ''
-    aar_upload_path = 'android_archive/webrtc_android_%s%s.aar' % (
-        self.revision_number, experimental)
-    if not self.m.tryserver.is_tryserver:
+    if not self.m.tryserver.is_tryserver and not self.m.runtime.is_experimental:
       self.m.gsutil.upload(
           self.m.path['checkout'].join('libwebrtc.aar'),
           'chromium-webrtc',
-          aar_upload_path,
+          'android_archive/webrtc_android_%s.aar' % self.revision_number,
           args=['-a', 'public-read'],
           unauthenticated_url=True)
 
@@ -340,11 +337,12 @@ class WebRTCApi(recipe_api.RecipeApi):
     pkg.add_file(apk_root.join('AppRTCMobile.apk'))
     pkg.zip('AppRTCMobile zip archive')
 
-    experimental = '_experimental' if self.m.runtime.is_experimental else ''
-    apk_upload_path = 'client.webrtc/%s/AppRTCMobile_apk_%s%s.zip' % (
-        self.buildername, self.revision_number, experimental)
-    self.m.gsutil.upload(zip_path, self.WEBRTC_GS_BUCKET, apk_upload_path,
-                          args=['-a', 'public-read'], unauthenticated_url=True)
+    apk_upload_url = 'client.webrtc/%s/AppRTCMobile_apk_%s.zip' % (
+        self.buildername, self.revision_number)
+    if not self.m.runtime.is_experimental:
+      self.m.gsutil.upload(zip_path, self.WEBRTC_GS_BUCKET, apk_upload_url,
+                           args=['-a', 'public-read'], unauthenticated_url=True)
+
   def extract_build(self):
     if not self.m.properties.get('parent_got_revision'):
       raise self.m.step.StepFailure(

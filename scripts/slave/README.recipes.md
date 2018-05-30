@@ -3606,11 +3606,11 @@ Capture coverage data and upload a report.
 
 &mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#137)(self, \*\*kwargs):**
 
-&mdash; **def [clean\_test\_output](/scripts/slave/recipe_modules/webrtc/api.py#376)(self):**
+&mdash; **def [clean\_test\_output](/scripts/slave/recipe_modules/webrtc/api.py#374)(self):**
 
 Remove all test output in out/, since we have tests leaking files.
 
-&mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#369)(self):**
+&mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#367)(self):**
 
 &mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#204)(self, phase=None):**
 
@@ -3622,13 +3622,13 @@ Remove all test output in out/, since we have tests leaking files.
 
 &mdash; **def [download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#159)(self):**
 
-&mdash; **def [extract\_build](/scripts/slave/recipe_modules/webrtc/api.py#348)(self):**
+&mdash; **def [extract\_build](/scripts/slave/recipe_modules/webrtc/api.py#346)(self):**
 
 &mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#213)(self, files=None, base_dir=None):**
 
 &mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#266)(self):**
 
-&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#333)(self):**
+&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#330)(self):**
 
 &mdash; **def [package\_build](/scripts/slave/recipe_modules/webrtc/api.py#279)(self):**
 
