@@ -10,7 +10,7 @@ DEPS = [
 ]
 
 BUILDERS = freeze({
-  'luci.chromium.ci': {
+  'chromium.fyi': {
     'builders': {
       'linux-code-coverage-generation': {
         'chromium_config': 'chromium_clang',
