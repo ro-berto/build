@@ -208,7 +208,8 @@ _AddBuildSpec(
 
 # 32 bit android swarming
 _AddIsolatedTestSpec('Android Nexus5X Perf', 'android-nexus5X', 'android',
-                     parent_buildername='Android Compile Perf', target_bits=32)
+                     parent_buildername='Android Compile Perf', target_bits=32,
+                     use_private_swarming_server=True)
 _AddIsolatedTestSpec('Android Nexus5 Perf', 'android-nexus5', 'android',
                      target_bits=32, parent_buildername='Android Compile Perf',
                      use_private_swarming_server=True)
