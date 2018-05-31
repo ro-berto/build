@@ -130,6 +130,7 @@
       "run",
       "[START_DIR]\\boringssl\\util\\check_filenames.go"
     ],
+    "cwd": "[START_DIR]\\boringssl",
     "name": "check filenames"
   },
   {

@@ -151,6 +151,7 @@
       "run",
       "[START_DIR]\\boringssl\\util\\check_filenames.go"
     ],
+    "cwd": "[START_DIR]\\boringssl",
     "env": {
       "GYP_MSVS_VERSION": "2017"
     },

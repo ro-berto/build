@@ -254,9 +254,10 @@ def RunSteps(api, buildername):
             build_dir.join('ssl', 'libssl.so')
         ])
 
-      api.python('check filenames', go_env, [
-          'go', 'run', api.path['checkout'].join('util', 'check_filenames.go')
-      ])
+      with api.context(cwd=api.path['checkout']):
+        api.python('check filenames', go_env, [
+            'go', 'run', api.path['checkout'].join('util', 'check_filenames.go')
+        ])
 
       env = _GetTargetEnv(buildername, bot_utils)
 
