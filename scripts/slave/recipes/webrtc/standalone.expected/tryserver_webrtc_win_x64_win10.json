@@ -3227,7 +3227,7 @@
     ],
     "name": "modules_tests on Windows-10",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-10'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-10'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -3427,7 +3427,7 @@
     ],
     "name": "modules_unittests on Windows-10",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-10'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-10'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -3947,7 +3947,7 @@
     ],
     "name": "peerconnection_unittests on Windows-10",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-10'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-10'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -4707,7 +4707,7 @@
     ],
     "name": "rtc_unittests on Windows-10",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-10'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-10'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -5547,7 +5547,7 @@
     ],
     "name": "video_engine_tests on Windows-10",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-10'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-10'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",

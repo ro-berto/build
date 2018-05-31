@@ -860,7 +860,7 @@
     ],
     "name": "browser_tests on Windows-10",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Windows-10'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)@@@",
+      "@@@STEP_TEXT@Run on OS: 'Windows-10'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",

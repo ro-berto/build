@@ -859,9 +859,10 @@ class SwarmingApi(recipe_api.RecipeApi):
   @staticmethod
   def _display_pending(shards, step_presentation):
     """Shows max pending time in seconds across all shards if it exceeds 10s,
-    and also displays the max shard duration accross all shards."""
+    and also displays the min and max shard duration accross all shards."""
     max_pending = (-1, None)
     max_duration = (-1, None)
+    min_duration = (None, None)
     for i, shard in enumerate(shards):
       if not shard or not shard.get('started_ts'):
         continue
@@ -877,6 +878,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         duration = (parse_time(shard['completed_ts']) - started).total_seconds()
         if duration > max_duration[0]:
           max_duration = (duration, i)
+        if min_duration[0] is None or duration < min_duration[0]:
+          min_duration = (duration, i)
 
     # Only display annotation when pending more than 10 seconds to reduce noise.
     if max_pending[0] > 10:
@@ -891,6 +894,11 @@ class SwarmingApi(recipe_api.RecipeApi):
       step_presentation.step_text += (
         '<br>%shard duration: %s%s' % (
           prefix, fmt_time(max_duration[0]), suffix))
+
+    if min_duration[0] is not None and len(shards) > 1:
+      step_presentation.step_text += (
+        '<br>Min shard duration: %s (shard #%d)' % (
+          fmt_time(min_duration[0]), min_duration[1]))
 
   def _default_collect_step(
       self, task, merged_test_output=None,

@@ -374,7 +374,7 @@
     ],
     "name": "base_unittests on Intel GPU on Linux (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br/>Total tests: n/a<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)<br/>Total tests: n/a<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",

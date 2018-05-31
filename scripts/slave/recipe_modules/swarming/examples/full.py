@@ -275,8 +275,9 @@ def GenTests(api):
           api.test_utils.canned_gtest_output(True))
     )
 
-  data = api.swarming.canned_summary_output_raw(shards=3)
+  data = api.swarming.canned_summary_output_raw(shards=4)
   data['shards'][2]['completed_ts'] = '2014-09-25T01:49:23.123'
+  data['shards'][3]['completed_ts'] = '2014-09-25T01:48:22.345'
 
   yield (
       api.test('gtest_with_long_task') +

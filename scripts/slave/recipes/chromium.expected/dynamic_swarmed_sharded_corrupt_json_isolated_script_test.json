@@ -512,7 +512,7 @@
     },
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br/>Exception while processing test results: 'str' object has no attribute 'iteritems'<br/>@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)<br/>Exception while processing test results: 'str' object has no attribute 'iteritems'<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
