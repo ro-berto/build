@@ -111,6 +111,8 @@ _AddIsolatedTestSpec(
     parent_buildername='Linux Compile Perf FYI',
     use_private_swarming_server=True)
 
+_AddIsolatedTestSpec('OBBS Mac 10.12 Perf', '', 'mac',
+                     parent_buildername='Mac Builder Perf FYI')
 _AddIsolatedTestSpec('Android Go', '', 'android',
                      parent_buildername='Android Builder Perf FYI',
                      use_private_swarming_server=True)
