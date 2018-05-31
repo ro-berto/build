@@ -130,6 +130,17 @@
       "[START_DIR]/boringssl/util/bot/go/env.py",
       "go",
       "run",
+      "[START_DIR]/boringssl/util/check_filenames.go"
+    ],
+    "name": "check filenames"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/boringssl/util/bot/go/env.py",
+      "go",
+      "run",
       "util/run_android_tests.go",
       "-build-dir",
       "[START_DIR]/boringssl/build",

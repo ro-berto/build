@@ -126,6 +126,17 @@
       "python",
       "-u",
       "[START_DIR]\\boringssl\\util\\bot\\go\\env.py",
+      "go",
+      "run",
+      "[START_DIR]\\boringssl\\util\\check_filenames.go"
+    ],
+    "name": "check filenames"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]\\boringssl\\util\\bot\\go\\env.py",
       "python",
       "[START_DIR]\\boringssl\\util\\bot\\vs_env.py",
       "x86",

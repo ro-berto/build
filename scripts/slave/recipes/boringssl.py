@@ -254,6 +254,10 @@ def RunSteps(api, buildername):
             build_dir.join('ssl', 'libssl.so')
         ])
 
+      api.python('check filenames', go_env, [
+          'go', 'run', api.path['checkout'].join('util', 'check_filenames.go')
+      ])
+
       env = _GetTargetEnv(buildername, bot_utils)
 
       # Run the unit tests.
@@ -389,6 +393,18 @@ def GenTests(api):
     api.properties.generic(mastername='client.boringssl',
                            buildername='linux_shared', bot_id='bot_id') +
     api.override_step_data('check imported libraries', retcode=1) +
+    api.override_step_data('unit tests',
+                           api.test_utils.canned_test_output(True)) +
+    api.override_step_data('ssl tests',
+                           api.test_utils.canned_test_output(True))
+  )
+
+  yield (
+    api.test('failed_filenames') +
+    api.platform('linux', 64) +
+    api.properties.generic(mastername='client.boringssl', buildername='linux',
+                           bot_id='bot_id') +
+    api.override_step_data('check filenames', retcode=1) +
     api.override_step_data('unit tests',
                            api.test_utils.canned_test_output(True)) +
     api.override_step_data('ssl tests',

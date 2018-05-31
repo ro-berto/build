@@ -1,19 +1,26 @@
 [
   {
     "cmd": [
+      "uname",
+      "-a"
+    ],
+    "name": "uname"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'deps_file': 'util/bot/DEPS', 'managed': True, 'name': 'boringssl', 'url': 'https://boringssl.googlesource.com/boringssl.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'util/bot/DEPS', 'managed': True, 'name': 'boringssl', 'url': 'https://boringssl.googlesource.com/boringssl.git'}]",
       "--patch_root",
       "boringssl",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
-      "[CACHE]\\git",
+      "[CACHE]/git",
       "--cleanup-dir",
-      "[CLEANUP]\\bot_update",
+      "[CLEANUP]/bot_update",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -51,12 +58,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]\\boringssl",
+    "cwd": "[START_DIR]/boringssl",
     "env": {
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "name": "gclient runhooks"
   },
@@ -64,11 +71,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[START_DIR]\\boringssl\\build"
+      "[START_DIR]/boringssl/build"
     ],
     "infra_step": true,
     "name": "clean"
@@ -77,13 +84,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "ensure-directory",
       "--mode",
       "0777",
-      "[START_DIR]\\boringssl\\build"
+      "[START_DIR]/boringssl/build"
     ],
     "infra_step": true,
     "name": "mkdir"
@@ -92,31 +99,24 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\boringssl\\util\\bot\\go\\env.py",
-      "python",
-      "[START_DIR]\\boringssl\\util\\bot\\vs_env.py",
-      "x64",
-      "[START_DIR]\\boringssl\\util\\bot\\cmake-win32\\bin\\cmake.exe",
+      "[START_DIR]/boringssl/util/bot/go/env.py",
+      "[START_DIR]/boringssl/util/bot/cmake-linux64/bin/cmake",
       "-GNinja",
-      "-DCMAKE_ASM_NASM_COMPILER=[START_DIR]/boringssl/util/bot/yasm-win32.exe",
-      "-DCMAKE_MAKE_PROGRAM=RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
-      "-DPERL_EXECUTABLE=[START_DIR]\\boringssl\\util\\bot\\perl-win32\\perl\\bin\\perl.exe",
-      "[START_DIR]\\boringssl"
+      "-DBORINGSSL_ALLOW_CXX_RUNTIME=1",
+      "-DCMAKE_MAKE_PROGRAM=RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "[START_DIR]/boringssl"
     ],
-    "cwd": "[START_DIR]\\boringssl\\build",
+    "cwd": "[START_DIR]/boringssl/build",
     "name": "cmake"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\boringssl\\util\\bot\\go\\env.py",
-      "python",
-      "[START_DIR]\\boringssl\\util\\bot\\vs_env.py",
-      "x64",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "[START_DIR]/boringssl/util/bot/go/env.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
-      "[START_DIR]\\boringssl\\build"
+      "[START_DIR]/boringssl/build"
     ],
     "name": "ninja"
   },
@@ -124,28 +124,29 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\boringssl\\util\\bot\\go\\env.py",
+      "[START_DIR]/boringssl/util/bot/go/env.py",
       "go",
       "run",
-      "[START_DIR]\\boringssl\\util\\check_filenames.go"
+      "[START_DIR]/boringssl/util/check_filenames.go"
     ],
-    "name": "check filenames"
+    "name": "check filenames",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\boringssl\\util\\bot\\go\\env.py",
-      "python",
-      "[START_DIR]\\boringssl\\util\\bot\\vs_env.py",
-      "x64",
+      "[START_DIR]/boringssl/util/bot/go/env.py",
       "go",
       "run",
-      "util\\all_tests.go",
+      "util/all_tests.go",
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[START_DIR]\\boringssl",
+    "cwd": "[START_DIR]/boringssl",
     "name": "unit tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test_utils.test_results@{@@@",
@@ -195,17 +196,14 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\boringssl\\util\\bot\\go\\env.py",
-      "python",
-      "[START_DIR]\\boringssl\\util\\bot\\vs_env.py",
-      "x64",
+      "[START_DIR]/boringssl/util/bot/go/env.py",
       "go",
       "test",
       "-json-output",
       "/path/to/tmp/json",
       "-pipe"
     ],
-    "cwd": "[START_DIR]\\boringssl\\ssl\\test\\runner",
+    "cwd": "[START_DIR]/boringssl/ssl/test/runner",
     "name": "ssl tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test_utils.test_results@{@@@",
@@ -253,7 +251,8 @@
   },
   {
     "name": "$result",
+    "reason": "1 out of 3 aggregated steps failed. Failures: Step('check filenames') failed with return_code 1",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]
