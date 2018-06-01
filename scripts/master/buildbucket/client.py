@@ -49,12 +49,7 @@ def create_buildbucket_service(master, hostname=None, verbose=None):
   # https://chromium.googlesource.com/chromium/tools/build/+/08b404f/third_party/google_api_python_client/googleapiclient/discovery.py#218
   resource = apiclient.discovery.Resource(
       http=httplib2.Http(),
-      # Note that this does not include _ah/ in URL path, which means
-      # we bypass Cloud Endpoints proxy server. See also:
-      # https://bugs.chromium.org/p/chromium/issues/detail?id=626650
-      # https://codereview.chromium.org/2117833003/
-      # https://codereview.chromium.org/2116783003/
-      baseUrl='https://%s/api/buildbucket/v1/' % hostname,
+      baseUrl='https://%s/_ah/api/buildbucket/v1/' % hostname,
       model=apiclient.model.JsonModel(False),
       requestBuilder=apiclient.http.HttpRequest,
       developerKey=None,
