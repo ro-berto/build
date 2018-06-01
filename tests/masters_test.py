@@ -222,7 +222,6 @@ def main(argv):
       'master.chromium.fyi': 'ChromiumFYI',
       'master.chromium.gatekeeper': 'Gatekeeper',
       'master.chromium.goma': 'ChromiumGoma',
-      'master.chromium.gpu': 'ChromiumGPU',
       'master.chromium.infra': 'Infra',
       'master.chromium.infra.codesearch': 'InfraCodesearch',
       'master.chromium.infra.cron': 'InfraCron',

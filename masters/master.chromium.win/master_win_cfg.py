@@ -26,14 +26,10 @@ def Update(config, active_master, c):
                             branch='master',
                             treeStableTimer=60,
                             builderNames=[
-          'Win Builder',
           'Win x64 Builder (dbg)',
       ]),
   ])
   specs = [
-    {'name': 'Win Builder'},
-    {'name': 'Win7 (32) Tests'},
-    {'name': 'Win7 Tests (1)'},
     {'name': 'Win x64 Builder (dbg)'},
   ]
 

@@ -18,7 +18,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MAIN_WATERFALL_MASTERS = [
     'master.chromium',
     'master.chromium.chrome',
-    'master.chromium.gpu',
     'master.chromium.memory',
     'master.chromium.webkit',
     'master.chromium.win',
@@ -52,7 +51,6 @@ SUPPRESSIONS = {
         'WebKit Win x64 Builder (dbg)',
     ],
     'master.chromium.win': [
-        'Win7 (32) Tests',
         'Win x64 Builder (dbg)',
     ],
 
@@ -98,8 +96,11 @@ FAKE_BUILDERS = {
     ],
     'master.chromium.win': [
         # These have been migrated to LUCI.
+        'Win Builder',
         'Win x64 Builder',
         'Win Builder (dbg)',
+        'Win7 (32) Tests',
+        'Win7 Tests (1)',
         'Win7 Tests (dbg)(1)',
         'Win 7 Tests x64 (1)',
         'Win10 Tests x64',
@@ -115,6 +116,7 @@ FAKE_BUILDERS = {
         'win_chromium_dbg_ng',
         'win_optional_gpu_tests_rel',
         'win_chromium_x64_rel_ng',
+        'win7_chromium_rel_ng',
         'win10_chromium_x64_rel_ng',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'gpu_manual_try_win7_nvidia_rel',
