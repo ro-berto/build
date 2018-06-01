@@ -665,7 +665,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"telemetry_gpu_unittests\": \"[dummy hash for telemetry_gpu_unittests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}@{\"telemetry_gpu_unittests\": \"[dummy hash for telemetry_gpu_unittests]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}_without_patch@{\"telemetry_gpu_unittests\": \"[dummy hash for telemetry_gpu_unittests]\"}@@@"
     ]
   },
   {

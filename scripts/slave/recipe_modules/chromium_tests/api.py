@@ -381,11 +381,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if isolated_targets:
         self.m.isolate.remove_build_metadata()
 
+        has_patch = self.m.tryserver.is_tryserver
         swarm_hashes_property_name = ''  # By default do not yield as property.
         if 'got_revision_cp' in update_step.presentation.properties:
-          swarm_hashes_property_name = 'swarm_hashes_%s' % (
+          # Some recipes such as Findit's may build different revisions in the
+          # same build. Hence including the commit position as part of the
+          # property name.
+          swarm_hashes_property_name = 'swarm_hashes_%s_%s_patch' % (
               update_step.presentation.properties['got_revision_cp'].replace(
-                '@', '(at)'))  # At sign may clash with annotations format.
+                # At sign may clash with annotations format.
+                '@', '(at)'), 'with' if has_patch else 'without')
 
         # 'compile' just prepares all information needed for the isolation,
         # and the isolation is a separate step.
@@ -764,8 +769,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                 mb_mastername=mb_mastername,
                                 mb_buildername=mb_buildername)
         if failing_swarming_tests:
-          self.m.isolate.isolate_tests(self.m.chromium.output_dir,
-                                       verbose=True)
+          swarm_hashes_property_name = 'swarm_hashes'
+          if 'got_revision_cp' in bot_update_step.presentation.properties:
+            swarm_hashes_property_name = 'swarm_hashes_%s_without_patch' % (
+                bot_update_step.presentation.properties['got_revision_cp']
+                .replace('@', '(at)')),
+          self.m.isolate.isolate_tests(
+              self.m.chromium.output_dir,
+              swarm_hashes_property_name=swarm_hashes_property_name,
+              verbose=True)
 
     deapply_patch = True
     deapply_patch_reason = 'unknown reason'
