@@ -1247,16 +1247,22 @@
     "name": "Upload to test-results [telemetry_gpu_unittests on (15ad) GPU on Windows]"
   },
   {
-    "cmd": [],
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Tests statistics",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Total shards: 3<br/>",
-      "Total runtime: 17s <br/>",
-      "Min/mean/max: 5s / 5s / 5s@@@"
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 3<br/>Total runtime: 17s <br/>@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total shards: 3@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 17s @@@",
+      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 5s / 5s / 5s@@@",
+      "@@@STEP_LOG_END@detailed stats@@@"
     ]
   },
   {

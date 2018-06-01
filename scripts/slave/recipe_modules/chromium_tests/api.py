@@ -978,6 +978,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.run_tests_on_tryserver(
             bot_config_object, tests, bot_update_step,
             affected_files, disable_deapply_patch=disable_deapply_patch)
+        self.m.swarming.report_stats()
 
   def _trybot_steps_internal(self, builders=None, trybots=None):
     mastername = self.m.properties.get('mastername')

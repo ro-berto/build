@@ -631,15 +631,21 @@
     ]
   },
   {
-    "cmd": [],
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
     "env": {
       "CHROME_HEADLESS": "1"
     },
     "name": "Tests statistics",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Total shards: 2<br/>",
-      "Total runtime: 14s <br/>",
-      "Min/mean/max: 5s / 7s / 8s@@@"
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 2<br/>Total runtime: 14s <br/>@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total shards: 2@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 14s @@@",
+      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 5s / 7s / 8s@@@",
+      "@@@STEP_LOG_END@detailed stats@@@"
     ]
   },
   {

@@ -842,19 +842,23 @@ class SwarmingApi(recipe_api.RecipeApi):
     """Report statistics on all tasks ran so far."""
     if not self._shards_durations:
       return
-    result = self.m.step('Tests statistics', [])
     stats = ['Total shards: %d' % len(self._shards_durations)]
     total = sum(self._shards_durations)
     mean = total / len(self._shards_durations)
     stats.extend([
       'Total runtime: %s ' % fmt_time(total),
+    ])
+    detailed_stats = stats + [
       'Min/mean/max: %s / %s / %s' % (
           fmt_time(min(self._shards_durations)),
           fmt_time(total / len(self._shards_durations)),
           fmt_time(max(self._shards_durations)),
       ),
-    ])
-    result.presentation.step_text = '<br/>\n'.join(stats)
+    ]
+    step_text = self.m.test_utils.format_step_text([
+        ('Stats', stats)])
+    result = self.m.python.succeeding_step('Tests statistics', step_text)
+    result.presentation.logs['detailed stats'] = detailed_stats
 
   @staticmethod
   def _display_pending(shards, step_presentation):
