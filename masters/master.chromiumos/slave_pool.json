@@ -1,64 +1,26 @@
 {
   "class_map": {
     "builder": {
-      "amd64-generic-full": [
-        "build98-m2"
-      ], 
-      "amd64-generic-fuzzer": [
-        "build182-m2"
-      ], 
       "amd64-generic-incremental": [
         "cros-beefy423-c2"
       ], 
       "amd64-generic-paladin": [
         "cros-beefy468-c2"
       ], 
-      "arm-generic-full": [
-        "cros-beefy424-c2"
-      ], 
       "arm-generic-paladin": [
         "cros-beefy425-c2"
-      ], 
-      "chromeos-infra-go": [
-        "cros-beefy466-c2"
-      ], 
-      "chromiumos-sdk": [
-        "cros-beefy467-c2"
-      ], 
-      "daisy-full": [
-        "cros-beefy426-c2"
       ], 
       "daisy-incremental": [
         "cros-beefy427-c2"
       ], 
-      "kevin-full": [
-        "cros-beefy499-c2"
-      ], 
-      "lakitu-full": [
-        "build174-m2"
-      ], 
       "moblab-generic-vm-paladin": [
         "build112-m2"
-      ], 
-      "oak-full": [
-        "cros-beefy428-c2"
-      ], 
-      "tael-full": [
-        "cros-beefy100-c2"
       ], 
       "tael-paladin": [
         "cros-beefy191-c2"
       ], 
-      "tatl-full": [
-        "cros-beefy500-c2"
-      ], 
       "tatl-paladin": [
         "cros-beefy439-c2"
-      ]
-    }, 
-    "builder_shared": {
-      "amd64-generic-asan": [
-        "build326-m2"
       ]
     }, 
     "floating": {
@@ -69,13 +31,25 @@
     }
   }, 
   "unallocated": [
+    "build174-m2", 
+    "build182-m2", 
     "build203-m2", 
     "build245-m2", 
     "build263-m2", 
     "build323-m2", 
+    "build326-m2", 
     "build333-m2", 
+    "build98-m2", 
+    "cros-beefy100-c2", 
     "cros-beefy192-c2", 
+    "cros-beefy424-c2", 
+    "cros-beefy426-c2", 
+    "cros-beefy428-c2", 
     "cros-beefy429-c2", 
+    "cros-beefy466-c2", 
+    "cros-beefy467-c2", 
+    "cros-beefy499-c2", 
+    "cros-beefy500-c2", 
     "cros-test0-c2", 
     "cros-test1-c2"
   ]
