@@ -47,7 +47,7 @@ _CIPD_PY_PATH = os.path.join(env.Build, 'scripts', 'slave', 'cipd.py')
 # $ cipd resolve infra/tools/luci/logdog/butler/ -version ${TAG}
 # $ cipd resolve infra/tools/luci/logdog/annotee/ -version ${TAG}
 _STABLE_CIPD_TAG = 'git_revision:910b0131071156dce831a84150623d2b9ead62cd'
-_CANARY_CIPD_TAG = 'git_revision:910b0131071156dce831a84150623d2b9ead62cd'
+_CANARY_CIPD_TAG = 'git_revision:4237d42c2f77bc5e276c08309344ba0138211801'
 
 _CIPD_TAG_MAP = {
     '$stable': _STABLE_CIPD_TAG,
@@ -683,7 +683,7 @@ def _argparse_type_trinary(v):
 
 def add_arguments(parser):
   parser.add_argument('--logdog-verbose',
-      action='count', default=0,
+      action='count', default=2,
       help='Increase LogDog verbosity. This can be specified multiple times.')
   parser.add_argument('--logdog-disable', action='store_true',
       help='Disable LogDog bootstrapping, even if otherwise configured.')
