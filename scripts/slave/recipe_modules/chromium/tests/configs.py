@@ -283,18 +283,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('chromium_pgo_instrument') +
-      api.properties(chromium_config='chromium_pgo_instrument') +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('chromium_pgo_optimize') +
-      api.properties(chromium_config='chromium_pgo_optimize') +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
       api.test('v8_optimize_medium') +
       api.properties(chromium_apply_config=['v8_optimize_medium']) +
       api.post_process(post_process.DropExpectation)

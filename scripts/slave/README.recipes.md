@@ -43,7 +43,6 @@
   * [perf_dashboard](#recipe_modules-perf_dashboard)
   * [perf_try](#recipe_modules-perf_try) &mdash; API for the perf try job recipe module.
   * [perf_try_staging](#recipe_modules-perf_try_staging) &mdash; API for the perf try job recipe module.
-  * [pgo](#recipe_modules-pgo)
   * [puppet_service_account](#recipe_modules-puppet_service_account) &mdash; **[DEPRECATED]** API for generating OAuth2 access tokens from service account keys predeployed to Chrome Ops bots via Puppet.
   * [repo](#recipe_modules-repo) &mdash; Common steps for recipes that use repo for source control.
   * [swarming](#recipe_modules-swarming)
@@ -133,7 +132,6 @@
   * [chromium_gsutil:examples/full](#recipes-chromium_gsutil_examples_full)
   * [chromium_libfuzzer](#recipes-chromium_libfuzzer)
   * [chromium_libfuzzer_clang_tot](#recipes-chromium_libfuzzer_clang_tot)
-  * [chromium_pgo](#recipes-chromium_pgo)
   * [chromium_swarming:tests/configure_swarming](#recipes-chromium_swarming_tests_configure_swarming)
   * [chromium_tests:examples/full](#recipes-chromium_tests_examples_full)
   * [chromium_tests:tests/api/archive_build](#recipes-chromium_tests_tests_api_archive_build)
@@ -288,8 +286,6 @@
   * [ndk:tests/cover](#recipes-ndk_tests_cover)
   * [pdfium](#recipes-pdfium)
   * [perf_dashboard:examples/full](#recipes-perf_dashboard_examples_full)
-  * [pgo:examples/full](#recipes-pgo_examples_full) &mdash; Example of using the PGO recipe module.
-  * [pgo:tests/archive_profile_database](#recipes-pgo_tests_archive_profile_database)
   * [pinpoint/builder](#recipes-pinpoint_builder)
   * [puppet_service_account:examples/full](#recipes-puppet_service_account_examples_full) &mdash; Small example of using the puppet_service_account api.
   * [remote_run_test](#recipes-remote_run_test) &mdash; Checks that properties get to recipes from remote_run properly.
@@ -2616,23 +2612,6 @@ This is meant to be used by tryjobs with a metric.
 &mdash; **def [start\_perf\_try\_job](/scripts/slave/recipe_modules/perf_try_staging/api.py#45)(self, api, affected_files, bot_update_step, bot_db):**
 
 Entry point pert tryjob or CQ tryjob.
-### *recipe_modules* / [pgo](/scripts/slave/recipe_modules/pgo)
-
-[DEPS](/scripts/slave/recipe_modules/pgo/__init__.py#1): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-#### **class [PGOApi](/scripts/slave/recipe_modules/pgo/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-PGOApi encapsulate the various step involved in a PGO build.
-
-&mdash; **def [archive\_profile\_database](/scripts/slave/recipe_modules/pgo/api.py#135)(self, revision):**
-
-Archive the profile database into a cloud bucket and use 'git notes' to
-annotate the current commit with the URL to this file.
-
-&mdash; **def [compile\_pgo](/scripts/slave/recipe_modules/pgo/api.py#96)(self, bot_config):**
-
-Do a PGO build. This takes care of building an instrumented image, profiling
-it and then compiling the optimized version of it.
 ### *recipe_modules* / [puppet\_service\_account](/scripts/slave/recipe_modules/puppet_service_account)
 
 [DEPS](/scripts/slave/recipe_modules/puppet_service_account/__init__.py#1): [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account]
@@ -4150,11 +4129,6 @@ Returns: the list of matched targets.
 [DEPS](/scripts/slave/recipes/chromium_libfuzzer_clang_tot.py#8): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_libfuzzer_clang_tot.py#39)(api):**
-### *recipes* / [chromium\_pgo](/scripts/slave/recipes/chromium_pgo.py)
-
-[DEPS](/scripts/slave/recipes/chromium_pgo.py#7): [chromium](#recipe_modules-chromium), [pgo](#recipe_modules-pgo), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_pgo.py#73)(api):**
 ### *recipes* / [chromium\_swarming:tests/configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/tests/configure_swarming.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_swarming/tests/configure_swarming.py#8): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
@@ -5188,18 +5162,6 @@ test_type is expected to be 'corpus', 'javascript', or 'pixel'
 [DEPS](/scripts/slave/recipe_modules/perf_dashboard/examples/full.py#5): [perf\_dashboard](#recipe_modules-perf_dashboard), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/perf_dashboard/examples/full.py#20)(api):**
-### *recipes* / [pgo:examples/full](/scripts/slave/recipe_modules/pgo/examples/full.py)
-
-[DEPS](/scripts/slave/recipe_modules/pgo/examples/full.py#8): [chromium](#recipe_modules-chromium), [pgo](#recipe_modules-pgo), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-Example of using the PGO recipe module.
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/pgo/examples/full.py#41)(api):**
-### *recipes* / [pgo:tests/archive\_profile\_database](/scripts/slave/recipe_modules/pgo/tests/archive_profile_database.py)
-
-[DEPS](/scripts/slave/recipe_modules/pgo/tests/archive_profile_database.py#5): [chromium](#recipe_modules-chromium), [pgo](#recipe_modules-pgo), [recipe\_engine/platform][recipe_engine/recipe_modules/platform]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/pgo/tests/archive_profile_database.py#12)(api):**
 ### *recipes* / [pinpoint/builder](/scripts/slave/recipes/pinpoint/builder.py)
 
 [DEPS](/scripts/slave/recipes/pinpoint/builder.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
