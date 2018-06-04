@@ -250,9 +250,7 @@
       "--buildbot-mastername",
       "test_master",
       "--buildbot-slavename",
-      "test_slave",
-      "--buildbot-clobber",
-      "1"
+      "test_slave"
     ],
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [

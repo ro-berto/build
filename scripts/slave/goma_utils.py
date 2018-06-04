@@ -157,7 +157,7 @@ def UploadToGomaLogGS(file_path, gs_filename,
 
 def UploadGomaCompilerProxyInfo(override_gsutil=None,
                                 builder='unknown', master='unknown',
-                                slave='unknown', clobber='',
+                                slave='unknown',
                                 builder_id=None, is_luci=False,
                                 is_experimental=False):
   """Upload compiler_proxy{,-subproc}.INFO and gomacc.INFO to Google Storage.
@@ -167,7 +167,6 @@ def UploadGomaCompilerProxyInfo(override_gsutil=None,
     builder: a string name of a builder.
     master: a string name of a master.
     slave: a string name of a slave.
-    clobber: set something if clobber (to be removed)
     builder_id: a dictionary that represents BuilderID.
     is_luci: True if this is LUCI.
     is_experimental: True if this is experimental build.
@@ -178,7 +177,6 @@ def UploadGomaCompilerProxyInfo(override_gsutil=None,
     'builder': builder,
     'master': master,
     'slave': slave,
-    'clobber': True if clobber else False,
     'os': chromium_utils.PlatformName(),
     'is_luci': is_luci,
     'is_experimental': is_experimental,
@@ -327,7 +325,7 @@ def IsCompilerProxyKilledByFatalError():
 
 def MakeGomaExitStatusCounter(goma_stats_file, goma_crash_report,
                               builder='unknown', master='unknown',
-                              slave='unknown', clobber=''):
+                              slave='unknown'):
   """Make Goma exit status counter. This counter indicates compiler_proxy
      has finished without problem, crashed, or killed. This counter will
      be used to alert to goma team.
@@ -338,7 +336,6 @@ def MakeGomaExitStatusCounter(goma_stats_file, goma_crash_report,
     builder: builder name
     master: master name
     slave: slave name
-    clobber: non false if clobber build
   """
 
   try:
@@ -348,7 +345,6 @@ def MakeGomaExitStatusCounter(goma_stats_file, goma_crash_report,
         'builder': builder,
         'master': master,
         'slave': slave,
-        'clobber': 1 if clobber else 0,
         'os': chromium_utils.PlatformName(),
     }
     if goma_stats_file and os.path.exists(goma_stats_file):
@@ -447,8 +443,7 @@ def SendCountersToTsMon(counters):
 
 
 def MakeGomaStatusCounter(json_file, exit_status,
-                          builder='unknown', master='unknown', slave='unknown',
-                          clobber=''):
+                          builder='unknown', master='unknown', slave='unknown'):
   """Make latest Goma status counter which will be sent to ts_mon.
 
   Args:
@@ -502,7 +497,6 @@ def MakeGomaStatusCounter(json_file, exit_status,
         'builder': builder,
         'master': master,
         'slave': slave,
-        'clobber': 1 if clobber else 0,
         'os': chromium_utils.PlatformName(),
         'ping_status_code': ping_status_code,
         'result': result}
@@ -519,7 +513,7 @@ def MakeGomaStatusCounter(json_file, exit_status,
 
 def MakeGomaFailureReasonCounter(json_file, exit_status,
                                  builder='unknown', master='unknown',
-                                 slave='unknown', clobber=''):
+                                 slave='unknown'):
   """Make latest Goma failure reason counter which will be sent to ts_mon.
 
   Args:
@@ -574,7 +568,6 @@ def MakeGomaFailureReasonCounter(json_file, exit_status,
         'builder': builder,
         'master': master,
         'slave': slave,
-        'clobber': 1 if clobber else 0,
         'os': chromium_utils.PlatformName(),
         'result': result,
         'exception_reason': reason}

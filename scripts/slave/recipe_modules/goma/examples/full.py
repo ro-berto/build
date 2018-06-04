@@ -53,7 +53,6 @@ def GenTests(api):
       'buildername': 'test_builder',
       'mastername': 'test_master',
       'bot_id': 'test_slave',
-      'clobber': '1',
       'build_command': ['ninja', '-C', 'out/Release'],
       'ninja_log_outdir': 'out/Release',
       'ninja_log_compiler': 'goma',

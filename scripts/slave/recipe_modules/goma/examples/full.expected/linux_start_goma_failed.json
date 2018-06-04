@@ -179,9 +179,7 @@
       "--buildbot-mastername",
       "test_master",
       "--buildbot-slavename",
-      "test_slave",
-      "--buildbot-clobber",
-      "1"
+      "test_slave"
     ],
     "name": "preprocess_for_goma.upload_goma_start_failed_logs",
     "~followup_annotations": [

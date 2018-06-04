@@ -115,8 +115,6 @@ def main():
   parser.add_argument('--buildbot-slavename',
                       default='unknown',
                       help='buildbot slavename')
-  parser.add_argument('--buildbot-clobber', default='',
-                      help='buildbot clobber')
 
   # For ComipleEvents.
   parser.add_argument('--build-id', default=0, type=long,
@@ -160,7 +158,6 @@ def main():
         builder=args.buildbot_buildername,
         master=args.buildbot_mastername,
         slave=args.buildbot_slavename,
-        clobber=args.buildbot_clobber,
         builder_id=builder_id,
         is_luci=args.is_luci,
         is_experimental=args.is_experimental,
@@ -218,8 +215,7 @@ def main():
         goma_crash_report=args.goma_crash_report_id_file,
         builder=args.buildbot_buildername,
         master=args.buildbot_mastername,
-        slave=args.buildbot_slavename,
-        clobber=args.buildbot_clobber)
+        slave=args.buildbot_slavename)
     if counter:
       tsmon_counters.append(counter)
 
@@ -234,8 +230,7 @@ def main():
         args.build_exit_status,
         builder=args.buildbot_buildername,
         master=args.buildbot_mastername,
-        slave=args.buildbot_slavename,
-        clobber=args.buildbot_clobber)
+        slave=args.buildbot_slavename)
     if counter:
       tsmon_counters.append(counter)
 
@@ -244,8 +239,7 @@ def main():
         args.build_exit_status,
         builder=args.buildbot_buildername,
         master=args.buildbot_mastername,
-        slave=args.buildbot_slavename,
-        clobber=args.buildbot_clobber)
+        slave=args.buildbot_slavename)
     if counter:
       tsmon_counters.append(counter)
 

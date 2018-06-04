@@ -461,7 +461,6 @@ class GomaApi(recipe_api.RecipeApi):
       ('buildername', 'buildername'),
       ('mastername', 'mastername'),
       ('bot_id', 'slavename'),
-      ('clobber', 'clobber'),
     ]
     for prop_name, flag_suffix in keys:
       if prop_name in self.m.properties:

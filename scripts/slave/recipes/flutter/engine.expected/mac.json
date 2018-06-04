@@ -469,9 +469,7 @@
       "--buildbot-mastername",
       "client.flutter",
       "--buildbot-slavename",
-      "fake-m1",
-      "--buildbot-clobber",
-      ""
+      "fake-m1"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -736,9 +734,7 @@
       "--buildbot-mastername",
       "client.flutter",
       "--buildbot-slavename",
-      "fake-m1",
-      "--buildbot-clobber",
-      ""
+      "fake-m1"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1093,9 +1089,7 @@
       "--buildbot-mastername",
       "client.flutter",
       "--buildbot-slavename",
-      "fake-m1",
-      "--buildbot-clobber",
-      ""
+      "fake-m1"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1361,9 +1355,7 @@
       "--buildbot-mastername",
       "client.flutter",
       "--buildbot-slavename",
-      "fake-m1",
-      "--buildbot-clobber",
-      ""
+      "fake-m1"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1629,9 +1621,7 @@
       "--buildbot-mastername",
       "client.flutter",
       "--buildbot-slavename",
-      "fake-m1",
-      "--buildbot-clobber",
-      ""
+      "fake-m1"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1897,9 +1887,7 @@
       "--buildbot-mastername",
       "client.flutter",
       "--buildbot-slavename",
-      "fake-m1",
-      "--buildbot-clobber",
-      ""
+      "fake-m1"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2653,9 +2641,7 @@
       "--buildbot-mastername",
       "client.flutter",
       "--buildbot-slavename",
-      "fake-m1",
-      "--buildbot-clobber",
-      ""
+      "fake-m1"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2920,9 +2906,7 @@
       "--buildbot-mastername",
       "client.flutter",
       "--buildbot-slavename",
-      "fake-m1",
-      "--buildbot-clobber",
-      ""
+      "fake-m1"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3187,9 +3171,7 @@
       "--buildbot-mastername",
       "client.flutter",
       "--buildbot-slavename",
-      "fake-m1",
-      "--buildbot-clobber",
-      ""
+      "fake-m1"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3454,9 +3436,7 @@
       "--buildbot-mastername",
       "client.flutter",
       "--buildbot-slavename",
-      "fake-m1",
-      "--buildbot-clobber",
-      ""
+      "fake-m1"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3721,9 +3701,7 @@
       "--buildbot-mastername",
       "client.flutter",
       "--buildbot-slavename",
-      "fake-m1",
-      "--buildbot-clobber",
-      ""
+      "fake-m1"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -3988,9 +3966,7 @@
       "--buildbot-mastername",
       "client.flutter",
       "--buildbot-slavename",
-      "fake-m1",
-      "--buildbot-clobber",
-      ""
+      "fake-m1"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4255,9 +4231,7 @@
       "--buildbot-mastername",
       "client.flutter",
       "--buildbot-slavename",
-      "fake-m1",
-      "--buildbot-clobber",
-      ""
+      "fake-m1"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
