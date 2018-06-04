@@ -20,7 +20,6 @@ per-file chromium.py=sergiyb@chromium.org
 per-file chromium_codesearch.py=file:chromium_codesearch.expected/OWNERS
 per-file chromium_libfuzzer.py=file:chromium_libfuzzer.expected/OWNERS
 per-file chromium_libfuzzer_clang_tot.py=file:chromium_libfuzzer.expected/OWNERS
-per-file chromium_pgo.py=file:chromium_pgo.expected/OWNERS
 per-file chromium_trybot.py=set noparent
 per-file chromium_trybot.py=dpranke@chromium.org
 per-file chromium_trybot.py=iannucci@chromium.org
