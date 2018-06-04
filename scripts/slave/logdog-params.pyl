@@ -69,7 +69,6 @@
     'chromium.goma': {},
     'chromium.win': {},
     'chromium.fyi': {},
-    'chromium.gpu': {},
     'chromium.webkit': {},
 
     'chromium.memory': {},
