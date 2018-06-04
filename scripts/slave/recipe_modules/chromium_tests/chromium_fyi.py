@@ -458,7 +458,8 @@ SPEC = {
         ['goma_localoutputcache']),
 
     'Win Builder Goma Canary': chromium_apply_configs(
-        chromium_win.SPEC['builders']['Win Builder'], ['goma_canary']),
+        chromium_win.SPEC['builders']['Win Builder'],
+        ['goma_canary', 'goma_use_local']),
     'Win Builder (dbg) Goma Canary': chromium_apply_configs(
         chromium_win.SPEC['builders']['Win Builder (dbg)'],
         ['goma_canary', 'shared_library']),
@@ -498,14 +499,16 @@ SPEC = {
             'chromeos-amd64-generic-rel'],
         ['goma_canary']),
     'Linux Builder Goma Canary': chromium_apply_configs(
-        chromium_linux.SPEC['builders']['Linux Builder'], ['goma_canary']),
+        chromium_linux.SPEC['builders']['Linux Builder'],
+        ['goma_canary','goma_use_local']),
     'Linux x64 Goma Canary (clobber)': chromium_apply_configs(
         no_archive(chromium.SPEC['builders']['Linux x64']), ['goma_canary']),
     'Linux x64 Goma Canary LocalOutputCache': chromium_apply_configs(
         no_archive(chromium.SPEC['builders']['Linux x64']),
         ['goma_canary', 'goma_localoutputcache']),
     'Mac Builder Goma Canary': chromium_apply_configs(
-        chromium_mac.SPEC['builders']['Mac Builder'], ['goma_canary']),
+        chromium_mac.SPEC['builders']['Mac Builder'],
+        ['goma_canary', 'goma_use_local']),
     'Mac Builder (dbg) Goma Canary': chromium_apply_configs(
         chromium_mac.SPEC['builders']['Mac Builder (dbg)'], ['goma_canary']),
     'Mac Goma Canary (clobber)': chromium_apply_configs(

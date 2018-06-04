@@ -39,6 +39,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       mode = Single(basestring, required=False),
       goma_dir = Single(Path, required=False),
       goma_canary = Single(bool, empty_val=False, required=False),
+      goma_use_local = Single(bool, empty_val=False, required=False),
       show_ninja_stats = Single(bool, empty_val=False, required=False),
       goma_hermetic = Single(basestring, required=False),
       goma_failfast = Single(bool, empty_val=False, required=False),
@@ -321,6 +322,10 @@ def goma_localoutputcache_small(c):
   c.compile_py.goma_enable_localoutputcache = True
   c.env.GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB = 10*1024
   c.env.GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB = 5*1024
+
+@config_ctx()
+def goma_use_local(c):
+  c.compile_py.goma_use_local = True
 
 @config_ctx()
 def ninja_confirm_noop(c):

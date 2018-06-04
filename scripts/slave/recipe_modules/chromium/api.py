@@ -336,7 +336,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     self.m.goma.start(goma_env)
 
     try:
-      if 'GOMA_USE_LOCAL' not in ninja_env:
+      if not self.c.compile_py.goma_use_local:
         # Do not allow goma to invoke local compiler.
         ninja_env['GOMA_USE_LOCAL'] = 'false'
 
