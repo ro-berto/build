@@ -773,7 +773,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           if 'got_revision_cp' in bot_update_step.presentation.properties:
             swarm_hashes_property_name = 'swarm_hashes_%s_without_patch' % (
                 bot_update_step.presentation.properties['got_revision_cp']
-                .replace('@', '(at)')),
+                .replace('@', '(at)'))
           self.m.isolate.isolate_tests(
               self.m.chromium.output_dir,
               swarm_hashes_property_name=swarm_hashes_property_name,
