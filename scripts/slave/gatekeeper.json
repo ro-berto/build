@@ -360,26 +360,85 @@
               "infra_tree_closer"
             ]
           },
-          "luci-go-trusty64": {
+
+          "luci-gae-continuous-trusty-64": {
             "categories": [
               "infra_tree_closer"
             ]
           },
-          "luci-go-precise32": {
+          "luci-gae-continuous-mac": {
             "categories": [
               "infra_tree_closer"
             ]
           },
-          "luci-go-osx": {
+          "luci-gae-continuous-win": {
             "categories": [
               "infra_tree_closer"
             ]
           },
-          "luci-go-win64": {
+
+          "luci-go-continuous-mac-10.13-64": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "luci-go-continuous-mac-10.9-64": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "luci-go-continuous-precise-32": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "luci-go-continuous-trusty-32": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "luci-go-continuous-trusty-64": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "luci-go-continuous-win10-64": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "luci-go-continuous-win7-64": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "luci-go-continuous-xenial-64": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+
+          "build-recipe-tests": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "depot_tools-recipes-tests": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "infra-recipe-tests": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
+          "recipe_engine-recipes-tests": {
             "categories": [
               "infra_tree_closer"
             ]
           }
+
         }
       }
     ],
