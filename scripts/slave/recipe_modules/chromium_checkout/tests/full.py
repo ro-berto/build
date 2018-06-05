@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
+
 DEPS = [
     'chromium_checkout',
     'chromium_tests',
@@ -71,4 +73,13 @@ def GenTests(api):
           buildername='does not matter') +
       api.post_process(verify_checkout_dir,
                        api.path['cache'].join('builder', 'src'))
+  )
+
+  yield (
+      api.test('cipd_paranoia') +
+      api.runtime(is_luci=True, is_experimental=False) +
+      api.properties(
+          buildername='does not matter') +
+      api.post_process(post_process.MustRun, 'remove .cipd') +
+      api.post_process(post_process.DropExpectation)
   )

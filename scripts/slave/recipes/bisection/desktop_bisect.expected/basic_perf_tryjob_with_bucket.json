@@ -18,6 +18,36 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[BUILDER_CACHE]/linux_perf_bisect"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "infra_step": true,
+    "name": "makedirs checkout path (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[BUILDER_CACHE]/linux_perf_bisect/.cipd"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
+    "infra_step": true,
+    "name": "remove .cipd"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
@@ -323,7 +353,7 @@
       "[BUILDER_CACHE]/linux_perf_bisect"
     ],
     "infra_step": true,
-    "name": "makedirs checkout path (2)"
+    "name": "makedirs checkout path (3)"
   },
   {
     "cmd": [
