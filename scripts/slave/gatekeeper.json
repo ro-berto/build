@@ -360,6 +360,11 @@
               "infra_tree_closer"
             ]
           },
+          "infra-continuous-recipe-tests": {
+            "categories": [
+              "infra_tree_closer"
+            ]
+          },
 
           "luci-gae-continuous-trusty-64": {
             "categories": [
@@ -424,11 +429,6 @@
             ]
           },
           "depot_tools-recipes-tests": {
-            "categories": [
-              "infra_tree_closer"
-            ]
-          },
-          "infra-recipe-tests": {
             "categories": [
               "infra_tree_closer"
             ]
