@@ -250,7 +250,7 @@ class ChromiteFetcherTestCase(unittest.TestCase):
     return '%s/+/%s/%s?format=text' % (
         cros_chromite.ChromiteFetcher.CHROMITE_GITILES_BASE,
         branch,
-        cros_chromite.ChromiteFetcher.CHROMITE_CONFIG_PATH,
+        cros_chromite.ChromiteFetcher.NEW_CHROMITE_CONFIG_PATH,
     )
 
   def testFetch_Valid(self):

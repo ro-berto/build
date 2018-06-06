@@ -483,7 +483,8 @@ class ChromiteFetcher(object):
 
   CHROMITE_GITILES_BASE = (
       'https://chromium.googlesource.com/chromiumos/chromite')
-  CHROMITE_CONFIG_PATH = 'cbuildbot/config_dump.json'
+  OLD_CHROMITE_CONFIG_PATH = 'cbuildbot/config_dump.json'
+  NEW_CHROMITE_CONFIG_PATH = 'config/config_dump.json'
 
   def __init__(self, pin_manager):
     self._pinned = pin_manager
@@ -525,16 +526,28 @@ class ChromiteFetcher(object):
     """
     if not version:
       version = self._pinned.GetPinnedBranch(name)
-    url = '%s/+/%s/%s?format=text' % (
-        self.CHROMITE_GITILES_BASE,
-        version,
-        self.CHROMITE_CONFIG_PATH)
-    data = self._GetText(url)
-    try:
-      data = base64.b64decode(data)
-    except (TypeError, UnicodeEncodeError) as e:
-      raise GitilesError(url, 'Failed to decode Base64: %s' % (e,))
-    return data, version
+
+    for config_path in (self.NEW_CHROMITE_CONFIG_PATH,
+                        self.OLD_CHROMITE_CONFIG_PATH):
+      url = '%s/+/%s/%s?format=text' % (
+          self.CHROMITE_GITILES_BASE,
+          version,
+          config_path)
+      logging.info('Checking URL path: %s', url)
+
+      try:
+        data = self._GetText(url)
+      except GitilesError as e:
+        # Try the next config location.
+        continue
+
+      try:
+        data = base64.b64decode(data)
+      except (TypeError, UnicodeEncodeError) as e:
+        raise GitilesError(url, 'Failed to decode Base64: %s' % (e,))
+      return data, version
+
+    raise GitilesError(url, 'Failed to locate config.')
 
 
 # Default ChromitePinManager instance.
