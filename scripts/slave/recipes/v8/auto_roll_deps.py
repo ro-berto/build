@@ -18,6 +18,7 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/runtime',
+  'recipe_engine/service_account',
   'recipe_engine/step',
   'recipe_engine/url',
 ]
@@ -64,11 +65,16 @@ def RunSteps(api):
 
     # Check for an open auto-roller CL. There should be at most one CL in the
     # chromium project, which is the last roll.
+    push_account = (
+        # TODO(sergiyb): Replace with api.service_account.default().get_email()
+        # when https://crbug.com/846923 is resolved.
+        'v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com'
+        if api.runtime.is_luci else 'v8-autoroll@chromium.org')
     commits = api.gerrit.get_changes(
         'https://chromium-review.googlesource.com',
       query_params=[
         ('project', 'chromium/src'),
-        ('owner', 'v8-autoroll@chromium.org'),
+        ('owner', push_account),
         ('status', 'open'),
       ],
       limit=1,
@@ -146,7 +152,7 @@ def RunSteps(api):
             api.path['checkout'].join(
                 'v8', 'tools', 'release', 'auto_roll.py'),
             ['--chromium', api.path['checkout'],
-             '--author', 'v8-autoroll@chromium.org',
+             '--author', push_account,
              '--reviewer',
              'hablich@chromium.org,machenbach@chromium.org,'
              'kozyatinskiy@chromium.org,sergiyb@chromium.org',

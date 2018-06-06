@@ -30,6 +30,7 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/runtime',
+  'recipe_engine/service_account',
   'recipe_engine/step',
   'v8',
 ]
@@ -92,15 +93,19 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
   """
 
   # Create a fresh work branch.
-  with api.context(cwd=api.path['checkout']):
+  push_account = (
+      # TODO(sergiyb): Replace with api.service_account.default().get_email()
+      # when https://crbug.com/846923 is resolved.
+      'v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com'
+      if api.runtime.is_luci else 'v8-autoroll@chromium.org')
+  dt_path = api.path['checkout'].join('third_party', 'depot_tools')
+  with api.context(cwd=api.path['checkout'], env_prefixes={'PATH': [dt_path]}):
     api.git('new-branch', 'work', '--upstream', ref)
     api.git(
-        'config', 'user.name', 'V8 Autoroll',
-        name='git config user.name',
+        'config', 'user.name', 'V8 Autoroll', name='git config user.name',
     )
     api.git(
-        'config', 'user.email', 'v8-autoroll@chromium.org',
-        name='git config user.email',
+        'config', 'user.email', push_account, name='git config user.email',
     )
 
   # Increment patch level and update file content.
@@ -123,11 +128,9 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
     api.step('Dry-run commit', cmd=None)
     return
 
-  with api.context(cwd=api.path['checkout']):
+  with api.context(cwd=api.path['checkout'], env_prefixes={'PATH': [dt_path]}):
     api.git('cl', 'upload', '-f', '--bypass-hooks', '--send-mail',
             '--private', '--tbrs', 'machenbach@chromium.org')
-
-  with api.context(cwd=api.path['checkout']):
     api.git('cl', 'land', '-f', '--bypass-hooks', name='git cl land')
 
   # Function to check if commit has landed.

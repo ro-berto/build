@@ -19,6 +19,7 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/runtime',
+  'recipe_engine/service_account',
   'recipe_engine/step',
   'v8',
 ]
@@ -107,11 +108,16 @@ def RunSteps(api):
 
   # Bail out on existing roll. Needs to be manually closed.
   # TODO(machenbach): Add auto-abandon on stale roll.
+  push_account = (
+      # TODO(sergiyb): Replace with api.service_account.default().get_email()
+      # when https://crbug.com/846923 is resolved.
+      'v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com'
+      if api.runtime.is_luci else 'v8-autoroll@chromium.org')
   commits = api.gerrit.get_changes(
       'https://chromium-review.googlesource.com',
       query_params=[
           ('project', 'v8/v8'),
-          ('owner', 'v8-autoroll@chromium.org'),
+          ('owner', push_account),
           ('status', 'open'),
       ],
       limit=20,
@@ -149,7 +155,8 @@ def RunSteps(api):
   api.bot_update.ensure_checkout(no_shallow=True)
 
   # Enforce a clean state.
-  with api.context(cwd=api.path['checkout']):
+  dt_path = api.path['checkout'].join('third_party', 'depot_tools')
+  with api.context(cwd=api.path['checkout'], env_prefixes={'PATH': [dt_path]}):
     api.git('checkout', '-f', 'origin/master')
     api.git('branch', '-D', 'roll', ok_ret='any')
     api.git('clean', '-ffd')
@@ -225,11 +232,12 @@ def RunSteps(api):
         args.extend(['-m', message])
       args.extend(['-m', 'TBR=%s' % ','.join(bot_config['reviewers'])])
       kwargs = {'stdout': api.raw_io.output_text()}
-      with api.context(cwd=api.path['checkout']):
+      with api.context(
+          cwd=api.path['checkout'], env_prefixes={'PATH': [dt_path]}):
         api.git(*args, **kwargs)
         api.git(
             'cl', 'upload', '-f', '--use-commit-queue', '--bypass-hooks',
-            '--email', 'v8-autoroll@chromium.org', '--gerrit', '--send-mail',
+            '--email', push_account, '--gerrit', '--send-mail',
         )
 
 

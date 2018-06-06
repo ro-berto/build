@@ -14,7 +14,7 @@
       "-p",
       "project=v8/v8",
       "-p",
-      "owner=v8-autoroll@chromium.org",
+      "owner=v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com",
       "-p",
       "status=open"
     ],
@@ -186,6 +186,11 @@
       "origin/master"
     ],
     "cwd": "[START_DIR]/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/v8/third_party/depot_tools"
+      ]
+    },
     "infra_step": true,
     "name": "git checkout"
   },
@@ -197,6 +202,11 @@
       "roll"
     ],
     "cwd": "[START_DIR]/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/v8/third_party/depot_tools"
+      ]
+    },
     "infra_step": true,
     "name": "git branch"
   },
@@ -207,6 +217,11 @@
       "-ffd"
     ],
     "cwd": "[START_DIR]/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/v8/third_party/depot_tools"
+      ]
+    },
     "infra_step": true,
     "name": "git clean"
   },
@@ -217,6 +232,11 @@
       "roll"
     ],
     "cwd": "[START_DIR]/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/v8/third_party/depot_tools"
+      ]
+    },
     "infra_step": true,
     "name": "git new-branch"
   },

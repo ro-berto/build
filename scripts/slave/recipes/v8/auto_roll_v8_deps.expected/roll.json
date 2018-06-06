@@ -186,6 +186,11 @@
       "origin/master"
     ],
     "cwd": "[START_DIR]/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/v8/third_party/depot_tools"
+      ]
+    },
     "infra_step": true,
     "name": "git checkout"
   },
@@ -197,6 +202,11 @@
       "roll"
     ],
     "cwd": "[START_DIR]/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/v8/third_party/depot_tools"
+      ]
+    },
     "infra_step": true,
     "name": "git branch"
   },
@@ -207,6 +217,11 @@
       "-ffd"
     ],
     "cwd": "[START_DIR]/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/v8/third_party/depot_tools"
+      ]
+    },
     "infra_step": true,
     "name": "git clean"
   },
@@ -217,6 +232,11 @@
       "roll"
     ],
     "cwd": "[START_DIR]/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/v8/third_party/depot_tools"
+      ]
+    },
     "infra_step": true,
     "name": "git new-branch"
   },
@@ -404,6 +424,11 @@
       "TBR=machenbach@chromium.org,hablich@chromium.org,sergiyb@chromium.org"
     ],
     "cwd": "[START_DIR]/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/v8/third_party/depot_tools"
+      ]
+    },
     "infra_step": true,
     "name": "git commit",
     "stdout": "/path/to/tmp/"
@@ -422,6 +447,11 @@
       "--send-mail"
     ],
     "cwd": "[START_DIR]/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/v8/third_party/depot_tools"
+      ]
+    },
     "infra_step": true,
     "name": "git cl"
   },

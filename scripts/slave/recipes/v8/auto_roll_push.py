@@ -12,6 +12,7 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/runtime',
+  'recipe_engine/service_account',
   'recipe_engine/step',
   'recipe_engine/url',
   'v8',
@@ -37,12 +38,17 @@ def RunSteps(api):
     safe_buildername = ''.join(
       c if c.isalnum() else '_' for c in api.properties['buildername'])
     push_arg = [] if api.runtime.is_experimental else ['--push']
+    push_account = (
+        # TODO(sergiyb): Replace with api.service_account.default().get_email()
+        # when https://crbug.com/846923 is resolved.
+        'v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com'
+        if api.runtime.is_luci else 'v8-autoroll@chromium.org')
     api.python(
         'push candidate',
-        api.path['checkout'].join(
-            'tools', 'release', 'auto_push.py'),
-        push_arg + ['--author', 'v8-autoroll@chromium.org',
-         '--reviewer', 'v8-autoroll@chromium.org',
+        api.path['checkout'].join('tools', 'release', 'auto_push.py'),
+        push_arg + [
+         '--author', push_account,
+         '--reviewer', push_account,
          '--work-dir', api.path['cache'].join(safe_buildername, 'workdir')],
       )
 

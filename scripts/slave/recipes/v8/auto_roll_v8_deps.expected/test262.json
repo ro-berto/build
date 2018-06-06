@@ -12,6 +12,11 @@
       "TBR=adamk@chromium.org,gsathya@chromium.org"
     ],
     "cwd": "[START_DIR]/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/v8/third_party/depot_tools"
+      ]
+    },
     "infra_step": true,
     "name": "git commit",
     "stdout": "/path/to/tmp/"
@@ -30,6 +35,11 @@
       "--send-mail"
     ],
     "cwd": "[START_DIR]/v8",
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/v8/third_party/depot_tools"
+      ]
+    },
     "infra_step": true,
     "name": "git cl"
   }
