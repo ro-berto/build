@@ -216,7 +216,7 @@ def BASE(c):
     c.mac_toolchain.installer_cipd_package = (
         'infra/tools/mac_toolchain/${platform}')
     c.mac_toolchain.installer_version = (
-        'git_revision:478dc9dbbaa60dd9827f2b1106c5e70f1f6b429c')
+        'git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a')
     c.mac_toolchain.installer_cmd = 'mac_toolchain'
     # TODO(crbug.com/790154): make this conditional, do not set for LUCI bots.
     c.mac_toolchain.cipd_credentials = (
