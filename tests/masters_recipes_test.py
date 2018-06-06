@@ -121,6 +121,7 @@ FAKE_BUILDERS = {
         # These are pure LUCI bots, no equivalent buildbot bot.
         'gpu_manual_try_win7_nvidia_rel',
         'win10_chromium_x64_dbg_ng',
+        'win-annotator-rel',
         'win-jumbo-rel',
     ],
     'master.tryserver.chromium.linux': [

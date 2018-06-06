@@ -681,6 +681,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.win',
         'buildername': 'win-jumbo-rel',
       }),
+      'win-annotator-rel': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'win-annotator-rel',
+      }),
       'win_archive': simple_bot({
         'mastername': 'chromium',
         'buildername': 'Win',
