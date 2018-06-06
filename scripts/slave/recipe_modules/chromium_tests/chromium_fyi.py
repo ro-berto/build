@@ -117,6 +117,20 @@ def no_compile_targets(base_config):
   return config
 
 
+def override_compile_targets(base_config, compile_targets):
+  """Overrides compile_targets.
+
+  Args:
+    base_config: config obj in SPEC['builders'][x].
+    compile_targets: new compile targets.
+  Returns:
+    new config obj.
+  """
+
+  config = copy.deepcopy(base_config)
+  config['compile_targets'] = compile_targets
+  return config
+
 SPEC = {
   'settings': {
     'build_gs_bucket': 'chromium-fyi-archive',
@@ -516,9 +530,12 @@ SPEC = {
     'Mac Builder (dbg) Goma Canary (clobber)': chromium_apply_configs(
         chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
         ['goma_canary', 'clobber']),
-    # Mac has less disks, so use small localoutputcache. crbug.com/825536
+    # Mac has less disks, so use small localoutputcache.
+    # Build chrome only. Even with smaller localoutputcache, disk is short.
+    # See crbug.com/825536
     'Mac Goma Canary LocalOutputCache': chromium_apply_configs(
-        no_archive(chromium.SPEC['builders']['Mac']),
+        override_compile_targets(no_archive(chromium.SPEC['builders']['Mac']),
+                                 ['chrome']),
         ['goma_canary', 'goma_localoutputcache_small']),
 
     'Win Builder (ANGLE)': {
