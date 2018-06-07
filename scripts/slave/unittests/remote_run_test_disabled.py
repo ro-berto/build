@@ -38,7 +38,7 @@ BASE_DIR = os.path.join(env.Build, 'scripts', 'slave')
 
 MockOptions = collections.namedtuple('MockOptions', (
   'dry_run', 'factory_properties', 'build_properties', 'logdog_disable',
-  'kitchen', 'repository', 'revision', 'use_gitiles', 'recipe',
+  'kitchen', 'repository', 'revision', 'recipe',
   'logdog_debug_out_file', 'canary',
 ))
 
@@ -161,7 +161,6 @@ class RemoteRunExecTest(unittest.TestCase):
         kitchen=None,
         repository='https://example.com/repo.git',
         revision=None,
-        use_gitiles=True,
         recipe='example/recipe',
         logdog_debug_out_file=None,
         canary=None,
@@ -174,7 +173,6 @@ class RemoteRunExecTest(unittest.TestCase):
         '--verbose', 'remote',
         '--repository', self.opts.repository,
         '--workdir', self._tp('rw'),
-        '--use-gitiles',
     ]
 
     self.kitchen_args = [

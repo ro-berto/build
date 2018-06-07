@@ -144,7 +144,6 @@ def _ComputeBuilders(builders, m_annotator, active_master_cls):
                                else None),
           max_time=builder_data.get('builder_timeout_s'),
           factory_properties=props,
-          use_gitiles=False,
           **kwargs
       )
     else:

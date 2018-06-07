@@ -644,8 +644,6 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
   ]
   if args.revision:
     recipe_cmd.extend(['--revision', args.revision])
-  if args.use_gitiles:
-    recipe_cmd.append('--use-gitiles')
   recipe_cmd.extend([
       '--',] + (
       engine_args) + [
@@ -713,9 +711,6 @@ def _main_impl(argv, stream):
   parser.add_argument('--kitchen', metavar='CIPD_VERSION',
       help='Force use of Kitchen bootstrapping at this revision.')
   parser.add_argument('--verbose', action='store_true')
-  parser.add_argument(
-      '--use-gitiles', action='store_true',
-      help='Use Gitiles-specific way to fetch repo (faster for large repos)')
 
   group = parser.add_argument_group('LogDog Bootstrap')
   logdog_bootstrap.add_arguments(group)

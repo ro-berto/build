@@ -27,7 +27,6 @@ def m_remote_run(recipe, **kwargs):
       repository='https://chromium.googlesource.com/chromium/tools/build.git',
       recipe=recipe,
       factory_properties={'path_config': 'kitchen'},
-      use_gitiles=False,
       **kwargs)
 
 defaults['category'] = '1clobber'

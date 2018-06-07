@@ -12,8 +12,7 @@ from master.factory.build_factory import BuildFactory
 # TODO(nodir): restore timeout=1200, https://crbug.com/593891
 def RemoteRunFactory(active_master, repository, recipe,
                      revision=None, factory_properties=None,
-                     timeout=2400, max_time=None, triggers=None,
-                     use_gitiles=False):
+                     timeout=2400, max_time=None, triggers=None):
   """Returns buildbot build factory which runs recipes using recipe engine's
   remote_run command.
 
@@ -39,9 +38,6 @@ def RemoteRunFactory(active_master, repository, recipe,
 
   |triggers| is a list of builders on the same master to trigger
   after the build.
-
-  |use_gitiles| enables a Gitiles-specific way to fetch the repo; it's more
-  efficient for large repos.
   """
   revision = revision or 'refs/heads/master'
   if isinstance(revision, basestring):
@@ -53,7 +49,6 @@ def RemoteRunFactory(active_master, repository, recipe,
   factory_properties.update({
     'recipe': recipe,
     'recipe_repository': repository,
-    'use_gitiles': use_gitiles,
   })
 
   factory = BuildFactory(build_inherit_factory_properties=False)
@@ -68,8 +63,6 @@ def RemoteRunFactory(active_master, repository, recipe,
       '--revision', revision,
       '--recipe', recipe,
   ]
-  if use_gitiles:
-    cmd.append('--use-gitiles')
   cmd = cmd_obj.AddB64GzBuildProperties(cmd)
   cmd = cmd_obj.AddB64GzFactoryProperties(factory_properties, cmd)
 
