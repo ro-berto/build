@@ -1111,10 +1111,6 @@
     },
 
     "infra_tree_closer": {
-      "forgiving_optional": [
-        "update_scripts",
-        "steps"
-      ],
       "closing_optional": [
         "*"
       ],
