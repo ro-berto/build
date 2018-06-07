@@ -1545,17 +1545,6 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
-      'android_compile_mips_dbg': {
-        'recipe_config': 'webrtc_android',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'mipsel',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-      },
       'android_dbg': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
