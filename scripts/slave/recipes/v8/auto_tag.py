@@ -168,6 +168,7 @@ def RunSteps(api):
   local_branch_ref = 'refs/remotes/branch-heads/%s' % branch
 
   api.gclient.set_config('v8')
+  api.gclient.apply_config('with_branch_heads')
   api.v8.checkout()
 
   # Enforce a clean state.

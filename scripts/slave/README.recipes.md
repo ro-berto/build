@@ -5468,7 +5468,7 @@ Ensures a clean state of the git checkout.
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_tag.py#161)(api):**
 
-&mdash; **def [UpdateRef](/scripts/slave/recipes/v8/auto_tag.py#218)(api, repo, head, lkgr_ref):**
+&mdash; **def [UpdateRef](/scripts/slave/recipes/v8/auto_tag.py#219)(api, repo, head, lkgr_ref):**
 ### *recipes* / [v8/node\_integration](/scripts/slave/recipes/v8/node_integration.py)
 
 [DEPS](/scripts/slave/recipes/v8/node_integration.py#13): [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [trigger](#recipe_modules-trigger), [v8](#recipe_modules-v8), [zip](#recipe_modules-zip), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
