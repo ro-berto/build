@@ -257,7 +257,6 @@ def main(argv):
       'master.client.v8.official': 'ClientV8Official',
       'master.client.v8.ports': 'V8Ports',
       'master.client.wasm.llvm': 'WasmLlvm',
-      'master.client.webrtc': 'WebRTC',
       'master.client.webrtc.branches': 'WebRTCBranches',
       'master.client.webrtc.fyi': 'WebRTCFYI',
       'master.client.webrtc.perf': 'WebRTCPerf',
@@ -273,7 +272,6 @@ def main(argv):
       'master.tryserver.blink': 'BlinkTryServer',
       'master.tryserver.libyuv': 'LibyuvTryServer',
       'master.tryserver.nacl': 'NativeClientTryServer',
-      'master.tryserver.webrtc': 'WebRTCTryServer',
   }
   all_masters = {base_dir: public_masters}
   if os.path.exists(build_internal):
