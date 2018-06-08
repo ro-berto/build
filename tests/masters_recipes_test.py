@@ -160,6 +160,7 @@ FAKE_BUILDERS = {
         'android_cronet',
         'android_n5x_swarming_dbg',
         'android_optional_gpu_tests_rel',
+        'android_unswarmed_pixel_aosp',
         'cast_shell_android',
     ],
     'master.tryserver.chromium.mac': [

@@ -169,6 +169,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.android.fyi',
         'buildername': 'Unswarmed N5X Tests Dummy Builder',
       }),
+      'android_unswarmed_pixel_aosp': simple_bot({
+        'mastername': 'chromium.android',
+        'buildername': 'Android WebView N (dbg)',
+      }),
     },
   },
   'tryserver.chromium.angle': {
