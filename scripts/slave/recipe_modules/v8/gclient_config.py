@@ -8,10 +8,14 @@ ChromiumGitURL = DEPS['gclient'].config.ChromiumGitURL
 
 
 @CONFIG_CTX()
-def v8(c):
+def v8_bare(c):
   soln = c.solutions.add()
   soln.name = 'v8'
   soln.url = ChromiumGitURL(c, 'v8', 'v8')
+
+
+@CONFIG_CTX(includes=['v8_bare'])
+def v8(c):
   c.got_revision_reverse_mapping['got_revision'] = 'v8'
   # Needed to get the testers to properly sync the right revision.
   # TODO(infra): Upload full buildspecs for every build to isolate and then use

@@ -51,6 +51,10 @@ def RunSteps(api):
     api.gclient.set_config('chromium')
     api.gclient.apply_config('v8_tot')
 
+    # We need a full V8 checkout as well in order to checkout V8 DEPS, which
+    # includes pinned depot_tools used by release scripts that we invoke below.
+    api.gclient.apply_config('v8_bare')
+
     output = api.url.get_text(
         'https://v8-roll.appspot.com/status',
         step_name='check roll status',
@@ -150,7 +154,7 @@ def RunSteps(api):
       else:
         result = api.python(
             'roll deps',
-            api.path['checkout'].join(
+            api.v8.checkout_root.join(
                 'v8', 'tools', 'release', 'auto_roll.py'),
             ['--chromium', api.path['checkout'],
              '--author', push_account,
