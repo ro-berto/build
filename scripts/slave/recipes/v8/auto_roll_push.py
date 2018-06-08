@@ -20,7 +20,7 @@ DEPS = [
 
 def RunSteps(api):
   api.gclient.set_config('v8')
-  api.bot_update.ensure_checkout(no_shallow=True)
+  api.v8.checkout()
 
   output = api.url.get_text(
       'https://v8-roll.appspot.com/status',
@@ -54,9 +54,16 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield api.test('standard') + api.properties.generic(
-      mastername='client.v8.fyi')
-  yield (api.test('rolling_deactivated') +
-      api.properties.generic(mastername='client.v8.fyi') +
-      api.url.text('check roll status', '0'))
+  yield (
+      api.test('standard') +
+      api.properties.generic(mastername='client.v8.fyi',
+                             path_config='kitchen')
+  )
+
+  yield (
+      api.test('rolling_deactivated') +
+      api.properties.generic(mastername='client.v8.fyi',
+                             path_config='kitchen') +
+      api.url.text('check roll status', '0')
+  )
 

@@ -21,6 +21,7 @@ DEPS = [
   'recipe_engine/service_account',
   'recipe_engine/step',
   'recipe_engine/url',
+  'v8',
 ]
 
 TEST_DEPS_FILE = """
@@ -91,7 +92,7 @@ def RunSteps(api):
       )
 
       if not cq_commits:
-        api.bot_update.ensure_checkout(no_shallow=True)
+        api.v8.checkout()
         with api.context(cwd=api.path['checkout']):
           if api.runtime.is_experimental:
             api.step('fake resubmit to CQ', cmd=None)
@@ -114,7 +115,7 @@ def RunSteps(api):
         'import time; time.sleep(20)',
     )
 
-    api.bot_update.ensure_checkout(no_shallow=True)
+    api.v8.checkout()
 
     # Get deps file from gitiles.
     gitiles_deps = api.gitiles.download_file(
@@ -186,40 +187,40 @@ def RunSteps(api):
 
 def GenTests(api):
   yield (api.test('standard') + api.properties.generic(
-      mastername='client.v8.fyi') +
+      mastername='client.v8.fyi', path_config='kitchen') +
       api.override_step_data('gerrit changes', api.json.output([]))
     )
   yield (api.test('rolling_deactivated') +
-      api.properties.generic(mastername='client.v8') +
+      api.properties.generic(mastername='client.v8', path_config='kitchen') +
       api.url.text('check roll status', '0')
     )
   yield (api.test('active_roll') +
-      api.properties.generic(mastername='client.v8') +
+      api.properties.generic(mastername='client.v8', path_config='kitchen') +
       api.override_step_data(
           'gerrit changes', api.json.output([{'_number': '123'}])) +
       api.override_step_data(
           'gerrit changes (2)', api.json.output([{'_number': '123'}]))
     )
   yield (api.test('stale_roll') +
-      api.properties.generic(mastername='client.v8') +
+      api.properties.generic(mastername='client.v8', path_config='kitchen') +
       api.override_step_data(
           'gerrit changes', api.json.output([{'_number': '123'}])) +
       api.override_step_data('gerrit changes (2)', api.json.output([]))
     )
   yield (api.test('inconsistent_state') +
-      api.properties.generic(mastername='client.v8') +
+      api.properties.generic(mastername='client.v8', path_config='kitchen') +
       api.override_step_data('gerrit changes', api.json.output([])) +
       api.override_step_data(
           'git cat-file', api.raw_io.stream_output(
               TEST_DEPS_FILE % 'beefdead'))
     )
   yield (api.test('standard_experimental') + api.properties.generic(
-      mastername='client.v8.fyi') +
+      mastername='client.v8.fyi', path_config='kitchen') +
       api.override_step_data('gerrit changes', api.json.output([])) +
       api.runtime(is_luci=True, is_experimental=True)
     )
   yield (api.test('stale_roll_experimental') +
-      api.properties.generic(mastername='client.v8') +
+      api.properties.generic(mastername='client.v8', path_config='kitchen') +
       api.override_step_data(
           'gerrit changes', api.json.output([{'_number': '123'}])) +
       api.override_step_data('gerrit changes (2)', api.json.output([])) +

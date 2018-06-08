@@ -72,7 +72,7 @@ def GetDEPS(api, name, repo):
 
   # Read local deps information. Each deps has one line in the format:
   # path/to/deps: repo@revision
-  with api.context(cwd=api.path['start_dir']):
+  with api.context(cwd=api.v8.checkout_root):
     step_result = api.gclient(
         'get %s deps' % name,
         ['revinfo', '--deps', 'all', '--spec', spec],
@@ -152,7 +152,7 @@ def RunSteps(api):
     'src/tools/valgrind': None,
     'src/v8': None,
   })
-  api.bot_update.ensure_checkout(no_shallow=True)
+  api.v8.checkout()
 
   # Enforce a clean state.
   dt_path = api.path['checkout'].join('third_party', 'depot_tools')
@@ -259,7 +259,8 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
     return (
         api.test(testname) +
         api.properties.generic(mastername='client.v8.fyi',
-                               buildername=buildername) +
+                               buildername=buildername,
+                               path_config='kitchen') +
         api.override_step_data(
             'gclient get v8 deps',
             api.raw_io.stream_output(v8_deps_info, stream='stdout'),
@@ -301,7 +302,8 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
   yield (
       api.test('stale_roll') +
       api.properties.generic(mastername='client.v8.fyi',
-                             buildername='Auto-roll - v8 deps') +
+                             buildername='Auto-roll - v8 deps',
+                             path_config='kitchen') +
       api.override_step_data(
           'gerrit changes', api.json.output(
               [{'_number': '123', 'subject': 'Update V8 DEPS.'}])) +

@@ -168,7 +168,7 @@ def RunSteps(api):
   local_branch_ref = 'refs/remotes/branch-heads/%s' % branch
 
   api.gclient.set_config('v8')
-  api.gclient.checkout()
+  api.v8.checkout()
 
   # Enforce a clean state.
   InitClean(api)
@@ -245,7 +245,8 @@ def GenTests(api):
         api.test(name) +
         api.properties.generic(mastername='client.v8.fyi',
                                buildername='Auto-tag',
-                               branch='3.4') +
+                               branch='3.4',
+                               path_config='kitchen') +
         api.v8.version_file(patch_level_latest, 'latest') +
         api.v8.version_file(patch_level_previous, 'previous') +
         api.v8.version_file(patch_level_after_commit, 'head') +
@@ -336,7 +337,8 @@ def GenTests(api):
   yield (
       api.test('missing_branch') +
       api.properties.generic(mastername='client.v8.fyi',
-                             buildername='Auto-tag')
+                             buildername='Auto-tag',
+                             path_config='kitchen')
   )
   # Experimental mode.
   yield (

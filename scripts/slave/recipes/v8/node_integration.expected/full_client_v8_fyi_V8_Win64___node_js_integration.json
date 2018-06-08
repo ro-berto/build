@@ -3,15 +3,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[BUILDER_CACHE]\\V8_Win64___node_js_integration"
+    ],
+    "infra_step": true,
+    "name": "ensure builder cache dir"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'custom_vars': {'build_for_node': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}, {'custom_vars': {'build_for_node': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'node.js', 'url': 'https://chromium.googlesource.com/external/github.com/v8/node'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'build_for_node': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}, {'custom_vars': {'build_for_node': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'node.js', 'url': 'https://chromium.googlesource.com/external/github.com/v8/node'}]",
       "--patch_root",
       "v8",
       "--revision_mapping_file",
       "{\"got_node_js_revision\": \"node.js\", \"got_revision\": \"v8\", \"got_swarming_client_revision\": \"v8/tools/swarming_client\"}",
       "--git-cache-dir",
-      "[CACHE]\\git",
+      "[GIT_CACHE]",
       "--cleanup-dir",
       "[CLEANUP]\\bot_update",
       "--output_json",
@@ -22,6 +37,7 @@
       "v8@deadbeef",
       "--no_shallow"
     ],
+    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_integration",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -103,7 +119,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]\\v8",
+    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -120,7 +136,7 @@
       "cipd.bat",
       "ensure",
       "-root",
-      "[CACHE]\\goma\\client",
+      "[GOMA_CACHE]\\client",
       "-ensure-file",
       "infra_internal/goma/client/windows-amd64 release",
       "-json-output",
@@ -147,9 +163,9 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\v8\\tools\\node\\update_node.py",
-      "[START_DIR]\\v8",
-      "[START_DIR]\\node.js"
+      "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\v8\\tools\\node\\update_node.py",
+      "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\v8",
+      "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js"
     ],
     "name": "update v8"
   },
@@ -157,15 +173,15 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\node.js\\configure",
+      "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js\\configure",
       "--build-v8-with-gn",
       "--build-v8-with-gn-max-jobs=20",
       "--build-v8-with-gn-extra-gn-args",
-      "use_goma=true goma_dir=\"[CACHE]\\goma\\client\"",
+      "use_goma=true goma_dir=\"[GOMA_CACHE]\\client\"",
       "--ninja",
       "--use-clang-cl"
     ],
-    "cwd": "[START_DIR]\\node.js",
+    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js",
     "env": {
       "DEPOT_TOOLS_WIN_TOOLCHAIN": "1"
     },
@@ -173,7 +189,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]\\node.js",
+    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js",
     "name": "preprocess_for_goma"
   },
   {
@@ -186,9 +202,9 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\data\\V8_Win64___node_js_integration"
+      "[GOMA_CACHE]\\data\\V8_Win64___node_js_integration"
     ],
-    "cwd": "[START_DIR]\\node.js",
+    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js",
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
     "~followup_annotations": [
@@ -199,13 +215,13 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma\\client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "restart"
     ],
-    "cwd": "[START_DIR]\\node.js",
+    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\V8_Win64___node_js_integration",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\V8_Win64___node_js_integration",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -239,7 +255,7 @@
       "--pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[START_DIR]\\node.js",
+    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js",
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -252,26 +268,26 @@
       "-C",
       "out\\Release"
     ],
-    "cwd": "[START_DIR]\\node.js",
+    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js",
     "name": "build node.js"
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]\\node.js",
+    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js",
     "name": "postprocess_for_goma"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma\\client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
-    "cwd": "[START_DIR]\\node.js",
+    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\V8_Win64___node_js_integration",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\V8_Win64___node_js_integration",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -300,13 +316,13 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma\\client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stat"
     ],
-    "cwd": "[START_DIR]\\node.js",
+    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\V8_Win64___node_js_integration",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\V8_Win64___node_js_integration",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -324,13 +340,13 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma\\client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stop"
     ],
-    "cwd": "[START_DIR]\\node.js",
+    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\V8_Win64___node_js_integration",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\V8_Win64___node_js_integration",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -379,7 +395,7 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[START_DIR]\\node.js",
+    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js",
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -404,7 +420,7 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[START_DIR]\\node.js",
+    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js",
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
@@ -415,14 +431,14 @@
     "cmd": [
       "out\\Release\\cctest"
     ],
-    "cwd": "[START_DIR]\\node.js",
+    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js",
     "name": "run cctest"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\node.js\\tools\\test.py",
+      "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js\\tools\\test.py",
       "-p",
       "tap",
       "-j8",
@@ -431,7 +447,7 @@
       "run",
       "default"
     ],
-    "cwd": "[START_DIR]\\node.js",
+    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_integration\\node.js",
     "name": "run tests"
   },
   {

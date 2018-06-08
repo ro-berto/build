@@ -11,10 +11,10 @@
       "-m",
       "TBR=adamk@chromium.org,gsathya@chromium.org"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_roll___test262/v8",
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/Auto_roll___test262/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,
@@ -34,10 +34,10 @@
       "--gerrit",
       "--send-mail"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_roll___test262/v8",
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/Auto_roll___test262/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,

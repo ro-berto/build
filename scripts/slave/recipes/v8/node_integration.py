@@ -341,6 +341,7 @@ def GenTests(api):
               buildername=buildername,
               branch='refs/heads/master',
               revision='deadbeef',
+              path_config='kitchen',
           ) +
           api.platform(bot_config['testing']['platform'], 64)
       )
@@ -352,6 +353,7 @@ def GenTests(api):
       buildername='V8 Linux64 - node.js integration',
       branch='refs/heads/master',
       revision='deadbeef',
+      path_config='kitchen',
     ) +
     api.runtime(is_luci=True, is_experimental=True) +
     api.platform('linux', 64)
@@ -364,6 +366,7 @@ def GenTests(api):
       buildername='V8 Linux64 - node.js integration',
       branch='refs/heads/master',
       revision='deadbeef',
+      path_config='kitchen',
     ) +
     api.override_step_data(
       'trigger', api.json.output_stream({'error': {'message': 'foobar'}})) +

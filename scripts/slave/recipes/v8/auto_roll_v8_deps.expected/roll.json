@@ -32,15 +32,30 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[BUILDER_CACHE]/Auto_roll___v8_deps"
+    ],
+    "infra_step": true,
+    "name": "ensure builder cache dir"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}, {'custom_deps': {'src/chrome/test/data/pdf_private': None, 'src/native_client': None, 'src/third_party/WebKit': None, 'src/third_party/blink': None, 'src/third_party/skia': None, 'src/third_party/webrtc': None, 'src/tools/valgrind': None, 'src/v8': None}, 'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android', 'win']",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}, {'custom_deps': {'src/chrome/test/data/pdf_private': None, 'src/native_client': None, 'src/third_party/WebKit': None, 'src/third_party/blink': None, 'src/third_party/skia': None, 'src/third_party/webrtc': None, 'src/tools/valgrind': None, 'src/v8': None}, 'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = ['android', 'win']",
       "--patch_root",
       "v8",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"v8\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[GIT_CACHE]",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
@@ -49,6 +64,7 @@
       "v8@HEAD",
       "--no_shallow"
     ],
+    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -185,10 +201,10 @@
       "-f",
       "origin/master"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/Auto_roll___v8_deps/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,
@@ -201,10 +217,10 @@
       "-D",
       "roll"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/Auto_roll___v8_deps/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,
@@ -216,10 +232,10 @@
       "clean",
       "-ffd"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/Auto_roll___v8_deps/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,
@@ -231,10 +247,10 @@
       "new-branch",
       "roll"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/Auto_roll___v8_deps/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,
@@ -251,6 +267,7 @@
       "--spec",
       "solutions=[{'managed':False,'name':'src','url':'https://chromium.googlesource.com/chromium/src','deps_file':'DEPS'}]"
     ],
+    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -278,6 +295,7 @@
       "--spec",
       "solutions=[{'managed':False,'name':'v8','url':'https://chromium.googlesource.com/v8/v8','deps_file':'DEPS'}]"
     ],
+    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -303,7 +321,7 @@
       "https://chromium.googlesource.com/chromium/src/base/trace_event/common.git",
       "HEAD"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
     "infra_step": true,
     "name": "look up base_trace_event_common",
     "stdout": "/path/to/tmp/",
@@ -320,7 +338,7 @@
       "-r",
       "v8/base/trace_event/common@deadbeef"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -337,7 +355,7 @@
       "https://chromium.googlesource.com/chromium/src/build.git",
       "HEAD"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
     "infra_step": true,
     "name": "look up build",
     "stdout": "/path/to/tmp/",
@@ -354,7 +372,7 @@
       "-r",
       "v8/build@deadbeef"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -370,7 +388,7 @@
       "-r",
       "v8/tools/gyp@e7079f0e0e14108ab0dba58728ff219637458563"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -386,7 +404,7 @@
       "-r",
       "v8/tools/swarming_client@380e32662312eb107f06fcba6409b0409f8fe001"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -398,7 +416,7 @@
       "git",
       "diff"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
     "infra_step": true,
     "name": "git diff",
     "stdout": "/path/to/tmp/",
@@ -423,10 +441,10 @@
       "-m",
       "TBR=machenbach@chromium.org,hablich@chromium.org,sergiyb@chromium.org"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/Auto_roll___v8_deps/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,
@@ -446,10 +464,10 @@
       "--gerrit",
       "--send-mail"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps/v8",
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/Auto_roll___v8_deps/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,

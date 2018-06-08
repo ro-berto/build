@@ -3,86 +3,85 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
-      "config",
-      "--spec",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]"
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[BUILDER_CACHE]/Auto_tag"
     ],
-    "env": {
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
-    },
     "infra_step": true,
-    "name": "gclient setup"
+    "name": "ensure builder cache dir"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
-      "sync",
-      "--verbose",
-      "--nohooks",
-      "-j8",
-      "--reset",
-      "--force",
-      "--upstream",
-      "--no-nag-max",
-      "--with_branch_heads",
-      "--with_tags",
-      "--delete_unversioned_trees",
-      "--output-json",
-      "/path/to/tmp/json"
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--spec-path",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "--patch_root",
+      "v8",
+      "--revision_mapping_file",
+      "{\"got_revision\": \"v8\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
+      "--cleanup-dir",
+      "[CLEANUP]/bot_update",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "v8@refs/branch-heads/3.4:HEAD",
+      "--refs",
+      "refs/branch-heads/3.4",
+      "--no_shallow"
     ],
-    "env": {
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    "cwd": "[BUILDER_CACHE]/Auto_tag",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "infra_step": true,
-    "name": "gclient sync",
+    "name": "bot_update",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"v8/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"v8\": \"refs/branch-heads/3.4:HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8.git\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#50110}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"source_manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"directories\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"version\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@got_revision@\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@"
+      "@@@SET_BUILD_PROPERTY@got_revision@\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#50110}\"@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
-      "recurse",
-      "git",
-      "config",
-      "user.name",
-      "local_bot"
-    ],
-    "env": {
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
-    },
-    "infra_step": true,
-    "name": "gclient recurse (git config user.name)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
-      "recurse",
-      "git",
-      "config",
-      "user.email",
-      "local_bot@example.com"
-    ],
-    "env": {
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
-    },
-    "infra_step": true,
-    "name": "gclient recurse (git config user.email)"
   },
   {
     "cmd": [
@@ -91,7 +90,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_tag/v8",
     "infra_step": true,
     "name": "git checkout"
   },
@@ -102,7 +101,7 @@
       "-D",
       "work"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_tag/v8",
     "infra_step": true,
     "name": "git branch"
   },
@@ -112,7 +111,7 @@
       "clean",
       "-ffd"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_tag/v8",
     "infra_step": true,
     "name": "git clean"
   },
@@ -122,7 +121,7 @@
       "show",
       "refs/remotes/branch-heads/3.4:include/v8-version.h"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_tag/v8",
     "infra_step": true,
     "name": "Check latest version file",
     "stdout": "/path/to/tmp/"
@@ -133,7 +132,7 @@
       "show",
       "refs/remotes/branch-heads/3.4~1:include/v8-version.h"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_tag/v8",
     "infra_step": true,
     "name": "Check previous version file",
     "stdout": "/path/to/tmp/"
@@ -146,10 +145,10 @@
       "--upstream",
       "refs/remotes/branch-heads/3.4"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_tag/v8",
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/Auto_tag/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,
@@ -162,10 +161,10 @@
       "user.name",
       "V8 Autoroll"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_tag/v8",
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/Auto_tag/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,
@@ -178,10 +177,10 @@
       "user.email",
       "v8-autoroll@chromium.org"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_tag/v8",
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/Auto_tag/v8/third_party/depot_tools"
       ]
     },
     "infra_step": true,
@@ -196,7 +195,7 @@
       "/path/to/tmp/json",
       "copy",
       "\n#define V8_MAJOR_VERSION 3\n#define V8_MINOR_VERSION 4\n#define V8_BUILD_NUMBER 3\n#define V8_PATCH_LEVEL 3\n",
-      "[START_DIR]/v8/include/v8-version.h"
+      "[BUILDER_CACHE]/Auto_tag/v8/include/v8-version.h"
     ],
     "infra_step": true,
     "name": "Increment version"
@@ -208,7 +207,7 @@
       "-am",
       "Version 3.4.3.3"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_tag/v8",
     "infra_step": true,
     "name": "git commit"
   },
@@ -224,7 +223,7 @@
       "--format=%H",
       "refs/remotes/branch-heads/3.4"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_tag/v8",
     "infra_step": true,
     "name": "git log",
     "stdout": "/path/to/tmp/"
@@ -235,7 +234,7 @@
       "show",
       "c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6:include/v8-version.h"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_tag/v8",
     "infra_step": true,
     "name": "Check head version file",
     "stdout": "/path/to/tmp/"
@@ -247,7 +246,7 @@
       "--tags",
       "c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_tag/v8",
     "infra_step": true,
     "name": "git describe",
     "stdout": "/path/to/tmp/"
@@ -263,7 +262,7 @@
       "https://chromium.googlesource.com/v8/v8",
       "refs/heads/3.4-lkgr"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_tag/v8",
     "infra_step": true,
     "name": "git ls-remote refs_heads_3.4-lkgr",
     "stdout": "/path/to/tmp/",
@@ -283,7 +282,7 @@
       "https://chromium.googlesource.com/v8/v8",
       "refs/tags/lkgr/3.4"
     ],
-    "cwd": "[START_DIR]/v8",
+    "cwd": "[BUILDER_CACHE]/Auto_tag/v8",
     "infra_step": true,
     "name": "git ls-remote refs_tags_lkgr_3.4",
     "stdout": "/path/to/tmp/",

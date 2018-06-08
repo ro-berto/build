@@ -44,7 +44,7 @@ def ClusterfuzzHasIssues(api):
 
 def RunSteps(api):
   api.gclient.set_config('v8')
-  api.bot_update.ensure_checkout(no_shallow=True)
+  api.v8.checkout()
   if ClusterfuzzHasIssues(api):
     raise api.step.StepFailure('Clusterfuzz had issues.')
 
@@ -53,12 +53,14 @@ def GenTests(api):
   yield (
       api.test('clusterfuzz_no_issues') +
       api.properties.generic(mastername='client.v8.fyi',
-                             buildername='Auto-roll - release process')
+                             buildername='Auto-roll - release process',
+                             path_config='kitchen')
   )
 
   yield (
       api.test('clusterfuzz_issues') +
       api.properties.generic(mastername='client.v8.fyi',
-                             buildername='Auto-roll - release process') +
+                             buildername='Auto-roll - release process',
+                             path_config='kitchen') +
       api.override_step_data('check clusterfuzz', api.json.output([1, 2]))
   )
