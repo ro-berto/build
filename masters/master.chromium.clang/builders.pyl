@@ -151,11 +151,13 @@
       "category": "3ToTWindows",
     },
     "ToTWin(dbg)": {
-      "bot_pool": "build128-m1",
+      "mixins": ["win7"],
+      "bot": "build128-m1",
       "category": "3ToTWindows",
     },
     "ToTWin(dll)": {
-      "bot_pool": "build128-m1",
+      "mixins": ["win7"],
+      "bot": "build29-m1",
       "category": "3ToTWindows",
     },
     "ToTWin64": {
@@ -164,11 +166,13 @@
       "category": "3ToTWindows",
     },
     "ToTWin64(dbg)": {
-      "bot_pool": "build130-m1",
+      "mixins": ["win7"],
+      "bot": "build130-m1",
       "category": "3ToTWindows",
     },
     "ToTWin64(dll)": {
-      "bot_pool": "build130-m1",
+      "mixins": ["win7"],
+      "bot": "build4-m1",
       "category": "3ToTWindows",
     },
     "ToTWinLibcxx64": {
@@ -183,17 +187,18 @@
       "no_output_timeout_s": 24000,
     },
     "CrWinAsan": {
-      "mixins": ["win7"],
-      "bot": "build29-m1",
+      "mixins": ["win10"],
+      "bot": "win199-c1",
       "category": "3ToTWindows",
     },
     "CrWinAsanCov": {
-      "mixins": ["win7"],
-      "bot": "build4-m1",
+      "mixins": ["win10"],
+      "bot": "win200-c1",
       "category": "3ToTWindows",
     },
     "CrWinAsan(dll)": {
-      "bot_pool": "build27-m1",
+      "mixins": ["win10"],
+      "bot": "win201-c1",
       "category": "3ToTWindows",
     },
     "CrWinClangLLD": {
@@ -202,7 +207,8 @@
       "category": "3ToTWindows",
     },
     "CrWinClangLLD64": {
-      "bot_pool": "build27-m1",
+      "mixins": ["win7"],
+      "bot": "build27-m1",
       "category": "3ToTWindows",
     },
     "CrWinClngLLDdbg": {
@@ -258,11 +264,6 @@
   },
 
   "bot_pools": {
-    "build27-m1": {
-      "os": "win",
-      "version": "win7",
-      "bots": "build27-m1",
-    },
     "build98-m1": {
       "os": "mac",
       "version": "10.9",
@@ -272,16 +273,6 @@
       "os": "mac",
       "version": "10.9",
       "bots": "build99-m1",
-    },
-    "build128-m1": {
-      "os": "win",
-      "version": "win7",
-      "bots": "build128-m1",
-    },
-    "build130-m1": {
-      "os": "win",
-      "version": "win7",
-      "bots": "build130-m1",
     },
     "build155-m1": {
       "os": "mac",
