@@ -9,14 +9,19 @@ from recipe_engine import recipe_test_api
 
 
 class LuciConfigTestApi(recipe_test_api.RecipeTestApi):
-  def get_project_config(self, project, config, content):
+  def get_project_config(
+      self, project, config, content,
+      path='',
+      revision='80abb4d6f37e89ba0786c5bca9c599565693fe12'):
     return self.m.url.json(
         'Get project %r config %r' % (project, config),
         {
           'content': base64.b64encode(content),
           'content_hash': 'v1:814564d6e6507ad7de56de8c76548a31633ce3e4',
-          'revision': '80abb4d6f37e89ba0786c5bca9c599565693fe12',
+          'revision': revision,
           'kind': 'config#resourcesItem',
+          'url': 'https://chromium.googlesource.com/%s/+/%s/%s%s' % (
+            project, revision, path, config),
           # NOTE: Invalid etag, truncated for line length.
           'etag': '"-S_IMdk0_sAeij2f-EAhBG43QvQ/JlXgwF3XIs6IVH1"',
         })
