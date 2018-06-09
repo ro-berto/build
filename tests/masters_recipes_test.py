@@ -113,6 +113,7 @@ FAKE_BUILDERS = {
         'old_chromium_rel_ng',
         # These have been migrated to LUCI.
         'win_chromium_compile_dbg_ng',
+        'win_chromium_compile_rel_ng',
         'win_chromium_dbg_ng',
         'win_optional_gpu_tests_rel',
         'win_chromium_x64_rel_ng',
