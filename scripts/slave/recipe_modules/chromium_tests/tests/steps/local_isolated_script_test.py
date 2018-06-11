@@ -11,6 +11,8 @@ DEPS = [
     'test_utils',
 ]
 
+from recipe_engine import post_process
+
 
 def RunSteps(api):
   test_name = api.properties.get('test_name') or 'base_unittests'
@@ -28,25 +30,35 @@ def RunSteps(api):
           run_disabled=bool(test_repeat_count)
       )
 
-  test.pre_run(api, '')
-  test.run(api, '')
-  test.post_run(api, '')
+  try:
+    test.pre_run(api, '')
+    test.run(api, '')
+    test.post_run(api, '')
+  finally:
+    api.step('details', [])
+    api.step.active_result.presentation.logs['details'] = [
+        'compile_targets: %r' % test.compile_targets(api),
+        'isolate_target: %r' % test.isolate_target(api),
+        'uses_local_devices: %r' % test.uses_local_devices,
+        'uses_isolate: %r' % test.uses_isolate,
+    ]
 
-  api.step('details', [])
-  api.step.active_result.presentation.logs['details'] = [
-      'compile_targets: %r' % test.compile_targets(api),
-      'isolate_target: %r' % test.isolate_target(api),
-      'uses_local_devices: %r' % test.uses_local_devices,
-      'uses_isolate: %r' % test.uses_isolate,
-  ]
-
-  if api.properties.get('log_pass_fail_counts'):
-    api.step.active_result.presentation.logs['details'].append(
-      'pass_fail_counts: %r' % test.pass_fail_counts('')
-    )
+    if api.properties.get('log_pass_fail_counts'):
+      api.step.active_result.presentation.logs['details'] = [
+        'pass_fail_counts: %r' % test.pass_fail_counts('')
+      ]
 
 
 def GenTests(api):
+  def verify_log_fields(check, step_odict, expected_fields):
+    """Verifies fields in details log are with expected values."""
+    step = step_odict['details']
+    followup_annotations = step['~followup_annotations']
+    for key, value in expected_fields.iteritems():
+      expected_log = '@@@STEP_LOG_LINE@details@%s: %r@@@' % (key, value)
+      check(expected_log in followup_annotations)
+    return step_odict
+
   yield (
       api.test('basic') +
       api.properties(
@@ -70,7 +82,24 @@ def GenTests(api):
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
-          log_pass_fail_counts=True)
+          log_pass_fail_counts=True) +
+      api.post_process(verify_log_fields, {'pass_fail_counts': {}}) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('log_pass_fail_counts_invalid_results') +
+      api.properties(
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          log_pass_fail_counts=True) +
+      api.override_step_data(
+        'base_unittests',
+        api.test_utils.m.json.output({'interrupted': True}, 255)
+        ) +
+      api.post_process(verify_log_fields, {'pass_fail_counts': {}}) +
+      api.post_process(post_process.DropExpectation)
   )
 
   yield (

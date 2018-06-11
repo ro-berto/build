@@ -425,6 +425,16 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@compile_targets: ['base_unittests']@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: False@@@",
+      "@@@STEP_LOG_LINE@details@uses_isolate: True@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
     "name": "$result",
     "reason": "Step('base_unittests on Intel GPU on Linux (with patch)') failed with return_code 1",
     "recipe_result": null,

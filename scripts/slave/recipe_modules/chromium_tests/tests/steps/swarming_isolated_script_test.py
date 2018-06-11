@@ -68,18 +68,6 @@ def RunSteps(api):
     test.run(api, 'with patch')
     test.post_run(api, 'with patch')
 
-    api.step('details', [])
-    api.step.active_result.presentation.logs['details'] = [
-        'compile_targets: %r' % test.compile_targets(api),
-        'uses_local_devices: %r' % test.uses_local_devices,
-        'uses_isolate: %r' % test.uses_isolate,
-    ]
-
-    if test_repeat_count:
-        api.step.active_result.presentation.logs['details'].append(
-            'pass_fail_counts: %r' % test.pass_fail_counts('with patch')
-        )
-
   finally:
     if api.properties.get('run_without_patch'):
       test._only_retry_failed_tests = True
@@ -88,8 +76,29 @@ def RunSteps(api):
       test.run(api, 'without patch')
       test.post_run(api, 'without patch')
 
+    api.step('details', [])
+    api.step.active_result.presentation.logs['details'] = [
+      'compile_targets: %r' % test.compile_targets(api),
+      'uses_local_devices: %r' % test.uses_local_devices,
+      'uses_isolate: %r' % test.uses_isolate,
+    ]
+    if test_repeat_count:
+      api.step.active_result.presentation.logs['details'].append(
+        'pass_fail_counts: %r' % test.pass_fail_counts('with patch')
+      )
+
 
 def GenTests(api):
+
+  def verify_log_fields(check, step_odict, expected_fields):
+    """Verifies fields in details log are with expected values."""
+    step = step_odict['details']
+    followup_annotations = step['~followup_annotations']
+    for key, value in expected_fields.iteritems():
+      expected_log = '@@@STEP_LOG_LINE@details@%s: %r@@@' % (key, value)
+      check(expected_log in followup_annotations)
+    return step_odict
+
   yield (
       api.test('basic') +
       api.properties.generic(
@@ -144,7 +153,23 @@ def GenTests(api):
           version='test-version',
           got_revision_cp=123456,
           test_filter=['test1', 'test2'],
-          repeat_count=20)
+          repeat_count=20) +
+      api.post_process(
+          verify_log_fields,
+          {'pass_fail_counts': {
+              'test_common.Test1': {
+                  'pass_count': 1,
+                  'fail_count': 2},
+              'test1.Test1': {
+                  'pass_count': 1,
+                  'fail_count': 0},
+              'test1.Test2': {
+                  'pass_count': 1,
+                  'fail_count': 0},
+              'test1.Test3': {
+                  'pass_count': 0,
+                  'fail_count': 0}}}) +
+      api.post_process(post_process.DropExpectation)
   )
 
   yield (
@@ -533,4 +558,27 @@ def GenTests(api):
               'os': 'Android'
           }
       )
+  )
+
+  yield (
+      api.test('invalid_test_results') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
+      api.properties(
+          buildnumber=123,
+          swarm_hashes={
+            'webkit_layout_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp=123456,
+          test_filter=['test1', 'test2'],
+          repeat_count=20) +
+      api.override_step_data(
+          'webkit_layout_tests on Intel GPU on Linux (with patch)',
+          api.swarming.canned_summary_output(2) +
+          api.test_utils.m.json.output(None, 255)) +
+      api.post_process(verify_log_fields, {'pass_fail_counts': {}}) +
+      api.post_process(post_process.DropExpectation)
   )

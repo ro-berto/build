@@ -18,6 +18,8 @@ DEPS = [
     'test_utils',
 ]
 
+from recipe_engine import post_process
+
 
 def RunSteps(api):
   api.chromium.set_config(
@@ -32,20 +34,32 @@ def RunSteps(api):
   test_options = api.chromium_tests.steps.TestOptions()
   test.test_options = test_options
 
-  test.pre_run(api, '')
-  test.run(api, '')
-  test.post_run(api, '')
-
-  api.step('details', [])
-  api.step.active_result.presentation.logs['details'] = [
+  try:
+    test.pre_run(api, '')
+    test.run(api, '')
+    test.post_run(api, '')
+  finally:
+    api.step('details', [])
+    api.step.active_result.presentation.logs['details'] = [
       'compile_targets: %r' % test.compile_targets(api),
       'uses_local_devices: %r' % test.uses_local_devices,
       'uses_isolate: %r' % test.uses_isolate,
       'pass_fail_counts: %r' % test.pass_fail_counts(''),
-  ]
+    ]
+
 
 
 def GenTests(api):
+
+  def verify_log_fields(check, step_odict, expected_fields):
+    """Verifies fields in details log are with expected values."""
+    step = step_odict['details']
+    followup_annotations = step['~followup_annotations']
+    for key, value in expected_fields.iteritems():
+      expected_log = '@@@STEP_LOG_LINE@details@%s: %r@@@' % (key, value)
+      check(expected_log in followup_annotations)
+    return step_odict
+
   yield (
       api.test('basic') +
       api.properties(
@@ -99,4 +113,21 @@ def GenTests(api):
           'base_unittests',
           api.swarming.canned_summary_output(failure=True),
           retcode=1)
+  )
+
+  yield (
+      api.test('invalid_test_result') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests',
+          api.swarming.canned_summary_output() +
+          api.test_utils.raw_gtest_output(None, 255)) +
+      api.post_process(verify_log_fields, {'pass_fail_counts': {}}) +
+      api.post_process(post_process.DropExpectation)
   )

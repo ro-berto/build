@@ -695,8 +695,10 @@ class LocalGTestTest(Test):
     return step_result
 
   def pass_fail_counts(self, suffix):
-    if suffix in self._gtest_results:
+    if self._gtest_results.get(suffix):
+      # test_result exists and is not None.
       return self._gtest_results[suffix].pass_fail_counts
+    return {}
 
   def has_valid_results(self, api, suffix):
     if suffix not in self._test_runs:
@@ -1209,7 +1211,6 @@ class JSONResultsHandler(ResultsHandler):
           results)
     except Exception as e:
       return False, [str(e), '\n', api.traceback.format_exc()]
-
     # If results were interrupted, we can't trust they have all the tests in
     # them. For this reason we mark them as invalid.
     return (results.valid and not results.interrupted,
@@ -1639,8 +1640,10 @@ class SwarmingGTestTest(SwarmingTest):
     return gtest_results.valid, gtest_results.failures
 
   def pass_fail_counts(self, suffix):
-    if suffix in self._gtest_results:
+    if self._gtest_results.get(suffix):
+      # test_result exists and is not None.
       return self._gtest_results[suffix].pass_fail_counts
+    return {}
 
   def post_run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
@@ -1735,8 +1738,10 @@ class LocalIsolatedScriptTest(Test):
     return [self.target_name]
 
   def pass_fail_counts(self, suffix):
-    if suffix in self._test_results:
+    if self._test_results.get(suffix):
+      # test_result exists and is not None.
       return self._test_results[suffix].pass_fail_counts
+    return {}
 
   @Test.test_options.setter
   def test_options(self, value):
@@ -1770,12 +1775,10 @@ class LocalIsolatedScriptTest(Test):
       self._test_runs[suffix] = api.step.active_result
       results = self._test_runs[suffix].json.output
       presentation = self._test_runs[suffix].presentation
-
       valid, failures = self.results_handler.validate_results(api, results)
-
       self._test_results[suffix] = (
           api.test_utils.create_results_from_json_if_needed(
-              results) if valid else {})
+              results) if valid else None)
 
       self.results_handler.render_results(api, results, presentation)
 
@@ -1864,8 +1867,10 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         build_properties=api.chromium.build_properties, extra_args=args)
 
   def pass_fail_counts(self, suffix):
-    if suffix in self._test_results:
+    if self._test_results.get(suffix):
+      # test_result exists and is not None.
       return self._test_results[suffix].pass_fail_counts
+    return {}
 
   def validate_task_results(self, api, step_result):
     # If we didn't get a step_result object at all, we can safely
@@ -1912,7 +1917,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       valid = self._results.get(suffix, {}).get('valid')
       self._test_results[suffix] = (
           api.test_utils.create_results_from_json_if_needed(
-              results) if valid else {})
+              results) if valid else None)
 
       if results and self._upload_test_results:
         self.results_handler.upload_results(

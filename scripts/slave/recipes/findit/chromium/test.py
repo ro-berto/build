@@ -39,6 +39,10 @@ DEPS = [
     'test_utils',
 ]
 
+import re
+
+from recipe_engine import post_process
+
 
 PROPERTIES = {
     'target_mastername': Property(
@@ -312,6 +316,34 @@ def GenTests(api):
     if buildbucket:
       properties['buildbucket'] = buildbucket
     return api.properties(**properties) + api.platform.name(platform_name)
+
+  def verify_report_fields(check, step_odict, expected_report_fields):
+    """Verifies fields in report are with expected values."""
+    step = step_odict['report']
+    followup_annotations = step['~followup_annotations']
+
+    def get_report_dict():
+      long_line_pattern = re.compile(r'@@@STEP_LOG_LINE@report@\s*(.*)@@@')
+
+      report_json = ''
+      for log_line in followup_annotations:
+        match = long_line_pattern.match(log_line)
+        if match:
+          report_json += match.group(1)
+      return json.loads(report_json)
+
+    report_dict = get_report_dict()
+
+    def check_fields(expected_fields, actual_fields):
+      for key, value in expected_fields.iteritems():
+        if value and isinstance(value, dict):
+          check_fields(value, actual_fields.get(key) or {})
+        else:
+          check(actual_fields.get(key) == value)
+
+    check_fields(expected_report_fields, report_dict)
+
+    return step_odict
 
   yield (
       api.test('nonexistent_test_step_skipped') +
@@ -1453,4 +1485,76 @@ def GenTests(api):
           api.swarming.canned_summary_output() +
           api.test_utils.simulated_gtest_output(passed_test_names=['Test.One'])
       )
+  )
+
+  yield (
+      api.test('gtest_task_failed') +
+      props({'services_unittests': ['Test.One']}, 'linux', 'linux-ozone-rel') +
+      api.override_step_data(
+          'test r1.read test spec (chromium.linux.json)',
+          api.json.output({
+              'linux-ozone-rel': {
+                  'gtest_tests': [
+                      {
+                          'test': 'services_unittests',
+                          'swarming': {'can_use_on_swarming_builders': True},
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r1.services_unittests (r1)',
+          api.swarming.canned_summary_output() +
+          api.test_utils.raw_gtest_output(None, 255)) +
+      api.post_process(
+          verify_report_fields,
+          {'result': {
+                  'r1': {
+                      'services_unittests': {
+                          'pass_fail_counts': {}
+                      }
+                  }
+              }
+          }) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('isolated_script_test_task_failed') +
+      props({'webkit_layout_tests': [
+                'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js']},
+            'mac', 'Mac10.13 Tests') +
+      api.override_step_data(
+          'test r1.read test spec (chromium.mac.json)',
+          api.json.output({
+              'Mac10.13 Tests': {
+                  'isolated_scripts': [
+                    {
+                      'isolate_name': 'webkit_layout_tests',
+                      'name': 'webkit_layout_tests',
+                      'swarming': {
+                        'can_use_on_swarming_builders': True,
+                        'shards': 1,
+                      },
+                    },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'test r1.webkit_layout_tests (r1)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.m.json.output(None, 255)) +
+      api.post_process(
+          verify_report_fields,
+          {'result': {
+                  'r1': {
+                      'webkit_layout_tests': {
+                          'pass_fail_counts': {}
+                      }
+                  }
+              }
+          }) +
+      api.post_process(post_process.DropExpectation)
   )

@@ -551,6 +551,16 @@
     "name": "Upload to test-results [base_unittests on Intel GPU on Linux (with patch)]"
   },
   {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@compile_targets: ['base_unittests']@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: False@@@",
+      "@@@STEP_LOG_LINE@details@uses_isolate: True@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
     "name": "$result",
     "reason": "LUCI builder must set perf_dashboard_machine_group property for perf dashboard uploading. For more details, see bit.ly/perf-dashboard-machine-group.",
     "recipe_result": null,
