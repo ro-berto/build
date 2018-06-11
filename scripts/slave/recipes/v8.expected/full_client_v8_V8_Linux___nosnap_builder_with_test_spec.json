@@ -11,7 +11,7 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "read test spec",
+    "name": "read test spec (v8)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test_spec@V8 Linux - nosnap@@@",
       "@@@STEP_LOG_LINE@test_spec@  mjsunit(2) sweet@@@",

@@ -94,6 +94,7 @@ class V8Api(recipe_api.RecipeApi):
   FLATTENED_BUILDERS = builders.FLATTENED_BUILDERS
   VERSION_FILE = 'include/v8-version.h'
   EMPTY_TEST_SPEC = EmptyTestSpec
+  TEST_SPEC = TestSpec
 
   def bot_config_by_buildername(self, builders=FLATTENED_BUILDERS):
     default = {}
@@ -103,13 +104,14 @@ class V8Api(recipe_api.RecipeApi):
       default['chromium_apply_config'] = ['default_compiler', 'goma', 'mb']
     return builders.get(self.m.properties.get('buildername'), default)
 
-  def update_bot_config(self, bot_config, build_config, target_arch,
-                        target_platform, triggers):
+  def update_bot_config(self, bot_config, build_config, enable_swarming,
+                        target_arch, target_platform, triggers):
     """Update bot_config dict with src-side properties.
 
     Args:
       bot_config: The bot_config dict to update.
       build_config: Config value for BUILD_CONFIG in chromium recipe module.
+      enable_swarming: Switch to enable/disable swarming.
       target_arch: Config value for TARGET_ARCH in chromium recipe module.
       target_platform: Config value for TARGET_PLATFORM in chromium recipe
           module.
@@ -129,6 +131,8 @@ class V8Api(recipe_api.RecipeApi):
         ('TARGET_PLATFORM', target_platform)):
       if v is not None:
         bot_config['v8_config_kwargs'][k] = v
+    if enable_swarming is not None:
+      bot_config['enable_swarming'] = enable_swarming
     # Make mutable copy.
     bot_config['triggers'] = list(bot_config.get('triggers', []))
     bot_config['triggers'].extend(triggers or [])
@@ -155,12 +159,60 @@ class V8Api(recipe_api.RecipeApi):
     self.m.file.ensure_directory('ensure custom_deps dir', custom_deps_dir)
     for path in self.m.file.listdir('list test roots', custom_deps_dir):
       if self.m.path.exists(path.join('infra', 'testing', 'builders.pyl')):
+        assert self.bot_type == 'builder_tester', (
+            'Separate test checkouts are only supported on builder_testers. '
+            'For separate builders and testers, the test configs need to be '
+            'transferred as properties')
         result.append(path)
     return result
 
-  def load_test_configs(self):
-    # TODO(machenbach): Add V8 side test configs.
-    self.test_configs = testing.TEST_CONFIGS
+  def update_test_configs(self, test_configs):
+    """Update test configs without mutating previous copy."""
+    self.test_configs = dict(getattr(self, 'test_configs', {}))
+    self.test_configs.update(test_configs)
+
+  def load_static_test_configs(self):
+    """Set predifined test configs from build repository."""
+    self.update_test_configs(testing.TEST_CONFIGS)
+
+  def load_dynamic_test_configs(self, root):
+    """Add test configs from configured location.
+
+    The test configs in <root>/infra/testing/config.pyl are expected to follow
+    the same structure as the TEST_CONFIGS dict in testing.py.
+
+    Args:
+      test_checkout: Path to test root, can either be the V8 checkout or an
+          additional test checkout.
+    Returns: Test config dict.
+    """
+    test_config_path = root.join('infra', 'testing', 'config.pyl')
+
+    # Fallback for branch builders.
+    if not self.m.path.exists(test_config_path):
+      return {}
+
+    try:
+      # Eval python literal file.
+      test_configs = ast.literal_eval(self.m.file.read_text(
+          'read test config (%s)' % self.m.path.basename(root),
+          test_config_path,
+          test_data='{}',
+      ))
+    except SyntaxError as e:  # pragma: no cover
+      raise self.m.step.InfraFailure(
+          'Failed to parse test config "%s": %s' % (test_config_path, e))
+
+    for test_config in test_configs.itervalues():
+      # This configures the test runner to set the test root to the
+      # test_checkout location for all tests from this checkout.
+      # TODO(machenbach): This is starting to get hacky. The test config
+      # dicts should be refactored into classes similar to test specs. Maybe
+      # the extra configurations from test configs could be added to test
+      # specs.
+      test_config['test_root'] = str(root.join('test'))
+
+    return test_configs
 
   def apply_bot_config(self, bot_config):
     """Entry method for using the v8 api."""
@@ -430,14 +482,15 @@ class V8Api(recipe_api.RecipeApi):
     return high_prec_tests + [
       test for test in low_prec_tests if test.id not in high_prec_ids]
 
-  def read_test_spec(self):
-    """Reads a test specification file under v8/infra/testing/<mastername>.pyl.
+  def read_test_spec(self, root):
+    """Reads a test specification file under <root>/infra/testing/builders.pyl.
 
+    Args:
+      root: Path to checkout root with configurations.
     Returns: TestSpec object, filtered by interesting builders (current builder
         and all its triggered testers).
     """
-    test_spec_file = self.m.path['checkout'].join(
-        'infra', 'testing', 'builders.pyl')
+    test_spec_file = root.join('infra', 'testing', 'builders.pyl')
 
     # Fallback for branch builders.
     if not self.m.path.exists(test_spec_file):
@@ -446,7 +499,7 @@ class V8Api(recipe_api.RecipeApi):
     try:
       # Eval python literal file.
       full_test_spec = ast.literal_eval(self.m.file.read_text(
-          'read test spec',
+          'read test spec (%s)' % self.m.path.basename(root),
           test_spec_file,
           test_data='{}',
       ))
@@ -469,6 +522,8 @@ class V8Api(recipe_api.RecipeApi):
     Args:
       tests: A list of test names used as keys in the V8 API's test config.
     """
+    if not self.bot_config.get('enable_swarming', True):
+      return []
     targets = []
     for test in tests:
       config = self.test_configs.get(test) or {}
@@ -1212,6 +1267,10 @@ class V8Api(recipe_api.RecipeApi):
       '--buildbot',
       '--timeout=200',
     ]
+
+    # Add optional non-standard root directory for test suites.
+    if test.get('test_root'):
+      full_args += ['--test-root', test['test_root']]
 
     # On reruns, there's a fixed random seed set in the test configuration.
     if ('--random-seed' not in test.get('test_args', []) and

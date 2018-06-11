@@ -28,6 +28,8 @@ DEPS = [
 PROPERTIES = {
   # One of Release|Debug.
   'build_config': Property(default=None, kind=str),
+  # Switch to enable/disable swarming.
+  'enable_swarming': Property(default=None, kind=bool),
   # Name of a gclient custom_var to set to 'True'.
   'set_gclient_var': Property(default=None, kind=str),
   # One of intel|arm|mips.
@@ -39,13 +41,13 @@ PROPERTIES = {
 }
 
 
-def RunSteps(api, build_config, set_gclient_var, target_arch, target_platform,
-             triggers):
+def RunSteps(api, build_config, enable_swarming, set_gclient_var, target_arch,
+             target_platform, triggers):
   v8 = api.v8
-  v8.load_test_configs()
+  v8.load_static_test_configs()
   bot_config = v8.update_bot_config(
       v8.bot_config_by_buildername(),
-      build_config, target_arch, target_platform, triggers,
+      build_config, enable_swarming, target_arch, target_platform, triggers,
   )
   v8.apply_bot_config(bot_config)
   v8.set_gclient_custom_var(set_gclient_var)
@@ -54,7 +56,7 @@ def RunSteps(api, build_config, set_gclient_var, target_arch, target_platform,
   api.chromium.c.use_gyp_env = False
 
   additional_trigger_properties = {}
-  test_spec = v8.EMPTY_TEST_SPEC
+  test_spec = v8.TEST_SPEC()
   tests = v8.create_tests()
 
   # Tests from V8-side test specs have precedence.
@@ -99,13 +101,13 @@ def RunSteps(api, build_config, set_gclient_var, target_arch, target_platform,
     if v8.generate_gcov_coverage:
       v8.init_gcov_coverage()
 
-    # TODO(machenbach): Use test roots.
-    v8.get_test_roots()
-
-    test_spec = v8.read_test_spec()
-
-    # Tests from V8-side test specs have precedence.
-    tests =  v8.dedupe_tests(v8.extra_tests_from_test_spec(test_spec), tests)
+    # Dynamically load more test specifications from all discovered test roots.
+    test_roots = v8.get_test_roots()
+    for test_root in test_roots:
+      v8.update_test_configs(v8.load_dynamic_test_configs(test_root))
+      test_spec.update(v8.read_test_spec(test_root))
+      # Tests from dynamic test roots have precedence.
+      tests = v8.dedupe_tests(v8.extra_tests_from_test_spec(test_spec), tests)
 
     if v8.should_build:
       v8.compile(test_spec)
@@ -563,12 +565,12 @@ def GenTests(api):
     api.path.exists(api.path['builder_cache'].join(
         'V8_Mac64', 'v8', 'infra', 'testing', 'builders.pyl')) +
     api.override_step_data(
-        'read test spec',
+        'read test spec (v8)',
         api.v8.example_test_spec('V8 Mac64', test_spec),
     ) +
     api.post_process(
         Filter()
-            .include('read test spec')
+            .include('read test spec (v8)')
             .include('isolate tests')
             .include_re(r'.*Mjsunit.*')
     )
@@ -591,11 +593,11 @@ def GenTests(api):
         'V8_Linux___nosnap_builder', 'v8', 'infra', 'testing',
         'builders.pyl')) +
     api.override_step_data(
-        'read test spec',
+        'read test spec (v8)',
         api.v8.example_test_spec('V8 Linux - nosnap', test_spec),
     ) +
     api.post_process(Filter(
-        'read test spec',
+        'read test spec (v8)',
         'generate_build_files',
         'isolate tests',
         'trigger',
@@ -614,11 +616,30 @@ def GenTests(api):
     api.post_process(Filter().include_re(r'.*Mjsunit.*'))
   )
 
+  # Test reading pyl test configs and build configs from a separate checkout.
+  extra_test_config = """
+    {
+      'foounit': {
+        'name': 'Foounit',
+        'tests': ['foounit'],
+      },
+    }
+  """.strip()
+  extra_test_spec = """
+    {
+      "tests": [
+        {
+          "name": "foounit",
+        },
+      ],
+    }
+  """.strip()
   yield (
     api.v8.test(
         'somewhere.v8',
         'V8 Foobar',
         'with_test_config',
+        enable_swarming=False,
     ) +
     api.v8.example_test_roots('test_checkout') +
     api.path.exists(
@@ -629,7 +650,21 @@ def GenTests(api):
             'V8_Foobar', 'v8', 'custom_deps', 'test_checkout', 'infra',
             'testing', 'builders.pyl'),
     ) +
-    api.post_process(DropExpectation)
+    api.override_step_data(
+        'read test config (test_checkout)',
+        api.v8.example_test_config(extra_test_config),
+    ) +
+    api.override_step_data(
+        'read test spec (test_checkout)',
+        api.v8.example_test_spec('V8 Foobar', extra_test_spec),
+    ) +
+    api.post_process(DoesNotRun, 'isolate tests') +
+    api.post_process(
+        Filter()
+            .include('read test config (test_checkout)')
+            .include('read test spec (test_checkout)')
+            .include_re(r'.*Foounit.*')
+    )
   )
 
   # Test that uploading/downloading binaries happens to/from experimental GS

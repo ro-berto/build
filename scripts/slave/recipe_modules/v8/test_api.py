@@ -352,6 +352,14 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         self.m.file.listdir(roots),
     )
 
+  def example_test_config(self, test_config):
+    """Simulates reading a simple test-config file.
+
+    Args:
+      test_config: The raw test config pyl text.
+    """
+    return self.m.file.read_text(test_config)
+
   def example_test_spec(self, builder, spec):
     """Simulates reading a simple test-spec file with one builder.
 

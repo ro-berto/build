@@ -113,6 +113,9 @@ class TestSpec(object):
   def __init__(self):
     self._test_spec = {}
 
+  def update(self, other_test_spec):
+    self._test_spec.update(other_test_spec._test_spec)
+
   def as_properties_dict(self, buildername):
     """Packs a test spec and returns it as a properties dict to be passed to
     another builder.
