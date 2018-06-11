@@ -19,7 +19,7 @@
       "--revision",
       "src@HEAD"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -445,6 +445,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "--is-luci",
       "--buildbot-buildername",
       "codesearch-gen-chromium-win",
       "--buildbot-mastername",
@@ -789,6 +790,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "--is-luci",
       "--buildbot-buildername",
       "codesearch-gen-chromium-win",
       "--buildbot-mastername",

@@ -217,21 +217,21 @@
       "-m",
       "chromium.testing.master",
       "-b",
-      "codesearch-gen-chromium-win",
+      "codesearch-gen-chromium-linux",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--phase",
-      "win",
+      "linux",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "[START_DIR]/src/out/chromium-win/Debug"
+      "[START_DIR]/src/out/Debug"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "generate build files for win"
+    "name": "generate build files for linux"
   },
   {
     "cmd": [],
@@ -247,7 +247,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/codesearch_gen_chromium_win"
+      "[CACHE]/goma/data/codesearch_gen_chromium_linux"
     ],
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -264,7 +264,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/codesearch_gen_chromium_win",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/codesearch_gen_chromium_linux",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -313,10 +313,10 @@
       "--",
       "python",
       "RECIPE_MODULE[build::codesearch]/resources/redirect_stdout_to_file.py",
-      "[START_DIR]/src/out/chromium-win/Debug/compile_commands.json",
+      "[START_DIR]/src/out/Debug/compile_commands.json",
       "ninja",
       "-C",
-      "[START_DIR]/src/out/chromium-win/Debug",
+      "[START_DIR]/src/out/Debug",
       "all",
       "-t",
       "compdb",
@@ -327,7 +327,7 @@
       "-j",
       "20"
     ],
-    "name": "generate compilation database for win"
+    "name": "generate compilation database for linux"
   },
   {
     "cmd": [],
@@ -343,7 +343,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/codesearch_gen_chromium_win",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/codesearch_gen_chromium_linux",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -376,7 +376,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/codesearch_gen_chromium_win",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/codesearch_gen_chromium_linux",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -398,7 +398,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/codesearch_gen_chromium_win",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/codesearch_gen_chromium_linux",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -430,9 +430,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/chromium-win/Debug",
+      "[START_DIR]/src/out/Debug",
       "--ninja-log-command-file",
-      "[\"ninja\", \"-C\", \"[START_DIR]/src/out/chromium-win/Debug\", \"all\", \"-t\", \"compdb\", \"cc\", \"cxx\", \"objc\", \"objcxx\", \"-j\", 20]",
+      "[\"ninja\", \"-C\", \"[START_DIR]/src/out/Debug\", \"all\", \"-t\", \"compdb\", \"cc\", \"cxx\", \"objc\", \"objcxx\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -446,8 +446,9 @@
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
       "--is-luci",
+      "--is-experimental",
       "--buildbot-buildername",
-      "codesearch-gen-chromium-win",
+      "codesearch-gen-chromium-linux",
       "--buildbot-mastername",
       "chromium.testing.master",
       "--buildbot-slavename",
@@ -487,23 +488,15 @@
   },
   {
     "cmd": [
-      "forfiles",
-      "/p",
+      "find",
       "[START_DIR]/src/out",
-      "/s",
-      "/m",
-      "*",
-      "/d",
-      "-7",
-      "/c",
-      "cmd /c if @isdir==FALSE del @path"
+      "-mtime",
+      "+7",
+      "-type",
+      "f",
+      "-delete"
     ],
-    "name": "delete old generated files",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Step('delete old generated files') failed with return_code 1@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
+    "name": "delete old generated files"
   },
   {
     "allow_subannotations": true,
@@ -550,7 +543,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/codesearch_gen_chromium_win"
+      "[CACHE]/goma/data/codesearch_gen_chromium_linux"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -574,7 +567,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/codesearch_gen_chromium_win",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/codesearch_gen_chromium_linux",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
@@ -796,8 +789,9 @@
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
       "--is-luci",
+      "--is-experimental",
       "--buildbot-buildername",
-      "codesearch-gen-chromium-win",
+      "codesearch-gen-chromium-linux",
       "--buildbot-mastername",
       "chromium.testing.master",
       "--buildbot-slavename",
@@ -859,7 +853,7 @@
       "--tool",
       "[START_DIR]/src/third_party/llvm-build/Release+Asserts/bin/translation_unit",
       "-p",
-      "[START_DIR]/src/out/chromium-win/Debug",
+      "[START_DIR]/src/out/Debug",
       "--all"
     ],
     "name": "run translation_unit clang tool"
@@ -875,15 +869,13 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/package_index.py",
       "--path-to-compdb",
-      "[START_DIR]/src/out/chromium-win/Debug/compile_commands.json",
+      "[START_DIR]/src/out/Debug/compile_commands.json",
       "--path-to-archive-output",
-      "[START_DIR]/src/out/chromium-win/Debug/index_pack_win_kythe.zip",
+      "[START_DIR]/src/out/Debug/index_pack_linux_kythe.zip",
       "--corpus",
-      "chromium-win",
+      "chromium-linux",
       "--revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--out_dir",
-      "src/out/chromium-win/Debug"
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
     ],
     "name": "create kythe index pack"
   },
@@ -896,13 +888,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[START_DIR]/src/out/chromium-win/Debug/index_pack_win_kythe.zip",
-      "gs://chrome-codesearch/prod/index_pack_win_kythe_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
+      "[START_DIR]/src/out/Debug/index_pack_linux_kythe.zip",
+      "gs://chrome-codesearch/prod/index_pack_linux_kythe_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_experimental.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload kythe index pack",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/index_pack_win_kythe_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/index_pack_linux_kythe_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_experimental.zip@@@"
     ]
   },
   {
@@ -923,7 +915,7 @@
       "retry",
       "fetch",
       "origin",
-      "win",
+      "master",
       "--progress"
     ],
     "cwd": "[START_DIR]/generated",
@@ -1002,12 +994,10 @@
       "--",
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/sync_generated_files_codesearch.py",
-      "--debug-dir",
-      "chromium-win",
       "--message",
-      "Generated files from \"codesearch-gen-chromium-win\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "Generated files from \"codesearch-gen-chromium-linux\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
-      "win",
+      "master",
       "src/out",
       "[START_DIR]/generated"
     ],

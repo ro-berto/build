@@ -19,6 +19,7 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
+  'recipe_engine/runtime',
   'recipe_engine/step',
 ]
 
@@ -120,12 +121,17 @@ def GenTests(api):
 
   for buildername in BUILDERS:
     yield (api.test('%s_test_basic' % sanitize(buildername)) +
-           api.properties.generic(buildername=buildername))
+           api.properties.generic(buildername=buildername) +
+           api.runtime(is_luci=True, is_experimental=False))
+    yield (api.test('%s_test_experimental' % sanitize(buildername)) +
+           api.properties.generic(buildername=buildername) +
+           api.runtime(is_luci=True, is_experimental=True))
 
   yield (
     api.test(
         '%s_delete_generated_files_fail' %
         sanitize('codesearch-gen-chromium-win')) +
     api.step_data('delete old generated files', retcode=1) +
-    api.properties.generic(buildername='codesearch-gen-chromium-win')
+    api.properties.generic(buildername='codesearch-gen-chromium-win') +
+    api.runtime(is_luci=True, is_experimental=False)
   )

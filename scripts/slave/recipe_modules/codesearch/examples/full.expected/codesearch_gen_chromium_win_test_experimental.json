@@ -446,6 +446,7 @@
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
       "--is-luci",
+      "--is-experimental",
       "--buildbot-buildername",
       "codesearch-gen-chromium-win",
       "--buildbot-mastername",
@@ -498,12 +499,7 @@
       "/c",
       "cmd /c if @isdir==FALSE del @path"
     ],
-    "name": "delete old generated files",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Step('delete old generated files') failed with return_code 1@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
+    "name": "delete old generated files"
   },
   {
     "allow_subannotations": true,
@@ -796,6 +792,7 @@
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
       "--is-luci",
+      "--is-experimental",
       "--buildbot-buildername",
       "codesearch-gen-chromium-win",
       "--buildbot-mastername",
@@ -897,12 +894,12 @@
       "----",
       "cp",
       "[START_DIR]/src/out/chromium-win/Debug/index_pack_win_kythe.zip",
-      "gs://chrome-codesearch/prod/index_pack_win_kythe_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
+      "gs://chrome-codesearch/prod/index_pack_win_kythe_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_experimental.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload kythe index pack",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/index_pack_win_kythe_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/index_pack_win_kythe_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_experimental.zip@@@"
     ]
   },
   {
