@@ -345,6 +345,13 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       ],
     })
 
+  def example_test_roots(self, *roots):
+    """Simulates dynamically optained test-root directories."""
+    return self.override_step_data(
+        'list test roots',
+        self.m.file.listdir(roots),
+    )
+
   def example_test_spec(self, builder, spec):
     """Simulates reading a simple test-spec file with one builder.
 

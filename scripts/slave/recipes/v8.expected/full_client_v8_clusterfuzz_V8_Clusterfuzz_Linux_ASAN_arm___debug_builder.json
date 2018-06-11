@@ -114,6 +114,23 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "listdir",
+      "[BUILDER_CACHE]/V8_Clusterfuzz_Linux_ASAN_arm___debug_builder/v8/custom_deps"
+    ],
+    "infra_step": true,
+    "name": "list test roots",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@listdir@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILDER_CACHE]/V8_Clusterfuzz_Linux_ASAN_arm___debug_builder/v8/tools/mb/mb.py",
       "gen",
       "-m",

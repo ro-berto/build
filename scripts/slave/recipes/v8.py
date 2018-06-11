@@ -99,6 +99,9 @@ def RunSteps(api, build_config, set_gclient_var, target_arch, target_platform,
     if v8.generate_gcov_coverage:
       v8.init_gcov_coverage()
 
+    # TODO(machenbach): Use test roots.
+    v8.get_test_roots()
+
     test_spec = v8.read_test_spec()
 
     # Tests from V8-side test specs have precedence.
@@ -609,6 +612,24 @@ def GenTests(api):
         parent_test_spec=test_spec,
     ) +
     api.post_process(Filter().include_re(r'.*Mjsunit.*'))
+  )
+
+  yield (
+    api.v8.test(
+        'somewhere.v8',
+        'V8 Foobar',
+        'with_test_config',
+    ) +
+    api.v8.example_test_roots('test_checkout') +
+    api.path.exists(
+        api.path['builder_cache'].join(
+            'V8_Foobar', 'v8', 'custom_deps', 'test_checkout', 'infra',
+            'testing', 'config.pyl'),
+        api.path['builder_cache'].join(
+            'V8_Foobar', 'v8', 'custom_deps', 'test_checkout', 'infra',
+            'testing', 'builders.pyl'),
+    ) +
+    api.post_process(DropExpectation)
   )
 
   # Test that uploading/downloading binaries happens to/from experimental GS

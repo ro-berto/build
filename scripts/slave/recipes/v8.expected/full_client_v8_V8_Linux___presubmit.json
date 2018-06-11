@@ -87,6 +87,23 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
+      "listdir",
+      "[BUILDER_CACHE]/V8_Linux___presubmit/v8/custom_deps"
+    ],
+    "infra_step": true,
+    "name": "list test roots",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@listdir@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmtree",
       "[BUILDER_CACHE]/V8_Linux___presubmit/v8/out/Release"
     ],

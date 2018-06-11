@@ -137,6 +137,27 @@ class V8Api(recipe_api.RecipeApi):
     bot_config['triggers'] = sorted(list(set(bot_config['triggers'])))
     return bot_config
 
+  def get_test_roots(self):
+    """Returns the list of default and extensible test root directories.
+
+    A test root is a directory with the following layout:
+    <root>/infra/testing/config.pyl (optional)
+    <root>/infra/testing/builders.pyl
+    <root>/test/<test suites> (optional)
+
+    By default, the V8 checkout is a test root, and all matching directories
+    under v8/custom_deps.
+
+    Returns: List of paths to test roots.
+    """
+    result = [self.m.path['checkout']]
+    for path in self.m.file.listdir(
+        'list test roots',
+        self.m.path['checkout'].join('custom_deps')):
+      if self.m.path.exists(path.join('infra', 'testing', 'builders.pyl')):
+        result.append(path)
+    return result
+
   def load_test_configs(self):
     # TODO(machenbach): Add V8 side test configs.
     self.test_configs = testing.TEST_CONFIGS
