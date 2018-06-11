@@ -127,6 +127,7 @@ def RunSteps(api):
                    '--use-sdk',
                    '--compiler=dart2js',
                    '--dart2js-batch',
+                   '--no-preview-dart-2',
                    '--runtime=%s' % runtime,
                    '--progress=buildbot',
                    '-v',
@@ -175,7 +176,11 @@ def RunSteps(api):
             'tests': ['language', 'corelib', 'dart2js_extra', 'dart2js_native']
         }]
         RunTests(api, kernel_test_args, kernel_test_specs, use_xvfb=needs_xvfb)
-        kernel_strong_test_args = test_args + ['--strong', '--dart2js-with-kernel']
+        kernel_strong_test_args = test_args + [
+            '--dart2js-with-kernel',
+            '--strong'
+        ]
+        kernel_strong_test_args.remove('--no-preview-dart-2')
         kernel_strong_test_specs = [{
             'name': 'dart2js-with-kernel-strong-d8 tests',
             'tests': ['language_2', 'corelib_2']

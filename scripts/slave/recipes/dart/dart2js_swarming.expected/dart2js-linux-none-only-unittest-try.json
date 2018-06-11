@@ -422,6 +422,7 @@
       "--arch=ia32",
       "--time",
       "--report",
+      "--no-preview-dart-2",
       "--write-debug-log",
       "--write-result-log",
       "--write-test-outcome-log",

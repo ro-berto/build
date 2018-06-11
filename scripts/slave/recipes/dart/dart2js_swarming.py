@@ -102,6 +102,7 @@ def RunSteps(api):
                    api.path['checkout'].join('tools', 'test.py'),
                    args=["--mode=%s" % mode, "--compiler=none", "--runtime=vm",
                          "--arch=ia32", "--time", "--report",
+                         "--no-preview-dart-2",
                          "--write-debug-log",
                          "--write-result-log",
                          "--write-test-outcome-log",
@@ -124,7 +125,7 @@ def test_runtime(api, system, runtime, options, mode, tasks, isolate_hash):
   needs_xvfb = (runtime in ['chrome', 'ff'] and system == 'linux')
   command = xvfb_cmd if needs_xvfb else ['./tools/test.py']
 
-  test_args = ['-m%s' % mode, '-aia32', '-cdart2js',
+  test_args = ['-m%s' % mode, '-aia32', '-cdart2js', '--no-preview-dart-2',
                '--dart2js-batch', '--reset-browser-configuration',
                '--report', '--time', '--progress=buildbot',
                '--write-result-log', '-v', '-r%s' % runtime]
@@ -142,8 +143,10 @@ def test_runtime(api, system, runtime, options, mode, tasks, isolate_hash):
     tasks.append(api.dart.shard('dart2js_kernel_tests', isolate_hash, shard_args + tests))
 
     tests = ['language_2', 'corelib_2']
+    strong_args = shard_args + ['--strong'] + tests
+    strong_args.remove('--no-preview-dart-2')
     tasks.append(api.dart.shard('dart2js_kernel_strong_tests', isolate_hash,
-        shard_args + ['--strong'] + tests))
+        strong_args))
   else:
     tests = ['--exclude-suite=observatory_ui,service,co19']
     tasks.append(api.dart.shard('dart2js_tests', isolate_hash, shard_args + tests))
