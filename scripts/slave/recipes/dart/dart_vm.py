@@ -186,6 +186,7 @@ def RunSteps(api):
     with api.step.defer_results():
       test_args = ['-m%s' % b['mode'],
                    '--arch=%s' % b['target_arch'],
+                   '--no-preview-dart-2',
                    '--progress=line',
                    '--report',
                    '--time',

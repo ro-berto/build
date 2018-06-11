@@ -96,6 +96,7 @@
       "[START_DIR]/sdk/tools/test.py",
       "-mdebug",
       "--arch=x64",
+      "--no-preview-dart-2",
       "--progress=line",
       "--report",
       "--time",
