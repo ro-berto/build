@@ -151,9 +151,9 @@ class V8Api(recipe_api.RecipeApi):
     Returns: List of paths to test roots.
     """
     result = [self.m.path['checkout']]
-    for path in self.m.file.listdir(
-        'list test roots',
-        self.m.path['checkout'].join('custom_deps')):
+    custom_deps_dir = self.m.path['checkout'].join('custom_deps')
+    self.m.file.ensure_directory('ensure custom_deps dir', custom_deps_dir)
+    for path in self.m.file.listdir('list test roots', custom_deps_dir):
       if self.m.path.exists(path.join('infra', 'testing', 'builders.pyl')):
         result.append(path)
     return result

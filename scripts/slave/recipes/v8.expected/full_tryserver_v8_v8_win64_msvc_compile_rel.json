@@ -120,6 +120,21 @@
       "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[BUILDER_CACHE]\\v8_win64_msvc_compile_rel\\v8\\custom_deps"
+    ],
+    "infra_step": true,
+    "name": "ensure custom_deps dir"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "listdir",
       "[BUILDER_CACHE]\\v8_win64_msvc_compile_rel\\v8\\custom_deps"
     ],
