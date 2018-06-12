@@ -162,27 +162,6 @@ SPEC = {
         'test_spec_file': 'chromium.memory.json',
       },
     },
-    # TODO(machenbach): Remove obsolete config.
-    'Linux ASan LSan Tests (1)': {
-      'chromium_config': 'chromium_linux_asan',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': [
-        'v8_tot',
-        'chromium_lkgr',
-        'show_v8_revision',
-      ],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
-      'parent_buildername': 'Linux ASAN Builder',
-      'testing': {
-        'platform': 'linux',
-        'test_spec_file': 'chromium.memory.json',
-      },
-    },
     'Linux Snapshot Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
