@@ -512,6 +512,13 @@ class SwarmingApi(recipe_api.RecipeApi):
     if idempotent is None:
       idempotent = self.default_idempotent
 
+    spec_name = ''
+    if self.m.buildbucket.builder_id and self.m.buildbucket.builder_id.bucket:
+      spec_name = '%s.%s:%s' % (
+          self.m.buildbucket.builder_id.project,
+          self.m.buildbucket.builder_id.bucket,
+          self.m.buildbucket.builder_id.builder)
+
     return SwarmingTask(
         title=title,
         isolated_hash=isolated_hash,
@@ -519,6 +526,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         env=self._default_env,
         priority=self.default_priority,
         shards=shards,
+        spec_name=spec_name,
         buildername=self.m.properties.get('buildername'),
         buildnumber=self.m.properties.get('buildnumber'),
         user=self.default_user,
@@ -724,6 +732,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     mastername = self.m.properties.get('mastername')
     if mastername:
       tags.add('master:' + mastername)
+    if task.spec_name:
+      tags.add('spec_name:' + task.spec_name)
     if task.buildername:
       tags.add('buildername:' + task.buildername)
     if task.buildnumber:
@@ -1291,9 +1301,9 @@ class SwarmingTask(object):
   """Definition of a task to run on swarming."""
 
   def __init__(self, title, isolated_hash, ignore_task_failure, dimensions,
-               env, priority, shards, buildername, buildnumber, expiration,
-               user, io_timeout, hard_timeout, idempotent, extra_args,
-               collect_step, task_output_dir, cipd_packages=None,
+               env, priority, shards, spec_name, buildername, buildnumber,
+               expiration, user, io_timeout, hard_timeout, idempotent,
+               extra_args, collect_step, task_output_dir, cipd_packages=None,
                build_properties=None, merge=None, trigger_script=None,
                named_caches=None, service_account=None, raw_cmd=None,
                env_prefixes=None):
@@ -1329,6 +1339,7 @@ class SwarmingTask(object):
           isolated tests based on gtest. Swarming uses GTEST_SHARD_INDEX
           and GTEST_TOTAL_SHARDS environment variables to tell the executable
           what shard to run.
+      * spec_name: task spec name. Used in monitoring.
       * buildername: buildbot builder this task was triggered from.
       * buildnumber: build number of a build this task was triggered from.
       * expiration: number of schedule until the task shouldn't even be run if
@@ -1384,6 +1395,7 @@ class SwarmingTask(object):
 
     self._trigger_output = None
     self.build_properties = build_properties
+    self.spec_name = spec_name
     self.buildername = buildername
     self.buildnumber = buildnumber
     self.cipd_packages = cipd_packages

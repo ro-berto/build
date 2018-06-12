@@ -26,6 +26,7 @@ DEPS = [
 ]
 
 from recipe_engine import post_process
+import json
 
 
 def RunSteps(api):
@@ -102,6 +103,27 @@ def GenTests(api):
   yield (
       api.test('basic') +
       api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
+      api.properties(
+          buildnumber=123,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp=123456)
+  )
+
+  yield (
+      api.test('basic_luci') +
+      api.properties.generic(
+          buildbucket=json.dumps({
+            'build':{
+              'project':'chromium',
+              'bucket':'try',
+              'tags':['builder:Linux Tests'],
+            }}),
           mastername='chromium.linux',
           buildername='Linux Tests') +
       api.properties(
