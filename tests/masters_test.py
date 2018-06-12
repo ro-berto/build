@@ -241,7 +241,6 @@ def main(argv):
       'master.client.dart.fyi': 'DartFYI',
       'master.client.dart.packages': 'DartPackages',
       'master.client.flutter': 'ClientFlutter',
-      'master.client.gyp': 'GYP',
       'master.client.libyuv': 'Libyuv',
       'master.client.nacl': 'NativeClient',
       'master.client.nacl.ports': 'WebPorts',
