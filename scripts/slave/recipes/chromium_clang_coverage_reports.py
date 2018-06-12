@@ -1,6 +1,7 @@
 # Copyright 2018 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
+from recipe_engine import post_process
 from recipe_engine.types import freeze
 
 DEPS = [
@@ -38,5 +39,14 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  for test in api.chromium.gen_tests_for_builders(BUILDERS):
-    yield test
+  yield (
+      api.test('linux') +
+      api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='linux-code-coverage-generation') +
+      api.post_process(post_process.MustRun, 'bot_update') +
+      api.post_process(post_process.MustRun, 'ensure_goma') +
+      api.post_process(post_process.MustRun, 'gclient runhooks') +
+      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.DropExpectation)
+  )
