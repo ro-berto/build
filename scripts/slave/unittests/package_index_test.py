@@ -13,6 +13,7 @@ import os
 import shutil
 import tempfile
 import unittest
+import zipfile
 
 import test_env  # pylint: disable=relative-import
 
@@ -75,6 +76,11 @@ class PackageIndexTest(unittest.TestCase):
           os.path.join('../../../', self.test2_h_file_name),
       ]))
 
+    # Create a path for the archive to be written to.
+    with tempfile.NamedTemporaryFile(
+        suffix='.zip', delete=False) as archive_file:
+      self.archive_path = archive_file.name
+
     self.index_pack = package_index.IndexPack(
         os.path.realpath(self.compdb_file.name), corpus=CORPUS, root=VNAME_ROOT,
         revision=REVISION, out_dir=OUT_DIR)
@@ -85,6 +91,8 @@ class PackageIndexTest(unittest.TestCase):
         os.path.join(self.index_pack.index_directory, 'units')))
 
   def tearDown(self):
+    if os.path.exists(self.archive_path):
+      os.remove(self.archive_path)
     if os.path.exists(self.index_pack.index_directory):
       shutil.rmtree(self.index_pack.index_directory)
     shutil.rmtree(self.root_dir)
@@ -226,6 +234,47 @@ class PackageIndexTest(unittest.TestCase):
         compilation_unit_wrapper = json.loads(unit_file_content)
         compilation_unit_dictionary = compilation_unit_wrapper['content']
         self.assertEquals(compilation_unit_dictionary['output_key'], 'test.obj')
+
+  def testCreateArchive(self):
+    self.index_pack._GenerateDataFiles()
+    self.index_pack._GenerateUnitFiles()
+    self.index_pack.CreateArchive(self.archive_path)
+
+    # Verify the structure of the archive. It should be as follows:
+    # root/              # Any valid non-empty directory name
+    #   units/
+    #     abcd1234       # Compilation unit (name is SHA256 of content)
+    #     ...
+    #   files/
+    #     1a2b4c4d       # File contents
+    #     ...
+    self.assertTrue(os.path.exists(self.archive_path))
+    with zipfile.ZipFile(self.archive_path, 'r') as archive:
+      zipped_filenames = archive.namelist()
+
+    root = os.path.basename(self.index_pack.index_directory)
+    self.assertIn(root + os.path.sep, zipped_filenames);
+
+    self.assertIn(os.path.join(root, 'units', ''), zipped_filenames)
+
+    # Rather than hardcode the SHA256 of the unit files here, we simply verify
+    # that at least one exists and that they are all present in the zip.
+    for _, _, files in os.walk(self.index_pack.index_directory):
+      self.assertNotEqual(0, len(files))
+      for unit_file_name in files:
+        self.assertIn(os.path.join(root, 'units', unit_file_name),
+                      zipped_filenames)
+
+    self.assertIn(os.path.join(root, 'files', ''), zipped_filenames)
+
+    test_cc_file = hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest() + '.data'
+    self.assertIn(os.path.join(root, 'files', test_cc_file), zipped_filenames)
+
+    test_h_file = hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest() + '.data'
+    self.assertIn(os.path.join(root, 'files', test_h_file), zipped_filenames)
+
+    test_h_file2 = hashlib.sha256(TEST2_H_FILE_CONTENT).hexdigest() + '.data'
+    self.assertIn(os.path.join(root, 'files', test_h_file2), zipped_filenames)
 
 if __name__ == '__main__':
   unittest.main()
