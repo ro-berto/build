@@ -324,14 +324,10 @@ class IndexPack(object):
     # relative path for the index pack to get rid of any path prefix. The format
     # specification requires that the archive contains one folder with an
     # arbitrary name directly containing the 'units' and 'files' directories.
-    temp_archive_path = shutil.make_archive(
-        filepath, format='zip', root_dir=os.path.dirname(self.index_directory),
-        base_dir=os.path.basename(self.index_directory))
-    # We have to move the archive file after creation, because
-    # shutil.make_archive adds an extra .zip to the end of the filepath that you
-    # pass in.
-    shutil.move(temp_archive_path, filepath)
-    print "Index pack created successfully at: %s" % filepath
+    if chromium_utils.RunCommand(
+        ['zip', '-r', filepath, os.path.basename(self.index_directory)],
+        cwd=os.path.dirname(self.index_directory)) != 0:
+      raise Exception('ERROR: failed to create %s, exiting' % filepath)
 
 
 def main():
