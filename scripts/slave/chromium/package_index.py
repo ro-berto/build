@@ -196,6 +196,10 @@ class IndexPack(object):
         if command_list[i] == '-o' and i + 1 < len(command_list):
           output_file = command_list[i + 1]
           break
+        elif command_list[i].startswith('/Fo'):
+          # Handle the Windows case.
+          output_file = command_list[i][len('/Fo'):]
+          break
       if not output_file:
         print 'No output file path found for %s' % entry['file']
 

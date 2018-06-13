@@ -24,6 +24,8 @@ TEST_H_FILE_CONTENT = ('#ifndef TEST_H\n#define TEST_H\n#include "test2.h"\n'
 TEST2_H_FILE_CONTENT = '#ifndef TEST2_H\n#define TEST2_H\n#endif\n'
 COMPILE_ARGUMENTS = 'clang++ -fsyntax-only -std=c++11 -c test.cc -o test.o'
 
+COMPILE_ARGUMENTS_WIN = 'clang-cl.exe /c test.cc /Fotest.obj'
+
 # Test values for corpus, root, and revision
 CORPUS = 'chromium-test'
 VNAME_ROOT = 'linux'
@@ -180,6 +182,50 @@ class PackageIndexTest(unittest.TestCase):
             (
                 real_compile_arguments + ['-w', '-nostdinc++']
             ))
+
+  def testGenerateUnitFilesWindows(self):
+    # Write a new compdb with Windows args, and re-create the index pack.
+    compdb_dictionary = {
+        'directory': self.build_dir,
+        'command': COMPILE_ARGUMENTS_WIN,
+        'file': '../../../test.cc',
+    }
+    with open(self.compdb_file.name, 'w') as compdb_file:
+      compdb_file.write(json.dumps([compdb_dictionary]))
+    self.index_pack = package_index.IndexPack(
+        os.path.realpath(self.compdb_file.name), corpus=CORPUS, root=VNAME_ROOT,
+        revision=REVISION, out_dir=OUT_DIR)
+
+    # Setup some dictionaries which are usually filled by _GenerateDataFiles()
+    self.index_pack.filehashes = {
+        self.test_cc_file_name:
+            hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest(),
+        self.test_h_file_name:
+            hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest(),
+        self.test2_h_file_name:
+            hashlib.sha256(TEST2_H_FILE_CONTENT).hexdigest(),
+    }
+    self.index_pack.filesizes = {
+        self.test_cc_file_name: len(TEST_CC_FILE_CONTENT),
+        self.test_h_file_name: len(TEST_H_FILE_CONTENT),
+        self.test2_h_file_name: len(TEST2_H_FILE_CONTENT),
+    }
+
+    # Now _GenerateUnitFiles() can be called.
+    self.index_pack._GenerateUnitFiles()
+
+    # Because we only called _GenerateUnitFiles(), the index pack directory
+    # should only contain the one unit file for the one compilation unit in our
+    # test compilation database.
+    for root, _, files in os.walk(self.index_pack.index_directory):
+      for unit_file_name in files:
+        with gzip.open(os.path.join(root, unit_file_name), 'rb') as unit_file:
+          unit_file_content = unit_file.read()
+
+        # Assert that the output path was parsed correctly.
+        compilation_unit_wrapper = json.loads(unit_file_content)
+        compilation_unit_dictionary = compilation_unit_wrapper['content']
+        self.assertEquals(compilation_unit_dictionary['output_key'], 'test.obj')
 
 if __name__ == '__main__':
   unittest.main()
