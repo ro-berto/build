@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.post_process import Filter
+from recipe_engine.post_process import Filter, DropExpectation
 
 DEPS = [
   'build',
@@ -671,6 +671,57 @@ def GenTests(api):
         'git diff to analyze patch',
         api.raw_io.stream_output('README.md\nfoo/bar/baz.py')
     )
+  )
+
+  def check_ordering(check, step_odict):
+    # 'base_unittests (with patch)' step should run before
+    # 'webkit_layout_tests (with patch)' step.
+    base_unittest_idx = None
+    webkit_layout_tests_idx = None
+
+    idx = 0
+    for step_name in step_odict:
+      if step_name == 'base_unittests (with patch)':
+        base_unittest_idx = idx
+
+      if step_name == 'webkit_layout_tests (with patch)':
+        webkit_layout_tests_idx = idx
+      idx += 1
+
+    check(base_unittest_idx != None)
+    check(webkit_layout_tests_idx != None)
+    check(base_unittest_idx < webkit_layout_tests_idx)
+
+  # This test is used to confirm the order of test execution.
+  # webkit_layout_tests step should run after base_unittests.
+  yield (
+    api.test('swarmed_isolated_scripts_and_gtests') +
+    props(extra_swarmed_tests=['base_unittests', 'webkit_layout_tests']) +
+    api.platform.name('linux') +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': [
+                    {
+                        "swarming": {"can_use_on_swarming_builders": True},
+                        "test": "base_unittests",
+                    },
+                ],
+                'isolated_scripts': [
+                    {
+                      'isolate_name': 'webkit_layout_tests',
+                      'name': 'webkit_layout_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                      'results_handler': 'layout tests',
+                    },
+                ],
+            },
+        })
+    ) +
+    suppress_analyze() +
+    api.post_process(check_ordering) +
+    api.post_process(DropExpectation)
   )
 
   swarmed_webkit_tests = (

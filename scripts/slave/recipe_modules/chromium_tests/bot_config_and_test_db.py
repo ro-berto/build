@@ -88,13 +88,17 @@ class BotConfig(object):
       scripts_compile_targets = \
           chromium_tests_api.get_compile_targets_for_scripts(self)
 
+    # chromium_tests_api.steps.generate_isolated_script should be in front.
+    # because this lets webkit_layout_tests runs later and bot's s resources
+    # are utilized by receiving result of other tests while webkit_layout_tests
+    # is running.
     test_generators = [
+      chromium_tests_api.steps.generate_isolated_script,
       chromium_tests_api.steps.generate_cts_test,
       chromium_tests_api.steps.generate_gtest,
       chromium_tests_api.steps.generate_instrumentation_test,
       chromium_tests_api.steps.generate_junit_test,
       chromium_tests_api.steps.generate_script,
-      chromium_tests_api.steps.generate_isolated_script,
     ]
 
     masternames = set(bot_id['mastername'] for bot_id in self._bot_ids)
