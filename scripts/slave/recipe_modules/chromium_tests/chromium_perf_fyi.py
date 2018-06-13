@@ -101,7 +101,8 @@ _AddBuildSpec('Android CFI arm64 Builder Perf FYI', 'android', 'android',
 
 _AddBuildSpec('Linux Compile Perf FYI', 'linux-fyi', 'linux')
 _AddBuildSpec('Mac Builder Perf FYI', 'mac-fyi', 'mac')
-_AddBuildSpec('Win Builder Perf FYI', 'win-fyi', 'win')
+_AddBuildSpec('Win Builder Perf FYI', 'win-fyi', 'win',
+              use_private_isolate_server=True)
 
 _AddIsolatedTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux',
                      parent_buildername='Linux Compile Perf FYI',
@@ -124,11 +125,11 @@ _AddIsolatedTestSpec('android-pixel2_webview-perf', '', 'android',
                      use_private_swarming_server=True)
 
 _AddBuildSpec('Battor Agent Linux', 'linux', 'linux', run_sizes=False,
-              compile_targets=['battor_agent'])
+              compile_targets=['battor_agent'], use_private_isolate_server=True)
 _AddBuildSpec('Battor Agent Mac', 'mac', 'mac', run_sizes=False,
-              compile_targets=['battor_agent'])
+              compile_targets=['battor_agent'], use_private_isolate_server=True)
 _AddBuildSpec('Battor Agent Win', 'win', 'win', run_sizes=False,
-              compile_targets=['battor_agent'])
+              compile_targets=['battor_agent'], use_private_isolate_server=True)
 
 _AddIsolatedTestSpec('Histogram Pipeline Linux Perf',
                      'histogram-pipeline-linux-perf',
