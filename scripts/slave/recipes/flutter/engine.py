@@ -162,6 +162,28 @@ def BuildLinuxAndroid(api):
     UploadArtifacts(api, artifact_dir, ['out/%s/libflutter.so' % out_dir],
                     archive_name='symbols.zip')
 
+  jit_variants = [
+    ('arm', 'android_dynamic_%s', 'android-arm-dynamic-%s', 'clang_x86'),
+    ('arm64', 'android_dynamic_%s_arm64', 'android-arm64-dynamic-%s', 'clang_x64'),
+  ]
+  for android_cpu, out_dir, artifact_dir, clang_dir in jit_variants:
+    for runtime_mode in ['profile', 'release']:
+      build_output_dir = out_dir % runtime_mode
+      upload_dir = artifact_dir % runtime_mode
+
+      RunGN(api, '--android', '--runtime-mode=' + runtime_mode, '--android-cpu=%s' % android_cpu)
+      Build(api, build_output_dir)
+
+      UploadArtifacts(api, upload_dir, [
+        'out/%s/flutter.jar' % build_output_dir,
+      ])
+      UploadArtifacts(api, upload_dir, [
+        'out/%s/%s/gen_snapshot' % (build_output_dir, clang_dir),
+      ], archive_name='linux-x64.zip')
+      UploadArtifacts(api, upload_dir, [
+          'out/%s/libflutter.so' % build_output_dir
+      ], archive_name='symbols.zip')
+
   # Build and upload engines for the runtime modes that use AOT compilation.
   aot_variants = [
     ('arm', 'android_%s', 'android-arm-%s', 'clang_x86'),
