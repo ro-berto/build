@@ -513,7 +513,9 @@ class SwarmingApi(recipe_api.RecipeApi):
       idempotent = self.default_idempotent
 
     spec_name = ''
-    if self.m.buildbucket.builder_id and self.m.buildbucket.builder_id.bucket:
+    if (self.m.buildbucket.builder_id and
+        self.m.buildbucket.builder_id.bucket and
+        self.m.buildbucket.builder_id.project):
       spec_name = '%s.%s:%s' % (
           self.m.buildbucket.builder_id.project,
           self.m.buildbucket.builder_id.bucket,
