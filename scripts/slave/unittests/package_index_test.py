@@ -6,7 +6,6 @@
 
 """Tests for package_index.py."""
 
-import gzip
 import hashlib
 import json
 import os
@@ -78,7 +77,7 @@ class PackageIndexTest(unittest.TestCase):
 
     # Create a path for the archive to be written to.
     with tempfile.NamedTemporaryFile(
-        suffix='.zip', delete=False) as archive_file:
+        suffix='.kzip', delete=False) as archive_file:
       self.archive_path = archive_file.name
 
     self.index_pack = package_index.IndexPack(
@@ -101,14 +100,14 @@ class PackageIndexTest(unittest.TestCase):
   def _CheckDataFile(self, filename, content):
     filepath = os.path.join(self.index_pack.index_directory, 'files', filename)
     self.assertTrue(os.path.exists(filepath))
-    with gzip.open(filepath, 'rb') as data_file:
+    with open(filepath, 'r') as data_file:
       actual_content = data_file.read()
     self.assertEquals(content, actual_content)
 
   def testGenerateDataFiles(self):
     self.index_pack._GenerateDataFiles()
-    test_cc_file = hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest() + '.data'
-    test_h_file = hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest() + '.data'
+    test_cc_file = hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest()
+    test_h_file = hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest()
     self._CheckDataFile(test_cc_file, TEST_CC_FILE_CONTENT)
     self._CheckDataFile(test_h_file, TEST_H_FILE_CONTENT)
 
@@ -138,18 +137,16 @@ class PackageIndexTest(unittest.TestCase):
     unit_files = os.listdir(units_dir)
     self.assertEqual(1, len(unit_files))
     for unit_file_name in unit_files:
-      with gzip.open(
-          os.path.join(units_dir, unit_file_name), 'rb') as unit_file:
+      with open(os.path.join(units_dir, unit_file_name), 'r') as unit_file:
         unit_file_content = unit_file.read()
 
       # Assert that the name of the unit file is correct.
       unit_file_hash = hashlib.sha256(unit_file_content).hexdigest()
-      self.assertEquals(unit_file_name, unit_file_hash + '.unit')
+      self.assertEquals(unit_file_name, unit_file_hash)
 
       # Assert that the json content encodes valid dictionaries.
       compilation_unit_wrapper = json.loads(unit_file_content)
-      self.assertEquals(compilation_unit_wrapper['format'], 'kythe')
-      compilation_unit_dictionary = compilation_unit_wrapper['content']
+      compilation_unit_dictionary = compilation_unit_wrapper['unit']
 
       self.assertEquals(compilation_unit_dictionary['v_name']['corpus'],
                         CORPUS)
@@ -234,13 +231,12 @@ class PackageIndexTest(unittest.TestCase):
     unit_files = os.listdir(units_dir)
     self.assertEqual(1, len(unit_files))
     for unit_file_name in unit_files:
-      with gzip.open(
-          os.path.join(units_dir, unit_file_name), 'rb') as unit_file:
+      with open(os.path.join(units_dir, unit_file_name), 'r') as unit_file:
         unit_file_content = unit_file.read()
 
       # Assert that the output path was parsed correctly.
       compilation_unit_wrapper = json.loads(unit_file_content)
-      compilation_unit_dictionary = compilation_unit_wrapper['content']
+      compilation_unit_dictionary = compilation_unit_wrapper['unit']
       self.assertEquals(compilation_unit_dictionary['output_key'], 'test.obj')
 
   def testCreateArchive(self):
@@ -276,13 +272,13 @@ class PackageIndexTest(unittest.TestCase):
 
     self.assertIn(os.path.join(root, 'files', ''), zipped_filenames)
 
-    test_cc_file = hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest() + '.data'
+    test_cc_file = hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest()
     self.assertIn(os.path.join(root, 'files', test_cc_file), zipped_filenames)
 
-    test_h_file = hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest() + '.data'
+    test_h_file = hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest()
     self.assertIn(os.path.join(root, 'files', test_h_file), zipped_filenames)
 
-    test_h_file2 = hashlib.sha256(TEST2_H_FILE_CONTENT).hexdigest() + '.data'
+    test_h_file2 = hashlib.sha256(TEST2_H_FILE_CONTENT).hexdigest()
     self.assertIn(os.path.join(root, 'files', test_h_file2), zipped_filenames)
 
 if __name__ == '__main__':

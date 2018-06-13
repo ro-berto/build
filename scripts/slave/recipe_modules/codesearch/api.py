@@ -154,14 +154,14 @@ class CodesearchApi(recipe_api.RecipeApi):
     """Create the kythe index pack and upload it to google storage.
     """
     commit_position = self._get_commit_position()
-    index_pack_kythe_name = 'index_pack_%s_kythe.zip' % self.c.PLATFORM
+    index_pack_kythe_name = 'chromium_%s.kzip' % self.c.PLATFORM
     # TODO(hinoka): Delete these two lines after migrated to LUCI.
     if self.m.runtime.is_experimental:
       index_pack_kythe_name_with_revision = (
-          'index_pack_%s_kythe_%s_%s_experimental.zip' % (
+          'chromium_%s_%s_%s_experimental.kzip' % (
               self.c.PLATFORM, commit_position, self._get_revision()))
     else:
-      index_pack_kythe_name_with_revision = 'index_pack_%s_kythe_%s_%s.zip' % (
+      index_pack_kythe_name_with_revision = 'chromium_%s_%s_%s.kzip' % (
           self.c.PLATFORM, commit_position, self._get_revision())
     self._create_kythe_index_pack(index_pack_kythe_name)
 
@@ -192,7 +192,7 @@ class CodesearchApi(recipe_api.RecipeApi):
 
   def _upload_kythe_index_pack(self, bucket_name, index_pack_kythe_name,
                               index_pack_kythe_name_with_revision):
-    """Upload the kythe index pack to goole storage.
+    """Upload the kythe index pack to google storage.
 
     Args:
       bucket_name: Name of the google storage bucket to upload to

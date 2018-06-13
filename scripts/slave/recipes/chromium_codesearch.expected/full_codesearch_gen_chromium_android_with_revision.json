@@ -867,7 +867,7 @@
       "--path-to-compdb",
       "[START_DIR]/src/out/chromium-android/Debug/compile_commands.json",
       "--path-to-archive-output",
-      "[START_DIR]/src/out/chromium-android/Debug/index_pack_android_kythe.zip",
+      "[START_DIR]/src/out/chromium-android/Debug/chromium_android.kzip",
       "--corpus",
       "chromium",
       "--revision",
@@ -888,13 +888,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[START_DIR]/src/out/chromium-android/Debug/index_pack_android_kythe.zip",
-      "gs://chrome-codesearch/prod/index_pack_android_kythe_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
+      "[START_DIR]/src/out/chromium-android/Debug/chromium_android.kzip",
+      "gs://chrome-codesearch/prod/chromium_android_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.kzip"
     ],
     "infra_step": true,
     "name": "gsutil upload kythe index pack",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/index_pack_android_kythe_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_android_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.kzip@@@"
     ]
   },
   {

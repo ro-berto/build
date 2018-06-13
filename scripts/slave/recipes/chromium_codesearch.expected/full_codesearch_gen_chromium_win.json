@@ -870,7 +870,7 @@
       "--path-to-compdb",
       "[START_DIR]/src/out/Debug/compile_commands.json",
       "--path-to-archive-output",
-      "[START_DIR]/src/out/Debug/index_pack_win_kythe.zip",
+      "[START_DIR]/src/out/Debug/chromium_win.kzip",
       "--corpus",
       "chromium",
       "--revision",
@@ -889,13 +889,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[START_DIR]/src/out/Debug/index_pack_win_kythe.zip",
-      "gs://chrome-codesearch/prod/index_pack_win_kythe_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip"
+      "[START_DIR]/src/out/Debug/chromium_win.kzip",
+      "gs://chrome-codesearch/prod/chromium_win_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.kzip"
     ],
     "infra_step": true,
     "name": "gsutil upload kythe index pack",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/index_pack_win_kythe_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_win_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.kzip@@@"
     ]
   },
   {
