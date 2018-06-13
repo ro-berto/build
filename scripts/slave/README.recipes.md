@@ -2397,11 +2397,7 @@ Add a suite of test steps.
 
 &mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/luci_config/api.py#17)(self):**
 
-&mdash; **def [get\_project\_config](/scripts/slave/recipe_modules/luci_config/api.py#48)(self, project, config):**
-
-Do not use. Use get_ref_config instead.
-
-&mdash; **def [get\_project\_metadata](/scripts/slave/recipe_modules/luci_config/api.py#75)(self, project):**
+&mdash; **def [get\_project\_metadata](/scripts/slave/recipe_modules/luci_config/api.py#70)(self, project):**
 
 &mdash; **def [get\_projects](/scripts/slave/recipe_modules/luci_config/api.py#30)(self):**
 
@@ -2411,7 +2407,7 @@ Returns:
   A dictionary mapping project id to its luci-config project spec (among
   which there is a repo_url key).
 
-&mdash; **def [get\_ref\_config](/scripts/slave/recipe_modules/luci_config/api.py#52)(self, project, ref, config):**
+&mdash; **def [get\_ref\_config](/scripts/slave/recipe_modules/luci_config/api.py#47)(self, project, ref, config):**
 
 Fetch the ref config from luci-config.
 

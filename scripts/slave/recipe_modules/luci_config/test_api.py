@@ -9,18 +9,6 @@ from recipe_engine import recipe_test_api
 
 
 class LuciConfigTestApi(recipe_test_api.RecipeTestApi):
-  # TODO(tandrii): remove once no downstream uses this.
-  def get_project_config(self, project, config, content):
-    return self.m.url.json(
-        'Get project %r \'refs/heads/master\' config %r' % (project, config),
-        {
-          'content': base64.b64encode(content),
-          'content_hash': 'v1:814564d6e6507ad7de56de8c76548a31633ce3e4',
-          'revision': '80abb4d6f37e89ba0786c5bca9c599565693fe12',
-          'kind': 'config#resourcesItem',
-          'etag': 'fake-etag',
-        })
-
   def get_ref_config(
       self, project, ref, config,
       content,

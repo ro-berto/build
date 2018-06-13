@@ -44,11 +44,6 @@ class LuciConfigApi(recipe_api.RecipeApi):
       mapping[str(project['id'])] = {str(k): str(v) for k, v in project.items()}
     return mapping
 
-  # TODO(tandrii): remove this after usages are removed downstream.
-  def get_project_config(self, project, config):
-    """Do not use. Use get_ref_config instead."""
-    return self.get_ref_config(project, 'refs/heads/master', config)
-
   def get_ref_config(self, project, ref, config):
     """Fetch the ref config from luci-config.
 
