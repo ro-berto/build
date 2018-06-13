@@ -11,7 +11,21 @@
       "--outfile",
       "/path/to/tmp/json"
     ],
-    "name": "Get project 'build' config 'recipes.cfg'"
+    "name": "Get project 'build' 'refs/heads/master' config 'recipes.cfg'"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
+      "--url",
+      "https://luci-config.appspot.com//_ah/api/config/v1/config_sets/projects%2Fchromium%2Frefs%2Fheads%2Fmaster/config/cq.cfg",
+      "--status-json",
+      "/path/to/tmp/json",
+      "--outfile",
+      "/path/to/tmp/json"
+    ],
+    "name": "Get project 'chromium' 'refs/heads/master' config 'cq.cfg'"
   },
   {
     "cmd": [

@@ -21,6 +21,7 @@ def RunSteps(api, auth_token):
     api.luci_config.c.auth_token = auth_token
 
   api.luci_config.get_project_config('build', 'recipes.cfg')
+  api.luci_config.get_ref_config('chromium', 'refs/heads/master', 'cq.cfg')
   api.luci_config.get_project_metadata('build')
 
 
@@ -28,12 +29,20 @@ def GenTests(api):
   yield (
       api.test('basic') +
       api.luci_config.get_projects(['build']) +
-      api.luci_config.get_project_config('build', 'recipes.cfg', 'testcontent')
+      api.luci_config.get_project_config('build', 'recipes.cfg', 'content') +
+      api.luci_config.get_ref_config(
+        'chromium', 'refs/heads/master', 'cq.cfg',
+        'cq.cfg content',
+        found_at_path='infra/config/branch/')
   )
 
   yield (
       api.test('auth_token') +
       api.properties(auth_token='ya2930948320948203480=') +
       api.luci_config.get_projects(['build']) +
-      api.luci_config.get_project_config('build', 'recipes.cfg', 'testcontent')
+      api.luci_config.get_project_config('build', 'recipes.cfg', 'content') +
+      api.luci_config.get_ref_config(
+        'chromium', 'refs/heads/master', 'cq.cfg',
+        'cq.cfg content',
+        found_at_path='infra/config/branch/')
   )

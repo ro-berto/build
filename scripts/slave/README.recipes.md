@@ -257,7 +257,6 @@
   * [goma:tests/recommended_goma_jobs](#recipes-goma_tests_recommended_goma_jobs)
   * [goma:tests/start](#recipes-goma_tests_start)
   * [goma_client](#recipes-goma_client)
-  * [gyp](#recipes-gyp)
   * [halt:examples/full](#recipes-halt_examples_full)
   * [infra/gae_sdk_cipd_packager](#recipes-infra_gae_sdk_cipd_packager)
   * [ios/try](#recipes-ios_try)
@@ -2398,18 +2397,11 @@ Add a suite of test steps.
 
 &mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/luci_config/api.py#17)(self):**
 
-&mdash; **def [get\_project\_config](/scripts/slave/recipe_modules/luci_config/api.py#47)(self, project, config):**
+&mdash; **def [get\_project\_config](/scripts/slave/recipe_modules/luci_config/api.py#48)(self, project, config):**
 
-Fetch the project config from luci-config.
+Do not use. Use get_ref_config instead.
 
-Args:
-  project: The name of the project in luci-config.
-  config: The config to fetch from refs/heads/master of the project.
-
-Returns:
-  The json returned from luci-config.
-
-&mdash; **def [get\_project\_metadata](/scripts/slave/recipe_modules/luci_config/api.py#67)(self, project):**
+&mdash; **def [get\_project\_metadata](/scripts/slave/recipe_modules/luci_config/api.py#75)(self, project):**
 
 &mdash; **def [get\_projects](/scripts/slave/recipe_modules/luci_config/api.py#30)(self):**
 
@@ -2418,6 +2410,19 @@ Fetch the mapping of project id to url from luci-config.
 Returns:
   A dictionary mapping project id to its luci-config project spec (among
   which there is a repo_url key).
+
+&mdash; **def [get\_ref\_config](/scripts/slave/recipe_modules/luci_config/api.py#52)(self, project, ref, config):**
+
+Fetch the ref config from luci-config.
+
+Args:
+  project: The name of the project in luci-config.
+  ref: git ref, e.g., 'refs/heads/master'
+  config: The config to fetch from refs/heads/master of the project.
+
+Returns:
+  The json returned from luci-config with 'content' field already base64
+  decoded.
 ### *recipe_modules* / [math\_utils](/scripts/slave/recipe_modules/math_utils)
 
 General statistical or mathematical functions.
@@ -5009,11 +5014,6 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 [DEPS](/scripts/slave/recipes/goma_client.py#5): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/goma_client.py#18)(api):**
-### *recipes* / [gyp](/scripts/slave/recipes/gyp.py)
-
-[DEPS](/scripts/slave/recipes/gyp.py#5): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/gyp.py#17)(api):**
 ### *recipes* / [halt:examples/full](/scripts/slave/recipe_modules/halt/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/halt/examples/full.py#5): [halt](#recipe_modules-halt)

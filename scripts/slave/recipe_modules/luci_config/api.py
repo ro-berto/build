@@ -44,22 +44,30 @@ class LuciConfigApi(recipe_api.RecipeApi):
       mapping[str(project['id'])] = {str(k): str(v) for k, v in project.items()}
     return mapping
 
+  # TODO(tandrii): remove this after usages are removed downstream.
   def get_project_config(self, project, config):
-    """Fetch the project config from luci-config.
+    """Do not use. Use get_ref_config instead."""
+    return self.get_ref_config(project, 'refs/heads/master', config)
+
+  def get_ref_config(self, project, ref, config):
+    """Fetch the ref config from luci-config.
 
     Args:
       project: The name of the project in luci-config.
+      ref: git ref, e.g., 'refs/heads/master'
       config: The config to fetch from refs/heads/master of the project.
 
     Returns:
-      The json returned from luci-config.
+      The json returned from luci-config with 'content' field already base64
+      decoded.
     """
     url = self.c.base_url + '/_ah/api/config/v1/config_sets/'
-    url += self.m.url.quote('projects/%s/refs/heads/master' % project, safe='')
+    url += self.m.url.quote('projects/%s/%s' % (project, ref), safe='')
     url += '/config/%s' % config
 
     result = self.m.url.get_json(
-        url, step_name='Get project %r config %r' % (project, config),
+        url,
+        step_name='Get project %r %r config %r' % (project, ref, config),
         headers=self._get_headers()).output
     result['content'] = base64.b64decode(result['content'])
     return result
