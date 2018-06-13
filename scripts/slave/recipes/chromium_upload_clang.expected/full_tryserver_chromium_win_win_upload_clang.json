@@ -219,6 +219,11 @@
       "-u",
       "[START_DIR]\\src\\third_party\\binutils\\download.py"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "download binutils"
   },
   {
@@ -228,6 +233,11 @@
       "[START_DIR]\\src\\tools\\clang\\scripts\\package.py",
       "--upload"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "package clang"
   },
   {

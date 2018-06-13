@@ -7,7 +7,9 @@ from recipe_engine.types import freeze
 DEPS = [
   'depot_tools/bot_update',
   'chromium',
+  'depot_tools/depot_tools',
   'depot_tools/gsutil',
+  'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -68,13 +70,15 @@ def RunSteps(api):
       api.path['checkout'].join('build', 'vs_toolchain.py'), ['update'])
   api.python('update mac toolchain',
       api.path['checkout'].join('build', 'mac_toolchain.py'))
-  api.python('download binutils',
-      api.path['checkout'].join('third_party', 'binutils', 'download.py'))
+  with api.depot_tools.on_path():
+    api.python('download binutils',
+        api.path['checkout'].join('third_party', 'binutils', 'download.py'))
 
-  api.python(
-      'package clang',
-      api.path['checkout'].join('tools', 'clang', 'scripts', 'package.py'),
-      args=['--upload'])
+    # Note this shares above's context manager.
+    api.python(
+        'package clang',
+        api.path['checkout'].join('tools', 'clang', 'scripts', 'package.py'),
+        args=['--upload'])
 
 
 def GenTests(api):

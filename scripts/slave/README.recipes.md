@@ -4431,9 +4431,9 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_trybot.py#35)(api):**
 ### *recipes* / [chromium\_upload\_clang](/scripts/slave/recipes/chromium_upload_clang.py)
 
-[DEPS](/scripts/slave/recipes/chromium_upload_clang.py#7): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/chromium_upload_clang.py#7): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_upload_clang.py#61)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_upload_clang.py#63)(api):**
 ### *recipes* / [client.fletch.recipe\_autogen](/scripts/slave/recipes/client.fletch.recipe_autogen.py)
 
 [DEPS](/scripts/slave/recipes/client.fletch.recipe_autogen.py#5): [build](#recipe_modules-build), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
