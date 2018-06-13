@@ -17,6 +17,7 @@ import time
 import zlib
 
 from common import chromium_utils
+from contextlib import closing
 
 
 class IndexPack(object):
@@ -65,6 +66,10 @@ class IndexPack(object):
     self.units_directory = os.path.join(self.index_directory, 'units')
     os.makedirs(self.files_directory)
     os.makedirs(self.units_directory)
+
+  def close(self):
+    """Cleans up any temporary dirs created in the constructor."""
+    shutil.rmtree(self.index_directory)
 
   def _GenerateDataFiles(self):
     """A function which produces the data files for the index pack.
@@ -327,10 +332,6 @@ class IndexPack(object):
     # pass in.
     shutil.move(temp_archive_path, filepath)
     print "Index pack created successfully at: %s" % filepath
-    # Remove the temporary index pack directory. If there was no exception so
-    # far, the archive has been created successfully, so the temporary index
-    # pack directory is not needed anymore.
-    shutil.rmtree(self.index_directory)
 
 
 def main():
@@ -358,17 +359,17 @@ def main():
   options = parser.parse_args()
 
   print '%s: Index generation...' % time.strftime('%X')
-  index_pack = IndexPack(options.path_to_compdb, options.corpus, options.root,
-                         options.revision, options.out_dir)
-  index_pack.GenerateIndexPack()
+  with closing(IndexPack(options.path_to_compdb, options.corpus, options.root,
+                         options.revision, options.out_dir)) as index_pack:
+    index_pack.GenerateIndexPack()
 
-  if not options.keep_filepaths_files:
-    # Clean up the *.filepaths files.
-    chromium_utils.RemoveFilesWildcards(
-        '*.filepaths', os.path.join(os.getcwd(), 'src'))
+    if not options.keep_filepaths_files:
+      # Clean up the *.filepaths files.
+      chromium_utils.RemoveFilesWildcards(
+          '*.filepaths', os.path.join(os.getcwd(), 'src'))
 
-  # Create the archive containing the generated files.
-  index_pack.CreateArchive(options.path_to_archive_output)
+    # Create the archive containing the generated files.
+    index_pack.CreateArchive(options.path_to_archive_output)
 
   print '%s: Done.' % time.strftime('%X')
   return 0

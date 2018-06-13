@@ -91,10 +91,11 @@ class PackageIndexTest(unittest.TestCase):
         os.path.join(self.index_pack.index_directory, 'units')))
 
   def tearDown(self):
+    if os.path.exists(self.compdb_file.name):
+      os.remove(self.compdb_file.name)
     if os.path.exists(self.archive_path):
       os.remove(self.archive_path)
-    if os.path.exists(self.index_pack.index_directory):
-      shutil.rmtree(self.index_pack.index_directory)
+    self.index_pack.close()
     shutil.rmtree(self.root_dir)
 
   def _CheckDataFile(self, filename, content):
@@ -133,63 +134,66 @@ class PackageIndexTest(unittest.TestCase):
     # Because we only called _GenerateUnitFiles(), the index pack directory
     # should only contain the one unit file for the one compilation unit in our
     # test compilation database.
-    for root, _, files in os.walk(self.index_pack.index_directory):
-      for unit_file_name in files:
-        with gzip.open(os.path.join(root, unit_file_name), 'rb') as unit_file:
-          unit_file_content = unit_file.read()
+    units_dir = os.path.join(self.index_pack.index_directory, 'units')
+    unit_files = os.listdir(units_dir)
+    self.assertEqual(1, len(unit_files))
+    for unit_file_name in unit_files:
+      with gzip.open(
+          os.path.join(units_dir, unit_file_name), 'rb') as unit_file:
+        unit_file_content = unit_file.read()
 
-        # Assert that the name of the unit file is correct.
-        unit_file_hash = hashlib.sha256(unit_file_content).hexdigest()
-        self.assertEquals(unit_file_name, unit_file_hash + '.unit')
+      # Assert that the name of the unit file is correct.
+      unit_file_hash = hashlib.sha256(unit_file_content).hexdigest()
+      self.assertEquals(unit_file_name, unit_file_hash + '.unit')
 
-        # Assert that the json content encodes valid dictionaries.
-        compilation_unit_wrapper = json.loads(unit_file_content)
-        self.assertEquals(compilation_unit_wrapper['format'], 'kythe')
-        compilation_unit_dictionary = compilation_unit_wrapper['content']
+      # Assert that the json content encodes valid dictionaries.
+      compilation_unit_wrapper = json.loads(unit_file_content)
+      self.assertEquals(compilation_unit_wrapper['format'], 'kythe')
+      compilation_unit_dictionary = compilation_unit_wrapper['content']
 
-        self.assertEquals(compilation_unit_dictionary['v_name']['corpus'],
-                          CORPUS)
-        self.assertEquals(compilation_unit_dictionary['v_name']['root'],
-                          VNAME_ROOT)
-        self.assertEquals(compilation_unit_dictionary['source_file'],
-                          ['../../../test.cc'])
-        self.assertEquals(compilation_unit_dictionary['revision'],
-                          REVISION)
-        self.assertEquals(compilation_unit_dictionary['output_key'], 'test.o')
+      self.assertEquals(compilation_unit_dictionary['v_name']['corpus'],
+                        CORPUS)
+      self.assertEquals(compilation_unit_dictionary['v_name']['root'],
+                        VNAME_ROOT)
+      self.assertEquals(compilation_unit_dictionary['source_file'],
+                        ['../../../test.cc'])
+      self.assertEquals(compilation_unit_dictionary['revision'],
+                        REVISION)
+      self.assertEquals(compilation_unit_dictionary['output_key'], 'test.o')
 
-        self.assertEquals(len(compilation_unit_dictionary['required_input']),
-                          len(self.index_pack.filesizes))
+      self.assertEquals(len(compilation_unit_dictionary['required_input']),
+                        len(self.index_pack.filesizes))
 
-        test_cc_entry = compilation_unit_dictionary['required_input'][0]
-        self.assertEquals(test_cc_entry['info']['digest'],
-                          hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest())
-        self.assertEquals(test_cc_entry['info']['path'], '../../../test.cc')
-        self.assertEquals(test_cc_entry['v_name']['path'], 'src/test.cc')
-        self.assertEquals(test_cc_entry['v_name']['corpus'], CORPUS)
-        self.assertEquals(test_cc_entry['v_name']['root'], VNAME_ROOT)
+      test_cc_entry = compilation_unit_dictionary['required_input'][0]
+      self.assertEquals(test_cc_entry['info']['digest'],
+                        hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest())
+      self.assertEquals(test_cc_entry['info']['path'], '../../../test.cc')
+      self.assertEquals(test_cc_entry['v_name']['path'], 'src/test.cc')
+      self.assertEquals(test_cc_entry['v_name']['corpus'], CORPUS)
+      self.assertEquals(test_cc_entry['v_name']['root'], VNAME_ROOT)
 
-        test_h_entry = compilation_unit_dictionary['required_input'][1]
-        self.assertEquals(test_h_entry['info']['digest'],
-                          hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest())
-        self.assertEquals(test_h_entry['info']['path'], '../../../test.h')
-        self.assertEquals(test_h_entry['v_name']['path'], 'src/test.h')
-        self.assertEquals(test_h_entry['v_name']['corpus'], CORPUS)
-        self.assertEquals(test_h_entry['v_name']['root'], VNAME_ROOT)
+      test_h_entry = compilation_unit_dictionary['required_input'][1]
+      self.assertEquals(test_h_entry['info']['digest'],
+                        hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest())
+      self.assertEquals(test_h_entry['info']['path'], '../../../test.h')
+      self.assertEquals(test_h_entry['v_name']['path'], 'src/test.h')
+      self.assertEquals(test_h_entry['v_name']['corpus'], CORPUS)
+      self.assertEquals(test_h_entry['v_name']['root'], VNAME_ROOT)
 
-        test2_h_entry = compilation_unit_dictionary['required_input'][2]
-        self.assertEquals(test2_h_entry['info']['digest'],
-                          hashlib.sha256(TEST2_H_FILE_CONTENT).hexdigest())
-        self.assertEquals(test2_h_entry['info']['path'], '../../../test2.h')
-        self.assertEquals(test2_h_entry['v_name']['path'], 'src/test2.h')
-        self.assertEquals(test2_h_entry['v_name']['corpus'], CORPUS)
-        self.assertEquals(test2_h_entry['v_name']['root'], VNAME_ROOT)
+      test2_h_entry = compilation_unit_dictionary['required_input'][2]
+      self.assertEquals(test2_h_entry['info']['digest'],
+                        hashlib.sha256(TEST2_H_FILE_CONTENT).hexdigest())
+      self.assertEquals(test2_h_entry['info']['path'], '../../../test2.h')
+      self.assertEquals(test2_h_entry['v_name']['path'], 'src/test2.h')
+      self.assertEquals(test2_h_entry['v_name']['corpus'], CORPUS)
+      self.assertEquals(test2_h_entry['v_name']['root'], VNAME_ROOT)
 
-        real_compile_arguments = COMPILE_ARGUMENTS.split()[1:]
-        self.assertEquals(
-            compilation_unit_dictionary['argument'],
-            (
-                real_compile_arguments + ['-w', '-nostdinc++']
-            ))
+      real_compile_arguments = COMPILE_ARGUMENTS.split()[1:]
+      self.assertEquals(
+          compilation_unit_dictionary['argument'],
+          (
+              real_compile_arguments + ['-w', '-nostdinc++']
+          ))
 
   def testGenerateUnitFilesWindows(self):
     # Write a new compdb with Windows args, and re-create the index pack.
@@ -200,6 +204,7 @@ class PackageIndexTest(unittest.TestCase):
     }
     with open(self.compdb_file.name, 'w') as compdb_file:
       compdb_file.write(json.dumps([compdb_dictionary]))
+    self.index_pack.close()
     self.index_pack = package_index.IndexPack(
         os.path.realpath(self.compdb_file.name), corpus=CORPUS, root=VNAME_ROOT,
         revision=REVISION, out_dir=OUT_DIR)
@@ -225,15 +230,18 @@ class PackageIndexTest(unittest.TestCase):
     # Because we only called _GenerateUnitFiles(), the index pack directory
     # should only contain the one unit file for the one compilation unit in our
     # test compilation database.
-    for root, _, files in os.walk(self.index_pack.index_directory):
-      for unit_file_name in files:
-        with gzip.open(os.path.join(root, unit_file_name), 'rb') as unit_file:
-          unit_file_content = unit_file.read()
+    units_dir = os.path.join(self.index_pack.index_directory, 'units')
+    unit_files = os.listdir(units_dir)
+    self.assertEqual(1, len(unit_files))
+    for unit_file_name in unit_files:
+      with gzip.open(
+          os.path.join(units_dir, unit_file_name), 'rb') as unit_file:
+        unit_file_content = unit_file.read()
 
-        # Assert that the output path was parsed correctly.
-        compilation_unit_wrapper = json.loads(unit_file_content)
-        compilation_unit_dictionary = compilation_unit_wrapper['content']
-        self.assertEquals(compilation_unit_dictionary['output_key'], 'test.obj')
+      # Assert that the output path was parsed correctly.
+      compilation_unit_wrapper = json.loads(unit_file_content)
+      compilation_unit_dictionary = compilation_unit_wrapper['content']
+      self.assertEquals(compilation_unit_dictionary['output_key'], 'test.obj')
 
   def testCreateArchive(self):
     self.index_pack._GenerateDataFiles()
@@ -259,11 +267,12 @@ class PackageIndexTest(unittest.TestCase):
 
     # Rather than hardcode the SHA256 of the unit files here, we simply verify
     # that at least one exists and that they are all present in the zip.
-    for _, _, files in os.walk(self.index_pack.index_directory):
-      self.assertNotEqual(0, len(files))
-      for unit_file_name in files:
-        self.assertIn(os.path.join(root, 'units', unit_file_name),
-                      zipped_filenames)
+    units_dir = os.path.join(self.index_pack.index_directory, 'units')
+    unit_files = os.listdir(units_dir)
+    self.assertNotEqual(0, len(unit_files))
+    for unit_file_name in unit_files:
+      self.assertIn(os.path.join(root, 'units', unit_file_name),
+                    zipped_filenames)
 
     self.assertIn(os.path.join(root, 'files', ''), zipped_filenames)
 
