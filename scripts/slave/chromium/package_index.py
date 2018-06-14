@@ -22,7 +22,7 @@ from contextlib import closing
 class IndexPack(object):
   """Class used to create an index pack to be indexed by Kythe."""
 
-  def __init__(self, compdb_path, corpus=None, root=None, revision=None,
+  def __init__(self, compdb_path, corpus=None, root=None,
                out_dir='src/out/Debug'):
     """Initializes IndexPack.
 
@@ -32,20 +32,16 @@ class IndexPack(object):
         A VName identifies a node in the Kythe index. For more details, see:
         https://kythe.io/docs/kythe-storage.html
       root: the root to use for the generated Kythe VNames (optional)
-      revision: the revision of the files being indexed
       out_dir: The output directory from which compilation was run.
     """
     if corpus is None:
       raise Exception('ERROR: --corpus required')
-    if revision is None:
-      raise Exception('ERROR: --revision required')
 
     with open(compdb_path, 'rb') as json_commands_file:
       # The list of JSON dictionaries, each describing one compilation unit.
       self.json_dictionaries = json.load(json_commands_file)
     self.corpus = corpus
     self.root = root
-    self.revision = revision
     self.out_dir = out_dir
     # Maps from source file name to the SHA256 hash of its content.
     self.filehashes = {}
@@ -134,7 +130,6 @@ class IndexPack(object):
         'corpus': <a corpus such as chromium>,
         'root': <a build config such as chromium-linux>,
       },
-      'revision': <the hash of the commit containing the files being indexed>,
       'required_input': [
         {
           'v_name': {
@@ -250,7 +245,6 @@ class IndexPack(object):
       # Add the VName root only if it was specified.
       if self.root:
         unit_dictionary['v_name']['root'] = self.root
-      unit_dictionary['revision'] = self.revision
 
       # Add the include paths to the list of compile arguments; also disable all
       # warnings so that the indexer can run successfully. The job of the
@@ -329,8 +323,6 @@ def main():
                       help='the kythe corpus to use for the vname')
   parser.add_argument('--root',
                       help='the kythe root to use for the vname')
-  parser.add_argument('--revision',
-                      help='the revision of the files being indexed')
   parser.add_argument('--out_dir',
                       default='src/out/Debug',
                       help='the output directory from which compilation is run')
@@ -342,7 +334,7 @@ def main():
 
   print '%s: Index generation...' % time.strftime('%X')
   with closing(IndexPack(options.path_to_compdb, options.corpus, options.root,
-                         options.revision, options.out_dir)) as index_pack:
+                         options.out_dir)) as index_pack:
     index_pack.GenerateIndexPack()
 
     if not options.keep_filepaths_files:

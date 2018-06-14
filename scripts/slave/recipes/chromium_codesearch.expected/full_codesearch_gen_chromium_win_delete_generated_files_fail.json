@@ -882,8 +882,6 @@
       "[START_DIR]/src/out/Debug/chromium_win.kzip",
       "--corpus",
       "chromium",
-      "--revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--root",
       "chromium-win"
     ],

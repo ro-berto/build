@@ -873,9 +873,7 @@
       "--path-to-archive-output",
       "[START_DIR]/src/out/Debug/chromium_linux.kzip",
       "--corpus",
-      "chromium",
-      "--revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+      "chromium"
     ],
     "name": "create kythe index pack"
   },

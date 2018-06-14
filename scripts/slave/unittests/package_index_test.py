@@ -26,10 +26,9 @@ COMPILE_ARGUMENTS = 'clang++ -fsyntax-only -std=c++11 -c test.cc -o test.o'
 
 COMPILE_ARGUMENTS_WIN = 'clang-cl.exe /c test.cc /Fotest.obj'
 
-# Test values for corpus, root, and revision
+# Test values for corpus, root, and out dir
 CORPUS = 'chromium-test'
 VNAME_ROOT = 'linux'
-REVISION = '0123456789'
 OUT_DIR = 'src/out/chromium-linux/Debug'
 
 class PackageIndexTest(unittest.TestCase):
@@ -82,7 +81,7 @@ class PackageIndexTest(unittest.TestCase):
 
     self.index_pack = package_index.IndexPack(
         os.path.realpath(self.compdb_file.name), corpus=CORPUS, root=VNAME_ROOT,
-        revision=REVISION, out_dir=OUT_DIR)
+        out_dir=OUT_DIR)
     self.assertTrue(os.path.exists(self.index_pack.index_directory))
     self.assertTrue(os.path.exists(
         os.path.join(self.index_pack.index_directory, 'files')))
@@ -154,8 +153,6 @@ class PackageIndexTest(unittest.TestCase):
                         VNAME_ROOT)
       self.assertEquals(compilation_unit_dictionary['source_file'],
                         ['../../../test.cc'])
-      self.assertEquals(compilation_unit_dictionary['revision'],
-                        REVISION)
       self.assertEquals(compilation_unit_dictionary['output_key'], 'test.o')
 
       self.assertEquals(len(compilation_unit_dictionary['required_input']),
@@ -204,7 +201,7 @@ class PackageIndexTest(unittest.TestCase):
     self.index_pack.close()
     self.index_pack = package_index.IndexPack(
         os.path.realpath(self.compdb_file.name), corpus=CORPUS, root=VNAME_ROOT,
-        revision=REVISION, out_dir=OUT_DIR)
+        out_dir=OUT_DIR)
 
     # Setup some dictionaries which are usually filled by _GenerateDataFiles()
     self.index_pack.filehashes = {

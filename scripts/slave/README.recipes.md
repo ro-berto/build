@@ -1481,7 +1481,7 @@ be undone.
 
 #### **class [CodesearchApi](/scripts/slave/recipe_modules/codesearch/api.py#12)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#210)(self):**
+&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#209)(self):**
 
 Check out the generated files repo and sync the generated files
 into this checkout.
@@ -4121,9 +4121,9 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#18)(api):**
 ### *recipes* / [chromium\_clang\_coverage\_reports](/scripts/slave/recipes/chromium_clang_coverage_reports.py)
 
-[DEPS](/scripts/slave/recipes/chromium_clang_coverage_reports.py#7): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipes/chromium_clang_coverage_reports.py#7): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_clang_coverage_reports.py#33)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_clang_coverage_reports.py#42)(api):**
 ### *recipes* / [chromium\_clang\_coverage\_tot](/scripts/slave/recipes/chromium_clang_coverage_tot.py)
 
 [DEPS](/scripts/slave/recipes/chromium_clang_coverage_tot.py#6): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
