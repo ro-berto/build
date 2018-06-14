@@ -683,7 +683,7 @@ def _argparse_type_trinary(v):
 
 def add_arguments(parser):
   parser.add_argument('--logdog-verbose',
-      action='count', default=2,
+      action='count', default=0,
       help='Increase LogDog verbosity. This can be specified multiple times.')
   parser.add_argument('--logdog-disable', action='store_true',
       help='Disable LogDog bootstrapping, even if otherwise configured.')
