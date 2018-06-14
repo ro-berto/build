@@ -7,6 +7,7 @@ from recipe_engine.types import freeze
 DEPS = [
     'chromium',
     'depot_tools/bot_update',
+    'recipe_engine/platform',
     'recipe_engine/properties',
 ]
 
@@ -18,6 +19,14 @@ BUILDERS = freeze({
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
+        },
+      },
+      'mac-code-coverage-generation': {
+        'chromium_config': 'chromium_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'mac',
           'TARGET_BITS': 64,
         },
       },
@@ -44,6 +53,20 @@ def GenTests(api):
       api.properties.generic(
           mastername='chromium.fyi',
           buildername='linux-code-coverage-generation') +
+      api.platform.name('linux') +
+      api.post_process(post_process.MustRun, 'bot_update') +
+      api.post_process(post_process.MustRun, 'ensure_goma') +
+      api.post_process(post_process.MustRun, 'gclient runhooks') +
+      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('mac') +
+      api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='mac-code-coverage-generation') +
+      api.platform.name('mac') +
       api.post_process(post_process.MustRun, 'bot_update') +
       api.post_process(post_process.MustRun, 'ensure_goma') +
       api.post_process(post_process.MustRun, 'gclient runhooks') +
