@@ -91,8 +91,12 @@
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_DEFINES": "target_arch=x64",
-      "GYP_GENERATORS": "msvs-ninja,ninja",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_GENERATORS": "msvs-ninja,ninja"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

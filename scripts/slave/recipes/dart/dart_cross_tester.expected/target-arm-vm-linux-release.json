@@ -65,8 +65,12 @@
     ],
     "cwd": "[START_DIR]/sdk",
     "env": {
-      "DART_USE_GYP": "1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "DART_USE_GYP": "1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

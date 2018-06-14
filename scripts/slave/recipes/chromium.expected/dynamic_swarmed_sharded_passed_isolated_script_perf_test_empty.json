@@ -255,8 +255,12 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[CACHE]\\goma\\client' target_arch=x64 use_goma=1",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library fastbuild=1 gomadir='[CACHE]\\goma\\client' target_arch=x64 use_goma=1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

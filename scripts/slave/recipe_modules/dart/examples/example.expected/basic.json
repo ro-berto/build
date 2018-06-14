@@ -104,8 +104,12 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },
@@ -202,8 +206,12 @@
     ],
     "cwd": "[CACHE]/builder",
     "env": {
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks (2)"
   },

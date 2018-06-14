@@ -122,8 +122,12 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[GOMA_CACHE]/client' target_arch=arm64 use_goma=1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "component=shared_library dcheck_always_on=1 fastbuild=1 gomadir='[GOMA_CACHE]/client' target_arch=arm64 use_goma=1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

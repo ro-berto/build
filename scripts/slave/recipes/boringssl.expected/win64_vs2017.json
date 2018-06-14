@@ -59,8 +59,12 @@
     ],
     "cwd": "[START_DIR]\\boringssl",
     "env": {
-      "GYP_MSVS_VERSION": "2017",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_MSVS_VERSION": "2017"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

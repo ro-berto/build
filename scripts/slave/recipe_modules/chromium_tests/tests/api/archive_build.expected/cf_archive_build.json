@@ -232,8 +232,12 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library enable_ipc_fuzzer=1 gomadir='[CACHE]/goma/client' lsan=1 sanitizer_coverage=trace-pc-guard target_arch=x64 use_goma=1 v8_enable_verify_heap=1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library enable_ipc_fuzzer=1 gomadir='[CACHE]/goma/client' lsan=1 sanitizer_coverage=trace-pc-guard target_arch=x64 use_goma=1 v8_enable_verify_heap=1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

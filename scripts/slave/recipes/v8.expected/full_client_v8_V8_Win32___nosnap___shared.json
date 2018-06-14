@@ -104,8 +104,12 @@
     "cwd": "[BUILDER_CACHE]\\V8_Win32___nosnap___shared\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

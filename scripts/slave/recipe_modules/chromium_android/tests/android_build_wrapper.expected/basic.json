@@ -319,8 +319,12 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library lsan=1 target_arch=x64",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library lsan=1 target_arch=x64"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

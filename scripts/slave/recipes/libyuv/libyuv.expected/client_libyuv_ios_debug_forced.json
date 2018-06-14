@@ -139,8 +139,12 @@
       "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/goma/client' target_arch=arm use_goma=1",
       "GYP_GENERATORS": "ninja",
       "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
-      "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

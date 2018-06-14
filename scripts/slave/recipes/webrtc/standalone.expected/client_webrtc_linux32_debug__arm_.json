@@ -118,8 +118,12 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "component=shared_library gomadir='[GOMA_CACHE]/client' target_arch=arm use_goma=1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "component=shared_library gomadir='[GOMA_CACHE]/client' target_arch=arm use_goma=1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

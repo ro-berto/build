@@ -105,8 +105,12 @@
     ],
     "cwd": "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64_ASAN___debug_builder/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "CHROME_HEADLESS": "1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

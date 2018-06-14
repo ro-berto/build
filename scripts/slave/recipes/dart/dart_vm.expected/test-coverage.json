@@ -65,8 +65,12 @@
     ],
     "cwd": "[START_DIR]\\sdk",
     "env": {
-      "LOGONSERVER": "\\\\AD1",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+      "LOGONSERVER": "\\\\AD1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

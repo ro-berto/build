@@ -151,8 +151,10 @@
       "runhooks"
     ],
     "cwd": "[BUILDER_CACHE]/v8_presubmit_infra_config/v8",
-    "env": {
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

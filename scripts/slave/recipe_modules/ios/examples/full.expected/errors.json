@@ -262,8 +262,12 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "",
-      "LANDMINES_VERBOSE": "1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "LANDMINES_VERBOSE": "1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

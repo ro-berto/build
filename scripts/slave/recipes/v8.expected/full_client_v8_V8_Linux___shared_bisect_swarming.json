@@ -89,8 +89,12 @@
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux___shared/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "CHROME_HEADLESS": "1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },
@@ -944,8 +948,12 @@
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux___shared/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "CHROME_HEADLESS": "1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "Bisect a0.gclient runhooks",
     "~followup_annotations": [
@@ -1407,8 +1415,12 @@
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux___shared/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "CHROME_HEADLESS": "1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "Bisect a2.gclient runhooks",
     "~followup_annotations": [
@@ -1903,8 +1915,12 @@
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux___shared/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "CHROME_HEADLESS": "1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "Bisect a1.gclient runhooks",
     "~followup_annotations": [

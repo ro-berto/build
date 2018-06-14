@@ -211,8 +211,12 @@
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=shared_library gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "component=shared_library gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1 v8_enable_slow_dchecks=1 v8_optimized_debug=1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

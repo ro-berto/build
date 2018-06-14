@@ -264,8 +264,12 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]/client' proprietary_codecs=1 target_arch=x64 use_goma=1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]/client' proprietary_codecs=1 target_arch=x64 use_goma=1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },
@@ -584,8 +588,12 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]/client' proprietary_codecs=1 target_arch=x64 use_goma=1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]/client' proprietary_codecs=1 target_arch=x64 use_goma=1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "test r7.gclient runhooks",
     "~followup_annotations": [
@@ -1262,8 +1270,12 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]/client' proprietary_codecs=1 target_arch=x64 use_goma=1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]/client' proprietary_codecs=1 target_arch=x64 use_goma=1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "test r3.gclient runhooks",
     "~followup_annotations": [
@@ -1959,8 +1971,12 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]/client' proprietary_codecs=1 target_arch=x64 use_goma=1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "component=static_library fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]/client' proprietary_codecs=1 target_arch=x64 use_goma=1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "test r4.gclient runhooks",
     "~followup_annotations": [

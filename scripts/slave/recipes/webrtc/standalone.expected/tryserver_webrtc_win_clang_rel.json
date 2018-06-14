@@ -147,8 +147,12 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
-      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1",
-      "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

@@ -58,8 +58,12 @@
     "env": {
       "ASAN_OPTIONS": "handle_segv=0:detect_stack_use_after_return=1",
       "ASAN_SYMBOLIZER_PATH": "buildtools/toolchain/clang+llvm-x86_64-linux/bin/llvm-symbolizer",
-      "DART_USE_ASAN": "1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "DART_USE_ASAN": "1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

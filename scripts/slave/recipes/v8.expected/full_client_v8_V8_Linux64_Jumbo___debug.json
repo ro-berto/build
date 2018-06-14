@@ -89,8 +89,12 @@
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux64_Jumbo___debug/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "CHROME_HEADLESS": "1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

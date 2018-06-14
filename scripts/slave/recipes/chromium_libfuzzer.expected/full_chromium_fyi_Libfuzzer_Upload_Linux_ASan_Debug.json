@@ -206,8 +206,12 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "clang=1 component=shared_library gomadir='[CACHE]/goma/client' proprietary_codecs=1 target_arch=x64 use_goma=1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "GYP_DEFINES": "clang=1 component=shared_library gomadir='[CACHE]/goma/client' proprietary_codecs=1 target_arch=x64 use_goma=1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },

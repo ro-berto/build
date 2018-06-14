@@ -298,9 +298,13 @@
     "env": {
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1",
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]",
       "fake env var 1": "fake env value 1",
       "fake env var 2": "fake env value 2"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gclient runhooks"
   },
