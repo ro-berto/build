@@ -257,6 +257,11 @@
       "123"
     ],
     "cwd": "[BUILDER_CACHE]/TestBuilder/src",
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/TestBuilder/src/third_party/depot_tools"
+      ]
+    },
     "infra_step": true,
     "name": "git cl",
     "~followup_annotations": [

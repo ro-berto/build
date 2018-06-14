@@ -250,6 +250,11 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/TestBuilder/src",
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/TestBuilder/src/third_party/depot_tools"
+      ]
+    },
     "name": "fake resubmit to CQ",
     "~followup_annotations": [
       "@@@STEP_TEXT@Stale roll found. Resubmitted to CQ.@@@"

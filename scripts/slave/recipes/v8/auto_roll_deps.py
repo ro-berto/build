@@ -97,7 +97,9 @@ def RunSteps(api):
 
       if not cq_commits:
         api.v8.checkout()
-        with api.context(cwd=api.path['checkout']):
+        dt_path = api.path['checkout'].join('third_party', 'depot_tools')
+        with api.context(
+            cwd=api.path['checkout'], env_prefixes={'PATH': [dt_path]}):
           if api.runtime.is_experimental:
             api.step('fake resubmit to CQ', cmd=None)
           else:
