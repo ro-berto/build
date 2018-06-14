@@ -8,12 +8,14 @@
 
 import argparse
 import hashlib
+import itertools
 import json
 import os
 import shutil
 import sys
 import tempfile
 import time
+import zipfile
 
 from common import chromium_utils
 from contextlib import closing
@@ -300,15 +302,26 @@ class IndexPack(object):
     if os.path.exists(filepath):
       os.remove(filepath)
 
-    # Run the command in the parent directory of the index pack and use a
-    # relative path for the index pack to get rid of any path prefix. The format
-    # specification requires that the archive contains one folder with an
-    # arbitrary name directly containing the 'units' and 'files' directories.
-    if chromium_utils.RunCommand(
-        ['zip', '-r', filepath, os.path.basename(self.index_directory)],
-        cwd=os.path.dirname(self.index_directory)) != 0:
-      raise Exception('ERROR: failed to create %s, exiting' % filepath)
+    # We use zipfile here rather than shutil.make_archive because it has a bug
+    # on Python <2.7.11 where it doesn't add entries for directories (see
+    # https://bugs.python.org/issue24982). When/if we upgrade the bots to Python
+    # >=2.7.11, the block below can be replaced with shutil.make_archive.
+    with zipfile.ZipFile(filepath, 'w', zipfile.ZIP_DEFLATED) as archive:
+      # os.walk doesn't include the directory you point it at in its output.
+      archive.write(self.index_directory,
+                    os.path.basename(self.index_directory))
 
+      for root, dirnames, filenames in os.walk(self.index_directory):
+        for filename in itertools.chain(dirnames, filenames):
+          # The format specification requires that the archive contains one
+          # folder with an arbitrary name directly containing the 'units' and
+          # 'files' directories. So, if index_directory is foo/bar, we need to
+          # prefix all the filenames with bar/. We do this by taking the path
+          # relative to the parent of the index directory.
+          abs_path = os.path.join(root, filename)
+          index_parent = os.path.dirname(self.index_directory.rstrip(os.sep))
+          rel_path = os.path.relpath(abs_path, index_parent)
+          archive.write(abs_path, rel_path)
 
 def main():
   parser = argparse.ArgumentParser()
