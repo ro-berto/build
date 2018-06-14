@@ -2824,6 +2824,7 @@
       "[START_DIR]/src/flutter/tools/gn",
       "--goma",
       "--android",
+      "--dynamic",
       "--runtime-mode=profile",
       "--android-cpu=arm"
     ],
@@ -2831,7 +2832,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
-    "name": "gn --android --runtime-mode=profile --android-cpu=arm"
+    "name": "gn --android --dynamic --runtime-mode=profile --android-cpu=arm"
   },
   {
     "cmd": [],
@@ -3260,6 +3261,7 @@
       "[START_DIR]/src/flutter/tools/gn",
       "--goma",
       "--android",
+      "--dynamic",
       "--runtime-mode=release",
       "--android-cpu=arm"
     ],
@@ -3267,7 +3269,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
-    "name": "gn --android --runtime-mode=release --android-cpu=arm"
+    "name": "gn --android --dynamic --runtime-mode=release --android-cpu=arm"
   },
   {
     "cmd": [],
@@ -3696,6 +3698,7 @@
       "[START_DIR]/src/flutter/tools/gn",
       "--goma",
       "--android",
+      "--dynamic",
       "--runtime-mode=profile",
       "--android-cpu=arm64"
     ],
@@ -3703,7 +3706,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
-    "name": "gn --android --runtime-mode=profile --android-cpu=arm64"
+    "name": "gn --android --dynamic --runtime-mode=profile --android-cpu=arm64"
   },
   {
     "cmd": [],
@@ -4132,6 +4135,7 @@
       "[START_DIR]/src/flutter/tools/gn",
       "--goma",
       "--android",
+      "--dynamic",
       "--runtime-mode=release",
       "--android-cpu=arm64"
     ],
@@ -4139,7 +4143,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
-    "name": "gn --android --runtime-mode=release --android-cpu=arm64"
+    "name": "gn --android --dynamic --runtime-mode=release --android-cpu=arm64"
   },
   {
     "cmd": [],
@@ -4575,7 +4579,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
-    "name": "gn --android --runtime-mode=profile --android-cpu=arm (2)"
+    "name": "gn --android --runtime-mode=profile --android-cpu=arm"
   },
   {
     "cmd": [],
@@ -5011,7 +5015,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
-    "name": "gn --android --runtime-mode=release --android-cpu=arm (2)"
+    "name": "gn --android --runtime-mode=release --android-cpu=arm"
   },
   {
     "cmd": [],
@@ -5447,7 +5451,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
-    "name": "gn --android --runtime-mode=profile --android-cpu=arm64 (2)"
+    "name": "gn --android --runtime-mode=profile --android-cpu=arm64"
   },
   {
     "cmd": [],
@@ -5883,7 +5887,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/linux/dart-sdk/bin:<PATH>"
     },
-    "name": "gn --android --runtime-mode=release --android-cpu=arm64 (2)"
+    "name": "gn --android --runtime-mode=release --android-cpu=arm64"
   },
   {
     "cmd": [],

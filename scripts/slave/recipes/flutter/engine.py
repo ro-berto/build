@@ -171,7 +171,8 @@ def BuildLinuxAndroid(api):
       build_output_dir = out_dir % runtime_mode
       upload_dir = artifact_dir % runtime_mode
 
-      RunGN(api, '--android', '--runtime-mode=' + runtime_mode, '--android-cpu=%s' % android_cpu)
+      RunGN(api, '--android', '--dynamic', '--runtime-mode=' + runtime_mode,
+            '--android-cpu=%s' % android_cpu)
       Build(api, build_output_dir)
 
       UploadArtifacts(api, upload_dir, [
