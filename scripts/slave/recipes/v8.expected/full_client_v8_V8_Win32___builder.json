@@ -96,6 +96,33 @@
   },
   {
     "cmd": [
+      "git",
+      "config",
+      "core.autocrlf"
+    ],
+    "cwd": "[BUILDER_CACHE]\\V8_Win32___builder\\v8",
+    "name": "git autocrlf check"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[BUILDER_CACHE]\\V8_Win32___builder\\v8\\test\\debugger\\debug\\debug-sourceinfo.js",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "read sample file"
+  },
+  {
+    "cmd": [],
+    "name": "detected CRLF line endings"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",

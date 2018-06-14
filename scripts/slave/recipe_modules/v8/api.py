@@ -333,6 +333,13 @@ class V8Api(recipe_api.RecipeApi):
       # TODO(machenbach): Remove this case when all builders using this recipe
       # migrated to LUCI.
       self.checkout_root = self.m.path['start_dir']
+
+    # TODO(sergiyb): Remove after https://crbug.com/v8/7775 is resolved.
+    if (self.m.properties['buildername'] == 'V8 Win32 - builder' and
+        self.m.runtime.is_luci):  # pragma: no cover
+      # Disable using builder cache for V8 Win32 - builder on LUCI.
+      self.checkout_root = self.m.path['start_dir']
+
     with self.m.context(cwd=self.checkout_root):
       update_step = self.m.bot_update.ensure_checkout(no_shallow=True, **kwargs)
 
@@ -349,6 +356,20 @@ class V8Api(recipe_api.RecipeApi):
     if self.revision_cp:
       self.revision_number = str(self.m.commit_position.parse_revision(
           self.revision_cp))
+
+    # TODO(sergiyb): Remove after https://crbug.com/v8/7775 is resolved.
+    if self.m.properties['buildername'] == 'V8 Win32 - builder':
+      # Log CRLF Git config that is used in v8 checkput.
+      with self.m.context(cwd=self.checkout_root.join('v8')):
+        self.m.step('git autocrlf check', ['git', 'config', 'core.autocrlf'])
+
+      # Log if we detect CRLF line endings in a sample file.
+      sample_file = self.checkout_root.join(
+          'v8', 'test', 'debugger', 'debug', 'debug-sourceinfo.js')
+      data = self.m.file.read_raw(
+          'read sample file', sample_file, test_data='a\r\nb\r\n')
+      if '\r\n' in data:
+          self.m.step('detected CRLF line endings', cmd=None)
 
     return update_step
 
