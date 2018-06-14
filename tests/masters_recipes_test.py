@@ -34,10 +34,21 @@ TRYSERVER_MASTERS = [
 
 
 SUPPRESSIONS = {
+    'master.chromium': [
+       'Linux x64',
+    ],
     'master.chromium.chrome': [
         'Google Chrome ChromeOS',
         'Google Chrome Linux x64',
         'Google Chrome Mac',
+    ],
+    'master.chromium.memory': [
+       'Linux Chromium OS ASan LSan Builder',
+       'Linux Chromium OS ASan LSan Tests (1)',
+       'Linux ChromiumOS MSan Builder',
+       'Linux ChromiumOS MSan Tests',
+       'Linux MSan Builder',
+       'Linux MSan Tests',
     ],
     'master.chromium.webkit': [
         # TODO(crbug.com/736257) Spin up 10.12 (dbg) trybots once we've
@@ -46,9 +57,10 @@ SUPPRESSIONS = {
         'WebKit Mac10.11 (dbg)',
 
         'WebKit Linux Trusty ASAN',
+        'WebKit Linux Trusty Leak',
         'WebKit Linux Trusty MSAN',
-        'WebKit Win x64 Builder',
         'WebKit Win x64 Builder (dbg)',
+        'WebKit Win x64 Builder',
     ],
     'master.chromium.win': [
         'Win x64 Builder (dbg)',
@@ -148,6 +160,25 @@ FAKE_BUILDERS = {
         'linux_chromium_rel_ng',
         'linux_chromium_tsan_rel_ng',
         'linux_optional_gpu_tests_rel',
+        'layout_test_leak_detection',
+        'linux-annotator-rel',
+        'linux_arm',
+        'linux_chromium_analysis',
+        'linux_chromium_archive_rel_ng',
+        'linux_chromium_browser_side_navigation_rel',
+        'linux_chromium_chromeos_asan_rel_ng',
+        'linux_chromium_chromeos_msan_rel_ng',
+        'linux_chromium_clobber_rel_ng',
+        'linux_chromium_compile_dbg_32_ng',
+        'linux_chromium_dbg_32_ng',
+        'linux_chromium_msan_rel_ng',
+        'linux_layout_tests_layout_ng',
+        'linux_layout_tests_root_layer_scrolls',
+        'linux_layout_tests_slimming_paint_v2',
+        'linux_mojo',
+        'linux_mojo_chromeos',
+        'linux_site_isolation',
+        'linux_vr',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'linux-jumbo-rel',
     ],
