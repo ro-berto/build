@@ -153,6 +153,11 @@ class Test(object):
     """Name of the test."""
     raise NotImplementedError()
 
+  @property
+  def canonical_name(self):
+    """Canonical name of the test, no suffix attached."""
+    return self.name
+
   def isolate_target(self, _api):
     """Returns isolate target name. Defaults to name.
 
@@ -210,7 +215,7 @@ class Test(object):
     data = {
         'waterfall_mastername': self._waterfall_mastername,
         'waterfall_buildername': self._waterfall_buildername,
-        'canonical_step_name': self.name,
+        'canonical_step_name': self.canonical_name,
         'isolate_target_name': self.isolate_target(api),
     }
     if suffix is not None:
@@ -1411,6 +1416,10 @@ class SwarmingTest(Test):
       return self._name
 
   @property
+  def canonical_name(self):
+    return self._name
+
+  @property
   def target_name(self):
     return self._target_name or self._name
 
@@ -1556,8 +1565,6 @@ class SwarmingTest(Test):
 
   def step_metadata(self, api, suffix=None):
     data = super(SwarmingTest, self).step_metadata(api, suffix)
-    # canonical_step_name should not contain any suffix.
-    data['canonical_step_name'] = self._name
     if suffix is not None:
       data['full_step_name'] = api.swarming.get_step_name(
           prefix=None, task=self._tasks[suffix])

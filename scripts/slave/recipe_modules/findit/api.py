@@ -177,7 +177,7 @@ class FinditApi(recipe_api.RecipeApi):
       # Figure out which test steps to run.
       all_tests, _ = api.m.chromium_tests.get_tests(bot_config, bot_db)
       requested_tests_to_run = [
-          test for test in all_tests if test.name in requested_tests]
+          test for test in all_tests if test.canonical_name in requested_tests]
 
       # Figure out the test targets to be compiled.
       requested_test_targets = []
