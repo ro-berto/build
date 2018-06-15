@@ -29,23 +29,27 @@ def chromium_perf_clang(c):
 def _AddBuildSpec(name, perf_id, platform, config_name='chromium_perf',
                   target_bits=64,
                   compile_targets=None, extra_compile_targets=None,
-                  force_exparchive=False, run_sizes=True):
+                  force_exparchive=False, run_sizes=True,
+                  use_private_swarming_server=True,
+                  use_private_isolate_server=True):
   SPEC['builders'][name] = chromium_perf.BuildSpec(
       config_name, perf_id, platform, target_bits,
       compile_targets=compile_targets,
       extra_compile_targets=extra_compile_targets,
       force_exparchive=force_exparchive, run_sizes=run_sizes,
-      use_private_swarming_server=True,
-      use_private_isolate_server=True)
+      use_private_swarming_server=use_private_swarming_server,
+      use_private_isolate_server=use_private_isolate_server)
 
 
 def _AddIsolatedTestSpec(name, perf_id, platform,
-                         parent_buildername=None, target_bits=64):
+                         parent_buildername=None, target_bits=64,
+                         use_private_swarming_server=True,
+                         use_private_isolate_server=True):
   spec = chromium_perf.TestSpec(
       'chromium_perf', perf_id, platform, target_bits,
       parent_buildername=parent_buildername,
-      use_private_swarming_server=True,
-      use_private_isolate_server=True)
+      use_private_swarming_server=use_private_swarming_server,
+      use_private_isolate_server=use_private_isolate_server)
   if not parent_buildername:
     spec['parent_mastername'] = 'chromium.perf' #pragma: no cover
   else:
@@ -95,7 +99,8 @@ _AddBuildSpec('Android CFI arm64 Builder Perf FYI', 'android', 'android',
                                      'system_webview_shell_apk',])
 
 _AddBuildSpec('Linux Compile Perf FYI', 'linux-fyi', 'linux')
-_AddBuildSpec('Mac Builder Perf FYI', 'mac-fyi', 'mac')
+_AddBuildSpec('Mac Builder Perf FYI', 'mac-fyi', 'mac',
+              use_private_isolate_server=False)
 _AddBuildSpec('Win Builder Perf FYI', 'win-fyi', 'win')
 
 _AddIsolatedTestSpec('Mojo Linux Perf', 'mojo-linux-perf', 'linux',
@@ -105,7 +110,9 @@ _AddIsolatedTestSpec(
     parent_buildername='Linux Compile Perf FYI')
 
 _AddIsolatedTestSpec('OBBS Mac 10.12 Perf', '', 'mac',
-                     parent_buildername='Mac Builder Perf FYI')
+                     parent_buildername='Mac Builder Perf FYI',
+                     use_private_swarming_server=False,
+                     use_private_isolate_server=False)
 _AddIsolatedTestSpec('Android Go', '', 'android',
                      parent_buildername='Android Builder Perf FYI')
 _AddIsolatedTestSpec('android-pixel2-perf', '', 'android',
