@@ -322,7 +322,8 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]\\win\\src\\testing\\buildbot\\chromium.win.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@target_buildername@\"Win Builder\"@@@"
     ]
   },
   {

@@ -372,6 +372,9 @@ class FinditApi(recipe_api.RecipeApi):
         bot_config,
         root_solution_revision=revision)
 
+    api.step.active_result.presentation.properties['target_buildername'] = (
+        target_buildername)
+
     return tests, target_buildername, checked_out_revision, cached_revision
 
   def record_previous_revision(self, api, bot_config):
