@@ -696,33 +696,6 @@ SPEC = {
         'platform': 'win',
       },
     },
-    'Android Coverage (dbg)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'Android Builder (dbg)',
-      'android_config': 'incremental_coverage_builder_tests',
-      'root_devices': True,
-      'checkout_dir': 'android',
-      'tests': [
-        steps.AndroidInstrumentationTest('ChromePublicTest'),
-        steps.AndroidInstrumentationTest('ContentShellTest'),
-        steps.AndroidInstrumentationTest('ChromeSyncShellTest'),
-        steps.AndroidInstrumentationTest('WebViewInstrumentationTest'),
-        steps.IncrementalCoverageTest(),
-      ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'Android VR Tests': {
       'chromium_config': 'android',
       'chromium_apply_config': ['download_vr_test_apks'],

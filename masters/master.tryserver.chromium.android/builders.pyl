@@ -62,14 +62,6 @@
       "scheduler": None,
       "slave_pools": ["ccompute_highmem_bots"],
     },
-    "android_coverage": {
-      "builder_timeout_s": 14400,  # 60 * 60 * 4
-      "recipe": "chromium_trybot",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slavebuilddir": "android",
-      "slave_pools": ["slaves_with_n5s"],
-    },
     "android_cronet_tester": {
       "builder_timeout_s": 14400,  # 60 * 60 * 4
       "recipe": "cronet",

@@ -132,10 +132,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.android',
         'buildername': 'Android x86 Builder (dbg)',
       }, analyze_mode='compile'),
-      'android_coverage': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'Android Coverage (dbg)'
-      }),
       'android_cronet': simple_bot({
         'mastername': 'chromium.android',
         'buildername': 'Android Cronet Builder'
