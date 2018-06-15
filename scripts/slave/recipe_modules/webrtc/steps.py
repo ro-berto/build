@@ -155,7 +155,9 @@ def generate_tests(api, test_suite, phase, revision):
           dimensions=api.bot_config['baremetal_swarming_dimensions'],
           **BAREMETAL_TESTS[name]))
 
-    add_test('video_capture_tests')
+    # TODO(bugs.webrtc.org/9292): enable on linux when webcams work.
+    if not api.m.platform.is_linux:
+      add_test('video_capture_tests')
 
     # Cover tests only running on perf tests on our trybots:
     if api.m.tryserver.is_tryserver:
