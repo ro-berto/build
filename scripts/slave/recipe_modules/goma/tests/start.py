@@ -12,7 +12,7 @@ DEPS = [
 def RunSteps(api):
   api.goma.ensure_goma(canary=True)
   api.goma.start()
-  api.goma.stop()
+  api.goma.stop(build_exit_status=0)
 
 
 def GenTests(api):

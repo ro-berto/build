@@ -311,8 +311,8 @@ class GomaApi(recipe_api.RecipeApi):
         nested_result.presentation.status = self.m.step.EXCEPTION
         raise e
 
-  def stop(self, ninja_log_outdir=None, ninja_log_compiler=None,
-           ninja_log_command=None, build_exit_status=None,
+  def stop(self, build_exit_status, ninja_log_outdir=None,
+           ninja_log_compiler=None, ninja_log_command=None,
            build_step_name='', **kwargs):
     """Stop goma compiler_proxy.
 
@@ -320,14 +320,13 @@ class GomaApi(recipe_api.RecipeApi):
     It is user's responsibility to handle failure of stopping compiler_proxy.
 
     Args:
+      build_exit_status: Exit status of ninja or other build commands like
+                         make. (e.g. 0)
       ninja_log_outdir: Directory of ninja log. (e.g. "out/Release")
       ninja_log_compiler: Compiler used in ninja. (e.g. "clang")
       ninja_log_command:
         Command used for build.
         (e.g. ['ninja', '-C', 'out/Release'])
-
-      build_exit_status: Exit status of ninja or other build commands like
-                         make. (e.g. 0)
 
     Raises:
       StepFailure if it fails to stop goma or upload logs.

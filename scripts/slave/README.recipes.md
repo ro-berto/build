@@ -2011,7 +2011,7 @@ set local goma dir like below at the beginning of recipe running.
 
 &emsp; **@property**<br>&mdash; **def [bigquery\_service\_account\_json\_path](/scripts/slave/recipe_modules/goma/api.py#56)(self):**
 
-&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#483)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
+&mdash; **def [build\_with\_goma](/scripts/slave/recipe_modules/goma/api.py#482)(self, ninja_command, name=None, ninja_log_outdir=None, ninja_log_compiler=None, goma_env=None, ninja_env=None, \*\*kwargs):**
 
 Build with ninja_command using goma
 
@@ -2086,7 +2086,7 @@ Start goma compiler_proxy.
 A user MUST execute ensure_goma beforehand.
 It is user's responsibility to handle failure of starting compiler_proxy.
 
-&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#314)(self, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_exit_status=None, build_step_name='', \*\*kwargs):**
+&mdash; **def [stop](/scripts/slave/recipe_modules/goma/api.py#314)(self, build_exit_status, ninja_log_outdir=None, ninja_log_compiler=None, ninja_log_command=None, build_step_name='', \*\*kwargs):**
 
 Stop goma compiler_proxy.
 
@@ -2094,14 +2094,13 @@ A user is expected to execute start beforehand.
 It is user's responsibility to handle failure of stopping compiler_proxy.
 
 Args:
+  build_exit_status: Exit status of ninja or other build commands like
+                     make. (e.g. 0)
   ninja_log_outdir: Directory of ninja log. (e.g. "out/Release")
   ninja_log_compiler: Compiler used in ninja. (e.g. "clang")
   ninja_log_command:
     Command used for build.
     (e.g. ['ninja', '-C', 'out/Release'])
-
-  build_exit_status: Exit status of ninja or other build commands like
-                     make. (e.g. 0)
 
 Raises:
   StepFailure if it fails to stop goma or upload logs.
