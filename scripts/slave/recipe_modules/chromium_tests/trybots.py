@@ -15,69 +15,71 @@ def simple_bot(bot_id, analyze_mode=None):
 TRYBOTS = freeze({
   'tryserver.blink': {
     'builders': {
-      'linux_trusty_blink_dbg': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Linux Trusty (dbg)',
+      # TODO(dpranke): Remove the _ versions of the builders once the
+      # src code has been updated.
+      'linux-blink-rel': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'linux-blink-rel-dummy',
       }),
       'linux_trusty_blink_rel': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Linux Trusty',
+        'mastername': 'chromium.fyi',
+        'buildername': 'linux-blink-rel-dummy',
       }),
-      'linux_trusty_blink_compile_dbg': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Linux Trusty (dbg)',
-      }, analyze_mode='compile'),
-      'linux_trusty_blink_compile_rel': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Linux Trusty',
-      }, analyze_mode='compile'),
+      'mac10.10-blink-rel': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'mac10.10-blink-rel-dummy',
+      }),
       'mac10.10_blink_rel': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac Builder',
-        'tester': 'WebKit Mac10.10',
+        'mastername': 'chromium.fyi',
+        'buildername': 'mac10.10-blink-rel-dummy',
+      }),
+      'mac10.11-blink-rel': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'mac10.11-blink-rel-dummy',
       }),
       'mac10.11_blink_rel': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac Builder',
-        'tester': 'WebKit Mac10.11',
+        'mastername': 'chromium.fyi',
+        'buildername': 'mac10.11-blink-rel-dummy',
+      }),
+      'mac10.12-blink-rel': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'mac10.12-blink-rel-dummy',
       }),
       'mac10.12_blink_rel': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'mac10.12-blink-rel-dummy',
+      }),
+      'mac10.12_retina-blink-rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac Builder',
-        'tester': 'WebKit Mac10.12',
+        'buildername': 'WebKit Mac10.12 (retina)',
       }),
       'mac10.12_retina_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
         'buildername': 'WebKit Mac10.12 (retina)',
       }),
+      'mac10.13-blink-rel': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'mac10.13-blink-rel-dummy',
+      }),
       'mac10.13_blink_rel': simple_bot({
         'mastername': 'chromium.fyi',
-        'buildername': 'Dummy WebKit Mac10.13',
+        'buildername': 'mac10.13-blink-rel-dummy',
       }),
-      'win7_blink_dbg': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Win Builder (dbg)',
-        'tester': 'WebKit Win7 (dbg)',
+      'win7-blink-rel': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'win7-blink-rel-dummy',
       }),
       'win7_blink_rel': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Win Builder',
-        'tester': 'WebKit Win7',
+        'mastername': 'chromium.fyi',
+        'buildername': 'win7-blink-rel-dummy',
       }),
-      'win7_blink_compile_dbg': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Win Builder (dbg)',
-        'tester': 'WebKit Win7 (dbg)'
-      }, analyze_mode='compile'),
-      'win7_blink_compile_rel': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Win Builder',
-        'tester': 'WebKit Win7'
-      }, analyze_mode='compile'),
+      'win10-blink-rel': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'win10-blink-rel-dummy',
+      }),
       'win10_blink_rel': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Win Builder',
-        'tester': 'WebKit Win10',
+        'mastername': 'chromium.fyi',
+        'buildername': 'win10-blink-rel-dummy',
       }),
     },
   },
@@ -581,11 +583,6 @@ TRYBOTS = freeze({
             'buildername': 'GPU Mac Builder',
             'tester': 'Mac Retina Release (AMD)',
           },
-          {
-            'mastername': 'chromium.webkit',
-            'buildername': 'WebKit Mac Builder',
-            'tester': 'WebKit Mac10.12',
-          },
         ],
       },
       'mac_chromium_10.12_rel_ng': simple_bot({
@@ -790,8 +787,8 @@ TRYBOTS = freeze({
   'tryserver.v8': {
     'builders': {
       'v8_linux_blink_rel': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Linux Trusty',
+        'mastername': 'chromium.fyi',
+        'buildername': 'linux-blink-rel-dummy',
       }),
       'v8_linux_chromium_gn_rel': simple_bot({
         'mastername': 'client.v8.fyi',

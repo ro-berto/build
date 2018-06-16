@@ -34,9 +34,6 @@ defaults['category'] = 'layout'
 # Linux Rel Builder/Tester
 #
 
-B('WebKit Linux Trusty', 'f_webkit_linux_rel', scheduler='global_scheduler')
-F('f_webkit_linux_rel', m_remote_run('chromium'))
-
 B('WebKit Linux Trusty ASAN', 'f_webkit_linux_rel_asan',
     scheduler='global_scheduler', auto_reboot=True)
 F('f_webkit_linux_rel_asan', m_remote_run('chromium'))
@@ -48,19 +45,6 @@ F('f_webkit_linux_rel_msan', m_remote_run('chromium'))
 B('WebKit Linux Trusty Leak', 'f_webkit_linux_leak_rel',
     scheduler='global_scheduler', category='layout')
 F('f_webkit_linux_leak_rel', m_remote_run('chromium'))
-
-
-################################################################################
-## Debug
-################################################################################
-
-#
-# Linux Dbg Webkit builders/testers
-#
-
-B('WebKit Linux Trusty (dbg)', 'f_webkit_dbg_tests',
-    scheduler='global_scheduler', auto_reboot=True)
-F('f_webkit_dbg_tests', m_remote_run('chromium'))
 
 
 def Update(_config, _active_master, c):

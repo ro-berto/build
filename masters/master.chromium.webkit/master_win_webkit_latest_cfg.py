@@ -44,43 +44,9 @@ F('f_webkit_win_rel', m_remote_run('chromium'))
 #
 # Win Rel WebKit testers
 #
-B('WebKit Win7', 'f_webkit_rel_tests')
 B('WebKit Win10', 'f_webkit_rel_tests')
 F('f_webkit_rel_tests', m_remote_run('chromium'))
 
-#
-# Win x64 Rel Builder (note: currently no x64 testers)
-#
-B('WebKit Win x64 Builder', 'f_webkit_win_rel_x64',
-  scheduler='global_scheduler', builddir='webkit-win-latest-rel-x64',
-  auto_reboot=True)
-F('f_webkit_win_rel_x64', m_remote_run('chromium'))
-
-
-################################################################################
-## Debug
-################################################################################
-
-#
-# Win Dbg Builder
-#
-B('WebKit Win Builder (dbg)', 'f_webkit_win_dbg', scheduler='global_scheduler',
-  builddir='webkit-win-latest-dbg', auto_reboot=True)
-F('f_webkit_win_dbg', m_remote_run('chromium'))
-
-#
-# Win Dbg WebKit testers
-#
-B('WebKit Win7 (dbg)', 'f_webkit_dbg_tests')
-F('f_webkit_dbg_tests', m_remote_run('chromium'))
-
-#
-# Win x64 Dbg Builder (note: currently no x64 testers)
-#
-B('WebKit Win x64 Builder (dbg)', 'f_webkit_win_dbg_x64',
-  scheduler='global_scheduler', builddir='webkit-win-latest-dbg-x64',
-  auto_reboot=True)
-F('f_webkit_win_dbg_x64', m_remote_run('chromium'))
 
 def Update(_config, _active_master, c):
   return helper.Update(c)

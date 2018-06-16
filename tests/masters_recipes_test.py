@@ -19,13 +19,11 @@ MAIN_WATERFALL_MASTERS = [
     'master.chromium',
     'master.chromium.chrome',
     'master.chromium.memory',
-    'master.chromium.webkit',
     'master.chromium.win',
 ]
 
 
 TRYSERVER_MASTERS = [
-    'master.tryserver.blink',
     'master.tryserver.chromium.android',
     'master.tryserver.chromium.linux',
     'master.tryserver.chromium.mac',
@@ -49,18 +47,6 @@ SUPPRESSIONS = {
        'Linux ChromiumOS MSan Tests',
        'Linux MSan Builder',
        'Linux MSan Tests',
-    ],
-    'master.chromium.webkit': [
-        # TODO(crbug.com/736257) Spin up 10.12 (dbg) trybots once we've
-        # finished shutting down the 10.9 bots.
-        'WebKit Mac Builder (dbg)',
-        'WebKit Mac10.11 (dbg)',
-
-        'WebKit Linux Trusty ASAN',
-        'WebKit Linux Trusty Leak',
-        'WebKit Linux Trusty MSAN',
-        'WebKit Win x64 Builder (dbg)',
-        'WebKit Win x64 Builder',
     ],
     'master.chromium.win': [
         'Win x64 Builder (dbg)',

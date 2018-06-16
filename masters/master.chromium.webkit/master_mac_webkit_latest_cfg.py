@@ -42,40 +42,8 @@ F('f_webkit_mac_rel', m_remote_run('chromium'))
 # Mac Rel WebKit testers
 #
 
-B('WebKit Mac10.10', 'f_webkit_rel_tests_1010')
-F('f_webkit_rel_tests_1010', m_remote_run('chromium'))
-
-B('WebKit Mac10.11', 'f_webkit_rel_tests_1011')
-F('f_webkit_rel_tests_1011', m_remote_run('chromium'))
-
-B('WebKit Mac10.12', 'f_webkit_rel_tests_1012')
-F('f_webkit_rel_tests_1012', m_remote_run('chromium'))
-
 B('WebKit Mac10.12 (retina)', 'f_webkit_rel_tests_1012_retina')
 F('f_webkit_rel_tests_1012_retina', m_remote_run('chromium'))
-
-
-################################################################################
-## Debug
-################################################################################
-
-# Archive location
-dbg_archive = master_config.GetGSUtilUrl('chromium-build-transfer',
-                                         'WebKit Mac Builder (dbg)')
-
-#
-# Mac Dbg Builder
-#
-B('WebKit Mac Builder (dbg)', 'f_webkit_mac_dbg', auto_reboot=False,
-  scheduler='global_scheduler', builddir='webkit-mac-latest-dbg')
-F('f_webkit_mac_dbg', m_remote_run('chromium'))
-
-#
-# Mac Dbg WebKit testers
-#
-
-B('WebKit Mac10.11 (dbg)', 'f_webkit_dbg_tests')
-F('f_webkit_dbg_tests', m_remote_run('chromium'))
 
 
 ################################################################################

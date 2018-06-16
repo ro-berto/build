@@ -9,7 +9,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/mac"
+      "[BUILDER_CACHE]/mac10_12_blink_rel"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -27,9 +27,9 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/mac"
+      "[BUILDER_CACHE]/mac10_12_blink_rel"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[BUILDER_CACHE]/mac10_12_blink_rel",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -44,9 +44,9 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[BUILDER_CACHE]/mac/.cipd"
+      "[BUILDER_CACHE]/mac10_12_blink_rel/.cipd"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[BUILDER_CACHE]/mac10_12_blink_rel",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -68,7 +68,7 @@
       "-p",
       "change=456789"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[BUILDER_CACHE]/mac10_12_blink_rel",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -125,7 +125,7 @@
       "--revision",
       "src/v8@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[BUILDER_CACHE]/mac10_12_blink_rel",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -301,7 +301,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/mac10_12_blink_rel/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "env": {
@@ -349,11 +349,11 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[BUILDER_CACHE]/mac10_12_blink_rel/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 fetch_telemetry_dependencies=1 ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]/client' proprietary_codecs=1 target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1",
       "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
@@ -368,15 +368,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/testing/scripts/get_compile_targets.py",
+      "[BUILDER_CACHE]/mac10_12_blink_rel/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
-      "--use-src-side-runtest-py",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/mac/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/mac10_12_blink_rel/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"test_bot\", \"buildername\": \"mac10.12_blink_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"test_bot\", \"target_platform\": \"mac\"}"
     ],
@@ -394,15 +393,15 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.webkit.json",
+      "[BUILDER_CACHE]/mac10_12_blink_rel/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "read test spec (chromium.webkit.json)",
+    "name": "read test spec (chromium.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.webkit.json@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac10_12_blink_rel/src/testing/buildbot/chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -416,7 +415,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src/v8",
+    "cwd": "[BUILDER_CACHE]/mac10_12_blink_rel/src/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -434,7 +433,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/mac/src/testing/buildbot/trybot_analyze_config.json",
+      "[BUILDER_CACHE]/mac10_12_blink_rel/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -461,14 +460,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/mac10_12_blink_rel/src/tools/mb/mb.py",
       "analyze",
       "-m",
       "tryserver.blink",
       "-b",
       "mac10.12_blink_rel",
       "-f",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/mac10_12_blink_rel/src/tools/mb/mb_config.pyl",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"v8/foo.cc\"], \"test_targets\": []}",

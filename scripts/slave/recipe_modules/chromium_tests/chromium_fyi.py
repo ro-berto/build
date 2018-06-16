@@ -920,7 +920,15 @@ SPEC['builders']['Android Builder (dbg) Goma Canary'] = chromium_apply_configs(
     ['goma_canary'])
 
 SPEC['builders'].update([
-    stock_config('Dummy WebKit Mac10.13'),
+    stock_config('linux-blink-rel-dummy'),
+    stock_config('mac10.10-blink-rel-dummy'),
+    stock_config('mac10.11-blink-rel-dummy'),
+    stock_config('mac10.12-blink-rel-dummy'),
+    stock_config('mac10.12_retina-blink-rel-dummy'),
+    stock_config('mac10.13-blink-rel-dummy'),
+    stock_config('mac10.13-blink-rel-dummy'),
+    stock_config('win7-blink-rel-dummy'),
+    stock_config('win10-blink-rel-dummy'),
     stock_config('Jumbo Linux x64'),
     stock_config('Jumbo Mac'),
     stock_config('Jumbo Win x64'),

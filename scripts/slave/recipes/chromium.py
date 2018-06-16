@@ -1910,51 +1910,6 @@ def GenTests(api):
   )
 
   yield (
-    api.test('chromium_webkit_revision_webkit') +
-    api.properties.generic(mastername='chromium.webkit',
-                           buildername='WebKit Linux Trusty',
-                           project='webkit',
-                           revision='191187') +
-    api.platform('linux', 64)
-  )
-
-  yield (
-    api.test('chromium_webkit_revision_chromium') +
-    api.properties.generic(
-        mastername='chromium.webkit',
-        buildername='WebKit Linux Trusty',
-        project='chromium',
-        revision='3edb4989f8f69c968c0df14cb1c26d21dd19bf1f') +
-    api.platform('linux', 64)
-  )
-
-  yield (
-    api.test('chromium_webkit_parent_revision_webkit') +
-    api.properties.generic(
-        mastername='chromium.webkit',
-        buildername='WebKit Win7',
-        project='webkit',
-        parent_buildername='WebKit Win Builder',
-        parent_got_revision='7496f63cbefd34b2d791022fbad64a82838a3f3f',
-        parent_got_webkit_revision='191275',
-        revision='191275') +
-    api.platform('win', 32)
-  )
-
-  yield (
-    api.test('chromium_webkit_parent_revision_chromium') +
-    api.properties.generic(
-        mastername='chromium.webkit',
-        buildername='WebKit Win7',
-        project='chromium',
-        parent_buildername='WebKit Win Builder',
-        parent_got_revision='1e74b372f951d4491f305ec64f6decfcda739e73',
-        parent_got_webkit_revision='191269',
-        revision='1e74b372f951d4491f305ec64f6decfcda739e73') +
-    api.platform('win', 32)
-  )
-
-  yield (
     api.test('kitchen_path_config') +
     api.properties(
         mastername='chromium.fyi',

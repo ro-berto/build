@@ -32,22 +32,6 @@ SPEC['builders'] = {
     },
     'checkout_dir': 'win',
   },
-  'WebKit Win7': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': 32,
-    },
-    'bot_type': 'tester',
-    'parent_buildername': 'WebKit Win Builder',
-    'tests': [],
-    'testing': {
-      'platform': 'win',
-    },
-    'checkout_dir': 'win',
-  },
   'WebKit Win10': {
     'chromium_config': 'chromium',
     'chromium_apply_config': ['mb'],
@@ -59,72 +43,6 @@ SPEC['builders'] = {
     'bot_type': 'tester',
     'parent_buildername': 'WebKit Win Builder',
     'tests': [],
-    'testing': {
-      'platform': 'win',
-    },
-    'checkout_dir': 'win',
-  },
-  'WebKit Win x64 Builder': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': 64,
-    },
-    'compile_targets': [
-      # TODO(phajdan.jr): Shouldn't be needed once we have 64-bit testers.
-      'blink_tests',
-    ],
-    'bot_type': 'builder_tester',
-    'testing': {
-      'platform': 'win',
-    },
-    'checkout_dir': 'win',
-  },
-  'WebKit Win Builder (dbg)': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Debug',
-      'TARGET_BITS': 32,
-    },
-    'bot_type': 'builder',
-    'testing': {
-      'platform': 'win',
-    },
-    'checkout_dir': 'win',
-  },
-  'WebKit Win7 (dbg)': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Debug',
-      'TARGET_BITS': 32,
-    },
-    'bot_type': 'tester',
-    'parent_buildername': 'WebKit Win Builder (dbg)',
-    'tests': [],
-    'testing': {
-      'platform': 'win',
-    },
-    'checkout_dir': 'win',
-  },
-  'WebKit Win x64 Builder (dbg)': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Debug',
-      'TARGET_BITS': 64,
-    },
-    'compile_targets': [
-      # TODO(phajdan.jr): Shouldn't be needed once we have 64-bit testers.
-      'blink_tests',
-    ],
-    'bot_type': 'builder_tester',
     'testing': {
       'platform': 'win',
     },
@@ -164,100 +82,6 @@ SPEC['builders'] = {
     },
     'checkout_dir': 'mac',
   },
-  'WebKit Mac10.10': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': 64,
-    },
-    'bot_type': 'tester',
-    'parent_buildername': 'WebKit Mac Builder',
-    'tests': [],
-    'testing': {
-      'platform': 'mac',
-    },
-    'checkout_dir': 'mac',
-  },
-  'WebKit Mac10.11': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': 64,
-    },
-    'bot_type': 'tester',
-    'parent_buildername': 'WebKit Mac Builder',
-    'tests': [],
-    'testing': {
-      'platform': 'mac',
-    },
-    'checkout_dir': 'mac',
-  },
-  'WebKit Mac10.12': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': 64,
-    },
-    'bot_type': 'tester',
-    'parent_buildername': 'WebKit Mac Builder',
-    'tests': [],
-    'testing': {
-      'platform': 'mac',
-    },
-    'checkout_dir': 'mac',
-  },
-  'WebKit Mac Builder (dbg)': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Debug',
-      'TARGET_BITS': 64,
-    },
-    'bot_type': 'builder',
-    'testing': {
-      'platform': 'mac',
-    },
-    'checkout_dir': 'mac',
-  },
-  'WebKit Mac10.11 (dbg)': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Debug',
-      'TARGET_BITS': 64,
-    },
-    'bot_type': 'tester',
-    'parent_buildername': 'WebKit Mac Builder (dbg)',
-    'testing': {
-      'platform': 'mac',
-    },
-    'checkout_dir': 'mac',
-  },
-  'WebKit Linux Trusty': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': 64,
-    },
-    'compile_targets': [
-      'blink_tests',
-    ],
-    'tests': [],
-    'testing': {
-      'platform': 'linux',
-    },
-    'checkout_dir': 'linux_layout',
-  },
   'WebKit Linux Trusty ASAN': {
     'chromium_config': 'chromium_clang',
     'chromium_apply_config': ['asan', 'mb'],
@@ -283,20 +107,6 @@ SPEC['builders'] = {
     ],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
-      'TARGET_BITS': 64,
-    },
-    'tests': [],
-    'testing': {
-      'platform': 'linux',
-    },
-    'checkout_dir': 'linux_layout',
-  },
-  'WebKit Linux Trusty (dbg)': {
-    'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
-    'gclient_config': 'chromium',
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': 'Debug',
       'TARGET_BITS': 64,
     },
     'tests': [],
