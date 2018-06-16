@@ -12,9 +12,18 @@ index packs (used to generate xrefs) are all generated from the same revision.
 DEPS = [
   'recipe_engine/buildbucket',
   'recipe_engine/properties',
+  'recipe_engine/runtime',
+  'recipe_engine/scheduler',
   'recipe_engine/step',
   'recipe_engine/url',
   'trigger',
+]
+
+BUILDERS = [
+    'codesearch-gen-chromium-chromiumos',
+    'codesearch-gen-chromium-linux',
+    'codesearch-gen-chromium-android',
+    'codesearch-gen-chromium-win',
 ]
 
 def RunSteps(api):
@@ -30,32 +39,18 @@ def RunSteps(api):
   api.step('Print revision', ['echo', commit_hash])
 
   # Trigger the chromium_codesearch builders.
-  api.trigger(
-      {
-          'builder_name': 'codesearch-gen-chromium-chromiumos',
-          'properties': {
-              'root_solution_revision': commit_hash,
-          },
-      },
-      {
-          'builder_name': 'codesearch-gen-chromium-linux',
-          'properties': {
-              'root_solution_revision': commit_hash,
-          },
-      },
-      {
-          'builder_name': 'codesearch-gen-chromium-android',
-          'properties': {
-              'root_solution_revision': commit_hash,
-          },
-      },
-      {
-          'builder_name': 'codesearch-gen-chromium-win',
-          'properties': {
-              'root_solution_revision': commit_hash,
-          },
-      },
-  )
+  properties = {'root_solution_revision': commit_hash}
+  if api.runtime.is_luci:
+    api.scheduler.emit_trigger(
+        api.scheduler.BuildbucketTrigger(properties=properties),
+        project='infra', jobs=BUILDERS)
+  else:
+    args = [{
+        'builder_name': builder, 'properties': properties
+    } for builder in BUILDERS]
+    api.trigger(*args)
 
 def GenTests(api):
-  yield api.test('basic')
+  # TODO(hinoka): Delete this.
+  yield api.test('basic_buildbot')
+  yield api.test('basic') + api.runtime(is_luci=True, is_experimental=False)

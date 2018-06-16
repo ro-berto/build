@@ -1,0 +1,63 @@
+[
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
+      "--url",
+      "https://chromium.googlesource.com/chromium/src/+refs/heads/master?format=JSON",
+      "--status-json",
+      "/path/to/tmp/json",
+      "--outfile",
+      "/path/to/tmp/json",
+      "--strip-prefix",
+      "\")]}'\\n\""
+    ],
+    "name": "Get hash of HEAD commit on master"
+  },
+  {
+    "cmd": [
+      "echo",
+      "deadbeef"
+    ],
+    "name": "Print revision"
+  },
+  {
+    "cmd": [],
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "codesearch-gen-chromium-chromiumos",
+        "properties": {
+          "root_solution_revision": "deadbeef"
+        }
+      },
+      {
+        "builder_name": "codesearch-gen-chromium-linux",
+        "properties": {
+          "root_solution_revision": "deadbeef"
+        }
+      },
+      {
+        "builder_name": "codesearch-gen-chromium-android",
+        "properties": {
+          "root_solution_revision": "deadbeef"
+        }
+      },
+      {
+        "builder_name": "codesearch-gen-chromium-win",
+        "properties": {
+          "root_solution_revision": "deadbeef"
+        }
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@codesearch-gen-chromium-android<br />codesearch-gen-chromium-chromiumos<br />codesearch-gen-chromium-linux<br />codesearch-gen-chromium-win@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

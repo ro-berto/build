@@ -23,36 +23,55 @@
     "name": "Print revision"
   },
   {
-    "cmd": [],
-    "name": "trigger",
-    "trigger_specs": [
-      {
-        "builder_name": "codesearch-gen-chromium-chromiumos",
-        "properties": {
-          "root_solution_revision": "deadbeef"
-        }
-      },
-      {
-        "builder_name": "codesearch-gen-chromium-linux",
-        "properties": {
-          "root_solution_revision": "deadbeef"
-        }
-      },
-      {
-        "builder_name": "codesearch-gen-chromium-android",
-        "properties": {
-          "root_solution_revision": "deadbeef"
-        }
-      },
-      {
-        "builder_name": "codesearch-gen-chromium-win",
-        "properties": {
-          "root_solution_revision": "deadbeef"
-        }
-      }
+    "cmd": [
+      "prpc",
+      "call",
+      "-format=json",
+      "luci-scheduler.appspot.com",
+      "scheduler.Scheduler.EmitTriggers"
     ],
+    "infra_step": true,
+    "name": "luci-scheduler.EmitTriggers",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"codesearch-gen-chromium-chromiumos\", \"project\": \"infra\"}, {\"job\": \"codesearch-gen-chromium-linux\", \"project\": \"infra\"}, {\"job\": \"codesearch-gen-chromium-android\", \"project\": \"infra\"}, {\"job\": \"codesearch-gen-chromium-win\", \"project\": \"infra\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"root_solution_revision\": \"deadbeef\"}, \"tags\": [\"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"None/None\"}}], \"timestamp\": 1337000001500000}",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_TEXT@codesearch-gen-chromium-android<br />codesearch-gen-chromium-chromiumos<br />codesearch-gen-chromium-linux<br />codesearch-gen-chromium-win@@@"
+      "@@@STEP_TEXT@input {",
+      "    \"batches\": [",
+      "        {",
+      "            \"jobs\": [",
+      "                {",
+      "                    \"job\": \"codesearch-gen-chromium-chromiumos\", ",
+      "                    \"project\": \"infra\"",
+      "                }, ",
+      "                {",
+      "                    \"job\": \"codesearch-gen-chromium-linux\", ",
+      "                    \"project\": \"infra\"",
+      "                }, ",
+      "                {",
+      "                    \"job\": \"codesearch-gen-chromium-android\", ",
+      "                    \"project\": \"infra\"",
+      "                }, ",
+      "                {",
+      "                    \"job\": \"codesearch-gen-chromium-win\", ",
+      "                    \"project\": \"infra\"",
+      "                }",
+      "            ], ",
+      "            \"trigger\": {",
+      "                \"buildbucket\": {",
+      "                    \"properties\": {",
+      "                        \"root_solution_revision\": \"deadbeef\"",
+      "                    }, ",
+      "                    \"tags\": [",
+      "                        \"user_agent:recipe\"",
+      "                    ]",
+      "                }, ",
+      "                \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", ",
+      "                \"title\": \"None/None\"",
+      "            }",
+      "        }",
+      "    ], ",
+      "    \"timestamp\": 1337000001500000",
+      "}@@@"
     ]
   },
   {

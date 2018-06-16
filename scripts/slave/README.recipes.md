@@ -4135,7 +4135,7 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch.py#128)(api, root_solution_revision):**
 ### *recipes* / [chromium\_codesearch\_initiator](/scripts/slave/recipes/chromium_codesearch_initiator.py)
 
-[DEPS](/scripts/slave/recipes/chromium_codesearch_initiator.py#12): [trigger](#recipe_modules-trigger), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
+[DEPS](/scripts/slave/recipes/chromium_codesearch_initiator.py#12): [trigger](#recipe_modules-trigger), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
 A recipe for picking a stable HEAD revision for chromium/src.
 
@@ -4143,7 +4143,7 @@ This recipe picks a commit at HEAD, and then triggers the other codesearch
 recipes with the chosen commit hash as a parameter. This ensures that codesearch
 index packs (used to generate xrefs) are all generated from the same revision.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch_initiator.py#20)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch_initiator.py#29)(api):**
 ### *recipes* / [chromium\_gn\_upload](/scripts/slave/recipes/chromium_gn_upload.py)
 
 [DEPS](/scripts/slave/recipes/chromium_gn_upload.py#7): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
