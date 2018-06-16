@@ -32,6 +32,7 @@ class TestResults(object):
     self.flakes = {}
     self.unexpected_flakes = {}
     self.skipped = {}
+    self.unexpected_skipped = {}
     self.unknown = {}
 
     self.pass_fail_counts = {}
@@ -132,7 +133,7 @@ class TestResults(object):
       elif last_result in failing_statuses:
         key += 'failures'
       elif last_result in skipping_statuses:
-        key = 'skipped'
+        key += 'skipped'
       else:
         # Unknown test state was found.
         key = 'unknown'

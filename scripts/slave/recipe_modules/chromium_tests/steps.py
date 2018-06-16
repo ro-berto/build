@@ -1161,7 +1161,7 @@ class JSONResultsHandler(ResultsHandler):
     else:
       if results.unexpected_flakes:
         presentation.status = api.step.WARNING
-      if results.unexpected_failures:
+      if results.unexpected_failures or results.unexpected_skipped:
         presentation.status = (
             api.step.WARNING if self._ignore_task_failure else api.step.FAILURE)
 
@@ -1174,7 +1174,7 @@ class JSONResultsHandler(ResultsHandler):
               self._format_counts(
                   'Skipped',
                   len(results.skipped.keys()),
-                  0),
+                  len(results.unexpected_skipped.keys())),
               self._format_counts(
                   'Failed',
                   len(results.failures.keys()),
@@ -1197,6 +1197,10 @@ class JSONResultsHandler(ResultsHandler):
     step_text += [
         self._format_failures(
             'Unexpected Flakes', results.unexpected_flakes.keys()),
+    ]
+    step_text += [
+        self._format_failures(
+            'Unexpected Skips', results.unexpected_skipped.keys()),
     ]
 
     # Unknown test results mean something has probably gone wrong, mark as an
