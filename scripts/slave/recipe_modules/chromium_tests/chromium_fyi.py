@@ -36,7 +36,7 @@ KITCHEN_TEST_SPEC = {
   },
 }
 
-def stock_config(name, config='Release', **kwargs):
+def stock_config(name, config='Release', target_bits=64, **kwargs):
   if 'mac' in name.lower():
     platform = 'mac'
   elif 'win' in name.lower():
@@ -54,7 +54,7 @@ def stock_config(name, config='Release', **kwargs):
       ],
       'chromium_config_kwargs': {
           'BUILD_CONFIG': config,
-          'TARGET_BITS': 64,
+          'TARGET_BITS': target_bits,
       },
       'chromium_tests_apply_config': [ 'staging' ],
       'test_results_config': 'staging_server',
@@ -927,8 +927,8 @@ SPEC['builders'].update([
     stock_config('mac10.12_retina-blink-rel-dummy'),
     stock_config('mac10.13-blink-rel-dummy'),
     stock_config('mac10.13-blink-rel-dummy'),
-    stock_config('win7-blink-rel-dummy'),
-    stock_config('win10-blink-rel-dummy'),
+    stock_config('win7-blink-rel-dummy', target_bits=32),
+    stock_config('win10-blink-rel-dummy', target_bits=32),
     stock_config('Jumbo Linux x64'),
     stock_config('Jumbo Mac'),
     stock_config('Jumbo Win x64'),
