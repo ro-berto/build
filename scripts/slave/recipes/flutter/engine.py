@@ -251,11 +251,11 @@ def TestObservatory(api):
     api.step('test observatory and service protocol', test_cmd)
 
 
-def TestEngine(api):
-  checkout = api.path['start_dir'].join('src')
-  test_cmd = [checkout.join('flutter/testing/run_tests.sh')]
-  with api.context(cwd=checkout):
-    api.step('engine unit tests', test_cmd)
+#def TestEngine(api):
+#  checkout = api.path['start_dir'].join('src')
+#  test_cmd = [checkout.join('flutter/testing/run_tests.sh')]
+#  with api.context(cwd=checkout):
+#    api.step('engine unit tests', test_cmd)
 
 
 def RunFindXcode(api, ios_tools_path, target_version):
@@ -539,7 +539,7 @@ def RunSteps(api):
       AnalyzeDartUI(api)
       BuildLinux(api)
       TestObservatory(api)
-      TestEngine(api)
+      #TestEngine(api)
       BuildLinuxAndroid(api)
       BuildJavadoc(api)
 
