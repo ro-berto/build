@@ -115,8 +115,8 @@ AddTestSpec('Win10 Tester', 'win', target_bits=32,
             })
 AddTestSpec('Mac Tester', 'mac',
             swarming={
-              'os': 'Mac-10.12',
-              'cpu': 'x86-64',
+              'gpu': '8086:0a2e',
+              'os': 'Mac-10.12.6',
             })
 AddTestSpec('Linux Tester', 'linux',
             swarming={
