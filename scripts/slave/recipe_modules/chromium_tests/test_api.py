@@ -23,6 +23,18 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
   def trybots(self):
     return trybots.TRYBOTS
 
+  @recipe_test_api.mod_test_data
+  @staticmethod
+  def handle_bot_config_errors(handle_bot_config_errors):
+    """Returns a TestData that controls handling BotConfig errors.
+
+    If BotConfig errors are handled, then any exceptions raised when creating a
+    BotConfig will result in the creation of a failing step. If BotConfig errors
+    are not handled, the exception will instead be propagated, allowing tests to
+    fail in the event of a bad configuration.
+    """
+    return handle_bot_config_errors
+
   def platform(self, bot_ids):
     bot_config= bdb_module.BotConfig(self.builders, bot_ids)
     # TODO(phajdan.jr): Get the bitness from actual config for that bot.

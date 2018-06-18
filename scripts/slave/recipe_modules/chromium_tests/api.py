@@ -62,6 +62,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     try:
       return bdb_module.BotConfig(builders or self.builders, bot_ids)
     except Exception:
+      if not self._test_data.get('handle_bot_config_errors', True):
+        raise  # pragma: no cover
       self.m.python.failing_step(
           'Incorrect or missing bot configuration',
           [traceback.format_exc()],
@@ -1089,4 +1091,3 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       [k,v] = line.split('=', 1)
       output[k] = v
     return output
-
