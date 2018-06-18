@@ -225,7 +225,6 @@
   * [dart/sdk_builder](#recipes-dart_sdk_builder)
   * [dart/sdk_gn](#recipes-dart_sdk_gn)
   * [dart/sdk_swarming](#recipes-dart_sdk_swarming)
-  * [dart/vm_kernel_swarming](#recipes-dart_vm_kernel_swarming)
   * [dart:examples/example](#recipes-dart_examples_example)
   * [disk:examples/full](#recipes-disk_examples_full)
   * [docker:examples/full](#recipes-docker_examples_full)
@@ -4748,11 +4747,6 @@ Generates the sequence of steps that will be run by the slave.
 [DEPS](/scripts/slave/recipes/dart/sdk_swarming.py#7): [dart](#recipe_modules-dart), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/sdk_swarming.py#20)(api, buildername):**
-### *recipes* / [dart/vm\_kernel\_swarming](/scripts/slave/recipes/dart/vm_kernel_swarming.py)
-
-[DEPS](/scripts/slave/recipes/dart/vm_kernel_swarming.py#5): [dart](#recipe_modules-dart), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/vm_kernel_swarming.py#16)(api):**
 ### *recipes* / [dart:examples/example](/scripts/slave/recipe_modules/dart/examples/example.py)
 
 [DEPS](/scripts/slave/recipe_modules/dart/examples/example.py#1): [dart](#recipe_modules-dart), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
