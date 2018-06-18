@@ -19,7 +19,6 @@ MAIN_WATERFALL_MASTERS = [
     'master.chromium',
     'master.chromium.chrome',
     'master.chromium.memory',
-    'master.chromium.win',
 ]
 
 
@@ -48,10 +47,6 @@ SUPPRESSIONS = {
        'Linux MSan Builder',
        'Linux MSan Tests',
     ],
-    'master.chromium.win': [
-        'Win x64 Builder (dbg)',
-    ],
-
 }
 
 
