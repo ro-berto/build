@@ -372,7 +372,8 @@ class DartApi(recipe_api.RecipeApi):
                 args = ['-m%s' % mode] + args
               if not self._has_specific_argument(args, ['-a', '--arch']):
                 args = ['-a%s' % arch] + args
-              self.build(name=step_name, build_args=args)
+              deferred_result = self.build(name=step_name, build_args=args)
+              deferred_result.get_result() # raises build errors
             elif is_trigger:
               self.run_trigger(step_name, step, isolate_hash)
             elif is_test_py_step:

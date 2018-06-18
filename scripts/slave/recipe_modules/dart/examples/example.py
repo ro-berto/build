@@ -1,3 +1,9 @@
+# Copyright 2018 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+from recipe_engine.post_process import (DoesNotRun, DropExpectation)
+
 DEPS = [
   'dart',
   'recipe_engine/json',
@@ -126,7 +132,10 @@ TEST_MATRIX = {
 }
 
 def RunSteps(api):
-  api.dart.checkout(True)
+  if 'clobber' in api.properties:
+    api.dart.checkout(True)
+    return
+
   api.dart.checkout(False)
 
   build_args = ['--super-fast']
@@ -152,6 +161,8 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  yield (api.test('clobber') + api.properties(clobber='True'))
+
   yield (api.test('basic') + api.properties(
       shards='2', shard_timeout='600', branch="refs/head/master",
       buildername='dart2js-linux-release-chrome-try') +
@@ -165,15 +176,21 @@ def GenTests(api):
       api.step_data('buildbucket.put',
                     stdout=api.json.output(TRIGGER_RESULT)))
 
+  yield (api.test('build-failure-in-matrix') + api.properties(
+      buildername='analyzer-linux-release-be') +
+      api.step_data('Build', retcode=1) +
+      api.post_process(DoesNotRun, 'Test-step 1') +
+      api.post_process(DropExpectation))
+
   yield (api.test('basic-missing-name') + api.properties(
-      shards='1', buildername='this-name-does-not-exist-in-test-matrix'))
+      buildername='this-name-does-not-exist-in-test-matrix'))
 
   yield (api.test('basic-timeout') + api.properties(
-      shards='1', buildername='times-out') +
+      buildername='times-out') +
       api.step_data('can_time_out', times_out_after=20 * 61 + 1))
 
   yield (api.test('basic-failure') + api.properties(
-      shards='1', buildername='build-fail') +
+      buildername='build-fail') +
       api.step_data('can_time_out', retcode=1))
 
   yield (api.test('basic-win-stable') + api.platform('win', 64) + api.properties(
