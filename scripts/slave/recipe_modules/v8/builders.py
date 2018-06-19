@@ -880,6 +880,15 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux64 UBSan': {
+        'chromium_apply_config': [
+          'default_compiler', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+        },
+        'tests': [V8Testing],
+        'testing': {'platform': 'linux'},
+      },
       'V8 Linux64 UBSanVptr': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
