@@ -112,6 +112,9 @@
       "closing_optional": [
         "*"
       ],
+      "tree_notify": [
+        "mtv-sf-v8-sheriff@grotations.appspotmail.com"
+      ],
       "excluded_steps": [
         "Failure reason",
         "update_scripts",
@@ -130,6 +133,9 @@
       "status_template": "closed (%(build_url)s from %(revision)s)"
     },
     "v8_compile": {
+      "tree_notify": [
+        "mtv-sf-v8-sheriff@grotations.appspotmail.com"
+      ],
       "closing_optional": [
         "compile",
         "generate_build_files",
