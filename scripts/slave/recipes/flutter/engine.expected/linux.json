@@ -5744,7 +5744,7 @@
     "infra_step": true,
     "name": "gsutil upload treemap for out/android_release/libflutter.so",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release@@@"
+      "@@@STEP_LINK@Open Treemap@https://storage.googleapis.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/sizes/index.html@@@"
     ]
   },
   {
@@ -6672,7 +6672,7 @@
     "infra_step": true,
     "name": "gsutil upload treemap for out/android_release_arm64/libflutter.so",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm64-release@@@"
+      "@@@STEP_LINK@Open Treemap@https://storage.googleapis.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm64-release/sizes/index.html@@@"
     ]
   },
   {

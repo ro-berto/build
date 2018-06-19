@@ -157,8 +157,9 @@ def UploadTreeMap(api, upload_dir, lib_flutter_path):
     api.python('generate treemap for %s' % lib_flutter_path, script_path, args)
 
     remote_name = GetCloudPath(api, upload_dir)
-    api.gsutil.upload(destionation_dir, BUCKET_NAME, remote_name,
-        args=['-r'], name='upload treemap for %s' % lib_flutter_path)
+    result = api.gsutil.upload(destionation_dir, BUCKET_NAME, remote_name,
+        args=['-r'], name='upload treemap for %s' % lib_flutter_path, link_name=None)
+    result.presentation.links['Open Treemap'] = 'https://storage.googleapis.com/%s/%s/sizes/index.html' % (BUCKET_NAME, remote_name)
 
 
 def BuildLinuxAndroid(api):
