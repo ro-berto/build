@@ -241,8 +241,10 @@ def BuildLinuxAndroid(api):
 def BuildLinux(api):
   RunGN(api, '--runtime-mode', 'debug')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
+  RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
   Build(api, 'host_debug_unopt')
   Build(api, 'host_debug')
+  Build(api, 'android_release_vulkan')
   RunHostTests(api, 'out/host_debug_unopt')
   UploadArtifacts(api, 'linux-x64', [
     'out/host_debug_unopt/icudtl.dat',
@@ -306,6 +308,7 @@ def BuildMac(api):
   RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
   RunGN(api, '--runtime-mode', 'release', '--android')
   RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
+  RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
 
   Build(api, 'host_debug_unopt')
   Build(api, 'host_debug')
@@ -315,6 +318,7 @@ def BuildMac(api):
   Build(api, 'android_profile_arm64', 'flutter/lib/snapshot')
   Build(api, 'android_release', 'flutter/lib/snapshot')
   Build(api, 'android_release_arm64', 'flutter/lib/snapshot')
+  Build(api, 'android_release_vulkan')
 
   host_debug_path = api.path['start_dir'].join('src', 'out', 'host_debug')
 
