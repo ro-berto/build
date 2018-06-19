@@ -17,6 +17,7 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/step',
+  'recipe_engine/python',
   'zip',
 ]
 
@@ -60,7 +61,7 @@ def RunHostTests(api, out_dir, exe_extension=''):
       [directory.join('shell_unittests' + exe_extension)])
     api.step('Test Embedder API',
       [directory.join('embedder_unittests' + exe_extension)])
-      
+
     if api.platform.is_mac:
       api.step('Test Flutter Channels',
         [directory.join('flutter_channels_unittests' + exe_extension)])
@@ -145,6 +146,21 @@ def AnalyzeDartUI(api):
     api.step('analyze dart_ui', ['/bin/bash', 'flutter/travis/analyze.sh'])
 
 
+def UploadTreeMap(api, upload_dir, lib_flutter_path):
+  with MakeTempDir(api, 'treemap') as temp_dir:
+    checkout = api.path['start_dir'].join('src')
+    script_path = checkout.join('third_party/dart/runtime/third_party/binary_size/src/run_binary_size_analysis.py')
+    library_path = checkout.join(lib_flutter_path)
+    destionation_dir = temp_dir.join('sizes')
+    args = ['--library', library_path, '--destdir', destionation_dir]
+
+    api.python('generate treemap for %s' % lib_flutter_path, script_path, args)
+
+    remote_name = GetCloudPath(api, upload_dir)
+    api.gsutil.upload(destionation_dir, BUCKET_NAME, remote_name,
+        args=['-r'], name='upload treemap for %s' % lib_flutter_path)
+
+
 def BuildLinuxAndroid(api):
   debug_variants = [
     ('arm', 'android_debug', 'android-arm'),
@@ -210,9 +226,13 @@ def BuildLinuxAndroid(api):
       UploadArtifacts(api, upload_dir, [
         'out/%s/%s/gen_snapshot' % (build_output_dir, clang_dir),
       ], archive_name='linux-x64.zip')
+      unstripped_lib_flutter_path = 'out/%s/libflutter.so' % build_output_dir
       UploadArtifacts(api, upload_dir, [
-          'out/%s/libflutter.so' % build_output_dir
+          unstripped_lib_flutter_path
       ], archive_name='symbols.zip')
+
+      if runtime_mode == 'release':
+        UploadTreeMap(api, upload_dir, unstripped_lib_flutter_path);
 
   Build(api, 'android_debug', ':dist')
   UploadDartPackage(api, 'sky_engine')
