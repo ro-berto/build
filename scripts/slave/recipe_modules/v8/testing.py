@@ -410,7 +410,8 @@ class V8Test(BaseTest):
       step_result = self.api.step(
           test['name'] + self.test_step_config.step_name_suffix + ' (flakes)',
           cmd=None)
-      step_result.presentation.status = self.api.step.WARNING
+      # TODO(sergiyb): Use WARNING result type after crbug.com/854099 is fixed.
+      step_result.presentation.status = self.api.step.FAILURE
       self.api.v8._update_failure_presentation(
             flake_log, flakes, step_result.presentation)
 

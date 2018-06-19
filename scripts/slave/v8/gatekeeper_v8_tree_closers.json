@@ -115,7 +115,8 @@
       "excluded_steps": [
         "Failure reason",
         "update_scripts",
-        "steps"
+        "steps",
+        "* (flakes)"
       ],
       "forgiving_optional": [
         "bot_update",

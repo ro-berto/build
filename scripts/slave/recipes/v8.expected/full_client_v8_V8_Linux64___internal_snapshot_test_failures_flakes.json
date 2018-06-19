@@ -472,7 +472,7 @@
       "@@@STEP_LOG_LINE@test-name2@Some output.@@@",
       "@@@STEP_LOG_LINE@test-name2@@@@",
       "@@@STEP_LOG_END@test-name2@@@",
-      "@@@STEP_WARNINGS@@@"
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
