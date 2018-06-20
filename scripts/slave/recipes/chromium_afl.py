@@ -61,7 +61,7 @@ def RunSteps(api):
 
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-  api.chromium.run_mb(mastername, buildername, use_goma=False)
+  api.chromium.run_mb(mastername, buildername)
 
   all_fuzzers = gn_refs(
           api,
