@@ -305,13 +305,7 @@ def RunSteps(api):
     else:
       api.v8.buildbucket_trigger(
           'master.internal.client.v8',
-          # Since builders using this recipe have been migrated to LUCI, the
-          # blamelist property is not available anymore, hence we can't use
-          # api.v8.get_changes and create a fake change here. This is needed so
-          # that Milo can render triggered Buildbot builds correctly. This
-          # should go away after migrating triggered builds to LUCI, as Milo
-          # only requires buildset tag for such builds and it is already set.
-          [{'author': 'see-parent-build'}],
+          api.v8.get_changes(),
           [
             {
               'properties': {

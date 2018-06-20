@@ -1454,8 +1454,8 @@ class V8Api(recipe_api.RecipeApi):
   def get_changes(self):
     # TODO(sergiyb): Remove this after migrating all builders to LUCI as
     # there the revision from the buildset will be used instead.
-    return [
-        {'author': email} for email in self.m.properties.get('blamelist', [])]
+    blamelist = self.m.properties.get('blamelist', ['fake-author'])
+    return [{'author': email} for email in blamelist]
 
   def buildbucket_trigger(self, bucket, changes, requests, step_name='trigger',
                           service_account='v8-bot', no_buildset=False):
