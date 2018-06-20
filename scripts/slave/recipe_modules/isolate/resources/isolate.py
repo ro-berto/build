@@ -6,7 +6,7 @@
 """Calls the isolate Go executable in the checkout, failing if it cannot run.
 """
 
-# TODO(djd): make the caller invoke the Go binary directly, kill this script.
+# TODO(maruel): make the caller invoke the Go binary directly, kill this script.
 
 import os
 import subprocess
@@ -15,7 +15,18 @@ import sys
 
 def try_go(path, args):
   """Tries to run the Go implementation of isolate.
+
+  First try the new location under src/tools/luci-go/, then the old location
+  under src/tools/luci-go/{platform}/.
   """
+  # New location.
+  exe = os.path.join(os.path.dirname(path), 'luci-go', 'isolate')
+  if sys.platform == 'win32':
+    exe += '.exe'
+  if os.path.isfile(exe):
+    return subprocess.call([exe] + args)
+
+  # Old location.
   luci_go = os.path.join(os.path.dirname(path), 'luci-go')
   if sys.platform == 'win32':
     exe = os.path.join(luci_go, 'win64', 'isolate.exe')
@@ -23,7 +34,6 @@ def try_go(path, args):
     exe = os.path.join(luci_go, 'mac64', 'isolate')
   else:
     exe = os.path.join(luci_go, 'linux64', 'isolate')
-
   return subprocess.call([exe] + args)
 
 
