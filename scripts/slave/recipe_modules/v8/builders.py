@@ -373,26 +373,26 @@ BUILDERS = {
       },
       'V8 Linux - debug': {
         'tests': [
-          V8Testing(2),
+          V8Testing(3),
           OptimizeForSize,
           Benchmarks,
-          Test262Variants(4),
+          Test262Variants(6),
           Mozilla,
           MjsunitSPFrameAccess,
         ] + with_test_args(
             'isolates',
             ['--isolates'],
-            [V8Testing(2)],
+            [V8Testing(3)],
         ) + with_test_args(
             'nosse3',
             ['--extra-flags',
              '--noenable-sse3 --noenable-ssse3 --noenable-sse4-1 --noenable-avx'
             ],
-            [V8Testing(2), Test262, Mozilla],
+            [V8Testing(3), Test262, Mozilla],
         ) + with_test_args(
             'nosse4',
             ['--extra-flags', '--noenable-sse4-1 --noenable-avx'],
-            [V8Testing(2), Test262, Mozilla],
+            [V8Testing(3), Test262, Mozilla],
         ) + with_extra_variants(
             [V8Testing, Mozilla, Test262Variants(2), Benchmarks]),
         'testing': {'platform': 'linux'},
@@ -424,7 +424,7 @@ BUILDERS = {
         'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - nosnap - debug': {
-        'tests': [V8Testing(9)],
+        'tests': [V8Testing(12)],
         'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
         'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
@@ -1591,18 +1591,18 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
         },
         'tests': [
-          V8Testing(5),
+          V8Testing(7),
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
         ] + with_test_args(
             'armv8-a',
             ['--extra-flags', '--enable-armv8'],
-            [V8Testing(5), Test262, Mozilla],
+            [V8Testing(7), Test262, Mozilla],
         ) + with_test_args(
             'novfp3',
             ['--novfp3'],
-            [V8Testing(5), Test262, Mozilla],
+            [V8Testing(7), Test262, Mozilla],
             V8Variant('default'),
         ) + with_extra_variants([V8Testing(2)]),
         'testing': {'platform': 'linux'},
@@ -1644,7 +1644,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
         },
         'tests': [
-          V8Testing(8),
+          V8Testing(10),
           Test262,
           Mozilla,
           MjsunitSPFrameAccess,
