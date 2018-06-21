@@ -57,8 +57,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@[master-branch-point hsh]",
-      "--no_shallow"
+      "v8@[master-branch-point hsh]"
     ],
     "cwd": "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel",
     "env_prefixes": {

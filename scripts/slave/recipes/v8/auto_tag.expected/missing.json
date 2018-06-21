@@ -35,7 +35,6 @@
       "v8@refs/branch-heads/3.4:HEAD",
       "--refs",
       "refs/branch-heads/3.4",
-      "--no_shallow",
       "--with_branch_heads"
     ],
     "cwd": "[BUILDER_CACHE]/Auto_tag",

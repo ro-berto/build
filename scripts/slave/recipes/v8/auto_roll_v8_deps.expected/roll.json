@@ -61,8 +61,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@HEAD",
-      "--no_shallow"
+      "v8@HEAD"
     ],
     "cwd": "[BUILDER_CACHE]/Auto_roll___v8_deps",
     "env_prefixes": {

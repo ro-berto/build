@@ -31,8 +31,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-      "--no_shallow"
+      "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Win64___msvc",
     "env_prefixes": {

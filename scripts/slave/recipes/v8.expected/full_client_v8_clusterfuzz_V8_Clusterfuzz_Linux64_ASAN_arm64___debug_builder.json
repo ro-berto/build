@@ -17,8 +17,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-      "--no_shallow"
+      "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64_ASAN_arm64___debug_builder",
     "env_prefixes": {

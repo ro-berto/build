@@ -34,8 +34,7 @@
       "--revision",
       "node.js@vee-eight-lkgr:HEAD",
       "--revision",
-      "v8@deadbeef",
-      "--no_shallow"
+      "v8@deadbeef"
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_baseline",
     "env_prefixes": {

@@ -17,8 +17,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-      "--no_shallow"
+      "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux64___internal_snapshot",
     "env_prefixes": {
@@ -985,8 +984,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@a0",
-      "--no_shallow"
+      "v8@a0"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux64___internal_snapshot",
     "env_prefixes": {
@@ -1406,8 +1404,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@a2",
-      "--no_shallow"
+      "v8@a2"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux64___internal_snapshot",
     "env_prefixes": {

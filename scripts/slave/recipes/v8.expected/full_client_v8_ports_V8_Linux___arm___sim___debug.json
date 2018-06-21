@@ -17,8 +17,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-      "--no_shallow"
+      "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux___arm___sim___debug",
     "env_prefixes": {

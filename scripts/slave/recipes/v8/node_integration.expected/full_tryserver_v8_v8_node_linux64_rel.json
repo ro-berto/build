@@ -38,8 +38,7 @@
       "--revision",
       "node.js@vee-eight-lkgr:HEAD",
       "--revision",
-      "v8@deadbeef",
-      "--no_shallow"
+      "v8@deadbeef"
     ],
     "cwd": "[BUILDER_CACHE]/v8_node_linux64_rel",
     "env_prefixes": {

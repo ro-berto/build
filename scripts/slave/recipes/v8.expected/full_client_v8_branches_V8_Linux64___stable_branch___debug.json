@@ -19,8 +19,7 @@
       "--revision",
       "v8@refs/branch-heads/4.2:deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
       "--refs",
-      "refs/branch-heads/4.2",
-      "--no_shallow"
+      "refs/branch-heads/4.2"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux64___stable_branch___debug",
     "env_prefixes": {

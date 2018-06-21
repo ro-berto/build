@@ -17,8 +17,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "sdk@123456789abcdef",
-      "--no_shallow"
+      "sdk@123456789abcdef"
     ],
     "env_prefixes": {
       "PATH": [

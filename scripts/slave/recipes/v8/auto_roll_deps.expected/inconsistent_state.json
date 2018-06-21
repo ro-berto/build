@@ -94,8 +94,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/v8@HEAD",
-      "--no_shallow"
+      "src/v8@HEAD"
     ],
     "cwd": "[BUILDER_CACHE]/TestBuilder",
     "env_prefixes": {

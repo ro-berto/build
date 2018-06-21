@@ -17,8 +17,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "v8@deafbeefdeafbeefdeafbeefdeafbeefdeafbeef",
-      "--no_shallow"
+      "v8@deafbeefdeafbeefdeafbeefdeafbeefdeafbeef"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux___presubmit",
     "env_prefixes": {
