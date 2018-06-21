@@ -31,9 +31,6 @@ TRYSERVER_MASTERS = [
 
 
 SUPPRESSIONS = {
-    'master.chromium': [
-       'Linux x64',
-    ],
     'master.chromium.chrome': [
         'Google Chrome ChromeOS',
         'Google Chrome Linux x64',
@@ -52,6 +49,14 @@ SUPPRESSIONS = {
 
 # TODO(hinoka): Remove this after LUCI migration.
 FAKE_BUILDERS = {
+    'master.chromium': [
+      # These have been migrated to LUCI.
+      'Android',
+      'Linux x64',
+      'Mac',
+      'Win',
+      'Win x64',
+    ],
     'master.chromium.android': [
         # These have been migrated to LUCI.
         'Android ASAN (dbg)',
