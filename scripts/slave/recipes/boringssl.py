@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from contextlib import contextmanager
 from recipe_engine.recipe_api import Property
 
 DEPS = [
@@ -186,13 +187,25 @@ def _LogFailingTests(api, deferred):
       ])
 
 
+@contextmanager
+def _CleanupMSVC(api):
+  try:
+    yield
+  finally:
+    if api.platform.is_win:
+      # cl.exe automatically starts background mspdbsrv.exe daemon which needs
+      # to be manually stopped so Swarming can tidy up after itself.
+      api.step('taskkill mspdbsrv',
+               ['taskkill.exe', '/f', '/t', '/im', 'mspdbsrv.exe'])
+
+
 PROPERTIES = {
   'buildername': Property(),
 }
 
 
 def RunSteps(api, buildername):
-  with api.context(env=_GetBuilderEnv(buildername)):
+  with api.context(env=_GetBuilderEnv(buildername)), _CleanupMSVC(api):
     # Print the kernel version on Linux builders. BoringSSL is sensitive to
     # whether the kernel has getrandom support.
     if api.platform.is_linux:
@@ -416,6 +429,18 @@ def GenTests(api):
     api.test('failed_unit_tests') +
     api.platform('linux', 64) +
     api.properties.generic(mastername='client.boringssl', buildername='linux',
+                           bot_id='bot_id') +
+    api.override_step_data('unit tests',
+                           api.test_utils.canned_test_output(False)) +
+    api.override_step_data('ssl tests',
+                           api.test_utils.canned_test_output(True))
+  )
+
+  # Test that the cleanup step works correctly with test failures.
+  yield (
+    api.test('failed_unit_tests_win') +
+    api.platform('win', 64) +
+    api.properties.generic(mastername='client.boringssl', buildername='win64',
                            bot_id='bot_id') +
     api.override_step_data('unit tests',
                            api.test_utils.canned_test_output(False)) +
