@@ -138,22 +138,17 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
 
   def run_tests(build_dir, env=None):
     if is_fuchsia:
-      # Start a QEMU instance.
-      api.python('start qemu',
-                 api.path['checkout'].join('build', 'run_fuchsia_qemu.py'),
-                 args=['start'])
+      # QEMU instances are very flaky. Disable test running for now. This used
+      # to (and should) do `build/run_fuchsia_qemu.py start` before, and `...
+      # stop` after calling run_tests.py.
+      # https://bugs.chromium.org/p/crashpad/issues/detail?id=219.
+      return
 
     with api.context(env=env):
       api.python('run tests',
                 api.path['checkout'].join('build', 'run_tests.py'),
                 args=[build_dir],
                 timeout=5*60)
-
-    if is_fuchsia:
-      # Shut down the QEMU instance.
-      api.python('stop qemu',
-                 api.path['checkout'].join('build', 'run_fuchsia_qemu.py'),
-                 args=['stop'])
 
   if is_win:
     api.step('compile with ninja x86', ['ninja', '-C', x86_path])
