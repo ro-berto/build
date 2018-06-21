@@ -196,7 +196,8 @@ def _CleanupMSVC(api):
       # cl.exe automatically starts background mspdbsrv.exe daemon which needs
       # to be manually stopped so Swarming can tidy up after itself.
       api.step('taskkill mspdbsrv',
-               ['taskkill.exe', '/f', '/t', '/im', 'mspdbsrv.exe'])
+               ['taskkill.exe', '/f', '/t', '/im', 'mspdbsrv.exe'],
+               ok_ret='any')
 
 
 PROPERTIES = {
@@ -457,6 +458,20 @@ def GenTests(api):
                            api.test_utils.canned_test_output(True)) +
     api.override_step_data('ssl tests',
                            api.test_utils.canned_test_output(False))
+  )
+
+  # The taskkill step may fail if mspdbsrv has already exitted. This should
+  # still be accepted.
+  yield (
+    api.test('failed_taskkill') +
+    api.platform('win', 64) +
+    api.properties.generic(mastername='client.boringssl', buildername='win64',
+                           bot_id='bot_id') +
+    api.override_step_data('unit tests',
+                           api.test_utils.canned_test_output(True)) +
+    api.override_step_data('ssl tests',
+                           api.test_utils.canned_test_output(True)) +
+    api.override_step_data('taskkill mspdbsrv', retcode=1)
   )
 
   yield (
