@@ -7,6 +7,7 @@ from . import steps
 SPEC = {
   'settings': {
     'build_gs_bucket': 'chromium-v8',
+    'luci_project': 'v8',
   },
   'builders': {
     'Linux Debug Builder': {

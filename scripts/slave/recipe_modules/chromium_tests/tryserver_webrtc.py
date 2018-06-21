@@ -7,6 +7,9 @@ from . import steps
 
 
 SPEC = {
+  'settings': {
+    'luci_project': 'webrtc',
+  },
   'builders': {},
 }
 

@@ -145,7 +145,7 @@ class BotConfig(object):
 
     tests_including_triggered = list(tests)
     for bot_id in self._bot_ids:
-      for _, _, test_bot in bot_db.bot_configs_matching_parent_buildername(
+      for _, _, _, test_bot in bot_db.bot_configs_matching_parent_buildername(
           bot_id['mastername'], bot_id['buildername']):
         tests_including_triggered.extend(test_bot.get('tests', []))
 
@@ -220,7 +220,9 @@ class BotConfigAndTestDB(object):
         builder_matches = (bot_config.get('parent_buildername') ==
                            parent_buildername)
         if master_matches and builder_matches:
-          yield mastername, buildername, bot_config
+          master_settings = self.get_master_settings(mastername)
+          luci_project = master_settings.get('luci_project', 'chromium')
+          yield luci_project, mastername, buildername, bot_config
 
   def get_test_spec(self, mastername, buildername):
     return self._db[mastername]['test_spec'].get(buildername, {})

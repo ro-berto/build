@@ -9,6 +9,7 @@ SPEC = {
     # Usage not covered by chromium CQ is not supported and can break
     # without notice.
     'src_side_runtest_py': True,
+    'luci_project': 'v8',
   },
   'builders': {
     'Linux - Future': {

@@ -531,7 +531,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # Legacy buildbot-only triggering.
       # TODO(tandrii): get rid of legacy triggering.
       trigger_specs = []
-      for loop_mastername, loop_buildername, builder_dict in sorted(
+      for _, loop_mastername, loop_buildername, builder_dict in sorted(
           bot_db.bot_configs_matching_parent_buildername(
               mastername, buildername)):
         trigger_spec = {
@@ -566,8 +566,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     properties.update(additional_properties)
 
-    scheduler_jobs = []
-    for loop_mastername, loop_buildername, builder_dict in sorted(
+    scheduler_jobs = collections.defaultdict(list)
+    for luci_project, loop_mastername, loop_buildername, builder_dict in sorted(
         bot_db.bot_configs_matching_parent_buildername(
             mastername, buildername)):
       # LUCI mode will emulate triggering of builds inside master.chromium*
@@ -580,22 +580,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       #
       # Schematically:
       #   <this build> --triggers--> LUCI Scheduler --triggers--> Buildbucket.
-      #
-      # If you use this recipe module with a different master/bucket/project
-      # refactor the `bot_configs_matching_parent_buildername` to return LUCI
-      # Scheduler project instead of master.
-      if not loop_mastername.startswith('chromium'):  # pragma: no cover
-        # If you hit this condition, then you have a test case for coverage,
-        # so please add your test and remove the pragma above.
-        self.m.python.failing_step('trigger', 'unknown destination bucket')
-
-      scheduler_jobs.append(loop_buildername)
+      scheduler_jobs[luci_project].append(loop_buildername)
 
     if scheduler_jobs:
-      self.m.scheduler.emit_trigger(
-          self.m.scheduler.BuildbucketTrigger(properties=properties),
-          project='chromium',
-          jobs=scheduler_jobs,
+      self.m.scheduler.emit_triggers(
+          ((self.m.scheduler.BuildbucketTrigger(properties=properties),
+            project, jobs)
+           for project, jobs in scheduler_jobs.iteritems()),
           step_name='trigger')
 
   def run_mb_and_compile(self, compile_targets, isolated_targets, name_suffix,
