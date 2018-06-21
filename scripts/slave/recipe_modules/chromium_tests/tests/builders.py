@@ -25,21 +25,16 @@ PROPERTIES = {
       kind=str, help='Name of the buildbot builder to check'),
 }
 
-BLACKLIST = [
-  # TODO(crbug.com/853899) This builder spec is invalid, don't test it
-  ('chromium.android', 'Android Cronet Builder Asan'),
-]
 
 def RunSteps(api, mastername, buildername):
   bot_config = (
       api.chromium_tests.create_bot_config_object(mastername, buildername))
   api.chromium_tests.configure_build(bot_config)
 
+
 def GenTests(api):
   for mastername, builders_dict in api.chromium_tests.builders.iteritems():
     for buildername in builders_dict['builders']:
-      if (mastername, buildername) in BLACKLIST:
-        continue
       yield (
           api.test(('%s-%s' % (mastername, buildername)).replace(' ', '_'))
           + api.properties(mastername=mastername, buildername=buildername)

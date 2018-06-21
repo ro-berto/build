@@ -109,19 +109,16 @@ SPEC = {
       },
     },
 
-    # TODO(crbug.com/853899) This builder spec is invalid
-    # If fixed, remove it from blacklist in
-    # //scripts/slave/recipe_modules/chromium_tests/tests/builders.py
     'Android Cronet Builder Asan': {
       'chromium_config': 'main_builder_rel_mb',
-      'chromium_apply_config': ['chromium_asan', 'cronet_builder', 'mb'],
+      'chromium_apply_config': ['chromium_asan', 'cronet_builder'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_PLATFORM': 'android',
       },
-      'android_config': 'main_builder_rel_mb',
+      'android_config': 'clang_builder_mb',
       'android_apply_config': ['asan_symbolize', 'use_devil_provision'],
       'bot_type': 'builder_tester',
       'testing': {
