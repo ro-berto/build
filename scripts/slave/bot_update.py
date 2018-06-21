@@ -3,6 +3,12 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+# WARNING! DO NOT USE. YOU ARE LOOKING AT DEPRECATED BOT_UPDATE!
+#
+# This is the old location of bot_update, the new one is in depot_tools'
+# recipes/recipe_modules/bot_update.
+# This file will be removed as soon as last users migrate away from it.
+
 # TODO(hinoka): Use logging.
 
 import cStringIO
