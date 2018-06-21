@@ -14,8 +14,8 @@ def distribute_subdir_slaves(master, builders, hostnames, slaves):
   subdir 1.
   """
   # Assuming lists are used to ensure determinism.
-  assert type(builders) == list
-  assert type(hostnames) == list
+  assert isinstance(builders, list)
+  assert isinstance(hostnames, list)
 
   # Assuming there are more or equal builders than hostnames.
   assert len(builders) >= len(hostnames)

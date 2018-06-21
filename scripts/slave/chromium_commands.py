@@ -617,7 +617,7 @@ class GClient(SourceBaseCommand):
 
   def maybeDoVCFallback(self, rc):
     """Called after doVCUpdate."""
-    if type(rc) is int and rc == 2:
+    if isinstance(rc, int) and rc == 2:
       # Non-VC failure, return 2 to turn the step red.
       return rc
 
@@ -626,7 +626,7 @@ class GClient(SourceBaseCommand):
 
   def maybeDoVCRetry(self, res):
     """Called after doVCFull."""
-    if type(res) is int and res == 2:
+    if isinstance(res, int) and res == 2:
       # Non-VC failure, return 2 to turn the step red.
       return res
 

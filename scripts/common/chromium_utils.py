@@ -1385,7 +1385,7 @@ def EntryToSlavePool(entry):
   if not builders:
     return None
 
-  if type(builders) not in (tuple, list):
+  if not isinstance(builders, (list, tuple)):
     builders = [builders]
   builders = sorted(builders)
   return builders[0]

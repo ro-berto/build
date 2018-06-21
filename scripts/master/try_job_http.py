@@ -39,7 +39,7 @@ class TryJobHTTP(TryJobBase):
                last_good_urls=None, code_review_sites=None):
     TryJobBase.__init__(self, name, pools, properties,
                         last_good_urls, code_review_sites)
-    if type(port) is int:
+    if isinstance(port, int):
       port = "tcp:%d" % port
     self.port = port
     f = http.HTTPFactory()

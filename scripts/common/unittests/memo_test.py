@@ -360,7 +360,7 @@ class MemoClassMethodTestCase(MemoTestCase):
       return hash(type(self))
 
     def __eq__(self, other):
-      return type(other) == type(self)
+      return isinstance(other, type(self))
 
 
   def testClassMethodNoEquals(self):

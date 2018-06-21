@@ -209,7 +209,7 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
         else:
           d = pathsep + 'b'
         builders = s.get('builder') or '?'
-        if type(builders) is not list:
+        if not isinstance(builders, list):
           builders = [builders]
         for b in sorted(builders):
           print '%-30s %-20s %-35s %-35s %-10s' % (host, d, master, b, slaveos)

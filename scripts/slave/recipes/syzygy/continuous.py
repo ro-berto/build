@@ -99,7 +99,7 @@ def RunSteps(api, buildername, blamelist, revision):
 
     # Sometimes these come as a tuple, sometimes as a list, which messes up the
     # simulation unittests.
-    blamelist = list(blamelist) if type(blamelist) is tuple else blamelist
+    blamelist = list(blamelist) if isinstance(blamelist, tuple) else blamelist
 
     # Trigger a smoke test build for the same revision.
     props = {'blamelist': blamelist,

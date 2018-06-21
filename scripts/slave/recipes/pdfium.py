@@ -251,7 +251,7 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
   upload_dm_results(api, gold_output_dir, revision, 'corpus')
 
   if test_exception:
-    raise test_exception # pylint: disable-msg=E0702
+    raise test_exception # pylint: disable=E0702
 
 
 def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,

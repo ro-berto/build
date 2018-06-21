@@ -1313,8 +1313,8 @@ def _ConfigureSanitizerTools(options, args, extra_env):
   def AddToExistingEnv(env_dict, key, options_list):
     # Adds a key to the supplied environment dictionary but appends it to
     # existing environment variables if it already contains values.
-    assert type(env_dict) is dict
-    assert type(options_list) is list
+    assert isinstance(env_dict, dict)
+    assert isinstance(options_list, list)
     env_dict[key] = ' '.join(filter(bool, [os.environ.get(key)]+options_list))
 
   # ThreadSanitizer
@@ -1550,7 +1550,7 @@ def main():
     if options.perf_config:
       try:
         options.perf_config = ast.literal_eval(options.perf_config)
-        assert type(options.perf_config) is dict, (
+        assert isinstance(options.perf_config, dict), (
             'Value of --perf-config couldn\'t be evaluated into a dict.')
       except (exceptions.SyntaxError, ValueError):
         option_parser.error('Failed to parse --perf-config value into a dict: '
