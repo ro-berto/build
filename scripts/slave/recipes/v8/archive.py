@@ -23,15 +23,16 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'v8',
   'zip',
 ]
 
 ARCHIVE_LINK = 'https://storage.googleapis.com/chromium-v8/official/%s/%s'
-BRANCH_RE = re.compile(r'^\d+\.\d+(?:\.\d+)?$')
-RELEASE_BRANCH_RE = re.compile(r'^\d+\.\d+$')
-FIRST_BUILD_IN_MILESTONE_RE = re.compile(r'^\d+\.\d+\.\d+$')
+BRANCH_RE = re.compile(r'^(?:refs/heads/)?\d+\.\d+(?:\.\d+)?$')
+RELEASE_BRANCH_RE = re.compile(r'^(?:refs/heads/)?\d+\.\d+$')
+FIRST_BUILD_IN_MILESTONE_RE = re.compile(r'^(?:refs/heads/)?\d+\.\d+\.\d+$')
 
 
 def make_archive(api, branch, version, archive_type, step_suffix='',
@@ -72,7 +73,8 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
   )
   archive_name = '%s-%s.zip' % (archive_prefix, version)
   gs_path_suffix = branch if RELEASE_BRANCH_RE.match(branch) else 'canary'
-  gs_path = 'chromium-v8/official/%s' % gs_path_suffix
+  experiment_subdir = 'experimental/' if api.runtime.is_experimental else ''
+  gs_path = 'chromium-v8/%sofficial/%s' % (experiment_subdir, gs_path_suffix)
   api.gsutil.upload(
       zip_file,
       gs_path,
@@ -96,7 +98,7 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
       FIRST_BUILD_IN_MILESTONE_RE.match(version)):
     api.gsutil.upload(
         zip_file,
-        'chromium-v8/official/refbuild',
+        'chromium-v8/%sofficial/refbuild' % experiment_subdir,
         'v8-%s%s%s%s-rel.zip' % (api.chromium.c.TARGET_PLATFORM, arch_name,
                                  api.chromium.c.TARGET_BITS, archive_suffix),
         args=['-a', 'public-read'],
