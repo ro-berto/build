@@ -27,7 +27,6 @@ per-file chromium_trybot.py=jbudorick@chromium.org
 per-file chromium_trybot.py=martiniss@chromium.org
 per-file chromium_trybot.py=sergeyberezin@chromium.org
 per-file chromium_trybot.py=sergiyb@chromium.org
-per-file client.fletch.recipe_autogen.py=file:client.fletch.recipe_autogen.expected/OWNERS
 per-file cronet.py=file:cronet.expected/OWNERS
 per-file ct_top1k_perf.py=rmistry@chromium.org
 per-file goma_client.py=shinyak@chromium.org
