@@ -186,7 +186,6 @@
   * [chromium_tests:tests/trybots](#recipes-chromium_tests_tests_trybots) &mdash; Test to ensure the validity of the entries within TRYBOTS.
   * [chromium_trybot](#recipes-chromium_trybot)
   * [chromium_upload_clang](#recipes-chromium_upload_clang)
-  * [client.fletch.recipe_autogen](#recipes-client.fletch.recipe_autogen)
   * [client.nacl.sdk.recipe_autogen](#recipes-client.nacl.sdk.recipe_autogen)
   * [closure_compilation](#recipes-closure_compilation)
   * [codesearch:examples/full](#recipes-codesearch_examples_full)
@@ -4456,75 +4455,6 @@ properties set for the entry.
 [DEPS](/scripts/slave/recipes/chromium_upload_clang.py#7): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_upload_clang.py#63)(api):**
-### *recipes* / [client.fletch.recipe\_autogen](/scripts/slave/recipes/client.fletch.recipe_autogen.py)
-
-[DEPS](/scripts/slave/recipes/client.fletch.recipe_autogen.py#5): [build](#recipe_modules-build), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#1597)(api):**
-
-&mdash; **def [cross\_dartino\_linux\_arm\_dev\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#401)(api):**
-
-&mdash; **def [cross\_dartino\_linux\_arm\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#304)(api):**
-
-&mdash; **def [dartino\_free\_rtos\_dev\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#548)(api):**
-
-&mdash; **def [dartino\_free\_rtos\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#455)(api):**
-
-&mdash; **def [dartino\_linux\_debug\_asan\_x86\_dev\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#928)(api):**
-
-&mdash; **def [dartino\_linux\_debug\_asan\_x86\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#978)(api):**
-
-&mdash; **def [dartino\_linux\_debug\_x86\_dev\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#1460)(api):**
-
-&mdash; **def [dartino\_linux\_debug\_x86\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#1360)(api):**
-
-&mdash; **def [dartino\_linux\_release\_asan\_x86\_dev\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#1310)(api):**
-
-&mdash; **def [dartino\_linux\_release\_asan\_x86\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#211)(api):**
-
-&mdash; **def [dartino\_linux\_release\_x64\_sdk\_dev\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#875)(api):**
-
-&mdash; **def [dartino\_linux\_release\_x64\_sdk\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#1164)(api):**
-
-&mdash; **def [dartino\_linux\_release\_x86\_dev\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#782)(api):**
-
-&mdash; **def [dartino\_linux\_release\_x86\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#1410)(api):**
-
-&mdash; **def [dartino\_lk\_debug\_arm\_qemu\_dev\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#161)(api):**
-
-&mdash; **def [dartino\_lk\_debug\_arm\_qemu\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#1217)(api):**
-
-&mdash; **def [dartino\_mac\_debug\_asan\_x86\_dev\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#68)(api):**
-
-&mdash; **def [dartino\_mac\_debug\_asan\_x86\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#598)(api):**
-
-&mdash; **def [dartino\_mac\_debug\_x86\_dev\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#832)(api):**
-
-&mdash; **def [dartino\_mac\_debug\_x86\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#641)(api):**
-
-&mdash; **def [dartino\_mac\_release\_asan\_x86\_dev\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#1028)(api):**
-
-&mdash; **def [dartino\_mac\_release\_asan\_x86\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#358)(api):**
-
-&mdash; **def [dartino\_mac\_release\_x64\_sdk\_dev\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#1267)(api):**
-
-&mdash; **def [dartino\_mac\_release\_x64\_sdk\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#505)(api):**
-
-&mdash; **def [dartino\_mac\_release\_x86\_dev\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#261)(api):**
-
-&mdash; **def [dartino\_mac\_release\_x86\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#1121)(api):**
-
-&mdash; **def [dartino\_win\_debug\_x86\_dev\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#1510)(api):**
-
-&mdash; **def [dartino\_win\_debug\_x86\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#734)(api):**
-
-&mdash; **def [target\_dartino\_linux\_debug\_arm\_dev\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#18)(api):**
-
-&mdash; **def [target\_dartino\_linux\_debug\_arm\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#684)(api):**
-
-&mdash; **def [target\_dartino\_linux\_release\_arm\_dev\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#111)(api):**
-
-&mdash; **def [target\_dartino\_linux\_release\_arm\_steps](/scripts/slave/recipes/client.fletch.recipe_autogen.py#1071)(api):**
 ### *recipes* / [client.nacl.sdk.recipe\_autogen](/scripts/slave/recipes/client.nacl.sdk.recipe_autogen.py)
 
 [DEPS](/scripts/slave/recipes/client.nacl.sdk.recipe_autogen.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5588,17 +5518,17 @@ The changes are:
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/zip/examples/full.py#14)(api):**
 
-[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/120b2e4f2660a4c583996d5334cff1fc65c251f0/recipes/README.recipes.md#recipe_modules-bot_update
-[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/120b2e4f2660a4c583996d5334cff1fc65c251f0/recipes/README.recipes.md#recipe_modules-cipd
-[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/120b2e4f2660a4c583996d5334cff1fc65c251f0/recipes/README.recipes.md#recipe_modules-depot_tools
-[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/120b2e4f2660a4c583996d5334cff1fc65c251f0/recipes/README.recipes.md#recipe_modules-gclient
-[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/120b2e4f2660a4c583996d5334cff1fc65c251f0/recipes/README.recipes.md#recipe_modules-gerrit
-[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/120b2e4f2660a4c583996d5334cff1fc65c251f0/recipes/README.recipes.md#recipe_modules-git
-[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/120b2e4f2660a4c583996d5334cff1fc65c251f0/recipes/README.recipes.md#recipe_modules-gitiles
-[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/120b2e4f2660a4c583996d5334cff1fc65c251f0/recipes/README.recipes.md#recipe_modules-gsutil
-[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/120b2e4f2660a4c583996d5334cff1fc65c251f0/recipes/README.recipes.md#recipe_modules-infra_paths
-[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/120b2e4f2660a4c583996d5334cff1fc65c251f0/recipes/README.recipes.md#recipe_modules-presubmit
-[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/120b2e4f2660a4c583996d5334cff1fc65c251f0/recipes/README.recipes.md#recipe_modules-tryserver
+[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/7999d926809fdb560e58012dddd74b235ea1d99a/recipes/README.recipes.md#recipe_modules-bot_update
+[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/7999d926809fdb560e58012dddd74b235ea1d99a/recipes/README.recipes.md#recipe_modules-cipd
+[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/7999d926809fdb560e58012dddd74b235ea1d99a/recipes/README.recipes.md#recipe_modules-depot_tools
+[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/7999d926809fdb560e58012dddd74b235ea1d99a/recipes/README.recipes.md#recipe_modules-gclient
+[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/7999d926809fdb560e58012dddd74b235ea1d99a/recipes/README.recipes.md#recipe_modules-gerrit
+[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/7999d926809fdb560e58012dddd74b235ea1d99a/recipes/README.recipes.md#recipe_modules-git
+[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/7999d926809fdb560e58012dddd74b235ea1d99a/recipes/README.recipes.md#recipe_modules-gitiles
+[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/7999d926809fdb560e58012dddd74b235ea1d99a/recipes/README.recipes.md#recipe_modules-gsutil
+[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/7999d926809fdb560e58012dddd74b235ea1d99a/recipes/README.recipes.md#recipe_modules-infra_paths
+[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/7999d926809fdb560e58012dddd74b235ea1d99a/recipes/README.recipes.md#recipe_modules-presubmit
+[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/7999d926809fdb560e58012dddd74b235ea1d99a/recipes/README.recipes.md#recipe_modules-tryserver
 [recipe_engine/recipe_modules/buildbucket]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/94bb0a758456a5df6891677a8cf2876c07ea5f0c/README.recipes.md#recipe_modules-buildbucket
 [recipe_engine/recipe_modules/context]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/94bb0a758456a5df6891677a8cf2876c07ea5f0c/README.recipes.md#recipe_modules-context
 [recipe_engine/recipe_modules/file]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/94bb0a758456a5df6891677a8cf2876c07ea5f0c/README.recipes.md#recipe_modules-file
