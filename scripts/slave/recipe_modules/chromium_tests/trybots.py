@@ -171,6 +171,11 @@ TRYBOTS = freeze({
         'mastername': 'chromium.android',
         'buildername': 'Android WebView N (dbg)',
       }),
+      # Manually triggered GPU trybots.
+      'gpu-manual-try-android-p-pixel-2-32': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI 32 Vk Release (Pixel 2)',
+      }),
     },
   },
   'tryserver.chromium.angle': {
