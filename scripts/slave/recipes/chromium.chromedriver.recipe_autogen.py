@@ -288,6 +288,7 @@ def annotated_steps(api, got_revision):
       api.package_repo_resource('scripts', 'tools', 'runit.py'),
       args=[
         '-s',
+        'python',
         api.package_repo_resource('scripts', 'slave', 'runtest.py'),
         '--run-python-script',
         api.path['checkout'].join('chrome', 'test', 'chromedriver',

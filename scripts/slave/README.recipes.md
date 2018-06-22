@@ -3919,7 +3919,7 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 
 &mdash; **def [Mac\_10\_6\_steps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#96)(api):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#300)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#301)(api):**
 
 &mdash; **def [Win7\_steps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#157)(api):**
 

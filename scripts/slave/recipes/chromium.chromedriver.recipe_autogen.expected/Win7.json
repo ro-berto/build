@@ -436,6 +436,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "-s",
+      "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
       "--run-python-script",
       "[START_DIR]/src/chrome/test/chromedriver/run_buildbot_steps.py",
