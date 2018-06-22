@@ -3915,13 +3915,15 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 
 &mdash; **def [Linux32\_steps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#35)(api):**
 
-&mdash; **def [Linux\_steps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#236)(api):**
+&mdash; **def [Linux\_steps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#217)(api):**
 
-&mdash; **def [Mac\_10\_6\_steps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#103)(api):**
+&mdash; **def [Mac\_10\_6\_steps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#96)(api):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#312)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#300)(api):**
 
-&mdash; **def [Win7\_steps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#170)(api):**
+&mdash; **def [Win7\_steps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#157)(api):**
+
+&mdash; **def [annotated\_steps](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#286)(api, got_revision):**
 
 &mdash; **def [build\_with\_goma\_module](/scripts/slave/recipes/chromium.chromedriver.recipe_autogen.py#20)(api):**
 ### *recipes* / [chromium:examples/full](/scripts/slave/recipe_modules/chromium/examples/full.py)

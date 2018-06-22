@@ -428,11 +428,15 @@
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/chromedriver_buildbot_run.py",
-      "--build-properties={\"bot_id\":\"TestSlave\",\"buildername\":\"Mac 10.6\",\"got_revision\":\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\",\"got_revision_cp\":\"refs/heads/master@{#170242}\",\"got_swarming_client_revision\":\"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\",\"got_swarming_client_revision_cp\":\"refs/heads/master@{#276089}\",\"got_v8_revision\":\"801ada225ddc271c132c3a35f03975671d43e399\",\"got_v8_revision_cp\":\"refs/heads/master@{#43426}\",\"got_webkit_revision\":\"5e2293dffc3cd07d37fbedea3b500f0eb650614d\",\"got_webkit_revision_cp\":\"refs/heads/master@{#124383}\",\"mastername\":\"chromium.chromedriver\",\"recipe\":\"chromium.chromedriver.recipe_autogen\",\"slavename\":\"TestSlave\"}",
-      "--factory-properties={\"annotated_script\":\"chromedriver_buildbot_run.py\",\"blink_config\":\"chromium\",\"gclient_env\":{\"DEPOT_TOOLS_UPDATE\":\"0\",\"LANDMINES_VERBOSE\":\"1\"},\"needs_webdriver_java_tests\":true}"
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "-s",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--run-python-script",
+      "[START_DIR]/src/chrome/test/chromedriver/run_buildbot_steps.py",
+      "--revision",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
     ],
-    "name": "annotated_steps"
+    "name": "chromedriver buildbot steps"
   },
   {
     "name": "$result",

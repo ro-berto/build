@@ -88,16 +88,9 @@ def Linux32_steps(api):
   # strip binary
   api.m.step('strip', cmd=['strip', str(api.path['checkout'].join(
       'out', 'Default', 'chromedriver'))])
+
   # annotated_steps step
-  api.build.python("annotated_steps",
-      api.package_repo_resource("scripts", "slave", "chromium",
-                                "chromedriver_buildbot_run.py"),
-    args=['--build-properties=%s' % api.json.dumps(build_properties,
-      separators=(',', ':')), '--factory-properties={"annotated_script":'+\
-          '"chromedriver_buildbot_run.py","blink_config":"chromium",'+\
-          '"gclient_env":{"DEPOT_TOOLS_UPDATE":"0","LANDMINES_VERBOSE":'+\
-          '"1"},"needs_webdriver_java_tests":true,"use_xvfb_on_linux":true}'],
-    allow_subannotations=True)
+  annotated_steps(api, build_properties.get('got_revision'))
 
 
 def Mac_10_6_steps(api):
@@ -156,15 +149,9 @@ def Mac_10_6_steps(api):
   # strip binary
   api.m.step('strip', cmd=['strip', str(api.path['checkout'].join(
       'out', 'Default', 'chromedriver'))])
+
   # annotated_steps step
-  api.build.python("annotated_steps",
-      api.package_repo_resource("scripts", "slave", "chromium",
-                                "chromedriver_buildbot_run.py"),
-    args=['--build-properties=%s' % api.json.dumps(build_properties,
-      separators=(',', ':')), '--factory-properties={"annotated_script":"c'+\
-          'hromedriver_buildbot_run.py","blink_config":"chromium","gclient_e'+\
-          'nv":{"DEPOT_TOOLS_UPDATE":"0","LANDMINES_VERBOSE":"1"},"ne'+\
-          'eds_webdriver_java_tests":true}'], allow_subannotations=True)
+  annotated_steps(api, build_properties.get('got_revision'))
 
 
 def Win7_steps(api):
@@ -224,13 +211,7 @@ def Win7_steps(api):
   build_with_goma_module(api)
 
   # annotated_steps step
-  api.step("annotated_steps", ["python_slave", api.package_repo_resource("scripts",
-    "slave", "chromium", "chromedriver_buildbot_run.py"),
-    '--build-properties=%s' % api.json.dumps(build_properties,
-      separators=(',', ':')), '--factory-properties={"annotated_script":"chro'+\
-          'medriver_buildbot_run.py","blink_config":"chromium","gclient_env":'+\
-          '{"DEPOT_TOOLS_UPDATE":"0","LANDMINES_VERBOSE":"1"},"needs_'+\
-          'webdriver_java_tests":true}'], allow_subannotations=True)
+  annotated_steps(api, build_properties.get('got_revision'))
 
 
 def Linux_steps(api):
@@ -289,16 +270,9 @@ def Linux_steps(api):
   # strip binary
   api.m.step('strip', cmd=['strip', str(api.path['checkout'].join(
       'out', 'Default', 'chromedriver'))])
+
   # annotated_steps step
-  api.build.python("annotated_steps",
-      api.package_repo_resource("scripts", "slave", "chromium",
-                                "chromedriver_buildbot_run.py"),
-    args=['--build-properties=%s' % api.json.dumps(build_properties,
-      separators=(',', ':')), '--factory-properties={"annotated_script":"chro'+\
-          'medriver_buildbot_run.py","blink_config":"chromium","gclient_env":'+\
-          '{"DEPOT_TOOLS_UPDATE":"0","LANDMINES_VERBOSE":"1"},"needs_webdrive'+\
-          'r_java_tests":true,"use_xvfb_on_linux":true}'],
-    allow_subannotations=True)
+  annotated_steps(api, build_properties.get('got_revision'))
 
 
 dispatch_directory = {
@@ -307,6 +281,20 @@ dispatch_directory = {
   'Win7': Win7_steps,
   'Linux': Linux_steps,
 }
+
+
+def annotated_steps(api, got_revision):
+  api.build.python('chromedriver buildbot steps',
+      api.package_repo_resource('scripts', 'tools', 'runit.py'),
+      args=[
+        '-s',
+        api.package_repo_resource('scripts', 'slave', 'runtest.py'),
+        '--run-python-script',
+        api.path['checkout'].join('chrome', 'test', 'chromedriver',
+                                  'run_buildbot_steps.py'),
+        '--revision', got_revision
+      ],
+      allow_subannotations=True)
 
 
 def RunSteps(api):
