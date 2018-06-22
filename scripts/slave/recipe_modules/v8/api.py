@@ -334,7 +334,7 @@ class V8Api(recipe_api.RecipeApi):
       # migrated to LUCI.
       self.checkout_root = self.m.path['start_dir']
     with self.m.context(cwd=self.checkout_root):
-      update_step = self.m.bot_update.ensure_checkout(no_shallow=True, **kwargs)
+      update_step = self.m.bot_update.ensure_checkout(**kwargs)
 
     assert update_step.json.output['did_run']
 
