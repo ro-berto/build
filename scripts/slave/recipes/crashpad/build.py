@@ -73,11 +73,6 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
     # setting of clang_path below.
     api.gclient.c.solutions[0].custom_vars['pull_linux_clang'] = True
 
-  if is_win:
-    # Setting this variable causes DEPS to download the Windows SDK and
-    # toolchain in runhooks. See also the setting of win_toolchain_path below.
-    api.gclient.c.solutions[0].custom_vars['pull_win_toolchain'] = True
-
   api.bot_update.ensure_checkout()
 
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
@@ -123,8 +118,7 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
 
     x86_path = api.path['checkout'].join('out', dirname + '_x86')
     x64_path = api.path['checkout'].join('out', dirname + '_x64')
-    args = 'target_os="win" is_debug=' + ('true' if is_debug else 'false') + \
-           ' win_toolchain_path="//third_party/win/toolchain"'
+    args = 'target_os="win" is_debug=' + ('true' if is_debug else 'false')
     with api.context(cwd=api.path['checkout']):
       api.step('generate build files x86',
                ['gn', 'gen', x86_path, '--args=' + args + ' target_cpu="x86"'])
