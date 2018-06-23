@@ -475,6 +475,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.memory',
         'buildername': 'Linux CFI',
       }),
+      'linux_chromium_ubsan_rel_ng': simple_bot({
+        'mastername': 'chromium.clang',
+        'buildername': 'UBSanVptr Linux',
+      }),
       'linux_site_isolation': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'Site Isolation Linux',
