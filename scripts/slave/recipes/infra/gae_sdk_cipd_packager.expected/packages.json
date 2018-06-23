@@ -19,49 +19,8 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@ 10.2.3@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "search",
-      "infra/gae_sdk/go/linux-386",
-      "-tag",
-      "gae_sdk_version:10.2.3",
-      "-json-output",
-      "/path/to/tmp/json",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-cipd-builder.json"
-    ],
-    "name": "Sync go/linux-386.cipd search infra/gae_sdk/go/linux-386 gae_sdk_version:10.2.3",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-instance_id_1---\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/gae_sdk/go/linux-386\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }, @@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-instance_id_2---\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/gae_sdk/go/linux-386\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "name": "Sync go/linux-386.Synced",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Package is up to date.@@@"
+      "@@@STEP_SUMMARY_TEXT@No latest version for prefix: gs://appengine-sdks/featured/go_appengine_sdk_linux_386-@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {

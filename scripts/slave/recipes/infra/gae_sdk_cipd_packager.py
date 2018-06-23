@@ -148,7 +148,6 @@ def GenTests(api):
         'go_appengine_sdk_linux_amd64-10.2.3.zip',
         'go_appengine_sdk_linux_amd64-junk.zip',
         'go_appengine_sdk_linux_amd64-99.99.zip',
-        'go_appengine_sdk_linux_386-10.2.3.zip',
         'go_appengine_sdk_darwin_amd64-10.2.3.zip',
         'google_appengine_10.2.3.zip',
         'junk',
@@ -173,7 +172,6 @@ def GenTests(api):
   bad_version_test = api.test('bad_version_list')
   for plat, arch, exists in (
       ('go', 'linux-amd64', False),
-      ('go', 'linux-386', True),
       ('go', 'mac-amd64', True),
       ('python', 'all', False)):
     packages_test += (
