@@ -6,7 +6,7 @@ from recipe_engine import recipe_test_api
 
 
 class GomaTestApi(recipe_test_api.RecipeTestApi):
-  def __call__(self, jobs):
+  def __call__(self, jobs, debug=False):
     """Simulate pre-configured Goma through properties."""
     assert isinstance(jobs, int), '%r (%s)' % (jobs, type(jobs))
     ret = self.test(None)
@@ -15,4 +15,6 @@ class GomaTestApi(recipe_test_api.RecipeTestApi):
         'jobs': jobs,
       },
     }
+    if debug:
+      ret.properties['$build/goma']['debug'] = True
     return ret

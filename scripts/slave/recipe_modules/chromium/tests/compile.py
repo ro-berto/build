@@ -71,7 +71,7 @@ def GenTests(api):
   )
 
   yield (
-      api.test('goma_custom_jobs') +
+      api.test('goma_custom_jobs_debug') +
       api.properties(buildername='test_buildername') +
-      api.goma(jobs=500) + api.runtime(is_luci=True, is_experimental=False)
+      api.goma(jobs=500, debug=True) + api.runtime(is_luci=True, is_experimental=False)
   )

@@ -442,6 +442,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         # The right way to configure goma jobs number is in cr-buildbucket.cfg.
         # See also doc for goma.jobs.
         command += ['-j', self.m.goma.jobs]
+        if self.m.goma.debug:
+          ninja_env['GOMA_DUMP'] = '1'
       else:
         # TODO(tandrii): delete this block after we migrate off buildbot.
         # Set -j just before 'with self.m.goma.build_with_goma('

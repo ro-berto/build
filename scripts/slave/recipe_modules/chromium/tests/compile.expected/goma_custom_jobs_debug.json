@@ -169,6 +169,7 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_DUMP": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "compile"
@@ -190,6 +191,7 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1",
+      "GOMA_DUMP": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "compile confirm no-op",

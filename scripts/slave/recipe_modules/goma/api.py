@@ -27,6 +27,7 @@ class GomaApi(recipe_api.RecipeApi):
 
     self._goma_ctl_env = {}
     self._jobs = properties.get('jobs', None)
+    self._debug = properties.get('debug', False)
     self._recommended_jobs = None
     self._jsonstatus = None
     self._goma_jsonstatus_called = False
@@ -106,6 +107,15 @@ class GomaApi(recipe_api.RecipeApi):
     (typically in cr-buildbucket.cfg), else defaults to `recommended_goma_jobs`.
     """
     return self._jobs or self.recommended_goma_jobs
+
+  @property
+  def debug(self):
+    """Returns true if debug mode is turned on.
+
+    Uses value from property "$build/goma:{\"debug\":true}" if configured
+    (typically in cr-buildbucket.cfg).  Defaults to False.
+    """
+    return self._debug
 
   @property
   def recommended_goma_jobs(self):
@@ -507,6 +517,9 @@ class GomaApi(recipe_api.RecipeApi):
       ninja_env = {}
     if goma_env is None:
       goma_env = {}
+
+    if self.debug:
+      ninja_env['GOMA_DUMP'] = '1'
 
     # TODO(tikuta): Remove -j flag from ninja_command and set appropriate value.
 

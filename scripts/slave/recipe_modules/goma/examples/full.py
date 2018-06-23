@@ -67,6 +67,9 @@ def GenTests(api):
   yield (api.test('linux_custom_jobs') + api.platform.name('linux') +
            api.properties.generic(**properties) + api.goma(jobs=80))
 
+  yield (api.test('linux_debug') + api.platform.name('linux') +
+           api.properties.generic(**properties) + api.goma(jobs=80, debug=True))
+
   yield (api.test('linux_compile_failed') + api.platform.name('linux') +
          api.step_data('ninja', retcode=1) +
          api.properties.generic(**properties))

@@ -29,6 +29,8 @@ PROPERTIES = {
     kind=ConfigGroup(
       # How many jobs to run in parallel.
       jobs=Single(int),
+      # Whether or not to turn on debug mode.
+      debug=Single(bool),
     ),
     default={},
   ),
