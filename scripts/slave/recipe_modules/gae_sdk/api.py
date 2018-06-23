@@ -18,7 +18,6 @@ class GaeSdkApi(recipe_api.RecipeApi):
       },
       PLAT_GO: {
         'linux-amd64': ('go_appengine_sdk_linux_amd64-', 'go_appengine'),
-        'linux-386': ('go_appengine_sdk_linux_386-', 'go_appengine'),
         'mac-amd64': ('go_appengine_sdk_darwin_amd64-', 'go_appengine'),
       },
   }
@@ -26,7 +25,6 @@ class GaeSdkApi(recipe_api.RecipeApi):
   # Map of architecture bitness to CIPD bitness suffix.
   _BITS_MAP = {
       64: 'amd64',
-      32: '386',
   }
 
 

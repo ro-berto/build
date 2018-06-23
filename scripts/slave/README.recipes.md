@@ -259,7 +259,6 @@
   * [goma:tests/start](#recipes-goma_tests_start)
   * [goma_client](#recipes-goma_client)
   * [halt:examples/full](#recipes-halt_examples_full)
-  * [infra/gae_sdk_cipd_packager](#recipes-infra_gae_sdk_cipd_packager)
   * [ios/try](#recipes-ios_try)
   * [ios/unified_builder_tester](#recipes-ios_unified_builder_tester)
   * [ios:examples/full](#recipes-ios_examples_full)
@@ -1928,9 +1927,9 @@ Returns:
 
 #### **class [GaeSdkApi](/scripts/slave/recipe_modules/gae_sdk/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&emsp; **@property**<br>&mdash; **def [all\_packages](/scripts/slave/recipe_modules/gae_sdk/api.py#64)(self):**
+&emsp; **@property**<br>&mdash; **def [all\_packages](/scripts/slave/recipe_modules/gae_sdk/api.py#62)(self):**
 
-&mdash; **def [fetch](/scripts/slave/recipe_modules/gae_sdk/api.py#70)(self, plat, dst):**
+&mdash; **def [fetch](/scripts/slave/recipe_modules/gae_sdk/api.py#68)(self, plat, dst):**
 
 Fetch the AppEngine SDK for the specified platform.
 
@@ -1938,13 +1937,13 @@ Args:
   plat (str): platform string, one of the PLAT_ local variables.
   dst (path.Path): The destination directory to extract it.
 
-&emsp; **@property**<br>&mdash; **def [latest\_ref](/scripts/slave/recipe_modules/gae_sdk/api.py#40)(self):**
+&emsp; **@property**<br>&mdash; **def [latest\_ref](/scripts/slave/recipe_modules/gae_sdk/api.py#38)(self):**
 
-&mdash; **def [package](/scripts/slave/recipe_modules/gae_sdk/api.py#54)(self, plat, arch=None):**
+&mdash; **def [package](/scripts/slave/recipe_modules/gae_sdk/api.py#52)(self, plat, arch=None):**
 
-&mdash; **def [package\_spec](/scripts/slave/recipe_modules/gae_sdk/api.py#44)(self, plat, arch):**
+&mdash; **def [package\_spec](/scripts/slave/recipe_modules/gae_sdk/api.py#42)(self, plat, arch):**
 
-&emsp; **@property**<br>&mdash; **def [platforms](/scripts/slave/recipe_modules/gae_sdk/api.py#60)(self):**
+&emsp; **@property**<br>&mdash; **def [platforms](/scripts/slave/recipe_modules/gae_sdk/api.py#58)(self):**
 ### *recipe_modules* / [gatekeeper](/scripts/slave/recipe_modules/gatekeeper)
 
 [DEPS](/scripts/slave/recipe_modules/gatekeeper/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4970,11 +4969,6 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 [DEPS](/scripts/slave/recipe_modules/halt/examples/full.py#5): [halt](#recipe_modules-halt)
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/halt/examples/full.py#9)(api):**
-### *recipes* / [infra/gae\_sdk\_cipd\_packager](/scripts/slave/recipes/infra/gae_sdk_cipd_packager.py)
-
-[DEPS](/scripts/slave/recipes/infra/gae_sdk_cipd_packager.py#9): [gae\_sdk](#recipe_modules-gae_sdk), [zip](#recipe_modules-zip), [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/infra/gae_sdk_cipd_packager.py#25)(api):**
 ### *recipes* / [ios/try](/scripts/slave/recipes/ios/try.py)
 
 [DEPS](/scripts/slave/recipes/ios/try.py#5): [ios](#recipe_modules-ios), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]

@@ -3,7 +3,6 @@
     "cmd": [],
     "name": "all_packages",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@details@'go': 'linux-386'@@@",
       "@@@STEP_LOG_LINE@details@'go': 'linux-amd64'@@@",
       "@@@STEP_LOG_LINE@details@'go': 'mac-amd64'@@@",
       "@@@STEP_LOG_LINE@details@'python': 'all'@@@",
