@@ -17,6 +17,7 @@
 /runisolatedtest.py           recipes
 /runtest.py                   recipes
 /slave_utils.py               recipes
+/tee.py                       recipes
 /telemetry_utils.py           recipes
 /upload_goma_logs.py          recipes
 /xvfb.py                      recipes
