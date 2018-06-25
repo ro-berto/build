@@ -86,7 +86,7 @@ SPEC = {
    },
    'Chromium Linux Goma RBE Staging (clobber)': {
      'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_gce', 'clobber', 'mb'],
+     'chromium_apply_config': ['goma_rbe', 'clobber', 'mb'],
      'gclient_config': 'chromium',
      'chromium_config_kwargs': {
        'BUILD_CONFIG': 'Release',
@@ -99,7 +99,7 @@ SPEC = {
    },
    'Chromium Linux Goma RBE Staging': {
      'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_gce', 'mb'],
+     'chromium_apply_config': ['goma_rbe', 'mb'],
      'gclient_config': 'chromium',
      'chromium_config_kwargs': {
        'BUILD_CONFIG': 'Release',
@@ -112,7 +112,7 @@ SPEC = {
    },
    'Chromium Linux Goma RBE Staging (dbg) (clobber)': {
      'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_gce', 'clobber', 'mb'],
+     'chromium_apply_config': ['goma_rbe', 'clobber', 'mb'],
      'gclient_config': 'chromium',
      'chromium_config_kwargs': {
        'BUILD_CONFIG': 'Debug',
@@ -125,7 +125,7 @@ SPEC = {
    },
    'Chromium Linux Goma RBE Staging (dbg)': {
      'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_gce', 'mb'],
+     'chromium_apply_config': ['goma_rbe', 'mb'],
      'gclient_config': 'chromium',
      'chromium_config_kwargs': {
        'BUILD_CONFIG': 'Debug',

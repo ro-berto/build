@@ -1,0 +1,17 @@
+[
+  {
+    "cmd": [],
+    "env": {
+      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_SETTINGS_SERVER": "https://cxx-compiler-service.appspot.com/settings",
+      "GOMA_USE_CASE": "rbe-staging"
+    },
+    "name": "test"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

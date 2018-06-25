@@ -126,6 +126,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.env.GOMA_SETTINGS_SERVER:
       ret['GOMA_SETTINGS_SERVER'] = \
         self.c.env.GOMA_SETTINGS_SERVER
+    if self.c.env.GOMA_USE_CASE:
+      ret['GOMA_USE_CASE'] = self.c.env.GOMA_USE_CASE
     if self.c.env.GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB:
       ret['GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB'] = \
         self.c.env.GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB

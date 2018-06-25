@@ -927,7 +927,7 @@ Returns: (context manager) A context manager that inserts system python
 
 Returns a step invoking archive_build.py to archive a Chromium build.
 
-&emsp; **@property**<br>&mdash; **def [build\_properties](/scripts/slave/recipe_modules/chromium/api.py#139)(self):**
+&emsp; **@property**<br>&mdash; **def [build\_properties](/scripts/slave/recipe_modules/chromium/api.py#141)(self):**
 
 &emsp; **@contextlib.contextmanager**<br>&mdash; **def [chromium\_layout](/scripts/slave/recipe_modules/chromium/api.py#60)(self):**
 
@@ -940,11 +940,11 @@ See "ensure_chromium_layout" for more information.
 
 Add an explicit clobber step if requested.
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [compile](/scripts/slave/recipe_modules/chromium/api.py#359)(self, targets=None, name=None, out_dir=None, target=None, use_goma_module=False, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [compile](/scripts/slave/recipe_modules/chromium/api.py#361)(self, targets=None, name=None, out_dir=None, target=None, use_goma_module=False, \*\*kwargs):**
 
 Return a compile.py invocation.
 
-&mdash; **def [configure\_bot](/scripts/slave/recipe_modules/chromium/api.py#175)(self, builders_dict, additional_configs=None):**
+&mdash; **def [configure\_bot](/scripts/slave/recipe_modules/chromium/api.py#177)(self, builders_dict, additional_configs=None):**
 
 Sets up the configurations and gclient to be ready for bot update.
 
@@ -999,15 +999,15 @@ Args:
 
 &mdash; **def [get\_mac\_toolchain\_installer](/scripts/slave/recipe_modules/chromium/api.py#763)(self):**
 
-&mdash; **def [get\_version](/scripts/slave/recipe_modules/chromium/api.py#161)(self):**
+&mdash; **def [get\_version](/scripts/slave/recipe_modules/chromium/api.py#163)(self):**
 
-&emsp; **@property**<br>&mdash; **def [output\_dir](/scripts/slave/recipe_modules/chromium/api.py#143)(self):**
+&emsp; **@property**<br>&mdash; **def [output\_dir](/scripts/slave/recipe_modules/chromium/api.py#145)(self):**
 
 Return the path to the built executable directory.
 
 &mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1069)(self, \*\*kwargs):**
 
-&mdash; **def [reload\_version](/scripts/slave/recipe_modules/chromium/api.py#166)(self):**
+&mdash; **def [reload\_version](/scripts/slave/recipe_modules/chromium/api.py#168)(self):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gn](/scripts/slave/recipe_modules/chromium/api.py#884)(self, use_goma=False, gn_path=None, build_dir=None, \*\*kwargs):**
 
@@ -1023,7 +1023,7 @@ Run the build-configuration hooks for chromium.
 
 Return a runtest.py invocation.
 
-&mdash; **def [set\_build\_properties](/scripts/slave/recipe_modules/chromium/api.py#172)(self, props):**
+&mdash; **def [set\_build\_properties](/scripts/slave/recipe_modules/chromium/api.py#174)(self, props):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [sizes](/scripts/slave/recipe_modules/chromium/api.py#657)(self, results_url=None, perf_id=None, platform=None, \*\*kwargs):**
 
@@ -1036,7 +1036,7 @@ This uses runtests.py to upload the results to the perf dashboard.
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [update\_clang](/scripts/slave/recipe_modules/chromium/api.py#1053)(self):**
 
-&emsp; **@property**<br>&mdash; **def [version](/scripts/slave/recipe_modules/chromium/api.py#148)(self):**
+&emsp; **@property**<br>&mdash; **def [version](/scripts/slave/recipe_modules/chromium/api.py#150)(self):**
 
 Returns a version dictionary (after get_version()), e.g.
 

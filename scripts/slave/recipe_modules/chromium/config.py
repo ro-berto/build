@@ -76,6 +76,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       LLVM_FORCE_HEAD_REVISION = Single(basestring, required=False),
       GOMA_STUBBY_PROXY_IP_ADDRESS = Single(basestring, required=False),
       GOMA_SETTINGS_SERVER = Single(basestring, required=False),
+      GOMA_USE_CASE = Single(basestring, required=False),
       GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB = Single(int, required=False),
       GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB = Single(int, required=False),
       FORCE_MAC_TOOLCHAIN = Single(int, required=False),
@@ -308,6 +309,13 @@ def goma_gce(c):
   c.compile_py.goma_failfast = True
   c.env.GOMA_SETTINGS_SERVER = (
       'https://cxx-compiler-service.appspot.com/settings')
+
+@config_ctx()
+def goma_rbe(c):
+  c.compile_py.goma_failfast = True
+  c.env.GOMA_SETTINGS_SERVER = (
+      'https://cxx-compiler-service.appspot.com/settings')
+  c.env.GOMA_USE_CASE = 'rbe-staging'
 
 @config_ctx()
 def goma_hermetic_fallback(c):
