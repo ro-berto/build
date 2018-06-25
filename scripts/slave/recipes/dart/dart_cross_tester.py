@@ -59,6 +59,7 @@ def RunSteps(api):
     with api.step.defer_results():
       test_args = ['--mode=%s' % b['mode'],
                    '--arch=%s' % b['target_arch'],
+                   '--compiler=dartk',
                    '--progress=line',
                    '--report',
                    '--time',

@@ -78,7 +78,7 @@
       "[START_DIR]/sdk/tools/build.py",
       "-mrelease",
       "--arch=x64",
-      "runtime"
+      "runtime_kernel"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "build dart"

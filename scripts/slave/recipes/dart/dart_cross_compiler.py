@@ -55,7 +55,8 @@ def RunSteps(api):
   api.gclient.runhooks()
 
   with api.context(cwd=api.path['checkout']):
-    build_args = ['-m%s' % b['mode'], '--arch=%s' % b['target_arch'], 'runtime']
+    build_args = ['-m%s' % b['mode'], '--arch=%s' % b['target_arch'],
+                   'runtime_kernel']
     api.python('build dart',
                api.path['checkout'].join('tools', 'build.py'),
                args=build_args)
