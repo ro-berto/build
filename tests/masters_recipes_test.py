@@ -166,6 +166,7 @@ FAKE_BUILDERS = {
         'linux_site_isolation',
         'linux_vr',
         # These are pure LUCI bots, no equivalent buildbot bot.
+        'linux-dcheck-off-rel',
         'linux-jumbo-rel',
     ],
     'master.tryserver.chromium.android': [

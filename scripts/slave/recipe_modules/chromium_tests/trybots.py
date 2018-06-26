@@ -374,6 +374,21 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'linux-blink-heap-verification',
       }),
+      # This trybot mirrors linux_chromium_rel_ng
+      'linux-dcheck-off-rel': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.linux',
+            'buildername': 'Linux Builder',
+            'tester': 'Linux Tests',
+          },
+          {
+            'mastername': 'chromium.gpu',
+            'buildername': 'GPU Linux Builder',
+            'tester': 'Linux Release (NVIDIA)',
+          },
+        ],
+      },
       'linux-gcc-rel': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'linux-gcc-rel',
