@@ -61,8 +61,7 @@ def RunSteps(api):
     # headers are generally only added when a previous job compiles fine and
     # fails with the "You need to add the header" message.
     if size_footers:
-      api.python.succeeding_step(_FOOTER_PRESENT_STEP_NAME,
-                                 _FOOTER_PRESENT_STEP_NAME)
+      api.python.succeeding_step(_FOOTER_PRESENT_STEP_NAME, '')
       return
 
     suffix = ' (with patch)'
@@ -86,8 +85,7 @@ def RunSteps(api):
         api.chromium.runhooks(name='runhooks' + suffix)
         without_results_dir = _BuildAndMeasure(api, False)
       except api.step.StepFailure:
-        api.python.succeeding_step(_PATCH_FIXED_BUILD_STEP_NAME,
-                                   _PATCH_FIXED_BUILD_STEP_NAME)
+        api.python.succeeding_step(_PATCH_FIXED_BUILD_STEP_NAME, '')
         return
 
     # Re-apply patch so that the diff scripts can be tested via tryjobs.
@@ -98,10 +96,11 @@ def RunSteps(api):
     api.chromium.runhooks(name='runhooks' + suffix)
 
     with api.context(cwd=api.path['checkout']):
-      resource_sizes_diff_path = _ResourceSizesDiff(
+      resource_sizes_diff_path, diff_summary_str = _ResourceSizesDiff(
           api, without_results_dir, with_results_dir)
       _SupersizeDiff(api, without_results_dir, with_results_dir)
-      _CheckForUnexpectedIncrease(api, resource_sizes_diff_path, author)
+      _CheckForUnexpectedIncrease(
+          api, resource_sizes_diff_path, author, diff_summary_str)
 
 
 def _BuildAndMeasure(api, with_patch):
@@ -147,7 +146,10 @@ def _SupersizeDiff(api, without_results_dir, with_results_dir):
       '--diff-output', diff_output_path,
   ])
   diff_text = api.file.read_text('Show Supersize Diff', diff_output_path)
-  api.step.active_result.presentation.logs['diff'] = diff_text.splitlines()
+  read_step_result = api.step.active_result
+  read_step_result.presentation.step_text = '(Look here for detailed breakdown)'
+  read_step_result.presentation.logs['>>> Show Diff <<<'] = (
+      diff_text.splitlines())
 
 
 def _ResourceSizesDiff(api, without_results_dir, with_results_dir):
@@ -162,18 +164,26 @@ def _ResourceSizesDiff(api, without_results_dir, with_results_dir):
       '--after-dir', with_results_dir,
       '--diff-output', diff_output_path,
   ])
-  diff_text = api.file.read_text('Show Resource Sizes Diff', diff_output_path)
-  api.step.active_result.presentation.logs['diff'] = diff_text.splitlines()
-  return diff_output_path
+  diff_text = api.file.read_text(
+      'Show Resource Sizes Diff', diff_output_path,
+      test_data='MonochromePublic.apk_Specifics normalized apk size=-5\n')
+  diff_lines = diff_text.splitlines()
+  diff_summary_str = 'Normalized apk size: ' + diff_lines[-1].partition('=')[2]
+  read_step_result = api.step.active_result
+  read_step_result.presentation.step_text = '(Look here for high-level metrics)'
+  read_step_result.presentation.logs['>>> Show Diff <<<'] = diff_lines
+  return diff_output_path, diff_summary_str
 
 
-def _CheckForUnexpectedIncrease(api, resource_sizes_diff_path, author):
+def _CheckForUnexpectedIncrease(api, resource_sizes_diff_path, author,
+                                diff_summary_str):
   checker_script = api.path['checkout'].join(
       'tools', 'binary_size', 'trybot_commit_size_checker.py')
-  api.python('check for undocumented increase', checker_script, [
+  step_result = api.python('check for undocumented increase', checker_script, [
       '--author', author,
       '--resource-sizes-diff', resource_sizes_diff_path,
   ])
+  step_result.presentation.step_text = '({})'.format(diff_summary_str)
 
 
 def GenTests(api):

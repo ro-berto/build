@@ -1570,7 +1570,9 @@
     "infra_step": true,
     "name": "Show Resource Sizes Diff",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@diff@@@"
+      "@@@STEP_TEXT@(Look here for high-level metrics)@@@",
+      "@@@STEP_LOG_LINE@>>> Show Diff <<<@MonochromePublic.apk_Specifics normalized apk size=-5@@@",
+      "@@@STEP_LOG_END@>>> Show Diff <<<@@@"
     ]
   },
   {
@@ -1614,7 +1616,8 @@
     "infra_step": true,
     "name": "Show Supersize Diff",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@diff@@@"
+      "@@@STEP_TEXT@(Look here for detailed breakdown)@@@",
+      "@@@STEP_LOG_END@>>> Show Diff <<<@@@"
     ]
   },
   {
@@ -1631,7 +1634,10 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "check for undocumented increase"
+    "name": "check for undocumented increase",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@(Normalized apk size: -5)@@@"
+    ]
   },
   {
     "name": "$result",
