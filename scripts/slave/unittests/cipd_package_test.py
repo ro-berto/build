@@ -37,32 +37,36 @@ def run_presubmit(basedir):
   cipd_bootstrap_v2.high_level_ensure_cipd_client(
       basedir, None, track=cipd_bootstrap_v2.STAGING)
 
-  # Build our aggregate manifest.
   from slave import logdog_bootstrap, remote_run
 
-  manifest = []
-  for os_name, arch in slave.infra_platform.cipd_all_targets():
-    manifest += ['$VerifiedPlatform %s-%s' % (os_name, arch)]
+  manifests = []
+  manifests.extend(cipd_bootstrap_v2.all_cipd_manifests())
+  manifests.extend(logdog_bootstrap.all_cipd_manifests())
+  manifests.extend(remote_run.all_cipd_manifests())
 
-  def _add_packages(src_fn):
-    src_packages = set(src_fn())
-    assert src_packages, (
-        'Source %s yielded no CIPD packages.' % (src_fn.__module__,))
-    for pkg in src_packages:
-      manifest.append('%s %s' % (pkg.name, pkg.version))
+  fail = False
 
-  _add_packages(cipd_bootstrap_v2.all_cipd_packages)
-  _add_packages(logdog_bootstrap.all_cipd_packages)
-  _add_packages(remote_run.all_cipd_packages)
+  for manifest in manifests:
+    assert manifest
 
-  manifest = '\n'.join(manifest)
-  logging.debug('Ensuring manifest:\n%s', manifest)
+    lines = []
+    for os_name, arch in slave.infra_platform.cipd_all_targets():
+      lines.append('$VerifiedPlatform %s-%s' % (os_name, arch))
+    for pkg in manifest:
+      lines.append('%s %s' % (pkg.name, pkg.version))
+    ensure_file = '\n'.join(lines)
 
-  proc = subprocess.Popen(
-      [CIPD_CLIENT, 'ensure-file-verify', '-ensure-file=-'],
-      stdin=subprocess.PIPE)
-  proc.communicate(input=manifest)
-  return proc.returncode
+    logging.debug('Verifying ensure file:\n%s', ensure_file)
+    proc = subprocess.Popen(
+        [CIPD_CLIENT, 'ensure-file-verify', '-ensure-file=-'],
+        stdin=subprocess.PIPE)
+    proc.communicate(input=ensure_file)
+
+    if proc.returncode:
+      logging.error('Failed, see logs')
+      fail = True
+
+  return 1 if fail else 0
 
 
 def main(_argv):

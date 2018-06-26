@@ -230,13 +230,18 @@ def get_is_opt_in(properties):
     return False
 
 
-def all_cipd_packages():
-  """Generator which yields all referenced CIPD packages."""
+def all_cipd_manifests():
+  """Generator which yields all CIPD ensure manifests (canary, staging, prod).
+
+  Each manifest is represented by a list of cipd.CipdPackage instances.
+  """
   # All CIPD packages are in top-level platform config.
   for pins in (_STABLE_CIPD_PINS, _CANARY_CIPD_PINS):
     # TODO(dnj): Remove me when everything runs on Kitchen.
-    yield cipd.CipdPackage(name=_RECIPES_PY_CIPD_PACKAGE, version=pins.recipes)
-    yield cipd.CipdPackage(name=_KITCHEN_CIPD_PACKAGE, version=pins.kitchen)
+    yield [
+      cipd.CipdPackage(name=_RECIPES_PY_CIPD_PACKAGE, version=pins.recipes),
+      cipd.CipdPackage(name=_KITCHEN_CIPD_PACKAGE, version=pins.kitchen),
+    ]
 
 
 def set_recipe_runtime_properties(stream, args, properties):

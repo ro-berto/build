@@ -189,14 +189,21 @@ else:
     pass
 
 
-def all_cipd_packages():
-  """Generator which yields all referenced CIPD packages."""
+def all_cipd_manifests():
+  """Generator which yields all CIPD ensure manifests (canary, staging, prod).
+
+  Each manifest is represented by a list of cipd.CipdPackage instances.
+  """
   package_name = 'infra/tools/cipd/${platform}'
-  yield cipd.CipdPackage(name=package_name, version=DEFAULT_CIPD_VERSION)
-  yield cipd.CipdPackage(name=package_name, version=STAGING_CIPD_VERSION)
-  for packages in AUX_BINARY_PACKAGES.itervalues():
-    for pkg in packages:
-      yield pkg
+
+  prod = cipd.CipdPackage(name=package_name, version=DEFAULT_CIPD_VERSION)
+  yield [prod] + list(AUX_BINARY_PACKAGES[None])
+
+  staging = cipd.CipdPackage(name=package_name, version=STAGING_CIPD_VERSION)
+  yield [staging] + list(AUX_BINARY_PACKAGES[STAGING])
+
+  canary = cipd.CipdPackage(name=package_name, version='latest')
+  yield [canary] + list(AUX_BINARY_PACKAGES[CANARY])
 
 
 def _update_client(path, version):
