@@ -128,16 +128,12 @@ class ChromiteApi(recipe_api.RecipeApi):
     soln = cfg.solutions.add()
     soln.name = 'chromite'
     soln.url = self.chromite_url
-    # Set the revision using 'bot_update' remote branch:revision notation.
-    # Omitting the revision uses HEAD.
-    soln.revision = 'master:'
+    soln.revision = 'master'
 
     soln = cfg.solutions.add()
     soln.name = 'depot_tools'
     soln.url = self.depot_tools_url
-    # Set the revision using 'bot_update' remote branch:revision notation.
-    # Omitting the revision uses HEAD.
-    soln.revision = 'master:%s' % self.depot_tools_pin
+    soln.revision = self.depot_tools_pin
 
     return cfg
 
