@@ -1,14 +1,14 @@
 [
   {
     "cmd": [
-      "[CLEANUP]/chocolatey/choco",
+      "[CLEANUP]\\chocolatey\\choco",
       "pack",
       "version=2.0.0.51-dev-0"
     ],
-    "cwd": "[START_DIR]/chocolatey-packages/dart-sdk",
+    "cwd": "[START_DIR]\\chocolatey-packages\\dart-sdk",
     "env": {
-      "ChocolateyBinRoot": "[CLEANUP]/bin_root",
-      "ChocolateyInstall": "[CLEANUP]/chocolatey"
+      "ChocolateyBinRoot": "[CLEANUP]\\bin_root",
+      "ChocolateyInstall": "[CLEANUP]\\chocolatey"
     },
     "name": "choco pack"
   },
@@ -16,12 +16,12 @@
     "cmd": [
       "C:\\\\WINDOWS\\\\system32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
       "-Command",
-      "$secret = cat [CLEANUP]/chocolatey.key; [CLEANUP]/chocolatey/choco push -k=\"$secret\" dart-sdk.2.0.0.51-dev-0.nupkg"
+      "$secret = cat [CLEANUP]\\chocolatey.key; [CLEANUP]\\chocolatey\\choco push -k=\"$secret\" dart-sdk.2.0.0.51-dev-0.nupkg"
     ],
-    "cwd": "[START_DIR]/chocolatey-packages/dart-sdk",
+    "cwd": "[START_DIR]\\chocolatey-packages\\dart-sdk",
     "env": {
-      "ChocolateyBinRoot": "[CLEANUP]/bin_root",
-      "ChocolateyInstall": "[CLEANUP]/chocolatey"
+      "ChocolateyBinRoot": "[CLEANUP]\\bin_root",
+      "ChocolateyInstall": "[CLEANUP]\\chocolatey"
     },
     "name": "choco push"
   }

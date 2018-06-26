@@ -1,0 +1,15 @@
+[
+  {
+    "cmd": [
+      "[START_DIR]\\cloudkms\\cloudkms.exe",
+      "decrypt",
+      "-input",
+      "not_a_secret.encrypted",
+      "-output",
+      "[CLEANUP]\\not_a_secret.key",
+      "dart-ci/us-central1/dart-ci/dart-ci"
+    ],
+    "cwd": "[CLEANUP]",
+    "name": "cloudkms get key"
+  }
+]

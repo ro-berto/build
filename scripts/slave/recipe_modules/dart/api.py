@@ -38,6 +38,24 @@ class DartApi(recipe_api.RecipeApi):
                         self.m.path['checkout'].join('tools', 'clean_output_directory.py'))
       self.m.gclient.runhooks()
 
+  def get_secret(self, name):
+    """Decrypts the specified secret and returns the location of the result"""
+    cloudkms_dir = self.m.path['start_dir'].join('cloudkms')
+    self.m.cipd.ensure(cloudkms_dir,
+                    {'infra/tools/luci/cloudkms/${platform}': 'latest'})
+
+    with self.m.context(cwd=self.m.path['cleanup']):
+      file_name = '%s.encrypted' % name
+      self.m.gsutil.download('dart-ci-credentials', file_name, file_name)
+
+      executable_suffix = '.exe' if self.m.platform.name == 'win' else ''
+      secret_key = self.m.path['cleanup'].join('%s.key' % name)
+      self.m.step('cloudkms get key',
+               [cloudkms_dir.join('cloudkms%s' % executable_suffix), 'decrypt',
+               '-input', file_name,
+               '-output', secret_key, 'dart-ci/us-central1/dart-ci/dart-ci'])
+      return secret_key
+
   def kill_tasks(self):
     """Kills leftover tasks from previous runs or steps."""
     self.m.python('kill processes',

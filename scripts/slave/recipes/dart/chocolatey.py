@@ -5,11 +5,11 @@
 from recipe_engine.post_process import Filter
 
 DEPS = [
-  'depot_tools/cipd',
-  'depot_tools/gsutil',
+  'dart',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/path',
+  'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/step',
   'recipe_engine/url',
@@ -46,19 +46,7 @@ def RunSteps(api):
     api.step('choco set package directory',
              [choco, 'config', 'set', 'cacheLocation', cache])
 
-    cloudkms_dir = api.path['start_dir'].join('cloudkms')
-    api.cipd.ensure(cloudkms_dir,
-                    {'infra/tools/luci/cloudkms/${platform}': 'latest'})
-
-    api.gsutil.download('dart-ci-credentials',
-                        'chocolatey.encrypted',
-                        'chocolatey.encrypted')
-
-    chocolatey_key = api.path['cleanup'].join('chocolatey.key')
-    api.step('cloudkms get API key', [
-             cloudkms_dir.join('cloudkms.exe'), 'decrypt',
-             '-input', 'chocolatey.encrypted',
-             '-output', chocolatey_key, 'dart-ci/us-central1/dart-ci/dart-ci'])
+    chocolatey_key = api.dart.get_secret('chocolatey')
 
     # todo(athom): Use git recipe module instead if bug 785362 is ever fixed.
     api.step(
@@ -104,11 +92,12 @@ def RunSteps(api):
 def GenTests(api):
   yield (
     api.test('dev') +
+    api.platform('win', 64) +
     api.properties.generic(version='2.0.0-dev.51.0') +
     api.post_process(Filter('choco pack', 'choco push'))
   )
   yield (
     api.test('release') +
-    api.properties.generic(
-      version='1.24.3')
+    api.platform('win', 64) +
+    api.properties.generic(version='1.24.3')
   )
