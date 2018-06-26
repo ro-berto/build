@@ -8,13 +8,14 @@
 DEPS = [
   'chromium',
   'depot_tools/bot_update',
-  'depot_tools/tryserver',
   'depot_tools/gclient',
   'depot_tools/gsutil',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
+  'recipe_engine/runtime',
   'recipe_engine/step',
 ]
 
@@ -33,25 +34,35 @@ def RunSteps(api):
   # Generate and upload documentation.
   with api.context(cwd=util):
     api.python('generate', go_env, ['go', 'run', 'doc.go', '-out', output])
-  if not api.tryserver.is_tryserver:
-    # Upload docs only if run after commit, not a tryjob.
-    api.gsutil(['-m', 'cp', '-a', 'public-read', api.path.join(output, '**'),
-                'gs://chromium-boringssl-docs/'])
+  # Upload docs only if run after commit and on not experimental builds.
+  # TODO(tandrii, davidben): remove support for buildbot.
+  if api.buildbucket.builder_id.bucket == 'ci' or not api.runtime.is_luci:
+    if api.runtime.is_experimental:
+      api.step('skipping uploading docs on experimental build', cmd=None)
+    else:
+      api.gsutil(['-m', 'cp', '-a', 'public-read', api.path.join(output, '**'),
+                  'gs://chromium-boringssl-docs/'])
 
 
 def GenTests(api):
   yield (
-    api.test('boringssl-docs') +
+    api.test('docs') +
+    api.runtime(is_luci=True, is_experimental=False) +
+    api.buildbucket.ci_build(
+      project='boringssl', bucket='ci', builder='docs')
+  )
+  yield (
+    api.test('docs-experimental') +
+    api.runtime(is_luci=False, is_experimental=True) +
     api.properties.generic(mastername='client.boringssl',
-                           buildername='docs',
-                           bot_id='bot_id')
+                           buildername='docs')
   )
 
   yield (
-    api.test('boringssl-docs-gerrit') +
-    api.properties.tryserver(
-        gerrit_project='boringssl',
-        gerrit_url='https://boringssl-review.googlesource.com',
-        mastername='actually-no-master', buildername='docs',
-        bot_id='swarming-slave')
+    api.test('docs-try') +
+    api.runtime(is_luci=True, is_experimental=False) +
+    api.buildbucket.try_build(
+      project='boringssl', bucket='try', builder='docs',
+      gerrit_host='boringssl-review.googlesource.com',
+    )
   )
