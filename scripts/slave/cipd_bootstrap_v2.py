@@ -46,7 +46,7 @@ AUX_BINARY_PACKAGES = {
 
       cipd.CipdPackage(
           name='infra/tools/git/${platform}',
-          version='git_revision:0ae21738597e5601ba90372315145fec18582fc4'),
+          version='git_revision:57211f43708aa2c91027d1f90f6cdfb639925fb4'),
 
       ## The Python package installs its binaries into "bin/".
       #cipd.CipdPackage(
@@ -84,7 +84,7 @@ AUX_BINARY_PACKAGES = {
 
       cipd.CipdPackage(
           name='infra/tools/git/${platform}',
-          version='git_revision:0ae21738597e5601ba90372315145fec18582fc4'),
+          version='git_revision:57211f43708aa2c91027d1f90f6cdfb639925fb4'),
 
       # The Python package installs its binaries into "bin/".
       cipd.CipdPackage(
