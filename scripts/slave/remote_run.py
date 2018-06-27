@@ -63,7 +63,6 @@ _ALL_BUILDERS = KitchenConfig(builders=None, is_blacklist=False)
 # This is a map of KitchenConfig to apply to master. Keys are master names,
 # values are KitchenConfig instances to apply to that master.
 _KITCHEN_CONFIG = {
-  'chromium.infra': _ALL_BUILDERS,
   'chromium.infra.cron': _ALL_BUILDERS,
   'internal.infra': _ALL_BUILDERS,
   'internal.official.tryserver': _ALL_BUILDERS,
@@ -84,7 +83,6 @@ _KITCHEN_CONFIG = {
 
 # Masters that are running "canary" run.
 _CANARY_MASTERS = set((
-  'chromium.infra',
   'chromium.infra.cron',
   'internal.infra',
   'internal.infra.cron',

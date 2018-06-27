@@ -44,12 +44,6 @@
 {
   'chromium': {
     # Infra
-    'chromium.infra': {
-      # Used for canarying.
-      '*': {
-        'cipd_tag': '$canary',
-      },
-    },
     'chromium.infra.cron': {},
     'chromium.swarm': {},
 
