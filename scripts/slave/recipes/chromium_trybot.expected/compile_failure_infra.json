@@ -820,6 +820,7 @@
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_EXCEPTION@@@",
       "@@@SET_BUILD_PROPERTY@extra_result_code@[\"GOMA_PING_FAILURE\"]@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"COMPILE_FAILURE\"@@@"
     ]

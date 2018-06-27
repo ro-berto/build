@@ -513,7 +513,6 @@ class ChromiumApi(recipe_api.RecipeApi):
               **kwargs)
     except self.m.step.StepFailure as e:
       # Handle failures caused by goma.
-      step_result = self.m.step.active_result
       failure_result_code = ''
 
       json_status = self.m.goma.jsonstatus['notice'][0]
@@ -531,6 +530,19 @@ class ChromiumApi(recipe_api.RecipeApi):
         if not properties.get('extra_result_code'):
           properties['extra_result_code'] = []
         properties['extra_result_code'].append(failure_result_code)
+        # FIXME(yyanagisawa): mark the active step exception on goma error.
+        #
+        # This is workaround to make goma error recognized as infra exception.
+        # 1. even if self.m.step.InfraFailure is raised, the step is not shown
+        #    as EXCEPTION step in milo.  We need to make status EXCEPTION to
+        #    make the step annotated as STEP_EXCEPTION. (crbug.com/856914)
+        # 2. I believe it natural to mark compile step exception but we cannot.
+        #    since this step is executed after compile step, it is recognized as
+        #    finalized step, and we cannot edit such a step.  Let us touch
+        #    active result instead.
+        #    It looks like "cloudtail stop" caused exception but I believe
+        #    it much better than not showing exception.
+        self.m.step.active_result.presentation.status = self.m.step.EXCEPTION
         raise self.m.step.InfraFailure('Infra compile failure: %s' % e)
 
       raise e

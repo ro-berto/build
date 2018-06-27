@@ -1006,6 +1006,7 @@
     "name": "test r1.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_EXCEPTION@@@",
       "@@@SET_BUILD_PROPERTY@extra_result_code@[\"GOMA_BUILD_ERROR\"]@@@"
     ]
   },
