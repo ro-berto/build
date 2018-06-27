@@ -136,6 +136,12 @@ class iOSApi(recipe_api.RecipeApi):
 
     checkout_dir = self._ensure_checkout_dir()
 
+    # TODO(jbudorick): Remove this after resolving crbug.com/794764,
+    # crbug.com/857110.
+    self.m.file.rmtree(
+        'remove .cipd',
+        checkout_dir.join('.cipd'))
+
     # Support for legacy buildbot clobber. If the "clobber" property is
     # present at all with any value, clobber the whole checkout.
     if 'clobber' in self.m.properties:

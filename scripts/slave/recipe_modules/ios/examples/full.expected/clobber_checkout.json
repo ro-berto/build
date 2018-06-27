@@ -6,6 +6,19 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
+      "rmtree",
+      "[START_DIR]/.cipd"
+    ],
+    "infra_step": true,
+    "name": "remove .cipd"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "rmcontents",
       "[START_DIR]"
     ],
