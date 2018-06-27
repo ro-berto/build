@@ -1393,7 +1393,43 @@
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (2)",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "deapply_failure",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@exception occured while de-applying patch",
+      "Step Failure in compile (without patch)@@@",
+      "@@@STEP_LOG_LINE@exception@Step Failure in compile (without patch)@@@",
+      "@@@STEP_LOG_LINE@exception@@@@",
+      "@@@STEP_LOG_LINE@exception@Traceback (most recent call last):@@@",
+      "@@@STEP_LOG_LINE@exception@  File \"<...>/recipe_modules/test_utils/api.py\", line NA, in determine_new_failures@@@",
+      "@@@STEP_LOG_LINE@exception@    result = deapply_patch_fn(failing_tests)@@@",
+      "@@@STEP_LOG_LINE@exception@  File \"<...>/recipe_modules/chromium_tests/api.py\", line NA, in deapply_patch_fn@@@",
+      "@@@STEP_LOG_LINE@exception@    mb_buildername=mb_buildername)@@@",
+      "@@@STEP_LOG_LINE@exception@  File \"<...>/recipe_engine/recipe_api.py\", line NA, in _inner@@@",
+      "@@@STEP_LOG_LINE@exception@    return func(*a, **kw)@@@",
+      "@@@STEP_LOG_LINE@exception@  File \"<...>/recipe_modules/chromium_tests/api.py\", line NA, in run_mb_and_compile@@@",
+      "@@@STEP_LOG_LINE@exception@    use_goma_module=use_goma_module)@@@",
+      "@@@STEP_LOG_LINE@exception@  File \"<...>/recipe_engine/recipe_api.py\", line NA, in _inner@@@",
+      "@@@STEP_LOG_LINE@exception@    return func(*a, **kw)@@@",
+      "@@@STEP_LOG_LINE@exception@  File \"<...>/recipe_modules/chromium/api.py\", line NA, in inner@@@",
+      "@@@STEP_LOG_LINE@exception@    return fn(self, *args, **kwargs)@@@",
+      "@@@STEP_LOG_LINE@exception@  File \"<...>/recipe_modules/chromium/api.py\", line NA, in compile@@@",
+      "@@@STEP_LOG_LINE@exception@    raise e@@@",
+      "@@@STEP_LOG_LINE@exception@StepFailure: Step Failure in compile (without patch)@@@",
+      "@@@STEP_LOG_END@exception@@@",
+      "@@@STEP_WARNINGS@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
     ]
   },

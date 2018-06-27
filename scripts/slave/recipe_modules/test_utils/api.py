@@ -152,6 +152,18 @@ class TestUtilsApi(recipe_api.RecipeApi):
       result = deapply_patch_fn(failing_tests)
       self.run_tests(caller_api, failing_tests, 'without patch')
       return result
+    except Exception as e:
+      # This except is here to try to debug a strange error. Builds like
+      # https://ci.chromium.org/p/chromium/builders/luci.chromium.try/mac_chromium_rel_ng/80909
+      # seem to be failing before they run any steps to de-apply the patch. The
+      # hypothesis is that an exception is being thrown and ignored due to the
+      # defer_results() call below.
+      text = 'exception occured while de-applying patch\n%s' % (str(e))
+      step = self.m.python.succeeding_step('deapply_failure', text)
+      step.presentation.status = self.m.step.WARNING
+      step.presentation.logs['exception'] = [
+          str(e), '\n', self.m.traceback.format_exc()]
+      raise
     finally:
       with self.m.step.defer_results():
         for t in failing_tests:
