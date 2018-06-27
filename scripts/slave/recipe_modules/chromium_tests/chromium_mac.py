@@ -13,6 +13,23 @@ SPEC = {
     'src_side_runtest_py': True,
   },
   'builders': {
+    'mac-cocoa-rel': {
+      'bot_type': 'tester',
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+      ],
+      'chromium_config': 'chromium',
+      'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+      },
+      'gclient_config': 'chromium',
+      'parent_buildername': 'Mac Builder',
+      'testing': {
+          'platform': 'mac',
+      },
+    },
     'mac-jumbo-rel': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
