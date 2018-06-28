@@ -418,8 +418,15 @@ class iOSApi(recipe_api.RecipeApi):
       with self.m.context(
           cwd=self.m.path['checkout'].join('out', build_sub_path),
           env=env):
+        gn_path = self.m.path['checkout'].join('third_party', 'gn', 'gn')
+
+        # TODO(jbudorick): Remove this once the gn move has fully rolled
+        # downstream.
+        if not self.m.path.exists(gn_path):
+          gn_path = self.m.path['checkout'].join('buildtools', 'mac', 'gn')
+
         self.m.step('generate build files (gn)' + suffix, [
-          self.m.path['checkout'].join('third_party', 'gn', 'gn'),
+          gn_path,
           'gen',
           '--check',
           '//out/%s' % build_sub_path,

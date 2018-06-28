@@ -314,7 +314,7 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/src/third_party/gn/gn",
+      "[CACHE]/builder/src/buildtools/mac/gn",
       "gen",
       "--check",
       "//out/Debug-iphonesimulator"
