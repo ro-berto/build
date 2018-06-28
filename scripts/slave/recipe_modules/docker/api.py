@@ -9,7 +9,7 @@ class DockerApi(recipe_api.RecipeApi):
   """Provides steps to connect and run Docker images."""
 
   def login(self, server='gcr.io', project='chromium-container-registry',
-            step_name=None, **kwargs):
+            service_account=None, step_name=None, **kwargs):
     """Connect to a Docker registry.
 
     This step must be executed before any other step in this module.
@@ -17,6 +17,9 @@ class DockerApi(recipe_api.RecipeApi):
     Args:
       server: Docker server to connect to.
       project: Name of the Cloud project where Docker images are hosted.
+      service_account: service_account.api.ServiceAccount used for
+          authenticating with the container registry. Defaults to the task's
+          associated service account.
       step_name: Override step name. Default is 'docker login'.
     """
     # We store config file in the cleanup dir to ensure that it is deleted after
@@ -25,7 +28,9 @@ class DockerApi(recipe_api.RecipeApi):
     self._config_file = self.m.path['cleanup'].join('.docker')
     self._project = project
     self._server = server
-    token = self.m.service_account.default().get_access_token(
+    if not service_account:
+      service_account = self.m.service_account.default()
+    token = service_account.get_access_token(
         ['https://www.googleapis.com/auth/cloud-platform'])
     self.m.python(
         step_name or 'docker login',
