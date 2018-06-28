@@ -95,7 +95,7 @@ SPEC = freeze({
       'sync_generated_files': True,
       'gen_repo_branch': 'master',
       # Generated files will end up in out/chromium-android/Debug/gen.
-      'gen_repo_out_dir': 'chromium-android',
+      'gen_repo_out_dir': 'chromium-android/Debug',
       'corpus': 'chromium',
       'root': 'chromium-android',
     },
@@ -135,7 +135,10 @@ def RunSteps(api, root_solution_revision):
   targets = bot_config.get('compile_targets', [])
   gen_repo_branch = bot_config.get('gen_repo_branch', 'master')
   gen_repo_out_dir = bot_config.get('gen_repo_out_dir', '')
-  joined_gen_repo_out_dir = api.path.join('out', gen_repo_out_dir)
+  if gen_repo_out_dir:
+    joined_gen_repo_out_dir = api.path.join('out', gen_repo_out_dir)
+  else:
+    joined_gen_repo_out_dir = api.path.join('out', 'Debug')
 
   api.codesearch.set_config(
       'chromium',
@@ -191,7 +194,8 @@ def RunSteps(api, root_solution_revision):
   # validation and doesn't get pushed out anyway, so there's no point in
   # uploading at all.
   api.chromium.compile(targets, use_goma_module=True,
-                       out_dir=joined_gen_repo_out_dir)
+                       out_dir=joined_gen_repo_out_dir,
+                       out_dir_includes_config=True)
 
   if platform == 'chromeos':
     # Generate a compilation database for Linux at a temporary location, then

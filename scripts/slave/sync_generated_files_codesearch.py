@@ -16,9 +16,9 @@ def main():
                       help='git branch in the destination repo to sync to',
                       default='master')
   parser.add_argument('--debug-dir',
-                      help='optional dir containing the Debug folder to include'
+                      help='optional dir containing the gen folder to include '
                            'in the checked-in repo',
-                      default='')
+                      default='Debug')
   parser.add_argument('source', help='directory to copy files from')
   parser.add_argument('dest', help='git checkout to copy files to')
   opts = parser.parse_args()
@@ -28,7 +28,7 @@ def main():
   # of the path for copying purposes. Everything after the '.' is recreated in
   # the destination directory.
   relative_source_path = os.path.join(opts.source, '.', opts.debug_dir,
-                                      'Debug/gen')
+                                      'gen')
   check_call([
       'rsync',
       '--recursive',

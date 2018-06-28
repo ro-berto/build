@@ -23,9 +23,15 @@ def RunSteps(api):
   for config in api.properties.get('chromium_apply_config', []):
     api.chromium.apply_config(config)
 
+  out_dir = api.properties.get('out_dir', '')
+
   api.chromium.c.compile_py.goma_max_active_fail_fallback_tasks = 1
   api.chromium.ensure_goma()
-  api.chromium.compile(use_goma_module=True)
+  if out_dir:
+    api.chromium.compile(use_goma_module=True, out_dir=out_dir,
+                         out_dir_includes_config=True)
+  else:
+    api.chromium.compile(use_goma_module=True)
 
 
 def GenTests(api):
@@ -74,4 +80,11 @@ def GenTests(api):
       api.test('goma_custom_jobs_debug') +
       api.properties(buildername='test_buildername') +
       api.goma(jobs=500, debug=True) + api.runtime(is_luci=True, is_experimental=False)
+  )
+
+  yield (
+      api.test('custom_out_dir') +
+      api.properties(
+          buildername='test_buildername',
+          out_dir='win-Debug')
   )

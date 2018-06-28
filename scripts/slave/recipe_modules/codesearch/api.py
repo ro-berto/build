@@ -183,7 +183,7 @@ class CodesearchApi(recipe_api.RecipeApi):
     if self.c.ROOT:
       args.extend(['--root', self.c.ROOT])
     if self.c.GEN_REPO_OUT_DIR:
-      args.extend(['--out_dir', 'src/out/%s/Debug' % self.c.GEN_REPO_OUT_DIR])
+      args.extend(['--out_dir', 'src/out/%s' % self.c.GEN_REPO_OUT_DIR])
     self.m.build.python('create kythe index pack',
                         self.package_repo_resource('scripts', 'slave', 'chromium',
                                                    'package_index.py'),

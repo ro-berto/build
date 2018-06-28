@@ -360,7 +360,8 @@ class ChromiumApi(recipe_api.RecipeApi):
   # Decrease the number of ways configuring with or without goma.
   @_with_chromium_layout
   def compile(self, targets=None, name=None, out_dir=None,
-              target=None, use_goma_module=False, **kwargs):
+              target=None, use_goma_module=False,
+              out_dir_includes_config=False,**kwargs):
     """Return a compile.py invocation."""
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
@@ -424,9 +425,12 @@ class ChromiumApi(recipe_api.RecipeApi):
     elif out_dir is None:
       out_dir = 'out'
 
-    target_output_dir = self.m.path.abspath(
-        self.m.path.join(self.m.path['checkout'], out_dir,
-                         target or self.c.build_config_fs))
+    if out_dir_includes_config:
+      target_output_dir = self.m.path.join(self.m.path['checkout'], out_dir)
+    else:
+      target_output_dir = self.m.path.join(self.m.path['checkout'], out_dir,
+                                           target or self.c.build_config_fs)
+    target_output_dir = self.m.path.abspath(target_output_dir)
 
     command = [str(self.m.depot_tools.ninja_path), '-w', 'dupbuild=err',
                '-C', target_output_dir]
