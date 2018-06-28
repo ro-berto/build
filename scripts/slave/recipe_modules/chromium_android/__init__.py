@@ -7,6 +7,7 @@ DEPS = [
   'archive',
   'build',
   'chromium',
+  'chromium_checkout',
   'commit_position',
   'depot_tools/bot_update',
   'depot_tools/depot_tools',

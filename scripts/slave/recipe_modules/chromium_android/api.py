@@ -111,6 +111,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def init_and_sync(self, gclient_config='android_bare',
                     with_branch_heads=False, use_bot_update=True,
                     use_git_cache=True, manifest_name=None):
+    # TODO(jbudorick): Rewrite this to use chromium_checkout.
     # TODO(sivachandra): Move the setting of the gclient spec below to an
     # internal config extension when they are supported by the recipe system.
     if use_git_cache:
@@ -127,6 +128,11 @@ class AndroidApi(recipe_api.RecipeApi):
     s.managed = self.c.managed
     s.revision = self.c.revision
     spec.revisions = self.c.revisions
+
+    # TODO(jbudorick): Remove this after resolving crbug.com/794764.
+    self.m.file.rmtree(
+        'remove .cipd',
+        self.m.chromium_checkout.get_checkout_dir(spec).join('.cipd'))
 
     self.m.gclient.break_locks()
     refs = self.m.properties.get('event.patchSet.ref')

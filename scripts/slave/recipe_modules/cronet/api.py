@@ -77,7 +77,7 @@ class CronetApi(recipe_api.RecipeApi):
               and self.m.chromium.c.HOST_BITS == 64)
       self.m.chromium.run_gn(
           use_goma=use_goma,
-          gn_path=self.m.path['checkout'].join('buildtools', 'linux64', 'gn'))
+          gn_path=self.m.path['checkout'].join('third_party', 'gn', 'gn'))
     elif self.m.chromium.c.project_generator.tool == 'mb':
       self.m.chromium.run_mb(
           mastername,

@@ -3,6 +3,19 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[START_DIR]/.cipd"
+    ],
+    "infra_step": true,
+    "name": "remove .cipd"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "\nimport os, sys\n\nbuild_path = sys.argv[1]\nif os.path.exists(build_path):\n  for (path, dir, files) in os.walk(build_path):\n    for cur_file in files:\n      if cur_file.endswith('index.lock'):\n        path_to_file = os.path.join(path, cur_file)\n        print 'deleting %s' % path_to_file\n        os.remove(path_to_file)\n",
       "[START_DIR]"
     ],
@@ -271,7 +284,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/buildtools/linux64/gn",
+      "[START_DIR]/src/third_party/gn/gn",
       "--root=[START_DIR]/src",
       "gen",
       "//out/Debug",
