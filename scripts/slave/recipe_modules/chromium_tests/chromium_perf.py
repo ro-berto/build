@@ -166,7 +166,7 @@ def _AddBuildSpec(
       extra_compile_targets=extra_compile_targets,
       force_exparchive=force_exparchive)
 
-  # TODO(martiniss): re-enable assertion once android has switched to the
+  # TODO(jbudorick): re-enable assertion once android has switched to the
   # chromium recipe
   # assert target_bits not in builders[platform]
 

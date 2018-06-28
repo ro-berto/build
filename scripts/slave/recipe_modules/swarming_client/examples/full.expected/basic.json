@@ -124,13 +124,14 @@
     ],
     "name": "swarming.py is too old",
     "~followup_annotations": [
+      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Expecting at least v20.0.0, got v0.4.4@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "Expecting at least v20.0.0, got v0.4.4",
+    "reason": "Step('swarming.py is too old') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }

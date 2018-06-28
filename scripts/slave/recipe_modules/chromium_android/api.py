@@ -1147,7 +1147,7 @@ class AndroidApi(recipe_api.RecipeApi):
                if not self.m.path.exists(b)])])
       result.presentation.logs['info'] = [
           'This bot appears to not have some of the binaries required to run ',
-          'stackwalker. No action is needed at this time; contact martiniss@ ',
+          'stackwalker. No action is needed at this time; contact infra-dev@ ',
           'for any questions or issues'
       ]
       return

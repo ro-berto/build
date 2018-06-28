@@ -149,7 +149,6 @@ def RunSteps(api, libvpx_git_url, buildername):
   points = []
   device = BUILDER_TO_DEVICE[buildername]
 
-  #TODO(martiniss) convert loop
   for i in data:
     if i["type"] == "encode_perf_test":
       # Two data points for encoder tests, FPS and minPsnr

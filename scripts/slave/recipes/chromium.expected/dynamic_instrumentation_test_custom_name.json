@@ -1169,7 +1169,7 @@
     "name": "skipping stackwalker step",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@info@This bot appears to not have some of the binaries required to run @@@",
-      "@@@STEP_LOG_LINE@info@stackwalker. No action is needed at this time; contact martiniss@ @@@",
+      "@@@STEP_LOG_LINE@info@stackwalker. No action is needed at this time; contact infra-dev@ @@@",
       "@@@STEP_LOG_LINE@info@for any questions or issues@@@",
       "@@@STEP_LOG_END@info@@@"
     ]

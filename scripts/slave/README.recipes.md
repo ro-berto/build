@@ -3220,13 +3220,13 @@ Returns:
 
 [DEPS](/scripts/slave/recipe_modules/test_utils/__init__.py#1): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [traceback](#recipe_modules-traceback), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [TestUtilsApi](/scripts/slave/recipe_modules/test_utils/api.py#27)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [TestUtilsApi](/scripts/slave/recipe_modules/test_utils/api.py#25)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#229)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#227)(self, data):**
 
-&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#232)(self, data):**
+&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#230)(self, data):**
 
-&mdash; **def [determine\_new\_failures](/scripts/slave/recipe_modules/test_utils/api.py#129)(self, caller_api, tests, deapply_patch_fn):**
+&mdash; **def [determine\_new\_failures](/scripts/slave/recipe_modules/test_utils/api.py#127)(self, caller_api, tests, deapply_patch_fn):**
 
 Utility function for running steps with a patch applied, and retrying
 failing steps without the patch. Failures from the run without the patch are
@@ -3241,7 +3241,7 @@ Args:
   deapply_patch_fn - function that takes a list of failing tests
                      and undoes any effect of the previously applied patch
 
-&emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#37)(data):**
+&emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#35)(data):**
 
 Returns string suitable for use in a followup function's step result's
 presentation step text.
@@ -3254,7 +3254,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#249)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#247)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3264,7 +3264,7 @@ Provides the --test-launcher-summary-output flag since --flag=value
 
 The test_results will be an instance of the GTestResults class.
 
-&mdash; **def [run\_tests](/scripts/slave/recipe_modules/test_utils/api.py#67)(self, caller_api, tests, suffix):**
+&mdash; **def [run\_tests](/scripts/slave/recipe_modules/test_utils/api.py#65)(self, caller_api, tests, suffix):**
 
 Utility function for running a list of tests and returning the failed tests.
 
@@ -3279,9 +3279,9 @@ Args:
 Returns:
   The list of failed tests.
 
-&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#115)(self, caller_api, tests):**
+&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#113)(self, caller_api, tests):**
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#239)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#237)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 

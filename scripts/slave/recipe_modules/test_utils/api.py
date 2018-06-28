@@ -17,8 +17,6 @@ class TestResultsOutputPlaceholder(JsonOutputPlaceholder):
     return TestResults(ret)
 
 
-# TODO(martiniss) replace this with step.AggregateResults once
-# aggregate steps lands
 class GTestResultsOutputPlaceholder(JsonOutputPlaceholder):
   def result(self, presentation, test):
     ret = super(GTestResultsOutputPlaceholder, self).result(presentation, test)

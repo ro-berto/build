@@ -120,13 +120,6 @@ class SwarmingClientApi(recipe_api.RecipeApi):
       got = '.'.join(map(str, version))
       abort_reason = 'Expecting at least v%s, got v%s' % (expecting, got)
 
-      # TODO(martiniss) remove once recipe 1.5 migration done
-      step_result = self.m.python.inline(
-          '%s is too old' % script,
-          'import sys; sys.exit(1)',
-          add_python_log=False)
-      # TODO(martiniss) get rid of this bare string.
-      step_result.presentation.status = self.m.step.FAILURE
-      step_result.presentation.step_text = abort_reason
-
-      raise self.m.step.StepFailure(abort_reason)
+      text = '%s is too old' % script
+      # Throws a step failure
+      self.m.python.failing_step(text, abort_reason)
