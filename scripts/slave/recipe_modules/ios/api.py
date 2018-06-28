@@ -419,7 +419,7 @@ class iOSApi(recipe_api.RecipeApi):
           cwd=self.m.path['checkout'].join('out', build_sub_path),
           env=env):
         self.m.step('generate build files (gn)' + suffix, [
-          self.m.path['checkout'].join('buildtools', 'mac', 'gn'),
+          self.m.path['checkout'].join('third_party', 'gn', 'gn'),
           'gen',
           '--check',
           '//out/%s' % build_sub_path,

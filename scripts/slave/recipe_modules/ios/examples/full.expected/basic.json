@@ -461,7 +461,7 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/buildtools/mac/gn",
+      "[START_DIR]/src/third_party/gn/gn",
       "gen",
       "--check",
       "//out/Debug-iphonesimulator"
