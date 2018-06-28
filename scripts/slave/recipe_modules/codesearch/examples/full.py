@@ -46,7 +46,7 @@ BUILDERS = freeze({
     'platform': 'win',
     'sync_generated_files': True,
     'gen_repo_branch': 'win',
-    'gen_repo_out_dir': 'chromium-win/Debug',
+    'gen_repo_out_dir': 'win-Debug',
     'corpus': 'chromium-win',
   },
 })

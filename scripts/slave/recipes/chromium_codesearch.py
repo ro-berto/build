@@ -105,13 +105,10 @@ SPEC = freeze({
         'all',
       ],
       'platform': 'win',
-      # Don't push generated files to git until we've verified their contents.
-      'sync_generated_files': False,
+      'sync_generated_files': True,
       'gen_repo_branch': 'win',
-      # Generated files will end up in out/chromium-win/Debug/gen.
-      # TODO(jsca): Re-enable this once we have a solution for midl.py failing
-      # due to output subdirectory depth.
-      # 'gen_repo_out_dir': 'chromium-win',
+      # Generated files will end up in out/win-Debug/gen.
+      'gen_repo_out_dir': 'win-Debug',
       'corpus': 'chromium',
       'root': 'chromium-win',
     },
