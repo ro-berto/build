@@ -84,6 +84,7 @@ SPEC = freeze({
       'platform': 'chromeos',
       'sync_generated_files': True,
       'gen_repo_branch': 'chromiumos',
+      'gen_repo_out_dir': 'chromeos-Debug',
       'corpus': 'chromium',
     },
     'codesearch-gen-chromium-android': {
