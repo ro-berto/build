@@ -362,7 +362,19 @@ class ChromiumApi(recipe_api.RecipeApi):
   def compile(self, targets=None, name=None, out_dir=None,
               target=None, use_goma_module=False,
               out_dir_includes_config=False,**kwargs):
-    """Return a compile.py invocation."""
+    """Return a compile.py invocation.
+
+    Args:
+      targets: List of build targets to compile.
+      name: Name of compile step.
+      out_dir: Output directory for the compile.
+      target: Custom config name to use in the output directory (defaults to
+        "Release" or "Debug").
+      use_goma_module (bool): If True, use the goma recipe module.
+      out_dir_includes_config (bool): If True, indicates that out_dir ends with
+        a config name subdirectory (e.g. "Debug"). Otherwise, the build config
+        subdirectory will be appended.
+    """
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
 

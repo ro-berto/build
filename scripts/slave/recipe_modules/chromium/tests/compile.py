@@ -86,5 +86,5 @@ def GenTests(api):
       api.test('custom_out_dir') +
       api.properties(
           buildername='test_buildername',
-          out_dir='win-Debug')
+          out_dir='out/win-Debug')
   )
