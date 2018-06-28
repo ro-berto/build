@@ -21,6 +21,11 @@ DEPS = [
 ]
 
 
+def _HasToken(buildername, token):
+  # Builder names are a sequence of tokens separated by underscores.
+  return '_' + token + '_' in '_' + buildername + '_'
+
+
 def _GetHostToolSuffix(platform):
   if platform.is_linux:
     if platform.bits == 64:
@@ -45,19 +50,20 @@ def _WindowsCMakeWorkaround(path):
   return str(path).replace('\\', '/')
 
 
-def _GetHostCMakeArgs(platform, bot_utils):
+def _GetHostCMakeArgs(buildername, platform, bot_utils):
   args = {}
   if platform.is_win:
-    args['CMAKE_ASM_NASM_COMPILER'] = _WindowsCMakeWorkaround(
-        bot_utils.join('yasm-win32.exe'))
+    # TODO(davidben): When we've finished switching to NASM, remove this token
+    # and make all bots use NASM.
+    if _HasToken(buildername, 'nasm'):
+      args['CMAKE_ASM_NASM_COMPILER'] = _WindowsCMakeWorkaround(
+          bot_utils.join('nasm-win32.exe'))
+    else:
+      args['CMAKE_ASM_NASM_COMPILER'] = _WindowsCMakeWorkaround(
+          bot_utils.join('yasm-win32.exe'))
     args['PERL_EXECUTABLE'] = bot_utils.join('perl-win32', 'perl', 'bin',
                                              'perl.exe')
   return args
-
-
-def _HasToken(buildername, token):
-  # Builder names are a sequence of tokens separated by underscores.
-  return '_' + token + '_' in '_' + buildername + '_'
 
 
 def _AppendFlags(args, key, flags):
@@ -87,6 +93,8 @@ def _GetGclientVars(buildername):
     ret['checkout_sde'] = 'True'
   if _HasToken(buildername, 'fuzz'):
     ret['checkout_fuzzer'] = 'True'
+  if _HasToken(buildername, 'nasm'):
+    ret['checkout_nasm'] = 'True'
   return ret
 
 
@@ -242,7 +250,7 @@ def RunSteps(api, buildername):
     # Build BoringSSL itself.
     cmake = bot_utils.join('cmake-' + _GetHostToolSuffix(api.platform), 'bin',
                            'cmake' + _GetHostExeSuffix(api.platform))
-    cmake_args = _GetHostCMakeArgs(api.platform, bot_utils)
+    cmake_args = _GetHostCMakeArgs(buildername, api.platform, bot_utils)
     cmake_args.update(
         _GetTargetCMakeArgs(buildername, api.path, api.depot_tools.ninja_path,
                             api.platform))
@@ -351,11 +359,13 @@ def GenTests(api):
     ('win32_rel', api.platform('win', 64)),
     ('win32_vs2017', api.platform('win', 64)),
     ('win32_vs2017_clang', api.platform('win', 64)),
+    ('win32_nasm', api.platform('win', 64)),
     ('win64', api.platform('win', 64)),
     ('win64_small', api.platform('win', 64)),
     ('win64_rel', api.platform('win', 64)),
     ('win64_vs2017', api.platform('win', 64)),
     ('win64_vs2017_clang', api.platform('win', 64)),
+    ('win64_nasm', api.platform('win', 64)),
     ('android_arm', api.platform('linux', 64)),
     ('android_arm_rel', api.platform('linux', 64)),
     ('android_aarch64', api.platform('linux', 64)),
