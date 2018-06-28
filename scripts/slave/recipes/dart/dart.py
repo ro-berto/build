@@ -44,6 +44,7 @@ def RunSteps(api):
       extra_test_args = api.properties.get('test_args', [])
       test_args = ['-m%s' % mode,
                    '--arch=%s' % target_arch,
+                   '--no-preview-dart-2',
                    '--progress=line',
                    '--report',
                    '--time',

@@ -82,6 +82,7 @@
       "[START_DIR]/sdk/tools/test.py",
       "-mrelease",
       "--arch=arm",
+      "--no-preview-dart-2",
       "--progress=line",
       "--report",
       "--time",
