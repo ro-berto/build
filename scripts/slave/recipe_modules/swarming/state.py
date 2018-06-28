@@ -3,7 +3,10 @@
 # found in the LICENSE file.
 
 class State(object):
-  """Copied from appengine/swarming/server/task_result.py.
+  """Represents the current task state.
+
+  Copied from:
+  https://cs.chromium.org/chromium/infra/luci/appengine/swarming/swarming_rpcs.py?q=TaskState\(
 
   KEEP IN SYNC.
 
@@ -16,13 +19,8 @@ class State(object):
   BOT_DIED = 0x50   # 80
   CANCELED = 0x60   # 96
   COMPLETED = 0x70  # 112
-
-  STATES = (
-      RUNNING, PENDING, EXPIRED, TIMED_OUT, BOT_DIED, CANCELED, COMPLETED)
-  STATES_RUNNING = (RUNNING, PENDING)
-  STATES_NOT_RUNNING = (EXPIRED, TIMED_OUT, BOT_DIED, CANCELED, COMPLETED)
-  STATES_DONE = (TIMED_OUT, COMPLETED)
-  STATES_ABANDONED = (EXPIRED, BOT_DIED, CANCELED)
+  KILLED = 0x80
+  NO_RESOURCE = 0x100
 
   _NAMES = {
     RUNNING: 'Running',
@@ -32,6 +30,8 @@ class State(object):
     BOT_DIED: 'Bot died',
     CANCELED: 'User canceled',
     COMPLETED: 'Completed',
+    KILLED: 'Killed',
+    NO_RESOURCE: 'No resource',
   }
 
   @classmethod
