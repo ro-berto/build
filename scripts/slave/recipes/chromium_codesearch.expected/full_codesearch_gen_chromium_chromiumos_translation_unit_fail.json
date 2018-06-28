@@ -1348,7 +1348,7 @@
       "retry",
       "fetch",
       "origin",
-      "chromiumos",
+      "master",
       "--progress"
     ],
     "cwd": "[START_DIR]/generated",
@@ -1432,7 +1432,7 @@
       "--message",
       "Generated files from \"codesearch-gen-chromium-chromiumos\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
-      "chromiumos",
+      "master",
       "src/out",
       "[START_DIR]/generated"
     ],

@@ -83,7 +83,7 @@ SPEC = freeze({
       ],
       'platform': 'chromeos',
       'sync_generated_files': True,
-      'gen_repo_branch': 'chromiumos',
+      'gen_repo_branch': 'master',
       'gen_repo_out_dir': 'chromeos-Debug',
       'corpus': 'chromium',
     },
