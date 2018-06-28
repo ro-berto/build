@@ -113,7 +113,8 @@
         "*"
       ],
       "tree_notify": [
-        "mtv-sf-v8-sheriff@grotations.appspotmail.com"
+        "mtv-sf-v8-sheriff@grotations.appspotmail.com",
+        "v8-waterfall-sheriff@grotations.appspotmail.com"
       ],
       "excluded_steps": [
         "Failure reason",
@@ -134,7 +135,8 @@
     },
     "v8_compile": {
       "tree_notify": [
-        "mtv-sf-v8-sheriff@grotations.appspotmail.com"
+        "mtv-sf-v8-sheriff@grotations.appspotmail.com",
+        "v8-waterfall-sheriff@grotations.appspotmail.com"
       ],
       "closing_optional": [
         "compile",
