@@ -2041,6 +2041,8 @@
       "/path/to/tmp/",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
       "[]",
       "--",
@@ -2103,6 +2105,8 @@
       "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@swarming.summary@}@@@",
       "@@@STEP_LOG_END@swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2394,6 +2398,8 @@
       "/path/to/tmp/",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
       "[]",
       "--",
@@ -2456,6 +2462,8 @@
       "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@swarming.summary@}@@@",
       "@@@STEP_LOG_END@swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2475,6 +2483,8 @@
       "/path/to/tmp/",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
       "[]",
       "--",
@@ -2537,6 +2547,8 @@
       "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@swarming.summary@}@@@",
       "@@@STEP_LOG_END@swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2556,6 +2568,8 @@
       "/path/to/tmp/",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
       "[]",
       "--",
@@ -2618,6 +2632,8 @@
       "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@swarming.summary@}@@@",
       "@@@STEP_LOG_END@swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -2637,6 +2653,8 @@
       "/path/to/tmp/",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
       "[]",
       "--",
@@ -2699,6 +2717,8 @@
       "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@swarming.summary@}@@@",
       "@@@STEP_LOG_END@swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },

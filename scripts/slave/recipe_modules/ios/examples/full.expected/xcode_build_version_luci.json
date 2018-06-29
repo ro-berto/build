@@ -1003,6 +1003,8 @@
       "[TMP_BASE]/0_tmp_2",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
       "[]",
       "--",
@@ -1065,6 +1067,8 @@
       "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@swarming.summary@}@@@",
       "@@@STEP_LOG_END@swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@test data@blah@@@"
     ]
@@ -1085,6 +1089,8 @@
       "[TMP_BASE]/1_tmp_3",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
       "[]",
       "--",
@@ -1147,6 +1153,8 @@
       "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@swarming.summary@}@@@",
       "@@@STEP_LOG_END@swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@test data@blah@@@"
     ]
@@ -1167,6 +1175,8 @@
       "[TMP_BASE]/2_tmp_4",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
       "[]",
       "--",
@@ -1229,6 +1239,8 @@
       "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@swarming.summary@}@@@",
       "@@@STEP_LOG_END@swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@test data@blah@@@"
     ]

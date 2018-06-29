@@ -12,8 +12,8 @@ import sys
 
 
 def collect_task(
-    collect_cmd, merge_script, build_properties, merge_arguments,
-    task_output_dir, output_json):
+    collect_cmd, merge_script, merge_script_stdout_file,
+    build_properties, merge_arguments, task_output_dir, output_json):
   """Collect and merge the results of a task.
 
   This is a relatively thin wrapper script around a `swarming.py collect`
@@ -40,6 +40,8 @@ def collect_task(
       pass to the merge script in JSON form.
     merge_arguments: A string containing additional arguments to pass to
       the merge script in JSON form.
+    merge_script_stdout_file: A path to a file in which the stdout/stderr
+      of the merge script will be written to.
     task_output_dir: A path to a directory in which swarming will write the
       output of the task, including a summary JSON and all of the individual
       shard results.
@@ -136,7 +138,9 @@ def collect_task(
   merge_cmd.extend(extant_shard_json_files)
 
   logging.info('merge_cmd: %s', ' '.join(merge_cmd))
-  merge_result = subprocess.call(merge_cmd)
+  with open(merge_script_stdout_file, 'w') as f:
+    merge_result = subprocess.call(
+        merge_cmd, stdout=f, stderr=subprocess.STDOUT)
   if merge_result != 0:
     logging.warn('merge_cmd had non-zero return code: %s', merge_result)
 
@@ -152,6 +156,7 @@ def main():
   parser.add_argument('--build-properties')
   parser.add_argument('--merge-additional-args')
   parser.add_argument('--merge-script', required=True)
+  parser.add_argument('--merge-script-stdout-file', required=True)
   parser.add_argument('--task-output-dir', required=True)
   parser.add_argument('-o', '--output-json', required=True)
   parser.add_argument('--verbose', action='store_true')
@@ -164,7 +169,8 @@ def main():
 
   return collect_task(
       args.collect_cmd,
-      args.merge_script, args.build_properties, args.merge_additional_args,
+      args.merge_script, args.merge_script_stdout_file,
+      args.build_properties, args.merge_additional_args,
       args.task_output_dir, args.output_json)
 
 

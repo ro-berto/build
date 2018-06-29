@@ -473,12 +473,13 @@ def GenTests(api):
           results_url='https://example/url') +
       api.override_step_data(
           'base_unittests on Intel GPU on Linux (with patch)',
-          api.swarming.canned_summary_output(2)
-          + api.test_utils.canned_isolated_script_output(
+          api.swarming.canned_summary_output(2) +
+          api.test_utils.canned_isolated_script_output(
               passing=True, swarming=True,
               shards=2, isolated_script_passing=True,
               output_chartjson=True, benchmark_enabled=True,
-              use_json_test_format=True, output_histograms=True),
+              use_json_test_format=True, output_histograms=True) +
+          api.swarming.merge_script_log_file('Merge succesfully'),
           retcode=0) +
       api.runtime(is_luci=True, is_experimental=False)
   )

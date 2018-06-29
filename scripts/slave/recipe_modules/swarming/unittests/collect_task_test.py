@@ -25,7 +25,7 @@ class CollectTaskTest(unittest.TestCase):
     super(CollectTaskTest, self).setUp()
 
     self.subprocess_calls = []
-    def mocked_subprocess_call(args):
+    def mocked_subprocess_call(args, **kwargs):
       self.subprocess_calls.append(args)
       return 0
     m = mock.patch('subprocess.call', side_effect=mocked_subprocess_call)
@@ -33,6 +33,8 @@ class CollectTaskTest(unittest.TestCase):
     self.addCleanup(m.stop)
 
     self.temp_dir = tempfile.mkdtemp()
+    self.merge_script_log = os.path.join(
+        self.temp_dir, 'merge_script_log.txt')
 
   def tearDown(self):
     shutil.rmtree(self.temp_dir)
@@ -51,7 +53,8 @@ class CollectTaskTest(unittest.TestCase):
     os.makedirs(task_output_dir)
     output_json = os.path.join(self.temp_dir, 'output.json')
     exit_code = collect_task.collect_task(
-        collect_cmd, 'merge.py', build_props_json, None, task_output_dir,
+        collect_cmd, 'merge.py', self.merge_script_log,
+        build_props_json, None, task_output_dir,
         output_json)
     self.assertEqual(0, exit_code)
 
@@ -103,7 +106,8 @@ class CollectTaskTest(unittest.TestCase):
     build_props_json = os.path.join(self.temp_dir, 'build_properties.json')
     output_json = os.path.join(self.temp_dir, 'output.json')
     exit_code = collect_task.collect_task(
-        collect_cmd, merge_script, build_props_json, None, task_output_dir,
+        collect_cmd, merge_script, self.merge_script_log,
+        build_props_json, None, task_output_dir,
         output_json)
 
     self.assertEquals(0, exit_code)
@@ -145,7 +149,8 @@ class CollectTaskTest(unittest.TestCase):
     build_props_json = os.path.join(self.temp_dir, 'build_properties.json')
     output_json = os.path.join(self.temp_dir, 'output.json')
     exit_code = collect_task.collect_task(
-        collect_cmd, merge_script, build_props_json, None, task_output_dir,
+        collect_cmd, merge_script, self.merge_script_log,
+        build_props_json, None, task_output_dir,
         output_json)
 
     self.assertEquals(0, exit_code)
@@ -191,8 +196,8 @@ class CollectTaskTest(unittest.TestCase):
 
     output_json = os.path.join(self.temp_dir, 'output.json')
     exit_code = collect_task.collect_task(
-        collect_cmd, merge_script, build_props, merge_args,
-        task_output_dir, output_json)
+        collect_cmd, merge_script, self.merge_script_log, build_props,
+        merge_args, task_output_dir, output_json)
 
     self.assertEquals(0, exit_code)
     self.assertEquals(
@@ -243,8 +248,8 @@ class CollectTaskTest(unittest.TestCase):
 
     output_json = os.path.join(self.temp_dir, 'output.json')
     exit_code = collect_task.collect_task(
-        collect_cmd, 'merge.py', build_props_json, None, task_output_dir,
-        output_json)
+        collect_cmd, 'merge.py', self.merge_script_log, build_props_json, None,
+        task_output_dir, output_json)
     self.assertEqual(0, exit_code)
 
     # Should append correct --task-output-dir to args after '--'.

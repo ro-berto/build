@@ -53,3 +53,6 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
       self, shards=1, failure=False, internal_failure=False):
     return self.summary(
       self.canned_summary_output_raw( shards, failure, internal_failure))
+
+  def merge_script_log_file(self, data):
+    return self.m.raw_io.output(data)

@@ -939,6 +939,8 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     task_args.extend([
       '--merge-script', merge_script,
+      '--merge-script-stdout-file',
+      self.m.raw_io.output('merge_script_log'),
       '--merge-additional-args', self.m.json.dumps(merge_args),
     ])
 
@@ -969,13 +971,16 @@ class SwarmingApi(recipe_api.RecipeApi):
     if task.ignore_task_failure:
       allowed_return_codes = 'any'
 
-    # The call to collect_task emits two JSON files:
+    # The call to collect_task emits two JSON files and one text file:
     #  1) a task summary JSON emitted by swarming
     #  2) a gtest results JSON emitted by the task
-    # This builds an instance of StepTestData that covers both.
+    #  3) a merge script stdout/stderr log emitted by the task
+    # This builds an instance of StepTestData that covers all of them.
     step_test_data = step_test_data or (
       self.test_api.canned_summary_output(task.shards) +
-      self.m.json.test_api.output({}))
+      self.m.json.test_api.output({}) +
+      self.m.raw_io.test_api.output(
+        'Successfully merged all data'))
 
     try:
       with self.m.context(cwd=self.m.path['start_dir']):
@@ -992,6 +997,9 @@ class SwarmingApi(recipe_api.RecipeApi):
         step_result = self.m.step.active_result
         if step_result is not None:
           step_result.presentation.step_text = text_for_task(task)
+
+          step_result.presentation.logs['Merge script log'] = [
+              step_result.raw_io.output]
 
           links = {}
           if hasattr(step_result, 'json') and hasattr(step_result.json, 'output'):
@@ -1024,13 +1032,15 @@ class SwarmingApi(recipe_api.RecipeApi):
       gtest_results_test_data = (
           self.m.test_utils.test_api.canned_gtest_output(True))
 
-    # The call to collect_task emits two JSON files:
+    # The call to collect_task emits two JSON files and a test file:
     #  1) a task summary JSON emitted by swarming
     #  2) a gtest results JSON emitted by the task
-    # This builds an instance of StepTestData that covers both.
+    #  3) a log file that stores stdout/stderr of task
+    # This builds an instance of StepTestData that covers all three.
     step_test_data = (
-        self.test_api.canned_summary_output(shards=task.shards)
-        + gtest_results_test_data)
+        self.test_api.canned_summary_output(shards=task.shards) +
+        gtest_results_test_data +
+        self.test_api.merge_script_log_file('Gtest merged successfully'))
     try:
       return self._default_collect_step(
           task,
@@ -1150,7 +1160,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     # This builds an instance of StepTestData that covers both.
     step_test_data = (
         self.test_api.canned_summary_output(task.shards) +
-        isolated_script_results_test_data)
+        isolated_script_results_test_data +
+        self.test_api.merge_script_log_file('Merged succesfully'))
 
     try:
       return self._default_collect_step(
