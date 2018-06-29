@@ -88,7 +88,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/TestBuilder"
+      "[BUILDER_CACHE]"
     ],
     "infra_step": true,
     "name": "ensure builder cache dir"
@@ -115,7 +115,7 @@
       "--revision",
       "src/v8@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/TestBuilder",
+    "cwd": "[BUILDER_CACHE]",
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -248,10 +248,10 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/TestBuilder/src",
+    "cwd": "[BUILDER_CACHE]/src",
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/TestBuilder/src/third_party/depot_tools"
+        "[BUILDER_CACHE]/src/third_party/depot_tools"
       ]
     },
     "name": "fake resubmit to CQ",

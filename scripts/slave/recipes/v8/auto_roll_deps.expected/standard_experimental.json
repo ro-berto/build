@@ -69,7 +69,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/TestBuilder"
+      "[BUILDER_CACHE]"
     ],
     "infra_step": true,
     "name": "ensure builder cache dir"
@@ -96,7 +96,7 @@
       "--revision",
       "src/v8@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/TestBuilder",
+    "cwd": "[BUILDER_CACHE]",
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -248,14 +248,14 @@
       "blob",
       "HEAD:DEPS"
     ],
-    "cwd": "[BUILDER_CACHE]/TestBuilder/src",
+    "cwd": "[BUILDER_CACHE]/src",
     "infra_step": true,
     "name": "git cat-file",
     "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/TestBuilder/src/v8",
+    "cwd": "[BUILDER_CACHE]/src/v8",
     "name": "fake roll deps"
   },
   {

@@ -4,12 +4,12 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]\\gn.py",
-      "--root=[START_DIR]\\v8",
+      "--root=[BUILDER_CACHE]\\V8_Official_Win32\\v8",
       "gen",
       "//out/Release",
-      "--args=is_clang=true v8_static_library=true is_debug=false target_cpu=\"x86\" use_goma=true goma_dir=\"[CACHE]\\goma\\client\""
+      "--args=is_clang=true v8_static_library=true is_debug=false target_cpu=\"x86\" use_goma=true goma_dir=\"[GOMA_CACHE]\\client\""
     ],
-    "cwd": "[START_DIR]\\v8",
+    "cwd": "[BUILDER_CACHE]\\V8_Official_Win32\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -31,12 +31,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\v8\\out\\Release",
+      "[BUILDER_CACHE]\\V8_Official_Win32\\v8\\out\\Release",
       "-j",
       "20",
       "v8_archive"
     ],
-    "cwd": "[START_DIR]\\v8",
+    "cwd": "[BUILDER_CACHE]\\V8_Official_Win32\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
@@ -48,9 +48,9 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\v8\\tools\\release\\filter_build_files.py",
+      "[BUILDER_CACHE]\\V8_Official_Win32\\v8\\tools\\release\\filter_build_files.py",
       "--dir",
-      "[START_DIR]\\v8\\out\\Release",
+      "[BUILDER_CACHE]\\V8_Official_Win32\\v8\\out\\Release",
       "--platform",
       "win",
       "--type",
@@ -62,8 +62,8 @@
     "name": "filter build files",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\d8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\icudtl.dat\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]\\\\V8_Official_Win32\\\\v8\\\\out\\\\Release\\\\d8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]\\\\V8_Official_Win32\\\\v8\\\\out\\\\Release\\\\icudtl.dat\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -75,7 +75,7 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "name": "zipping",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\archive.zip\", \"root\": \"[START_DIR]\\\\v8\\\\out\\\\Release\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]\\\\V8_Official_Win32\\\\v8\\\\out\\\\Release\\\\d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]\\\\V8_Official_Win32\\\\v8\\\\out\\\\Release\\\\icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\archive.zip\", \"root\": \"[BUILDER_CACHE]\\\\V8_Official_Win32\\\\v8\\\\out\\\\Release\"}"
   },
   {
     "cmd": [
@@ -108,9 +108,9 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\v8\\tools\\release\\filter_build_files.py",
+      "[BUILDER_CACHE]\\V8_Official_Win32\\v8\\tools\\release\\filter_build_files.py",
       "--dir",
-      "[START_DIR]\\v8\\out\\Release",
+      "[BUILDER_CACHE]\\V8_Official_Win32\\v8\\out\\Release",
       "--platform",
       "win",
       "--type",
@@ -122,8 +122,8 @@
     "name": "filter build files (libs)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\d8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\icudtl.dat\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]\\\\V8_Official_Win32\\\\v8\\\\out\\\\Release\\\\d8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]\\\\V8_Official_Win32\\\\v8\\\\out\\\\Release\\\\icudtl.dat\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -135,7 +135,7 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "name": "zipping (libs)",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[START_DIR]\\\\v8\\\\out\\\\Release\\\\icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\archive.zip\", \"root\": \"[START_DIR]\\\\v8\\\\out\\\\Release\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]\\\\V8_Official_Win32\\\\v8\\\\out\\\\Release\\\\d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]\\\\V8_Official_Win32\\\\v8\\\\out\\\\Release\\\\icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\archive.zip\", \"root\": \"[BUILDER_CACHE]\\\\V8_Official_Win32\\\\v8\\\\out\\\\Release\"}"
   },
   {
     "cmd": [

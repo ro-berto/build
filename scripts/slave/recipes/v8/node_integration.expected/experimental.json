@@ -9,7 +9,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/V8_Linux64___node_js_integration"
+      "[BUILDER_CACHE]"
     ],
     "infra_step": true,
     "name": "ensure builder cache dir"
@@ -36,7 +36,7 @@
       "--revision",
       "v8@deadbeef"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration",
+    "cwd": "[BUILDER_CACHE]",
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -118,7 +118,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -165,9 +165,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Linux64___node_js_integration/v8/tools/node/update_node.py",
-      "[BUILDER_CACHE]/V8_Linux64___node_js_integration/v8",
-      "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js"
+      "[BUILDER_CACHE]/v8/tools/node/update_node.py",
+      "[BUILDER_CACHE]/v8",
+      "[BUILDER_CACHE]/node.js"
     ],
     "name": "update v8"
   },
@@ -175,18 +175,18 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js/configure",
+      "[BUILDER_CACHE]/node.js/configure",
       "--build-v8-with-gn",
       "--build-v8-with-gn-max-jobs=20",
       "--build-v8-with-gn-extra-gn-args",
       "use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "configure node.js"
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "preprocess_for_goma"
   },
   {
@@ -201,7 +201,7 @@
       "0777",
       "[GOMA_CACHE]/data/V8_Linux64___node_js_integration"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
     "~followup_annotations": [
@@ -215,7 +215,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/V8_Linux64___node_js_integration",
@@ -251,7 +251,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -263,7 +263,7 @@
       "make",
       "-j8"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build node.js"
   },
   {
@@ -271,7 +271,7 @@
       "make",
       "test-addons-clean"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "clean addons"
   },
   {
@@ -280,7 +280,7 @@
       "-j8",
       "clear-stalled"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "clear stalled"
   },
   {
@@ -289,7 +289,7 @@
       "-j8",
       "build-addons"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build addons"
   },
   {
@@ -298,7 +298,7 @@
       "-j8",
       "build-addons-napi"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build addons-napi"
   },
   {
@@ -307,12 +307,12 @@
       "-j8",
       "doc-only"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build doc-only"
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "postprocess_for_goma"
   },
   {
@@ -323,7 +323,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/V8_Linux64___node_js_integration",
@@ -357,7 +357,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/V8_Linux64___node_js_integration",
@@ -380,7 +380,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/V8_Linux64___node_js_integration",
@@ -433,7 +433,7 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -458,7 +458,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
@@ -469,14 +469,14 @@
     "cmd": [
       "out/Release/cctest"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "run cctest"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js/tools/test.py",
+      "[BUILDER_CACHE]/node.js/tools/test.py",
       "-p",
       "tap",
       "-j8",
@@ -488,14 +488,14 @@
       "addons-napi",
       "doctool"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "run tests"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js/configure",
+      "[BUILDER_CACHE]/node.js/configure",
       "--prefix=/",
       "--tag=v8-build-f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
       "--build-v8-with-gn",
@@ -503,7 +503,7 @@
       "--build-v8-with-gn-extra-gn-args",
       "use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "configure node.js - install"
   },
   {
@@ -598,7 +598,7 @@
       "install",
       "DESTDIR=[CLEANUP]/archive-build"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build and install node.js"
   },
   {
