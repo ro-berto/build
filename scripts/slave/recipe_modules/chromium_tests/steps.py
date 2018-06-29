@@ -2595,35 +2595,32 @@ class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
       **kwargs)
 
 
-class WebViewCTSTest(Test):
+class WebViewCTSTest(AndroidTest):
 
   def __init__(self, platform, arch, command_line_args=None,
                waterfall_mastername=None, waterfall_buildername=None):
     super(WebViewCTSTest, self).__init__(
-        waterfall_mastername=None,
-        waterfall_buildername=None)
+        'WebView CTS: %s' % platform,
+        ['system_webview_apk'],
+        waterfall_mastername,
+        waterfall_buildername)
     self._arch = arch
     self._command_line_args = command_line_args
     self._platform = platform
 
   @property
-  def name(self):  # pragma: no cover
-    return 'WebView CTS: %s' % self._platform
-
-  @property
   def uses_local_devices(self):
     return True
 
-  def compile_targets(self, api):
-    return ['system_webview_apk']
-
-  def run(self, api, suffix):
+  def run_tests(self, api, suffix, json_results_file):
     api.chromium_android.adb_install_apk(
         api.chromium_android.apk_path('SystemWebView.apk'))
-    api.chromium_android.run_webview_cts(
+    return api.chromium_android.run_webview_cts(
         android_platform=self._platform,
+        suffix=suffix,
         command_line_args=self._command_line_args,
         arch=self._arch,
+        json_results_file=json_results_file,
         result_details=True)
 
 

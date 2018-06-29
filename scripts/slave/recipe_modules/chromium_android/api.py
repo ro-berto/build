@@ -1392,28 +1392,31 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def run_webview_cts(self, android_platform, arch,
                       command_line_args=None, suffix=None,
+                      json_results_file=None,
                       result_details=False):
     suffix = ' (%s)' % suffix if suffix else ''
     if command_line_args:
       self._set_webview_command_line(command_line_args)
 
-    json_results_file = self.m.test_utils.gtest_results(add_json_log=False)
-
     cts_runner_args = ['--arch', arch,
                        '--platform', android_platform,
                        '--skip-expected-failures',
-                       '--apk-dir', self.m.path['cache'],
-                       '--json-results-file', json_results_file,
-                       '--verbose']
+                       '--apk-dir', self.m.path['cache']]
+
+    if result_details and not json_results_file:
+      json_results_file = self.m.test_utils.gtest_results(add_json_log=False)
+
+    if json_results_file:
+      cts_runner_args.extend(['--json-results-file', json_results_file])
+
+    cts_runner_args.append('--verbose')
 
     try:
       self.m.python(
           'Run CTS%s' % suffix,
           self.m.path['checkout'].join(
               'android_webview', 'tools', 'run_cts.py'),
-          cts_runner_args,
-          step_test_data=lambda: (
-              self.m.test_utils.test_api.canned_gtest_output(passing=False)))
+          cts_runner_args)
 
     finally:
       step_result = self.m.step.active_result
@@ -1430,6 +1433,8 @@ class AndroidApi(recipe_api.RecipeApi):
                                                     json_results)
           self.m.step.active_result.presentation.links[_RESULT_DETAILS_LINK] = (
               details_link)
+        self.copy_gtest_results(step_result, self.m.step.active_result)
+    return step_result
 
 
   def coverage_report(self, upload=True, **kwargs):

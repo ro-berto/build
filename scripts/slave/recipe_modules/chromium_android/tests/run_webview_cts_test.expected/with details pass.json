@@ -1,0 +1,49 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/android_webview/tools/run_cts.py",
+      "--arch",
+      "arm64",
+      "--platform",
+      "N",
+      "--skip-expected-failures",
+      "--apk-dir",
+      "[CACHE]",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--verbose"
+    ],
+    "name": "Run CTS"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/build/android/pylib/results/presentation/test_results_presentation.py",
+      "--json-file",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
+      "--test-name",
+      "CTS",
+      "--builder-name",
+      "TestBuilder",
+      "--build-number",
+      "571",
+      "--cs-base-url",
+      "http://cs.chromium.org",
+      "--bucket",
+      "chromium-result-details"
+    ],
+    "name": "CTS: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

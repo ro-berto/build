@@ -1020,12 +1020,7 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
-    "name": "Run CTS",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
+    "name": "Run CTS"
   },
   {
     "cmd": [
@@ -1033,7 +1028,7 @@
       "-u",
       "[START_DIR]/src/build/android/pylib/results/presentation/test_results_presentation.py",
       "--json-file",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":(\", \"status\": \"FAILURE\"}]}]}",
+      "{}",
       "--test-name",
       "CTS",
       "--builder-name",
@@ -1052,9 +1047,63 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "[START_DIR]/src/out/Release/full_log",
+      "--",
+      "[START_DIR]/src/build/android/adb_logcat_printer.py",
+      "[START_DIR]/src/out/logcat"
+    ],
+    "infra_step": true,
+    "name": "logcat_dump"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/src/third_party/android_platform/development/scripts/stack",
+      "--arch",
+      "arm",
+      "--more-info",
+      "[START_DIR]/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+    },
+    "infra_step": true,
+    "name": "stack_tool_with_logcat_dump"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+    },
+    "infra_step": true,
+    "name": "stack_tool_for_tombstones"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/src/build/android/asan_symbolize.py",
+      "-l",
+      "[START_DIR]/src/out/Release/full_log"
+    ],
+    "env": {
+      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+    },
+    "infra_step": true,
+    "name": "stack_tool_for_asan"
+  },
+  {
     "name": "$result",
-    "reason": "Step('Run CTS') failed with return_code 1",
     "recipe_result": null,
-    "status_code": 1
+    "status_code": 0
   }
 ]

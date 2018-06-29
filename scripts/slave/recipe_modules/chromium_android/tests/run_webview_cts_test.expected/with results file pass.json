@@ -1,0 +1,25 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/android_webview/tools/run_cts.py",
+      "--arch",
+      "arm64",
+      "--platform",
+      "N",
+      "--skip-expected-failures",
+      "--apk-dir",
+      "[CACHE]",
+      "--json-results-file",
+      "/path/to/a/json/file",
+      "--verbose"
+    ],
+    "name": "Run CTS"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

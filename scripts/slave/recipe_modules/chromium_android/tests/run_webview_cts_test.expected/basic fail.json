@@ -1,0 +1,28 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/android_webview/tools/run_cts.py",
+      "--arch",
+      "arm64",
+      "--platform",
+      "N",
+      "--skip-expected-failures",
+      "--apk-dir",
+      "[CACHE]",
+      "--verbose"
+    ],
+    "name": "Run CTS",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "reason": "Step('Run CTS') failed with return_code 1",
+    "recipe_result": null,
+    "status_code": 1
+  }
+]

@@ -3,39 +3,11 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "None/chrome/VERSION",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "get version"
-  },
-  {
-    "cmd": [
-      "None/build/android/adb_install_apk.py",
-      "None/out/Release/apks/SystemWebView.apk",
-      "-v",
-      "--blacklist-file",
-      "None/out/bad_devices.json",
-      "--adb-path",
-      "None/third_party/android_tools/sdk/platform-tools/adb",
-      "--release"
-    ],
-    "infra_step": true,
-    "name": "install SystemWebView.apk"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "None/android_webview/tools/run_cts.py",
       "--arch",
       "arm64",
       "--platform",
-      "M",
+      "N",
       "--skip-expected-failures",
       "--apk-dir",
       "[CACHE]",
@@ -60,9 +32,9 @@
       "--test-name",
       "CTS",
       "--builder-name",
-      "test_buildername",
+      "TestBuilder",
       "--build-number",
-      "123",
+      "571",
       "--cs-base-url",
       "http://cs.chromium.org",
       "--bucket",
@@ -72,15 +44,6 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "details",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@details@compile_targets: ['system_webview_apk']@@@",
-      "@@@STEP_LOG_LINE@details@uses_local_devices: True@@@",
-      "@@@STEP_LOG_END@details@@@"
     ]
   },
   {

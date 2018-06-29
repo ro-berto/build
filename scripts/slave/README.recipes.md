@@ -120,6 +120,7 @@
   * [chromium_android:tests/run_instrumentation_suite](#recipes-chromium_android_tests_run_instrumentation_suite)
   * [chromium_android:tests/run_java_unit_test_suite](#recipes-chromium_android_tests_run_java_unit_test_suite)
   * [chromium_android:tests/run_test_suite](#recipes-chromium_android_tests_run_test_suite)
+  * [chromium_android:tests/run_webview_cts_test](#recipes-chromium_android_tests_run_webview_cts_test)
   * [chromium_android:tests/stackwalker](#recipes-chromium_android_tests_stackwalker)
   * [chromium_android:tests/upload_apks_for_bisect](#recipes-chromium_android_tests_upload_apks_for_bisect)
   * [chromium_android:tests/upload_build](#recipes-chromium_android_tests_upload_build)
@@ -1088,7 +1089,7 @@ Returns a version dictionary (after get_version()), e.g.
 
 &emsp; **@property**<br>&mdash; **def [coverage\_dir](/scripts/slave/recipe_modules/chromium_android/api.py#48)(self):**
 
-&mdash; **def [coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1435)(self, upload=True, \*\*kwargs):**
+&mdash; **def [coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1440)(self, upload=True, \*\*kwargs):**
 
 Creates an EMMA HTML report and optionally uploads it to storage bucket.
 
@@ -1134,7 +1135,7 @@ Args:
   binary_path: Path to binary to generate symbols for.
   root_chromium_dir: Root Chromium directory.
 
-&mdash; **def [get\_changed\_lines\_for\_revision](/scripts/slave/recipe_modules/chromium_android/api.py#1547)(self):**
+&mdash; **def [get\_changed\_lines\_for\_revision](/scripts/slave/recipe_modules/chromium_android/api.py#1552)(self):**
 
 Saves a JSON file containing the files/lines requiring coverage analysis.
 
@@ -1145,13 +1146,13 @@ coverage directory.
 
 &mdash; **def [git\_number](/scripts/slave/recipe_modules/chromium_android/api.py#204)(self, \*\*kwargs):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [handle\_exit\_codes](/scripts/slave/recipe_modules/chromium_android/api.py#1608)(self):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [handle\_exit\_codes](/scripts/slave/recipe_modules/chromium_android/api.py#1613)(self):**
 
 Handles exit codes emitted by the test runner and other scripts.
 
 &mdash; **def [host\_info](/scripts/slave/recipe_modules/chromium_android/api.py#419)(self, args=None, \*\*kwargs):**
 
-&mdash; **def [incremental\_coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1476)(self):**
+&mdash; **def [incremental\_coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1481)(self):**
 
 Creates an incremental code coverage report.
 
@@ -1214,7 +1215,7 @@ Run a telemetry browser test.
 
 &mdash; **def [run\_tree\_truth](/scripts/slave/recipe_modules/chromium_android/api.py#189)(self, additional_repos=None):**
 
-&mdash; **def [run\_webview\_cts](/scripts/slave/recipe_modules/chromium_android/api.py#1393)(self, android_platform, arch, command_line_args=None, suffix=None, result_details=False):**
+&mdash; **def [run\_webview\_cts](/scripts/slave/recipe_modules/chromium_android/api.py#1393)(self, android_platform, arch, command_line_args=None, suffix=None, json_results_file=None, result_details=False):**
 
 &mdash; **def [shutdown\_device\_monitor](/scripts/slave/recipe_modules/chromium_android/api.py#376)(self):**
 
@@ -1235,7 +1236,7 @@ Args:
   binary_paths: Paths to binaries to generate breakpad symbols.
   root_chromium_dir: Root Chromium directory.
 
-&mdash; **def [staged\_files\_matching\_filter](/scripts/slave/recipe_modules/chromium_android/api.py#1588)(self, diff_filter):**
+&mdash; **def [staged\_files\_matching\_filter](/scripts/slave/recipe_modules/chromium_android/api.py#1593)(self, diff_filter):**
 
 Returns list of files changed matching the provided diff-filter.
 
@@ -1251,7 +1252,7 @@ Creates a .size file for the given .apk.
 
 &mdash; **def [test\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1214)(self):**
 
-&mdash; **def [test\_runner](/scripts/slave/recipe_modules/chromium_android/api.py#1631)(self, step_name, args=None, wrapper_script_suite_name=None, pass_adb_path=True, \*\*kwargs):**
+&mdash; **def [test\_runner](/scripts/slave/recipe_modules/chromium_android/api.py#1636)(self, step_name, args=None, wrapper_script_suite_name=None, pass_adb_path=True, \*\*kwargs):**
 
 Wrapper for the python testrunner script.
 
@@ -4127,6 +4128,11 @@ Returns: the list of matched targets.
 [DEPS](/scripts/slave/recipe_modules/chromium_android/tests/run_test_suite.py#5): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [recipe\_engine/json][recipe_engine/recipe_modules/json]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_android/tests/run_test_suite.py#12)(api):**
+### *recipes* / [chromium\_android:tests/run\_webview\_cts\_test](/scripts/slave/recipe_modules/chromium_android/tests/run_webview_cts_test.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium_android/tests/run_webview_cts_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_android/tests/run_webview_cts_test.py#13)(api):**
 ### *recipes* / [chromium\_android:tests/stackwalker](/scripts/slave/recipe_modules/chromium_android/tests/stackwalker.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_android/tests/stackwalker.py#5): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [recipe\_engine/path][recipe_engine/recipe_modules/path]
@@ -4460,9 +4466,9 @@ without error.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/swarming_isolated_script_test.py#32)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/web\_view\_cts\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/web_view_cts_test.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/web_view_cts_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/web_view_cts_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/web_view_cts_test.py#14)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/web_view_cts_test.py#18)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/webrtc\_perf\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/webrtc_perf_test.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/webrtc_perf_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]

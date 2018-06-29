@@ -1,0 +1,128 @@
+[
+  {
+    "cmd": [],
+    "name": "WebView CTS: M"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "None/chrome/VERSION",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "WebView CTS: M.get version",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "None/build/android/adb_install_apk.py",
+      "None/out/Release/apks/SystemWebView.apk",
+      "-v",
+      "--blacklist-file",
+      "None/out/bad_devices.json",
+      "--adb-path",
+      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "--release"
+    ],
+    "env": {
+      "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
+    },
+    "infra_step": true,
+    "name": "WebView CTS: M.install SystemWebView.apk",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/android_webview/tools/run_cts.py",
+      "--arch",
+      "arm64",
+      "--platform",
+      "M",
+      "--skip-expected-failures",
+      "--apk-dir",
+      "[CACHE]",
+      "--json-results-file",
+      "/path/to/tmp/json",
+      "--verbose"
+    ],
+    "name": "WebView CTS: M.Run CTS",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/build/android/pylib/results/presentation/test_results_presentation.py",
+      "--json-file",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
+      "--test-name",
+      "CTS",
+      "--builder-name",
+      "TestBuilder",
+      "--build-number",
+      "571",
+      "--cs-base-url",
+      "http://cs.chromium.org",
+      "--bucket",
+      "chromium-result-details"
+    ],
+    "name": "WebView CTS: M.CTS: generate result details",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "chromium.testing.master",
+      "--builder-name",
+      "TestBuilder",
+      "--build-number",
+      "571",
+      "--test-type",
+      "WebView CTS: M",
+      "--chrome-revision",
+      "x@{#0}",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "name": "WebView CTS: M.Upload to test-results [WebView CTS: M]",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@compile_targets: ['system_webview_apk']@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: True@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

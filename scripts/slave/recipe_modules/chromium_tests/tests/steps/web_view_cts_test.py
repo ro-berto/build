@@ -6,19 +6,23 @@ DEPS = [
     'chromium',
     'chromium_android',
     'chromium_tests',
+    'depot_tools/bot_update',
+    'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/step',
+    'test_results',
+    'test_utils',
 ]
 
 
 def RunSteps(api):
-  api.chromium.set_config('chromium')
+  api.chromium.set_config('android', TARGET_PLATFORM='android')
   api.chromium_android.set_config('main_builder')
 
   test = api.chromium_tests.steps.WebViewCTSTest('M', arch='arm64')
 
   try:
-    test.run(api, '')
+    test.run(api, api.properties['suffix'])
   finally:
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
@@ -29,10 +33,32 @@ def RunSteps(api):
 
 def GenTests(api):
   yield (
-      api.test('basic') +
+      api.test('basic pass') +
       api.properties(
           mastername='test_mastername',
           buildername='test_buildername',
           bot_id='test_bot_id',
-          buildnumber=123)
+          buildnumber=123) +
+      api.step_data("WebView CTS: M.Run CTS", api.test_utils.canned_gtest_output(passing=True)) +
+      api.properties.generic(suffix='')
+  )
+  yield (
+      api.test('basic fail') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          bot_id='test_bot_id',
+          buildnumber=123) +
+      api.step_data("WebView CTS: M.Run CTS", api.test_utils.canned_gtest_output(passing=False)) +
+      api.properties.generic(suffix='')
+  )
+  yield (
+      api.test('with suffix') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          bot_id='test_bot_id',
+          buildnumber=123) +
+      api.step_data("WebView CTS: M (build suffix).Run CTS (build suffix)", api.test_utils.canned_gtest_output(passing=True)) +
+      api.properties.generic(suffix='build suffix')
   )

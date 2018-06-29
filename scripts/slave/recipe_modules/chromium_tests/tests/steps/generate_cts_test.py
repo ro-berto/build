@@ -20,7 +20,7 @@ DEPS = [
 
 def RunSteps(api):
   api.gclient.set_config('chromium')
-  api.chromium.set_config('chromium', TARGET_PLATFORM='android')
+  api.chromium.set_config('android', TARGET_PLATFORM='android')
   api.chromium_android.set_config('main_builder')
 
   update_step = api.bot_update.ensure_checkout()

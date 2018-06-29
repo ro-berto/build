@@ -1,0 +1,36 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/build/android/adb_command_line.py",
+      "--adb-path",
+      "None/third_party/android_tools/sdk/platform-tools/adb",
+      "--name",
+      "webview-command-line",
+      "--webview-test-flag"
+    ],
+    "name": "write webview command line file"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/android_webview/tools/run_cts.py",
+      "--arch",
+      "arm64",
+      "--platform",
+      "N",
+      "--skip-expected-failures",
+      "--apk-dir",
+      "[CACHE]",
+      "--verbose"
+    ],
+    "name": "Run CTS"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
