@@ -318,11 +318,7 @@ class V8Api(recipe_api.RecipeApi):
     solution = self.m.gclient.c.solutions[0]
     branch = self.m.properties.get('branch', 'master')
     if RELEASE_BRANCH_RE.match(branch):
-      if branch.startswith('refs/branch-heads/'):
-        revision = '%s:%s' % (branch, revision)
-      else:
-        # TODO(sergiyb): Deprecate this after migrating branch builders to LUCI.
-        revision = 'refs/branch-heads/%s:%s' % (branch, revision)
+      revision = 'refs/branch-heads/%s:%s' % (branch, revision)
     solution.revision = revision
 
     self.checkout_root = self.m.path['builder_cache']
