@@ -86,6 +86,7 @@ SPEC = freeze({
       'gen_repo_branch': 'master',
       'gen_repo_out_dir': 'chromeos-Debug',
       'corpus': 'chromium',
+      'root': 'chromium-chromeos',
     },
     'codesearch-gen-chromium-android': {
       'gclient_config': 'chromium',
@@ -195,17 +196,6 @@ def RunSteps(api, root_solution_revision):
                        out_dir=joined_gen_repo_out_dir,
                        out_dir_includes_config=True)
 
-  if platform == 'chromeos':
-    # Generate a compilation database for Linux at a temporary location, then
-    # use this to filter the ChromeOS compilation database.
-    try:
-      temp_file = api.path.mkstemp(prefix='compdb_filter')
-      api.codesearch.generate_compilation_database(
-          targets, 'linux', output_file=temp_file)
-      api.codesearch.filter_compilation(temp_file)
-    finally:
-      api.file.remove('remove temporary compilation database', temp_file)
-
   # Download and run the clang tool.
   api.codesearch.run_clang_tool()
 
@@ -223,30 +213,24 @@ def _sanitize_nonalpha(text):
 def GenTests(api):
   for buildername, config in SPEC['builders'].iteritems():
     platform = config.get('platform')
-    test = api.test('full_%s' % (_sanitize_nonalpha(buildername)))
-    test += api.step_data('generate compilation database for %s' % platform,
-                          stdout=api.raw_io.output_text('some compilation data'))
-    if platform == 'chromeos':
-      test += api.step_data('generate compilation database for linux',
-                            stdout=api.raw_io.output_text('some compilation data'))
-    test += api.properties.generic(buildername=buildername,
-                                   mastername='chromium.infra.codesearch')
-
-    yield test
+    yield (
+        api.test('full_%s' % (_sanitize_nonalpha(buildername))) +
+        api.step_data('generate compilation database for %s' % platform,
+                      stdout=api.raw_io.output_text('some compilation data')) +
+        api.properties.generic(buildername=buildername,
+                               mastername='chromium.infra.codesearch')
+    )
 
   for buildername, config in SPEC['builders'].iteritems():
     platform = config.get('platform')
-    test = api.test('full_%s_with_revision' % (_sanitize_nonalpha(buildername)))
-    test += api.step_data('generate compilation database for %s' % platform,
-                          stdout=api.raw_io.output_text('some compilation data'))
-    if platform == 'chromeos':
-      test += api.step_data('generate compilation database for linux',
-                            stdout=api.raw_io.output_text('some compilation data'))
-    test += api.properties.generic(buildername=buildername,
-                                   mastername='chromium.infra.codesearch')
-    test += api.properties(root_solution_revision="deadbeef")
-
-    yield test
+    yield (
+        api.test('full_%s_with_revision' % (_sanitize_nonalpha(buildername))) +
+        api.step_data('generate compilation database for %s' % platform,
+                      stdout=api.raw_io.output_text('some compilation data')) +
+        api.properties.generic(buildername=buildername,
+                               mastername='chromium.infra.codesearch') +
+        api.properties(root_solution_revision="deadbeef")
+    )
 
   yield (
     api.test(
@@ -272,8 +256,6 @@ def GenTests(api):
     api.test(
         'full_%s_translation_unit_fail' % _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
     api.step_data('generate compilation database for chromeos',
-                  stdout=api.raw_io.output_text('some compilation data')) +
-    api.step_data('generate compilation database for linux',
                   stdout=api.raw_io.output_text('some compilation data')) +
     api.step_data('run translation_unit clang tool', retcode=2) +
     api.properties.generic(buildername='codesearch-gen-chromium-chromiumos',
