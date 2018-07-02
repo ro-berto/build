@@ -777,6 +777,10 @@ def _main_impl(argv, stream):
 
 
 def main(argv, stream, passthrough=False):
+  # We always want everything to be unbuffered so that we can see the logs on
+  # buildbot/logdog as soon as they're available.
+  os.environ['PYTHONUNBUFFERED'] = '1'
+
   exc_info = None
   try:
     return _main_impl(argv, stream)

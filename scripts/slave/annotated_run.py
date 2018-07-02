@@ -382,6 +382,10 @@ def _exec_recipe(rt, opts, stream, basedir, tdir, properties):
 
 
 def main(argv):
+  # We always want everything to be unbuffered so that we can see the logs on
+  # buildbot/logdog as soon as they're available.
+  os.environ['PYTHONUNBUFFERED'] = '1'
+
   opts = get_args(argv)
 
   if opts.verbose == 0:
