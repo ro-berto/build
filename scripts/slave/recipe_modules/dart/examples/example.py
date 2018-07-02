@@ -55,7 +55,7 @@ TEST_MATRIX = {
   },
   "global": {
     "chrome": "66.0.3359.139",
-    "ff": "60.0.1"
+    "ff": "61"
   },
   "configurations": [
     {
@@ -90,7 +90,7 @@ TEST_MATRIX = {
         "arguments": ["foo", "--bar", "--buildername"]
       }, {
         "name": "Test-step 3",
-        "arguments": ["foo", "--bar"],
+        "arguments": ["foo", "--bar", "-rff"],
         "fileset": "fileset1",
         "shards": 2
       }]

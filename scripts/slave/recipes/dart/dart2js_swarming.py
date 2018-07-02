@@ -136,23 +136,29 @@ def test_runtime(api, system, runtime, options, mode, tasks, isolate_hash):
   if system in ['win7', 'win8', 'win10']:
     test_args.append('--builder-tag=%s' % system)
   shard_args = command + test_args + use_sdk
+  cipd_packages = [];
   if system == 'linux' and runtime == 'chrome':
+    cipd_packages.append((
+      'browsers', 'dart/browsers/chrome/${platform}', 'stable'))
     shard_args.append('--chrome=browsers/chrome/google-chrome')
   if 'kernel' in options:
     tests = ['language', 'corelib', 'dart2js_extra', 'dart2js_native']
-    tasks.append(api.dart.shard('dart2js_kernel_tests', isolate_hash, shard_args + tests))
+    tasks.append(api.dart.shard('dart2js_kernel_tests', isolate_hash,
+        shard_args + tests, cipd_packages=cipd_packages))
 
     tests = ['language_2', 'corelib_2']
     strong_args = shard_args + ['--strong'] + tests
     strong_args.remove('--no-preview-dart-2')
     tasks.append(api.dart.shard('dart2js_kernel_strong_tests', isolate_hash,
-        strong_args))
+                                strong_args, cipd_packages=cipd_packages))
   else:
     tests = ['--exclude-suite=observatory_ui,service,co19']
-    tasks.append(api.dart.shard('dart2js_tests', isolate_hash, shard_args + tests))
+    tasks.append(api.dart.shard('dart2js_tests', isolate_hash,
+        shard_args + tests, cipd_packages=cipd_packages))
 
     tests = ['co19']
-    tasks.append(api.dart.shard('dart2js_co19_tests', isolate_hash, shard_args + tests))
+    tasks.append(api.dart.shard('dart2js_co19_tests', isolate_hash,
+        shard_args + tests, cipd_packages=cipd_packages))
 
     test_args.extend(['--write-debug-log', '--write-test-outcome-log'])
 

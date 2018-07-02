@@ -18,6 +18,14 @@ CHROME_PATH_ARGUMENT = {
   'win': '--chrome=browsers\\Chrome\\Application\\chrome.exe'
 }
 
+FIREFOX_PATH_ARGUMENT = {
+  'linux': '--firefox=browsers/firefox/firefox',
+  'mac': '--firefox=browsers/Firefox.app/Contents/MacOS/firefox',
+  'win7': '--firefox=browsers\\firefox\\firefox.exe',
+  'win10': '--firefox=browsers\\firefox\\firefox.exe',
+  'win': '--firefox=browsers\\firefox\\firefox.exe'
+}
+
 class DartApi(recipe_api.RecipeApi):
   """Recipe module for code commonly used in dart recipes. Shouldn't be used elsewhere."""
 
@@ -144,7 +152,8 @@ class DartApi(recipe_api.RecipeApi):
         stdout=self.m.raw_io.output('out'))
 
   def shard(self, title, isolate_hash, test_args, os=None, cpu='x86-64',
-      pool='dart.tests', num_shards=0, last_shard_is_local=False):
+            pool='dart.tests', num_shards=0, last_shard_is_local=False,
+            cipd_packages=[]):
     """Runs test.py in the given isolate, sharded over several swarming tasks.
        Requires the 'shards' build property to be set to the number of tasks.
        Returns the created task(s), which are meant to be passed into collect().
@@ -155,11 +164,6 @@ class DartApi(recipe_api.RecipeApi):
     tasks = []
     if os is None:
       os = self.m.platform.name
-    cipd_packages = []
-    if '-rchrome' in test_args or '--runtime=chrome' in test_args:
-      cipd_packages.append(('browsers',
-                            'dart/browsers/chrome/${platform}',
-                            'stable'))
     for shard in range(num_shards):
       # TODO(athom) collect all the triggers, and present as a single step
       if last_shard_is_local and shard == num_shards - 1: break
@@ -397,7 +401,8 @@ class DartApi(recipe_api.RecipeApi):
             elif is_test_py_step:
               append_logs = test_py_index > 0
               self.run_test_py(step_name, append_logs, step,
-                  isolate_hash, shards, local_shard, environment, tasks)
+                               isolate_hash, shards, local_shard,
+                               environment, tasks, global_config)
               if shards == 0 or local_shard:
                 # Only count indexes that are not sharded, to help with adding
                 # append-logs.
@@ -418,6 +423,7 @@ class DartApi(recipe_api.RecipeApi):
     #  [sdk root]/browsers
     # Shards must install this CIPD package to the same location -
     # there is an argument to the swarming module task creation api for this.
+    if runtime == 'ff': runtime = 'firefox'
     browser_path = self.m.path['checkout'].join('browsers')
     self.m.file.ensure_directory('create browser cache', browser_path)
     self.m.cipd.set_service_account_credentials(None)
@@ -460,7 +466,7 @@ class DartApi(recipe_api.RecipeApi):
       self.m.step.active_result.presentation.links[builder_name] = build['build']['url']
 
   def run_test_py(self, step_name, append_logs, step, isolate_hash, shards,
-      local_shard, environment, tasks):
+                  local_shard, environment, tasks, global_config):
     """Runs test.py with default arguments, based on configuration from.
     Args:
       * step_name (str) - Name of the step
@@ -472,6 +478,8 @@ class DartApi(recipe_api.RecipeApi):
       * local_shard (bool) - Should the current builder be one of the shards.
       * environment (dict) - Environment with runtime, arch, system etc
       * tasks ([task]) - placeholder to put all swarming tasks in
+      * global_config (dict) - The global section from test_matrix.json.
+        Contains version tags for the pinned browsers Firefox and Chrome.
     """
     args = step.get('arguments', [])
     test_args = ['--progress=buildbot',
@@ -494,27 +502,39 @@ class DartApi(recipe_api.RecipeApi):
     if environment['system'] in ['win7', 'win8', 'win10']:
       args = args + ['--builder-tag=%s' % environment['system']]
     # The --chrome flag is added here if the runtime for the bot is
-    # chrome. This misses the case where there is a specific
-    # argument -r or --runtime. It also misses the case where
+    # chrome. This also catches the case where there is a specific
+    # argument -r or --runtime. It misses the case where
     # a recipe calls run_script directly with a test.py command.
     # The download of the browser from CIPD should also be moved
     # here (perhaps checking if it is already done) so we catch
     # specific test steps with runtime chrome in a bot without that
     # global runtime.
-    if environment.get('runtime') == 'chrome':
+    cipd_packages = []
+    if any(arg in ['-rchrome', '--runtime=chrome'] for arg in args):
+      version_tag = 'version:%s' % global_config['chrome']
+      cipd_packages.append(('browsers',
+                            'dart/browsers/chrome/${platform}',
+                            version_tag))
       args = args + [CHROME_PATH_ARGUMENT[environment['system']]]
+    if any(arg in ['-rff', '--runtime=ff'] for arg in args):
+      version_tag = 'version:%s' % global_config['ff']
+      cipd_packages.append(('browsers',
+                            'dart/browsers/firefox/${platform}',
+                            version_tag))
+      args = args + [FIREFOX_PATH_ARGUMENT[environment['system']]]
     if 'exclude_tests' in step:
         args = args + ['--exclude_suite=' + ','.join(step['exclude_tests'])]
     if 'tests' in step:
       args = args + step['tests']
     with self.m.step.defer_results():
       self.run_script(step_name, 'tools/test.py', args, isolate_hash, shards,
-          local_shard, environment, tasks)
+                      local_shard, environment, tasks,
+                      cipd_packages=cipd_packages)
       if shards == 0 or local_shard:
         self.read_result_file('read results of %s' % step_name, 'result.log')
 
   def run_script(self, step_name, script, args, isolate_hash, shards,
-      local_shard, environment, tasks):
+                 local_shard, environment, tasks, cipd_packages=[]):
     """Runs a specific script with current working directory to be checkout. If
     the runtime (passed in environment) is a browser, and the system is linux,
     xvfb is used. If an isolate_hash is passed in, it will swarm the command.
@@ -526,7 +546,9 @@ class DartApi(recipe_api.RecipeApi):
       * shards (int) - The number of shards to invoke
       * local_shard (bool) - Should the current builder be used as a shard
       * environment (dict) - Environment with runtime, arch, system etc
-      * tasks ([task]) - placeholder to put all swarming tasks in
+      * tasks ([task]) - placeholder to hold swarming tasks
+      * cipd_packages ([tuple]) - list of 3-tuples specifying a cipd package
+        to be downloaded
     """
     runtime = self._get_specific_argument(args, ['-r', '--runtime'])
     if runtime is None:
@@ -542,13 +564,17 @@ class DartApi(recipe_api.RecipeApi):
         cmd = xvfb_cmd + ['python', '-u', script] + args
         if isolate_hash:
           tasks.append(self.shard(step_name, isolate_hash, cmd,
-              num_shards=shards, last_shard_is_local=local_shard))
+                                  num_shards=shards,
+                                  last_shard_is_local=local_shard,
+                                  cipd_packages=cipd_packages))
         else:
           self.m.step(step_name, cmd)
       else:
         if isolate_hash:
           tasks.append(self.shard(step_name, isolate_hash, [script] + args,
-              num_shards=shards, last_shard_is_local=local_shard))
+                                  num_shards=shards,
+                                  last_shard_is_local=local_shard,
+                                  cipd_packages=cipd_packages))
         elif '.py' in str(script):
           self.m.python(step_name, script, args=args)
         else:
@@ -560,4 +586,4 @@ class DartApi(recipe_api.RecipeApi):
           '--shard=%s' % shards
         ]
         self.run_script("%s_shard_%s" % (step_name, shards), script,
-            args, None, 0, False, environment, tasks)
+            args, None, 0, False, environment, tasks, cipd_packages)

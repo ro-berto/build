@@ -932,7 +932,8 @@
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"--bar\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"-rff\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
       "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"fileset1\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 3\", @@@",
@@ -1000,7 +1001,7 @@
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"global\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"chrome\": \"66.0.3359.139\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"ff\": \"60.0.1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ff\": \"61\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"

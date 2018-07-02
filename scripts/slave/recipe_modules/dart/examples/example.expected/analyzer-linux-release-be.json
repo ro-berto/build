@@ -932,7 +932,8 @@
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"--bar\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"-rff\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
       "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"fileset1\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 3\", @@@",
@@ -1000,7 +1001,7 @@
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"global\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"chrome\": \"66.0.3359.139\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"ff\": \"60.0.1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"ff\": \"61\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -1468,7 +1469,8 @@
       "--write-test-outcome-log",
       "foo",
       "--bar",
-      "-rchrome"
+      "-rchrome",
+      "--chrome=browsers/chrome/google-chrome"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -1658,6 +1660,8 @@
       "--tag",
       "stepname:Test-step 3_shard_1",
       "--cipd-package",
+      "browsers:dart/browsers/firefox/${platform}:version:61",
+      "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
       ".swarming_module:infra/tools/luci/logdog/butler/${platform}:TEST_VERSION",
@@ -1678,6 +1682,11 @@
       "test isolate hash",
       "--raw-cmd",
       "--",
+      "/usr/bin/xvfb-run",
+      "-a",
+      "--server-args=-screen 0 1024x768x24",
+      "python",
+      "-u",
       "tools/test.py",
       "-ax64",
       "-mrelease",
@@ -1690,7 +1699,9 @@
       "--write-test-outcome-log",
       "foo",
       "--bar",
+      "-rff",
       "--append_logs",
+      "--firefox=browsers/firefox/firefox",
       "--shards=2",
       "--shard=1",
       "--output_directory=${ISOLATED_OUTDIR}"
@@ -1724,6 +1735,9 @@
   },
   {
     "cmd": [
+      "/usr/bin/xvfb-run",
+      "-a",
+      "--server-args=-screen 0 1024x768x24",
       "python",
       "-u",
       "tools/test.py",
@@ -1738,7 +1752,9 @@
       "--write-test-outcome-log",
       "foo",
       "--bar",
+      "-rff",
       "--append_logs",
+      "--firefox=browsers/firefox/firefox",
       "--shards=2",
       "--shard=2"
     ],
