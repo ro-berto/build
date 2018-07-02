@@ -84,6 +84,7 @@ SPEC = freeze({
       'platform': 'chromeos',
       'sync_generated_files': True,
       'gen_repo_branch': 'master',
+      # Generated files will end up in out/chromeos-Debug/gen.
       'gen_repo_out_dir': 'chromeos-Debug',
       'corpus': 'chromium',
       'root': 'chromium-chromeos',
@@ -96,8 +97,8 @@ SPEC = freeze({
       'platform': 'android',
       'sync_generated_files': True,
       'gen_repo_branch': 'master',
-      # Generated files will end up in out/chromium-android/Debug/gen.
-      'gen_repo_out_dir': 'chromium-android/Debug',
+      # Generated files will end up in out/android-Debug/gen.
+      'gen_repo_out_dir': 'android-Debug',
       'corpus': 'chromium',
       'root': 'chromium-android',
     },
