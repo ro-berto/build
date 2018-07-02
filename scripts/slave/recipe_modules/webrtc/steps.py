@@ -15,6 +15,7 @@ sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
 from chromium_tests.steps import SwarmingGTestTest
 from chromium_tests.steps import SwarmingIsolatedScriptTest
 
+from webrtc.api import WEBRTC_GS_BUCKET
 
 PERF_CONFIG = {'a_default_rev': 'r_webrtc_git'}
 DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
@@ -131,16 +132,20 @@ ANDROID_PERF_TESTS = freeze({
 })
 
 
-def generate_tests(api, test_suite, phase, revision):
+def generate_tests(api, test_suite, phase, revision,
+                   baremetal_swarming_dimensions, recipe_config, perf_id,
+                   revision_number,
+                   should_test_android_studio_project_generation):
   tests = []
-  build_out_dir = api.m.path['checkout'].join(
-      'out', api.m.chromium.c.build_config_fs)
+  build_out_dir = api.path['checkout'].join(
+      'out', api.chromium.c.build_config_fs)
 
   if test_suite in ('webrtc', 'webrtc_and_baremetal'):
     for test, extra_args in sorted(NORMAL_TESTS.items()):
       tests.append(SwarmingWebRtcGtestTest(test, **extra_args))
 
-    if api.mastername == 'client.webrtc.fyi' and api.m.platform.is_win:
+    if api.properties['mastername'] == 'client.webrtc.fyi' and (
+        api.platform.is_win):
       tests.append(BaremetalTest(
           'modules_tests',
           name='modules_tests (screen capture disabled tests)',
@@ -152,82 +157,78 @@ def generate_tests(api, test_suite, phase, revision):
     def add_test(name):
       tests.append(SwarmingWebRtcGtestTest(
           name,
-          dimensions=api.bot_config['baremetal_swarming_dimensions'],
+          dimensions=baremetal_swarming_dimensions,
           **BAREMETAL_TESTS[name]))
 
     # TODO(bugs.webrtc.org/9292): enable on linux when webcams work.
-    if not api.m.platform.is_linux:
+    if not api.platform.is_linux:
       add_test('video_capture_tests')
 
     # Cover tests only running on perf tests on our trybots:
-    if api.m.tryserver.is_tryserver:
-      if api.m.platform.is_linux:
+    if api.tryserver.is_tryserver:
+      if api.platform.is_linux:
         add_test('isac_fix_test')
 
-      is_win_clang = (api.m.platform.is_win and
-                      'clang' in api.bot_config['recipe_config'])
+      is_win_clang = (api.platform.is_win and 'clang' in recipe_config)
 
       # TODO(kjellander): Enable on Mac when bugs.webrtc.org/7322 is fixed.
       # TODO(oprypin): Enable on MSVC when bugs.webrtc.org/9290 is fixed.
-      if api.m.platform.is_linux or is_win_clang:
+      if api.platform.is_linux or is_win_clang:
         add_test('webrtc_perf_tests')
 
   if test_suite == 'desktop_perf_swarming':
     for test, extra_args in sorted(PERF_TESTS.items()):
       tests.append(SwarmingPerfTest(test, **extra_args))
-  if test_suite == 'android_perf_swarming' and api.c.PERF_ID:
+  if test_suite == 'android_perf_swarming' and perf_id:
     for test, extra_args in sorted(ANDROID_PERF_TESTS.items()):
       tests.append(SwarmingAndroidPerfTest(test, **extra_args))
-  if test_suite == 'android_perf' and api.c.PERF_ID:
+  if test_suite == 'android_perf' and perf_id:
     # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest(
         'webrtc_perf_tests',
         args=['--save_worst_frame'],
         revision=revision,
-        revision_number=api.revision_number,
-        perf_id=api.c.PERF_ID,
+        revision_number=revision_number,
+        perf_id=perf_id,
         upload_test_artifacts=True))
 
     tests.append(PerfTest(
-        str(api.m.path['checkout'].join('audio', 'test',
+        str(api.path['checkout'].join('audio', 'test',
                                         'low_bandwidth_audio_test.py')),
         name='low_bandwidth_audio_test',
-        args=[api.m.chromium.output_dir, '--remove',
-              '--android', '--adb-path', api.m.adb.adb_path()],
-        revision=revision,
-        revision_number=api.revision_number,
-        perf_id=api.c.PERF_ID))
+        args=[api.chromium.output_dir, '--remove',
+              '--android', '--adb-path', api.adb.adb_path()],
+        revision=revision, revision_number=revision_number,
+        perf_id=perf_id))
 
     # Skip video_quality_loopback_test on Android K bot (not supported).
     # TODO(oprypin): Re-enable on Nexus 4 once webrtc:7724 is fixed.
-    if 'kitkat' not in api.c.PERF_ID and 'nexus4' not in api.c.PERF_ID:
+    if 'kitkat' not in perf_id and 'nexus4' not in perf_id:
       tests.append(PerfTest(
-          str(api.m.path['checkout'].join('examples', 'androidtests',
+          str(api.path['checkout'].join('examples', 'androidtests',
                                           'video_quality_loopback_test.py')),
           name='video_quality_loopback_test',
-          args=['--adb-path', api.m.adb.adb_path(), build_out_dir],
-          revision=revision,
-          revision_number=api.revision_number,
-          perf_id=api.c.PERF_ID))
+          args=['--adb-path', api.adb.adb_path(), build_out_dir],
+          revision=revision, revision_number=revision_number, perf_id=perf_id))
 
   if test_suite == 'android':
     for test, extra_args in sorted(ANDROID_DEVICE_TESTS.items() +
                                    ANDROID_INSTRUMENTATION_TESTS.items()):
       tests.append(AndroidTest(test, **extra_args))
     for test, extra_args in sorted(ANDROID_JUNIT_TESTS.items()):
-      if api.mastername == 'client.webrtc.fyi':
+      if api.properties['mastername'] == 'client.webrtc.fyi':
         tests.append(AndroidTest(test, **extra_args))
       else:
         tests.append(AndroidJunitTest(test))
 
-    if api.should_test_android_studio_project_generation:
+    if should_test_android_studio_project_generation:
        tests.append(PythonTest(
           test='gradle_project_test',
-          script=str(api.m.path['checkout'].join('examples',  'androidtests',
+          script=str(api.path['checkout'].join('examples',  'androidtests',
                                                  'gradle_project_test.py')),
           args=[build_out_dir],
           env={'GOMA_DISABLED': True}))
-    if api.m.tryserver.is_tryserver:
+    if api.tryserver.is_tryserver:
       tests.append(AndroidTest(
           'webrtc_perf_tests',
           args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
@@ -350,17 +351,17 @@ class BaremetalTest(Test):
 
   def run(self, api, suffix):
     test_type = self._test
-    test = api.m.path['checkout'].join('tools_webrtc',
+    test = api.path['checkout'].join('tools_webrtc',
                                        'gtest-parallel-wrapper.py')
-    test_ext = '.exe' if api.m.platform.is_win else ''
-    test_executable = api.m.chromium.c.build_dir.join(
-      api.m.chromium.c.build_config_fs, self._test + test_ext)
+    test_ext = '.exe' if api.platform.is_win else ''
+    test_executable = api.chromium.c.build_dir.join(
+      api.chromium.c.build_config_fs, self._test + test_ext)
 
     args = [test_executable]
     if not self._parallel: args.append('--workers=1')
     args += self._gtest_args
 
-    api.m.chromium.runtest(
+    api.chromium.runtest(
         test=test, args=args, name=self._name, annotate=None, xvfb=True,
         python_mode=True, revision=self._revision, test_type=test_type,
         **self._runtest_kwargs)
@@ -374,9 +375,9 @@ class PythonTest(Test):
     self._env = env or {}
 
   def run(self, api, suffix):
-    with api.m.depot_tools.on_path():
-      with api.m.context(env=self._env):
-        api.m.python(self._test, self._script, self._args)
+    with api.depot_tools.on_path():
+      with api.context(env=self._env):
+        api.python(self._test, self._script, self._args)
 
 
 class AndroidTest(SwarmingGTestTest):
@@ -495,8 +496,8 @@ class PerfTest(Test):
   def run(self, api, suffix):
     # Some of the perf tests depend on depot_tools for
     # download_from_google_storage and gsutil usage.
-    with api.m.depot_tools.on_path():
-      api.m.chromium.runtest(
+    with api.depot_tools.on_path():
+      api.chromium.runtest(
           test=self._test, name=self._name, args=self._args,
           results_url=DASHBOARD_UPLOAD_URL, annotate='graphing', xvfb=True,
           perf_dashboard_id=self._name, test_type=self._name,
@@ -508,7 +509,7 @@ class AndroidJunitTest(Test):
   """Runs an Android Junit test."""
 
   def run(self, api, suffix):
-    api.m.chromium_android.run_java_unit_test_suite(self._name)
+    api.chromium_android.run_java_unit_test_suite(self._name)
 
 
 class AndroidPerfTest(PerfTest):
@@ -529,23 +530,23 @@ class AndroidPerfTest(PerfTest):
         upload_test_artifacts=upload_test_artifacts, python_mode=True)
 
   def _prepare_test_artifacts_upload(self, api):
-    gtest_results_file = api.m.test_utils.gtest_results(add_json_log=False)
-    self._args.extend(['--gs-test-artifacts-bucket', api.WEBRTC_GS_BUCKET,
+    gtest_results_file = api.test_utils.gtest_results(add_json_log=False)
+    self._args.extend(['--gs-test-artifacts-bucket', WEBRTC_GS_BUCKET,
                        '--json-results-file', gtest_results_file])
 
   def _upload_test_artifacts(self, api):
-    step_result = api.m.step.active_result
+    step_result = api.step.active_result
     if (hasattr(step_result, 'test_utils') and
         hasattr(step_result.test_utils, 'gtest_results')):
-      json_results = api.m.json.input(step_result.test_utils.gtest_results.raw)
-      details_link = api.m.chromium_android.create_result_details(
+      json_results = api.json.input(step_result.test_utils.gtest_results.raw)
+      details_link = api.chromium_android.create_result_details(
           self._name, json_results)
-      api.m.step.active_result.presentation.links['result_details'] = (
+      api.step.active_result.presentation.links['result_details'] = (
           details_link)
 
   @composite_step
   def run(self, api, suffix):
-    wrapper_script = api.m.chromium.output_dir.join('bin',
+    wrapper_script = api.chromium.output_dir.join('bin',
                                                     'run_%s' % self._name)
     self._test = wrapper_script
     if self._should_upload_test_artifacts:

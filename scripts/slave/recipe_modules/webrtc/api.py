@@ -7,6 +7,8 @@ import sys
 
 from recipe_engine import recipe_api
 
+WEBRTC_GS_BUCKET = 'chromium-webrtc'
+
 from . import builders
 from . import steps
 
@@ -30,7 +32,6 @@ class WebRTCApi(recipe_api.RecipeApi):
   BUILDERS = builders.BUILDERS
   RECIPE_CONFIGS = builders.RECIPE_CONFIGS
 
-  WEBRTC_GS_BUCKET = 'chromium-webrtc'
 
   @property
   def should_build(self):
@@ -110,8 +111,11 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def configure_isolate(self, phase=None):
     if self.c.enable_swarming:
-      tests = steps.generate_tests(self, self.c.TEST_SUITE, phase,
-                                   self.revision)
+      tests = steps.generate_tests(
+        self.m, self.c.TEST_SUITE, phase, self.revision,
+        self.bot_config.get('baremetal_swarming_dimensions'),
+        self.bot_config['recipe_config'], self.c.PERF_ID, self.revision_number,
+        self.should_test_android_studio_project_generation)
       self._isolated_targets = [test._name for test in tests
                                 if isinstance(test, SwarmingTest)]
       self._isolated_targets.sort()
@@ -233,8 +237,11 @@ class WebRTCApi(recipe_api.RecipeApi):
       test_suite=The name of the test suite.
     """
     with self.m.context(cwd=self._working_dir):
-      tests = steps.generate_tests(self, self.c.TEST_SUITE, phase,
-                                   self.revision)
+      tests = steps.generate_tests(
+        self.m, self.c.TEST_SUITE, phase, self.revision,
+        self.bot_config.get('baremetal_swarming_dimensions'),
+        self.bot_config['recipe_config'], self.c.PERF_ID, self.revision_number,
+        self.should_test_android_studio_project_generation)
       with self.m.step.defer_results():
         if tests:
           run_android_device_steps = (not self.c.enable_swarming and
@@ -247,7 +254,7 @@ class WebRTCApi(recipe_api.RecipeApi):
             test.pre_run(self.m, suffix='')
 
           for test in tests:
-            test.run(self, suffix='')
+            test.run(self.m, suffix='')
 
           # Build + upload archives while waiting for swarming tasks to finish.
           if self.bot_config.get('build_android_archive'):
@@ -340,7 +347,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     apk_upload_url = 'client.webrtc/%s/AppRTCMobile_apk_%s.zip' % (
         self.buildername, self.revision_number)
     if not self.m.runtime.is_experimental:
-      self.m.gsutil.upload(zip_path, self.WEBRTC_GS_BUCKET, apk_upload_url,
+      self.m.gsutil.upload(zip_path, WEBRTC_GS_BUCKET, apk_upload_url,
                            args=['-a', 'public-read'], unauthenticated_url=True)
 
   def extract_build(self):
