@@ -161,6 +161,10 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
 def RunSteps(api):
   # Ensure a proper branch is specified.
   branch = api.properties.get('branch')
+  # The luci-scheduler service specifies fully-qualified branch name, therefore
+  # remove the refs/branch-heads/ prefix if present.
+  if branch and branch.startswith('refs/branch-heads/'):
+    branch = branch[len('refs/branch-heads/'):]
   if not branch or not BRANCH_RE.match(branch):
     raise api.step.InfraFailure('A release branch must be specified.')
   repo = api.properties.get('repo', REPO)
@@ -246,7 +250,7 @@ def GenTests(api):
         api.test(name) +
         api.properties.generic(mastername='client.v8.fyi',
                                buildername='Auto-tag',
-                               branch='3.4',
+                               branch='refs/branch-heads/3.4',
                                path_config='kitchen') +
         api.v8.version_file(patch_level_latest, 'latest') +
         api.v8.version_file(patch_level_previous, 'previous') +
