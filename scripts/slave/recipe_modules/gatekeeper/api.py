@@ -14,9 +14,6 @@ class Gatekeeper(recipe_api.RecipeApi):
     ).json.output
 
     for tree_name, tree_args in config.iteritems():
-      # TODO(martiniss): create a creds recipe module to make a nice path
-      # reference to /creds
-
       # Use tree-specific config if specified, otherwise use default.
       # Tree-specific configs must be relative to the trees file.
       gatekeeper_json = gatekeeper_default_json
@@ -27,8 +24,7 @@ class Gatekeeper(recipe_api.RecipeApi):
             *tree_args['config'].split('/'))
 
       args = [
-          '--json', gatekeeper_json, '--email-app-secret-file',
-          '/creds/gatekeeper/mailer_password',
+          '--json', gatekeeper_json,
           '--service-account-path',
           self.m.puppet_service_account.get_key_path('gatekeeper'),
       ]

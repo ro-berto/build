@@ -45,8 +45,6 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
       "--json",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper.json",
-      "--email-app-secret-file",
-      "/creds/gatekeeper/mailer_password",
       "--service-account-path",
       "/creds/service_accounts/service-account-gatekeeper.json"
     ],
@@ -68,8 +66,6 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
       "--json",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper.json",
-      "--email-app-secret-file",
-      "/creds/gatekeeper/mailer_password",
       "--service-account-path",
       "/creds/service_accounts/service-account-gatekeeper.json",
       "--status-url",
