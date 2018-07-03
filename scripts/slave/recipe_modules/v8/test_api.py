@@ -14,10 +14,11 @@ from recipe_engine.post_process import Filter
 from . import builders
 from . import testing
 
-# Simulated branch names for testing. Optionally upgrade these in branch
-# period to reflect the real branches used by the gitiles poller.
+# Simulated branch names for testing. Optionally upgrade these in branch period
+# to reflect the real branches used by the gitiles poller. Fully-qualified ref
+# format for beta branch below simulates the way branches are specified on LUCI.
 STABLE_BRANCH = '4.2'
-BETA_BRANCH = '4.3'
+BETA_BRANCH = 'refs/branch-heads/4.3'
 
 # Excerpt of the v8 version file.
 VERSION_FILE_TMPL = """
