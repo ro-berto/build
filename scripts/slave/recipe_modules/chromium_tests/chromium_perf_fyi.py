@@ -34,16 +34,14 @@ def _AddBuildSpec(name, perf_id, platform, config_name='chromium_perf',
       config_name, perf_id, platform, target_bits,
       compile_targets=compile_targets,
       extra_compile_targets=extra_compile_targets,
-      force_exparchive=force_exparchive, run_sizes=run_sizes,
-      use_private_swarming_server=True, use_private_isolate_server=True)
+      force_exparchive=force_exparchive, run_sizes=run_sizes)
 
 
 def _AddIsolatedTestSpec(name, perf_id, platform,
                          parent_buildername=None, target_bits=64):
   spec = chromium_perf.TestSpec(
       'chromium_perf', perf_id, platform, target_bits,
-      parent_buildername=parent_buildername,
-      use_private_swarming_server=True, use_private_isolate_server=True)
+      parent_buildername=parent_buildername)
   if not parent_buildername:
     spec['parent_mastername'] = 'chromium.perf' #pragma: no cover
   else:

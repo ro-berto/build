@@ -43,7 +43,6 @@ def chromium_perf(c):
 
 
 def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
-              use_private_swarming_server, use_private_isolate_server,
               remove_system_webview=None):
   spec = {
     'bot_type': bot_type,
@@ -67,27 +66,19 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
     spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
     spec['gclient_apply_config'] = ['android']
 
-  # TODO(crbug.com/818319): always set these private servers after we migrate
-  # all perf bots.
-  if use_private_swarming_server:
-    spec['swarming_server'] = 'https://chrome-swarming.appspot.com'
-    spec['swarming_service_account'] = 'chrome-perf-buildbot'
 
-  # TODO(crbug.com/818319): always set these private servers after we migrate
-  # all perf bots.
-  # This will get covered when we convert a builder to upload files to private
-  # isolate server. (crbug.com/818319)
-  if use_private_isolate_server: # pragma: no cover
-    spec['isolate_server'] = 'chrome-isolated.appspot.com'
-    spec['isolate_service_account'] = 'chrome-perf-buildbot'
+  spec['swarming_server'] = 'https://chrome-swarming.appspot.com'
+  spec['swarming_service_account'] = 'chrome-perf-buildbot'
+
+  spec['isolate_server'] = 'chrome-isolated.appspot.com'
+  spec['isolate_service_account'] = 'chrome-perf-buildbot'
   return spec
 
 
 def BuildSpec(
   config_name, perf_id, platform, target_bits,
   compile_targets=None, extra_compile_targets=None, force_exparchive=False,
-  run_sizes=True, use_private_swarming_server=False,
-  use_private_isolate_server=False):
+  run_sizes=True):
   if not compile_targets:
     compile_targets = ['chromium_builder_perf']
 
@@ -102,8 +93,6 @@ def BuildSpec(
       platform=platform,
       target_bits=target_bits,
       tests=tests,
-      use_private_swarming_server=use_private_swarming_server,
-      use_private_isolate_server=use_private_isolate_server,
   )
 
   spec['perf_isolate_lookup'] = True
@@ -119,17 +108,13 @@ def BuildSpec(
 
 
 def TestSpec(config_name, perf_id, platform, target_bits,
-             parent_buildername=None, tests=None, remove_system_webview=None,
-             use_private_swarming_server=False,
-             use_private_isolate_server=False):
+             parent_buildername=None, tests=None, remove_system_webview=None):
   spec = _BaseSpec(
       bot_type='tester',
       config_name=config_name,
       platform=platform,
       target_bits=target_bits,
       tests=tests or [],
-      use_private_swarming_server=use_private_swarming_server,
-      use_private_isolate_server=use_private_isolate_server,
       remove_system_webview=remove_system_webview,
   )
 
@@ -143,13 +128,9 @@ def TestSpec(config_name, perf_id, platform, target_bits,
 
 
 def _AddIsolatedTestSpec(name, perf_id, platform, target_bits=64,
-                         parent_buildername=None,
-                         use_private_swarming_server=False,
-                         use_private_isolate_server=False):
+                         parent_buildername=None):
   spec = TestSpec('chromium_perf', perf_id, platform, target_bits,
-                  parent_buildername=parent_buildername,
-                  use_private_swarming_server=use_private_swarming_server,
-                  use_private_isolate_server=use_private_isolate_server)
+                  parent_buildername=parent_buildername)
   SPEC['builders'][name] = spec
 
 
@@ -208,40 +189,30 @@ _AddBuildSpec(
 
 # 32 bit android swarming
 _AddIsolatedTestSpec('Android Nexus5X Perf', 'android-nexus5X', 'android',
-                     parent_buildername='Android Compile Perf', target_bits=32,
-                     use_private_swarming_server=True)
+                     parent_buildername='Android Compile Perf', target_bits=32)
 _AddIsolatedTestSpec('Android Nexus5 Perf', 'android-nexus5', 'android',
-                     target_bits=32, parent_buildername='Android Compile Perf',
-                     use_private_swarming_server=True)
+                     target_bits=32, parent_buildername='Android Compile Perf')
 _AddIsolatedTestSpec('Android One Perf', 'android-one', 'android',
-                     target_bits=32, parent_buildername='Android Compile Perf',
-                     use_private_swarming_server=True)
+                     target_bits=32, parent_buildername='Android Compile Perf')
 
 # Webview
 _AddIsolatedTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
-                     'android', parent_buildername='Android arm64 Compile Perf',
-                     use_private_swarming_server=True)
+                     'android', parent_buildername='Android arm64 Compile Perf')
 _AddIsolatedTestSpec('Android Nexus6 WebView Perf', 'android-webview-nexus6',
                      'android', target_bits=32,
-                     parent_buildername='Android Compile Perf',
-                     use_private_swarming_server=True)
+                     parent_buildername='Android Compile Perf')
 
 
-_AddIsolatedTestSpec('Win 10 High-DPI Perf', 'win-high-dpi', 'win',
-                      use_private_swarming_server=True)
-_AddIsolatedTestSpec('Win 10 Perf', 'chromium-rel-win10', 'win',
-                      use_private_swarming_server=True)
+_AddIsolatedTestSpec('Win 10 High-DPI Perf', 'win-high-dpi', 'win')
+_AddIsolatedTestSpec('Win 10 Perf', 'chromium-rel-win10', 'win')
 _AddIsolatedTestSpec('Win 7 Perf', 'chromium-rel-win7-dual', 'win',
-                     target_bits=32, use_private_swarming_server=True)
+                     target_bits=32)
 _AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'chromium-rel-win7-gpu-nvidia',
-                     'win', use_private_swarming_server=True)
+                     'win')
 
 
-_AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', '', 'mac',
-                     use_private_swarming_server=True)
-_AddIsolatedTestSpec('mac-10_13_laptop_high_end-perf', '', 'mac',
-                     use_private_swarming_server=True)
+_AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', '', 'mac')
+_AddIsolatedTestSpec('mac-10_13_laptop_high_end-perf', '', 'mac')
 
 
-_AddIsolatedTestSpec('linux-perf', '', 'linux',
-    use_private_swarming_server=True)
+_AddIsolatedTestSpec('linux-perf', '', 'linux')
