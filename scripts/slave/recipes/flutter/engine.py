@@ -549,7 +549,7 @@ def RunSteps(api):
   GetCheckout(api)
 
   checkout = api.path['start_dir'].join('src')
-  dart_bin = checkout.join('third_party', 'dart', 'tools', 'sdks', 'linux', 'dart-sdk', 'bin')
+  dart_bin = checkout.join('third_party', 'dart', 'tools', 'sdks', 'dart-sdk', 'bin')
 
   api.goma.ensure_goma()
 
