@@ -122,7 +122,7 @@
     "name": "read test-matrix.json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"configurations\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"builder_configurations\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"builders\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        \"dart2js-win10-debug-x64-ff-try\", @@@",

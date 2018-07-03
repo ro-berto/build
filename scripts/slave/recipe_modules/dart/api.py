@@ -271,7 +271,7 @@ class DartApi(recipe_api.RecipeApi):
       builder = builder[0:builder.rfind('-')]
     isolate_hashes = {}
     global_config = test_matrix['global']
-    for config in test_matrix['configurations']:
+    for config in test_matrix['builder_configurations']:
       if builder in config['builders']:
         self._write_file_sets(test_matrix['filesets'])
         self._run_steps(config, isolate_hashes, builder, global_config)

@@ -20,7 +20,7 @@ TEST_MATRIX = {
     "chrome": "66.0.3359.139",
     "ff": "60.0.1"
   },
-  "configurations": [
+  "builder_configurations": [
     {
       "builders": [
         "dart2js-win10-debug-x64-ff-try",
