@@ -6,7 +6,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://pinpoint-dot-chromeperf.appspot.com/api/isolate",
       "-i",
-      "{\"builder_name\": \"Linux Builder Perf\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"repository\\\": \\\"chromium\\\"}]}\", \"isolate_map\": \"{\\\"base_unittests\\\": \\\"[dummy hash for base_unittests]\\\"}\", \"isolate_server\": \"chrome-isolated.appspot.com\"}",
+      "{\"builder_name\": \"Linux Builder Perf\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"repository\\\": \\\"chromium\\\"}]}\", \"isolate_map\": \"{\\\"base_unittests\\\": \\\"[dummy hash for base_unittests]\\\"}\", \"isolate_server\": \"https://isolateserver.appspot.com\"}",
       "-o",
       "/path/to/tmp/json"
     ],
