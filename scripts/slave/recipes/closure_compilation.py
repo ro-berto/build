@@ -39,13 +39,6 @@ def RunSteps(api):
                                 'run_tests.py')
   )
 
-  api.step(
-      'generate_gyp_files',
-      [api.path['checkout'].join('build', 'gyp_chromium'),
-       api.path['checkout'].join('third_party', 'closure_compiler',
-                                 'compiled_resources2.gyp')],
-  )
-
   api.chromium.compile()
 
 

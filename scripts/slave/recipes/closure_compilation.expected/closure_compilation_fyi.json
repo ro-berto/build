@@ -158,13 +158,6 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/build/gyp_chromium",
-      "[START_DIR]/src/third_party/closure_compiler/compiled_resources2.gyp"
-    ],
-    "name": "generate_gyp_files"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
