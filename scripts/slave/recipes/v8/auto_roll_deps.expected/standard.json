@@ -263,7 +263,7 @@
       "--author",
       "v8-autoroll@chromium.org",
       "--reviewer",
-      "hablich@chromium.org,machenbach@chromium.org,kozyatinskiy@chromium.org,sergiyb@chromium.org",
+      "hablich@chromium.org,v8-waterfall-sheriff@grotations.appspotmail.com",
       "--roll",
       "--json-output",
       "/path/to/tmp/json",

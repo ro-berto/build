@@ -160,9 +160,8 @@ def RunSteps(api):
                 'v8', 'tools', 'release', 'auto_roll.py'),
             ['--chromium', api.path['checkout'],
              '--author', push_account,
-             '--reviewer',
-             'hablich@chromium.org,machenbach@chromium.org,'
-             'kozyatinskiy@chromium.org,sergiyb@chromium.org',
+             '--reviewer', 'hablich@chromium.org,'
+                           'v8-waterfall-sheriff@grotations.appspotmail.com',
              '--roll',
              '--json-output', api.json.output(),
              '--work-dir', api.path['cache'].join(safe_buildername, 'workdir')],
