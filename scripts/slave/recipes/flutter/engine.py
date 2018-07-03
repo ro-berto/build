@@ -268,8 +268,7 @@ def TestObservatory(api):
   empty_main_path = \
       checkout.join('flutter/shell/testing/observatory/empty_main.dart')
   test_path = checkout.join('flutter/shell/testing/observatory/test.dart')
-  test_cmd = ['dart', '--preview-dart-2', test_path, flutter_tester_path,
-      empty_main_path]
+  test_cmd = ['dart', test_path, flutter_tester_path, empty_main_path]
   with api.context(cwd=checkout):
     api.step('test observatory and service protocol', test_cmd)
 
