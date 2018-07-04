@@ -93,20 +93,6 @@ class CodesearchApi(recipe_api.RecipeApi):
 
     return step_result
 
-  def filter_compilation(self, filter_file):
-    """Filter out duplicate compilation units.
-
-    Args:
-      filter_file: Path to the compilation database to use for filtering.
-    """
-    compile_file = self.c.compile_commands_json_file
-    self.m.build.python('Filter out duplicate compilation units',
-                        self.package_repo_resource('scripts', 'slave', 'chromium',
-                                                   'filter_compilations.py'),
-                        ['--compdb-input', compile_file,
-                         '--compdb-filter', filter_file,
-                         '--compdb-output', compile_file])
-
   def run_clang_tool(self):
     """Download and run the clang tool."""
     # Download the clang tool.
