@@ -280,6 +280,7 @@
       "@@@STEP_LOG_LINE@deps@  \"buildtools\": \"https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"third_party/snappy/src\": \"https://chromium.googlesource.com/external/snappy.git@762bb32f0c9d2f31ba4958c7c0933d22e80c20bf\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"tools/gyp\": \"https://chromium.googlesource.com/external/gyp.git@e7079f0e0e14108ab0dba58728ff219637458563\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"tools/luci-go:infra/tools/luci/isolate/${platform}\": \"https://chrome-infra-packages.appspot.com/infra/tools/luci/isolate/${platform}@git_revision:3d8f881462b1a93c7525499381fafc8a08691be7\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"tools/swarming_client\": \"https://chromium.googlesource.com/external/swarming.client.git@380e32662312eb107f06fcba6409b0409f8fe001\"@@@",
       "@@@STEP_LOG_LINE@deps@}@@@",
       "@@@STEP_LOG_END@deps@@@"
@@ -312,6 +313,7 @@
       "@@@STEP_LOG_LINE@deps@  \"buildtools\": \"https://chromium.googlesource.com/chromium/buildtools.git@5fd66957f08bb752dca714a591c84587c9d70762\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"test/test262/data\": \"https://chromium.googlesource.com/external/github.com/tc39/test262.git@29c23844494a7cc2fbebc6948d2cb0bcaddb24e7\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"tools/gyp\": \"https://chromium.googlesource.com/external/gyp.git@702ac58e477214c635d9b541932e75a95d349352\", @@@",
+      "@@@STEP_LOG_LINE@deps@  \"tools/luci-go:infra/tools/luci/isolate/${platform}\": \"https://chrome-infra-packages.appspot.com/infra/tools/luci/isolate/${platform}@git_revision:8b15ba47cbaf07a56f93326e39f0c8e5069c19e9\", @@@",
       "@@@STEP_LOG_LINE@deps@  \"tools/swarming_client\": \"https://chromium.googlesource.com/external/swarming.client.git@380e32662312eb107f06fcba6409b0409f8fe000\"@@@",
       "@@@STEP_LOG_LINE@deps@}@@@",
       "@@@STEP_LOG_END@deps@@@"
@@ -394,6 +396,24 @@
     },
     "infra_step": true,
     "name": "gclient setdep tools_gyp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "setdep",
+      "-r",
+      "v8/tools/luci-go:infra/tools/luci/isolate/${platform}@git_revision:3d8f881462b1a93c7525499381fafc8a08691be7"
+    ],
+    "cwd": "[BUILDER_CACHE]/v8",
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gclient setdep tools_luci-go:infra_tools_luci_isolate_${platform}"
   },
   {
     "cmd": [
