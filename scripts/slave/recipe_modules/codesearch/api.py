@@ -63,33 +63,20 @@ class CodesearchApi(recipe_api.RecipeApi):
                            name='generate build files for %s' % platform,
                            mb_config_path=mb_config_path)
 
-    command = ['ninja', '-C', self.c.debug_path] + list(targets)
-    # Add the parameters for creating the compilation database.
-    command += ['-t', 'compdb', 'cc', 'cxx', 'objc', 'objcxx']
-
-    command += ['-j', self.m.goma.recommended_goma_jobs]
-
-    # TODO(tikuta): Support returning step result in api.m.goma.build_with_goma
-    self.m.goma.start()
+    output_file = output_file or self.c.compile_commands_json_file
+    args = ['-p', self.c.debug_path, '-o', output_file] + list(targets)
 
     build_exit_status = 1
     try:
-      # The Ninja compdb tool doesn't support writing to a file, so we wrap it
-      # in a script which redirects stdout to the compile_commands_json_file.
-      output_file = output_file or self.c.compile_commands_json_file
-      step_result = self.m.build.python(
-          'generate compilation database for %s' % platform,
-          self.resource('redirect_stdout_to_file.py'),
-          [output_file] + command)
+      step_result = self.m.python(
+          'generate compilation database',
+          self.m.path['checkout'].join(
+              'tools', 'clang', 'scripts', 'generate_compdb.py'),
+          args)
       build_exit_status = step_result.retcode
     except self.m.step.StepFailure as e:
       build_exit_status = e.retcode
       raise e
-    finally:
-      self.m.goma.stop(ninja_log_outdir=self.c.debug_path,
-                       ninja_log_command=command,
-                       ninja_log_compiler='goma',
-                       build_exit_status=build_exit_status)
 
     return step_result
 

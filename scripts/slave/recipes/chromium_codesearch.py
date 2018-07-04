@@ -207,22 +207,16 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  for buildername, config in SPEC['builders'].iteritems():
-    platform = config.get('platform')
+  for buildername, _ in SPEC['builders'].iteritems():
     yield (
         api.test('full_%s' % (_sanitize_nonalpha(buildername))) +
-        api.step_data('generate compilation database for %s' % platform,
-                      stdout=api.raw_io.output_text('some compilation data')) +
         api.properties.generic(buildername=buildername,
                                mastername='chromium.infra.codesearch')
     )
 
-  for buildername, config in SPEC['builders'].iteritems():
-    platform = config.get('platform')
+  for buildername, _ in SPEC['builders'].iteritems():
     yield (
         api.test('full_%s_with_revision' % (_sanitize_nonalpha(buildername))) +
-        api.step_data('generate compilation database for %s' % platform,
-                      stdout=api.raw_io.output_text('some compilation data')) +
         api.properties.generic(buildername=buildername,
                                mastername='chromium.infra.codesearch') +
         api.properties(root_solution_revision="deadbeef")
@@ -241,8 +235,6 @@ def GenTests(api):
     api.test(
         'full_%s_compile_fail' %
         _sanitize_nonalpha('codesearch-gen-chromium-linux')) +
-    api.step_data('generate compilation database for linux',
-                  stdout=api.raw_io.output_text('some compilation data')) +
     api.step_data('compile', retcode=1) +
     api.properties.generic(buildername='codesearch-gen-chromium-linux',
                            mastername='chromium.infra.codesearch')
@@ -251,8 +243,6 @@ def GenTests(api):
   yield (
     api.test(
         'full_%s_translation_unit_fail' % _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
-    api.step_data('generate compilation database for chromeos',
-                  stdout=api.raw_io.output_text('some compilation data')) +
     api.step_data('run translation_unit clang tool', retcode=2) +
     api.properties.generic(buildername='codesearch-gen-chromium-chromiumos',
                            mastername='chromium.infra.codesearch')
@@ -262,9 +252,7 @@ def GenTests(api):
     api.test(
         'full_%s_generate_compile_database_fail' %
         _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
-    api.step_data('generate compilation database for chromeos',
-                  stdout=api.raw_io.output_text('some compilation data'),
-                  retcode=1) +
+    api.step_data('generate compilation database', retcode=1) +
     api.properties.generic(buildername='codesearch-gen-chromium-chromiumos',
                            mastername='chromium.infra.codesearch')
   )

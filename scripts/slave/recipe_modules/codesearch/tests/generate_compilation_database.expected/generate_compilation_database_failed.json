@@ -72,11 +72,16 @@
       "-o",
       "None/out/Debug/compile_commands.json"
     ],
-    "name": "generate compilation database"
+    "name": "generate compilation database",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "name": "$result",
+    "reason": "Step('generate compilation database') failed with return_code 1",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]

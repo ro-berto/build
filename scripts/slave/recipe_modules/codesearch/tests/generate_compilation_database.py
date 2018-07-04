@@ -31,9 +31,8 @@ def GenTests(api):
   )
 
   yield (
-      api.test('generate_compilation_database_for_linux_failed') +
+      api.test('generate_compilation_database_failed') +
       api.properties(mastername='test_mastername',
                      buildername='test_buildername') +
-      api.step_data('generate compilation database for linux',
-                    retcode=1)
+      api.step_data('generate compilation database', retcode=1)
   )
