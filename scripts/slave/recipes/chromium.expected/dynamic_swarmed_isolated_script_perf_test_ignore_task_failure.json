@@ -423,7 +423,7 @@
       "--swarming",
       "https://chrome-swarming.appspot.com",
       "--isolate-server",
-      "chrome-isolated.appspot.com",
+      "https://chrome-isolated.appspot.com",
       "--priority",
       "25",
       "--shards",

@@ -70,7 +70,7 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
   spec['swarming_server'] = 'https://chrome-swarming.appspot.com'
   spec['swarming_service_account'] = 'chrome-perf-buildbot'
 
-  spec['isolate_server'] = 'chrome-isolated.appspot.com'
+  spec['isolate_server'] = 'https://chrome-isolated.appspot.com'
   spec['isolate_service_account'] = 'chrome-perf-buildbot'
   return spec
 
