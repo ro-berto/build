@@ -135,10 +135,6 @@ def RunSteps(api, root_solution_revision):
   targets = bot_config.get('compile_targets', [])
   gen_repo_branch = bot_config.get('gen_repo_branch', 'master')
   gen_repo_out_dir = bot_config.get('gen_repo_out_dir', '')
-  if gen_repo_out_dir:
-    joined_gen_repo_out_dir = api.path.join('out', gen_repo_out_dir)
-  else:
-    joined_gen_repo_out_dir = api.path.join('out', 'Debug')
 
   api.codesearch.set_config(
       'chromium',
@@ -194,8 +190,7 @@ def RunSteps(api, root_solution_revision):
   # validation and doesn't get pushed out anyway, so there's no point in
   # uploading at all.
   api.chromium.compile(targets, use_goma_module=True,
-                       out_dir=joined_gen_repo_out_dir,
-                       out_dir_includes_config=True)
+                       out_dir='out', target=gen_repo_out_dir or 'Debug')
 
   # Download and run the clang tool.
   api.codesearch.run_clang_tool()
