@@ -28,9 +28,23 @@ class CollectTaskTest(unittest.TestCase):
     def mocked_subprocess_call(args, **kwargs):
       self.subprocess_calls.append(args)
       return 0
+
+    def mocked_subprocess_popen(args, **kwards):
+      self.subprocess_calls.append(args)
+
+      class FakeProcess(object):
+        def __init__(self):
+          self.returncode = 0
+        def poll(self):
+          return True
+
+      return FakeProcess()
     m = mock.patch('subprocess.call', side_effect=mocked_subprocess_call)
     m.start()
     self.addCleanup(m.stop)
+    p = mock.patch('subprocess.Popen', side_effect=mocked_subprocess_popen)
+    p.start()
+    self.addCleanup(p.stop)
 
     self.temp_dir = tempfile.mkdtemp()
     self.merge_script_log = os.path.join(

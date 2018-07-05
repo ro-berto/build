@@ -4,11 +4,31 @@
 # found in the LICENSE file.
 
 import argparse
+import io
 import json
 import logging
 import os
 import subprocess
 import sys
+import time
+
+
+def run_command_with_output(argv, stdoutfile, env=None, cwd=None):
+  """ Run command and stream its stdout/stderr to the console & |stdoutfile|.
+  """
+  print('Running %r in %r (env: %r)' % (argv, cwd, env))
+  assert stdoutfile
+  with io.open(stdoutfile, 'w') as writer, io.open(stdoutfile, 'r', 1) as \
+      reader:
+    process = subprocess.Popen(argv, env=env, cwd=cwd, stdout=writer,
+        stderr=subprocess.STDOUT)
+    while process.poll() is None:
+      sys.stdout.write(reader.read())
+      time.sleep(0.1)
+    # Read the remaining.
+    sys.stdout.write(reader.read())
+    print('Command %r returned exit code %d' % (argv, process.returncode))
+    return process.returncode
 
 
 def collect_task(
@@ -138,9 +158,9 @@ def collect_task(
   merge_cmd.extend(extant_shard_json_files)
 
   logging.info('merge_cmd: %s', ' '.join(merge_cmd))
-  with open(merge_script_stdout_file, 'w') as f:
-    merge_result = subprocess.call(
-        merge_cmd, stdout=f, stderr=subprocess.STDOUT)
+
+  merge_result = run_command_with_output(
+      argv=merge_cmd, stdoutfile=merge_script_stdout_file)
   if merge_result != 0:
     logging.warn('merge_cmd had non-zero return code: %s', merge_result)
 
