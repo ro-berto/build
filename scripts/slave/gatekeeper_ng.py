@@ -481,7 +481,7 @@ def _http_req_auth(url, method, body, http):
   return resp.status, content
 
 
-def submit_email(email_app, build_data, secret, simulate, creds):
+def submit_email(email_app, build_data, simulate, creds):
   """Submit json to a mailer app which sends out the alert email."""
   if simulate:
     logging.info("Simulate: Sending e-mail via [%s]: %s", email_app, build_data)
@@ -669,7 +669,7 @@ def close_tree_if_necessary(build_db, failed_builds, username, password,
 
 
 def notify_failures(failed_builds, sheriff_url, default_from_email,
-                    email_app_url, secret, domain, filter_domain,
+                    email_app_url, domain, filter_domain,
                     disable_domain_filter, simulate, creds):
   # Email everyone that should be notified.
   emails_to_send = []
@@ -757,7 +757,7 @@ def notify_failures(failed_builds, sheriff_url, default_from_email,
     watchers = list(reduce(operator.or_, [set(e[0]) for e in g], set()))
     build_data = json.loads(k)
     build_data['recipients'] = watchers
-    submit_email(email_app_url, build_data, secret, simulate, creds)
+    submit_email(email_app_url, build_data, simulate, creds)
 
 
 def simulate_build_failure(build_db, master, builder, *steps):
@@ -846,8 +846,6 @@ def get_args(argv):
   parser.add_argument('--email-app-url',
                       default='https://chromium-build.appspot.com/mailer',
                       help='URL of the application to send email from')
-  parser.add_argument('--email-app-secret-file',
-                      help='file containing secret used in email app auth')
   parser.add_argument('--no-email-app', action='store_true',
                       help='don\'t send emails')
   parser.add_argument('--json',
@@ -885,7 +883,6 @@ def get_args(argv):
       parser.error('only specify one of --milo-creds and'
                    '--service-account-path')
     args.service_account_path = args.milo_creds
-  args.email_app_secret = None
   args.password = None
 
   if args.no_hashes and not args.flatten_json:
@@ -900,14 +897,6 @@ def get_args(argv):
 
   if args.no_email_app:
     args.email_app_url = None
-
-  if args.email_app_url and not args.simulate_master:
-    if os.path.exists(args.email_app_secret_file):
-      with open(args.email_app_secret_file) as f:
-        args.email_app_secret = f.read().strip()
-    else:
-      parser.error('Must provide email app auth with  %s.' % (
-          args.email_app_secret_file))
 
   args.filter_domain = args.filter_domain.split(',')
 
@@ -1022,9 +1011,9 @@ def main(argv):
   try:
     notify_failures(new_failures, args.sheriff_url,
                     args.default_from_email, args.email_app_url,
-                    args.email_app_secret, args.email_domain,
-                    args.filter_domain, args.disable_domain_filter,
-                    simulate, args.service_account_path)
+                    args.email_domain, args.filter_domain,
+                    args.disable_domain_filter, simulate,
+                    args.service_account_path)
   finally:
     if not args.skip_build_db_update and not simulate:
       build_scan_db.save_build_db(build_db, gatekeeper_config,
