@@ -317,6 +317,7 @@
   * [v8/auto_roll_release_process](#recipes-v8_auto_roll_release_process)
   * [v8/auto_roll_v8_deps](#recipes-v8_auto_roll_v8_deps)
   * [v8/auto_tag](#recipes-v8_auto_tag) &mdash; This recipe checks if a version update on branch <B> is necessary, where 'version' refers to the contents of the v8 version file (part of the v8 sources).
+  * [v8/flako](#recipes-v8_flako) &mdash; Recipe to bisect flaky tests in V8.
   * [v8/node_integration](#recipes-v8_node_integration) &mdash; Recipe to test v8/node.
   * [wasm_llvm](#recipes-wasm_llvm)
   * [webrtc/auto_roll_webrtc_deps](#recipes-webrtc_auto_roll_webrtc_deps)
@@ -5480,6 +5481,41 @@ Ensures a clean state of the git checkout.
 &mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_tag.py#161)(api):**
 
 &mdash; **def [UpdateRef](/scripts/slave/recipes/v8/auto_tag.py#223)(api, repo, head, lkgr_ref):**
+### *recipes* / [v8/flako](/scripts/slave/recipes/v8/flako.py)
+
+[DEPS](/scripts/slave/recipes/v8/flako.py#27): [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
+
+Recipe to bisect flaky tests in V8.
+
+Bisection will start at a known bad to_revision and:
+1. Calibrate the number of repetitions until enough confidence is reached.
+2. Bisect backwards exponentially, doubling the offset in each step.
+3. After finding a good from_revision, bisect into the range
+   from_revision..to_revision and report the suspect.
+
+Tests are only run on existing isolated files, looked up on Google Storage.
+
+All revisions during bisections are represented as offsets to the start revision
+which has offset 0.
+
+See PROPERTIES for documentation on the recipe's interface.
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/flako.py#378)(api, bisect_mastername, bisect_buildername, build_config, extra_args, initial_commit_offset, isolated_name, repetitions, swarming_dimensions, test_name, timeout, to_revision, variant):**
+
+&mdash; **def [bisect](/scripts/slave/recipes/v8/flako.py#280)(api, depot, initial_commit_offset, is_bad_func, offset):**
+
+Exercises the bisection control flow.
+
+Args:
+  api: Recipe api.
+  depot: Helper for accessing storage and git.
+  initial_commit_offset: Number of commits, backwards bisection will
+      initially leap over.
+  is_bad_func: Function (revision->bool) determining if a given revision is
+      bad.
+  offset: Offset at which to start bisection.
+
+&mdash; **def [setup\_swarming](/scripts/slave/recipes/v8/flako.py#362)(api, swarming_dimensions):**
 ### *recipes* / [v8/node\_integration](/scripts/slave/recipes/v8/node_integration.py)
 
 [DEPS](/scripts/slave/recipes/v8/node_integration.py#13): [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [trigger](#recipe_modules-trigger), [v8](#recipe_modules-v8), [zip](#recipe_modules-zip), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
