@@ -307,6 +307,7 @@ SPEC = {
         'platform': 'win',
       },
     },
+    # TODO(jbudorick): Remove these three once the bots have been renamed.
     'Fuchsia': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
@@ -353,6 +354,63 @@ SPEC = {
       },
       'bot_type': 'builder_tester',
       # Serialize the tests so as to not overwhelm the limited number of bots.
+      'serialize_tests': True,
+      'checkout_dir': 'linux',
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'fuchsia-fyi-arm64-rel': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['fuchsia'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'fuchsia',
+      },
+      'bot_type': 'builder_tester',
+      # Serialize the tests to limit capacity usage.
+      'serialize_tests': True,
+      'checkout_dir': 'linux',
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'fuchsia-fyi-x64-dbg': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['fuchsia'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'fuchsia',
+      },
+      'bot_type': 'builder',
+      # Serialize the tests to limit capacity usage.
+      'serialize_tests': True,
+      'checkout_dir': 'linux',
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'fuchsia-fyi-x64-rel': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['fuchsia'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'fuchsia',
+      },
+      'bot_type': 'builder_tester',
+      # Serialize the tests to limit capacity usage.
       'serialize_tests': True,
       'checkout_dir': 'linux',
       'test_results_config': 'staging_server',

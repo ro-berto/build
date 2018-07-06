@@ -885,6 +885,24 @@
             ],
             "forgiving_optional": ["*"]
           },
+          "fuchsia-fyi-arm64-rel": {
+            "tree_notify": [
+              "cr-fuchsia+bot@chromium.org"
+            ],
+            "forgiving_optional": ["*"]
+          },
+          "fuchsia-fyi-x64-dbg": {
+            "tree_notify": [
+              "cr-fuchsia+bot@chromium.org"
+            ],
+            "forgiving_optional": ["*"]
+          },
+          "fuchsia-fyi-x64-rel": {
+            "tree_notify": [
+              "cr-fuchsia+bot@chromium.org"
+            ],
+            "forgiving_optional": ["*"]
+          },
           "Headless Linux (dbg)": {
             "tree_notify": [
               "thomasanderson@chromium.org"
