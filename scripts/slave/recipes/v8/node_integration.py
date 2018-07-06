@@ -13,7 +13,6 @@ from recipe_engine.types import freeze
 DEPS = [
   'chromium',
   'depot_tools/gclient',
-  'depot_tools/git',
   'depot_tools/gsutil',
   'depot_tools/tryserver',
   'goma',
@@ -261,13 +260,6 @@ def RunSteps(api):
   # Opt out of using gyp environment variables.
   api.chromium.c.use_gyp_env = False
   api.gclient.apply_config('node_js')
-
-  # TODO(machenbach): Remove temporary reset, see:
-  # https://crbug.com/860430
-  with api.context(cwd=api.path['builder_cache'].join('node.js')):
-    api.git('reset', '--hard', ok_ret='any')
-    api.git('clean', '-fxd', ok_ret='any')
-
   v8.checkout()
   v8.runhooks()
 

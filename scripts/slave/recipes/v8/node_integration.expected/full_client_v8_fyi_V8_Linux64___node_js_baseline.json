@@ -1,26 +1,6 @@
 [
   {
     "cmd": [
-      "git",
-      "reset",
-      "--hard"
-    ],
-    "cwd": "[BUILDER_CACHE]/node.js",
-    "infra_step": true,
-    "name": "git reset"
-  },
-  {
-    "cmd": [
-      "git",
-      "clean",
-      "-fxd"
-    ],
-    "cwd": "[BUILDER_CACHE]/node.js",
-    "infra_step": true,
-    "name": "git clean"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
