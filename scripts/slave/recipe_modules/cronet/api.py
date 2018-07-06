@@ -75,9 +75,12 @@ class CronetApi(recipe_api.RecipeApi):
     if self.m.chromium.c.project_generator.tool == 'gn': # pragma: no cover
       assert (self.m.chromium.c.HOST_PLATFORM == 'linux'
               and self.m.chromium.c.HOST_BITS == 64)
+      gn_path = self.m.path['checkout'].join('buildtools', 'linux64', 'gn')
+      if not self.m.path.exists(gn_path):
+        gn_path = self.m.path['checkout'].join('third_party', 'gn', 'gn')
       self.m.chromium.run_gn(
           use_goma=use_goma,
-          gn_path=self.m.path['checkout'].join('third_party', 'gn', 'gn'))
+          gn_path=gn_path)
     elif self.m.chromium.c.project_generator.tool == 'mb':
       self.m.chromium.run_mb(
           mastername,

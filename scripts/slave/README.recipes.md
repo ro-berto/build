@@ -1549,17 +1549,17 @@ Common steps for recipes that sync/build Cronet sources.
 
 &mdash; **def [build](/scripts/slave/recipe_modules/cronet/api.py#66)(self, mastername=None, buildername=None, targets=None, use_revision=True, use_goma=True):**
 
-&mdash; **def [get\_version](/scripts/slave/recipe_modules/cronet/api.py#89)(self):**
+&mdash; **def [get\_version](/scripts/slave/recipe_modules/cronet/api.py#92)(self):**
 
 &mdash; **def [init\_and\_sync](/scripts/slave/recipe_modules/cronet/api.py#46)(self, recipe_config, kwargs, gyp_defs, chromium_apply_config=None):**
 
-&mdash; **def [run\_perf\_tests](/scripts/slave/recipe_modules/cronet/api.py#155)(self, perf_id):**
+&mdash; **def [run\_perf\_tests](/scripts/slave/recipe_modules/cronet/api.py#158)(self, perf_id):**
 
-&mdash; **def [run\_tests](/scripts/slave/recipe_modules/cronet/api.py#127)(self, build_config, unit_tests=None, instrumentation_tests=INSTRUMENTATION_TESTS):**
+&mdash; **def [run\_tests](/scripts/slave/recipe_modules/cronet/api.py#130)(self, build_config, unit_tests=None, instrumentation_tests=INSTRUMENTATION_TESTS):**
 
-&mdash; **def [sizes](/scripts/slave/recipe_modules/cronet/api.py#115)(self, perf_id):**
+&mdash; **def [sizes](/scripts/slave/recipe_modules/cronet/api.py#118)(self, perf_id):**
 
-&mdash; **def [upload\_package](/scripts/slave/recipe_modules/cronet/api.py#95)(self, build_config, cronetdir=None, platform='android'):**
+&mdash; **def [upload\_package](/scripts/slave/recipe_modules/cronet/api.py#98)(self, build_config, cronetdir=None, platform='android'):**
 ### *recipe_modules* / [crrev](/scripts/slave/recipe_modules/crrev)
 
 [DEPS](/scripts/slave/recipe_modules/crrev/__init__.py#1): [build](#recipe_modules-build), [commit\_position](#recipe_modules-commit_position), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
