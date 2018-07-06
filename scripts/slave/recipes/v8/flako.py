@@ -153,7 +153,7 @@ class Depot(object):
     revision = self.revisions.get(offset)
     if not revision:
       commits, _ = self.api.gitiles.log(
-          REPO, '%s~%d' % (revision, offset), limit=1,
+          REPO, '%s~%d' % (self.revision, offset), limit=1,
           step_name='get revision #%d' % offset)
       assert commits
       for i, commit in enumerate(commits):
