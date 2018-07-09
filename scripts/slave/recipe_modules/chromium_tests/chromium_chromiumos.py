@@ -109,5 +109,5 @@ SPEC['builders'].update([
             gclient_apply_config=['chromeos_amd64_generic']),
     _config('chromeos-daisy-rel', cros_board='daisy',
             target_arch='arm', target_bits=32,
-            gclient_apply_config=['chromeos_daisy']),
+            gclient_apply_config=['arm', 'chromeos_daisy']),
 ])
