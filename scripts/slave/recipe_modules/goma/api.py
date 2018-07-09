@@ -270,10 +270,6 @@ class GomaApi(recipe_api.RecipeApi):
       self._goma_ctl_env['GOMA_DUMP_COUNTERZ_FILE'] = self.counterz_path
       self._goma_ctl_env['GOMA_ENABLE_COUNTERZ'] = 'true'
 
-      # Set larger entry limit to store result of included file analysis.
-      # TODO(tikuta): make this the default value of goma client's.
-      self._goma_ctl_env['GOMA_DEPS_CACHE_TABLE_THRESHOLD'] = '70000'
-
       # GLOG_log_dir should not be set.
       assert 'GLOG_log_dir' not in env
 
@@ -282,9 +278,6 @@ class GomaApi(recipe_api.RecipeApi):
 
       if 'GOMA_CACHE_DIR' not in env:
         self._goma_ctl_env['GOMA_CACHE_DIR'] = self.default_cache_path
-
-      if self.m.platform.is_win:
-        self._goma_ctl_env['GOMA_ENABLE_MACRO_CACHE'] = 'true'
 
       goma_ctl_start_env = self._goma_ctl_env.copy()
 

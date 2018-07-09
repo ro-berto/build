@@ -162,11 +162,9 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff_stable",
-      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -252,11 +250,9 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff_stable",
-      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -292,11 +288,9 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff_stable",
-      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -321,11 +315,9 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff_stable",
-      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -473,11 +465,9 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff_stable",
-      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -563,11 +553,9 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff_stable",
-      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -603,11 +591,9 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff_stable",
-      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -632,11 +618,9 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff_stable",
-      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -1158,11 +1142,9 @@
       "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff_stable",
-      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -1265,11 +1247,9 @@
       "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff_stable",
-      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -1307,11 +1287,9 @@
       "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff_stable",
-      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -1338,11 +1316,9 @@
       "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff_stable",
-      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },

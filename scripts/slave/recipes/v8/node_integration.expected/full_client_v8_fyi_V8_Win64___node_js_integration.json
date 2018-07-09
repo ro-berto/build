@@ -225,11 +225,9 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\V8_Win64___node_js_integration",
-      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -291,11 +289,9 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\V8_Win64___node_js_integration",
-      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -326,11 +322,9 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\V8_Win64___node_js_integration",
-      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
@@ -350,11 +344,9 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\V8_Win64___node_js_integration",
-      "GOMA_DEPS_CACHE_TABLE_THRESHOLD": "70000",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_MACRO_CACHE": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
