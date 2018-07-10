@@ -17,7 +17,6 @@
     "V8 Clusterfuzz Win64 ASAN - release builder": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["win"],
       "category": "0Windows",
@@ -25,7 +24,6 @@
     "V8 Clusterfuzz Win64 ASAN - debug builder": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["win"],
       "category": "0Windows",
@@ -33,7 +31,6 @@
     "V8 Clusterfuzz Mac64 ASAN - release builder": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["mac"],
       "category": "1Mac",
@@ -41,7 +38,6 @@
     "V8 Clusterfuzz Mac64 ASAN - debug builder": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["mac"],
       "category": "1Mac",
@@ -49,7 +45,6 @@
     "V8 Clusterfuzz Linux64 - release builder": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux1"],
       "category": "2Linux",
@@ -57,7 +52,6 @@
     "V8 Clusterfuzz Linux64 - debug builder": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux1"],
       "category": "2Linux",
@@ -65,7 +59,6 @@
     "V8 Clusterfuzz Linux64 - nosnap release builder": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": True,
       "bot_pools": ["linux1"],
       "category": "2Linux",
@@ -73,7 +66,6 @@
     "V8 Clusterfuzz Linux64 - nosnap debug builder": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": True,
       "bot_pools": ["linux1"],
       "category": "2Linux",
@@ -81,7 +73,6 @@
     "V8 Clusterfuzz Linux64 ASAN no inline - release builder": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux2"],
       "category": "2Linux",
@@ -89,7 +80,6 @@
     "V8 Clusterfuzz Linux64 ASAN - debug builder": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux2"],
       "category": "2Linux",
@@ -97,7 +87,6 @@
     "V8 Clusterfuzz Linux64 ASAN arm64 - debug builder": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux3"],
       "category": "2Linux",
@@ -105,7 +94,6 @@
     "V8 Clusterfuzz Linux ASAN arm - debug builder": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux3"],
       "category": "2Linux",
@@ -113,7 +101,6 @@
     "V8 Clusterfuzz Linux ASAN mipsel - debug builder": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux3"],
       "category": "2Linux",
@@ -122,7 +109,6 @@
       "recipe": "v8",
       "properties": {"set_gclient_var": "checkout_instrumented_libraries"},
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux4"],
       "category": "2Linux",
@@ -131,7 +117,6 @@
       "recipe": "v8",
       "properties": {"set_gclient_var": "checkout_instrumented_libraries"},
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux4"],
       "category": "2Linux",
@@ -139,7 +124,6 @@
     "V8 Clusterfuzz Linux64 CFI - release builder": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux5"],
       "category": "2Linux",
@@ -147,7 +131,6 @@
     "V8 Clusterfuzz Linux64 TSAN - release builder": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux6"],
       "category": "2Linux",
@@ -155,7 +138,6 @@
     "V8 Clusterfuzz Linux64 UBSanVptr - release builder": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "bot_pools": ["linux6"],
       "category": "2Linux",
@@ -163,7 +145,6 @@
     "V8 NumFuzz": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": None,
       "mergeRequests": True,
       "bot": "slave210-c3",
       "subdir": "0",
@@ -175,7 +156,6 @@
     "V8 NumFuzz - debug": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": None,
       "mergeRequests": True,
       "bot": "slave210-c3",
       "subdir": "1",
@@ -187,7 +167,6 @@
     "V8 NumFuzz - TSAN": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": None,
       "mergeRequests": True,
       "bot": "slave210-c3",
       "subdir": "2",
@@ -199,7 +178,6 @@
     "V8 NumFuzz - nosnap": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": None,
       "mergeRequests": True,
       "bot": "slave210-c3",
       "subdir": "3",
@@ -211,7 +189,6 @@
     "V8 NumFuzz - nosnap debug": {
       "recipe": "v8",
       "use_remote_run": True,
-      "scheduler": None,
       "mergeRequests": True,
       "bot": "slave210-c3",
       "subdir": "4",
@@ -223,11 +200,6 @@
   },
 
   "schedulers": {
-    "v8_commits": {
-      "type": "git_poller",
-      "git_repo_url": "https://chromium.googlesource.com/v8/v8",
-      "treeStableTimer": 10,
-    },
   },
 
   "bot_pools": {
@@ -235,49 +207,49 @@
       "bits": 64,
       "os": "win",
       "version": "win7",
-      "bots": ["vm92-m3", "vm93-m3"],
+      "bots": ["fake-slave-78"],
     },
     "mac": {
       "bits": 64,
       "os": "mac",
       "version": "10.12.2",
-      "bots": ["vm82-m3", "vm85-m3"],
+      "bots": ["fake-slave-79"],
     },
     "linux1": {
       "bits": 64,
       "os": "linux",
       "version": "trusty",
-      "bots": ["slave4-c3"],
+      "bots": ["fake-slave-80"],
     },
     "linux2": {
       "bits": 64,
       "os": "linux",
       "version": "trusty",
-      "bots": ["slave252-c3"],
+      "bots": ["fake-slave-81"],
     },
     "linux3": {
       "bits": 64,
       "os": "linux",
       "version": "trusty",
-      "bots": ["slave253-c3"],
+      "bots": ["fake-slave-82"],
     },
     "linux4": {
       "bits": 64,
       "os": "linux",
       "version": "trusty",
-      "bots": ["slave254-c3"],
+      "bots": ["fake-slave-83"],
     },
     "linux5": {
       "bits": 64,
       "os": "linux",
       "version": "trusty",
-      "bots": ["slave255-c3"],
+      "bots": ["fake-slave-84"],
     },
     "linux6": {
       "bits": 64,
       "os": "linux",
       "version": "trusty",
-      "bots": ["slave256-c3"],
+      "bots": ["fake-slave-85"],
     },
   },
 }

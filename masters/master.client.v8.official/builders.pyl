@@ -20,56 +20,48 @@
   "builders": {
     "V8 Official Arm32": {
       "recipe": "v8/archive",
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["linux"],
       "category": "0Linux",
     },
     "V8 Official Android Arm32": {
       "recipe": "v8/archive",
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["linux"],
       "category": "0Linux",
     },
     "V8 Official Android Arm64": {
       "recipe": "v8/archive",
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["linux"],
       "category": "0Linux",
     },
     "V8 Official Linux32": {
       "recipe": "v8/archive",
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["linux"],
       "category": "0Linux",
     },
     "V8 Official Linux64": {
       "recipe": "v8/archive",
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["linux"],
       "category": "0Linux",
     },
     "V8 Official Win32": {
       "recipe": "v8/archive",
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["win"],
       "category": "1Windows",
     },
     "V8 Official Win64": {
       "recipe": "v8/archive",
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["win"],
       "category": "1Windows",
     },
     "V8 Official Mac64": {
       "recipe": "v8/archive",
-      "scheduler": "v8_commits",
       "mergeRequests": False,
       "slave_pools": ["mac"],
       "category": "2Mac",
@@ -77,11 +69,6 @@
   },
 
   "schedulers": {
-    "v8_commits": {
-      "type": "git_poller_any",
-      "git_repo_url": "https://chromium.googlesource.com/v8/v8",
-      "branch": [r'refs/branch\-heads/\d+\.\d+', r'refs/heads/\d+\.\d+.\d+'],
-    },
   },
 
   "slave_pools": {
@@ -91,7 +78,7 @@
         "os": "linux",
         "version": "trusty",
       },
-      "slaves": ["slave47-c3", "slave86-c3"],
+      "slaves": ["fake-slave-75"],
     },
     "win": {
       "slave_data": {
@@ -99,7 +86,7 @@
         "os": "win",
         "version": "win7",
       },
-      "slaves": ["vm58-m3"],
+      "slaves": ["fake-slave-76"],
     },
     "mac": {
       "slave_data": {
@@ -107,7 +94,7 @@
         "os": "mac",
         "version": "10.12",
       },
-      "slaves": ["vm79-m3"],
+      "slaves": ["fake-slave-77"],
     },
   },
 }
