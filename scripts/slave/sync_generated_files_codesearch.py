@@ -9,26 +9,11 @@ import subprocess
 import sys
 
 
-def main():
-  parser = argparse.ArgumentParser()
-  parser.add_argument('--message', help='commit message', required=True)
-  parser.add_argument('--dest-branch',
-                      help='git branch in the destination repo to sync to',
-                      default='master')
-  parser.add_argument('--debug-dir',
-                      help='optional dir containing the gen folder to include '
-                           'in the checked-in repo',
-                      default='Debug')
-  parser.add_argument('source', help='directory to copy files from')
-  parser.add_argument('dest', help='git checkout to copy files to')
-  opts = parser.parse_args()
-
-
+def copy_generated_files(source, dest, debug_dir):
   # We pass --relative to rsync below, which treats the '/./' as the beginning
   # of the path for copying purposes. Everything after the '.' is recreated in
   # the destination directory.
-  relative_source_path = os.path.join(opts.source, '.', opts.debug_dir,
-                                      'gen')
+  relative_source_path = os.path.join(source, '.', debug_dir, 'gen')
   check_call([
       'rsync',
       '--recursive',
@@ -74,8 +59,24 @@ def main():
       '--relative',
 
       relative_source_path,
-      opts.dest,
+      dest,
   ])
+
+def main():
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--message', help='commit message', required=True)
+  parser.add_argument('--dest-branch',
+                      help='git branch in the destination repo to sync to',
+                      default='master')
+  parser.add_argument('--debug-dir',
+                      help='optional dir containing the gen folder to include '
+                           'in the checked-in repo',
+                      default='Debug')
+  parser.add_argument('source', help='directory to copy files from')
+  parser.add_argument('dest', help='git checkout to copy files to')
+  opts = parser.parse_args()
+
+  copy_generated_files(opts.source, opts.dest, opts.debug_dir)
 
   # Add the files to the git index, exit if there were no changes.
   check_call(['git', 'add', '--', '.'], cwd=opts.dest)
