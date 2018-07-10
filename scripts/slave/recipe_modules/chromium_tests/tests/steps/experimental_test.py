@@ -29,7 +29,6 @@ def RunSteps(api):
 
   experimental_test.pre_run(api.chromium_tests.m, suffix)
   experimental_test.run(api.chromium_tests.m, suffix)
-  experimental_test.post_run(api.chromium_tests.m, suffix)
 
   assert experimental_test.has_valid_results(api.chromium_tests.m, '')
   assert not experimental_test.failures(api.chromium_tests.m, '')
@@ -48,7 +47,6 @@ def GenTests(api):
           experiment_percentage='100') +
       api.post_process(post_process.MustRun, 'pre_run inner_test (experimental)') +
       api.post_process(post_process.MustRun, 'inner_test (experimental)') +
-      api.post_process(post_process.MustRun, 'post_run inner_test (experimental)') +
       api.post_process(post_process.StatusCodeIn, 0) +
       api.post_process(post_process.DropExpectation))
 
@@ -62,7 +60,6 @@ def GenTests(api):
           experiment_percentage='0') +
       api.post_process(post_process.DoesNotRun, 'pre_run inner_test (experimental)') +
       api.post_process(post_process.DoesNotRun, 'inner_test (experimental)') +
-      api.post_process(post_process.DoesNotRun, 'post_run inner_test (experimental)') +
       api.post_process(post_process.StatusCodeIn, 0) +
       api.post_process(post_process.DropExpectation))
 
@@ -141,19 +138,6 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation))
 
   yield (
-      api.test('failure_in_post_run') +
-      api.properties(
-          mastername='test_mastername',
-          buildername='test_buildername',
-          buildnumber='123',
-          patch_issue='456',
-          experiment_percentage='100') +
-      api.override_step_data('post_run inner_test (experimental)', retcode=1) +
-      api.post_process(post_process.MustRun, 'post_run inner_test (experimental)') +
-      api.post_process(post_process.StatusCodeIn, 0) +
-      api.post_process(post_process.DropExpectation))
-
-  yield (
       api.test('abort_on_failure') +
       api.properties(
           mastername='test_mastername',
@@ -163,7 +147,7 @@ def GenTests(api):
           experiment_percentage='100',
           failures=['foo'],
           abort_on_failure=True) +
-      api.post_process(post_process.MustRun, 'post_run inner_test (experimental)') +
+      api.post_process(post_process.MustRun, 'inner_test (experimental)') +
       api.post_process(post_process.StatusCodeIn, 0) +
       api.post_process(post_process.DropExpectation))
 
@@ -178,6 +162,5 @@ def GenTests(api):
           suffix='with patch') +
       api.post_process(post_process.MustRun, 'pre_run inner_test (with patch, experimental)') +
       api.post_process(post_process.MustRun, 'inner_test (with patch, experimental)') +
-      api.post_process(post_process.MustRun, 'post_run inner_test (with patch, experimental)') +
       api.post_process(post_process.StatusCodeIn, 0) +
       api.post_process(post_process.DropExpectation))

@@ -333,9 +333,6 @@ class Test(object):
     return []
 
   def run(self, api, suffix): # pragma: no cover:
-    raise NotImplementedError()
-
-  def post_run(self, api, suffix):
     return []
 
 
@@ -386,9 +383,9 @@ class AndroidTest(SwarmingGTestTest):
                                       cipd_packages=ANDROID_CIPD_PACKAGES,
                                       **kwargs)
 
-  def post_run(self, api, suffix):
+  def run(self, api, suffix):
     try:
-      super(SwarmingGTestTest, self).post_run(api, suffix)
+      super(SwarmingGTestTest, self).run(api, suffix)
     finally:
       step_result = api.step.active_result
       task_output_dir = api.step.active_result.raw_io.output_dir
@@ -439,9 +436,9 @@ class SwarmingAndroidPerfTest(AndroidTest):
         extra_args=self._args,
         build_properties=api.chromium.build_properties)
 
-  def post_run(self, api, suffix):
+  def run(self, api, suffix):
     try:
-      super(SwarmingGTestTest, self).post_run(api, suffix)
+      super(SwarmingGTestTest, self).run(api, suffix)
     finally:
       step_result = api.step.active_result
       task_output_dir = api.step.active_result.raw_io.output_dir

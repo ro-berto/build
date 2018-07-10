@@ -743,27 +743,6 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\chrome\\test\\mini_installer\\test_installer.py",
-      "--build-dir",
-      "[START_DIR]\\src\\out",
-      "--target",
-      "Release",
-      "--force-clean",
-      "--config",
-      "[START_DIR]\\src\\chrome\\test\\mini_installer\\config\\config.config",
-      "--write-full-results-to",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "name": "test_installer"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -1278,6 +1257,27 @@
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "Upload to test-results [telemetry_gpu_unittests on (15ad) GPU on Windows]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]\\src\\chrome\\test\\mini_installer\\test_installer.py",
+      "--build-dir",
+      "[START_DIR]\\src\\out",
+      "--target",
+      "Release",
+      "--force-clean",
+      "--config",
+      "[START_DIR]\\src\\chrome\\test\\mini_installer\\config\\config.config",
+      "--write-full-results-to",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "name": "test_installer"
   },
   {
     "cmd": [

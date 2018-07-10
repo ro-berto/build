@@ -2638,38 +2638,6 @@
     ]
   },
   {
-    "cmd": [
-      "vpython",
-      "-u",
-      "[CACHE]/builder/src/out/android_experimental/bin/run_android_junit_tests",
-      "--verbose",
-      "--release"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
-    },
-    "name": "android_junit_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/examples/androidtests/gradle_project_test.py",
-      "[CACHE]/builder/src/out/android_experimental"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "GOMA_DISABLED": "True"
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "gradle_project_test"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -5379,6 +5347,38 @@
     ],
     "cwd": "[CACHE]/builder",
     "name": "Upload to test-results [webrtc_nonparallel_tests on Android]"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "[CACHE]/builder/src/out/android_experimental/bin/run_android_junit_tests",
+      "--verbose",
+      "--release"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
+    },
+    "name": "android_junit_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/examples/androidtests/gradle_project_test.py",
+      "[CACHE]/builder/src/out/android_experimental"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMA_DISABLED": "True"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gradle_project_test"
   },
   {
     "allow_subannotations": true,

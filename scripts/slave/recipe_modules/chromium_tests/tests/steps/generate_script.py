@@ -40,7 +40,6 @@ def RunSteps(api):
     try:
       test.pre_run(api, '')
       test.run(api, '')
-      test.post_run(api, '')
     finally:
       api.step('details', [])
       api.step.active_result.presentation.logs['details'] = [

@@ -168,10 +168,6 @@ class Test(object):
     """Run the test. suffix is 'with patch' or 'without patch'."""
     raise NotImplementedError()
 
-  def post_run(self, api, suffix):  # pragma: no cover
-    """Steps to execute after running the test."""
-    return []
-
   def has_valid_results(self, api, suffix):  # pragma: no cover
     """
     Returns True if results (failures) are valid.
@@ -258,9 +254,6 @@ class TestWrapper(Test):  # pragma: no cover
 
   def run(self, api, suffix):
     return self._test.run(api, suffix)
-
-  def post_run(self, api, suffix):
-    return self._test.post_run(api, suffix)
 
   def has_valid_results(self, api, suffix):
     return self._test.has_valid_results(api, suffix)
@@ -350,17 +343,6 @@ class ExperimentalTest(TestWrapper):
 
     try:
       return super(ExperimentalTest, self).run(
-          api, self._experimental_suffix(suffix))
-    except api.step.StepFailure:
-      pass
-
-  #override
-  def post_run(self, api, suffix):
-    if not self._is_in_experiment(api):
-      return []
-
-    try:
-      return super(ExperimentalTest, self).post_run(
           api, self._experimental_suffix(suffix))
     except api.step.StepFailure:
       pass
@@ -1493,10 +1475,6 @@ class SwarmingTest(Test):
 
     return api.swarming.trigger_task(self._tasks[suffix])
 
-  def run(self, api, suffix):  # pylint: disable=R0201
-    """Not used. All logic in pre_run, post_run."""
-    return []
-
   def validate_task_results(self, api, step_result):
     """Interprets output of a task (provided as StepResult object).
 
@@ -1513,7 +1491,7 @@ class SwarmingTest(Test):
     """
     raise NotImplementedError()  # pragma: no cover
 
-  def post_run(self, api, suffix):
+  def run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
     assert suffix not in self._results, (
         'Results of %s were already collected' % self._step_name(suffix))
@@ -1646,10 +1624,10 @@ class SwarmingGTestTest(SwarmingTest):
       return self._gtest_results[suffix].pass_fail_counts
     return {}
 
-  def post_run(self, api, suffix):
+  def run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
     try:
-      super(SwarmingGTestTest, self).post_run(api, suffix)
+      super(SwarmingGTestTest, self).run(api, suffix)
     finally:
       step_result = api.step.active_result
       if (hasattr(step_result, 'test_utils') and
@@ -1909,9 +1887,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
     return valid, failures
 
-  def post_run(self, api, suffix):
+  def run(self, api, suffix):
     try:
-      super(SwarmingIsolatedScriptTest, self).post_run(api, suffix)
+      super(SwarmingIsolatedScriptTest, self).run(api, suffix)
     finally:
       results = self._isolated_script_results
 
@@ -2695,10 +2673,6 @@ class MockTest(Test):
   def run(self, api, suffix):
     with self._mock_exit_codes(api):
       api.step('%s%s' % (self.name, self._mock_suffix(suffix)), None)
-
-  def post_run(self, api, suffix):
-    with self._mock_exit_codes(api):
-      api.step('post_run %s%s' % (self.name, self._mock_suffix(suffix)), None)
 
   def has_valid_results(self, api, suffix):
     api.step('has_valid_results %s%s' % (self.name, self._mock_suffix(suffix)), None)

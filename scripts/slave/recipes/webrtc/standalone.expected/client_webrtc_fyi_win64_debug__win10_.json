@@ -2486,41 +2486,6 @@
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py",
-      "--target",
-      "Win64_Debug_Win10",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"buildername\": \"Win64 Debug (Win10)\", \"buildnumber\": 1337, \"git_revision\": \"git12345\", \"got_revision_cp\": \"12345\", \"mastername\": \"client.webrtc.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"buildername\": \"Win64 Debug (Win10)\", \"buildnumber\": 1337, \"git_revision\": \"git12345\", \"got_revision_cp\": \"12345\", \"mastername\": \"client.webrtc.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
-      "--test-type=modules_tests",
-      "--step-name=modules_tests (screen capture disabled tests)",
-      "--builder-name=Win64 Debug (Win10)",
-      "--slave-name=bot_id",
-      "--build-number=1337",
-      "--run-python-script",
-      "[CACHE]\\builder\\src\\tools_webrtc\\gtest-parallel-wrapper.py",
-      "[CACHE]\\builder\\src\\out\\Win64_Debug_Win10\\modules_tests.exe",
-      "--gtest_filter=ScreenCapturerIntegrationTest.*",
-      "--gtest_also_run_disabled_tests"
-    ],
-    "cwd": "[CACHE]\\builder",
-    "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
-    },
-    "name": "modules_tests (screen capture disabled tests)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
       "RECIPE_MODULE[build::swarming]\\resources\\collect_task.py",
       "-o",
       "/path/to/tmp/json",
@@ -5979,6 +5944,41 @@
     ],
     "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [webrtc_nonparallel_tests]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Win64_Debug_Win10",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"buildername\": \"Win64 Debug (Win10)\", \"buildnumber\": 1337, \"git_revision\": \"git12345\", \"got_revision_cp\": \"12345\", \"mastername\": \"client.webrtc.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"buildername\": \"Win64 Debug (Win10)\", \"buildnumber\": 1337, \"git_revision\": \"git12345\", \"got_revision_cp\": \"12345\", \"mastername\": \"client.webrtc.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
+      "--test-type=modules_tests",
+      "--step-name=modules_tests (screen capture disabled tests)",
+      "--builder-name=Win64 Debug (Win10)",
+      "--slave-name=bot_id",
+      "--build-number=1337",
+      "--run-python-script",
+      "[CACHE]\\builder\\src\\tools_webrtc\\gtest-parallel-wrapper.py",
+      "[CACHE]\\builder\\src\\out\\Win64_Debug_Win10\\modules_tests.exe",
+      "--gtest_filter=ScreenCapturerIntegrationTest.*",
+      "--gtest_also_run_disabled_tests"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "name": "modules_tests (screen capture disabled tests)"
   },
   {
     "name": "$result",

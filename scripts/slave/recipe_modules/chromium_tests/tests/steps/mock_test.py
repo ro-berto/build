@@ -29,8 +29,6 @@ def RunSteps(api):
     else:
       api.python.succeeding_step('step failure in %s' % test.name, '')
 
-  test.post_run(api.chromium_tests.m, '')
-
 
 def GenTests(api):
   failure_code = api.chromium_tests.steps.MockTest.ExitCodes.FAILURE

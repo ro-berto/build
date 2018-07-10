@@ -98,16 +98,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
         if t.abort_on_failure:
           raise
 
-    for t in tests:
-      try:
-        t.post_run(caller_api, suffix)
-      except caller_api.step.InfraFailure:
-        raise
-      except caller_api.step.StepFailure:
-        failed_tests.append(t)
-        if t.abort_on_failure:
-          raise
-
     return failed_tests
 
   def run_tests_with_patch(self, caller_api, tests):

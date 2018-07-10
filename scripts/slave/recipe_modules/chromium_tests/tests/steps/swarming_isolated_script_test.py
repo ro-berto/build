@@ -67,7 +67,6 @@ def RunSteps(api):
   try:
     test.pre_run(api, 'with patch')
     test.run(api, 'with patch')
-    test.post_run(api, 'with patch')
 
   finally:
     if api.properties.get('run_without_patch'):
@@ -75,7 +74,6 @@ def RunSteps(api):
 
       test.pre_run(api, 'without patch')
       test.run(api, 'without patch')
-      test.post_run(api, 'without patch')
 
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [

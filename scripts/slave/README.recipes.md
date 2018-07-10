@@ -3217,11 +3217,11 @@ Returns:
 
 #### **class [TestUtilsApi](/scripts/slave/recipe_modules/test_utils/api.py#25)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#227)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#217)(self, data):**
 
-&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#230)(self, data):**
+&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#220)(self, data):**
 
-&mdash; **def [determine\_new\_failures](/scripts/slave/recipe_modules/test_utils/api.py#127)(self, caller_api, tests, deapply_patch_fn):**
+&mdash; **def [determine\_new\_failures](/scripts/slave/recipe_modules/test_utils/api.py#117)(self, caller_api, tests, deapply_patch_fn):**
 
 Utility function for running steps with a patch applied, and retrying
 failing steps without the patch. Failures from the run without the patch are
@@ -3249,7 +3249,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#247)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#237)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3274,9 +3274,9 @@ Args:
 Returns:
   The list of failed tests.
 
-&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#113)(self, caller_api, tests):**
+&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#103)(self, caller_api, tests):**
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#237)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#227)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 
@@ -3645,17 +3645,17 @@ Capture coverage data and upload a report.
 
 &mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/webrtc/api.py#66)(self, builders, recipe_configs):**
 
-&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#296)(self):**
+&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#293)(self):**
 
 &mdash; **def [check\_swarming\_version](/scripts/slave/recipe_modules/webrtc/api.py#183)(self):**
 
 &mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#141)(self, \*\*kwargs):**
 
-&mdash; **def [clean\_test\_output](/scripts/slave/recipe_modules/webrtc/api.py#381)(self):**
+&mdash; **def [clean\_test\_output](/scripts/slave/recipe_modules/webrtc/api.py#378)(self):**
 
 Remove all test output in out/, since we have tests leaking files.
 
-&mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#374)(self):**
+&mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#371)(self):**
 
 &mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#208)(self, phase=None):**
 
@@ -3667,15 +3667,15 @@ Remove all test output in out/, since we have tests leaking files.
 
 &mdash; **def [download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#163)(self):**
 
-&mdash; **def [extract\_build](/scripts/slave/recipe_modules/webrtc/api.py#353)(self):**
+&mdash; **def [extract\_build](/scripts/slave/recipe_modules/webrtc/api.py#350)(self):**
 
 &mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#217)(self, files=None, base_dir=None):**
 
-&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#273)(self):**
+&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#270)(self):**
 
-&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#337)(self):**
+&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#334)(self):**
 
-&mdash; **def [package\_build](/scripts/slave/recipe_modules/webrtc/api.py#286)(self):**
+&mdash; **def [package\_build](/scripts/slave/recipe_modules/webrtc/api.py#283)(self):**
 
 &mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#192)(self, phase=None):**
 

@@ -253,9 +253,6 @@ class WebRTCApi(recipe_api.RecipeApi):
           for test in tests:
             test.pre_run(self.m, suffix='')
 
-          for test in tests:
-            test.run(self.m, suffix='')
-
           # Build + upload archives while waiting for swarming tasks to finish.
           if self.bot_config.get('build_android_archive'):
             self.build_android_archive()
@@ -263,7 +260,7 @@ class WebRTCApi(recipe_api.RecipeApi):
             self.package_apprtcmobile()
 
           for test in tests:
-            test.post_run(self.m, suffix='')
+            test.run(self.m, suffix='')
 
           if run_android_device_steps:
             self.m.chromium_android.common_tests_final_steps(

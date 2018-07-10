@@ -2476,20 +2476,6 @@
     ]
   },
   {
-    "cmd": [
-      "vpython",
-      "-u",
-      "[CACHE]/builder/src/out/Android32_M_Nexus5X/bin/run_android_junit_tests",
-      "--verbose",
-      "--release"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
-    },
-    "name": "android_junit_tests"
-  },
-  {
     "cmd": [],
     "cwd": "[CACHE]/builder",
     "name": "ensure_goma (2)"
@@ -5529,6 +5515,20 @@
     ],
     "cwd": "[CACHE]/builder",
     "name": "Upload to test-results [webrtc_nonparallel_tests on Android]"
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "[CACHE]/builder/src/out/Android32_M_Nexus5X/bin/run_android_junit_tests",
+      "--verbose",
+      "--release"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
+    },
+    "name": "android_junit_tests"
   },
   {
     "name": "$result",
