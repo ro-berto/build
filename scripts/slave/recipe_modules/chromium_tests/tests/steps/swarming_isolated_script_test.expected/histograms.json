@@ -517,71 +517,6 @@
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
-      "@@@STEP_LOG_END@chartjson_info@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1 isolated out@blah@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "luci-auth",
-      "token",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-chromium-perf-histograms.json",
-      "-lifetime",
-      "3m"
-    ],
-    "infra_step": true,
-    "name": "get access token for service-account-chromium-perf-histograms.json",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_perf_dashboard_results.py",
-      "--results-file",
-      "[{\"guid\": \"1\", \"name\": \"foo1\", \"unit\": \"count\"}]",
-      "--oauth-token-file",
-      "\"extra.secret.token.should.not.be.logged\"",
-      "--perf-id",
-      "test-perf-id",
-      "--results-url",
-      "https://example/url",
-      "--output-json-file",
-      "/path/to/tmp/json",
-      "--name",
-      "test-perf-dashboard-id",
-      "--buildername",
-      "Linux Tests",
-      "--buildnumber",
-      "123",
-      "--build-dir",
-      "[CACHE]/builder/src/out",
-      "--got-webrtc-revision",
-      "0f90628433546e61d9268596da93418c623137f4",
-      "--got-v8-revision",
-      "801ada225ddc271c132c3a35f03975671d43e399",
-      "--got-revision-cp",
-      "refs/heads/master@{#123456}",
-      "--git-revision",
-      "test_sha",
-      "--send-as-histograms",
-      "--chromium-checkout-dir",
-      "[CACHE]/builder",
-      "--is-luci-builder",
-      "--perf-dashboard-machine-group",
-      "ChromePerf"
-    ],
-    "name": "test-perf-dashboard-id Dashboard Upload",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"base_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
@@ -598,7 +533,9 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
-      "@@@STEP_LOG_END@step_metadata@@@"
+      "@@@STEP_LOG_END@step_metadata@@@",
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@",
+      "@@@STEP_LINK@shard #1 isolated out@blah@@@"
     ]
   },
   {

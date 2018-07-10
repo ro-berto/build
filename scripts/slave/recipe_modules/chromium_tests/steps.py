@@ -17,16 +17,6 @@ from recipe_engine.types import freeze
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 
-UPLOAD_DASHBOARD_API_PROPERTIES = [
-    'got_revision_cp',
-    'git_revision',
-]
-
-UPLOAD_DASHBOARD_BUILD_PROPERTIES = [
-    'got_webrtc_revision',
-    'got_v8_revision'
-]
-
 
 class TestOptions(object):
   """Abstracts command line flags to be passed to the test."""
@@ -1935,133 +1925,14 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
             api, results, self._step_name(suffix), suffix)
 
   def _output_perf_results_if_present(self, api, step_result):
-    raw_results = \
-      getattr(step_result, 'isolated_script_perf_results', None) or {}
-
-    results = raw_results.get('data', {})
-    is_histogramset = raw_results.get('is_histogramset')
-
-    if not self._perf_id or not self._results_url:
-      # We aren't correctly configured to send data.
-      if results:
-        # warn if we have results and aren't uploading them
-        step_result.presentation.logs['NOT_UPLOADING_CHART_JSON'] = [
-            'Info: Bot is missing perf_id and/or results_url configuration, so'
-            ' not uploading chart json']
-      return
-
-    if not results:
-      # No data was generated
-      return
-
-    json_results = getattr(step_result, 'isolated_script_results', {})
-
-    is_benchmark_enabled = True
-    # If new json-test-results format exist, use that
-    if json_results.get('version') == 3:
-      is_benchmark_enabled = bool(json_results.get('tests'))
-    # If not, check the perf results
-    else:
-      is_benchmark_enabled = results.get('enabled', True)
-
-    if not is_benchmark_enabled:
-      step_result.presentation.logs['DISABLED_BENCHMARK'] = \
-         ['Info: Benchmark disabled, not sending results to dashboard']
-      return
-
-    # TODO(eyaich): Remove logging once we debug uploading chartjson
-    # to perf dashboard
-    step_result.presentation.logs['chartjson_info'] = \
-        ['Info: Setting up arguments for perf dashboard']
-
-    try:
-      oauth_token = api.puppet_service_account.get_access_token(
-          'chromium-perf-histograms')
-    # Only bots uploading histograms have/need these creds.
-    except api.step.StepFailure:  # pragma: no cover
-      oauth_token = None
-
-    # Produces a step that uploads results to dashboard
-    revisions = {}
-    for revision_name in UPLOAD_DASHBOARD_API_PROPERTIES:
-      if revision_name in api.properties:
-        revisions[revision_name] = api.properties[revision_name]
-    for revision_name in UPLOAD_DASHBOARD_BUILD_PROPERTIES:
-      if revision_name in api.chromium.build_properties:
-        revisions[revision_name] = api.chromium.build_properties[revision_name]
-
-    # TODO(eakuefner): Confirm that 'version' is unused by legacy pipeline
-    # and remove it.
-    if not is_histogramset and 'version' in api.properties:
-      revisions['version'] = api.properties['version']
-
-    args = [
-        '--results-file', api.raw_io.input_text(data=json.dumps(results)),
-        # We are passing this in solely to have the output show up as a link
-        # in the step log, it will not be used after the upload is complete.
-        '--oauth-token-file', api.json.input(oauth_token),
-        '--perf-id', self._perf_id,
-        '--results-url', self._results_url,
-        '--output-json-file', api.json.output(),
-        '--name', self._perf_dashboard_id,
-        '--buildername', api.properties['buildername'],
-        '--buildnumber', api.properties['buildnumber'],
-    ]
-
-    if api.chromium.c.build_dir:
-      args.extend(['--build-dir', api.chromium.c.build_dir])
-    for revision_name, revision in revisions.iteritems():
-      flag_name = '--%s' % revision_name.replace('_', '-')
-      args.extend([flag_name, revision])
-
-    if is_histogramset:
-      args.append('--send-as-histograms')
-      args.extend(
-          ['--chromium-checkout-dir', api.chromium_checkout.working_dir])
-    else:
-      args.append('--output-json-dashboard-url')
-      args.append(api.json.output(add_json_log=False, name='dashboard_url'))
-
-    if api.runtime.is_luci:
-      mastername = api.properties.get('perf_dashboard_machine_group')
-      if mastername:
-        args.extend(
-            ['--is-luci-builder', '--perf-dashboard-machine-group', mastername])
-      else:
-        raise api.step.StepFailure(
-            'LUCI builder must set perf_dashboard_machine_group property '
-            'for perf dashboard uploading. For more details, see '
-            'bit.ly/perf-dashboard-machine-group.')
-
-    step_name = '%s Dashboard Upload' % self._perf_dashboard_id
-    step_result = api.build.python(
-        step_name,
-        api.chromium.package_repo_resource(
-            'scripts', 'slave', 'upload_perf_dashboard_results.py'),
-        args,
-        venv=True,
-        step_test_data=(
-            lambda: api.json.test_api.output('chromeperf.appspot.com',
-                                             name='dashboard_url') +
-                    api.json.test_api.output({})))
-
-    if not is_histogramset:
-      step_result.presentation.links['Results Dashboard'] = (
-          step_result.json.outputs.get('dashboard_url', ''))
-
-    return step_result
+    # webrtc overrides this method in recipe_modules/webrtc/steps.py
+    pass
 
 
 def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
                              test_spec, bot_update_step,
                              swarming_dimensions=None,
-                             scripts_compile_targets=None,
-                             bot_config=None):
-  if not bot_config:
-    # Get the perf id and results url if present.
-    bot_config = (chromium_tests_api.builders.get(mastername, {})
-        .get('builders', {}).get(buildername, {}))
-
+                             scripts_compile_targets=None):
   def isolated_script_delegate_common(test, name=None, **kwargs):
 
     common_kwargs = {}
@@ -2101,14 +1972,10 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
   def isolated_script_swarming_delegate(spec, **kwargs):
     kwargs.update(isolated_script_delegate_common(spec, **kwargs))
 
-    default_perf_id = bot_config.get('perf-id')
     swarming_spec = spec.get('swarming', {})
 
     kwargs['ignore_task_failure'] = swarming_spec.get(
         'ignore_task_failure', False)
-    kwargs['perf_id'] = spec.get('override_perf_id', default_perf_id)
-    kwargs['perf_dashboard_id'] = spec.get('name', '')
-    kwargs['results_url'] = bot_config.get('results-url')
     kwargs['waterfall_buildername'] = buildername
     kwargs['waterfall_mastername'] = mastername
     kwargs['only_retry_failed_tests'] = spec.get(

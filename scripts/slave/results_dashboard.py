@@ -3,7 +3,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Functions for adding results to perf dashboard."""
+"""Functions for adding results to perf dashboard.
+
+NOTE: This file is deprecated and no longer maintained by the
+perf team after crbug.com/757933.  Please use src side
+script src/tools/perf/core/results_dashboard.py instead.
+
+"""
 
 import calendar
 import datetime

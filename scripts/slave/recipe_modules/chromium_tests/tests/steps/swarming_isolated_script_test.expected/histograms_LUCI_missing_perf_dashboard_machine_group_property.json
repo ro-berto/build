@@ -517,24 +517,26 @@
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}, {\\\"internal_failure\\\": false, \\\"failure\\\": false, \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LOG_LINE@chartjson_info@Info: Setting up arguments for perf dashboard@@@",
-      "@@@STEP_LOG_END@chartjson_info@@@",
+      "@@@STEP_LOG_LINE@step_metadata@{@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"base_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"8086\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"base_unittests on Intel GPU on Linux (with patch)\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"base_unittests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": true, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
+      "@@@STEP_LOG_LINE@step_metadata@}@@@",
+      "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@"
     ]
-  },
-  {
-    "cmd": [
-      "luci-auth",
-      "token",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-chromium-perf-histograms.json",
-      "-lifetime",
-      "3m"
-    ],
-    "infra_step": true,
-    "name": "get access token for service-account-chromium-perf-histograms.json",
-    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
@@ -570,8 +572,7 @@
   },
   {
     "name": "$result",
-    "reason": "LUCI builder must set perf_dashboard_machine_group property for perf dashboard uploading. For more details, see bit.ly/perf-dashboard-machine-group.",
     "recipe_result": null,
-    "status_code": 1
+    "status_code": 0
   }
 ]

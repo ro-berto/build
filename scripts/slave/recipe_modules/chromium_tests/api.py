@@ -244,8 +244,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               self.m, self, mastername, buildername, test_spec,
               bot_update_step,
               swarming_dimensions=swarming_dimensions,
-              scripts_compile_targets=scripts_compile_targets,
-              bot_config=bot_config)) +
+              scripts_compile_targets=scripts_compile_targets)) +
           tuple(tests))
     return tests
 
@@ -858,11 +857,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for name in ('buildername', 'bot_id', 'buildnumber', 'mastername'):
       properties[name] = self.m.properties[name]
     properties['slavename'] = properties['bot_id']
-
-    # Optional properties
-    for name in ('perf-id', 'results-url'):
-      if bot_config.get(name):
-        properties[name] = bot_config.get(name)
 
     properties['target_platform'] = self.m.chromium.c.TARGET_PLATFORM
 

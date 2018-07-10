@@ -3,6 +3,12 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+"""
+NOTE: This file is deprecated and no longer maintained by the
+perf team after crbug.com/757933.  Please use src side
+script src/tools/perf/upload_results_to_perf_dashboard.py instead.
+"""
+
 import logging
 import json
 import optparse

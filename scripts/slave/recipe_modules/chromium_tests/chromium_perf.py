@@ -76,7 +76,7 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
 
 
 def BuildSpec(
-  config_name, perf_id, platform, target_bits,
+  config_name, platform, target_bits,
   compile_targets=None, extra_compile_targets=None, force_exparchive=False,
   run_sizes=True):
   if not compile_targets:
@@ -85,7 +85,7 @@ def BuildSpec(
   tests = []
     # TODO: Run sizes on Android.
   if run_sizes and not platform == 'android':
-    tests = [steps.SizesStep('https://chromeperf.appspot.com', perf_id)]
+    tests = [steps.SizesStep('https://chromeperf.appspot.com', config_name)]
 
   spec = _BaseSpec(
       bot_type='builder',
@@ -107,7 +107,7 @@ def BuildSpec(
   return spec
 
 
-def TestSpec(config_name, perf_id, platform, target_bits,
+def TestSpec(config_name, platform, target_bits,
              parent_buildername=None, tests=None, remove_system_webview=None):
   spec = _BaseSpec(
       bot_type='tester',
@@ -121,15 +121,13 @@ def TestSpec(config_name, perf_id, platform, target_bits,
   if not parent_buildername:
     parent_buildername = builders[platform][target_bits]
   spec['parent_buildername'] = parent_buildername
-  spec['perf-id'] = perf_id
-  spec['results-url'] = 'https://chromeperf.appspot.com'
 
   return spec
 
 
-def _AddIsolatedTestSpec(name, perf_id, platform, target_bits=64,
+def _AddIsolatedTestSpec(name, platform, target_bits=64,
                          parent_buildername=None):
-  spec = TestSpec('chromium_perf', perf_id, platform, target_bits,
+  spec = TestSpec('chromium_perf', platform, target_bits,
                   parent_buildername=parent_buildername)
   SPEC['builders'][name] = spec
 
@@ -143,7 +141,7 @@ def _AddBuildSpec(
     perf_id = '%s-%d' % (platform, target_bits)
 
   SPEC['builders'][name] = BuildSpec(
-      'chromium_perf', perf_id, platform, target_bits,
+      'chromium_perf', platform, target_bits,
       extra_compile_targets=extra_compile_targets,
       force_exparchive=force_exparchive)
 
@@ -188,31 +186,29 @@ _AddBuildSpec(
 
 
 # 32 bit android swarming
-_AddIsolatedTestSpec('Android Nexus5X Perf', 'android-nexus5X', 'android',
+_AddIsolatedTestSpec('Android Nexus5X Perf', 'android',
                      parent_buildername='Android Compile Perf', target_bits=32)
-_AddIsolatedTestSpec('Android Nexus5 Perf', 'android-nexus5', 'android',
+_AddIsolatedTestSpec('Android Nexus5 Perf', 'android',
                      target_bits=32, parent_buildername='Android Compile Perf')
-_AddIsolatedTestSpec('Android One Perf', 'android-one', 'android',
+_AddIsolatedTestSpec('Android One Perf', 'android',
                      target_bits=32, parent_buildername='Android Compile Perf')
 
 # Webview
-_AddIsolatedTestSpec('Android Nexus5X WebView Perf', 'android-webview-nexus5X',
+_AddIsolatedTestSpec('Android Nexus5X WebView Perf',
                      'android', parent_buildername='Android arm64 Compile Perf')
-_AddIsolatedTestSpec('Android Nexus6 WebView Perf', 'android-webview-nexus6',
+_AddIsolatedTestSpec('Android Nexus6 WebView Perf',
                      'android', target_bits=32,
                      parent_buildername='Android Compile Perf')
 
 
-_AddIsolatedTestSpec('Win 10 High-DPI Perf', 'win-high-dpi', 'win')
-_AddIsolatedTestSpec('Win 10 Perf', 'chromium-rel-win10', 'win')
-_AddIsolatedTestSpec('Win 7 Perf', 'chromium-rel-win7-dual', 'win',
-                     target_bits=32)
-_AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'chromium-rel-win7-gpu-nvidia',
-                     'win')
+_AddIsolatedTestSpec('Win 10 High-DPI Perf', 'win')
+_AddIsolatedTestSpec('Win 10 Perf', 'win')
+_AddIsolatedTestSpec('Win 7 Perf', 'win', target_bits=32)
+_AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'win')
 
 
-_AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', '', 'mac')
-_AddIsolatedTestSpec('mac-10_13_laptop_high_end-perf', '', 'mac')
+_AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', 'mac')
+_AddIsolatedTestSpec('mac-10_13_laptop_high_end-perf', 'mac')
 
 
-_AddIsolatedTestSpec('linux-perf', '', 'linux')
+_AddIsolatedTestSpec('linux-perf', 'linux')
