@@ -83,5 +83,6 @@ def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
     yield (test +
            api.step_data('calculate targets',
-               stdout=api.raw_io.output_text('target1 target2 target3'))
-           )
+               stdout=api.raw_io.output_text('target1 target2 target3')) +
+           api.properties(
+               patch_repository_url='https://webrtc.googlesource.com/src'))

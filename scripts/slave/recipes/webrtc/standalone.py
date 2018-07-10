@@ -123,8 +123,8 @@ def GenTests(api):
       test += api.properties.tryserver(
           mastername=mastername,
           buildername=buildername,
-          gerrit_project='src',
-      )
+          gerrit_url='https://webrtc-review.googlesource.com',
+          gerrit_project='src')
     test += api.properties(buildnumber=1337)
 
     return test

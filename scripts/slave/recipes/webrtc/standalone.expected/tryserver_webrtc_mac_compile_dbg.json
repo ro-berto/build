@@ -15,7 +15,7 @@
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--gerrit_repo",
-      "https://chromium.googlesource.com/src",
+      "https://webrtc.googlesource.com/src",
       "--gerrit_ref",
       "refs/changes/89/456789/12",
       "--output_json",
