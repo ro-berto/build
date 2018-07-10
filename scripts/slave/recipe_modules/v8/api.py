@@ -1101,6 +1101,7 @@ class V8Api(recipe_api.RecipeApi):
     lines.append('Test: %s%s' % (results[0]['name'], flaky_suffix))
     lines.append('Flags: %s' % ' '.join(results[0]['flags']))
     lines.append('Command: %s' % results[0]['command'])
+    lines.append('Variant: %s' % results[0]['variant'])
     lines.append('')
     lines.append('Build environment:')
     build_environment = self.build_environment

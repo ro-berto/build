@@ -1592,6 +1592,7 @@
       "@@@STEP_LOG_LINE@test-name@Test: suite-name/dir/test-name@@@",
       "@@@STEP_LOG_LINE@test-name@Flags: @@@",
       "@@@STEP_LOG_LINE@test-name@Command: d8 test.js@@@",
+      "@@@STEP_LOG_LINE@test-name@Variant: default@@@",
       "@@@STEP_LOG_LINE@test-name@@@@",
       "@@@STEP_LOG_LINE@test-name@Build environment:@@@",
       "@@@STEP_LOG_LINE@test-name@Not available. Please look up the builder's configuration.@@@",
