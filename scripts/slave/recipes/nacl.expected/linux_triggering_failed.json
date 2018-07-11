@@ -156,6 +156,7 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts:RECIPE_PACKAGE_REPO[build]/site_config",
       "RUNTEST": "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py"
     },
     "infra_step": true,
@@ -206,6 +207,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_TMP_DIR": "[TMP_BASE]/goma",
       "NOCONTROL_GOMA": "1",
+      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]/scripts:RECIPE_PACKAGE_REPO[build]/site_config",
       "RUNTEST": "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py"
     },
     "name": "annotated steps",
