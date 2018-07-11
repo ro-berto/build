@@ -114,6 +114,48 @@
     "name": "tests"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/client/build/archive.py",
+      "--platform",
+      "linux",
+      "--build_dir",
+      "[START_DIR]/client/out",
+      "--target_dir",
+      "Release",
+      "--dist_dir",
+      "[TMP_BASE]"
+    ],
+    "name": "archive"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "pkg-build",
+      "-in",
+      "[START_DIR]/client/out/Release/goma-linux",
+      "-name",
+      "infra/goma/client/linux",
+      "-out",
+      "[TMP_BASE]/package.cipd",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-install-mode",
+      "copy"
+    ],
+    "name": "build linux",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/goma/client/linux\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

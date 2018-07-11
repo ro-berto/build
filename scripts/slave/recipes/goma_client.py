@@ -4,6 +4,7 @@
 
 DEPS = [
     'depot_tools/bot_update',
+    'depot_tools/cipd',
     'depot_tools/depot_tools',
     'depot_tools/gclient',
     'recipe_engine/context',
@@ -57,6 +58,22 @@ def RunSteps(api):
         script=api.path['checkout'].join('build', 'run_unittest.py'),
         args=['--build-dir', build_out_dir,
               '--target', build_target, '--non-stop'])
+
+  # 4. Create archive.
+  api.python(
+      name='archive',
+      script=api.path['checkout'].join('build', 'archive.py'),
+      args=['--platform', api.platform.name,
+            '--build_dir', build_out_dir,
+            '--target_dir', build_target,
+            '--dist_dir', api.path['tmp_base']])
+
+  # 5. Build CIPD package.
+  # archive.py creates goma-<platform>/ in out/Release.
+  root = build_out_dir.join(build_target, 'goma-%s' % api.platform.name)
+  package_file = api.path['tmp_base'].join('package.cipd')
+  pkg_name = 'infra/goma/client/%s' % api.platform.name
+  api.cipd.build(root, package_file, pkg_name, install_mode='copy')
 
 
 def GenTests(api):
