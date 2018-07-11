@@ -12,6 +12,7 @@ DEPS = [
   'depot_tools/depot_tools',
   'depot_tools/gclient',
   'depot_tools/git',
+  'depot_tools/gitiles',
   'depot_tools/gsutil',
   'depot_tools/tryserver',
   'goma',

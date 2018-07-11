@@ -77,7 +77,8 @@ def GenTests(api):
 
   def generate_builder(mastername, buildername, revision,
                        parent_got_revision=None, failing_test=None,
-                       suffix=None, fail_android_archive=False):
+                       suffix=None, fail_android_archive=False,
+                       is_chromium=False):
     suffix = suffix or ''
     bot_config = builders[mastername]['builders'][buildername]
     bot_type = bot_config.get('bot_type', 'builder_tester')
@@ -120,11 +121,12 @@ def GenTests(api):
       test += api.step_data('build android archive', retcode=1)
 
     if mastername.startswith('tryserver'):
-      test += api.properties.tryserver(
-          mastername=mastername,
-          buildername=buildername,
-          gerrit_url='https://webrtc-review.googlesource.com',
-          gerrit_project='src')
+      kwargs = dict(mastername=mastername,
+                    buildername=buildername)
+      if not is_chromium:
+        kwargs.update(gerrit_url='https://webrtc-review.googlesource.com',
+                      gerrit_project='src')
+      test += api.properties.tryserver(**kwargs)
     test += api.properties(buildnumber=1337)
 
     return test
@@ -133,6 +135,14 @@ def GenTests(api):
     master_config = builders[mastername]
     for buildername in master_config['builders'].keys():
       yield generate_builder(mastername, buildername, revision='12345')
+
+  mastername = 'tryserver.webrtc'
+  buildername = 'linux_compile_rel'
+  yield generate_builder(mastername, buildername, revision=None,
+                         is_chromium=True, suffix='_chromium')
+  yield (generate_builder(mastername, buildername, revision=None,
+                          is_chromium=True, suffix='_chromium_failing_patch') +
+         api.step_data('apply patch', retcode=1))
 
   # Forced builds (not specifying any revision) and test failures.
   mastername = 'client.webrtc'

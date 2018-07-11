@@ -18,6 +18,11 @@ sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
 from chromium_tests.steps import SwarmingTest
 
 
+CHROMIUM_REPO = 'https://chromium.googlesource.com/chromium/src'
+# WebRTC's dependencies on Chromium's subtree mirrors like
+# https://chromium.googlesource.com/chromium/src/build.git
+CHROMIUM_DEPS = ['base', 'build', 'ios', 'testing', 'third_party', 'tools']
+
 
 class WebRTCApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
@@ -138,8 +143,34 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.m.swarming.default_hard_timeout = self.bot_config['swarming_timeout']
         self.m.swarming.default_io_timeout = self.bot_config['swarming_timeout']
 
+  def _apply_patch(self, repository_url, patch_ref, include_subdirs=()):
+    """Applies a patch by downloading the text diff from Gitiles."""
+    with self.m.context(cwd=self.m.path['checkout']):
+      patch_diff = self.m.gitiles.download_file(
+          repository_url, '', patch_ref + '^!',
+          step_name='download patch',
+          step_test_data=self.test_api.example_patch)
+
+      includes = ['--include=%s/*' % subdir for subdir in include_subdirs]
+      try:
+        self.m.git('apply', *includes,
+                   stdin=self.m.raw_io.input_text(patch_diff),
+                   name='apply patch', infra_step=False)
+      except recipe_api.StepFailure:
+        self.m.step.active_result.presentation.step_text = 'Patch failure'
+        self.m.tryserver.set_patch_failure_tryjob_result()
+        raise
+
   def checkout(self, **kwargs):
     self._working_dir = self.m.chromium_checkout.get_checkout_dir({})
+
+    is_chromium = self.m.properties.get('patch_repository_url') == CHROMIUM_REPO
+
+    if is_chromium:
+      for subdir in CHROMIUM_DEPS:
+        self.m.gclient.c.revisions['src/%s' % subdir] = 'HEAD'
+
+      kwargs.setdefault('patch', False)
 
     with self.m.context(cwd=self.m.context.cwd or self._working_dir):
       update_step = self.m.bot_update.ensure_checkout(**kwargs)
@@ -151,6 +182,11 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.revision_cp = revs['got_revision_cp']
     self.revision_number = str(self.m.commit_position.parse_revision(
         self.revision_cp))
+
+    if is_chromium:
+      self._apply_patch(self.m.properties['patch_repository_url'],
+                        self.m.properties['patch_ref'],
+                        include_subdirs=CHROMIUM_DEPS)
 
   def download_audio_quality_tools(self):
     with self.m.depot_tools.on_path():
