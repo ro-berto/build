@@ -201,24 +201,6 @@ SPEC = {
       },
     },
 
-    'Oreo Phone Tester': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_PLATFORM': 'android',
-      },
-      'parent_buildername': 'Android arm64 Builder (dbg)',
-      'parent_mastername': 'chromium.android',
-      'bot_type': 'tester',
-      'android_config': 'arm64_builder_mb',
-      'android_apply_config': ['use_devil_provision'],
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'x64 Device Tester': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',

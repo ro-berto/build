@@ -74,14 +74,6 @@
       "category": "2Testers",
       "mergeRequests": True,
     },
-    "Oreo Phone Tester": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["oreo_phone"],
-      "category": "2Testers",
-      "mergeRequests": True,
-    },
     "x64 Device Tester": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -154,16 +146,6 @@
       },
       "slaves": [
         "slave13-c1",
-      ],
-    },
-    "oreo_phone": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": [
-        "slave240-c1",
       ],
     },
     "x64_ccompute_launcher": {

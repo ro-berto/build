@@ -177,7 +177,8 @@
             ]
           },
           "*": {}
-        }
+        },
+        "excluded_builders": [ "Oreo Phone Tester" ]
       }
     ],
     "https://build.chromium.org/p/chromium.android.fyi": [
