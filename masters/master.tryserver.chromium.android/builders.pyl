@@ -76,62 +76,6 @@
       "slavebuilddir": "android",
       "slave_pools": ["slaves_with_n5s"],
     },
-    "android_chromium_variable": {
-      "builder_timeout_s": 36000,  # 60 * 600
-      "recipe": "findit/chromium/compile",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slavebuilddir": "android",
-      "slave_pools": ["ccompute_optional_bots"],
-    },
-    "android_chromium_variable_arm64": {
-      "builder_timeout_s": 36000,  # 60 * 600
-      "recipe": "findit/chromium/compile",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slavebuilddir": "android_arm64_dbg_recipe",
-      "slave_pools": ["ccompute_optional_bots"],
-    },
-    "android_chromium_variable_cast_shell": {
-      "builder_timeout_s": 36000,  # 60 * 600
-      "recipe": "findit/chromium/compile",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slavebuilddir": "cast_shell_android",
-      "slave_pools": ["ccompute_optional_bots"],
-    },
-    "android_chromium_variable_clang": {
-      "builder_timeout_s": 36000,  # 60 * 600
-      "recipe": "findit/chromium/compile",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slavebuilddir": "android_clang_dbg_recipe",
-      "slave_pools": ["ccompute_optional_bots"],
-    },
-    "android_chromium_variable_nexus4": {
-      "builder_timeout_s": 36000,  # 60 * 600
-      "recipe": "findit/chromium/compile",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slavebuilddir": "android_chromium_variable_nexus4",
-      "slave_pools": ["slaves_with_nexus4_devices"],
-    },
-    "android_chromium_variable_archive": {
-      "builder_timeout_s": 36000,  # 60 * 600
-      "recipe": "findit/chromium/compile",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slavebuilddir": "android_chromium_variable_archive",
-      "slave_pools": ["ccompute_optional_bots"],
-    },
-    "android_chromium_variable_deflake": {
-      "builder_timeout_s": 36000,  # 60 * 600
-      "recipe": "findit/chromium/flake",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slavebuilddir": "android",
-      "slave_pools": ["ccompute_optional_bots_2"],
-    },
     "android_mojo": {
       "builder_timeout_s": 10800,  # 60 * 60 * 4
       "recipe": "chromium_trybot",
@@ -270,15 +214,5 @@
         "build247-m4",
       ],
     },
-    "slaves_with_nexus4_devices": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": [
-        "build35-b4",
-      ],
-    }
   }
 }
