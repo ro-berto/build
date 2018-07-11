@@ -54,7 +54,6 @@ SPEC['builders'] = {
       'chrome_with_codecs',
       'mb',
       'ninja_confirm_noop',
-      'fetch_telemetry_dependencies',
     ],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {

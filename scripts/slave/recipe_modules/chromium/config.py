@@ -809,10 +809,6 @@ def download_vr_test_apks(c):
   c.gyp_env.DOWNLOAD_VR_TEST_APKS = 1
 
 @config_ctx()
-def fetch_telemetry_dependencies(c):
-  c.gyp_env.GYP_DEFINES['fetch_telemetry_dependencies'] = 1
-
-@config_ctx()
 def mac_toolchain(c, xcode_build_version=None):
   if c.HOST_PLATFORM != 'mac': # pragma: no cover
     raise BadConf('Cannot setup Xcode on "%s"' % c.HOST_PLATFORM)
