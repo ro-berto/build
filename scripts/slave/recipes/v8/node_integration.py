@@ -47,6 +47,19 @@ BUILDERS = freeze({
           'platform': 'linux',
         },
       },
+      'V8 Linux64 debug - node.js baseline': {
+        'baseline_only': True,
+        'is_debug': True,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'V8 Linux64 debug - node.js integration': {
+        'is_debug': True,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
       'V8 Win64 - node.js baseline': {
         'baseline_only': True,
         'testing': {
@@ -107,6 +120,15 @@ def goma_wrapper(api):
     raise
 
 
+def _run_make(api, step_name, args):
+  make_mode_args = []
+  if api.v8.bot_config.get('is_debug', False):
+    make_mode_args = ['BUILDTYPE=Debug']
+  api.step(
+      step_name,
+      ['make'] + make_mode_args + args,
+  )
+
 def _build_and_test(api, goma_dir):
   with api.context(cwd=api.v8.checkout_root.join('node.js')):
     args = [
@@ -115,6 +137,12 @@ def _build_and_test(api, goma_dir):
       '--build-v8-with-gn-extra-gn-args',
       'use_goma=true goma_dir="%s"' % goma_dir,
     ]
+
+    build_config = 'Release'
+    if api.v8.bot_config.get('is_debug', False):
+      args.append('--debug')
+      build_config = 'Debug'
+
     env = {}
     if api.platform.is_win:
       # TODO(machenbach): Also switch other platforms to ninja eventually.
@@ -136,49 +164,23 @@ def _build_and_test(api, goma_dir):
         # TODO(machenbach): Figure out what to do with clear-stalled and addons.
         api.step(
           'build node.js',
-          ['ninja', '-C', api.path.join('out', 'Release')],
+          ['ninja', '-C', api.path.join('out', build_config)],
         )
       else:
-        api.step(
-          'build node.js',
-          ['make', '-j8'],
-        )
-
-        api.step(
-          'clean addons', ['make', 'test-addons-clean'],
-        )
+        _run_make(api, 'build node.js', ['-j8'])
+        _run_make(api, 'clean addons', ['test-addons-clean'])
 
         # TODO(machenbach): This contains all targets test-ci depends on.
         # Migrate this to ninja.
-        api.step(
-          'clear stalled',
-          [
-            'make', '-j8', 'clear-stalled',
-          ],
-        )
-        api.step(
-          'build addons',
-          [
-            'make', '-j8', 'build-addons',
-          ],
-        )
-        api.step(
-          'build addons-napi',
-          [
-            'make', '-j8', 'build-addons-napi',
-          ],
-        )
-        api.step(
-          'build doc-only',
-          [
-            'make', '-j8', 'doc-only',
-          ],
-        )
+        _run_make(api, 'clear stalled', ['-j8', 'clear-stalled'])
+        _run_make(api, 'build addons', ['-j8', 'build-addons'])
+        _run_make(api, 'build addons-napi', ['-j8', 'build-addons-napi'])
+        _run_make(api, 'build doc-only', ['-j8', 'doc-only'])
 
     api.step(
       'run cctest',
       [
-        api.path.join('out', 'Release', 'cctest'),
+        api.path.join('out', build_config, 'cctest'),
       ],
     )
 
@@ -197,7 +199,7 @@ def _build_and_test(api, goma_dir):
       args=[
         '-p', 'tap',
         '-j8',
-        '--mode=release',
+        '--mode=%s' % build_config.lower(),
         '--flaky-tests', 'run',
       ] + suites,
     )
@@ -228,9 +230,9 @@ def _build_and_upload(api, goma_dir):
   # Build and install.
   with goma_wrapper(api):
     with api.context(cwd=api.v8.checkout_root.join('node.js')):
-      api.step(
-        'build and install node.js',
-        ['make', '-j8', 'install', 'DESTDIR=%s' % archive_dir],
+      _run_make(
+          api, 'build and install node.js',
+          ['-j8', 'install', 'DESTDIR=%s' % archive_dir],
       )
 
   # Zip build.
@@ -288,8 +290,8 @@ def RunSteps(api):
   # Build and test node.js with the checked-out v8.
   _build_and_test(api, goma_dir)
 
-  # Don't upload on tryserver.
-  if api.tryserver.is_tryserver:
+  # Don't upload on tryserver or on debug bots.
+  if api.tryserver.is_tryserver or api.v8.bot_config.get('is_debug', False):
     return
 
   # Build and upload node.js distribution with the checked-out v8.
@@ -343,7 +345,8 @@ def GenTests(api):
               revision='deadbeef',
               path_config='kitchen',
           ) +
-          api.platform(bot_config['testing']['platform'], 64)
+          api.platform(bot_config['testing']['platform'], 64) +
+          api.v8.hide_infra_steps()
       )
 
   yield (

@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'build_for_node': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}, {'custom_vars': {'build_for_node': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'node.js', 'url': 'https://chromium.googlesource.com/external/github.com/v8/node'}]",
       "--patch_root",
@@ -13,7 +13,7 @@
       "--git-cache-dir",
       "[GIT_CACHE]",
       "--cleanup-dir",
-      "[CLEANUP]\\bot_update",
+      "[CLEANUP]/bot_update",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
@@ -21,7 +21,7 @@
       "--revision",
       "v8@deadbeef"
     ],
-    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_baseline",
+    "cwd": "[BUILDER_CACHE]/V8_Linux64_debug___node_js_integration",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -100,13 +100,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_baseline\\v8",
+    "cwd": "[BUILDER_CACHE]/V8_Linux64_debug___node_js_integration/v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "env_suffixes": {
       "PATH": [
@@ -119,50 +118,108 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\V8_Win64___node_js_baseline\\node.js\\configure",
+      "[BUILDER_CACHE]/V8_Linux64_debug___node_js_integration/v8/tools/node/update_node.py",
+      "[BUILDER_CACHE]/V8_Linux64_debug___node_js_integration/v8",
+      "[BUILDER_CACHE]/V8_Linux64_debug___node_js_integration/node.js"
+    ],
+    "name": "update v8"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/V8_Linux64_debug___node_js_integration/node.js/configure",
       "--build-v8-with-gn",
       "--build-v8-with-gn-max-jobs=20",
       "--build-v8-with-gn-extra-gn-args",
-      "use_goma=true goma_dir=\"[GOMA_CACHE]\\client\"",
-      "--ninja",
-      "--use-clang-cl"
+      "use_goma=true goma_dir=\"[GOMA_CACHE]/client\"",
+      "--debug"
     ],
-    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_baseline\\node.js",
-    "env": {
-      "DEPOT_TOOLS_WIN_TOOLCHAIN": "1"
-    },
+    "cwd": "[BUILDER_CACHE]/V8_Linux64_debug___node_js_integration/node.js",
     "name": "configure node.js"
   },
   {
     "cmd": [
-      "ninja",
-      "-C",
-      "out\\Release"
+      "make",
+      "BUILDTYPE=Debug",
+      "-j8"
     ],
-    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_baseline\\node.js",
+    "cwd": "[BUILDER_CACHE]/V8_Linux64_debug___node_js_integration/node.js",
     "name": "build node.js"
   },
   {
     "cmd": [
-      "out\\Release\\cctest"
+      "make",
+      "BUILDTYPE=Debug",
+      "test-addons-clean"
     ],
-    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_baseline\\node.js",
+    "cwd": "[BUILDER_CACHE]/V8_Linux64_debug___node_js_integration/node.js",
+    "name": "clean addons"
+  },
+  {
+    "cmd": [
+      "make",
+      "BUILDTYPE=Debug",
+      "-j8",
+      "clear-stalled"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Linux64_debug___node_js_integration/node.js",
+    "name": "clear stalled"
+  },
+  {
+    "cmd": [
+      "make",
+      "BUILDTYPE=Debug",
+      "-j8",
+      "build-addons"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Linux64_debug___node_js_integration/node.js",
+    "name": "build addons"
+  },
+  {
+    "cmd": [
+      "make",
+      "BUILDTYPE=Debug",
+      "-j8",
+      "build-addons-napi"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Linux64_debug___node_js_integration/node.js",
+    "name": "build addons-napi"
+  },
+  {
+    "cmd": [
+      "make",
+      "BUILDTYPE=Debug",
+      "-j8",
+      "doc-only"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Linux64_debug___node_js_integration/node.js",
+    "name": "build doc-only"
+  },
+  {
+    "cmd": [
+      "out/Debug/cctest"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Linux64_debug___node_js_integration/node.js",
     "name": "run cctest"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\V8_Win64___node_js_baseline\\node.js\\tools\\test.py",
+      "[BUILDER_CACHE]/V8_Linux64_debug___node_js_integration/node.js/tools/test.py",
       "-p",
       "tap",
       "-j8",
-      "--mode=release",
+      "--mode=debug",
       "--flaky-tests",
       "run",
-      "default"
+      "default",
+      "addons",
+      "addons-napi",
+      "doctool"
     ],
-    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_baseline\\node.js",
+    "cwd": "[BUILDER_CACHE]/V8_Linux64_debug___node_js_integration/node.js",
     "name": "run tests"
   },
   {

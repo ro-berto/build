@@ -383,6 +383,23 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         [buildername],
     ).as_properties_dict(buildername)
 
+  def hide_infra_steps(self):
+    """This hides some infra steps in the expectations which are tested
+    sufficiently elsewhere.
+    """
+    skip_fragments = map(re.escape, [
+      'ensure builder cache dir',
+      'ensure_goma',
+      'calculate the number of recommended jobs',
+      'preprocess_for_goma',
+      'postprocess_for_goma',
+      'read revision',
+      'swarming_client',
+      'swarming.py --version',
+    ])
+    return self.post_process(
+        Filter().include_re(r'^((?!%s).)*$' % '|'.join(skip_fragments)))
+
   def version_file(self, patch_level, desc, count=1):
     # Recipe step name disambiguation.
     suffix = ' (%d)' % count if count > 1 else ''
@@ -529,18 +546,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       )
 
     # Skip some goma and swarming related steps in expectations.
-    skip_fragments = map(re.escape, [
-      'ensure builder cache dir',
-      'ensure_goma',
-      'calculate the number of recommended jobs',
-      'preprocess_for_goma',
-      'postprocess_for_goma',
-      'read revision',
-      'swarming_client',
-      'swarming.py --version',
-    ])
-    test += self.post_process(
-        Filter().include_re(r'^((?!%s).)*$' % '|'.join(skip_fragments)))
+    test += self.hide_infra_steps()
 
     # Only show the command for swarming trigger steps (i.e. drop logs).
     # List of (step-name regexp, tuple of fields to keep).
