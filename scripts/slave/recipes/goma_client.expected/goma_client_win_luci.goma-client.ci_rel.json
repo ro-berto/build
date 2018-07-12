@@ -3,21 +3,21 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'client', 'url': 'https://chromium.googlesource.com/infra/goma/client'}]",
+      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'client', 'url': 'https://chromium.googlesource.com/infra/goma/client'}]",
       "--patch_root",
       "client",
       "--revision_mapping_file",
       "{\"got_revision\": \"client\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[CACHE]\\git",
       "--cleanup-dir",
-      "[CLEANUP]/bot_update",
+      "[CLEANUP]\\bot_update",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "client@f3cdb946812584bc1789076599929fac4dc5da2b",
+      "client@8b3cd40a25a512033cc8c0797e41de9ecfc2432c",
       "--gerrit_no_reset"
     ],
     "env_prefixes": {
@@ -32,7 +32,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"client\": \"f3cdb946812584bc1789076599929fac4dc5da2b\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"client\": \"8b3cd40a25a512033cc8c0797e41de9ecfc2432c\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"client\": {@@@",
@@ -69,10 +69,10 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/client",
+    "cwd": "[START_DIR]\\client",
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -84,19 +84,19 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
-      "--root=[START_DIR]/client",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gn.py",
+      "--root=[START_DIR]\\client",
       "gen",
-      "[START_DIR]/client/out/Release",
+      "[START_DIR]\\client\\out\\Release",
       "--args=is_debug=false cpu_arch=\"x64\" dcheck_always_on=true use_link_time_optimization=false"
     ],
     "name": "gn"
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-C",
-      "[START_DIR]/client/out/Release"
+      "[START_DIR]\\client\\out\\Release"
     ],
     "name": "build"
   },
@@ -104,9 +104,9 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/client/build/run_unittest.py",
+      "[START_DIR]\\client\\build\\run_unittest.py",
       "--build-dir",
-      "[START_DIR]/client/out",
+      "[START_DIR]\\client\\out",
       "--target",
       "Release",
       "--non-stop"
@@ -117,11 +117,11 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/client/build/archive.py",
+      "[START_DIR]\\client\\build\\archive.py",
       "--platform",
-      "mac",
+      "win",
       "--build_dir",
-      "[START_DIR]/client/out",
+      "[START_DIR]\\client\\out",
       "--target_dir",
       "Release",
       "--dist_dir",
@@ -131,25 +131,25 @@
   },
   {
     "cmd": [
-      "cipd",
+      "cipd.bat",
       "pkg-build",
       "-in",
-      "[START_DIR]/client/out/Release/goma-mac",
+      "[START_DIR]\\client\\out\\Release\\goma-win",
       "-name",
-      "infra/goma/client/mac",
+      "infra/goma/client/windows-amd64",
       "-out",
-      "[TMP_BASE]/package.cipd",
+      "[TMP_BASE]\\package.cipd",
       "-json-output",
       "/path/to/tmp/json",
       "-install-mode",
       "copy"
     ],
-    "name": "build mac",
+    "name": "build windows-amd64",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/goma/client/mac\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/goma/client/windows-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"

@@ -17,7 +17,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "client@f3cdb946812584bc1789076599929fac4dc5da2b",
+      "client@8b3cd40a25a512033cc8c0797e41de9ecfc2432c",
       "--gerrit_no_reset"
     ],
     "env_prefixes": {
@@ -32,7 +32,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"client\": \"f3cdb946812584bc1789076599929fac4dc5da2b\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"client\": \"8b3cd40a25a512033cc8c0797e41de9ecfc2432c\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"client\": {@@@",
@@ -136,7 +136,7 @@
       "-in",
       "[START_DIR]/client/out/Release/goma-linux",
       "-name",
-      "infra/goma/client/linux",
+      "infra/goma/client/linux-amd64",
       "-out",
       "[TMP_BASE]/package.cipd",
       "-json-output",
@@ -144,12 +144,35 @@
       "-install-mode",
       "copy"
     ],
-    "name": "build linux",
+    "name": "build linux-amd64",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/goma/client/linux\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/goma/client/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "pkg-register",
+      "[TMP_BASE]/package.cipd",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-ref",
+      "latest",
+      "-tag",
+      "git_revision:8b3cd40a25a512033cc8c0797e41de9ecfc2432c"
+    ],
+    "name": "register infra/goma/client/linux-amd64",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"instance_id\": \"40-chars-fake-of-the-package-instance_id\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"package\": \"infra/goma/client/linux-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"

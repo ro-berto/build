@@ -7,6 +7,7 @@ DEPS = [
     'depot_tools/cipd',
     'depot_tools/depot_tools',
     'depot_tools/gclient',
+    'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -71,16 +72,38 @@ def RunSteps(api):
   # 5. Build CIPD package.
   # archive.py creates goma-<platform>/ in out/Release.
   root = build_out_dir.join(build_target, 'goma-%s' % api.platform.name)
-  package_file = api.path['tmp_base'].join('package.cipd')
-  pkg_name = 'infra/goma/client/%s' % api.platform.name
-  api.cipd.build(root, package_file, pkg_name, install_mode='copy')
+  pkg_file = api.path['tmp_base'].join('package.cipd')
+  pkg_name = 'infra/goma/client/%s' % api.cipd.platform_suffix()
+  api.cipd.build(root, pkg_file, pkg_name, install_mode='copy')
+
+  # 6. Register CIPD package if prod.
+  revision = None
+  if api.buildbucket.build_input.gitiles_commit:
+    revision = api.buildbucket.build_input.gitiles_commit.id
+  if revision and api.buildbucket.builder_id.bucket == 'prod':
+    api.cipd.register(pkg_name, pkg_file, tags={'git_revision': revision},
+                      refs=['latest'])
 
 
 def GenTests(api):
   for platform in ['linux', 'mac', 'win']:
-    yield (api.test('goma_client_%s_rel' % platform) +
-           api.platform(platform, 64) +
-           api.properties(
-               buildername='%s_rel' % platform,
-               mastername='client.goma',
-               revision='f3cdb946812584bc1789076599929fac4dc5da2b'))
+    for bucket in ['prod', 'luci.goma-client.ci']:
+      yield (api.test('goma_client_%s_%s_rel' % (platform, bucket)) +
+             api.platform(platform, 64) +
+             api.properties(
+                 buildername='%s_rel' % platform,
+                 mastername='client.goma',
+                 buildbucket={
+                     'build': {
+                         'bucket': bucket,
+                         'tags': [
+                             ('buildset:commit/git/'
+                              '8b3cd40a25a512033cc8c0797e41de9ecfc2432c'),
+                             ('buildset:commit/gitiles/'
+                              'chromium.googlesource.com/infra/goma/client/'
+                              '+/8b3cd40a25a512033cc8c0797e41de9ecfc2432c'),
+                             'gitiles_ref:refs/heads/master',
+                         ]
+                     }
+                 }
+             ))
