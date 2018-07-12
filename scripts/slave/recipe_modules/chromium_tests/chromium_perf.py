@@ -186,7 +186,7 @@ _AddBuildSpec(
 
 
 # 32 bit android swarming
-_AddIsolatedTestSpec('Android Nexus5X Perf', 'android',
+_AddIsolatedTestSpec('android-nexus5x-perf', 'android',
                      parent_buildername='Android Compile Perf', target_bits=32)
 _AddIsolatedTestSpec('Android Nexus5 Perf', 'android',
                      target_bits=32, parent_buildername='Android Compile Perf')
@@ -202,7 +202,7 @@ _AddIsolatedTestSpec('Android Nexus6 WebView Perf',
 
 
 _AddIsolatedTestSpec('Win 10 High-DPI Perf', 'win')
-_AddIsolatedTestSpec('Win 10 Perf', 'win')
+_AddIsolatedTestSpec('win-10-perf', 'win')
 _AddIsolatedTestSpec('Win 7 Perf', 'win', target_bits=32)
 _AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'win')
 
