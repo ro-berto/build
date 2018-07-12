@@ -4,63 +4,96 @@
 # found in the LICENSE file.
 
 import argparse
+import errno
 import os.path
+import shutil
 import subprocess
 import sys
 
+def has_whitelisted_extension(filename):
+  """ Checks if this file has one of the approved extensions. """
+
+  # Exclude everything except generated source code.
+  # Note that we use a whitelist here instead of a blacklist, because:
+  # 1. If we whitelist, the problem is that some legit files might be excluded.
+  #    The solution to this is simple; we just whitelist the filetype and then
+  #    they show up in CS a few hours later.
+  # 2. If we blacklist, the problem is that some large binary files of a new
+  #    filetype may show up. This could go undetected for a long time, causing
+  #    the Git repo to start expanding until it gets too big for the builders to
+  #    fetch. The fix in this case is essentially to blow away the generated Git
+  #    repo and start again.
+  # Since the problems caused by whitelisting are more easily managed than those
+  # caused by blacklisting, we whitelist below.
+  extension_whitelist = {'c', 'cc', 'cpp', 'css', 'h', 'html', 'java', 'js',
+                         'json', 'proto', 'py', 'strings', 'txt', 'xml'}
+  dot_index = filename.rfind(".")
+  return dot_index != -1 and filename[dot_index + 1:] in extension_whitelist
+
+def translate_root(source_root, target_root, filename):
+  """ Given a root path (source_root), a path under that path (filename) and
+      another root path (target_root), translate the path such that it has the
+      new root instead of the old one, but is otherwise unchanged.
+
+      For example:
+      translate_root('/foo', '/bar', '/foo/baz') => '/bar/baz'
+  """
+
+  relative_to_root = os.path.join(filename[len(source_root) + 1:])
+  return os.path.join(target_root, relative_to_root)
 
 def copy_generated_files(source, dest, debug_dir):
-  # We pass --relative to rsync below, which treats the '/./' as the beginning
-  # of the path for copying purposes. Everything after the '.' is recreated in
-  # the destination directory.
-  relative_source_path = os.path.join(source, '.', debug_dir, 'gen')
-  check_call([
-      'rsync',
-      '--recursive',
-      '--stats',
+  source_root = os.path.join(source, debug_dir, "gen")
+  dest_root = os.path.join(dest, debug_dir, "gen")
 
-      # Delete files in the git checkout that no longer exist in the build
-      # output directory.
-      '--delete-delay',
-      '--delete-excluded',
-      '--prune-empty-dirs',
+  try:
+    os.makedirs(dest_root)
+  except OSError as e:
+    if e.errno != errno.EEXIST: raise
 
-      # Exclude everything except generated source code.
-      # Note that we use a whitelist here instead of a blacklist, because:
-      # 1. If we whitelist, the problem is that some legit files might be
-      #    excluded. The solution to this is simple; we just whitelist the
-      #    filetype and then they show up in CS a few hours later.
-      # 2. If we blacklist, the problem is that some large binary files of a new
-      #    filetype may show up. This could go undetected for a long time,
-      #    causing the Git repo to start expanding until it gets too big for the
-      #    builders to fetch. The fix in this case is essentially to blow away
-      #    the generated Git repo and start again.
-      # Since the problems caused by whitelisting are more easily managed than
-      # those caused by blacklisting, we whitelist below.
-      '--include=*.c',
-      '--include=*.cc',
-      '--include=*.cpp',
-      '--include=*.css',
-      '--include=*.h',
-      '--include=*.html',
-      '--include=*.java',
-      '--include=*.js',
-      '--include=*.json',
-      '--include=*.proto',
-      '--include=*.py',
-      '--include=*.strings',
-      '--include=*.txt',
-      '--include=*.xml',
-      '--include=*/',
-      '--exclude=*',
+  # First, delete everything in dest that either isn't in source, or doesn't
+  # match the whitelist.
+  for dirpath, _, filenames in os.walk(dest_root):
+    for filename in filenames:
+      dest_file = os.path.join(dirpath, filename)
+      source_file = translate_root(dest_root, source_root, dest_file)
 
-      # Treat the '/./' in the SRC as the beginning of the path, so a
-      # 'Debug/gen' directory is created in the destination.
-      '--relative',
+      if not os.path.exists(source_file) or \
+          not has_whitelisted_extension(source_file):
+        os.remove(dest_file)
 
-      relative_source_path,
-      dest,
-  ])
+  # Second, copy everything that matches the whitelist from source to dest.
+  for dirpath, _, filenames in os.walk(source_root):
+    if dirpath != source_root:
+      try:
+        os.mkdir(translate_root(source_root, dest_root, dirpath))
+      except OSError as e:
+        if e.errno != errno.EEXIST: raise
+
+    for filename in filenames:
+      if not has_whitelisted_extension(filename): continue
+
+      source_file = os.path.join(dirpath, filename)
+      dest_file = translate_root(source_root, dest_root, source_file)
+
+      shutil.copyfile(source_file, dest_file)
+
+  # Finally, delete any empty directories. We keep going to a fixed point, to
+  # remove directories that contain only other empty directories.
+  dirs_to_examine = [dirpath for dirpath, _, _ in os.walk(dest_root)
+                     if dirpath != dest_root]
+  while dirs_to_examine != []:
+    d = dirs_to_examine.pop()
+
+    # We make no effort to deduplicate paths in dirs_to_examine, so we might
+    # have already removed this path.
+    if os.path.exists(d) and os.listdir(d) == []:
+      os.rmdir(d)
+
+      # The parent dir might be empty now, so add it back into the list.
+      parent_dir = os.path.dirname(d.rstrip(os.sep))
+      if parent_dir != dest_root:
+        dirs_to_examine.append(parent_dir)
 
 def main():
   parser = argparse.ArgumentParser()

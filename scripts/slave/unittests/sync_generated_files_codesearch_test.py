@@ -51,6 +51,8 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
       f.write('baz contents')
     with open(os.path.join(self.src_dir, 'Debug', 'gen', 'dir2', 'dir21', 'quux.json'), 'w') as f:
       f.write('quux contents')
+    with open(os.path.join(self.src_dir, 'Debug', 'gen', 'dir2', 'dir21', 'zip.txt'), 'w') as f:
+      f.write('zip contents')
 
     sync.copy_generated_files(self.src_dir, self.dest_dir, 'Debug')
 
@@ -67,6 +69,9 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
       self.assertEqual(
           open(os.path.join(self.dest_dir, 'Debug', 'gen', 'dir2', 'dir21', 'quux.json'), 'r').read(),
           'quux contents')
+      self.assertEqual(
+          open(os.path.join(self.dest_dir, 'Debug', 'gen', 'dir2', 'dir21', 'zip.txt'), 'r').read(),
+          'zip contents')
     except IOError as e:
       self.fail(e)
 
@@ -86,8 +91,6 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
     os.makedirs(os.path.join(self.dest_dir, 'Debug', 'gen'))
     with open(os.path.join(self.dest_dir, 'Debug', 'gen', 'foo.cc'), 'w') as f:
       f.write('old foo contents')
-    # Set the mtime so that rsync doesn't assume the files are the same.
-    os.utime(os.path.join(self.dest_dir, 'Debug', 'gen', 'foo.cc'), (0, 0))
 
     sync.copy_generated_files(self.src_dir, self.dest_dir, 'Debug')
 
@@ -97,7 +100,6 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
           'new foo contents')
     except IOError as e:
       self.fail(e)
-
 
   def testCopyFilesDeleteNoLongerExistingFiles(self):
     with open(os.path.join(self.src_dir, 'Debug', 'gen', 'foo.cc'), 'w') as f:
@@ -111,6 +113,23 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
 
     self.assertFalse(os.path.exists(os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir')))
     self.assertFalse(os.path.exists(os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir', 'the_file.cc')))
+
+  def testCopyFilesDeleteNestedEmptyDirs(self):
+    with open(os.path.join(self.src_dir, 'Debug', 'gen', 'foo.cc'), 'w') as f:
+      f.write('foo contents')
+
+    os.makedirs(os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir', 'inner_dir'))
+    with open(os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir', 'inner_dir', 'the_file.cc'), 'w') as f:
+      f.write('the data')
+
+    sync.copy_generated_files(self.src_dir, self.dest_dir, 'Debug')
+
+    self.assertFalse(os.path.exists(
+        os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir')))
+    self.assertFalse(os.path.exists(
+        os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir', 'inner_dir')))
+    self.assertFalse(os.path.exists(
+        os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir', 'inner_dir', 'the_file.cc')))
 
   def testCopyFilesDeleteExcludedFiles(self):
     os.makedirs(os.path.join(self.src_dir, 'Debug', 'gen', 'the_dir'))
