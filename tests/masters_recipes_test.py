@@ -129,6 +129,7 @@ FAKE_BUILDERS = {
         'cast_shell_linux',
         'fuchsia_arm64',
         'fuchsia_arm64_cast_audio',
+        'fuchsia-fyi-x64-dbg',
         'fuchsia_x64',
         'fuchsia_x64_cast_audio',
         'leak_detection_linux',
