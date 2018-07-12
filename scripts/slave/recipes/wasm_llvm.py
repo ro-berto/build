@@ -16,8 +16,7 @@ DEPS = [
 
 def RunSteps(api):
   api.gclient.set_config('wasm_llvm')
-  with api.context(cwd=api.path['builder_cache']):
-    result = api.bot_update.ensure_checkout()
+  result = api.bot_update.ensure_checkout()
   got_revision = result.presentation.properties['got_waterfall_revision']
   goma_dir = api.goma.ensure_goma()
   env = {
@@ -51,7 +50,6 @@ def GenTests(api):
       buildername = 'linux',
       bot_id = 'TestBot',
       revision = 'abcd',
-      path_config = 'kitchen',
     ))
 
   yield (
@@ -61,5 +59,4 @@ def GenTests(api):
       buildername = 'linux',
       bot_id = 'TestBot',
       revision = 'abcd',
-      path_config = 'kitchen',
     ) + api.step_data('annotated steps', retcode=1))

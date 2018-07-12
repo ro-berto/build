@@ -9,28 +9,22 @@
   "templates": ["templates", "../master.chromium/templates"],
   "public_html": "../master.client.wasm.llvm/public_html",
 
-  "builder_defaults": {
-    "remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
-    "recipe": "wasm_llvm",
-    "use_remote_run": True,
-    "properties": {
-      "path_config": "kitchen",
-    },
-  },
-
   "builders": {
     "linux": {
       "category": "continuous",
+      "recipe": "wasm_llvm",
       "scheduler": "llvm_commits",
       "slave_pools": ["linux"],
     },
     "windows": {
       "category": "continuous",
+      "recipe": "wasm_llvm",
       "scheduler": "llvm_commits",
       "slave_pools": ["windows"],
     },
     "mac": {
       "category": "continuous",
+      "recipe": "wasm_llvm",
       "scheduler": "llvm_commits",
       "slave_pools": ["mac"],
     },

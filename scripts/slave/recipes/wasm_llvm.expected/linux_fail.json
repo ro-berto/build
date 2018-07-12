@@ -5,13 +5,13 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/WebAssembly/waterfall.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/WebAssembly/waterfall.git'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
       "{\"got_waterfall_revision\": \"src\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[CACHE]/git",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
@@ -19,7 +19,6 @@
       "--revision",
       "src@origin/master"
     ],
-    "cwd": "[BUILDER_CACHE]",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -74,7 +73,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[GOMA_CACHE]/client",
+      "[CACHE]/goma/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -111,7 +110,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/data/linux"
+      "[CACHE]/goma/data/linux"
     ],
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -123,12 +122,12 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]/client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -171,15 +170,15 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/src/src/build.py"
+      "[START_DIR]/src/src/build.py"
     ],
-    "cwd": "[BUILDER_CACHE]/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "BUILDBOT_BUILDERNAME": "linux",
       "BUILDBOT_GOT_WATERFALL_REVISION": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "BUILDBOT_MASTERNAME": "client.wasm.llvm",
       "BUILDBOT_REVISION": "abcd",
-      "GOMA_DIR": "[GOMA_CACHE]/client"
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "name": "annotated steps",
     "~followup_annotations": [
@@ -195,13 +194,13 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]/client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -228,12 +227,12 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]/client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -249,12 +248,12 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]/client/goma_ctl.py",
+      "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
