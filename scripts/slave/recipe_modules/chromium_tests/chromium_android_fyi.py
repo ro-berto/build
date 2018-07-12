@@ -145,44 +145,6 @@ SPEC = {
       },
     },
 
-
-    # These don't actually run on the master. They're here to configure
-    # stand-alone trybots on tryserver.chromium.android.
-    'Unswarmed N5 Tests Dummy Builder': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'android_apply_config': ['use_devil_provision'],
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Unswarmed N5X Tests Dummy Builder': {
-      'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'arm64_builder_mb',
-      'android_apply_config': ['use_devil_provision'],
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Nougat Phone Tester': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',

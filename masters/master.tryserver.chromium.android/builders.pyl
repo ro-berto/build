@@ -84,22 +84,6 @@
       "slavebuilddir": "android",
       "slave_pools": ["ccompute_optional_bots_2"],
     },
-    "android_unswarmed_n5_rel": {
-      "builder_timeout_s": 36000,  # 60 * 60 * 6
-      "recipe": "chromium_trybot",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slavebuilddir": "android",
-      "slave_pools": ["slaves_with_n5s"],
-    },
-    "android_unswarmed_n5x_rel": {
-      "builder_timeout_s": 36000,  # 60 * 60 * 6
-      "recipe": "chromium_trybot",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slavebuilddir": "android",
-      "slave_pools": ["slaves_with_n5xs"],
-    },
   },
 
   "schedulers": { },
@@ -202,16 +186,6 @@
         "build134-b4",
         "build38-b4",
         "build97-b4",
-      ],
-    },
-    "slaves_with_n5xs": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": [
-        "build247-m4",
       ],
     },
   }
