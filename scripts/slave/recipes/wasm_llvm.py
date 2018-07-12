@@ -16,6 +16,7 @@ DEPS = [
 
 def RunSteps(api):
   api.gclient.set_config('wasm_llvm')
+  api.gclient.apply_config('depot_tools')
   result = api.bot_update.ensure_checkout()
   got_revision = result.presentation.properties['got_waterfall_revision']
   goma_dir = api.goma.ensure_goma()
@@ -30,7 +31,9 @@ def RunSteps(api):
   api.goma.start()
   exit_status = -1
   try:
-    with api.context(cwd=api.path['checkout'], env=env):
+    depot_tools_path = api.path['start_dir'].join('depot_tools')
+    with api.context(cwd=api.path['checkout'], env=env,
+                     env_prefixes={'PATH': [depot_tools_path]}):
       api.python('annotated steps',
                  api.path['checkout'].join('src', 'build.py'),
                  allow_subannotations=True)
