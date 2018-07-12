@@ -61,7 +61,11 @@ PROPERTIES = {
   'test_name': Property(kind=str),
   # Timeout parameter passed to run-tests.py. Keep small when bisecting
   # fast-running tests that occasionally hang.
-  'timeout': Property(default=60, kind=int),
+  'timeout_sec': Property(default=60, kind=int),
+  # Initial total timeout for one entire bisect step. During calibration, this
+  # time might be increased for more confidence. Set to 0 to disable and specify
+  # the 'repetitions' property instead.
+  'total_timeout_sec': Property(default=120, kind=int),
   # Revision known to be bad, where backwards bisection will start.
   'to_revision': Property(kind=str),
   # Name of the testing variant passed to run-tests.py.
@@ -94,9 +98,8 @@ REPO = 'https://chromium.googlesource.com/v8/v8'
 EXIT_CODE_NO_TESTS = 2
 
 # Output of V8's test runner when all tests passed.
-TEST_PASSED_TEMPLATE = """
+TEST_PASSED_TEXT = """
 === All tests succeeded
->>> %d tests ran
 """
 
 # Output of V8's test runner when some tests failed.
@@ -107,20 +110,34 @@ TEST_FAILED_TEMPLATE = """
 
 class Command(object):
   """Helper class representing a command line to V8's run-tests.py."""
-  def __init__(self, test_name, build_config, variant, timeout=60,
-               extra_args=None):
+  def __init__(self, test_name, build_config, variant, repetitions,
+               total_timeout_sec, timeout=60, extra_args=None):
+    self.repetitions = repetitions
+    self.total_timeout_sec = total_timeout_sec
     self.base_cmd = [
-      "tools/run-tests.py",
-      "--progress=verbose",
-      "--mode=%s" % build_config,
-      "--outdir=out",
-      "--timeout=%d" % timeout,
-      "--swarming",
-      "--variants=%s" % variant,
+      'tools/run-tests.py',
+      '--progress=verbose',
+      '--mode=%s' % build_config,
+      '--outdir=out',
+      '--timeout=%d' % timeout,
+      '--swarming',
+      '--variants=%s' % variant,
     ] + (extra_args or []) + [test_name]
 
-  def raw_cmd(self, count):
-    return self.base_cmd + ["--random-seed-stress-count=%d" % count]
+  def raw_cmd(self, multiplier):
+    if self.total_timeout_sec:
+      return (
+          self.base_cmd +
+          [
+            '--random-seed-stress-count=1000000',
+            '--total-timeout-sec=%d' % (self.total_timeout_sec * multiplier),
+          ]
+      )
+    else:
+      return (
+          self.base_cmd +
+          ['--random-seed-stress-count=%d' % (self.repetitions * multiplier)]
+      )
 
 
 class Depot(object):
@@ -222,23 +239,23 @@ class Depot(object):
 
 class Runner(object):
   """Helper class for executing the V8 test runner to check for flakes."""
-  def __init__(self, api, depot, command, count):
+  def __init__(self, api, depot, command):
     self.api = api
     self.depot = depot
     self.command = command
-    self.count = count
+    self.multiplier = 1
 
   def calibrate(self, offset):
-    """Calibrates the repetition count of the runner for the given offset.
+    """Calibrates the multiplier for test time or repetitions of the runner for
+    the given offset.
 
     Testing is repeated until MIN_FLAKE_THRESHOLD test failures are counted in
-    an attempt. The repetition count is doubled on each fresh attempt.
+    an attempt. The multiplier is doubled on each fresh attempt.
     """
     for _ in range(MAX_CALIBRATION_ATTEMPTS):
       if self.check_num_flakes(offset) >= MIN_FLAKE_THRESHOLD:
         return True
-      # TODO(machenbach): Calculate better count based on test duration.
-      self.count *= 2
+      self.multiplier *= 2
     return False
 
   def check_num_flakes(self, offset):
@@ -246,10 +263,10 @@ class Runner(object):
     isolated_hash = self.depot.get_isolated_hash(offset)
     with self.api.tempfile.temp_dir('v8-flake-bisect-') as path:
       task = self.api.swarming.task(
-          'check flakes for #%d - %d' % (offset, self.count),
+          'check flakes for #%d - %d' % (offset, self.multiplier),
           isolated_hash,
           task_output_dir=path.join('task_output_dir'),
-          raw_cmd=self.command.raw_cmd(self.count),
+          raw_cmd=self.command.raw_cmd(self.multiplier),
       )
       self.api.swarming.trigger_task(task)
       try:
@@ -258,8 +275,7 @@ class Runner(object):
         # Sanity checks.
         # TODO(machenbach): Add this information to the V8 test runner's json
         # output as parsing stdout is brittle.
-        assert '=== All tests succeeded' in data['outputs'][0]
-        assert ('>>> %d tests ran' % self.count) in data['outputs'][0]
+        assert TEST_PASSED_TEXT in data['outputs'][0]
         return 0
       except self.api.step.StepFailure as e:
         data = e.result.swarming.summary['shards'][0]
@@ -377,15 +393,18 @@ def setup_swarming(api, swarming_dimensions):
 
 def RunSteps(api, bisect_mastername, bisect_buildername, build_config,
              extra_args, initial_commit_offset, isolated_name, repetitions,
-             swarming_dimensions, test_name, timeout, to_revision, variant):
+             swarming_dimensions, test_name, timeout_sec, total_timeout_sec,
+             to_revision, variant):
   # Set up swarming client.
   setup_swarming(api, swarming_dimensions)
 
   # Set up bisection helpers.
   depot = Depot(
       api, bisect_mastername, bisect_buildername, isolated_name, to_revision)
-  command = Command(test_name, build_config, variant, timeout, extra_args)
-  runner = Runner(api, depot, command, repetitions)
+  command = Command(
+      test_name, build_config, variant, repetitions, total_timeout_sec,
+      timeout_sec, extra_args)
+  runner = Runner(api, depot, command)
 
   # Get confidence that the initial revision is flaky and calibrate the
   # repetitions.
@@ -410,7 +429,7 @@ def GenTests(api):
             repetitions=64,
             swarming_dimensions=['os:Ubuntu-14.04', 'cpu:x86-64'],
             test_name='mjsunit/foobar',
-            timeout=20,
+            timeout_sec=20,
             to_revision='a0',
             variant='stress_foo',
         )
@@ -434,18 +453,18 @@ def GenTests(api):
         ]}),
     )
 
-  def is_flaky(offset, repetitions, flakes):
+  def is_flaky(offset, multiplier, flakes):
     test_data = api.swarming.canned_summary_output_raw()
     if flakes:
       output = TEST_FAILED_TEMPLATE % flakes
       exit_code = 1
     else:
-      output = TEST_PASSED_TEMPLATE % repetitions
+      output = TEST_PASSED_TEXT
       exit_code = 0
     test_data['shards'][0]['outputs'][0] = output
     test_data['shards'][0]['exit_codes'][0] = exit_code
     return api.step_data(
-        'check flakes for #%d - %d' % (offset, repetitions),
+        'check flakes for #%d - %d' % (offset, multiplier),
         api.swarming.summary(test_data),
         retcode=exit_code,
     )
@@ -473,6 +492,8 @@ def GenTests(api):
   # -> Should result in suspecting range a5..a3.
   yield (
       test('full_bisect') +
+      # Test path where total timeout isn't used.
+      api.properties(total_timeout_sec=0) +
       # Data for resolving offsets to git hashes. Simulate gitiles page size of
       # 3 commits per call.
       get_revisions(1, 'a1', 'a2', 'a3') +
@@ -485,13 +506,13 @@ def GenTests(api):
       isolated_lookup(4, False) +
       isolated_lookup(5, True) +
       # Calibration. We check for flakes until enough are found.
-      is_flaky(1, 64, 2) +
-      is_flaky(1, 128, 5) +
+      is_flaky(1, 1, 2) +
+      is_flaky(1, 2, 5) +
       # Bisect backwards from a1 until good revision a5 is found.
-      is_flaky(2, 128, 3) +
-      is_flaky(5, 128, 0) +
+      is_flaky(2, 2, 3) +
+      is_flaky(5, 2, 0) +
       # Bisect into a5..a2.
-      is_flaky(3, 128, 3) +
+      is_flaky(3, 2, 3) +
       verify_suspects(5, 3)
   )
 
@@ -511,14 +532,14 @@ def GenTests(api):
       isolated_lookup(5, True) +
       isolated_lookup(7, True) +
       # Calibration.
-      is_flaky(0, 64, 5) +
+      is_flaky(0, 1, 5) +
       # Bisect backwards from a0 until good revision a7 is found.
-      is_flaky(1, 64, 3) +
-      is_flaky(3, 64, 3) +
-      is_flaky(7, 64, 0) +
+      is_flaky(1, 1, 3) +
+      is_flaky(3, 1, 3) +
+      is_flaky(7, 1, 0) +
       # Bisect into a7..a3.
-      is_flaky(5, 64, 0) +
-      is_flaky(4, 64, 2) +
+      is_flaky(5, 1, 0) +
+      is_flaky(4, 1, 2) +
       verify_suspects(5, 4) +
       api.post_process(DropExpectation)
   )
@@ -543,11 +564,11 @@ def GenTests(api):
   yield (
       test('no_confidence') +
       isolated_lookup(0, True) +
-      is_flaky(0, 64, 0) +
-      is_flaky(0, 128, 2) +
-      is_flaky(0, 256, 1) +
-      is_flaky(0, 512, 3) +
-      is_flaky(0, 1024, 3) +
+      is_flaky(0, 1, 0) +
+      is_flaky(0, 2, 2) +
+      is_flaky(0, 4, 1) +
+      is_flaky(0, 8, 3) +
+      is_flaky(0, 16, 3) +
       verify_failure_reason('Could not reach enough confidence.') +
       api.post_process(DropExpectation)
   )
