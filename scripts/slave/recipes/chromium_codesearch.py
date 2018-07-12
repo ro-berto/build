@@ -34,7 +34,6 @@ SPEC = freeze({
   # - gen_repo_out_dir: Which directory under src/out to write gen files to.
   'builders': {
     'codesearch-gen-chromium-linux': {
-      'gclient_config': 'chromium',
       'compile_targets': [
         'all',
       ],
@@ -44,7 +43,6 @@ SPEC = freeze({
       'corpus': 'chromium',
     },
     'codesearch-gen-chromium-chromiumos': {
-      'gclient_config': 'chromium',
       # TODO(emso): Get the below compile targets.
       # from the chromium_tests recipe module.
       # Compile targets used by the 'Linux ChromiumOS Full' builder (2016-12-16)
@@ -90,7 +88,6 @@ SPEC = freeze({
       'root': 'chromium-chromeos',
     },
     'codesearch-gen-chromium-android': {
-      'gclient_config': 'chromium',
       'compile_targets': [
         'all',
       ],
@@ -103,7 +100,6 @@ SPEC = freeze({
       'root': 'chromium-android',
     },
     'codesearch-gen-chromium-win': {
-      'gclient_config': 'chromium',
       'compile_targets': [
         'all',
       ],
@@ -149,8 +145,7 @@ def RunSteps(api, root_solution_revision):
 
   # Checkout the repositories that are either directly needed or should be
   # included in the source archive.
-  assert bot_config.get('gclient_config'), 'gclient_config is required'
-  gclient_config = api.gclient.make_config(bot_config['gclient_config'])
+  gclient_config = api.gclient.make_config('chromium_no_telemetry_dependencies')
   if platform == 'android':
     gclient_config.target_os = ['android']
   elif platform == 'chromeos':

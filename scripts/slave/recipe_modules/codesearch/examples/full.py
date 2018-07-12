@@ -75,7 +75,7 @@ def RunSteps(api, buildername):
 
   # Checkout the repositories that are either directly needed or should be
   # included in the source archive.
-  gclient_config = api.gclient.make_config('chromium')
+  gclient_config = api.gclient.make_config('chromium_no_telemetry_dependencies')
   for name, url in api.codesearch.c.additional_repos.iteritems():
     solution = gclient_config.solutions.add()
     solution.name = name
