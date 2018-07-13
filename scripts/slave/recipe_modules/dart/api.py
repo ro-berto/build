@@ -39,7 +39,7 @@ class DartApi(recipe_api.RecipeApi):
 
     with self.m.context(cwd=self.m.path['cache'].join('builder'),
                         env={'GOMA_DIR':self.m.goma.goma_dir}):
-      self.m.bot_update.ensure_checkout()
+      self.m.bot_update.ensure_checkout(with_branch_heads=True, with_tags=True)
       with self.m.context(cwd=self.m.path['checkout']):
         if clobber:
           self.m.python('clobber',
