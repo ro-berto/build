@@ -157,6 +157,11 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder',
+      'compile_targets': [
+        'extensions_browsertests',
+        'net_unittests',
+        'unit_tests',
+      ],
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {
         'platform': 'linux',
