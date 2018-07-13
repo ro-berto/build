@@ -609,7 +609,7 @@ class iOSApi(recipe_api.RecipeApi):
     task = {
         'bot id': test.get('bot id'),
         'dimensions': test.get('dimensions'),
-        'isolate.gen': None,
+        'isolated.gen': None,
         'isolated hash': None,
         'pool': test.get('pool'),
         'skip': 'skip' in test,
@@ -628,7 +628,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     app_path = self.m.path.join(self.most_recent_app_dir,
                                 '%s.app' % test['app'])
-    task['isolate.gen'] = tmp_dir.join('%s.isolate.gen.json' % test_id)
+    task['isolated.gen'] = tmp_dir.join('%s.isolated.gen.json' % test_id)
 
     args = [
       '--config-variable', 'OS', 'ios',
@@ -663,17 +663,17 @@ class iOSApi(recipe_api.RecipeApi):
     }, indent=2)
     try:
       self.m.file.write_text(
-        'generate %s.isolate.gen.json' % test_id,
-        task['isolate.gen'],
+        'generate %s.isolated.gen.json' % test_id,
+        task['isolated.gen'],
         isolate_gen_file_contents,
       )
       pres = self.m.step.active_result.presentation
-      pres.logs['%s.isolate.gen.json' % test_id] = (
+      pres.logs['%s.isolated.gen.json' % test_id] = (
         isolate_gen_file_contents.splitlines())
       pres.step_text = task['step name']
     except self.m.step.StepFailure as f:
       f.result.presentation.status = self.m.step.EXCEPTION
-      task['isolate.gen'] = None
+      task['isolated.gen'] = None
 
     return task
 
@@ -801,34 +801,15 @@ class iOSApi(recipe_api.RecipeApi):
         tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
         tasks[-1]['buildername'] = bot
 
-    gen_files = []
-    for task in tasks:
-      if task['isolate.gen'] and not task['skip']:
-        gen_files.append(task['isolate.gen'])
-    if not gen_files:
-      return tasks
-
-    cmd = [
-      self.m.path['checkout'].join('tools', 'luci-go', 'mac64', 'isolate'),
-      'batcharchive',
-      '--dump-json', self.m.json.output(),
-      '--isolate-server', self.m.isolate.isolate_server,
-      '--verbose',
-    ]
-    cmd.extend(gen_files)
-    step_result = self.m.step(
-      'archive',
-      cmd,
-      infra_step=True,
-      step_test_data=lambda: self.m.json.test_api.output({
-        task['task_id']: 'fake-hash-%s' % task['task_id']
-        for task in tasks
-        if task['isolate.gen'] and not task['skip']
-      }),
-    )
-    for task in tasks:
-      if task['task_id'] in step_result.json.output:
-        task['isolated hash'] = step_result.json.output[task['task_id']]
+    targets_to_isolate = [
+        t['task_id'] for t in tasks
+        if t['isolated.gen'] and not t['skip']]
+    if targets_to_isolate:
+      step_result = self.m.isolate.isolate_tests(
+          tmp_dir, targets=targets_to_isolate, verbose=True)
+      for task in tasks:
+        if task['task_id'] in step_result.json.output:
+          task['isolated hash'] = step_result.json.output[task['task_id']]
 
     return tasks
 
@@ -963,7 +944,7 @@ class iOSApi(recipe_api.RecipeApi):
         # Create a dummy step for it and mark it as failed.
         step_result = self.m.step(task['step name'], [])
         step_result.presentation.status = self.m.step.EXCEPTION
-        if not task['isolate.gen']:
+        if not task['isolated.gen']:
           step_result.presentation.step_text = 'Failed to isolate the test.'
         else:
           step_result.presentation.step_text = 'Failed to trigger the test.'

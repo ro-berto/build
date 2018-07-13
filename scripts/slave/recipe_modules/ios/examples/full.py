@@ -179,7 +179,7 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.step_data(
-        'isolate.generate 0.isolate.gen.json',
+        'isolate.generate 0.isolated.gen.json',
         retcode=1,
     )
     + api.step_data(
