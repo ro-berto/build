@@ -1079,7 +1079,9 @@
       "--target-platform",
       "android",
       "--json-output",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--ninja-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja"
     ],
     "name": "compare_build_artifacts",
     "~followup_annotations": [
