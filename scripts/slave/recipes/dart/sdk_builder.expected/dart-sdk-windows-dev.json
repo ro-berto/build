@@ -104,98 +104,32 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "analyzer-win7-release-dev",
+        "builder_name": "dart2js-win7-ie11-1-4-dev",
         "properties": {
           "revision": "abcd1234efef5656"
         }
       },
       {
-        "builder_name": "analyzer-win7-release-strong-dev",
+        "builder_name": "dart2js-win7-ie11-2-4-dev",
         "properties": {
           "revision": "abcd1234efef5656"
         }
       },
       {
-        "builder_name": "dart2js-win7-chrome-1-4-dev",
+        "builder_name": "dart2js-win7-ie11-3-4-dev",
         "properties": {
           "revision": "abcd1234efef5656"
         }
       },
       {
-        "builder_name": "dart2js-win7-chrome-2-4-dev",
-        "properties": {
-          "revision": "abcd1234efef5656"
-        }
-      },
-      {
-        "builder_name": "dart2js-win7-chrome-3-4-dev",
-        "properties": {
-          "revision": "abcd1234efef5656"
-        }
-      },
-      {
-        "builder_name": "dart2js-win7-chrome-4-4-dev",
-        "properties": {
-          "revision": "abcd1234efef5656"
-        }
-      },
-      {
-        "builder_name": "dart2js-win7-ie11ff-1-4-dev",
-        "properties": {
-          "revision": "abcd1234efef5656"
-        }
-      },
-      {
-        "builder_name": "dart2js-win7-ie11ff-2-4-dev",
-        "properties": {
-          "revision": "abcd1234efef5656"
-        }
-      },
-      {
-        "builder_name": "dart2js-win7-ie11ff-3-4-dev",
-        "properties": {
-          "revision": "abcd1234efef5656"
-        }
-      },
-      {
-        "builder_name": "dart2js-win7-ie11ff-4-4-dev",
-        "properties": {
-          "revision": "abcd1234efef5656"
-        }
-      },
-      {
-        "builder_name": "dart2js-win8-ie11-1-4-dev",
-        "properties": {
-          "revision": "abcd1234efef5656"
-        }
-      },
-      {
-        "builder_name": "dart2js-win8-ie11-2-4-dev",
-        "properties": {
-          "revision": "abcd1234efef5656"
-        }
-      },
-      {
-        "builder_name": "dart2js-win8-ie11-3-4-dev",
-        "properties": {
-          "revision": "abcd1234efef5656"
-        }
-      },
-      {
-        "builder_name": "dart2js-win8-ie11-4-4-dev",
-        "properties": {
-          "revision": "abcd1234efef5656"
-        }
-      },
-      {
-        "builder_name": "pkg-win7-release-dev",
+        "builder_name": "dart2js-win7-ie11-4-4-dev",
         "properties": {
           "revision": "abcd1234efef5656"
         }
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@analyzer-win7-release-dev<br />analyzer-win7-release-strong-dev<br />dart2js-win7-chrome-1-4-dev<br />dart2js-win7-chrome-2-4-dev<br />dart2js-win7-chrome-3-4-dev<br />dart2js-win7-chrome-4-4-dev<br />dart2js-win7-ie11ff-1-4-dev<br />dart2js-win7-ie11ff-2-4-dev<br />dart2js-win7-ie11ff-3-4-dev<br />dart2js-win7-ie11ff-4-4-dev<br />dart2js-win8-ie11-1-4-dev<br />dart2js-win8-ie11-2-4-dev<br />dart2js-win8-ie11-3-4-dev<br />dart2js-win8-ie11-4-4-dev<br />pkg-win7-release-dev@@@"
+      "@@@STEP_TEXT@dart2js-win7-ie11-1-4-dev<br />dart2js-win7-ie11-2-4-dev<br />dart2js-win7-ie11-3-4-dev<br />dart2js-win7-ie11-4-4-dev@@@"
     ]
   },
   {

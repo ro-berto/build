@@ -21,9 +21,7 @@ PROPERTIES = {
   'buildername': Property(help="Should end in -[channel]"),
 }
 
-def BuildBuilderNames(name, channel, shards=None):
-  if not shards:
-    return ['%s-%s' % (name, channel)]
+def BuildBuilderNames(name, channel, shards):
   return ['%s-%s-%s-%s' % (name, i, shards, channel)
           for i in range(1, shards + 1)]
 
@@ -65,37 +63,11 @@ def RunSteps(api, revision, buildername):
                ok_ret='any')
 
     # Step 7) Trigger dependent builders.
-    buildernames = {
-      'linux' : (
-          BuildBuilderNames('analyze-linux', channel) +
-          BuildBuilderNames('analyzer-linux-release', channel) +
-          BuildBuilderNames('analyzer-linux-release-strong', channel) +
-          BuildBuilderNames('dart2js-linux-ff', channel, 4) +
-          BuildBuilderNames('dart2js-linux-d8-minified', channel, 5) +
-          BuildBuilderNames('dart2js-linux-chrome-csp-minified', channel) +
-          BuildBuilderNames('pkg-linux-release', channel)
-      ),
-      'win' : (
-          BuildBuilderNames('analyzer-win7-release', channel) +
-          BuildBuilderNames('analyzer-win7-release-strong', channel) +
-          BuildBuilderNames('dart2js-win7-chrome', channel, 4) +
-          BuildBuilderNames('dart2js-win7-ie11ff', channel, 4) +
-          BuildBuilderNames('dart2js-win8-ie11', channel, 4) +
-          BuildBuilderNames('pkg-win7-release', channel)
-      ),
-      'mac' : (
-          BuildBuilderNames('analyzer-mac10.11-release', channel) +
-          BuildBuilderNames('analyzer-mac10.11-release-strong', channel) +
-          BuildBuilderNames('dart2js-mac10.11-chrome', channel) +
-          BuildBuilderNames('dart2js-mac10.11-safari', channel, 3) +
-          BuildBuilderNames('pkg-mac10.11-release', channel)
-      ),
-    }[api.platform.name]
-
-    triggers = [{'builder_name': name,
-                 'properties': { 'revision': revision },
-                 } for name in buildernames]
-    api.trigger(*triggers)
+    if api.platform.name == 'win':
+      triggers = [{'builder_name': name,
+                   'properties': { 'revision': revision }
+                  } for name in BuildBuilderNames('dart2js-win7-ie11', channel, 4)]
+      api.trigger(*triggers)
 
     # Step 8) Create and upload the API docs
     api.python('generate API docs',

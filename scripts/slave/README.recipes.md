@@ -4722,9 +4722,9 @@ Generates the sequence of steps that will be run by the slave.
 
 [DEPS](/scripts/slave/recipes/dart/sdk_builder.py#7): [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [BuildBuilderNames](/scripts/slave/recipes/dart/sdk_builder.py#24)(name, channel, shards=None):**
+&mdash; **def [BuildBuilderNames](/scripts/slave/recipes/dart/sdk_builder.py#24)(name, channel, shards):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/sdk_builder.py#30)(api, revision, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/sdk_builder.py#28)(api, revision, buildername):**
 ### *recipes* / [dart/sdk\_gn](/scripts/slave/recipes/dart/sdk_gn.py)
 
 [DEPS](/scripts/slave/recipes/dart/sdk_gn.py#5): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
