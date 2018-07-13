@@ -523,7 +523,7 @@ SPEC = {
       'parent_buildername': 'Android arm64 Builder (dbg)',
       'bot_type': 'tester',
       'android_config': 'arm64_builder_mb',
-      'android_apply_config': ['remove_all_system_webviews'],
+      'android_apply_config': ['remove_all_system_webviews', 'restart_usb'],
       'testing': {
         'platform': 'linux',
       },
