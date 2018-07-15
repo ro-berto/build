@@ -757,7 +757,8 @@
       "--dest-branch",
       "master",
       "src/out",
-      "[START_DIR]/generated"
+      "[START_DIR]/generated",
+      "--dry-run"
     ],
     "name": "sync generated files"
   },

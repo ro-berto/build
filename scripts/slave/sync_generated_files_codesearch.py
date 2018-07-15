@@ -105,6 +105,8 @@ def main():
                       help='optional dir containing the gen folder to include '
                            'in the checked-in repo',
                       default='Debug')
+  parser.add_argument('--dry-run', action='store_true',
+                      help='if set, does a dry run of push to remote repo.')
   parser.add_argument('source', help='directory to copy files from')
   parser.add_argument('dest', help='git checkout to copy files to')
   opts = parser.parse_args()
@@ -120,8 +122,12 @@ def main():
     return 0
 
   check_call(['git', 'commit', '-m', opts.message], cwd=opts.dest)
-  check_call(['git', 'push', 'origin', 'HEAD:%s' % opts.dest_branch],
-              cwd=opts.dest)
+  if opts.dry_run:
+    check_call(['git', 'push', '--dry-run', 'origin', 'HEAD:%s' % opts.dest_branch],
+                cwd=opts.dest)
+  else:
+    check_call(['git', 'push', 'origin', 'HEAD:%s' % opts.dest_branch],
+                cwd=opts.dest)
 
 
 def check_call(cmd, cwd=None):

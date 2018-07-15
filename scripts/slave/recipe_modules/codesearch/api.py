@@ -211,6 +211,8 @@ class CodesearchApi(recipe_api.RecipeApi):
             generated_repo_dir]
     if self.c.GEN_REPO_OUT_DIR:
       args = ['--debug-dir', self.c.GEN_REPO_OUT_DIR] + args
+    if self.m.runtime.is_experimental:
+      args.append('--dry-run')
     self.m.build.python('sync generated files',
                         self.package_repo_resource('scripts','slave',
                                                    'sync_generated_files_codesearch.py'),
