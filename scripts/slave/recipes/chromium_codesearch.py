@@ -105,7 +105,7 @@ SPEC = freeze({
       ],
       'platform': 'win',
       'sync_generated_files': True,
-      'gen_repo_branch': 'win',
+      'gen_repo_branch': 'master',
       # Generated files will end up in out/win-Debug/gen.
       'gen_repo_out_dir': 'win-Debug',
       'corpus': 'chromium',

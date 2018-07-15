@@ -678,7 +678,7 @@
       "retry",
       "fetch",
       "origin",
-      "win",
+      "master",
       "--progress"
     ],
     "cwd": "[START_DIR]/generated",
@@ -762,7 +762,7 @@
       "--message",
       "Generated files from \"codesearch-gen-chromium-win\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
-      "win",
+      "master",
       "src/out",
       "[START_DIR]/generated"
     ],
