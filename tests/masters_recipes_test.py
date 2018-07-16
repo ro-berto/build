@@ -136,6 +136,7 @@ FAKE_BUILDERS = {
         'linux-blink-gen-property-trees',
         'linux-blink-heap-incremental-marking',
         'linux-blink-heap-verification-try',
+        'linux-goma-rbe-staging-rel',
         'linux-gcc-rel',
         'linux-ozone-rel',
         'linux-xenial-rel',

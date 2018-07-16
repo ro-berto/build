@@ -385,6 +385,11 @@ TRYBOTS = freeze({
           },
         ],
       },
+      'linux-goma-rbe-staging-rel': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'Linux Builder',
+        'tester': 'Linux Tests',
+      }),
       'linux-gcc-rel': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'linux-gcc-rel',
