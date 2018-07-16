@@ -506,24 +506,6 @@ SPEC = {
         'platform': 'win',
       },
     },
-    'Browser Side Navigation Linux': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'builder_tester',
-      'compile_targets': [
-        'content_unittests',
-        'content_browsertests',
-      ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
 
     'Win Builder Localoutputcache': chromium_apply_configs(
         no_archive(chromium_win.SPEC['builders']['Win Builder']),

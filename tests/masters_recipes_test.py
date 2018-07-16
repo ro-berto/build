@@ -152,7 +152,6 @@ FAKE_BUILDERS = {
         'linux_arm',
         'linux_chromium_analysis',
         'linux_chromium_archive_rel_ng',
-        'linux_chromium_browser_side_navigation_rel',
         'linux_chromium_chromeos_asan_rel_ng',
         'linux_chromium_chromeos_msan_rel_ng',
         'linux_chromium_clobber_rel_ng',

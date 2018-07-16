@@ -846,13 +846,6 @@
     "https://build.chromium.org/p/chromium.fyi": [
       {
         "builders": {
-          "Browser Side Navigation Linux": {
-            "tree_notify": [
-              "plznavigate@chromium.org"
-            ],
-            "forgive_all": "true",
-            "forgiving_optional": ["*"]
-          },
           "Closure Compilation Linux": {
             "tree_notify": [
               "dbeam+closure-bots@chromium.org",
