@@ -486,10 +486,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.clang',
         'buildername': 'UBSanVptr Linux',
       }),
-      'linux_site_isolation': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'Site Isolation Linux',
-      }),
       'linux_layout_tests_slimming_paint_v2': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'WebKit Linux slimming_paint_v2 Dummy Builder',

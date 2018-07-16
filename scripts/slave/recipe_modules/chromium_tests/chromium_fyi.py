@@ -454,58 +454,6 @@ SPEC = {
         'platform': 'linux',
       },
     },
-    'Site Isolation Linux': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'GYP_DEFINES': {
-        'dcheck_always_on': '1',
-      },
-      'bot_type': 'builder_tester',
-      'compile_targets': [
-        'content_unittests',
-        'content_browsertests',
-      ],
-      'checkout_dir': 'linux',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Site Isolation Win': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'win',
-        'TARGET_BITS': 32,
-      },
-      'GYP_DEFINES': {
-        'dcheck_always_on': '1',
-      },
-      'bot_type': 'builder_tester',
-      'compile_targets': [
-        'content_unittests',
-        'content_browsertests',
-      ],
-      'tests': [
-        steps.BlinkTest(extra_args=[
-          '--additional-driver-flag',
-          '--site-per-process',
-          '--additional-expectations',
-          'src\\third_party\\WebKit\\LayoutTests\\FlagExpectations\\site-per-process',
-        ]),
-      ],
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-    },
 
     'Win Builder Localoutputcache': chromium_apply_configs(
         no_archive(chromium_win.SPEC['builders']['Win Builder']),

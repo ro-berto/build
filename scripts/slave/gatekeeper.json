@@ -937,28 +937,6 @@
               "*"
             ]
           },
-          "Site Isolation Linux": {
-            "tree_notify": [
-              "nasko+fyi-bots@chromium.org",
-              "creis+fyi-bots@chromium.org",
-              "lukasza+fyi-bots@chromium.org",
-              "alexmos+fyi-bots@chromium.org"
-            ],
-            "forgiving_optional": [
-              "*"
-            ]
-          },
-          "Site Isolation Win": {
-            "tree_notify": [
-              "nasko+fyi-bots@chromium.org",
-              "creis+fyi-bots@chromium.org",
-              "lukasza+fyi-bots@chromium.org",
-              "alexmos+fyi-bots@chromium.org"
-            ],
-            "forgiving_optional": [
-              "*"
-            ]
-          },
           "Jumbo Linux x64": {
             "tree_notify": [
               "bratell+jumbo-builds@opera.com",

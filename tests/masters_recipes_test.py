@@ -163,7 +163,6 @@ FAKE_BUILDERS = {
         'linux_layout_tests_slimming_paint_v2',
         'linux_mojo',
         'linux_mojo_chromeos',
-        'linux_site_isolation',
         'linux_vr',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'linux-dcheck-off-rel',
