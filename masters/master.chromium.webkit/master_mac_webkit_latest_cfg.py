@@ -42,8 +42,8 @@ F('f_webkit_mac_rel', m_remote_run('chromium'))
 # Mac Rel WebKit testers
 #
 
-B('WebKit Mac10.12 (retina)', 'f_webkit_rel_tests_1012_retina')
-F('f_webkit_rel_tests_1012_retina', m_remote_run('chromium'))
+B('WebKit Mac10.13 (retina)', 'f_webkit_rel_tests_1013_retina')
+F('f_webkit_rel_tests_1013_retina', m_remote_run('chromium'))
 
 
 ################################################################################

@@ -49,13 +49,13 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'mac10.12-blink-rel-dummy',
       }),
-      'mac10.12_retina-blink-rel': simple_bot({
+      'mac10.13_retina-blink-rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac10.12 (retina)',
+        'buildername': 'WebKit Mac10.13 (retina)',
       }),
-      'mac10.12_retina_blink_rel': simple_bot({
+      'mac10.13_retina_blink_rel': simple_bot({
         'mastername': 'chromium.webkit',
-        'buildername': 'WebKit Mac10.12 (retina)',
+        'buildername': 'WebKit Mac10.13 (retina)',
       }),
       'mac10.13-blink-rel': simple_bot({
         'mastername': 'chromium.fyi',
