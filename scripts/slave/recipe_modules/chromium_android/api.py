@@ -1056,8 +1056,11 @@ class AndroidApi(recipe_api.RecipeApi):
           stdout=self.m.raw_io.output_text(),
           step_test_data=(
               lambda: self.m.raw_io.test_api.stream_output(
-                  'https://storage.cloud.google.com/chromium-result-details')))
-      return result_details.stdout.strip()
+                  'Result Details: https://storage.cloud.google.com/chromium-result-details')))
+      # Stdout is in the format of 'Result Details: <link>'.
+      lines = result_details.stdout.strip()
+      prefix = 'Result Details: '
+      return lines.splitlines()[0][len(prefix):] if lines.startswith(prefix) else ''
     except self.m.step.StepFailure as f:
       return ('https://storage.googleapis.com/chromium-result-details/'
               'UploadQuietFailure.txt')
