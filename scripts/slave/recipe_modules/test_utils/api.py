@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import itertools
+
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
@@ -35,6 +37,31 @@ class TestUtilsApi(recipe_api.RecipeApi):
   def __init__(self, max_reported_gtest_failures, *args, **kwargs):
     super(TestUtilsApi, self).__init__(*args, **kwargs)
     self._max_reported_gtest_failures = max_reported_gtest_failures
+
+  @staticmethod
+  def limit_failures(failures, limit):
+    """Limit failures of a step to prevent large results JSON.
+
+    Args:
+      failures - An iterable containing the failures that resulted from some
+                 step.
+      limit - The maxmium number of failures to display in the results.
+    Returns:
+      A tuple containing 2 elements:
+        1. The list of the subset of at most *limit* elements of *failures*,
+           suitable for iterating over and indexing into structures that are
+           indexed by the failure names.
+        2. The list of failures suitable for including in the step's text. If
+           *failures* contains more elements than *limit*, it will contain an
+           element indicating the number of additional failures.
+    """
+    if len(failures) <= limit:
+      return failures, failures
+    overflow_line = '... %d more ...' % (len(failures) - limit)
+    # failures might be a set, which doesn't support slicing, so create a list
+    # out of an islice so that only the elemnts we are keeping are copied
+    limited_failures = list(itertools.islice(failures, limit))
+    return limited_failures, limited_failures + [overflow_line]
 
   @staticmethod
   def format_step_text(data):
@@ -88,15 +115,15 @@ class TestUtilsApi(recipe_api.RecipeApi):
     """
     r = getattr(step_result, 'test_utils', None)
     r = getattr(r, 'gtest_results', None)
+
     if r and r.valid:
       p = presentation or step_result.presentation
-      failures = list(r.failures)[:self._max_reported_gtest_failures]
+      failures, text_failures = self.limit_failures(
+          r.failures, self._max_reported_gtest_failures)
       for f in failures:
         p.logs[f] = r.logs[f]
-      if len(r.failures) > len(failures):
-        failures.append('... %d more ...' % (len(r.failures) - len(failures)))
       p.step_text += self.format_step_text([
-          ['failures:', failures],
+          ['failures:', text_failures],
       ])
     return r
 

@@ -16,6 +16,7 @@ from recipe_engine.types import freeze
 
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
+MAX_FAILS = 30
 
 
 class TestOptions(object):
@@ -497,9 +498,11 @@ class ScriptTest(Test):  # pylint: disable=W0232
     finally:
       self._test_runs[suffix] = api.step.active_result
       if self.has_valid_results(api, suffix):
+        _, failures = api.test_utils.limit_failures(
+            self.failures(api, suffix), MAX_FAILS)
         self._test_runs[suffix].presentation.step_text += (
             api.test_utils.format_step_text([
-              ['failures:', self.failures(api, suffix)]
+              ['failures:', failures]
             ]))
 
     return self._test_runs[suffix]
@@ -1992,8 +1995,10 @@ class PythonBasedTest(Test):
       if hasattr(step_result, 'test_utils'):
         r = step_result.test_utils.test_results
         p = step_result.presentation
+        _, failures = api.test_utils.limit_failures(
+            r.unexpected_failures.keys(), MAX_FAILS)
         p.step_text += api.test_utils.format_step_text([
-          ['unexpected_failures:', r.unexpected_failures.keys()],
+            ['unexpected_failures:', failures],
         ])
 
     return step_result
