@@ -1,3 +1,5 @@
+from recipe_engine.recipe_api import Property
+
 DEPS = [
   'build',
   'chromium',
@@ -11,6 +13,9 @@ DEPS = [
   'recipe_engine/step',
 ]
 
+PROPERTIES = {
+  'max_reported_gtest_failures': Property(default=30, kind=int),
+}
 
 # TODO(phajdan.jr): provide coverage (http://crbug.com/693058).
 DISABLE_STRICT_COVERAGE = True

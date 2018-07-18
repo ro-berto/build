@@ -32,6 +32,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
   # This magic string is depended on by other infra tools.
   INVALID_RESULTS_MAGIC = 'TEST RESULTS WERE INVALID'
 
+  def __init__(self, max_reported_gtest_failures, *args, **kwargs):
+    super(TestUtilsApi, self).__init__(*args, **kwargs)
+    self._max_reported_gtest_failures = max_reported_gtest_failures
+
   @staticmethod
   def format_step_text(data):
     """
@@ -61,6 +65,32 @@ class TestUtilsApi(recipe_api.RecipeApi):
         raise ValueError(
             'Expected a one or two-element list, got %r instead.' % section)
     return ''.join(step_text)
+
+  def present_gtest_failures(self, step_result):
+    """Update a step result's presentation with details of gtest failures.
+
+    If the provided step result contains valid gtest results, then the
+    presentation will be updated to include information about the failing
+    tests, including logs for the individual failures.
+
+    The max_reported_gtest_failures property modifies this behavior by limiting
+    the number of tests that will appear in the step text and have their logs
+    included. If the limit is exceeded the step text will indicate the number
+    of additional failures.
+    """
+    r = getattr(step_result, 'test_utils', None)
+    r = getattr(r, 'gtest_results', None)
+    if not r or not r.valid:
+      return
+    p = step_result.presentation
+    failures = list(r.failures)[:self._max_reported_gtest_failures]
+    for f in failures:
+      p.logs[f] = r.logs[f]
+    if len(r.failures) > len(failures):
+      failures.append('... %d more ...' % (len(r.failures) - len(failures)))
+    p.step_text += self.format_step_text([
+        ['failures:', failures],
+    ])
 
   def run_tests(self, caller_api, tests, suffix):
     """

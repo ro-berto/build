@@ -890,6 +890,8 @@
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
+      "@@@STEP_LOG_END@Test.Two@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

@@ -290,6 +290,18 @@ def GenTests(api):
           api.test_utils.canned_gtest_output(True))
     )
 
+  yield (
+      api.test('gtest_with_many_failures') +
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+      api.step_data(
+          'hello_world on Windows-7-SP1',
+          api.test_utils.simulated_gtest_output(
+              failed_test_names=['test-%d' % i for i in xrange(100)])) +
+      api.properties(gtest_task=True)
+    )
+
   data = {
     'shards': [
       {

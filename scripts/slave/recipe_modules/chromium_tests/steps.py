@@ -658,10 +658,7 @@ class LocalGTestTest(Test):
         p = step_result.presentation
         self._gtest_results[suffix] = r
 
-        if r.valid:
-          p.step_text += api.test_utils.format_step_text([
-            ['failures:', r.failures]
-          ])
+        api.test_utils.present_gtest_failures(step_result)
 
         api.test_results.upload(
             api.json.input(r.raw),

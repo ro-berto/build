@@ -1422,10 +1422,7 @@ class AndroidApi(recipe_api.RecipeApi):
       step_result = self.m.step.active_result
       if (hasattr(step_result, 'test_utils') and
           hasattr(step_result.test_utils, 'gtest_results')):
-        gtest_results = step_result.test_utils.gtest_results
-        step_result.presentation.step_text += (
-            self.m.test_utils.format_step_text(
-                [['failures:', gtest_results.failures]]))
+        self.m.test_utils.present_gtest_failures(step_result)
         if result_details:
           json_results = self.m.json.input(
                 step_result.test_utils.gtest_results.raw)
