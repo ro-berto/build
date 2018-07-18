@@ -1192,18 +1192,18 @@ class V8Api(recipe_api.RecipeApi):
       for command in results_per_command:
         # Determine flakiness. A test is flaky if not all results from a unique
         # command are the same (e.g. all 'FAIL').
+        # Only add the data of the first run to the final test results, as rerun
+        # data is not important for bisection.
+        data = results_per_command[command][0]
+        failure = failure_factory(data)
         if all_same(map(lambda x: x['result'], results_per_command[command])):
-          # This is a failure. Only add the data of the first run to the final
-          # test results, as rerun data is not important for bisection.
-          failure = results_per_command[command][0]
-          failures.append(failure_factory(failure, failure['duration']))
+          # This is a failure.
+          failures.append(failure)
           failure_lines += self._command_results_text(
               results_per_command[command], False)
         else:
-          # This is a flake. Only add the data of the first run to the final
-          # test results, as rerun data is not important for bisection.
-          flake = results_per_command[command][0]
-          flakes.append(failure_factory(flake, flake['duration']))
+          # This is a flake.
+          flakes.append(failure)
           flake_lines += self._command_results_text(
               results_per_command[command], True)
 

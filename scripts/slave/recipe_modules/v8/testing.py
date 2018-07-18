@@ -724,15 +724,18 @@ TOOL_TO_TEST_SWARMING = freeze({
 
 
 class Failure(object):
-  def __init__(self, test_step_config, failure_dict, duration):
+  def __init__(self, test_step_config, failure_dict):
     self.test_step_config = test_step_config
     self.failure_dict = failure_dict
-    self.duration = duration
+
+  @property
+  def duration(self):
+    return self.failure_dict['duration']
 
   @staticmethod
   def factory_func(test_step_config):
-    def create(failure_dict, duration):
-      return Failure(test_step_config, failure_dict, duration)
+    def create(failure_dict):
+      return Failure(test_step_config, failure_dict)
     return create
 
 
