@@ -201,7 +201,6 @@ _AddIsolatedTestSpec('Android Nexus6 WebView Perf',
                      parent_buildername='Android Compile Perf')
 
 
-_AddIsolatedTestSpec('Win 10 High-DPI Perf', 'win')
 _AddIsolatedTestSpec('win-10-perf', 'win')
 _AddIsolatedTestSpec('Win 7 Perf', 'win', target_bits=32)
 _AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'win')
