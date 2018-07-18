@@ -308,6 +308,12 @@
       {
         "close_tree": false,
         "builders": {
+          "Build From Tarball": {
+            "forgiving_optional": ["*"],
+            "tree_notify": [
+              "raphael.kubo.da.costa@intel.com"
+            ]
+          },
           "publish_tarball": {
             "forgiving_optional": ["*"],
             "tree_notify": [
