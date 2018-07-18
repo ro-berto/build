@@ -14,9 +14,7 @@ import tempfile
 import unittest
 import zipfile
 
-import test_env  # pylint: disable=relative-import
-
-from slave.chromium import package_index
+import package_index
 
 TEST_CC_FILE_CONTENT = '#include "test.h"\nint main() {\nreturn 0;\n}\n'
 TEST_H_FILE_CONTENT = ('#ifndef TEST_H\n#define TEST_H\n#include "test2.h"\n'

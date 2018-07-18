@@ -158,8 +158,7 @@ class CodesearchApi(recipe_api.RecipeApi):
     if self.c.GEN_REPO_OUT_DIR:
       args.extend(['--out_dir', 'src/out/%s' % self.c.GEN_REPO_OUT_DIR])
     self.m.build.python('create kythe index pack',
-                        self.package_repo_resource('scripts', 'slave', 'chromium',
-                                                   'package_index.py'),
+                        self.resource('package_index.py'),
                         args)
 
   def _upload_kythe_index_pack(self, bucket_name, index_pack_kythe_name,
@@ -214,6 +213,5 @@ class CodesearchApi(recipe_api.RecipeApi):
     if self.m.runtime.is_experimental:
       args.append('--dry-run')
     self.m.build.python('sync generated files',
-                        self.package_repo_resource('scripts','slave',
-                                                   'sync_generated_files_codesearch.py'),
+                        self.resource('sync_generated_files.py'),
                         args)

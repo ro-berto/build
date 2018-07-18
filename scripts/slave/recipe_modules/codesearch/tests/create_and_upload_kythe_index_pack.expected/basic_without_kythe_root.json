@@ -157,7 +157,7 @@
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/package_index.py",
+      "RECIPE_MODULE[build::codesearch]/resources/package_index.py",
       "--path-to-compdb",
       "[START_DIR]/src/out/Debug/compile_commands.json",
       "--path-to-archive-output",

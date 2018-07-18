@@ -7,6 +7,8 @@
 
 
 import argparse
+import errno
+import fnmatch
 import hashlib
 import itertools
 import json
@@ -17,7 +19,6 @@ import tempfile
 import time
 import zipfile
 
-from common import chromium_utils
 from contextlib import closing
 
 
@@ -323,6 +324,18 @@ class IndexPack(object):
           rel_path = os.path.relpath(abs_path, index_parent)
           archive.write(abs_path, rel_path)
 
+
+def _RemoveFilepathsFiles(root):
+  """Removes all .filepaths files within specified root dir."""
+  for path, _, files in os.walk(os.path.abspath(root)):
+    for filename in fnmatch.filter(files, '*.filepaths'):
+      try:
+        os.remove(os.path.join(path, filename))
+      except OSError, e:
+        if e.errno != errno.ENOENT:
+          raise
+
+
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--path-to-archive-output',
@@ -352,8 +365,7 @@ def main():
 
     if not options.keep_filepaths_files:
       # Clean up the *.filepaths files.
-      chromium_utils.RemoveFilesWildcards(
-          '*.filepaths', os.path.join(os.getcwd(), 'src'))
+      _RemoveFilepathsFiles(os.path.join(os.getcwd(), 'src'))
 
     # Create the archive containing the generated files.
     index_pack.CreateArchive(options.path_to_archive_output)

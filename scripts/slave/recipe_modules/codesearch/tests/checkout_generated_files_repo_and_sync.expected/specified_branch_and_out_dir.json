@@ -244,7 +244,7 @@
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/sync_generated_files_codesearch.py",
+      "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
       "--debug-dir",
       "chromium-android",
       "--message",

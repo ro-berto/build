@@ -244,7 +244,7 @@
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/sync_generated_files_codesearch.py",
+      "RECIPE_MODULE[build::codesearch]/resources/sync_generated_files.py",
       "--message",
       "Generated files from \"test_buildername\" build 123, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",

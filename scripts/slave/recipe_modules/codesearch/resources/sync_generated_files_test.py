@@ -11,9 +11,7 @@ import shutil
 import tempfile
 import unittest
 
-import test_env  # pylint: disable=relative-import
-
-from slave import sync_generated_files_codesearch as sync
+import sync_generated_files as sync
 
 class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
   def setUp(self):
