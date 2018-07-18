@@ -1087,7 +1087,7 @@ Returns a version dictionary (after get_version()), e.g.
 
 &emsp; **@property**<br>&mdash; **def [coverage\_dir](/scripts/slave/recipe_modules/chromium_android/api.py#48)(self):**
 
-&mdash; **def [coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1437)(self, upload=True, \*\*kwargs):**
+&mdash; **def [coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1436)(self, upload=True, \*\*kwargs):**
 
 Creates an EMMA HTML report and optionally uploads it to storage bucket.
 
@@ -1133,7 +1133,7 @@ Args:
   binary_path: Path to binary to generate symbols for.
   root_chromium_dir: Root Chromium directory.
 
-&mdash; **def [get\_changed\_lines\_for\_revision](/scripts/slave/recipe_modules/chromium_android/api.py#1549)(self):**
+&mdash; **def [get\_changed\_lines\_for\_revision](/scripts/slave/recipe_modules/chromium_android/api.py#1548)(self):**
 
 Saves a JSON file containing the files/lines requiring coverage analysis.
 
@@ -1144,13 +1144,13 @@ coverage directory.
 
 &mdash; **def [git\_number](/scripts/slave/recipe_modules/chromium_android/api.py#204)(self, \*\*kwargs):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [handle\_exit\_codes](/scripts/slave/recipe_modules/chromium_android/api.py#1610)(self):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [handle\_exit\_codes](/scripts/slave/recipe_modules/chromium_android/api.py#1609)(self):**
 
 Handles exit codes emitted by the test runner and other scripts.
 
 &mdash; **def [host\_info](/scripts/slave/recipe_modules/chromium_android/api.py#419)(self, args=None, \*\*kwargs):**
 
-&mdash; **def [incremental\_coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1478)(self):**
+&mdash; **def [incremental\_coverage\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1477)(self):**
 
 Creates an incremental code coverage report.
 
@@ -1234,7 +1234,7 @@ Args:
   binary_paths: Paths to binaries to generate breakpad symbols.
   root_chromium_dir: Root Chromium directory.
 
-&mdash; **def [staged\_files\_matching\_filter](/scripts/slave/recipe_modules/chromium_android/api.py#1590)(self, diff_filter):**
+&mdash; **def [staged\_files\_matching\_filter](/scripts/slave/recipe_modules/chromium_android/api.py#1589)(self, diff_filter):**
 
 Returns list of files changed matching the provided diff-filter.
 
@@ -1250,7 +1250,7 @@ Creates a .size file for the given .apk.
 
 &mdash; **def [test\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1214)(self):**
 
-&mdash; **def [test\_runner](/scripts/slave/recipe_modules/chromium_android/api.py#1633)(self, step_name, args=None, wrapper_script_suite_name=None, pass_adb_path=True, \*\*kwargs):**
+&mdash; **def [test\_runner](/scripts/slave/recipe_modules/chromium_android/api.py#1632)(self, step_name, args=None, wrapper_script_suite_name=None, pass_adb_path=True, \*\*kwargs):**
 
 Wrapper for the python testrunner script.
 
@@ -3218,11 +3218,11 @@ Returns:
 
 #### **class [TestUtilsApi](/scripts/slave/recipe_modules/test_utils/api.py#25)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#247)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#255)(self, data):**
 
-&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#250)(self, data):**
+&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#258)(self, data):**
 
-&mdash; **def [determine\_new\_failures](/scripts/slave/recipe_modules/test_utils/api.py#147)(self, caller_api, tests, deapply_patch_fn):**
+&mdash; **def [determine\_new\_failures](/scripts/slave/recipe_modules/test_utils/api.py#155)(self, caller_api, tests, deapply_patch_fn):**
 
 Utility function for running steps with a patch applied, and retrying
 failing steps without the patch. Failures from the run without the patch are
@@ -3250,7 +3250,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#267)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#275)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3260,7 +3260,7 @@ Provides the --test-launcher-summary-output flag since --flag=value
 
 The test_results will be an instance of the GTestResults class.
 
-&mdash; **def [present\_gtest\_failures](/scripts/slave/recipe_modules/test_utils/api.py#69)(self, step_result):**
+&mdash; **def [present\_gtest\_failures](/scripts/slave/recipe_modules/test_utils/api.py#69)(self, step_result, presentation=None):**
 
 Update a step result's presentation with details of gtest failures.
 
@@ -3273,7 +3273,15 @@ the number of tests that will appear in the step text and have their logs
 included. If the limit is exceeded the step text will indicate the number
 of additional failures.
 
-&mdash; **def [run\_tests](/scripts/slave/recipe_modules/test_utils/api.py#95)(self, caller_api, tests, suffix):**
+Args:
+  step_result - The step result that potentially contains gtest results.
+  presentation - The presentation to update. If not provided or None, the
+                 presentation of *step_result* will be updated.
+Returns:
+  The gtest_results object if it is present in the step result, otherwise
+  None.
+
+&mdash; **def [run\_tests](/scripts/slave/recipe_modules/test_utils/api.py#103)(self, caller_api, tests, suffix):**
 
 Utility function for running a list of tests and returning the failed tests.
 
@@ -3288,9 +3296,9 @@ Args:
 Returns:
   The list of failed tests.
 
-&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#133)(self, caller_api, tests):**
+&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#141)(self, caller_api, tests):**
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#257)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#265)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 

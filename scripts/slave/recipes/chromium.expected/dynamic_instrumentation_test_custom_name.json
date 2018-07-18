@@ -933,6 +933,8 @@
     "name": "custom_test_name",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
+      "@@@STEP_LOG_END@Test.Two@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

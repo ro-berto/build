@@ -1054,8 +1054,8 @@ class SwarmingApi(recipe_api.RecipeApi):
       # gtest_task(...). It's not enforced in any way.
       step_result = self.m.step.active_result
 
-      gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
-      if gtest_results and gtest_results.raw:
+      gtest_results = self.m.test_utils.present_gtest_failures(step_result)
+      if gtest_results and gtest_results.valid:
         p = step_result.presentation
         missing_shards = gtest_results.raw.get('missing_shards') or []
         if missing_shards:
@@ -1063,7 +1063,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           for index in missing_shards:
             p.links['missing shard #%d' % index] = \
                 task.get_shard_view_url(index)
-        self.m.test_utils.present_gtest_failures(step_result)
+
         swarming_summary = step_result.swarming.summary
 
         # Show any remaining isolated outputs (such as logcats).

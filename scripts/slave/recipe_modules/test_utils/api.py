@@ -66,7 +66,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
             'Expected a one or two-element list, got %r instead.' % section)
     return ''.join(step_text)
 
-  def present_gtest_failures(self, step_result):
+  def present_gtest_failures(self, step_result, presentation=None):
     """Update a step result's presentation with details of gtest failures.
 
     If the provided step result contains valid gtest results, then the
@@ -77,20 +77,28 @@ class TestUtilsApi(recipe_api.RecipeApi):
     the number of tests that will appear in the step text and have their logs
     included. If the limit is exceeded the step text will indicate the number
     of additional failures.
+
+    Args:
+      step_result - The step result that potentially contains gtest results.
+      presentation - The presentation to update. If not provided or None, the
+                     presentation of *step_result* will be updated.
+    Returns:
+      The gtest_results object if it is present in the step result, otherwise
+      None.
     """
     r = getattr(step_result, 'test_utils', None)
     r = getattr(r, 'gtest_results', None)
-    if not r or not r.valid:
-      return
-    p = step_result.presentation
-    failures = list(r.failures)[:self._max_reported_gtest_failures]
-    for f in failures:
-      p.logs[f] = r.logs[f]
-    if len(r.failures) > len(failures):
-      failures.append('... %d more ...' % (len(r.failures) - len(failures)))
-    p.step_text += self.format_step_text([
-        ['failures:', failures],
-    ])
+    if r and r.valid:
+      p = presentation or step_result.presentation
+      failures = list(r.failures)[:self._max_reported_gtest_failures]
+      for f in failures:
+        p.logs[f] = r.logs[f]
+      if len(r.failures) > len(failures):
+        failures.append('... %d more ...' % (len(r.failures) - len(failures)))
+      p.step_text += self.format_step_text([
+          ['failures:', failures],
+      ])
+    return r
 
   def run_tests(self, caller_api, tests, suffix):
     """

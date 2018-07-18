@@ -653,12 +653,9 @@ class LocalGTestTest(Test):
       step_result = api.step.active_result
       self._test_runs[suffix] = step_result
 
-      if hasattr(step_result, 'test_utils'):
-        r = step_result.test_utils.gtest_results
-        p = step_result.presentation
+      r = api.test_utils.present_gtest_failures(step_result)
+      if r:
         self._gtest_results[suffix] = r
-
-        api.test_utils.present_gtest_failures(step_result)
 
         api.test_results.upload(
             api.json.input(r.raw),
@@ -2154,14 +2151,11 @@ class AndroidTest(Test):
       finally:
         nested_step.presentation.status = step_result.presentation.status
         self._test_runs[suffix] = {'valid': False}
-        if (hasattr(step_result, 'test_utils') and
-            hasattr(step_result.test_utils, 'gtest_results')):
-          gtest_results = step_result.test_utils.gtest_results
-
+        gtest_results = api.test_utils.present_gtest_failures(
+            step_result, nested_step.presentation)
+        if gtest_results:
           failures = gtest_results.failures
           self._test_runs[suffix] = {'valid': True, 'failures': failures}
-          nested_step.presentation.step_text += (
-              api.test_utils.format_step_text([['failures:', failures]]))
 
           api.test_results.upload(
               api.json.input(gtest_results.raw),
