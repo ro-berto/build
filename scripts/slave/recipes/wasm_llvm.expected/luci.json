@@ -195,7 +195,7 @@
       "BUILDBOT_REVISION": "abcd",
       "GOMA_DIR": "[GOMA_CACHE]/client"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "[BUILDER_CACHE]/depot_tools"
       ]

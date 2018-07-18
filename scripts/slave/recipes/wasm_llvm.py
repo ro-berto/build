@@ -40,7 +40,7 @@ def RunSteps(api):
   try:
     depot_tools_path = checkout_root.join('depot_tools')
     with api.context(cwd=api.path['checkout'], env=env,
-                     env_prefixes={'PATH': [depot_tools_path]}):
+                     env_suffixes={'PATH': [depot_tools_path]}):
       api.python('annotated steps',
                  api.path['checkout'].join('src', 'build.py'),
                  allow_subannotations=True)
