@@ -30,6 +30,28 @@ SPEC = {
       },
       'checkout_dir': 'linux',
     },
+    # This is not a real bot; it isn't actually present on the waterfall. It's
+    # only here to be mirrored by a trybot which needs a special config
+    # (goma_rbe).
+    'linux-goma-rbe-staging-rel': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+        'chrome_with_codecs',
+        'goma_rbe',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'checkout_dir': 'linux',
+    },
     'linux-jumbo-rel': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
