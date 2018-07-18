@@ -1380,8 +1380,8 @@ class V8Api(recipe_api.RecipeApi):
         properties['swarm_hashes'] = swarm_hashes
       properties.update(**additional_properties)
 
-      if self.m.tryserver.is_tryserver:
-        if triggers:
+      if triggers:
+        if self.m.tryserver.is_tryserver:
           trigger_props = {}
           self._copy_property(self.m.properties, trigger_props, 'git_revision')
           self._copy_property(self.m.properties, trigger_props, 'revision')
@@ -1410,35 +1410,35 @@ class V8Api(recipe_api.RecipeApi):
           )
           triggered_build_ids.extend(
               build['build']['id'] for build in step_result.stdout['results'])
-      else:
-        ci_properties = dict(properties)
-        if self.should_upload_build:
-          ci_properties['archive'] = self._get_default_archive()
-        if self.m.runtime.is_luci:
-          self.m.scheduler.emit_triggers(
-              [(
-                self.m.scheduler.BuildbucketTrigger(
-                  properties=dict(
-                    ci_properties,
-                    **test_spec.as_properties_dict(builder_name)
-                  ),
-                  tags={
-                    'buildset': 'commit/gitiles/chromium.googlesource.com/v8/'
-                                'v8/+/%s' % ci_properties['revision']
-                  }
-                ), 'v8', [builder_name],
-              ) for builder_name in triggers],
-              step_name='trigger'
-          )
         else:
-          self.m.trigger(*[{
-            'builder_name': builder_name,
-            # Attach additional builder-specific test-spec properties.
-            'properties': dict(
-                ci_properties,
-                **test_spec.as_properties_dict(builder_name)
-            ),
-          } for builder_name in triggers])
+          ci_properties = dict(properties)
+          if self.should_upload_build:
+            ci_properties['archive'] = self._get_default_archive()
+          if self.m.runtime.is_luci:
+            self.m.scheduler.emit_triggers(
+                [(
+                  self.m.scheduler.BuildbucketTrigger(
+                    properties=dict(
+                      ci_properties,
+                      **test_spec.as_properties_dict(builder_name)
+                    ),
+                    tags={
+                      'buildset': 'commit/gitiles/chromium.googlesource.com/v8/'
+                                  'v8/+/%s' % ci_properties['revision']
+                    }
+                  ), 'v8', [builder_name],
+                ) for builder_name in triggers],
+                step_name='trigger'
+            )
+          else:
+            self.m.trigger(*[{
+              'builder_name': builder_name,
+              # Attach additional builder-specific test-spec properties.
+              'properties': dict(
+                  ci_properties,
+                  **test_spec.as_properties_dict(builder_name)
+              ),
+            } for builder_name in triggers])
 
       if triggers_proxy and not self.m.runtime.is_experimental:
         proxy_properties = {'archive': self._get_default_archive()}
@@ -1448,7 +1448,8 @@ class V8Api(recipe_api.RecipeApi):
             [{
               'properties': proxy_properties,
               'builder_name': 'v8_trigger_proxy'
-            }]
+            }],
+            step_name='trigger_internal'
         )
 
     if triggered_build_ids:
