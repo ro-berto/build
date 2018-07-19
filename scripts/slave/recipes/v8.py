@@ -33,6 +33,9 @@ PROPERTIES = {
   'custom_deps': Property(default=None, kind=dict),
   # Switch to enable/disable swarming.
   'enable_swarming': Property(default=None, kind=bool),
+  # Optional path to a different MB config. The path must be relative to the
+  # V8 checkout and using forward slashes.
+  'mb_config_path': Property(default=None, kind=str),
   # Name of a gclient custom_var to set to 'True'.
   'set_gclient_var': Property(default=None, kind=str),
   # One of intel|arm|mips.
@@ -44,8 +47,8 @@ PROPERTIES = {
 }
 
 
-def RunSteps(api, build_config, custom_deps, enable_swarming, set_gclient_var,
-             target_arch, target_platform, triggers):
+def RunSteps(api, build_config, custom_deps, enable_swarming, mb_config_path,
+             set_gclient_var, target_arch, target_platform, triggers):
   v8 = api.v8
   v8.load_static_test_configs()
   bot_config = v8.update_bot_config(
@@ -702,10 +705,11 @@ def GenTests(api):
       api.post_process(Filter('trigger'))
   )
 
-  # Test using custom_deps and set_gclient_var property.
+  # Test using custom_deps, set_gclient_var and mb_config_path property.
   yield (
       api.v8.test('client.v8', 'V8 Linux - builder', 'set_gclient_var',
                   custom_deps={'v8/foo': 'bar'},
+                  mb_config_path='somewhere/else/mb_config.pyl',
                   set_gclient_var='download_gcmole') +
       api.v8.check_in_param(
           'bot_update',
@@ -713,6 +717,9 @@ def GenTests(api):
       api.v8.check_in_param(
           'bot_update',
           '--spec-path', '\'custom_deps\': {\'v8/foo\': \'bar\'}') +
+      api.v8.check_in_param(
+          'generate_build_files',
+          '--config-file', 'somewhere/else/mb_config.pyl') +
       api.post_process(DropExpectation)
   )
 

@@ -695,12 +695,14 @@ class V8Api(recipe_api.RecipeApi):
             'moar text'
         )
       try:
+        mb_config_rel_path = self.m.properties.get(
+          'mb_config_path', 'infra/mb/mb_config.pyl')
         self.m.chromium.run_mb(
             self.m.properties['mastername'],
             self.m.properties['buildername'],
             use_goma=use_goma,
             mb_config_path=self.m.path['checkout'].join(
-                'infra', 'mb', 'mb_config.pyl'),
+                *mb_config_rel_path.split('/')),
             isolated_targets=isolate_targets,
             stdout=self.m.raw_io.output_text(),
             step_test_data=step_test_data,
