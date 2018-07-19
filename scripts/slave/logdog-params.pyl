@@ -45,7 +45,6 @@
   'chromium': {
     # Infra
     'chromium.infra.cron': {},
-    'chromium.swarm': {},
 
     # Chromium tryservers.
     'tryserver.chromium.android': {},
