@@ -281,6 +281,11 @@ class V8Api(recipe_api.RecipeApi):
     if var_name:
       self.m.gclient.c.solutions[0].custom_vars[var_name] = 'True'
 
+  def set_gclient_custom_deps(self, custom_deps):
+    """Configures additional gclient custom_deps to be synced."""
+    for name, path in (custom_deps or {}).iteritems():
+      self.m.gclient.c.solutions[0].custom_deps[name] = path
+
   @property
   def isolated_tests(self):
     # During bisection, the isolated hashes will be updated with hashes that

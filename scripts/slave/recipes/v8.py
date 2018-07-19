@@ -28,6 +28,9 @@ DEPS = [
 PROPERTIES = {
   # One of Release|Debug.
   'build_config': Property(default=None, kind=str),
+  # Mapping of custom dependencies to sync (dependency name as in DEPS file ->
+  # deps url).
+  'custom_deps': Property(default=None, kind=dict),
   # Switch to enable/disable swarming.
   'enable_swarming': Property(default=None, kind=bool),
   # Name of a gclient custom_var to set to 'True'.
@@ -41,8 +44,8 @@ PROPERTIES = {
 }
 
 
-def RunSteps(api, build_config, enable_swarming, set_gclient_var, target_arch,
-             target_platform, triggers):
+def RunSteps(api, build_config, custom_deps, enable_swarming, set_gclient_var,
+             target_arch, target_platform, triggers):
   v8 = api.v8
   v8.load_static_test_configs()
   bot_config = v8.update_bot_config(
@@ -51,6 +54,7 @@ def RunSteps(api, build_config, enable_swarming, set_gclient_var, target_arch,
   )
   v8.apply_bot_config(bot_config)
   v8.set_gclient_custom_var(set_gclient_var)
+  v8.set_gclient_custom_deps(custom_deps)
 
   # Opt out of using gyp environment variables.
   api.chromium.c.use_gyp_env = False
@@ -698,13 +702,17 @@ def GenTests(api):
       api.post_process(Filter('trigger'))
   )
 
-  # Test using set_gclient_var property.
+  # Test using custom_deps and set_gclient_var property.
   yield (
       api.v8.test('client.v8', 'V8 Linux - builder', 'set_gclient_var',
+                  custom_deps={'v8/foo': 'bar'},
                   set_gclient_var='download_gcmole') +
       api.v8.check_in_param(
           'bot_update',
           '--spec-path', '\'custom_vars\': {\'download_gcmole\': \'True\'}') +
+      api.v8.check_in_param(
+          'bot_update',
+          '--spec-path', '\'custom_deps\': {\'v8/foo\': \'bar\'}') +
       api.post_process(DropExpectation)
   )
 
