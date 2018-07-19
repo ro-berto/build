@@ -20,7 +20,8 @@ TEST_CC_FILE_CONTENT = '#include "test.h"\nint main() {\nreturn 0;\n}\n'
 TEST_H_FILE_CONTENT = ('#ifndef TEST_H\n#define TEST_H\n#include "test2.h"\n'
                        '#endif\n')
 TEST2_H_FILE_CONTENT = '#ifndef TEST2_H\n#define TEST2_H\n#endif\n'
-COMPILE_ARGUMENTS = 'clang++ -fsyntax-only -std=c++11 -c test.cc -o test.o'
+COMPILE_ARGUMENTS = (r'clang++ -fsyntax-only -DFOO=\"foo\ bar\" -std=c++11 -c '
+                     r'test.cc -o test.o')
 
 COMPILE_ARGUMENTS_WIN = 'clang-cl.exe /c test.cc /Fotest.obj'
 
@@ -180,12 +181,12 @@ class PackageIndexTest(unittest.TestCase):
       self.assertEquals(test2_h_entry['v_name']['corpus'], CORPUS)
       self.assertEquals(test2_h_entry['v_name']['root'], VNAME_ROOT)
 
-      real_compile_arguments = COMPILE_ARGUMENTS.split()[1:]
-      self.assertEquals(
-          compilation_unit_dictionary['argument'],
-          (
-              real_compile_arguments + ['-w', '-nostdinc++']
-          ))
+      real_compile_arguments = [
+          u'-fsyntax-only', u'-DFOO="foo bar"', u'-std=c++11', u'-c',
+          u'test.cc', u'-o', u'test.o', u'-w', u'-nostdinc++',
+      ]
+      self.assertEquals(compilation_unit_dictionary['argument'],
+                        real_compile_arguments)
 
   def testGenerateUnitFilesWindows(self):
     # Write a new compdb with Windows args, and re-create the index pack.

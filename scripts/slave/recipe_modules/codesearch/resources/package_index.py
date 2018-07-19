@@ -14,6 +14,7 @@ import itertools
 import json
 import os
 import shutil
+import shlex
 import sys
 import tempfile
 import time
@@ -168,7 +169,8 @@ class IndexPack(object):
       print 'Generating Translation Unit data for %s' % entry['file']
       print 'Compile command: %s' % entry['command']
 
-      command_list = entry['command'].split()
+      command_list = shlex.split(
+          entry['command'], posix=sys.platform != 'win32')
       # The |command_list| starts with the compiler that was used for the
       # compilation. In the unit file we want to have just the parameters passed
       # to the compiler (which always needs to be clang/clang++). Currently,
