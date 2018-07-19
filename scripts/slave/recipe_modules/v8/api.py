@@ -742,6 +742,7 @@ class V8Api(recipe_api.RecipeApi):
           ],
           step_test_data=lambda: self.test_api.example_build_dependencies(),
           ok_ret='any',
+          venv=True,
       ).json.output
       if deps:
         self._upload_build_dependencies(deps)
