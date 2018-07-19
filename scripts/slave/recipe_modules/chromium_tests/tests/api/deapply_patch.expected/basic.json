@@ -278,7 +278,6 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_DEFINES": "component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\goma\\client' proprietary_codecs=1 target_arch=ia32 use_goma=1"
     },
     "env_suffixes": {
@@ -499,7 +498,6 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_DEFINES": "component=static_library fastbuild=1 ffmpeg_branding=Chrome gomadir='[CACHE]\\goma\\client' proprietary_codecs=1 target_arch=ia32 use_goma=1"
     },
     "env_suffixes": {

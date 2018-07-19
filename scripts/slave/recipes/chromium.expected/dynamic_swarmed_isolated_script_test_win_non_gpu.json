@@ -11,8 +11,7 @@
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "taskkill"
@@ -28,8 +27,7 @@
       "[START_DIR]\\.cipd"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "remove .cipd"
@@ -55,8 +53,7 @@
       "src@HEAD"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "env_prefixes": {
       "PATH": [
@@ -190,8 +187,7 @@
   {
     "cmd": [],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "ensure_goma"
   },
@@ -209,8 +205,7 @@
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
@@ -235,8 +230,7 @@
       "--version"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
@@ -254,7 +248,6 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[CACHE]\\goma\\client' target_arch=ia32 use_goma=1"
     },
     "env_suffixes": {
@@ -281,8 +274,7 @@
       "{\"bot_id\": \"test_bot\", \"buildername\": \"Win7 Tests (1)\", \"buildnumber\": 571, \"mastername\": \"chromium.win\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -299,8 +291,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "read test spec (chromium.win.json)",
     "~followup_annotations": [
@@ -337,8 +328,7 @@
       "[START_DIR]\\src\\out\\Release"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "build directory"
@@ -371,8 +361,7 @@
       "571"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "extract build"
@@ -388,8 +377,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "find isolated tests",
     "~followup_annotations": [
@@ -404,8 +392,7 @@
   {
     "cmd": [],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "test_pre_run"
   },
@@ -494,8 +481,7 @@
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "test_pre_run.[trigger] telemetry_gpu_unittests on Windows",
@@ -553,8 +539,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "telemetry_gpu_unittests on Windows",
     "~followup_annotations": [
@@ -684,8 +669,7 @@
       "test-results.appspot.com"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Upload to test-results [telemetry_gpu_unittests]"
   },
@@ -705,8 +689,7 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "test_installer"
   },
@@ -717,8 +700,7 @@
       "import sys; sys.exit(0)"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "Tests statistics",
     "~followup_annotations": [
@@ -743,8 +725,7 @@
       "Release"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "process_dumps"

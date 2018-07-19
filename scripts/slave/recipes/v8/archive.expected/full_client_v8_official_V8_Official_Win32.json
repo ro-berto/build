@@ -12,7 +12,6 @@
     "cwd": "[BUILDER_CACHE]\\V8_Official_Win32\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "gn"
@@ -39,7 +38,6 @@
     "cwd": "[BUILDER_CACHE]\\V8_Official_Win32\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "compile"

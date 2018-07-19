@@ -89,7 +89,6 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_DEFINES": "target_arch=ia32",
       "GYP_GENERATORS": "msvs-ninja,ninja"
     },

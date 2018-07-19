@@ -102,8 +102,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Win64\\v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "env_suffixes": {
       "PATH": [
@@ -165,7 +164,6 @@
     "cwd": "[BUILDER_CACHE]\\V8_Win64\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files",
@@ -207,7 +205,6 @@
     "cwd": "[BUILDER_CACHE]\\V8_Win64\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "compile"
@@ -228,7 +225,6 @@
     "cwd": "[BUILDER_CACHE]\\V8_Win64\\v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "compile confirm no-op",

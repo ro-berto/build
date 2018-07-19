@@ -198,7 +198,6 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1 target_arch=ia32 use_lld=1",
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },
@@ -262,7 +261,6 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "generate_build_files"
@@ -285,7 +283,6 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "clang_revision",
@@ -316,7 +313,6 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "compile"
@@ -336,7 +332,6 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "name": "compile confirm no-op",
@@ -364,8 +359,7 @@
       "clang"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "upload_ninja_log"
   },

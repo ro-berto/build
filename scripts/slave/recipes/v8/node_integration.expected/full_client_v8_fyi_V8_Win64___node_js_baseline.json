@@ -105,8 +105,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_baseline\\v8",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "env_suffixes": {
       "PATH": [

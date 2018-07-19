@@ -11,8 +11,7 @@
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "taskkill"
@@ -30,8 +29,7 @@
       "[BUILDER_CACHE]\\win"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "makedirs checkout path"
@@ -50,8 +48,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "makedirs checkout path (2)"
@@ -68,8 +65,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "remove .cipd"
@@ -92,7 +88,6 @@
     "cwd": "[BUILDER_CACHE]\\win",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
@@ -147,8 +142,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "env_prefixes": {
       "PATH": [
@@ -282,8 +276,7 @@
   {
     "cmd": [],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "ensure_goma"
   },
@@ -301,8 +294,7 @@
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
@@ -327,8 +319,7 @@
       "--version"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "swarming.py --version",
     "stdout": "/path/to/tmp/",
@@ -346,7 +337,6 @@
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]\\client' proprietary_codecs=1 target_arch=ia32 use_goma=1"
     },
     "env_suffixes": {
@@ -372,8 +362,7 @@
       "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "taskkill (2)"
@@ -400,8 +389,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "env_prefixes": {
       "PATH": [
@@ -528,7 +516,6 @@
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]\\client' proprietary_codecs=1 target_arch=ia32 use_goma=1"
     },
     "env_suffixes": {
@@ -549,8 +536,7 @@
       "import sys; sys.exit(0)"
     ],
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "mark: before_tests",
     "~followup_annotations": [

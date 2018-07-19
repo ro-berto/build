@@ -49,9 +49,6 @@ class ChromiumApi(recipe_api.RecipeApi):
         # tools don't require user interaction.
         'CHROME_HEADLESS': '1',
     }
-    if self.m.platform.is_win:
-      env['DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT'] = (
-          self.m.path['cache'].join('win_toolchain'))
 
     return self.Layout(
         env=env,

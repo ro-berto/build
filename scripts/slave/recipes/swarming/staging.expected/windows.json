@@ -314,7 +314,6 @@
     "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1"
     },
     "env_suffixes": {
@@ -356,7 +355,6 @@
     "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files",
@@ -369,8 +367,7 @@
     "cmd": [],
     "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "preprocess_for_goma"
   },
@@ -388,8 +385,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -407,7 +403,6 @@
     "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\Windows_Swarm",
@@ -445,8 +440,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
@@ -476,7 +470,6 @@
     "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "compile"
@@ -498,7 +491,6 @@
     "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "compile confirm no-op",
@@ -508,8 +500,7 @@
     "cmd": [],
     "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "postprocess_for_goma"
   },
@@ -524,7 +515,6 @@
     "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -558,7 +548,6 @@
     "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -581,7 +570,6 @@
     "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -639,8 +627,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
@@ -670,8 +657,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\Windows_Swarm\\src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+      "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
