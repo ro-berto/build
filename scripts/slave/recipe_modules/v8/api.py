@@ -732,18 +732,19 @@ class V8Api(recipe_api.RecipeApi):
     self.m.chromium.compile(**kwargs)
 
     if self.bot_config.get('track_build_dependencies', False):
-      deps = self.m.python(
-          name='track build dependencies (fyi)',
-          script=self.resource('build-dep-stats.py'),
-          args=[
-            '-C', self.build_output_dir,
-            '-x', '/third_party/',
-            '-o', self.m.json.output(),
-          ],
-          step_test_data=lambda: self.test_api.example_build_dependencies(),
-          ok_ret='any',
-          venv=True,
-      ).json.output
+      with self.m.context(env_prefixes={'PATH': [self.depot_tools_path]}):
+        deps = self.m.python(
+            name='track build dependencies (fyi)',
+            script=self.resource('build-dep-stats.py'),
+            args=[
+              '-C', self.build_output_dir,
+              '-x', '/third_party/',
+              '-o', self.m.json.output(),
+            ],
+            step_test_data=lambda: self.test_api.example_build_dependencies(),
+            ok_ret='any',
+            venv=True,
+        ).json.output
       if deps:
         self._upload_build_dependencies(deps)
 
@@ -756,6 +757,13 @@ class V8Api(recipe_api.RecipeApi):
       )
 
     self.isolate_tests(isolate_targets)
+
+  @property
+  def depot_tools_path(self):
+    """Returns path to depot_tools pinned in the V8 checkout."""
+    assert 'checkout' in self.m.path, (
+        "Pinned depot_tools is not available before checkout has been created")
+    return self.m.path['checkout'].join('third_party', 'depot_tools')
 
   def _get_default_archive(self):
     return 'gs://chromium-v8/%sarchives/%s/%s' % (

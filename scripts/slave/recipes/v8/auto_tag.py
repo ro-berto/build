@@ -98,8 +98,9 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
       # when https://crbug.com/846923 is resolved.
       'v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com'
       if api.runtime.is_luci else 'v8-autoroll@chromium.org')
-  dt_path = api.path['checkout'].join('third_party', 'depot_tools')
-  with api.context(cwd=api.path['checkout'], env_prefixes={'PATH': [dt_path]}):
+  with api.context(
+      cwd=api.path['checkout'],
+      env_prefixes={'PATH': [api.v8.depot_tools_path]}):
     api.git('new-branch', 'work', '--upstream', ref)
     api.git(
         'config', 'user.name', 'V8 Autoroll', name='git config user.name',
@@ -128,7 +129,9 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
     api.step('Dry-run commit', cmd=None)
     return
 
-  with api.context(cwd=api.path['checkout'], env_prefixes={'PATH': [dt_path]}):
+  with api.context(
+      cwd=api.path['checkout'],
+      env_prefixes={'PATH': [api.v8.depot_tools_path]}):
     api.git('cl', 'upload', '-f', '--bypass-hooks', '--send-mail',
             '--private', '--tbrs', 'machenbach@chromium.org')
     api.git('cl', 'land', '-f', '--bypass-hooks', name='git cl land')

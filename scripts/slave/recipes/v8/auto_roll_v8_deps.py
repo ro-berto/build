@@ -155,8 +155,9 @@ def RunSteps(api):
   api.v8.checkout()
 
   # Enforce a clean state.
-  dt_path = api.path['checkout'].join('third_party', 'depot_tools')
-  with api.context(cwd=api.path['checkout'], env_prefixes={'PATH': [dt_path]}):
+  with api.context(
+      cwd=api.path['checkout'],
+      env_prefixes={'PATH': [api.v8.depot_tools_path]}):
     api.git('checkout', '-f', 'origin/master')
     api.git('branch', '-D', 'roll', ok_ret='any')
     api.git('clean', '-ffd')
@@ -244,7 +245,8 @@ def RunSteps(api):
       args.extend(['-m', 'TBR=%s' % ','.join(bot_config['reviewers'])])
       kwargs = {'stdout': api.raw_io.output_text()}
       with api.context(
-          cwd=api.path['checkout'], env_prefixes={'PATH': [dt_path]}):
+          cwd=api.path['checkout'],
+          env_prefixes={'PATH': [api.v8.depot_tools_path]}):
         api.git(*args, **kwargs)
         api.git(
             'cl', 'upload', '-f', '--use-commit-queue', '--bypass-hooks',

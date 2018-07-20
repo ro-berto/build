@@ -233,6 +233,11 @@
       "-o",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/V8_Linux64___builder/v8/third_party/depot_tools"
+      ]
+    },
     "name": "track build dependencies (fyi)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

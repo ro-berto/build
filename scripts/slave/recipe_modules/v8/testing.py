@@ -571,9 +571,9 @@ class V8SwarmingTest(V8Test):
 
 class V8Presubmit(BaseTest):
   def run(self, **kwargs):
-    dt_path = self.api.path['checkout'].join('third_party', 'depot_tools')
-    with self.api.context(cwd=self.api.path['checkout'],
-                          env_prefixes={'PATH': [dt_path]}):
+    with self.api.context(
+        cwd=self.api.path['checkout'],
+        env_prefixes={'PATH': [self.api.v8.depot_tools_path]}):
       self.api.python(
         'Presubmit',
         self.api.path['checkout'].join('tools', 'presubmit.py'),
