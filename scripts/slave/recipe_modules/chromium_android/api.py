@@ -129,11 +129,6 @@ class AndroidApi(recipe_api.RecipeApi):
     s.revision = self.c.revision
     spec.revisions = self.c.revisions
 
-    # TODO(jbudorick): Remove this after resolving crbug.com/794764.
-    self.m.file.rmtree(
-        'remove .cipd',
-        self.m.chromium_checkout.get_checkout_dir(spec).join('.cipd'))
-
     self.m.gclient.break_locks()
     refs = self.m.properties.get('event.patchSet.ref')
     if refs:

@@ -33,36 +33,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/mac"
-    ],
-    "cwd": "[BUILDER_CACHE]/mac",
-    "infra_step": true,
-    "name": "makedirs checkout path (3)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[BUILDER_CACHE]/mac/.cipd"
-    ],
-    "cwd": "[BUILDER_CACHE]/mac",
-    "infra_step": true,
-    "name": "remove .cipd"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
@@ -361,42 +331,6 @@
     ],
     "infra_step": true,
     "name": "test r0.makedirs checkout path",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/mac"
-    ],
-    "cwd": "[BUILDER_CACHE]/mac",
-    "infra_step": true,
-    "name": "test r0.makedirs checkout path (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[BUILDER_CACHE]/mac/.cipd"
-    ],
-    "cwd": "[BUILDER_CACHE]/mac",
-    "infra_step": true,
-    "name": "test r0.remove .cipd",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

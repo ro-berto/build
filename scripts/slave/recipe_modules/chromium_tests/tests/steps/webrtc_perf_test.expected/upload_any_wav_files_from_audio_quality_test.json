@@ -3,19 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[START_DIR]/.cipd"
-    ],
-    "infra_step": true,
-    "name": "remove .cipd"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}, {'deps_file': 'DEPS', 'managed': True, 'name': 'webrtc.DEPS', 'url': 'https://webrtc.googlesource.com/webrtc.DEPS'}]",

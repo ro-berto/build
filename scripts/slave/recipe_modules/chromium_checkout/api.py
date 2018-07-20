@@ -89,10 +89,6 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
 
     # Bot Update re-uses the gclient configs.
     with self.m.context(cwd=self._working_dir):
-      # TODO(jbudorick): Remove this after resolving crbug.com/794764.
-      self.m.file.rmtree(
-          'remove .cipd',
-          self.get_checkout_dir(bot_config).join('.cipd'))
       update_step = self.m.bot_update.ensure_checkout(
           patch_root=bot_config.get('patch_root'),
           root_solution_revision=root_solution_revision,

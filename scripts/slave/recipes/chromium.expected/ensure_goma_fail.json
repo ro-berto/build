@@ -21,42 +21,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/Linux_remote_run_Builder"
-    ],
-    "cwd": "[BUILDER_CACHE]/Linux_remote_run_Builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "makedirs checkout path (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[BUILDER_CACHE]/Linux_remote_run_Builder/.cipd"
-    ],
-    "cwd": "[BUILDER_CACHE]/Linux_remote_run_Builder",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "remove .cipd"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
