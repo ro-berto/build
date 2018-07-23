@@ -545,7 +545,6 @@
           "experimental_tests"
         ],
         "excluded_builders" : [
-          "ios-uirefresh-simulator",
           "mac-cocoa-rel"
         ],
         "builders": {
@@ -568,6 +567,10 @@
           "ios-simulator-xcode-clang": {
             "close_tree": false,
             "sheriff_classes": ["sheriff_ios"]
+          },
+          "ios-uirefresh-simulator": {
+            "sheriff_classes": ["sheriff_ios"],
+            "close_tree": false
           },
           "Mac GN (dbg)": {
             "close_tree": false
