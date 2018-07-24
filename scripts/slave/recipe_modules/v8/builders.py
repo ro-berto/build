@@ -575,6 +575,15 @@ BUILDERS = {
         },
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux64 - debug - header includes': {
+        'chromium_apply_config': [
+          'default_compiler', 'goma', 'mb',
+        ],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+        },
+        'testing': {'platform': 'linux'},
+      },
 ####### Category: Jumbo
       'V8 Linux64 Jumbo': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
@@ -1972,6 +1981,15 @@ BUILDERS = {
         },
       },
       'v8_linux64_gcc_compile_dbg': {
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
+        'testing': {
+          'properties': {
+            'build_config': 'Debug',
+          },
+          'platform': 'linux',
+        },
+      },
+      'v8_linux64_header_includes_dbg': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
           'properties': {
