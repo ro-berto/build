@@ -189,9 +189,7 @@ class BotConfigAndTestDB(object):
     """
     # TODO(kbr): currently the master_dicts that are created by
     # get_master_dict_with_dynamic_tests are over-specialized to a
-    # particular builder -- the "enable_swarming" flag paradoxically comes
-    # from that builder, rather than from each individual builder and/or
-    # the parent builder. This needs to be fixed so that there's exactly
+    # particular builder. This needs to be fixed so that there's exactly
     # one master_dict per waterfall.
     assert mastername not in self._db, (
         'Illegal attempt to add multiple master dictionaries for waterfall %s' %

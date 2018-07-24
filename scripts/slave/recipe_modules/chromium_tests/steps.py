@@ -524,10 +524,10 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
 
 class LocalGTestTest(Test):
-  def __init__(self, name, args=None, target_name=None, use_isolate=False,
-               revision=None, webkit_revision=None,
-               android_shard_timeout=None, android_tool=None,
-               override_compile_targets=None, override_isolate_target=None,
+  def __init__(self, name, args=None, target_name=None, revision=None,
+               webkit_revision=None, android_shard_timeout=None,
+               android_tool=None, override_compile_targets=None,
+               override_isolate_target=None,
                commit_position_property='got_revision_cp', use_xvfb=True,
                waterfall_mastername=None, waterfall_buildername=None,
                set_up=None, tear_down=None, **runtest_kwargs):
@@ -537,8 +537,6 @@ class LocalGTestTest(Test):
       name: Displayed name of the test. May be modified by suffixes.
       args: Arguments to be passed to the test.
       target_name: Actual name of the test. Defaults to name.
-      use_isolate: When set, uses api.isolate.runtest to invoke the test.
-          Calling recipe should have isolate in their DEPS.
       revision: Revision of the Chrome checkout.
       webkit_revision: Revision of the WebKit checkout.
       override_compile_targets: List of compile targets for this test
@@ -561,7 +559,6 @@ class LocalGTestTest(Test):
     self._name = name
     self._args = args or []
     self._target_name = target_name
-    self._use_isolate = use_isolate
     self._revision = revision
     self._webkit_revision = webkit_revision
     self._android_shard_timeout = android_shard_timeout

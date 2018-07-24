@@ -764,7 +764,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'android-mojo-webview-rel': {
       'chromium_config': 'android',
@@ -781,7 +780,6 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      'enable_swarming': True,
     },
     'Mojo ChromiumOS': {
       'chromium_config': 'chromium',

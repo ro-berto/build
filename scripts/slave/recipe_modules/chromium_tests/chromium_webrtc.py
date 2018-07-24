@@ -119,8 +119,6 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
       build_config=build_config)
 
   if swarming is not None:
-    spec['enable_swarming'] = True
-    spec['use_isolate'] = True
     spec['swarming_dimensions'] = swarming
 
   spec['parent_buildername'] = parent_builder
