@@ -13,7 +13,11 @@
       "--strip-prefix",
       "\")]}'\\n\""
     ],
-    "name": "Get hash of HEAD commit on master"
+    "name": "Get hash of HEAD commit on master",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@time data '' does not match format '%a %b %d %H:%M:%S %Y'@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
   },
   {
     "cmd": [
@@ -25,7 +29,7 @@
     ],
     "infra_step": true,
     "name": "luci-scheduler.EmitTriggers",
-    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"codesearch-gen-chromium-chromiumos\", \"project\": \"infra\"}, {\"job\": \"codesearch-gen-chromium-linux\", \"project\": \"infra\"}, {\"job\": \"codesearch-gen-chromium-android\", \"project\": \"infra\"}, {\"job\": \"codesearch-gen-chromium-win\", \"project\": \"infra\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"root_solution_revision\": \"deadbeef\", \"root_solution_revision_timestamp\": 1531887759}, \"tags\": [\"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"None/None\"}}], \"timestamp\": 1337000001500000}",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"codesearch-gen-chromium-chromiumos\", \"project\": \"infra\"}, {\"job\": \"codesearch-gen-chromium-linux\", \"project\": \"infra\"}, {\"job\": \"codesearch-gen-chromium-android\", \"project\": \"infra\"}, {\"job\": \"codesearch-gen-chromium-win\", \"project\": \"infra\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"root_solution_revision\": \"HEAD\", \"root_solution_revision_timestamp\": 1337000001}, \"tags\": [\"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"None/None\"}}], \"timestamp\": 1337000003000000}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@input {",
@@ -52,8 +56,8 @@
       "            \"trigger\": {",
       "                \"buildbucket\": {",
       "                    \"properties\": {",
-      "                        \"root_solution_revision\": \"deadbeef\", ",
-      "                        \"root_solution_revision_timestamp\": 1531887759",
+      "                        \"root_solution_revision\": \"HEAD\", ",
+      "                        \"root_solution_revision_timestamp\": 1337000001",
       "                    }, ",
       "                    \"tags\": [",
       "                        \"user_agent:recipe\"",
@@ -64,7 +68,7 @@
       "            }",
       "        }",
       "    ], ",
-      "    \"timestamp\": 1337000001500000",
+      "    \"timestamp\": 1337000003000000",
       "}@@@"
     ]
   },

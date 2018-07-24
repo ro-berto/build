@@ -9,12 +9,16 @@ recipes with the chosen commit hash as a parameter. This ensures that codesearch
 index packs (used to generate xrefs) are all generated from the same revision.
 """
 
+from datetime import datetime
+
 DEPS = [
   'recipe_engine/buildbucket',
+  'recipe_engine/json',
   'recipe_engine/properties',
   'recipe_engine/runtime',
   'recipe_engine/scheduler',
   'recipe_engine/step',
+  'recipe_engine/time',
   'recipe_engine/url',
   'trigger',
 ]
@@ -26,20 +30,55 @@ BUILDERS = [
     'codesearch-gen-chromium-win',
 ]
 
-def RunSteps(api):
-  url = 'https://chromium.googlesource.com/chromium/src/+refs/heads/master?format=JSON'
+GERRIT_TEST_DATA = {
+    'commit': 'deadbeef',
+    'committer': {
+        'time': 'Wed Jul 18 04:22:39 2018'
+    }
+}
 
+GERRIT_TEST_DATA_NO_COMMIT = {}
+
+GERRIT_TEST_DATA_NO_TIMESTAMP = {
+    'commit': 'deadbeef',
+}
+
+GERRIT_TEST_DATA_BAD_TIMESTAMP = {
+    'commit': 'deadbeef',
+    'committer': {
+        'time': 'Jul 18 04:22:39 2018'
+    }
+}
+
+GERRIT_URL = 'https://chromium.googlesource.com/chromium/src/+show/master?format=JSON'
+GERRIT_DATETIME_FORMAT = '%a %b %d %H:%M:%S %Y'
+
+def RunSteps(api):
   master_ref_json = api.url.get_json(
-      url,
+      GERRIT_URL,
       step_name='Get hash of HEAD commit on master',
       strip_prefix=api.url.GERRIT_JSON_PREFIX,
-      default_test_data={'refs/heads/master': {'value': 'deadbeef'}}).output
-  commit_hash = master_ref_json.get(
-      'refs/heads/master', {}).get('value', 'HEAD')
-  api.step('Print revision', ['echo', commit_hash])
+      default_test_data=GERRIT_TEST_DATA).output
+
+  formatted_time = master_ref_json.get('committer', {}).get('time', '')
+  try:
+    time_since_epoch = datetime.strptime(
+        formatted_time, GERRIT_DATETIME_FORMAT) - datetime(1970, 1, 1)
+    unix_timestamp = int(time_since_epoch.total_seconds())
+  except ValueError as e:
+    api.step.active_result.presentation.step_text = str(e)
+    api.step.active_result.presentation.status = api.step.WARNING
+    # If we failed to extract the time, use the current time as an
+    # approximation.
+    unix_timestamp = int(api.time.time())
+
+  commit_hash = master_ref_json.get('commit', 'HEAD')
 
   # Trigger the chromium_codesearch builders.
-  properties = {'root_solution_revision': commit_hash}
+  properties = {
+      'root_solution_revision': commit_hash,
+      'root_solution_revision_timestamp': unix_timestamp
+  }
   if api.runtime.is_luci:
     api.scheduler.emit_trigger(
         api.scheduler.BuildbucketTrigger(properties=properties),
@@ -54,3 +93,18 @@ def GenTests(api):
   # TODO(hinoka): Delete this.
   yield api.test('basic_buildbot')
   yield api.test('basic') + api.runtime(is_luci=True, is_experimental=False)
+  yield (
+      api.test('missing_commit') +
+      api.runtime(is_luci=True, is_experimental=False) +
+      api.url.json('Get hash of HEAD commit on master', GERRIT_TEST_DATA_NO_COMMIT)
+  )
+  yield (
+      api.test('missing_timestamp') +
+      api.runtime(is_luci=True, is_experimental=False) +
+      api.url.json('Get hash of HEAD commit on master', GERRIT_TEST_DATA_NO_TIMESTAMP)
+  )
+  yield (
+      api.test('bad_timestamp') +
+      api.runtime(is_luci=True, is_experimental=False) +
+      api.url.json('Get hash of HEAD commit on master', GERRIT_TEST_DATA_BAD_TIMESTAMP)
+  )

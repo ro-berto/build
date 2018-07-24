@@ -5,7 +5,7 @@
       "-u",
       "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
       "--url",
-      "https://chromium.googlesource.com/chromium/src/+refs/heads/master?format=JSON",
+      "https://chromium.googlesource.com/chromium/src/+show/master?format=JSON",
       "--status-json",
       "/path/to/tmp/json",
       "--outfile",
@@ -16,38 +16,35 @@
     "name": "Get hash of HEAD commit on master"
   },
   {
-    "cmd": [
-      "echo",
-      "deadbeef"
-    ],
-    "name": "Print revision"
-  },
-  {
     "cmd": [],
     "name": "trigger",
     "trigger_specs": [
       {
         "builder_name": "codesearch-gen-chromium-chromiumos",
         "properties": {
-          "root_solution_revision": "deadbeef"
+          "root_solution_revision": "deadbeef",
+          "root_solution_revision_timestamp": 1531887759
         }
       },
       {
         "builder_name": "codesearch-gen-chromium-linux",
         "properties": {
-          "root_solution_revision": "deadbeef"
+          "root_solution_revision": "deadbeef",
+          "root_solution_revision_timestamp": 1531887759
         }
       },
       {
         "builder_name": "codesearch-gen-chromium-android",
         "properties": {
-          "root_solution_revision": "deadbeef"
+          "root_solution_revision": "deadbeef",
+          "root_solution_revision_timestamp": 1531887759
         }
       },
       {
         "builder_name": "codesearch-gen-chromium-win",
         "properties": {
-          "root_solution_revision": "deadbeef"
+          "root_solution_revision": "deadbeef",
+          "root_solution_revision_timestamp": 1531887759
         }
       }
     ],
