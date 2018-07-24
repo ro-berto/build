@@ -151,10 +151,6 @@ SPEC = {
         'platform': 'linux',
       },
       'checkout_dir': 'linux',
-      # Temporary hack because the binaries are too large to be isolated.
-      'GYP_DEFINES': {
-        'fastbuild': 2,
-      },
     },
     'Linux Tests (dbg)(1)(32)': {
       'chromium_config': 'chromium',

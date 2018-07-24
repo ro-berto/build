@@ -82,9 +82,6 @@ SPEC = {
       'chromium_config': 'chromium_msan',
       'gclient_config': 'chromium',
       'chromium_apply_config': ['mb', 'prebuilt_instrumented_libraries'],
-      'GYP_DEFINES': {
-        'msan_track_origins': 2,
-      },
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -112,10 +109,6 @@ SPEC = {
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chromeos'],
       'chromium_apply_config': ['mb', 'prebuilt_instrumented_libraries'],
-      'GYP_DEFINES': {
-        'msan_track_origins': 2,
-        'chromeos': 1
-      },
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

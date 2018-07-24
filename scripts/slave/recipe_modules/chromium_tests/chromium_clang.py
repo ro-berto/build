@@ -130,7 +130,6 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
@@ -154,7 +153,6 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
@@ -175,7 +173,6 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
@@ -199,7 +196,6 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'GYP_DEFINES': { 'component': 'shared_library', 'use_lld': 1 },
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
@@ -225,7 +221,6 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'GYP_DEFINES': { 'component': 'shared_library' },
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
@@ -331,7 +326,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
       },
-      'GYP_DEFINES': { 'component': 'shared_library' },
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': {
@@ -369,9 +363,6 @@ SPEC = {
         'TARGET_ARCH': 'arm',
         'TARGET_BITS': 32,
       },
-      'GYP_DEFINES': {
-        'component': 'shared_library',
-      },
       'compile_targets': [
         'all',
       ],
@@ -394,9 +385,6 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
         'TARGET_ARCH': 'arm',
         'TARGET_BITS': 32,
-      },
-      'GYP_DEFINES': {
-        'component': 'shared_library',
       },
       'compile_targets': [
         'all',
@@ -437,9 +425,6 @@ SPEC = {
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
-      },
-      'GYP_DEFINES': {
-        'component': 'shared_library',
       },
       'compile_targets': [
         'all',
@@ -549,7 +534,6 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'GYP_DEFINES': { 'component': 'shared_library' },
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
@@ -639,7 +623,6 @@ SPEC = {
       'compile_targets': [
         'all',
       ],
-      'GYP_DEFINES': { 'component': 'shared_library' },
       'bot_type': 'builder_tester',
       'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },

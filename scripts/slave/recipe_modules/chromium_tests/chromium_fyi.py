@@ -250,9 +250,6 @@ SPEC = {
     'Print Preview Linux': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
-      'GYP_DEFINES': {
-        'component': 'shared_library',
-      },
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_PLATFORM': 'linux',
@@ -270,9 +267,6 @@ SPEC = {
     'Print Preview Mac': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
-      'GYP_DEFINES': {
-        'component': 'shared_library',
-      },
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_PLATFORM': 'mac',
@@ -290,9 +284,6 @@ SPEC = {
     'Print Preview Win': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
-      'GYP_DEFINES': {
-        'component': 'shared_library',
-      },
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_PLATFORM': 'win',
@@ -424,9 +415,6 @@ SPEC = {
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
-      },
-      'GYP_DEFINES': {
-        'use_openssl': '1',
       },
       'test_results_config': 'staging_server',
       'testing': {
@@ -672,9 +660,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
-      'GYP_DEFINES': {
-        'dcheck_always_on': '1',
-      },
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
