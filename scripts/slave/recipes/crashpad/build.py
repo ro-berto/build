@@ -10,6 +10,7 @@ from recipe_engine.recipe_api import Property
 
 DEPS = [
   'depot_tools/bot_update',
+  'depot_tools/depot_tools',
   'depot_tools/gclient',
   'recipe_engine/context',
   'recipe_engine/file',
@@ -84,6 +85,7 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
 
   dirname = config
   if is_fuchsia or is_linux:
+    gn = api.path['start_dir'].join('buildtools', 'linux64', 'gn')
     # Generic GN build.
     path = api.path['checkout'].join('out', dirname)
     if target_cpu is "":
@@ -100,8 +102,9 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
       # with -std=c++14, so force static linkage of libstdc++ from the sysroot.
       args += ' link_libstdcpp_statically = true'
     with api.context(cwd=api.path['checkout']):
-      api.step('generate build files', ['gn', 'gen', path, '--args=' + args])
+      api.step('generate build files', [gn, 'gen', path, '--args=' + args])
   elif is_win:
+    gn = api.path['start_dir'].join('buildtools', 'win', 'gn.exe')
     # On Windows, we ought to test:
     # a) x64 OS, x64 handler, x64 client
     # b) x64 OS, x64 handler, x86 client
@@ -121,9 +124,9 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
     args = 'target_os="win" is_debug=' + ('true' if is_debug else 'false')
     with api.context(cwd=api.path['checkout']):
       api.step('generate build files x86',
-               ['gn', 'gen', x86_path, '--args=' + args + ' target_cpu="x86"'])
+               [gn, 'gen', x86_path, '--args=' + args + ' target_cpu="x86"'])
       api.step('generate build files x64',
-               ['gn', 'gen', x64_path, '--args=' + args + ' target_cpu="x64"'])
+               [gn, 'gen', x64_path, '--args=' + args + ' target_cpu="x64"'])
   else:
     assert is_mac
     # Other platforms still default to the gyp build, so the build files have
@@ -144,13 +147,14 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
                 args=[build_dir],
                 timeout=5*60)
 
+  ninja = api.depot_tools.ninja_path
   if is_win:
-    api.step('compile with ninja x86', ['ninja', '-C', x86_path])
-    api.step('compile with ninja x64', ['ninja', '-C', x64_path])
+    api.step('compile with ninja x86', [ninja, '-C', x86_path])
+    api.step('compile with ninja x64', [ninja, '-C', x64_path])
     run_tests(x86_path)
     run_tests(x64_path, env={'CRASHPAD_TEST_32_BIT_OUTPUT':x86_path})
   else:
-    api.step('compile with ninja', ['ninja', '-C', path])
+    api.step('compile with ninja', [ninja, '-C', path])
     run_tests(path)
 
   test_spec_path = api.path['checkout'].join('build', 'swarming_test_spec.pyl')

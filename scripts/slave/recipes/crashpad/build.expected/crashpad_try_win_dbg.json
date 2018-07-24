@@ -64,7 +64,7 @@
   },
   {
     "cmd": [
-      "gn",
+      "[START_DIR]/buildtools/win/gn.exe",
       "gen",
       "[START_DIR]/crashpad/out/Debug_x86",
       "--args=target_os=\"win\" is_debug=true target_cpu=\"x86\""
@@ -74,7 +74,7 @@
   },
   {
     "cmd": [
-      "gn",
+      "[START_DIR]/buildtools/win/gn.exe",
       "gen",
       "[START_DIR]/crashpad/out/Debug_x64",
       "--args=target_os=\"win\" is_debug=true target_cpu=\"x64\""
@@ -84,7 +84,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
       "[START_DIR]/crashpad/out/Debug_x86"
     ],
@@ -92,7 +92,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
       "[START_DIR]/crashpad/out/Debug_x64"
     ],
