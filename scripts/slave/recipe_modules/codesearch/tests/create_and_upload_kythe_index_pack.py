@@ -27,7 +27,7 @@ def RunSteps(api):
       CORPUS=api.properties.get('corpus', 'chromium'),
       ROOT=api.properties.get('root', 'linux'),
   )
-  api.codesearch.create_and_upload_kythe_index_pack()
+  api.codesearch.create_and_upload_kythe_index_pack(commit_timestamp=1337000000)
 
 
 def GenTests(api):

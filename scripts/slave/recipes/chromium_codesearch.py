@@ -21,6 +21,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/raw_io',
   'recipe_engine/step',
+  'recipe_engine/time',
 ]
 
 SPEC = freeze({
@@ -117,11 +118,16 @@ SPEC = freeze({
 PROPERTIES = {
     'root_solution_revision': Property(
         kind=str,
-        help="The revision to checkout and build.",
+        help='The revision to checkout and build.',
+        default=None),
+    'root_solution_revision_timestamp': Property(
+        kind=int,
+        help='The commit timestamp of the revision to checkout and build, in '
+             'seconds since the UNIX epoch.',
         default=None),
 }
 
-def RunSteps(api, root_solution_revision):
+def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
   buildername = api.properties.get('buildername')
 
   bot_config = SPEC.get('builders', {}).get(buildername)
@@ -191,7 +197,8 @@ def RunSteps(api, root_solution_revision):
   api.codesearch.run_clang_tool()
 
   # Create the kythe index pack and upload it to google storage.
-  api.codesearch.create_and_upload_kythe_index_pack()
+  api.codesearch.create_and_upload_kythe_index_pack(
+      commit_timestamp=root_solution_revision_timestamp or int(api.time.time()))
 
   # Check out the generated files repo and sync the generated files
   # into this checkout.
@@ -214,7 +221,8 @@ def GenTests(api):
         api.test('full_%s_with_revision' % (_sanitize_nonalpha(buildername))) +
         api.properties.generic(buildername=buildername,
                                mastername='chromium.infra.codesearch') +
-        api.properties(root_solution_revision="deadbeef")
+        api.properties(root_solution_revision='deadbeef',
+                       root_solution_revision_timestamp=1531887759)
     )
 
   yield (

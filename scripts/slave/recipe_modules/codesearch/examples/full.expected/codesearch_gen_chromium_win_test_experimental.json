@@ -652,12 +652,12 @@
       "----",
       "cp",
       "[START_DIR]/src/out/win-Debug/chromium_win.kzip",
-      "gs://chrome-codesearch/prod/chromium_win_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_experimental.kzip"
+      "gs://chrome-codesearch/prod/chromium_win_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9+1337000000_experimental.kzip"
     ],
     "infra_step": true,
     "name": "gsutil upload kythe index pack",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_win_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_experimental.kzip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_win_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9+1337000000_experimental.kzip@@@"
     ]
   },
   {

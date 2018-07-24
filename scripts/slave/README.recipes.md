@@ -70,7 +70,6 @@
   * [auto_bisect:examples/full](#recipes-auto_bisect_examples_full)
   * [auto_bisect_staging:examples/full](#recipes-auto_bisect_staging_examples_full)
   * [binary_size_trybot](#recipes-binary_size_trybot)
-  * [bisect_test/math_util_test](#recipes-bisect_test_math_util_test) &mdash; Code coverage tests for the math_utils recipe module.
   * [bisection/android_bisect](#recipes-bisection_android_bisect)
   * [bisection/android_bisect_staging](#recipes-bisection_android_bisect_staging)
   * [bisection/desktop_bisect](#recipes-bisection_desktop_bisect)
@@ -1493,7 +1492,7 @@ be undone.
 
 #### **class [CodesearchApi](/scripts/slave/recipe_modules/codesearch/api.py#12)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#181)(self):**
+&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#187)(self):**
 
 Check out the generated files repo and sync the generated files
 into this checkout.
@@ -1505,10 +1504,13 @@ Clean up generated files older than the specified number of days.
 Args:
   age_days: Minimum age in days for files to delete (integer).
 
-&mdash; **def [create\_and\_upload\_kythe\_index\_pack](/scripts/slave/recipe_modules/codesearch/api.py#126)(self):**
+&mdash; **def [create\_and\_upload\_kythe\_index\_pack](/scripts/slave/recipe_modules/codesearch/api.py#126)(self, commit_timestamp):**
 
 Create the kythe index pack and upload it to google storage.
-    
+
+Args:
+  commit_timestamp: Timestamp of the commit at which we're creating the
+    index pack, in integer seconds since the UNIX epoch.
 
 &mdash; **def [generate\_compilation\_database](/scripts/slave/recipe_modules/codesearch/api.py#53)(self, targets, platform, output_file=None, mb_config_path=None):**
 
@@ -3871,13 +3873,6 @@ Checks that properties get to recipes from annotated_run properly
 [DEPS](/scripts/slave/recipes/binary_size_trybot.py#7): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/binary_size_trybot.py#41)(api):**
-### *recipes* / [bisect\_test/math\_util\_test](/scripts/slave/recipes/bisect_test/math_util_test.py)
-
-[DEPS](/scripts/slave/recipes/bisect_test/math_util_test.py#9): [math\_utils](#recipe_modules-math_utils), [test\_utils](#recipe_modules-test_utils)
-
-Code coverage tests for the math_utils recipe module.
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/bisect_test/math_util_test.py#14)(api):**
 ### *recipes* / [bisection/android\_bisect](/scripts/slave/recipes/bisection/android_bisect.py)
 
 [DEPS](/scripts/slave/recipes/bisection/android_bisect.py#9): [auto\_bisect](#recipe_modules-auto_bisect), [bisect\_tester](#recipe_modules-bisect_tester), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4211,9 +4206,9 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_clang_coverage_tot.py#50)(api):**
 ### *recipes* / [chromium\_codesearch](/scripts/slave/recipes/chromium_codesearch.py)
 
-[DEPS](/scripts/slave/recipes/chromium_codesearch.py#8): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [codesearch](#recipe_modules-codesearch), [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/chromium_codesearch.py#8): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [codesearch](#recipe_modules-codesearch), [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch.py#124)(api, root_solution_revision):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch.py#130)(api, root_solution_revision, root_solution_revision_timestamp):**
 ### *recipes* / [chromium\_codesearch\_initiator](/scripts/slave/recipes/chromium_codesearch_initiator.py)
 
 [DEPS](/scripts/slave/recipes/chromium_codesearch_initiator.py#12): [trigger](#recipe_modules-trigger), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]

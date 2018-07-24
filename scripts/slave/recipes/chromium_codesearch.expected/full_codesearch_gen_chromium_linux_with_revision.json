@@ -645,12 +645,12 @@
       "----",
       "cp",
       "[START_DIR]/src/out/Debug/chromium_linux.kzip",
-      "gs://chrome-codesearch/prod/chromium_linux_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.kzip"
+      "gs://chrome-codesearch/prod/chromium_linux_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9+1531887759.kzip"
     ],
     "infra_step": true,
     "name": "gsutil upload kythe index pack",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_linux_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.kzip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_linux_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9+1531887759.kzip@@@"
     ]
   },
   {
