@@ -273,4 +273,3 @@ class TryJobGerritStatus(StatusReceiverMultiService):
   def buildFinished(self, builder_name, build, result):
     self.sendUpdate(builder_name, build, result)
     self.submitPatchSetIfNecessary(builder_name, build, result)
-

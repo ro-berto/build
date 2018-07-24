@@ -121,4 +121,3 @@ def GenTests(api):
       api.override_step_data(
           'gerrit changes (2)', api.json.output([{'_number': '123'}]))
   )
-

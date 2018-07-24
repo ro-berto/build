@@ -60,4 +60,3 @@ class CrrevApi(recipe_api.RecipeApi):
         number = numbering['number']
         return self.m.commit_position.construct(branch, number)
     raise self.m.step.StepFailure('No commit position for ' + commit_hash)
-

@@ -79,4 +79,3 @@ class CommitPositionApi(recipe_api.RecipeApi):
           'Could not parse commit position from git output: ' +
           (step_result.stdout or ''))
     return result
-

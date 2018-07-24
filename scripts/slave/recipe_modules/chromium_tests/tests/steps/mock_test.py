@@ -66,4 +66,3 @@ def GenTests(api):
     api.post_process(post_process.MustRun, 'infra failure in base_unittests') +
     api.post_process(post_process.DropExpectation)
   )
-

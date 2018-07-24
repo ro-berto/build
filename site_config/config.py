@@ -24,9 +24,3 @@ banana.SIZE_LIMIT = 100 * 1024 * 1024
 
 def SiteConfigPath():
   return SITE_CONFIG_PATH
-
-
-
-
-
-

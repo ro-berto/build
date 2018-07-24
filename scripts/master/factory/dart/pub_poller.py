@@ -100,4 +100,3 @@ class PubPoller(base.PollingChangeSource):
     package_info = json.loads(info)
     defer.returnValue(
         set([package['version'] for package in package_info['versions']]))
-

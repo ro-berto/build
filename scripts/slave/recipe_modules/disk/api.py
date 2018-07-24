@@ -73,4 +73,3 @@ class DiskApi(recipe_api.RecipeApi):
       if can_fail_build:
         raise recipe_api.StepFailure('Could not get disk info: %s' % ex)
       return
-

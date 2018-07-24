@@ -145,4 +145,3 @@ def change_from_change_spec(change):
       'url': change.get('revlink'),
       'project': change.get('project'),
   }
-

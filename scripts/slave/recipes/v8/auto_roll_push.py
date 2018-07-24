@@ -66,4 +66,3 @@ def GenTests(api):
                              path_config='kitchen') +
       api.url.text('check roll status', '0')
   )
-

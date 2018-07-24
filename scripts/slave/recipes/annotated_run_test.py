@@ -37,4 +37,3 @@ def GenTests(api):
       string_prop=321,
       dict_prop={'foo': 'bar'}) +
     api.expect_exception('AssertionError'))
-

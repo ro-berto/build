@@ -77,4 +77,3 @@ class JsonBodyProducer(StringBodyProducer):
         self,
         json.dumps(json_dict),
         mime_type='application/json')
-

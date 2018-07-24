@@ -29,4 +29,3 @@ def Update(config, active_master, c):
       status_header='buildbot failure in %(project)s on %(builder)s, %(steps)s',
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps))
-

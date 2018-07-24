@@ -18,4 +18,3 @@ args = [sys.argv[0], 'lint']
 for pattern in MODULES_WHITELIST:
   args.extend(['-w', pattern])
 os.execvp(RECIPES_PY, args)
-

@@ -83,4 +83,3 @@ def GenTests(api):
       git_revision='asdfawe2342',
     )
     yield api.test(bot_id) + props
-

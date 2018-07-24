@@ -28,4 +28,3 @@ def GenTests(api):
           buildername='linux_chromium_rel_ng') +
       api.override_step_data('gclient runhooks (with patch)', retcode=1)
   )
-

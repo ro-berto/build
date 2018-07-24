@@ -185,4 +185,3 @@ class QueryBuilder(object):
   def __str__(self):
     """Constructs a URL-quoted query string from this query's terms"""
     return self._formatQuery(self.termiter())
-

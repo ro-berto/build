@@ -45,4 +45,3 @@ def Update(config, active_master, c):
         ],
     ),
   ])
-

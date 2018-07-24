@@ -695,4 +695,3 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
               'parsed_values': [212, 213, 214, 215, 7],
               'test_results': 5 * [{'stdout': 'benchmark text', 'retcode': 0}],
           }]))
-
