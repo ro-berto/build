@@ -27,7 +27,7 @@ class IndexPack(object):
   """Class used to create an index pack to be indexed by Kythe."""
 
   def __init__(self, compdb_path, corpus=None, root=None,
-               out_dir='src/out/Debug'):
+               out_dir='src/out/Debug', verbose=False):
     """Initializes IndexPack.
 
     Args:
@@ -47,6 +47,7 @@ class IndexPack(object):
     self.corpus = corpus
     self.root = root
     self.out_dir = out_dir
+    self.verbose = verbose
     # Maps from source file name to the SHA256 hash of its content.
     self.filehashes = {}
     # Maps from source file name to the file size.
@@ -81,7 +82,8 @@ class IndexPack(object):
     # Process all entries in the compilation database.
     for entry in self.json_dictionaries:
       filepath = os.path.join(entry['directory'], entry['file'] + '.filepaths')
-      print 'Extract source files from %s' % filepath
+      if self.verbose:
+        print 'Extract source files from %s' % filepath
 
       # We don't want to fail if one of the filepaths doesn't exist. However we
       # keep track of it.
@@ -117,8 +119,9 @@ class IndexPack(object):
             self.filehashes[fname] = content_hash
             self.filesizes[fname] = len(content)
             file_name = os.path.join(self.files_directory, content_hash)
-            print ' Including source file %s as %s for compilation' % (
-                fname, file_name)
+            if self.verbose:
+              print ' Including source file %s as %s for compilation' % (
+                  fname, file_name)
             with open(file_name, 'wb') as f:
               f.write(content)
 
@@ -166,8 +169,9 @@ class IndexPack(object):
       # above.
       unit_dictionary = {}
 
-      print 'Generating Translation Unit data for %s' % entry['file']
-      print 'Compile command: %s' % entry['command']
+      if self.verbose:
+        print 'Generating Translation Unit data for %s' % entry['file']
+        print 'Compile command: %s' % entry['command']
 
       command_list = shlex.split(
           entry['command'], posix=sys.platform != 'win32')
@@ -262,7 +266,8 @@ class IndexPack(object):
       )
       unit_dictionary['required_input'] = required_inputs
 
-      print "Unit argument: %s" % unit_dictionary['argument']
+      if self.verbose:
+        print "Unit argument: %s" % unit_dictionary['argument']
 
       wrapper = {
           'unit': unit_dictionary
@@ -275,7 +280,8 @@ class IndexPack(object):
                                     unit_file_content_hash)
       with open(unit_file_path, 'wb') as unit_file:
         unit_file.write(unit_file_content)
-      print 'Wrote compilation unit file %s' % unit_file_path
+      if self.verbose:
+        print 'Wrote compilation unit file %s' % unit_file_path
 
   def GenerateIndexPack(self):
     """Generates the index pack.
@@ -358,11 +364,15 @@ def main():
                       help='keep the .filepaths files used for index pack '
                       'generation',
                       action='store_true')
+  parser.add_argument('--verbose',
+                      help='print details of every file being written to the '
+                      'index pack.',
+                      action='store_true')
   options = parser.parse_args()
 
   print '%s: Index generation...' % time.strftime('%X')
   with closing(IndexPack(options.path_to_compdb, options.corpus, options.root,
-                         options.out_dir)) as index_pack:
+                         options.out_dir, options.verbose)) as index_pack:
     index_pack.GenerateIndexPack()
 
     if not options.keep_filepaths_files:

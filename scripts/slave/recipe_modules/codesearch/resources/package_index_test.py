@@ -80,7 +80,7 @@ class PackageIndexTest(unittest.TestCase):
 
     self.index_pack = package_index.IndexPack(
         os.path.realpath(self.compdb_file.name), corpus=CORPUS, root=VNAME_ROOT,
-        out_dir=OUT_DIR)
+        out_dir=OUT_DIR, verbose=True)
     self.assertTrue(os.path.exists(self.index_pack.index_directory))
     self.assertTrue(os.path.exists(
         os.path.join(self.index_pack.index_directory, 'files')))
