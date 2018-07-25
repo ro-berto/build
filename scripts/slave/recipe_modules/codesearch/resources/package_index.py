@@ -317,7 +317,8 @@ class IndexPack(object):
       # https://bugs.python.org/issue24982). When/if we upgrade the bots to
       # Python >=2.7.11, the block below can be replaced with
       # shutil.make_archive.
-      with zipfile.ZipFile(filepath, 'w', zipfile.ZIP_DEFLATED) as archive:
+      with zipfile.ZipFile(
+          filepath, 'w', zipfile.ZIP_DEFLATED, allowZip64=True) as archive:
         # os.walk doesn't include the directory you point it at in its output.
         archive.write(self.index_directory,
                       os.path.basename(self.index_directory))
