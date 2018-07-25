@@ -271,6 +271,7 @@
   * [isolate:tests/isolated_tests](#recipes-isolate_tests_isolated_tests)
   * [isolate:tests/remove_build_metadata](#recipes-isolate_tests_remove_build_metadata)
   * [isolate:tests/run_isolated](#recipes-isolate_tests_run_isolated)
+  * [led_recipes_tester](#recipes-led_recipes_tester) &mdash; Tests a recipe CL by running a chromium builder.
   * [legion/legion](#recipes-legion_legion) &mdash; Launches Legion tests.
   * [legion:examples/full](#recipes-legion_examples_full) &mdash; Specifies how to launch chromoting integration test on build_internal.
   * [libvpx/android_unittests](#recipes-libvpx_android_unittests)
@@ -5102,6 +5103,13 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 [DEPS](/scripts/slave/recipe_modules/isolate/tests/run_isolated.py#5): [isolate](#recipe_modules-isolate)
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/isolate/tests/run_isolated.py#10)(api):**
+### *recipes* / [led\_recipes\_tester](/scripts/slave/recipes/led_recipes_tester.py)
+
+[DEPS](/scripts/slave/recipes/led_recipes_tester.py#9): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/led][recipe_engine/recipe_modules/led], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+Tests a recipe CL by running a chromium builder.
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/led_recipes_tester.py#41)(api, repo_name):**
 ### *recipes* / [legion/legion](/scripts/slave/recipes/legion/legion.py)
 
 [DEPS](/scripts/slave/recipes/legion/legion.py#9): [isolate](#recipe_modules-isolate), [legion](#recipe_modules-legion), [swarming](#recipe_modules-swarming), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -5654,6 +5662,7 @@ The changes are:
 [recipe_engine/recipe_modules/file]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/c201ea2c059e30b35d3b6514cb5febef659c4806/README.recipes.md#recipe_modules-file
 [recipe_engine/recipe_modules/generator_script]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/c201ea2c059e30b35d3b6514cb5febef659c4806/README.recipes.md#recipe_modules-generator_script
 [recipe_engine/recipe_modules/json]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/c201ea2c059e30b35d3b6514cb5febef659c4806/README.recipes.md#recipe_modules-json
+[recipe_engine/recipe_modules/led]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/c201ea2c059e30b35d3b6514cb5febef659c4806/README.recipes.md#recipe_modules-led
 [recipe_engine/recipe_modules/path]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/c201ea2c059e30b35d3b6514cb5febef659c4806/README.recipes.md#recipe_modules-path
 [recipe_engine/recipe_modules/platform]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/c201ea2c059e30b35d3b6514cb5febef659c4806/README.recipes.md#recipe_modules-platform
 [recipe_engine/recipe_modules/properties]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/c201ea2c059e30b35d3b6514cb5febef659c4806/README.recipes.md#recipe_modules-properties
