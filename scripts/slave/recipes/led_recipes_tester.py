@@ -60,6 +60,10 @@ def RunSteps(api, repo_name):
       result = (api.
                 led('get-builder', builder).
                 then('edit-recipe-bundle').
+                # Force the job to be experimental, since we don't want it
+                # affecting production services.
+                then('edit', '-p', '$recipe_engine/runtime={'
+                     '"is_experimental":true, "is_luci": true}').
                 then('launch')).result
 
     triggered_jobs[builder] = result['swarming']
