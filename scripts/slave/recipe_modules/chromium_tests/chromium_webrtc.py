@@ -131,11 +131,21 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
 
   if platform == 'android':
     spec['root_devices'] = True
-    spec['tests'] = [
+    spec['tests'] = tests = [
       MakeTest(
           'content_browsertests',
-          args=['--gtest_filter=WebRtc*']),
+          args=['--gtest_filter=WebRtc*'])
     ]
+
+    if enable_baremetal_tests:
+      tests.append(MakeTest(
+          name='content_browsertests_sequential',
+          target_name='content_browsertests',
+          # These run a few tests that require webcam access. They need to
+          # run sequentially, otherwise tests may interfere with each other.
+          args=['--gtest_filter=UsingRealWebcam*:-*Stress*', '--run-manual',
+                '--test-launcher-jobs=1']))
+
   else:
     spec['gclient_apply_config'].append('webrtc_test_resources')
     if enable_baremetal_tests and perf_id.endswith('-long'):
@@ -214,15 +224,18 @@ def AddBuildSpec(name, platform, target_bits=64):
   _builders[platform][target_bits] = name
 
 
-def AddTestSpec(name, perf_id, platform, target_bits=64):
+def AddTestSpec(name, perf_id, platform, target_bits=64,
+                build_config='Release', swarming=None):
   parent_builder = _builders[platform][target_bits]
   SPEC['builders'][name] = TestSpec(parent_builder, perf_id, platform,
-                                    target_bits)
+                                    target_bits, build_config=build_config,
+                                    swarming=swarming)
 
 
 AddBuildSpec('Win Builder', 'win', target_bits=32)
 AddBuildSpec('Mac Builder', 'mac')
 AddBuildSpec('Linux Builder', 'linux')
+AddBuildSpec('Android Builder', 'android')
 
 AddTestSpec('Win7 Tester', 'chromium-webrtc-rel-7', 'win', target_bits=32)
 AddTestSpec('Win7 Tester (long-running)', 'chromium-webrtc-rel-7-long', 'win',
@@ -232,3 +245,10 @@ AddTestSpec('Win10 Tester', 'chromium-webrtc-rel-win10', 'win', target_bits=32)
 AddTestSpec('Mac Tester', 'chromium-webrtc-rel-mac', 'mac')
 AddTestSpec('Mac Tester (long-running)', 'chromium-webrtc-rel-mac-long', 'mac')
 AddTestSpec('Linux Tester', 'chromium-webrtc-rel-linux', 'linux')
+AddTestSpec('Android Tester', None, 'android',
+            build_config='Debug',
+            swarming={
+              'device_type': 'bullhead',
+              'device_os': 'MMB29Q',
+              'os': 'Android',
+            })

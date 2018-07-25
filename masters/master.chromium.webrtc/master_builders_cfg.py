@@ -32,6 +32,7 @@ def Update(c):
                               'Win Builder',
                               'Mac Builder',
                               'Linux Builder',
+                              'Android Builder',
                             ]),
   )
   specs = [
@@ -45,6 +46,8 @@ def Update(c):
     {'name': 'Mac Tester (long-running)', 'category': 'mac'},
     {'name': 'Linux Builder', 'category': 'linux'},
     {'name': 'Linux Tester', 'category': 'linux'},
+    {'name': 'Android Builder', 'category': 'android'},
+    {'name': 'Android Tester', 'category': 'android'},
   ]
 
   c['builders'].extend([
