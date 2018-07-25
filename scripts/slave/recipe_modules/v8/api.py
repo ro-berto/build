@@ -346,19 +346,33 @@ class V8Api(recipe_api.RecipeApi):
 
     assert update_step.json.output['did_run']
 
-    # Bot_update maintains the properties independent of the UI
-    # presentation.
-    self.revision = self.m.bot_update.last_returned_properties['got_revision']
+    self.parse_revision_props(
+        self.m.bot_update.last_returned_properties['got_revision'],
+        self.m.bot_update.last_returned_properties.get('got_revision_cp'))
+    return update_step
+
+  def parse_revision_props(self, got_revision, got_revision_cp=None):
+    """Parses got_revision and got_revision_cp properties.
+
+    Sets self.revision, self.revision_cp and self.revision_number.
+
+    Normally this is called from self.checkout above, but it may also be useful
+    on bots where we do not have a checkout but have these properties (e.g. set
+    by the parent builder when triggering child) and need to parse them.
+
+    Args:
+      got_revision: Full git hash of the commit.
+      got_revision_cp: Value of the Cr-Commit-Position commit footer, e.g.
+          "refs/heads/master@{#12345}".
+    """
+    self.revision = got_revision
+    self.revision_cp = got_revision_cp
 
     # Note, a commit position might not be available on feature branches.
-    self.revision_cp = (
-        self.m.bot_update.last_returned_properties.get('got_revision_cp'))
     self.revision_number = None
     if self.revision_cp:
       self.revision_number = str(self.m.commit_position.parse_revision(
           self.revision_cp))
-
-    return update_step
 
   def calculate_patch_base_gerrit(self):
     """Calculates the commit hash a gerrit patch was branched off."""
