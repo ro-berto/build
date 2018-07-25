@@ -75,7 +75,7 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'compile_targets': [
-        'chrome_official_builder_no_unittests',
+        'chrome_official_builder',
       ],
       'checkout_dir': 'win_chrome',
       'testing': {
