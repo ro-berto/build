@@ -1773,7 +1773,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                perf_dashboard_id=None, io_timeout=None,
                waterfall_mastername=None, waterfall_buildername=None,
                merge=None, trigger_script=None, results_handler=None,
-               set_up=None, tear_down=None, only_retry_failed_tests=False):
+               set_up=None, tear_down=None):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name, dimensions, tags, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -1790,7 +1790,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._merge = merge
     self._trigger_script = trigger_script
     self._ignore_task_failure = ignore_task_failure
-    self._only_retry_failed_tests = only_retry_failed_tests
     self.results_handler = results_handler or JSONResultsHandler(
         ignore_task_failure=ignore_task_failure)
     self._test_results = {}
@@ -1821,7 +1820,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     # We've run into issues in the past with command lines hitting a character
     # limit on windows. Do a sanity check, and only pass this list if we failed
     # less than 100 tests.
-    if suffix == 'without patch' and self._only_retry_failed_tests and len(
+    if suffix == 'without patch' and len(
         self.failures(api, 'with patch')) < 100:
       test_list = "::".join(self.failures(api, 'with patch'))
       args.extend(['--isolated-script-test-filter', test_list])
@@ -1950,8 +1949,6 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
         'ignore_task_failure', False)
     kwargs['waterfall_buildername'] = buildername
     kwargs['waterfall_mastername'] = mastername
-    kwargs['only_retry_failed_tests'] = spec.get(
-        'only_retry_failed_tests', False)
 
     return SwarmingIsolatedScriptTest(**kwargs)
 
