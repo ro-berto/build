@@ -632,6 +632,7 @@
       "[START_DIR]/src/out/android-Debug/chromium_android.kzip",
       "--corpus",
       "chromium",
+      "--verbose",
       "--root",
       "chromium-android",
       "--out_dir",

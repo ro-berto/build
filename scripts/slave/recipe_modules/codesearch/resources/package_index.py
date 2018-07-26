@@ -311,45 +311,28 @@ class IndexPack(object):
     if os.path.exists(filepath):
       os.remove(filepath)
 
-    try:
-      # We use zipfile here rather than shutil.make_archive because it has a bug
-      # on Python <2.7.11 where it doesn't add entries for directories (see
-      # https://bugs.python.org/issue24982). When/if we upgrade the bots to
-      # Python >=2.7.11, the block below can be replaced with
-      # shutil.make_archive.
-      with zipfile.ZipFile(
-          filepath, 'w', zipfile.ZIP_DEFLATED, allowZip64=True) as archive:
-        # os.walk doesn't include the directory you point it at in its output.
-        archive.write(self.index_directory,
-                      os.path.basename(self.index_directory))
+    # We use zipfile here rather than shutil.make_archive because it has a bug
+    # on Python <2.7.11 where it doesn't add entries for directories (see
+    # https://bugs.python.org/issue24982).
+    # TODO(crbug/790616): Once the bots have been migrated to LUCI, the block
+    # below can be replaced with shutil.make_archive.
+    with zipfile.ZipFile(
+        filepath, 'w', zipfile.ZIP_DEFLATED, allowZip64=True) as archive:
+      # os.walk doesn't include the directory you point it at in its output.
+      archive.write(self.index_directory,
+                    os.path.basename(self.index_directory))
 
-        for root, dirnames, filenames in os.walk(self.index_directory):
-          for filename in itertools.chain(dirnames, filenames):
-            # The format specification requires that the archive contains one
-            # folder with an arbitrary name directly containing the 'units' and
-            # 'files' directories. So, if index_directory is foo/bar, we need to
-            # prefix all the filenames with bar/. We do this by taking the path
-            # relative to the parent of the index directory.
-            abs_path = os.path.join(root, filename)
-            index_parent = os.path.dirname(self.index_directory.rstrip(os.sep))
-            rel_path = os.path.relpath(abs_path, index_parent)
-            archive.write(abs_path, rel_path)
-    except zipfile.LargeZipFile:
-      # If the zip file would be too large, print out a list of all the files in
-      # self.index_directory and their sizes. This is useful for debugging.
-      # TODO(jsca): Remove this once the LUCI migration is complete.
-      print 'ERROR: files to be zipped were too large.'
-      total_size = 0
       for root, dirnames, filenames in os.walk(self.index_directory):
-        for filename in filenames:
+        for filename in itertools.chain(dirnames, filenames):
+          # The format specification requires that the archive contains one
+          # folder with an arbitrary name directly containing the 'units' and
+          # 'files' directories. So, if index_directory is foo/bar, we need to
+          # prefix all the filenames with bar/. We do this by taking the path
+          # relative to the parent of the index directory.
           abs_path = os.path.join(root, filename)
           index_parent = os.path.dirname(self.index_directory.rstrip(os.sep))
           rel_path = os.path.relpath(abs_path, index_parent)
-          file_size = os.path.getsize(abs_path)
-          total_size += file_size
-          print file_size, rel_path
-      print 'Total size (bytes):', total_size
-      raise
+          archive.write(abs_path, rel_path)
 
 
 def _RemoveFilepathsFiles(root):

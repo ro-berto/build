@@ -635,6 +635,7 @@
       "[START_DIR]/src/out/win-Debug/chromium_win.kzip",
       "--corpus",
       "chromium",
+      "--verbose",
       "--root",
       "chromium-win",
       "--out_dir",

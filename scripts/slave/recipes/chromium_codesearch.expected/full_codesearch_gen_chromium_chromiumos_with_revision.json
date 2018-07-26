@@ -722,6 +722,7 @@
       "[START_DIR]/src/out/chromeos-Debug/chromium_chromeos.kzip",
       "--corpus",
       "chromium",
+      "--verbose",
       "--root",
       "chromium-chromeos",
       "--out_dir",

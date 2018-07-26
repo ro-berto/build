@@ -158,7 +158,8 @@ class CodesearchApi(recipe_api.RecipeApi):
     args = ['--path-to-compdb', self.c.compile_commands_json_file,
             '--path-to-archive-output',
             self.c.debug_path.join(index_pack_kythe_name),
-            '--corpus', self.c.CORPUS]
+            '--corpus', self.c.CORPUS,
+            '--verbose']
     if self.c.ROOT:
       args.extend(['--root', self.c.ROOT])
     if self.c.GEN_REPO_OUT_DIR:
