@@ -67,6 +67,7 @@ FAKE_BUILDERS = {
         # These are on LUCI.
         'linux-chromium-tests-staging-builder',
         'linux-chromium-tests-staging-tests',
+        'linux-tmalloc-rel',
     ],
     'master.chromium.gpu': [
         # These have been migrated to LUCI.
