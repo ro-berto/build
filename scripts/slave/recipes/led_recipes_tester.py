@@ -70,9 +70,8 @@ def RunSteps(api, repo_name):
 
   for builder, job in triggered_jobs.items():
     api.python(
-      'collect %s task' % builder, client_py_workdir.join(
-          'infra', 'luci', 'client', 'swarming.py'), [
-              'collect', '-S', job['host_name'], job['task_id']])
+      'collect %s task' % builder, client_py_workdir.join('swarming.py'), [
+          'collect', '-S', job['host_name'], job['task_id']])
 
 
 def GenTests(api):

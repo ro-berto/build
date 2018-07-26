@@ -238,7 +238,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/client_py/infra/luci/client/swarming.py",
+      "[CACHE]/builder/client_py/swarming.py",
       "collect",
       "-S",
       "chromium-swarm.appspot.com",
