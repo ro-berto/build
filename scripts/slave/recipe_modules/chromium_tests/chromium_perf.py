@@ -193,6 +193,9 @@ _AddIsolatedTestSpec('Android Nexus5 Perf', 'android',
 _AddIsolatedTestSpec('Android One Perf', 'android',
                      target_bits=32, parent_buildername='Android Compile Perf')
 
+_AddIsolatedTestSpec('android-go-perf', 'android', target_bits=32,
+                     parent_buildername='Android Compile Perf')
+
 # Webview
 _AddIsolatedTestSpec('Android Nexus5X WebView Perf',
                      'android', parent_buildername='Android arm64 Compile Perf')

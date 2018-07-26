@@ -102,8 +102,6 @@ _AddIsolatedTestSpec(
 
 _AddIsolatedTestSpec('OBBS Mac 10.12 Perf', 'mac',
                      parent_buildername='Mac Builder Perf FYI')
-_AddIsolatedTestSpec('Android Go', 'android',
-                     parent_buildername='Android Builder Perf FYI')
 _AddIsolatedTestSpec('android-pixel2-perf', 'android',
                      parent_buildername='Android Builder Perf FYI')
 _AddIsolatedTestSpec('android-pixel2_webview-perf', 'android',
