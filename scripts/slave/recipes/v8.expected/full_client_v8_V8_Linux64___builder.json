@@ -325,6 +325,30 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
+      "https://chrome-isolate.appspot.com",
+      "--eventlog-endpoint",
+      "prod",
+      "--verbose",
+      "[BUILDER_CACHE]/V8_Linux64___builder/v8/out/Release/perf.isolated.gen.json"
+    ],
+    "name": "isolate tests (perf)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"perf\": \"[dummy hash for perf]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
+      "[BUILDER_CACHE]/V8_Linux64___builder/v8/tools/swarming_client",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
       "https://isolateserver.appspot.com",
       "--eventlog-endpoint",
       "prod",
@@ -335,7 +359,6 @@
       "[BUILDER_CACHE]/V8_Linux64___builder/v8/out/Release/mjsunit.isolated.gen.json",
       "[BUILDER_CACHE]/V8_Linux64___builder/v8/out/Release/mozilla.isolated.gen.json",
       "[BUILDER_CACHE]/V8_Linux64___builder/v8/out/Release/optimize_for_size.isolated.gen.json",
-      "[BUILDER_CACHE]/V8_Linux64___builder/v8/out/Release/perf.isolated.gen.json",
       "[BUILDER_CACHE]/V8_Linux64___builder/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "isolate tests",
@@ -347,7 +370,6 @@
       "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"perf\": \"[dummy hash for perf]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"

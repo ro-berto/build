@@ -260,9 +260,12 @@ class V8Api(recipe_api.RecipeApi):
     # If tests are run, this value will be set to their total duration.
     self.test_duration_sec = 0
 
-    # Allow overriding the isolate hashes during bisection with the ones that
-    # correspond to the build of a bisect step.
-    self._isolated_tests_override = None
+    # Contains list of isolated tests, which can be either a list of tests from
+    # one or more steps uploading to isolate server, isolate hashes from the
+    # build part of the bisect step or a list of values from the swarm_hashes
+    # property (parsed by self.m.isolate.isolated_tests property getter invoked
+    # here, which returns a new dict each time, thus no need to copy it here).
+    self.isolated_tests = self.m.isolate.isolated_tests
 
     # Cache to compute isolated targets only once.
     self._isolate_targets_cached = []
@@ -285,16 +288,6 @@ class V8Api(recipe_api.RecipeApi):
     """Configures additional gclient custom_deps to be synced."""
     for name, path in (custom_deps or {}).iteritems():
       self.m.gclient.c.solutions[0].custom_deps[name] = path
-
-  @property
-  def isolated_tests(self):
-    # During bisection, the isolated hashes will be updated with hashes that
-    # correspond to the bisect step.
-    # TODO(machenbach): Remove pragma as soon as rerun is implemented for
-    # swarming.
-    if self._isolated_tests_override is not None:  # pragma: no cover
-      return self._isolated_tests_override
-    return self.m.isolate.isolated_tests
 
   def testing_random_seed(self):
     """Return a random seed suitable for v8 testing.
@@ -587,6 +580,22 @@ class V8Api(recipe_api.RecipeApi):
     Args:
       isolate_targets: Targets to isolate.
     """
+    # Special handling for 'perf' target, since perf tests are going to be
+    # executed on an internal swarming server and thus need to be uploaded to
+    # internal isolate server.
+    if 'perf' in isolate_targets:
+      isolate_targets.remove('perf')
+      self.m.isolate.isolate_server = 'https://chrome-isolate.appspot.com'
+      self.m.isolate.isolate_tests(
+          self.m.chromium.output_dir,
+          targets=['perf'],
+          verbose=True,
+          swarm_hashes_property_name=None,
+          step_name='isolate tests (perf)',
+      )
+      self.isolated_tests.update(self.m.isolate.isolated_tests)
+      self.m.isolate.isolate_server = 'https://isolateserver.appspot.com'
+
     if isolate_targets:
       self.m.isolate.isolate_tests(
           self.m.chromium.output_dir,
@@ -594,6 +603,9 @@ class V8Api(recipe_api.RecipeApi):
           verbose=True,
           swarm_hashes_property_name=None,
       )
+      self.isolated_tests.update(self.m.isolate.isolated_tests)
+
+    if self.isolated_tests:
       self.upload_isolated_json()
 
   def _update_build_environment(self, mb_output):
@@ -805,7 +817,7 @@ class V8Api(recipe_api.RecipeApi):
 
   def upload_isolated_json(self):
     self.m.gsutil.upload(
-        self.m.json.input(self.m.isolate.isolated_tests),
+        self.m.json.input(self.isolated_tests),
         self.isolated_archive_path,
         '%s.json' % self.revision,
         args=['-a', 'public-read'],
@@ -845,7 +857,7 @@ class V8Api(recipe_api.RecipeApi):
             {'bot_default': '[dummy hash for bisection]'}),
     )
     step_result = self.m.step.active_result
-    self._isolated_tests_override = step_result.json.output
+    self.isolated_tests = step_result.json.output
 
   @property
   def build_output_dir(self):
@@ -1405,7 +1417,7 @@ class V8Api(recipe_api.RecipeApi):
       if len(self.m.json.dumps(self.build_environment)) < 1024:
         properties['parent_build_environment'] = self.build_environment
 
-      swarm_hashes = self.m.isolate.isolated_tests
+      swarm_hashes = self.isolated_tests
       if swarm_hashes:
         properties['swarm_hashes'] = swarm_hashes
       properties.update(**additional_properties)

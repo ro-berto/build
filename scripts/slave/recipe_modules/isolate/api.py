@@ -98,7 +98,7 @@ class IsolateApi(recipe_api.RecipeApi):
 
   def isolate_tests(self, build_dir, targets=None, verbose=False,
                     swarm_hashes_property_name='swarm_hashes',
-                    use_exparchive=False, **kwargs):
+                    use_exparchive=False, step_name=None, **kwargs):
     """Archives prepared tests in |build_dir| to isolate server.
 
     src/tools/mb/mb.py is invoked to produce *.isolated.gen.json files that
@@ -198,7 +198,7 @@ class IsolateApi(recipe_api.RecipeApi):
 
         isolate_steps.append(
             self.m.python(
-                'isolate tests', self.resource('isolate.py'), args,
+                step_name or 'isolate tests', self.resource('isolate.py'), args,
                 step_test_data=lambda: self.test_api.output_json(batch_targets),
                 **kwargs))
 

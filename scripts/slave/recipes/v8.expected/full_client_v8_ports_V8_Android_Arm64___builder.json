@@ -262,13 +262,13 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
-      "https://isolateserver.appspot.com",
+      "https://chrome-isolate.appspot.com",
       "--eventlog-endpoint",
       "prod",
       "--verbose",
       "[BUILDER_CACHE]/V8_Android_Arm64___builder/v8/out/Release/perf.isolated.gen.json"
     ],
-    "name": "isolate tests",
+    "name": "isolate tests (perf)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"perf\": \"[dummy hash for perf]\"@@@",
