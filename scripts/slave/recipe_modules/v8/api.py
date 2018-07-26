@@ -585,7 +585,7 @@ class V8Api(recipe_api.RecipeApi):
     # internal isolate server.
     if 'perf' in isolate_targets:
       isolate_targets.remove('perf')
-      self.m.isolate.isolate_server = 'https://chrome-isolate.appspot.com'
+      self.m.isolate.isolate_server = 'https://chrome-isolated.appspot.com'
       self.m.isolate.isolate_tests(
           self.m.chromium.output_dir,
           targets=['perf'],

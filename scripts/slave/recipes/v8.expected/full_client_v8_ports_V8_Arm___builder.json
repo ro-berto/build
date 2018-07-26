@@ -265,7 +265,7 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--isolate-server",
-      "https://chrome-isolate.appspot.com",
+      "https://chrome-isolated.appspot.com",
       "--eventlog-endpoint",
       "prod",
       "--verbose",
