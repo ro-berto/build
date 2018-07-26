@@ -874,6 +874,6 @@ SPEC['builders'].update([
                  bot_type='tester',
                  parent_buildername='linux-chromium-tests-staging-builder'),
     stock_config('linux-gcc-rel'),
-    stock_config('linux-tmalloc-rel'),
+    stock_config('linux-tcmalloc-rel'),
     stock_config('win-annotator-rel'),
 ])
