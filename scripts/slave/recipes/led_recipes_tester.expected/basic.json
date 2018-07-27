@@ -231,7 +231,8 @@
       "@@@STEP_LOG_LINE@json.output@    \"task_id\": \"beeeeeeeee5\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=beeeeeeeee5@@@"
     ]
   },
   {
