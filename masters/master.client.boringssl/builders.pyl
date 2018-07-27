@@ -76,6 +76,12 @@
       "slave_pools": ["linux_trusty"],
       "category": "0linux",
     },
+    "linux_clang_rel_tsan": {
+      "recipe": "boringssl",
+      "scheduler": "boringssl_commits",
+      "slave_pools": ["linux_trusty"],
+      "category": "0linux",
+    },
     "linux_sde": {
       "recipe": "boringssl",
       "scheduler": "boringssl_commits",

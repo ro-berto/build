@@ -134,6 +134,8 @@ def _GetTargetCMakeArgs(buildername, path, ninja_path, platform):
     args['ASAN'] = '1'
   if _HasToken(buildername, 'cfi'):
     args['CFI'] = '1'
+  if _HasToken(buildername, 'tsan'):
+    args['TSAN'] = '1'
   if _HasToken(buildername, 'small'):
     _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-DOPENSSL_SMALL=1')
     _AppendFlags(args, 'CMAKE_C_FLAGS', '-DOPENSSL_SMALL=1')
@@ -305,7 +307,8 @@ def RunSteps(api, buildername):
       _LogFailingTests(api, deferred)
 
       # Run the SSL tests.
-      if not _HasToken(buildername, 'sde'):
+      if (not _HasToken(buildername, 'sde') and
+          not _HasToken(buildername, 'tsan')):
         runner_args = ['-pipe']
         if _HasToken(buildername, 'fuzz'):
           runner_args += ['-fuzzer', '-shim-config', 'fuzzer_mode.json']
@@ -401,6 +404,7 @@ def GenTests(api):
   unit_test_only_tests = [
     ('linux_sde', api.platform('linux', 64)),
     ('linux32_sde', api.platform('linux', 64)),
+    ('linux_clang_rel_tsan', api.platform('linux', 64)),
   ]
   for (buildername, host_platform) in unit_test_only_tests:
     yield (
