@@ -118,16 +118,9 @@
         "set-status": false,
         "open-tree": false
     },
-    "v8-chromium": {
-        "build-db": "v8_chromium_build_db.json",
-        "config": "v8/gatekeeper_v8_chromium.json",
-        "masters": {
-            "https://build.chromium.org/p/client.v8.chromium": ["*"]
-        }
-    },
     "v8-tree-closers": {
         "build-db": "v8_tree_closers_build_db.json",
-        "config": "v8/gatekeeper_v8_tree_closers.json",
+        "config": "v8_gatekeeper/tree_closers.json",
         "masters": {
             "https://build.chromium.org/p/client.v8": ["*"],
             "https://build.chromium.org/p/client.v8.fyi": ["*"],
@@ -139,6 +132,15 @@
         "set-status": true,
         "status-url": "https://v8-status.appspot.com",
         "track-revisions": true
+    },
+    "v8-mail-notifiers": {
+        "build-db": "v8_mail_notifiers_build_db.json",
+        "config": "v8_gatekeeper/mail_notifiers.json",
+        "masters": {
+            "https://build.chromium.org/p/client.v8": ["*"],
+            "https://build.chromium.org/p/client.v8.chromium": ["*"],
+            "https://build.chromium.org/p/client.v8.fyi": ["*"]
+        }
     },
     "webrtc": {
         "build-db": "webrtc_build_db.json",
