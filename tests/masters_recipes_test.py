@@ -56,6 +56,11 @@ FAKE_BUILDERS = {
       'Mac',
       'Win',
       'Win x64',
+      'android-rel',
+      'linux-rel',
+      'mac-rel',
+      'win32-rel',
+      'win-rel',
     ],
     'master.chromium.android': [
         # These have been migrated to LUCI.
