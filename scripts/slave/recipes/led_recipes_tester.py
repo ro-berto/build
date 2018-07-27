@@ -69,10 +69,23 @@ def RunSteps(api, repo_name):
     triggered_jobs[builder] = result['swarming']
 
   for builder, job in triggered_jobs.items():
-    api.python(
+    result = None
+    try:
+      result = api.python(
       'collect %s task' % builder, client_py_workdir.join(
           'client-py', 'swarming.py'), [
-              'collect', '-S', job['host_name'], job['task_id']])
+              'collect', '-S', job['host_name'], job['task_id'],
+              # Needed because these jobs often take >40 minutes, since they're
+              # regular tryjobs.
+              '--print-status-updates',
+              # Don't need task stdout; if the task fails then the user should
+              # just look at the task itself.
+              '--task-output-stdout=none',
+          ])
+    finally:
+      if result:
+        result.presentation.links['Swarming task'] = 'https://%s/task?id=%s' % (
+            job['host_name'], job['task_id'])
 
 
 def GenTests(api):
