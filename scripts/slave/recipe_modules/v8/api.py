@@ -1486,27 +1486,13 @@ class V8Api(recipe_api.RecipeApi):
         proxy_properties = {'archive': self._get_default_archive()}
         proxy_properties.update(properties)
         self.buildbucket_trigger(
-            'master.internal.client.v8', self.get_changes(),
+            'luci.v8-internal.ci', self.get_changes(),
             [{
               'properties': proxy_properties,
-              'builder_name': 'v8_trigger_proxy (buildbot)'
+              'builder_name': 'v8_trigger_proxy'
             }],
             step_name='trigger_internal'
         )
-        try:
-          self.buildbucket_trigger(
-              'luci.v8-internal.ci', self.get_changes(),
-              [{
-                'properties': proxy_properties,
-                'builder_name': 'v8_trigger_proxy'
-              }],
-              step_name='trigger_internal (luci)'
-          )
-        except self.m.step.StepFailure:  # pragma: no cover
-          # Triggering on LUCI is experimental, therefore no need to fail the
-          # build. Once it works, we'll remove triggering via buildbot above and
-          # make this this step fail the build.
-          pass
 
     if triggered_build_ids:
       output_properties = self.m.step.active_result.presentation.properties
