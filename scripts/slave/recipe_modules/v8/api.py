@@ -1489,9 +1489,17 @@ class V8Api(recipe_api.RecipeApi):
             'master.internal.client.v8', self.get_changes(),
             [{
               'properties': proxy_properties,
-              'builder_name': 'v8_trigger_proxy'
+              'builder_name': 'v8_trigger_proxy (buildbot)'
             }],
             step_name='trigger_internal'
+        )
+        self.buildbucket_trigger(
+            'luci.v8-internal.ci', self.get_changes(),
+            [{
+              'properties': proxy_properties,
+              'builder_name': 'v8_trigger_proxy'
+            }],
+            step_name='trigger_internal (luci)'
         )
 
     if triggered_build_ids:
