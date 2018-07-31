@@ -2388,7 +2388,7 @@ config: The configuration returned by create_controller.
 Returns the path to legion.py.
 ### *recipe_modules* / [libyuv](/scripts/slave/recipe_modules/libyuv)
 
-[DEPS](/scripts/slave/recipe_modules/libyuv/__init__.py#1): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/libyuv/__init__.py#1): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [LibyuvApi](/scripts/slave/recipe_modules/libyuv/api.py#9)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -2396,13 +2396,13 @@ Returns the path to legion.py.
 
 &mdash; **def [checkout](/scripts/slave/recipe_modules/libyuv/api.py#75)(self):**
 
-&mdash; **def [extract\_build](/scripts/slave/recipe_modules/libyuv/api.py#103)(self):**
+&mdash; **def [extract\_build](/scripts/slave/recipe_modules/libyuv/api.py#108)(self):**
 
 &mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/libyuv/api.py#80)(self):**
 
-&mdash; **def [package\_build](/scripts/slave/recipe_modules/libyuv/api.py#93)(self):**
+&mdash; **def [package\_build](/scripts/slave/recipe_modules/libyuv/api.py#98)(self):**
 
-&mdash; **def [runtests](/scripts/slave/recipe_modules/libyuv/api.py#124)(self):**
+&mdash; **def [runtests](/scripts/slave/recipe_modules/libyuv/api.py#129)(self):**
 
 Add a suite of test steps.
 
@@ -5139,11 +5139,11 @@ Specifies how to launch chromoting integration test on build_internal.
 &mdash; **def [RunSteps](/scripts/slave/recipes/libvpx/unittests.py#19)(api):**
 ### *recipes* / [libyuv/libyuv](/scripts/slave/recipes/libyuv/libyuv.py)
 
-[DEPS](/scripts/slave/recipes/libyuv/libyuv.py#11): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [libyuv](#recipe_modules-libyuv), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/libyuv/libyuv.py#11): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [libyuv](#recipe_modules-libyuv), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 Recipe for building and running tests for Libyuv stand-alone.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/libyuv/libyuv.py#25)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/libyuv/libyuv.py#26)(api):**
 ### *recipes* / [luci\_config:examples/full](/scripts/slave/recipe_modules/luci_config/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/luci_config/examples/full.py#7): [luci\_config](#recipe_modules-luci_config), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]

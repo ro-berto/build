@@ -19,7 +19,7 @@
       "--revision",
       "src@deadbeef"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]

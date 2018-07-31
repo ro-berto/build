@@ -5,7 +5,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/libyuv/libyuv'}]\ntarget_os = ['ios', 'mac']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/libyuv/libyuv'}]\ntarget_os = ['android']",
       "--patch_root",
       "src",
       "--revision_mapping_file",
@@ -19,7 +19,7 @@
       "--revision",
       "src@HEAD"
     ],
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -75,7 +75,7 @@
       "-root",
       "[CACHE]/goma/client",
       "-ensure-file",
-      "infra_internal/goma/client/mac-386 release",
+      "infra_internal/goma/client/linux-386 release",
       "-json-output",
       "/path/to/tmp/json",
       "-service-account-json",
@@ -89,36 +89,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/mac-386\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[START_DIR]",
-      "-ensure-file",
-      "infra/tools/mac_toolchain/${platform} git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
-      "-json-output",
-      "/path/to/tmp/json",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-goma-client.json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-git_revision:796\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/mac_toolchain/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-386\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -136,9 +107,8 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/goma/client' target_arch=arm use_goma=1",
-      "GYP_GENERATORS": "ninja",
-      "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir='[CACHE]/goma/client' target_arch=arm use_goma=1",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "env_suffixes": {
       "PATH": [
@@ -154,42 +124,16 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "--root=[START_DIR]/src",
       "gen",
-      "//out/Debug-iphoneos",
-      "--args=is_clang=true ios_enable_code_signing=false target_os=\"ios\" is_component_build=false is_debug=true target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
+      "//out/Debug",
+      "--args=is_component_build=false is_debug=true target_os=\"android\" target_cpu=\"arm\" use_goma=true goma_dir=\"[CACHE]/goma/client\""
     ],
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
+      "GOMA_USE_LOCAL": "false",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "gn"
-  },
-  {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
-      "--src-dir",
-      "[START_DIR]/src",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "clang_revision",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
   },
   {
     "cmd": [],
@@ -209,7 +153,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/iOS_Debug"
+      "[CACHE]/goma/data/Android_Debug"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -233,13 +177,14 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/iOS_Debug",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Android_Debug",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
@@ -290,14 +235,15 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Debug-iphoneos",
+      "[START_DIR]/src/out/Debug",
       "-j",
       "20"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
+      "GOMA_USE_LOCAL": "false",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "compile"
   },
@@ -307,7 +253,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Debug-iphoneos",
+      "[START_DIR]/src/out/Debug",
       "-j",
       "20",
       "-d",
@@ -317,7 +263,8 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
+      "GOMA_USE_LOCAL": "false",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "compile confirm no-op",
     "stdout": "/path/to/tmp/"
@@ -427,15 +374,15 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Debug-iphoneos",
+      "[START_DIR]/src/out/Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Debug-iphoneos\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Debug\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
       "compile",
       "--ninja-log-compiler",
-      "goma-clang",
+      "goma",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -444,9 +391,8 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
-      "--is-luci",
       "--buildbot-buildername",
-      "iOS Debug",
+      "Android Debug",
       "--buildbot-mastername",
       "client.libyuv",
       "--buildbot-slavename",
@@ -490,6 +436,55 @@
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/zip_build.py",
+      "--target",
+      "Debug",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--staging-dir",
+      "[CACHE]/chrome_staging",
+      "--src-dir",
+      "[START_DIR]/src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--build-url",
+      "gs://chromium-libyuv/client.libyuv/Android Debug",
+      "--build_revision",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--factory-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"buildername\": \"Android Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}",
+      "--build-properties",
+      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"buildername\": \"Android Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"slavename\": \"bot_id\"}"
+    ],
+    "infra_step": true,
+    "name": "package build"
+  },
+  {
+    "cmd": [],
+    "name": "trigger",
+    "trigger_specs": [
+      {
+        "builder_name": "Android Tester ARM32 Debug (Nexus 5X)",
+        "properties": {
+          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+        }
+      }
+    ],
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Android Tester ARM32 Debug (Nexus 5X)@@@"
     ]
   },
   {

@@ -79,15 +79,20 @@ class LibyuvApi(recipe_api.RecipeApi):
 
   def maybe_trigger(self):
     triggers = self.bot_config.get('triggers')
+    properties = {
+      'revision': self.revision,
+      'parent_got_revision': self.revision,
+    }
     if triggers:
-      properties = {
-        'revision': self.revision,
-        'parent_got_revision': self.revision,
-      }
-      self.m.trigger(*[{
-        'builder_name': builder_name,
-        'properties': properties,
-      } for builder_name in triggers])
+      if self.m.runtime.is_luci:
+        self.m.scheduler.emit_trigger(
+            self.m.scheduler.BuildbucketTrigger(properties=properties),
+            project='libyuv', jobs=triggers)
+      else:
+        self.m.trigger(*[{
+          'builder_name': builder_name,
+          'properties': properties,
+        } for builder_name in triggers])
 
 
   def package_build(self):

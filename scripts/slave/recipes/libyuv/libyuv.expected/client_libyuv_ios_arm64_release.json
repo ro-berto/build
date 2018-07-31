@@ -19,7 +19,7 @@
       "--revision",
       "src@deadbeef"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -138,7 +138,6 @@
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/goma/client' target_arch=arm64 use_goma=1",
       "GYP_GENERATORS": "ninja",
-      "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
@@ -445,6 +444,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "--is-luci",
       "--buildbot-buildername",
       "iOS ARM64 Release",
       "--buildbot-mastername",

@@ -19,7 +19,7 @@
       "--revision",
       "src@deadbeef"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -391,6 +391,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "--is-luci",
       "--buildbot-buildername",
       "Android ARM64 Debug",
       "--buildbot-mastername",
@@ -472,19 +473,46 @@
     "name": "package build"
   },
   {
-    "cmd": [],
-    "name": "trigger",
-    "trigger_specs": [
-      {
-        "builder_name": "Android Tester ARM64 Debug (Nexus 5X)",
-        "properties": {
-          "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-          "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
-        }
-      }
+    "cmd": [
+      "prpc",
+      "call",
+      "-format=json",
+      "luci-scheduler.appspot.com",
+      "scheduler.Scheduler.EmitTriggers"
     ],
+    "infra_step": true,
+    "name": "luci-scheduler.EmitTriggers",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Android Tester ARM64 Debug (Nexus 5X)\", \"project\": \"libyuv\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}, \"tags\": [\"parent_buildername:Android ARM64 Debug\", \"parent_buildnumber:1337\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Android ARM64 Debug/1337\"}}], \"timestamp\": 1337000003000000}",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Android Tester ARM64 Debug (Nexus 5X)@@@"
+      "@@@STEP_TEXT@input {",
+      "    \"batches\": [",
+      "        {",
+      "            \"jobs\": [",
+      "                {",
+      "                    \"job\": \"Android Tester ARM64 Debug (Nexus 5X)\", ",
+      "                    \"project\": \"libyuv\"",
+      "                }",
+      "            ], ",
+      "            \"trigger\": {",
+      "                \"buildbucket\": {",
+      "                    \"properties\": {",
+      "                        \"parent_got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", ",
+      "                        \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"",
+      "                    }, ",
+      "                    \"tags\": [",
+      "                        \"parent_buildername:Android ARM64 Debug\", ",
+      "                        \"parent_buildnumber:1337\", ",
+      "                        \"user_agent:recipe\"",
+      "                    ]",
+      "                }, ",
+      "                \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", ",
+      "                \"title\": \"Android ARM64 Debug/1337\"",
+      "            }",
+      "        }",
+      "    ], ",
+      "    \"timestamp\": 1337000003000000",
+      "}@@@"
     ]
   },
   {
