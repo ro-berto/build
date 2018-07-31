@@ -51,6 +51,7 @@ def BuildLinuxAndroidArm(api):
 def BuildLinux(api):
   RunGN(api)
   Build(api, 'host_debug')
+  RunGN(api, '--unoptimized')
   Build(api, 'host_debug_unopt')
 
 def TestObservatory(api):

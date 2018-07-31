@@ -97,6 +97,13 @@
   },
   {
     "cmd": [
+      "[START_DIR]/src/flutter/tools/gn",
+      "--unoptimized"
+    ],
+    "name": "gn --unoptimized"
+  },
+  {
+    "cmd": [
       "ninja",
       "-C",
       "[START_DIR]/src/out/host_debug_unopt"
