@@ -97,6 +97,14 @@
   },
   {
     "cmd": [
+      "ninja",
+      "-C",
+      "[START_DIR]/src/out/host_debug_unopt"
+    ],
+    "name": "build host_debug_unopt"
+  },
+  {
+    "cmd": [
       "/bin/bash",
       "flutter/travis/analyze.sh"
     ],

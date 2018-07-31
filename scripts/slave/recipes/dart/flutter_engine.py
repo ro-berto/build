@@ -51,6 +51,7 @@ def BuildLinuxAndroidArm(api):
 def BuildLinux(api):
   RunGN(api)
   Build(api, 'host_debug')
+  Build(api, 'host_debug_unopt')
 
 def TestObservatory(api):
   checkout = api.path['start_dir'].join('src')
