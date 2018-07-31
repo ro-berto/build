@@ -566,15 +566,6 @@ BUILDERS = {
         'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux64 - debug - deprecation warnings': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb',
-        ],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-        },
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux64 - debug - header includes': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb',
