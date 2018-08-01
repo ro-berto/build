@@ -55,12 +55,12 @@ TEST_MATRIX = {
   },
   "global": {
     "chrome": "66.0.3359.139",
-    "ff": "61"
+    "firefox": "61"
   },
   "builder_configurations": [
     {
       "builders": [
-        "dart2js-win10-debug-x64-ff",
+        "dart2js-win10-debug-x64-firefox",
         "analyzer-linux-release"
       ],
       "meta": {},
@@ -90,7 +90,7 @@ TEST_MATRIX = {
         "arguments": ["foo", "--bar", "--buildername"]
       }, {
         "name": "Test-step 3",
-        "arguments": ["foo", "--bar", "-rff"],
+        "arguments": ["foo", "--bar", "-rfirefox"],
         "fileset": "fileset1",
         "shards": 2
       }]
@@ -193,14 +193,14 @@ def GenTests(api):
       api.step_data('can_time_out', retcode=1))
 
   yield (api.test('basic-win-stable') + api.platform('win', 64) + api.properties(
-      buildername='dart2js-win10-debug-x64-ff-stable') +
+      buildername='dart2js-win10-debug-x64-firefox-stable') +
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')) +
       api.step_data('buildbucket.put',
                     stdout=api.json.output(TRIGGER_RESULT)))
 
   yield (api.test('basic-win') + api.platform('win', 64) + api.properties(
-      buildername='dart2js-win10-debug-x64-ff',
+      buildername='dart2js-win10-debug-x64-firefox',
       revision='revision-foo',
       parent_fileset='isolate_hash_123',
       parent_fileset_name='nameoffileset') +

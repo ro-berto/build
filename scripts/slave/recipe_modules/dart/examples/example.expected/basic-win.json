@@ -139,7 +139,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff"
+      "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_firefox"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env_prefixes": {
@@ -163,7 +163,7 @@
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_firefox",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -251,7 +251,7 @@
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_firefox",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -289,7 +289,7 @@
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_firefox",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -316,7 +316,7 @@
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_firefox",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -362,7 +362,7 @@
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
       "--buildbot-buildername",
-      "dart2js-win10-debug-x64-ff"
+      "dart2js-win10-debug-x64-firefox"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env_prefixes": {
@@ -442,7 +442,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff"
+      "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_firefox"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env_prefixes": {
@@ -466,7 +466,7 @@
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_firefox",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -554,7 +554,7 @@
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_firefox",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -592,7 +592,7 @@
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_firefox",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -619,7 +619,7 @@
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_firefox",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -665,7 +665,7 @@
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
       "--buildbot-buildername",
-      "dart2js-win10-debug-x64-ff"
+      "dart2js-win10-debug-x64-firefox"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env_prefixes": {
@@ -870,7 +870,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"builder_configurations\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"builders\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"dart2js-win10-debug-x64-ff\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"dart2js-win10-debug-x64-firefox\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"analyzer-linux-release\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"meta\": {}, @@@",
@@ -929,7 +929,7 @@
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"-rff\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"-rfirefox\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
       "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"fileset1\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 3\", @@@",
@@ -997,7 +997,7 @@
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"global\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"chrome\": \"66.0.3359.139\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"ff\": \"61\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"firefox\": \"61\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -1080,7 +1080,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1094,7 +1094,7 @@
     "cmd": [],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1114,11 +1114,11 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff"
+      "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_firefox"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1141,9 +1141,9 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try",
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_firefox",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -1183,7 +1183,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1211,7 +1211,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1226,7 +1226,7 @@
     "cmd": [],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1246,9 +1246,9 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try",
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_firefox",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -1286,9 +1286,9 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try",
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_firefox",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -1315,9 +1315,9 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try",
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_ff",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\dart2js_win10_debug_x64_firefox",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -1364,11 +1364,11 @@
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
       "--buildbot-buildername",
-      "dart2js-win10-debug-x64-ff"
+      "dart2js-win10-debug-x64-firefox"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1402,7 +1402,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1449,7 +1449,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test-step 1_shard_1/Windows/isolate_ha/dart2js-win10-debug-x64-ff/-1",
+      "Test-step 1_shard_1/Windows/isolate_ha/dart2js-win10-debug-x64-firefox/-1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1473,7 +1473,7 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:dart2js-win10-debug-x64-ff",
+      "buildername:dart2js-win10-debug-x64-firefox",
       "--tag",
       "data:isolate_hash_123",
       "--tag",
@@ -1512,7 +1512,7 @@
       "--write-debug-log",
       "--write-result-log",
       "--write-test-outcome-log",
-      "-rff",
+      "-rfirefox",
       "foo",
       "--arch=x64",
       "--builder-tag=win10",
@@ -1525,7 +1525,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1537,9 +1537,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 1_shard_1/Windows/isolate_ha/dart2js-win10-debug-x64-ff/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 1_shard_1/Windows/isolate_ha/dart2js-win10-debug-x64-firefox/-1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_1/Windows/isolate_ha/dart2js-win10-debug-x64-ff/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_1/Windows/isolate_ha/dart2js-win10-debug-x64-firefox/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1565,7 +1565,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test-step 1_shard_2/Windows/isolate_ha/dart2js-win10-debug-x64-ff/-1",
+      "Test-step 1_shard_2/Windows/isolate_ha/dart2js-win10-debug-x64-firefox/-1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1589,7 +1589,7 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:dart2js-win10-debug-x64-ff",
+      "buildername:dart2js-win10-debug-x64-firefox",
       "--tag",
       "data:isolate_hash_123",
       "--tag",
@@ -1628,7 +1628,7 @@
       "--write-debug-log",
       "--write-result-log",
       "--write-test-outcome-log",
-      "-rff",
+      "-rfirefox",
       "foo",
       "--arch=x64",
       "--builder-tag=win10",
@@ -1641,7 +1641,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1653,9 +1653,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 1_shard_2/Windows/isolate_ha/dart2js-win10-debug-x64-ff/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 1_shard_2/Windows/isolate_ha/dart2js-win10-debug-x64-firefox/-1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_2/Windows/isolate_ha/dart2js-win10-debug-x64-ff/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_2/Windows/isolate_ha/dart2js-win10-debug-x64-firefox/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1688,7 +1688,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1710,7 +1710,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1736,7 +1736,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1752,12 +1752,12 @@
       "put",
       "-host",
       "cr-buildbucket.appspot.com",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-ff\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"revision-foo\\\"}}\", \"tags\": [\"builder:foo-builder\", \"parent_buildername:dart2js-win10-debug-x64-ff\", \"user_agent:recipe\"]}",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-ff\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"revision-foo\\\"}}\", \"tags\": [\"builder:bar-builder\", \"parent_buildername:dart2js-win10-debug-x64-ff\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-firefox\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"revision-foo\\\"}}\", \"tags\": [\"builder:foo-builder\", \"parent_buildername:dart2js-win10-debug-x64-firefox\", \"user_agent:recipe\"]}",
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-firefox\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"revision-foo\\\"}}\", \"tags\": [\"builder:bar-builder\", \"parent_buildername:dart2js-win10-debug-x64-firefox\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1818,7 +1818,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1842,7 +1842,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test-step 3_shard_1/Windows/test isola/dart2js-win10-debug-x64-ff/-1",
+      "Test-step 3_shard_1/Windows/test isola/dart2js-win10-debug-x64-firefox/-1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1866,7 +1866,7 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:dart2js-win10-debug-x64-ff",
+      "buildername:dart2js-win10-debug-x64-firefox",
       "--tag",
       "data:test isolate hash",
       "--tag",
@@ -1908,7 +1908,7 @@
       "--write-test-outcome-log",
       "foo",
       "--bar",
-      "-rff",
+      "-rfirefox",
       "--append_logs",
       "--builder-tag=win10",
       "--firefox=browsers\\firefox\\firefox.exe",
@@ -1918,7 +1918,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1930,9 +1930,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 3_shard_1/Windows/test isola/dart2js-win10-debug-x64-ff/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 3_shard_1/Windows/test isola/dart2js-win10-debug-x64-firefox/-1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test-step 3_shard_1/Windows/test isola/dart2js-win10-debug-x64-ff/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test-step 3_shard_1/Windows/test isola/dart2js-win10-debug-x64-firefox/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1959,7 +1959,7 @@
       "--write-test-outcome-log",
       "foo",
       "--bar",
-      "-rff",
+      "-rfirefox",
       "--append_logs",
       "--builder-tag=win10",
       "--firefox=browsers\\firefox\\firefox.exe",
@@ -1968,7 +1968,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -1990,7 +1990,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -2016,7 +2016,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-ff-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
     },
     "env_prefixes": {
       "PATH": [
@@ -2056,7 +2056,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test-step 1_shard_1/Windows/isolate_ha/dart2js-win10-debug-x64-ff/-1\", \"tasks\": {\"Test-step 1_shard_1/Windows/isolate_ha/dart2js-win10-debug-x64-ff/-1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"Test-step 1_shard_1/Windows/isolate_ha/dart2js-win10-debug-x64-firefox/-1\", \"tasks\": {\"Test-step 1_shard_1/Windows/isolate_ha/dart2js-win10-debug-x64-firefox/-1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -2141,7 +2141,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test-step 1_shard_2/Windows/isolate_ha/dart2js-win10-debug-x64-ff/-1\", \"tasks\": {\"Test-step 1_shard_2/Windows/isolate_ha/dart2js-win10-debug-x64-ff/-1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"Test-step 1_shard_2/Windows/isolate_ha/dart2js-win10-debug-x64-firefox/-1\", \"tasks\": {\"Test-step 1_shard_2/Windows/isolate_ha/dart2js-win10-debug-x64-firefox/-1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -2226,7 +2226,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test-step 3_shard_1/Windows/test isola/dart2js-win10-debug-x64-ff/-1\", \"tasks\": {\"Test-step 3_shard_1/Windows/test isola/dart2js-win10-debug-x64-ff/-1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"Test-step 3_shard_1/Windows/test isola/dart2js-win10-debug-x64-firefox/-1\", \"tasks\": {\"Test-step 3_shard_1/Windows/test isola/dart2js-win10-debug-x64-firefox/-1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],

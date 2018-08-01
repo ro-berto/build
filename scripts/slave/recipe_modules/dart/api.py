@@ -343,15 +343,16 @@ class DartApi(recipe_api.RecipeApi):
       'x64')
     runtime = self._get_option(
       builder_fragments,
-      ['none', 'd8', 'jsshell', 'ie9', 'ie10', 'ie11', 'ff',
+      ['none', 'd8', 'jsshell', 'ie9', 'ie10', 'ie11', 'firefox', 'ff',
             'safari', 'chrome', 'safarimobilesim', 'drt', 'ie10', 'ie11'],
       None)
     environment = {'system': system,
                    'mode': mode,
                    'arch': arch}
     if runtime is not None:
+      if runtime == 'ff': runtime = 'firefox'
       environment['runtime'] = runtime
-      if runtime == 'chrome' or runtime == 'ff':
+      if runtime == 'chrome' or runtime == 'firefox':
         self._download_browser(runtime, global_config[runtime])
     channel = 'try'
     if 'branch' in self.m.properties:
@@ -423,7 +424,6 @@ class DartApi(recipe_api.RecipeApi):
     #  [sdk root]/browsers
     # Shards must install this CIPD package to the same location -
     # there is an argument to the swarming module task creation api for this.
-    if runtime == 'ff': runtime = 'firefox'
     browser_path = self.m.path['checkout'].join('browsers')
     self.m.file.ensure_directory('create browser cache', browser_path)
     self.m.cipd.set_service_account_credentials(None)
@@ -516,8 +516,8 @@ class DartApi(recipe_api.RecipeApi):
                             'dart/browsers/chrome/${platform}',
                             version_tag))
       args = args + [CHROME_PATH_ARGUMENT[environment['system']]]
-    if any(arg in ['-rff', '--runtime=ff'] for arg in args):
-      version_tag = 'version:%s' % global_config['ff']
+    if any(arg in ['-rfirefox', '--runtime=firefox'] for arg in args):
+      version_tag = 'version:%s' % global_config['firefox']
       cipd_packages.append(('browsers',
                             'dart/browsers/firefox/${platform}',
                             version_tag))
@@ -553,7 +553,7 @@ class DartApi(recipe_api.RecipeApi):
     runtime = self._get_specific_argument(args, ['-r', '--runtime'])
     if runtime is None:
       runtime = environment.get('runtime', None)
-    use_xvfb = (runtime in ['drt', 'chrome', 'ff'] and
+    use_xvfb = (runtime in ['drt', 'chrome', 'firefox'] and
                 environment['system'] == 'linux')
     with self.m.step.defer_results():
       if use_xvfb:

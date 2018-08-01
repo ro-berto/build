@@ -139,7 +139,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"builder_configurations\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"builders\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"dart2js-win10-debug-x64-ff-try\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"dart2js-win10-debug-x64-firefox-try\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"analyzer-linux-release-be\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"meta\": {}, @@@",
@@ -217,7 +217,7 @@
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"global\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"chrome\": \"66.0.3359.139\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"ff\": \"60.0.1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"firefox\": \"60.0.1\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"

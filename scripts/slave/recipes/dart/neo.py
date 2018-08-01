@@ -18,12 +18,12 @@ DEPS = [
 TEST_MATRIX = {
   "global": {
     "chrome": "66.0.3359.139",
-    "ff": "60.0.1"
+    "firefox": "60.0.1"
   },
   "builder_configurations": [
     {
       "builders": [
-        "dart2js-win10-debug-x64-ff-try",
+        "dart2js-win10-debug-x64-firefox-try",
         "analyzer-linux-release-be"
       ],
       "meta": {},
