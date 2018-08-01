@@ -241,7 +241,7 @@
       "--paths",
       "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux x64\", \"buildnumber\": 571, \"mastername\": \"chromium\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"linux-rel\", \"buildnumber\": 571, \"mastername\": \"chromium\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -277,7 +277,7 @@
       "--src-dir",
       "[START_DIR]/src",
       "--build-name",
-      "Linux_x64",
+      "linux_rel",
       "--staging-dir",
       "[CACHE]/chrome_staging",
       "--target",
