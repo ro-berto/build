@@ -194,8 +194,13 @@ class CodesearchApi(recipe_api.RecipeApi):
     assert self.c.generated_repo, (
         'Trying to check out generated files repo, but the repo is not indicated')
 
-    # Check out the generated files repo.
-    generated_repo_dir = self.m.path['start_dir'].join('generated')
+    # Check out the generated files repo. On LUCI, we use a named cache so that
+    # the checkout stays around between builds (this saves ~15 mins of build
+    # time).
+    if self.m.runtime.is_luci:
+      generated_repo_dir = self.m.path['cache'].join('builder')
+    else:
+      generated_repo_dir = self.m.path['start_dir'].join('generated')
     self.m.git.checkout(
         self.c.generated_repo,
         ref=self.c.GEN_REPO_BRANCH,
