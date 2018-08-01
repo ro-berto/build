@@ -3220,11 +3220,11 @@ Returns:
 
 #### **class [TestUtilsApi](/scripts/slave/recipe_modules/test_utils/api.py#27)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#282)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#283)(self, data):**
 
-&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#285)(self, data):**
+&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#286)(self, data):**
 
-&mdash; **def [determine\_new\_failures](/scripts/slave/recipe_modules/test_utils/api.py#182)(self, caller_api, tests, deapply_patch_fn):**
+&mdash; **def [determine\_new\_failures](/scripts/slave/recipe_modules/test_utils/api.py#183)(self, caller_api, tests, deapply_patch_fn):**
 
 Utility function for running steps with a patch applied, and retrying
 failing steps without the patch. Failures from the run without the patch are
@@ -3239,7 +3239,7 @@ Args:
   deapply_patch_fn - function that takes a list of failing tests
                      and undoes any effect of the previously applied patch
 
-&emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#66)(data):**
+&emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#67)(data):**
 
 Returns string suitable for use in a followup function's step result's
 presentation step text.
@@ -3252,7 +3252,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#302)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#303)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3279,7 +3279,7 @@ Returns:
        *failures* contains more elements than *limit*, it will contain an
        element indicating the number of additional failures.
 
-&mdash; **def [present\_gtest\_failures](/scripts/slave/recipe_modules/test_utils/api.py#96)(self, step_result, presentation=None):**
+&mdash; **def [present\_gtest\_failures](/scripts/slave/recipe_modules/test_utils/api.py#97)(self, step_result, presentation=None):**
 
 Update a step result's presentation with details of gtest failures.
 
@@ -3300,7 +3300,7 @@ Returns:
   The gtest_results object if it is present in the step result, otherwise
   None.
 
-&mdash; **def [run\_tests](/scripts/slave/recipe_modules/test_utils/api.py#130)(self, caller_api, tests, suffix):**
+&mdash; **def [run\_tests](/scripts/slave/recipe_modules/test_utils/api.py#131)(self, caller_api, tests, suffix):**
 
 Utility function for running a list of tests and returning the failed tests.
 
@@ -3315,9 +3315,9 @@ Args:
 Returns:
   The list of failed tests.
 
-&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#168)(self, caller_api, tests):**
+&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#169)(self, caller_api, tests):**
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#292)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#293)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 

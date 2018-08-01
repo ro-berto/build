@@ -1050,7 +1050,8 @@ class JSONResultsHandler(ResultsHandler):
     num_failures = len(failures)
     if num_failures > cls.MAX_FAILS:
       failures = failures[:cls.MAX_FAILS]
-      failures.append('... %s more ...' % (num_failures - cls.MAX_FAILS))
+      failures.append('... %d more (%d total) ...' % (
+          num_failures - cls.MAX_FAILS, num_failures))
     return ('%s:' % state, ['* %s' % f for f in failures])
 
   # TODO(tansell): Make this better formatted when milo supports html rendering.

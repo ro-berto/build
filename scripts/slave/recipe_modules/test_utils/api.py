@@ -57,7 +57,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     """
     if len(failures) <= limit:
       return failures, failures
-    overflow_line = '... %d more ...' % (len(failures) - limit)
+    overflow_line = '... %d more (%d total) ...' % (
+        len(failures) - limit, len(failures))
     # failures might be a set, which doesn't support slicing, so create a list
     # out of an islice so that only the elemnts we are keeping are copied
     limited_failures = list(itertools.islice(failures, limit))
