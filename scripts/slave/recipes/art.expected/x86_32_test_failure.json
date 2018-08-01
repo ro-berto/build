@@ -284,7 +284,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
     },
-    "name": "test jdwp aot",
+    "name": "test jdwp interpreter",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
@@ -339,7 +339,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
     },
-    "name": "test libjdwp aot"
+    "name": "test libjdwp interpreter"
   },
   {
     "cmd": [
@@ -366,7 +366,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 out of 12 aggregated steps failed. Failures: Step('test jdwp aot') failed with return_code 1",
+    "reason": "1 out of 12 aggregated steps failed. Failures: Step('test jdwp interpreter') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }

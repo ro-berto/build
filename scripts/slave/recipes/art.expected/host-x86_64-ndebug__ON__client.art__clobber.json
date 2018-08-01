@@ -287,7 +287,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
     },
-    "name": "test jdwp aot"
+    "name": "test jdwp interpreter"
   },
   {
     "cmd": [
@@ -336,7 +336,7 @@
       "TARGET_BUILD_VARIANT": "eng",
       "TARGET_PRODUCT": "sdk"
     },
-    "name": "test libjdwp aot"
+    "name": "test libjdwp interpreter"
   },
   {
     "cmd": [

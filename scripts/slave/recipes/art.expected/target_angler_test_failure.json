@@ -1076,7 +1076,7 @@
       "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test jdwp aot",
+    "name": "test jdwp interpreter",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
@@ -1110,7 +1110,7 @@
       "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test jdwp aot: adb logcat"
+    "name": "test jdwp interpreter: adb logcat"
   },
   {
     "cmd": [
@@ -1136,7 +1136,7 @@
       "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test jdwp aot: crashes"
+    "name": "test jdwp interpreter: crashes"
   },
   {
     "cmd": [
@@ -1164,7 +1164,7 @@
       "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test jdwp aot: adb clear log"
+    "name": "test jdwp interpreter: adb clear log"
   },
   {
     "cmd": [
@@ -1307,7 +1307,7 @@
       "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test libjdwp aot"
+    "name": "test libjdwp interpreter"
   },
   {
     "cmd": [
@@ -1337,7 +1337,7 @@
       "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test libjdwp aot: adb logcat"
+    "name": "test libjdwp interpreter: adb logcat"
   },
   {
     "cmd": [
@@ -1363,7 +1363,7 @@
       "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test libjdwp aot: crashes"
+    "name": "test libjdwp interpreter: crashes"
   },
   {
     "cmd": [
@@ -1391,7 +1391,7 @@
       "TARGET_PRODUCT": "arm_krait",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test libjdwp aot: adb clear log"
+    "name": "test libjdwp interpreter: adb clear log"
   },
   {
     "cmd": [
@@ -1447,7 +1447,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 out of 49 aggregated steps failed. Failures: Step('test jdwp aot') failed with return_code 1",
+    "reason": "1 out of 49 aggregated steps failed. Failures: Step('test jdwp interpreter') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }

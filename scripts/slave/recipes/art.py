@@ -187,7 +187,7 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
         jdwp_command += ['--vm-arg', '-Xgc:gcstress']
 
       api.step('test jdwp jit', jdwp_command)
-      api.step('test jdwp aot', jdwp_command + ['--no-jit'])
+      api.step('test jdwp interpreter', jdwp_command + ['--no-jit'])
 
       libjdwp_run = art_tools.join('run-libjdwp-tests.sh')
       libjdwp_common_command = [libjdwp_run,
@@ -199,7 +199,7 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
         libjdwp_common_command += ['--vm-arg', '-Xgc:gcstress']
 
       api.step('test libjdwp jit', libjdwp_common_command)
-      api.step('test libjdwp aot', libjdwp_common_command + ['--no-jit'])
+      api.step('test libjdwp interpreter', libjdwp_common_command + ['--no-jit'])
 
       api.step('test dx', ['./dalvik/dx/tests/run-all-tests'])
 
@@ -375,9 +375,11 @@ def setup_target(api,
       api.step('test jdwp jit', jdwp_command)
     test_logging(api, 'test jdwp jit')
 
-    with api.context(env=test_env):
-      api.step('test jdwp aot', jdwp_command + ['--no-jit'])
-    test_logging(api, 'test jdwp aot')
+    # Disable interpreter jdwp runs with gcstress, they time out.
+    if not gcstress:
+      with api.context(env=test_env):
+        api.step('test jdwp interpreter', jdwp_command + ['--no-jit'])
+      test_logging(api, 'test jdwp interpreter')
 
     libjdwp_command = [art_tools.join('run-libjdwp-tests.sh'),
                        '--mode=device',
@@ -391,9 +393,11 @@ def setup_target(api,
       api.step('test libjdwp jit', libjdwp_command)
     test_logging(api, 'test libjdwp jit')
 
-    with api.context(env=test_env):
-      api.step('test libjdwp aot', libjdwp_command + ['--no-jit'])
-    test_logging(api, 'test libjdwp aot')
+    # Disable interpreter libjdwp runs with gcstress, they time out.
+    if not gcstress:
+      with api.context(env=test_env):
+        api.step('test libjdwp interpreter', libjdwp_command + ['--no-jit'])
+      test_logging(api, 'test libjdwp interpreter')
 
     with api.context(env=env):
       api.step('tear down device', [art_tools.join('teardown-buildbot-device.sh')])
@@ -663,7 +667,7 @@ def GenTests(api):
         buildername='host-x86-ndebug',
         bot_id='TestSlave',
       ) +
-      api.step_data('test jdwp aot', retcode=1))
+      api.step_data('test jdwp interpreter', retcode=1))
   yield (
       api.test('target_angler_setup_failure') +
       api.properties(
@@ -679,7 +683,7 @@ def GenTests(api):
         buildername='angler-armv7-ndebug',
         bot_id='TestSlave',
       ) +
-      api.step_data('test jdwp aot', retcode=1))
+      api.step_data('test jdwp interpreter', retcode=1))
   yield (
       api.test('target_angler_device_pre_run_cleanup_failure') +
       api.properties(

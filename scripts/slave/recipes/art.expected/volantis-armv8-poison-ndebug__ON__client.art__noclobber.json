@@ -1076,7 +1076,7 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test jdwp aot"
+    "name": "test jdwp interpreter"
   },
   {
     "cmd": [
@@ -1106,7 +1106,7 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test jdwp aot: adb logcat"
+    "name": "test jdwp interpreter: adb logcat"
   },
   {
     "cmd": [
@@ -1132,7 +1132,7 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test jdwp aot: crashes"
+    "name": "test jdwp interpreter: crashes"
   },
   {
     "cmd": [
@@ -1160,7 +1160,7 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test jdwp aot: adb clear log"
+    "name": "test jdwp interpreter: adb clear log"
   },
   {
     "cmd": [
@@ -1303,7 +1303,7 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test libjdwp aot"
+    "name": "test libjdwp interpreter"
   },
   {
     "cmd": [
@@ -1333,7 +1333,7 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test libjdwp aot: adb logcat"
+    "name": "test libjdwp interpreter: adb logcat"
   },
   {
     "cmd": [
@@ -1359,7 +1359,7 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test libjdwp aot: crashes"
+    "name": "test libjdwp interpreter: crashes"
   },
   {
     "cmd": [
@@ -1387,7 +1387,7 @@
       "TARGET_PRODUCT": "armv8",
       "USE_DEX2OAT_DEBUG": "false"
     },
-    "name": "test libjdwp aot: adb clear log"
+    "name": "test libjdwp interpreter: adb clear log"
   },
   {
     "cmd": [
