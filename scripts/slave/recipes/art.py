@@ -137,7 +137,7 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
 
       api.step('test debuggable', ['./art/test/testrunner/testrunner.py',
                                    '-j8',
-                                   '--optimizing',
+                                   '--jit',
                                    '--debuggable'] + common_options)
 
       # Use a lower -j number for interpreter, some tests take a long time
@@ -325,6 +325,13 @@ def setup_target(api,
                                    '--debuggable',
                                    '--ndebuggable'] + common_options)
     test_logging(api, 'test optimizing')
+
+    with api.context(env=test_env):
+      api.step('test debuggable', ['./art/test/testrunner/testrunner.py',
+                                   '-j%d' % (make_jobs),
+                                   '--jit',
+                                   '--debuggable'] + common_options)
+    test_logging(api, 'test debuggable')
 
     with api.context(env=test_env):
       api.step('test interpreter', ['./art/test/testrunner/testrunner.py',

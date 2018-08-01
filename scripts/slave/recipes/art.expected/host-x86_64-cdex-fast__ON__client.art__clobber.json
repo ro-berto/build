@@ -112,7 +112,7 @@
     "cmd": [
       "./art/test/testrunner/testrunner.py",
       "-j8",
-      "--optimizing",
+      "--jit",
       "--debuggable",
       "--verbose",
       "--host",
