@@ -377,7 +377,7 @@ class DartApi(recipe_api.RecipeApi):
         is_test_py_step = script.endswith(test_py_path)
 
         if self.m.platform.name == 'mac' and script.startswith('out/'):
-          script.replace('out/', 'xcodebuild/', 1)
+          script = script.replace('out/', 'xcodebuild/', 1)
 
         is_dart = script.endswith('/dart')
         if is_dart:
