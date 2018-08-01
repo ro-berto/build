@@ -85,9 +85,9 @@ TEST_MATRIX = {
         "fileset": "fileset1",
         "trigger": ["foo-builder", "bar-builder"]
       }, {
-        "name": "Test-step custom",
-        "script": "tools/custom_thing",
-        "arguments": ["foo", "--bar", "--buildername"]
+        "name": "Test-step dart",
+        "script": "out/ReleaseX64/dart",
+        "arguments": ["--bar", "foo.dart"]
       }, {
         "name": "Test-step 3",
         "arguments": ["foo", "--bar", "-rfirefox"],
@@ -126,6 +126,10 @@ TEST_MATRIX = {
         "name": "Build",
         "script": "tools/build.py",
         "arguments": []
+      }, {
+        "name": "Test-step custom",
+        "script": "out/custom_thing",
+        "arguments": ["foo", "--bar", "--buildername"]
       }]
     }
   ]

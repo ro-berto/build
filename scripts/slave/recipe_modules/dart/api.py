@@ -343,8 +343,7 @@ class DartApi(recipe_api.RecipeApi):
       'x64')
     runtime = self._get_option(
       builder_fragments,
-      ['none', 'd8', 'jsshell', 'ie9', 'ie10', 'ie11', 'firefox', 'ff',
-            'safari', 'chrome', 'safarimobilesim', 'drt', 'ie10', 'ie11'],
+      ['none', 'd8', 'jsshell', 'edge', 'ie11', 'firefox', 'safari', 'chrome'],
       None)
     environment = {'system': system,
                    'mode': mode,
@@ -376,6 +375,15 @@ class DartApi(recipe_api.RecipeApi):
         is_build_step = script.endswith(build_py_path)
         is_trigger = 'trigger' in step
         is_test_py_step = script.endswith(test_py_path)
+
+        if self.m.platform.name == 'mac' and script.startswith('out/'):
+          script.replace('out/', 'xcodebuild/', 1)
+
+        is_dart = script.endswith('/dart')
+        if is_dart:
+          executable_suffix = '.exe' if self.m.platform.name == 'win' else ''
+          script += executable_suffix
+
         script = self.m.path['checkout'].join(*script.split('/'))
         isolate_hash = None
         shards = step.get('shards', 0)
@@ -553,15 +561,19 @@ class DartApi(recipe_api.RecipeApi):
     runtime = self._get_specific_argument(args, ['-r', '--runtime'])
     if runtime is None:
       runtime = environment.get('runtime', None)
-    use_xvfb = (runtime in ['drt', 'chrome', 'firefox'] and
+    use_xvfb = (runtime in ['chrome', 'firefox'] and
                 environment['system'] == 'linux')
+    is_python = str(script).endswith('.py')
+
     with self.m.step.defer_results():
       if use_xvfb:
         xvfb_cmd = [
           '/usr/bin/xvfb-run',
           '-a',
           '--server-args=-screen 0 1024x768x24']
-        cmd = xvfb_cmd + ['python', '-u', script] + args
+        if is_python:
+          xvfb_cmd += ['python', '-u']
+        cmd = xvfb_cmd + [script] + args
         if isolate_hash:
           tasks.append(self.shard(step_name, isolate_hash, cmd,
                                   num_shards=shards,
@@ -575,7 +587,7 @@ class DartApi(recipe_api.RecipeApi):
                                   num_shards=shards,
                                   last_shard_is_local=local_shard,
                                   cipd_packages=cipd_packages))
-        elif '.py' in str(script):
+        elif is_python:
           self.m.python(step_name, script, args=args)
         else:
           self.m.step(step_name, [script] + args)

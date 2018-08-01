@@ -918,12 +918,11 @@
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"--buildername\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"foo.dart\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step custom\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/custom_thing\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step dart\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"script\": \"out/ReleaseX64/dart\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
@@ -987,6 +986,15 @@
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"Build\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/build.py\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--buildername\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step custom\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"script\": \"out/custom_thing\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -1811,10 +1819,9 @@
   },
   {
     "cmd": [
-      "[CACHE]\\builder\\sdk\\tools\\custom_thing",
-      "foo",
+      "[CACHE]\\builder\\sdk\\out\\ReleaseX64\\dart.exe",
       "--bar",
-      "--buildername"
+      "foo.dart"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
@@ -1825,7 +1832,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "Test-step custom"
+    "name": "Test-step dart"
   },
   {
     "cmd": [

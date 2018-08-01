@@ -916,12 +916,11 @@
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"--buildername\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"foo.dart\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step custom\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/custom_thing\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step dart\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"script\": \"out/ReleaseX64/dart\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
@@ -985,6 +984,15 @@
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [], @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"Build\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/build.py\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }, @@@",
+      "@@@STEP_LOG_LINE@json.output@        {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--buildername\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step custom\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"script\": \"out/custom_thing\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -1372,6 +1380,24 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/out/custom_thing",
+      "foo",
+      "--bar",
+      "--buildername"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "example-mac-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Test-step custom"
   },
   {
     "name": "$result",
