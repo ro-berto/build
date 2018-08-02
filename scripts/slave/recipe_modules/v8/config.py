@@ -29,6 +29,9 @@ def v8(c):
 def gc_stress(c):
   c.testing.test_args.append('--gc-stress')
 
+@config_ctx()
+def isolates(c):
+  c.testing.test_args.append('--isolates')
 
 @config_ctx()
 def no_harness(c):

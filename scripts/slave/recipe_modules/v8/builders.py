@@ -839,6 +839,7 @@ BUILDERS = {
         'triggers': [
           'V8 Linux64 TSAN',
           'V8 Linux64 TSAN - concurrent marking',
+          'V8 Linux64 TSAN - isolates',
         ],
         'testing': {'platform': 'linux'},
       },
@@ -861,6 +862,13 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
         'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
+      },
+      'V8 Linux64 TSAN - isolates': {
+        'v8_apply_config': ['isolates'],
+        'tests': [
+          V8Testing(5),
+        ],
+        'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - MSAN': {
         'chromium_apply_config': [
