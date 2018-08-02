@@ -831,11 +831,18 @@ BUILDERS = {
         ] + with_extra_variants([V8Testing]),
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux64 TSAN': {
+      'V8 Linux64 TSAN - builder': {
         'chromium_apply_config': ['clang', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
+        'triggers': [
+          'V8 Linux64 TSAN',
+          'V8 Linux64 TSAN - concurrent marking',
+        ],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux64 TSAN': {
         'tests': [
           V8Testing(5),
           Test262(3),
@@ -845,11 +852,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 TSAN - concurrent marking': {
-        'chromium_apply_config': ['clang', 'goma', 'mb'],
         'v8_apply_config': ['stress_incremental_marking'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-        },
         'tests': [
           V8Testing(4),
           Test262(4),
