@@ -31,10 +31,11 @@ def GetCloudPath(api, path):
   return 'flutter/%s/%s' % (git_hash, path)
 
 
-def Build(api, config, *targets):
+def Build(api, config, *targets, **kwargs):
   checkout = api.path['start_dir'].join('src')
   build_dir = checkout.join('out/%s' % config)
-  ninja_args = ['ninja', '-j', GOMA_JOBS, '-C', build_dir]
+  goma_jobs = kwargs['goma_jobs'] if 'goma_jobs' in kwargs else GOMA_JOBS
+  ninja_args = ['ninja', '-j', goma_jobs, '-C', build_dir]
   ninja_args.extend(targets)
   api.goma.build_with_goma(
     name='build %s' % ' '.join([config] + list(targets)),
@@ -449,7 +450,8 @@ def BuildWindows(api):
   RunGN(api, '--runtime-mode', 'release', '--android')
   RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
 
-  Build(api, 'host_debug_unopt')
+  # TODO(goderbauer): turn parallelism back on when build problem is diagnosed
+  Build(api, 'host_debug_unopt', goma_jobs='1')
   Build(api, 'host_debug')
   Build(api, 'android_profile', 'gen_snapshot')
   Build(api, 'android_profile_arm64', 'gen_snapshot')
