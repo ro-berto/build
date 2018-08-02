@@ -77,15 +77,6 @@
     'client.dart.fyi': {},
     'client.dart.packages': {},
 
-    # V8
-    'client.v8': {},
-    'client.v8.branches': {},
-    'client.v8.clusterfuzz': {},
-    'client.v8.chromium': {},
-    'client.v8.fyi': {},
-    'client.v8.official': {},
-    'client.v8.ports': {},
-
     # NaCl / WASM
     'client.nacl': {},
     'client.nacl.ports': {},
