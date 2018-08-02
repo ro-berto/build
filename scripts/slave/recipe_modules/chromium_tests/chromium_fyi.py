@@ -111,8 +111,6 @@ def no_compile_targets(base_config):
   """
 
   config = copy.deepcopy(base_config)
-  if 'compile_targets' in config:
-    del(config['compile_targets'])
 
   return config
 
