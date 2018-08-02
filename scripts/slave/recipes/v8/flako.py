@@ -288,6 +288,12 @@ class Runner(object):
           # not a setup error?
           return 0  # pragma: no cover
         stdout = data['outputs'][0]
+        if TEST_PASSED_TEXT in stdout:  # pragma: no cover
+          # It's possible that the return code is non-zero due to a test runner
+          # leak.
+          # TODO(machenbach): Remove this when https://crbug.com/v8/8001 is
+          # resolved.
+          return 0
         match = re.search(r'=== (\d+) tests failed', stdout)
         assert match
         return int(match.group(1))
