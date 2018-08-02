@@ -23,6 +23,7 @@ DEPS = [
 
 BUCKET_NAME = 'flutter_infra'
 GOMA_JOBS = '200'
+ICU_DATA_PATH = 'third_party/icu/flutter/icudtl.dat'
 
 def GetCloudPath(api, path):
   # TODO(eseidel): api.bot_update.last_returned_properties is supposedly a known
@@ -249,7 +250,7 @@ def BuildLinux(api):
   Build(api, 'android_release_vulkan')
   RunHostTests(api, 'out/host_debug_unopt')
   UploadArtifacts(api, 'linux-x64', [
-    'out/host_debug_unopt/icudtl.dat',
+    ICU_DATA_PATH,
     'out/host_debug_unopt/flutter_tester',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
@@ -328,7 +329,7 @@ def BuildMac(api):
     host_debug_path.join('FlutterEmbedder.framework.zip'))
 
   UploadArtifacts(api, 'darwin-x64', [
-    'out/host_debug_unopt/icudtl.dat',
+    ICU_DATA_PATH,
     'out/host_debug_unopt/flutter_tester',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
@@ -461,7 +462,7 @@ def BuildWindows(api):
   RunHostTests(api, 'out\\host_debug', '.exe')
 
   UploadArtifacts(api, 'windows-x64', [
-    'out/host_debug/icudtl.dat',
+    ICU_DATA_PATH,
     'out/host_debug/flutter_tester.exe',
     'out/host_debug/gen/flutter/lib/snapshot/isolate_snapshot.bin',
     'out/host_debug/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
