@@ -616,6 +616,16 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       check(any(value in arg for arg in steps[step]['cmd']))
     return self.post_process(check_any, step, value)
 
+  def check_not_in_any_arg(self, step, value):
+    """Check that a given value is not a substring of any argument in a step.
+
+    This is the opposite of the method above.
+    """
+    def check_any(check, steps, step, value):
+      check(step in steps)
+      check(not any(value in arg for arg in steps[step]['cmd']))
+    return self.post_process(check_any, step, value)
+
   def check_triggers(self, *expected_builders):
     """Verify expected triggered builders."""
     def check_triggers_internal(check, steps):

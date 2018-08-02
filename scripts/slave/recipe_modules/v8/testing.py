@@ -469,6 +469,12 @@ def _trigger_swarming_task(api, task, test_step_config):
   # Override with per-test dimensions.
   task.dimensions.update(test_step_config.swarming_dimensions or {})
 
+  # Override cpu and gpu defaults for Android as such devices don't have these
+  # dimensions.
+  if task.dimensions['os'] == 'Android':
+    task.dimensions.pop('cpu')
+    task.dimensions.pop('gpu')
+
   # Add custom attributes.
   for k, v in api.v8.bot_config.get('swarming_task_attrs', {}).iteritems():
     setattr(task, k, v)

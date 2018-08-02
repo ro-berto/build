@@ -623,6 +623,32 @@ def GenTests(api):
     api.post_process(Filter().include_re(r'.*Mjsunit.*'))
   )
 
+  # Test that cpu and gpu dimensinos are reset when triggering Android bots.
+  android_test_spec = """
+    {
+      "swarming_dimensions": {
+        "os": "Android",
+      },
+      "tests": [
+        {
+          "name": "mjsunit",
+        },
+      ],
+    }
+  """.strip()
+  yield (
+    api.v8.test(
+        'client.v8',
+        'Android bot',
+        parent_build_config='Release',
+        parent_test_spec=android_test_spec,
+        swarm_hashes={'mjsunit': 'hash'},
+    ) +
+    api.v8.check_not_in_any_arg('[trigger] Mjsunit on Android', 'cpu') +
+    api.v8.check_not_in_any_arg('[trigger] Mjsunit on Android', 'gpu') +
+    api.post_process(DropExpectation)
+  )
+
   # Test reading pyl test configs and build configs from a separate checkout.
   extra_test_config = """
     {
