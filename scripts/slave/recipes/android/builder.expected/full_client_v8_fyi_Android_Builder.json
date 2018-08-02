@@ -646,7 +646,7 @@
       "--exclude-filter",
       "*/gen/*",
       "--exclude-filter",
-      "thinlto-cache/*",
+      "*/thinlto-cache/*",
       "--exclude-filter",
       "*.stamp",
       "--exclude-filter",
