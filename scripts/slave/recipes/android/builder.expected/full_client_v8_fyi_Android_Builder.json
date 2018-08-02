@@ -646,6 +646,8 @@
       "--exclude-filter",
       "*/gen/*",
       "--exclude-filter",
+      "thinlto-cache/*",
+      "--exclude-filter",
       "*.stamp",
       "--exclude-filter",
       "*.d",

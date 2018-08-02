@@ -281,6 +281,7 @@ class AndroidApi(recipe_api.RecipeApi):
         exclude_filters=[
             "obj/*", "gen/*",  # Default toolchain's obj/ and gen/
             "*/obj/*", "*/gen/*",  # Secondary toolchains' obj/ and gen/
+            "thinlto-cache/*", # ThinLTO cache directory
             "*.stamp", "*.d",  # Files used only for incremental builds
             "*.ninja", ".ninja_*",  # Build files, .ninja_log, .ninja_deps
         ]
