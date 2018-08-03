@@ -576,56 +576,6 @@
     "name": "low_bandwidth_audio_test"
   },
   {
-    "allow_subannotations": true,
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--test-platform",
-      "android",
-      "--xvfb",
-      "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Android64 Tests (N Pixel)\", \"buildnumber\": 1337, \"git_revision\": \"git12345\", \"got_revision_cp\": \"12345\", \"mastername\": \"client.webrtc.perf\", \"parent_buildername\": \"Android64 Builder\", \"parent_got_revision\": \"12345\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
-      "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"bot_id\": \"bot_id\", \"buildername\": \"Android64 Tests (N Pixel)\", \"buildnumber\": 1337, \"git_revision\": \"git12345\", \"got_revision_cp\": \"12345\", \"mastername\": \"client.webrtc.perf\", \"parent_buildername\": \"Android64 Builder\", \"parent_got_revision\": \"12345\", \"path_config\": \"kitchen\", \"recipe\": \"webrtc/standalone\", \"revision\": \"12345\", \"slavename\": \"bot_id\"}",
-      "--annotate=graphing",
-      "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=video_quality_loopback_test",
-      "--perf-id=webrtc-android-tests-pixel-nougat",
-      "--perf-config",
-      "{\"a_default_rev\": \"r_webrtc_git\", \"r_webrtc_git\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}",
-      "--test-type=video_quality_loopback_test",
-      "--step-name=video_quality_loopback_test",
-      "--builder-name=Android64 Tests (N Pixel)",
-      "--slave-name=bot_id",
-      "--build-number=1337",
-      "--run-python-script",
-      "--revision=170242",
-      "[CACHE]/builder/src/examples/androidtests/video_quality_loopback_test.py",
-      "--adb-path",
-      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb",
-      "[CACHE]/builder/src/out/Release"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "CHROME_HEADLESS": "1"
-    },
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "video_quality_loopback_test"
-  },
-  {
     "cmd": [
       "python",
       "-u",

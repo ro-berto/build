@@ -88,8 +88,9 @@ BAREMETAL_TESTS = freeze({
 })
 
 ANDROID_INSTRUMENTATION_TESTS = freeze({
-  'AppRTCMobileTest': {},
-  'libjingle_peerconnection_android_unittest': {},
+  # TODO(bugs.webrtc.org/9588): rename and re-enable these:
+  # 'AppRTCMobileTest': {},
+  # 'libjingle_peerconnection_android_unittest': {},
 })
 
 ANDROID_JUNIT_TESTS = freeze({
@@ -126,9 +127,9 @@ ANDROID_PERF_TESTS = freeze({
             '--android',
         ]
     },
-    'video_quality_loopback_test': {
-        'add_adb_path': True,
-    },
+    # 'video_quality_loopback_test': {
+    #     'add_adb_path': True,
+    # },
 })
 
 
@@ -203,13 +204,13 @@ def generate_tests(api, test_suite, phase, revision,
 
     # Skip video_quality_loopback_test on Android K bot (not supported).
     # TODO(oprypin): Re-enable on Nexus 4 once webrtc:7724 is fixed.
-    if 'kitkat' not in perf_id and 'nexus4' not in perf_id:
-      tests.append(PerfTest(
-          str(api.path['checkout'].join('examples', 'androidtests',
-                                          'video_quality_loopback_test.py')),
-          name='video_quality_loopback_test',
-          args=['--adb-path', api.adb.adb_path(), build_out_dir],
-          revision=revision, revision_number=revision_number, perf_id=perf_id))
+    # if 'kitkat' not in perf_id and 'nexus4' not in perf_id:
+    #   tests.append(PerfTest(
+    #       str(api.path['checkout'].join('examples', 'androidtests',
+    #                                       'video_quality_loopback_test.py')),
+    #       name='video_quality_loopback_test',
+    #       args=['--adb-path', api.adb.adb_path(), build_out_dir],
+    #       revision=revision, revision_number=revision_number, perf_id=perf_id))
 
   if test_suite == 'android':
     for test, extra_args in sorted(ANDROID_DEVICE_TESTS.items() +
