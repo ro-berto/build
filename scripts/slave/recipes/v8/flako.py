@@ -100,12 +100,12 @@ EXIT_CODE_NO_TESTS = 2
 # Output of V8's test runner when all tests passed.
 TEST_PASSED_TEXT = """
 === All tests succeeded
-"""
+""".strip()
 
 # Output of V8's test runner when some tests failed.
 TEST_FAILED_TEMPLATE = """
 === %d tests failed
-"""
+""".strip()
 
 
 class Command(object):
@@ -366,6 +366,9 @@ def bisect(api, depot, initial_commit_offset, is_bad_func, offset):
 
       if build_offset == from_offset:
         # There are no isolates in lower half. Skip it and continue.
+        # TODO(machenbach): This seems to not work. See:
+        # https://ci.chromium.org/swarming/task/3f17ac108baf5010?server=chromium-swarm.appspot.com
+        # Bisect repeatedly finds no isolates and reruns the known good build.
         from_offset = middle_offset
         continue
 
