@@ -709,6 +709,10 @@ class V8Api(recipe_api.RecipeApi):
         test_spec.get_all_test_names())
     isolate_targets = sorted(list(set(self.isolate_targets + extra_targets)))
 
+    build_dir = None
+    if kwargs.get('out_dir'):  # pragma: no cover
+      build_dir = '//%s/%s' % (
+          kwargs['out_dir'], self.m.chromium.c.build_config_fs)
     if self.m.chromium.c.project_generator.tool == 'mb':
       def step_test_data():
         # Fake MB output with GN flags.
@@ -732,6 +736,7 @@ class V8Api(recipe_api.RecipeApi):
             isolated_targets=isolate_targets,
             stdout=self.m.raw_io.output_text(),
             step_test_data=step_test_data,
+            build_dir=build_dir,
         )
       finally:
         # Log captured output. We call log below 'captured_stdout' instead of
@@ -751,7 +756,7 @@ class V8Api(recipe_api.RecipeApi):
         self.m.step.active_result.presentation.logs['gn_args'] = (
             self.build_environment['gn_args'].splitlines())
     elif self.m.chromium.c.project_generator.tool == 'gn':
-      self.m.chromium.run_gn(use_goma=use_goma)
+      self.m.chromium.run_gn(use_goma=use_goma, build_dir=build_dir)
 
     if use_goma:
       kwargs['use_goma_module'] = True
