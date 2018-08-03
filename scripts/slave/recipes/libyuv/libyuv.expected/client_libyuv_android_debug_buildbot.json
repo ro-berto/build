@@ -478,6 +478,7 @@
       {
         "builder_name": "Android Tester ARM32 Debug (Nexus 5X)",
         "properties": {
+          "parent_buildername": "Android Debug",
           "parent_got_revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
           "revision": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
         }

@@ -82,6 +82,7 @@ class LibyuvApi(recipe_api.RecipeApi):
     properties = {
       'revision': self.revision,
       'parent_got_revision': self.revision,
+      'parent_buildername': self.m.properties.get('buildername'),
     }
     if triggers:
       if self.m.runtime.is_luci:

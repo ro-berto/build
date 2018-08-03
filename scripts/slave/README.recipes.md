@@ -2396,13 +2396,13 @@ Returns the path to legion.py.
 
 &mdash; **def [checkout](/scripts/slave/recipe_modules/libyuv/api.py#75)(self):**
 
-&mdash; **def [extract\_build](/scripts/slave/recipe_modules/libyuv/api.py#108)(self):**
+&mdash; **def [extract\_build](/scripts/slave/recipe_modules/libyuv/api.py#109)(self):**
 
 &mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/libyuv/api.py#80)(self):**
 
-&mdash; **def [package\_build](/scripts/slave/recipe_modules/libyuv/api.py#98)(self):**
+&mdash; **def [package\_build](/scripts/slave/recipe_modules/libyuv/api.py#99)(self):**
 
-&mdash; **def [runtests](/scripts/slave/recipe_modules/libyuv/api.py#129)(self):**
+&mdash; **def [runtests](/scripts/slave/recipe_modules/libyuv/api.py#130)(self):**
 
 Add a suite of test steps.
 
