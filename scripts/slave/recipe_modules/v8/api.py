@@ -691,7 +691,7 @@ class V8Api(recipe_api.RecipeApi):
       points.append(p)
     self.m.perf_dashboard.add_point(points)
 
-  def compile(self, test_spec=EmptyTestSpec, **kwargs):
+  def compile(self, test_spec=EmptyTestSpec, mb_config_path=None, **kwargs):
     """Compile all desired targets and isolate tests.
 
     Args:
@@ -732,8 +732,9 @@ class V8Api(recipe_api.RecipeApi):
             self.m.properties['mastername'],
             self.m.properties['buildername'],
             use_goma=use_goma,
-            mb_config_path=self.m.path['checkout'].join(
-                *mb_config_rel_path.split('/')),
+            mb_config_path=(
+              mb_config_path or
+              self.m.path['checkout'].join(*mb_config_rel_path.split('/'))),
             isolated_targets=isolate_targets,
             stdout=self.m.raw_io.output_text(),
             step_test_data=step_test_data,
