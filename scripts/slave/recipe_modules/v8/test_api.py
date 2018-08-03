@@ -273,9 +273,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     return {
       'sourceStamp': {
         'changes': [
-          {'revision': 'a1'},
-          {'revision': 'a2'},
-          {'revision': 'a3'},
+          {'revision': 'a1', 'when': 1},
+          {'revision': 'a2', 'when': 2},
+          {'revision': 'a3', 'when': 3},
         ]
       }
     }

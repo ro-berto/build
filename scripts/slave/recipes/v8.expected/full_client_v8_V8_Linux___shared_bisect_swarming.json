@@ -815,7 +815,7 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"data\": \"eyJzb3VyY2VTdGFtcCI6IHsiY2hhbmdlcyI6IFt7InJldmlzaW9uIjogImExIn0sIHsicmV2aXNpb24iOiAiYTIifSwgeyJyZXZpc2lvbiI6ICJhMyJ9XX19\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"data\": \"eyJzb3VyY2VTdGFtcCI6IHsiY2hhbmdlcyI6IFt7InJldmlzaW9uIjogImExIiwgIndoZW4iOiAxfSwgeyJyZXZpc2lvbiI6ICJhMiIsICJ3aGVuIjogMn0sIHsicmV2aXNpb24iOiAiYTMiLCAid2hlbiI6IDN9XX19\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]

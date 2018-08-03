@@ -1601,13 +1601,14 @@ class V8Api(recipe_api.RecipeApi):
       changes = change_json['sourceStamp']['changes']
 
     assert changes
-    first_change = changes[0]['revision']
-    last_change = changes[-1]['revision']
+    changes = sorted(changes, key=lambda c: c['when'])
+    oldest_change = changes[0]['revision']
+    newest_change = changes[-1]['revision']
 
     # Commits is a list of gitiles commit dicts in reverse chronological order.
     commits, _ = self.m.gitiles.log(
         url=V8_URL,
-        ref='%s~2..%s' % (first_change, last_change),
+        ref='%s~2..%s' % (oldest_change, newest_change),
         limit=100,
         step_name='Get change range',
         step_test_data=lambda: self.test_api.example_bisection_range()
