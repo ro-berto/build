@@ -2184,19 +2184,22 @@
   },
   {
     "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
-      "--url",
-      "http://chrome-build-extract.appspot.com/p/client.v8/builders/V8%20Linux64/builds/571?json=1",
-      "--status-json",
-      "/path/to/tmp/json",
-      "--outfile",
-      "/path/to/tmp/json"
+      "prpc",
+      "call",
+      "-format=json",
+      "luci-milo.appspot.com",
+      "milo.Buildbot.GetBuildbotBuildJSON"
     ],
+    "infra_step": true,
     "name": "Bisect.Fetch changes",
+    "stdin": "{\"buildNum\": 571, \"builder\": \"V8 Linux64\", \"master\": \"client.v8\"}",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"data\": \"eyJzb3VyY2VTdGFtcCI6IHsiY2hhbmdlcyI6IFt7InJldmlzaW9uIjogImExIn0sIHsicmV2aXNpb24iOiAiYTIifSwgeyJyZXZpc2lvbiI6ICJhMyJ9XX19\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

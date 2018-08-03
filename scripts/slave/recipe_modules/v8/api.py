@@ -4,6 +4,7 @@
 
 import argparse
 import ast
+import base64
 import contextlib
 import datetime
 import difflib
@@ -19,7 +20,7 @@ from . import builders
 from . import testing
 
 
-CBE_URL = 'http://chrome-build-extract.appspot.com'
+MILO_HOST = 'luci-milo.appspot.com'
 V8_URL = 'https://chromium.googlesource.com/v8/v8'
 
 COMMIT_TEMPLATE = '%s/+/%%s' % V8_URL
@@ -1577,20 +1578,26 @@ class V8Api(recipe_api.RecipeApi):
       step_result.presentation.logs['changes'] = self.m.json.dumps(
         changes, indent=2).splitlines()
     else:
-      # TODO(sergiyb): Migrate to using new Milo API that allows to specify
-      # Buildbucket ID to retrieve build info. This will allow to deprecate
-      # build numbers for builders using V8 recipe.
-      url = '%s/p/%s/builders/%s/builds/%s?json=1' % (
-          CBE_URL,
-          self.m.properties['mastername'],
-          urllib.quote(self.m.properties['buildername']),
-          str(self.m.properties['buildnumber']),
-      )
-      change_json = self.m.url.get_json(
-          url,
-          step_name='Fetch changes',
-          default_test_data=self.test_api.example_buildbot_changes(),
-      ).output
+      # TODO(sergiyb): Migrate from Milo API to buildbucket v2.
+      data_json = self.m.step(
+          'Fetch changes',
+          [
+            'prpc', 'call', '-format=json', MILO_HOST,
+            'milo.Buildbot.GetBuildbotBuildJSON'
+          ],
+          stdin=self.m.json.input({
+            'master': self.m.properties['mastername'],
+            'builder': self.m.properties['buildername'],
+            'buildNum': self.m.properties['buildnumber'],
+          }),
+          stdout=self.m.json.output(),
+          infra_step=True,
+          step_test_data=lambda: self.m.json.test_api.output_stream({
+            'data': base64.b64encode(
+              self.m.json.dumps(self.test_api.example_buildbot_changes())),
+          }),
+      ).stdout
+      change_json = self.m.json.loads(base64.b64decode(data_json['data']))
       changes = change_json['sourceStamp']['changes']
 
     assert changes
