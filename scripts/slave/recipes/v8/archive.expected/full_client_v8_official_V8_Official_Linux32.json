@@ -87,19 +87,19 @@
       "-a",
       "public-read",
       "[CLEANUP]/archive.zip",
-      "gs://chromium-v8/official/3.4/v8-linux32-rel-3.4.3.17.zip"
+      "gs://chromium-v8/official/refs/branch-heads/3.4/v8-linux32-rel-3.4.3.17.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/3.4/v8-linux32-rel-3.4.3.17.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/refs/branch-heads/3.4/v8-linux32-rel-3.4.3.17.zip@@@"
     ]
   },
   {
     "cmd": [],
     "name": "archive link",
     "~followup_annotations": [
-      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-linux32-rel-3.4.3.17.zip@@@"
+      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/refs/branch-heads/3.4/v8-linux32-rel-3.4.3.17.zip@@@"
     ]
   },
   {
@@ -147,19 +147,19 @@
       "-a",
       "public-read",
       "[CLEANUP]/archive.zip",
-      "gs://chromium-v8/official/3.4/v8-linux32-libs-rel-3.4.3.17.zip"
+      "gs://chromium-v8/official/refs/branch-heads/3.4/v8-linux32-libs-rel-3.4.3.17.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload (libs)",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/3.4/v8-linux32-libs-rel-3.4.3.17.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/refs/branch-heads/3.4/v8-linux32-libs-rel-3.4.3.17.zip@@@"
     ]
   },
   {
     "cmd": [],
     "name": "archive link (libs)",
     "~followup_annotations": [
-      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-linux32-libs-rel-3.4.3.17.zip@@@"
+      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/refs/branch-heads/3.4/v8-linux32-libs-rel-3.4.3.17.zip@@@"
     ]
   }
 ]

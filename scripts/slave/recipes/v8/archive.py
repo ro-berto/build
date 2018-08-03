@@ -23,16 +23,15 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
-  'recipe_engine/runtime',
   'recipe_engine/step',
   'v8',
   'zip',
 ]
 
 ARCHIVE_LINK = 'https://storage.googleapis.com/chromium-v8/official/%s/%s'
-BRANCH_RE = re.compile(r'^(?:refs/heads/)?\d+\.\d+(?:\.\d+)?$')
-RELEASE_BRANCH_RE = re.compile(r'^(?:refs/heads/)?\d+\.\d+$')
-FIRST_BUILD_IN_MILESTONE_RE = re.compile(r'^(?:refs/heads/)?\d+\.\d+\.\d+$')
+BRANCH_RE = re.compile(r'^refs/(branch-heads/\d+\.\d+|heads/\d+\.\d+\.\d+)$')
+RELEASE_BRANCH_RE = re.compile(r'^(?:refs/branch-heads/)?\d+\.\d+$')
+FIRST_BUILD_IN_MILESTONE_RE = re.compile(r'^\d+\.\d+\.\d+$')
 
 
 def make_archive(api, branch, version, archive_type, step_suffix='',
@@ -73,8 +72,7 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
   )
   archive_name = '%s-%s.zip' % (archive_prefix, version)
   gs_path_suffix = branch if RELEASE_BRANCH_RE.match(branch) else 'canary'
-  experiment_subdir = 'experimental/' if api.runtime.is_experimental else ''
-  gs_path = 'chromium-v8/%sofficial/%s' % (experiment_subdir, gs_path_suffix)
+  gs_path = 'chromium-v8/official/%s' % gs_path_suffix
   api.gsutil.upload(
       zip_file,
       gs_path,
@@ -101,7 +99,7 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
                              api.chromium.c.TARGET_BITS, archive_suffix)
     api.gsutil.upload(
         zip_file,
-        'chromium-v8/%sofficial/refbuild' % experiment_subdir,
+        'chromium-v8/official/refbuild',
         'v8-%s-rel.zip' % platform,
         args=['-a', 'public-read'],
         name='update refbuild binaries' + step_suffix,
@@ -161,7 +159,7 @@ def GenTests(api):
         api.test(api.v8.test_name(mastername, buildername)) +
         api.properties.generic(mastername=mastername,
                                buildername=buildername,
-                               branch='3.4',
+                               branch='refs/branch-heads/3.4',
                                revision='deadbeef',
                                path_config='kitchen') +
         api.platform(bot_config['testing']['platform'], 64) +
@@ -215,7 +213,7 @@ def GenTests(api):
       api.test(api.v8.test_name(mastername, buildername, 'no_tag')) +
       api.properties.generic(mastername=mastername,
                              buildername=buildername,
-                             branch='3.4',
+                             branch='refs/branch-heads/3.4',
                              revision='deadbeef',
                              path_config='kitchen') +
       api.v8.version_file(17, 'head') +
@@ -228,14 +226,14 @@ def GenTests(api):
       api.post_process(DropExpectation)
   )
 
-  # Upload beta binaries to a known location.
+  # Test refbuilds.
   mastername = 'client.v8.official'
   buildername = 'V8 Official Linux64'
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'update_beta')) +
       api.properties.generic(mastername=mastername, buildername=buildername,
-                             branch='3.4', revision='deadbeef',
-                             path_config='kitchen') +
+                             branch='refs/branch-heads/3.4',
+                             revision='deadbeef', path_config='kitchen') +
       api.v8.version_file(0, 'head') +
       api.override_step_data(
           'git describe', api.raw_io.stream_output('3.4.3')) +
@@ -248,7 +246,7 @@ def GenTests(api):
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'canary')) +
       api.properties.generic(mastername=mastername, buildername=buildername,
-                             branch='3.4.3', revision='deadbeef',
+                             branch='refs/heads/3.4.3', revision='deadbeef',
                              path_config='kitchen') +
       api.v8.version_file(1, 'head') +
       api.override_step_data(
