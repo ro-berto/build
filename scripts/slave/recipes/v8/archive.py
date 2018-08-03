@@ -95,14 +95,28 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
   # Upload first build for the latest milestone to a known location. We use
   # these binaries for running reference perf tests.
   if (RELEASE_BRANCH_RE.match(branch) and
-      FIRST_BUILD_IN_MILESTONE_RE.match(version)):
+      FIRST_BUILD_IN_MILESTONE_RE.match(version) and
+      archive_type == 'exe'):
+    platform = '%s%s%s%s' % (api.chromium.c.TARGET_PLATFORM, arch_name,
+                             api.chromium.c.TARGET_BITS, archive_suffix)
     api.gsutil.upload(
         zip_file,
         'chromium-v8/%sofficial/refbuild' % experiment_subdir,
-        'v8-%s%s%s%s-rel.zip' % (api.chromium.c.TARGET_PLATFORM, arch_name,
-                                 api.chromium.c.TARGET_BITS, archive_suffix),
+        'v8-%s-rel.zip' % platform,
         args=['-a', 'public-read'],
         name='update refbuild binaries' + step_suffix,
+    )
+    api.v8.buildbucket_trigger(
+        'luci.v8-internal.ci',
+        api.v8.get_changes(),
+        [{
+          'builder_name': 'v8_refbuild_bundler',
+          'properties': {
+            'revision': api.v8.revision,
+            'platform': platform,
+          },
+        }],
+        step_name='trigger refbuild bundler' + step_suffix,
     )
 
   api.step('archive link' + step_suffix, cmd=None)
@@ -225,10 +239,7 @@ def GenTests(api):
       api.v8.version_file(0, 'head') +
       api.override_step_data(
           'git describe', api.raw_io.stream_output('3.4.3')) +
-      api.post_process(Filter(
-          'gsutil update refbuild binaries',
-          'gsutil update refbuild binaries (libs)',
-      ))
+      api.post_process(Filter().include_re('.*refbuild.*'))
   )
 
   # Test canary upload.
