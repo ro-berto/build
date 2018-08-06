@@ -240,8 +240,6 @@ def main(argv):
       'master.client.flutter': 'ClientFlutter',
       'master.client.libyuv': 'Libyuv',
       'master.client.nacl': 'NativeClient',
-      'master.client.nacl.ports': 'WebPorts',
-      'master.client.nacl.sdk': 'NativeClientSDK',
       'master.client.nacl.toolchain': 'NativeClientToolchain',
       'master.client.syzygy': 'Syzygy',
       'master.client.wasm.llvm': 'WasmLlvm',
