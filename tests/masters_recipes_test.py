@@ -102,6 +102,8 @@ FAKE_BUILDERS = {
         'Linux ASan Tests (sandboxed)',
         'Linux TSan Builder',
         'Linux TSan Tests',
+        # These are pure LUCI bots, no equivalent buildbot bot.
+        'win-asan',
     ],
     'master.chromium.win': [
         # These have been migrated to LUCI.
@@ -132,6 +134,7 @@ FAKE_BUILDERS = {
         'gpu_manual_try_win7_nvidia_rel',
         'win10_chromium_x64_dbg_ng',
         'win-annotator-rel',
+        'win-asan',
         'win-jumbo-rel',
     ],
     'master.tryserver.chromium.linux': [

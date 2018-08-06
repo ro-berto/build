@@ -206,5 +206,16 @@ SPEC = {
       'bot_type': 'tester',
       'testing': {'platform': 'linux'},
     },
+    'win-asan': {
+      'chromium_config': 'chromium_win_clang_asan',
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'chromium_apply_config': ['mb'],
+      'bot_type': 'builder_tester',
+      'testing': {'platform': 'win'},
+    },
   },
 }

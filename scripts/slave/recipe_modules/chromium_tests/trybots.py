@@ -690,6 +690,10 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.win': {
     'builders': {
+      'win-asan': simple_bot({
+        'mastername': 'chromium.memory',
+        'buildername': 'win-asan',
+      }),
       'win-jumbo-rel': simple_bot({
         'mastername': 'chromium.win',
         'buildername': 'win-jumbo-rel',
