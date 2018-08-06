@@ -12,12 +12,12 @@
         ],
 
         "builders": {
-          "Linux x64": {
+          "linux-rel": {
             "tree_notify": [
               "thomasanderson@chromium.org"
             ]
           },
-          "Win": {
+          "win32-rel": {
             "categories": [
               "chromium_windows"
             ]
