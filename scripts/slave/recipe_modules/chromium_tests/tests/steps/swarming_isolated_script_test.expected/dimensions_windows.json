@@ -301,6 +301,7 @@
       "slavename:test_bot",
       "--tag",
       "stepname:base_unittests on Intel GPU on Windows (with patch)",
+      "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",

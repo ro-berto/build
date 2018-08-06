@@ -425,6 +425,7 @@
       "slavename:test_bot",
       "--tag",
       "stepname:telemetry_gpu_unittests on NVIDIA GPU on Linux",
+      "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",

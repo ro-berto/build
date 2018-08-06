@@ -1774,7 +1774,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                perf_dashboard_id=None, io_timeout=None,
                waterfall_mastername=None, waterfall_buildername=None,
                merge=None, trigger_script=None, results_handler=None,
-               set_up=None, tear_down=None):
+               set_up=None, tear_down=None, idempotent=True):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name, dimensions, tags, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -1794,6 +1794,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self.results_handler = results_handler or JSONResultsHandler(
         ignore_task_failure=ignore_task_failure)
     self._test_results = {}
+    self._idempotent = idempotent
 
   @property
   def target_name(self):
@@ -1831,11 +1832,13 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       shards = 1
 
     # For the time being, we assume all isolated_script_test are not idempotent
-    # TODO(nednguyen): make this configurable in isolated_scripts's spec.
+    # TODO(crbug.com/549140): remove the self._idempotent parameter once Telemetry
+    # tests are idempotent, since that will make all isolated_script_tests
+    # idempotent.
     return api.swarming.isolated_script_task(
         title=self._step_name(suffix),
         ignore_task_failure=self._ignore_task_failure,
-        isolated_hash=isolated_hash, shards=shards, idempotent=False,
+        isolated_hash=isolated_hash, shards=shards, idempotent=self._idempotent,
         merge=self._merge, trigger_script=self._trigger_script,
         build_properties=api.chromium.build_properties, extra_args=args)
 
@@ -1950,6 +1953,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
         'ignore_task_failure', False)
     kwargs['waterfall_buildername'] = buildername
     kwargs['waterfall_mastername'] = mastername
+    kwargs['idempotent'] = swarming_spec.get('idempotent', True)
 
     return SwarmingIsolatedScriptTest(**kwargs)
 

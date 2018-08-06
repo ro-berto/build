@@ -959,6 +959,7 @@
       "slavename:test_bot",
       "--tag",
       "stepname:telemetry_gpu_unittests (with patch)",
+      "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",

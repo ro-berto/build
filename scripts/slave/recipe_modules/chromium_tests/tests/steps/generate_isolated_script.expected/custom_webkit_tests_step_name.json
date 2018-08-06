@@ -198,6 +198,7 @@
       "name:custom_webkit_tests",
       "--tag",
       "stepname:custom_webkit_tests",
+      "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",

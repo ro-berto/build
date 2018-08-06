@@ -198,6 +198,7 @@
       "name:base_unittests",
       "--tag",
       "stepname:base_unittests",
+      "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
