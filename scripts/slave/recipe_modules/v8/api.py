@@ -575,12 +575,19 @@ class V8Api(recipe_api.RecipeApi):
         self._isolate_targets_cached)))
     return self._isolate_targets_cached
 
-  def isolate_tests(self, isolate_targets):
+  def isolate_tests(self, isolate_targets, out_dir=None):
     """Upload isolated tests to isolate server.
 
     Args:
       isolate_targets: Targets to isolate.
+      out_dir: Name of the build output directory, e.g. 'out-ref'. Defaults to
+        'out'. Note that it is not a path, but just the name of the directory.
     """
+    output_dir = self.m.chromium.output_dir
+    if out_dir:
+      output_dir = self.m.path['checkout'].join(
+          out_dir, self.m.chromium.c.build_config_fs)
+
     # Special handling for 'perf' target, since perf tests are going to be
     # executed on an internal swarming server and thus need to be uploaded to
     # internal isolate server.
@@ -588,7 +595,7 @@ class V8Api(recipe_api.RecipeApi):
       isolate_targets.remove('perf')
       self.m.isolate.isolate_server = 'https://chrome-isolated.appspot.com'
       self.m.isolate.isolate_tests(
-          self.m.chromium.output_dir,
+          output_dir,
           targets=['perf'],
           verbose=True,
           swarm_hashes_property_name=None,
@@ -599,7 +606,7 @@ class V8Api(recipe_api.RecipeApi):
 
     if isolate_targets:
       self.m.isolate.isolate_tests(
-          self.m.chromium.output_dir,
+          output_dir,
           targets=isolate_targets,
           verbose=True,
           swarm_hashes_property_name=None,
@@ -691,7 +698,9 @@ class V8Api(recipe_api.RecipeApi):
       points.append(p)
     self.m.perf_dashboard.add_point(points)
 
-  def compile(self, test_spec=EmptyTestSpec, mb_config_path=None, **kwargs):
+  def compile(
+      self, test_spec=EmptyTestSpec, mb_config_path=None, out_dir=None,
+      **kwargs):
     """Compile all desired targets and isolate tests.
 
     Args:
@@ -699,6 +708,10 @@ class V8Api(recipe_api.RecipeApi):
           Expected to contain only specifications for the current builder and
           all triggered builders. All corrensponding extra targets will also be
           isolated.
+      mb_config_path: Path to the MB config file. Defaults to
+          infra/mb/mb_config.py in the checkout.
+      out_dir: Name of the build output directory, e.g. 'out-ref'. Defaults to
+        'out'. Note that it is not a path, but just the name of the directory.
     """
     use_goma = (self.m.chromium.c.compile_py.compiler and
                 'goma' in self.m.chromium.c.compile_py.compiler)
@@ -711,9 +724,8 @@ class V8Api(recipe_api.RecipeApi):
     isolate_targets = sorted(list(set(self.isolate_targets + extra_targets)))
 
     build_dir = None
-    if kwargs.get('out_dir'):  # pragma: no cover
-      build_dir = '//%s/%s' % (
-          kwargs['out_dir'], self.m.chromium.c.build_config_fs)
+    if out_dir:  # pragma: no cover
+      build_dir = '//%s/%s' % (out_dir, self.m.chromium.c.build_config_fs)
     if self.m.chromium.c.project_generator.tool == 'mb':
       def step_test_data():
         # Fake MB output with GN flags.
@@ -762,7 +774,7 @@ class V8Api(recipe_api.RecipeApi):
 
     if use_goma:
       kwargs['use_goma_module'] = True
-    self.m.chromium.compile(**kwargs)
+    self.m.chromium.compile(out_dir=out_dir, **kwargs)
 
     if self.bot_config.get('track_build_dependencies', False):
       with self.m.context(env_prefixes={'PATH': [self.depot_tools_path]}):
@@ -789,7 +801,7 @@ class V8Api(recipe_api.RecipeApi):
         tracking_config['category'],
       )
 
-    self.isolate_tests(isolate_targets)
+    self.isolate_tests(isolate_targets, out_dir=out_dir)
 
   @property
   def depot_tools_path(self):
