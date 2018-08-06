@@ -109,21 +109,19 @@ _AddIsolatedTestSpec('android-pixel2_webview-perf', 'android',
 
 
 _AddIsolatedTestSpec('win-10_laptop_high_end-perf_Lenovo-P51', 'win',
-                     parent_buildername='Win Builder Perf FYI')
+                     parent_buildername='win64-builder-perf')
 
 _AddIsolatedTestSpec('win-10_laptop_high_end-perf_Dell-Precision', 'win',
-                     parent_buildername='Win Builder Perf FYI')
+                     parent_buildername='win64-builder-perf')
 
-# TODO(crbug.com/868162): convert builders below to 32 bits once we have
-# 32 bit win builder.
 _AddIsolatedTestSpec('win-7_laptop_low_end_x32-perf_Acer-Aspire-5', 'win',
-                     parent_buildername='Win Builder Perf FYI')
+                     parent_buildername='win32-builder-perf', target_bits=32)
 
 _AddIsolatedTestSpec('win-7_laptop_low_end_x32-perf_Dell-Latitude', 'win',
-                     parent_buildername='Win Builder Perf FYI')
+                     parent_buildername='win32-builder-perf', target_bits=32)
 
 _AddIsolatedTestSpec('win-7_laptop_low_end_x32-perf-Lenovo-ThinkPad', 'win',
-                     parent_buildername='Win Builder Perf FYI')
+                     parent_buildername='win32-builder-perf', target_bits=32)
 
 
 _AddBuildSpec('Battor Agent Linux', 'linux', run_sizes=False,
