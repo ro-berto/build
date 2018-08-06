@@ -78,7 +78,7 @@ SPEC = {
     },
     'CFI Linux CF': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'clobber'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -213,7 +213,7 @@ SPEC = {
     },
     'CrWinAsan': {
       'chromium_config': 'chromium_win_clang_asan_tot',
-      'chromium_apply_config': ['mb', 'clobber'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -230,7 +230,7 @@ SPEC = {
     },
     'CrWinAsan(dll)': {
       'chromium_config': 'chromium_win_clang_asan_tot',
-      'chromium_apply_config': ['mb', 'clobber'],
+      'chromium_apply_config': ['mb',],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -247,7 +247,7 @@ SPEC = {
     },
     'CrWinAsanCov': {
       'chromium_config': 'chromium_win_clang_asan_tot_coverage',
-      'chromium_apply_config': ['mb', 'clobber'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
