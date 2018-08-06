@@ -201,26 +201,6 @@
       "bot": "win201-c1",
       "category": "3ToTWindows",
     },
-    "CrWinClangLLD": {
-      "mixins": ["win7"],
-      "bot": "build60-m1",
-      "category": "3ToTWindows",
-    },
-    "CrWinClangLLD64": {
-      "mixins": ["win7"],
-      "bot": "build27-m1",
-      "category": "3ToTWindows",
-    },
-    "CrWinClngLLDdbg": {
-      "mixins": ["win7"],
-      "bot": "build70-m1",
-      "category": "3ToTWindows",
-    },
-    "CrWinClngLLD64dbg": {
-      "mixins": ["win7"],
-      "bot": "build154-m1",
-      "category": "3ToTWindows",
-    },
 
     "linux-win_cross-rel": {
       "mixins": ["trusty"],
