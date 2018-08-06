@@ -20,7 +20,7 @@ See PROPERTIES for documentation on the recipe's interface.
 
 import re
 
-from recipe_engine.post_process import DropExpectation
+from recipe_engine.post_process import DoesNotRun, DropExpectation, MustRun
 from recipe_engine.recipe_api import Property
 
 
@@ -202,7 +202,7 @@ class Depot(object):
       self.api.step.active_result.presentation.links[rev[:8]] = link
 
   def find_closest_build(self, offset, max_offset=None):
-    """Looks backwards for the closest offset with an existing isolate.
+    """Looks backwards for the closest offset with an existing isolate (cached).
 
     Args:
       offset: The offset to the base revision where the lookup is started.
@@ -216,7 +216,9 @@ class Depot(object):
     for i in range(MAX_ISOLATE_OFFSET):
       closest = offset + i
       if closest == max_offset or self.has_build(closest):
-        self.closest_builds[offset] = closest
+        for j in range(offset, closest + 1):
+          # Cache the closest build for all offsets we tried.
+          self.closest_builds[j] = closest
         return closest
     raise self.api.step.StepFailure('Couldn\'t find isolates.')
 
@@ -364,11 +366,9 @@ def bisect(api, depot, initial_commit_offset, is_bad_func, offset):
       middle_offset = to_offset + (from_offset - to_offset ) / 2
       build_offset = depot.find_closest_build(middle_offset, from_offset)
 
-      if build_offset == from_offset:
+      if build_offset >= from_offset:
+        report_range('No builds in %s', from_offset, middle_offset)
         # There are no isolates in lower half. Skip it and continue.
-        # TODO(machenbach): This seems to not work. See:
-        # https://ci.chromium.org/swarming/task/3f17ac108baf5010?server=chromium-swarm.appspot.com
-        # Bisect repeatedly finds no isolates and reruns the known good build.
         from_offset = middle_offset
         continue
 
@@ -550,6 +550,32 @@ def GenTests(api):
       is_flaky(5, 1, 0) +
       is_flaky(4, 1, 2) +
       verify_suspects(5, 4) +
+      api.post_process(DropExpectation)
+  )
+
+  # Test bisecting through a large range of missing builds.
+  yield (
+      test('large_gap') +
+      get_revisions(1, 'a1', 'a2', 'a3', 'a4') +
+      # Simulate a large gap between #0 and #4..
+      isolated_lookup(0, True) +
+      isolated_lookup(1, False) +
+      isolated_lookup(2, False) +
+      isolated_lookup(3, False) +
+      isolated_lookup(4, True) +
+      # Bad build #0.
+      is_flaky(0, 1, 5) +
+      # Good build #4.
+      is_flaky(4, 1, 0) +
+      # Check that bisect continues properly after not finding a build in one
+      # half.
+      api.post_process(MustRun, 'No builds in #4..#2') +
+      api.post_process(MustRun, 'No builds in #2..#1') +
+      # Check that isolate lookup is cached for the negative case. We look only
+      # once for a build that's not found.
+      api.post_process(MustRun, 'gsutil lookup isolates for #2') +
+      api.post_process(DoesNotRun, 'gsutil lookup isolates for #2 (2)') +
+      verify_suspects(4, 0) +
       api.post_process(DropExpectation)
   )
 
