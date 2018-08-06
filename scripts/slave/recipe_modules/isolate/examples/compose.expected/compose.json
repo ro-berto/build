@@ -1,0 +1,15 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/swarming.client/isolateserver.py",
+      "archive",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "{\"algo\": \"sha-1\", \"includes\": [\"isolated_hash1\", \"isolated_hash2\"], \"version\": \"1.4\"}"
+    ],
+    "name": "compose isolates",
+    "stdout": "/path/to/tmp/"
+  }
+]

@@ -350,3 +350,37 @@ class IsolateApi(recipe_api.RecipeApi):
       step_result = self.m.step.active_result
       self.archive_differences(first_dir, second_dir, step_result.json.output)
       raise e
+
+  def compose(self, isolate_hashes, step_name=None, **kwargs):
+    """Creates and uploads a new isolate composing multiple existing isolates.
+
+    In case of a conflict, where a given file is present in multiple isolates,
+    the version of the file from an earlier isolate (as ordered in the
+    isolate_hashes argument) is checked out on the bot.
+
+    Args:
+      isolate_hashes: List of hashes of existing uploaded isolates.
+
+    Returns:
+      Hash of the uploaded composite isolate.
+    """
+    step_test_data = kwargs.pop(
+        'step_test_data',
+        lambda: self.m.raw_io.test_api.stream_output('new-hash path/to/file'))
+    composed_isolate_file = self.m.json.input({
+      'algo': 'sha-1',
+      'includes': isolate_hashes,
+      'version': '1.4',
+    })
+    return self.m.python(
+        step_name or 'compose isolates',
+        self.m.swarming_client.path.join('isolateserver.py'),
+        [
+          'archive',
+          '--isolate-server', self._isolate_server,
+          composed_isolate_file
+        ],
+        stdout=self.m.raw_io.output_text(),
+        step_test_data=step_test_data,
+        **kwargs
+    ).stdout.split()[0]

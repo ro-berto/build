@@ -264,6 +264,7 @@
   * [ios/try](#recipes-ios_try)
   * [ios/unified_builder_tester](#recipes-ios_unified_builder_tester)
   * [ios:examples/full](#recipes-ios_examples_full)
+  * [isolate:examples/compose](#recipes-isolate_examples_compose)
   * [isolate:examples/full](#recipes-isolate_examples_full)
   * [isolate:tests/clean_isolated_files](#recipes-isolate_tests_clean_isolated_files)
   * [isolate:tests/compare_build_artifacts](#recipes-isolate_tests_compare_build_artifacts)
@@ -2261,7 +2262,7 @@ Args:
 &emsp; **@property**<br>&mdash; **def [xcode\_build\_version](/scripts/slave/recipe_modules/ios/api.py#99)(self):**
 ### *recipe_modules* / [isolate](/scripts/slave/recipe_modules/isolate)
 
-[DEPS](/scripts/slave/recipe_modules/isolate/__init__.py#5): [chromium](#recipe_modules-chromium), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
+[DEPS](/scripts/slave/recipe_modules/isolate/__init__.py#5): [chromium](#recipe_modules-chromium), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
 
 #### **class [IsolateApi](/scripts/slave/recipe_modules/isolate/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -2281,6 +2282,20 @@ completely described to gyp.
 &mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#326)(self, first_dir, second_dir):**
 
 Compare the artifacts from 2 builds.
+
+&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#354)(self, isolate_hashes, step_name=None, \*\*kwargs):**
+
+Creates and uploads a new isolate composing multiple existing isolates.
+
+In case of a conflict, where a given file is present in multiple isolates,
+the version of the file from an earlier isolate (as ordered in the
+isolate_hashes argument) is checked out on the bot.
+
+Args:
+  isolate_hashes: List of hashes of existing uploaded isolates.
+
+Returns:
+  Hash of the uploaded composite isolate.
 
 &mdash; **def [find\_isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#53)(self, build_dir, targets=None, \*\*kwargs):**
 
@@ -5084,6 +5099,11 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 [DEPS](/scripts/slave/recipe_modules/ios/examples/full.py#5): [ios](#recipe_modules-ios), [swarming](#recipe_modules-swarming), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/ios/examples/full.py#16)(api):**
+### *recipes* / [isolate:examples/compose](/scripts/slave/recipe_modules/isolate/examples/compose.py)
+
+[DEPS](/scripts/slave/recipe_modules/isolate/examples/compose.py#7): [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client)
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/isolate/examples/compose.py#13)(api):**
 ### *recipes* / [isolate:examples/full](/scripts/slave/recipe_modules/isolate/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/isolate/examples/full.py#7): [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
