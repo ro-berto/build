@@ -136,10 +136,6 @@ TEST_MATRIX = {
 }
 
 def RunSteps(api):
-  if 'clobber' in api.properties:
-    api.dart.checkout(True)
-    return
-
   api.dart.checkout(False)
 
   build_args = ['--super-fast']
@@ -164,8 +160,6 @@ def RunSteps(api):
     api.dart.download_parent_isolate()
 
 def GenTests(api):
-  yield (api.test('clobber') + api.properties(clobber='True'))
-
   yield (api.test('basic') + api.properties(
       shards='2', shard_timeout='600', branch="refs/head/master",
       buildername='dart2js-linux-release-chrome-try') +
