@@ -31,6 +31,9 @@ PROPERTIES = {
       jobs=Single(int),
       # Whether or not to turn on debug mode.
       debug=Single(bool),
+      # Whether or not we're running locally and should pick the local client
+      # from this path.
+      local=Single(str),
     ),
     default={},
   ),

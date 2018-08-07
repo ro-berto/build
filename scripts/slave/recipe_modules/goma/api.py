@@ -11,17 +11,31 @@ class GomaApi(recipe_api.RecipeApi):
   """
   GomaApi contains helper functions for using goma.
 
-  For local running of goma recipe module,
-  set local goma dir like below at the beginning of recipe running.
-  `api.goma.set_goma_dir_for_local_test(goma_dir)`
+  For local running of goma recipe module, add the $build/goma['local']
+  property when running the recipe with the full path. e.g.
+
+    .../recipes.py run --properties-file - recipe_name <<EOF
+    {
+      ...,
+      "$build/goma": {
+        "local": "/path/to/workdir/goma/client"
+      }
+    }
+    EOF
+
+  Note that the goma client directory must exist inside the recipe workdir.
+  A symlink (on mac/linux) is enough, though.
   """
 
   def __init__(self, properties, **kwargs):
     super(GomaApi, self).__init__(**kwargs)
     self._goma_dir = None
 
-    # Flag to represent local goma module running.
-    self._is_local = False
+    # Optionally allow developers running recipes locally to override the goma
+    # client location.
+    self._local_dir = properties.get('local')
+    if self._local_dir:
+      self._goma_dir = self._local_dir
 
     self._goma_started = False
 
@@ -40,6 +54,10 @@ class GomaApi(recipe_api.RecipeApi):
     else:  #pragma: no cover
       # TODO(tikuta): find a recipe way to get hostname
       self._hostname = socket.gethostname()
+
+  def initialize(self):
+    if self._local_dir:
+      self._goma_dir = self.m.path.abs_to_path(self._local_dir)
 
   @property
   def service_account_json_path(self):
@@ -137,16 +155,8 @@ class GomaApi(recipe_api.RecipeApi):
 
     return self._recommended_jobs
 
-  def set_goma_dir_for_local_test(self, goma_dir):
-    """
-    This function is made for local recipe test only.
-    Do not use in recipes used by buildbots.
-    """
-    self._goma_dir = goma_dir
-    self._is_local = True
-
   def ensure_goma(self, canary=False):
-    if self._is_local:
+    if self._local_dir:
       # When using goma module on local debug, we need to skip cipd step.
       return self._goma_dir
 
@@ -260,7 +270,7 @@ class GomaApi(recipe_api.RecipeApi):
       self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'] = (
           self.m.path['tmp_base'].join('crash_report_id'))
 
-      if not self._is_local:
+      if not self._local_dir:
         self._goma_ctl_env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = (
             self.service_account_json_path)
 
@@ -290,7 +300,7 @@ class GomaApi(recipe_api.RecipeApi):
               name='start_goma',
               script=self.goma_ctl,
               args=['restart'], infra_step=True, **kwargs)
-          if not self._is_local:
+          if not self._local_dir:
             result.presentation.links['cloudtail'] = (
                 'https://console.cloud.google.com/logs/viewer?'
                 'project=goma-logs&resource=gce_instance%%2F'
@@ -298,7 +308,7 @@ class GomaApi(recipe_api.RecipeApi):
                 (self._hostname, self.m.time.utcnow().isoformat()))
 
         self._goma_started = True
-        if not self._is_local:
+        if not self._local_dir:
           self._start_cloudtail()
 
       except self.m.step.InfraFailure as e:

@@ -16,18 +16,7 @@ DEPS = [
 ]
 
 def RunSteps(api):
-  goma_local = api.properties.get('local_run_goma_recipe', False)
   env = {}
-
-  if goma_local:
-    goma_dir = '/home/goma/goma'
-    api.python.inline('check gomacc file',"""
-    import os.path
-    if os.path.exists(os.path.join('%s','gomacc')):
-      exit(0)
-    exit(1)
-    """ % goma_dir)
-    api.goma.set_goma_dir_for_local_test(goma_dir)
 
   api.goma.ensure_goma(api.properties.get('canary', False))
 
@@ -92,7 +81,11 @@ def GenTests(api):
          api.properties.generic(**properties))
 
   yield (api.test('linux_local_run_goma_recipe') + api.platform.name('linux') +
-         api.properties(local_run_goma_recipe=True) +
+         api.properties(**{
+           "$build/goma": {
+             "local": "[START_DIR]/goma",
+           }
+         }) +
          api.properties.generic(**properties))
 
   yield (api.test('win_goma_canary') + api.platform.name('win') +

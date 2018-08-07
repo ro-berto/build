@@ -1,26 +1,10 @@
 [
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport os.path\nif os.path.exists(os.path.join('/home/goma/goma','gomacc')):\n  exit(0)\nexit(1)\n"
-    ],
-    "name": "check gomacc file",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import os.path@@@",
-      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(os.path.join('/home/goma/goma','gomacc')):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  exit(0)@@@",
-      "@@@STEP_LOG_LINE@python.inline@exit(1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
       "gn",
       "gen",
       "out/Release",
-      "--args=use_goma=true goma_dir=/home/goma/goma"
+      "--args=use_goma=true goma_dir=[START_DIR]/goma"
     ],
     "name": "gn"
   },
@@ -50,7 +34,7 @@
     "cmd": [
       "python",
       "-u",
-      "/home/goma/goma/goma_ctl.py",
+      "[START_DIR]/goma/goma_ctl.py",
       "restart"
     ],
     "env": {
@@ -85,7 +69,7 @@
     "cmd": [
       "python",
       "-u",
-      "/home/goma/goma/goma_ctl.py",
+      "[START_DIR]/goma/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
@@ -117,7 +101,7 @@
     "cmd": [
       "python",
       "-u",
-      "/home/goma/goma/goma_ctl.py",
+      "[START_DIR]/goma/goma_ctl.py",
       "stat"
     ],
     "env": {
@@ -137,7 +121,7 @@
     "cmd": [
       "python",
       "-u",
-      "/home/goma/goma/goma_ctl.py",
+      "[START_DIR]/goma/goma_ctl.py",
       "stop"
     ],
     "env": {
