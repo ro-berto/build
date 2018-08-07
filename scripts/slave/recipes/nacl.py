@@ -4,6 +4,7 @@
 
 DEPS = [
   'depot_tools/bot_update',
+  'depot_tools/depot_tools',
   'depot_tools/gclient',
   'goma',
   'recipe_engine/context',
@@ -85,9 +86,11 @@ def _AnnotatedStepsSteps(api, got_revision):
   exit_status = -1
   try:
     with api.context(cwd=api.path['checkout'], env=env):
-      api.python('annotated steps',
-                 api.path['checkout'].join('buildbot', 'buildbot_selector.py'),
-                 allow_subannotations=True)
+      with api.depot_tools.on_path():
+        api.python('annotated steps',
+                   api.path['checkout'].join(
+                      'buildbot', 'buildbot_selector.py'),
+                   allow_subannotations=True)
     exit_status = 0
   except api.step.StepFailure as e:
     exit_status = e.retcode
