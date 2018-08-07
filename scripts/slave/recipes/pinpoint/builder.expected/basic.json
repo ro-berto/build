@@ -323,20 +323,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[START_DIR]/src/out/Release",
-      "--clean-isolated-files"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "clean isolated files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[START_DIR]/src/tools/mb/mb.py",
       "gen",
       "-m",
@@ -347,8 +333,6 @@
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "--swarming-targets-file",
-      "telemetry_perf_tests\n",
       "//out/Release"
     ],
     "cwd": "[START_DIR]/src",
@@ -357,11 +341,7 @@
       "GOMA_USE_LOCAL": "false",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "generate_build_files",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@telemetry_perf_tests@@@",
-      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
-    ]
+    "name": "generate_build_files"
   },
   {
     "cmd": [],
@@ -476,8 +456,7 @@
       "microdump_stackwalk",
       "push_apps_to_background_apk",
       "system_webview_apk",
-      "system_webview_shell_apk",
-      "telemetry_perf_tests"
+      "system_webview_shell_apk"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -508,7 +487,6 @@
       "push_apps_to_background_apk",
       "system_webview_apk",
       "system_webview_shell_apk",
-      "telemetry_perf_tests",
       "-d",
       "explain",
       "-n"
@@ -631,7 +609,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Release\", \"-j\", 20, \"android_tools\", \"cc_perftests\", \"chrome_public_apk\", \"chromium_builder_perf\", \"dump_syms\", \"gpu_perftests\", \"microdump_stackwalk\", \"push_apps_to_background_apk\", \"system_webview_apk\", \"system_webview_shell_apk\", \"telemetry_perf_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Release\", \"-j\", 20, \"android_tools\", \"cc_perftests\", \"chrome_public_apk\", \"chromium_builder_perf\", \"dump_syms\", \"gpu_perftests\", \"microdump_stackwalk\", \"push_apps_to_background_apk\", \"system_webview_apk\", \"system_webview_shell_apk\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -691,72 +669,6 @@
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[START_DIR]/src/out/Release"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "remove_build_metadata"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[START_DIR]/src/tools/swarming_client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://chrome-isolated.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
-      "--verbose",
-      "--service-account-json",
-      "/creds/service_accounts/service-account-chrome-perf-buildbot.json",
-      "[START_DIR]/src/out/Release/telemetry_perf_tests.isolated.gen.json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "isolate tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"telemetry_perf_tests\": \"[dummy hash for telemetry_perf_tests]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}_without_patch@{\"telemetry_perf_tests\": \"[dummy hash for telemetry_perf_tests]\"}@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
-      "https://pinpoint-dot-chromeperf.appspot.com/api/isolate",
-      "-i",
-      "{\"builder_name\": \"Android Compile Perf\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"repository\\\": \\\"chromium\\\"}]}\", \"isolate_map\": \"{\\\"telemetry_perf_tests\\\": \\\"[dummy hash for telemetry_perf_tests]\\\"}\", \"isolate_server\": \"https://chrome-isolated.appspot.com\"}",
-      "-o",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "pinpoint isolate upload",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@",
-      "@@@STEP_WARNINGS@@@"
     ]
   },
   {
