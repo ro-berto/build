@@ -36,10 +36,6 @@ linux_asan_env_32 = {'CXX': clang_asan,
 windows_env = {'LOGONSERVER': '\\\\AD1'}
 
 class DartUtils(object):
-  mac_options = ['--compiler=goma', 'dartium_builder']
-  linux_options = ['--compiler=goma', 'dartium_builder']
-  win_options = ['dartium_builder']
-
 
   def __init__(self, active_master):
     self._active_master = active_master

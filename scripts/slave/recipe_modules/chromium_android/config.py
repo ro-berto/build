@@ -122,16 +122,6 @@ def mipsel_builder(c):  # pragma: no cover
 def mipsel_builder_mb(c):
   pass
 
-@config_ctx(includes=['main_builder'])
-def dartium_builder(c):  # pragma: no cover
-  c.get_app_manifest_vars = False
-  c.run_tree_truth = False
-  if c.deps_dir != 'src/dart':
-    c.deps_file = 'DEPS'
-  else:
-    c.deps_file = 'tools/deps/dartium.deps/DEPS'
-  c.managed = True
-
 @config_ctx()
 def arm_l_builder(c):  # pragma: no cover
   pass

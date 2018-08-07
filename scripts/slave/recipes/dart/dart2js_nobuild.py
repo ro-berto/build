@@ -165,8 +165,7 @@ def RunSteps(api):
            'tests': ['co19']},
         ]
 
-      needs_xvfb = (runtime in ['dartium', 'chrome', 'ff'] and
-                    system == 'linux')
+      needs_xvfb = (runtime in ['chrome', 'ff'] and system == 'linux')
       RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
 
       if runtime == 'd8':
