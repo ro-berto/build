@@ -47,8 +47,6 @@ def RunHostTests(api, out_dir, exe_extension=''):
   directory = api.path['start_dir'].join('src', out_dir)
   with api.context(cwd=directory):
     # Cross platform tests.
-    api.step('Test FXL',
-      [directory.join('fxl_unittests' + exe_extension)])
     api.step('Test Flow',
       [directory.join('flow_unittests' + exe_extension)])
     api.step('Test FML', [
