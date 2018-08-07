@@ -402,7 +402,7 @@
   {
     "cmd": [
       "/bin/bash",
-      "flutter/travis/analyze.sh"
+      "flutter/ci/analyze.sh"
     ],
     "cwd": "[START_DIR]/src",
     "env": {

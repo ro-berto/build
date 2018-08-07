@@ -143,7 +143,7 @@ def AnalyzeDartUI(api):
 
   checkout = api.path['start_dir'].join('src')
   with api.context(cwd=checkout):
-    api.step('analyze dart_ui', ['/bin/bash', 'flutter/travis/analyze.sh'])
+    api.step('analyze dart_ui', ['/bin/bash', 'flutter/ci/analyze.sh'])
 
 
 def UploadTreeMap(api, upload_dir, lib_flutter_path):
