@@ -128,7 +128,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[GOMA_CACHE]/client' release_extra_cflags=-fno-sanitize-recover=undefined target_arch=x64 ubsan=1 use_goma=1"
+      "GYP_DEFINES": "clang=1 component=static_library gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [

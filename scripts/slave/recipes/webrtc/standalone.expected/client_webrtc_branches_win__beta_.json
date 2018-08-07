@@ -142,7 +142,7 @@
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library fastbuild=1 gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "component=static_library gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [

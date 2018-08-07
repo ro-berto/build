@@ -185,7 +185,7 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "clang=1 component=static_library fastbuild=1 target_arch=ia32",
+      "GYP_DEFINES": "clang=1 component=static_library target_arch=ia32",
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "env_suffixes": {

@@ -245,22 +245,14 @@ def gn(c):
 def mb(c):
   c.project_generator.tool = 'mb'
 
+# TODO(thakis): Remove references, then delete.
 @config_ctx()
 def gn_for_uploads(c):
-  # This config is used to do the official builds of GN itself (which
-  # are uploaded into Google Cloud Storage). While most of the configuration
-  # of the build is done repo-side via MB, we need to set a few GYP_DEFINES
-  # so that `gclient runhooks` will do the right thing.
-
-  if c.TARGET_PLATFORM == 'linux':
-    c.gyp_env.GYP_DEFINES['branding'] = 'Chrome'
-    c.gyp_env.GYP_DEFINES['buildtype'] = 'Official'
+  pass
 
 @config_ctx()
 def win_analyze(c):
-  c.gyp_env.GYP_DEFINES['win_analyze'] = '1'
-  c.gyp_env.GYP_DEFINES['fastbuild'] = '2'
-  c.gyp_env.GYP_DEFINES['use_goma'] = 0
+  c.gyp_env.GYP_DEFINES['use_goma'] = 0  # Read by api.py.
 
 @config_ctx(group='builder')
 def ninja(c):
@@ -348,7 +340,7 @@ def xcode(c):  # pragma: no cover
 def _clang_common(c):
   c.compile_py.compiler = 'clang'
   c.gn_args.append('is_clang=true')
-  c.gyp_env.GYP_DEFINES['clang'] = 1
+  c.gyp_env.GYP_DEFINES['clang'] = 1  # Read by api.py.
 
 @config_ctx(group='compiler')
 def clang(c):
@@ -357,7 +349,7 @@ def clang(c):
 @config_ctx(group='compiler')
 def gcc(c):
   c.gn_args.append('is_clang=false')
-  c.gyp_env.GYP_DEFINES['clang'] = 0
+  c.gyp_env.GYP_DEFINES['clang'] = 0  # Read by api.py.
 
 @config_ctx(group='compiler')
 def default_compiler(c):
@@ -384,15 +376,16 @@ def dcheck(c, invert=False):
 @config_ctx()
 def fastbuild(c, invert=False):
   c.gn_args.append('symbol_level=%d' % (1 if invert else 2))
-  c.gyp_env.GYP_DEFINES['fastbuild'] = int(not invert)
 
+# TODO(thakis): Remove references, then delete.
 @config_ctx()
 def no_dump_symbols(c):
-  c.gyp_env.GYP_DEFINES['linux_dump_symbols'] = 0
+  pass
 
+# TODO(thakis): Remove references, then delete.
 @config_ctx()
 def isolation_mode_noop(c):
-  c.gyp_env.GYP_DEFINES['test_isolation_mode'] = 'noop'
+  pass
 
 @config_ctx(group='link_type')
 def shared_library(c):
@@ -458,11 +451,11 @@ def asan(c):
     fastbuild(c, invert=True, optional=False)
 
   c.gn_args.append('is_asan=true')
-  c.gyp_env.GYP_DEFINES['asan'] = 1
+  c.gyp_env.GYP_DEFINES['asan'] = 1  # Read by api.py.
   if c.TARGET_PLATFORM not in ('android', 'mac') and c.TARGET_BITS == 64:
     # LSAN isn't supported on Android, Mac or 32 bits platforms.
     c.gn_args.append('is_lsan=true')
-    c.gyp_env.GYP_DEFINES['lsan'] = 1
+    c.gyp_env.GYP_DEFINES['lsan'] = 1  # Read by api.py.
 
 @config_ctx(deps=['compiler'])
 def lsan(c):
@@ -470,17 +463,15 @@ def lsan(c):
   c.runtests.swarming_extra_args += ['--lsan=1']
   c.runtests.swarming_tags |= {'lsan:1'}
 
-# TODO(infra,earthdok,glider): Make this a gyp variable. This is also not a
-# good name as only v8 builds release symbolized with -O2 while
-# chromium.lkgr uses -O1.
+# TODO(thakis): Remove references, then delete.
 @config_ctx()
 def asan_symbolized(c):
-  c.gyp_env.GYP_DEFINES['release_extra_cflags'] = (
-      '-fno-inline-functions -fno-inline')
+  pass
 
+# TODO(thakis): Remove references, then delete.
 @config_ctx()
 def sanitizer_coverage(c):
-  c.gyp_env.GYP_DEFINES['sanitizer_coverage'] = 'trace-pc-guard'
+  pass
 
 @config_ctx(deps=['compiler'])
 def msan(c):
@@ -488,44 +479,39 @@ def msan(c):
     raise BadConf('msan requires clang')
   c.runtests.swarming_tags |= {'msan:1'}
   c.gn_args.append('is_msan=true')
-  c.gyp_env.GYP_DEFINES['msan'] = 1
+  c.gyp_env.GYP_DEFINES['msan'] = 1  # Read by api.py.
 
+# TODO(thakis): Remove references, then delete.
 @config_ctx()
 def msan_no_origin_tracking(c):
-  # Don't track the chain of stores leading from allocation site to use site.
-  c.gyp_env.GYP_DEFINES['msan_track_origins'] = 0
+  pass
 
+# TODO(thakis): Remove references, then delete.
 @config_ctx()
 def msan_full_origin_tracking(c):
-  # Track the chain of stores leading from allocation site to use site.
-  c.gyp_env.GYP_DEFINES['msan_track_origins'] = 2
+  pass
 
-# This is currently needed to make tests return a non-zero exit code when an
-# UBSan failure happens.
-# TODO(kjellander,samsonov): Remove when the upstream bug
-# (https://llvm.org/bugs/show_bug.cgi?id=25569) is fixed.
+# TODO(thakis): Remove references, then delete.
 @config_ctx()
 def ubsan_fail_on_errors(c):
-  c.gyp_env.GYP_DEFINES['release_extra_cflags'] = (
-      '-fno-sanitize-recover=undefined')
+  pass
 
 @config_ctx(deps=['compiler'], includes=['ubsan_fail_on_errors'])
 def ubsan(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('ubsan requires clang')
   c.gn_args.append('is_ubsan=true')
-  c.gyp_env.GYP_DEFINES['ubsan'] = 1
 
 @config_ctx(deps=['compiler'], includes=['ubsan_fail_on_errors'])
 def ubsan_vptr(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('ubsan_vptr requires clang')
   c.gn_args.append('is_ubsan_vptr=true')
-  c.gyp_env.GYP_DEFINES['ubsan_vptr'] = 1
 
+# TODO(thakis): Remove references, then delete.
 @config_ctx()
 def prebuilt_instrumented_libraries(c):
-  c.gyp_env.GYP_DEFINES['use_prebuilt_instrumented_libraries'] = 1
+  pass
 
 @config_ctx(group='memory_tool')
 def memcheck(c):
@@ -538,9 +524,7 @@ def tsan2(c):
     raise BadConf('tsan2 requires clang')
   c.runtests.swarming_tags |= {'tsan:1'}
   c.gn_args.append('is_tsan=true')
-  gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['tsan'] = 1
-  gyp_defs['disable_nacl'] = 1
+  c.gyp_env.GYP_DEFINES['tsan'] = 1  # Read by api.py.
 
 @config_ctx()
 def trybot_flavor(c):
@@ -550,17 +534,10 @@ def trybot_flavor(c):
 @config_ctx()
 def clang_tot(c):
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
-  # Plugin flags often need to be changed when using a plugin newer than
-  # the latest Clang package, so disable plugins.
-  # TODO(pcc): Investigate whether this should be consistent between Windows and
-  # non-Windows.
-  if c.TARGET_PLATFORM != 'win':
-    c.gyp_env.GYP_DEFINES['clang_use_chrome_plugins'] = 0
 
 @config_ctx(includes=['ninja', 'clang', 'asan', 'static_library'])
 def win_asan(c):
-  c.gyp_env.GYP_DEFINES['enable_ipc_fuzzer'] = 1
-  c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
+  pass
 
 #### 'Full' configurations
 @config_ctx(includes=['ninja', 'default_compiler'])
@@ -675,17 +652,15 @@ def chromium_linux_asan_no_test_args(c):
   # remove chromium_linux_asan and rename this.
   pass
 
+# TODO(thakis): Replace references with chromium_asan, then delete.
 @config_ctx(includes=['chromium_asan', 'static_library'])
 def chromium_mac_asan(c):
-  # Need to explicitly set host arch for mac asan 64.
-  # TODO(glider, earthdok): Figure out if this is really required or
-  # auto-detected by gyp.
-  if c.gyp_env.GYP_DEFINES['target_arch'] == 'x64':
-    c.gyp_env.GYP_DEFINES['host_arch'] = 'x64'
+  pass
 
+# TODO(thakis): Replace references with chromium, then delete.
 @config_ctx(includes=['chromium'])
 def chromium_mac_mac_views(c):
-  c.gyp_env.GYP_DEFINES['mac_views_browser'] = '1'
+  pass
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'msan', 'chromium_sanitizer'])
 def chromium_msan(c):
@@ -728,9 +703,10 @@ def chromium_official(c):
 def blink(c):  # pragma: no cover
   c.compile_py.default_targets = ['blink_tests']
 
+# TODO(thakis): Remove references, then delete.
 @config_ctx()
 def blink_logging_on(c, invert=False):
-  c.gyp_env.GYP_DEFINES['blink_logging_always_on'] = int(not invert)
+  pass
 
 @config_ctx(includes=['android_common', 'ninja', 'static_library',
                       'default_compiler', 'goma'])
@@ -765,29 +741,27 @@ def codesearch(c):
   # -k 0 prevents stopping on errors, so the compile step tries to do as much as
   # possible.
   c.compile_py.build_args = ['-k' ,'0']
-  gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['fastbuild'] = 1
 
 @config_ctx()
 def v8_optimize_medium(c):
   c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 1
 
-# TODO(phajdan.jr): cover or remove v8_slow_dchecks; used by blink_downstream.
+# TODO(thakis): Remove references, then delete.
 @config_ctx()
 def v8_slow_dchecks(c):  # pragma: no cover
-  c.gyp_env.GYP_DEFINES['v8_enable_slow_dchecks'] = 1
+  pass
 
+# TODO(thakis): Remove references, then delete.
 @config_ctx()
 def v8_verify_heap(c):
-  c.gyp_env.GYP_DEFINES['v8_enable_verify_heap'] = 1
+  pass
 
+# TODO(thakis): Remove references, then delete.
 @config_ctx()
 def v8_hybrid_arm(c):
-  c.gyp_env.GYP_DEFINES['disable_nacl'] = 1
-  c.gyp_env.GYP_DEFINES['v8_target_arch'] = 'arm'
-  c.gyp_env.GYP_DEFINES['target_arch'] = 'ia32'
-  c.gyp_env.GYP_DEFINES['host_arch'] = 'x86_64'
+  pass
 
+# TODO(thakis): Remove references, then delete.
 @config_ctx()
 def enable_ipc_fuzzer(c):
   c.gyp_env.GYP_DEFINES['enable_ipc_fuzzer'] = 1

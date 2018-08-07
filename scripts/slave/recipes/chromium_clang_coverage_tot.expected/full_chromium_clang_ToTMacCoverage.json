@@ -220,7 +220,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
-      "GYP_DEFINES": "clang=1 clang_use_chrome_plugins=0 component=static_library gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1",
       "LLVM_FORCE_HEAD_REVISION": "YES",
       "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"

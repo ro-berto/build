@@ -174,7 +174,7 @@
     "cwd": "[START_DIR]\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=shared_library fastbuild=2 target_arch=ia32 use_goma=0 win_analyze=1"
+      "GYP_DEFINES": "component=shared_library target_arch=ia32 use_goma=0"
     },
     "env_suffixes": {
       "PATH": [
