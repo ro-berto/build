@@ -128,7 +128,6 @@ def cipd_all_targets():
   This is used for CIPD presubmit validation.
   """
   return (
-      ('linux', '386'),
       ('linux', 'amd64'),
       ('linux', 'arm64'),
       ('linux', 'armv6l'),
