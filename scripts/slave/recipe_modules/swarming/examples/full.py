@@ -501,3 +501,40 @@ def GenTests(api):
           platforms=('linux',),
           show_shards_in_collect_step=True,
           isolated_script_task=True))
+
+  summary_data_deduped = {
+    'shards': [
+      {
+        'state': 0x70, # COMPLETED
+        'internal_failure': False,
+        'exit_code': '0',
+      },
+      {
+        'state': 0x70, # COMPLETED
+        'internal_failure': False,
+        'exit_code': '0',
+        'deduped_from': None,
+      },
+      {
+        'state': 0x70, # COMPLETED
+        'internal_failure': False,
+        'exit_code': '0',
+        'deduped_from': 'deadbeef',
+      },
+    ]
+  }
+  yield (
+      api.test('gtest_with_deduped_shard') +
+      api.step_data(
+          'archive for linux',
+          stdout=api.raw_io.output('hash_for_linux hello_world.isolated')) +
+      api.step_data(
+          'hello_world',
+          api.raw_io.output_dir(
+              {'summary.json': json.dumps(summary_data_deduped)}),
+          api.swarming.summary(summary_data_deduped) +
+          api.test_utils.canned_gtest_output(False)) +
+      api.properties(
+          platforms=('linux',),
+          show_shards_in_collect_step=True,
+          gtest_task=True))

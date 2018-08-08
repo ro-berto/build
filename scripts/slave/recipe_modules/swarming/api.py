@@ -1234,6 +1234,9 @@ class SwarmingApi(recipe_api.RecipeApi):
       else:
         display_text = 'shard #%d' % index
 
+      if shard and shard.get('deduped_from'):
+        display_text += ' (deduped)'
+
       if not shard or shard.get('internal_failure'):
         display_text = (
           'shard #%d had an internal swarming failure' % index)

@@ -1,0 +1,313 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
+      "--path",
+      "[START_DIR]/swarming.client",
+      "--url",
+      "https://chromium.googlesource.com/infra/luci/client-py.git"
+    ],
+    "name": "git setup (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "retry",
+      "fetch",
+      "origin",
+      "master",
+      "--progress"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "env": {
+      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:<PATH>"
+    },
+    "infra_step": true,
+    "name": "git fetch (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "FETCH_HEAD"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
+    "name": "git checkout (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
+    "name": "read revision",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
+    "name": "git clean (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "sync"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
+    "name": "submodule sync (swarming_client)"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "update",
+      "--init",
+      "--recursive"
+    ],
+    "cwd": "[START_DIR]/swarming.client",
+    "infra_step": true,
+    "name": "submodule update (swarming_client)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/swarming.client/swarming.py",
+      "--version"
+    ],
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.8.6@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/swarming.client/isolate.py",
+      "archive",
+      "--isolate",
+      "[START_DIR]/swarming.client/example/payload/hello_world.isolate",
+      "--isolated",
+      "[TMP_BASE]/hello_isolated_world_tmp_1/hello_world.isolated",
+      "--isolate-server",
+      "https://isolateserver-dev.appspot.com",
+      "--config-variable",
+      "OS",
+      "linux",
+      "--verbose"
+    ],
+    "name": "archive for linux",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/swarming.client/swarming.py",
+      "trigger",
+      "--swarming",
+      "https://chromium-swarm-dev.appspot.com",
+      "--isolate-server",
+      "https://isolateserver-dev.appspot.com",
+      "--priority",
+      "30",
+      "--shards",
+      "2",
+      "--task-name",
+      "hello_world/Ubuntu-14.04/hash_for_l",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--expiration",
+      "3600",
+      "--io-timeout",
+      "1200",
+      "--hard-timeout",
+      "3600",
+      "--dimension",
+      "cpu",
+      "x86-64",
+      "--dimension",
+      "gpu",
+      "none",
+      "--dimension",
+      "os",
+      "Ubuntu-14.04",
+      "--env",
+      "TESTING",
+      "1",
+      "--named-cache",
+      "swarming_module_cache_vpython",
+      ".swarming_module_cache/vpython",
+      "--auth-service-account-json",
+      "/creds/service_accounts/service-account-chromium-builder.json",
+      "--tag",
+      "build_is_experimental:false",
+      "--tag",
+      "data:hash_for_linux",
+      "--tag",
+      "master:tryserver",
+      "--tag",
+      "name:hello_world",
+      "--tag",
+      "os:linux",
+      "--tag",
+      "stepname:hello_world",
+      "--verbose",
+      "--idempotent",
+      "--user",
+      "joe",
+      "--cipd-package",
+      "bin:super/awesome/pkg:git_revision:deadbeef",
+      "--cipd-package",
+      ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
+      "--cipd-package",
+      ".swarming_module:infra/tools/luci/logdog/butler/${platform}:TEST_VERSION",
+      "--cipd-package",
+      ".swarming_module:infra/tools/luci/vpython-native/${platform}:TEST_VERSION",
+      "--cipd-package",
+      ".swarming_module:infra/tools/luci/vpython/${platform}:TEST_VERSION",
+      "--env-prefix",
+      "PATH",
+      ".swarming_module",
+      "--env-prefix",
+      "PATH",
+      ".swarming_module/bin",
+      "--env-prefix",
+      "VPYTHON_VIRTUALENV_ROOT",
+      ".swarming_module_cache/vpython",
+      "--isolated",
+      "hash_for_linux",
+      "--",
+      "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
+    ],
+    "infra_step": true,
+    "name": "[trigger] hello_world",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"hello_world/Ubuntu-14.04/hash_for_l\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"hello_world/Ubuntu-14.04/hash_for_l:2:0\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"hello_world/Ubuntu-14.04/hash_for_l:2:1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm-dev.appspot.com/user/task/10100@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "echo",
+      "running something locally"
+    ],
+    "name": "local step"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir",
+      "--merge-script",
+      "RECIPE_MODULE[build::swarming]/resources/standard_gtest_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--",
+      "python",
+      "-u",
+      "[START_DIR]/swarming.client/swarming.py",
+      "collect",
+      "--swarming",
+      "https://chromium-swarm-dev.appspot.com",
+      "--decorate",
+      "--print-status-updates",
+      "--verbose",
+      "--json",
+      "{\"base_task_name\": \"hello_world/Ubuntu-14.04/hash_for_l\", \"tasks\": {\"hello_world/Ubuntu-14.04/hash_for_l:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}, \"hello_world/Ubuntu-14.04/hash_for_l:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10100\"}}}",
+      "--auth-service-account-json",
+      "/creds/service_accounts/service-account-chromium-builder.json",
+      "--task-summary-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "hello_world",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"exit_code\": \"0\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"state\": 112@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@    }, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"deduped_from\": null, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"exit_code\": \"0\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"state\": 112@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@    }, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"deduped_from\": \"deadbeef\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"exit_code\": \"0\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"state\": 112@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@}@@@",
+      "@@@STEP_LOG_END@swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Gtest merged successfully@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
+      "@@@STEP_LOG_END@Test.Two@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm-dev.appspot.com/user/task/10100@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "reason": "Step('hello_world') failed with return_code 1",
+    "recipe_result": null,
+    "status_code": 1
+  }
+]
