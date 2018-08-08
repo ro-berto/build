@@ -123,14 +123,6 @@ _AddIsolatedTestSpec('win-7_laptop_low_end_x32-perf_Dell-Latitude', 'win',
 _AddIsolatedTestSpec('win-7_laptop_low_end_x32-perf-Lenovo-ThinkPad', 'win',
                      parent_buildername='win32-builder-perf', target_bits=32)
 
-
-_AddBuildSpec('Battor Agent Linux', 'linux', run_sizes=False,
-              compile_targets=['battor_agent'])
-_AddBuildSpec('Battor Agent Mac', 'mac', run_sizes=False,
-              compile_targets=['battor_agent'])
-_AddBuildSpec('Battor Agent Win', 'win', run_sizes=False,
-              compile_targets=['battor_agent'])
-
 _AddIsolatedTestSpec('Histogram Pipeline Linux Perf',
                      'linux',
                      parent_buildername='Linux Compile Perf FYI')
