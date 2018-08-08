@@ -81,7 +81,7 @@ SPEC = {
     'Linux MSan Builder': {
       'chromium_config': 'chromium_msan',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['mb', 'prebuilt_instrumented_libraries'],
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -108,7 +108,7 @@ SPEC = {
       'chromium_config': 'chromium_msan',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chromeos'],
-      'chromium_apply_config': ['mb', 'prebuilt_instrumented_libraries'],
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -159,7 +159,7 @@ SPEC = {
       },
     },
     'Mac ASan 64 Builder': {
-      'chromium_config': 'chromium_mac_asan',
+      'chromium_config': 'chromium_asan',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -171,7 +171,7 @@ SPEC = {
       'checkout_dir': 'mac',
     },
     'Mac ASan 64 Tests (1)': {
-      'chromium_config': 'chromium_mac_asan',
+      'chromium_config': 'chromium_asan',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',

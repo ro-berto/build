@@ -137,10 +137,7 @@ SPEC = {
     'mac-views-rel': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
-      'chromium_apply_config': [
-        'chromium_mac_mac_views',
-        'mb',
-      ],
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

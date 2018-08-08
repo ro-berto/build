@@ -101,8 +101,6 @@ SPEC['builders'] = {
     'chromium_apply_config': [
       'mb',
       'msan',
-      'msan_full_origin_tracking',
-      'prebuilt_instrumented_libraries',
     ],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',

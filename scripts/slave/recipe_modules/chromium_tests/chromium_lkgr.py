@@ -43,8 +43,8 @@ SPEC = {
       'testing': { 'platform': 'win' },
     },
     'Mac ASAN Release': {
-      'chromium_config': 'chromium_mac_asan',
-      'chromium_apply_config': ['mb', 'clobber', 'v8_verify_heap',
+      'chromium_config': 'chromium_asan',
+      'chromium_apply_config': ['mb', 'clobber',
                                 'enable_ipc_fuzzer'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -61,8 +61,8 @@ SPEC = {
       'testing': { 'platform': 'mac' },
     },
     'Mac ASAN Release Media': {
-      'chromium_config': 'chromium_mac_asan',
-      'chromium_apply_config': ['mb', 'clobber', 'v8_verify_heap',
+      'chromium_config': 'chromium_asan',
+      'chromium_apply_config': ['mb', 'clobber',
                                 'enable_ipc_fuzzer', 'chrome_with_codecs'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -79,8 +79,8 @@ SPEC = {
       'testing': { 'platform': 'mac' },
     },
     'Mac ASAN Debug': {
-      'chromium_config': 'chromium_mac_asan',
-      'chromium_apply_config': ['mb', 'clobber', 'v8_verify_heap',
+      'chromium_config': 'chromium_asan',
+      'chromium_apply_config': ['mb', 'clobber',
                                 'enable_ipc_fuzzer'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -98,8 +98,8 @@ SPEC = {
     },
     'ASAN Release': {
       'chromium_config': 'chromium_linux_asan',
-      'chromium_apply_config': ['mb', 'clobber', 'v8_verify_heap',
-                                'enable_ipc_fuzzer', 'sanitizer_coverage'],
+      'chromium_apply_config': ['mb', 'clobber',
+                                'enable_ipc_fuzzer'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -114,8 +114,8 @@ SPEC = {
     },
     'ASAN Release Media': {
       'chromium_config': 'chromium_linux_asan',
-      'chromium_apply_config': ['mb', 'clobber', 'v8_verify_heap',
-                                'enable_ipc_fuzzer', 'sanitizer_coverage',
+      'chromium_apply_config': ['mb', 'clobber',
+                                'enable_ipc_fuzzer',
                                 'chromeos_with_codecs'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -133,7 +133,7 @@ SPEC = {
     },
     'ASAN Debug': {
       'chromium_config': 'chromium_linux_asan',
-      'chromium_apply_config': ['mb', 'clobber', 'sanitizer_coverage'],
+      'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -150,8 +150,8 @@ SPEC = {
     },
     'ChromiumOS ASAN Release': {
       'chromium_config': 'chromium_linux_asan',
-      'chromium_apply_config': ['mb', 'clobber', 'v8_verify_heap',
-                                'enable_ipc_fuzzer', 'sanitizer_coverage',
+      'chromium_apply_config': ['mb', 'clobber',
+                                'enable_ipc_fuzzer',
                                 'chromiumos'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chromeos'],
@@ -173,8 +173,7 @@ SPEC = {
     # https://sites.google.com/a/chromium.org/dev/developers/testing/addresssanitizer#TOC-Building-with-v8_target_arch-arm
     'ASan Debug (32-bit x86 with V8-ARM)': {
       'chromium_config': 'chromium_linux_asan',
-      'chromium_apply_config': ['mb', 'clobber', 'sanitizer_coverage',
-                                'v8_hybrid_arm', 'v8_verify_heap',
+      'chromium_apply_config': ['mb', 'clobber',
                                 'static_library'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -193,8 +192,7 @@ SPEC = {
     },
     'ASan Release (32-bit x86 with V8-ARM)': {
       'chromium_config': 'chromium_linux_asan',
-      'chromium_apply_config': ['mb', 'clobber', 'sanitizer_coverage',
-                                'v8_hybrid_arm', 'v8_verify_heap',
+      'chromium_apply_config': ['mb', 'clobber',
                                 'enable_ipc_fuzzer'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -213,8 +211,7 @@ SPEC = {
     },
     'ASan Release Media (32-bit x86 with V8-ARM)': {
       'chromium_config': 'chromium_linux_asan',
-      'chromium_apply_config': ['mb', 'clobber', 'sanitizer_coverage',
-                                'v8_hybrid_arm', 'v8_verify_heap',
+      'chromium_apply_config': ['mb', 'clobber',
                                 'enable_ipc_fuzzer', 'chromeos_with_codecs'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -271,9 +268,7 @@ SPEC = {
     # http://dev.chromium.org/developers/testing/memorysanitizer
     'MSAN Release (no origins)': {
       'chromium_config': 'chromium_clang',
-      'chromium_apply_config': ['mb', 'msan', 'msan_no_origin_tracking',
-                                'prebuilt_instrumented_libraries',
-                                'sanitizer_coverage', 'clobber'],
+      'chromium_apply_config': ['mb', 'msan', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -290,9 +285,7 @@ SPEC = {
     },
     'MSAN Release (chained origins)': {
       'chromium_config': 'chromium_clang',
-      'chromium_apply_config': ['mb', 'msan', 'msan_full_origin_tracking',
-                                'prebuilt_instrumented_libraries',
-                                'sanitizer_coverage', 'clobber'],
+      'chromium_apply_config': ['mb', 'msan', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',

@@ -30,12 +30,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('gn_for_uploads') +
-      api.properties(chromium_apply_config=['gn_for_uploads']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
       api.test('ios') +
       api.platform('mac', 64) +
       api.properties(target_platform='ios') +
@@ -61,18 +55,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('no_dump_symbols') +
-      api.properties(chromium_apply_config=['no_dump_symbols']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('isolation_mode_noop') +
-      api.properties(chromium_apply_config=['isolation_mode_noop']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
       api.test('chromeos_with_codecs') +
       api.properties(chromium_apply_config=['chromeos_with_codecs']) +
       api.post_process(post_process.DropExpectation)
@@ -93,31 +75,6 @@ def GenTests(api):
   yield (
       api.test('analysis') +
       api.properties(chromium_apply_config=['analysis']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('asan_symbolized') +
-      api.properties(chromium_apply_config=['asan_symbolized']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('msan_no_origin_tracking') +
-      api.properties(chromium_apply_config=['msan_no_origin_tracking']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('msan_full_origin_tracking') +
-      api.properties(chromium_apply_config=['msan_full_origin_tracking']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('prebuilt_instrumented_libraries') +
-      api.properties(
-          chromium_apply_config=['prebuilt_instrumented_libraries']) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -149,8 +106,8 @@ def GenTests(api):
   )
 
   yield (
-      api.test('chromium_win_clang_asan_tot_coverage') +
-      api.properties(chromium_config='chromium_win_clang_asan_tot_coverage') +
+      api.test('chromium_win_clang_asan_tot') +
+      api.properties(chromium_config='chromium_win_clang_asan_tot') +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -224,18 +181,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('chromium_mac_asan') +
-      api.properties(chromium_config='chromium_mac_asan') +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('chromium_mac_mac_views') +
-      api.properties(chromium_config='chromium_mac_mac_views') +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
       api.test('chromium_tsan2') +
       api.properties(chromium_config='chromium_tsan2') +
       api.post_process(post_process.DropExpectation)
@@ -265,12 +210,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('blink_logging_on') +
-      api.properties(chromium_apply_config=['blink_logging_on']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
       api.test('android_clang') +
       api.properties(chromium_config='android_clang') +
       api.post_process(post_process.DropExpectation)
@@ -285,18 +224,6 @@ def GenTests(api):
   yield (
       api.test('v8_optimize_medium') +
       api.properties(chromium_apply_config=['v8_optimize_medium']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('v8_verify_heap') +
-      api.properties(chromium_apply_config=['v8_verify_heap']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('v8_hybrid_arm') +
-      api.properties(chromium_apply_config=['v8_hybrid_arm']) +
       api.post_process(post_process.DropExpectation)
   )
 

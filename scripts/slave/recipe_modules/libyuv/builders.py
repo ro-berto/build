@@ -249,8 +249,7 @@ BUILDERS = freeze({
       },
       'Linux MSan': {
         'recipe_config': 'libyuv_clang',
-        'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
-                                  'prebuilt_instrumented_libraries'],
+        'chromium_apply_config': ['msan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -582,8 +581,7 @@ BUILDERS = freeze({
       },
       'linux_msan': {
         'recipe_config': 'libyuv_clang',
-        'chromium_apply_config': ['msan', 'msan_full_origin_tracking',
-                                  'prebuilt_instrumented_libraries'],
+        'chromium_apply_config': ['msan'],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,

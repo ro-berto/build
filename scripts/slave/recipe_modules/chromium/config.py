@@ -245,11 +245,6 @@ def gn(c):
 def mb(c):
   c.project_generator.tool = 'mb'
 
-# TODO(thakis): Remove references, then delete.
-@config_ctx()
-def gn_for_uploads(c):
-  pass
-
 @config_ctx()
 def win_analyze(c):
   c.gyp_env.GYP_DEFINES['use_goma'] = 0  # Read by api.py.
@@ -377,16 +372,6 @@ def dcheck(c, invert=False):
 def fastbuild(c, invert=False):
   c.gn_args.append('symbol_level=%d' % (1 if invert else 2))
 
-# TODO(thakis): Remove references, then delete.
-@config_ctx()
-def no_dump_symbols(c):
-  pass
-
-# TODO(thakis): Remove references, then delete.
-@config_ctx()
-def isolation_mode_noop(c):
-  pass
-
 @config_ctx(group='link_type')
 def shared_library(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
@@ -463,16 +448,6 @@ def lsan(c):
   c.runtests.swarming_extra_args += ['--lsan=1']
   c.runtests.swarming_tags |= {'lsan:1'}
 
-# TODO(thakis): Remove references, then delete.
-@config_ctx()
-def asan_symbolized(c):
-  pass
-
-# TODO(thakis): Remove references, then delete.
-@config_ctx()
-def sanitizer_coverage(c):
-  pass
-
 @config_ctx(deps=['compiler'])
 def msan(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
@@ -481,37 +456,17 @@ def msan(c):
   c.gn_args.append('is_msan=true')
   c.gyp_env.GYP_DEFINES['msan'] = 1  # Read by api.py.
 
-# TODO(thakis): Remove references, then delete.
-@config_ctx()
-def msan_no_origin_tracking(c):
-  pass
-
-# TODO(thakis): Remove references, then delete.
-@config_ctx()
-def msan_full_origin_tracking(c):
-  pass
-
-# TODO(thakis): Remove references, then delete.
-@config_ctx()
-def ubsan_fail_on_errors(c):
-  pass
-
-@config_ctx(deps=['compiler'], includes=['ubsan_fail_on_errors'])
+@config_ctx(deps=['compiler'])
 def ubsan(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('ubsan requires clang')
   c.gn_args.append('is_ubsan=true')
 
-@config_ctx(deps=['compiler'], includes=['ubsan_fail_on_errors'])
+@config_ctx(deps=['compiler'])
 def ubsan_vptr(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('ubsan_vptr requires clang')
   c.gn_args.append('is_ubsan_vptr=true')
-
-# TODO(thakis): Remove references, then delete.
-@config_ctx()
-def prebuilt_instrumented_libraries(c):
-  pass
 
 @config_ctx(group='memory_tool')
 def memcheck(c):
@@ -573,10 +528,6 @@ def chromium_win_clang_asan(c):
 def chromium_win_clang_asan_tot(c):
   pass
 
-@config_ctx(includes=['chromium_win_clang_asan_tot', 'sanitizer_coverage'])
-def chromium_win_clang_asan_tot_coverage(c):
-  pass
-
 @config_ctx(includes=['ninja', 'clang', 'clang_tot'])  # No goma.
 def clang_tot_linux(c):
   pass
@@ -596,16 +547,16 @@ def clang_tot_linux_asan(c):
   pass
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'clobber',
-                      'ubsan', 'sanitizer_coverage'])
+                      'ubsan'])
 def chromium_linux_ubsan(c):
   pass
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'clobber',
-                      'ubsan_vptr', 'sanitizer_coverage'])
+                      'ubsan_vptr'])
 def chromium_linux_ubsan_vptr(c):
   pass
 
-@config_ctx(includes=['clang_tot_linux', 'ubsan_vptr', 'sanitizer_coverage'])
+@config_ctx(includes=['clang_tot_linux', 'ubsan_vptr'])
 def clang_tot_linux_ubsan_vptr(c):
   pass
 
@@ -652,16 +603,6 @@ def chromium_linux_asan_no_test_args(c):
   # remove chromium_linux_asan and rename this.
   pass
 
-# TODO(thakis): Replace references with chromium_asan, then delete.
-@config_ctx(includes=['chromium_asan', 'static_library'])
-def chromium_mac_asan(c):
-  pass
-
-# TODO(thakis): Replace references with chromium, then delete.
-@config_ctx(includes=['chromium'])
-def chromium_mac_mac_views(c):
-  pass
-
 @config_ctx(includes=['ninja', 'clang', 'goma', 'msan', 'chromium_sanitizer'])
 def chromium_msan(c):
   c.compile_py.default_targets = ['all']
@@ -703,11 +644,6 @@ def chromium_official(c):
 def blink(c):  # pragma: no cover
   c.compile_py.default_targets = ['blink_tests']
 
-# TODO(thakis): Remove references, then delete.
-@config_ctx()
-def blink_logging_on(c, invert=False):
-  pass
-
 @config_ctx(includes=['android_common', 'ninja', 'static_library',
                       'default_compiler', 'goma'])
 def android(c):
@@ -745,21 +681,6 @@ def codesearch(c):
 @config_ctx()
 def v8_optimize_medium(c):
   c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 1
-
-# TODO(thakis): Remove references, then delete.
-@config_ctx()
-def v8_slow_dchecks(c):  # pragma: no cover
-  pass
-
-# TODO(thakis): Remove references, then delete.
-@config_ctx()
-def v8_verify_heap(c):
-  pass
-
-# TODO(thakis): Remove references, then delete.
-@config_ctx()
-def v8_hybrid_arm(c):
-  pass
 
 # TODO(thakis): Remove references, then delete.
 @config_ctx()

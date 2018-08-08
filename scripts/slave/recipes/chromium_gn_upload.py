@@ -117,8 +117,7 @@ def upload_to_cipd(api, buildername, rel_dir, gn_exe, gn_version, git_revision):
 
 def RunSteps(api):
   mastername = api.m.properties['mastername']
-  buildername, bot_config = api.chromium.configure_bot(BUILDERS,
-                                                       ['gn_for_uploads', 'mb'])
+  buildername, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
 
   bot_update_step = api.bot_update.ensure_checkout(
       patch_root=bot_config.get('root_override'))

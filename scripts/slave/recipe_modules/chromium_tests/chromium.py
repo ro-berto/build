@@ -10,10 +10,8 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'clobber',
-        'isolation_mode_noop',
         'mb',
         'ninja_confirm_noop',
-        'no_dump_symbols',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -29,10 +27,8 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'clobber',
-        'isolation_mode_noop',
         'mb',
         'ninja_confirm_noop',
-        'no_dump_symbols',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -51,10 +47,8 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'clobber',
-        'isolation_mode_noop',
         'mb',
         'ninja_confirm_noop',
-        'no_dump_symbols',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -70,10 +64,8 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'clobber',
-        'isolation_mode_noop',
         'mb',
         'ninja_confirm_noop',
-        'no_dump_symbols',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -92,10 +84,8 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'clobber',
-        'isolation_mode_noop',
         'mb',
         'ninja_confirm_noop',
-        'no_dump_symbols',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -111,10 +101,8 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'clobber',
-        'isolation_mode_noop',
         'mb',
         'ninja_confirm_noop',
-        'no_dump_symbols',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -133,10 +121,8 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'clobber',
-        'isolation_mode_noop',
         'mb',
         'ninja_confirm_noop',
-        'no_dump_symbols',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -152,10 +138,8 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'clobber',
-        'isolation_mode_noop',
         'mb',
         'ninja_confirm_noop',
-        'no_dump_symbols',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -174,9 +158,7 @@ SPEC = {
       'chromium_config': 'android',
       'chromium_apply_config': [
         'clobber',
-        'isolation_mode_noop',
         'mb',
-        'no_dump_symbols',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
@@ -194,9 +176,7 @@ SPEC = {
       'chromium_config': 'android',
       'chromium_apply_config': [
         'clobber',
-        'isolation_mode_noop',
         'mb',
-        'no_dump_symbols',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
