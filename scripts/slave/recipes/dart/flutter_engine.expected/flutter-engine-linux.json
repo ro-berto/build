@@ -117,7 +117,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "analyze dart_ui"
   },
@@ -131,7 +131,7 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "test observatory and service protocol"
   },
@@ -141,7 +141,7 @@
       "--android"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "gn --android"
   },
@@ -152,7 +152,7 @@
       "[START_DIR]/src/out/android_debug"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "build android_debug"
   },
@@ -164,7 +164,7 @@
       ":dist"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "build android_debug :dist"
   },
@@ -175,7 +175,7 @@
       "--runtime-mode=profile"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "gn --android --runtime-mode=profile"
   },
@@ -186,7 +186,7 @@
       "[START_DIR]/src/out/android_profile"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "build android_profile"
   },
@@ -197,7 +197,7 @@
       "--runtime-mode=release"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "gn --android --runtime-mode=release"
   },
@@ -208,7 +208,7 @@
       "[START_DIR]/src/out/android_release"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "build android_release"
   },
@@ -219,7 +219,7 @@
       "--android-cpu=x64"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "gn --android --android-cpu=x64"
   },
@@ -230,7 +230,7 @@
       "[START_DIR]/src/out/android_debug_x64"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "build android_debug_x64"
   },
@@ -241,7 +241,7 @@
       "--android-cpu=x86"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "gn --android --android-cpu=x86"
   },
@@ -252,7 +252,7 @@
       "[START_DIR]/src/out/android_debug_x86"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "build android_debug_x86"
   },
@@ -263,7 +263,7 @@
       "--no-analytics"
     ],
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "disable flutter analytics"
   },
@@ -274,7 +274,7 @@
     ],
     "cwd": "[START_DIR]/flutter/dev/bots",
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "pub get in dev/bots before flutter test"
   },
@@ -287,7 +287,7 @@
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "flutter update-packages"
   },
@@ -301,7 +301,7 @@
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
-      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "flutter test"
   },

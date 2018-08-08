@@ -118,8 +118,8 @@ def RunSteps(api):
 
   BuildLinux(api)
   checkout = api.path['start_dir'].join('src')
-  dart_bin = checkout.join(
-      'out', 'host_debug', 'dart-sdk', 'bin')
+  dart_bin = checkout.join('third_party', 'dart', 'tools', 'sdks', 'dart-sdk',
+    'bin')
   env = { 'PATH': api.path.pathsep.join((str(dart_bin), '%(PATH)s')) }
 
   # The context adds dart-sdk/bin to the path.
