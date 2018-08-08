@@ -244,6 +244,27 @@
     "name": "generate_build_files (with patch)"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src/out/Debug/args.gn",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "GN args",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
     "env": {
@@ -833,6 +854,27 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files (without patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src/out/Debug/args.gn",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "GN args (2)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
   },
   {
     "cmd": [],

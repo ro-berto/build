@@ -2,11 +2,14 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import functools
+
 DEPS = [
   'chromium',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
+  'recipe_engine/raw_io',
 ]
 
 
@@ -29,7 +32,10 @@ def RunSteps(api):
       phase='test_phase',
       isolated_targets=['base_unittests_run'],
       android_version_code=3,
-      android_version_name='example')
+      android_version_name='example',
+      gn_args_presenter=functools.partial(
+          api.chromium.default_gn_args_presenter,
+          **api.properties.get('presenter_kwargs', {})))
 
 
 def GenTests(api):
@@ -58,4 +64,17 @@ def GenTests(api):
       api.properties(
           use_explicit_isolate_map_path=True,
           chromium_apply_config=['chromium_official'])
+  )
+
+  yield (
+      api.test('gn_args_location') +
+      api.properties(presenter_kwargs={'location': 'text'})
+  )
+
+  yield (
+      api.test('many_gn_args') +
+      api.step_data(
+          'GN args',
+          api.raw_io.output_text(
+              '\n'.join('arg%02d = "value%d' % (i, i) for i in xrange(30))))
   )

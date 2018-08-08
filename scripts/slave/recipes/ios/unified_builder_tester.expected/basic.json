@@ -334,6 +334,30 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator/args.gn",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "",
+      "LANDMINES_VERBOSE": "1",
+      "fake env var 1": "fake env value 1",
+      "fake env var 2": "fake env value 2"
+    },
+    "infra_step": true,
+    "name": "GN args",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
       "[BUILDER_CACHE]/ios/src/out/Debug-iphonesimulator",
