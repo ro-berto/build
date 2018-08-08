@@ -603,27 +603,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/linux/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r6.GN args",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::findit]/resources/check_target_existence.py",
       "--target-build-dir",
       "[BUILDER_CACHE]/linux/src/out/Release",
@@ -670,27 +649,6 @@
     "name": "test r6.generate_build_files (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/linux/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r6.GN args (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -1306,27 +1264,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/linux/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r7.GN args",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::findit]/resources/check_target_existence.py",
       "--target-build-dir",
       "[BUILDER_CACHE]/linux/src/out/Release",
@@ -1373,27 +1310,6 @@
     "name": "test r7.generate_build_files (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/linux/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r7.GN args (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -2009,27 +1925,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/linux/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r9.GN args",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::findit]/resources/check_target_existence.py",
       "--target-build-dir",
       "[BUILDER_CACHE]/linux/src/out/Release",
@@ -2076,27 +1971,6 @@
     "name": "test r9.generate_build_files (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/linux/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r9.GN args (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -2712,27 +2586,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/linux/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r10.GN args",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::findit]/resources/check_target_existence.py",
       "--target-build-dir",
       "[BUILDER_CACHE]/linux/src/out/Release",
@@ -2779,27 +2632,6 @@
     "name": "test r10.generate_build_files (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/linux/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r10.GN args (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {

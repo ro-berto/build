@@ -207,26 +207,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]\\src\\out\\Debug\\args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "GN args",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::chromium]\\resources\\ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
