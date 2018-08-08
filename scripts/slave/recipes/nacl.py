@@ -6,6 +6,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
+  'depot_tools/windows_sdk',
   'goma',
   'recipe_engine/context',
   'recipe_engine/path',
@@ -87,10 +88,11 @@ def _AnnotatedStepsSteps(api, got_revision):
   try:
     with api.context(cwd=api.path['checkout'], env=env):
       with api.depot_tools.on_path():
-        api.python('annotated steps',
-                   api.path['checkout'].join(
-                      'buildbot', 'buildbot_selector.py'),
-                   allow_subannotations=True)
+        with api.windows_sdk(enabled=api.platform.is_win):
+          api.python('annotated steps',
+                     api.path['checkout'].join(
+                        'buildbot', 'buildbot_selector.py'),
+                     allow_subannotations=True)
     exit_status = 0
   except api.step.StepFailure as e:
     exit_status = e.retcode
@@ -117,6 +119,18 @@ def GenTests(api):
     api.properties(
       mastername = 'client.nacl',
       buildername = 'precise_64-newlib-arm_qemu-pnacl-dbg',
+      revision = 'abcd',
+      bot_id = 'TestSlave',
+      buildnumber = 1234,
+      slavetype = 'BuilderTester',
+    ))
+
+  yield (
+    api.test('win') +
+    api.platform('win', 64) +
+    api.properties(
+      mastername = 'client.nacl',
+      buildername = 'win7-64-glibc-dbg',
       revision = 'abcd',
       bot_id = 'TestSlave',
       buildnumber = 1234,
