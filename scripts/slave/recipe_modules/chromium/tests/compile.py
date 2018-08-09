@@ -42,8 +42,18 @@ def GenTests(api):
   )
 
   yield (
-      api.test('official') +
+      api.test('official_win_luci') +
       api.properties(
+          target_platform='win',
+          buildername='test_buildername',
+          chromium_apply_config=['official']) +
+      api.runtime(is_luci=True, is_experimental=False)
+  )
+
+  yield (
+      api.test('official_linux_buildbot') +
+      api.properties(
+          target_platform='linux',
           buildername='test_buildername',
           chromium_apply_config=['official'])
   )

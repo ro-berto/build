@@ -392,6 +392,20 @@ class ChromiumApi(recipe_api.RecipeApi):
       if self.c.compile_py.mode == 'official':
         # Official builds are always Google Chrome.
         ninja_env['CHROME_BUILD_TYPE'] = '_official'
+        # This may be needed for running `ninja -t msvc` in
+        # src/build/toolchain/win/BUILD.gn.
+        # Note that this may not be needed when ninja is launched directly since
+        # Windows does search for the directory of the parent process (which is
+        # also ninja). However, when ninja is launched under another subprocess
+        # (such as cmd), this is necessary. Therefore, adding the ninja's
+        # directory directly will make the code less brittle.
+        # This is only for LUCI, buildbot bots already have this directory
+        # includeded in PATH.
+        # TODO(crbug.com/872740): Remove once msvc -t processes are no longer
+        # needed.
+        if self.c.TARGET_PLATFORM == 'win' and self.m.runtime.is_luci:
+          ninja_env['PATH'] = self.m.path.pathsep.join(
+             (self.m.path.dirname(self.m.depot_tools.ninja_path), '%(PATH)s'))
 
     if self.c.compile_py.goma_hermetic:
       goma_env['GOMA_HERMETIC'] = self.c.compile_py.goma_hermetic
