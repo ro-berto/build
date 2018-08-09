@@ -312,9 +312,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'binary_size_files': [
-          'obj/libwebrtc.a'
-        ],
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -325,6 +322,18 @@ BUILDERS = freeze({
           'os': 'Ubuntu',
           'gpu': None,
         }
+      },
+      'Linux64 Builder': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+        'binary_size_files': [
+          'obj/libwebrtc.a'
+        ],
       },
       'Linux64 Debug (ARM)': {
         'recipe_config': 'webrtc',
@@ -495,11 +504,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'binary_size_files': [
-          'libjingle_peerconnection_so.so',
-          'libjingle_peerconnection_datachannelonly_so.so',
-          'apks/AppRTCMobile.apk'
-        ],
         'archive_apprtc': True,
         'build_android_archive': True,
         # TODO(bugs.webrtc.org/8642): Re-enable when it is fixed and stable.
@@ -511,6 +515,22 @@ BUILDERS = freeze({
           'os': 'Android',
           'android_devices': '1',
         }
+      },
+      'Android32 Builder arm': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+        'binary_size_files': [
+          'libjingle_peerconnection_so.so',
+          'libjingle_peerconnection_datachannelonly_so.so',
+          'apks/AppRTCMobile.apk'
+        ],
       },
       'Android64 (M Nexus5X)(dbg)': {
         'recipe_config': 'webrtc_android',
@@ -541,11 +561,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'binary_size_files': [
-          'libjingle_peerconnection_so.so',
-          'libjingle_peerconnection_datachannelonly_so.so',
-          'apks/AppRTCMobile.apk'
-        ],
         'archive_apprtc': True,
         'enable_swarming': True,
         'swarming_dimensions': {
@@ -554,6 +569,22 @@ BUILDERS = freeze({
           'os': 'Android',
           'android_devices': '1',
         }
+      },
+      'Android64 Builder arm64': {
+        'recipe_config': 'webrtc_android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'linux'},
+        'binary_size_files': [
+          'libjingle_peerconnection_so.so',
+          'libjingle_peerconnection_datachannelonly_so.so',
+          'apks/AppRTCMobile.apk'
+        ],
       },
     },
   },
