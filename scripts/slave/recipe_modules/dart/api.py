@@ -512,7 +512,8 @@ class DartApi(recipe_api.RecipeApi):
     template = self._get_specific_argument(args, ['-n'])
     if template is not None:
       for term in ['runtime', 'system', 'mode', 'arch']:
-        template = template.replace('${%s}' % term, environment[term])
+        if '${%s}' % term in template:
+          template = template.replace('${%s}' % term, environment.get(term, ''))
       self._replace_specific_argument(args, ['-n'], "-n%s" % template)
     if not self._has_specific_argument(args, ['-m', '--mode']):
       test_args = ['-m%s' % environment['mode']] + test_args
