@@ -61,7 +61,7 @@ TEST_MATRIX = {
     {
       "builders": [
         "dart2js-win10-debug-x64-firefox",
-        "analyzer-linux-release"
+        "analyzer-none-linux-release"
       ],
       "meta": {},
       "steps": [{
@@ -78,7 +78,8 @@ TEST_MATRIX = {
         "fileset": "nameoffileset"
       }, {
         "name": "Test-step 2",
-        "arguments": ["foo", "--bar", "-rchrome"],
+        "arguments": ["foo", "--bar", "-rchrome",
+                      "-n${runtime}-foo-${mode}-${arch}-bar"],
         "tests": []
       }, {
         "name": "Trigger step",
@@ -166,15 +167,15 @@ def GenTests(api):
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')))
 
-  yield (api.test('analyzer-linux-release-be') + api.properties(
-      buildername='analyzer-linux-release-be') +
+  yield (api.test('analyzer-none-linux-release-be') + api.properties(
+      buildername='analyzer-none-linux-release-be') +
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')) +
       api.step_data('buildbucket.put',
                     stdout=api.json.output(TRIGGER_RESULT)))
 
   yield (api.test('build-failure-in-matrix') + api.properties(
-      buildername='analyzer-linux-release-be') +
+      buildername='analyzer-none-linux-release-be') +
       api.step_data('Build', retcode=1) +
       api.post_process(DoesNotRun, 'Test-step 1') +
       api.post_process(DropExpectation))

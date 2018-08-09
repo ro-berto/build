@@ -328,6 +328,13 @@ class DartApi(recipe_api.RecipeApi):
   def _has_specific_argument(self, arguments, options):
     return self._get_specific_argument(arguments, options) is not None
 
+  def _replace_specific_argument(self, arguments, options, replacement):
+    for index,arg in enumerate(arguments):
+      for option in options:
+        if arg.startswith(option):
+          arguments[index] = replacement;
+          return None
+
   def _run_steps(self, config, isolate_hashes, builder_name, global_config):
     """Executes all steps from a json test-matrix builder entry"""
     # Find information from the builder name. It should be in the form
@@ -502,6 +509,11 @@ class DartApi(recipe_api.RecipeApi):
                  '--write-debug-log',
                  '--write-result-log',
                  '--write-test-outcome-log']
+    template = self._get_specific_argument(args, ['-n'])
+    if template is not None:
+      for term in ['runtime', 'system', 'mode', 'arch']:
+        template = template.replace('${%s}' % term, environment[term])
+      self._replace_specific_argument(args, ['-n'], "-n%s" % template)
     if not self._has_specific_argument(args, ['-m', '--mode']):
       test_args = ['-m%s' % environment['mode']] + test_args
     if not self._has_specific_argument(args, ['-a', '--arch']):

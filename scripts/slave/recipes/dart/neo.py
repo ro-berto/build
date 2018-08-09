@@ -16,6 +16,10 @@ DEPS = [
 ]
 
 TEST_MATRIX = {
+  "filesets": {
+    "fileset1": "[]",
+    "nameoffileset": "[]"
+  },
   "global": {
     "chrome": "66.0.3359.139",
     "firefox": "60.0.1"
@@ -23,8 +27,8 @@ TEST_MATRIX = {
   "builder_configurations": [
     {
       "builders": [
-        "dart2js-win10-debug-x64-firefox-try",
-        "analyzer-linux-release-be"
+        "dart2js-win10-debug-x64-firefox",
+        "analyzer-linux-release-none"
       ],
       "meta": {},
       "steps": [{
@@ -39,13 +43,14 @@ TEST_MATRIX = {
         "tests": ["-e co19", "language_2"]
       }, {
         "name": "Test-step 2",
-        "arguments": ["foo", "--bar"],
+        "arguments": ["foo", "--bar", "-mdebug",
+                      "-n${runtime}-foo-${mode}-${arch}-bar"],
         "tests": []
       }]
     },
     {
       "builders": [
-        "dart2js-linux-release-chrome-try"
+        "dart2js-linux-release-chrome"
       ],
       "meta": {},
       "steps": [{
@@ -127,9 +132,9 @@ def GenTests(api):
         clobber='true')
    )
    yield (
-      api.test('builders/dart2js-linux-x64-chrome-dev') +
+      api.test('builders/dart2js-win10-debug-x64-firefox-try') +
       api.properties.generic(
-        buildername='builders/dart2js-linux-x64-chrome-dev')
+        buildername='dart2js-win10-debug-x64-firefox-try')
    )
    yield (
       api.test('builders/try-cl-builder') +
