@@ -5,6 +5,7 @@
 """Tests a recipe CL by running a chromium builder."""
 
 from recipe_engine.recipe_api import Property
+from recipe_engine.post_process import DoesNotRun
 
 DEPS = [
   'recipe_engine/context',
@@ -19,16 +20,25 @@ DEPS = [
 
   'depot_tools/gclient',
   'depot_tools/bot_update',
+  'depot_tools/tryserver',
 ]
+
 
 PROPERTIES = {
   # This is set by CQ when triggering a job.
   'repo_name': Property(kind=str),
 }
 
+
+# If present in a CL description, will override the existing default builders
+# with a custom list. Format is expected to be "<bucket>.<builder>".
+BUILDER_FOOTER = 'Led-Recipes-Tester-Builder'
+
+
 DEFAULT_BUILDERS = [
   'luci.chromium.try:linux_chromium_rel_ng',
 ]
+
 
 def _checkout_project(api, workdir, gclient_config, patch):
   api.file.ensure_directory(
@@ -55,7 +65,16 @@ def RunSteps(api, repo_name):
   _checkout_project(api, client_py_workdir, client_py_config, False)
 
   triggered_jobs = {}
-  for builder in DEFAULT_BUILDERS:
+
+  cl_footers = api.tryserver.get_footers() or {}
+  builders = cl_footers.get(BUILDER_FOOTER, DEFAULT_BUILDERS)
+  # We don't currently check anything about the list of builders to trigger.
+  # This is because the only existing builder which runs this recipe uses a
+  # service account which is only allowed to trigger jobs in the
+  # luci.chromium.try bucket. That builder is not in that bucket, so there's no
+  # possibility for running a tryjob on itself.
+
+  for builder in builders:
     with api.context(cwd=cl_workdir.join('build')):
       result = (api.
                 led('get-builder', builder).
@@ -91,13 +110,37 @@ def RunSteps(api, repo_name):
 def GenTests(api):
   yield (
       api.test('basic') +
-      api.properties(repo_name='build') +
+      api.properties.tryserver(repo_name='build') +
       api.step_data('led launch',
                     stdout=api.json.output({
                       'swarming':{
                           'host_name': 'chromium-swarm.appspot.com',
                           'task_id': 'beeeeeeeee5',
                       }
-                    }))
+                    })) +
+    api.override_step_data(
+      'gerrit changes', api.json.output(
+        [{'revisions': {1: {'_number': 12, 'commit': {
+          'message': 'nothing important'}}}}])) +
+    api.override_step_data(
+        'parse description', api.json.output({}))
   )
 
+  yield (
+      api.test('custom_builder') +
+      api.properties.tryserver(repo_name='build') +
+      api.step_data('led launch',
+                    stdout=api.json.output({
+                      'swarming':{
+                          'host_name': 'chromium-swarm.appspot.com',
+                          'task_id': 'beeeeeeeee5',
+                      }
+                    })) +
+    api.override_step_data(
+      'gerrit changes', api.json.output(
+        [{'revisions': {1: {'_number': 12, 'commit': {
+          'message': BUILDER_FOOTER + ': arbitrary.blah'}}}}])) +
+    api.override_step_data(
+        'parse description', api.json.output(
+            {BUILDER_FOOTER: ['arbitrary.blah']}))
+  )

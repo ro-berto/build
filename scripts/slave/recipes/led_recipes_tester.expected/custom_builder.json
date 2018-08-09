@@ -224,7 +224,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"_number\": 12, @@@",
       "@@@STEP_LOG_LINE@json.output@        \"commit\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"message\": \"nothing important\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"message\": \"Led-Recipes-Tester-Builder: arbitrary.blah\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -242,9 +242,13 @@
       "/path/to/tmp/json"
     ],
     "name": "parse description",
-    "stdin": "nothing important",
+    "stdin": "Led-Recipes-Tester-Builder: arbitrary.blah",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Led-Recipes-Tester-Builder\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"arbitrary.blah\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -279,7 +283,7 @@
     "cmd": [
       "[CACHE]/led/led",
       "get-builder",
-      "luci.chromium.try:linux_chromium_rel_ng"
+      "arbitrary.blah"
     ],
     "cwd": "[CACHE]/builder/build/build",
     "name": "led get-builder",
@@ -351,7 +355,7 @@
       "--print-status-updates",
       "--task-output-stdout=none"
     ],
-    "name": "collect luci.chromium.try:linux_chromium_rel_ng task",
+    "name": "collect arbitrary.blah task",
     "~followup_annotations": [
       "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=beeeeeeeee5@@@"
     ]
