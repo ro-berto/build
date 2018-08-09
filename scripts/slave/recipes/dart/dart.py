@@ -22,7 +22,7 @@ def RunSteps(api):
 
   api.gclient.set_config('dart')
 
-  if 'vm-precomp-android' in buildername:
+  if 'vm-kernel-precomp-android' in buildername:
     api.gclient.apply_config('android')
 
   api.bot_update.ensure_checkout()
@@ -42,15 +42,17 @@ def RunSteps(api):
 
     with api.step.defer_results():
       extra_test_args = api.properties.get('test_args', [])
-      test_args = ['-m%s' % mode,
-                   '--arch=%s' % target_arch,
-                   '--no-preview-dart-2',
-                   '--progress=line',
-                   '--report',
-                   '--time',
-                   '--write-debug-log',
-                   '--write-result-log',
-                   '--write-test-outcome-log']
+      test_args = ['-m%s' % mode, '--arch=%s' % target_arch]
+      if 'vm-kernel' not in buildername:
+        test_args.append('--no-preview-dart-2')
+
+      test_args.extend([
+          '--progress=line',
+          '--report',
+          '--time',
+          '--write-debug-log',
+          '--write-result-log',
+          '--write-test-outcome-log'])
       test_args.extend(extra_test_args)
       api.python('test vm',
                  api.path['checkout'].join('tools', 'test.py'),
@@ -65,12 +67,14 @@ def GenTests(api):
       api.properties.generic(mastername='client.dart.FYI'))
    yield (
       api.test('test-coverage') + api.platform('linux', 64) +
-      api.properties.generic(mastername='client.dart.FYI',
-                             buildername='vm-precomp-android-release',
+      api.properties.generic(mastername='client.dart',
+                             buildername='vm-kernel-precomp-android-release',
                              target_arch='arm',
                              build_args=['--os=android'],
-                             build_targets=['runtime_precompiled'],
+                             build_targets=[
+                                 'runtime_kernel',
+                                 'dart_precompiled_runtime'],
                              test_args=[
-                                 '-cprecompiler',
+                                 '-cdartkp',
                                  '-rdart_precompiled',
                                  '--system=android']))

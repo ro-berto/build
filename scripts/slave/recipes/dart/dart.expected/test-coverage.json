@@ -70,7 +70,8 @@
       "-mrelease",
       "--arch=arm",
       "--os=android",
-      "runtime_precompiled"
+      "runtime_kernel",
+      "dart_precompiled_runtime"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "build dart"
@@ -82,14 +83,13 @@
       "[START_DIR]/sdk/tools/test.py",
       "-mrelease",
       "--arch=arm",
-      "--no-preview-dart-2",
       "--progress=line",
       "--report",
       "--time",
       "--write-debug-log",
       "--write-result-log",
       "--write-test-outcome-log",
-      "-cprecompiler",
+      "-cdartkp",
       "-rdart_precompiled",
       "--system=android"
     ],
