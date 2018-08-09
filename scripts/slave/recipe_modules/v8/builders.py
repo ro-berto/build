@@ -1641,7 +1641,20 @@ BUILDERS = {
           'category': 'android_arm64'
         },
         'testing': {'platform': 'linux'},
+        'triggers': [
+          'V8 Android Arm64 - N5X',
+        ],
         'triggers_proxy': True,
+      },
+      'V8 Android Arm64 - N5X': {
+        'tests': [Mjsunit(2)],
+        'variants': V8Variant('default'),
+        'swarming_dimensions': {
+          'device_os': 'MMB29Q',
+          'device_type': 'bullhead',
+          'os': 'Android',
+        },
+        'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim': {
         'chromium_apply_config': [
