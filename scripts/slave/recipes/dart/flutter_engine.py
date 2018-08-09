@@ -29,7 +29,7 @@ def RunGN(api, *args):
 def AnalyzeDartUI(api):
   checkout = api.path['start_dir'].join('src')
   with api.context(cwd=checkout):
-    api.step('analyze dart_ui', ['/bin/bash', 'flutter/travis/analyze.sh'])
+    api.step('analyze dart_ui', ['/bin/bash', 'flutter/ci/analyze.sh'])
 
 def BuildLinuxAndroidx86(api):
   for x86_variant in ['x64', 'x86']:
