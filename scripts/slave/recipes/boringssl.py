@@ -85,6 +85,10 @@ def _UsesClang(buildername):
       _HasToken(buildername, token) for token in ('asan', 'clang', 'fuzz'))
 
 
+def _UsesCustomLibCXX(buildername):
+  return any(_HasToken(buildername, token) for token in ('msan', 'tsan'))
+
+
 def _GetGclientVars(buildername):
   ret = {}
   if _UsesClang(buildername):
@@ -95,6 +99,8 @@ def _GetGclientVars(buildername):
     ret['checkout_fuzzer'] = 'True'
   if _HasToken(buildername, 'nasm'):
     ret['checkout_nasm'] = 'True'
+  if _UsesCustomLibCXX(buildername):
+    ret['checkout_libcxx'] = 'True'
   return ret
 
 
@@ -134,8 +140,12 @@ def _GetTargetCMakeArgs(buildername, path, ninja_path, platform):
     args['ASAN'] = '1'
   if _HasToken(buildername, 'cfi'):
     args['CFI'] = '1'
+  if _HasToken(buildername, 'msan'):
+    args['MSAN'] = '1'
   if _HasToken(buildername, 'tsan'):
     args['TSAN'] = '1'
+  if _UsesCustomLibCXX(buildername):
+    args['USE_CUSTOM_LIBCXX'] = '1'
   if _HasToken(buildername, 'small'):
     _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-DOPENSSL_SMALL=1')
     _AppendFlags(args, 'CMAKE_C_FLAGS', '-DOPENSSL_SMALL=1')
@@ -347,6 +357,7 @@ def GenTests(api):
     ('linux_rel', api.platform('linux', 64)),
     ('linux32_rel', api.platform('linux', 64)),
     ('linux_clang_rel', api.platform('linux', 64)),
+    ('linux_clang_rel_msan', api.platform('linux', 64)),
     ('linux_clang_cfi', api.platform('linux', 64)),
     ('linux_fuzz', api.platform('linux', 64)),
     ('linux_fips', api.platform('linux', 64)),
