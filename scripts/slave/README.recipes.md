@@ -928,7 +928,7 @@ Returns: (context manager) A context manager that inserts system python
 
 #### **class [ChromiumApi](/scripts/slave/recipe_modules/chromium/api.py#29)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1109)(self, step_name, gs_bucket, gs_acl=None, mode=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1115)(self, step_name, gs_bucket, gs_acl=None, mode=None, \*\*kwargs):**
 
 Returns a step invoking archive_build.py to archive a Chromium build.
 
@@ -941,7 +941,7 @@ recipe operations. This is responsible for basic enviornment initialization.
 
 See "ensure_chromium_layout" for more information.
 
-&mdash; **def [clobber\_if\_needed](/scripts/slave/recipe_modules/chromium/api.py#851)(self):**
+&mdash; **def [clobber\_if\_needed](/scripts/slave/recipe_modules/chromium/api.py#857)(self):**
 
 Add an explicit clobber step if requested.
 
@@ -971,7 +971,7 @@ as appropriate.
 Returns a tuple of (buildername, bot_config) for subsequent use in
    the recipe.
 
-&mdash; **def [delete\_old\_mac\_toolchain](/scripts/slave/recipe_modules/chromium/api.py#805)(self):**
+&mdash; **def [delete\_old\_mac\_toolchain](/scripts/slave/recipe_modules/chromium/api.py#811)(self):**
 
 Remove the old "hermetic" toolchain cache.
 
@@ -986,19 +986,19 @@ Note: the layout must be installed into the engine context. The
 
 Returns (ChromiumApi.Layout): The configured Chromium build layout.
 
-&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/chromium/api.py#771)(self, canary=False):**
+&mdash; **def [ensure\_goma](/scripts/slave/recipe_modules/chromium/api.py#777)(self, canary=False):**
 
-&mdash; **def [ensure\_mac\_toolchain](/scripts/slave/recipe_modules/chromium/api.py#814)(self):**
+&mdash; **def [ensure\_mac\_toolchain](/scripts/slave/recipe_modules/chromium/api.py#820)(self):**
 
-&mdash; **def [ensure\_toolchains](/scripts/slave/recipe_modules/chromium/api.py#847)(self):**
+&mdash; **def [ensure\_toolchains](/scripts/slave/recipe_modules/chromium/api.py#853)(self):**
 
-&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1150)(self, test_name):**
+&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1156)(self, test_name):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [get\_clang\_version](/scripts/slave/recipe_modules/chromium/api.py#728)(self, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [get\_clang\_version](/scripts/slave/recipe_modules/chromium/api.py#734)(self, \*\*kwargs):**
 
 &mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/chromium/api.py#80)(self):**
 
-&mdash; **def [get\_cros\_chrome\_sdk\_wrapper](/scripts/slave/recipe_modules/chromium/api.py#742)(self):**
+&mdash; **def [get\_cros\_chrome\_sdk\_wrapper](/scripts/slave/recipe_modules/chromium/api.py#748)(self):**
 
 Returns: a wrapper command for 'cros chrome-sdk'
 
@@ -1010,7 +1010,7 @@ Args:
 
 &mdash; **def [get\_env](/scripts/slave/recipe_modules/chromium/api.py#111)(self):**
 
-&mdash; **def [get\_mac\_toolchain\_installer](/scripts/slave/recipe_modules/chromium/api.py#791)(self):**
+&mdash; **def [get\_mac\_toolchain\_installer](/scripts/slave/recipe_modules/chromium/api.py#797)(self):**
 
 &mdash; **def [get\_version](/scripts/slave/recipe_modules/chromium/api.py#160)(self):**
 
@@ -1018,36 +1018,36 @@ Args:
 
 Return the path to the built executable directory.
 
-&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1097)(self, \*\*kwargs):**
+&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1103)(self, \*\*kwargs):**
 
 &mdash; **def [reload\_version](/scripts/slave/recipe_modules/chromium/api.py#165)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gn](/scripts/slave/recipe_modules/chromium/api.py#912)(self, use_goma=False, gn_path=None, build_dir=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gn](/scripts/slave/recipe_modules/chromium/api.py#918)(self, use_goma=False, gn_path=None, build_dir=None, \*\*kwargs):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gyp\_chromium](/scripts/slave/recipe_modules/chromium/api.py#904)(self):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gyp\_chromium](/scripts/slave/recipe_modules/chromium/api.py#910)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb](/scripts/slave/recipe_modules/chromium/api.py#976)(self, mastername, buildername, use_goma=True, mb_path=None, mb_config_path=None, isolated_targets=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, phase=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb](/scripts/slave/recipe_modules/chromium/api.py#982)(self, mastername, buildername, use_goma=True, mb_path=None, mb_config_path=None, isolated_targets=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, phase=None, \*\*kwargs):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium/api.py#861)(self, env=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium/api.py#867)(self, env=None, \*\*kwargs):**
 
 Run the build-configuration hooks for chromium.
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [runtest](/scripts/slave/recipe_modules/chromium/api.py#568)(self, test, args=None, xvfb=False, name=None, annotate=None, results_url=None, perf_dashboard_id=None, test_type=None, python_mode=False, parallel=False, point_id=None, revision=None, webkit_revision=None, test_launcher_summary_output=None, perf_id=None, perf_config=None, chartjson_file=False, disable_src_side_runtest_py=False, tee_stdout_file=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [runtest](/scripts/slave/recipe_modules/chromium/api.py#574)(self, test, args=None, xvfb=False, name=None, annotate=None, results_url=None, perf_dashboard_id=None, test_type=None, python_mode=False, parallel=False, point_id=None, revision=None, webkit_revision=None, test_launcher_summary_output=None, perf_id=None, perf_config=None, chartjson_file=False, disable_src_side_runtest_py=False, tee_stdout_file=None, \*\*kwargs):**
 
 Return a runtest.py invocation.
 
 &mdash; **def [set\_build\_properties](/scripts/slave/recipe_modules/chromium/api.py#171)(self, props):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [sizes](/scripts/slave/recipe_modules/chromium/api.py#685)(self, results_url=None, perf_id=None, platform=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [sizes](/scripts/slave/recipe_modules/chromium/api.py#691)(self, results_url=None, perf_id=None, platform=None, \*\*kwargs):**
 
 Return a sizes.py invocation.
 This uses runtests.py to upload the results to the perf dashboard.
 
-&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#1091)(self):**
+&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#1097)(self):**
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_launcher\_filter](/scripts/slave/recipe_modules/chromium/api.py#564)(self, tests):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_launcher\_filter](/scripts/slave/recipe_modules/chromium/api.py#570)(self, tests):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [update\_clang](/scripts/slave/recipe_modules/chromium/api.py#1081)(self):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [update\_clang](/scripts/slave/recipe_modules/chromium/api.py#1087)(self):**
 
 &emsp; **@property**<br>&mdash; **def [version](/scripts/slave/recipe_modules/chromium/api.py#147)(self):**
 
@@ -1631,7 +1631,7 @@ Args:
 Returns (str) - The content of the file.
 Raises file.Error
 
-&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#561)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=[]):**
+&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#562)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=[]):**
 
 Runs a specific script with current working directory to be checkout. If
 the runtime (passed in environment) is a browser, and the system is linux,
@@ -3970,7 +3970,7 @@ in a forced build with no revision provided).
 
 [DEPS](/scripts/slave/recipes/boringssl.py#8): [chromium](#recipe_modules-chromium), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/boringssl.py#218)(api, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/boringssl.py#228)(api, buildername):**
 ### *recipes* / [boringssl\_docs](/scripts/slave/recipes/boringssl_docs.py)
 
 [DEPS](/scripts/slave/recipes/boringssl_docs.py#8): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5689,18 +5689,18 @@ The changes are:
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/zip/examples/full.py#14)(api):**
 
-[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/729f8963f1c77f3bf3562699694c58914a629a7e/recipes/README.recipes.md#recipe_modules-bot_update
-[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/729f8963f1c77f3bf3562699694c58914a629a7e/recipes/README.recipes.md#recipe_modules-cipd
-[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/729f8963f1c77f3bf3562699694c58914a629a7e/recipes/README.recipes.md#recipe_modules-depot_tools
-[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/729f8963f1c77f3bf3562699694c58914a629a7e/recipes/README.recipes.md#recipe_modules-gclient
-[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/729f8963f1c77f3bf3562699694c58914a629a7e/recipes/README.recipes.md#recipe_modules-gerrit
-[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/729f8963f1c77f3bf3562699694c58914a629a7e/recipes/README.recipes.md#recipe_modules-git
-[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/729f8963f1c77f3bf3562699694c58914a629a7e/recipes/README.recipes.md#recipe_modules-gitiles
-[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/729f8963f1c77f3bf3562699694c58914a629a7e/recipes/README.recipes.md#recipe_modules-gsutil
-[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/729f8963f1c77f3bf3562699694c58914a629a7e/recipes/README.recipes.md#recipe_modules-infra_paths
-[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/729f8963f1c77f3bf3562699694c58914a629a7e/recipes/README.recipes.md#recipe_modules-presubmit
-[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/729f8963f1c77f3bf3562699694c58914a629a7e/recipes/README.recipes.md#recipe_modules-tryserver
-[depot_tools/recipe_modules/windows_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/729f8963f1c77f3bf3562699694c58914a629a7e/recipes/README.recipes.md#recipe_modules-windows_sdk
+[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/61110ec711159cc393622f2ac203a01b5f8eba9f/recipes/README.recipes.md#recipe_modules-bot_update
+[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/61110ec711159cc393622f2ac203a01b5f8eba9f/recipes/README.recipes.md#recipe_modules-cipd
+[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/61110ec711159cc393622f2ac203a01b5f8eba9f/recipes/README.recipes.md#recipe_modules-depot_tools
+[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/61110ec711159cc393622f2ac203a01b5f8eba9f/recipes/README.recipes.md#recipe_modules-gclient
+[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/61110ec711159cc393622f2ac203a01b5f8eba9f/recipes/README.recipes.md#recipe_modules-gerrit
+[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/61110ec711159cc393622f2ac203a01b5f8eba9f/recipes/README.recipes.md#recipe_modules-git
+[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/61110ec711159cc393622f2ac203a01b5f8eba9f/recipes/README.recipes.md#recipe_modules-gitiles
+[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/61110ec711159cc393622f2ac203a01b5f8eba9f/recipes/README.recipes.md#recipe_modules-gsutil
+[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/61110ec711159cc393622f2ac203a01b5f8eba9f/recipes/README.recipes.md#recipe_modules-infra_paths
+[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/61110ec711159cc393622f2ac203a01b5f8eba9f/recipes/README.recipes.md#recipe_modules-presubmit
+[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/61110ec711159cc393622f2ac203a01b5f8eba9f/recipes/README.recipes.md#recipe_modules-tryserver
+[depot_tools/recipe_modules/windows_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/61110ec711159cc393622f2ac203a01b5f8eba9f/recipes/README.recipes.md#recipe_modules-windows_sdk
 [recipe_engine/recipe_modules/buildbucket]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/4f89beb3e0d1c128aa748398fe619ec38a4452b3/README.recipes.md#recipe_modules-buildbucket
 [recipe_engine/recipe_modules/context]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/4f89beb3e0d1c128aa748398fe619ec38a4452b3/README.recipes.md#recipe_modules-context
 [recipe_engine/recipe_modules/file]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/4f89beb3e0d1c128aa748398fe619ec38a4452b3/README.recipes.md#recipe_modules-file
