@@ -724,6 +724,56 @@ def GenTests(api):
     api.post_process(DropExpectation)
   )
 
+  def check_sorted_ordering(check, step_odict):
+    # 'base_unittests (with patch)' step should run before
+    # 'browser_tests (with patch)' step.
+    base_unittests_idx = None
+    browser_tests_idx = None
+
+    idx = 0
+    for step_name in step_odict:
+      if step_name == 'base_unittests (with patch)':
+        base_unittests_idx = idx
+
+      if step_name == 'browser_tests (with patch)':
+        browser_tests_idx = idx
+      idx += 1
+
+    check(base_unittests_idx != None)
+    check(browser_tests_idx != None)
+    check(base_unittests_idx < browser_tests_idx)
+
+  # This test is used to confirm the order of gtest execution.
+  # browser_tests step should run before base_unittests.
+  yield (
+    api.test('swarmed_gtests_sort') +
+    props(extra_swarmed_tests=['base_unittests', 'browser_tests']) +
+    api.platform.name('linux') +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': [
+                    {
+                        "swarming": {"can_use_on_swarming_builders": True},
+                        "test": "base_unittests",
+                    },
+                    {
+                        "swarming": {
+                            "can_use_on_swarming_builders": True,
+                            "shards": 12,
+                        },
+                        "test": "browser_tests",
+                    },
+                ],
+            },
+        })
+    ) +
+    suppress_analyze() +
+    api.post_process(check_sorted_ordering) +
+    api.post_process(DropExpectation)
+  )
+
   swarmed_webkit_tests = (
     props(extra_swarmed_tests=['webkit_layout_tests']) +
     api.platform.name('linux') +
