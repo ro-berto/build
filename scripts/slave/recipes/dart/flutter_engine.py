@@ -107,7 +107,7 @@ def TestFlutter(api):
              [flutter_cmd, 'update-packages'] + test_args)
     # runs all flutter tests similar to travis as described on this page:
     # https://github.com/flutter/flutter/blob/master/CONTRIBUTING.md
-    api.step('flutter test', test_cmd + test_args)
+    api.step('flutter test', test_cmd + test_args, timeout=90) # 90 minutes
 
 def RunSteps(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
