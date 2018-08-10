@@ -485,6 +485,30 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::webrtc]/resources/binary_sizes.py",
+      "--base-dir",
+      "[CACHE]/builder/src/out/android_compile_rel",
+      "--output",
+      "/path/to/tmp/json",
+      "--",
+      "libjingle_peerconnection_so.so",
+      "libjingle_peerconnection_datachannelonly_so.so",
+      "apks/AppRTCMobile.apk"
+    ],
+    "infra_step": true,
+    "name": "get binary sizes",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"some_binary\": 123456@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@binary_sizes@{\"some_binary\": 123456}@@@"
+    ]
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

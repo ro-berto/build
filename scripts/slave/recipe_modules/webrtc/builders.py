@@ -1274,6 +1274,9 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
+        'binary_size_files': [
+          'obj/libwebrtc.a'
+        ],
       },
       'linux_dbg': {
         'recipe_config': 'webrtc',
@@ -1297,9 +1300,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'binary_size_files': [
-          'obj/libwebrtc.a'
-        ],
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
@@ -1518,6 +1518,11 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
+        'binary_size_files': [
+          'libjingle_peerconnection_so.so',
+          'libjingle_peerconnection_datachannelonly_so.so',
+          'apks/AppRTCMobile.apk'
+        ],
       },
       'android_compile_arm64_dbg': {
         'recipe_config': 'webrtc_android',
@@ -1540,6 +1545,11 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
+        'binary_size_files': [
+          'libjingle_peerconnection_so.so',
+          'libjingle_peerconnection_datachannelonly_so.so',
+          'apks/AppRTCMobile.apk'
+        ],
       },
       'android_compile_x86_rel': {
         'recipe_config': 'webrtc_android',
@@ -1602,11 +1612,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'binary_size_files': [
-          'libjingle_peerconnection_so.so',
-          'libjingle_peerconnection_datachannelonly_so.so',
-          'apks/AppRTCMobile.apk'
-        ],
         'build_android_archive': True,
         # TODO(bugs.webrtc.org/8642): Re-enable when it is fixed and stable.
         # 'test_android_studio_project_generation': True,
@@ -1628,11 +1633,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'binary_size_files': [
-          'libjingle_peerconnection_so.so',
-          'libjingle_peerconnection_datachannelonly_so.so',
-          'apks/AppRTCMobile.apk'
-        ],
         'enable_swarming': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
