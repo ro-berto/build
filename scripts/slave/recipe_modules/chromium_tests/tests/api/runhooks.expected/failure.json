@@ -206,7 +206,7 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library ffmpeg_branding=Chrome proprietary_codecs=1 target_arch=x64"
+      "GYP_DEFINES": "component=static_library target_arch=x64"
     },
     "env_suffixes": {
       "PATH": [
@@ -364,7 +364,7 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library ffmpeg_branding=Chrome proprietary_codecs=1 target_arch=x64"
+      "GYP_DEFINES": "component=static_library target_arch=x64"
     },
     "env_suffixes": {
       "PATH": [

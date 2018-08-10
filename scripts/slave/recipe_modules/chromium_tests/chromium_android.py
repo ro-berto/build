@@ -19,7 +19,6 @@ SPEC = {
     'Android arm Builder (dbg)': {
       'chromium_config': 'android',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'download_vr_test_apks',
       ],
       'gclient_config': 'chromium',
@@ -39,7 +38,6 @@ SPEC = {
     'Android arm64 Builder (dbg)': {
       'chromium_config': 'android',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'download_vr_test_apks',
       ],
       'gclient_config': 'chromium',
@@ -58,7 +56,9 @@ SPEC = {
 
     'Android ASAN (dbg)': {
       'chromium_config': 'android_clang',
-      'chromium_apply_config': ['chrome_with_codecs', 'errorprone'],
+      'chromium_apply_config': [
+          'errorprone',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -188,7 +188,6 @@ SPEC = {
 
     'Android x64 Builder (dbg)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -205,7 +204,6 @@ SPEC = {
 
     'Android x86 Builder (dbg)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -223,7 +221,6 @@ SPEC = {
     'android-kitkat-arm-rel': {
       'chromium_config': 'android',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'download_vr_test_apks',
         'mb'
       ],
@@ -244,7 +241,6 @@ SPEC = {
     'android-marshmallow-arm64-rel': {
       'chromium_config': 'android',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'download_vr_test_apks',
 
         # This is specified because 'android-marshmallow-arm64-rel' builder
@@ -267,7 +263,9 @@ SPEC = {
 
     'Cast Android (dbg)' : {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
+      'chromium_apply_config': [
+          'mb',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -283,7 +281,9 @@ SPEC = {
 
     'KitKat Phone Tester (dbg)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
+      'chromium_apply_config': [
+          'mb',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
@@ -302,7 +302,6 @@ SPEC = {
     'KitKat Phone Tester (rel)': {
       'chromium_config': 'android',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'download_vr_test_apks',
         'mb'
       ],
@@ -389,7 +388,6 @@ SPEC = {
     'Marshmallow Phone Tester (rel)': {
       'chromium_config': 'android',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'download_vr_test_apks',
 
         # This is specified because 'android_n5x_swarming_rel' builder

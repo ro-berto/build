@@ -21,7 +21,6 @@ CUSTOM_BUILDERS = {
       'Fake Builder': {
         'chromium_config': 'android',
         'chromium_apply_config': [
-          'chrome_with_codecs',
           'download_vr_test_apks',
         ],
         'gclient_config': 'chromium',

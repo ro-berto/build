@@ -17,7 +17,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'build_angle_deqp_tests',
-        'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -36,7 +35,6 @@ SPEC = {
     'GPU FYI Win Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -56,7 +54,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'build_angle_deqp_tests',
-        'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -247,7 +244,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'build_angle_deqp_tests',
-        'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -266,7 +262,6 @@ SPEC = {
     'GPU FYI Win x64 Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -286,7 +281,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'build_angle_deqp_tests',
-        'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -344,9 +338,10 @@ SPEC = {
       # on Windows. We don't run the binaries that are built on this
       # bot, at least not yet.
       'chromium_config': 'chromium_win_clang',
-      'chromium_apply_config': ['chrome_with_codecs',
-                                'mb',
-                                'ninja_confirm_noop',],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -368,9 +363,11 @@ SPEC = {
     },
     'GPU FYI Linux Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop',
-                                'chrome_with_codecs',
-                                'build_angle_deqp_tests'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+          'build_angle_deqp_tests'
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -403,8 +400,10 @@ SPEC = {
     },
     'GPU FYI Linux Builder (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop',
-                                'chrome_with_codecs'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -419,9 +418,11 @@ SPEC = {
     },
     'GPU FYI Linux dEQP Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop',
-                                'chrome_with_codecs',
-                                'build_angle_deqp_tests'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+          'build_angle_deqp_tests'
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -549,9 +550,10 @@ SPEC = {
     },
     'GPU FYI Mac Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config':['chrome_with_codecs',
-                               'mb',
-                               'ninja_confirm_noop'],
+      'chromium_apply_config':[
+          'mb',
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -566,9 +568,10 @@ SPEC = {
     },
     'GPU FYI Mac Builder (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['chrome_with_codecs',
-                                'mb',
-                                'ninja_confirm_noop'],
+      'chromium_apply_config':[
+          'mb',
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -583,8 +586,9 @@ SPEC = {
     },
     'GPU FYI Mac dEQP Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config':['chrome_with_codecs',
-                               'ninja_confirm_noop'],
+      'chromium_apply_config':[
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -805,7 +809,9 @@ SPEC = {
     },
     'Android FYI Release (Nexus 5)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
+      'chromium_apply_config': [
+          'mb'
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -823,7 +829,6 @@ SPEC = {
     'Android FYI Release (Nexus 5X)': {
       'chromium_config': 'android',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'download_vr_test_apks',
       ],
       'gclient_config': 'chromium',
@@ -840,7 +845,9 @@ SPEC = {
     },
     'Android FYI Release (Nexus 6)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs', 'mb'],
+      'chromium_apply_config': [
+          'mb'
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -857,7 +864,6 @@ SPEC = {
     },
     'Android FYI Release (Nexus 6P)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -872,7 +878,6 @@ SPEC = {
     },
     'Android FYI Release (Nexus 9)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -887,7 +892,6 @@ SPEC = {
     },
     'Android FYI Release (NVIDIA Shield TV)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -902,7 +906,6 @@ SPEC = {
     },
     'Android FYI dEQP Release (Nexus 5X)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -917,7 +920,6 @@ SPEC = {
     },
     'Android FYI 32 Vk Release (Nexus 5X)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -934,7 +936,6 @@ SPEC = {
     },
     'Android FYI 32 Vk Release (Pixel 2)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -951,7 +952,6 @@ SPEC = {
     },
     'Android FYI 64 Vk Release (Nexus 5X)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -968,7 +968,6 @@ SPEC = {
     },
     'Android FYI 64 Vk Release (Pixel 2)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -985,7 +984,6 @@ SPEC = {
     },
     'Android FYI 32 dEQP Vk Release (Nexus 5X)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -1002,7 +1000,6 @@ SPEC = {
     },
     'Android FYI 32 dEQP Vk Release (Pixel 2)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -1019,7 +1016,6 @@ SPEC = {
     },
     'Android FYI 64 dEQP Vk Release (Nexus 5X)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -1036,7 +1032,6 @@ SPEC = {
     },
     'Android FYI 64 dEQP Vk Release (Pixel 2)': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -1054,8 +1049,10 @@ SPEC = {
 
     'GPU Fake Linux Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop',
-                                'chrome_with_codecs' ],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1202,7 +1199,6 @@ SPEC = {
     'Optional Android Release (Nexus 5X)': {
       'chromium_config': 'android',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'download_vr_test_apks',
 
         # This is specified in order to match the same configuration

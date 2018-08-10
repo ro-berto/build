@@ -16,7 +16,6 @@ SPEC = {
     'GPU Win Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'goma_high_parallel',
         'goma_enable_global_file_id_cache',
         'mb',
@@ -36,7 +35,6 @@ SPEC = {
     'GPU Win Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -83,7 +81,6 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'chrome_with_codecs',
         'goma_high_parallel',
       ],
       'gclient_config': 'chromium',
@@ -105,7 +102,6 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'chrome_with_codecs',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -148,7 +144,6 @@ SPEC = {
     'GPU Mac Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -166,7 +161,6 @@ SPEC = {
     'GPU Mac Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -239,7 +233,6 @@ SPEC = {
     'Android Release (Nexus 5X)': {
       'chromium_config': 'android',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'download_vr_test_apks',
 
         # This is specified in order to match the same configuration

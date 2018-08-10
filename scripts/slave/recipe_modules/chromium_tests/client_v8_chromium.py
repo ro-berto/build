@@ -17,7 +17,6 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'chrome_with_codecs'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {

@@ -390,11 +390,6 @@ def proprietary_codecs(c, invert=False):
   c.gyp_env.GYP_DEFINES['proprietary_codecs'] = int(not invert)
 
 @config_ctx()
-def chrome_with_codecs(c):
-  ffmpeg_branding(c, branding='Chrome')
-  proprietary_codecs(c)
-
-@config_ctx()
 def chromeos_with_codecs(c):
   ffmpeg_branding(c, branding='ChromeOS')
   proprietary_codecs(c)

@@ -38,7 +38,6 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'chrome_with_codecs',
         'goma_rbe',
       ],
       'gclient_config': 'chromium',
@@ -101,7 +100,6 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'chrome_with_codecs',
 
         # This is specified because 'linux_chromium_rel_ng' builder
         # is one of the slowest builder in CQ (crbug.com/804251).

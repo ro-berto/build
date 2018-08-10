@@ -21,7 +21,6 @@ KITCHEN_TEST_SPEC = {
   'chromium_apply_config': [
     'mb',
     'ninja_confirm_noop',
-    'chrome_with_codecs'
   ],
   'gclient_config': 'chromium',
   'chromium_config_kwargs': {
@@ -559,7 +558,6 @@ SPEC = {
     'Android Builder (dbg)': {
       'chromium_config': 'android',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'mb',
         'download_vr_test_apks'
       ],
@@ -693,7 +691,6 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'chrome_with_codecs'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -711,7 +708,6 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'chrome_with_codecs'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {

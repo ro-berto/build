@@ -234,7 +234,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]/client' proprietary_codecs=1 target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "component=static_library gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -522,7 +522,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]/client' proprietary_codecs=1 target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "component=static_library gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -1183,7 +1183,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]/client' proprietary_codecs=1 target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "component=static_library gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -1844,7 +1844,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]/client' proprietary_codecs=1 target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "component=static_library gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -2505,7 +2505,7 @@
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library ffmpeg_branding=Chrome gomadir='[GOMA_CACHE]/client' proprietary_codecs=1 target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "component=static_library gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [

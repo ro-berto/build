@@ -48,7 +48,6 @@ SPEC = {
     'Mac Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
       ],

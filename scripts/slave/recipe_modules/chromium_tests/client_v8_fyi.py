@@ -198,7 +198,6 @@ SPEC = {
     'Win V8 FYI Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -224,7 +223,6 @@ SPEC = {
     'Mac V8 FYI Release (Intel)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -250,7 +248,6 @@ SPEC = {
     'Linux V8 FYI Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -276,7 +273,6 @@ SPEC = {
     'Linux V8 FYI Release - concurrent marking (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -302,7 +298,6 @@ SPEC = {
     'Android V8 FYI Release (Nexus 5X)': {
       'chromium_config': 'android',
       'chromium_apply_config': [
-        'chrome_with_codecs',
         'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',

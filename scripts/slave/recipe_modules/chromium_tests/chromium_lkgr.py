@@ -27,7 +27,10 @@ SPEC = {
     },
     'Win ASan Release Media': {
       'chromium_config': 'chromium_win_clang_asan',
-      'chromium_apply_config': ['mb', 'clobber', 'chrome_with_codecs'],
+      'chromium_apply_config': [
+          'mb',
+          'clobber',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -62,8 +65,11 @@ SPEC = {
     },
     'Mac ASAN Release Media': {
       'chromium_config': 'chromium_asan',
-      'chromium_apply_config': ['mb', 'clobber',
-                                'enable_ipc_fuzzer', 'chrome_with_codecs'],
+      'chromium_apply_config': [
+          'mb',
+          'clobber',
+          'enable_ipc_fuzzer',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
