@@ -277,7 +277,7 @@
       "--src-dir",
       "[START_DIR]/src",
       "--build-name",
-      "linux_rel",
+      "Linux_x64",
       "--staging-dir",
       "[CACHE]/chrome_staging",
       "--target",

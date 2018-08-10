@@ -1114,7 +1114,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   @_with_chromium_layout
   def archive_build(self, step_name, gs_bucket, gs_acl=None, mode=None,
-                    **kwargs):
+                    build_name=None, **kwargs):
     """Returns a step invoking archive_build.py to archive a Chromium build."""
 
     # archive_build.py insists on inspecting factory properties. For now just
@@ -1133,7 +1133,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     args = [
         '--src-dir', self.m.path['checkout'],
-        '--build-name', sanitized_buildername,
+        '--build-name', build_name or sanitized_buildername,
         '--staging-dir', self.m.path['cache'].join('chrome_staging'),
         '--target', self.c.build_config_fs,
         '--factory-properties', self.m.json.dumps(fake_factory_properties),

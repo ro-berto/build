@@ -37,6 +37,7 @@ SPEC = {
       },
       'archive_build': True,
       'gs_bucket': 'chromium-browser-snapshots',
+      'gs_build_name': 'Win',
       'gs_acl': 'public-read',
       'checkout_dir': 'win',
       'testing': {
@@ -74,6 +75,7 @@ SPEC = {
       },
       'archive_build': True,
       'gs_bucket': 'chromium-browser-snapshots',
+      'gs_build_name': 'Win_x64',
       'gs_acl': 'public-read',
       'checkout_dir': 'win',
       'testing': {
@@ -111,6 +113,7 @@ SPEC = {
       },
       'archive_build': True,
       'gs_bucket': 'chromium-browser-snapshots',
+      'gs_build_name': 'Mac',
       'gs_acl': 'public-read',
       'checkout_dir': 'mac',
       'testing': {
@@ -148,6 +151,7 @@ SPEC = {
       },
       'archive_build': True,
       'gs_bucket': 'chromium-browser-snapshots',
+      'gs_build_name': 'Linux_x64',
       'gs_acl': 'public-read',
       'checkout_dir': 'linux_clobber',
       'testing': {
@@ -188,6 +192,7 @@ SPEC = {
       'android_config': 'main_builder',
       'archive_build': True,
       'gs_bucket': 'chromium-browser-snapshots',
+      'gs_build_name': 'Android',
       'gs_acl': 'public-read',
       'testing': {
         'platform': 'linux',

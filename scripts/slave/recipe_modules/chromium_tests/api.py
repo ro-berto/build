@@ -502,7 +502,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           'archive_build',
           bot_config['gs_bucket'],
           bot_config.get('gs_acl'),
-          mode='dev'
+          mode='dev',
+          build_name=bot_config.get('gs_build_name'),
       )
     if bot_config.get('cf_archive_build') and not self.m.tryserver.is_tryserver:
        self.m.archive.clusterfuzz_archive(
