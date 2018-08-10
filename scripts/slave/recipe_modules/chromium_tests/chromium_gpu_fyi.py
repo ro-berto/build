@@ -18,7 +18,6 @@ SPEC = {
       'chromium_apply_config': [
         'build_angle_deqp_tests',
         'chrome_with_codecs',
-        'internal_gles2_conform_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -38,7 +37,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'chrome_with_codecs',
-        'internal_gles2_conform_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -250,7 +248,6 @@ SPEC = {
       'chromium_apply_config': [
         'build_angle_deqp_tests',
         'chrome_with_codecs',
-        'internal_gles2_conform_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -270,7 +267,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'chrome_with_codecs',
-        'internal_gles2_conform_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -291,7 +287,6 @@ SPEC = {
       'chromium_apply_config': [
         'build_angle_deqp_tests',
         'chrome_with_codecs',
-        'internal_gles2_conform_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -350,7 +345,6 @@ SPEC = {
       # bot, at least not yet.
       'chromium_config': 'chromium_win_clang',
       'chromium_apply_config': ['chrome_with_codecs',
-                                'internal_gles2_conform_tests',
                                 'mb',
                                 'ninja_confirm_noop',],
       'gclient_config': 'chromium',
@@ -376,7 +370,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
                                 'chrome_with_codecs',
-                                'internal_gles2_conform_tests',
                                 'build_angle_deqp_tests'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
@@ -393,7 +386,6 @@ SPEC = {
     'GPU FYI Linux Ozone Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'internal_gles2_conform_tests',
         'mb',
         'ninja_confirm_noop',
         'ozone',
@@ -412,8 +404,7 @@ SPEC = {
     'GPU FYI Linux Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
-                                'chrome_with_codecs',
-                                'internal_gles2_conform_tests'],
+                                'chrome_with_codecs'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -430,7 +421,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop',
                                 'chrome_with_codecs',
-                                'internal_gles2_conform_tests',
                                 'build_angle_deqp_tests'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
@@ -560,7 +550,6 @@ SPEC = {
     'GPU FYI Mac Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config':['chrome_with_codecs',
-                               'internal_gles2_conform_tests',
                                'mb',
                                'ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -578,7 +567,6 @@ SPEC = {
     'GPU FYI Mac Builder (dbg)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['chrome_with_codecs',
-                                'internal_gles2_conform_tests',
                                 'mb',
                                 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -596,8 +584,6 @@ SPEC = {
     'GPU FYI Mac dEQP Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config':['chrome_with_codecs',
-                               'internal_gles2_conform_tests',
-                               'mb',
                                'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],

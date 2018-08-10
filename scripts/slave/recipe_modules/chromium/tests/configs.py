@@ -240,12 +240,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('internal_gles2_conform_tests') +
-      api.properties(chromium_apply_config=['internal_gles2_conform_tests']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
       api.test('build_angle_deqp_tests') +
       api.properties(chromium_apply_config=['build_angle_deqp_tests']) +
       api.post_process(post_process.DropExpectation)

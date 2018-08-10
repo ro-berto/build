@@ -692,10 +692,6 @@ def cast_linux(c):
   c.gyp_env.GYP_DEFINES['chromecast'] = 1
 
 @config_ctx()
-def internal_gles2_conform_tests(c):
-  c.gyp_env.GYP_DEFINES['internal_gles2_conform_tests'] = 1
-
-@config_ctx()
 def build_angle_deqp_tests(c):
   c.gyp_env.GYP_DEFINES['build_angle_deqp_tests'] = 1
 
