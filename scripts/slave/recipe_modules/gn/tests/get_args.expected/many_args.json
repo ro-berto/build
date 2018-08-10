@@ -1,0 +1,35 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "None/out/Release/args.gn",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "read GN args",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Count of GN args (10) exceeds limit (5), presented in logs instead@@@",
+      "@@@STEP_LOG_LINE@gn_args@arg00 = \"value0\"@@@",
+      "@@@STEP_LOG_LINE@gn_args@arg01 = \"value1\"@@@",
+      "@@@STEP_LOG_LINE@gn_args@arg02 = \"value2\"@@@",
+      "@@@STEP_LOG_LINE@gn_args@arg03 = \"value3\"@@@",
+      "@@@STEP_LOG_LINE@gn_args@arg04 = \"value4\"@@@",
+      "@@@STEP_LOG_LINE@gn_args@arg05 = \"value5\"@@@",
+      "@@@STEP_LOG_LINE@gn_args@arg06 = \"value6\"@@@",
+      "@@@STEP_LOG_LINE@gn_args@arg07 = \"value7\"@@@",
+      "@@@STEP_LOG_LINE@gn_args@arg08 = \"value8\"@@@",
+      "@@@STEP_LOG_LINE@gn_args@arg09 = \"value9\"@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

@@ -31,6 +31,7 @@
   * [gae_sdk](#recipe_modules-gae_sdk)
   * [gatekeeper](#recipe_modules-gatekeeper)
   * [git_clone_bundler](#recipe_modules-git_clone_bundler)
+  * [gn](#recipe_modules-gn)
   * [goma](#recipe_modules-goma)
   * [halt](#recipe_modules-halt)
   * [ios](#recipe_modules-ios)
@@ -252,6 +253,7 @@
   * [gatekeeper-failure](#recipes-gatekeeper-failure) &mdash; Repeatedly fails as a way to ensure the gatekeeper is alive and well.
   * [gatekeeper:tests/call](#recipes-gatekeeper_tests_call)
   * [git_clone_bundler:examples/full](#recipes-git_clone_bundler_examples_full)
+  * [gn:tests/get_args](#recipes-gn_tests_get_args)
   * [goma:examples/full](#recipes-goma_examples_full)
   * [goma:tests/build_with_goma](#recipes-goma_tests_build_with_goma)
   * [goma:tests/ensure](#recipes-goma_tests_ensure)
@@ -2017,6 +2019,55 @@ Args:
 Returns: (dict) If 'remote_name' is supplied, a dictionary mapping the
     remote repository URL (key) to the Google Storage path (value) where
     that repository's bundle was uploaded.
+### *recipe_modules* / [gn](/scripts/slave/recipe_modules/gn)
+
+[DEPS](/scripts/slave/recipe_modules/gn/__init__.py#5): [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+#### **class [GnApi](/scripts/slave/recipe_modules/gn/api.py#9)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+
+&mdash; **def [default\_args\_presenter](/scripts/slave/recipe_modules/gn/api.py#14)(self, result, args, location=None, text_limit=15):**
+
+Default presenter for GN args.
+
+The arguments will be presented one per line, with arguments that aren't
+useful for local repros moved to the end. The arguments will be presented
+either in the step_text or the logs, depending on the values of location and
+text_limit.
+
+Args:
+  result: The step result to present the GN args on.
+  args: The GN args to present.
+  location: Controls where the GN args for the build should be presented. By
+    default or if None, the args will be in step_text if the count of lines
+    is less than text_limit or the logs otherwise. To force the presentation
+    to the step_text or logs, use 'text' or 'logs', respectively.
+ text_limit: The maximum number of lines of GN args to display in the
+    step_text when using the default behavior for displaying GN args.
+
+&mdash; **def [get\_args](/scripts/slave/recipe_modules/gn/api.py#61)(self, build_dir, presenter=None, step_name='read GN args'):**
+
+Get the GN args for the build.
+
+A step will be executed that fetches the args.gn file and adds the contents
+to the presentation for the step.
+
+Args:
+  build_dir: The Path to the build output directory. The args.gn file will
+    be extracted from this location. The args.gn file must already exist (gn
+    or mb should have already been run before calling this method).
+  presenter: The callback used to present the GN args. It must be an object
+    callable with two arguments:
+      1. The step result.
+      2. The GN args in the form of the content of the args.gn file.
+    By default, gn.default_args_presenter will be used. To change the text
+    limit or force it to present to the logs or text, use functools.partial.
+    e.g.
+      functools.partial(
+         self.m.gn.default_args_presenter, location='logs')
+  step_name: The name of the step for fetching the args.
+
+Returns:
+  The content of the args.gn file.
 ### *recipe_modules* / [goma](/scripts/slave/recipe_modules/goma)
 
 [DEPS](/scripts/slave/recipe_modules/goma/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
@@ -5046,6 +5097,11 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 [DEPS](/scripts/slave/recipe_modules/git_clone_bundler/examples/full.py#5): [git\_clone\_bundler](#recipe_modules-git_clone_bundler), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/git_clone_bundler/examples/full.py#23)(api):**
+### *recipes* / [gn:tests/get\_args](/scripts/slave/recipe_modules/gn/tests/get_args.py)
+
+[DEPS](/scripts/slave/recipe_modules/gn/tests/get_args.py#7): [gn](#recipe_modules-gn), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/gn/tests/get_args.py#24)(api):**
 ### *recipes* / [goma:examples/full](/scripts/slave/recipe_modules/goma/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/goma/examples/full.py#8): [goma](#recipe_modules-goma), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
