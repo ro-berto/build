@@ -4427,7 +4427,7 @@ Returns: the list of matched targets.
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py#7): [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py#68)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trigger_child_builds.py#67)(api):**
 ### *recipes* / [chromium\_tests:tests/api/trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py#8): [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
@@ -5560,7 +5560,7 @@ Example of using the Syzygy recipe module.
 
 Recipe for archiving officially tagged v8 builds.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/archive.py#125)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/archive.py#126)(api):**
 
 &mdash; **def [make\_archive](/scripts/slave/recipes/v8/archive.py#37)(api, branch, version, archive_type, step_suffix='', archive_suffix=''):**
 ### *recipes* / [v8/auto\_roll\_deps](/scripts/slave/recipes/v8/auto_roll_deps.py)
