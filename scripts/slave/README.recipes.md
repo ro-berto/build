@@ -2469,25 +2469,25 @@ Returns the path to legion.py.
 
 &mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/libyuv/api.py#16)(self, builders, recipe_configs, perf_config=None):**
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/libyuv/api.py#75)(self):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/libyuv/api.py#77)(self):**
 
-&mdash; **def [extract\_build](/scripts/slave/recipe_modules/libyuv/api.py#109)(self):**
+&mdash; **def [extract\_build](/scripts/slave/recipe_modules/libyuv/api.py#111)(self):**
 
-&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/libyuv/api.py#80)(self):**
+&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/libyuv/api.py#82)(self):**
 
-&mdash; **def [package\_build](/scripts/slave/recipe_modules/libyuv/api.py#99)(self):**
+&mdash; **def [package\_build](/scripts/slave/recipe_modules/libyuv/api.py#101)(self):**
 
-&mdash; **def [runtests](/scripts/slave/recipe_modules/libyuv/api.py#130)(self):**
+&mdash; **def [runtests](/scripts/slave/recipe_modules/libyuv/api.py#132)(self):**
 
 Add a suite of test steps.
 
-&emsp; **@property**<br>&mdash; **def [should\_build](/scripts/slave/recipe_modules/libyuv/api.py#59)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_build](/scripts/slave/recipe_modules/libyuv/api.py#61)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_download\_build](/scripts/slave/recipe_modules/libyuv/api.py#71)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_download\_build](/scripts/slave/recipe_modules/libyuv/api.py#73)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_test](/scripts/slave/recipe_modules/libyuv/api.py#63)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_test](/scripts/slave/recipe_modules/libyuv/api.py#65)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_upload\_build](/scripts/slave/recipe_modules/libyuv/api.py#67)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_upload\_build](/scripts/slave/recipe_modules/libyuv/api.py#69)(self):**
 ### *recipe_modules* / [luci\_config](/scripts/slave/recipe_modules/luci_config)
 
 [DEPS](/scripts/slave/recipe_modules/luci_config/__init__.py#1): [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]

@@ -53,6 +53,8 @@ class LibyuvApi(recipe_api.RecipeApi):
         # fastbuild is enabled since it implies symbol_level=2. So we can only
         # enable dcheck for those.
         self.m.chromium.apply_config('dcheck')
+      elif 'ubsan' in buildername.lower():
+        pass  # UBSAN with dchecks crashes clang on some bots.
       else:
         self.m.chromium.apply_config('trybot_flavor')
 
