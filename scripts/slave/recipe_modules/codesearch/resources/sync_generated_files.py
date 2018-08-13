@@ -60,6 +60,7 @@ def copy_generated_files(source, dest, debug_dir):
 
       if not os.path.exists(source_file) or \
           not has_whitelisted_extension(source_file):
+        print "DELETING FILE:", dest_file
         os.remove(dest_file)
 
   # Second, copy everything that matches the whitelist from source to dest.
@@ -76,6 +77,8 @@ def copy_generated_files(source, dest, debug_dir):
       source_file = os.path.join(dirpath, filename)
       dest_file = translate_root(source_root, dest_root, source_file)
 
+      if not os.path.exists(dest_file):
+        print "ADDING FILE:", dest_file
       shutil.copyfile(source_file, dest_file)
 
   # Finally, delete any empty directories. We keep going to a fixed point, to
@@ -88,6 +91,7 @@ def copy_generated_files(source, dest, debug_dir):
     # We make no effort to deduplicate paths in dirs_to_examine, so we might
     # have already removed this path.
     if os.path.exists(d) and os.listdir(d) == []:
+      print "DELETING DIRECTORY:", dest_file
       os.rmdir(d)
 
       # The parent dir might be empty now, so add it back into the list.
@@ -115,6 +119,7 @@ def main():
 
   # Add the files to the git index, exit if there were no changes.
   check_call(['git', 'add', '--', '.'], cwd=opts.dest)
+  check_call(['git', 'status'], cwd=opts.dest)
   status = subprocess.check_output(
       ['git', 'status', '--porcelain'], cwd=opts.dest)
   if not status:
