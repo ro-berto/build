@@ -150,6 +150,9 @@
       "/path/to/tmp/json"
     ],
     "cwd": "[START_DIR]/boringssl",
+    "env": {
+      "MSAN_SYMBOLIZER_PATH": "[START_DIR]/boringssl/util/bot/llvm-build/bin/llvm-symbolizer"
+    },
     "name": "unit tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test_utils.test_results@{@@@",
@@ -207,6 +210,9 @@
       "-pipe"
     ],
     "cwd": "[START_DIR]/boringssl/ssl/test/runner",
+    "env": {
+      "MSAN_SYMBOLIZER_PATH": "[START_DIR]/boringssl/util/bot/llvm-build/bin/llvm-symbolizer"
+    },
     "name": "ssl tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@test_utils.test_results@{@@@",

@@ -193,6 +193,9 @@ def _GetTargetEnv(buildername, bot_utils):
     env['ASAN_OPTIONS'] = 'detect_stack_use_after_return=1'
     env['ASAN_SYMBOLIZER_PATH'] = bot_utils.join('llvm-build', 'bin',
                                                  'llvm-symbolizer')
+  if _HasToken(buildername, 'msan'):
+    env['MSAN_SYMBOLIZER_PATH'] = bot_utils.join('llvm-build', 'bin',
+                                                 'llvm-symbolizer')
   return env
 
 
