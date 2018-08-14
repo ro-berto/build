@@ -65,7 +65,10 @@ def RunSteps(api):
       return
 
     suffix = ' (with patch)'
-    bot_update_step = api.bot_update.ensure_checkout(suffix=suffix, patch=True)
+    checkout_dir = api.chromium_checkout.get_checkout_dir({})
+    with api.context(cwd=checkout_dir):
+      bot_config = {}
+      bot_update_step = api.chromium_checkout.ensure_checkout(bot_config)
     api.chromium.runhooks(name='runhooks' + suffix)
 
     affected_files = api.chromium_checkout.get_files_affected_by_patch()
@@ -92,7 +95,9 @@ def RunSteps(api):
     # We could build without-patch first to avoid having to apply the patch
     # twice, but it's nicer to fail fast when the patch does not compile.
     suffix = ' (with patch again)'
-    api.bot_update.ensure_checkout(suffix=suffix, patch=True)
+    with api.context(cwd=checkout_dir):
+      bot_update_step = api.bot_update.ensure_checkout(suffix=suffix,
+                                                       patch=True)
     api.chromium.runhooks(name='runhooks' + suffix)
 
     with api.context(cwd=api.path['checkout']):
