@@ -1032,6 +1032,20 @@
               "mlippautz+fyi-bots@chromium.org"
             ],
             "forgiving_optional": ["*"]
+          },
+          "linux-annotator-rel": {
+            "tree_notify": [
+              "georgesak@chromium.com",
+              "nicolaso@chromium.com"
+            ],
+            "forgiving_optional": ["*"]
+          },
+          "win-annotator-rel": {
+            "tree_notify": [
+              "georgesak@chromium.com",
+              "nicolaso@chromium.com"
+            ],
+            "forgiving_optional": ["*"]
           }
         }
       }
