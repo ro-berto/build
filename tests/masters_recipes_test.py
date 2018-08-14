@@ -78,6 +78,12 @@ FAKE_BUILDERS = {
         'linux-chromium-tests-staging-builder',
         'linux-chromium-tests-staging-tests',
         'linux-tcmalloc-rel',
+        'Android Builder (dbg)',
+        'Android ChromeDriver Tests (dbg)',
+        'Android Find Annotated Test',
+        'Android Remoting Tests',
+        'Android VR Tests',
+        'Chromium Windows Analyze',
     ],
     'master.chromium.gpu': [
         # These have been migrated to LUCI.
