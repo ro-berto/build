@@ -135,8 +135,7 @@
       "--use-sdk",
       "--compiler=dart2js",
       "--dart2js-batch",
-      "--no-preview-dart-2",
-      "--runtime=ie10",
+      "--runtime=ie11",
       "--progress=buildbot",
       "-v",
       "--reset-browser-configuration",
@@ -145,6 +144,8 @@
       "--write-debug-log",
       "--write-result-log",
       "--write-test-outcome-log",
+      "--shards=5",
+      "--shard=3",
       "--builder-tag=win7",
       "-j6",
       "--timeout=120",
@@ -153,7 +154,7 @@
       "samples"
     ],
     "cwd": "[START_DIR]\\sdk",
-    "name": "dart2js ie10 tests"
+    "name": "dart2js ie11 tests"
   },
   {
     "cmd": [
@@ -168,7 +169,7 @@
     ],
     "cwd": "[START_DIR]\\sdk",
     "infra_step": true,
-    "name": "read results of dart2js ie10 tests",
+    "name": "read results of dart2js ie11 tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
@@ -198,8 +199,7 @@
       "--use-sdk",
       "--compiler=dart2js",
       "--dart2js-batch",
-      "--no-preview-dart-2",
-      "--runtime=ie10",
+      "--runtime=ie11",
       "--progress=buildbot",
       "-v",
       "--reset-browser-configuration",
@@ -208,6 +208,8 @@
       "--write-debug-log",
       "--write-result-log",
       "--write-test-outcome-log",
+      "--shards=5",
+      "--shard=3",
       "--builder-tag=win7",
       "-j6",
       "--timeout=120",
@@ -215,7 +217,7 @@
       "co19"
     ],
     "cwd": "[START_DIR]\\sdk",
-    "name": "dart2js ie10 co19 tests"
+    "name": "dart2js ie11 co19 tests"
   },
   {
     "cmd": [
@@ -230,7 +232,7 @@
     ],
     "cwd": "[START_DIR]\\sdk",
     "infra_step": true,
-    "name": "read results of dart2js ie10 co19 tests",
+    "name": "read results of dart2js ie11 co19 tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
@@ -260,8 +262,7 @@
       "--use-sdk",
       "--compiler=dart2js",
       "--dart2js-batch",
-      "--no-preview-dart-2",
-      "--runtime=ie10",
+      "--runtime=ie11",
       "--progress=buildbot",
       "-v",
       "--reset-browser-configuration",
@@ -270,6 +271,8 @@
       "--write-debug-log",
       "--write-result-log",
       "--write-test-outcome-log",
+      "--shards=5",
+      "--shard=3",
       "--builder-tag=win7",
       "-j6",
       "--timeout=120",
@@ -280,7 +283,7 @@
       "samples"
     ],
     "cwd": "[START_DIR]\\sdk",
-    "name": "dart2js ie10-fast-startup tests"
+    "name": "dart2js ie11-fast-startup tests"
   },
   {
     "cmd": [
@@ -295,7 +298,7 @@
     ],
     "cwd": "[START_DIR]\\sdk",
     "infra_step": true,
-    "name": "read results of dart2js ie10-fast-startup tests",
+    "name": "read results of dart2js ie11-fast-startup tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"
@@ -325,8 +328,7 @@
       "--use-sdk",
       "--compiler=dart2js",
       "--dart2js-batch",
-      "--no-preview-dart-2",
-      "--runtime=ie10",
+      "--runtime=ie11",
       "--progress=buildbot",
       "-v",
       "--reset-browser-configuration",
@@ -335,6 +337,8 @@
       "--write-debug-log",
       "--write-result-log",
       "--write-test-outcome-log",
+      "--shards=5",
+      "--shard=3",
       "--builder-tag=win7",
       "-j6",
       "--timeout=120",
@@ -343,7 +347,7 @@
       "co19"
     ],
     "cwd": "[START_DIR]\\sdk",
-    "name": "dart2js ie10 co19-fast-startup tests"
+    "name": "dart2js ie11 co19-fast-startup tests"
   },
   {
     "cmd": [
@@ -358,7 +362,7 @@
     ],
     "cwd": "[START_DIR]\\sdk",
     "infra_step": true,
-    "name": "read results of dart2js ie10 co19-fast-startup tests",
+    "name": "read results of dart2js ie11 co19-fast-startup tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@result.log@@@@",
       "@@@STEP_LOG_END@result.log@@@"

@@ -19,23 +19,12 @@ DEPS = [
 ]
 
 
-all_runtimes = ['d8', 'ie9', 'ie10', 'ie11', 'ff',
-            'safari', 'chrome', 'chromeff',
-            'ie10chrome', 'ie11ff']
-
-multiple_runtimes = {'chromeff': ['chrome', 'ff'],
-                     'ie10chrome': ['ie10', 'chrome'],
-                     'ie11ff': ['ie11', 'ff']}
-all_options = {'hostchecked': '--host-checked',
-               'minified': '--minified',
-               'cps': '--cps-ir',
-               'csp': '--csp'}
 build_directories = {'linux': 'out/ReleaseX64',
                     'win': 'out/ReleaseX64',
                     'mac': 'xcodebuild/ReleaseX64'}
 
 IsFirstTestStep = True
-def RunTests(api, test_args, test_specs, use_xvfb=False):
+def RunTests(api, test_args, test_specs):
   for test_spec in test_specs:
     args = []
     args.extend(test_args)
@@ -47,18 +36,10 @@ def RunTests(api, test_args, test_specs, use_xvfb=False):
     args.extend(test_spec['tests'])
 
     with api.context(cwd=api.path['checkout']):
-      if use_xvfb:
-        xvfb_cmd = ['xvfb-run', '-a', '--server-args=-screen 0 1024x768x24']
-        xvfb_cmd.extend(['python', '-u', './tools/test.py'])
-        xvfb_cmd.extend(args)
-        api.step(test_spec['name'], xvfb_cmd)
-        api.dart.read_result_file('read results of %s' % test_spec['name'],
-                                  'result.log')
-      else:
-        api.python(test_spec['name'],
+      api.python(test_spec['name'],
                    api.path['checkout'].join('tools', 'test.py'),
                    args=args)
-        api.dart.read_result_file('read results of %s' % test_spec['name'],
+      api.dart.read_result_file('read results of %s' % test_spec['name'],
                                   'result.log')
 
 def sdk_url(channel, platform, arch, mode, revision):
@@ -78,22 +59,13 @@ def RunSteps(api):
   assert len(builder_fragments) > 3
   assert builder_fragments[0] == 'dart2js'
   system = builder_fragments[1]
-  assert system in ['linux', 'mac10.11', 'win7', 'win8', 'win10']
+  assert system in ['win7', 'win8', 'win10']
   runtime = builder_fragments[2]
-  assert runtime in all_runtimes
+  assert runtime == 'ie11'
   channel = builder_fragments[-1]
   assert channel in ['be', 'dev', 'stable', 'integration']
-  try:
-    num_shards = int(builder_fragments[-2])
-    shard = int(builder_fragments[-3])
-    sharded = True
-    options_end = - 3
-  except ValueError:
-    sharded = False
-    options_end = - 1
-  options = builder_fragments[3:options_end]
-  for option in options:
-    assert all_options.has_key(option)
+  num_shards = int(builder_fragments[-2])
+  shard = int(builder_fragments[-3])
 
   api.gclient.set_config('dart')
   api.path.c.dynamic_paths['tools'] = None
@@ -119,15 +91,12 @@ def RunSteps(api):
     api.zip.unzip('Unzip sdk', zipfile, build_dir)
 
   with api.step.defer_results():
-    runtimes = multiple_runtimes.get(runtime, [runtime])
-    for runtime in runtimes:
-      # TODO(whesse): Call a script that prints the runtime version.
-      test_args = ['--mode=release',
+    # TODO(whesse): Call a script that prints the runtime version.
+    test_args = ['--mode=release',
                    '--arch=x64',
                    '--use-sdk',
                    '--compiler=dart2js',
                    '--dart2js-batch',
-                   '--no-preview-dart-2',
                    '--runtime=%s' % runtime,
                    '--progress=buildbot',
                    '-v',
@@ -136,110 +105,36 @@ def RunSteps(api):
                    '--time',
                    '--write-debug-log',
                    '--write-result-log',
-                   '--write-test-outcome-log']
-      for option in options:
-        test_args.append(all_options[option])
-      if sharded:
-        test_args.extend(['--shards=%s' % num_shards, '--shard=%s' % shard])
-
-      if system in ['win7', 'win8', 'win10']:
-        test_args.append('--builder-tag=%s' % system)
-
-      if runtime in ['ie10', 'ie11']:
-        test_args.extend(['-j6', '--timeout=120'])  # Issue 28955, IE is slow.
-        test_specs = [{'name': 'dart2js %s tests' % runtime,
+                   '--write-test-outcome-log',
+                   '--shards=%s' % num_shards,
+                   '--shard=%s' % shard,
+                   '--builder-tag=%s' % system,
+                   '-j6',
+                   '--timeout=120'] # Issue 28955, IE is slow.
+    test_specs = [{'name': 'dart2js %s tests' % runtime,
                        'tests': ['html', 'pkg', 'samples']},
                       {'name': 'dart2js %s co19 tests' % runtime,
                        'tests': ['co19']}]
-      else:
-        test_specs = [
-          {'name': 'dart2js-%s tests' % runtime,
-           'tests': ['--exclude-suite=observatory_ui,co19']},
-          {'name': 'dart2js-%s-package tests' % runtime,
-           'tests': ['pkg']},
-          {'name': 'dart2js-%s-observatory_ui tests' % runtime,
-           'tests': ['observatory_ui']},
-          {'name': 'dart2js-%s-extra tests' % runtime,
-           'tests': ['dart2js_extra', 'dart2js_native']},
-          {'name': 'dart2js-%s-co19 tests' % runtime,
-           'tests': ['co19']},
-        ]
 
-      needs_xvfb = (runtime in ['chrome', 'ff'] and system == 'linux')
-      RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
+    RunTests(api, test_args, test_specs)
 
-      if runtime == 'd8':
-        kernel_test_args = test_args + ['--dart2js-with-kernel']
-        kernel_test_specs = [{
-            'name': 'dart2js-with-kernel-d8 tests',
-            'tests': ['language', 'corelib', 'dart2js_extra', 'dart2js_native']
-        }]
-        RunTests(api, kernel_test_args, kernel_test_specs, use_xvfb=needs_xvfb)
-        kernel_strong_test_args = test_args + [
-            '--dart2js-with-kernel',
-            '--strong'
-        ]
-        kernel_strong_test_args.remove('--no-preview-dart-2')
-        kernel_strong_test_specs = [{
-            'name': 'dart2js-with-kernel-strong-d8 tests',
-            'tests': ['language_2', 'corelib_2']
-        }]
-        RunTests(api, kernel_strong_test_args, kernel_strong_test_specs,
-                use_xvfb=needs_xvfb)
+    test_args.append('--fast-startup')
+    for spec in test_specs:
+      spec['name'] = spec['name'].replace(' tests', '-fast-startup tests')
+    RunTests(api, test_args, test_specs)
 
-      test_args.append('--fast-startup')
-      for spec in test_specs:
-        spec['name'] = spec['name'].replace(' tests', '-fast-startup tests')
-      RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
-
-      if runtime in ['d8']:
-        test_args.append('--checked')
-        for spec in test_specs:
-          spec['name'] = spec['name'].replace(' tests', '-checked tests')
-        RunTests(api, test_args, test_specs, use_xvfb=needs_xvfb)
-
-    with api.context(cwd=api.path['checkout']):
-      # TODO(whesse): Add archive coredumps step from dart_factory.py.
-      api.python('taskkill after testing',
+  with api.context(cwd=api.path['checkout']):
+    # TODO(whesse): Add archive coredumps step from dart_factory.py.
+    api.python('taskkill after testing',
                  api.path['checkout'].join('tools', 'task_kill.py'),
                  args=['--kill_browsers=True'],
                  ok_ret='any')
-      if api.platform.name == 'win':
-        api.step('debug log',
-                 ['cmd.exe', '/c', 'type', '.debug.log'])
-      else:
-        api.step('debug log',
-                 ['cat', '.debug.log'])
+    api.step('debug log', ['cmd.exe', '/c', 'type', '.debug.log'])
 
 def GenTests(api):
    yield (
-      api.test('dart2js-linux-d8-hostchecked-csp-3-5-be') +
-      api.platform('linux', 64) +
+      api.test('dart2js-win7-ie11-dev') + api.platform('win', 32) +
       api.properties.generic(
         mastername='client.dart',
-        buildername='dart2js-linux-d8-hostchecked-csp-3-5-be',
-        revision='hash_of_revision'))
-   yield (
-      api.test('dart2js-win7-ie10-dev') + api.platform('win', 32) +
-      api.properties.generic(
-        mastername='client.dart',
-        buildername='dart2js-win7-ie10-dev',
-        revision='hash_of_revision'))
-   yield (
-      api.test('dart2js-linux-chrome-be') + api.platform('linux', 64) +
-      api.properties.generic(
-        mastername='client.dart',
-        buildername='dart2js-linux-chrome-93-105-dev',
-        revision='hash_of_revision'))
-   yield (
-      api.test('dart2js-linux-d8-be') + api.platform('linux', 64) +
-      api.properties.generic(
-        mastername='client.dart',
-        buildername='dart2js-linux-d8-1-4-be',
-        revision='hash_of_revision'))
-   yield (
-      api.test('dart2js-mac10.11-safari-1-3-be') + api.platform('mac', 64) +
-      api.properties.generic(
-        mastername='client.dart',
-        buildername='dart2js-mac10.11-safari-1-3-be',
+        buildername='dart2js-win7-ie11-3-5-dev',
         revision='hash_of_revision'))
