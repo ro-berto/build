@@ -235,7 +235,6 @@ def main(argv):
       'master.client.crashpad': 'ClientCrashpad',
       'master.client.dart': 'Dart',
       'master.client.dart.fyi': 'DartFYI',
-      'master.client.dart.packages': 'DartPackages',
       'master.client.flutter': 'ClientFlutter',
       'master.client.libyuv': 'Libyuv',
       'master.client.nacl': 'NativeClient',
