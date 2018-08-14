@@ -1853,6 +1853,17 @@ BUILDERS = {
         },
         'testing': {'platform': 'linux'},
       },
+      'V8 Official Linux32 Debug': {
+        'recipe': 'v8/archive',
+        'chromium_apply_config': [
+          'clobber', 'clang', 'default_target_v8_archive',
+          'v8_static_library', 'goma', 'gn'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'testing': {'platform': 'linux'},
+      },
       'V8 Official Linux64': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
@@ -1860,6 +1871,17 @@ BUILDERS = {
           'v8_static_library', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Official Linux64 Debug': {
+        'recipe': 'v8/archive',
+        'chromium_apply_config': [
+          'clobber', 'clang', 'default_target_v8_archive',
+          'v8_static_library', 'goma', 'gn'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
         'testing': {'platform': 'linux'},
@@ -1875,6 +1897,17 @@ BUILDERS = {
         },
         'testing': {'platform': 'win'},
       },
+      'V8 Official Win32 Debug': {
+        'recipe': 'v8/archive',
+        'chromium_apply_config': [
+          'clobber', 'clang', 'default_target_v8_archive',
+          'v8_static_library', 'goma', 'gn'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'testing': {'platform': 'win'},
+      },
       'V8 Official Win64': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
@@ -1886,6 +1919,17 @@ BUILDERS = {
         },
         'testing': {'platform': 'win'},
       },
+      'V8 Official Win64 Debug': {
+        'recipe': 'v8/archive',
+        'chromium_apply_config': [
+          'clobber', 'clang', 'default_target_v8_archive',
+          'v8_static_library', 'goma', 'gn'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'win'},
+      },
       'V8 Official Mac64': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
@@ -1893,6 +1937,17 @@ BUILDERS = {
           'v8_static_library', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': {'platform': 'mac'},
+      },
+      'V8 Official Mac64 Debug': {
+        'recipe': 'v8/archive',
+        'chromium_apply_config': [
+          'clobber', 'clang', 'default_target_v8_archive',
+          'v8_static_library', 'goma', 'gn'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
         'testing': {'platform': 'mac'},

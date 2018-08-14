@@ -65,10 +65,11 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
     arch_name = '-%s' % api.chromium.c.TARGET_ARCH
   else:
     arch_name = ''
+  build_config = 'rel' if api.chromium.c.BUILD_CONFIG == 'Release' else 'dbg'
   archive_prefix = (
-      'v8-%s%s%s%s-rel' %
+      'v8-%s%s%s%s-%s' %
       (api.chromium.c.TARGET_PLATFORM, arch_name, api.chromium.c.TARGET_BITS,
-       archive_suffix)
+      archive_suffix, build_config)
   )
   archive_name = '%s-%s.zip' % (archive_prefix, version)
   branch_match = RELEASE_BRANCH_RE.match(branch)
