@@ -236,7 +236,6 @@ def main(argv):
       'master.client.dart': 'Dart',
       'master.client.dart.fyi': 'DartFYI',
       'master.client.flutter': 'ClientFlutter',
-      'master.client.libyuv': 'Libyuv',
       'master.client.nacl': 'NativeClient',
       'master.client.nacl.toolchain': 'NativeClientToolchain',
       'master.client.wasm.llvm': 'WasmLlvm',
