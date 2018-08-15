@@ -88,6 +88,9 @@ def GetCheckout(api):
   api.bot_update.ensure_checkout()
   api.gclient.runhooks()
 
+  api.step('3xHEAD Flutter Hooks',
+      ['src/third_party/dart/tools/3xhead_flutter_hooks.sh'])
+
 def TestFlutter(api):
   engine_src = api.path['start_dir'].join('src')
   flutter = api.path['start_dir'].join('flutter')
