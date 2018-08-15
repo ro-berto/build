@@ -363,10 +363,19 @@ def _ResultsDashboardDict(options):
   extra_columns = options.perf_config
   if extra_columns:
     supplemental_columns.update(extra_columns)
+
+  perf_dashboard_machine_group = options.build_properties.get(
+      'perf_dashboard_machine_group')
+  if not perf_dashboard_machine_group:
+    perf_dashboard_machine_group = chromium_utils.GetActiveMaster()
+  assert perf_dashboard_machine_group, (
+      'This field must be set for uploading to perf dashboard')
+
   fields = {
       'system': _GetPerfID(options),
       'test': options.test_type,
       'url': options.results_url,
+      'perf_dashboard_machine_group': perf_dashboard_machine_group,
       'mastername': options.build_properties.get('mastername'),
       'buildername': options.build_properties.get('buildername'),
       'buildnumber': options.build_properties.get('buildnumber'),
@@ -394,7 +403,7 @@ def _GenerateDashboardJson(log_processor, args):
         args['revisions'], args['test'], args['system'],
         args['buildername'], args['buildnumber'],
         args['supplemental_columns'], log_processor.IsReferenceBuild(),
-        chromium_utils.GetActiveMaster())
+        args['perf_dashboard_machine_group'])
   return None
 
 
@@ -462,8 +471,7 @@ def _SendResultsToDashboard(log_processor, args):
     results = results_dashboard.MakeListOfPoints(
         charts, args['system'], args['test'], args['buildername'],
         args['buildnumber'], args['supplemental_columns'],
-        chromium_utils.GetActiveMaster())
-
+        args['perf_dashboard_machine_group'])
   if not results:
     return False
 
