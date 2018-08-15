@@ -1056,6 +1056,12 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
+      "--blacklist",
+      "\"*.pyc\"",
+      "--blacklist",
+      "\"*.swp\"",
+      "--blacklist",
+      "\".git\"",
       "[BUILDER_CACHE]/ChromeOS_Swarm/src/out_arm-generic/Release/browser_tests.isolated.gen.json"
     ],
     "name": "isolate tests",

@@ -244,6 +244,12 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
+      "--blacklist",
+      "\"*.pyc\"",
+      "--blacklist",
+      "\"*.swp\"",
+      "--blacklist",
+      "\".git\"",
       "[BUILDER_CACHE]\\V8_Win64___msvc\\v8\\out\\Release\\bot_default.isolated.gen.json",
       "[BUILDER_CACHE]\\V8_Win64___msvc\\v8\\out\\Release\\mozilla.isolated.gen.json",
       "[BUILDER_CACHE]\\V8_Win64___msvc\\v8\\out\\Release\\test262.isolated.gen.json"

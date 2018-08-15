@@ -228,6 +228,12 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
+      "--blacklist",
+      "\"*.pyc\"",
+      "--blacklist",
+      "\"*.swp\"",
+      "--blacklist",
+      "\".git\"",
       "[BUILDER_CACHE]/V8_Linux64___custom_snapshot___debug_builder/v8/out/Debug/mjsunit.isolated.gen.json"
     ],
     "name": "isolate tests",

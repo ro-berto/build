@@ -230,6 +230,12 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
+      "--blacklist",
+      "\"*.pyc\"",
+      "--blacklist",
+      "\"*.swp\"",
+      "--blacklist",
+      "\".git\"",
       "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64___release_builder/v8/out/Release/run-num-fuzzer.isolated.gen.json"
     ],
     "name": "isolate tests",

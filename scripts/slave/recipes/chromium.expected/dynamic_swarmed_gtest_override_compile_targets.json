@@ -653,6 +653,12 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
+      "--blacklist",
+      "\"*.pyc\"",
+      "--blacklist",
+      "\"*.swp\"",
+      "--blacklist",
+      "\".git\"",
       "[START_DIR]/src/out/Release/tab_capture_end2end_tests.isolated.gen.json"
     ],
     "env": {

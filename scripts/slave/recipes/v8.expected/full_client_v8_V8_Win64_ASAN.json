@@ -242,6 +242,12 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
+      "--blacklist",
+      "\"*.pyc\"",
+      "--blacklist",
+      "\"*.swp\"",
+      "--blacklist",
+      "\".git\"",
       "[BUILDER_CACHE]\\V8_Win64_ASAN\\v8\\out\\Release\\bot_default.isolated.gen.json"
     ],
     "name": "isolate tests",

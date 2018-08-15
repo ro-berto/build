@@ -615,6 +615,12 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
+      "--blacklist",
+      "\"*.pyc\"",
+      "--blacklist",
+      "\"*.swp\"",
+      "--blacklist",
+      "\".git\"",
       "[START_DIR]/src/out/Release/base_unittests.isolated.gen.json"
     ],
     "name": "isolate tests",

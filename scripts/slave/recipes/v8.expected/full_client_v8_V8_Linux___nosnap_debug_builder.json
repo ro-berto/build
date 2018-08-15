@@ -228,6 +228,12 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
+      "--blacklist",
+      "\"*.pyc\"",
+      "--blacklist",
+      "\"*.swp\"",
+      "--blacklist",
+      "\".git\"",
       "[BUILDER_CACHE]/V8_Linux___nosnap_debug_builder/v8/out/Debug/bot_default.isolated.gen.json"
     ],
     "name": "isolate tests",

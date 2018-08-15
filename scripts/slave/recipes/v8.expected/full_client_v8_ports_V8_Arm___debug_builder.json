@@ -230,6 +230,12 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
+      "--blacklist",
+      "\"*.pyc\"",
+      "--blacklist",
+      "\"*.swp\"",
+      "--blacklist",
+      "\".git\"",
       "[BUILDER_CACHE]/V8_Arm___debug_builder/v8/out/Debug/bot_default.isolated.gen.json",
       "[BUILDER_CACHE]/V8_Arm___debug_builder/v8/out/Debug/d8_default.isolated.gen.json",
       "[BUILDER_CACHE]/V8_Arm___debug_builder/v8/out/Debug/optimize_for_size.isolated.gen.json"
