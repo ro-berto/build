@@ -102,7 +102,6 @@
   * [chromium:tests/runtest](#recipes-chromium_tests_runtest)
   * [chromium:tests/sizes](#recipes-chromium_tests_sizes)
   * [chromium:tests/taskkill](#recipes-chromium_tests_taskkill)
-  * [chromium:tests/update_clang](#recipes-chromium_tests_update_clang)
   * [chromium:tests/version](#recipes-chromium_tests_version)
   * [chromium_afl](#recipes-chromium_afl)
   * [chromium_android:examples/full](#recipes-chromium_android_examples_full)
@@ -927,7 +926,7 @@ Returns: (context manager) A context manager that inserts system python
 
 #### **class [ChromiumApi](/scripts/slave/recipe_modules/chromium/api.py#29)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1115)(self, step_name, gs_bucket, gs_acl=None, mode=None, build_name=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1105)(self, step_name, gs_bucket, gs_acl=None, mode=None, build_name=None, \*\*kwargs):**
 
 Returns a step invoking archive_build.py to archive a Chromium build.
 
@@ -991,7 +990,7 @@ Returns (ChromiumApi.Layout): The configured Chromium build layout.
 
 &mdash; **def [ensure\_toolchains](/scripts/slave/recipe_modules/chromium/api.py#853)(self):**
 
-&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1156)(self, test_name):**
+&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1146)(self, test_name):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [get\_clang\_version](/scripts/slave/recipe_modules/chromium/api.py#734)(self, \*\*kwargs):**
 
@@ -1017,7 +1016,7 @@ Args:
 
 Return the path to the built executable directory.
 
-&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1103)(self, \*\*kwargs):**
+&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1093)(self, \*\*kwargs):**
 
 &mdash; **def [reload\_version](/scripts/slave/recipe_modules/chromium/api.py#165)(self):**
 
@@ -1042,11 +1041,9 @@ Return a runtest.py invocation.
 Return a sizes.py invocation.
 This uses runtests.py to upload the results to the perf dashboard.
 
-&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#1097)(self):**
+&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#1087)(self):**
 
 &emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_launcher\_filter](/scripts/slave/recipe_modules/chromium/api.py#570)(self, tests):**
-
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [update\_clang](/scripts/slave/recipe_modules/chromium/api.py#1087)(self):**
 
 &emsp; **@property**<br>&mdash; **def [version](/scripts/slave/recipe_modules/chromium/api.py#147)(self):**
 
@@ -4160,11 +4157,6 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/taskkill.py#5): [chromium](#recipe_modules-chromium)
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/taskkill.py#10)(api):**
-### *recipes* / [chromium:tests/update\_clang](/scripts/slave/recipe_modules/chromium/tests/update_clang.py)
-
-[DEPS](/scripts/slave/recipe_modules/chromium/tests/update_clang.py#5): [chromium](#recipe_modules-chromium)
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/update_clang.py#10)(api):**
 ### *recipes* / [chromium:tests/version](/scripts/slave/recipe_modules/chromium/tests/version.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/version.py#7): [chromium](#recipe_modules-chromium), [recipe\_engine/python][recipe_engine/recipe_modules/python]

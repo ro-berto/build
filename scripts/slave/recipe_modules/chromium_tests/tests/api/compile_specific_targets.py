@@ -110,14 +110,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('update_clang') +
-      api.platform.name('win') +
-      api.properties.generic(
-          mastername='chromium.clang',
-          buildername='ToTWinCFI')
-  )
-
-  yield (
       api.test('android') +
       api.properties.generic(
           mastername='chromium.android',
