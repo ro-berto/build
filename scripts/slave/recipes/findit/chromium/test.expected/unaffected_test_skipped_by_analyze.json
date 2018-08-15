@@ -1101,12 +1101,6 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "--blacklist",
-      "\"*.pyc\"",
-      "--blacklist",
-      "\"*.swp\"",
-      "--blacklist",
-      "\".git\"",
       "[BUILDER_CACHE]\\win\\src\\out\\Release\\affected_tests.isolated.gen.json"
     ],
     "name": "test r1.isolate tests",

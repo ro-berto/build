@@ -268,12 +268,6 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "--blacklist",
-      "\"*.pyc\"",
-      "--blacklist",
-      "\"*.swp\"",
-      "--blacklist",
-      "\".git\"",
       "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8/out/Release/bot_default.isolated.gen.json"
     ],
     "name": "isolate tests",

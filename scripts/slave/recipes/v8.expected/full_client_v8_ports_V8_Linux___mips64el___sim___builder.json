@@ -229,12 +229,6 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "--blacklist",
-      "\"*.pyc\"",
-      "--blacklist",
-      "\"*.swp\"",
-      "--blacklist",
-      "\".git\"",
       "[BUILDER_CACHE]/V8_Linux___mips64el___sim___builder/v8/out/Release/bot_default.isolated.gen.json",
       "[BUILDER_CACHE]/V8_Linux___mips64el___sim___builder/v8/out/Release/test262.isolated.gen.json"
     ],

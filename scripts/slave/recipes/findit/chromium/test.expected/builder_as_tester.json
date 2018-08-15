@@ -962,12 +962,6 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "--blacklist",
-      "\"*.pyc\"",
-      "--blacklist",
-      "\"*.swp\"",
-      "--blacklist",
-      "\".git\"",
       "[BUILDER_CACHE]/linux/src/out/Release/services_unittests.isolated.gen.json"
     ],
     "name": "test r1.isolate tests",

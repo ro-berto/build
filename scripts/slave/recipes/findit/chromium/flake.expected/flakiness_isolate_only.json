@@ -1045,12 +1045,6 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "--blacklist",
-      "\"*.pyc\"",
-      "--blacklist",
-      "\"*.swp\"",
-      "--blacklist",
-      "\".git\"",
       "[BUILDER_CACHE]/mac/src/out/Release/browser_tests.isolated.gen.json"
     ],
     "name": "test r0.isolate tests",

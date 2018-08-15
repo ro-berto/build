@@ -228,12 +228,6 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "--blacklist",
-      "\"*.pyc\"",
-      "--blacklist",
-      "\"*.swp\"",
-      "--blacklist",
-      "\".git\"",
       "[BUILDER_CACHE]/V8_Linux___arm64___sim___gc_stress/v8/out/Debug/d8_default.isolated.gen.json"
     ],
     "name": "isolate tests",

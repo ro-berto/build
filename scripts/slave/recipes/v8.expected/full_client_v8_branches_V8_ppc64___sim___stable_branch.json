@@ -230,12 +230,6 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "--blacklist",
-      "\"*.pyc\"",
-      "--blacklist",
-      "\"*.swp\"",
-      "--blacklist",
-      "\".git\"",
       "[BUILDER_CACHE]/V8_ppc64___sim___stable_branch/v8/out/Release/unittests.isolated.gen.json"
     ],
     "name": "isolate tests",

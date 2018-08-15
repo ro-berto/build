@@ -484,12 +484,6 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "--blacklist",
-      "\"*.pyc\"",
-      "--blacklist",
-      "\"*.swp\"",
-      "--blacklist",
-      "\".git\"",
       "[TMP_BASE]/isolate_tmp_1/0.isolated.gen.json"
     ],
     "cwd": "[START_DIR]/src",

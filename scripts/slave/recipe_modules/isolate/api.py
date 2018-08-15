@@ -96,14 +96,6 @@ class IsolateApi(recipe_api.RecipeApi):
         step_result.presentation.status != self.m.step.FAILURE):
       step_result.presentation.status = self.m.step.WARNING
 
-  def _blacklist_args_for_isolate(self):
-    # Files that match these regexes should never be included in the isolate.
-    blacklist = ['*.pyc', '*.swp', '.git']
-    args = []
-    for el in blacklist:
-      args.extend(('--blacklist', '"' + el + '"'))
-    return args
-
   def isolate_tests(self, build_dir, targets=None, verbose=False,
                     swarm_hashes_property_name='swarm_hashes',
                     use_exparchive=False, step_name=None, **kwargs):
@@ -171,7 +163,6 @@ class IsolateApi(recipe_api.RecipeApi):
           '--isolate-server', self._isolate_server,
           '--eventlog-endpoint', 'prod',
       ] + (['--verbose'] if verbose else [])
-      args.extend(self._blacklist_args_for_isolate())
 
       if self.service_account_json:
         args.extend(['--service-account-json', self.service_account_json])
@@ -198,7 +189,6 @@ class IsolateApi(recipe_api.RecipeApi):
             '--isolate-server', self._isolate_server,
             '--eventlog-endpoint', 'prod',
         ] + (['--verbose'] if verbose else [])
-        args.extend(self._blacklist_args_for_isolate())
 
         if self.service_account_json:
           args.extend(['--service-account-json', self.service_account_json])

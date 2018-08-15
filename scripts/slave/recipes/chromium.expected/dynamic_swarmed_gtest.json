@@ -650,12 +650,6 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "--blacklist",
-      "\"*.pyc\"",
-      "--blacklist",
-      "\"*.swp\"",
-      "--blacklist",
-      "\".git\"",
       "[START_DIR]/src/out/Release/browser_tests.isolated.gen.json"
     ],
     "env": {

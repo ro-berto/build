@@ -263,12 +263,6 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "--blacklist",
-      "\"*.pyc\"",
-      "--blacklist",
-      "\"*.swp\"",
-      "--blacklist",
-      "\".git\"",
       "[BUILDER_CACHE]/V8_Mac64_GC_Stress/v8/out/Debug/d8_default.isolated.gen.json"
     ],
     "name": "isolate tests",

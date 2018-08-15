@@ -849,12 +849,6 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "--blacklist",
-      "\"*.pyc\"",
-      "--blacklist",
-      "\"*.swp\"",
-      "--blacklist",
-      "\".git\"",
       "[BUILDER_CACHE]/linux/src/out/Release/gl_tests.isolated.gen.json"
     ],
     "env": {
@@ -1679,12 +1673,6 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "--blacklist",
-      "\"*.pyc\"",
-      "--blacklist",
-      "\"*.swp\"",
-      "--blacklist",
-      "\".git\"",
       "[BUILDER_CACHE]/linux/src/out/Release/dummy_target_1.isolated.gen.json",
       "[BUILDER_CACHE]/linux/src/out/Release/dummy_target_2.isolated.gen.json"
     ],
