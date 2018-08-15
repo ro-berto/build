@@ -104,8 +104,6 @@ def TestFlutter(api):
   ]
   api.step('disable flutter analytics', [flutter_cmd, 'config', '--no-analytics'])
   with api.context(cwd=flutter):
-    with api.context(cwd=flutter.join('dev/bots')):
-      api.step('pub get in dev/bots before flutter test', ['pub', 'get'])
     api.step('flutter update-packages',
              [flutter_cmd, 'update-packages'] + test_args)
     # runs all flutter tests similar to travis as described on this page:
