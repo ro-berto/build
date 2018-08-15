@@ -218,7 +218,6 @@
   * [dart/docker](#recipes-dart_docker)
   * [dart/flutter_engine](#recipes-dart_flutter_engine)
   * [dart/misc](#recipes-dart_misc)
-  * [dart/misc_nobuild](#recipes-dart_misc_nobuild)
   * [dart/neo](#recipes-dart_neo)
   * [dart/packagebot](#recipes-dart_packagebot)
   * [dart/sdk_builder](#recipes-dart_sdk_builder)
@@ -4807,13 +4806,6 @@ Generates the sequence of steps that will be run by the slave.
 [DEPS](/scripts/slave/recipes/dart/misc.py#5): [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/misc.py#16)(api):**
-### *recipes* / [dart/misc\_nobuild](/scripts/slave/recipes/dart/misc_nobuild.py)
-
-[DEPS](/scripts/slave/recipes/dart/misc_nobuild.py#5): [test\_utils](#recipe_modules-test_utils), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/misc_nobuild.py#35)(api):**
-
-&mdash; **def [sdk\_url](/scripts/slave/recipes/dart/misc_nobuild.py#24)(channel, platform, arch, mode, revision):**
 ### *recipes* / [dart/neo](/scripts/slave/recipes/dart/neo.py)
 
 [DEPS](/scripts/slave/recipes/dart/neo.py#5): [dart](#recipe_modules-dart), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
