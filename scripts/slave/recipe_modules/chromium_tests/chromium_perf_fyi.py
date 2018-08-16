@@ -53,6 +53,8 @@ def _AddIsolatedTestSpec(name, platform,
   SPEC['builders'][name] = spec
 
 
+# TODO(crbug.com/828444): remove this builder once 'android-builder-perf'
+# functions well.
 _AddBuildSpec('Android Builder Perf FYI', 'android', target_bits=32,
               extra_compile_targets=['android_tools',
                                      'cc_perftests',
