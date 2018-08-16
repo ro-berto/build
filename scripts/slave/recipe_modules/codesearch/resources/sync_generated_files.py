@@ -91,7 +91,7 @@ def copy_generated_files(source, dest, debug_dir):
     # We make no effort to deduplicate paths in dirs_to_examine, so we might
     # have already removed this path.
     if os.path.exists(d) and os.listdir(d) == []:
-      print "DELETING DIRECTORY:", dest_file
+      print "DELETING DIRECTORY:", d
       os.rmdir(d)
 
       # The parent dir might be empty now, so add it back into the list.
@@ -120,6 +120,7 @@ def main():
   # Add the files to the git index, exit if there were no changes.
   check_call(['git', 'add', '--', '.'], cwd=opts.dest)
   check_call(['git', 'status'], cwd=opts.dest)
+  check_call(['git', 'diff'], cwd=opts.dest)
   status = subprocess.check_output(
       ['git', 'status', '--porcelain'], cwd=opts.dest)
   if not status:
