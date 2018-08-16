@@ -73,6 +73,8 @@ SPEC = {
       },
     },
 
+    # TODO(jbudorick): Remove this and use android-cronet-arm-rel as the
+    # trybot mirror.
     'Android Cronet Builder': {
       'chromium_config': 'android',
       'chromium_apply_config': ['cronet_builder'],
@@ -86,103 +88,6 @@ SPEC = {
       'bot_type': 'builder',
       'testing': {
         'platform': 'linux',
-      },
-    },
-
-    'Android Cronet Builder (dbg)': {
-      'chromium_config': 'main_builder_mb',
-      'chromium_apply_config': ['cronet_builder'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'android_apply_config': ['use_devil_provision'],
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-      'tests': {
-        steps.SizesStep(RESULTS_URL, 'android_cronet_builder_dbg')
-      },
-    },
-
-    'Android Cronet Builder Asan': {
-      'chromium_config': 'main_builder_rel_mb',
-      'chromium_apply_config': ['chromium_asan', 'cronet_builder'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'clang_builder_mb',
-      'android_apply_config': ['asan_symbolize', 'use_devil_provision'],
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
-    'Android Cronet KitKat Builder': {
-      'chromium_config': 'main_builder_rel_mb',
-      'chromium_apply_config': ['cronet_builder', 'cronet_official'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_rel_mb',
-      'android_apply_config': ['use_devil_provision'],
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-      'tests': {
-        steps.SizesStep(RESULTS_URL, 'android_cronet_builder')
-      },
-    },
-
-    'Android Cronet Lollipop Builder': {
-      'chromium_config': 'main_builder_rel_mb',
-      'chromium_apply_config': ['cronet_builder', 'cronet_official'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_rel_mb',
-      'android_apply_config': ['use_devil_provision'],
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-      'tests': {
-        steps.SizesStep(RESULTS_URL, 'android_cronet_l_builder')
-      },
-    },
-
-    'Android Cronet Marshmallow 64bit Builder': {
-      'chromium_config': 'arm64_builder_rel_mb',
-      'chromium_apply_config': ['cronet_builder', 'cronet_official'],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'arm64_builder_rel_mb',
-      'android_apply_config': ['use_devil_provision'],
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-      'tests': {
-        steps.SizesStep(RESULTS_URL, 'android_cronet_m64_builder')
       },
     },
 
@@ -528,3 +433,48 @@ SPEC = {
     },
   },
 }
+
+
+def stock_cronet_config(name, config='Release', **kwargs):
+  bot_config = {
+    'android_config': 'main_builder',
+    'chromium_config': 'android',
+    'chromium_apply_config': [
+        'cronet_builder',
+        'mb',
+        'ninja_confirm_noop',
+    ],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': config,
+      'TARGET_PLATFORM': 'android',
+    },
+    'gclient_config': 'chromium',
+    'gclient_apply_config': ['android'],
+    'bot_type': 'builder_tester',
+    'testing': {
+      'platform': 'linux',
+    },
+  }
+
+  bot_config.update(**kwargs)
+  return name, bot_config
+
+
+SPEC['builders'].update([
+  stock_cronet_config('android-cronet-arm-dbg', config='Debug'),
+  stock_cronet_config('android-cronet-arm-rel'),
+  stock_cronet_config('android-cronet-arm64-dbg', config='Debug'),
+  stock_cronet_config('android-cronet-arm64-rel'),
+  stock_cronet_config('android-cronet-asan-arm-rel'),
+  stock_cronet_config('android-cronet-kitkat-arm-rel',
+      bot_type='tester',
+      parent_buildername='android-cronet-arm-rel'),
+  stock_cronet_config('android-cronet-lollipop-arm-rel',
+      bot_type='tester',
+      parent_buildername='android-cronet-arm-rel'),
+  stock_cronet_config('android-cronet-marshmallow-arm64-rel',
+      bot_type='tester',
+      parent_buildername='android-cronet-arm64-rel'),
+  stock_cronet_config('android-cronet-x86-dbg'),
+  stock_cronet_config('android-cronet-x86-rel'),
+])

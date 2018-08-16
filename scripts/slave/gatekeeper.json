@@ -178,7 +178,19 @@
           },
           "*": {}
         },
-        "excluded_builders": [ "Oreo Phone Tester" ]
+        "excluded_builders": [
+          "android-cronet-arm-dbg",
+          "android-cronet-arm-rel",
+          "android-cronet-arm64-dbg",
+          "android-cronet-arm64-rel",
+          "android-cronet-asan-arm-rel",
+          "android-cronet-kitkat-arm-rel",
+          "android-cronet-lollipop-arm-rel",
+          "android-cronet-marshmallow-arm64-rel",
+          "android-cronet-x86-dbg",
+          "android-cronet-x86-rel",
+          "Oreo Phone Tester"
+        ]
       }
     ],
     "https://build.chromium.org/p/chromium.android.fyi": [
