@@ -448,6 +448,7 @@ def stock_cronet_config(name, config='Release', **kwargs):
       'BUILD_CONFIG': config,
       'TARGET_PLATFORM': 'android',
     },
+    'chromium_tests_apply_config': ['staging'],
     'gclient_config': 'chromium',
     'gclient_apply_config': ['android'],
     'bot_type': 'builder_tester',
