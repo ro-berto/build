@@ -38,11 +38,14 @@ def _AddBuildSpec(name, platform, config_name='chromium_perf',
 
 
 def _AddIsolatedTestSpec(name, platform,
-                         parent_buildername=None, target_bits=64):
+                         parent_buildername=None, parent_mastername=None,
+                         target_bits=64):
   spec = chromium_perf.TestSpec(
       'chromium_perf', platform, target_bits,
       parent_buildername=parent_buildername)
-  if not parent_buildername:
+  if parent_mastername:
+    spec['parent_mastername'] = parent_mastername
+  elif not parent_buildername:
     spec['parent_mastername'] = 'chromium.perf' #pragma: no cover
   else:
     spec['parent_mastername'] = 'chromium.perf.fyi'
@@ -111,19 +114,27 @@ _AddIsolatedTestSpec('android-go_webview-perf', 'android',
 
 
 _AddIsolatedTestSpec('win-10_laptop_high_end-perf_Lenovo-P51', 'win',
-                     parent_buildername='win64-builder-perf')
+                     parent_buildername='win64-builder-perf',
+                     parent_mastername='chromium.perf')
 
 _AddIsolatedTestSpec('win-10_laptop_high_end-perf_Dell-Precision', 'win',
-                     parent_buildername='win64-builder-perf')
+                     parent_buildername='win64-builder-perf',
+                     parent_mastername='chromium.perf')
 
 _AddIsolatedTestSpec('win-7_laptop_low_end_x32-perf_Acer-Aspire-5', 'win',
-                     parent_buildername='win32-builder-perf', target_bits=32)
+                     parent_buildername='win32-builder-perf',
+                     parent_mastername='chromium.perf',
+                     target_bits=32)
 
 _AddIsolatedTestSpec('win-7_laptop_low_end_x32-perf_Dell-Latitude', 'win',
-                     parent_buildername='win32-builder-perf', target_bits=32)
+                     parent_buildername='win32-builder-perf',
+                     parent_mastername='chromium.perf',
+                     target_bits=32)
 
 _AddIsolatedTestSpec('win-7_laptop_low_end_x32-perf-Lenovo-ThinkPad', 'win',
-                     parent_buildername='win32-builder-perf', target_bits=32)
+                     parent_buildername='win32-builder-perf',
+                     parent_mastername='chromium.perf',
+                     target_bits=32)
 
 _AddIsolatedTestSpec('Histogram Pipeline Linux Perf',
                      'linux',
