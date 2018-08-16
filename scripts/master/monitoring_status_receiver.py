@@ -242,9 +242,10 @@ class MonitoringStatusReceiver(StatusReceiverMultiService):
           continue  # Maybe the builder's configuration was removed.
         pending_per_builder[brdict['buildername']] += 1
 
-      for builder_name, count in pending_per_builder.iteritems():
-        pending_builds.set(count,
-                           fields={'builder': builder_name, 'master': ''})
+      for builder_name in builder_names:
+        pending_builds.set(
+            pending_per_builder[builder_name],
+            fields={'builder': builder_name, 'master': ''})
 
   def _flush_and_log_exceptions(self):
     try:
