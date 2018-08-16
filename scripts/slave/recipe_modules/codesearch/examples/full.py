@@ -94,7 +94,7 @@ def RunSteps(api, buildername):
   api.chromium.ensure_goma()
   api.chromium.runhooks()
 
-  api.codesearch.generate_compilation_database(targets, platform)
+  api.codesearch.generate_compilation_database(targets)
 
   api.codesearch.cleanup_old_generated()
 

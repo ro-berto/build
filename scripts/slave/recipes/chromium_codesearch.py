@@ -184,7 +184,7 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
   # by that step may be deleted (if they've been unchanged for the past week).
   api.codesearch.cleanup_old_generated()
 
-  api.codesearch.generate_compilation_database(targets, platform)
+  api.codesearch.generate_compilation_database(targets)
 
   # If the compile fails, abort execution and don't upload the pack. When we
   # upload an incomplete (due to compile failures) pack to Kythe, it fails

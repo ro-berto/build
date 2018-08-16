@@ -50,17 +50,14 @@ class CodesearchApi(recipe_api.RecipeApi):
                         '-mtime', ('+%d' % age_days), '-type', 'f', '-delete']
       self.m.step('delete old generated files', delete_command)
 
-  def generate_compilation_database(self, targets, platform, output_file=None,
+  def generate_compilation_database(self, targets, output_file=None,
                                     mb_config_path=None):
     mastername = self.m.properties['mastername']
     buildername = self.m.properties['buildername']
-    mb_config_path = mb_config_path or self.c.CHECKOUT_PATH.join('tools', 'mb',
-                                                                 'mb_config.pyl')
     self.m.chromium.run_mb(mastername,
                            buildername,
                            build_dir=self.c.debug_path,
-                           phase=platform,
-                           name='generate build files for %s' % platform,
+                           name='generate build files',
                            mb_config_path=mb_config_path)
 
     output_file = output_file or self.c.compile_commands_json_file

@@ -1490,7 +1490,7 @@ be undone.
 
 #### **class [CodesearchApi](/scripts/slave/recipe_modules/codesearch/api.py#12)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#188)(self):**
+&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#185)(self):**
 
 Check out the generated files repo and sync the generated files
 into this checkout.
@@ -1502,7 +1502,7 @@ Clean up generated files older than the specified number of days.
 Args:
   age_days: Minimum age in days for files to delete (integer).
 
-&mdash; **def [create\_and\_upload\_kythe\_index\_pack](/scripts/slave/recipe_modules/codesearch/api.py#126)(self, commit_timestamp):**
+&mdash; **def [create\_and\_upload\_kythe\_index\_pack](/scripts/slave/recipe_modules/codesearch/api.py#123)(self, commit_timestamp):**
 
 Create the kythe index pack and upload it to google storage.
 
@@ -1510,11 +1510,11 @@ Args:
   commit_timestamp: Timestamp of the commit at which we're creating the
     index pack, in integer seconds since the UNIX epoch.
 
-&mdash; **def [generate\_compilation\_database](/scripts/slave/recipe_modules/codesearch/api.py#53)(self, targets, platform, output_file=None, mb_config_path=None):**
+&mdash; **def [generate\_compilation\_database](/scripts/slave/recipe_modules/codesearch/api.py#53)(self, targets, output_file=None, mb_config_path=None):**
 
 &mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/codesearch/api.py#13)(self):**
 
-&mdash; **def [run\_clang\_tool](/scripts/slave/recipe_modules/codesearch/api.py#83)(self):**
+&mdash; **def [run\_clang\_tool](/scripts/slave/recipe_modules/codesearch/api.py#80)(self):**
 
 Download and run the clang tool.
 ### *recipe_modules* / [commit\_position](/scripts/slave/recipe_modules/commit_position)

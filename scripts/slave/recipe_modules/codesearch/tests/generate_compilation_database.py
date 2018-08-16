@@ -19,8 +19,7 @@ def RunSteps(api):
       GEN_REPO_BRANCH=api.properties.get('gen_repo_branch', 'master'),
       CORPUS=api.properties.get('corpus', 'chromium-linux'),
   )
-  api.codesearch.generate_compilation_database(api.codesearch.c.COMPILE_TARGETS,
-                                               api.codesearch.c.PLATFORM)
+  api.codesearch.generate_compilation_database(api.codesearch.c.COMPILE_TARGETS)
 
 
 def GenTests(api):

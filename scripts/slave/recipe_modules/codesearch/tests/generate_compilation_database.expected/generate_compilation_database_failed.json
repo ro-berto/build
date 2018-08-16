@@ -49,8 +49,6 @@
       "test_buildername",
       "--config-file",
       "None/tools/mb/mb_config.pyl",
-      "--phase",
-      "linux",
       "--goma-dir",
       "[CACHE]/goma/client",
       "None/out/Debug"
@@ -60,7 +58,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "generate build files for linux"
+    "name": "generate build files"
   },
   {
     "cmd": [
