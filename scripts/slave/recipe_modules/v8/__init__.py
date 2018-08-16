@@ -10,6 +10,7 @@ DEPS = [
   'depot_tools/gsutil',
   'depot_tools/tryserver',
   'docker',
+  'gn',
   'isolate',
   'perf_dashboard',
   # TODO(sergiyb): Module puppet_service_account is not LUCI-ready because it

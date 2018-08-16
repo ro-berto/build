@@ -11,6 +11,7 @@ DEPS = [
   'build',
   'chromite',
   'commit_position',
+  'gn',
   'goma',
 
   'recipe_engine/context',

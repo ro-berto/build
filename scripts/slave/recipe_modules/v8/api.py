@@ -8,6 +8,7 @@ import base64
 import contextlib
 import datetime
 import difflib
+import functools
 import random
 import re
 import urllib
@@ -616,18 +617,12 @@ class V8Api(recipe_api.RecipeApi):
     if self.isolated_tests:
       self.upload_isolated_json()
 
-  def _update_build_environment(self, mb_output):
-    """Sets the build_environment property based on gn arguments in mb output.
-    """
+  def _update_build_environment(self, gn_args):
+    """Sets the build_environment property based on gn arguments."""
     self.build_environment = {}
-    # Check if the output looks like gn. Space-join all gn args, except
-    # goma_dir.
-    # TODO(machenbach): Instead of scanning the output, we could also read
-    # the gn.args file that was written.
-    match = re.search(r'Writing """\\?\s*(.*)""" to ', mb_output, re.S)
-    if match:
-      self.build_environment['gn_args'] = ' '.join(
-        l for l in match.group(1).strip().splitlines()
+    # Space-join all gn args, except goma_dir.
+    self.build_environment['gn_args'] = ' '.join(
+        l for l in gn_args.splitlines()
         if not l.startswith('goma_dir'))
 
   def _upload_build_dependencies(self, deps):
@@ -727,42 +722,24 @@ class V8Api(recipe_api.RecipeApi):
     if out_dir:  # pragma: no cover
       build_dir = '//%s/%s' % (out_dir, self.m.chromium.c.build_config_fs)
     if self.m.chromium.c.project_generator.tool == 'mb':
-      def step_test_data():
-        # Fake MB output with GN flags.
-        return self.m.raw_io.test_api.stream_output(
-            'Writing """\\\n'
-            'goma_dir = "/b/build/slave/cache/goma_client"\n'
-            'target_cpu = "x86"\n'
-            'use_goma = true\n'
-            '""" to /b/build/slave/linux-builder/build/v8/out/Release/args.gn\n'
-            'moar text'
-        )
-      try:
-        mb_config_rel_path = self.m.properties.get(
+      mb_config_rel_path = self.m.properties.get(
           'mb_config_path', 'infra/mb/mb_config.pyl')
-        self.m.chromium.run_mb(
-            self.m.properties['mastername'],
-            self.m.properties['buildername'],
-            use_goma=use_goma,
-            mb_config_path=(
+      gn_args = self.m.chromium.run_mb(
+          self.m.properties['mastername'],
+          self.m.properties['buildername'],
+          use_goma=use_goma,
+          mb_config_path=(
               mb_config_path or
               self.m.path['checkout'].join(*mb_config_rel_path.split('/'))),
-            isolated_targets=isolate_targets,
-            stdout=self.m.raw_io.output_text(),
-            step_test_data=step_test_data,
-            build_dir=build_dir,
-        )
-      finally:
-        # Log captured output. We call log below 'captured_stdout' instead of
-        # simply 'stdout' to differentiate it from the default 'stdout' log that
-        # is added to all steps. The latter log will actually contain no real
-        # output because it is captured by the raw_io module.
-        self.m.step.active_result.presentation.logs['captured_stdout'] = (
-          self.m.step.active_result.stdout.splitlines())
+          isolated_targets=isolate_targets,
+          stdout=self.m.raw_io.output_text(),
+          build_dir=build_dir,
+          gn_args_presenter=functools.partial(
+              self.m.gn.default_args_presenter, location='logs'))
 
       # Update the build environment dictionary, which is printed to the
       # user on test failures for easier build reproduction.
-      self._update_build_environment(self.m.step.active_result.stdout)
+      self._update_build_environment(gn_args)
 
       # Create logs surfacing GN arguments. This information is critical to
       # developers for reproducing failures locally.

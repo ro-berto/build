@@ -983,7 +983,24 @@ class ChromiumApi(recipe_api.RecipeApi):
   def run_mb(self, mastername, buildername, use_goma=True, mb_path=None,
              mb_config_path=None, isolated_targets=None, name=None,
              build_dir=None, android_version_code=None,
-             android_version_name=None, phase=None, **kwargs):
+             android_version_name=None, phase=None, gn_args_presenter=None,
+             **kwargs):
+    """Run mb in the source tree.
+
+    Args:
+      gn_args_presenter: The callback used to present the GN args. It must be an
+        object callable with two arguments:
+          1. The step result.
+          2. The GN args in the form of the content of the args.gn file.
+        By default, gn.default_args_presenter will be used. To change the text
+        limit or force it to present to the logs or text, use functools.partial.
+        e.g.
+          functools.partial(
+             self.m.chromium.default_gn_args_presenter, location='logs')
+
+    Returns:
+      The content of the args.gn file.
+    """
     mb_path = mb_path or self.m.path['checkout'].join('tools', 'mb')
     mb_config_path = (
         mb_config_path or self.c.project_generator.config_path or
@@ -1082,6 +1099,16 @@ class ChromiumApi(recipe_api.RecipeApi):
     if isolated_targets and result:
       result.presentation.logs['swarming-targets-file.txt'] = (
           sorted_isolated_targets)
+
+    # If build_dir is a string, convert it to a Path
+    if isinstance(build_dir, str):
+      # The / splitting is required because Path.join on Windows won't convert
+      # the / in target label syntax to \ and the resulting path will not be
+      # well formed for any operation that requires an absolute path
+      build_dir = self.m.path['checkout'].join(*build_dir.split('/'))
+
+    return self.m.gn.get_args(
+        build_dir, gn_args_presenter or self.m.gn.default_args_presenter)
 
 
   def taskkill(self):
