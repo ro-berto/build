@@ -212,6 +212,7 @@ FAKE_BUILDERS = {
         'mac_chromium_compile_rel_ng',
         'mac_chromium_dbg_ng',
         'mac_chromium_rel_ng',
+        'mac-cocoa-rel',
         'mac_optional_gpu_tests_rel',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'mac-jumbo-rel',
