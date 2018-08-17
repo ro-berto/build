@@ -97,7 +97,6 @@ _AddBuildSpec('Android CFI arm64 Builder Perf FYI', 'android',
 
 _AddBuildSpec('Linux Compile Perf FYI', 'linux')
 _AddBuildSpec('Mac Builder Perf FYI', 'mac')
-_AddBuildSpec('Win Builder Perf FYI', 'win')
 
 _AddIsolatedTestSpec('Mojo Linux Perf', 'linux',
                      parent_buildername='Linux Compile Perf FYI')
