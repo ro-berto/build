@@ -250,7 +250,6 @@ def main(argv):
       'master.tryserver.client.catapult': 'CatapultTryserver',
       'master.tryserver.client.custom_tabs_client': 'CustomTabsClientTryserver',
       'master.tryserver.blink': 'BlinkTryServer',
-      'master.tryserver.libyuv': 'LibyuvTryServer',
       'master.tryserver.nacl': 'NativeClientTryServer',
   }
   all_masters = {base_dir: public_masters}
