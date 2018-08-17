@@ -112,7 +112,8 @@ _AddIsolatedTestSpec('android-pixel2-perf', 'android',
 _AddIsolatedTestSpec('android-pixel2_webview-perf', 'android',
                      parent_buildername='Android Builder Perf FYI')
 _AddIsolatedTestSpec('android-go_webview-perf', 'android',
-                     parent_buildername='Android Builder Perf FYI')
+                     parent_buildername='android-builder-perf',
+                     parent_mastername='chromium.perf')
 
 
 _AddIsolatedTestSpec('win-10_laptop_high_end-perf_Lenovo-P51', 'win',
