@@ -22,6 +22,7 @@ SPEC = {
     'bisect_build_gs_bucket': 'chrome-test-builds',
     'bisect_build_gs_extra': 'official-by-commit',
     'bisect_builders': [],
+    'luci_project': 'chrome',
   },
 }
 
