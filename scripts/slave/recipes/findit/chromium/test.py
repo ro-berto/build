@@ -152,6 +152,7 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
     for index in sorted(suspected_revision_index, reverse=True):
       if index > 0:
         # try job will not run linearly, sets use_analyze to False.
+        # TODO(https://crbug.com/874292): filter out irrelevant commits first.
         use_analyze = False
         sub_ranges.append(remaining_revisions[index - 1:])
         remaining_revisions = remaining_revisions[:index - 1]
@@ -188,21 +189,24 @@ def RunSteps(api, target_mastername, target_testername, good_revision,
 
       # The revision right before the suspected revision provided by
       # the heuristic result.
-      potential_green_rev = sub_range[0]
+      first_revision = sub_range[0]
       following_revisions = sub_range[1:]
-      if potential_green_rev:
-        revision_being_checked = potential_green_rev
-        test_results[potential_green_rev], tests_failed_in_potential_green = (
+      if first_revision:
+        revision_being_checked = first_revision
+        # Should not use "analyze" to skip tests at the first revision, because
+        # if a skipped test fails at the second revision in the sub range, the
+        # second revision is not necessarily the culprit.
+        test_results[first_revision], tests_failed_in_potential_green = (
             api.findit.compile_and_test_at_revision(
                 api, target_mastername, target_buildername, target_testername,
-                potential_green_rev, tests_have_not_found_culprit, use_analyze,
-                test_repeat_count=test_repeat_count))
+                first_revision, tests_have_not_found_culprit,
+                use_analyze=False, test_repeat_count=test_repeat_count))
       else:
         tests_failed_in_potential_green = {}
 
       # Looks for reliably failed tests.
       flaky_tests_in_potential_green = _get_flaky_tests(test_results.get(
-          potential_green_rev))
+          first_revision))
       _consolidate_flaky_tests(flakes, flaky_tests_in_potential_green)
       tests_passed_in_potential_green = _get_reduced_test_dict(
           tests_have_not_found_culprit, tests_failed_in_potential_green

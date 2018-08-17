@@ -260,7 +260,7 @@ def RunSteps(api, target_mastername, target_buildername,
         revision_being_checked = revision_before_suspect
         compile_result = _run_compile_at_revision(
             api, target_mastername, target_buildername,
-            revision_being_checked, compile_targets, use_analyze)
+            revision_being_checked, compile_targets, use_analyze=False)
         compile_results[revision_being_checked] = compile_result
         if compile_result == CompileResult.FAILED:
           # The first revision of this sub-range already failed, thus either it
