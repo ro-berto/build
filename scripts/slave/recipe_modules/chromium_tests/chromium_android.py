@@ -123,49 +123,6 @@ SPEC = {
       },
     },
 
-    'android-kitkat-arm-rel': {
-      'chromium_config': 'android',
-      'chromium_apply_config': [
-        'download_vr_test_apks',
-        'mb'
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder',
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
-    'android-marshmallow-arm64-rel': {
-      'chromium_config': 'android',
-      'chromium_apply_config': [
-        'download_vr_test_apks',
-
-        # This is specified because 'android-marshmallow-arm64-rel' builder
-        # is one of the slowest builder in CQ (crbug.com/804251).
-        'goma_high_parallel',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'android',
-      },
-      'android_config': 'main_builder_mb',
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Cast Android (dbg)' : {
       'chromium_config': 'android',
       'chromium_apply_config': [
@@ -435,33 +392,57 @@ SPEC = {
 }
 
 
-def stock_cronet_config(name, config='Release', **kwargs):
+def stock_config(name, config='Release', chromium_apply_config=None,
+                 chromium_config_kwargs=None, **kwargs):
   bot_config = {
-    'android_config': 'main_builder',
     'chromium_config': 'android',
-    'chromium_apply_config': [
-        'cronet_builder',
-        'mb',
-        'ninja_confirm_noop',
-    ],
-    'chromium_config_kwargs': {
-      'BUILD_CONFIG': config,
-      'TARGET_PLATFORM': 'android',
-    },
-    'chromium_tests_apply_config': ['staging'],
+    'chromium_apply_config': ['mb'],
     'gclient_config': 'chromium',
     'gclient_apply_config': ['android'],
+    'chromium_config_kwargs': {
+      'BUILD_CONFIG': config,
+      'TARGET_BITS': 32,
+      'TARGET_PLATFORM': 'android',
+    },
+    'android_config': 'main_builder',
     'bot_type': 'builder_tester',
     'testing': {
       'platform': 'linux',
     },
   }
 
+  if chromium_apply_config:
+    bot_config['chromium_apply_config'].extend(chromium_apply_config)
+    bot_config['chromium_apply_config'].sort()
+  if chromium_config_kwargs:
+    bot_config['chromium_config_kwargs'].update(chromium_config_kwargs)
   bot_config.update(**kwargs)
   return name, bot_config
 
 
+def stock_cronet_config(name, config='Release', **kwargs):
+  return stock_config(
+      name,
+      config=config,
+      chromium_apply_config=['cronet_builder', 'ninja_confirm_noop'],
+      chromium_tests_apply_config=['staging'],
+      **kwargs)
+
+
 SPEC['builders'].update([
+  stock_config('android-incremental-dbg', config='Debug'),
+  stock_config(
+      'android-kitkat-arm-rel',
+      chromium_apply_config=['download_vr_test_apks'],
+      chromium_config_kwargs={'TARGET_BITS': 32}),
+  stock_config(
+      'android-marshmallow-arm64-rel',
+      chromium_apply_config=[
+          'download_vr_test_apks',
+          # This is specified because 'android-marshmallow-arm64-rel' builder
+          # is one of the slowest builder in CQ (crbug.com/804251).
+          'goma_high_parallel'],
+      chromium_config_kwargs={'TARGET_BITS': 64}),
   stock_cronet_config('android-cronet-arm-dbg', config='Debug'),
   stock_cronet_config('android-cronet-arm-rel'),
   stock_cronet_config('android-cronet-arm64-dbg', config='Debug'),

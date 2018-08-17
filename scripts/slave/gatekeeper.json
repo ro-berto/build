@@ -189,6 +189,7 @@
           "android-cronet-marshmallow-arm64-rel",
           "android-cronet-x86-dbg",
           "android-cronet-x86-rel",
+          "android-incremental-dbg",
           "Oreo Phone Tester"
         ]
       }

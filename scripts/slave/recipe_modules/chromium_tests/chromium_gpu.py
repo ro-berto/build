@@ -238,6 +238,7 @@ SPEC = {
         # This is specified in order to match the same configuration
         # in 'chromium.android:Marshmallow Phone Tester (rel)'.
         'goma_high_parallel',
+        'mb',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
@@ -246,7 +247,7 @@ SPEC = {
         'TARGET_BITS': 64,
         'TARGET_PLATFORM': 'android',
       },
-      'android_config': 'main_builder_mb',
+      'android_config': 'main_builder',
       'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',
