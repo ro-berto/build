@@ -30,10 +30,8 @@
       "[CLEANUP]\\bot_update",
       "--output_json",
       "/path/to/tmp/json",
-      "--gerrit_repo",
-      "https://webrtc.googlesource.com/src",
-      "--gerrit_ref",
-      "refs/changes/89/456789/12",
+      "--patch_ref",
+      "https://webrtc.googlesource.com/src@refs/changes/89/456789/12",
       "--revision",
       "src@12345"
     ],

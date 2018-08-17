@@ -16,10 +16,8 @@
       "[CLEANUP]\\bot_update",
       "--output_json",
       "/path/to/tmp/json",
-      "--gerrit_repo",
-      "https://chromium.googlesource.com/libyuv",
-      "--gerrit_ref",
-      "refs/changes/89/456789/12",
+      "--patch_ref",
+      "https://chromium.googlesource.com/libyuv@refs/changes/89/456789/12",
       "--revision",
       "src@deadbeef"
     ],
