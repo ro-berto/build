@@ -1047,15 +1047,15 @@
           },
           "linux-annotator-rel": {
             "tree_notify": [
-              "georgesak@chromium.com",
-              "nicolaso@chromium.com"
+              "georgesak@chromium.org",
+              "nicolaso@chromium.org"
             ],
             "forgiving_optional": ["*"]
           },
           "win-annotator-rel": {
             "tree_notify": [
-              "georgesak@chromium.com",
-              "nicolaso@chromium.com"
+              "georgesak@chromium.org",
+              "nicolaso@chromium.org"
             ],
             "forgiving_optional": ["*"]
           }
