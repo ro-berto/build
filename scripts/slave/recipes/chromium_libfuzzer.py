@@ -129,12 +129,8 @@ def RunSteps(api):
   api.step.active_result.presentation.logs['targets'] = targets
   api.chromium.compile(targets=targets, use_goma_module=True)
 
-  config_kwargs = bot_config.get('chromium_config_kwargs', dict())
-  build_config = config_kwargs.get('BUILD_CONFIG', 'Release')
-  build_dir=api.path['start_dir'].join('src', 'out', build_config)
-
   api.archive.clusterfuzz_archive(
-      build_dir=build_dir,
+      build_dir=api.chromium.output_dir,
       update_properties=checkout_results.json.output['properties'],
       gs_bucket=bot_config['upload_bucket'],
       archive_prefix='libfuzzer',
