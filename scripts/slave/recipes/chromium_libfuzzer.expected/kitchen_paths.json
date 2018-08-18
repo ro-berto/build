@@ -320,6 +320,7 @@
       "--as=output",
       "//testing/libfuzzer:libfuzzer_main"
     ],
+    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
     "name": "calculate all_fuzzers",
     "stdout": "/path/to/tmp/"
   },
@@ -336,6 +337,7 @@
       "--as=output",
       "//testing/libfuzzer:no_clusterfuzz"
     ],
+    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
     "name": "calculate no_clusterfuzz",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [

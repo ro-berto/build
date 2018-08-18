@@ -271,6 +271,7 @@
       "--as=output",
       "//testing/libfuzzer:libfuzzer_main"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "calculate all_fuzzers",
     "stdout": "/path/to/tmp/"
   },
@@ -287,6 +288,7 @@
       "--as=output",
       "//testing/libfuzzer:no_clusterfuzz"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "calculate no_clusterfuzz",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [

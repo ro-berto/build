@@ -11,6 +11,7 @@ DEPS = [
   'chromium_checkout',
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
+  'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -89,13 +90,14 @@ def gn_refs(api, step_name, args):
   """Runs gn refs with given additional arguments.
   Returns: the list of matched targets.
   """
-  step_result = api.python(step_name,
-          api.depot_tools.gn_py_path,
-          ['--root=%s' % str(api.path['checkout']),
-           'refs',
-           str(api.chromium.output_dir),
-          ] + args,
-          stdout=api.raw_io.output_text())
+  with api.context(cwd=api.path['checkout']):
+    step_result = api.python(step_name,
+            api.depot_tools.gn_py_path,
+            ['--root=%s' % str(api.path['checkout']),
+             'refs',
+             str(api.chromium.output_dir),
+            ] + args,
+            stdout=api.raw_io.output_text())
   return step_result.stdout.split()
 
 
