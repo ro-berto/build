@@ -8,6 +8,7 @@ from recipe_engine.types import freeze
 DEPS = [
   'archive',
   'chromium',
+  'chromium_checkout',
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'recipe_engine/json',
@@ -102,8 +103,7 @@ def RunSteps(api):
   mastername = api.m.properties['mastername']
   buildername, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
 
-  checkout_results = api.bot_update.ensure_checkout(
-      patch_root=bot_config.get('root_override'))
+  checkout_results = api.chromium_checkout.ensure_checkout(bot_config)
 
   api.chromium.ensure_goma()
   api.chromium.runhooks()
@@ -145,3 +145,11 @@ def GenTests(api):
            api.step_data('calculate no_clusterfuzz',
                stdout=api.raw_io.output_text('target1'))
            )
+
+  yield (
+      api.test('kitchen_paths') +
+      api.platform.name('mac') +
+      api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='Libfuzzer Upload Mac ASan',
+          path_config='kitchen'))
