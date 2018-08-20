@@ -207,7 +207,6 @@ def setup_target(api,
     serial,
     debug,
     device,
-    chroot=False,
     concurrent_collector=True,
     heap_poisoning=False,
     gcstress=False):
@@ -216,9 +215,6 @@ def setup_target(api,
   # The path to the chroot directory on the device where ART and its
   # dependencies are installed, in case of chroot-based testing.
   chroot_dir='/data/local/art-test-chroot'
-  # The path to the local directory on the device where ART and its
-  # dependencies are installed, if case no chroot is used.
-  android_root = '/data/local/tmp/system'
 
   env = {'TARGET_BUILD_VARIANT': 'eng',
          'TARGET_BUILD_TYPE': 'release',
@@ -255,14 +251,7 @@ def setup_target(api,
          _TARGET_DEVICE_MAP[device]['product'])
       })
 
-  if chroot:
-    env.update({ 'ART_TEST_CHROOT' : chroot_dir })
-  else:
-    env.update({ 'ART_TEST_ANDROID_ROOT' : android_root })                      # pragma: no cover
-    if bitness == 32:                                                           # pragma: no cover
-      env.update({ 'CUSTOM_TARGET_LINKER': '%s/bin/linker' % android_root  })   # pragma: no cover
-    else:                                                                       # pragma: no cover
-      env.update({ 'CUSTOM_TARGET_LINKER': '%s/bin/linker64' % android_root  }) # pragma: no cover
+  env.update({ 'ART_TEST_CHROOT' : chroot_dir })
 
   checkout(api)
   clobber(api)
@@ -293,8 +282,6 @@ def setup_target(api,
 
     test_env = env.copy()
     test_env.update({ 'ART_TEST_NO_SYNC': 'true' })
-    if not chroot:
-      test_env.update({ 'ANDROID_ROOT': android_root }) # pragma: no cover
 
     with api.context(env=test_env):
       api.step('test gtest', ['make', '-j%d' % (make_jobs),
@@ -504,78 +491,66 @@ _CONFIG_MAP = {
         'serial': '84B7N16728001219',
         'device': 'angler-armv7',
         'debug': False,
-        'chroot': True,
       },
       'angler-armv7-debug': {
         'serial': '84B7N15B03000729',
         'device': 'angler-armv7',
         'debug': True,
-        'chroot': True,
       },
       'volantis-armv7-poison-debug': {
         'serial': 'FA7BN1A04406',
         'device': 'volantis-armv7',
         'debug': True,
-        'chroot': True,
         'heap_poisoning': True
       },
       'volantis-armv8-poison-ndebug': {
         'serial': 'FA7BN1A04412',
         'device': 'volantis-armv8',
         'debug': False,
-        'chroot': True,
         'heap_poisoning': True,
       },
       'volantis-armv8-poison-debug': {
         'serial': 'FA7BN1A04433',
         'device': 'volantis-armv8',
         'debug': True,
-        'chroot': True,
         'heap_poisoning': True
       },
       'fugu-ndebug': {
         'serial': '0BCDB85D',
         'device': 'fugu',
         'debug': False,
-        'chroot': True,
       },
       'fugu-debug': {
         'serial': 'E6B27F19',
         'device': 'fugu',
         'debug': True,
-        'chroot': True,
       },
       'angler-armv7-cms': {
         'serial': '84B7N15B03000329',
         'device': 'angler-armv7',
         'debug': True,
-        'chroot': True,
         'concurrent_collector': False,
       },
       'angler-armv8-ndebug': {
         'serial': '84B7N16728001299',
         'device': 'angler-armv8',
         'debug': False,
-        'chroot': True,
       },
       'angler-armv8-debug': {
         'serial': '84B7N15B03000660',
         'device': 'angler-armv8',
         'debug': True,
-        'chroot': True,
       },
       'angler-armv8-cms': {
         'serial': '84B7N15B03000641',
         'device': 'angler-armv8',
         'debug': True,
-        'chroot': True,
         'concurrent_collector': False,
       },
       'bullhead-armv8-gcstress-ndebug': {
         'serial': '00c5a4683f54164f',
         'device': 'bullhead-armv8',
         'debug': False,
-        'chroot': True,
         'gcstress': True,
         'concurrent_collector': True,
       },
@@ -583,7 +558,6 @@ _CONFIG_MAP = {
         'serial': '01e0c128ccf732ca',
         'device': 'bullhead-armv8',
         'debug': True,
-        'chroot': True,
         'gcstress': True,
         'concurrent_collector': True,
       },
@@ -591,7 +565,6 @@ _CONFIG_MAP = {
         'serial': '02022c7ec2834126',
         'device': 'bullhead-armv7',
         'debug': False,
-        'chroot': True,
         'gcstress': True,
         'concurrent_collector': True,
       },
