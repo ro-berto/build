@@ -110,7 +110,7 @@ class PackageIndexTest(unittest.TestCase):
     self._CheckDataFile(test_h_file, TEST_H_FILE_CONTENT)
 
   def testGenerateUnitFiles(self):
-    # Setup some dictionaries which are usually filled by _GenerateDataFiles()
+    # Set up the filehashes dict which is usually filled by _GenerateDataFiles()
     self.index_pack.filehashes = {
         self.test_cc_file_name:
             hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest(),
@@ -118,11 +118,6 @@ class PackageIndexTest(unittest.TestCase):
             hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest(),
         self.test2_h_file_name:
             hashlib.sha256(TEST2_H_FILE_CONTENT).hexdigest(),
-    }
-    self.index_pack.filesizes = {
-        self.test_cc_file_name: len(TEST_CC_FILE_CONTENT),
-        self.test_h_file_name: len(TEST_H_FILE_CONTENT),
-        self.test2_h_file_name: len(TEST2_H_FILE_CONTENT),
     }
 
     # Now _GenerateUnitFiles() can be called.
@@ -155,7 +150,7 @@ class PackageIndexTest(unittest.TestCase):
       self.assertEquals(compilation_unit_dictionary['output_key'], 'test.o')
 
       self.assertEquals(len(compilation_unit_dictionary['required_input']),
-                        len(self.index_pack.filesizes))
+                        len(self.index_pack.filehashes))
 
       test_cc_entry = compilation_unit_dictionary['required_input'][0]
       self.assertEquals(test_cc_entry['info']['digest'],
@@ -183,7 +178,7 @@ class PackageIndexTest(unittest.TestCase):
 
       real_compile_arguments = [
           u'-fsyntax-only', u'-DFOO="foo bar"', u'-std=c++11', u'-c',
-          u'test.cc', u'-o', u'test.o', u'-w', u'-nostdinc++',
+          u'test.cc', u'-o', u'test.o', u'-w',
       ]
       self.assertEquals(compilation_unit_dictionary['argument'],
                         real_compile_arguments)
@@ -202,7 +197,7 @@ class PackageIndexTest(unittest.TestCase):
         os.path.realpath(self.compdb_file.name), corpus=CORPUS, root=VNAME_ROOT,
         out_dir=OUT_DIR)
 
-    # Setup some dictionaries which are usually filled by _GenerateDataFiles()
+    # Set up the filehashes dict which is usually filled by _GenerateDataFiles()
     self.index_pack.filehashes = {
         self.test_cc_file_name:
             hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest(),
@@ -210,11 +205,6 @@ class PackageIndexTest(unittest.TestCase):
             hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest(),
         self.test2_h_file_name:
             hashlib.sha256(TEST2_H_FILE_CONTENT).hexdigest(),
-    }
-    self.index_pack.filesizes = {
-        self.test_cc_file_name: len(TEST_CC_FILE_CONTENT),
-        self.test_h_file_name: len(TEST_H_FILE_CONTENT),
-        self.test2_h_file_name: len(TEST2_H_FILE_CONTENT),
     }
 
     # Now _GenerateUnitFiles() can be called.

@@ -50,8 +50,6 @@ class IndexPack(object):
     self.verbose = verbose
     # Maps from source file name to the SHA256 hash of its content.
     self.filehashes = {}
-    # Maps from source file name to the file size.
-    self.filesizes = {}
     # Create a temporary data directory. The structure is as follows:
     # A root directory (arbitrary name) with two subdirectories. The
     # subdirectory 'files' should contain all source files involved in any
@@ -117,7 +115,6 @@ class IndexPack(object):
               content = source_file.read()
             content_hash = hashlib.sha256(content).hexdigest()
             self.filehashes[fname] = content_hash
-            self.filesizes[fname] = len(content)
             file_name = os.path.join(self.files_directory, content_hash)
             if self.verbose:
               print ' Including source file %s as %s for compilation' % (
@@ -203,7 +200,6 @@ class IndexPack(object):
         print 'No output file path found for %s' % entry['file']
 
       required_inputs = []
-      include_paths = set()
       with open(filepath, 'rb') as filepaths_file:
         for line in filepaths_file:
           fname = line.strip()
@@ -218,7 +214,7 @@ class IndexPack(object):
             path = fname.split('//')
             fname = '/'.join(path)
           fname_fullpath = os.path.join(entry['directory'], fname)
-          if fname_fullpath not in self.filesizes:
+          if fname_fullpath not in self.filehashes:
             print 'No information about required input file %s' % fname_fullpath
             continue
 
@@ -255,15 +251,10 @@ class IndexPack(object):
       if self.root:
         unit_dictionary['v_name']['root'] = self.root
 
-      # Add the include paths to the list of compile arguments; also disable all
-      # warnings so that the indexer can run successfully. The job of the
-      # indexer is to index the code, not to verify it. Warnings we actually
-      # care about would show up in the compile step. And the -nostdinc++ flag
-      # tells the indexer that it does not need to add any additional -isystem
-      # arguments itself.
-      unit_dictionary['argument'] = (
-          list(include_paths) + command_list + ['-w', '-nostdinc++']
-      )
+      # Disable all warnings with -w so that the indexer can run successfully.
+      # The job of the indexer is to index the code, not to verify it. Warnings
+      # we actually care about should show up in the compile step.
+      unit_dictionary['argument'] = command_list + ['-w']
       unit_dictionary['required_input'] = required_inputs
 
       if self.verbose:
