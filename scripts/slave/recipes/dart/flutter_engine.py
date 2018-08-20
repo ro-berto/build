@@ -118,17 +118,22 @@ def RunSteps(api):
 
   BuildLinux(api)
   checkout = api.path['start_dir'].join('src')
-  dart_bin = checkout.join('third_party', 'dart', 'tools', 'sdks', 'dart-sdk',
-    'bin')
-  env = { 'PATH': api.path.pathsep.join((str(dart_bin), '%(PATH)s')) }
+  prebuilt_dart_bin = checkout.join('third_party', 'dart', 'tools', 'sdks',
+    'dart-sdk', 'bin')
+  engine_env = { 'PATH': api.path.pathsep.join((str(prebuilt_dart_bin),
+    '%(PATH)s')) }
+  just_built_dart_bin = checkout.join('out', 'host_debug', 'dart-sdk', 'bin')
+  flutter_env = { 'PATH': api.path.pathsep.join((str(just_built_dart_bin),
+    '%(PATH)s')) }
 
   # The context adds dart-sdk/bin to the path.
-  with api.context(env=env):
-    with api.step.defer_results():
+  with api.step.defer_results():
+    with api.context(env=engine_env):
       AnalyzeDartUI(api)
       TestObservatory(api)
       BuildLinuxAndroidArm(api)
       BuildLinuxAndroidx86(api)
+    with api.context(env=flutter_env):
       TestFlutter(api)
 
 def GenTests(api):
