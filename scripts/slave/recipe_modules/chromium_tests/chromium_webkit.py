@@ -143,7 +143,9 @@ SPEC['builders'] = {
     'tests': [
       steps.LocalGTestTest('blink_heap_unittests'),
       steps.LocalGTestTest('webkit_unit_tests'),
-      steps.BlinkTest(),
+      # TODO(crbug.com/875172): this bot can't yet run SwiftShader, so
+      # attempt to run layout tests on top of the real GPU instead.
+      steps.BlinkTest(extra_args='--use-gpu-in-tests'),
     ],
     'testing': {
       'platform': 'linux',
