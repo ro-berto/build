@@ -22,6 +22,20 @@ class PuppetServiceAccountApi(recipe_api.RecipeApi):
       return 'C:\\creds\\service_accounts'
     return '/creds/service_accounts'
 
+  def get(self, account):
+    """Returns a recipe_module.service_account.ServiceAccount for the account.
+
+    Assumes a service account key for the given account is available at
+    self.keys_path.
+
+    Args:
+      account: a name of the service account, as defined in Puppet config.
+    Returns
+      A recipe_module.service_account.ServiceAccount instance.
+    """
+    return self.m.service_account.from_credentials_json(
+        self.get_key_path(account))
+
   def get_key_path(self, account):
     """Path to a particular JSON key (as str)."""
     return self.m.path.join(self.keys_path, 'service-account-%s.json' % account)

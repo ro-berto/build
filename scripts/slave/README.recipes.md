@@ -2735,7 +2735,19 @@ exposed through 'recipe_engine/service_account' module.
 
 #### **class [PuppetServiceAccountApi](/scripts/slave/recipe_modules/puppet_service_account/api.py#17)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [get\_access\_token](/scripts/slave/recipe_modules/puppet_service_account/api.py#29)(self, account, scopes=None):**
+&mdash; **def [get](/scripts/slave/recipe_modules/puppet_service_account/api.py#25)(self, account):**
+
+Returns a recipe_module.service_account.ServiceAccount for the account.
+
+Assumes a service account key for the given account is available at
+self.keys_path.
+
+Args:
+  account: a name of the service account, as defined in Puppet config.
+Returns
+  A recipe_module.service_account.ServiceAccount instance.
+
+&mdash; **def [get\_access\_token](/scripts/slave/recipe_modules/puppet_service_account/api.py#43)(self, account, scopes=None):**
 
 Returns an access token for a service account.
 
@@ -2745,7 +2757,7 @@ Args:
   account: a name of the service account, as defined in Puppet config.
   scopes: list of OAuth scopes for new token, default is [userinfo.email].
 
-&mdash; **def [get\_key\_path](/scripts/slave/recipe_modules/puppet_service_account/api.py#25)(self, account):**
+&mdash; **def [get\_key\_path](/scripts/slave/recipe_modules/puppet_service_account/api.py#39)(self, account):**
 
 Path to a particular JSON key (as str).
 

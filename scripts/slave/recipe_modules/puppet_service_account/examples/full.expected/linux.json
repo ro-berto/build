@@ -13,6 +13,19 @@
     "stdout": "/path/to/tmp/"
   },
   {
+    "cmd": [
+      "luci-auth",
+      "token",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-fake-account.json",
+      "-lifetime",
+      "3m"
+    ],
+    "infra_step": true,
+    "name": "get access token for service-account-fake-account.json (2)",
+    "stdout": "/path/to/tmp/"
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0
