@@ -126,13 +126,14 @@ def RunSteps(api):
   flutter_env = { 'PATH': api.path.pathsep.join((str(just_built_dart_bin),
     '%(PATH)s')) }
 
-  # The context adds dart-sdk/bin to the path.
   with api.step.defer_results():
+    # The context adds prebuilt dart-sdk to the path.
     with api.context(env=engine_env):
       AnalyzeDartUI(api)
       TestObservatory(api)
       BuildLinuxAndroidArm(api)
       BuildLinuxAndroidx86(api)
+    # The context adds freshly-built engine's dart-sdk to the path.
     with api.context(env=flutter_env):
       TestFlutter(api)
 
