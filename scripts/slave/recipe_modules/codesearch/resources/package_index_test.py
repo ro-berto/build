@@ -20,8 +20,8 @@ TEST_CC_FILE_CONTENT = '#include "test.h"\nint main() {\nreturn 0;\n}\n'
 TEST_H_FILE_CONTENT = ('#ifndef TEST_H\n#define TEST_H\n#include "test2.h"\n'
                        '#endif\n')
 TEST2_H_FILE_CONTENT = '#ifndef TEST2_H\n#define TEST2_H\n#endif\n'
-COMPILE_ARGUMENTS = (r'clang++ -fsyntax-only -DFOO=\"foo\ bar\" -std=c++11 -c '
-                     r'test.cc -o test.o')
+COMPILE_ARGUMENTS = (r'clang++ -fsyntax-only -DFOO=\"foo\ bar\" -std=c++11 '
+                     '-Wno-c++11-narrowing  -Wall -c test.cc -o test.o')
 
 COMPILE_ARGUMENTS_WIN = 'clang-cl.exe /c test.cc /Fotest.obj'
 

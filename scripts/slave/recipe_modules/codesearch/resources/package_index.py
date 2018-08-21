@@ -13,6 +13,7 @@ import hashlib
 import itertools
 import json
 import os
+import re
 import shutil
 import shlex
 import sys
@@ -166,12 +167,16 @@ class IndexPack(object):
       # above.
       unit_dictionary = {}
 
+      # Remove warning flags from the command. These are disabled later by
+      # appending -w anyway, so there's no need to bloat the index pack with
+      # them.
+      compile_command = _RemoveWarningSwitches(entry['command'])
+
       if self.verbose:
         print 'Generating Translation Unit data for %s' % entry['file']
-        print 'Compile command: %s' % entry['command']
+        print 'Compile command: %s' % compile_command
 
-      command_list = shlex.split(
-          entry['command'], posix=sys.platform != 'win32')
+      command_list = shlex.split(compile_command, posix=sys.platform != 'win32')
       # The |command_list| starts with the compiler that was used for the
       # compilation. In the unit file we want to have just the parameters passed
       # to the compiler (which always needs to be clang/clang++). Currently,
@@ -324,6 +329,14 @@ class IndexPack(object):
           index_parent = os.path.dirname(self.index_directory.rstrip(os.sep))
           rel_path = os.path.relpath(abs_path, index_parent)
           archive.write(abs_path, rel_path)
+
+
+WARNING_SWITCH_RE = re.compile(r'\s[-/][Ww]\S+')
+
+
+def _RemoveWarningSwitches(cmd_str):
+  """Removes all warning switches from a command string."""
+  return re.sub(WARNING_SWITCH_RE, '', cmd_str)
 
 
 def _RemoveFilepathsFiles(root):
