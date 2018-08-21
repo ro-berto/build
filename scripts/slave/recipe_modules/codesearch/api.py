@@ -195,7 +195,7 @@ class CodesearchApi(recipe_api.RecipeApi):
     # the checkout stays around between builds (this saves ~15 mins of build
     # time).
     if self.m.runtime.is_luci:
-      generated_repo_dir = self.m.path['cache'].join('builder')
+      generated_repo_dir = self.m.path['cache'].join('generated')
     else:
       generated_repo_dir = self.m.path['start_dir'].join('generated')
     self.m.git.checkout(

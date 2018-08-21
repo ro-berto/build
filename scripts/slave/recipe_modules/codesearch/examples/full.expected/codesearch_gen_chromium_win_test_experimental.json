@@ -685,7 +685,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
-      "[CACHE]/builder",
+      "[CACHE]/generated",
       "--url",
       "https://chromium.googlesource.com/chromium/src/out"
     ],
@@ -700,7 +700,7 @@
       "win",
       "--progress"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/generated",
     "env": {
       "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:<PATH>"
     },
@@ -714,7 +714,7 @@
       "-f",
       "FETCH_HEAD"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/generated",
     "infra_step": true,
     "name": "git checkout"
   },
@@ -724,7 +724,7 @@
       "rev-parse",
       "HEAD"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/generated",
     "infra_step": true,
     "name": "read revision",
     "stdout": "/path/to/tmp/",
@@ -740,7 +740,7 @@
       "-d",
       "-x"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/generated",
     "infra_step": true,
     "name": "git clean"
   },
@@ -751,7 +751,7 @@
       "user.email",
       "git-generated-files-sync@chromium.org"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/generated",
     "infra_step": true,
     "name": "git config"
   },
@@ -762,7 +762,7 @@
       "user.name",
       "Automatic Generated Files Sync"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]/generated",
     "infra_step": true,
     "name": "git config (2)"
   },
@@ -783,7 +783,7 @@
       "--dest-branch",
       "win",
       "src/out",
-      "[CACHE]/builder",
+      "[CACHE]/generated",
       "--dry-run"
     ],
     "name": "sync generated files"

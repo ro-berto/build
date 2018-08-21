@@ -278,8 +278,6 @@
   * [math_utils:examples/full](#recipes-math_utils_examples_full)
   * [math_utils:tests/mean_error](#recipes-math_utils_tests_mean_error)
   * [nacl](#recipes-nacl)
-  * [nacl/sdk](#recipes-nacl_sdk)
-  * [nacl/sdk_build](#recipes-nacl_sdk_build)
   * [nacl_ports](#recipes-nacl_ports)
   * [ndk/ndk_buildbot](#recipes-ndk_ndk_buildbot)
   * [ndk:tests/cover](#recipes-ndk_tests_cover)
@@ -5241,16 +5239,6 @@ Recipe for building and running tests for Libyuv stand-alone.
 [DEPS](/scripts/slave/recipes/nacl.py#5): [goma](#recipe_modules-goma), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/windows\_sdk][depot_tools/recipe_modules/windows_sdk], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/nacl.py#110)(api):**
-### *recipes* / [nacl/sdk](/scripts/slave/recipes/nacl/sdk.py)
-
-[DEPS](/scripts/slave/recipes/nacl/sdk.py#5): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/nacl/sdk.py#17)(api):**
-### *recipes* / [nacl/sdk\_build](/scripts/slave/recipes/nacl/sdk_build.py)
-
-[DEPS](/scripts/slave/recipes/nacl/sdk_build.py#5): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/nacl/sdk_build.py#16)(api):**
 ### *recipes* / [nacl\_ports](/scripts/slave/recipes/nacl_ports.py)
 
 [DEPS](/scripts/slave/recipes/nacl_ports.py#5): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
