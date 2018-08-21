@@ -412,27 +412,6 @@ def setup_aosp_builder(api, read_barrier):
         api.step('Clean oat %s' % build, ['make', '-j8', 'clean-oat-host'])
         api.step('build %s' % build, ['make', '-j8'])
 
-def setup_valgrind_runner(api, bitness):
-  # ART doesn't support valgrind host 32 anymore.
-  assert bitness == 64
-  checkout(api)
-  clobber(api)
-  build_top_dir = api.path['start_dir']
-  run = api.path['start_dir'].join('art', 'test', 'testrunner', 'run_build_test_target.py')
-  with api.step.defer_results():
-    env = { 'TARGET_PRODUCT': 'sdk',
-            'TARGET_BUILD_VARIANT': 'eng',
-            'TARGET_BUILD_TYPE': 'release',
-            'ANDROID_BUILD_TOP': build_top_dir,
-            'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
-                    api.path.pathsep + '%(PATH)s',
-            'JACK_SERVER': 'false',
-            'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
-                                                      'tools', 'jacks')) }
-
-    with api.context(env=env):
-      api.step('run valgrind tests', [run, '-j8', 'art-gtest-valgrind%d' % bitness])
-
 
 _CONFIG_MAP = {
   'client.art': {
@@ -578,12 +557,6 @@ _CONFIG_MAP = {
         'read_barrier': True
       },
     },
-
-    'valgrind': {
-      'host-x86_64-valgrind': {
-        'bitness': 64
-      },
-    },
   },
 }
 
@@ -592,7 +565,6 @@ _CONFIG_DISPATCH_MAP = {
     'x86': setup_host_x86,
     'target': setup_target,
     'aosp': setup_aosp_builder,
-    'valgrind': setup_valgrind_runner,
   }
 }
 
