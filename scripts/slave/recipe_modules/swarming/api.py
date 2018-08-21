@@ -1138,6 +1138,23 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     return merged_results
 
+  def get_states(self, task_ids):
+    """Returns the states of a list of tasks.
+
+    Uses the 'get_states' endpoint on the server."""
+    args = [
+        '--swarming-server', self.swarming_server,
+        '--swarming-py-path', self.m.swarming_client.path.join('swarming.py'),
+        '--json', self.m.json.output(),
+    ] + task_ids
+
+    result =  self.m.build.python(
+        name='collect tasks',
+        script=self.resource('collect_task.py'),
+        args=args)
+    return {
+        task_id: state for task_id, state in zip(
+            task_ids, result.json.output['states'])}
 
   def _isolated_script_collect_step(self, task, **kwargs):
     """Collects results for a step that is *not* a googletest, like telemetry.

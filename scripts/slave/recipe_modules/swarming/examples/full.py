@@ -32,11 +32,12 @@ PROPERTIES = {
   'trigger_script': Property(default=None),
   'named_caches': Property(default=None),
   'service_account': Property(default=None),
+  'get_states': Property(default=None),
 }
 
 def RunSteps(api, platforms, show_isolated_out_in_collect_step,
              show_shards_in_collect_step, gtest_task, isolated_script_task,
-             merge, trigger_script, named_caches, service_account):
+             merge, trigger_script, named_caches, service_account, get_states):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
@@ -137,6 +138,13 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
   # running on swarming.
   api.step('local step', ['echo', 'running something locally'])
 
+  if get_states:
+    task_ids = []
+    for task in tasks:
+      task_ids.extend(task.get_task_ids())
+    api.swarming.get_states(task_ids)
+    return
+
   # Wait for all tasks to complete.
   for task in tasks:
     step_result = api.swarming.collect_task(task)
@@ -170,6 +178,22 @@ def GenTests(api):
           'archive for mac',
           stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
       api.properties(platforms=('win', 'linux', 'mac')))
+
+  yield (
+      api.test('get_states') +
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+      api.step_data(
+          'archive for linux',
+          stdout=api.raw_io.output_text(
+            'hash_for_linux hello_world.isolated')) +
+      api.step_data(
+          'archive for mac',
+          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
+      api.swarming.get_states(['PENDING']) +
+      api.properties(platforms=('win', 'linux', 'mac'), get_states=True) +
+      api.post_process(post_process.Filter('collect tasks')))
 
   for exp in [True, False]:
     yield (
