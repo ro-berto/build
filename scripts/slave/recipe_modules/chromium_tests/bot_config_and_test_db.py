@@ -101,7 +101,25 @@ class BotConfig(object):
       chromium_tests_api.steps.generate_script,
     ]
 
-    masternames = set(bot_id['mastername'] for bot_id in self._bot_ids)
+    def is_child_of(builder_config, parent_mastername, parent_buildername):
+      return (
+          parent_mastername == builder_config.get('parent_mastername')
+          and parent_buildername == builder_config.get('parent_buildername'))
+
+    masternames = set()
+    for bot_id in self._bot_ids:
+      bot_master_name = bot_id['mastername']
+      bot_builder_name = bot_id['buildername']
+      masternames.add(bot_master_name)
+
+      for master_name, master_config in self._bots_dict.iteritems():
+        if master_name == bot_master_name:
+          continue
+
+        if any(is_child_of(b, bot_master_name, bot_builder_name)
+               for b in master_config.get('builders', {}).itervalues()):
+          masternames.add(master_name)
+
     for mastername in sorted(self._bots_dict):
       # We manually thaw the path to the elements we are modifying, since the
       # builders are frozen.
@@ -126,7 +144,6 @@ class BotConfig(object):
               ))
       else:
         test_spec = None
-
 
       bot_db._add_master_dict_and_test_spec(
           mastername, freeze(master_dict), freeze(test_spec))

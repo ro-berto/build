@@ -4416,7 +4416,7 @@ Returns: the list of matched targets.
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/prepare_checkout.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/prepare_checkout.py#12)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/prepare_checkout.py#39)(api):**
 ### *recipes* / [chromium\_tests:tests/api/run\_tests\_on\_tryserver](/scripts/slave/recipe_modules/chromium_tests/tests/api/run_tests_on_tryserver.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/run_tests_on_tryserver.py#5): [chromium\_tests](#recipe_modules-chromium_tests), [swarming](#recipe_modules-swarming), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

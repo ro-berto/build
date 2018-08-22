@@ -8,10 +8,39 @@ DEPS = [
     'recipe_engine/properties',
 ]
 
+from recipe_engine import post_process
+
+
+DUMMY_BUILDERS = {
+  'chromium.fake': {
+    'builders': {
+      'cross-master-trigger-builder': {
+        'bot_type': 'builder',
+        'chromium_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+        },
+        'gclient_config': 'chromium',
+      },
+    },
+  },
+  'chromium.fake.fyi': {
+    'builders': {
+      'cross-master-trigger-tester': {
+        'bot_type': 'tester',
+        'parent_buildername': 'cross-master-trigger-builder',
+        'parent_mastername': 'chromium.fake',
+      }
+    },
+  },
+}
+
 
 def RunSteps(api):
   bot_config_object = api.chromium_tests.create_bot_config_object(
-      api.properties['mastername'], api.properties['buildername'])
+      api.properties['mastername'],
+      api.properties['buildername'],
+      builders=api.properties.get('builders'))
   api.chromium_tests.configure_build(bot_config_object)
   api.chromium_tests.prepare_checkout(bot_config_object)
 
@@ -29,4 +58,14 @@ def GenTests(api):
       api.properties.generic(
           mastername='chromium.lkgr',
           buildername='Win ASan Release')
+  )
+
+  yield (
+      api.test('cross_master_trigger') +
+      api.properties.generic(
+          mastername='chromium.fake',
+          buildername='cross-master-trigger-builder',
+          builders=DUMMY_BUILDERS) +
+      api.post_process(post_process.MustRun, 'read test spec (chromium.fake.fyi.json)') +
+      api.post_process(post_process.DropExpectation)
   )
