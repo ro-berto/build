@@ -20,6 +20,7 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'recipe_engine/time',
 ]
@@ -161,8 +162,14 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
     solution.name = name
     solution.url = url
   api.gclient.c = gclient_config
-  update_step = api.bot_update.ensure_checkout(
-      root_solution_revision=root_solution_revision)
+
+  if api.runtime.is_luci:
+    checkout_dir = api.path['cache'].join('builder')
+  else:
+    checkout_dir = api.path['start_dir']
+  with api.context(cwd=checkout_dir):
+    update_step = api.bot_update.ensure_checkout(
+        root_solution_revision=root_solution_revision)
   api.chromium.set_build_properties(update_step.json.output['properties'])
 
   # Remove the llvm-build directory, so that gclient runhooks will download
@@ -214,6 +221,12 @@ def GenTests(api):
         api.test('full_%s' % (_sanitize_nonalpha(buildername))) +
         api.properties.generic(buildername=buildername,
                                mastername='chromium.infra.codesearch')
+    )
+    yield (
+        api.test('full_%s_luci' % (_sanitize_nonalpha(buildername))) +
+        api.properties.generic(buildername=buildername,
+                               mastername='chromium.infra.codesearch') +
+        api.runtime(is_luci=True, is_experimental=False)
     )
 
   for buildername, _ in SPEC['builders'].iteritems():
