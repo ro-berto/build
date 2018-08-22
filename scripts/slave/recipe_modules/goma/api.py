@@ -7,6 +7,7 @@ import socket
 
 from recipe_engine import recipe_api
 
+
 class GomaApi(recipe_api.RecipeApi):
   """
   GomaApi contains helper functions for using goma.
@@ -47,7 +48,7 @@ class GomaApi(recipe_api.RecipeApi):
     self._goma_jsonstatus_called = False
     self._cloudtail_running = False
 
-    self._is_canary = False
+    self._client_type = 'release'
 
     if self._test_data.enabled:
       self._hostname = 'fakevm999-m9'
@@ -155,16 +156,21 @@ class GomaApi(recipe_api.RecipeApi):
 
     return self._recommended_jobs
 
-  def ensure_goma(self, canary=False):
+  def ensure_goma(self, client_type=None):
     if self._local_dir:
       # When using goma module on local debug, we need to skip cipd step.
       return self._goma_dir
 
-    self._is_canary = canary
+    if not client_type:
+      client_type = 'release'
+    # client_type must be one of following values.
+    assert client_type in ('release', 'candidate', 'latest')
+    self._client_type = client_type
 
     with self.m.step.nest('ensure_goma') as step_result:
-      if canary:
-        step_result.presentation.step_text = 'canary goma client is selected'
+      if client_type != 'release':
+        step_result.presentation.step_text = (
+            '%s goma client is selected' % client_type)
         step_result.presentation.status = self.m.step.WARNING
 
       with self.m.context(infra_steps=True):
@@ -176,11 +182,8 @@ class GomaApi(recipe_api.RecipeApi):
         # For Windows there's only 64-bit goma client.
         if self.m.platform.is_win:
           goma_package = goma_package.replace('386', 'amd64')
-        ref='release'
-        if canary:
-          ref='candidate'
+        ref = client_type
         self._goma_dir = self.default_client_path
-
         self.m.cipd.ensure(self._goma_dir, {goma_package: ref})
         return self._goma_dir
 

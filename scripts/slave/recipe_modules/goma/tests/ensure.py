@@ -9,16 +9,20 @@ DEPS = [
 
 
 def RunSteps(api):
-  canary = api.m.properties.get('canary', False)
-  api.goma.ensure_goma(canary=canary)
+  client_type = api.m.properties.get('client_type')
+  api.goma.ensure_goma(client_type=client_type)
 
 
 def GenTests(api):
   yield (
       api.test('non_canary') +
-      api.properties(canary=False)
+      api.properties(client_type='release')
   )
   yield (
     api.test('canary') +
-    api.properties(canary=True)
+    api.properties(client_type='candidate')
+  )
+  yield (
+    api.test('latest') +
+    api.properties(client_type='latest')
   )

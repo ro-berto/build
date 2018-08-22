@@ -29,8 +29,11 @@ def RunSteps(api):
   api.chromite.checkout_chromite()
 
   # Update or install goma client via cipd.
-  use_goma_canary = api.properties.get('cbb_goma_canary', False)
-  api.chromite.m.goma.ensure_goma(canary=use_goma_canary)
+  # TODO(yyanagisawa): use cbb_goma_client_type instead (crbug.com/876585)
+  client_type = None
+  if api.properties.get('cbb_goma_canary', False):
+    client_type = 'candidate'
+  api.chromite.m.goma.ensure_goma(client_type=client_type)
 
   # Use the system python, not "bundled python" so that we have access
   # to system python packages.

@@ -10,7 +10,7 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.goma.ensure_goma(canary=True)
+  api.goma.ensure_goma(client_type='candidate')
   api.goma.start()
   api.goma.stop(build_exit_status=0)
 

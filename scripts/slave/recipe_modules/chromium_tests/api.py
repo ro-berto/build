@@ -216,7 +216,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if (self.m.chromium.c.compile_py.compiler and
         'goma' in self.m.chromium.c.compile_py.compiler):
       self.m.chromium.ensure_goma(
-          canary=self.m.chromium.c.compile_py.goma_canary)
+          client_type=self.m.chromium.c.compile_py.goma_client_type)
 
     # Installs toolchains configured in the current bot, if any.
     self.m.chromium.ensure_toolchains()

@@ -18,7 +18,7 @@ DEPS = [
 def RunSteps(api):
   env = {}
 
-  api.goma.ensure_goma(api.properties.get('canary', False))
+  api.goma.ensure_goma(api.properties.get('client_type'))
 
   api.step('gn', ['gn', 'gen', 'out/Release',
                   '--args=use_goma=true goma_dir=%s' % api.goma.goma_dir])
@@ -89,5 +89,5 @@ def GenTests(api):
          api.properties.generic(**properties))
 
   yield (api.test('win_goma_canary') + api.platform.name('win') +
-         api.properties(canary=True) +
+         api.properties(client_type='candidate') +
          api.properties.generic(**properties))

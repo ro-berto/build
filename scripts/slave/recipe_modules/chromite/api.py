@@ -238,7 +238,10 @@ class ChromiteApi(recipe_api.RecipeApi):
     self.checkout_chromite()
 
     # Update or install goma client via cipd.
-    self.m.goma.ensure_goma(canary=goma_canary)
+    client_type = None
+    if goma_canary:
+      client_type = 'candidate'
+    self.m.goma.ensure_goma(client_type=client_type)
 
     self.run(args)
 

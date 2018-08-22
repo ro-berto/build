@@ -38,7 +38,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       compiler = Single(basestring, required=False),
       mode = Single(basestring, required=False),
       goma_dir = Single(Path, required=False),
-      goma_canary = Single(bool, empty_val=False, required=False),
+      goma_client_type = Single(basestring, required=False),
       goma_use_local = Single(bool, empty_val=False, required=False),
       show_ninja_stats = Single(bool, empty_val=False, required=False),
       goma_hermetic = Single(basestring, required=False),
@@ -280,7 +280,7 @@ def goma_enable_global_file_id_cache(c):
 
 @config_ctx()
 def goma_canary(c):
-  c.compile_py.goma_canary = True
+  c.compile_py.goma_client_type = 'candidate'
   c.compile_py.goma_hermetic = 'error'
   c.compile_py.goma_failfast = True
   c.compile_py.show_ninja_stats = True
