@@ -116,7 +116,7 @@ def main():
                       default='unknown',
                       help='buildbot slavename')
 
-  # For ComipleEvents.
+  # For CompileEvents.
   parser.add_argument('--build-id', default=0, type=long,
                       help='unique ID of the current build')
   parser.add_argument('--build-step-name', default='',
