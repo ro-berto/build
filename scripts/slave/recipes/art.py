@@ -69,10 +69,14 @@ def clobber(api):
   if 'clobber' in api.properties:
     api.file.rmtree('clobber', api.path['start_dir'].join('out'))
 
-def setup_host_x86(api, debug, bitness, concurrent_collector=True,
-    heap_poisoning=False,
-    gcstress=False,
-    cdex_level='none'):
+def setup_host_x86(api,
+                   debug,
+                   bitness,
+                   concurrent_collector=True,
+                   generational_cc=False,
+                   heap_poisoning=False,
+                   gcstress=False,
+                   cdex_level='none'):
   checkout(api)
   clobber(api)
 
@@ -99,6 +103,13 @@ def setup_host_x86(api, debug, bitness, concurrent_collector=True,
     env.update({ 'ART_USE_READ_BARRIER' : 'true' })
   else:
     env.update({ 'ART_USE_READ_BARRIER' : 'false' })
+
+  # Note: Generational CC only makes sense when read barriers are used
+  # (i.e. when the Concurrent Copying collector is used).
+  if generational_cc:
+    env.update({ 'ART_USE_GENERATIONAL_CC' : 'true' })
+  else:
+    env.update({ 'ART_USE_GENERATIONAL_CC' : 'false' })
 
   if heap_poisoning:
     env.update({ 'ART_HEAP_POISONING' : 'true' })
@@ -457,6 +468,11 @@ _CONFIG_MAP = {
         'bitness': 32,
         'debug': True,
         'gcstress': True,
+      },
+      'host-x86-generational-cc': {
+        'bitness': 64,
+        'debug': True,
+        'generational_cc': True,
       },
       'host-x86_64-cdex-fast': {
         'debug': True,
