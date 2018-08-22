@@ -85,7 +85,7 @@ class PerfDashboardApi(recipe_api.RecipeApi):
                      '%s/api/isolate' % _PINPOINT_BASE_URL,
                      data, halt_on_failure, **kwargs)
 
-  def post(self, name, url, data, halt_on_failure, **kwargs):
+  def post(self, name, url, data, halt_on_failure, debug_info=None, **kwargs):
     """Send a POST request to a URL with a payload.
 
     Args:
@@ -94,11 +94,16 @@ class PerfDashboardApi(recipe_api.RecipeApi):
       data: A dict of parameters to send in the body of the request.
       halt_on_failure: If True, the step turns purple on failure. Otherwise, it
           turns orange.
+      debug_info (list[str]|None): An optional list of log lines to add to the
+          post step as debugging information.
     """
     step_result = self.m.python(
         name=name, script=self.resource('post_json.py'), args=[
             url, '-i', self.m.json.input(data), '-o', self.m.json.output()],
             **kwargs)
+
+    if debug_info:
+      step_result.presentation.logs['Debug Info'] = debug_info
 
     response = step_result.json.output
     if not response or response['status_code'] != 200:  # pragma: no cover

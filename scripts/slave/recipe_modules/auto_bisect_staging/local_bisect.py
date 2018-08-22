@@ -26,7 +26,7 @@ def perform_bisect(api, **flags):
         try:
           _perform_single_bisect(api, bisect_attempts, **flags)
           break
-        except api.m.step.StepFailure:
+        except api.m.step.StepFailure: # pragma: no cover
           # Redo the bisect job if target platform is android and bisect
           # failed because the test device disconnected
           current_connected_devices = _get_connected_devices(api)
@@ -53,7 +53,7 @@ def perform_bisect(api, **flags):
 
 def _perform_single_bisect(api, bisect_attempts, **flags):
   bisect_config = dict(api.m.properties.get('bisect_config'))
-  if bisect_attempts:
+  if bisect_attempts: # pragma: no cover
     bisect_config['good_revision'] = bisect_attempts[-1].lkgr.commit_hash
     bisect_config['bad_revision'] = bisect_attempts[-1].fkbr.commit_hash
   bisector = api.create_bisector(bisect_config, **flags)

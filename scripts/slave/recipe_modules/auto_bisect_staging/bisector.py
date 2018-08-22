@@ -575,21 +575,16 @@ class Bisector(object):
     return '\n'.join(results)
 
   def print_result_debug_info(self):
-    """Prints extra debug info at the end of the bisect process."""
-    # If we emit a null step then add a log to it, the log should be kept
-    # longer than 7 days (which is often needed to debug some issues).
-    self.api.m.step('Debug Info', [])
-    current_step = self.api.m.step.active_result
+    """Prints an extra debug info step at the end of the bisect process."""
     lines = self._results_debug_message().splitlines()
-    current_step.presentation.logs['Debug Info'] = lines
+    self.api.m.python.succeeding_step('Debug Info', lines, as_log='Debug Info')
 
   def post_result(self, halt_on_failure=False):
     """Posts bisect results to Perf Dashboard."""
     self.api.m.perf_dashboard.set_default_config()
-    step_result = self.api.m.perf_dashboard.post_bisect_results(
-        self.get_result(), halt_on_failure)
-    lines = json.dumps(self.get_result(), indent=2).splitlines()
-    step_result.presentation.logs['Debug Info'] = lines
+    lines = self.api.m.json.dumps(self.get_result(), indent=2).splitlines()
+    self.api.m.perf_dashboard.post_bisect_results(
+        self.get_result(), halt_on_failure, debug_info=lines)
 
   def get_revision_to_eval(self):
     """Gets the next RevisionState object in the candidate range.

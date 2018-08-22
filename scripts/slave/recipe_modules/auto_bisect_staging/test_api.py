@@ -190,7 +190,7 @@ index 029be3b..2b3ea0a 100644
       if 'build_status' in item:
         result[item['hash']] = []
         for entry in item['build_status']:
-          if type(entry) == type(dict()):
+          if isinstance(entry, dict):
             result[item['hash']].append(self.m.json.output_stream(entry))
           else:
             result[item['hash']].append(

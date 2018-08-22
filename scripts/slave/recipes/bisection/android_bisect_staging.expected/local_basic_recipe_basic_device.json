@@ -7045,11 +7045,6 @@
     ]
   },
   {
-    "cmd": [],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Debug Info"
-  },
-  {
     "cmd": [
       "git",
       "footers",
@@ -7070,12 +7065,48 @@
     "cmd": [
       "python",
       "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Debug Info",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@Debug Info@bisector.lkgr: RevisionState(rev=chromium@e28dc0d49c, mean_value=11.0, std_dev=5.70087712549569)@@@",
+      "@@@STEP_LOG_LINE@Debug Info@bisector.fkbr: RevisionState(rev=chromium@fc6dfc7ff5, mean_value=172.2, std_dev=92.35637498299725)@@@",
+      "@@@STEP_LOG_LINE@Debug Info@@@@",
+      "@@@STEP_LOG_LINE@Debug Info@Revision       Values         @@@",
+      "@@@STEP_LOG_LINE@Debug Info@chromium@e28dc0d49c[12, 13, 14, 15, 1]@@@",
+      "@@@STEP_LOG_LINE@Debug Info@chromium@fc6dfc7ff5[212, 213, 214, 215, 7]@@@",
+      "@@@STEP_LOG_LINE@Debug Info@LKGR values: [12, 13, 14, 15, 1]@@@",
+      "@@@STEP_LOG_LINE@Debug Info@FKBR values: [212, 213, 214, 215, 7]@@@",
+      "@@@STEP_LOG_END@Debug Info@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::auto_bisect_staging]/resources/fetch_revision_info.py",
       "fc6dfc7ff5b1073408499478969261b826441144",
       "chromium"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "name": "Reading culprit cl information.",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::auto_bisect_staging]/resources/fetch_revision_info.py",
+      "fc6dfc7ff5b1073408499478969261b826441144",
+      "chromium"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
+    "name": "Reading culprit cl information. (2)",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -7099,23 +7130,50 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"status_code\": 200@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::auto_bisect_staging]/resources/fetch_revision_info.py",
-      "fc6dfc7ff5b1073408499478969261b826441144",
-      "chromium"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
-    "name": "Reading culprit cl information. (2)",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@Debug Info@{@@@",
+      "@@@STEP_LOG_LINE@Debug Info@  \"aborted_reason\": null, @@@",
+      "@@@STEP_LOG_LINE@Debug Info@  \"bad_revision\": \"fc6dfc7ff5b1073408499478969261b826441144\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@  \"bisect_bot\": \"linux_perf_tester\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@  \"bug_id\": \"425582\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@  \"buildbot_log_url\": \"http://c.org/p/cr/builders/android_one_perf_bisect/builds/571\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@  \"change\": \"1465.45%\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@  \"command\": \"./tools/perf/run_benchmark -v --browser=android-chromium --output-format=valueset page_cycler_v2.intl_ar_fa_he\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@  \"culprit_data\": null, @@@",
+      "@@@STEP_LOG_LINE@Debug Info@  \"good_revision\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@  \"metric\": \"warm_times/page_load_time\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@  \"revision_data\": [@@@",
+      "@@@STEP_LOG_LINE@Debug Info@    {@@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"build_id\": null, @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"commit_hash\": \"e28dc0d49c331def2a3bbf3ddd0096eb51551155\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"depot_name\": \"chromium\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"failed\": false, @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"failure_reason\": null, @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"mean_value\": 11.0, @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"n_observations\": 5, @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"result\": \"good\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"revision_string\": \"chromium@e28dc0d49c\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"std_dev\": 5.70087712549569@@@",
+      "@@@STEP_LOG_LINE@Debug Info@    }, @@@",
+      "@@@STEP_LOG_LINE@Debug Info@    {@@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"build_id\": null, @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"commit_hash\": \"fc6dfc7ff5b1073408499478969261b826441144\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"depot_name\": \"chromium\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"failed\": false, @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"failure_reason\": null, @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"mean_value\": 172.2, @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"n_observations\": 5, @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"result\": \"bad\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"revision_string\": \"chromium@fc6dfc7ff5\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@      \"std_dev\": 92.35637498299725@@@",
+      "@@@STEP_LOG_LINE@Debug Info@    }@@@",
+      "@@@STEP_LOG_LINE@Debug Info@  ], @@@",
+      "@@@STEP_LOG_LINE@Debug Info@  \"status\": \"completed\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@  \"test_type\": \"perf\", @@@",
+      "@@@STEP_LOG_LINE@Debug Info@  \"try_job_id\": null, @@@",
+      "@@@STEP_LOG_LINE@Debug Info@  \"warnings\": []@@@",
+      "@@@STEP_LOG_LINE@Debug Info@}@@@",
+      "@@@STEP_LOG_END@Debug Info@@@"
     ]
   },
   {
