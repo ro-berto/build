@@ -1021,7 +1021,7 @@ Return the path to the built executable directory.
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gyp\_chromium](/scripts/slave/recipe_modules/chromium/api.py#910)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb](/scripts/slave/recipe_modules/chromium/api.py#982)(self, mastername, buildername, use_goma=True, mb_path=None, mb_config_path=None, isolated_targets=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, phase=None, gn_args_presenter=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb](/scripts/slave/recipe_modules/chromium/api.py#982)(self, mastername, buildername, use_goma=True, mb_path=None, mb_config_path=None, isolated_targets=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, phase=None, gn_args_presenter=None, mb_command='gen', \*\*kwargs):**
 
 Run mb in the source tree.
 
@@ -2348,7 +2348,7 @@ completely described to gyp.
 
 Compare the artifacts from 2 builds.
 
-&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#354)(self, isolate_hashes, step_name=None, \*\*kwargs):**
+&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#355)(self, isolate_hashes, step_name=None, \*\*kwargs):**
 
 Creates and uploads a new isolate composing multiple existing isolates.
 
