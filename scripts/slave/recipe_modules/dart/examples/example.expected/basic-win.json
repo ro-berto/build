@@ -1666,13 +1666,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_2/Windows/isolate_ha/dart2js-win10-debug-x64-firefox/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
   },
   {
@@ -1943,13 +1943,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"Test-step 3_shard_1/Windows/test isola/dart2js-win10-debug-x64-firefox/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"120000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {
@@ -2150,7 +2150,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test-step 1_shard_2/Windows/isolate_ha/dart2js-win10-debug-x64-firefox/-1\", \"tasks\": {\"Test-step 1_shard_2/Windows/isolate_ha/dart2js-win10-debug-x64-firefox/-1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"Test-step 1_shard_2/Windows/isolate_ha/dart2js-win10-debug-x64-firefox/-1\", \"tasks\": {\"Test-step 1_shard_2/Windows/isolate_ha/dart2js-win10-debug-x64-firefox/-1\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -2235,7 +2235,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test-step 3_shard_1/Windows/test isola/dart2js-win10-debug-x64-firefox/-1\", \"tasks\": {\"Test-step 3_shard_1/Windows/test isola/dart2js-win10-debug-x64-firefox/-1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"Test-step 3_shard_1/Windows/test isola/dart2js-win10-debug-x64-firefox/-1\", \"tasks\": {\"Test-step 3_shard_1/Windows/test isola/dart2js-win10-debug-x64-firefox/-1\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],

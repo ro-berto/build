@@ -280,7 +280,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Mjsunit - everything/Ubuntu-14.04/[dummy has/V8 Linux - nosnap/571\", \"tasks\": {\"Mjsunit - everything/Ubuntu-14.04/[dummy has/V8 Linux - nosnap/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Mjsunit - everything/Ubuntu-14.04/[dummy has/V8 Linux - nosnap/571\", \"tasks\": {\"Mjsunit - everything/Ubuntu-14.04/[dummy has/V8 Linux - nosnap/571\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}"
     ],
     "infra_step": true,
     "name": "Mjsunit - everything",

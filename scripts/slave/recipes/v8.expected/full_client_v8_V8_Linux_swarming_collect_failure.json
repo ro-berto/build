@@ -2134,7 +2134,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Check/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Check/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}"
     ],
     "infra_step": true,
     "name": "Check",
@@ -2181,7 +2181,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}"
     ],
     "infra_step": true,
     "name": "OptimizeForSize",
@@ -2226,7 +2226,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Benchmarks/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Benchmarks/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Benchmarks/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Benchmarks/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}}}"
     ],
     "infra_step": true,
     "name": "Benchmarks",
@@ -2271,7 +2271,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test262/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Test262/Ubuntu-14.04/[dummy has/V8 Linux/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Test262/Ubuntu-14.04/[dummy has/V8 Linux/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
+      "{\"base_task_name\": \"Test262/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Test262/Ubuntu-14.04/[dummy has/V8 Linux/571:2:0\": {\"shard_index\": 0, \"task_id\": \"140000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/140000\"}, \"Test262/Ubuntu-14.04/[dummy has/V8 Linux/571:2:1\": {\"shard_index\": 1, \"task_id\": \"140100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/140100\"}}}"
     ],
     "infra_step": true,
     "name": "Test262",
@@ -2316,7 +2316,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Mozilla/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Mozilla/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Mozilla/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Mozilla/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"160000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160000\"}}}"
     ],
     "infra_step": true,
     "name": "Mozilla",
@@ -2361,7 +2361,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Mjsunit - sp frame access/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Mjsunit - sp frame access/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Mjsunit - sp frame access/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Mjsunit - sp frame access/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"170000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/170000\"}}}"
     ],
     "infra_step": true,
     "name": "Mjsunit - sp frame access",
@@ -2412,7 +2412,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"GCMole ia32/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"GCMole ia32/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"GCMole ia32/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"GCMole ia32/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"180000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/180000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -2497,7 +2497,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"GCMole x64/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"GCMole x64/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"GCMole x64/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"GCMole x64/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"190000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/190000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -2582,7 +2582,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"GCMole arm/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"GCMole arm/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"GCMole arm/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"GCMole arm/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"1100000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1100000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -2667,7 +2667,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"GCMole arm64/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"GCMole arm64/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"GCMole arm64/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"GCMole arm64/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"1110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1110000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -2746,7 +2746,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check - isolates/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Check - isolates/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Check - isolates/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Check - isolates/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"1120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1120000\"}}}"
     ],
     "infra_step": true,
     "name": "Check - isolates",
@@ -2791,7 +2791,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check - nosse3/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Check - nosse3/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Check - nosse3/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Check - nosse3/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"1130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130000\"}}}"
     ],
     "infra_step": true,
     "name": "Check - nosse3",
@@ -2836,7 +2836,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Mozilla - nosse3/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Mozilla - nosse3/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Mozilla - nosse3/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Mozilla - nosse3/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"1140000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1140000\"}}}"
     ],
     "infra_step": true,
     "name": "Mozilla - nosse3",
@@ -2881,7 +2881,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check - nosse4/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Check - nosse4/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Check - nosse4/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Check - nosse4/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"1150000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1150000\"}}}"
     ],
     "infra_step": true,
     "name": "Check - nosse4",
@@ -2926,7 +2926,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Mozilla - nosse4/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Mozilla - nosse4/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Mozilla - nosse4/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Mozilla - nosse4/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"1160000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1160000\"}}}"
     ],
     "infra_step": true,
     "name": "Mozilla - nosse4",
@@ -2971,7 +2971,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"1170000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1170000\"}}}"
     ],
     "infra_step": true,
     "name": "Check - extra",
@@ -3016,7 +3016,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Mozilla - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Mozilla - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Mozilla - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Mozilla - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"1180000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1180000\"}}}"
     ],
     "infra_step": true,
     "name": "Mozilla - extra",
@@ -3061,7 +3061,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test262 - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Test262 - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Test262 - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Test262 - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"1190000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1190000\"}}}"
     ],
     "infra_step": true,
     "name": "Test262 - extra",
@@ -3106,7 +3106,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Benchmarks - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Benchmarks - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Benchmarks - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\", \"tasks\": {\"Benchmarks - extra/Ubuntu-14.04/[dummy has/V8 Linux/571\": {\"shard_index\": 0, \"task_id\": \"1200000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1200000\"}}}"
     ],
     "infra_step": true,
     "name": "Benchmarks - extra",

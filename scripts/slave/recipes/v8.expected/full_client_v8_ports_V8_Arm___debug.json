@@ -486,7 +486,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Arm - debug/571\", \"tasks\": {\"OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Arm - debug/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Arm - debug/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
+      "{\"base_task_name\": \"OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Arm - debug/571\", \"tasks\": {\"OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Arm - debug/571:2:0\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}, \"OptimizeForSize/Ubuntu-14.04/[dummy has/V8 Arm - debug/571:2:1\": {\"shard_index\": 1, \"task_id\": \"130100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130100\"}}}"
     ],
     "infra_step": true,
     "name": "OptimizeForSize",
@@ -531,7 +531,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check - ODROID/Ubuntu-16.04/[dummy has/V8 Arm - debug/571\", \"tasks\": {\"Check - ODROID/Ubuntu-16.04/[dummy has/V8 Arm - debug/571:3:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check - ODROID/Ubuntu-16.04/[dummy has/V8 Arm - debug/571:3:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Check - ODROID/Ubuntu-16.04/[dummy has/V8 Arm - debug/571:3:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}}}"
+      "{\"base_task_name\": \"Check - ODROID/Ubuntu-16.04/[dummy has/V8 Arm - debug/571\", \"tasks\": {\"Check - ODROID/Ubuntu-16.04/[dummy has/V8 Arm - debug/571:3:0\": {\"shard_index\": 0, \"task_id\": \"150000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/150000\"}, \"Check - ODROID/Ubuntu-16.04/[dummy has/V8 Arm - debug/571:3:1\": {\"shard_index\": 1, \"task_id\": \"150100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/150100\"}, \"Check - ODROID/Ubuntu-16.04/[dummy has/V8 Arm - debug/571:3:2\": {\"shard_index\": 2, \"task_id\": \"150200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/150200\"}}}"
     ],
     "infra_step": true,
     "name": "Check - ODROID",
@@ -576,7 +576,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"OptimizeForSize - ODROID/Ubuntu-16.04/[dummy has/V8 Arm - debug/571\", \"tasks\": {\"OptimizeForSize - ODROID/Ubuntu-16.04/[dummy has/V8 Arm - debug/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"OptimizeForSize - ODROID/Ubuntu-16.04/[dummy has/V8 Arm - debug/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
+      "{\"base_task_name\": \"OptimizeForSize - ODROID/Ubuntu-16.04/[dummy has/V8 Arm - debug/571\", \"tasks\": {\"OptimizeForSize - ODROID/Ubuntu-16.04/[dummy has/V8 Arm - debug/571:2:0\": {\"shard_index\": 0, \"task_id\": \"180000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/180000\"}, \"OptimizeForSize - ODROID/Ubuntu-16.04/[dummy has/V8 Arm - debug/571:2:1\": {\"shard_index\": 1, \"task_id\": \"180100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/180100\"}}}"
     ],
     "infra_step": true,
     "name": "OptimizeForSize - ODROID",

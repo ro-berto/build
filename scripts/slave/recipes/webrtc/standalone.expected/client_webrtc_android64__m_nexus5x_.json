@@ -820,13 +820,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"android_instrumentation_test_apk/Android/[dummy has/Android64 (M Nexus5X)/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
   },
   {
@@ -930,13 +930,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"audio_decoder_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"120000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {
@@ -1040,13 +1040,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"common_audio_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"130000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/130000@@@"
     ]
   },
   {
@@ -1150,13 +1150,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"common_video_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"140000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/140000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/140000@@@"
     ]
   },
   {
@@ -1260,19 +1260,19 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"modules_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:2:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"150000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/150000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"modules_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:2:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"150100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/150100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/150000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/150100@@@"
     ]
   },
   {
@@ -1376,43 +1376,43 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"170000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/170000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"170100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/170100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:2\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 2, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10200\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"170200\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/170200\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:3\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 3, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10300\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"170300\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/170300\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:4\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 4, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10400\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"170400\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/170400\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:5\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 5, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10500\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10500\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"170500\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/170500\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
-      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
-      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@",
-      "@@@STEP_LINK@shard #4@https://chromium-swarm.appspot.com/user/task/10400@@@",
-      "@@@STEP_LINK@shard #5@https://chromium-swarm.appspot.com/user/task/10500@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/170000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/170100@@@",
+      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/170200@@@",
+      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/170300@@@",
+      "@@@STEP_LINK@shard #4@https://chromium-swarm.appspot.com/user/task/170400@@@",
+      "@@@STEP_LINK@shard #5@https://chromium-swarm.appspot.com/user/task/170500@@@"
     ]
   },
   {
@@ -1516,13 +1516,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"ortc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1130000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1130000@@@"
     ]
   },
   {
@@ -1626,31 +1626,31 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1140000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1140000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1140100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1140100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:2\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 2, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10200\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1140200\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1140200\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:3\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 3, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10300\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1140300\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1140300\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
-      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
-      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1140000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/1140100@@@",
+      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/1140200@@@",
+      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/1140300@@@"
     ]
   },
   {
@@ -1754,13 +1754,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_stats_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1180000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1180000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1180000@@@"
     ]
   },
   {
@@ -1864,43 +1864,43 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1190000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1190000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1190100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1190100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:2\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 2, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10200\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1190200\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1190200\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:3\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 3, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10300\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1190300\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1190300\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:4\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 4, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10400\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1190400\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1190400\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:5\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 5, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10500\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10500\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1190500\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1190500\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
-      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
-      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@",
-      "@@@STEP_LINK@shard #4@https://chromium-swarm.appspot.com/user/task/10400@@@",
-      "@@@STEP_LINK@shard #5@https://chromium-swarm.appspot.com/user/task/10500@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1190000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/1190100@@@",
+      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/1190200@@@",
+      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/1190300@@@",
+      "@@@STEP_LINK@shard #4@https://chromium-swarm.appspot.com/user/task/1190400@@@",
+      "@@@STEP_LINK@shard #5@https://chromium-swarm.appspot.com/user/task/1190500@@@"
     ]
   },
   {
@@ -2004,13 +2004,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"system_wrappers_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1250000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1250000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1250000@@@"
     ]
   },
   {
@@ -2114,13 +2114,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"test_support_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1260000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1260000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1260000@@@"
     ]
   },
   {
@@ -2224,13 +2224,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"tools_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1270000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1270000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1270000@@@"
     ]
   },
   {
@@ -2334,31 +2334,31 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1280000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1280000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1280100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1280100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:2\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 2, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10200\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1280200\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1280200\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:3\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 3, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10300\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1280300\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1280300\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
-      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
-      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1280000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/1280100@@@",
+      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/1280200@@@",
+      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/1280300@@@"
     ]
   },
   {
@@ -2462,13 +2462,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"webrtc_nonparallel_tests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1320000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1320000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1320000@@@"
     ]
   },
   {
@@ -2661,7 +2661,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"android_instrumentation_test_apk/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"android_instrumentation_test_apk/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"android_instrumentation_test_apk/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"android_instrumentation_test_apk/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -2724,7 +2724,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"android_instrumentation_test_apk\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"110000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
@@ -2732,7 +2732,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
   },
   {
@@ -2789,7 +2789,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"audio_decoder_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"audio_decoder_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"audio_decoder_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"audio_decoder_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -2852,7 +2852,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"audio_decoder_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"120000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
@@ -2860,7 +2860,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {
@@ -2917,7 +2917,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"common_audio_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"common_audio_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"common_audio_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"common_audio_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -2980,7 +2980,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"130000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
@@ -2988,7 +2988,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/130000@@@"
     ]
   },
   {
@@ -3045,7 +3045,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"common_video_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"common_video_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"common_video_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"common_video_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"140000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/140000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3108,7 +3108,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"common_video_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"140000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
@@ -3116,7 +3116,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/140000@@@"
     ]
   },
   {
@@ -3173,7 +3173,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"modules_tests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"modules_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"modules_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}",
+      "{\"base_task_name\": \"modules_tests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"modules_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:2:0\": {\"shard_index\": 0, \"task_id\": \"150000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/150000\"}, \"modules_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:2:1\": {\"shard_index\": 1, \"task_id\": \"150100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/150100\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3272,8 +3272,8 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"modules_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10100\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"150100\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"150000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
@@ -3281,9 +3281,9 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/150000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@"
+      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/150100@@@"
     ]
   },
   {
@@ -3340,7 +3340,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}, \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:4\": {\"shard_index\": 4, \"task_id\": \"10400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"}, \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:5\": {\"shard_index\": 5, \"task_id\": \"10500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10500\"}}}",
+      "{\"base_task_name\": \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:0\": {\"shard_index\": 0, \"task_id\": \"170000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/170000\"}, \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:1\": {\"shard_index\": 1, \"task_id\": \"170100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/170100\"}, \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:2\": {\"shard_index\": 2, \"task_id\": \"170200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/170200\"}, \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:3\": {\"shard_index\": 3, \"task_id\": \"170300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/170300\"}, \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:4\": {\"shard_index\": 4, \"task_id\": \"170400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/170400\"}, \"modules_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:5\": {\"shard_index\": 5, \"task_id\": \"170500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/170500\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3583,12 +3583,12 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"modules_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10500\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10400\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10300\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10200\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10100\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"170500\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"170400\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"170300\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"170200\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"170100\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"170000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
@@ -3596,17 +3596,17 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/170000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/170100@@@",
       "@@@STEP_LINK@shard #2 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/10200@@@",
+      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/170200@@@",
       "@@@STEP_LINK@shard #3 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/10300@@@",
+      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/170300@@@",
       "@@@STEP_LINK@shard #4 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #4 (17.7 sec)@https://chromium-swarm.appspot.com/user/task/10400@@@",
+      "@@@STEP_LINK@shard #4 (17.7 sec)@https://chromium-swarm.appspot.com/user/task/170400@@@",
       "@@@STEP_LINK@shard #5 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #5 (20.7 sec)@https://chromium-swarm.appspot.com/user/task/10500@@@"
+      "@@@STEP_LINK@shard #5 (20.7 sec)@https://chromium-swarm.appspot.com/user/task/170500@@@"
     ]
   },
   {
@@ -3663,7 +3663,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"ortc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"ortc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"ortc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"ortc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"1130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3726,7 +3726,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"ortc_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1130000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
@@ -3734,7 +3734,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1130000@@@"
     ]
   },
   {
@@ -3791,7 +3791,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}}}",
+      "{\"base_task_name\": \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:0\": {\"shard_index\": 0, \"task_id\": \"1140000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1140000\"}, \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:1\": {\"shard_index\": 1, \"task_id\": \"1140100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1140100\"}, \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:2\": {\"shard_index\": 2, \"task_id\": \"1140200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1140200\"}, \"peerconnection_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:3\": {\"shard_index\": 3, \"task_id\": \"1140300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1140300\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3962,10 +3962,10 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"peerconnection_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10300\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10200\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10100\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1140300\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1140200\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1140100\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1140000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
@@ -3973,13 +3973,13 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1140000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/1140100@@@",
       "@@@STEP_LINK@shard #2 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/10200@@@",
+      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/1140200@@@",
       "@@@STEP_LINK@shard #3 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/10300@@@"
+      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/1140300@@@"
     ]
   },
   {
@@ -4036,7 +4036,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"rtc_stats_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"rtc_stats_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"rtc_stats_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"rtc_stats_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"1180000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1180000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -4099,7 +4099,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"rtc_stats_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1180000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
@@ -4107,7 +4107,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1180000@@@"
     ]
   },
   {
@@ -4164,7 +4164,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}, \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:4\": {\"shard_index\": 4, \"task_id\": \"10400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"}, \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:5\": {\"shard_index\": 5, \"task_id\": \"10500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10500\"}}}",
+      "{\"base_task_name\": \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:0\": {\"shard_index\": 0, \"task_id\": \"1190000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1190000\"}, \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:1\": {\"shard_index\": 1, \"task_id\": \"1190100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1190100\"}, \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:2\": {\"shard_index\": 2, \"task_id\": \"1190200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1190200\"}, \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:3\": {\"shard_index\": 3, \"task_id\": \"1190300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1190300\"}, \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:4\": {\"shard_index\": 4, \"task_id\": \"1190400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1190400\"}, \"rtc_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337:6:5\": {\"shard_index\": 5, \"task_id\": \"1190500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1190500\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -4407,12 +4407,12 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"rtc_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10500\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10400\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10100\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10300\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10200\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1190500\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1190400\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1190100\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1190000\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1190300\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1190200\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
@@ -4420,17 +4420,17 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1190000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/1190100@@@",
       "@@@STEP_LINK@shard #2 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/10200@@@",
+      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/1190200@@@",
       "@@@STEP_LINK@shard #3 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/10300@@@",
+      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/1190300@@@",
       "@@@STEP_LINK@shard #4 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #4 (17.7 sec)@https://chromium-swarm.appspot.com/user/task/10400@@@",
+      "@@@STEP_LINK@shard #4 (17.7 sec)@https://chromium-swarm.appspot.com/user/task/1190400@@@",
       "@@@STEP_LINK@shard #5 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #5 (20.7 sec)@https://chromium-swarm.appspot.com/user/task/10500@@@"
+      "@@@STEP_LINK@shard #5 (20.7 sec)@https://chromium-swarm.appspot.com/user/task/1190500@@@"
     ]
   },
   {
@@ -4487,7 +4487,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"system_wrappers_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"system_wrappers_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"system_wrappers_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"system_wrappers_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"1250000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1250000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -4550,7 +4550,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"system_wrappers_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1250000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
@@ -4558,7 +4558,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1250000@@@"
     ]
   },
   {
@@ -4615,7 +4615,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"test_support_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"test_support_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"test_support_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"test_support_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"1260000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1260000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -4678,7 +4678,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"test_support_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1260000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
@@ -4686,7 +4686,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1260000@@@"
     ]
   },
   {
@@ -4743,7 +4743,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"tools_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"tools_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"tools_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"tools_unittests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"1270000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1270000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -4806,7 +4806,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"tools_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1270000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
@@ -4814,7 +4814,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1270000@@@"
     ]
   },
   {
@@ -4871,7 +4871,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}}}",
+      "{\"base_task_name\": \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:0\": {\"shard_index\": 0, \"task_id\": \"1280000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1280000\"}, \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:1\": {\"shard_index\": 1, \"task_id\": \"1280100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1280100\"}, \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:2\": {\"shard_index\": 2, \"task_id\": \"1280200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1280200\"}, \"video_engine_tests/Android/[dummy has/Android64 (M Nexus5X)/1337:4:3\": {\"shard_index\": 3, \"task_id\": \"1280300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1280300\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -5042,10 +5042,10 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"video_engine_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10100\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10300\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10200\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1280100\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1280000\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1280300\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1280200\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
@@ -5053,13 +5053,13 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1280000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/1280100@@@",
       "@@@STEP_LINK@shard #2 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/10200@@@",
+      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/1280200@@@",
       "@@@STEP_LINK@shard #3 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/10300@@@"
+      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/1280300@@@"
     ]
   },
   {
@@ -5116,7 +5116,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"webrtc_nonparallel_tests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"webrtc_nonparallel_tests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"webrtc_nonparallel_tests/Android/[dummy has/Android64 (M Nexus5X)/1337\", \"tasks\": {\"webrtc_nonparallel_tests/Android/[dummy has/Android64 (M Nexus5X)/1337\": {\"shard_index\": 0, \"task_id\": \"1320000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1320000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -5179,7 +5179,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"webrtc_nonparallel_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1320000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
@@ -5187,7 +5187,7 @@
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LOG_END@logcats@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1320000@@@"
     ]
   },
   {

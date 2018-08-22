@@ -706,7 +706,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Num Fuzz - marking/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\", \"tasks\": {\"Num Fuzz - marking/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Num Fuzz - marking/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\", \"tasks\": {\"Num Fuzz - marking/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}"
     ],
     "infra_step": true,
     "name": "Num Fuzz - marking",
@@ -751,7 +751,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Num Fuzz - scavenge/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\", \"tasks\": {\"Num Fuzz - scavenge/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Num Fuzz - scavenge/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\", \"tasks\": {\"Num Fuzz - scavenge/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}}}"
     ],
     "infra_step": true,
     "name": "Num Fuzz - scavenge",
@@ -796,7 +796,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Num Fuzz - threads/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\", \"tasks\": {\"Num Fuzz - threads/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Num Fuzz - threads/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\", \"tasks\": {\"Num Fuzz - threads/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\": {\"shard_index\": 0, \"task_id\": \"140000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/140000\"}}}"
     ],
     "infra_step": true,
     "name": "Num Fuzz - threads",
@@ -841,7 +841,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Num Fuzz - combined/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\", \"tasks\": {\"Num Fuzz - combined/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571:4:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Num Fuzz - combined/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571:4:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Num Fuzz - combined/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571:4:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"Num Fuzz - combined/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571:4:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}}}"
+      "{\"base_task_name\": \"Num Fuzz - combined/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\", \"tasks\": {\"Num Fuzz - combined/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571:4:0\": {\"shard_index\": 0, \"task_id\": \"150000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/150000\"}, \"Num Fuzz - combined/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571:4:1\": {\"shard_index\": 1, \"task_id\": \"150100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/150100\"}, \"Num Fuzz - combined/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571:4:2\": {\"shard_index\": 2, \"task_id\": \"150200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/150200\"}, \"Num Fuzz - combined/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571:4:3\": {\"shard_index\": 3, \"task_id\": \"150300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/150300\"}}}"
     ],
     "infra_step": true,
     "name": "Num Fuzz - combined",
@@ -886,7 +886,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Num Fuzz - endurance/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\", \"tasks\": {\"Num Fuzz - endurance/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Num Fuzz - endurance/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\", \"tasks\": {\"Num Fuzz - endurance/Ubuntu-14.04/[dummy has/V8 NumFuzz - TSAN/571\": {\"shard_index\": 0, \"task_id\": \"190000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/190000\"}}}"
     ],
     "infra_step": true,
     "name": "Num Fuzz - endurance",

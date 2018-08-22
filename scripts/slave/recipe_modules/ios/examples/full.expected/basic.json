@@ -1968,13 +1968,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"fake test 0 (fake device 0 iOS 11.0) shard 1/Mac/[dummy has/ios/0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
   },
   {
@@ -2078,13 +2078,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"fake test 0 (fake device 0 iOS 11.0) shard 2/Mac/[dummy has/ios/0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"120000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {
@@ -2184,13 +2184,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"fake test 1 (fake device 1 iOS 8.1)/Mac/[dummy has/ios/0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"130000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/130000@@@"
     ]
   },
   {
@@ -2290,13 +2290,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"fake test 2 (fake device 2 iOS 8.1)/Mac-10.12/[dummy has/ios/0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"140000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/140000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/140000@@@"
     ]
   },
   {
@@ -2396,13 +2396,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"fake included test 1 (fake device 1 iOS 8.1)/Mac/[dummy has/ios/0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"150000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/150000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/150000@@@"
     ]
   },
   {
@@ -2502,13 +2502,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"fake included test 2 (fake device 1 iOS 8.1)/Mac/[dummy has/ios/0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"160000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/160000@@@"
     ]
   },
   {
@@ -2608,13 +2608,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"fake test 2 (fake device 2 iOS 7.1)/Mac/[dummy has/ios/0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"170000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/170000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/170000@@@"
     ]
   },
   {
@@ -2714,13 +2714,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"fake included test 1 (fake device 2 iOS 7.1)/Mac/[dummy has/ios/0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"180000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/180000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/180000@@@"
     ]
   },
   {
@@ -2820,13 +2820,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"fake included test 2 (fake device 2 iOS 7.1)/Mac/[dummy has/ios/0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"190000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/190000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/190000@@@"
     ]
   },
   {
@@ -2968,7 +2968,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"fake test 0 (fake device 0 iOS 11.0) shard 1/Mac/[dummy has/ios/0\", \"tasks\": {\"fake test 0 (fake device 0 iOS 11.0) shard 1/Mac/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"fake test 0 (fake device 0 iOS 11.0) shard 1/Mac/[dummy has/ios/0\", \"tasks\": {\"fake test 0 (fake device 0 iOS 11.0) shard 1/Mac/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3020,7 +3020,7 @@
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/110000@@@",
       "@@@STEP_LINK@test data@blah@@@"
     ]
   },
@@ -3077,7 +3077,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"fake test 0 (fake device 0 iOS 11.0) shard 2/Mac/[dummy has/ios/0\", \"tasks\": {\"fake test 0 (fake device 0 iOS 11.0) shard 2/Mac/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"fake test 0 (fake device 0 iOS 11.0) shard 2/Mac/[dummy has/ios/0\", \"tasks\": {\"fake test 0 (fake device 0 iOS 11.0) shard 2/Mac/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3129,7 +3129,7 @@
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/120000@@@",
       "@@@STEP_LINK@test data@blah@@@"
     ]
   },
@@ -3163,7 +3163,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"fake test 1 (fake device 1 iOS 8.1)/Mac/[dummy has/ios/0\", \"tasks\": {\"fake test 1 (fake device 1 iOS 8.1)/Mac/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"fake test 1 (fake device 1 iOS 8.1)/Mac/[dummy has/ios/0\", \"tasks\": {\"fake test 1 (fake device 1 iOS 8.1)/Mac/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3215,7 +3215,7 @@
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/130000@@@",
       "@@@STEP_LINK@test data@blah@@@"
     ]
   },
@@ -3293,7 +3293,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"fake test 2 (fake device 2 iOS 8.1)/Mac-10.12/[dummy has/ios/0\", \"tasks\": {\"fake test 2 (fake device 2 iOS 8.1)/Mac-10.12/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"fake test 2 (fake device 2 iOS 8.1)/Mac-10.12/[dummy has/ios/0\", \"tasks\": {\"fake test 2 (fake device 2 iOS 8.1)/Mac-10.12/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"140000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/140000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3345,7 +3345,7 @@
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/140000@@@",
       "@@@STEP_LINK@test data@blah@@@"
     ]
   },
@@ -3379,7 +3379,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"fake included test 1 (fake device 1 iOS 8.1)/Mac/[dummy has/ios/0\", \"tasks\": {\"fake included test 1 (fake device 1 iOS 8.1)/Mac/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"fake included test 1 (fake device 1 iOS 8.1)/Mac/[dummy has/ios/0\", \"tasks\": {\"fake included test 1 (fake device 1 iOS 8.1)/Mac/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"150000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/150000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3431,7 +3431,7 @@
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/150000@@@",
       "@@@STEP_LINK@test data@blah@@@"
     ]
   },
@@ -3465,7 +3465,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"fake included test 2 (fake device 1 iOS 8.1)/Mac/[dummy has/ios/0\", \"tasks\": {\"fake included test 2 (fake device 1 iOS 8.1)/Mac/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"fake included test 2 (fake device 1 iOS 8.1)/Mac/[dummy has/ios/0\", \"tasks\": {\"fake included test 2 (fake device 1 iOS 8.1)/Mac/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"160000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3517,7 +3517,7 @@
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/160000@@@",
       "@@@STEP_LINK@test data@blah@@@"
     ]
   },
@@ -3551,7 +3551,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"fake test 2 (fake device 2 iOS 7.1)/Mac/[dummy has/ios/0\", \"tasks\": {\"fake test 2 (fake device 2 iOS 7.1)/Mac/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"fake test 2 (fake device 2 iOS 7.1)/Mac/[dummy has/ios/0\", \"tasks\": {\"fake test 2 (fake device 2 iOS 7.1)/Mac/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"170000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/170000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3603,7 +3603,7 @@
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/170000@@@",
       "@@@STEP_LINK@test data@blah@@@"
     ]
   },
@@ -3637,7 +3637,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"fake included test 1 (fake device 2 iOS 7.1)/Mac/[dummy has/ios/0\", \"tasks\": {\"fake included test 1 (fake device 2 iOS 7.1)/Mac/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"fake included test 1 (fake device 2 iOS 7.1)/Mac/[dummy has/ios/0\", \"tasks\": {\"fake included test 1 (fake device 2 iOS 7.1)/Mac/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"180000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/180000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3689,7 +3689,7 @@
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/180000@@@",
       "@@@STEP_LINK@test data@blah@@@"
     ]
   },
@@ -3723,7 +3723,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"fake included test 2 (fake device 2 iOS 7.1)/Mac/[dummy has/ios/0\", \"tasks\": {\"fake included test 2 (fake device 2 iOS 7.1)/Mac/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"fake included test 2 (fake device 2 iOS 7.1)/Mac/[dummy has/ios/0\", \"tasks\": {\"fake included test 2 (fake device 2 iOS 7.1)/Mac/[dummy has/ios/0\": {\"shard_index\": 0, \"task_id\": \"190000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/190000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3775,7 +3775,7 @@
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/190000@@@",
       "@@@STEP_LINK@test data@blah@@@"
     ]
   },

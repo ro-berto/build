@@ -779,7 +779,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test262 - no variants/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\", \"tasks\": {\"Test262 - no variants/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Test262 - no variants/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\", \"tasks\": {\"Test262 - no variants/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\": {\"shard_index\": 0, \"task_id\": \"140000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/140000\"}}}"
     ],
     "infra_step": true,
     "name": "Test262 - no variants",
@@ -824,7 +824,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Mozilla/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\", \"tasks\": {\"Mozilla/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Mozilla/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\", \"tasks\": {\"Mozilla/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\": {\"shard_index\": 0, \"task_id\": \"150000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/150000\"}}}"
     ],
     "infra_step": true,
     "name": "Mozilla",
@@ -869,7 +869,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\", \"tasks\": {\"Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
+      "{\"base_task_name\": \"Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\", \"tasks\": {\"Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571:2:0\": {\"shard_index\": 0, \"task_id\": \"160000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160000\"}, \"Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571:2:1\": {\"shard_index\": 1, \"task_id\": \"160100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160100\"}}}"
     ],
     "infra_step": true,
     "name": "Check - extra",

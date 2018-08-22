@@ -969,13 +969,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"vm_tests_shard_2/Linux//dart2js-linux-release-chrome-try/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
   },
   {
@@ -1093,7 +1093,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"vm_tests_shard_2/Linux//dart2js-linux-release-chrome-try/-1\", \"tasks\": {\"vm_tests_shard_2/Linux//dart2js-linux-release-chrome-try/-1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"vm_tests_shard_2/Linux//dart2js-linux-release-chrome-try/-1\", \"tasks\": {\"vm_tests_shard_2/Linux//dart2js-linux-release-chrome-try/-1\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1556,13 +1556,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_1/Linux/test isola/dart2js-linux-release-chrome-try/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"120000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {
@@ -1676,13 +1676,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_2/Linux/test isola/dart2js-linux-release-chrome-try/-1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"130000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/130000@@@"
     ]
   },
   {
@@ -1821,7 +1821,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test-step 1_shard_1/Linux/test isola/dart2js-linux-release-chrome-try/-1\", \"tasks\": {\"Test-step 1_shard_1/Linux/test isola/dart2js-linux-release-chrome-try/-1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"Test-step 1_shard_1/Linux/test isola/dart2js-linux-release-chrome-try/-1\", \"tasks\": {\"Test-step 1_shard_1/Linux/test isola/dart2js-linux-release-chrome-try/-1\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1906,7 +1906,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test-step 1_shard_2/Linux/test isola/dart2js-linux-release-chrome-try/-1\", \"tasks\": {\"Test-step 1_shard_2/Linux/test isola/dart2js-linux-release-chrome-try/-1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"Test-step 1_shard_2/Linux/test isola/dart2js-linux-release-chrome-try/-1\", \"tasks\": {\"Test-step 1_shard_2/Linux/test isola/dart2js-linux-release-chrome-try/-1\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],

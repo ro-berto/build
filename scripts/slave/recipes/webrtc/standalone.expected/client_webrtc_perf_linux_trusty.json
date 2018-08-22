@@ -763,13 +763,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"low_bandwidth_audio_perf_test/Ubuntu-14.04/[dummy has/Linux Trusty/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
   },
   {
@@ -872,13 +872,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"webrtc_perf_tests/Ubuntu-14.04/[dummy has/Linux Trusty/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"120000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {
@@ -1114,7 +1114,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"low_bandwidth_audio_perf_test/Ubuntu-14.04/[dummy has/Linux Trusty/1337\", \"tasks\": {\"low_bandwidth_audio_perf_test/Ubuntu-14.04/[dummy has/Linux Trusty/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"low_bandwidth_audio_perf_test/Ubuntu-14.04/[dummy has/Linux Trusty/1337\", \"tasks\": {\"low_bandwidth_audio_perf_test/Ubuntu-14.04/[dummy has/Linux Trusty/1337\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1204,7 +1204,7 @@
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
   },
   {
@@ -1255,7 +1255,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"low_bandwidth_audio_perf_test\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"110000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
@@ -1317,7 +1317,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"webrtc_perf_tests/Ubuntu-14.04/[dummy has/Linux Trusty/1337\", \"tasks\": {\"webrtc_perf_tests/Ubuntu-14.04/[dummy has/Linux Trusty/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"webrtc_perf_tests/Ubuntu-14.04/[dummy has/Linux Trusty/1337\", \"tasks\": {\"webrtc_perf_tests/Ubuntu-14.04/[dummy has/Linux Trusty/1337\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1407,7 +1407,7 @@
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {
@@ -1458,7 +1458,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"webrtc_perf_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"120000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",

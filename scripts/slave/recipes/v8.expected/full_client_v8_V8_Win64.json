@@ -817,7 +817,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test262 - no variants/Windows-7-SP1/[dummy has/V8 Win64/571\", \"tasks\": {\"Test262 - no variants/Windows-7-SP1/[dummy has/V8 Win64/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Test262 - no variants/Windows-7-SP1/[dummy has/V8 Win64/571\", \"tasks\": {\"Test262 - no variants/Windows-7-SP1/[dummy has/V8 Win64/571\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}"
     ],
     "infra_step": true,
     "name": "Test262 - no variants",
@@ -862,7 +862,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Mozilla/Windows-7-SP1/[dummy has/V8 Win64/571\", \"tasks\": {\"Mozilla/Windows-7-SP1/[dummy has/V8 Win64/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Mozilla/Windows-7-SP1/[dummy has/V8 Win64/571\", \"tasks\": {\"Mozilla/Windows-7-SP1/[dummy has/V8 Win64/571\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}"
     ],
     "infra_step": true,
     "name": "Mozilla",
@@ -907,7 +907,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check - extra/Windows-7-SP1/[dummy has/V8 Win64/571\", \"tasks\": {\"Check - extra/Windows-7-SP1/[dummy has/V8 Win64/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Check - extra/Windows-7-SP1/[dummy has/V8 Win64/571\", \"tasks\": {\"Check - extra/Windows-7-SP1/[dummy has/V8 Win64/571\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}}}"
     ],
     "infra_step": true,
     "name": "Check - extra",

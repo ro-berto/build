@@ -208,6 +208,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     # Record all durations of shards for aggregation.
     self._shards_durations = []
 
+    # Counter used to ensure test data task ids are unique across different
+    # triggers.
+    self._task_test_data_id_offset = 0
+
   def initialize(self):
     self.add_default_tag(
         'build_is_experimental:' + str(self.m.runtime.is_experimental).lower())
@@ -1313,13 +1317,16 @@ class SwarmingApi(recipe_api.RecipeApi):
       subtasks = ['']
     else:
       subtasks = [':%d:%d' % (task.shards, i) for i in range(task.shards)]
+    self._task_test_data_id_offset += len(subtasks)
+    tid = lambda i: '1%02d00' % (
+        i + 100*(self._task_test_data_id_offset - len(subtasks)))
     return self.m.json.test_api.output({
       'base_task_name': task.task_name,
       'tasks': {
         '%s%s' % (task.task_name, suffix): {
-          'task_id': '1%02d00' % i,
+          'task_id': tid(i),
           'shard_index': i,
-          'view_url': '%s/user/task/1%02d00' % (self.swarming_server, i),
+          'view_url': '%s/user/task/%s' % (self.swarming_server, tid(i)),
         } for i, suffix in enumerate(subtasks)
       },
     })

@@ -278,7 +278,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check - d8 - ODROID/Ubuntu-16.04/[dummy has/V8 Arm GC Stress/571\", \"tasks\": {\"Check - d8 - ODROID/Ubuntu-16.04/[dummy has/V8 Arm GC Stress/571:3:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check - d8 - ODROID/Ubuntu-16.04/[dummy has/V8 Arm GC Stress/571:3:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"Check - d8 - ODROID/Ubuntu-16.04/[dummy has/V8 Arm GC Stress/571:3:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}}}"
+      "{\"base_task_name\": \"Check - d8 - ODROID/Ubuntu-16.04/[dummy has/V8 Arm GC Stress/571\", \"tasks\": {\"Check - d8 - ODROID/Ubuntu-16.04/[dummy has/V8 Arm GC Stress/571:3:0\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}, \"Check - d8 - ODROID/Ubuntu-16.04/[dummy has/V8 Arm GC Stress/571:3:1\": {\"shard_index\": 1, \"task_id\": \"130100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130100\"}, \"Check - d8 - ODROID/Ubuntu-16.04/[dummy has/V8 Arm GC Stress/571:3:2\": {\"shard_index\": 2, \"task_id\": \"130200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130200\"}}}"
     ],
     "infra_step": true,
     "name": "Check - d8 - ODROID",

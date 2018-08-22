@@ -848,13 +848,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"common_audio_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
   },
   {
@@ -954,13 +954,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"common_video_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"120000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {
@@ -1060,13 +1060,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"low_bandwidth_audio_test/Mac-10.11/[dummy has/Mac64 Debug/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"130000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/130000@@@"
     ]
   },
   {
@@ -1166,19 +1166,19 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"modules_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:2:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"140000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/140000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"modules_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:2:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"140100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/140100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/140000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/140100@@@"
     ]
   },
   {
@@ -1278,43 +1278,43 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"160000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"160100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:2\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 2, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10200\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"160200\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160200\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:3\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 3, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10300\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"160300\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160300\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:4\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 4, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10400\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"160400\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160400\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:5\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 5, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10500\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10500\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"160500\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160500\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
-      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
-      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@",
-      "@@@STEP_LINK@shard #4@https://chromium-swarm.appspot.com/user/task/10400@@@",
-      "@@@STEP_LINK@shard #5@https://chromium-swarm.appspot.com/user/task/10500@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/160000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/160100@@@",
+      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/160200@@@",
+      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/160300@@@",
+      "@@@STEP_LINK@shard #4@https://chromium-swarm.appspot.com/user/task/160400@@@",
+      "@@@STEP_LINK@shard #5@https://chromium-swarm.appspot.com/user/task/160500@@@"
     ]
   },
   {
@@ -1414,13 +1414,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"ortc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1120000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1120000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1120000@@@"
     ]
   },
   {
@@ -1520,31 +1520,31 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"peerconnection_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1130000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"peerconnection_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1130100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"peerconnection_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:2\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 2, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10200\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1130200\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130200\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"peerconnection_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:3\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 3, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10300\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1130300\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130300\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
-      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
-      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1130000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/1130100@@@",
+      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/1130200@@@",
+      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/1130300@@@"
     ]
   },
   {
@@ -1644,13 +1644,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_media_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1170000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1170000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1170000@@@"
     ]
   },
   {
@@ -1750,13 +1750,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_pc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1180000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1180000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1180000@@@"
     ]
   },
   {
@@ -1856,13 +1856,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_stats_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1190000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1190000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1190000@@@"
     ]
   },
   {
@@ -1962,43 +1962,43 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1200000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1200000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1200100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1200100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:2\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 2, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10200\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1200200\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1200200\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:3\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 3, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10300\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1200300\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1200300\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:4\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 4, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10400\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1200400\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1200400\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:5\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 5, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10500\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10500\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1200500\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1200500\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
-      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
-      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@",
-      "@@@STEP_LINK@shard #4@https://chromium-swarm.appspot.com/user/task/10400@@@",
-      "@@@STEP_LINK@shard #5@https://chromium-swarm.appspot.com/user/task/10500@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1200000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/1200100@@@",
+      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/1200200@@@",
+      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/1200300@@@",
+      "@@@STEP_LINK@shard #4@https://chromium-swarm.appspot.com/user/task/1200400@@@",
+      "@@@STEP_LINK@shard #5@https://chromium-swarm.appspot.com/user/task/1200500@@@"
     ]
   },
   {
@@ -2098,13 +2098,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"system_wrappers_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1260000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1260000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1260000@@@"
     ]
   },
   {
@@ -2204,13 +2204,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"test_support_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1270000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1270000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1270000@@@"
     ]
   },
   {
@@ -2310,13 +2310,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"tools_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1280000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1280000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1280000@@@"
     ]
   },
   {
@@ -2416,31 +2416,31 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"video_engine_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:0\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1290000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1290000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"video_engine_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 1, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10100\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1290100\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1290100\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"video_engine_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:2\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 2, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10200\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1290200\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1290200\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    \"video_engine_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:3\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 3, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10300\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1290300\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1290300\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/10100@@@",
-      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/10200@@@",
-      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/10300@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1290000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm.appspot.com/user/task/1290100@@@",
+      "@@@STEP_LINK@shard #2@https://chromium-swarm.appspot.com/user/task/1290200@@@",
+      "@@@STEP_LINK@shard #3@https://chromium-swarm.appspot.com/user/task/1290300@@@"
     ]
   },
   {
@@ -2540,13 +2540,13 @@
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"webrtc_nonparallel_tests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"1330000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1330000\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/1330000@@@"
     ]
   },
   {
@@ -2743,7 +2743,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"common_audio_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"common_audio_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"common_audio_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"common_audio_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -2844,14 +2844,14 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"common_audio_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"110000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
   },
   {
@@ -2907,7 +2907,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"common_video_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"common_video_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"common_video_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"common_video_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3008,14 +3008,14 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"common_video_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"120000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {
@@ -3071,7 +3071,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"low_bandwidth_audio_test/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"low_bandwidth_audio_test/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"low_bandwidth_audio_test/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"low_bandwidth_audio_test/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3172,14 +3172,14 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"low_bandwidth_audio_test\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"130000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/130000@@@"
     ]
   },
   {
@@ -3235,7 +3235,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"modules_tests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"modules_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"modules_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}",
+      "{\"base_task_name\": \"modules_tests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"modules_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:2:0\": {\"shard_index\": 0, \"task_id\": \"140000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/140000\"}, \"modules_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:2:1\": {\"shard_index\": 1, \"task_id\": \"140100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/140100\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3373,17 +3373,17 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"modules_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10100\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"140000\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"140100\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/140000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@"
+      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/140100@@@"
     ]
   },
   {
@@ -3439,7 +3439,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}, \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:4\": {\"shard_index\": 4, \"task_id\": \"10400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"}, \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:5\": {\"shard_index\": 5, \"task_id\": \"10500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10500\"}}}",
+      "{\"base_task_name\": \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:0\": {\"shard_index\": 0, \"task_id\": \"160000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160000\"}, \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:1\": {\"shard_index\": 1, \"task_id\": \"160100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160100\"}, \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:2\": {\"shard_index\": 2, \"task_id\": \"160200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160200\"}, \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:3\": {\"shard_index\": 3, \"task_id\": \"160300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160300\"}, \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:4\": {\"shard_index\": 4, \"task_id\": \"160400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160400\"}, \"modules_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:5\": {\"shard_index\": 5, \"task_id\": \"160500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160500\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3725,29 +3725,29 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"modules_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10400\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10500\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10200\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10300\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10100\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"160400\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"160500\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"160200\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"160300\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"160000\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"160100\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/160000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/160100@@@",
       "@@@STEP_LINK@shard #2 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/10200@@@",
+      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/160200@@@",
       "@@@STEP_LINK@shard #3 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/10300@@@",
+      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/160300@@@",
       "@@@STEP_LINK@shard #4 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #4 (17.7 sec)@https://chromium-swarm.appspot.com/user/task/10400@@@",
+      "@@@STEP_LINK@shard #4 (17.7 sec)@https://chromium-swarm.appspot.com/user/task/160400@@@",
       "@@@STEP_LINK@shard #5 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #5 (20.7 sec)@https://chromium-swarm.appspot.com/user/task/10500@@@"
+      "@@@STEP_LINK@shard #5 (20.7 sec)@https://chromium-swarm.appspot.com/user/task/160500@@@"
     ]
   },
   {
@@ -3803,7 +3803,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"ortc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"ortc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"ortc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"ortc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"1120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1120000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -3904,14 +3904,14 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"ortc_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1120000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1120000@@@"
     ]
   },
   {
@@ -3967,7 +3967,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"peerconnection_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"peerconnection_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"peerconnection_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"peerconnection_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"peerconnection_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}}}",
+      "{\"base_task_name\": \"peerconnection_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"peerconnection_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:0\": {\"shard_index\": 0, \"task_id\": \"1130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130000\"}, \"peerconnection_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:1\": {\"shard_index\": 1, \"task_id\": \"1130100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130100\"}, \"peerconnection_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:2\": {\"shard_index\": 2, \"task_id\": \"1130200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130200\"}, \"peerconnection_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:3\": {\"shard_index\": 3, \"task_id\": \"1130300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130300\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -4179,23 +4179,23 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"peerconnection_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10200\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10300\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10100\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1130200\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1130300\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1130000\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1130100\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1130000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/1130100@@@",
       "@@@STEP_LINK@shard #2 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/10200@@@",
+      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/1130200@@@",
       "@@@STEP_LINK@shard #3 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/10300@@@"
+      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/1130300@@@"
     ]
   },
   {
@@ -4251,7 +4251,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"rtc_media_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"rtc_media_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"rtc_media_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"rtc_media_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"1170000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1170000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -4352,14 +4352,14 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"rtc_media_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1170000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1170000@@@"
     ]
   },
   {
@@ -4415,7 +4415,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"rtc_pc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"rtc_pc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"rtc_pc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"rtc_pc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"1180000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1180000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -4516,14 +4516,14 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"rtc_pc_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1180000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1180000@@@"
     ]
   },
   {
@@ -4579,7 +4579,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"rtc_stats_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"rtc_stats_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"rtc_stats_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"rtc_stats_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"1190000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1190000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -4680,14 +4680,14 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"rtc_stats_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1190000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1190000@@@"
     ]
   },
   {
@@ -4743,7 +4743,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}, \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:4\": {\"shard_index\": 4, \"task_id\": \"10400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10400\"}, \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:5\": {\"shard_index\": 5, \"task_id\": \"10500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10500\"}}}",
+      "{\"base_task_name\": \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:0\": {\"shard_index\": 0, \"task_id\": \"1200000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1200000\"}, \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:1\": {\"shard_index\": 1, \"task_id\": \"1200100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1200100\"}, \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:2\": {\"shard_index\": 2, \"task_id\": \"1200200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1200200\"}, \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:3\": {\"shard_index\": 3, \"task_id\": \"1200300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1200300\"}, \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:4\": {\"shard_index\": 4, \"task_id\": \"1200400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1200400\"}, \"rtc_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337:6:5\": {\"shard_index\": 5, \"task_id\": \"1200500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1200500\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -5029,29 +5029,29 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"rtc_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10100\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10200\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10300\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10400\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10500\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1200000\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1200100\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1200200\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1200300\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1200400\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1200500\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1200000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/1200100@@@",
       "@@@STEP_LINK@shard #2 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/10200@@@",
+      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/1200200@@@",
       "@@@STEP_LINK@shard #3 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/10300@@@",
+      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/1200300@@@",
       "@@@STEP_LINK@shard #4 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #4 (17.7 sec)@https://chromium-swarm.appspot.com/user/task/10400@@@",
+      "@@@STEP_LINK@shard #4 (17.7 sec)@https://chromium-swarm.appspot.com/user/task/1200400@@@",
       "@@@STEP_LINK@shard #5 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #5 (20.7 sec)@https://chromium-swarm.appspot.com/user/task/10500@@@"
+      "@@@STEP_LINK@shard #5 (20.7 sec)@https://chromium-swarm.appspot.com/user/task/1200500@@@"
     ]
   },
   {
@@ -5107,7 +5107,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"system_wrappers_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"system_wrappers_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"system_wrappers_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"system_wrappers_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"1260000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1260000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -5208,14 +5208,14 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"system_wrappers_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1260000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1260000@@@"
     ]
   },
   {
@@ -5271,7 +5271,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"test_support_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"test_support_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"test_support_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"test_support_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"1270000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1270000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -5372,14 +5372,14 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"test_support_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1270000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1270000@@@"
     ]
   },
   {
@@ -5435,7 +5435,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"tools_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"tools_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"tools_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"tools_unittests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"1280000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1280000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -5536,14 +5536,14 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"tools_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1280000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1280000@@@"
     ]
   },
   {
@@ -5599,7 +5599,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"video_engine_tests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"video_engine_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"video_engine_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}, \"video_engine_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:2\": {\"shard_index\": 2, \"task_id\": \"10200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10200\"}, \"video_engine_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:3\": {\"shard_index\": 3, \"task_id\": \"10300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10300\"}}}",
+      "{\"base_task_name\": \"video_engine_tests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"video_engine_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:0\": {\"shard_index\": 0, \"task_id\": \"1290000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1290000\"}, \"video_engine_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:1\": {\"shard_index\": 1, \"task_id\": \"1290100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1290100\"}, \"video_engine_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:2\": {\"shard_index\": 2, \"task_id\": \"1290200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1290200\"}, \"video_engine_tests/Mac-10.11/[dummy has/Mac64 Debug/1337:4:3\": {\"shard_index\": 3, \"task_id\": \"1290300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1290300\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -5811,23 +5811,23 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"video_engine_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10100\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10200\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10300\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1290000\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1290100\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1290200\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1290300\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1290000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/1290100@@@",
       "@@@STEP_LINK@shard #2 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/10200@@@",
+      "@@@STEP_LINK@shard #2 (11.7 sec)@https://chromium-swarm.appspot.com/user/task/1290200@@@",
       "@@@STEP_LINK@shard #3 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/10300@@@"
+      "@@@STEP_LINK@shard #3 (14.7 sec)@https://chromium-swarm.appspot.com/user/task/1290300@@@"
     ]
   },
   {
@@ -5883,7 +5883,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"webrtc_nonparallel_tests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"webrtc_nonparallel_tests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"webrtc_nonparallel_tests/Mac-10.11/[dummy has/Mac64 Debug/1337\", \"tasks\": {\"webrtc_nonparallel_tests/Mac-10.11/[dummy has/Mac64 Debug/1337\": {\"shard_index\": 0, \"task_id\": \"1330000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1330000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -5984,14 +5984,14 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"webrtc_nonparallel_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"1330000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": null, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": null@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/1330000@@@"
     ]
   },
   {

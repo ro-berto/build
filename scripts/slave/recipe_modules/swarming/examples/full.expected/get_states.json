@@ -16,9 +16,9 @@
       "--json",
       "/path/to/tmp/json",
       "10000",
-      "10000",
-      "10100",
-      "10000"
+      "110000",
+      "110100",
+      "130000"
     ],
     "name": "collect tasks",
     "~followup_annotations": [
