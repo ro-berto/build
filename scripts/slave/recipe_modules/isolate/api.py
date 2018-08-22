@@ -331,7 +331,6 @@ class IsolateApi(recipe_api.RecipeApi):
         '--target-platform', self.m.chromium.c.TARGET_PLATFORM,
         '--json-output', self.m.json.output(),
         '--ninja-path', self.m.depot_tools.ninja_path,
-        '--use-isolate-files'
     ]
     try:
       with self.m.context(cwd=self.m.path['start_dir']):
