@@ -129,16 +129,13 @@ class CodesearchApi(recipe_api.RecipeApi):
     """
     commit_position = self._get_commit_position()
     index_pack_kythe_name = 'chromium_%s.kzip' % self.c.PLATFORM
-    # TODO(hinoka): Delete these two lines after migrated to LUCI.
-    if self.m.runtime.is_experimental:
-      index_pack_kythe_name_with_revision = (
-          'chromium_%s_%s_%s+%d_experimental.kzip' % (
-              self.c.PLATFORM, commit_position, self._get_revision(),
-              commit_timestamp))
-    else:
-      index_pack_kythe_name_with_revision = 'chromium_%s_%s_%s+%d.kzip' % (
-          self.c.PLATFORM, commit_position, self._get_revision(),
-          commit_timestamp)
+    # TODO(jsca): Delete the second part of the below condition after LUCI
+    # migration is complete.
+    experimental_suffix = '_experimental' if (
+        self.c.EXPERIMENTAL or self.m.runtime.is_experimental) else ''
+    index_pack_kythe_name_with_revision = 'chromium_%s_%s_%s+%d%s.kzip' % (
+        self.c.PLATFORM, commit_position, self._get_revision(),
+        commit_timestamp, experimental_suffix)
     self._create_kythe_index_pack(index_pack_kythe_name)
 
     assert self.c.bucket_name, (

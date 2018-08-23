@@ -9,14 +9,17 @@ from recipe_engine.config import Single, Static, Dict, List
 from recipe_engine.config_types import Path
 
 def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=[], PLATFORM=None,
-               SYNC_GENERATED_FILES=False, GEN_REPO_BRANCH='master',
-               GEN_REPO_OUT_DIR='', CORPUS=None, ROOT=None, **_kwargs):
+               EXPERIMENTAL=False, SYNC_GENERATED_FILES=False,
+               GEN_REPO_BRANCH='master', GEN_REPO_OUT_DIR='', CORPUS=None,
+               ROOT=None, **_kwargs):
   """Filter out duplicate compilation units.
 
   Args:
     CHECKOUT_PATH: the source checkout path.
     COMPILE_TARGETS: the compile targets.
     PLATFORM: The platform for which the code is compiled.
+    EXPERIMENTAL: If True, appends '_experimental' to the generated kzip file.
+      Used to mark kzips that aren't ready for ingestion by Kythe.
     SYNC_GENERATED_FILES: Whether to sync generated files into a git repo.
     GEN_REPO_BRANCH: Which branch in the generated files repo to sync to.
     GEN_REPO_OUT_DIR: Which output dir in the generated files repo to sync to.
@@ -27,6 +30,7 @@ def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=[], PLATFORM=None,
     CHECKOUT_PATH = Static(CHECKOUT_PATH),
     COMPILE_TARGETS = List(COMPILE_TARGETS),
     PLATFORM = Static(PLATFORM),
+    EXPERIMENTAL = Static(EXPERIMENTAL),
     SYNC_GENERATED_FILES = Static(SYNC_GENERATED_FILES),
     GEN_REPO_BRANCH = Static(GEN_REPO_BRANCH),
     GEN_REPO_OUT_DIR = Static(GEN_REPO_OUT_DIR),

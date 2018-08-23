@@ -29,6 +29,7 @@ SPEC = freeze({
   # The builders have the following parameters:
   # - compile_targets: the compile targets.
   # - platform: The platform for which the code is compiled.
+  # - experimental: Whether to mark Kythe uploads as experimental.
   # - sync_generated_files: Whether to sync generated files into a git repo.
   # - corpus: Kythe corpus to generate index packs under.
   # - root: Kythe VName root to generate index packs under.
@@ -106,6 +107,8 @@ SPEC = freeze({
         'all',
       ],
       'platform': 'win',
+      # Mark Windows kzip files as experimental until we know they work.
+      'experimental': True,
       'sync_generated_files': True,
       'gen_repo_branch': 'master',
       # Generated files will end up in out/win-Debug/gen.
@@ -133,6 +136,7 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
 
   bot_config = SPEC.get('builders', {}).get(buildername)
   platform = bot_config.get('platform', 'linux')
+  experimental = bot_config.get('experimental', False)
   corpus = bot_config.get('corpus', 'chromium-linux')
   root = bot_config.get('root', '')
   targets = bot_config.get('compile_targets', [])
@@ -143,6 +147,7 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
       'chromium',
       COMPILE_TARGETS=targets,
       PLATFORM=platform,
+      EXPERIMENTAL=experimental,
       SYNC_GENERATED_FILES=bot_config['sync_generated_files'],
       GEN_REPO_BRANCH=gen_repo_branch,
       GEN_REPO_OUT_DIR=gen_repo_out_dir,
