@@ -469,7 +469,7 @@ _CONFIG_MAP = {
         'debug': True,
         'gcstress': True,
       },
-      'host-x86-generational-cc': {
+      'host-x86_64-generational-cc': {
         'bitness': 64,
         'debug': True,
         'generational_cc': True,
