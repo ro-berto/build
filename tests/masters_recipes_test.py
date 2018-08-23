@@ -201,7 +201,15 @@ FAKE_BUILDERS = {
         'android_optional_gpu_tests_rel',
         'android_unswarmed_pixel_aosp',
         'cast_shell_android',
+        'gpu-manual-try-android-l-nexus-5-32',
+        'gpu-manual-try-android-l-nexus-6-32',
+        'gpu-manual-try-android-m-nexus-6p-64',
+        'gpu-manual-try-android-m-nexus-9-64',
+        'gpu-manual-try-android-n-nvidia-shield-tv-64',
         'gpu-manual-try-android-p-pixel-2-32',
+        'gpu-manual-try-android-p-pixel-2-32-deqp',
+        'gpu-manual-try-android-p-pixel-2-64',
+        'gpu-manual-try-android-p-pixel-2-64-deqp',
     ],
     'master.tryserver.chromium.mac': [
         # These have been migrated to LUCI.

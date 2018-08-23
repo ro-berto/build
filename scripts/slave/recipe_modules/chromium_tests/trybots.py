@@ -164,9 +164,41 @@ TRYBOTS = freeze({
         'buildername': 'Android WebView N (dbg)',
       }),
       # Manually triggered GPU trybots.
+      'gpu-manual-try-android-l-nexus-5-32': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI Release (Nexus 5)',
+      }),
+      'gpu-manual-try-android-l-nexus-6-32': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI Release (Nexus 6)',
+      }),
+      'gpu-manual-try-android-m-nexus-6p-64': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI Release (Nexus 6P)',
+      }),
+      'gpu-manual-try-android-m-nexus-9-64': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI Release (Nexus 9)',
+      }),
+      'gpu-manual-try-android-n-nvidia-shield-tv-64': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI Release (NVIDIA Shield TV)',
+      }),
       'gpu-manual-try-android-p-pixel-2-32': simple_bot({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI 32 Vk Release (Pixel 2)',
+      }),
+      'gpu-manual-try-android-p-pixel-2-32-deqp': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI 32 dEQP Vk Release (Pixel 2)',
+      }),
+      'gpu-manual-try-android-p-pixel-2-64': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI 64 Vk Release (Pixel 2)',
+      }),
+      'gpu-manual-try-android-p-pixel-2-64-deqp': simple_bot({
+        'mastername': 'chromium.gpu.fyi',
+        'buildername': 'Android FYI 64 dEQP Vk Release (Pixel 2)',
       }),
     },
   },
