@@ -252,7 +252,8 @@ def UploadGomaccInfo(gomacc_logs,
     os.remove(temp_file.name)
 
 def UploadNinjaLog(
-    outdir, compiler, command, exit_status, override_gsutil=None):
+    outdir, compiler, command, exit_status, build_id, step_name,
+    override_gsutil=None):
   """Upload .ninja_log to Google Cloud Storage (gs://chrome-goma-log),
   in the same folder with goma's compiler_proxy.INFO.
 
@@ -261,6 +262,8 @@ def UploadNinjaLog(
     compiler: compiler used for the build.
     command: command line.
     exit_status: ninja's exit status.
+    build_id: unique build id assigned to LUCI build.
+    step_name: name of compile step e.g. "compile (with patch)"
   """
   ninja_log_path = os.path.join(outdir, '.ninja_log')
   try:
@@ -282,6 +285,8 @@ def UploadNinjaLog(
           'cwd': cwd,
           'platform': platform,
           'exit': exit_status,
+          'build_id': build_id,
+          'step_name': step_name,
           'env': {}}
   for k, v in os.environ.iteritems():
     info['env'][k] = v

@@ -175,10 +175,12 @@ def main():
 
   if args.ninja_log_outdir:
     viewer_url = goma_utils.UploadNinjaLog(
-        args.ninja_log_outdir,
-        args.ninja_log_compiler,
-        ninja_log_command,
-        args.build_exit_status,
+        outdir=args.ninja_log_outdir,
+        compiler=args.ninja_log_compiler,
+        command=ninja_log_command,
+        exit_status=args.build_exit_status,
+        build_id=args.build_id,
+        step_name=args.build_step_name,
         override_gsutil=override_gsutil
     )
     if viewer_url is not None:
