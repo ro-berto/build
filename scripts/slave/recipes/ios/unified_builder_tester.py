@@ -134,7 +134,7 @@ def GenTests(api):
         'target_cpu="arm"',
         'use_goma=true',
       ],
-      'use_goma_canary': True,
+      'goma_client_type': 'candidate',
       'tests': [
       ],
     })

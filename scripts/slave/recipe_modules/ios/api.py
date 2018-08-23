@@ -304,12 +304,8 @@ class iOSApi(recipe_api.RecipeApi):
       # chromium.c.compile_py.goma_dir, but calling ensure_goma() after
       # that fixes things, and makes sure that goma is actually
       # available as well.
-      # TODO(yyanagisawa): use goma_client_type instead of use_goma_canary
-      #                    (crbug.com/876583)
-      client_type = None
-      if self.__config.get('use_goma_canary'):
-        client_type = 'candidate'
-      self.m.chromium.ensure_goma(client_type=client_type)
+      self.m.chromium.ensure_goma(
+          client_type=self.__config.get('goma_client_type'))
 
     return copy.deepcopy(self.__config)
 
