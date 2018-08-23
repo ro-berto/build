@@ -15,6 +15,8 @@ DEPS = [
   'recipe_engine/step',
 ]
 
+from recipe_engine import post_process
+
 def RunSteps(api):
   env = {}
 
@@ -91,3 +93,10 @@ def GenTests(api):
   yield (api.test('win_goma_canary') + api.platform.name('win') +
          api.properties(client_type='candidate') +
          api.properties.generic(**properties))
+
+  yield (api.test('win_goma_latest_client') + api.platform.name('win') +
+         api.properties(client_type='latest') +
+         api.properties.generic(**properties) +
+         api.post_process(post_process.MustRun, 'ensure_goma') +
+         api.post_process(post_process.StepTextContains, 'ensure_goma',
+                          ['latest']))

@@ -286,6 +286,13 @@ def goma_canary(c):
   c.compile_py.show_ninja_stats = True
 
 @config_ctx()
+def goma_latest_client(c):
+  c.compile_py.goma_client_type = 'latest'
+  c.compile_py.goma_hermetic = 'error'
+  c.compile_py.goma_failfast = True
+  c.compile_py.show_ninja_stats = True
+
+@config_ctx()
 def goma_staging(c):
   c.compile_py.goma_failfast = True
   c.env.GOMA_STUBBY_PROXY_IP_ADDRESS = 'sandbox.google.com'

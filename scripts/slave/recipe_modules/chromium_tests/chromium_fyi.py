@@ -508,6 +508,77 @@ SPEC = {
             no_archive(chromium.SPEC['builders']['mac-rel']), ['chrome']),
         ['goma_canary', 'goma_localoutputcache_small']),
 
+    # Latest Goma Client
+    'Win Builder Goma Latest Client': chromium_apply_configs(
+        chromium_win.SPEC['builders']['Win Builder'],
+        ['goma_latest_client', 'goma_use_local']),
+    'Win Builder (dbg) Goma Latest Client': chromium_apply_configs(
+        chromium_win.SPEC['builders']['Win Builder (dbg)'],
+        ['goma_latest_client', 'shared_library']),
+    'Win Goma Latest Client LocalOutputCache': chromium_apply_configs(
+        no_archive(chromium.SPEC['builders']['win-rel']),
+        ['goma_latest_client', 'goma_localoutputcache']),
+    'Win cl.exe Goma Latest Client LocalOutputCache': chromium_apply_configs(
+        no_compile_targets(no_archive(chromium.SPEC['builders']['win-rel'])),
+        ['goma_latest_client', 'goma_localoutputcache']),
+    'Win7 Builder Goma Latest Client': chromium_apply_configs(
+        chromium_win.SPEC['builders']['Win Builder'], ['goma_latest_client']),
+    'Win7 Builder (dbg) Goma Latest Client': chromium_apply_configs(
+        chromium_win.SPEC['builders']['Win Builder (dbg)'],
+        ['goma_latest_client']),
+    'WinMSVC64 Goma Latest Client': chromium_apply_configs(
+        {
+          'chromium_config': 'chromium',
+          'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+          'gclient_config': 'chromium',
+          'chromium_config_kwargs': {
+            'BUILD_CONFIG': 'Release',
+            'TARGET_PLATFORM': 'win',
+            'TARGET_BITS': 64,
+          },
+          'bot_type': 'builder',
+          'checkout_dir': 'win',
+          'testing': {
+            'platform': 'win',
+          },
+          # Workaround so that recipes doesn't add random build targets to our
+          # compile line. We want to build everything.
+          'add_tests_as_compile_targets': False,
+        },
+        ['goma_latest_client']),
+    'chromeos-amd64-generic-rel-goma-latest-client': chromium_apply_configs(
+        chromium_chromiumos.SPEC['builders'][
+            'chromeos-amd64-generic-rel'],
+        ['goma_latest_client']),
+    'Linux Builder Goma Latest Client': chromium_apply_configs(
+        chromium_linux.SPEC['builders']['Linux Builder'],
+        ['goma_latest_client','goma_use_local']),
+    'Linux x64 Goma Latest Client (clobber)': chromium_apply_configs(
+        no_archive(chromium.SPEC['builders']['linux-rel']),
+        ['goma_latest_client']),
+    'Linux x64 Goma Latest Client LocalOutputCache': chromium_apply_configs(
+        no_archive(chromium.SPEC['builders']['linux-rel']),
+        ['goma_latest_client', 'goma_localoutputcache']),
+    'Mac Builder Goma Latest Client': chromium_apply_configs(
+        chromium_mac.SPEC['builders']['Mac Builder'],
+        ['goma_latest_client', 'goma_use_local']),
+    'Mac Builder (dbg) Goma Latest Client': chromium_apply_configs(
+        chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
+        ['goma_latest_client']),
+    'Mac Goma Latest Client (clobber)': chromium_apply_configs(
+        no_archive(chromium.SPEC['builders']['mac-rel']),
+        ['goma_latest_client']),
+    'Mac Builder (dbg) Goma Latest Client (clobber)': chromium_apply_configs(
+        chromium_mac.SPEC['builders']['Mac Builder (dbg)'],
+        ['goma_latest_client', 'clobber']),
+    # Mac has less disks, so use small localoutputcache.
+    # Build chrome only. Even with smaller localoutputcache, disk is short.
+    # See crbug.com/825536
+    'Mac Goma Latest Client LocalOutputCache': chromium_apply_configs(
+        override_compile_targets(
+            no_archive(chromium.SPEC['builders']['mac-rel']), ['chrome']),
+        ['goma_latest_client', 'goma_localoutputcache_small']),
+
     'Win Builder (ANGLE)': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
@@ -840,6 +911,10 @@ SPEC = {
 SPEC['builders']['Android Builder (dbg) Goma Canary'] = chromium_apply_configs(
     SPEC['builders']['Android Builder (dbg)'],
     ['goma_canary'])
+SPEC['builders']['Android Builder (dbg) Goma Latest Client'] = (
+    chromium_apply_configs(
+        SPEC['builders']['Android Builder (dbg)'],
+        ['goma_latest_client']))
 
 SPEC['builders'].update([
     stock_config('linux-blink-rel-dummy'),

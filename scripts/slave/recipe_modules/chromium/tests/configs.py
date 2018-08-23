@@ -43,6 +43,12 @@ def GenTests(api):
   )
 
   yield (
+      api.test('goma_latest_client') +
+      api.properties(chromium_apply_config=['goma_latest_client']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
       api.test('goma_use_local') +
       api.properties(chromium_apply_config=['goma_use_local']) +
       api.post_process(post_process.DropExpectation)
