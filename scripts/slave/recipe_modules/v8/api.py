@@ -401,17 +401,7 @@ class V8Api(recipe_api.RecipeApi):
 
     if self.m.properties['mastername'] == 'tryserver.v8':
       self.m.swarming.add_default_tag('purpose:pre-commit')
-      requester = self.m.properties.get('requester')
-      if requester == 'commit-bot@chromium.org':
-        self.m.swarming.default_priority = 30
-        self.m.swarming.add_default_tag('purpose:CQ')
-        blamelist = self.m.properties.get('blamelist')
-        if len(blamelist) == 1:
-          requester = blamelist[0]
-      else:
-        self.m.swarming.default_priority = 28
-        self.m.swarming.add_default_tag('purpose:ManualTS')
-      self.m.swarming.default_user = requester
+      self.m.swarming.default_priority = 30
 
       patch_project = self.m.properties.get('patch_project')
       if patch_project:

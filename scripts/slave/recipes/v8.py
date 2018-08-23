@@ -188,8 +188,7 @@ def GenTests(api):
     }
   """.strip()
 
-  # Simulate a tryjob triggered by the CQ for setting up different swarming
-  # default tags.
+  # Simulate a tryjob for setting up different swarming default tags.
   yield (
     api.v8.test(
         'tryserver.v8',
@@ -198,23 +197,6 @@ def GenTests(api):
         parent_buildername='v8_foobar_rel_ng',
         parent_bot_config=release_bot_config,
         parent_test_spec=test_spec,
-        requester='commit-bot@chromium.org',
-        patch_project='v8',
-        blamelist=['dude@chromium.org'],
-    )
-  )
-
-  # Simulate a tryjob triggered by the tryserver for setting up different
-  # swarming default tags.
-  yield (
-    api.v8.test(
-        'tryserver.v8',
-        'v8_foobar_rel_ng_triggered',
-        'triggered_by_ts',
-        parent_buildername='v8_foobar_rel_ng',
-        parent_bot_config=release_bot_config,
-        parent_test_spec=test_spec,
-        requester='dude@chromium.org',
         patch_project='v8',
         blamelist=['dude@chromium.org'],
     )
