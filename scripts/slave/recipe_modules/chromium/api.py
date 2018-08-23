@@ -983,20 +983,19 @@ class ChromiumApi(recipe_api.RecipeApi):
   def run_mb(self, mastername, buildername, use_goma=True, mb_path=None,
              mb_config_path=None, isolated_targets=None, name=None,
              build_dir=None, android_version_code=None,
-             android_version_name=None, phase=None, gn_args_presenter=None,
+             android_version_name=None, phase=None,
+             gn_args_location=None, gn_args_max_text_lines=None,
              **kwargs):
     """Run mb in the source tree.
 
     Args:
-      gn_args_presenter: The callback used to present the GN args. It must be an
-        object callable with two arguments:
-          1. The step result.
-          2. The GN args in the form of the content of the args.gn file.
-        By default, gn.default_args_presenter will be used. To change the text
-        limit or force it to present to the logs or text, use functools.partial.
-        e.g.
-          functools.partial(
-             self.m.chromium.default_gn_args_presenter, location='logs')
+      gn_args_location: Controls where the GN args for the build should be
+        presented. By default or if gn.DEFAULT, the args will be in step_text if
+        the count of lines is less than max_text_lines or the logs otherwise. To
+        force the presentation to the step_text or logs, use gn.TEXT or gn.LOGS,
+        respectively.
+      gn_args_max_text_lines: The maximum number of lines of GN args to display
+        in the step_text when using the default behavior for displaying GN args.
 
     Returns:
       The content of the args.gn file.
@@ -1108,7 +1107,9 @@ class ChromiumApi(recipe_api.RecipeApi):
       build_dir = self.m.path['checkout'].join(*build_dir.split('/'))
 
     return self.m.gn.get_args(
-        build_dir, gn_args_presenter or self.m.gn.default_args_presenter)
+        build_dir,
+        location=gn_args_location,
+        max_text_lines=gn_args_max_text_lines)
 
 
   def taskkill(self):

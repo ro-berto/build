@@ -724,8 +724,7 @@ class V8Api(recipe_api.RecipeApi):
           isolated_targets=isolate_targets,
           stdout=self.m.raw_io.output_text(),
           build_dir=build_dir,
-          gn_args_presenter=functools.partial(
-              self.m.gn.default_args_presenter, location='logs'))
+          gn_args_location=self.m.gn.LOGS)
 
       # Update the build environment dictionary, which is printed to the
       # user on test failures for easier build reproduction.

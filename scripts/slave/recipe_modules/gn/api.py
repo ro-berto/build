@@ -6,35 +6,56 @@ import re
 
 from recipe_engine import recipe_api
 
+from . import constants
+
 class GnApi(recipe_api.RecipeApi):
 
+  _DEFAULT_STEP_NAME = 'read GN args'
   _ARG_RE = re.compile('\s*(\w+)\s*=')
   _NON_LOCAL_ARGS = frozenset(['goma_dir', 'target_sysroot'])
+  _DEFAULT_MAX_TEXT_LINES = 15
 
-  def default_args_presenter(self, result, args, location=None, text_limit=15):
-    """Default presenter for GN args.
+  DEFAULT = constants.DEFAULT
+  TEXT = constants.TEXT
+  LOGS = constants.LOGS
 
-    The arguments will be presented one per line, with arguments that aren't
-    useful for local repros moved to the end. The arguments will be presented
-    either in the step_text or the logs, depending on the values of location and
-    text_limit.
+  def read_args(self, build_dir, step_name=None):
+    """Read the GN args.
 
     Args:
-      result: The step result to present the GN args on.
-      args: The GN args to present.
-      location: Controls where the GN args for the build should be presented. By
-        default or if None, the args will be in step_text if the count of lines
-        is less than text_limit or the logs otherwise. To force the presentation
-        to the step_text or logs, use 'text' or 'logs', respectively.
-     text_limit: The maximum number of lines of GN args to display in the
-        step_text when using the default behavior for displaying GN args.
-    """
-    if location is not None:
-      assert location in ('text', 'logs'), \
-          "location must be None or one of 'text' or 'logs'"
+      build_dir: The Path to the build output directory. The args.gn file will
+        be extracted from this location. The args.gn file must already exist (gn
+        or mb should have already been run before calling this method).
 
-    # Move arguments that aren't useful for local repros to the end for
-    # presentation
+    Returns:
+      A tuple containing the contents of the args.gn file as a single string and
+      the step result of reading the file.
+    """
+    args_file_path = build_dir.join('args.gn')
+    step_name = step_name or self._DEFAULT_STEP_NAME
+    fake_args = (
+        'goma_dir = "/b/build/slave/cache/goma_client"\n'
+        'target_cpu = "x86"\n'
+        'use_goma = true\n')
+    args = self.m.file.read_text(step_name, args_file_path, fake_args)
+    return args, self.m.step.active_result
+
+  def reformat_args(self, args):
+    """Reformat the GN args to be more useful for local repros.
+
+    Some of the arguments have values that are specific to individual runs and
+    so a developer would likely not want to copy them to their own checkout when
+    attempting to reproduce an issue locally. To enable ease of use, these
+    arguments are moved to the end of the arguments so that a single contiguous
+    region can be copied in order to create a build directory with the
+    appropriate arguments.
+
+    Args:
+      args: A string containing the args.gn content to reformat.
+
+    Returns:
+      The reformatted args.gn content as a single string.
+    """
     local_lines = []
     non_local_lines = []
     for l in args.splitlines():
@@ -43,22 +64,44 @@ class GnApi(recipe_api.RecipeApi):
         non_local_lines.append(l)
       else:
         local_lines.append(l)
+    return '\n'.join(local_lines + non_local_lines)
 
-    lines = local_lines + non_local_lines
+  def present_args(self, result, args, location=None, max_text_lines=None):
+    """Present the GN args.
 
-    if location is None:
-      if len(lines) > text_limit:
+    Args:
+      result: The step result to present the GN args on.
+      args: A string containing the args.gn content to present.
+      location: Controls where the GN args for the build should be presented. By
+        default or if gn.DEFAULT, the args will be in step_text if the count of
+        lines is less than max_text_lines or the logs otherwise. To force the
+        presentation to the step_text or logs, use gn.TEXT or gn.LOGS,
+        respectively.
+      max_text_lines: The maximum number of lines of GN args to display in the
+        step_text when using the default behavior for displaying GN args.
+    """
+    location = location or self.DEFAULT
+    assert location in (self.DEFAULT, self.TEXT, self.LOGS), \
+        "location must be one of gn.DEFAULT, gn.TEXT or gn.LOGS"
+
+    lines = args.splitlines()
+
+    if location == self.DEFAULT:
+      if max_text_lines is None:
+        max_text_lines = self._DEFAULT_MAX_TEXT_LINES
+      if len(lines) > max_text_lines:
         result.presentation.step_text += (
             '<br/>Count of GN args (%d) exceeds limit (%d),'
-            ' presented in logs instead') % (len(lines), text_limit)
-        location = 'logs'
+            ' presented in logs instead') % (len(lines), max_text_lines)
+        location = self.LOGS
 
-    if location == 'logs':
+    if location == self.LOGS:
       result.presentation.logs['gn_args'] = lines
     else:
       result.presentation.step_text += '<br/>'.join([''] + lines)
 
-  def get_args(self, build_dir, presenter=None, step_name='read GN args'):
+  def get_args(self, build_dir, location=None, max_text_lines=None,
+               step_name=None):
     """Get the GN args for the build.
 
     A step will be executed that fetches the args.gn file and adds the contents
@@ -68,27 +111,20 @@ class GnApi(recipe_api.RecipeApi):
       build_dir: The Path to the build output directory. The args.gn file will
         be extracted from this location. The args.gn file must already exist (gn
         or mb should have already been run before calling this method).
-      presenter: The callback used to present the GN args. It must be an object
-        callable with two arguments:
-          1. The step result.
-          2. The GN args in the form of the content of the args.gn file.
-        By default, gn.default_args_presenter will be used. To change the text
-        limit or force it to present to the logs or text, use functools.partial.
-        e.g.
-          functools.partial(
-             self.m.gn.default_args_presenter, location='logs')
-      step_name: The name of the step for fetching the args.
+      location: Controls where the GN args for the build should be presented. By
+        default or if gn.DEFAULT, the args will be in step_text if the count of
+        lines is less than max_text_lines or the logs otherwise. To force the
+        presentation to the step_text or logs, use gn.TEXT or gn.LOGS,
+        respectively.
+      max_text_lines: The maximum number of lines of GN args to display in the
+        step_text when using the default behavior for displaying GN args.
+      step_name: The name of the step for reading the args.
 
     Returns:
       The content of the args.gn file.
     """
-    args_file_path = build_dir.join('args.gn')
-    fake_args = (
-        'goma_dir = "/b/build/slave/cache/goma_client"\n'
-        'target_cpu = "x86"\n'
-        'use_goma = true\n')
-    args = self.m.file.read_text(step_name, args_file_path, fake_args)
-
-    (presenter or self.default_args_presenter)(self.m.step.active_result, args)
-
+    args, result = self.read_args(build_dir, step_name=step_name)
+    reformatted_args = self.reformat_args(args)
+    self.present_args(result, reformatted_args,
+                      location=location, max_text_lines=max_text_lines)
     return args
