@@ -27,22 +27,23 @@ def chromium_perf_clang(c):
 
 
 def _AddBuildSpec(name, platform, config_name='chromium_perf',
-                  target_bits=64,
+                  target_bits=64, is_luci_builder=False,
                   compile_targets=None, extra_compile_targets=None,
                   force_exparchive=False, run_sizes=True):
   SPEC['builders'][name] = chromium_perf.BuildSpec(
       config_name, platform, target_bits,
       compile_targets=compile_targets,
+      is_luci_builder=is_luci_builder,
       extra_compile_targets=extra_compile_targets,
       force_exparchive=force_exparchive, run_sizes=run_sizes)
 
 
 def _AddIsolatedTestSpec(name, platform,
                          parent_buildername=None, parent_mastername=None,
-                         target_bits=64):
+                         target_bits=64, is_luci_builder=False):
   spec = chromium_perf.TestSpec(
       'chromium_perf', platform, target_bits,
-      parent_buildername=parent_buildername)
+      parent_buildername=parent_buildername, is_luci_builder=is_luci_builder)
   if parent_mastername:
     spec['parent_mastername'] = parent_mastername
   elif not parent_buildername:
@@ -114,30 +115,36 @@ _AddIsolatedTestSpec('android-pixel2_webview-perf', 'android',
                      parent_buildername='Android Builder Perf FYI')
 _AddIsolatedTestSpec('android-go_webview-perf', 'android',
                      parent_buildername='android-builder-perf',
-                     parent_mastername='chromium.perf')
+                     parent_mastername='chromium.perf',
+                     is_luci_builder=True)
 
 
 _AddIsolatedTestSpec('win-10_laptop_high_end-perf_Lenovo-P51', 'win',
                      parent_buildername='win64-builder-perf',
-                     parent_mastername='chromium.perf')
+                     parent_mastername='chromium.perf',
+                     is_luci_builder=True)
 
 _AddIsolatedTestSpec('win-10_laptop_high_end-perf_Dell-Precision', 'win',
                      parent_buildername='win64-builder-perf',
-                     parent_mastername='chromium.perf')
+                     parent_mastername='chromium.perf',
+                     is_luci_builder=True)
 
 _AddIsolatedTestSpec('win-7_laptop_low_end_x32-perf_Acer-Aspire-5', 'win',
                      parent_buildername='win32-builder-perf',
                      parent_mastername='chromium.perf',
+                     is_luci_builder=True,
                      target_bits=32)
 
 _AddIsolatedTestSpec('win-7_laptop_low_end_x32-perf_Dell-Latitude', 'win',
                      parent_buildername='win32-builder-perf',
                      parent_mastername='chromium.perf',
+                     is_luci_builder=True,
                      target_bits=32)
 
 _AddIsolatedTestSpec('win-7_laptop_low_end_x32-perf-Lenovo-ThinkPad', 'win',
                      parent_buildername='win32-builder-perf',
                      parent_mastername='chromium.perf',
+                     is_luci_builder=True,
                      target_bits=32)
 
 _AddIsolatedTestSpec('Histogram Pipeline Linux Perf',
