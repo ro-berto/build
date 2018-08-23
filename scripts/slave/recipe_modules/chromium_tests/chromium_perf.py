@@ -11,9 +11,6 @@ CHROMIUM_CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
 GCLIENT_CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
 
 
-builders = collections.defaultdict(dict)
-
-
 SPEC = {
   'builders': {},
   'settings': {
@@ -116,7 +113,7 @@ def BuildSpec(
 
 
 def TestSpec(config_name, platform, target_bits, is_luci_builder,
-             parent_buildername=None, tests=None, remove_system_webview=None):
+             parent_buildername, tests=None, remove_system_webview=None):
   spec = _BaseSpec(
       bot_type='tester',
       config_name=config_name,
@@ -127,15 +124,13 @@ def TestSpec(config_name, platform, target_bits, is_luci_builder,
       remove_system_webview=remove_system_webview,
   )
 
-  if not parent_buildername:
-    parent_buildername = builders[platform][target_bits]
   spec['parent_buildername'] = parent_buildername
 
   return spec
 
 
-def _AddIsolatedTestSpec(name, platform, target_bits=64, is_luci_builder=False,
-                         parent_buildername=None):
+def _AddIsolatedTestSpec(name, platform, parent_buildername,
+                         target_bits=64, is_luci_builder=False):
   spec = TestSpec('chromium_perf', platform, target_bits,
                   is_luci_builder=is_luci_builder,
                   parent_buildername=parent_buildername)
@@ -155,12 +150,6 @@ def _AddBuildSpec(
       extra_compile_targets=extra_compile_targets,
       force_exparchive=force_exparchive)
 
-  # TODO(jbudorick): re-enable assertion once android has switched to the
-  # chromium recipe
-  # assert target_bits not in builders[platform]
-
-  if not builders[platform].get(target_bits, None):
-    builders[platform][target_bits] = name
   if add_to_bisect:
     SPEC['settings']['bisect_builders'].append(name)
 
@@ -226,28 +215,28 @@ _AddBuildSpec(
 
 # 32 bit android swarming
 _AddIsolatedTestSpec('android-nexus5x-perf', 'android',
-                     parent_buildername='Android Compile Perf', target_bits=32)
+                     'Android Compile Perf', target_bits=32)
 _AddIsolatedTestSpec('Android Nexus5 Perf', 'android',
-                     target_bits=32, parent_buildername='Android Compile Perf')
+                     'Android Compile Perf', target_bits=32)
 
-_AddIsolatedTestSpec('android-go-perf', 'android', target_bits=32,
-                     parent_buildername='Android Compile Perf')
+_AddIsolatedTestSpec('android-go-perf', 'android',
+                     'Android Compile Perf', target_bits=32)
 
 # Webview
-_AddIsolatedTestSpec('Android Nexus5X WebView Perf',
-                     'android', parent_buildername='Android arm64 Compile Perf')
-_AddIsolatedTestSpec('Android Nexus6 WebView Perf',
-                     'android', target_bits=32,
-                     parent_buildername='Android Compile Perf')
+_AddIsolatedTestSpec('Android Nexus5X WebView Perf', 'android',
+                     'Android arm64 Compile Perf')
+_AddIsolatedTestSpec('Android Nexus6 WebView Perf', 'android',
+                     'Android Compile Perf', target_bits=32)
 
 
-_AddIsolatedTestSpec('win-10-perf', 'win')
-_AddIsolatedTestSpec('Win 7 Perf', 'win', target_bits=32)
-_AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'win')
+_AddIsolatedTestSpec('win-10-perf', 'win', 'Win x64 Builder Perf')
+_AddIsolatedTestSpec('Win 7 Perf', 'win', 'Win Builder Perf', target_bits=32)
+_AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'win', 'Win x64 Builder Perf')
 
 
-_AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', 'mac')
-_AddIsolatedTestSpec('mac-10_13_laptop_high_end-perf', 'mac')
+_AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', 'mac', 'Mac Builder Perf')
+_AddIsolatedTestSpec('mac-10_13_laptop_high_end-perf', 'mac',
+                     'Mac Builder Perf')
 
 
-_AddIsolatedTestSpec('linux-perf', 'linux')
+_AddIsolatedTestSpec('linux-perf', 'linux', 'Linux Builder Perf')
