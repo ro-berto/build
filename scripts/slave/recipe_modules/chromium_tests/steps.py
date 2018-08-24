@@ -908,7 +908,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
 
   def gtest_delegate_common(spec, name=None, **kwargs):
     common_gtest_kwargs = {}
-    args = spec.get('args', [])
+    args = get_args_for_test(api, chromium_tests_api, spec, bot_update_step)
     if spec['shard_index'] != 0 or spec['total_shards'] != 1:
       args.extend(['--test-launcher-shard-index=%d' % spec['shard_index'],
                    '--test-launcher-total-shards=%d' % spec['total_shards']])
