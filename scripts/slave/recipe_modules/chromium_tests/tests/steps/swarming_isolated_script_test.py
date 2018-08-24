@@ -65,7 +65,15 @@ def RunSteps(api):
       )
 
   try:
-    test.pre_run(api, 'with patch')
+    # Emulate the behavior test_utils uses to run tests. Needed to achieve
+    # coverage of some code.
+    try:
+      test.pre_run(api, 'with patch')
+    except api.step.InfraFailure:
+      raise
+    except api.step.StepFailure:
+      # Swarming isolated script tests never abort on failure
+      pass
     test.run(api, 'with patch')
 
   finally:
@@ -111,6 +119,39 @@ def GenTests(api):
           git_revision='test_sha',
           version='test-version',
           got_revision_cp=123456)
+  )
+
+  yield (
+      api.test('fail') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
+      api.properties(
+          buildnumber=123,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp=123456) +
+      api.step_data(
+          '[trigger] base_unittests on Intel GPU on Linux (with patch)', retcode=1) +
+      api.post_process(post_process.StatusCodeIn, 1) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('fail_to_trigger') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
+      api.properties(
+          buildnumber=123,
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp=123456) +
+      api.post_process(post_process.StatusCodeIn, 1) +
+      api.post_process(post_process.DropExpectation)
   )
 
   yield (

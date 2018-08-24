@@ -1424,14 +1424,9 @@ class SwarmingTest(Test):
     # in gyp, not a recipe failure. So carry on with recipe execution.
     isolated_hash = api.isolate.isolated_tests.get(self.isolate_target(api))
     if not isolated_hash:
-      return api.python.inline(
+      return api.python.failing_step(
           '[error] %s' % self._step_name(suffix),
-          r"""
-          import sys
-          print '*.isolated file for target %s is missing' % sys.argv[1]
-          sys.exit(1)
-          """,
-          args=[self.isolate_target(api)])
+          '*.isolated file for target %s is missing' % self.isolate_target(api))
 
     # Create task.
     self._tasks[suffix] = self.create_task(api, suffix, isolated_hash)
@@ -1499,14 +1494,9 @@ class SwarmingTest(Test):
     # Emit error if test wasn't triggered. This happens if *.isolated is not
     # found. (The build is already red by this moment anyway).
     if suffix not in self._tasks:
-      return api.python.inline(
+      return api.python.failing_step(
           '[collect error] %s' % self._step_name(suffix),
-          r"""
-          import sys
-          print '%s wasn\'t triggered' % sys.argv[1]
-          sys.exit(1)
-          """,
-          args=[self.target_name])
+          '%s wasn\'t triggered' % self.target_name)
 
     try:
       api.swarming.collect_task(self._tasks[suffix])

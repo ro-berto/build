@@ -3,32 +3,13 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "base_unittests_run"
+      "import sys; sys.exit(1)"
     ],
     "name": "[error] base_unittests",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@print '*.isolated file for target %s is missing' % sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport sys\nprint '%s wasn\\'t triggered' % sys.argv[1]\nsys.exit(1)\n",
-      "base_unittests"
-    ],
-    "name": "[collect error] base_unittests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@print '%s wasn\\'t triggered' % sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@*.isolated file for target base_unittests_run is missing@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -44,7 +25,8 @@
   },
   {
     "name": "$result",
+    "reason": "Step('[error] base_unittests') failed with return_code 1",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]

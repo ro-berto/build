@@ -904,8 +904,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nprint '*.isolated file for target %s is missing' % sys.argv[1]\nsys.exit(1)\n",
-      "base_unittests"
+      "import sys; sys.exit(1)"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -914,19 +913,16 @@
     "name": "test_pre_run.[error] base_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@print '*.isolated file for target %s is missing' % sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@*.isolated file for target base_unittests is missing@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nprint '%s wasn\\'t triggered' % sys.argv[1]\nsys.exit(1)\n",
-      "base_unittests"
+      "import sys; sys.exit(1)"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -934,11 +930,9 @@
     },
     "name": "[collect error] base_unittests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@print '%s wasn\\'t triggered' % sys.argv[1]@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@",
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@base_unittests wasn't triggered@@@",
+      "@@@STEP_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
     ]
   },
