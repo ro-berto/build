@@ -200,8 +200,12 @@ _AddBuildSpec(
 _AddBuildSpec(
   'win64-builder-perf', 'win', add_to_bisect=True, force_exparchive=True,
   is_luci_builder=True)
+# TODO(crbug.com/828468): Remove 'Mac Builder Perf'
 _AddBuildSpec(
   'Mac Builder Perf', 'mac', add_to_bisect=True, force_exparchive=True)
+_AddBuildSpec(
+  'mac-builder-perf', 'mac', add_to_bisect=True, force_exparchive=True,
+  is_luci_builder=True)
 
 
 _AddBuildSpec('linux-builder-perf', 'linux', add_to_bisect=True,
