@@ -354,6 +354,12 @@
     ]
   },
   {
+    "cmd": [
+      "[START_DIR]\\dawn\\out\\release_x86\\dawn_unittests"
+    ],
+    "name": "Run the Dawn unittests"
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

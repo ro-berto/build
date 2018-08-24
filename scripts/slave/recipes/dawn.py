@@ -98,11 +98,16 @@ def _build_steps(api, out_dir, clang):
       ninja_log_outdir=debug_path,
       ninja_log_compiler=_get_compiler_name(api, clang))
 
+def _run_unittests(api, out_dir):
+  test_path = api.path['checkout'].join('out', out_dir, 'dawn_unittests')
+  api.step('Run the Dawn unittests', [test_path])
+
 def RunSteps(api, target_cpu, debug, clang):
   _checkout_steps(api)
   out_dir = _out_path(target_cpu, debug, clang)
   _gn_gen_builds(api, target_cpu, debug, clang, out_dir)
   _build_steps(api, out_dir, clang)
+  _run_unittests(api, out_dir)
 
 def GenTests(api):
   yield (
