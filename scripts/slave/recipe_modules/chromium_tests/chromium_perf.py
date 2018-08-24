@@ -66,15 +66,11 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
 
 
   spec['swarming_server'] = 'https://chrome-swarming.appspot.com'
-  if is_luci_builder:
-    spec['swarming_service_account'] = 'chrome-ci-builder'
-  else:
+  if not is_luci_builder:
     spec['swarming_service_account'] = 'chrome-perf-buildbot'
 
   spec['isolate_server'] = 'https://chrome-isolated.appspot.com'
-  if is_luci_builder:
-    spec['isolate_service_account'] = 'chrome-ci-builder'
-  else:
+  if not is_luci_builder:
     spec['isolate_service_account'] = 'chrome-perf-buildbot'
   return spec
 
