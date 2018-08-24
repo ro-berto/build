@@ -397,6 +397,25 @@ class IntegratorTest(unittest.TestCase):
       self.assertEqual(bb.add_build_request.call_count, 1)
       self.assertEqual(self.buildbucket.api.lease.call_count, 1)
 
+  def test_update_existing_lease_key_in_schedule(self):
+    with self.create_integrator():
+      build_id = self.buildbucket_build_rel['id']
+      lease = {
+        'key': LEASE_KEY - 1,
+        'build': Mock(),
+      }
+      self.integrator._leases = {build_id: lease}
+
+      with self.mock_build_peek():
+        run_deferred(self.integrator.poll_builds())
+
+      # Assert that lease object is same.
+      self.assertIs(self.integrator._leases[build_id], lease)
+      self.assertEqual(lease['key'], LEASE_KEY)
+
+      # Assert added one buildset of two.
+      self.assertEqual(self.integrator.buildbot.add_build_request.call_count, 1)
+
   def test_build_not_scheduled_if_builder_name_is_wrong(self):
     with self.create_integrator():
       bb = self.integrator.buildbot

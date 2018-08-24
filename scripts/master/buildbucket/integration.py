@@ -143,6 +143,9 @@ class BuildBucketIntegrator(object):
         continue
       build = info.get('build', {})
       build_id = build.get('id')
+      # Note that if a lease key was updated AFTER build has been scheduled, the
+      # update is not persisted in the database. On master restart, progerss
+      # of such build would lost.
       lease_key = build.get('lease_key')
       if not (build_id and lease_key):
         self.log(
@@ -288,15 +291,15 @@ class BuildBucketIntegrator(object):
     return True
 
   @inlineCallbacks
-  def _try_lease_build(self, build):
+  def _try_lease_build(self, build_id):
     lease_expiration_ts = common.datetime_to_timestamp(
         datetime.datetime.utcnow() + LEASE_DURATION)
     lease_resp = yield self.buildbucket_service.api.lease(
-        id=build['id'],
+        id=build_id,
         body=dict(lease_expiration_ts=lease_expiration_ts))
     lease_error = lease_resp.get('error')
     if lease_error and lease_error['reason'] == 'CANNOT_LEASE_BUILD':
-      self.log('Could not lease build %s' % build['id'])
+      self.log('Could not lease build %s' % build_id)
       return
     if self._check_error(lease_resp):
       return
@@ -323,7 +326,7 @@ class BuildBucketIntegrator(object):
 
   @inlineCallbacks
   def _schedule(self, builder_name, properties, build, ssid):
-    """Schedules a build and returns (bsid, brid) tuple as Deferred."""
+    """Schedules a build."""
     assert self._leases is not None
     properties = (properties or {}).copy()
     properties[common.INFO_PROPERTY] = json.dumps({
@@ -352,6 +355,9 @@ class BuildBucketIntegrator(object):
   def _try_schedule_build(self, build, ssid_cache):
     """Tries to schedule a build if it is valid and there is capacity.
 
+    If a buildbot build already exists for this buildbucket build, updates the
+    lease without scheduling a new build.
+
     Args:
       build (dict): a build received from buildbucket.peek api.
     """
@@ -363,14 +369,22 @@ class BuildBucketIntegrator(object):
       return
 
     self.log(
-        'Will try to schedule buildbucket build %s' % build_id,
+        'Will try to lease buildbucket build %s' % build_id,
         level=logging.DEBUG)
 
-    lease_key = yield self._try_lease_build(build)
+    lease_key = yield self._try_lease_build(build_id)
     if not lease_key:
       self.log('Could not lease build %s' % build_id)
       return
     build['lease_key'] = lease_key
+
+    existing_lease = self._leases.get(build_id)
+    if existing_lease:
+      # We already have a Buildbot build for this Buildbucket build.
+      # Perhaps its lease expired and we've just leased it again.
+      # Update the lease key of the existing build without scheduling a new one.
+      existing_lease['key'] = lease_key
+      return
 
     try:
       params = self._validate_build(build)
@@ -379,7 +393,7 @@ class BuildBucketIntegrator(object):
       self.buildbucket_service.api.fail(
           id=build_id,
           body={
-              'lease_key': build['lease_key'],
+              'lease_key': lease_key,
               'failure_reason': 'INVALID_BUILD_DEFINITION',
               'result_details_json': json.dumps({
                   'error': {
@@ -494,7 +508,9 @@ class BuildBucketIntegrator(object):
         lease = self._leases.get(build_id)
         if not lease:
           continue
+
         if self._check_error(result):
+          # TODO(crbug.com/806077): try to re-lease the build.
           self.log('Canceling build request for build "%s"' % build_id)
           del self._leases[build_id]
           build = lease.get('build')
@@ -574,15 +590,11 @@ class BuildBucketIntegrator(object):
     self.buildbot.stop_build(build, reason=reason)
 
   @inlineCallbacks
-  def _leased_build_call(self, method_name, build, body):
-    build_def = self._get_build_def(build)
-    if not build_def:
-      return
-
+  def _leased_build_call(self, method_name, build_id, lease, body):
     method = getattr(self.buildbucket_service.api, method_name)
     body = body.copy()
-    body['lease_key'] = build_def['lease_key']
-    resp = yield method(id=build_def['id'], body=body)
+    body['lease_key'] = lease['key']
+    resp = yield method(id=build_id, body=body)
     returnValue(resp)
 
   @inlineCallbacks
@@ -602,14 +614,13 @@ class BuildBucketIntegrator(object):
     lease = self._leases.get(build_id)
     # A lease may be not present in the dict if the build was cancelled on
     # buildbucket side.
-    if not lease or lease['key'] != build_def['lease_key']:
-      self._stop_build(
-          build, 'Build started, but it is lease key is not current.')
+    if not lease:
+      self._stop_build(build, 'Build has started, but it is not leased.')
       return
 
     assert not lease.get('build')
     lease['build'] = build
-    resp = yield self._leased_build_call('start', build, {
+    resp = yield self._leased_build_call('start', build_id, lease, {
         'url': self.buildbot.get_build_url(build),
     })
     if 'error' in resp:
@@ -634,18 +645,21 @@ class BuildBucketIntegrator(object):
 
     # Update leases.
     yield self._ensure_leases_loaded()
-    if build_id not in self._leases:
+    lease = self._leases.get(build_id)
+    if not lease:
       self.log(
           'build %s is not among current leases' % build_id,
           level=logging.WARNING)
-    elif status != 'RETRY':
-      del self._leases[build_id]
+      return
 
     if status == 'RETRY':
       # Do not mark this build as failed. Either it will be retried when master
       # starts again and the build lease is still held, or the build lease will
       # expire.
       return
+
+    del self._leases[build_id]
+
     if status == 'SKIPPED':
       # Build lease will expire on its own.
       # TODO(nodir): implement unlease API http://crbug.com/448984 and call it
@@ -671,9 +685,9 @@ class BuildBucketIntegrator(object):
         ],
     }
     if status == 'SUCCESS':
-      yield self._leased_build_call('succeed', build, body)
+      yield self._leased_build_call('succeed', build_id, lease, body)
     else:
       body['failure_reason'] = (
           'BUILD_FAILURE' if status == 'FAILURE'
           else 'INFRA_FAILURE')
-      yield self._leased_build_call('fail', build, body)
+      yield self._leased_build_call('fail', build_id, lease, body)
