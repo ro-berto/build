@@ -229,7 +229,7 @@ class FinditApi(recipe_api.RecipeApi):
       for test in actual_tests_to_run:
         try:
           test.test_options = api.m.chromium_tests.steps.TestOptions(
-              test_filter=requested_tests.get(test.name),
+              test_filter=requested_tests.get(test.canonical_name),
               repeat_count=test_repeat_count,
               retry_limit=0 if test_repeat_count else None,
               run_disabled=bool(test_repeat_count))
