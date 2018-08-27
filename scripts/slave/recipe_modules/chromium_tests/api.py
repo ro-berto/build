@@ -178,12 +178,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for key, value in bot_config.get('swarming_dimensions', {}).iteritems():
       self.m.swarming.set_default_dimension(key, value)
 
-    if bot_config.get('swarming_service_account'):
+    if (bot_config.get('swarming_service_account') and
+        not self.m.runtime.is_luci):
       self.m.swarming.service_account_json = (
           self.m.puppet_service_account.get_key_path(
               bot_config.get('swarming_service_account')))
 
-    if bot_config.get('isolate_service_account'):
+    if (bot_config.get('isolate_service_account') and
+        not self.m.runtime.is_luci):
       self.m.isolate.service_account_json = (
           self.m.puppet_service_account.get_key_path(
               bot_config.get('isolate_service_account')))

@@ -13,6 +13,28 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "swarming_service_account",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@C:\\creds\\service_accounts\\service-account-chromium-builder.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "isolate_service_account",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@C:\\creds\\service_accounts\\service-account-chromium_builder.json@@@"
+    ]
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0
