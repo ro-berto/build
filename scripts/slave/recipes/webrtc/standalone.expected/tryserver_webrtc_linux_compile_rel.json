@@ -133,6 +133,28 @@
       "python",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
+      "lookup",
+      "-m",
+      "tryserver.webrtc",
+      "-b",
+      "linux_compile_rel",
+      "--config-file",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "lookup GN args",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
       "tryserver.webrtc",
@@ -150,26 +172,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CACHE]/builder/src/out/linux_compile_rel/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "read GN args",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
   },
   {
     "cmd": [],

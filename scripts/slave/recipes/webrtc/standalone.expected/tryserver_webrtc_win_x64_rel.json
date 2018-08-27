@@ -171,6 +171,28 @@
       "python",
       "-u",
       "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb.py",
+      "lookup",
+      "-m",
+      "tryserver.webrtc",
+      "-b",
+      "win_x64_rel",
+      "--config-file",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "lookup GN args",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb.py",
       "gen",
       "-m",
       "tryserver.webrtc",
@@ -209,26 +231,6 @@
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@video_engine_tests@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@webrtc_nonparallel_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CACHE]\\builder\\src\\out\\win_x64_rel\\args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "read GN args",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {

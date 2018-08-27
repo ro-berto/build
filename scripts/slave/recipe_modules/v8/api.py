@@ -730,11 +730,6 @@ class V8Api(recipe_api.RecipeApi):
       # user on test failures for easier build reproduction.
       self._update_build_environment(gn_args)
 
-      # Create logs surfacing GN arguments. This information is critical to
-      # developers for reproducing failures locally.
-      if 'gn_args' in self.build_environment:
-        self.m.step.active_result.presentation.logs['gn_args'] = (
-            self.build_environment['gn_args'].splitlines())
     elif self.m.chromium.c.project_generator.tool == 'gn':
       self.m.chromium.run_gn(use_goma=use_goma, build_dir=build_dir)
 
