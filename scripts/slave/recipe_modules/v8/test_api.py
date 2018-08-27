@@ -578,6 +578,10 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         step_name, self.failures_example(variant=variant))
 
   @staticmethod
+  def _check_step(check, steps, step):
+    return check(step in steps)
+
+  @staticmethod
   def _get_param(check, steps, step, param, action=None):
     """Returns the value of the given step's cmd-line parameter."""
     check(step in steps)
@@ -612,8 +616,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
   def check_in_any_arg(self, step, value):
     """Check if a given value is a substring of any argument in a step."""
     def check_any(check, steps, step, value):
-      check(step in steps)
-      check(any(value in arg for arg in steps[step]['cmd']))
+      if self._check_step(check, steps, step):
+        check(any(value in arg for arg in steps[step]['cmd']))
     return self.post_process(check_any, step, value)
 
   def check_not_in_any_arg(self, step, value):
@@ -622,19 +626,19 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     This is the opposite of the method above.
     """
     def check_any(check, steps, step, value):
-      check(step in steps)
-      check(not any(value in arg for arg in steps[step]['cmd']))
+      if self._check_step(check, steps, step):
+        check(not any(value in arg for arg in steps[step]['cmd']))
     return self.post_process(check_any, step, value)
 
   def check_triggers(self, *expected_builders):
     """Verify expected triggered builders."""
     def check_triggers_internal(check, steps):
-      check('trigger' in steps)
-      actual_builders = [
-        spec['builder_name'] for spec in steps['trigger']['trigger_specs']]
-      check(len(actual_builders) == len(expected_builders))
-      for expected, actual in zip(expected_builders, actual_builders):
-        check(expected == actual)
+      if self._check_step(check, steps, 'trigger'):
+        actual_builders = [
+            spec['builder_name'] for spec in steps['trigger']['trigger_specs']]
+        check(len(actual_builders) == len(expected_builders))
+        for expected, actual in zip(expected_builders, actual_builders):
+          check(expected == actual)
     return self.post_process(check_triggers_internal)
 
   def buildbucket_test_data(self, num_requests):
