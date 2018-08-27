@@ -1857,7 +1857,7 @@ BUILDERS = {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
           'clobber', 'clang', 'default_target_v8_archive',
-          'v8_static_library', 'goma', 'gn'],
+          'dcheck', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1879,7 +1879,7 @@ BUILDERS = {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
           'clobber', 'clang', 'default_target_v8_archive',
-          'v8_static_library', 'goma', 'gn'],
+          'dcheck', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1901,7 +1901,7 @@ BUILDERS = {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
           'clobber', 'clang', 'default_target_v8_archive',
-          'v8_static_library', 'goma', 'gn'],
+          'dcheck', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -1923,7 +1923,7 @@ BUILDERS = {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
           'clobber', 'clang', 'default_target_v8_archive',
-          'v8_static_library', 'goma', 'gn'],
+          'dcheck', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -1945,7 +1945,7 @@ BUILDERS = {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
           'clobber', 'clang', 'default_target_v8_archive',
-          'v8_static_library', 'goma', 'gn'],
+          'dcheck', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,

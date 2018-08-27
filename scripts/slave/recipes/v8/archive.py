@@ -150,8 +150,13 @@ def RunSteps(api):
   api.v8.runhooks()
   api.v8.compile()
 
-  make_archive(api, branch, version, 'exe')
-  make_archive(api, branch, version, 'lib', ' (libs)', '-libs')
+  if api.chromium.c.BUILD_CONFIG == 'Debug':
+    # Debug binaries require libraries to be present in the same archive to run.
+    make_archive(api, branch, version, 'all')
+  else:
+    make_archive(api, branch, version, 'exe')
+    make_archive(api, branch, version, 'lib', ' (libs)', '-libs')
+
 
 
 def GenTests(api):
@@ -185,11 +190,17 @@ def GenTests(api):
       test += api.v8.check_in_param(
           'bot_update', '--spec-path', 'target_cpu = [\'arm\', \'arm64\']')
 
-    test += api.post_process(Filter(
+    expected_steps = [
         'gn', 'compile', 'filter build files', 'zipping', 'gsutil upload',
-        'archive link', 'filter build files (libs)', 'zipping (libs)',
-        'gsutil upload (libs)', 'archive link (libs)'))
+        'archive link',
+    ]
+    if 'Debug' not in buildername:
+      expected_steps.extend([
+        'filter build files (libs)', 'zipping (libs)', 'gsutil upload (libs)',
+        'archive link (libs)',
+      ])
 
+    test += api.post_process(Filter(*expected_steps))
     yield test
 
   # Test bailout on missing branch.

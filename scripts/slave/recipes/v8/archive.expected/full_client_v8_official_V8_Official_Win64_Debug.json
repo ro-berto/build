@@ -7,7 +7,7 @@
       "--root=[BUILDER_CACHE]\\V8_Official_Win64_Debug\\v8",
       "gen",
       "//out/Debug",
-      "--args=is_clang=true v8_static_library=true is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[GOMA_CACHE]\\client\""
+      "--args=is_clang=true dcheck_always_on=true is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[GOMA_CACHE]\\client\""
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Official_Win64_Debug\\v8",
     "env": {
@@ -52,7 +52,7 @@
       "--platform",
       "win",
       "--type",
-      "exe",
+      "all",
       "--json-output",
       "/path/to/tmp/json"
     ],
@@ -100,66 +100,6 @@
     "name": "archive link",
     "~followup_annotations": [
       "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-win64-dbg-3.4.3.17.zip@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]\\V8_Official_Win64_Debug\\v8\\tools\\release\\filter_build_files.py",
-      "--dir",
-      "[BUILDER_CACHE]\\V8_Official_Win64_Debug\\v8\\out\\Debug",
-      "--platform",
-      "win",
-      "--type",
-      "lib",
-      "--json-output",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "name": "filter build files (libs)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]\\\\V8_Official_Win64_Debug\\\\v8\\\\out\\\\Debug\\\\d8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]\\\\V8_Official_Win64_Debug\\\\v8\\\\out\\\\Debug\\\\icudtl.dat\"@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::zip]\\resources\\zip.py"
-    ],
-    "name": "zipping (libs)",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]\\\\V8_Official_Win64_Debug\\\\v8\\\\out\\\\Debug\\\\d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]\\\\V8_Official_Win64_Debug\\\\v8\\\\out\\\\Debug\\\\icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\archive.zip\", \"root\": \"[BUILDER_CACHE]\\\\V8_Official_Win64_Debug\\\\v8\\\\out\\\\Debug\"}"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "----",
-      "cp",
-      "-a",
-      "public-read",
-      "[CLEANUP]\\archive.zip",
-      "gs://chromium-v8/official/3.4/v8-win64-libs-dbg-3.4.3.17.zip"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload (libs)",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/3.4/v8-win64-libs-dbg-3.4.3.17.zip@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "archive link (libs)",
-    "~followup_annotations": [
-      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-win64-libs-dbg-3.4.3.17.zip@@@"
     ]
   }
 ]
