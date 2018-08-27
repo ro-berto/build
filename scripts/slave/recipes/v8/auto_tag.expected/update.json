@@ -232,7 +232,6 @@
       "-f",
       "--bypass-hooks",
       "--send-mail",
-      "--private",
       "--tbrs",
       "machenbach@chromium.org"
     ],

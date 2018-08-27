@@ -133,7 +133,7 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
       cwd=api.path['checkout'],
       env_prefixes={'PATH': [api.v8.depot_tools_path]}):
     api.git('cl', 'upload', '-f', '--bypass-hooks', '--send-mail',
-            '--private', '--tbrs', 'machenbach@chromium.org')
+            '--tbrs', 'machenbach@chromium.org')
     api.git('cl', 'land', '-f', '--bypass-hooks', name='git cl land')
 
   # Function to check if commit has landed.
