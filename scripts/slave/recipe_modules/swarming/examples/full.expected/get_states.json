@@ -3,12 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
+      "RECIPE_MODULE[build::swarming]/resources/get_task_states.py",
       "--swarming-server",
       "https://chromium-swarm-dev.appspot.com",
       "--swarming-py-path",
@@ -25,6 +20,32 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"states\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    \"PENDING\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::swarming]/resources/get_task_states.py",
+      "--swarming-server",
+      "https://chromium-swarm-dev.appspot.com",
+      "--swarming-py-path",
+      "[START_DIR]/swarming.client/swarming.py",
+      "--json",
+      "/path/to/tmp/json",
+      "10000",
+      "110000",
+      "110100",
+      "130000"
+    ],
+    "name": "collect tasks (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"states\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"COMPLETED\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"

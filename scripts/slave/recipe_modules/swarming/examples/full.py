@@ -142,6 +142,10 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
     task_ids = []
     for task in tasks:
       task_ids.extend(task.get_task_ids())
+
+    # Call it twice to cover the case where it's called more than once in a
+    # build.
+    api.swarming.get_states(task_ids)
     api.swarming.get_states(task_ids)
     return
 
@@ -191,9 +195,9 @@ def GenTests(api):
       api.step_data(
           'archive for mac',
           stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
-      api.swarming.get_states(['PENDING']) +
+      api.swarming.get_states([['PENDING'], ['COMPLETED']]) +
       api.properties(platforms=('win', 'linux', 'mac'), get_states=True) +
-      api.post_process(post_process.Filter('collect tasks')))
+      api.post_process(post_process.Filter('collect tasks', 'collect tasks (2)')))
 
   for exp in [True, False]:
     yield (

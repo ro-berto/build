@@ -1142,7 +1142,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     return merged_results
 
-  def get_states(self, task_ids):
+  def get_states(self, task_ids, suffix=None):
     """Returns the states of a list of tasks.
 
     Uses the 'get_states' endpoint on the server."""
@@ -1152,9 +1152,11 @@ class SwarmingApi(recipe_api.RecipeApi):
         '--json', self.m.json.output(),
     ] + task_ids
 
-    result =  self.m.build.python(
-        name='collect tasks',
-        script=self.resource('collect_task.py'),
+    result =  self.m.python(
+        'collect tasks%s' % (suffix or ''),
+        self.resource('get_task_states.py'),
+        step_test_data=lambda: self.m.json.test_api.output(data={
+            'states': ['COMPLETED'] * len(task_ids)}),
         args=args)
     return {
         task_id: state for task_id, state in zip(
