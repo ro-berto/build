@@ -7,9 +7,8 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmcontents",
-      "[CACHE]/builder"
+      "[START_DIR]"
     ],
-    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "everything"
   },
@@ -37,8 +36,7 @@
       "--revision",
       "src/third_party/dart@foo"
     ],
-    "cwd": "[CACHE]/builder",
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -75,7 +73,6 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[CACHE]/builder",
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -87,7 +84,6 @@
     "cmd": [
       "src/third_party/dart/tools/3xhead_flutter_hooks.sh"
     ],
-    "cwd": "[CACHE]/builder",
     "name": "3xHEAD Flutter Hooks"
   },
   {
@@ -124,13 +120,12 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/src/flutter/tools/gn"
+      "[START_DIR]/src/flutter/tools/gn"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -139,7 +134,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -157,7 +151,6 @@
       "0777",
       "[CACHE]/goma/data/flutter_engine_linux"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -174,7 +167,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -210,7 +202,6 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -226,9 +217,8 @@
       "-j",
       "20",
       "-C",
-      "[CACHE]/builder/src/out/host_debug"
+      "[START_DIR]/src/out/host_debug"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -236,7 +226,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -250,7 +239,6 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -284,7 +272,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -307,7 +294,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -353,7 +339,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
-      "--is-luci",
       "--buildbot-buildername",
       "flutter-engine-linux",
       "--buildbot-mastername",
@@ -361,7 +346,6 @@
       "--buildbot-slavename",
       "fake-m1"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -389,7 +373,6 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -401,14 +384,13 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/src/flutter/tools/gn",
+      "[START_DIR]/src/flutter/tools/gn",
       "--unoptimized"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -417,7 +399,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -435,7 +416,6 @@
       "0777",
       "[CACHE]/goma/data/flutter_engine_linux"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -452,7 +432,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -488,7 +467,6 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -504,9 +482,8 @@
       "-j",
       "20",
       "-C",
-      "[CACHE]/builder/src/out/host_debug_unopt"
+      "[START_DIR]/src/out/host_debug_unopt"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -514,7 +491,6 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -528,7 +504,6 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -562,7 +537,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -585,7 +559,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -631,7 +604,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
-      "--is-luci",
       "--buildbot-buildername",
       "flutter-engine-linux",
       "--buildbot-mastername",
@@ -639,7 +611,6 @@
       "--buildbot-slavename",
       "fake-m1"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -667,7 +638,6 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
     },
@@ -682,38 +652,37 @@
       "/bin/bash",
       "flutter/ci/analyze.sh"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "analyze dart_ui"
   },
   {
     "cmd": [
       "dart",
-      "[CACHE]/builder/src/flutter/shell/testing/observatory/test.dart",
-      "[CACHE]/builder/src/out/host_debug/flutter_tester",
-      "[CACHE]/builder/src/flutter/shell/testing/observatory/empty_main.dart"
+      "[START_DIR]/src/flutter/shell/testing/observatory/test.dart",
+      "[START_DIR]/src/out/host_debug/flutter_tester",
+      "[START_DIR]/src/flutter/shell/testing/observatory/empty_main.dart"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "test observatory and service protocol"
   },
   {
     "cmd": [
-      "[CACHE]/builder/src/flutter/tools/gn",
+      "[START_DIR]/src/flutter/tools/gn",
       "--android"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -722,10 +691,9 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "preprocess_for_goma (3)"
   },
@@ -741,10 +709,9 @@
       "0777",
       "[CACHE]/goma/data/flutter_engine_linux"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (3)",
@@ -759,7 +726,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -769,7 +735,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (3)",
@@ -796,10 +762,9 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (3)",
@@ -813,21 +778,19 @@
       "-j",
       "20",
       "-C",
-      "[CACHE]/builder/src/out/android_debug"
+      "[START_DIR]/src/out/android_debug"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "build android_debug"
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma (3)"
   },
@@ -839,7 +802,6 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -849,7 +811,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (3)",
     "~followup_annotations": [
@@ -874,7 +836,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -884,7 +845,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.goma_stat (3)",
     "~followup_annotations": [
@@ -898,7 +859,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -908,7 +868,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.stop_goma (3)",
     "~followup_annotations": [
@@ -945,7 +905,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
-      "--is-luci",
       "--buildbot-buildername",
       "flutter-engine-linux",
       "--buildbot-mastername",
@@ -953,10 +912,9 @@
       "--buildbot-slavename",
       "fake-m1"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.upload_log (3)",
     "~followup_annotations": [
@@ -982,10 +940,9 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (3)",
@@ -995,10 +952,9 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "preprocess_for_goma (4)"
   },
@@ -1014,10 +970,9 @@
       "0777",
       "[CACHE]/goma/data/flutter_engine_linux"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (4)",
@@ -1032,7 +987,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -1042,7 +996,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (4)",
@@ -1069,10 +1023,9 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (4)",
@@ -1086,22 +1039,20 @@
       "-j",
       "20",
       "-C",
-      "[CACHE]/builder/src/out/android_debug",
+      "[START_DIR]/src/out/android_debug",
       ":dist"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "build android_debug :dist"
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma (4)"
   },
@@ -1113,7 +1064,6 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -1123,7 +1073,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (4)",
     "~followup_annotations": [
@@ -1148,7 +1098,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -1158,7 +1107,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.goma_stat (4)",
     "~followup_annotations": [
@@ -1172,7 +1121,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -1182,7 +1130,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.stop_goma (4)",
     "~followup_annotations": [
@@ -1219,7 +1167,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
-      "--is-luci",
       "--buildbot-buildername",
       "flutter-engine-linux",
       "--buildbot-mastername",
@@ -1227,10 +1174,9 @@
       "--buildbot-slavename",
       "fake-m1"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.upload_log (4)",
     "~followup_annotations": [
@@ -1256,10 +1202,9 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (4)",
@@ -1269,16 +1214,15 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/src/flutter/tools/gn",
+      "[START_DIR]/src/flutter/tools/gn",
       "--android",
       "--runtime-mode=profile"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -1287,10 +1231,9 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "preprocess_for_goma (5)"
   },
@@ -1306,10 +1249,9 @@
       "0777",
       "[CACHE]/goma/data/flutter_engine_linux"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (5)",
@@ -1324,7 +1266,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -1334,7 +1275,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (5)",
@@ -1361,10 +1302,9 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (5)",
@@ -1378,21 +1318,19 @@
       "-j",
       "20",
       "-C",
-      "[CACHE]/builder/src/out/android_profile"
+      "[START_DIR]/src/out/android_profile"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "build android_profile"
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma (5)"
   },
@@ -1404,7 +1342,6 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -1414,7 +1351,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (5)",
     "~followup_annotations": [
@@ -1439,7 +1376,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -1449,7 +1385,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.goma_stat (5)",
     "~followup_annotations": [
@@ -1463,7 +1399,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -1473,7 +1408,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.stop_goma (5)",
     "~followup_annotations": [
@@ -1510,7 +1445,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
-      "--is-luci",
       "--buildbot-buildername",
       "flutter-engine-linux",
       "--buildbot-mastername",
@@ -1518,10 +1452,9 @@
       "--buildbot-slavename",
       "fake-m1"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.upload_log (5)",
     "~followup_annotations": [
@@ -1547,10 +1480,9 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (5)",
@@ -1560,16 +1492,15 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/src/flutter/tools/gn",
+      "[START_DIR]/src/flutter/tools/gn",
       "--android",
       "--runtime-mode=release"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -1578,10 +1509,9 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "preprocess_for_goma (6)"
   },
@@ -1597,10 +1527,9 @@
       "0777",
       "[CACHE]/goma/data/flutter_engine_linux"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (6)",
@@ -1615,7 +1544,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -1625,7 +1553,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (6)",
@@ -1652,10 +1580,9 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (6)",
@@ -1669,21 +1596,19 @@
       "-j",
       "20",
       "-C",
-      "[CACHE]/builder/src/out/android_release"
+      "[START_DIR]/src/out/android_release"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "build android_release"
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma (6)"
   },
@@ -1695,7 +1620,6 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -1705,7 +1629,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (6)",
     "~followup_annotations": [
@@ -1730,7 +1654,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -1740,7 +1663,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.goma_stat (6)",
     "~followup_annotations": [
@@ -1754,7 +1677,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -1764,7 +1686,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.stop_goma (6)",
     "~followup_annotations": [
@@ -1801,7 +1723,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
-      "--is-luci",
       "--buildbot-buildername",
       "flutter-engine-linux",
       "--buildbot-mastername",
@@ -1809,10 +1730,9 @@
       "--buildbot-slavename",
       "fake-m1"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.upload_log (6)",
     "~followup_annotations": [
@@ -1838,10 +1758,9 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (6)",
@@ -1851,16 +1770,15 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/src/flutter/tools/gn",
+      "[START_DIR]/src/flutter/tools/gn",
       "--android",
       "--android-cpu=x64"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -1869,10 +1787,9 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "preprocess_for_goma (7)"
   },
@@ -1888,10 +1805,9 @@
       "0777",
       "[CACHE]/goma/data/flutter_engine_linux"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (7)",
@@ -1906,7 +1822,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -1916,7 +1831,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (7)",
@@ -1943,10 +1858,9 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (7)",
@@ -1960,21 +1874,19 @@
       "-j",
       "20",
       "-C",
-      "[CACHE]/builder/src/out/android_debug_x64"
+      "[START_DIR]/src/out/android_debug_x64"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "build android_debug_x64"
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma (7)"
   },
@@ -1986,7 +1898,6 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -1996,7 +1907,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (7)",
     "~followup_annotations": [
@@ -2021,7 +1932,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -2031,7 +1941,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.goma_stat (7)",
     "~followup_annotations": [
@@ -2045,7 +1955,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -2055,7 +1964,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.stop_goma (7)",
     "~followup_annotations": [
@@ -2092,7 +2001,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
-      "--is-luci",
       "--buildbot-buildername",
       "flutter-engine-linux",
       "--buildbot-mastername",
@@ -2100,10 +2008,9 @@
       "--buildbot-slavename",
       "fake-m1"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.upload_log (7)",
     "~followup_annotations": [
@@ -2129,10 +2036,9 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (7)",
@@ -2142,16 +2048,15 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/src/flutter/tools/gn",
+      "[START_DIR]/src/flutter/tools/gn",
       "--android",
       "--android-cpu=x86"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -2160,10 +2065,9 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "preprocess_for_goma (8)"
   },
@@ -2179,10 +2083,9 @@
       "0777",
       "[CACHE]/goma/data/flutter_engine_linux"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (8)",
@@ -2197,7 +2100,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -2207,7 +2109,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (8)",
@@ -2234,10 +2136,9 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (8)",
@@ -2251,21 +2152,19 @@
       "-j",
       "20",
       "-C",
-      "[CACHE]/builder/src/out/android_debug_x86"
+      "[START_DIR]/src/out/android_debug_x86"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "build android_debug_x86"
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma (8)"
   },
@@ -2277,7 +2176,6 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -2287,7 +2185,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.goma_jsonstatus (8)",
     "~followup_annotations": [
@@ -2312,7 +2210,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -2322,7 +2219,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.goma_stat (8)",
     "~followup_annotations": [
@@ -2336,7 +2233,6 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
@@ -2346,7 +2242,7 @@
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.stop_goma (8)",
     "~followup_annotations": [
@@ -2383,7 +2279,6 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": null, \"builder\": null, \"project\": null}",
-      "--is-luci",
       "--buildbot-buildername",
       "flutter-engine-linux",
       "--buildbot-mastername",
@@ -2391,10 +2286,9 @@
       "--buildbot-slavename",
       "fake-m1"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "postprocess_for_goma.upload_log (8)",
     "~followup_annotations": [
@@ -2420,10 +2314,9 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (8)",
@@ -2433,29 +2326,28 @@
   },
   {
     "cmd": [
-      "[CACHE]/builder/flutter/bin/flutter",
+      "[START_DIR]/flutter/bin/flutter",
       "config",
       "--no-analytics"
     ],
-    "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
     },
     "name": "disable flutter analytics"
   },
   {
     "cmd": [
-      "[CACHE]/builder/flutter/bin/flutter",
+      "[START_DIR]/flutter/bin/flutter",
       "update-packages",
       "--local-engine=host_debug",
-      "--local-engine-src-path=[CACHE]/builder/src"
+      "--local-engine-src-path=[START_DIR]/src"
     ],
-    "cwd": "[CACHE]/builder/flutter",
+    "cwd": "[START_DIR]/flutter",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
     },
     "name": "flutter update-packages"
@@ -2465,12 +2357,12 @@
       "dart",
       "dev/bots/test.dart",
       "--local-engine=host_debug",
-      "--local-engine-src-path=[CACHE]/builder/src"
+      "--local-engine-src-path=[START_DIR]/src"
     ],
-    "cwd": "[CACHE]/builder/flutter",
+    "cwd": "[START_DIR]/flutter",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
     },
     "name": "flutter test",
