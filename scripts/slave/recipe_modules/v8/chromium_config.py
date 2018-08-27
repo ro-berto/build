@@ -45,3 +45,8 @@ def v8_android(c):
 @CONFIG_CTX(includes=['v8'])
 def v8_static_library(c):
   c.gn_args.append('v8_static_library=true')
+
+
+@CONFIG_CTX(includes=['v8'])
+def slow_dchecks(c):
+  c.gn_args.append('v8_enable_slow_dchecks=true')
