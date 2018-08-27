@@ -325,12 +325,10 @@ class PathMatcher(object):
 
 
   def Match(self, filename):
-    for p in self.inclusions:
-      if fnmatch.fnmatch(filename, p):
-        return True
-    for p in self.exclusions:
-      if fnmatch.fnmatch(filename, p):
-        return False
+    if filename in self.inclusions:
+      return True
+    if filename in self.exclusions:
+      return False
     if (self.custom_whitelist and
        re.match(self.custom_whitelist, filename)):
       return True
@@ -386,16 +384,26 @@ def Archive(options):
   if options.target == 'Debug' and chromium_utils.IsWindows():
     CopyDebugCRT(build_dir)
 
+  # Build the list of files to archive.
+  root_files = os.listdir(build_dir)
+
+  # Remove initial\chrome.ilk. The filtering is only done on toplevel files,
+  # and we can't exclude everything in initial since initial\chrome.dll.pdb is
+  # needed in the archive. (And we can't delete it on disk because that would
+  # slow down the next incremental build).
+  if 'initial' in root_files:
+    # Expand 'initial' directory by its contents, so that initial\chrome.ilk
+    # will be filtered out by the blacklist.
+    index = root_files.index('initial')
+    root_files[index:index+1] = [os.path.join('initial', f)
+        for f in os.listdir(os.path.join(build_dir, 'initial'))]
+
   path_filter = PathMatcher(options)
   print path_filter
+  print ('\nActually excluded: %s' %
+         [f for f in root_files if not path_filter.Match(f)])
 
-  # Build the list of files to archive.
-  zip_file_list = []
-  for root, dirs, files in os.walk(build_dir):
-    def rel(f):
-      return os.path.relpath(os.path.join(root, f), build_dir)
-    zip_file_list += [rel(f) for f in files if path_filter.Match(rel(f))]
-    dirs[:] = [d for d in dirs if path_filter.Match(rel(d))]
+  zip_file_list = [f for f in root_files if path_filter.Match(f)]
 
   # Include mojo public JS library.
   if (os.path.exists(os.path.join(build_dir, MOJO_BINDINGS_PATH))):
