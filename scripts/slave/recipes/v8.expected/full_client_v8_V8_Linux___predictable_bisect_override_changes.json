@@ -120,31 +120,6 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/mb/mb.py",
-      "lookup",
-      "-m",
-      "client.v8",
-      "-b",
-      "V8 Linux - predictable",
-      "--config-file",
-      "[BUILDER_CACHE]/V8_Linux___predictable/v8/infra/mb/mb_config.pyl"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "lookup GN args",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
-      "@@@STEP_LOG_LINE@gn_args@use_goma = true@@@",
-      "@@@STEP_LOG_LINE@gn_args@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
-      "@@@STEP_LOG_END@gn_args@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
@@ -163,6 +138,27 @@
     },
     "name": "generate_build_files",
     "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/out/Release/args.gn",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "read GN args",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
+    ]
   },
   {
     "cmd": [
@@ -542,32 +538,6 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/mb/mb.py",
-      "lookup",
-      "-m",
-      "client.v8",
-      "-b",
-      "V8 Linux - predictable",
-      "--config-file",
-      "[BUILDER_CACHE]/V8_Linux___predictable/v8/infra/mb/mb_config.pyl"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "Bisect a0.lookup GN args",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
-      "@@@STEP_LOG_LINE@gn_args@use_goma = true@@@",
-      "@@@STEP_LOG_LINE@gn_args@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
-      "@@@STEP_LOG_END@gn_args@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
@@ -588,6 +558,28 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/out/Release/args.gn",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Bisect a0.read GN args",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
     ]
   },
   {
@@ -792,32 +784,6 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/mb/mb.py",
-      "lookup",
-      "-m",
-      "client.v8",
-      "-b",
-      "V8 Linux - predictable",
-      "--config-file",
-      "[BUILDER_CACHE]/V8_Linux___predictable/v8/infra/mb/mb_config.pyl"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "Bisect a2.lookup GN args",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
-      "@@@STEP_LOG_LINE@gn_args@use_goma = true@@@",
-      "@@@STEP_LOG_LINE@gn_args@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
-      "@@@STEP_LOG_END@gn_args@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
@@ -838,6 +804,28 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/out/Release/args.gn",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Bisect a2.read GN args",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
     ]
   },
   {
@@ -1077,32 +1065,6 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/mb/mb.py",
-      "lookup",
-      "-m",
-      "client.v8",
-      "-b",
-      "V8 Linux - predictable",
-      "--config-file",
-      "[BUILDER_CACHE]/V8_Linux___predictable/v8/infra/mb/mb_config.pyl"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "Bisect a1.lookup GN args",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
-      "@@@STEP_LOG_LINE@gn_args@use_goma = true@@@",
-      "@@@STEP_LOG_LINE@gn_args@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
-      "@@@STEP_LOG_END@gn_args@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/V8_Linux___predictable/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
@@ -1123,6 +1085,28 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[BUILDER_CACHE]/V8_Linux___predictable/v8/out/Release/args.gn",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "Bisect a1.read GN args",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
     ]
   },
   {

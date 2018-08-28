@@ -10,9 +10,7 @@ from . import constants
 
 class GnApi(recipe_api.RecipeApi):
 
-  _DEFAULT_STEP_NAME = 'lookup GN args'
-  _LOOKUP_ARGS_RE = re.compile(r'Writing """\\?\s*(.*)""" to _path_/args.gn',
-                               re.DOTALL)
+  _DEFAULT_STEP_NAME = 'read GN args'
   _ARG_RE = re.compile('\s*(\w+)\s*=')
   _NON_LOCAL_ARGS = frozenset(['goma_dir', 'target_sysroot'])
   _DEFAULT_MAX_TEXT_LINES = 15
@@ -21,56 +19,26 @@ class GnApi(recipe_api.RecipeApi):
   TEXT = constants.TEXT
   LOGS = constants.LOGS
 
-  def lookup_args(self, mb_path, mb_config_path, mastername, buildername,
-                  step_name=None):
-    """Run "mb lookup" to get the GN args for a builder.
+  def read_args(self, build_dir, step_name=None):
+    """Read the GN args.
 
     Args:
-      mb_path - A Path object pointing at the directory that contains the mb tool.
-      mb_config_path - A Path object pointing to the file containing the mb
-        configurations.
-      mastername - The name of the master the builder is a part of.
-      buildername - The name of the builder to get the GN args for.
+      build_dir: The Path to the build output directory. The args.gn file will
+        be extracted from this location. The args.gn file must already exist (gn
+        or mb should have already been run before calling this method).
 
     Returns:
-      A tuple containing the GN args as the first element and the step result
-      from looking up the GN args as the second element. The GN args will be a
-      single string in the same format as the content of the args.gn file.
+      A tuple containing the contents of the args.gn file as a single string and
+      the step result of reading the file.
     """
-    args = [
-        'lookup',
-        '-m', mastername,
-        '-b', buildername,
-        '--config-file', mb_config_path,
-    ]
-
-    result = self.m.python(
-        name=step_name or self._DEFAULT_STEP_NAME,
-        script=mb_path.join('mb.py'),
-        args=args,
-        ok_ret='any',
-        stdout=self.m.raw_io.output_text(),
-        step_test_data=lambda: self.m.raw_io.test_api.stream_output(
-            '\n'
-            'Writing """\\\n'
-            'goma_dir = "/b/build/slave/cache/goma_client"\n'
-            'target_cpu = "x86"\n'
-            'use_goma = true\n'
-            '""" to _path_/args.gn.\n'
-            '\n'
-            '/fake-path/chromium/src/buildtools/linux64/gn gen _path_'
-        ))
-
-    match = self._LOOKUP_ARGS_RE.search(result.stdout)
-
-    if not match:
-      result.presentation.step_text = (
-          'Failed to extract GN args from output of "mb lookup"')
-      result.presentation.logs['mb lookup output'] = result.stdout.splitlines()
-      result.presentation.status = self.m.step.EXCEPTION
-      raise self.m.step.InfraFailure('Failed to extract GN args')
-
-    return match.group(1), result
+    args_file_path = build_dir.join('args.gn')
+    step_name = step_name or self._DEFAULT_STEP_NAME
+    fake_args = (
+        'goma_dir = "/b/build/slave/cache/goma_client"\n'
+        'target_cpu = "x86"\n'
+        'use_goma = true\n')
+    args = self.m.file.read_text(step_name, args_file_path, fake_args)
+    return args, self.m.step.active_result
 
   def reformat_args(self, args):
     """Reformat the GN args to be more useful for local repros.
@@ -132,12 +100,12 @@ class GnApi(recipe_api.RecipeApi):
     else:
       result.presentation.step_text += '<br/>'.join([''] + lines)
 
-  def get_args(self, mb_path, mb_config_path, mastername, buildername,
-               location=None, max_text_lines=None, step_name=None):
+  def get_args(self, build_dir, location=None, max_text_lines=None,
+               step_name=None):
     """Get the GN args for the build.
 
-    A step will be executed that looks up the GN args and adds them to the
-    presentation for the step.
+    A step will be executed that fetches the args.gn file and adds the contents
+    to the presentation for the step.
 
     Args:
       build_dir: The Path to the build output directory. The args.gn file will
@@ -153,13 +121,10 @@ class GnApi(recipe_api.RecipeApi):
       step_name: The name of the step for reading the args.
 
     Returns:
-      The GN args as a string in the same format as the content of the args.gn
-      file.
+      The content of the args.gn file.
     """
-    args, result = self.lookup_args(
-        mb_path, mb_config_path, mastername, buildername, step_name=step_name)
-    if args is not None:
-      reformatted_args = self.reformat_args(args)
-      self.present_args(result, reformatted_args,
-                        location=location, max_text_lines=max_text_lines)
+    args, result = self.read_args(build_dir, step_name=step_name)
+    reformatted_args = self.reformat_args(args)
+    self.present_args(result, reformatted_args,
+                      location=location, max_text_lines=max_text_lines)
     return args

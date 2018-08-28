@@ -148,31 +148,6 @@
       "python",
       "-u",
       "[BUILDER_CACHE]\\V8_Win64\\v8\\tools\\mb\\mb.py",
-      "lookup",
-      "-m",
-      "client.v8",
-      "-b",
-      "V8 Win64",
-      "--config-file",
-      "[BUILDER_CACHE]\\V8_Win64\\v8\\infra\\mb\\mb_config.pyl"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "lookup GN args",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
-      "@@@STEP_LOG_LINE@gn_args@use_goma = true@@@",
-      "@@@STEP_LOG_LINE@gn_args@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
-      "@@@STEP_LOG_END@gn_args@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]\\V8_Win64\\v8\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "client.v8",
@@ -198,6 +173,27 @@
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@mozilla@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@test262@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[BUILDER_CACHE]\\V8_Win64\\v8\\out\\Release\\args.gn",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "read GN args",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
     ]
   },
   {

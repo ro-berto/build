@@ -1005,14 +1005,6 @@ class ChromiumApi(recipe_api.RecipeApi):
         mb_config_path or self.c.project_generator.config_path or
         self.m.path.join(mb_path, 'mb_config.pyl'))
 
-    # Get the GN args before running any other steps so that if any subsequent
-    # steps fail, developers will have the information about what the GN args
-    # are so that they can reproduce the issue locally
-    gn_args = self.m.gn.get_args(
-        mb_path, mb_config_path, mastername, buildername,
-        location=gn_args_location,
-        max_text_lines=gn_args_max_text_lines)
-
     isolated_targets = isolated_targets or []
 
     out_dir = 'out'
@@ -1107,7 +1099,18 @@ class ChromiumApi(recipe_api.RecipeApi):
       result.presentation.logs['swarming-targets-file.txt'] = (
           sorted_isolated_targets)
 
-    return gn_args
+    # If build_dir is a string, convert it to a Path
+    if isinstance(build_dir, str):
+      # The / splitting is required because Path.join on Windows won't convert
+      # the / in target label syntax to \ and the resulting path will not be
+      # well formed for any operation that requires an absolute path
+      build_dir = self.m.path['checkout'].join(*build_dir.split('/'))
+
+    return self.m.gn.get_args(
+        build_dir,
+        location=gn_args_location,
+        max_text_lines=gn_args_max_text_lines)
+
 
   def taskkill(self):
     self.m.build.python(

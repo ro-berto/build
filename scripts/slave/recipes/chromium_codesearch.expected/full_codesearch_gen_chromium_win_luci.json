@@ -233,28 +233,6 @@
       "python",
       "-u",
       "[CACHE]/builder/src/tools/mb/mb.py",
-      "lookup",
-      "-m",
-      "chromium.infra.codesearch",
-      "-b",
-      "codesearch-gen-chromium-win",
-      "--config-file",
-      "[CACHE]/builder/src/tools/mb/mb_config.pyl"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "lookup GN args",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.infra.codesearch",
@@ -272,6 +250,26 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate build files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/win-Debug/args.gn",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "read GN args",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
   },
   {
     "cmd": [
