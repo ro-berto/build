@@ -730,9 +730,26 @@ TOOL_TO_TEST_SWARMING = freeze({
 
 
 class Failure(object):
-  def __init__(self, test_step_config, failure_dict):
+  """Represents a test run leading to a failure (possibly re-run several times).
+  """
+  def __init__(self, test_step_config, results):
+    """
+    Args:
+      test_step_config: Static test configuration as defined in builders.py.
+      results: List of failure dicts with one item per run of the test. The
+          first item is the original failure, the other items are re-runs for
+          flake checking. Each failure dict consists of the data as returned by
+          the V8-side test runner.
+    """
     self.test_step_config = test_step_config
-    self.failure_dict = failure_dict
+    self.results = results
+    # A failure is flaky if not all results are the same (e.g. all 'FAIL').
+    self.is_flaky = not all(
+        x['result'] == results[0]['result'] for x in results)
+
+  @property
+  def failure_dict(self):
+    return self.results[0]
 
   @property
   def duration(self):
@@ -740,8 +757,8 @@ class Failure(object):
 
   @staticmethod
   def factory_func(test_step_config):
-    def create(failure_dict):
-      return Failure(test_step_config, failure_dict)
+    def create(results):
+      return Failure(test_step_config, results)
     return create
 
 

@@ -5,6 +5,7 @@
 import argparse
 import ast
 import base64
+from collections import defaultdict
 import contextlib
 import datetime
 import difflib
@@ -1185,13 +1186,10 @@ class V8Api(recipe_api.RecipeApi):
     presentation.logs['durations'] = lines
 
   def _get_failure_logs(self, output, failure_factory):
-    def all_same(items):
-      return all(x == items[0] for x in items)
-
     if not output['results']:
       return {}, [], {}, []
 
-    unique_results = {}
+    unique_results = defaultdict(list)
     for result in output['results']:
       # Use test base name as UI label (without suite and directory names).
       label = result['name'].split('/')[-1]
@@ -1200,7 +1198,7 @@ class V8Api(recipe_api.RecipeApi):
         label = label[:MAX_LABEL_SIZE - 2] + '..'
       # Group tests with the same label (usually the same test that ran under
       # different configurations).
-      unique_results.setdefault(label, []).append(result)
+      unique_results[label].append(result)
 
     failure_log = {}
     flake_log = {}
@@ -1212,27 +1210,21 @@ class V8Api(recipe_api.RecipeApi):
 
       # Group results by command. The same command might have run multiple
       # times to detect flakes.
-      results_per_command = {}
+      results_per_command = defaultdict(list)
       for result in unique_results[label]:
-        results_per_command.setdefault(result['command'], []).append(result)
+        results_per_command[result['command']].append(result)
 
-      for command in results_per_command:
-        # Determine flakiness. A test is flaky if not all results from a unique
-        # command are the same (e.g. all 'FAIL').
-        # Only add the data of the first run to the final test results, as rerun
-        # data is not important for bisection.
-        data = results_per_command[command][0]
-        failure = failure_factory(data)
-        if all_same(map(lambda x: x['result'], results_per_command[command])):
-          # This is a failure.
-          failures.append(failure)
-          failure_lines += self._command_results_text(
-              results_per_command[command], False)
-        else:
+      for results in results_per_command.values():
+        # Determine flakiness.
+        failure = failure_factory(results)
+        if failure.is_flaky:
           # This is a flake.
           flakes.append(failure)
-          flake_lines += self._command_results_text(
-              results_per_command[command], True)
+          flake_lines += self._command_results_text(results, True)
+        else:
+          # This is a failure.
+          failures.append(failure)
+          failure_lines += self._command_results_text(results, False)
 
       if failure_lines:
         failure_log[label] = failure_lines
