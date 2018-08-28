@@ -154,8 +154,8 @@ def RunSteps(api, buildername):
     ConfigureChromiumBuilder(api, recipe_config)
   elif target_platform is 'android':
     # Disable the tests isolation on Android as it's not supported yet.
-    enable_isolate = False
     ConfigureAndroidBuilder(api, recipe_config)
+    enable_isolate = False
     api.chromium_android.init_and_sync()
 
   # Since disk lacks in Mac, we need to remove files before build.
@@ -167,17 +167,24 @@ def RunSteps(api, buildername):
   api.chromium.ensure_goma()
   api.chromium.runhooks()
   api.chromium.run_mb(api.properties.get('mastername'), buildername)
+  api.chromium.run_mb(api.properties.get('mastername'), buildername,
+                      name='generate .isolate files',
+                      mb_command='isolate-everything')
   api.chromium.compile(targets, name='First build', use_goma_module=True)
   api.isolate.remove_build_metadata()
   if enable_isolate:
     # This archives the results and regenerate the .isolated files.
     api.isolate.isolate_tests(api.chromium.output_dir)
+
   MoveBuildDirectory(api, str(api.chromium.output_dir),
                      str(api.chromium.output_dir).rstrip('\\/') + '.1')
 
   # Do the second build and move the build artifact to the temp directory.
   api.chromium.runhooks()
   api.chromium.run_mb(api.properties.get('mastername'), buildername)
+  api.chromium.run_mb(api.properties.get('mastername'), buildername,
+                      name='generate .isolate files',
+                      mb_command='isolate-everything')
   api.chromium.compile(targets, name='Second build', use_goma_module=True)
   api.isolate.remove_build_metadata()
   if enable_isolate:

@@ -985,7 +985,7 @@ class ChromiumApi(recipe_api.RecipeApi):
              build_dir=None, android_version_code=None,
              android_version_name=None, phase=None,
              gn_args_location=None, gn_args_max_text_lines=None,
-             **kwargs):
+             mb_command='gen', **kwargs):
     """Run mb in the source tree.
 
     Args:
@@ -1014,7 +1014,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     build_dir = build_dir or '//%s/%s' % (out_dir, self.c.build_config_fs)
 
     args=[
-        'gen',
+        mb_command,
         '-m', mastername,
         '-b', buildername,
         '--config-file', mb_config_path,
