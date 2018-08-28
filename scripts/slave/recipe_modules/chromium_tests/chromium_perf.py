@@ -232,7 +232,7 @@ _AddIsolatedTestSpec('Android Nexus5 Perf', 'android',
                      'Android Compile Perf', target_bits=32)
 
 _AddIsolatedTestSpec('android-go-perf', 'android',
-                     'android-builder-perf', target_bits=32)
+                     'Android Compile Perf', target_bits=32)
 
 # Webview
 _AddIsolatedTestSpec('Android Nexus5X WebView Perf', 'android',
