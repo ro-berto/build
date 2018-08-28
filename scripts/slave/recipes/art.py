@@ -215,12 +215,13 @@ def setup_host_x86(api,
       api.step('test dx', ['./dalvik/dx/tests/run-all-tests'])
 
 def setup_target(api,
-    serial,
-    debug,
-    device,
-    concurrent_collector=True,
-    heap_poisoning=False,
-    gcstress=False):
+                 serial,
+                 debug,
+                 device,
+                 concurrent_collector=True,
+                 generational_cc=False,
+                 heap_poisoning=False,
+                 gcstress=False):
   build_top_dir = api.path['start_dir']
   art_tools = api.path['start_dir'].join('art', 'tools')
   # The path to the chroot directory on the device where ART and its
@@ -247,6 +248,13 @@ def setup_target(api,
     env.update({ 'ART_USE_READ_BARRIER' : 'true' })
   else:
     env.update({ 'ART_USE_READ_BARRIER' : 'false' })
+
+  # Note: Generational CC only makes sense when read barriers are used
+  # (i.e. when the Concurrent Copying collector is used).
+  if generational_cc:
+    env.update({ 'ART_USE_GENERATIONAL_CC' : 'true' })
+  else:
+    env.update({ 'ART_USE_GENERATIONAL_CC' : 'false' })
 
   if heap_poisoning:
     env.update({ 'ART_HEAP_POISONING' : 'true' })
@@ -520,11 +528,14 @@ _CONFIG_MAP = {
         'device': 'fugu',
         'debug': True,
       },
+      # Generational CC ARMv7 (debug) configuration.
+      # TODO: Rename (this is no longer a CMS configuration).
       'angler-armv7-cms': {
         'serial': '84B7N15B03000329',
         'device': 'angler-armv7',
         'debug': True,
-        'concurrent_collector': False,
+        'concurrent_collector': True,
+        'generational_cc': True,
       },
       'angler-armv8-ndebug': {
         'serial': '84B7N16728001299',
