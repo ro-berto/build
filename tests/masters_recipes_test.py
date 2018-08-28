@@ -136,6 +136,10 @@ FAKE_BUILDERS = {
         'win_chromium_x64_rel_ng',
         'win7_chromium_rel_ng',
         'win10_chromium_x64_rel_ng',
+        'win7_chromium_rel_loc_exp',
+        'win_archive',
+        'win_mojo',
+        'win_x64_archive',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'gpu_manual_try_win7_nvidia_rel',
         'win10_chromium_x64_dbg_ng',
