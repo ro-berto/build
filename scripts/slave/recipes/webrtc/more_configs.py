@@ -129,8 +129,7 @@ def RunSteps(api):
   api.chromium.ensure_goma()
   api.chromium.runhooks()
 
-  phases = ['intelligibility_enhancer_no_include_tests',
-            'bwe_test_logging',
+  phases = ['bwe_test_logging',
             'dummy_audio_file_devices_no_protobuf',
             'rtti_no_sctp']
   for phase in phases:
