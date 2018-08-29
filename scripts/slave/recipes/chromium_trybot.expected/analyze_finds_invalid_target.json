@@ -455,20 +455,7 @@
       "@@@STEP_LOG_LINE@json.output@    \"another one\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "mark: before_tests",
-    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output@@@",
       "@@@SET_BUILD_PROPERTY@failure_hash@\"3908b365fae78e6b96f5e3b38db5b33131cde606\"@@@"
     ]
   },

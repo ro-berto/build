@@ -818,21 +818,8 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_EXCEPTION@@@",
       "@@@SET_BUILD_PROPERTY@extra_result_code@[\"GOMA_PING_FAILURE\"]@@@",
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"935f5d19481d533c5ea3a8d2d4abf9174668d7fe\"@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"COMPILE_FAILURE\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "mark: before_tests",
-    "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"935f5d19481d533c5ea3a8d2d4abf9174668d7fe\"@@@"
     ]
   },
   {

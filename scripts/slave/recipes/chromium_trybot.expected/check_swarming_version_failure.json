@@ -271,20 +271,7 @@
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@0.8.6@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "mark: before_tests",
-    "~followup_annotations": [
+      "@@@STEP_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_hash@\"d263d3961e134a9db54b635705e234a976cb9ca6\"@@@"
     ]
   },

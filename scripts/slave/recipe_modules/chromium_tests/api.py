@@ -953,13 +953,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def trybot_steps(self, builders=None, trybots=None):
     with self.m.tryserver.set_failure_hash():
-      try:
-        (bot_config_object, bot_update_step, affected_files, tests,
-         disable_deapply_patch) = self._trybot_steps_internal(
-            builders=builders, trybots=trybots)
-      finally:
-        self.m.python.succeeding_step('mark: before_tests', '')
+      (bot_config_object, bot_update_step, affected_files, tests,
+       disable_deapply_patch) = self._trybot_steps_internal(
+           builders=builders, trybots=trybots)
 
+      self.m.python.succeeding_step('mark: before_tests', '')
       if tests:
         self.run_tests_on_tryserver(
             bot_config_object, tests, bot_update_step,
