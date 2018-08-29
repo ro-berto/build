@@ -212,7 +212,7 @@ class CodesearchApi(recipe_api.RecipeApi):
                 self._get_revision()),
             '--dest-branch',
             self.c.GEN_REPO_BRANCH,
-            'src/out',
+            self.m.path['checkout'].join('out'),
             generated_repo_dir]
     if self.c.GEN_REPO_OUT_DIR:
       args = ['--debug-dir', self.c.GEN_REPO_OUT_DIR] + args

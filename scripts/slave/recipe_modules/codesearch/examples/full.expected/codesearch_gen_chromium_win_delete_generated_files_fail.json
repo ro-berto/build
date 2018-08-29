@@ -786,7 +786,7 @@
       "Generated files from \"codesearch-gen-chromium-win\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
       "win",
-      "src/out",
+      "[START_DIR]/src/out",
       "[CACHE]/generated"
     ],
     "name": "sync generated files"

@@ -871,7 +871,7 @@
       "Generated files from \"codesearch-gen-chromium-chromiumos\" build 571, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
       "master",
-      "src/out",
+      "[CACHE]/builder/src/out",
       "[CACHE]/generated"
     ],
     "name": "sync generated files"

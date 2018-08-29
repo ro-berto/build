@@ -251,7 +251,7 @@
       "Generated files from \"test_buildername\" build 123, revision f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--dest-branch",
       "android",
-      "src/out",
+      "[START_DIR]/src/out",
       "[START_DIR]/generated"
     ],
     "name": "sync generated files"
