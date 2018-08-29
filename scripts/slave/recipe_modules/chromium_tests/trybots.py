@@ -700,7 +700,7 @@ TRYBOTS = freeze({
       }),
       'Android arm64 Compile Perf': simple_bot({
         'mastername': 'chromium.perf',
-        'buildername': 'Android arm64 Compile Perf',
+        'buildername': 'android_arm64-builder-perf',
       }),
       'Linux Builder Perf': simple_bot({
         'mastername': 'chromium.perf',
