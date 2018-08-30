@@ -656,7 +656,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"master.chromium.infra.codesearch\", \"builder\": \"codesearch-gen-chromium-chromiumos\", \"project\": \"\"}",
       "--is-luci",
       "--buildbot-buildername",
       "codesearch-gen-chromium-chromiumos",

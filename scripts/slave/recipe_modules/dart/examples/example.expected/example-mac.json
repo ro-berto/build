@@ -360,7 +360,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"\", \"builder\": \"example-mac\", \"project\": \"\"}",
       "--buildbot-buildername",
       "example-mac"
     ],
@@ -663,7 +663,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"\", \"builder\": \"example-mac\", \"project\": \"\"}",
       "--buildbot-buildername",
       "example-mac"
     ],
@@ -1328,7 +1328,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"\", \"builder\": \"example-mac\", \"project\": \"\"}",
       "--buildbot-buildername",
       "example-mac"
     ],

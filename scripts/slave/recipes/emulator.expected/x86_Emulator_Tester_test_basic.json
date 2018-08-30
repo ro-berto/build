@@ -550,7 +550,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"master.chromium.android.fyi\", \"builder\": \"x86 Emulator Tester\", \"project\": \"\"}",
       "--buildbot-buildername",
       "x86 Emulator Tester",
       "--buildbot-mastername",

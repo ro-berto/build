@@ -484,7 +484,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]\\crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"master.tryserver.webrtc\", \"builder\": \"win_rel\", \"project\": \"\"}",
       "--is-luci",
       "--buildbot-buildername",
       "win_rel",

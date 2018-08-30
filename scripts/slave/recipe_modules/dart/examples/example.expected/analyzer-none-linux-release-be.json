@@ -360,7 +360,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"\", \"builder\": \"analyzer-none-linux-release-be\", \"project\": \"\"}",
       "--buildbot-buildername",
       "analyzer-none-linux-release-be"
     ],
@@ -663,7 +663,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"\", \"builder\": \"analyzer-none-linux-release-be\", \"project\": \"\"}",
       "--buildbot-buildername",
       "analyzer-none-linux-release-be"
     ],
@@ -1330,7 +1330,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"\", \"builder\": \"analyzer-none-linux-release-be\", \"project\": \"\"}",
       "--buildbot-buildername",
       "analyzer-none-linux-release-be"
     ],

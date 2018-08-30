@@ -486,7 +486,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"master.tryserver.webrtc\", \"builder\": \"mac_compile_dbg\", \"project\": \"\"}",
       "--is-luci",
       "--buildbot-buildername",
       "mac_compile_dbg",

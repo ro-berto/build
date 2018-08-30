@@ -563,7 +563,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"master.chromium.testing.master\", \"builder\": \"coverage_builder\", \"project\": \"\"}",
       "--buildbot-buildername",
       "coverage_builder",
       "--buildbot-mastername",

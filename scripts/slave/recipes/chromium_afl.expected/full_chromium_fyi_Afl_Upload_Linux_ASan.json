@@ -584,7 +584,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"master.chromium.fyi\", \"builder\": \"Afl Upload Linux ASan\", \"project\": \"\"}",
       "--buildbot-buildername",
       "Afl Upload Linux ASan",
       "--buildbot-mastername",

@@ -778,7 +778,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]\\crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"master.tryserver.chromium.win\", \"builder\": \"win7_chromium_rel_ng\", \"project\": \"\"}",
       "--buildbot-buildername",
       "win7_chromium_rel_ng",
       "--buildbot-mastername",

@@ -77,9 +77,7 @@ def RunSteps(api):
   api.cipd.build(root, pkg_file, pkg_name, install_mode='copy')
 
   # 6. Register CIPD package if prod.
-  revision = None
-  if api.buildbucket.build_input.gitiles_commit:
-    revision = api.buildbucket.build_input.gitiles_commit.id
+  revision = api.buildbucket.build.input.gitiles_commit.id
   if revision and api.buildbucket.builder_id.bucket == 'prod':
     api.cipd.register(pkg_name, pkg_file, tags={'git_revision': revision},
                       refs=['latest'])

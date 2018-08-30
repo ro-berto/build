@@ -366,7 +366,7 @@
       "--build-id",
       "8950789761525983376",
       "--builder-id-json",
-      "{\"bucket\": \"master.tryserver.client.pdfium\", \"builder\": \"linux_xfa\", \"project\": null}",
+      "{\"bucket\": \"master.tryserver.client.pdfium\", \"builder\": \"linux_xfa\", \"project\": \"\"}",
       "--buildbot-buildername",
       "linux_xfa_asan_lsan",
       "--buildbot-mastername",

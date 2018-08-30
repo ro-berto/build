@@ -109,14 +109,7 @@ class GomaApi(recipe_api.RecipeApi):
 
   @property
   def default_cache_path(self):
-    buildername = None
-    if self.m.buildbucket.builder_id:
-      # LUCI builds always have this, however not all expectation tests
-      # use (test_)api.buildbucket.ci_build or .try_build.
-      buildername = self.m.buildbucket.builder_id.builder
-    if buildername is None:
-      # TODO(tandrii): delete support for legacy buildbot stuff.
-      buildername = self.m.properties['buildername']
+    buildername = self.m.buildbucket.build.builder.builder
     safe_buildername = re.sub(r'[^a-zA-Z0-9]', '_', buildername)
     data_cache = self.default_cache_path_per_slave.join('data')
     return data_cache.join(safe_buildername)

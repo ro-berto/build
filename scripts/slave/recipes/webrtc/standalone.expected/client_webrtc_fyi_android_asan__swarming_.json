@@ -525,7 +525,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"master.client.webrtc.fyi\", \"builder\": \"Android ASan (swarming)\", \"project\": \"\"}",
       "--is-luci",
       "--buildbot-buildername",
       "Android ASan (swarming)",

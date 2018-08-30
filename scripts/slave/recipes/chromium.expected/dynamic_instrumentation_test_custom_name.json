@@ -627,7 +627,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"master.chromium.android\", \"builder\": \"KitKat Phone Tester (rel)\", \"project\": \"\"}",
       "--buildbot-buildername",
       "KitKat Phone Tester (rel)",
       "--buildbot-mastername",

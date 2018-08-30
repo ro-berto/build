@@ -630,7 +630,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"master.chromium.testing.master\", \"builder\": \"android_cronet_tester\", \"project\": \"\"}",
       "--buildbot-buildername",
       "android_cronet_tester",
       "--buildbot-mastername",

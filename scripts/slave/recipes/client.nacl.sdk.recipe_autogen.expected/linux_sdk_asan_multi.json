@@ -470,7 +470,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"master.client.nacl.sdk\", \"builder\": \"linux-sdk-asan-multi\", \"project\": \"\"}",
       "--buildbot-buildername",
       "linux-sdk-asan-multi",
       "--buildbot-mastername",

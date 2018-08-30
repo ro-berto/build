@@ -235,7 +235,7 @@
       "--build-id",
       "1",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"master.test_master\", \"builder\": \"test_builder\", \"project\": \"\"}",
       "--buildbot-buildername",
       "test_builder",
       "--buildbot-mastername",

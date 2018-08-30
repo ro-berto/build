@@ -995,7 +995,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"master.tryserver.chromium.linux\", \"builder\": \"linux_chromium_rel_ng\", \"project\": \"\"}",
       "--buildbot-buildername",
       "linux_chromium_rel_ng",
       "--buildbot-mastername",

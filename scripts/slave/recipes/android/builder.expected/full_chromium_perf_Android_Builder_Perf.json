@@ -584,7 +584,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"master.chromium.perf\", \"builder\": \"Android Builder Perf\", \"project\": \"\"}",
       "--buildbot-buildername",
       "Android Builder Perf",
       "--buildbot-mastername",

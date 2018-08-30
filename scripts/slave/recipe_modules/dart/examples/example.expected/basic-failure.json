@@ -364,7 +364,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"\", \"builder\": \"build-fail\", \"project\": \"\"}",
       "--buildbot-buildername",
       "build-fail"
     ],

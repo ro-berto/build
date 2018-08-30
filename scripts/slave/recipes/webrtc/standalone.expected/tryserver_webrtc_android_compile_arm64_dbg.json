@@ -453,7 +453,7 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": null, \"builder\": null, \"project\": null}",
+      "{\"bucket\": \"master.tryserver.webrtc\", \"builder\": \"android_compile_arm64_dbg\", \"project\": \"\"}",
       "--is-luci",
       "--buildbot-buildername",
       "android_compile_arm64_dbg",
