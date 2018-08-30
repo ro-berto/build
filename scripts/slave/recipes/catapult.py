@@ -14,6 +14,7 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
+  'recipe_engine/runtime',
   'wct',
 ]
 
@@ -65,7 +66,7 @@ def RunSteps(api, platform):
   api.gae_sdk.fetch(api.gae_sdk.PLAT_PYTHON, sdk_path)
   app_engine_sdk_path = api.path.pathsep.join([
       '%(PYTHONPATH)s', str(sdk_path)])
-  if api.platform.is_linux:
+  if api.platform.is_linux and api.runtime.is_luci:
     wct_path = api.wct.install().join('wct')
   else:
     wct_path = None
@@ -91,6 +92,7 @@ def GenTests(api):
                    buildername='android',
                    bot_id='android_slave',
                    platform='android') +
+    api.runtime(is_luci=True, is_experimental=False) +
     api.generator_script(
         'build_steps.py',
         {'name': 'Dashboard Tests', 'cmd': ['run_py_tests', '--no-hooks']},
