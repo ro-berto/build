@@ -55,13 +55,6 @@ class BotConfig(object):
   def get(self, name, default=None):
     return self._consistent_get(self._get, name, default)
 
-  def _get_master_setting(self, bot_id, name, default=None):
-    return self._bots_dict.get(bot_id['mastername'], {}).get(
-        'settings', {}).get(name, default)
-
-  def get_master_setting(self, name, default=None):
-    return self._consistent_get(self._get_master_setting, name, default)
-
   def _get_test_spec(self, chromium_tests_api, mastername):
     if len(self._bot_ids) == 1:
       bot_config = self._get_builder_bot_config(self._bot_ids[0])

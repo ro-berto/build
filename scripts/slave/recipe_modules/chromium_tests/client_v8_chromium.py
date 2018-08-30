@@ -5,10 +5,6 @@
 SPEC = {
   'settings': {
     'build_gs_bucket': 'chromium-v8',
-    # WARNING: src-side runtest.py is only tested with chromium CQ builders.
-    # Usage not covered by chromium CQ is not supported and can break
-    # without notice.
-    'src_side_runtest_py': True,
     'luci_project': 'v8',
   },
   'builders': {

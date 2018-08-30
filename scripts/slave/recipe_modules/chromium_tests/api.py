@@ -132,12 +132,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for c in bot_config.get('chromium_tests_apply_config', []):
       self.apply_config(c)
 
-    # WARNING: src-side runtest.py is only tested with chromium CQ builders.
-    # Usage not covered by chromium CQ is not supported and can break
-    # without notice.
-    if bot_config.get_master_setting('src_side_runtest_py'):
-      self.m.chromium.c.runtest_py.src_side = True
-
     bot_type = override_bot_type or bot_config.get('bot_type', 'builder_tester')
 
     if bot_config.get('set_component_rev'):
@@ -832,9 +826,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     args = []
 
     args.extend(['--build-config-fs', self.m.chromium.c.build_config_fs])
-
-    if self.m.chromium.c.runtest_py.src_side:
-      args.append('--use-src-side-runtest-py')
 
     paths = {
       'checkout': self.m.path['checkout'],

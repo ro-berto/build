@@ -53,9 +53,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       # module property, configured per builder in cr-buildbucket.cfg.
       goma_high_parallel = Single(bool, empty_val=False, required=False),
     ),
-    runtest_py = ConfigGroup(
-      src_side = Single(bool),
-    ),
     gyp_env = ConfigGroup(
       DOWNLOAD_VR_TEST_APKS = Single(int, required=False),
       GYP_CROSSCOMPILE = Single(int, jsonish_fn=str, required=False),

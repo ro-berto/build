@@ -19,8 +19,6 @@ def RunSteps(api):
   for config in api.properties.get('chromium_apply_config', []):
     api.chromium.apply_config(config)
 
-  api.chromium.c.runtest_py.src_side = True
-
   kwargs = {}
   if api.properties.get('annotate'):
     kwargs.update({

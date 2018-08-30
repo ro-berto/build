@@ -7,7 +7,6 @@ from . import steps
 SPEC = {
   'settings': {
     'build_gs_bucket': 'chromium-webkit-archive',
-    'src_side_runtest_py': True,
   },
 }
 

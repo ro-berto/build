@@ -7,10 +7,6 @@ from . import steps
 SPEC = {
   'settings': {
     'build_gs_bucket': 'chromium-linux-archive',
-    # WARNING: src-side runtest.py is only tested with chromium CQ builders.
-    # Usage not covered by chromium CQ is not supported and can break
-    # without notice.
-    'src_side_runtest_py': True,
   },
   'builders': {
     'linux-gcc-rel': {
