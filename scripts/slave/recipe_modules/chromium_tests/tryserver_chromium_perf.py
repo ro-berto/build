@@ -37,20 +37,19 @@ def tryserver_chromium_perf(c):
               'catapult-project/catapult.git')
 
 
-def _AddBuildSpec(name, platform, target_bits=64, is_luci_builder=False):
+def _AddBuildSpec(name, platform, target_bits=64):
   # We run sizes with no perf_id for perf tryjobs. http://crbug.com/610772
   SPEC['builders'][name] = chromium_perf.BuildSpec(
       'tryserver_chromium_perf', platform, target_bits,
-      is_luci_builder=is_luci_builder,
       force_exparchive=False)
 
 
-def _AddTestSpec(name, platform, target_bits=64, is_luci_builder=False):
+def _AddTestSpec(name, platform, target_bits=64):
    # parent_buildername is not used by the bisect or perf try recipes,
    # but required for running the chromium expectations tests.
    SPEC['builders'][name] = chromium_perf.TestSpec(
        'tryserver_chromium_perf', platform, target_bits,
-       parent_buildername='dummy', is_luci_builder=is_luci_builder)
+       parent_buildername='dummy')
 
 
 _AddBuildSpec('linux_perf_bisect_builder', 'linux')

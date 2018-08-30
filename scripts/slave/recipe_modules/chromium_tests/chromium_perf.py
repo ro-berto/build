@@ -41,7 +41,7 @@ def chromium_perf(c):
 
 
 def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
-              is_luci_builder, remove_system_webview=None):
+              remove_system_webview=None):
   spec = {
     'bot_type': bot_type,
     'chromium_config': config_name,
@@ -65,18 +65,18 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
     spec['gclient_apply_config'] = ['android']
 
 
+  # TODO(803137): remove setting 'swarming_service_account' once all perf
+  # builders are converted to LUCI.
   spec['swarming_server'] = 'https://chrome-swarming.appspot.com'
-  if not is_luci_builder:
-    spec['swarming_service_account'] = 'chrome-perf-buildbot'
+  spec['swarming_service_account'] = 'chrome-perf-buildbot'
 
   spec['isolate_server'] = 'https://chrome-isolated.appspot.com'
-  if not is_luci_builder:
-    spec['isolate_service_account'] = 'chrome-perf-buildbot'
+  spec['isolate_service_account'] = 'chrome-perf-buildbot'
   return spec
 
 
 def BuildSpec(
-  config_name, platform, target_bits, is_luci_builder,
+  config_name, platform, target_bits,
   compile_targets=None, extra_compile_targets=None, force_exparchive=False,
   run_sizes=True):
   if not compile_targets:
@@ -92,7 +92,6 @@ def BuildSpec(
       config_name=config_name,
       platform=platform,
       target_bits=target_bits,
-      is_luci_builder=is_luci_builder,
       tests=tests,
   )
 
@@ -108,14 +107,13 @@ def BuildSpec(
   return spec
 
 
-def TestSpec(config_name, platform, target_bits, is_luci_builder,
+def TestSpec(config_name, platform, target_bits,
              parent_buildername, tests=None, remove_system_webview=None):
   spec = _BaseSpec(
       bot_type='tester',
       config_name=config_name,
       platform=platform,
       target_bits=target_bits,
-      is_luci_builder=is_luci_builder,
       tests=tests or [],
       remove_system_webview=remove_system_webview,
   )
@@ -125,16 +123,14 @@ def TestSpec(config_name, platform, target_bits, is_luci_builder,
   return spec
 
 
-def _AddIsolatedTestSpec(name, platform, parent_buildername,
-                         target_bits=64, is_luci_builder=False):
+def _AddIsolatedTestSpec(name, platform, parent_buildername, target_bits=64):
   spec = TestSpec('chromium_perf', platform, target_bits,
-                  is_luci_builder=is_luci_builder,
                   parent_buildername=parent_buildername)
   SPEC['builders'][name] = spec
 
 
 def _AddBuildSpec(
-  name, platform, target_bits=64, is_luci_builder=False, add_to_bisect=False,
+  name, platform, target_bits=64, add_to_bisect=False,
   extra_compile_targets=None, force_exparchive=False):
   if target_bits == 64:
     perf_id = platform
@@ -142,7 +138,7 @@ def _AddBuildSpec(
     perf_id = '%s-%d' % (platform, target_bits)
 
   SPEC['builders'][name] = BuildSpec(
-      'chromium_perf', platform, target_bits, is_luci_builder=is_luci_builder,
+      'chromium_perf', platform, target_bits,
       extra_compile_targets=extra_compile_targets,
       force_exparchive=force_exparchive)
 
@@ -172,7 +168,7 @@ _AddBuildSpec('android-builder-perf', 'android', target_bits=32,
                                      'push_apps_to_background_apk',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',],
-              is_luci_builder=True)
+              )
 
 # TODO(crbug.com/828465): remove 'Android arm64 Compile Perf'
 _AddBuildSpec('Android arm64 Compile Perf', 'android',
@@ -192,7 +188,7 @@ _AddBuildSpec('android_arm64-builder-perf', 'android', target_bits=64,
                                      'push_apps_to_background_apk',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',],
-              is_luci_builder=True)
+              )
 
 # TODO(crbug.com/828472): remove this builder once win32-builder-perf works
 # well.
@@ -203,21 +199,18 @@ _AddBuildSpec(
 _AddBuildSpec(
   'Win x64 Builder Perf', 'win', add_to_bisect=True, force_exparchive=True)
 _AddBuildSpec(
-  'win32-builder-perf', 'win', target_bits=32, force_exparchive=True,
-  is_luci_builder=True)
+  'win32-builder-perf', 'win', target_bits=32, force_exparchive=True)
 _AddBuildSpec(
-  'win64-builder-perf', 'win', add_to_bisect=True, force_exparchive=True,
-  is_luci_builder=True)
+  'win64-builder-perf', 'win', add_to_bisect=True, force_exparchive=True)
 # TODO(crbug.com/828468): Remove 'Mac Builder Perf'
 _AddBuildSpec(
   'Mac Builder Perf', 'mac', add_to_bisect=True, force_exparchive=True)
 _AddBuildSpec(
-  'mac-builder-perf', 'mac', add_to_bisect=True, force_exparchive=True,
-  is_luci_builder=True)
+  'mac-builder-perf', 'mac', add_to_bisect=True, force_exparchive=True)
 
 
 _AddBuildSpec('linux-builder-perf', 'linux', add_to_bisect=True,
-              force_exparchive=True, is_luci_builder=True)
+              force_exparchive=True)
 
 # TODO(crbug.com/828467): remove this builder once linux-builder-perf works
 # well.
