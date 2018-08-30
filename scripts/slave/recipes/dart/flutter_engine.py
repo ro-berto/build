@@ -94,7 +94,7 @@ def GetCheckout(api):
   api.step('3xHEAD Flutter Hooks',
       ['src/third_party/dart/tools/3xhead_flutter_hooks.sh'])
 
-def TestFlutter(api, start_dir):
+def TestFlutter(api, start_dir, just_built_dart_sdk):
   engine_src = start_dir.join('src')
   flutter = start_dir.join('flutter')
   flutter_cmd = flutter.join('bin/flutter')
@@ -109,8 +109,11 @@ def TestFlutter(api, start_dir):
   with api.context(cwd=flutter):
     api.step('flutter update-packages',
              [flutter_cmd, 'update-packages'] + test_args)
-    # runs all flutter tests similar to travis as described on this page:
+    # runs all flutter tests similar to Cirrus as described on this page:
     # https://github.com/flutter/flutter/blob/master/CONTRIBUTING.md
+    api.step('flutter analyze', ['dart', 'dev/bots/analyze.dart',
+             '--dart-sdk', just_built_dart_sdk
+             ], timeout=20*60) # 20 minutes
     api.step('flutter test', test_cmd + test_args, timeout=90*60) # 90 minutes
 
 def RunSteps(api):
@@ -133,10 +136,9 @@ def RunSteps(api):
       'sdks', 'dart-sdk', 'bin')
     engine_env = { 'PATH': api.path.pathsep.join((str(prebuilt_dart_bin),
       '%(PATH)s')) }
-    just_built_dart_bin = checkout_dir.join('out', 'host_debug', 'dart-sdk',
-      'bin')
+    just_built_dart_sdk = checkout_dir.join('out', 'host_debug', 'dart-sdk')
     flutter_env = {
-      'PATH': api.path.pathsep.join((str(just_built_dart_bin), '%(PATH)s')),
+      'PATH': api.path.pathsep.join((str(just_built_dart_sdk.join('bin')), '%(PATH)s')),
       # Prevent test.dart from using git merge-base to determine a fork point.
       # git merge-base doesn't work without a FETCH_HEAD, which isn't available
       # on the first run of a bot. The builder tests a single revision, so use
@@ -153,7 +155,7 @@ def RunSteps(api):
         BuildLinuxAndroidx86(api, checkout_dir)
       # The context adds freshly-built engine's dart-sdk to the path.
       with api.context(env=flutter_env):
-        TestFlutter(api, start_dir)
+        TestFlutter(api, start_dir, just_built_dart_sdk)
 
 def GenTests(api):
   yield (api.test('flutter-engine-linux-buildbot') + api.platform('linux', 64)
