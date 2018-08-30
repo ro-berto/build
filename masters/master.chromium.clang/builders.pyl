@@ -139,7 +139,7 @@
       "bot_pool": "build98-m1",
       "category": "2ToTMac",
     },
-    "clang_tot_device": {
+    "ToTiOSDevice": {
       "recipe": "ios/unified_builder_tester",
       "bot_pool": "build155-m1",
       "category": "2ToTMac",
