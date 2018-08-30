@@ -1,0 +1,122 @@
+[
+  {
+    "cmd": [
+      "touch",
+      "[TMP_BASE]/wct-test_tmp_1/package.json"
+    ],
+    "name": "package.json"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]/packages",
+      "-ensure-file",
+      "dart/browsers/chrome/linux-amd64 b6b434ed592da55513d813b2cfb3422008fb280d\ninfra/nodejs/nodejs/linux-amd64 node_version:4.5.0\ninfra/testing/wct/linux-amd64 prod",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"b6b434ed592da55513d813b2cfb3422008fb280d\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"dart/browsers/chrome/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-node_version:4.5\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/nodejs/nodejs/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-prod------------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/testing/wct/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[START_DIR]/packages/chrome/chrome",
+      "--version"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/packages/bin:<PATH>"
+    },
+    "name": "Print chrome version"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/packages/bin/npm",
+      "install",
+      "--no-save"
+    ],
+    "cwd": "[TMP_BASE]/wct-test_tmp_1",
+    "env": {
+      "PATH": "[START_DIR]/packages/bin:<PATH>"
+    },
+    "name": "Install node modules"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/packages/bin/npm",
+      "install",
+      "-g",
+      "bower"
+    ],
+    "env": {
+      "PATH": "[START_DIR]/packages/bin:<PATH>"
+    },
+    "name": "Install bower"
+  },
+  {
+    "cmd": [
+      "bower",
+      "install"
+    ],
+    "cwd": "[TMP_BASE]/wct-test_tmp_1",
+    "env": {
+      "PATH": "[START_DIR]/packages/bin:<PATH>"
+    },
+    "name": "Install bower packages"
+  },
+  {
+    "cmd": [
+      "xvfb-run",
+      "-a",
+      "[START_DIR]/packages/wct",
+      "--base",
+      "[TMP_BASE]/wct-test_tmp_1",
+      "--chrome",
+      "[START_DIR]/packages/chrome/chrome",
+      "--prefix",
+      "test/"
+    ],
+    "cwd": "[TMP_BASE]/wct-test_tmp_1",
+    "env": {
+      "PATH": "[START_DIR]/packages/bin:<PATH>"
+    },
+    "name": "Run WCT tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[TMP_BASE]/wct-test_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "cleanup"
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
