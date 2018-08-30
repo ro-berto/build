@@ -30,17 +30,19 @@ PROPERTIES = {
 
 def _CheckoutSteps(api):
   # Checkout angle and its dependencies (specified in DEPS) using gclient.
-  api.gclient.set_config('angle')
-  api.gclient.c.got_revision_mapping['angle'] = 'got_revision'
-  # Standalone developer angle builds want the angle checkout in the same
-  # directory the .gclient file is in.  Bots want it in a directory called
-  # 'angle'.  To make both cases work, the angle DEPS file pulls deps and runs
-  # hooks relative to the variable "root" which is set to . by default and then
-  # to 'angle' on bots here:
-  api.gclient.c.solutions[0].custom_vars = {'angle_root': 'angle'}
-  api.bot_update.ensure_checkout()
-  api.gclient.runhooks()
-
+  solution_path = api.path['cache'].join('builder')
+  api.file.ensure_directory('init cache if not exists', solution_path)
+  with api.context(cwd=solution_path):
+    api.gclient.set_config('angle')
+    api.gclient.c.got_revision_mapping['angle'] = 'got_revision'
+    # Standalone developer angle builds want the angle checkout in the same
+    # directory the .gclient file is in.  Bots want it in a directory called
+    # 'angle'.  To make both cases work, the angle DEPS file pulls deps and runs
+    # hooks relative to the variable "root" which is set to . by default and then
+    # to 'angle' on bots here:
+    api.gclient.c.solutions[0].custom_vars = {'angle_root': 'angle'}
+    api.bot_update.ensure_checkout()
+    api.gclient.runhooks()
 
 def _OutPath(target_cpu, debug, clang):
   out_dir = 'debug' if debug else 'release'
