@@ -23,7 +23,11 @@
             ]
           },
           "*": {}
-        }
+        },
+        "excluded_builders": [
+          "win-dbg",
+          "win32-dbg"
+        ]
       }
     ],
     "https://build.chromium.org/p/chromium.android": [
