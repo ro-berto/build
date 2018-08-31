@@ -1246,24 +1246,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "Gathering reference values.read GN args",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -1936,24 +1918,6 @@
     "name": "Gathering reference values.build directory (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "Gathering reference values.read GN args (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -2793,24 +2757,6 @@
     "name": "Bisecting revision.build directory",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "Bisecting revision.read GN args",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -3857,24 +3803,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "Bisecting revision.read GN args (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -4380,24 +4308,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "Bisecting revision.read GN args (3)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -4897,24 +4807,6 @@
     "name": "Bisecting revision.build directory (4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "Bisecting revision.read GN args (4)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -5578,24 +5470,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "Bisecting revision.read GN args (5)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -6253,24 +6127,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "Bisecting revision.read GN args (6)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -6922,24 +6778,6 @@
     "name": "Bisecting revision.build directory (7)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "Bisecting revision.read GN args (7)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {

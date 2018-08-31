@@ -14,7 +14,6 @@ DEPS = [
   'depot_tools/gsutil',
   'depot_tools/tryserver',
   'filter',
-  'gn',
   'goma',
   'isolate',
   'perf_dashboard',
