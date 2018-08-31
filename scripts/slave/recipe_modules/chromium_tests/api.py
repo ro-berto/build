@@ -640,6 +640,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       master_config = bot_db.get_master_settings(mastername)
       legacy_build_url = self._make_legacy_build_url(master_config, mastername)
 
+    mb_path = self.m.path['checkout'].join('tools', 'mb')
+    builder_buildername = bot_db.get_bot_config(
+        mastername, buildername).get('parent_buildername', buildername)
+    self.m.gn.get_args(
+        self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
+
     self.m.archive.download_and_unzip_build(
       step_name='extract build',
       target=self.m.chromium.c.build_config_fs,
