@@ -892,6 +892,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot_config = (bot_config or
                   self.create_bot_config_object(mastername, buildername))
 
+    self._report_builders(bot_config)
+
     self.configure_build(bot_config)
     update_step, bot_db = self.prepare_checkout(bot_config)
     tests, tests_including_triggered = self.get_tests(bot_config, bot_db)
@@ -965,6 +967,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     bot_config_object = self.create_generalized_bot_config_object(
         bot_config['bot_ids'], builders=builders)
+    self._report_builders(bot_config_object)
+
     self.set_precommit_mode()
     self.configure_build(bot_config_object, override_bot_type='builder_tester')
 
@@ -1032,6 +1036,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     disable_deapply_patch = not bot_config.get('deapply_patch', True)
     return (bot_config_object, bot_update_step, affected_files, tests,
             disable_deapply_patch)
+
+  def _report_builders(self, bot_config):
+    """Reports the builders being executed by the bot."""
+    builders = bot_config.builders
+    lines = (['Using configs from the following builder%s:'
+              % ('s' if len(builders) > 1 else '')]
+             + ['%s on %s' % (b[1], b[0]) for b in builders])
+    self.m.python.succeeding_step('report builders', '<br/>'.join(lines))
 
   def _all_compile_targets(self, tests):
     """Returns the compile_targets for all the Tests in |tests|."""

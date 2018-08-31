@@ -3,6 +3,20 @@
     "cmd": [
       "python",
       "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "report builders",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Using configs from the following builder:<br/>Win7 Tests (1) on chromium.win@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",

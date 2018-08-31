@@ -29,6 +29,16 @@ class BotConfig(object):
       if not b in master_dict.get('builders', {}):
         raise Exception('No configuration present for builder %s in master %s' % (b, m))
 
+  @property
+  def builders(self):
+    """The builders to be executed by the associated bot.
+
+    Returns:
+      The list of builders to be executed as tuples of the form
+      (mastername, buildername).
+    """
+    return [(b['mastername'], b['buildername']) for b in self._bot_ids]
+
   def _consistent_get(self, getter, name, default=None):
     # This logic must be kept in sync with checkConsistentGet in
     # tests/masters_recipes_test.py . It's not feasible to otherwise write an

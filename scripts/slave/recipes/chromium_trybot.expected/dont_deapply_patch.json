@@ -3,6 +3,20 @@
     "cmd": [
       "python",
       "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "report builders",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Using configs from the following builders:<br/>GPU FYI Mac Builder on chromium.gpu.fyi<br/>GPU FYI Mac Builder on chromium.gpu.fyi<br/>GPU FYI Mac Builder on chromium.gpu.fyi@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
