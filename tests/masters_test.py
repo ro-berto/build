@@ -231,7 +231,6 @@ def main(argv):
       'master.chromium.webrtc.fyi': 'ChromiumWebRTCFYI',
       'master.chromiumos': 'ChromiumOS',
       'master.client.art': 'ART',
-      'master.client.catapult': 'Catapult',
       'master.client.crashpad': 'ClientCrashpad',
       'master.client.dart': 'Dart',
       'master.client.dart.fyi': 'DartFYI',
