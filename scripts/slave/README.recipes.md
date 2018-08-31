@@ -4000,7 +4000,7 @@ Checks that properties get to recipes from annotated_run properly
 
 [DEPS](/scripts/slave/recipes/art.py#5): [repo](#recipe_modules-repo), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/art.py#598)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/art.py#602)(api):**
 
 &mdash; **def [checkout](/scripts/slave/recipes/art.py#57)(api):**
 
@@ -4008,7 +4008,7 @@ Checks that properties get to recipes from annotated_run properly
 
 &mdash; **def [full\_checkout](/scripts/slave/recipes/art.py#62)(api):**
 
-&mdash; **def [setup\_aosp\_builder](/scripts/slave/recipes/art.py#413)(api, read_barrier):**
+&mdash; **def [setup\_aosp\_builder](/scripts/slave/recipes/art.py#417)(api, read_barrier):**
 
 &mdash; **def [setup\_host\_x86](/scripts/slave/recipes/art.py#72)(api, debug, bitness, concurrent_collector=True, generational_cc=False, heap_poisoning=False, gcstress=False, cdex_level='none'):**
 

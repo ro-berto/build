@@ -236,8 +236,6 @@ def setup_target(api,
          'JACK_SERVER': 'false',
          'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk', 'tools',
                                                    'jacks')),
-         'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
-                 api.path.pathsep + '%(PATH)s',
          'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
          'ART_TEST_FULL': 'false',
          'USE_DEX2OAT_DEBUG': 'false',
@@ -275,6 +273,14 @@ def setup_target(api,
   checkout(api)
   clobber(api)
 
+  gtest_env = env.copy()
+  gtest_env.update({ 'ART_TEST_NO_SYNC': 'true' })
+
+  test_env = gtest_env.copy()
+  test_env.update(
+      { 'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
+                api.path.pathsep + '%(PATH)s' })
+
   # Decrease the number of parallel tests, as some tests eat lots of memory.
   if debug and device == 'fugu':
     make_jobs = 1
@@ -284,25 +290,24 @@ def setup_target(api,
                               '-j8', '--target'])
 
   with api.step.defer_results():
-    with api.context(env=env):
+    with api.context(env=test_env):
       api.step('device pre-run cleanup', [art_tools.join('cleanup-buildbot-device.sh')])
 
       api.step('setup device', [art_tools.join('setup-buildbot-device.sh')])
 
+    with api.context(env=env):
       api.step('sync target', ['make', 'test-art-target-sync'])
 
     def test_logging(api, test_name):
-      with api.context(env=env):
+      with api.context(env=test_env):
         api.step(test_name + ': adb logcat',
                  ['adb', 'logcat', '-d', '-v', 'threadtime'])
         api.step(test_name + ': crashes',
                  [art_tools.join('symbolize-buildbot-crashes.sh')])
         api.step(test_name + ': adb clear log', ['adb', 'logcat', '-c'])
 
-    test_env = env.copy()
-    test_env.update({ 'ART_TEST_NO_SYNC': 'true' })
 
-    with api.context(env=test_env):
+    with api.context(env=gtest_env):
       api.step('test gtest', ['make', '-j%d' % (make_jobs),
         'test-art-target-gtest%d' % bitness])
     test_logging(api, 'test gtest')
@@ -405,7 +410,7 @@ def setup_target(api,
         api.step('test libjdwp interpreter', libjdwp_command + ['--no-jit'])
       test_logging(api, 'test libjdwp interpreter')
 
-    with api.context(env=env):
+    with api.context(env=test_env):
       api.step('tear down device', [art_tools.join('teardown-buildbot-device.sh')])
 
       api.step('device post-run cleanup', [art_tools.join('cleanup-buildbot-device.sh')])
