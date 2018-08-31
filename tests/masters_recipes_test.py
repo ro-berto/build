@@ -214,6 +214,7 @@ FAKE_BUILDERS = {
         'gpu-manual-try-android-p-pixel-2-32-deqp',
         'gpu-manual-try-android-p-pixel-2-64',
         'gpu-manual-try-android-p-pixel-2-64-deqp',
+        'try-nougat-phone-tester',
     ],
     'master.tryserver.chromium.mac': [
         # These have been migrated to LUCI.

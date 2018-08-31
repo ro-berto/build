@@ -200,6 +200,11 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'Android FYI 64 dEQP Vk Release (Pixel 2)',
       }),
+      'try-nougat-phone-tester': simple_bot({
+        'mastername': 'chromium.android',
+        'buildername': 'Android arm64 Builder (dbg)',
+        'tester': 'Nougat Phone Tester',
+      }),
     },
   },
   'tryserver.chromium.angle': {
