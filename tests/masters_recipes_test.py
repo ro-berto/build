@@ -18,7 +18,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MAIN_WATERFALL_MASTERS = [
     'master.chromium',
     'master.chromium.chrome',
-    'master.chromium.memory',
 ]
 
 
@@ -35,16 +34,6 @@ SUPPRESSIONS = {
         'Google Chrome ChromeOS',
         'Google Chrome Linux x64',
         'Google Chrome Mac',
-    ],
-    'master.chromium.memory': [
-       'Linux Chromium OS ASan LSan Builder',
-       'Linux Chromium OS ASan LSan Tests (1)',
-       'Linux ChromiumOS MSan Builder',
-       'Linux ChromiumOS MSan Tests',
-       'Linux MSan Builder',
-       'Linux MSan Tests',
-       'Mac ASan 64 Builder',
-       'Mac ASan 64 Tests (1)',
     ],
 }
 

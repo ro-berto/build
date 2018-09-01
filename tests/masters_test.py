@@ -223,7 +223,6 @@ def main(argv):
       'master.chromium.gatekeeper': 'Gatekeeper',
       'master.chromium.infra.codesearch': 'InfraCodesearch',
       'master.chromium.infra.cron': 'InfraCron',
-      'master.chromium.memory': 'ChromiumMemory',
       'master.chromium.perf': 'ChromiumPerf',
       'master.chromium.perf.fyi': 'ChromiumPerfFyi',
       'master.chromium.webkit': 'ChromiumWebkit',
