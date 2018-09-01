@@ -170,15 +170,6 @@ _AddBuildSpec('android-builder-perf', 'android', target_bits=32,
                                      'system_webview_shell_apk',],
               )
 
-# TODO(crbug.com/828465): remove 'Android arm64 Compile Perf'
-_AddBuildSpec('Android arm64 Compile Perf', 'android',
-              extra_compile_targets=['android_tools',
-                                     'cc_perftests',
-                                     'chrome_public_apk',
-                                     'gpu_perftests',
-                                     'push_apps_to_background_apk',
-                                     'system_webview_apk',
-                                     'system_webview_shell_apk',])
 # LUCI builder
 _AddBuildSpec('android_arm64-builder-perf', 'android', target_bits=64,
               extra_compile_targets=['android_tools',
