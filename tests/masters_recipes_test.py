@@ -43,6 +43,8 @@ SUPPRESSIONS = {
        'Linux ChromiumOS MSan Tests',
        'Linux MSan Builder',
        'Linux MSan Tests',
+       'Mac ASan 64 Builder',
+       'Mac ASan 64 Tests (1)',
     ],
 }
 
@@ -108,6 +110,8 @@ FAKE_BUILDERS = {
         'Linux ASan Tests (sandboxed)',
         'Linux TSan Builder',
         'Linux TSan Tests',
+        'Mac ASan 64 Builder',
+        'Mac ASan 64 Tests (1)',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'win-asan',
     ],
@@ -221,6 +225,8 @@ FAKE_BUILDERS = {
         'mac_chromium_10.10',
         'mac_chromium_10.12_rel_ng',
         'mac_chromium_10.13_rel_ng',
+        'mac_chromium_archive_rel_ng',
+        'mac_chromium_asan_rel_ng',
         'mac_chromium_compile_dbg_ng',
         'mac_chromium_compile_rel_ng',
         'mac_chromium_dbg_ng',
