@@ -102,10 +102,17 @@ def _BuildSteps(api, out_dir, clang):
 
 
 def RunSteps(api, target_cpu, debug, clang):
-  _CheckoutSteps(api)
-  out_dir = _OutPath(target_cpu, debug, clang)
-  _GNGenBuilds(api, target_cpu, debug, clang, out_dir)
-  _BuildSteps(api, out_dir, clang)
+
+  env = {}
+  if api.platform.is_win:
+    env['DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT'] = (
+        api.path['cache'].join('win_toolchain'))
+
+  with api.context(env=env):
+    _CheckoutSteps(api)
+    out_dir = _OutPath(target_cpu, debug, clang)
+    _GNGenBuilds(api, target_cpu, debug, clang, out_dir)
+    _BuildSteps(api, out_dir, clang)
 
 
 def GenTests(api):

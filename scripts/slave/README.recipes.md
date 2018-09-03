@@ -81,7 +81,6 @@
   * [boringssl_docs](#recipes-boringssl_docs) &mdash; Generates BoringSSL documentation and uploads it to Cloud Storage.
   * [build:examples/full](#recipes-build_examples_full)
   * [catapult](#recipes-catapult)
-  * [catapult_cron](#recipes-catapult_cron)
   * [chromedriver](#recipes-chromedriver)
   * [chromedriver:examples/full](#recipes-chromedriver_examples_full)
   * [chromite:examples/full](#recipes-chromite_examples_full)
@@ -4000,7 +3999,7 @@ Checks that properties get to recipes from annotated_run properly
 
 [DEPS](/scripts/slave/recipes/art.py#5): [repo](#recipe_modules-repo), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/art.py#603)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/art.py#602)(api):**
 
 &mdash; **def [checkout](/scripts/slave/recipes/art.py#57)(api):**
 
@@ -4100,11 +4099,6 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 [DEPS](/scripts/slave/recipes/catapult.py#5): [chromium](#recipe_modules-chromium), [gae\_sdk](#recipe_modules-gae_sdk), [wct](#recipe_modules-wct), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/generator\_script][recipe_engine/recipe_modules/generator_script], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/catapult.py#60)(api, platform):**
-### *recipes* / [catapult\_cron](/scripts/slave/recipes/catapult_cron.py)
-
-[DEPS](/scripts/slave/recipes/catapult_cron.py#5): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/catapult_cron.py#22)(api):**
 ### *recipes* / [chromedriver](/scripts/slave/recipes/chromedriver.py)
 
 [DEPS](/scripts/slave/recipes/chromedriver.py#8): [adb](#recipe_modules-adb), [archive](#recipe_modules-archive), [chromedriver](#recipe_modules-chromedriver), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [commit\_position](#recipe_modules-commit_position), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
