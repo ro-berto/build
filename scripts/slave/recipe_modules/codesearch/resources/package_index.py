@@ -251,6 +251,7 @@ class IndexPack(object):
       unit_dictionary['output_key'] = output_file
       unit_dictionary['v_name'] = {
           'corpus': self.corpus,
+          'language': 'c++',
       }
       # Add the VName root only if it was specified.
       if self.root:

@@ -145,6 +145,8 @@ class PackageIndexTest(unittest.TestCase):
                         CORPUS)
       self.assertEquals(compilation_unit_dictionary['v_name']['root'],
                         VNAME_ROOT)
+      self.assertEquals(compilation_unit_dictionary['v_name']['language'],
+                        'c++')
       self.assertEquals(compilation_unit_dictionary['source_file'],
                         ['../../../test.cc'])
       self.assertEquals(compilation_unit_dictionary['output_key'], 'test.o')
