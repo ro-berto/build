@@ -245,7 +245,7 @@ def setup_target(api,
   if concurrent_collector:
     env.update({ 'ART_USE_READ_BARRIER' : 'true' })
   else:
-    env.update({ 'ART_USE_READ_BARRIER' : 'false' })
+    env.update({ 'ART_USE_READ_BARRIER' : 'false' })  # pragma: no cover
 
   # Note: Generational CC only makes sense when read barriers are used
   # (i.e. when the Concurrent Copying collector is used).
@@ -533,9 +533,7 @@ _CONFIG_MAP = {
         'device': 'fugu',
         'debug': True,
       },
-      # Generational CC ARMv7 (debug) configuration.
-      # TODO: Rename (this is no longer a CMS configuration).
-      'angler-armv7-cms': {
+      'angler-armv7-generational-cc': {
         'serial': '84B7N15B03000329',
         'device': 'angler-armv7',
         'debug': True,
@@ -552,11 +550,12 @@ _CONFIG_MAP = {
         'device': 'angler-armv8',
         'debug': True,
       },
-      'angler-armv8-cms': {
+      'angler-armv8-generational-cc': {
         'serial': '84B7N15B03000641',
         'device': 'angler-armv8',
         'debug': True,
-        'concurrent_collector': False,
+        'concurrent_collector': True,
+        'generational_cc': True,
       },
       'bullhead-armv8-gcstress-ndebug': {
         'serial': '00c5a4683f54164f',
