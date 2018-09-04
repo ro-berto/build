@@ -439,7 +439,7 @@ def GenTests(api):
     api.platform('linux', 64) +
     props(mastername='tryserver.v8',
           buildername='v8_linux_chromium_gn_rel') +
-    api.properties(revision='22135') +
+    api.properties(revision='a' * 40) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
         api.json.output({

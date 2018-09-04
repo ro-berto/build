@@ -698,9 +698,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"mb_test\", \"buildnumber\": 571, \"git_revision\": \"asdfawe2342\", \"got_revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"got_revision_cp\": \"refs/heads/master@{#291141}\", \"mastername\": \"chromium.testing.master\", \"project\": \"src\", \"recipe\": \"cronet:examples/full\", \"repository\": \"https://chromium.googlesource.com/chromium/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"mb_test\", \"buildnumber\": 571, \"git_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"got_revision_cp\": \"refs/heads/master@{#291141}\", \"mastername\": \"chromium.testing.master\", \"project\": \"src\", \"recipe\": \"cronet:examples/full\", \"repository\": \"https://chromium.googlesource.com/chromium/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"mb_test\", \"buildnumber\": 571, \"git_revision\": \"asdfawe2342\", \"got_revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"got_revision_cp\": \"refs/heads/master@{#291141}\", \"mastername\": \"chromium.testing.master\", \"project\": \"src\", \"recipe\": \"cronet:examples/full\", \"repository\": \"https://chromium.googlesource.com/chromium/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"mb_test\", \"buildnumber\": 571, \"git_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"got_revision_cp\": \"refs/heads/master@{#291141}\", \"mastername\": \"chromium.testing.master\", \"project\": \"src\", \"recipe\": \"cronet:examples/full\", \"repository\": \"https://chromium.googlesource.com/chromium/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--test-type=sizes",
       "--builder-name=mb_test",
       "--slave-name=test_bot",
@@ -738,9 +738,9 @@
       "android",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"mb_test\", \"buildnumber\": 571, \"git_revision\": \"asdfawe2342\", \"got_revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"got_revision_cp\": \"refs/heads/master@{#291141}\", \"mastername\": \"chromium.testing.master\", \"project\": \"src\", \"recipe\": \"cronet:examples/full\", \"repository\": \"https://chromium.googlesource.com/chromium/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"mb_test\", \"buildnumber\": 571, \"git_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"got_revision_cp\": \"refs/heads/master@{#291141}\", \"mastername\": \"chromium.testing.master\", \"project\": \"src\", \"recipe\": \"cronet:examples/full\", \"repository\": \"https://chromium.googlesource.com/chromium/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"mb_test\", \"buildnumber\": 571, \"git_revision\": \"asdfawe2342\", \"got_revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"got_revision_cp\": \"refs/heads/master@{#291141}\", \"mastername\": \"chromium.testing.master\", \"project\": \"src\", \"recipe\": \"cronet:examples/full\", \"repository\": \"https://chromium.googlesource.com/chromium/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"mb_test\", \"buildnumber\": 571, \"git_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"got_revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"got_revision_cp\": \"refs/heads/master@{#291141}\", \"mastername\": \"chromium.testing.master\", \"project\": \"src\", \"recipe\": \"cronet:examples/full\", \"repository\": \"https://chromium.googlesource.com/chromium/src\", \"revision\": \"4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=resource_sizes (CronetSample.apk)",
@@ -1771,7 +1771,7 @@
       "--got-revision-cp",
       "refs/heads/master@{#291141}",
       "--git-revision",
-      "asdfawe2342"
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "name": "Perf Dashboard Upload",
     "~followup_annotations": [

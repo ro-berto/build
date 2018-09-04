@@ -19,7 +19,7 @@
       "--revision",
       "node.js@vee-eight-lkgr",
       "--revision",
-      "v8@deadbeef"
+      "v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_integration",
     "env_prefixes": {
@@ -35,7 +35,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"node.js\": \"vee-eight-lkgr\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"v8\": \"deadbeef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"v8\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"node.js\": {@@@",

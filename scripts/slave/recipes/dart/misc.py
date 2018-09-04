@@ -65,10 +65,10 @@ def GenTests(api):
       api.properties.generic(
         mastername='client.dart',
         buildername='androidvm-linux-be',
-        revision='hash_of_revision'))
+        revision='a' * 40))
    yield (
       api.test('pub-win-dev') + api.platform('win', 32) +
       api.properties.generic(
         mastername='client.dart',
         buildername='pub-win-dev',
-        revision='hash_of_revision'))
+        revision='a' * 40))

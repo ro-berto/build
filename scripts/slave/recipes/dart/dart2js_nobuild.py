@@ -137,4 +137,4 @@ def GenTests(api):
       api.properties.generic(
         mastername='client.dart',
         buildername='dart2js-win7-ie11-3-5-dev',
-        revision='hash_of_revision'))
+        revision='a' * 40))

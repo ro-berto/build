@@ -108,7 +108,7 @@ def GenTests(api):
 
     if revision:
       test += api.properties(revision=revision,
-                             git_revision='git' + revision,
+                             git_revision='a' * 40 + revision,
                              got_revision_cp=revision)
     if bot_type == 'tester':
       parent_rev = parent_got_revision or revision
@@ -134,7 +134,7 @@ def GenTests(api):
   for mastername in builders.keys():
     master_config = builders[mastername]
     for buildername in master_config['builders'].keys():
-      yield generate_builder(mastername, buildername, revision='12345')
+      yield generate_builder(mastername, buildername, revision='a' * 40)
 
   mastername = 'tryserver.webrtc'
   buildername = 'linux_compile_rel'
@@ -149,10 +149,10 @@ def GenTests(api):
   buildername = 'Linux64 Debug'
   yield generate_builder(mastername, buildername, revision=None,
                          suffix='_forced')
-  yield generate_builder(mastername, buildername, revision='12345',
+  yield generate_builder(mastername, buildername, revision='a' * 40,
                          failing_test='rtc_unittests',
                          suffix='_failing_test')
-  yield generate_builder(mastername, 'Android32 (M Nexus5X)', revision='12345',
+  yield generate_builder(mastername, 'Android32 (M Nexus5X)', revision='a' * 40,
                          fail_android_archive=True, suffix='_failing_archive')
 
   mastername = 'client.webrtc.perf'
@@ -161,9 +161,9 @@ def GenTests(api):
 
   buildername = 'Android32 Tests (L Nexus5)'
   yield generate_builder(mastername, buildername, revision=None,
-                         parent_got_revision='12345', suffix='_forced')
+                         parent_got_revision='a' * 40, suffix='_forced')
   yield generate_builder(mastername, buildername, revision=None,
                          suffix='_forced_invalid')
-  yield generate_builder(mastername, buildername, revision='12345',
+  yield generate_builder(mastername, buildername, revision='a' * 40,
                          failing_test='webrtc_perf_tests',
                          suffix='_failing_test')

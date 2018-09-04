@@ -17,7 +17,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@deadbeef"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "env_suffixes": {
       "PATH": [
@@ -31,7 +31,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"deadbeef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -447,9 +447,9 @@
       "Debug",
       "--no-xvfb",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"buildername\": \"Linux32 Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"bot_id\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"buildername\": \"Linux32 Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"bot_id\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"buildername\": \"Linux32 Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"bot_id\"}",
+      "{\"BUILD_CONFIG\": \"Debug\", \"bot_id\": \"bot_id\", \"buildername\": \"Linux32 Debug\", \"buildnumber\": 1337, \"mastername\": \"client.libyuv\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"bot_id\"}",
       "--step-name=libyuv_unittest",
       "--builder-name=Linux32 Debug",
       "--slave-name=bot_id",

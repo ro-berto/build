@@ -17,7 +17,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@builder-webrtc-tot"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "env_prefixes": {
       "PATH": [
@@ -31,7 +31,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"builder-webrtc-tot\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -177,9 +177,9 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"Linux Tester\", \"buildnumber\": 123, \"mastername\": \"chromium.webrtc\", \"parent_got_revision\": \"builder-webrtc-tot\", \"recipe\": \"chromium_tests:tests/steps/webrtc_perf_test\", \"slavename\": \"test_bot_id\"}",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"Linux Tester\", \"buildnumber\": 123, \"mastername\": \"chromium.webrtc\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"recipe\": \"chromium_tests:tests/steps/webrtc_perf_test\", \"slavename\": \"test_bot_id\"}",
       "--build-properties",
-      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"Linux Tester\", \"buildnumber\": 123, \"mastername\": \"chromium.webrtc\", \"parent_got_revision\": \"builder-webrtc-tot\", \"recipe\": \"chromium_tests:tests/steps/webrtc_perf_test\", \"slavename\": \"test_bot_id\"}",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"Linux Tester\", \"buildnumber\": 123, \"mastername\": \"chromium.webrtc\", \"parent_got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"recipe\": \"chromium_tests:tests/steps/webrtc_perf_test\", \"slavename\": \"test_bot_id\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=test_name",

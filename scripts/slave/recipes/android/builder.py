@@ -230,5 +230,5 @@ def GenTests(api):
             mastername=mastername,
             issue='8675309',
             patchset='1',
-            revision='267739',
-            got_revision='267739'))
+            revision='a' * 40,
+            got_revision='a' * 40))

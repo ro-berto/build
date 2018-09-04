@@ -342,7 +342,7 @@ def GenTests(api):
               mastername=mastername,
               buildername=buildername,
               branch='refs/heads/master',
-              revision='deadbeef',
+              revision='a' * 40,
               path_config='kitchen',
           ) +
           api.platform(bot_config['testing']['platform'], 64) +
@@ -355,7 +355,7 @@ def GenTests(api):
       mastername='client.v8.fyi',
       buildername='V8 Linux64 - node.js integration',
       branch='refs/heads/master',
-      revision='deadbeef',
+      revision='a' * 40,
       path_config='kitchen',
     ) +
     api.runtime(is_luci=True, is_experimental=True) +
@@ -368,7 +368,7 @@ def GenTests(api):
       mastername='client.v8.fyi',
       buildername='V8 Linux64 - node.js integration',
       branch='refs/heads/master',
-      revision='deadbeef',
+      revision='a' * 40,
       path_config='kitchen',
     ) +
     api.override_step_data(

@@ -412,7 +412,7 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
                       bisect_config=bisect_config) + api.properties(
                           job_name='f7a7b4135624439cbd27fdd5133d74ec') +
              api.bisect_tester(tempfile='/tmp/dummy') +
-             api.properties(parent_got_revision='1111111') + api.properties(
+             api.properties(parent_got_revision='a' * 40) + api.properties(
                  parent_build_archive_url='gs://test-domain/test-archive.zip'))
 
       local_bisect_config = {
@@ -560,7 +560,7 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
         bisect_config=local_bisect_config,
         job_name='f7a7b4135624439cbd27fdd5133d74ec',
         local_test=True,
-        parent_got_revision='1111111',
+        parent_got_revision='a' * 40,
         parent_build_archive_url='gs://test-domain/test-archive.zip') +
     api.bisect_tester(tempfile='/tmp/dummy') +
     api.override_step_data('device_status',
@@ -592,7 +592,7 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
         bisect_config=local_bisect_config,
         job_name='f7a7b4135624439cbd27fdd5133d74ec',
         local_test=True,
-        parent_got_revision='1111111',
+        parent_got_revision='a' * 40,
         parent_build_archive_url='gs://test-domain/test-archive.zip') +
     api.bisect_tester(tempfile='/tmp/dummy') +
     api.override_step_data('device_status', api.json.output([])) +
@@ -617,7 +617,7 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
         bisect_config=local_bisect_config,
         job_name='f7a7b4135624439cbd27fdd5133d74ec',
         local_test=True,
-        parent_got_revision='1111111',
+        parent_got_revision='a' * 40,
         parent_build_archive_url='gs://test-domain/test-archive.zip') +
     api.bisect_tester(tempfile='/tmp/dummy') +
     api.override_step_data('device_status',
@@ -659,7 +659,7 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
       },
         job_name='f7a7b4135624439cbd27fdd5133d74ec',
         local_test=True,
-        parent_got_revision='1111111',
+        parent_got_revision='a' * 40,
         parent_build_archive_url='gs://test-domain/test-archive.zip') +
     api.bisect_tester(tempfile='/tmp/dummy') +
     api.override_step_data('device_status',

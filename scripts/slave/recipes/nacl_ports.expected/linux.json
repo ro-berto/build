@@ -17,7 +17,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@abcd"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "env_prefixes": {
       "PATH": [
@@ -31,7 +31,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"abcd\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -89,7 +89,7 @@
       "BUILDBOT_BUILDERNAME": "linux-glibc-0",
       "BUILDBOT_GOT_REVISION": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "BUILDBOT_MASTERNAME": "client.nacl.ports",
-      "BUILDBOT_REVISION": "abcd",
+      "BUILDBOT_REVISION": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "BUILDBOT_SLAVE_TYPE": "BuilderTester"
     },
     "name": "annotated steps"

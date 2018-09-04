@@ -200,7 +200,7 @@ def GenTests(api):
 
   yield (api.test('basic-win') + api.platform('win', 64) + api.properties(
       buildername='dart2js-win10-debug-x64-firefox',
-      revision='revision-foo',
+      revision='a' * 40,
       parent_fileset='isolate_hash_123',
       parent_fileset_name='nameoffileset') +
       api.step_data('upload testing fileset fileset1',

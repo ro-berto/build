@@ -17,7 +17,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "native_client@abcd"
+      "native_client@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "env_prefixes": {
       "PATH": [
@@ -31,7 +31,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"native_client\": \"abcd\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"native_client\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"native_client\": {@@@",
@@ -91,7 +91,7 @@
       "BUILDBOT_BUILDERNAME": "oneiric_32-newlib-arm_hw-pnacl-panda-dbg",
       "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
       "BUILDBOT_MASTERNAME": "client.nacl",
-      "BUILDBOT_REVISION": "abcd",
+      "BUILDBOT_REVISION": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "BUILDBOT_SLAVE_TYPE": "BuilderTester",
       "BUILDBOT_TRIGGERED_BY_BUILDERNAME": "precise_64-newlib-arm_qemu-pnacl-dbg",
       "BUILDBOT_TRIGGERED_BY_BUILDNUMBER": "1",

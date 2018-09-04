@@ -30,7 +30,6 @@
       "retry",
       "fetch",
       "origin",
-      "1234abcd",
       "--recurse-submodules",
       "--progress"
     ],
@@ -46,7 +45,7 @@
       "git",
       "checkout",
       "-f",
-      "FETCH_HEAD"
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "cwd": "[START_DIR]/flutter",
     "infra_step": true,

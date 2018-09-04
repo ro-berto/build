@@ -167,14 +167,15 @@ def GenTests(api):
         api.properties.generic(mastername=mastername,
                                buildername=buildername,
                                branch='refs/branch-heads/3.4',
-                               revision='deadbeef',
+                               revision='a' * 40,
                                path_config='kitchen') +
         api.platform(bot_config['testing']['platform'], 64) +
         api.v8.version_file(17, 'head') +
         api.override_step_data(
             'git describe', api.raw_io.stream_output('3.4.3.17')) +
         api.v8.check_param_equals(
-            'bot_update', '--revision', 'v8@refs/branch-heads/3.4:deadbeef') +
+            'bot_update', '--revision',
+            'v8@refs/branch-heads/3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') +
         api.post_process(
             MustRun, 'clobber', 'gclient runhooks', 'gn', 'compile',
             'zipping', 'gsutil upload', 'archive link')
@@ -210,7 +211,7 @@ def GenTests(api):
       api.test(api.v8.test_name(mastername, buildername, 'no_branch')) +
       api.properties.generic(mastername=mastername,
                              buildername=buildername,
-                             revision='deadbeef',
+                             revision='a' * 40,
                              path_config='kitchen') +
       api.post_process(MustRun, 'Skipping due to missing release branch.') +
       api.post_process(
@@ -227,7 +228,7 @@ def GenTests(api):
       api.properties.generic(mastername=mastername,
                              buildername=buildername,
                              branch='refs/branch-heads/3.4',
-                             revision='deadbeef',
+                             revision='a' * 40,
                              path_config='kitchen') +
       api.v8.version_file(17, 'head') +
       api.override_step_data(
@@ -246,7 +247,7 @@ def GenTests(api):
       api.test(api.v8.test_name(mastername, buildername, 'update_beta')) +
       api.properties.generic(mastername=mastername, buildername=buildername,
                              branch='refs/branch-heads/3.4',
-                             revision='deadbeef', path_config='kitchen') +
+                             revision='a' * 40, path_config='kitchen') +
       api.v8.version_file(0, 'head') +
       api.override_step_data(
           'git describe', api.raw_io.stream_output('3.4.3')) +
@@ -259,7 +260,7 @@ def GenTests(api):
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'canary')) +
       api.properties.generic(mastername=mastername, buildername=buildername,
-                             branch='refs/heads/3.4.3', revision='deadbeef',
+                             branch='refs/heads/3.4.3', revision='a' * 40,
                              path_config='kitchen') +
       api.v8.version_file(1, 'head') +
       api.override_step_data(

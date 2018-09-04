@@ -51,7 +51,7 @@
       "--revision",
       "src@origin/lkgr",
       "--revision",
-      "src/v8@267739"
+      "src/v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "env_prefixes": {
       "PATH": [
@@ -66,7 +66,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": \"origin/lkgr\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": \"267739\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -690,12 +690,12 @@
       "----",
       "cp",
       "[START_DIR]/src/out/build_product.zip",
-      "gs://v8-android/v8_android_perf_rel/full-build-linux_267739.zip"
+      "gs://v8-android/v8_android_perf_rel/full-build-linux_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload_build_product",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/v8-android/v8_android_perf_rel/full-build-linux_267739.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/v8-android/v8_android_perf_rel/full-build-linux_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.zip@@@"
     ]
   },
   {

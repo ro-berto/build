@@ -19,7 +19,7 @@
       "--patch_ref",
       "https://chromium.googlesource.com/libyuv@refs/changes/89/456789/12",
       "--revision",
-      "src@deadbeef"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "env_suffixes": {
       "PATH": [
@@ -33,7 +33,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"deadbeef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",

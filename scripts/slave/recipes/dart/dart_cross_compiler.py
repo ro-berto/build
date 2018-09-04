@@ -84,10 +84,10 @@ def GenTests(api):
     api.platform('linux', 64) +
     api.properties.generic(mastername='client.dart',
                            buildername='cross-arm-vm-linux-release-recipe-be',
-                           revision='abcd1234efef5656'))
+                           revision='a' * 40))
   yield (
     api.test('clobber-coverage') +
     api.platform('linux', 64) +
     api.properties.generic(mastername='client.dart',
                            buildername='test-coverage-stable',
-                           revision='abcd1234efef5656'))
+                           revision='a' * 40))

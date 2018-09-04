@@ -49,7 +49,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@267739"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "env_prefixes": {
       "PATH": [
@@ -63,7 +63,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"267739\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -649,9 +649,9 @@
       "android",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"267739\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"267739\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"267739\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"267739\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=resource_sizes (ChromeModernPublic.apk)",
@@ -720,9 +720,9 @@
       "android",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"267739\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"267739\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"267739\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"267739\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=resource_sizes (ChromePublic.apk)",
@@ -791,9 +791,9 @@
       "android",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"267739\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"267739\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"267739\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"267739\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=resource_sizes (MonochromePublic.apk)",
@@ -862,9 +862,9 @@
       "android",
       "--no-xvfb",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"267739\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"267739\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"267739\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"267739\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=resource_sizes (SystemWebView.apk)",
@@ -1003,12 +1003,12 @@
       "----",
       "cp",
       "[START_DIR]/src/out/build_product.zip",
-      "gs://chrome-perf/Android Builder/full-build-linux_267739.zip"
+      "gs://chrome-perf/Android Builder/full-build-linux_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload_build_product",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/Android Builder/full-build-linux_267739.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-perf/Android Builder/full-build-linux_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.zip@@@"
     ]
   },
   {

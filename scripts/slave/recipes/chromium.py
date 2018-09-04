@@ -569,7 +569,7 @@ def GenTests(api):
                            got_revision_cp='refs/heads/master@{#291141}',
                            buildnumber='1234',
                            version='v23523',
-                           git_revision='asdfawe2342') +
+                           git_revision='a' * 40) +
 
     api.properties(
       swarm_hashes={
@@ -1418,7 +1418,7 @@ def GenTests(api):
     api.test('dynamic_gtest_memory_builder') +
     api.properties.generic(mastername='chromium.memory',
                            buildername='Linux ASan LSan Builder',
-                           revision='123456') +
+                           revision='a' * 40) +
     api.platform('linux', 64) +
     # The builder should build 'browser_tests', because there exists a child
     # tester that uses that test.

@@ -19,18 +19,18 @@ def RunSteps(api):
 
 def GenTests(api):
   yield api.test('affected_files_in_src') + api.properties(
-      revision='r1',
+      revision='a' * 40,
       solution_name='src',
   )
   yield api.test('affected_files_third_party') + api.properties(
-      revision='r1',
+      revision='a' * 40,
       solution_name='src/third_party/pdfium',
   )
   yield (
       api.test('affected_files_on_win') +
       api.platform.name('win') +
       api.properties(
-          revision='r1',
+          revision='a' * 40,
           solution_name='src\\third_party\\pdfium',
       )
   )

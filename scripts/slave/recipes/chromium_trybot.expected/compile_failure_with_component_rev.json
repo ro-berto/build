@@ -53,7 +53,7 @@
       "--revision",
       "src@origin/lkgr",
       "--revision",
-      "src/v8@22135"
+      "src/v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel",
     "env": {
@@ -72,7 +72,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": \"origin/lkgr\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": \"22135\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",

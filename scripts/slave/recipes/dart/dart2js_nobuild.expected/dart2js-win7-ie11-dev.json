@@ -17,7 +17,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "sdk@hash_of_revision"
+      "sdk@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "env_prefixes": {
       "PATH": [
@@ -31,7 +31,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"hash_of_revision\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
@@ -81,7 +81,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "gs://dart-archive/channels/dev/raw/hash/hash_of_revision/sdk/dartsdk-windows-x64-release.zip",
+      "gs://dart-archive/channels/dev/raw/hash/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/sdk/dartsdk-windows-x64-release.zip",
       "[START_DIR]\\sdk\\sdk.zip"
     ],
     "cwd": "[START_DIR]\\sdk",

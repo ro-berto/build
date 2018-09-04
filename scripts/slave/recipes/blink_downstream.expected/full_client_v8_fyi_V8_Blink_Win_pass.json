@@ -34,7 +34,7 @@
       "--revision",
       "src@HEAD",
       "--revision",
-      "src/v8@20123"
+      "src/v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Blink_Win",
     "env_prefixes": {
@@ -50,7 +50,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": \"20123\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -579,9 +579,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Win\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Win\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Win\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"20123\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Win\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=webkit_unit_tests",
       "--builder-name=V8-Blink Win",
       "--slave-name=test_bot",

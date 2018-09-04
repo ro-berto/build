@@ -80,6 +80,6 @@ def GenTests(api):
       project='src',
       got_revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
       got_revision_cp='refs/heads/master@{#291141}',
-      git_revision='asdfawe2342',
+      git_revision='a' * 40
     )
     yield api.test(bot_id) + props

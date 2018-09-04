@@ -83,4 +83,4 @@ def GenTests(api):
     api.platform('linux', 64) +
     api.properties.generic(mastername='client.dart',
                            buildername='target-arm-vm-linux-release-be',
-                           revision='abcd1234efef5656'))
+                           revision='a' * 40))

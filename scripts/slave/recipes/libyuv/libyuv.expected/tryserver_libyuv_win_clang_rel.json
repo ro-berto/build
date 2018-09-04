@@ -19,7 +19,7 @@
       "--patch_ref",
       "https://chromium.googlesource.com/libyuv@refs/changes/89/456789/12",
       "--revision",
-      "src@deadbeef"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "env_suffixes": {
       "PATH": [
@@ -33,7 +33,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"deadbeef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -475,9 +475,9 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"buildername\": \"win_clang_rel\", \"buildnumber\": 1337, \"mastername\": \"tryserver.libyuv\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"libyuv\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/libyuv\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"buildername\": \"win_clang_rel\", \"buildnumber\": 1337, \"mastername\": \"tryserver.libyuv\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"libyuv\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/libyuv\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"BUILD_CONFIG\": \"Release\", \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"buildername\": \"win_clang_rel\", \"buildnumber\": 1337, \"mastername\": \"tryserver.libyuv\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"libyuv\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/libyuv\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"deadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"BUILD_CONFIG\": \"Release\", \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"bot_id\", \"buildername\": \"win_clang_rel\", \"buildnumber\": 1337, \"mastername\": \"tryserver.libyuv\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"libyuv\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/libyuv\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"recipe\": \"libyuv/libyuv\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--step-name=libyuv_unittest",
       "--builder-name=win_clang_rel",
       "--slave-name=bot_id",

@@ -598,7 +598,7 @@ def GenTests(api):
   yield (
     api.test('mac_cannot_find_xcode') +
     api.platform('mac', 64) +
-    api.properties(revision='1234abcd') +
+    api.properties(revision='a' * 40) +
     api.properties(clobber='') +
     api.properties(buildername='Mac Engine') +
     api.step_data('set_xcode_version', api.json.output({

@@ -3,8 +3,8 @@
     "cmd": [
       "git",
       "diff",
-      "r1~1",
-      "r1",
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa~1",
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--name-only"
     ],
     "cwd": "[TMP_BASE]/fake_checkout_tmp_1",

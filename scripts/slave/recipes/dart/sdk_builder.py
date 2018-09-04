@@ -80,14 +80,14 @@ def GenTests(api):
     api.test('dart-sdk-linux-be') + api.platform('linux', 64) +
     api.properties.generic(mastername='client.dart',
                            buildername='dart-sdk-linux-be',
-                           revision='abcd1234efef5656'))
+                           revision='a' * 40))
   yield (
     api.test('dart-sdk-windows-dev') + api.platform('win', 32) +
     api.properties.generic(mastername='client.dart',
                            buildername='dart-sdk-windows-dev',
-                           revision='abcd1234efef5656'))
+                           revision='a' * 40))
   yield (
     api.test('dart-sdk-mac-stable') + api.platform('mac', 64) +
     api.properties.generic(mastername='client.dart',
                            buildername='dart-sdk-mac-stable',
-                           revision='abcd1234efef5656'))
+                           revision='a' * 40))

@@ -200,7 +200,7 @@ def GenTests(api):
       branch='master',
       project='src',
       got_revision_cp='refs/heads/master@{#291141}',
-      git_revision='asdfawe2342',
+      git_revision='a' * 40,
     )
     yield api.test(_sanitize_nonalpha(bot_id)) + props
 

@@ -31,7 +31,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@123456"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -48,7 +48,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"123456\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -684,9 +684,9 @@
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Linux ASan LSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"recipe\": \"chromium\", \"revision\": \"123456\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Linux ASan LSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"recipe\": \"chromium\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Linux ASan LSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"recipe\": \"chromium\", \"revision\": \"123456\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Linux ASan LSan Builder\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"recipe\": \"chromium\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"

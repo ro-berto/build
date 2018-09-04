@@ -17,7 +17,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "sdk@abcd1234efef5656"
+      "sdk@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "env_prefixes": {
       "PATH": [
@@ -31,7 +31,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"abcd1234efef5656\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
@@ -106,25 +106,25 @@
       {
         "builder_name": "dart2js-win7-ie11-1-4-dev",
         "properties": {
-          "revision": "abcd1234efef5656"
+          "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         }
       },
       {
         "builder_name": "dart2js-win7-ie11-2-4-dev",
         "properties": {
-          "revision": "abcd1234efef5656"
+          "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         }
       },
       {
         "builder_name": "dart2js-win7-ie11-3-4-dev",
         "properties": {
-          "revision": "abcd1234efef5656"
+          "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         }
       },
       {
         "builder_name": "dart2js-win7-ie11-4-4-dev",
         "properties": {
-          "revision": "abcd1234efef5656"
+          "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         }
       }
     ],

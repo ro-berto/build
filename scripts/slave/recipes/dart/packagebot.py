@@ -66,7 +66,7 @@ def GenTests(api):
       api.properties.generic(
         mastername='client.dart.packages',
         buildername='packages-linux-async',
-        revision='hash_of_revision',
+        revision='a' * 40,
         project='package-bots',
         target='async',
         repo='https://github.com/dart-lang/async.git'))
@@ -75,7 +75,7 @@ def GenTests(api):
       api.properties.generic(
         mastername='client.dart.packages',
         buildername='packages-windows-intl',
-        revision='hash_of_revision',
+        revision='a' * 40,
         project='args',
         target='intl',
         repo='https://github.com/dart-lang/intl.git'))

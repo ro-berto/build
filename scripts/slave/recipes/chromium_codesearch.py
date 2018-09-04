@@ -239,7 +239,7 @@ def GenTests(api):
         api.test('full_%s_with_revision' % (_sanitize_nonalpha(buildername))) +
         api.properties.generic(buildername=buildername,
                                mastername='chromium.infra.codesearch') +
-        api.properties(root_solution_revision='deadbeef',
+        api.properties(root_solution_revision='a' * 40,
                        root_solution_revision_timestamp=1531887759)
     )
 

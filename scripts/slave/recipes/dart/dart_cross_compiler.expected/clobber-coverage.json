@@ -17,7 +17,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "sdk@abcd1234efef5656"
+      "sdk@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "env_prefixes": {
       "PATH": [
@@ -31,7 +31,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"abcd1234efef5656\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
@@ -87,7 +87,7 @@
     "cmd": [
       "tar",
       "-cjf",
-      "cross_build_x64_release_abcd1234efef5656.tar.bz2",
+      "cross_build_x64_release_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.tar.bz2",
       "--exclude=**/obj",
       "--exclude=**/obj.host",
       "--exclude=**/obj.target",
@@ -108,8 +108,8 @@
       "cp",
       "-a",
       "public-read",
-      "cross_build_x64_release_abcd1234efef5656.tar.bz2",
-      "gs://dart-cross-compiled-binaries/cross_build_x64_release_abcd1234efef5656.tar.bz2"
+      "cross_build_x64_release_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.tar.bz2",
+      "gs://dart-cross-compiled-binaries/cross_build_x64_release_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.tar.bz2"
     ],
     "cwd": "[START_DIR]/sdk",
     "infra_step": true,

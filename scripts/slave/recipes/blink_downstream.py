@@ -195,7 +195,7 @@ def GenTests(api):
     return (
       api.properties.generic(mastername=mastername,
                              buildername=buildername,
-                             revision='20123',
+                             revision='a' * 40,
                              path_config='kitchen')
     )
 

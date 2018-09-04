@@ -89,7 +89,7 @@ def GenTests(api):
 
   for mastername, master_config in builders.iteritems():
     for buildername in master_config['builders'].keys():
-      yield generate_builder(mastername, buildername, revision='deadbeef')
+      yield generate_builder(mastername, buildername, revision='a' * 40)
 
   # Forced builds (not specifying any revision) and test failures.
   mastername = 'client.libyuv'

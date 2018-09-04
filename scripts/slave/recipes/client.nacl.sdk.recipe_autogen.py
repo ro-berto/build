@@ -129,44 +129,44 @@ def GenTests(api):
     yield (api.test('linux_sdk_multi') + api.properties(
         mastername='client.nacl.sdk') + api.properties(
             buildername='linux-sdk-multi') +
-           api.properties(revision='123456789abcdef') + api.properties(
-               got_revision='123456789abcdef') + api.properties(
+           api.properties(revision='a' * 40) + api.properties(
+               got_revision='a' * 40) + api.properties(
                    buildnumber='42') + api.properties(bot_id='TestSlave'))
     yield (api.test('mac_sdk_multi') + api.properties(
         mastername='client.nacl.sdk') + api.properties(
             buildername='mac-sdk-multi') +
-           api.properties(revision='123456789abcdef') + api.properties(
-               got_revision='123456789abcdef') + api.properties(
+           api.properties(revision='a' * 40) + api.properties(
+               got_revision='a' * 40) + api.properties(
                    buildnumber='42') + api.properties(bot_id='TestSlave'))
     yield (api.test('windows_sdk_multi') + api.properties(
         mastername='client.nacl.sdk') + api.properties(
             buildername='windows-sdk-multi') +
-           api.properties(revision='123456789abcdef') + api.properties(
-               got_revision='123456789abcdef') + api.properties(
+           api.properties(revision='a' * 40) + api.properties(
+               got_revision='a' * 40) + api.properties(
                    buildnumber='42') + api.properties(bot_id='TestSlave'))
     yield (api.test('linux_sdk_multirel') + api.properties(
         mastername='client.nacl.sdk') + api.properties(
             buildername='linux-sdk-multirel') +
-           api.properties(revision='123456789abcdef') + api.properties(
-               got_revision='123456789abcdef') + api.properties(
+           api.properties(revision='a' * 40) + api.properties(
+               got_revision='a' * 40) + api.properties(
                    buildnumber='42') + api.properties(bot_id='TestSlave'))
     yield (api.test('linux_sdk_asan_multi') + api.properties(
         mastername='client.nacl.sdk') + api.properties(
             buildername='linux-sdk-asan-multi') +
-           api.properties(revision='123456789abcdef') + api.properties(
-               got_revision='123456789abcdef') + api.properties(
+           api.properties(revision='a' * 40) + api.properties(
+               got_revision='a' * 40) + api.properties(
                    buildnumber='42') + api.properties(bot_id='TestSlave'))
     yield (api.test('windows_sdk_multirel') + api.properties(
         mastername='client.nacl.sdk') + api.properties(
             buildername='windows-sdk-multirel') +
-           api.properties(revision='123456789abcdef') + api.properties(
-               got_revision='123456789abcdef') + api.properties(
+           api.properties(revision='a' * 40) + api.properties(
+               got_revision='a' * 40) + api.properties(
                    buildnumber='42') + api.properties(bot_id='TestSlave'))
     yield (api.test('mac_sdk_multirel') + api.properties(
         mastername='client.nacl.sdk') + api.properties(
             buildername='mac-sdk-multirel') +
-           api.properties(revision='123456789abcdef') + api.properties(
-               got_revision='123456789abcdef') + api.properties(
+           api.properties(revision='a' * 40) + api.properties(
+               got_revision='a' * 40) + api.properties(
                    buildnumber='42') + api.properties(bot_id='TestSlave'))
     yield (api.test('builder_not_in_dispatch_directory') + api.properties(
         mastername='client.nacl.sdk') + api.properties(

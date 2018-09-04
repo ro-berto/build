@@ -119,7 +119,7 @@ def GenTests(api):
     api.properties(
       mastername = 'client.nacl',
       buildername = 'precise_64-newlib-arm_qemu-pnacl-dbg',
-      revision = 'abcd',
+      revision = 'a' * 40,
       bot_id = 'TestSlave',
       buildnumber = 1234,
       slavetype = 'BuilderTester',
@@ -131,7 +131,7 @@ def GenTests(api):
     api.properties(
       mastername = 'client.nacl',
       buildername = 'win7-64-glibc-dbg',
-      revision = 'abcd',
+      revision = 'a' * 40,
       bot_id = 'TestSlave',
       buildnumber = 1234,
       slavetype = 'BuilderTester',
@@ -143,7 +143,7 @@ def GenTests(api):
     api.properties(
       mastername = 'client.nacl',
       buildername = 'precise_64-newlib-arm_qemu-pnacl-dbg',
-      revision = 'abcd',
+      revision = 'a' * 40,
       bot_id = 'TestSlave',
       buildnumber = 1234,
       slavetype = 'BuilderTester',
@@ -155,7 +155,7 @@ def GenTests(api):
     api.properties(
       mastername = 'client.nacl',
       buildername = 'oneiric_32-newlib-arm_hw-pnacl-panda-dbg',
-      revision = 'abcd',
+      revision = 'a' * 40,
       bot_id='TestSlave',
       buildnumber = 5678,
       parent_slavename = 'TestSlave',

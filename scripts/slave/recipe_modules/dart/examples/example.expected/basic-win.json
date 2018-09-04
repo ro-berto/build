@@ -49,7 +49,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "sdk@revision-foo",
+      "sdk@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--with_branch_heads",
       "--with_tags"
     ],
@@ -69,7 +69,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"revision-foo\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
@@ -1762,8 +1762,8 @@
       "put",
       "-host",
       "cr-buildbucket.appspot.com",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-firefox\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"revision-foo\\\"}}\", \"tags\": [\"builder:foo-builder\", \"parent_buildername:dart2js-win10-debug-x64-firefox\", \"user_agent:recipe\"]}",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-firefox\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"revision-foo\\\"}}\", \"tags\": [\"builder:bar-builder\", \"parent_buildername:dart2js-win10-debug-x64-firefox\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-firefox\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\"}}\", \"tags\": [\"builder:foo-builder\", \"parent_buildername:dart2js-win10-debug-x64-firefox\", \"user_agent:recipe\"]}",
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win10-debug-x64-firefox\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\"}}\", \"tags\": [\"builder:bar-builder\", \"parent_buildername:dart2js-win10-debug-x64-firefox\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
