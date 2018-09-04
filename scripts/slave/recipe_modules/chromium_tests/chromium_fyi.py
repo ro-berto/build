@@ -224,23 +224,6 @@ SPEC = {
           'platform': 'linux',
       },
     },
-    'WebKit Linux root_layer_scrolls Dummy Builder': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb','ninja_confirm_noop'],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'compile_targets': [
-        'blink_tests',
-      ],
-      'tests': [],
-      'test_results_config': 'staging_server',
-      'testing': {
-          'platform': 'linux',
-      },
-    },
     'Print Preview Linux': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
