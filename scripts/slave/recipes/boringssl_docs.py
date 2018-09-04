@@ -49,7 +49,11 @@ def GenTests(api):
     api.test('docs') +
     api.runtime(is_luci=True, is_experimental=False) +
     api.buildbucket.ci_build(
-      project='boringssl', bucket='ci', builder='docs')
+        project='boringssl',
+        bucket='ci',
+        builder='docs',
+        git_repo='https://boringssl.googlesource.com/boringssl',
+    )
   )
   yield (
     api.test('docs-experimental') +
@@ -62,7 +66,9 @@ def GenTests(api):
     api.test('docs-try') +
     api.runtime(is_luci=True, is_experimental=False) +
     api.buildbucket.try_build(
-      project='boringssl', bucket='try', builder='docs',
-      gerrit_host='boringssl-review.googlesource.com',
+        project='boringssl',
+        bucket='try',
+        builder='docs',
+        gerrit_host='boringssl-review.googlesource.com',
     )
   )
