@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import itertools
+import json
 import re
 from recipe_engine.types import freeze
 
@@ -765,6 +766,47 @@ class Failure(object):
   def api(self):
     return self.test.api
 
+  def _format_swarming_dimensions(self, dims):
+    return ['%s:%s' % (k, dims[k]) for k in sorted(dims.keys())]
+
+  def _flako_cmd_line(self):
+    """Returns the command line for bisecting this failure with flako."""
+    test_config = self.api.v8.test_configs[self.test.name]
+    properties = {
+      # This assumes the builder's master is the same as the tester.
+      'bisect_mastername': self.api.properties['mastername'],
+      # Use builds from parent builder to bisect if any.
+      'bisect_buildername': self.api.properties.get(
+          'parent_buildername') or self.api.properties['buildername'],
+      # Start bisecting backwards at the revision that was tested.
+      'to_revision': self.api.properties['revision'],
+      # Use the same dimensions as the swarming task that ran this test.
+      'swarming_dimensions': self._format_swarming_dimensions(
+          self.test.task.dimensions),
+      # The isolated name is either specified in the test configurations or
+      # corresponds to the name of the test suite.
+      'isolated_name': test_config.get(
+          'isolated_target', test_config['tests'][0]),
+      # Full qualified test name that failed (e.g. mjsunit/foo/bar).
+      'test_name': self.results[0]['name'],
+      # Release or Debug.
+      'build_config': self.api.chromium.c.build_config_fs,
+      # Add timeout default for convenience.
+      'timeout_sec': 60,
+      # Add total timeout default for convenience.
+      'total_timeout_sec': 120,
+      # The variant the failing test ran in.
+      'variant': self.results[0]['variant'],
+      # Extra arguments passed to the V8 test runner.
+      # TODO(machenbach): This does not yet include the arguments from
+      # V8-side test configs.
+      'extra_args': test_config.get('test_args', []),
+    }
+    return (
+        'echo \'%s\' | buildbucket.py put -b luci.v8.try -n v8_flako -p -'
+        % json.dumps(properties, sort_keys=True)
+    )
+
   def log_lines(self):
     """Return a list of lines for logging all runs of this failure."""
     lines = []
@@ -784,6 +826,15 @@ class Failure(object):
       for key in sorted(self.api.v8.build_environment):
         lines.append(' %s: %s' % (key, self.api.v8.build_environment[key]))
     lines.append('')
+
+    # Print the command line for flake bisect if the test is flaky. Only
+    # supports tests run on swarming and CI.
+    if (self.is_flaky and
+        isinstance(self.test, V8SwarmingTest) and
+        not self.api.tryserver.is_tryserver):
+      lines.append('Trigger flake bisect on command line:')
+      lines.append(self._flako_cmd_line())
+      lines.append('')
 
     # Add results for each run of a command.
     for result in sorted(self.results, key=lambda r: int(r['run'])):

@@ -321,6 +321,40 @@ def GenTests(api):
     api.properties(parent_build_environment=None)
   )
 
+  # Test flako command line with interesting data.
+  debug_bot_config = {
+    'testing': {
+      'properties': {
+        'build_config': 'Debug',
+      },
+      'platform': 'win',
+    },
+  }
+  flake_test_spec = """
+    {
+      "swarming_dimensions": {
+        "os": "Windows-7-SP1",
+        "cpu": "x86-64",
+      },
+      "tests": [
+        {"name": "test262_variants", "test_args": ["--extra-flags=--flag"]},
+      ],
+    }
+  """.strip()
+  yield (
+      api.v8.test(
+          'client.v8',
+          'V8 Foobar',
+          'flako',
+          parent_buildername='V8 Foobar - builder',
+          parent_bot_config=debug_bot_config,
+          parent_test_spec=flake_test_spec,
+      ) +
+      api.override_step_data(
+          'Test262', api.v8.output_json(has_failures=True, flakes=True)) +
+      api.post_process(Filter('Test262 (flakes)'))
+  )
+
   yield (
     api.v8.test(
         'client.v8',
