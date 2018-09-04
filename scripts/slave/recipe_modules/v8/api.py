@@ -1119,47 +1119,6 @@ class V8Api(recipe_api.RecipeApi):
     time = (datetime.datetime.min + duration).time()
     return time.strftime('%M:%S:') + '%03i' % int(time.microsecond / 1000)
 
-  def _command_results_text(self, results, flaky):
-    """Returns log lines for all results of a unique command."""
-    assert results
-    lines = []
-
-    # Add common description for multiple runs.
-    flaky_suffix = ' (flaky in a repeated run)' if flaky else ''
-    lines.append('Test: %s%s' % (results[0]['name'], flaky_suffix))
-    lines.append('Flags: %s' % ' '.join(results[0]['flags']))
-    lines.append('Command: %s' % results[0]['command'])
-    lines.append('Variant: %s' % results[0]['variant'])
-    lines.append('')
-    lines.append('Build environment:')
-    build_environment = self.build_environment
-    if build_environment is None:
-      lines.append(
-          'Not available. Please look up the builder\'s configuration.')
-    else:
-      for key in sorted(build_environment):
-        lines.append(' %s: %s' % (key, build_environment[key]))
-    lines.append('')
-
-    # Add results for each run of a command.
-    for result in sorted(results, key=lambda r: int(r['run'])):
-      lines.append('Run #%d' % int(result['run']))
-      lines.append('Exit code: %s' % result['exit_code'])
-      lines.append('Result: %s' % result['result'])
-      if result.get('expected'):
-        lines.append('Expected outcomes: %s' % ", ".join(result['expected']))
-      lines.append('Duration: %s' % V8Api.format_duration(result['duration']))
-      lines.append('')
-      if result['stdout']:
-        lines.append('Stdout:')
-        lines.extend(result['stdout'].splitlines())
-        lines.append('')
-      if result['stderr']:
-        lines.append('Stderr:')
-        lines.extend(result['stderr'].splitlines())
-        lines.append('')
-    return lines
-
   def _duration_results_text(self, test):
     return [
       'Test: %s' % test['name'],
@@ -1220,11 +1179,11 @@ class V8Api(recipe_api.RecipeApi):
         if failure.is_flaky:
           # This is a flake.
           flakes.append(failure)
-          flake_lines += self._command_results_text(results, True)
+          flake_lines += failure.log_lines()
         else:
           # This is a failure.
           failures.append(failure)
-          failure_lines += self._command_results_text(results, False)
+          failure_lines += failure.log_lines()
 
       if failure_lines:
         failure_log[label] = failure_lines

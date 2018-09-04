@@ -393,7 +393,7 @@ class V8Test(BaseTest):
     # architecture.
     assert len(json_output) == 1
     self.api.v8._update_durations(json_output[0], step_result.presentation)
-    failure_factory=Failure.factory_func(self.test_step_config)
+    failure_factory = Failure.factory_func(self)
     failure_log, failures, flake_log, flakes = (
         self.api.v8._get_failure_logs(json_output[0], failure_factory))
     self.api.v8._update_failure_presentation(
@@ -732,16 +732,18 @@ TOOL_TO_TEST_SWARMING = freeze({
 class Failure(object):
   """Represents a test run leading to a failure (possibly re-run several times).
   """
-  def __init__(self, test_step_config, results):
+  def __init__(self, test, results):
     """
     Args:
-      test_step_config: Static test configuration as defined in builders.py.
+      test: Test (type V8Test) that led to this failure.
       results: List of failure dicts with one item per run of the test. The
           first item is the original failure, the other items are re-runs for
           flake checking. Each failure dict consists of the data as returned by
           the V8-side test runner.
     """
-    self.test_step_config = test_step_config
+    assert results
+    assert test
+    self.test = test
     self.results = results
     # A failure is flaky if not all results are the same (e.g. all 'FAIL').
     self.is_flaky = not all(
@@ -755,10 +757,58 @@ class Failure(object):
   def duration(self):
     return self.failure_dict['duration']
 
+  @property
+  def test_step_config(self):
+    return self.test.test_step_config
+
+  @property
+  def api(self):
+    return self.test.api
+
+  def log_lines(self):
+    """Return a list of lines for logging all runs of this failure."""
+    lines = []
+
+    # Add common description for multiple runs.
+    flaky_suffix = ' (flaky in a repeated run)' if self.is_flaky else ''
+    lines.append('Test: %s%s' % (self.results[0]['name'], flaky_suffix))
+    lines.append('Flags: %s' % ' '.join(self.results[0]['flags']))
+    lines.append('Command: %s' % self.results[0]['command'])
+    lines.append('Variant: %s' % self.results[0]['variant'])
+    lines.append('')
+    lines.append('Build environment:')
+    if self.api.v8.build_environment is None:
+      lines.append(
+          'Not available. Please look up the builder\'s configuration.')
+    else:
+      for key in sorted(self.api.v8.build_environment):
+        lines.append(' %s: %s' % (key, self.api.v8.build_environment[key]))
+    lines.append('')
+
+    # Add results for each run of a command.
+    for result in sorted(self.results, key=lambda r: int(r['run'])):
+      lines.append('Run #%d' % int(result['run']))
+      lines.append('Exit code: %s' % result['exit_code'])
+      lines.append('Result: %s' % result['result'])
+      if result.get('expected'):
+        lines.append('Expected outcomes: %s' % ", ".join(result['expected']))
+      lines.append(
+          'Duration: %s' % self.api.v8.format_duration(result['duration']))
+      lines.append('')
+      if result['stdout']:
+        lines.append('Stdout:')
+        lines.extend(result['stdout'].splitlines())
+        lines.append('')
+      if result['stderr']:
+        lines.append('Stderr:')
+        lines.extend(result['stderr'].splitlines())
+        lines.append('')
+    return lines
+
   @staticmethod
-  def factory_func(test_step_config):
+  def factory_func(test):
     def create(results):
-      return Failure(test_step_config, results)
+      return Failure(test, results)
     return create
 
 

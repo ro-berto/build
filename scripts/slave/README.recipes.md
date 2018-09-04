@@ -3559,7 +3559,7 @@ Entry method for using the v8 api.
 
 Absolute path to the build product based on the 'checkout' path.
 
-&mdash; **def [buildbucket\_trigger](/scripts/slave/recipe_modules/v8/api.py#1484)(self, bucket, changes, requests, step_name='trigger', service_account='v8-bot', no_buildset=False):**
+&mdash; **def [buildbucket\_trigger](/scripts/slave/recipe_modules/v8/api.py#1443)(self, bucket, changes, requests, step_name='trigger', service_account='v8-bot', no_buildset=False):**
 
 Triggers builds via buildbucket.
 
@@ -3584,7 +3584,7 @@ Args:
 
 Returns a list of names of this builder and all its triggered testers.
 
-&mdash; **def [calc\_missing\_values\_in\_sequence](/scripts/slave/recipe_modules/v8/api.py#1624)(self, sequence, subsequence, value):**
+&mdash; **def [calc\_missing\_values\_in\_sequence](/scripts/slave/recipe_modules/v8/api.py#1583)(self, sequence, subsequence, value):**
 
 Calculate a list of missing values from a subsequence.
 
@@ -3639,7 +3639,7 @@ Returns path to depot_tools pinned in the V8 checkout.
 
 &mdash; **def [download\_isolated\_json](/scripts/slave/recipe_modules/v8/api.py#836)(self, revision):**
 
-&emsp; **@property**<br>&mdash; **def [extra\_flags](/scripts/slave/recipe_modules/v8/api.py#1244)(self):**
+&emsp; **@property**<br>&mdash; **def [extra\_flags](/scripts/slave/recipe_modules/v8/api.py#1203)(self):**
 
 &mdash; **def [extra\_tests\_from\_properties](/scripts/slave/recipe_modules/v8/api.py#469)(self):**
 
@@ -3657,11 +3657,11 @@ in the test spec of the current builder.
 
 &emsp; **@property**<br>&mdash; **def [generate\_sanitizer\_coverage](/scripts/slave/recipe_modules/v8/api.py#939)(self):**
 
-&mdash; **def [get\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1600)(self, bisect_range, use_swarming=False):**
+&mdash; **def [get\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1559)(self, bisect_range, use_swarming=False):**
 
-&mdash; **def [get\_change\_range](/scripts/slave/recipe_modules/v8/api.py#1543)(self):**
+&mdash; **def [get\_change\_range](/scripts/slave/recipe_modules/v8/api.py#1502)(self):**
 
-&mdash; **def [get\_changes](/scripts/slave/recipe_modules/v8/api.py#1478)(self):**
+&mdash; **def [get\_changes](/scripts/slave/recipe_modules/v8/api.py#1437)(self):**
 
 &mdash; **def [get\_test\_roots](/scripts/slave/recipe_modules/v8/api.py#147)(self):**
 
@@ -3721,7 +3721,7 @@ Returns: Test config dict.
 
 Set predifined test configs from build repository.
 
-&mdash; **def [log\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1646)(self, available_bisect_range):**
+&mdash; **def [log\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1605)(self, available_bisect_range):**
 
 &mdash; **def [maybe\_bisect](/scripts/slave/recipe_modules/v8/api.py#1019)(self, test_results):**
 
@@ -3729,7 +3729,7 @@ Build-local bisection for one failure.
 
 &mdash; **def [maybe\_create\_clusterfuzz\_archive](/scripts/slave/recipe_modules/v8/api.py#812)(self, update_step):**
 
-&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/v8/api.py#1348)(self, test_spec=EmptyTestSpec, \*\*additional_properties):**
+&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/v8/api.py#1307)(self, test_spec=EmptyTestSpec, \*\*additional_properties):**
 
 &mdash; **def [parse\_revision\_props](/scripts/slave/recipe_modules/v8/api.py#350)(self, got_revision, got_revision_cp=None):**
 
@@ -3755,17 +3755,17 @@ Args:
 Returns: TestSpec object, filtered by interesting builders (current builder
     and all its triggered testers).
 
-&mdash; **def [read\_version\_file](/scripts/slave/recipe_modules/v8/api.py#1662)(self, ref, step_name_desc):**
+&mdash; **def [read\_version\_file](/scripts/slave/recipe_modules/v8/api.py#1621)(self, ref, step_name_desc):**
 
 Read and return the version-file content at a paricular ref.
 
-&mdash; **def [read\_version\_from\_ref](/scripts/slave/recipe_modules/v8/api.py#1671)(self, ref, step_name_desc):**
+&mdash; **def [read\_version\_from\_ref](/scripts/slave/recipe_modules/v8/api.py#1630)(self, ref, step_name_desc):**
 
 Read and return the version at a paricular ref.
 
 &emsp; **@property**<br>&mdash; **def [relative\_path\_to\_d8](/scripts/slave/recipe_modules/v8/api.py#465)(self):**
 
-&mdash; **def [report\_culprits](/scripts/slave/recipe_modules/v8/api.py#1651)(self, culprit_range):**
+&mdash; **def [report\_culprits](/scripts/slave/recipe_modules/v8/api.py#1610)(self, culprit_range):**
 
 &mdash; **def [runhooks](/scripts/slave/recipe_modules/v8/api.py#423)(self, \*\*kwargs):**
 
@@ -3792,7 +3792,7 @@ V8 DEPS file.
 
 &emsp; **@property**<br>&mdash; **def [should\_upload\_build](/scripts/slave/recipe_modules/v8/api.py#456)(self):**
 
-&emsp; **@property**<br>&mdash; **def [test\_filter](/scripts/slave/recipe_modules/v8/api.py#1270)(self):**
+&emsp; **@property**<br>&mdash; **def [test\_filter](/scripts/slave/recipe_modules/v8/api.py#1229)(self):**
 
 &mdash; **def [testing\_random\_seed](/scripts/slave/recipe_modules/v8/api.py#295)(self):**
 
@@ -3830,7 +3830,7 @@ Capture coverage data and upload a report.
 
 &mdash; **def [upload\_isolated\_json](/scripts/slave/recipe_modules/v8/api.py#804)(self):**
 
-&emsp; **@staticmethod**<br>&mdash; **def [version\_from\_file](/scripts/slave/recipe_modules/v8/api.py#1675)(blob):**
+&emsp; **@staticmethod**<br>&mdash; **def [version\_from\_file](/scripts/slave/recipe_modules/v8/api.py#1634)(blob):**
 ### *recipe_modules* / [wct](/scripts/slave/recipe_modules/wct)
 
 [DEPS](/scripts/slave/recipe_modules/wct/__init__.py#5): [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
