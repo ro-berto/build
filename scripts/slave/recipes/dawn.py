@@ -32,17 +32,21 @@ DAWN_REPO = "https://dawn.googlesource.com/dawn"
 
 
 def _checkout_steps(api):
-  # Checkout dawn and its dependencies (specified in DEPS) using gclient.
-  api.gclient.set_config('dawn')
-  api.gclient.c.got_revision_mapping['dawn'] = 'got_revision'
-  # Standalone developer dawn builds want the dawn checkout in the same
-  # directory the .gclient file is in.  Bots want it in a directory called
-  # 'dawn'.  To make both cases work, the dawn DEPS file pulls deps and runs
-  # hooks relative to the variable "root" which is set to . by default and then
-  # to 'dawn' on bots here:
-  api.gclient.c.solutions[0].custom_vars = {'dawn_root': 'dawn'}
-  api.bot_update.ensure_checkout()
-  api.gclient.runhooks()
+  solution_path = api.path['cache'].join('builder')
+  api.file.ensure_directory('init cache if not exists', solution_path)
+
+  with api.context(cwd=solution_path):
+    # Checkout dawn and its dependencies (specified in DEPS) using gclient.
+    api.gclient.set_config('dawn')
+    api.gclient.c.got_revision_mapping['dawn'] = 'got_revision'
+    # Standalone developer dawn builds want the dawn checkout in the same
+    # directory the .gclient file is in.  Bots want it in a directory called
+    # 'dawn'.  To make both cases work, the dawn DEPS file pulls deps and runs
+    # hooks relative to the variable "root" which is set to . by default and then
+    # to 'dawn' on bots here:
+    api.gclient.c.solutions[0].custom_vars = {'dawn_root': 'dawn'}
+    api.bot_update.ensure_checkout()
+    api.gclient.runhooks()
 
 def _out_path(target_cpu, debug, clang):
   out_dir = 'debug' if debug else 'release'
@@ -103,11 +107,17 @@ def _run_unittests(api, out_dir):
   api.step('Run the Dawn unittests', [test_path])
 
 def RunSteps(api, target_cpu, debug, clang):
-  _checkout_steps(api)
-  out_dir = _out_path(target_cpu, debug, clang)
-  _gn_gen_builds(api, target_cpu, debug, clang, out_dir)
-  _build_steps(api, out_dir, clang)
-  _run_unittests(api, out_dir)
+  env = {}
+  if api.platform.is_win:
+    env['DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT'] = (
+    api.path['cache'].join('win_toolchain'))
+
+  with api.context(env=env):
+    _checkout_steps(api)
+    out_dir = _out_path(target_cpu, debug, clang)
+    _gn_gen_builds(api, target_cpu, debug, clang, out_dir)
+    _build_steps(api, out_dir, clang)
+    _run_unittests(api, out_dir)
 
 def GenTests(api):
   yield (

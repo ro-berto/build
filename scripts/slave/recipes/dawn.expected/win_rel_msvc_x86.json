@@ -3,6 +3,24 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]\\builder"
+    ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "infra_step": true,
+    "name": "init cache if not exists"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
       "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'custom_vars': {'dawn_root': 'dawn'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'dawn', 'url': 'https://dawn.googlesource.com/dawn.git'}]",
@@ -19,6 +37,10 @@
       "--revision",
       "dawn@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
+    "cwd": "[CACHE]\\builder",
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -71,7 +93,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]\\dawn",
+    "cwd": "[CACHE]\\builder",
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -81,6 +106,9 @@
   },
   {
     "cmd": [],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "name": "ensure_goma"
   },
   {
@@ -96,6 +124,9 @@
       "-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -116,16 +147,22 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]\\gn.py",
-      "--root=[START_DIR]\\dawn",
+      "--root=[CACHE]\\builder\\dawn",
       "gen",
       "//out/release_x86",
       "--args=is_debug=false is_component_build=false use_goma=true goma_dir=\"[CACHE]\\goma\\client\" is_clang=false target_cpu=\"x86\""
     ],
-    "cwd": "[START_DIR]\\dawn",
+    "cwd": "[CACHE]\\builder\\dawn",
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "name": "gn gen"
   },
   {
     "cmd": [],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "name": "preprocess_for_goma"
   },
   {
@@ -140,6 +177,9 @@
       "0777",
       "[CACHE]\\goma\\data\\win"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
     "~followup_annotations": [
@@ -154,6 +194,7 @@
       "restart"
     ],
     "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\win",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
@@ -187,6 +228,9 @@
       "--pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -197,14 +241,20 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-C",
-      "[START_DIR]\\dawn\\out\\release_x86",
+      "[CACHE]\\builder\\dawn\\out\\release_x86",
       "-j",
       "20"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "name": "compile with ninja"
   },
   {
     "cmd": [],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "name": "postprocess_for_goma"
   },
   {
@@ -216,6 +266,7 @@
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
     "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\win",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
@@ -248,6 +299,7 @@
       "stat"
     ],
     "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\win",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
@@ -269,6 +321,7 @@
       "stop"
     ],
     "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\win",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
@@ -301,9 +354,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]\\dawn\\out\\release_x86",
+      "[CACHE]\\builder\\dawn\\out\\release_x86",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-C\", \"[START_DIR]\\\\dawn\\\\out\\\\release_x86\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-C\", \"[CACHE]\\\\builder\\\\dawn\\\\out\\\\release_x86\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -321,6 +374,9 @@
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"win\", \"project\": \"dawn\"}"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -347,6 +403,9 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
@@ -355,8 +414,11 @@
   },
   {
     "cmd": [
-      "[START_DIR]\\dawn\\out\\release_x86\\dawn_unittests"
+      "[CACHE]\\builder\\dawn\\out\\release_x86\\dawn_unittests"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "name": "Run the Dawn unittests"
   },
   {
