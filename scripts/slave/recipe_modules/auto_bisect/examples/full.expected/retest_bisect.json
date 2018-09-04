@@ -691,6 +691,24 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/src/out/Release/args.gn",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "Gathering reference values.read GN args",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "Gathering reference values.test_pre_run",
     "~followup_annotations": [
@@ -1492,6 +1510,24 @@
     "name": "Gathering reference values.extract build (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/src/out/Release/args.gn",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "Gathering reference values.read GN args (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -2332,6 +2368,24 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/src/out/Release/args.gn",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "Re-testing reference range.Retesting GOOD revision.read GN args",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "Re-testing reference range.Retesting GOOD revision.test_pre_run",
     "~followup_annotations": [
@@ -2875,6 +2929,24 @@
     "name": "Re-testing reference range.Retesting BAD revision.extract build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/src/out/Release/args.gn",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "Re-testing reference range.Retesting BAD revision.read GN args",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -3424,6 +3496,24 @@
     "name": "Re-testing reference range.Retesting GOOD revision.extract build (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/src/out/Release/args.gn",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "Re-testing reference range.Retesting GOOD revision.read GN args (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -4172,6 +4262,24 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/src/out/Release/args.gn",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "Re-testing reference range.Retesting BAD revision.read GN args (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "Re-testing reference range.Retesting BAD revision.test_pre_run (2)",
     "~followup_annotations": [
@@ -4916,6 +5024,24 @@
     "name": "Re-testing reference range.Retesting GOOD revision.extract build (3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/src/out/Release/args.gn",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "Re-testing reference range.Retesting GOOD revision.read GN args (3)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -5993,6 +6119,24 @@
     "name": "Bisecting revision.extract build",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]/src/out/Release/args.gn",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "Bisecting revision.read GN args",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {

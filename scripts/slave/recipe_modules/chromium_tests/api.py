@@ -647,6 +647,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       build_revision=build_revision,
       build_archive_url=build_archive_url)
 
+    self.m.gn.get_args(
+        self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
+
   def _make_legacy_build_url(self, master_config, mastername):
     # The master where the build was zipped and uploaded from.
     source_master = self.m.properties.get('parent_mastername')
