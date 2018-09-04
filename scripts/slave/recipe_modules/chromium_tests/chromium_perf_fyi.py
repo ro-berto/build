@@ -143,7 +143,3 @@ _AddIsolatedTestSpec('win-7_laptop_low_end_x32-perf-Lenovo-ThinkPad', 'win',
                      parent_buildername='win32-builder-perf',
                      parent_mastername='chromium.perf',
                      target_bits=32)
-
-_AddIsolatedTestSpec('Histogram Pipeline Linux Perf',
-                     'linux',
-                     parent_buildername='Linux Compile Perf FYI')
