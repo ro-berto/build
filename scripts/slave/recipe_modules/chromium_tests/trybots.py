@@ -705,7 +705,7 @@ TRYBOTS = freeze({
       }),
       'Linux Builder Perf': simple_bot({
         'mastername': 'chromium.perf',
-        'buildername': 'Linux Builder Perf',
+        'buildername': 'linux-builder-perf',
       }),
       'Mac Builder Perf': simple_bot({
         'mastername': 'chromium.perf',

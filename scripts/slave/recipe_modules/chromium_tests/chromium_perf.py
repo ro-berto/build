@@ -235,4 +235,4 @@ _AddIsolatedTestSpec('mac-10_13_laptop_high_end-perf', 'mac',
                      'Mac Builder Perf')
 
 
-_AddIsolatedTestSpec('linux-perf', 'linux', 'Linux Builder Perf')
+_AddIsolatedTestSpec('linux-perf', 'linux', 'linux-builder-perf')
