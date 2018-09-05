@@ -158,6 +158,7 @@ FAKE_BUILDERS = {
         'linux-ozone-rel',
         'linux-xenial-rel',
         'linux_chromium_asan_rel_ng',
+        'linux_chromium_cfi_rel_ng',
         'linux_chromium_compile_dbg_ng',
         'linux_chromium_compile_rel_ng',
         'linux_chromium_dbg_ng',
@@ -180,6 +181,7 @@ FAKE_BUILDERS = {
         'linux_layout_tests_slimming_paint_v2',
         'linux_mojo',
         'linux_mojo_chromeos',
+        'linux_upload_clang',
         'linux_vr',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'linux-dcheck-off-rel',
