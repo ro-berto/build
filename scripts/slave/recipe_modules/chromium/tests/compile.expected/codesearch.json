@@ -105,7 +105,7 @@
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_GLOBAL_FILE_ID_CACHE": "true",
+      "GOMA_ENABLE_GLOBAL_FILE_STAT_CACHE": "true",
       "GOMA_HERMETIC": "fallback",
       "GOMA_LOCAL_OUTPUT_CACHE_DIR": "[CACHE]/goma/localoutputcache",
       "GOMA_MAX_ACTIVE_FAIL_FALLBACK_TASKS": "1",

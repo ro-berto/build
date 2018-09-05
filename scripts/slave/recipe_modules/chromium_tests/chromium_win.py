@@ -28,7 +28,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'goma_high_parallel',
-        'goma_enable_global_file_id_cache',
+        'goma_enable_global_file_stat_cache',
         'mb',
         'ninja_confirm_noop',
       ],

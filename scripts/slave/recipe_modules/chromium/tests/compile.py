@@ -18,7 +18,7 @@ def RunSteps(api):
   api.chromium.apply_config('goma_hermetic_fallback')
   api.chromium.apply_config('goma_high_parallel')
   api.chromium.apply_config('goma_localoutputcache')
-  api.chromium.apply_config('goma_enable_global_file_id_cache')
+  api.chromium.apply_config('goma_enable_global_file_stat_cache')
 
   for config in api.properties.get('chromium_apply_config', []):
     api.chromium.apply_config(config)

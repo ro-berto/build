@@ -720,7 +720,7 @@
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_ENABLE_GLOBAL_FILE_ID_CACHE": "true",
+      "GOMA_ENABLE_GLOBAL_FILE_STAT_CACHE": "true",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
