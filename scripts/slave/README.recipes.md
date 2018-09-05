@@ -4355,7 +4355,7 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch.py#134)(api, root_solution_revision, root_solution_revision_timestamp):**
 ### *recipes* / [chromium\_codesearch\_initiator](/scripts/slave/recipes/chromium_codesearch_initiator.py)
 
-[DEPS](/scripts/slave/recipes/chromium_codesearch_initiator.py#14): [trigger](#recipe_modules-trigger), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time], [recipe\_engine/url][recipe_engine/recipe_modules/url]
+[DEPS](/scripts/slave/recipes/chromium_codesearch_initiator.py#14): [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
 A recipe for picking a stable HEAD revision for chromium/src.
 
@@ -4363,7 +4363,7 @@ This recipe picks a commit at HEAD, and then triggers the other codesearch
 recipes with the chosen commit hash as a parameter. This ensures that codesearch
 index packs (used to generate xrefs) are all generated from the same revision.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch_initiator.py#56)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch_initiator.py#55)(api):**
 ### *recipes* / [chromium\_gsutil:examples/full](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py#5): [chromium\_gsutil](#recipe_modules-chromium_gsutil), [recipe\_engine/path][recipe_engine/recipe_modules/path]

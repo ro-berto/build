@@ -168,10 +168,7 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
     solution.url = url
   api.gclient.c = gclient_config
 
-  if api.runtime.is_luci:
-    checkout_dir = api.path['cache'].join('builder')
-  else:
-    checkout_dir = api.path['start_dir']
+  checkout_dir = api.path['cache'].join('builder')
   with api.context(cwd=checkout_dir):
     update_step = api.bot_update.ensure_checkout(
         root_solution_revision=root_solution_revision)
@@ -225,11 +222,6 @@ def GenTests(api):
     yield (
         api.test('full_%s' % (_sanitize_nonalpha(buildername))) +
         api.properties.generic(buildername=buildername,
-                               mastername='chromium.infra.codesearch')
-    )
-    yield (
-        api.test('full_%s_luci' % (_sanitize_nonalpha(buildername))) +
-        api.properties.generic(buildername=buildername,
                                mastername='chromium.infra.codesearch') +
         api.runtime(is_luci=True, is_experimental=False)
     )
@@ -240,7 +232,8 @@ def GenTests(api):
         api.properties.generic(buildername=buildername,
                                mastername='chromium.infra.codesearch') +
         api.properties(root_solution_revision='a' * 40,
-                       root_solution_revision_timestamp=1531887759)
+                       root_solution_revision_timestamp=1531887759) +
+        api.runtime(is_luci=True, is_experimental=False)
     )
 
   yield (
@@ -249,7 +242,8 @@ def GenTests(api):
         _sanitize_nonalpha('codesearch-gen-chromium-win')) +
     api.step_data('delete old generated files', retcode=1) +
     api.properties.generic(buildername='codesearch-gen-chromium-win',
-                           mastername='chromium.infra.codesearch')
+                           mastername='chromium.infra.codesearch') +
+    api.runtime(is_luci=True, is_experimental=False)
   )
 
   yield (
@@ -258,7 +252,8 @@ def GenTests(api):
         _sanitize_nonalpha('codesearch-gen-chromium-linux')) +
     api.step_data('compile', retcode=1) +
     api.properties.generic(buildername='codesearch-gen-chromium-linux',
-                           mastername='chromium.infra.codesearch')
+                           mastername='chromium.infra.codesearch') +
+    api.runtime(is_luci=True, is_experimental=False)
   )
 
   yield (
@@ -266,7 +261,8 @@ def GenTests(api):
         'full_%s_translation_unit_fail' % _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
     api.step_data('run translation_unit clang tool', retcode=2) +
     api.properties.generic(buildername='codesearch-gen-chromium-chromiumos',
-                           mastername='chromium.infra.codesearch')
+                           mastername='chromium.infra.codesearch') +
+    api.runtime(is_luci=True, is_experimental=False)
   )
 
   yield (
@@ -275,5 +271,6 @@ def GenTests(api):
         _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
     api.step_data('generate compilation database', retcode=1) +
     api.properties.generic(buildername='codesearch-gen-chromium-chromiumos',
-                           mastername='chromium.infra.codesearch')
+                           mastername='chromium.infra.codesearch') +
+    api.runtime(is_luci=True, is_experimental=False)
   )

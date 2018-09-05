@@ -20,7 +20,6 @@ DEPS = [
   'recipe_engine/step',
   'recipe_engine/time',
   'recipe_engine/url',
-  'trigger',
 ]
 
 BUILDERS = [
@@ -79,19 +78,11 @@ def RunSteps(api):
       'root_solution_revision': commit_hash,
       'root_solution_revision_timestamp': unix_timestamp
   }
-  if api.runtime.is_luci:
-    api.scheduler.emit_trigger(
-        api.scheduler.BuildbucketTrigger(properties=properties),
-        project='infra', jobs=BUILDERS)
-  else:
-    args = [{
-        'builder_name': builder, 'properties': properties
-    } for builder in BUILDERS]
-    api.trigger(*args)
+  api.scheduler.emit_trigger(
+      api.scheduler.BuildbucketTrigger(properties=properties),
+      project='infra', jobs=BUILDERS)
 
 def GenTests(api):
-  # TODO(hinoka): Delete this.
-  yield api.test('basic_buildbot')
   yield api.test('basic') + api.runtime(is_luci=True, is_experimental=False)
   yield (
       api.test('missing_commit') +

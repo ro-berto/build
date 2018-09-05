@@ -19,7 +19,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -156,7 +157,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[START_DIR]/src/third_party/llvm-build"
+      "[CACHE]/builder/src/third_party/llvm-build"
     ],
     "infra_step": true,
     "name": "llvm-build"
@@ -200,7 +201,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "clang=1 component=shared_library gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
@@ -215,7 +216,7 @@
   {
     "cmd": [
       "find",
-      "[START_DIR]/src/out",
+      "[CACHE]/builder/src/out",
       "-mtime",
       "+7",
       "-type",
@@ -228,19 +229,19 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.infra.codesearch",
       "-b",
       "codesearch-gen-chromium-linux",
       "--config-file",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "[START_DIR]/src/out/Debug"
+      "[CACHE]/builder/src/out/Debug"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -255,7 +256,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[START_DIR]/src/out/Debug/args.gn",
+      "[CACHE]/builder/src/out/Debug/args.gn",
       "/path/to/tmp/"
     ],
     "env": {
@@ -271,11 +272,11 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/clang/scripts/generate_compdb.py",
+      "[CACHE]/builder/src/tools/clang/scripts/generate_compdb.py",
       "-p",
-      "[START_DIR]/src/out/Debug",
+      "[CACHE]/builder/src/out/Debug",
       "-o",
-      "[START_DIR]/src/out/Debug/compile_commands.json",
+      "[CACHE]/builder/src/out/Debug/compile_commands.json",
       "all"
     ],
     "name": "generate compilation database"
@@ -292,7 +293,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[START_DIR]/src",
+      "[CACHE]/builder/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -309,7 +310,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -327,7 +328,7 @@
       "0777",
       "[CACHE]/goma/data/codesearch_gen_chromium_linux"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -344,7 +345,7 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -382,7 +383,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -406,14 +407,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Debug",
+      "[CACHE]/builder/src/out/Debug",
       "-k",
       "0",
       "-j",
       "20",
       "all"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -444,7 +445,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -458,7 +459,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -491,7 +492,7 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -513,7 +514,7 @@
       "[CACHE]/goma/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -547,9 +548,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Debug",
+      "[CACHE]/builder/src/out/Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Debug\", \"-k\", \"0\", \"-j\", 20, \"all\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Debug\", \"-k\", \"0\", \"-j\", 20, \"all\"]",
       "--build-exit-status",
       "1",
       "--build-step-name",
@@ -564,6 +565,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.chromium.infra.codesearch\", \"builder\": \"codesearch-gen-chromium-linux\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "codesearch-gen-chromium-linux",
       "--buildbot-mastername",
@@ -571,7 +573,7 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -601,7 +603,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
