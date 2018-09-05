@@ -111,3 +111,14 @@ def GenTests(api):
           parent_got_revision='a' * 40,
           parent_got_cr_revision='builder-chromium-tot')
   )
+
+  yield (
+      api.test('webrtc_fyi_experimental_tester') +
+      api.properties(
+          mastername='chromium.webrtc.fyi.experimental',
+          buildername='Linux Tester',
+          buildnumber=123,
+          bot_id='test_bot_id',
+          parent_got_revision='builder-webrtc-tot',
+          parent_got_cr_revision='builder-chromium-tot')
+  )
