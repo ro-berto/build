@@ -190,6 +190,8 @@ class DartApi(recipe_api.RecipeApi):
       task.dimensions.pop('gpu', None)
       if 'shard_timeout' in self.m.properties:
         task.hard_timeout = int(self.m.properties['shard_timeout'])
+      # Set a priority lower than any builder, to prioritize shards.
+      task.priority = 25
       self.m.swarming.trigger_task(task)
       tasks.append(task)
     return tasks
