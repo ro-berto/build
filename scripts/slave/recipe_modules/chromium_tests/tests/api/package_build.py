@@ -33,7 +33,7 @@ def GenTests(api):
       api.test('linux_perf_builder') +
       api.properties.generic(
           mastername='chromium.perf',
-          buildername='Linux Builder Perf')
+          buildername='linux-builder-perf')
   )
 
   yield (

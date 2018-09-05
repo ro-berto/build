@@ -203,12 +203,6 @@ _AddBuildSpec(
 _AddBuildSpec('linux-builder-perf', 'linux', add_to_bisect=True,
               force_exparchive=True)
 
-# TODO(crbug.com/828467): remove this builder once linux-builder-perf works
-# well.
-_AddBuildSpec(
-  'Linux Builder Perf', 'linux', add_to_bisect=True, force_exparchive=True)
-
-
 # 32 bit android swarming
 _AddIsolatedTestSpec('android-nexus5x-perf', 'android',
                      'Android Compile Perf', target_bits=32)

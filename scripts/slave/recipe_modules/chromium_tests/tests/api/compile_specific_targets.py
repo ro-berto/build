@@ -87,7 +87,7 @@ def GenTests(api):
       api.test('perf_isolate_lookup') +
       api.properties.generic(
           mastername='chromium.perf',
-          buildername='Linux Builder Perf',
+          buildername='linux-builder-perf',
           swarming_gtest=True) +
           api.post_process(Filter('pinpoint isolate upload'))
   )
