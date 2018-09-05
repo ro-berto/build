@@ -30,6 +30,7 @@ _ANALYZE_TARGETS = [
 ]
 _COMPILE_TARGETS = [
     'monochrome_public_apk',
+    'monochrome_static_initializers',
 ]
 _APK_NAME = 'MonochromePublic.apk'
 _PATCH_FIXED_BUILD_STEP_NAME = (
@@ -65,9 +66,9 @@ def RunSteps(api):
       return
 
     suffix = ' (with patch)'
-    checkout_dir = api.chromium_checkout.get_checkout_dir({})
+    bot_config = {}
+    checkout_dir = api.chromium_checkout.get_checkout_dir(bot_config)
     with api.context(cwd=checkout_dir):
-      bot_config = {}
       bot_update_step = api.chromium_checkout.ensure_checkout(bot_config)
     api.chromium.runhooks(name='runhooks' + suffix)
 
