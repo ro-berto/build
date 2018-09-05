@@ -221,7 +221,6 @@ def main(argv):
       'master.chromium.clang': 'ChromiumClang',
       'master.chromium.fyi': 'ChromiumFYI',
       'master.chromium.gatekeeper': 'Gatekeeper',
-      'master.chromium.infra.codesearch': 'InfraCodesearch',
       'master.chromium.infra.cron': 'InfraCron',
       'master.chromium.perf': 'ChromiumPerf',
       'master.chromium.perf.fyi': 'ChromiumPerfFyi',
