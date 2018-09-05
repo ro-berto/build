@@ -40,6 +40,7 @@ def chromium_bare(c):
   p['parent_got_v8_revision'] = 'v8_revision'
   p['parent_got_webrtc_revision'] = 'webrtc_revision'
 
+  # TODO(nodir): remove patch_projects in favor of repo_path_map.
   p = c.patch_projects
   p['angle/angle'] = ('src/third_party/angle', None)
   p['blink'] = ('src/third_party/WebKit', None)
@@ -54,6 +55,20 @@ def chromium_bare(c):
   p['webrtc'] = ('src/third_party/webrtc', 'HEAD')
 
   p = c.repo_path_map
+  p['https://chromium.googlesource.com/angle/angle'] = (
+      'src/third_party/angle', None)
+  p['https://chromium.googlesource.com/chromium/buildtools'] = (
+      'src/buildtools', 'HEAD')
+  p['https://chromium.googlesource.com/catapult'] = (
+      'src/third_party/catapult', 'HEAD')
+  p['https://chromium.googlesource.com/chromium/deps/flac'] = (
+      'src/third_party/flac', 'HEAD')
+  p['https://chromium.googlesource.com/chromium/deps/icu'] = (
+      'src/third_party/icu', 'HEAD')
+  p['https://pdfium.googlesource.com/pdfium'] = (
+      'src/third_party/pdfium', 'HEAD')
+  p['https://skia.googlesource.com/skia'] = ('src/third_party/skia', 'HEAD')
+  p['https://chromium.googlesource.com/v8/v8'] = ('src/v8', 'HEAD')
   p['https://webrtc.googlesource.com/src'] = ('src/third_party/webrtc', 'HEAD')
 
 @CONFIG_CTX(includes=['chromium_bare'])

@@ -25,6 +25,10 @@ def v8(c):
   p = c.patch_projects
   p['icu'] = ('v8/third_party/icu', 'HEAD')
 
+  p = c.repo_path_map
+  p['https://chromium.googlesource.com/chromium/deps/icu'] = (
+      'v8/third_party/icu', 'HEAD')
+
 
 @CONFIG_CTX(includes=['v8'])
 def llvm_compiler_rt(c):
