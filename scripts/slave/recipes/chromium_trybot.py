@@ -612,6 +612,7 @@ def GenTests(api):
     props(buildername='win7_chromium_rel_ng',
           mastername='tryserver.chromium.win',
           repository='https://chromium.googlesource.com/v8/v8',
+          patch_repository_url='https://chromium.googlesource.com/v8/v8',
           patch_project='v8') +
     api.platform.name('win')
   )
@@ -638,6 +639,7 @@ def GenTests(api):
     api.test('use_webrtc_patch_on_chromium_trybot') +
     props(
         repository='https://webrtc.googlesource.com/src',
+        patch_repository_url='https://webrtc.googlesource.com/src',
         patch_project='webrtc') +
     api.platform.name('linux')
   )
@@ -646,6 +648,7 @@ def GenTests(api):
     api.test('use_webrtc_patch_on_chromium_trybot_compile_failure') +
     props(
         repository='https://webrtc.googlesource.com/src',
+        patch_repository_url='https://webrtc.googlesource.com/src',
         patch_project='webrtc') +
     api.platform.name('linux') +
     base_unittests_additional_compile_target() +
@@ -658,6 +661,7 @@ def GenTests(api):
     props(buildername='win7_chromium_rel_ng',
           mastername='tryserver.chromium.win',
           repository='https://skia.googlesource.com/skia',
+          patch_repository_url='https://skia.googlesource.com/skia',
           patch_project='skia') +
     api.platform.name('win')
   )
@@ -858,6 +862,7 @@ def GenTests(api):
     props(mastername='tryserver.blink',
           buildername='mac10.12_blink_rel',
           repository='https://skia.googlesource.com/skia',
+          patch_repository_url='https://skia.googlesource.com/skia',
           patch_project='skia') +
     api.platform.name('mac')
   )
@@ -866,6 +871,8 @@ def GenTests(api):
     api.test('use_v8_patch_on_blink_trybot') +
     props(mastername='tryserver.blink',
           buildername='mac10.12_blink_rel',
+          repository='https://chromium.googlesource.com/v8/v8',
+          patch_repository_url='https://chromium.googlesource.com/v8/v8',
           patch_project='v8') +
     api.platform.name('mac')
   )
