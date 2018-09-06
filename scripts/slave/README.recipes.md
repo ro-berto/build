@@ -250,6 +250,8 @@
   * [gatekeeper:tests/call](#recipes-gatekeeper_tests_call)
   * [git_clone_bundler:examples/full](#recipes-git_clone_bundler_examples_full)
   * [gn:tests/get_args](#recipes-gn_tests_get_args)
+  * [gn:tests/ls](#recipes-gn_tests_ls)
+  * [gn:tests/refs](#recipes-gn_tests_refs)
   * [goma:examples/full](#recipes-goma_examples_full)
   * [goma:tests/build_with_goma](#recipes-goma_tests_build_with_goma)
   * [goma:tests/ensure](#recipes-goma_tests_ensure)
@@ -2028,7 +2030,7 @@ Returns: (dict) If 'remote_name' is supplied, a dictionary mapping the
     that repository's bundle was uploaded.
 ### *recipe_modules* / [gn](/scripts/slave/recipe_modules/gn)
 
-[DEPS](/scripts/slave/recipe_modules/gn/__init__.py#5): [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/gn/__init__.py#5): [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [GnApi](/scripts/slave/recipe_modules/gn/api.py#11)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -2054,6 +2056,24 @@ Args:
 
 Returns:
   The content of the args.gn file.
+
+&mdash; **def [ls](/scripts/slave/recipe_modules/gn/api.py#176)(self, build_dir, inputs, output_type=None, output_format='label', step_name='list gn targets'):**
+
+List targets for a given set of inputs.
+
+See https://gn.googlesource.com/gn/+/master/docs/reference.md#ls for
+more documentation of the command.
+
+Args:
+  build_dir: Path to build output directory.
+  inputs: List of patterns to find matching targets for.
+  output_type: Type of target (eg: "executable", "shared_library", etc.) to
+    restrict outputs to. If None (default), no filtering is preformed.
+  output_format: How to display targets. See GN docs for valid options.
+    Default is "label".
+  step_name: Optional recipe step name to give to the "gn ls" command.
+Returns:
+  The set of targets found.
 
 &mdash; **def [present\_args](/scripts/slave/recipe_modules/gn/api.py#69)(self, result, args, location=None, max_text_lines=None):**
 
@@ -2099,6 +2119,26 @@ Args:
 
 Returns:
   The reformatted args.gn content as a single string.
+
+&mdash; **def [refs](/scripts/slave/recipe_modules/gn/api.py#140)(self, build_dir, inputs, all_deps=True, output_type=None, output_format='label', step_name='calculate gn refs'):**
+
+Find reverse dependencies for a given set of inputs.
+
+See https://gn.googlesource.com/gn/+/master/docs/reference.md#refs for
+more documentation of the command.
+
+Args:
+  build_dir: Path to build output directory.
+  inputs: List of label or files to find dependencies of.
+  all_deps: Boolean indicating wether or not to include indirect
+    dependencies.
+  output_type: Type of target (eg: "executable", "shared_library", etc.) to
+    restrict outputs to. If None (default), no filtering is preformed.
+  output_format: How to display targets. See GN docs for valid options.
+    Default is "label".
+  step_name: Optional recipe step name to give to the "gn refs" command.
+Returns:
+  The set of dependencies found.
 ### *recipe_modules* / [goma](/scripts/slave/recipe_modules/goma)
 
 [DEPS](/scripts/slave/recipe_modules/goma/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
@@ -5127,6 +5167,16 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 [DEPS](/scripts/slave/recipe_modules/gn/tests/get_args.py#9): [gn](#recipe_modules-gn), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/gn/tests/get_args.py#26)(api):**
+### *recipes* / [gn:tests/ls](/scripts/slave/recipe_modules/gn/tests/ls.py)
+
+[DEPS](/scripts/slave/recipe_modules/gn/tests/ls.py#11): [gn](#recipe_modules-gn), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/gn/tests/ls.py#24)(api, targets, output_type):**
+### *recipes* / [gn:tests/refs](/scripts/slave/recipe_modules/gn/tests/refs.py)
+
+[DEPS](/scripts/slave/recipe_modules/gn/tests/refs.py#11): [gn](#recipe_modules-gn), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/gn/tests/refs.py#24)(api, targets, output_type):**
 ### *recipes* / [goma:examples/full](/scripts/slave/recipe_modules/goma/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/goma/examples/full.py#8): [goma](#recipe_modules-goma), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]

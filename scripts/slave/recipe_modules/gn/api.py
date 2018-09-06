@@ -128,3 +128,78 @@ class GnApi(recipe_api.RecipeApi):
     self.present_args(result, reformatted_args,
                       location=location, max_text_lines=max_text_lines)
     return args
+
+  def _gn_cmd(self, name, cmd, gn_path=None, log_name='gn output'):
+    if not gn_path:
+      gn_path = self.m.depot_tools.gn_py_path
+    cmd = [gn_path] + cmd
+    return self.m.step(
+        name, cmd, stdout=self.m.raw_io.output_text(name=log_name,
+            add_output_log=True))
+
+  def refs(self, build_dir, inputs, all_deps=True, output_type=None,
+           output_format='label', step_name='calculate gn refs'):
+    """Find reverse dependencies for a given set of inputs.
+
+    See https://gn.googlesource.com/gn/+/master/docs/reference.md#refs for
+    more documentation of the command.
+
+    Args:
+      build_dir: Path to build output directory.
+      inputs: List of label or files to find dependencies of.
+      all_deps: Boolean indicating wether or not to include indirect
+        dependencies.
+      output_type: Type of target (eg: "executable", "shared_library", etc.) to
+        restrict outputs to. If None (default), no filtering is preformed.
+      output_format: How to display targets. See GN docs for valid options.
+        Default is "label".
+      step_name: Optional recipe step name to give to the "gn refs" command.
+    Returns:
+      The set of dependencies found.
+    """
+    assert isinstance(inputs, list), \
+        'Inputs to GN-refs must be a list of files or labels.'
+    cmd = [
+        'refs',
+        '-q',  # Don't print a warning when no refs are found.
+        '--as=%s' % output_format,
+    ]
+    if all_deps:
+      cmd += ['--all']
+    if output_type:
+      cmd += ['--type=%s' % output_type]
+    cmd.append(build_dir)
+    cmd.extend(inputs)
+    step_result = self._gn_cmd(step_name, cmd, log_name='refs')
+    return set(step_result.stdout.splitlines())
+
+  def ls(self, build_dir, inputs, output_type=None, output_format='label',
+         step_name='list gn targets'):
+    """List targets for a given set of inputs.
+
+    See https://gn.googlesource.com/gn/+/master/docs/reference.md#ls for
+    more documentation of the command.
+
+    Args:
+      build_dir: Path to build output directory.
+      inputs: List of patterns to find matching targets for.
+      output_type: Type of target (eg: "executable", "shared_library", etc.) to
+        restrict outputs to. If None (default), no filtering is preformed.
+      output_format: How to display targets. See GN docs for valid options.
+        Default is "label".
+      step_name: Optional recipe step name to give to the "gn ls" command.
+    Returns:
+      The set of targets found.
+    """
+    assert isinstance(inputs, list), \
+        'Inputs to GN-ls must be a list of file or label patterns.'
+    cmd = [
+        'ls',
+        '--as=%s' % output_format,
+    ]
+    if output_type:
+      cmd += ['--type=%s' % output_type]
+    cmd.append(build_dir)
+    cmd.extend(inputs)
+    step_result = self._gn_cmd(step_name, cmd, log_name='targets')
+    return set(step_result.stdout.splitlines())
