@@ -449,8 +449,7 @@ def BuildWindows(api):
   RunGN(api, '--runtime-mode', 'release', '--android')
   RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
 
-  # TODO(goderbauer): turn parallelism back on when build problem is diagnosed
-  Build(api, 'host_debug_unopt', goma_jobs='1')
+  Build(api, 'host_debug_unopt')
   Build(api, 'host_debug')
   Build(api, 'android_profile', 'gen_snapshot')
   Build(api, 'android_profile_arm64', 'gen_snapshot')

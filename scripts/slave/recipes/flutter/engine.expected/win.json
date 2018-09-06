@@ -302,7 +302,7 @@
     "cmd": [
       "ninja",
       "-j",
-      "1",
+      "200",
       "-C",
       "[START_DIR]\\src\\out/host_debug_unopt"
     ],
