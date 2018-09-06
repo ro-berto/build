@@ -14,7 +14,7 @@
       "--shards",
       "2",
       "--task-name",
-      "Mjsunit/Android/[dummy has/V8 Android Arm64 - N5X/571",
+      "Check - d8/Android/[dummy has/V8 Android Arm64 - N5X/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -45,11 +45,11 @@
       "--tag",
       "buildnumber:571",
       "--tag",
-      "data:[dummy hash for mjsunit]",
+      "data:[dummy hash for d8_default]",
       "--tag",
       "master:client.v8.ports",
       "--tag",
-      "name:Mjsunit",
+      "name:Check",
       "--tag",
       "project:v8",
       "--tag",
@@ -59,7 +59,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Mjsunit on Android",
+      "stepname:Check - d8 on Android",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -79,7 +79,7 @@
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
       "--isolated",
-      "[dummy hash for mjsunit]",
+      "[dummy hash for d8_default]",
       "--raw-cmd",
       "--",
       "tools/run-tests.py",
@@ -90,8 +90,8 @@
       "out",
       "--buildbot",
       "--timeout=200",
-      "--random-seed=2140216864",
-      "mjsunit",
+      "--random-seed=936968817",
+      "d8_default",
       "--variants=default",
       "--rerun-failures-count=2",
       "--mastername",
@@ -102,7 +102,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit on Android"
+    "name": "[trigger] Check - d8 on Android"
   },
   {
     "allow_subannotations": true,
@@ -128,10 +128,10 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Mjsunit/Android/[dummy has/V8 Android Arm64 - N5X/571\", \"tasks\": {\"Mjsunit/Android/[dummy has/V8 Android Arm64 - N5X/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Mjsunit/Android/[dummy has/V8 Android Arm64 - N5X/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
+      "{\"base_task_name\": \"Check - d8/Android/[dummy has/V8 Android Arm64 - N5X/571\", \"tasks\": {\"Check - d8/Android/[dummy has/V8 Android Arm64 - N5X/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Check - d8/Android/[dummy has/V8 Android Arm64 - N5X/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
     ],
     "infra_step": true,
-    "name": "Mjsunit",
+    "name": "Check - d8",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
       "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
