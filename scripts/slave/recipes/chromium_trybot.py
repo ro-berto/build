@@ -611,6 +611,7 @@ def GenTests(api):
     api.test('use_v8_patch_on_chromium_trybot') +
     props(buildername='win7_chromium_rel_ng',
           mastername='tryserver.chromium.win',
+          repository='https://chromium.googlesource.com/v8/v8',
           patch_project='v8') +
     api.platform.name('win')
   )
@@ -635,13 +636,17 @@ def GenTests(api):
 
   yield (
     api.test('use_webrtc_patch_on_chromium_trybot') +
-    props(patch_project='webrtc') +
+    props(
+        repository='https://webrtc.googlesource.com/src',
+        patch_project='webrtc') +
     api.platform.name('linux')
   )
 
   yield (
     api.test('use_webrtc_patch_on_chromium_trybot_compile_failure') +
-    props(patch_project='webrtc') +
+    props(
+        repository='https://webrtc.googlesource.com/src',
+        patch_project='webrtc') +
     api.platform.name('linux') +
     base_unittests_additional_compile_target() +
     suppress_analyze(more_exclusions=['third_party/webrtc/f.*']) +
@@ -652,6 +657,7 @@ def GenTests(api):
     api.test('use_skia_patch_on_chromium_trybot') +
     props(buildername='win7_chromium_rel_ng',
           mastername='tryserver.chromium.win',
+          repository='https://skia.googlesource.com/skia',
           patch_project='skia') +
     api.platform.name('win')
   )
@@ -851,6 +857,7 @@ def GenTests(api):
     api.test('use_skia_patch_on_blink_trybot') +
     props(mastername='tryserver.blink',
           buildername='mac10.12_blink_rel',
+          repository='https://skia.googlesource.com/skia',
           patch_project='skia') +
     api.platform.name('mac')
   )
