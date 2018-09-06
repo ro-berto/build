@@ -97,10 +97,14 @@ class PerfDashboardApi(recipe_api.RecipeApi):
       debug_info (list[str]|None): An optional list of log lines to add to the
           post step as debugging information.
     """
+    post_json_args = [
+        url, '-i', self.m.json.input(data), '-o', self.m.json.output()]
+    if self.m.runtime.is_luci:
+      post_json_args += [
+          '-t', self.m.service_account.default().get_access_token()]
     step_result = self.m.python(
-        name=name, script=self.resource('post_json.py'), args=[
-            url, '-i', self.m.json.input(data), '-o', self.m.json.output()],
-            **kwargs)
+        name=name, script=self.resource('post_json.py'), args=post_json_args,
+        **kwargs)
 
     if debug_info:
       step_result.presentation.logs['Debug Info'] = debug_info
