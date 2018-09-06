@@ -620,21 +620,16 @@ def GenTests(api):
     api.platform('linux', 64) +
     props(mastername='tryserver.chromium.linux',
           buildername='linux_chromium_rel_ng',
-          patch_project='chromium/src') +
+          gerrit_project='chromium/src') +
     suppress_analyze() +
     base_unittests_additional_compile_target() +
     api.step_data('compile (with patch)', retcode=1) +
     api.step_data(
-      'gerrit get change info for '
-      'https://chromium-review.googlesource.com/c/456789/12',
-      api.gerrit.get_one_change_response_data(
-          branch='experimental/feature',
-          patchset=12,
-          change=456789,
-          o_params=['DOWNLOAD_COMMANDS'])) + 
+      'gerrit get_patch_destination_branch',
+      api.gerrit.get_one_change_response_data(branch='experimental/feature'),
+     ) +
     api.post_process(
-        Filter('gerrit get change info for '
-               'https://chromium-review.googlesource.com/c/456789/12',
+        Filter('gerrit get_patch_destination_branch',
                'bot_update'))
   )
 
