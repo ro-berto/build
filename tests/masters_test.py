@@ -231,7 +231,6 @@ def main(argv):
       'master.client.art': 'ART',
       'master.client.crashpad': 'ClientCrashpad',
       'master.client.dart': 'Dart',
-      'master.client.dart.fyi': 'DartFYI',
       'master.client.flutter': 'ClientFlutter',
       'master.client.nacl': 'NativeClient',
       'master.client.nacl.toolchain': 'NativeClientToolchain',
