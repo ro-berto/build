@@ -69,6 +69,6 @@ def GenTests(api):
         project='boringssl',
         bucket='try',
         builder='docs',
-        gerrit_host='boringssl-review.googlesource.com',
+        git_repo='https://boringssl.googlesource.com/boringssl',
     )
   )
