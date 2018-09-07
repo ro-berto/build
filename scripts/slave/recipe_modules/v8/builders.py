@@ -382,7 +382,7 @@ BUILDERS = {
         ] + with_test_args(
             'isolates',
             ['--isolates'],
-            [V8Testing(3)],
+            [V8Testing(4)],
         ) + with_test_args(
             'nosse3',
             ['--extra-flags',
