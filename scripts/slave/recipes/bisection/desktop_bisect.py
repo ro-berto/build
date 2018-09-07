@@ -8,6 +8,7 @@ DEPS = [
     'chromium',
     'chromium_tests',
     'depot_tools/gclient',
+    'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/path',
     'recipe_engine/platform',
@@ -40,8 +41,19 @@ def RunSteps(api):
 
 
 def GenTests(api):
+
+  def try_build(**kwargs):
+    params = dict(
+        project='chromium',
+        builder='linux_perf_bisect',
+        git_repo='https://chromium.googlesource.com/chromium/src',
+    )
+    params.update(kwargs)
+    return api.buildbucket.try_build(**params)
+
   yield (
       api.test('basic') +
+      try_build() +
       api.properties.tryserver(
           path_config='kitchen',
           mastername='tryserver.chromium.perf',
@@ -111,7 +123,9 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
 }
 
   yield (
-      api.test('basic_perf_tryjob') + api.properties.tryserver(
+      api.test('basic_perf_tryjob') +
+      try_build() +
+      api.properties.tryserver(
           path_config='kitchen',
           mastername='tryserver.chromium.perf',
           buildername='linux_perf_bisect',
@@ -157,6 +171,7 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
 
   yield (
       api.test('basic_perf_tryjob_with_bucket') +
+      try_build() +
       api.properties.tryserver(
           path_config='kitchen',
           mastername='tryserver.chromium.perf',
@@ -198,7 +213,11 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
       'target_arch': 'ia32',
   }
   yield (
-      api.test('deps_perf_tryjob') + api.properties.tryserver(
+      api.test('deps_perf_tryjob') +
+      try_build(
+          git_repo='https://chromium.googlesource.com/v8/v8',
+      ) +
+      api.properties.tryserver(
           path_config='kitchen',
           mastername='tryserver.chromium.perf',
           buildername='linux_perf_bisect',
@@ -237,6 +256,7 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
 
   yield (
       api.test('basic_perf_tryjob_with_metric') +
+      try_build() +
       api.properties.tryserver(
           path_config='kitchen',
           mastername='tryserver.chromium.perf',
@@ -276,6 +296,7 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
   config_valueset['command'] += ' --output_format=valueset'
   yield (
       api.test('basic_perf_tryjob_with_metric_valueset') +
+      try_build() +
       api.properties.tryserver(
           path_config='kitchen',
           mastername='tryserver.chromium.perf',
@@ -313,7 +334,9 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
           api.json.output({'status_code': 200})))
 
   yield (
-      api.test('perf_tryjob_failed_test') + api.properties.tryserver(
+      api.test('perf_tryjob_failed_test') +
+      try_build() +
+      api.properties.tryserver(
           path_config='kitchen',
           mastername='tryserver.chromium.perf',
           buildername='linux_perf_bisect',
@@ -344,6 +367,7 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
 
   yield (
       api.test('basic_perf_tryjob_with_revisions') +
+      try_build() +
       api.properties.tryserver(
           path_config='kitchen',
           mastername='tryserver.chromium.perf',
@@ -396,6 +420,7 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
 
   yield (
       api.test('perf_tryjob_config_error') +
+      try_build() +
       api.properties.tryserver(
           path_config='kitchen',
           mastername='tryserver.chromium.perf',
@@ -407,6 +432,7 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
       api.override_step_data('load config', api.json.output(config_json)))
 
   yield (api.test('perf_tryjob_no_config') +
+      try_build() +
       api.properties.tryserver(
           path_config='kitchen',
           mastername='tryserver.chromium.perf',
