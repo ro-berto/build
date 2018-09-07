@@ -370,6 +370,8 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
+      "spec_name:v8.try:v8_linux64_sanitizer_coverage_rel",
+      "--tag",
       "stepname:Check",
       "--idempotent",
       "--cipd-package",

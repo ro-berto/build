@@ -543,6 +543,12 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           reason='CQ',
           revision='deadbeef'*5,
           try_job_key='1234',
+      ) + self.m.buildbucket.try_build(
+          project='v8',
+          builder=buildername,
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          change_number=456789,
+          patch_set=12,
       )
 
     # Skip some goma and swarming related steps in expectations.
