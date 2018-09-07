@@ -1647,7 +1647,11 @@ BUILDERS = {
         'triggers_proxy': True,
       },
       'V8 Android Arm64 - N5X': {
-        'tests': [D8Testing(2)],
+        'tests': [
+          D8Testing(2),
+          Test262(5),
+          Mozilla,
+        ],
         'variants': V8Variant('default'),
         'swarming_dimensions': {
           'device_os': 'MMB29Q',

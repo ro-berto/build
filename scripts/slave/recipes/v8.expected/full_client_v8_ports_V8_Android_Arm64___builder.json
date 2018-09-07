@@ -144,7 +144,7 @@
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
-      "d8_default\nperf\n",
+      "d8_default\nmozilla\nperf\ntest262\n",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Android_Arm64___builder/v8",
@@ -156,7 +156,9 @@
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@d8_default@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@mozilla@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@perf@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@test262@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
@@ -303,12 +305,16 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "[BUILDER_CACHE]/V8_Android_Arm64___builder/v8/out/Release/d8_default.isolated.gen.json"
+      "[BUILDER_CACHE]/V8_Android_Arm64___builder/v8/out/Release/d8_default.isolated.gen.json",
+      "[BUILDER_CACHE]/V8_Android_Arm64___builder/v8/out/Release/mozilla.isolated.gen.json",
+      "[BUILDER_CACHE]/V8_Android_Arm64___builder/v8/out/Release/test262.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"d8_default\": \"[dummy hash for d8_default]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"d8_default\": \"[dummy hash for d8_default]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -324,7 +330,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"d8_default\": \"[dummy hash for d8_default]\", \"perf\": \"[dummy hash for perf]\"}",
+      "{\"d8_default\": \"[dummy hash for d8_default]\", \"mozilla\": \"[dummy hash for mozilla]\", \"perf\": \"[dummy hash for perf]\", \"test262\": \"[dummy hash for test262]\"}",
       "gs://chromium-v8/isolated/client.v8.ports/V8 Android Arm64 - builder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "infra_step": true,
@@ -383,7 +389,9 @@
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
             "d8_default": "[dummy hash for d8_default]",
-            "perf": "[dummy hash for perf]"
+            "mozilla": "[dummy hash for mozilla]",
+            "perf": "[dummy hash for perf]",
+            "test262": "[dummy hash for test262]"
           }
         }
       }
@@ -400,7 +408,7 @@
       "cr-buildbucket.appspot.com",
       "-service-account-json",
       "/creds/service_accounts/service-account-v8-bot.json",
-      "{\"bucket\": \"luci.v8-internal.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_trigger_proxy\\\", \\\"changes\\\": [{\\\"author\\\": {\\\"email\\\": \\\"cool_dev1337@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}, {\\\"author\\\": {\\\"email\\\": \\\"hax@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}], \\\"properties\\\": {\\\"archive\\\": \\\"gs://chromium-v8/archives/client.v8.ports/V8 Android Arm64 - builder\\\", \\\"parent_build_config\\\": \\\"Release\\\", \\\"parent_build_environment\\\": {\\\"gn_args\\\": \\\"target_cpu = \\\\\\\"x86\\\\\\\" use_goma = true\\\"}, \\\"parent_buildername\\\": \\\"V8 Android Arm64 - builder\\\", \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"swarm_hashes\\\": {\\\"d8_default\\\": \\\"[dummy hash for d8_default]\\\", \\\"perf\\\": \\\"[dummy hash for perf]\\\"}}}\", \"tags\": [\"builder:v8_trigger_proxy\", \"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"parent_buildername:V8 Android Arm64 - builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"luci.v8-internal.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_trigger_proxy\\\", \\\"changes\\\": [{\\\"author\\\": {\\\"email\\\": \\\"cool_dev1337@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}, {\\\"author\\\": {\\\"email\\\": \\\"hax@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}], \\\"properties\\\": {\\\"archive\\\": \\\"gs://chromium-v8/archives/client.v8.ports/V8 Android Arm64 - builder\\\", \\\"parent_build_config\\\": \\\"Release\\\", \\\"parent_build_environment\\\": {\\\"gn_args\\\": \\\"target_cpu = \\\\\\\"x86\\\\\\\" use_goma = true\\\"}, \\\"parent_buildername\\\": \\\"V8 Android Arm64 - builder\\\", \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"swarm_hashes\\\": {\\\"d8_default\\\": \\\"[dummy hash for d8_default]\\\", \\\"mozilla\\\": \\\"[dummy hash for mozilla]\\\", \\\"perf\\\": \\\"[dummy hash for perf]\\\", \\\"test262\\\": \\\"[dummy hash for test262]\\\"}}}\", \"tags\": [\"builder:v8_trigger_proxy\", \"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"parent_buildername:V8 Android Arm64 - builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
     "name": "trigger_internal",
