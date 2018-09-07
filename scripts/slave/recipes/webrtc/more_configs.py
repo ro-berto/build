@@ -141,7 +141,11 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  for test in api.chromium.gen_tests_for_builders(BUILDERS):
+  tests = api.chromium.gen_tests_for_builders(
+      BUILDERS,
+      project='webrtc',
+      git_repo='https://webrtc.googlesource.com/src')
+  for test in tests:
     yield (test +
            api.runtime(is_luci=True, is_experimental=False) +
            api.properties(

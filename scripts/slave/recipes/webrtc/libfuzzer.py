@@ -80,7 +80,11 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  for test in api.chromium.gen_tests_for_builders(BUILDERS):
+  tests = api.chromium.gen_tests_for_builders(
+      BUILDERS,
+      project='webrtc',
+      git_repo='https://webrtc.googlesource.com/src')
+  for test in tests:
     yield (test +
            api.step_data('calculate targets',
                stdout=api.raw_io.output_text('target1 target2 target3')) +

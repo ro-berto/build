@@ -18,7 +18,10 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
         'get version',
         self.m.file.read_text(version_file_contents))
 
-  def gen_tests_for_builders(self, builder_dict):
+  def gen_tests_for_builders(
+      self, builder_dict,
+      project='chromium',
+      git_repo='https://chromium.googlesource.com/chromium/src'):
     # TODO: crbug.com/354674. Figure out where to put "simulation"
     # tests. Is this really the right place?
 
@@ -41,9 +44,19 @@ class ChromiumTestApi(recipe_test_api.RecipeTestApi):
         if mastername.startswith('tryserver'):
           test += self.m.properties.tryserver(buildername=buildername,
                                               mastername=mastername)
+          test += self.m.buildbucket.try_build(
+              project=project,
+              builder=buildername,
+              git_repo=git_repo,
+          )
         else:
           test += self.m.properties.generic(buildername=buildername,
                                             mastername=mastername)
+          test += self.m.buildbucket.ci_build(
+              project=project,
+              builder=buildername,
+              git_repo=git_repo,
+          )
 
         yield test
 
