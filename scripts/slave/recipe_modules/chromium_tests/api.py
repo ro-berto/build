@@ -55,8 +55,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def create_bot_config_object(self, mastername, buildername, builders=None):
     return self.create_generalized_bot_config_object(
-        [{'mastername': mastername, 'buildername': buildername}],
+        [self.create_bot_id(mastername, buildername)],
         builders=builders)
+
+  def create_bot_id(self, mastername, buildername):
+    return {'mastername': mastername, 'buildername': buildername}
 
   def create_generalized_bot_config_object(self, bot_ids, builders=None):
     try:
@@ -977,15 +980,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def _trybot_steps_internal(self, builders=None, trybots=None):
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
-    bot_config = (trybots or self.trybots).get(mastername, {}).get(
+    trybot_config = (trybots or self.trybots).get(mastername, {}).get(
         'builders', {}).get(buildername)
-    assert bot_config, 'No bot config for master/builder [%s / %s]' % (
-        mastername, buildername)
+
+    if not trybot_config:
+      trybot_config = {
+        'bot_ids': [self.create_bot_id(mastername, buildername)],
+      }
 
     bot_config_object = self.create_generalized_bot_config_object(
-        bot_config['bot_ids'], builders=builders)
-    self._report_builders(bot_config_object)
+        trybot_config['bot_ids'], builders=builders)
 
+    self._report_builders(bot_config_object)
     self.set_precommit_mode()
     self.configure_build(bot_config_object, override_bot_type='builder_tester')
 
@@ -1017,7 +1023,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver:
       additional_compile_targets = sorted(
           set(compile_targets) - set(test_targets))
-      analyze_names = ['chromium'] + list(bot_config.get('analyze_names', []))
+      analyze_names = ['chromium'] + list(trybot_config.get('analyze_names', []))
       mb_config_path = (
           self.m.chromium.c.project_generator.config_path
           or self.m.path['checkout'].join('tools', 'mb', 'mb_config.pyl'))
@@ -1029,7 +1035,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           mb_config_path=mb_config_path,
           additional_names=analyze_names)
 
-    if bot_config.get('analyze_mode') == 'compile':
+    if trybot_config.get('analyze_mode') == 'compile':
       tests = []
       tests_including_triggered = []
 
@@ -1056,7 +1062,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       else:
         tests = []
 
-    disable_deapply_patch = not bot_config.get('deapply_patch', True)
+    disable_deapply_patch = not trybot_config.get('deapply_patch', True)
     return (bot_config_object, bot_update_step, affected_files, tests,
             disable_deapply_patch)
 

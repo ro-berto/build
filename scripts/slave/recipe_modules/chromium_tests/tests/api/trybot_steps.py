@@ -28,6 +28,13 @@ _TEST_BUILDERS = {
       },
     },
   },
+  'tryserver.chromium.unmirrored': {
+    'builders': {
+      'unmirrored-chromium-rel': {
+        'gclient_config': 'chromium',
+      },
+    },
+  },
 }
 
 _TEST_TRYBOTS = {
@@ -132,6 +139,25 @@ def GenTests(api):
           'git diff to analyze patch',
           api.raw_io.stream_output('OWNERS')
       )
+  )
+
+  yield (
+      api.test('unmirrored') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.unmirrored',
+          buildername='unmirrored-chromium-rel',
+          builders=_TEST_BUILDERS) +
+      api.override_step_data(
+          'read test spec (tryserver.chromium.unmirrored.json)',
+          api.json.output({
+              'unmirrored-chromium-rel': {
+                  'gtest_tests': ['bogus_unittests'],
+              },
+          })
+      ) +
+      api.filter.suppress_analyze() +
+      api.post_process(post_process.MustRun, 'bogus_unittests (with patch)') +
+      api.post_process(post_process.DropExpectation)
   )
 
   # Check the 5% experiment for exparchive only runs on 5% of builds. It uses
