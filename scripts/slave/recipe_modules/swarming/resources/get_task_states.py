@@ -22,9 +22,8 @@ def main():
 
   args = parser.parse_args()
 
-  url = 'tasks/get_states?'
-  for task in args.task_id:
-    url += 'task_id=%s' % task
+  url = 'tasks/get_states?' + '&'.join(
+      'task_id=%s' % task for task in args.task_id)
 
   cmd = [
       args.swarming_py_path,
@@ -36,7 +35,7 @@ def main():
 
   logging.info('get_states cmd: %s', ' '.join(cmd))
   get_states_result = subprocess.call(cmd)
-  if collect_result != 0:
+  if get_states_result != 0:
     logging.warn(
         'get_states cmd had non-zero return code: %s', get_states_result)
 
