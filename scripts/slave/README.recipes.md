@@ -803,13 +803,13 @@ Uploads the given test results log to Google storage.
 
 #### **class [ChromiteApi](/scripts/slave/recipe_modules/chromite/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [build\_packages](/scripts/slave/recipe_modules/chromite/api.py#193)(self, board, args=None, \*\*kwargs):**
+&mdash; **def [build\_packages](/scripts/slave/recipe_modules/chromite/api.py#194)(self, board, args=None, \*\*kwargs):**
 
 Run the build_packages script inside the chroot.
 
 Used by the internal goma recipe.
 
-&mdash; **def [cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#139)(self, name, config, args=None, \*\*kwargs):**
+&mdash; **def [cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#140)(self, name, config, args=None, \*\*kwargs):**
 
 Runs the cbuildbot command defined by the arguments.
 
@@ -820,7 +820,7 @@ Args:
 
 Returns: (Step) The step that was run.
 
-&mdash; **def [check\_repository](/scripts/slave/recipe_modules/chromite/api.py#52)(self, repo_type_key, value):**
+&mdash; **def [check\_repository](/scripts/slave/recipe_modules/chromite/api.py#53)(self, repo_type_key, value):**
 
 Scans through registered repositories for a specified value.
 
@@ -829,16 +829,16 @@ Args:
   value (str): The value to scan for.
 Returns (bool): True if the value was found.
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/chromite/api.py#156)(self, manifest_url=None, repo_url=None, repo_sync_args=None):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/chromite/api.py#157)(self, manifest_url=None, repo_url=None, repo_sync_args=None):**
 
-&mdash; **def [checkout\_chromite](/scripts/slave/recipe_modules/chromite/api.py#247)(self):**
+&mdash; **def [checkout\_chromite](/scripts/slave/recipe_modules/chromite/api.py#248)(self):**
 
 Checks out the configured Chromite branch.
     
 
 &emsp; **@property**<br>&mdash; **def [chromite\_path](/scripts/slave/recipe_modules/chromite/api.py#28)(self):**
 
-&mdash; **def [configure](/scripts/slave/recipe_modules/chromite/api.py#202)(self, properties, config_map, \*\*KWARGS):**
+&mdash; **def [configure](/scripts/slave/recipe_modules/chromite/api.py#203)(self, properties, config_map, \*\*KWARGS):**
 
 Loads configuration from build properties into this recipe config.
 
@@ -847,7 +847,7 @@ Args:
   config_map (dict): The configuration map to use.
   KWARGS: Additional keyword arguments to forward to the configuration.
 
-&mdash; **def [cros\_sdk](/scripts/slave/recipe_modules/chromite/api.py#167)(self, name, cmd, args=None, environ=None, \*\*kwargs):**
+&mdash; **def [cros\_sdk](/scripts/slave/recipe_modules/chromite/api.py#168)(self, name, cmd, args=None, environ=None, \*\*kwargs):**
 
 Return a step to run a command inside the cros_sdk.
 
@@ -855,7 +855,7 @@ Used by the internal goma recipe.
 
 &emsp; **@property**<br>&mdash; **def [depot\_tools\_path](/scripts/slave/recipe_modules/chromite/api.py#32)(self):**
 
-&mdash; **def [gclient\_config](/scripts/slave/recipe_modules/chromite/api.py#121)(self):**
+&mdash; **def [gclient\_config](/scripts/slave/recipe_modules/chromite/api.py#122)(self):**
 
 Generate a 'gclient' configuration to check out Chromite.
 
@@ -863,7 +863,7 @@ Return: (config) A 'gclient' recipe module configuration.
 
 &mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/chromite/api.py#36)(self):**
 
-&mdash; **def [load\_manifest\_config](/scripts/slave/recipe_modules/chromite/api.py#70)(self, repository, revision):**
+&mdash; **def [load\_manifest\_config](/scripts/slave/recipe_modules/chromite/api.py#71)(self, repository, revision):**
 
 Loads manifest-specified parameters from the manifest commit.
 
@@ -875,7 +875,7 @@ Args:
   repository (str): The URL of the repository hosting the change.
   revision (str): The revision hash to load the build ID from.
 
-&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#285)(self, args=None):**
+&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#286)(self, args=None):**
 
 Runs the configured 'cbuildbot' build.
 
@@ -898,7 +898,7 @@ Args:
   args (list): Initial argument list, expanded based on other values.
 Returns: (Step) the 'cbuildbot' execution step.
 
-&mdash; **def [run\_cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#229)(self, args=None, goma_canary=False):**
+&mdash; **def [run\_cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#230)(self, args=None, goma_canary=False):**
 
 Performs a Chromite repository checkout, then runs cbuildbot.
 
@@ -906,13 +906,13 @@ Args:
   args (list): Initial argument list, see run() for details.
   goma_canary (bool): Use canary version of goma if True.
 
-&mdash; **def [setup\_board](/scripts/slave/recipe_modules/chromite/api.py#183)(self, board, args=None, \*\*kwargs):**
+&mdash; **def [setup\_board](/scripts/slave/recipe_modules/chromite/api.py#184)(self, board, args=None, \*\*kwargs):**
 
 Run the setup_board script inside the chroot.
 
 Used by the internal goma recipe.
 
-&mdash; **def [with\_system\_python](/scripts/slave/recipe_modules/chromite/api.py#256)(self):**
+&mdash; **def [with\_system\_python](/scripts/slave/recipe_modules/chromite/api.py#257)(self):**
 
 Prepare a directory with the system python binary available.
 
@@ -5817,18 +5817,18 @@ The changes are:
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/zip/examples/full.py#14)(api):**
 
-[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bf6feefa8a42b78a638e382c3a5b6b683b36c3aa/recipes/README.recipes.md#recipe_modules-bot_update
-[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bf6feefa8a42b78a638e382c3a5b6b683b36c3aa/recipes/README.recipes.md#recipe_modules-cipd
-[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bf6feefa8a42b78a638e382c3a5b6b683b36c3aa/recipes/README.recipes.md#recipe_modules-depot_tools
-[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bf6feefa8a42b78a638e382c3a5b6b683b36c3aa/recipes/README.recipes.md#recipe_modules-gclient
-[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bf6feefa8a42b78a638e382c3a5b6b683b36c3aa/recipes/README.recipes.md#recipe_modules-gerrit
-[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bf6feefa8a42b78a638e382c3a5b6b683b36c3aa/recipes/README.recipes.md#recipe_modules-git
-[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bf6feefa8a42b78a638e382c3a5b6b683b36c3aa/recipes/README.recipes.md#recipe_modules-gitiles
-[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bf6feefa8a42b78a638e382c3a5b6b683b36c3aa/recipes/README.recipes.md#recipe_modules-gsutil
-[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bf6feefa8a42b78a638e382c3a5b6b683b36c3aa/recipes/README.recipes.md#recipe_modules-infra_paths
-[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bf6feefa8a42b78a638e382c3a5b6b683b36c3aa/recipes/README.recipes.md#recipe_modules-presubmit
-[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bf6feefa8a42b78a638e382c3a5b6b683b36c3aa/recipes/README.recipes.md#recipe_modules-tryserver
-[depot_tools/recipe_modules/windows_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bf6feefa8a42b78a638e382c3a5b6b683b36c3aa/recipes/README.recipes.md#recipe_modules-windows_sdk
+[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/f3d9294ba49806fba0ec6c7f8378e77386429ef2/recipes/README.recipes.md#recipe_modules-bot_update
+[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/f3d9294ba49806fba0ec6c7f8378e77386429ef2/recipes/README.recipes.md#recipe_modules-cipd
+[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/f3d9294ba49806fba0ec6c7f8378e77386429ef2/recipes/README.recipes.md#recipe_modules-depot_tools
+[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/f3d9294ba49806fba0ec6c7f8378e77386429ef2/recipes/README.recipes.md#recipe_modules-gclient
+[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/f3d9294ba49806fba0ec6c7f8378e77386429ef2/recipes/README.recipes.md#recipe_modules-gerrit
+[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/f3d9294ba49806fba0ec6c7f8378e77386429ef2/recipes/README.recipes.md#recipe_modules-git
+[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/f3d9294ba49806fba0ec6c7f8378e77386429ef2/recipes/README.recipes.md#recipe_modules-gitiles
+[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/f3d9294ba49806fba0ec6c7f8378e77386429ef2/recipes/README.recipes.md#recipe_modules-gsutil
+[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/f3d9294ba49806fba0ec6c7f8378e77386429ef2/recipes/README.recipes.md#recipe_modules-infra_paths
+[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/f3d9294ba49806fba0ec6c7f8378e77386429ef2/recipes/README.recipes.md#recipe_modules-presubmit
+[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/f3d9294ba49806fba0ec6c7f8378e77386429ef2/recipes/README.recipes.md#recipe_modules-tryserver
+[depot_tools/recipe_modules/windows_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/f3d9294ba49806fba0ec6c7f8378e77386429ef2/recipes/README.recipes.md#recipe_modules-windows_sdk
 [recipe_engine/recipe_modules/buildbucket]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/25a327e765e0410f2dcaf152db9cdaba73207182/README.recipes.md#recipe_modules-buildbucket
 [recipe_engine/recipe_modules/context]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/25a327e765e0410f2dcaf152db9cdaba73207182/README.recipes.md#recipe_modules-context
 [recipe_engine/recipe_modules/file]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/25a327e765e0410f2dcaf152db9cdaba73207182/README.recipes.md#recipe_modules-file
