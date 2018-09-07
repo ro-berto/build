@@ -18,6 +18,7 @@ DEPS = [
   'depot_tools/tryserver',
   'filter',
   'isolate',
+  'recipe_engine/buildbucket',
   'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -614,6 +615,11 @@ def GenTests(api):
           repository='https://chromium.googlesource.com/v8/v8',
           patch_repository_url='https://chromium.googlesource.com/v8/v8',
           patch_project='v8') +
+    api.buildbucket.try_build(
+        project='chromium',
+        builder='win7_chromium_rel_ng',
+        git_repo='https://chromium.googlesource.com/v8/v8',
+    ) +
     api.platform.name('win')
   )
 
@@ -641,6 +647,11 @@ def GenTests(api):
         repository='https://webrtc.googlesource.com/src',
         patch_repository_url='https://webrtc.googlesource.com/src',
         patch_project='webrtc') +
+    api.buildbucket.try_build(
+        project='chromium',
+        builder='webrtc',
+        git_repo='https://webrtc.googlesource.com/src',
+    ) +
     api.platform.name('linux')
   )
 
@@ -650,6 +661,11 @@ def GenTests(api):
         repository='https://webrtc.googlesource.com/src',
         patch_repository_url='https://webrtc.googlesource.com/src',
         patch_project='webrtc') +
+    api.buildbucket.try_build(
+        project='chromium',
+        builder='webrtc',
+        git_repo='https://webrtc.googlesource.com/src',
+    ) +
     api.platform.name('linux') +
     base_unittests_additional_compile_target() +
     suppress_analyze(more_exclusions=['third_party/webrtc/f.*']) +
@@ -663,6 +679,11 @@ def GenTests(api):
           repository='https://skia.googlesource.com/skia',
           patch_repository_url='https://skia.googlesource.com/skia',
           patch_project='skia') +
+    api.buildbucket.try_build(
+        project='chromium',
+        builder='win7_chromium_rel_ng',
+        git_repo='https://skia.googlesource.com/skia',
+    ) +
     api.platform.name('win')
   )
 
@@ -864,6 +885,11 @@ def GenTests(api):
           repository='https://skia.googlesource.com/skia',
           patch_repository_url='https://skia.googlesource.com/skia',
           patch_project='skia') +
+    api.buildbucket.try_build(
+        project='chromium',
+        builder='mac10.12_blink_rel',
+        git_repo='https://skia.googlesource.com/skia',
+    ) +
     api.platform.name('mac')
   )
 
@@ -874,6 +900,11 @@ def GenTests(api):
           repository='https://chromium.googlesource.com/v8/v8',
           patch_repository_url='https://chromium.googlesource.com/v8/v8',
           patch_project='v8') +
+    api.buildbucket.try_build(
+        project='chromium',
+        builder='mac10.12_blink_rel',
+        git_repo='https://chromium.googlesource.com/v8/v8',
+    ) +
     api.platform.name('mac')
   )
 
