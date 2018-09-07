@@ -899,7 +899,32 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     self.configure_build(bot_config)
     update_step, bot_db = self.prepare_checkout(bot_config)
-    tests, tests_including_triggered = self.get_tests(bot_config, bot_db)
+
+    bot_type = bot_config.get('bot_type')
+
+    if self.c.staging:
+      # TODO(jbudorick): Promote this to stable.
+      test_config = bot_config.get_tests_staging(bot_db)
+      tests = test_config.tests_on(mastername, buildername)
+      tests_including_triggered = test_config.all_tests()
+
+      if bot_type == 'tester':
+        isolate_transfer = (
+            all(t.uses_isolate
+                for t in test_config.tests_on(mastername, buildername)))
+        package_transfer = not isolate_transfer
+      else:
+        isolate_transfer = (
+            any(t.uses_isolate
+                for t in test_config.tests_triggered_by(mastername, buildername)))
+        package_transfer = (
+            any(not t.uses_isolate
+                for t in test_config.tests_triggered_by(mastername, buildername)))
+    else:
+      tests, tests_including_triggered = self.get_tests(bot_config, bot_db)
+      isolate_transfer = False
+      package_transfer = True
+
     compile_targets = self.get_compile_targets(
         bot_config, bot_db, tests_including_triggered)
     self.compile_specific_targets(
@@ -907,22 +932,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         compile_targets, tests_including_triggered,
         mb_config_path=mb_config_path)
 
-    isolate_transfer = (
-        # Only check whether all tests on triggered testers are isolated.
-        # TODO(jbudorick): Clean this up prior to promoting to stable.
-        # get_tests should return something more sophisticated than just
-        # (tests, tests_including_triggered).
-        all(t.uses_isolate
-            for t in tests_including_triggered[len(tests):])
-
-        # TODO(jbudorick): Promote this to stable.
-        and self.c.staging)
-
     additional_trigger_properties = {}
     if isolate_transfer:
       additional_trigger_properties['swarm_hashes'] = (
           self.m.isolate.isolated_tests)
-    elif bot_config.get('bot_type') == 'builder':
+    if package_transfer and bot_type == 'builder':
       self.package_build(mastername, buildername, update_step, bot_db)
 
     self.trigger_child_builds(
@@ -930,11 +944,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         additional_properties=additional_trigger_properties)
     self.archive_build(mastername, buildername, update_step, bot_db)
 
-    if isolate_transfer and bot_config.get('bot_type') == 'tester':
+    if isolate_transfer and bot_type == 'tester':
       self.m.file.rmtree(
         'build directory',
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
-    else:
+    if package_transfer:
       self.download_and_unzip_build(mastername, buildername, update_step, bot_db)
 
     if not tests:
@@ -980,7 +994,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     self.m.chromium.apply_config('trybot_flavor')
 
     bot_update_step, bot_db = self.prepare_checkout(bot_config_object)
-    tests, tests_including_triggered = self.get_tests(bot_config_object, bot_db)
+
+    if self.c.staging:
+      test_config = bot_config_object.get_tests_staging(bot_db)
+      tests = test_config.tests_in_scope()
+      tests_including_triggered = test_config.all_tests()
+    else:
+      tests, tests_including_triggered = self.get_tests(bot_config_object, bot_db)
 
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
 

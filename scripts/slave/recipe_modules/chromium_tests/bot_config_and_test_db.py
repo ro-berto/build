@@ -171,6 +171,10 @@ class BotConfig(object):
 
     return tests, tests_including_triggered
 
+  def get_tests_staging(self, bot_db):
+    # TODO(jbudorick): Remove get_tests and replace it with this.
+    return _TestConfig(self._bot_ids, bot_db)
+
   def get_compile_targets(self, chromium_tests_api, bot_db, tests):
     compile_targets = set()
     for bot_id in self._bot_ids:
@@ -189,6 +193,116 @@ class BotConfig(object):
 
   def matches_any_bot_id(self, fun):
     return any(fun(bot_id) for bot_id in self._bot_ids)
+
+
+class _TestConfig(object):
+  """Determines and stores tests for a given group of bots."""
+
+  class _ConfigNode(object):
+    """A node in the builder graph.
+
+    Corresponds to an individual builder.
+    """
+    def __init__(self, key, mirrored, tests):
+      self.children = {}
+      # A key that uniquely identifies this builder.
+      # Currently (mastername, buildername)
+      self.key = key
+      # Whether this builder should be mirrored by trybots based on
+      # the bot IDs provided to _TestConfig.__init__.
+      self.mirrored = mirrored
+      # This builder's tests.
+      self.tests = tests
+
+  def __init__(self, bot_ids, bot_db):
+    """Creates a _TestConfig instance.
+
+    This creates a directed acyclic builder graph, with the builders
+    described by the provided bot IDs as the root nodes and the builders
+    they trigger as their children. Nodes keep track of whether they're
+    referenced by a bot ID (and would thus be mirrored by trybots).
+    """
+    self._config = self._ConfigNode(None, False, None)
+
+    for bot_id in bot_ids:
+      mastername = bot_id['mastername']
+      buildername = bot_id['buildername']
+      builder_bot_config = bot_db.get_bot_config(
+          mastername, buildername)
+      builder_key = (mastername, buildername)
+      if builder_key not in self._config.children:
+        self._config.children[builder_key] = self._ConfigNode(
+            builder_key, True, builder_bot_config.get('tests', []))
+      builder_config = self._config.children[builder_key]
+
+      if 'tester' in bot_id:
+        tester_mastername = bot_id.get('tester_mastername', mastername)
+        tester_buildername = bot_id['tester']
+        tester_key = (tester_mastername, tester_buildername)
+        tester_bot_config = bot_db.get_bot_config(
+            tester_mastername, tester_buildername)
+        builder_config.children[tester_key] = self._ConfigNode(
+            tester_key, True, tester_bot_config.get('tests', []))
+
+      for (
+            _luci_project,
+            triggered_mastername,
+            triggered_buildername,
+            triggered_bot_config
+          ) in bot_db.bot_configs_matching_parent_buildername(
+              mastername, buildername):
+        triggered_key = (triggered_mastername, triggered_buildername)
+        if triggered_key not in builder_config.children:
+          builder_config.children[triggered_key] = self._ConfigNode(
+              triggered_key, False, triggered_bot_config.get('tests', []))
+
+  def all_tests(self):
+    """Returns all tests."""
+    return list(self._iter_tests(
+        node for node, _ in self._iter_nodes()))
+
+  def tests_in_scope(self):
+    """Returns all tests for the provided bot IDs."""
+    return list(self._iter_tests(
+        node for node, _ in self._iter_nodes()
+        if node.mirrored))
+
+  def tests_on(self, mastername, buildername):
+    """Returns all tests for the specified builder."""
+    return list(self._iter_tests(
+        node for node, _ in self._iter_nodes()
+        if (mastername, buildername) == node.key))
+
+  def tests_triggered_by(self, mastername, buildername):
+    """Returns all tests for builders triggered by the specified builder."""
+    return list(self._iter_tests(
+        node for node, parent in self._iter_nodes()
+        if parent and (mastername, buildername) == parent.key))
+
+  def _iter_nodes(self):
+    """Generates a sequence of node pairs from the builder graph.
+
+    Each pair is (node, parent).
+    """
+    def _iter_nodes_impl(node, parent_node):
+      yield (node, parent_node)
+
+      for val in node.children.itervalues():
+        for node, parent_node in _iter_nodes_impl(val, node):
+          yield (node, parent_node)
+
+    for node, parent_node in _iter_nodes_impl(self._config, None):
+      yield (node, parent_node)
+
+  def _iter_tests(self, nodes):
+    """Generates a sequence of tests contained in the given nodes.
+
+    Args:
+      nodes: an iterable of _ConfigNodes.
+    """
+    for node in nodes:
+      for test in node.tests or []:
+        yield test
 
 
 class BotConfigAndTestDB(object):

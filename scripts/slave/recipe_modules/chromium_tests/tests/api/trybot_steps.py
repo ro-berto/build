@@ -15,8 +15,42 @@ DEPS = [
 ]
 
 
+_TEST_BUILDERS = {
+  'chromium.test': {
+    'builders': {
+      'staging-chromium-rel': {
+        'gclient_config': 'chromium',
+        'chromium_tests_apply_config': ['staging'],
+      },
+      'staging-chromium-test-rel': {
+        'gclient_config': 'chromium',
+        'chromium_tests_apply_config': ['staging'],
+      },
+    },
+  },
+}
+
+_TEST_TRYBOTS = {
+  'tryserver.chromium.test': {
+    'builders': {
+      'staging-chromium-rel': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.test',
+            'buildername': 'staging-chromium-rel',
+            'tester': 'staging-chromium-test-rel',
+          },
+        ],
+      },
+    },
+  },
+}
+
+
 def RunSteps(api):
-  api.chromium_tests.trybot_steps()
+  api.chromium_tests.trybot_steps(
+      builders=api.properties.get('builders'),
+      trybots=api.properties.get('trybots'))
   assert api.chromium_tests.is_precommit_mode()
 
 
@@ -35,6 +69,26 @@ def GenTests(api):
           })
       ) +
       api.filter.suppress_analyze()
+  )
+
+  yield (
+      api.test('staging') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.test',
+          buildername='staging-chromium-rel',
+          builders=_TEST_BUILDERS,
+          trybots=_TEST_TRYBOTS) +
+      api.override_step_data(
+          'read test spec (chromium.test.json)',
+          api.json.output({
+              'staging-chromium-test-rel': {
+                  'gtest_tests': ['staging_base_unittests'],
+              },
+          })
+      ) +
+      api.filter.suppress_analyze() +
+      api.post_process(post_process.MustRun, 'staging_base_unittests (with patch)') +
+      api.post_process(post_process.DropExpectation)
   )
 
   yield (
