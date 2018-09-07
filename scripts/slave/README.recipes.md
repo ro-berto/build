@@ -132,6 +132,7 @@
   * [chromium_gsutil:examples/full](#recipes-chromium_gsutil_examples_full)
   * [chromium_libfuzzer](#recipes-chromium_libfuzzer)
   * [chromium_libfuzzer_clang_tot](#recipes-chromium_libfuzzer_clang_tot)
+  * [chromium_libfuzzer_trybot](#recipes-chromium_libfuzzer_trybot)
   * [chromium_swarming:tests/configure_swarming](#recipes-chromium_swarming_tests_configure_swarming)
   * [chromium_tests:examples/full](#recipes-chromium_tests_examples_full)
   * [chromium_tests:tests/api/archive_build](#recipes-chromium_tests_tests_api_archive_build)
@@ -4426,6 +4427,11 @@ Returns: the list of matched targets.
 [DEPS](/scripts/slave/recipes/chromium_libfuzzer_clang_tot.py#8): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/chromium_libfuzzer_clang_tot.py#39)(api):**
+### *recipes* / [chromium\_libfuzzer\_trybot](/scripts/slave/recipes/chromium_libfuzzer_trybot.py)
+
+[DEPS](/scripts/slave/recipes/chromium_libfuzzer_trybot.py#8): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [gn](#recipe_modules-gn), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_libfuzzer_trybot.py#50)(api):**
 ### *recipes* / [chromium\_swarming:tests/configure\_swarming](/scripts/slave/recipe_modules/chromium_swarming/tests/configure_swarming.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_swarming/tests/configure_swarming.py#8): [chromium](#recipe_modules-chromium), [chromium\_swarming](#recipe_modules-chromium_swarming), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
