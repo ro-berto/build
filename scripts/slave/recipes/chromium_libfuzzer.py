@@ -90,7 +90,7 @@ def gn_refs(api, step_name, args):
   """Runs gn refs with given additional arguments.
   Returns: the list of matched targets.
   """
-  with api.context(cwd=api.path['checkout']):
+  with api.context(cwd=api.path['checkout'], env=api.chromium.get_env()):
     step_result = api.python(step_name,
             api.depot_tools.gn_py_path,
             ['--root=%s' % str(api.path['checkout']),
