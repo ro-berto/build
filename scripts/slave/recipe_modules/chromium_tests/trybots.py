@@ -709,7 +709,7 @@ TRYBOTS = freeze({
       }),
       'Mac Builder Perf': simple_bot({
         'mastername': 'chromium.perf',
-        'buildername': 'Mac Builder Perf',
+        'buildername': 'mac-builder-perf',
       }),
       'Win Builder Perf': simple_bot({
         'mastername': 'chromium.perf',

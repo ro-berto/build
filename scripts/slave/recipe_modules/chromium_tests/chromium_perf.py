@@ -224,9 +224,9 @@ _AddIsolatedTestSpec('Win 7 Perf', 'win', 'Win Builder Perf', target_bits=32)
 _AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'win', 'Win x64 Builder Perf')
 
 
-_AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', 'mac', 'Mac Builder Perf')
+_AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', 'mac', 'mac-builder-perf')
 _AddIsolatedTestSpec('mac-10_13_laptop_high_end-perf', 'mac',
-                     'Mac Builder Perf')
+                     'mac-builder-perf')
 
 
 _AddIsolatedTestSpec('linux-perf', 'linux', 'linux-builder-perf')
