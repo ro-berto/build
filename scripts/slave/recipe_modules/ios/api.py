@@ -866,6 +866,7 @@ class iOSApi(recipe_api.RecipeApi):
         swarming_task.dimensions['os'] = 'iOS-%s' % str(task['test']['os'])
         if self.__config.get('device check'):
           swarming_task.dimensions['device_status'] = 'available'
+          swarming_task.wait_for_capacity = True
         swarming_task.dimensions['device'] = self.PRODUCT_TYPES.get(
           task['test']['device type'])
         if not swarming_task.dimensions['device']:

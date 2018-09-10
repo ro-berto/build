@@ -730,6 +730,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     if self.service_account_json:
       args.extend(['--auth-service-account-json', self.service_account_json])
 
+    if task.wait_for_capacity:
+      args.append('--wait-for-capacity')
+
     # Default tags.
     tags = set(task.tags)
     tags.update(self._default_tags)
@@ -1459,6 +1462,7 @@ class SwarmingTask(object):
     self.user = user
     self.env_prefixes = {
       var: list(paths) for var, paths in (env_prefixes or {}).iteritems()}
+    self.wait_for_capacity = False
 
   @property
   def task_name(self):
