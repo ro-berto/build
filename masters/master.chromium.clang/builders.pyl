@@ -218,6 +218,11 @@
       "bot": "slave33-c1",
       "category": "5CFI",
     },
+    "SafeStack Linux ToT": {
+      "mixins": ["trusty"],
+      "bot": "slave30-c1",
+      "category": "5CFI",
+    },
     "ToTWinCFI": {
       "mixins": ["win10"],
       "bot": "win109-c1",
