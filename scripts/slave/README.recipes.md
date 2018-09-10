@@ -1645,7 +1645,7 @@ Args:
 Returns (str) - The content of the file.
 Raises file.Error
 
-&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#564)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=[]):**
+&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#563)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=[]):**
 
 Runs a specific script with current working directory to be checkout. If
 the runtime (passed in environment) is a browser, and the system is linux,

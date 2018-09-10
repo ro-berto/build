@@ -504,8 +504,7 @@ class DartApi(recipe_api.RecipeApi):
         Contains version tags for the pinned browsers Firefox and Chrome.
     """
     args = step.get('arguments', [])
-    test_args = ['--progress=buildbot',
-                 '-v',
+    test_args = ['--progress=status',
                  '--report',
                  '--time',
                  '--write-debug-log',
