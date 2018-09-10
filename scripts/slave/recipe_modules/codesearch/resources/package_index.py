@@ -111,6 +111,10 @@ class IndexPack(object):
           if 'third_party/llvm-build' in fname:
             continue
           if fname not in self.filehashes:
+            # We don't want to fail completely if the file doesn't exist.
+            if not os.path.exists(fname):
+              print 'missing ' + fname
+              continue
             # Derive the new filename from the SHA256 hash.
             with open(fname, 'rb') as source_file:
               content = source_file.read()

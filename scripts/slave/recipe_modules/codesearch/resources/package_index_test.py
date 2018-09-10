@@ -71,6 +71,7 @@ class PackageIndexTest(unittest.TestCase):
           os.path.join('../../../', self.test_cc_file_name),
           os.path.join('../../../', self.test_h_file_name),
           os.path.join('../../../', self.test2_h_file_name),
+          'missing_file_name',
       ]))
 
     # Create a path for the archive to be written to.
