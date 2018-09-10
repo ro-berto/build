@@ -633,20 +633,6 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\determinism\\remove_build_metadata.py",
-      "--build-dir",
-      "[START_DIR]\\src\\out\\Release"
-    ],
-    "name": "remove_build_metadata",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
@@ -1131,16 +1117,6 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]\\src\\tools\\determinism\\remove_build_metadata.py",
-      "--build-dir",
-      "[START_DIR]\\src\\out\\Release"
-    ],
-    "name": "remove_build_metadata (2)"
   },
   {
     "cmd": [

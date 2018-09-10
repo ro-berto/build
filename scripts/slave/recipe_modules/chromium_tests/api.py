@@ -375,8 +375,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         raise
 
       if isolated_targets:
-        self.m.isolate.remove_build_metadata()
-
         has_patch = self.m.tryserver.is_tryserver
         swarm_hashes_property_name = ''  # By default do not yield as property.
         if 'got_revision_cp' in update_step.presentation.properties:

@@ -171,7 +171,6 @@ def RunSteps(api, buildername):
                       name='generate .isolate files',
                       mb_command='isolate-everything')
   api.chromium.compile(targets, name='First build', use_goma_module=True)
-  api.isolate.remove_build_metadata()
   if enable_isolate:
     # This archives the results and regenerate the .isolated files.
     api.isolate.isolate_tests(api.chromium.output_dir)
@@ -186,7 +185,6 @@ def RunSteps(api, buildername):
                       name='generate .isolate files',
                       mb_command='isolate-everything')
   api.chromium.compile(targets, name='Second build', use_goma_module=True)
-  api.isolate.remove_build_metadata()
   if enable_isolate:
     # This should be quick if the build is indeed deterministic.
     api.isolate.isolate_tests(api.chromium.output_dir)
@@ -216,8 +214,7 @@ def GenTests(api):
       api.properties.generic(buildername=buildername,
                              mastername=mastername) +
       api.platform(DETERMINISTIC_BUILDERS[buildername]['platform'], 32) +
-      api.properties(configuration='Release') +
-      api.step_data('remove_build_metadata', retcode=1)
+      api.properties(configuration='Release')
     )
     yield (
       api.test(test_name + '_fail') +
@@ -226,6 +223,5 @@ def GenTests(api):
                              mastername=mastername) +
       api.platform(DETERMINISTIC_BUILDERS[buildername]['platform'], 32) +
       api.properties(configuration='Release') +
-      api.step_data('remove_build_metadata', retcode=1) +
       api.step_data('compare_build_artifacts', retcode=1)
     )

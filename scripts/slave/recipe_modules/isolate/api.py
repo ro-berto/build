@@ -275,25 +275,6 @@ class IsolateApi(recipe_api.RecipeApi):
       cmd.extend(args)
     self.m.python(name, self._run_isolated_path, cmd, **kwargs)
 
-  def remove_build_metadata(self):
-    """Removes the build metadata embedded in the build artifacts."""
-    args = [
-        '--build-dir', self.m.chromium.output_dir,
-    ]
-    # Turn the failures during this step into warnings, it's a best effort step
-    # that shouldn't break the build for now.
-    try:
-      with self.m.context(cwd=self.m.path['start_dir']):
-        self.m.python('remove_build_metadata',
-                      self.m.path.join(self.m.path['checkout'],
-                                       'tools',
-                                       'determinism',
-                                       'remove_build_metadata.py'),
-                      args=args)
-    except self.m.step.StepFailure:
-      step_result = self.m.step.active_result
-      step_result.presentation.status = self.m.step.WARNING
-
   def archive_differences(self, first_dir, second_dir, values):
     """Archive different files of 2 builds."""
     GS_BUCKET = 'chrome-determinism'

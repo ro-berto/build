@@ -521,16 +521,6 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[CACHE]/builder/src/out/Linux64_Release"
-    ],
-    "name": "remove_build_metadata"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
       "[CACHE]/builder/src/tools/swarming_client",
       "batcharchive",

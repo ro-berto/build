@@ -246,7 +246,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.m.chromium.compile(use_goma_module=True)
 
     if self.c.enable_swarming:
-      self.m.isolate.remove_build_metadata()
       self.m.isolate.isolate_tests(self.m.chromium.output_dir,
                                    targets=self._isolated_targets)
 

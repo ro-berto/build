@@ -521,16 +521,6 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[CACHE]/builder/src/out/bwe_test_logging"
-    ],
-    "name": "remove_build_metadata"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
       "[CACHE]/builder/src/tools/swarming_client",
       "batcharchive",
@@ -1182,16 +1172,6 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[CACHE]/builder/src/out/dummy_audio_file_devices_no_protobuf"
-    ],
-    "name": "remove_build_metadata (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
@@ -1541,16 +1521,6 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[CACHE]/builder/src/out/rtti_no_sctp"
-    ],
-    "name": "remove_build_metadata (3)"
   },
   {
     "cmd": [

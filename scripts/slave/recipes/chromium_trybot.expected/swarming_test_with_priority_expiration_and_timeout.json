@@ -860,19 +860,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/linux/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/linux/src/out/Release"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "remove_build_metadata"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
       "[BUILDER_CACHE]/linux/src/tools/swarming_client",
       "batcharchive",

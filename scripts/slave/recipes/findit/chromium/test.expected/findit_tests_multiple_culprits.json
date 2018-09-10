@@ -1061,19 +1061,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/mac/src/out/Release"
-    ],
-    "name": "test r4.remove_build_metadata",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
       "[BUILDER_CACHE]/mac/src/tools/swarming_client",
       "batcharchive",
@@ -2082,19 +2069,6 @@
     "name": "test r5.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/mac/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/mac/src/out/Release"
-    ],
-    "name": "test r5.remove_build_metadata",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -3115,19 +3089,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/mac/src/out/Release"
-    ],
-    "name": "test r6.remove_build_metadata",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
       "[BUILDER_CACHE]/mac/src/tools/swarming_client",
       "batcharchive",
@@ -4142,19 +4103,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/mac/src/out/Release"
-    ],
-    "name": "test r2.remove_build_metadata",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
       "[BUILDER_CACHE]/mac/src/tools/swarming_client",
       "batcharchive",
@@ -5159,19 +5107,6 @@
     "name": "test r3.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/mac/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/mac/src/out/Release"
-    ],
-    "name": "test r3.remove_build_metadata",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {

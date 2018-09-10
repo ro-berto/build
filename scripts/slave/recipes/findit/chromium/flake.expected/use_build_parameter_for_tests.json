@@ -1062,19 +1062,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/mac/src/out/Release"
-    ],
-    "name": "test r0.remove_build_metadata",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
       "[BUILDER_CACHE]/mac/src/tools/swarming_client",
       "batcharchive",

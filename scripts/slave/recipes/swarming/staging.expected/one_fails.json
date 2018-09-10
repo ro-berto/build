@@ -645,16 +645,6 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/Linux_Swarm/src/tools/determinism/remove_build_metadata.py",
-      "--build-dir",
-      "[BUILDER_CACHE]/Linux_Swarm/src/out/Release"
-    ],
-    "name": "remove_build_metadata"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
       "[BUILDER_CACHE]/Linux_Swarm/src/tools/swarming_client",
       "batcharchive",
