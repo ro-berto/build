@@ -28,10 +28,10 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
 
-        # We need this to build the Clang toolchain
-        # with proper AddressSanitizer prebuilts for
-        # Chrome on Android.
-        'gclient_apply_config': ['android'],
+        # 'android' is required to build the Clang toolchain with proper
+        # AddressSanitizer prebuilts for Chrome on Android.
+        # 'fuchsia' is required to build the builtins.a for Fuchsia.
+        'gclient_apply_config': ['android', 'fuchsia'],
       },
     },
   },
