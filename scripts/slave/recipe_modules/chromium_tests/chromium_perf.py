@@ -193,9 +193,6 @@ _AddBuildSpec(
   'win32-builder-perf', 'win', target_bits=32, force_exparchive=True)
 _AddBuildSpec(
   'win64-builder-perf', 'win', add_to_bisect=True, force_exparchive=True)
-# TODO(crbug.com/828468): Remove 'Mac Builder Perf'
-_AddBuildSpec(
-  'Mac Builder Perf', 'mac', add_to_bisect=True, force_exparchive=True)
 _AddBuildSpec(
   'mac-builder-perf', 'mac', add_to_bisect=True, force_exparchive=True)
 
