@@ -11,6 +11,7 @@ import json
 import logging
 import os
 import time
+import traceback
 
 from twisted.internet import defer
 from twisted.python import log
@@ -851,15 +852,14 @@ class AnnotationObserver(buildstep.LogLineObserver):
           self.finishStep(section, status=status, reason=reason)
           self.annotate_status = BuilderStatus.combine(self.annotate_status,
                                                        status)
-      except Exception as ex:
+      except Exception:
+        trace = traceback.format_exc(limit=20)
         if section['step'].isFinished():
           log.msg(
-              'failed to process async op results of step %r: %s',
-              section['name'],
-              ex,
-          )
+              'failed to process async op results of step %r: %s' % (
+                  section['name'], trace))
         else:
-          self.finishStep(section, status=builder.EXCEPTION, reason=ex)
+          self.finishStep(section, status=builder.EXCEPTION, reason=trace)
 
     d.addCallback(finish)
 
