@@ -154,7 +154,9 @@
       "-u",
       "[START_DIR]/src/out/Release/bin/run_gtest_test",
       "--test_launcher_summary_output",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "--system-log-file",
+      "${ISOLATED_OUTDIR}/system_log"
     ],
     "name": "gtest_test"
   },

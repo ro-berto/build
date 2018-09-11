@@ -640,9 +640,9 @@ class LocalGTestTest(Test):
       elif is_fuchsia:
         script = api.chromium.output_dir.join('bin',
                                               'run_%s' % self.target_name)
-        api.python(
-            self.target_name, script,
-            args + ['--test_launcher_summary_output', gtest_results_file])
+        args.extend(['--test_launcher_summary_output', gtest_results_file])
+        args.extend(['--system-log-file', '${ISOLATED_OUTDIR}/system_log'])
+        api.python(self.target_name, script, args)
       else:
         api.chromium.runtest(self.target_name, revision=self._revision,
                              webkit_revision=self._webkit_revision, **kwargs)
