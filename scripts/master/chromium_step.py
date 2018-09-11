@@ -852,7 +852,14 @@ class AnnotationObserver(buildstep.LogLineObserver):
           self.annotate_status = BuilderStatus.combine(self.annotate_status,
                                                        status)
       except Exception as ex:
-        self.finishStep(section, status=builder.EXCEPTION, reason=ex)
+        if section['step'].isFinished():
+          log.msg(
+              'failed to process async op results of step %r: %s',
+              section['name'],
+              ex,
+          )
+        else:
+          self.finishStep(section, status=builder.EXCEPTION, reason=ex)
 
     d.addCallback(finish)
 
