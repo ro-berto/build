@@ -215,6 +215,14 @@
     "cmd": [
       "python",
       "-u",
+      "[START_DIR]\\src\\build\\fuchsia\\update_sdk.py"
+    ],
+    "name": "update fuchsia sdk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]\\src\\third_party\\binutils\\download.py"
     ],
     "env_prefixes": {

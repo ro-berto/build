@@ -70,6 +70,8 @@ def RunSteps(api):
       api.path['checkout'].join('build', 'vs_toolchain.py'), ['update'])
   api.python('update mac toolchain',
       api.path['checkout'].join('build', 'mac_toolchain.py'))
+  api.python('update fuchsia sdk',
+      api.path['checkout'].join('build', 'fuchsia', 'update_sdk.py'))
   with api.depot_tools.on_path():
     api.python('download binutils',
         api.path['checkout'].join('third_party', 'binutils', 'download.py'))
