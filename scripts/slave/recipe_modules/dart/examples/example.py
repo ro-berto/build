@@ -163,19 +163,19 @@ def RunSteps(api):
 def GenTests(api):
   yield (api.test('basic') + api.properties(
       shards='2', shard_timeout='600', branch="refs/head/master",
-      buildername='dart2js-linux-release-chrome-try') +
+      buildername='dart2js-linux-release-chrome-try', buildnumber='1357') +
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')))
 
   yield (api.test('analyzer-none-linux-release-be') + api.properties(
-      buildername='analyzer-none-linux-release-be') +
+      buildername='analyzer-none-linux-release-be', buildnumber='1357') +
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')) +
       api.step_data('buildbucket.put',
                     stdout=api.json.output(TRIGGER_RESULT)))
 
   yield (api.test('build-failure-in-matrix') + api.properties(
-      buildername='analyzer-none-linux-release-be') +
+      buildername='analyzer-none-linux-release-be', buildnumber='1357') +
       api.step_data('Build', retcode=1) +
       api.post_process(DoesNotRun, 'Test-step 1') +
       api.post_process(DropExpectation))
@@ -191,8 +191,10 @@ def GenTests(api):
       buildername='build-fail') +
       api.step_data('can_time_out', retcode=1))
 
-  yield (api.test('basic-win-stable') + api.platform('win', 64) + api.properties(
-      buildername='dart2js-win10-debug-x64-firefox-stable') +
+  yield (api.test('basic-win-stable') +
+      api.platform('win', 64) +
+      api.properties(buildername='dart2js-win10-debug-x64-firefox-stable',
+           buildnumber='1357') +
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')) +
       api.step_data('buildbucket.put',
@@ -200,6 +202,7 @@ def GenTests(api):
 
   yield (api.test('basic-win') + api.platform('win', 64) + api.properties(
       buildername='dart2js-win10-debug-x64-firefox',
+      buildnumber='1357',
       revision='a' * 40,
       parent_fileset='isolate_hash_123',
       parent_fileset_name='nameoffileset') +

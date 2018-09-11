@@ -813,7 +813,7 @@
       "--shards",
       "1",
       "--task-name",
-      "vm_tests_shard_1/Linux//dart2js-linux-release-chrome-try/-1",
+      "vm_tests_shard_1/Linux//dart2js-linux-release-chrome-try/1357",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -838,6 +838,8 @@
       "build_is_experimental:false",
       "--tag",
       "buildername:dart2js-linux-release-chrome-try",
+      "--tag",
+      "buildnumber:1357",
       "--tag",
       "data:",
       "--tag",
@@ -875,9 +877,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"vm_tests_shard_1/Linux//dart2js-linux-release-chrome-try/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"vm_tests_shard_1/Linux//dart2js-linux-release-chrome-try/1357\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"vm_tests_shard_1/Linux//dart2js-linux-release-chrome-try/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"vm_tests_shard_1/Linux//dart2js-linux-release-chrome-try/1357\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -903,7 +905,7 @@
       "--shards",
       "1",
       "--task-name",
-      "vm_tests_shard_2/Linux//dart2js-linux-release-chrome-try/-1",
+      "vm_tests_shard_2/Linux//dart2js-linux-release-chrome-try/1357",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -928,6 +930,8 @@
       "build_is_experimental:false",
       "--tag",
       "buildername:dart2js-linux-release-chrome-try",
+      "--tag",
+      "buildnumber:1357",
       "--tag",
       "data:",
       "--tag",
@@ -965,9 +969,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"vm_tests_shard_2/Linux//dart2js-linux-release-chrome-try/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"vm_tests_shard_2/Linux//dart2js-linux-release-chrome-try/1357\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"vm_tests_shard_2/Linux//dart2js-linux-release-chrome-try/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"vm_tests_shard_2/Linux//dart2js-linux-release-chrome-try/1357\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
@@ -1008,7 +1012,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"vm_tests_shard_1/Linux//dart2js-linux-release-chrome-try/-1\", \"tasks\": {\"vm_tests_shard_1/Linux//dart2js-linux-release-chrome-try/-1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"vm_tests_shard_1/Linux//dart2js-linux-release-chrome-try/1357\", \"tasks\": {\"vm_tests_shard_1/Linux//dart2js-linux-release-chrome-try/1357\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1093,7 +1097,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"vm_tests_shard_2/Linux//dart2js-linux-release-chrome-try/-1\", \"tasks\": {\"vm_tests_shard_2/Linux//dart2js-linux-release-chrome-try/-1\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
+      "{\"base_task_name\": \"vm_tests_shard_2/Linux//dart2js-linux-release-chrome-try/1357\", \"tasks\": {\"vm_tests_shard_2/Linux//dart2js-linux-release-chrome-try/1357\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1460,7 +1464,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test-step 1_shard_1/Linux/test isola/dart2js-linux-release-chrome-try/-1",
+      "Test-step 1_shard_1/Linux/test isola/dart2js-linux-release-chrome-try/1357",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1485,6 +1489,8 @@
       "build_is_experimental:false",
       "--tag",
       "buildername:dart2js-linux-release-chrome-try",
+      "--tag",
+      "buildnumber:1357",
       "--tag",
       "data:test isolate hash",
       "--tag",
@@ -1526,6 +1532,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-results",
       "--write-result-log",
       "--write-test-outcome-log",
       "-rchrome",
@@ -1551,9 +1558,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 1_shard_1/Linux/test isola/dart2js-linux-release-chrome-try/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 1_shard_1/Linux/test isola/dart2js-linux-release-chrome-try/1357\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_1/Linux/test isola/dart2js-linux-release-chrome-try/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_1/Linux/test isola/dart2js-linux-release-chrome-try/1357\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"120000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"@@@",
@@ -1579,7 +1586,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test-step 1_shard_2/Linux/test isola/dart2js-linux-release-chrome-try/-1",
+      "Test-step 1_shard_2/Linux/test isola/dart2js-linux-release-chrome-try/1357",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1604,6 +1611,8 @@
       "build_is_experimental:false",
       "--tag",
       "buildername:dart2js-linux-release-chrome-try",
+      "--tag",
+      "buildnumber:1357",
       "--tag",
       "data:test isolate hash",
       "--tag",
@@ -1645,6 +1654,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-results",
       "--write-result-log",
       "--write-test-outcome-log",
       "-rchrome",
@@ -1670,9 +1680,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 1_shard_2/Linux/test isola/dart2js-linux-release-chrome-try/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 1_shard_2/Linux/test isola/dart2js-linux-release-chrome-try/1357\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_2/Linux/test isola/dart2js-linux-release-chrome-try/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_2/Linux/test isola/dart2js-linux-release-chrome-try/1357\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"130000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"@@@",
@@ -1708,6 +1718,27 @@
   },
   {
     "cmd": [
+      "git",
+      "show",
+      "HEAD",
+      "--format=%at",
+      "-s"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "git show",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
       "/usr/bin/xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",
@@ -1720,6 +1751,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-results",
       "--write-result-log",
       "--write-test-outcome-log",
       "-rchrome",
@@ -1790,6 +1822,24 @@
   },
   {
     "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/add_fields.dart",
+      "logs/run.json",
+      "1234567"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Add commit hash to run.json"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
@@ -1818,7 +1868,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test-step 1_shard_1/Linux/test isola/dart2js-linux-release-chrome-try/-1\", \"tasks\": {\"Test-step 1_shard_1/Linux/test isola/dart2js-linux-release-chrome-try/-1\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}",
+      "{\"base_task_name\": \"Test-step 1_shard_1/Linux/test isola/dart2js-linux-release-chrome-try/1357\", \"tasks\": {\"Test-step 1_shard_1/Linux/test isola/dart2js-linux-release-chrome-try/1357\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1903,7 +1953,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test-step 1_shard_2/Linux/test isola/dart2js-linux-release-chrome-try/-1\", \"tasks\": {\"Test-step 1_shard_2/Linux/test isola/dart2js-linux-release-chrome-try/-1\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}}}",
+      "{\"base_task_name\": \"Test-step 1_shard_2/Linux/test isola/dart2js-linux-release-chrome-try/1357\", \"tasks\": {\"Test-step 1_shard_2/Linux/test isola/dart2js-linux-release-chrome-try/1357\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],

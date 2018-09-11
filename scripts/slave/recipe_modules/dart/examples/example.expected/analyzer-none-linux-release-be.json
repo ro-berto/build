@@ -1430,6 +1430,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-results",
       "--write-result-log",
       "--write-test-outcome-log",
       "-rnone",
@@ -1451,6 +1452,27 @@
   },
   {
     "cmd": [
+      "git",
+      "show",
+      "HEAD",
+      "--format=%at",
+      "-s"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "git show",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
       "/usr/bin/xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",
@@ -1463,6 +1485,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-results",
       "--write-result-log",
       "--write-test-outcome-log",
       "foo",
@@ -1533,12 +1556,138 @@
   },
   {
     "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/add_fields.dart",
+      "logs/run.json",
+      "1234567"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Add commit hash to run.json"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CACHE]/builder/sdk/logs/results.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/results.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/results.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil copy",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/results.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CACHE]/builder/sdk/logs/run.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/run.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/run.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/run.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/run.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil copy (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/run.json@@@"
+    ]
+  },
+  {
+    "cmd": [
       "buildbucket",
       "put",
       "-host",
       "cr-buildbucket.appspot.com",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-none-linux-release-be\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\"}}\", \"tags\": [\"builder:foo-builder\", \"parent_buildername:analyzer-none-linux-release-be\", \"user_agent:recipe\"]}",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-none-linux-release-be\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\"}}\", \"tags\": [\"builder:bar-builder\", \"parent_buildername:analyzer-none-linux-release-be\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-none-linux-release-be\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\"}}\", \"tags\": [\"builder:foo-builder\", \"parent_buildername:analyzer-none-linux-release-be\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}",
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-none-linux-release-be\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\"}}\", \"tags\": [\"builder:bar-builder\", \"parent_buildername:analyzer-none-linux-release-be\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -1613,6 +1762,27 @@
   },
   {
     "cmd": [
+      "git",
+      "show",
+      "HEAD",
+      "--format=%at",
+      "-s"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "git show (2)",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[CACHE]/builder/sdk/tools/swarming_client/swarming.py",
@@ -1626,7 +1796,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test-step 3_shard_1/Linux/test isola/analyzer-none-linux-release-be/-1",
+      "Test-step 3_shard_1/Linux/test isola/analyzer-none-linux-release-be/1357",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1651,6 +1821,8 @@
       "build_is_experimental:false",
       "--tag",
       "buildername:analyzer-none-linux-release-be",
+      "--tag",
+      "buildnumber:1357",
       "--tag",
       "data:test isolate hash",
       "--tag",
@@ -1692,6 +1864,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-results",
       "--write-result-log",
       "--write-test-outcome-log",
       "foo",
@@ -1717,9 +1890,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 3_shard_1/Linux/test isola/analyzer-none-linux-release-be/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 3_shard_1/Linux/test isola/analyzer-none-linux-release-be/1357\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test-step 3_shard_1/Linux/test isola/analyzer-none-linux-release-be/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test-step 3_shard_1/Linux/test isola/analyzer-none-linux-release-be/1357\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1744,6 +1917,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-results",
       "--write-result-log",
       "--write-test-outcome-log",
       "foo",
@@ -1816,6 +1990,132 @@
   },
   {
     "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/add_fields.dart",
+      "logs/run.json",
+      "1234567"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Add commit hash to run.json (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CACHE]/builder/sdk/logs/results.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload (3)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/results.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/results.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil copy (3)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/results.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CACHE]/builder/sdk/logs/run.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/run.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload (4)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/run.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/run.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/run.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil copy (4)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/run.json@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
@@ -1844,7 +2144,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test-step 3_shard_1/Linux/test isola/analyzer-none-linux-release-be/-1\", \"tasks\": {\"Test-step 3_shard_1/Linux/test isola/analyzer-none-linux-release-be/-1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"Test-step 3_shard_1/Linux/test isola/analyzer-none-linux-release-be/1357\", \"tasks\": {\"Test-step 3_shard_1/Linux/test isola/analyzer-none-linux-release-be/1357\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],

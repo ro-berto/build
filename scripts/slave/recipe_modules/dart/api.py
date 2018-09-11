@@ -76,6 +76,11 @@ class DartApi(recipe_api.RecipeApi):
                args=['--kill_browsers=True', '--kill_vsbuild=True'],
                ok_ret='any')
 
+  def dart_executable(self):
+    executable = 'dart.exe' if self.m.platform.name == 'win' else 'dart'
+    return self.m.path['checkout'].join(
+      'tools','sdks', 'dart-sdk', 'bin', executable)
+
   def build(self, build_args=[], isolate=None, name='build dart'):
     """Builds dart using the specified build_args
        and optionally isolates the sdk for testing using the specified isolate.
@@ -228,6 +233,20 @@ class DartApi(recipe_api.RecipeApi):
               if "result.log" in filename: # pragma: no cover
                 contents = output_dir[filename]
                 self.m.step.active_result.presentation.logs['result.log'] = [contents]
+
+  def upload_results(self,  name):
+    builder = self.m.properties['buildername']
+    if builder.endswith(('-try', '-stable', '-dev')): return
+    build_number = self.m.properties['buildnumber']
+    for file in ['results.json', 'run.json']:
+      results_path = self.m.path['checkout'].join('logs', file)
+      self.m.gsutil.upload(results_path, 'dart-test-results',
+        'results/%s/%s/%s/%s' % (builder, build_number, name, file))
+      self.m.gsutil.copy(
+        'dart-test-results',
+        'results/%s/%s/%s/%s' % (builder, build_number, name, file),
+        'dart-test-results',
+        'results/%s/%s/%s/%s' % (builder, 'LATEST', name, file))
 
   def read_result_file(self,  name, log_name, test_data=''):
     """Reads the result.log file
@@ -508,6 +527,7 @@ class DartApi(recipe_api.RecipeApi):
                  '--report',
                  '--time',
                  '--write-debug-log',
+                 '--write-results',
                  '--write-result-log',
                  '--write-test-outcome-log']
     template = self._get_specific_argument(args, ['-n'])
@@ -553,12 +573,22 @@ class DartApi(recipe_api.RecipeApi):
         args = args + ['--exclude_suite=' + ','.join(step['exclude_tests'])]
     if 'tests' in step:
       args = args + step['tests']
+    # Fetch commit time outside deferred_results group.
+    commit_time = 'unused'
+    if shards == 0 or local_shard:
+      commit_time = self.m.git.get_timestamp(test_data='1234567')
     with self.m.step.defer_results():
       self.run_script(step_name, 'tools/test.py', args, isolate_hash, shards,
                       local_shard, environment, tasks,
                       cipd_packages=cipd_packages)
       if shards == 0 or local_shard:
         self.read_result_file('read results of %s' % step_name, 'result.log')
+        self.m.step('Add commit hash to run.json',
+                    [self.dart_executable(),
+                     'tools/bots/add_fields.dart',
+                     'logs/run.json',
+                     commit_time])
+        self.upload_results(step_name)
 
   def run_script(self, step_name, script, args, isolate_hash, shards,
                  local_shard, environment, tasks, cipd_packages=[]):

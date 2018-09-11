@@ -636,6 +636,27 @@
   },
   {
     "cmd": [
+      "git",
+      "show",
+      "HEAD",
+      "--format=%at",
+      "-s"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "git show",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "tools/test.py",
@@ -645,6 +666,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-results",
       "--write-result-log",
       "--write-test-outcome-log",
       "-rfirefox",
@@ -717,6 +739,45 @@
   },
   {
     "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/add_fields.dart",
+      "logs/run.json",
+      "1234567"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Add commit hash to run.json"
+  },
+  {
+    "cmd": [
+      "git",
+      "show",
+      "HEAD",
+      "--format=%at",
+      "-s"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "git show (2)",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "tools/test.py",
@@ -725,6 +786,7 @@
       "--report",
       "--time",
       "--write-debug-log",
+      "--write-results",
       "--write-result-log",
       "--write-test-outcome-log",
       "-rfirefox",
@@ -795,6 +857,24 @@
     },
     "infra_step": true,
     "name": "delete result.log (2)"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/add_fields.dart",
+      "logs/run.json",
+      "1234567"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Add commit hash to run.json (2)"
   },
   {
     "cmd": [

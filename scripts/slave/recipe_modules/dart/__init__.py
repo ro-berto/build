@@ -3,6 +3,7 @@ DEPS = [
   'depot_tools/cipd',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
+  'depot_tools/git',
   'depot_tools/gsutil',
   'goma',
   'recipe_engine/buildbucket',
