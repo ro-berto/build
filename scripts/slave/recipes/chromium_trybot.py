@@ -632,12 +632,9 @@ def GenTests(api):
     suppress_analyze() +
     base_unittests_additional_compile_target() +
     api.step_data('compile (with patch)', retcode=1) +
-    api.step_data(
-      'gerrit get_patch_destination_branch',
-      api.gerrit.get_one_change_response_data(branch='experimental/feature'),
-     ) +
+    api.tryserver.gerrit_change_target_ref('refs/heads/experimental/feature') +
     api.post_process(
-        Filter('gerrit get_patch_destination_branch',
+        Filter('gerrit fetch current CL info',
                'bot_update'))
   )
 
