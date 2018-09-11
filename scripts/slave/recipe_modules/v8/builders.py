@@ -1648,7 +1648,7 @@ BUILDERS = {
       },
       'V8 Android Arm64 - N5X': {
         'tests': [
-          D8Testing(2),
+          V8Testing(3),
           Test262(5),
           Mozilla,
         ],
