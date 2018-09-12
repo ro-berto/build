@@ -110,7 +110,12 @@ def RunSteps(api, repo_name):
       # intermediate result
       ir = (api.
             led('get-builder', builder))
-      recipe = ir.result['userland']['recipe_name']
+      # Recipe we run probably doesn't change between slices.
+      job_slice = ir.result['job_slices'][0]
+      # TODO(martiniss): Use recipe_cipd_source to determine which repo this
+      # recipe lives in. For now we assume the recipe lives in the repo the CL
+      # lives in.
+      recipe = job_slice['userland']['recipe_name']
       if not should_trigger_recipe(
           api, recipe, cl_workdir.join(repo_name),
           recipes_dir.join('recipes.py')):
@@ -174,9 +179,11 @@ def GenTests(api):
                     })) +
       api.step_data('led get-builder',
                     stdout=api.json.output({
-                      'userland': {
-                          'recipe_name': 'foo_recipe',
-                      }
+                      'job_slices': [{
+                        'userland': {
+                            'recipe_name': 'foo_recipe',
+                        },
+                      }],
                     })) +
       api.step_data('analyze foo_recipe',
                     api.json.output({
@@ -195,9 +202,11 @@ def GenTests(api):
       api.properties.tryserver(repo_name='build') +
       api.step_data('led get-builder',
                     stdout=api.json.output({
-                      'userland': {
-                          'recipe_name': 'foo_recipe',
-                      }
+                      'job_slices': [{
+                        'userland': {
+                            'recipe_name': 'foo_recipe',
+                        },
+                      }],
                     })) +
       api.step_data('analyze foo_recipe',
                     api.json.output({
@@ -217,9 +226,11 @@ def GenTests(api):
       api.properties.tryserver(repo_name='build') +
       api.step_data('led get-builder',
                     stdout=api.json.output({
-                      'userland': {
-                          'recipe_name': 'foo_recipe',
-                      }
+                      'job_slices': [{
+                        'userland': {
+                            'recipe_name': 'foo_recipe',
+                        },
+                      }],
                     })) +
       api.step_data('analyze foo_recipe',
                     api.json.output({
@@ -247,9 +258,11 @@ def GenTests(api):
                     })) +
       api.step_data('led get-builder',
                     stdout=api.json.output({
-                      'userland': {
-                          'recipe_name': 'foo_recipe',
-                      }
+                      'job_slices': [{
+                        'userland': {
+                            'recipe_name': 'foo_recipe',
+                        },
+                      }],
                     })) +
       api.step_data('analyze foo_recipe',
                     api.json.output({

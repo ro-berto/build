@@ -299,9 +299,13 @@
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"userland\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"recipe_name\": \"foo_recipe\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"userland\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"recipe_name\": \"foo_recipe\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -353,7 +357,7 @@
     ],
     "cwd": "[CACHE]/build/build",
     "name": "led edit-recipe-bundle",
-    "stdin": "{\"userland\": {\"recipe_name\": \"foo_recipe\"}}",
+    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_END@json.output (invalid)@@@",
