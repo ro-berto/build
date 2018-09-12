@@ -120,10 +120,24 @@ def _consolidate_flaky_tests(all_flakes, new_flakes):
 def RunSteps(api, target_mastername, target_testername, good_revision,
              bad_revision, tests, buildbucket, use_analyze,
              suspected_revisions, test_on_good_revision, test_repeat_count):
+  if not tests:
+    # Retrieve the failed tests from the build request.
+    # If the recipe is run by swarmbucket, the property 'buildbucket' will be
+    # a dict instead of a string containing json.
+    if isinstance(buildbucket, dict):
+      buildbucket_json = buildbucket  # pragma: no cover. To be deprecated.
+    else:
+      buildbucket_json = json.loads(buildbucket)
+    build_id = buildbucket_json['build']['id']
+    build_request = api.buildbucket.get_build(build_id)
+    tests = json.loads(
+        build_request.stdout['build']['parameters_json']).get(
+            'additional_build_parameters', {}).get('tests')
+  assert tests, 'No failed tests were specified.'
 
-  tests, target_buildername, checked_out_revision, cached_revision = (
-      api.findit.configure_and_sync(api, tests, buildbucket, target_mastername,
-                                    target_testername, bad_revision))
+  target_buildername, checked_out_revision, cached_revision = (
+      api.findit.configure_and_sync(api, target_mastername, target_testername,
+                                    bad_revision))
 
   # retrieve revisions in the regression range.
   revisions_to_check = api.findit.revisions_between(good_revision, bad_revision)

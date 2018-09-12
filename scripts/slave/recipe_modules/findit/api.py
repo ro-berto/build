@@ -296,9 +296,9 @@ class FinditApi(recipe_api.RecipeApi):
 
       return results, failed_tests_dict
 
-  def configure_and_sync(self, api, tests, buildbucket, target_mastername,
-                         target_testername, revision):
-    """Loads tests from buildbucket, applies bot/swarming configs & syncs code.
+  def configure_and_sync(self, api, target_mastername, target_testername,
+                         revision):
+    """Applies compile/test configs & syncs code.
 
     These are common tasks done in preparation ahead of building and testing
     chromium revisions, extracted as code share between the test and flake
@@ -306,40 +306,12 @@ class FinditApi(recipe_api.RecipeApi):
 
     Args:
       api (RecipeApi): With the dependencies injected by the calling recipe.
-      tests (dict):
-          maps the test name (step name) to the names of the subtest to run.
-          i.e. for GTests these are built into a test filter string, and passed
-          in the command line. E.g.
-              {'browser_tests': ['suite.test1', 'suite.test2']}
-          These are likely superseded by the contents of buildbucket below.
-      buildbucket (str or dict):
-          JSON string or dict containing a buildbucket job spec from which to
-          extract the tests to execute. Parsed if the `tests` parameter above is
-          not provided.
       target_mastername (str): Which master to derive the configuration off of.
       target_testername (str): likewise
       revision (str): A string representing the commit hash of the revision to
                       test.
-    Returns: (tests, target_buildername)
+    Returns: (target_buildername, checked_out_revision, cached_revision)
     """
-
-    if not tests:
-      # tests should be saved in build parameter in this case.
-
-      # If the recipe is run by swarmbucket, the property 'buildbucket' will be
-      # a dict instead of a string containing json.
-      if isinstance(buildbucket, dict):
-        buildbucket_json = buildbucket
-      else:
-        buildbucket_json = json.loads(buildbucket)
-      build_id = buildbucket_json['build']['id']
-      get_build_result = api.buildbucket.get_build(build_id)
-      tests = json.loads(
-          get_build_result.stdout['build']['parameters_json']).get(
-              'additional_build_parameters', {}).get('tests')
-
-    assert tests, 'No failed tests were specified.'
-
     # Figure out which builder configuration we should match for compile config.
     # Sometimes, the builder itself runs the tests and there is no tester. In
     # such cases, just treat the builder as a "tester". Thus, we default to
@@ -355,10 +327,10 @@ class FinditApi(recipe_api.RecipeApi):
     api.chromium_tests.configure_build(
         bot_config, override_bot_type='builder_tester')
 
+    # We rely on goma for fast compile. It's better to fail early if goma can't
+    # start.
     api.chromium.apply_config('goma_failfast')
 
-    (checked_out_revision, cached_revision) = self.record_previous_revision(
-        api, bot_config)
     # Configure to match the test config on the tester, as builders don't have
     # the settings for swarming tests.
     if target_buildername != target_testername:
@@ -368,7 +340,11 @@ class FinditApi(recipe_api.RecipeApi):
     # TODO(stgao): Fix the issue that precommit=False adds the tag 'purpose:CI'.
     api.chromium_swarming.configure_swarming('chromium', precommit=False)
 
-    # Sync to revision,
+    # Record the current revision of the checkout and HEAD of the git cache.
+    checked_out_revision, cached_revision = self.record_previous_revision(
+        api, bot_config)
+
+    # Sync code.
     api.chromium_tests.prepare_checkout(
         bot_config,
         root_solution_revision=revision)
@@ -376,7 +352,7 @@ class FinditApi(recipe_api.RecipeApi):
     api.step.active_result.presentation.properties['target_buildername'] = (
         target_buildername)
 
-    return tests, target_buildername, checked_out_revision, cached_revision
+    return target_buildername, checked_out_revision, cached_revision
 
   def record_previous_revision(self, api, bot_config):
     """Records the latest checked out and cached revisions.

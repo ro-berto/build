@@ -72,10 +72,25 @@ PROPERTIES = {
 
 def RunSteps(api, target_mastername, target_testername,
              test_revision, tests, buildbucket, test_repeat_count, skip_tests):
+  if not tests:
+    # This recipe is run through Swarming instead of buildbot.
+    # Retrieve the failed tests from the build request.
+    # If the recipe is run by swarmbucket, the property 'buildbucket' will be
+    # a dict instead of a string containing json.
+    if isinstance(buildbucket, dict):
+      buildbucket_json = buildbucket  # pragma: no cover. To be deprecated.
+    else:
+      buildbucket_json = json.loads(buildbucket)
+    build_id = buildbucket_json['build']['id']
+    build_request = api.buildbucket.get_build(build_id)
+    tests = json.loads(
+        build_request.stdout['build']['parameters_json']).get(
+            'additional_build_parameters', {}).get('tests')
+  assert tests, 'No failed tests were specified.'
 
-  tests, target_buildername, checked_out_revision, cached_revision  = (
-      api.findit.configure_and_sync(api, tests, buildbucket, target_mastername,
-                                    target_testername, test_revision))
+  target_buildername, checked_out_revision, cached_revision  = (
+      api.findit.configure_and_sync(api, target_mastername, target_testername,
+                                    test_revision))
 
   test_results = {}
   report = {

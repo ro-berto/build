@@ -1883,9 +1883,9 @@ Args:
       If True, do not actually run the tests. Useful when we only want to
       isolate the targets for running elsewhere.
 
-&mdash; **def [configure\_and\_sync](/scripts/slave/recipe_modules/findit/api.py#299)(self, api, tests, buildbucket, target_mastername, target_testername, revision):**
+&mdash; **def [configure\_and\_sync](/scripts/slave/recipe_modules/findit/api.py#299)(self, api, target_mastername, target_testername, revision):**
 
-Loads tests from buildbucket, applies bot/swarming configs & syncs code.
+Applies compile/test configs & syncs code.
 
 These are common tasks done in preparation ahead of building and testing
 chromium revisions, extracted as code share between the test and flake
@@ -1893,21 +1893,11 @@ recipes.
 
 Args:
   api (RecipeApi): With the dependencies injected by the calling recipe.
-  tests (dict):
-      maps the test name (step name) to the names of the subtest to run.
-      i.e. for GTests these are built into a test filter string, and passed
-      in the command line. E.g.
-          {'browser_tests': ['suite.test1', 'suite.test2']}
-      These are likely superseded by the contents of buildbucket below.
-  buildbucket (str or dict):
-      JSON string or dict containing a buildbucket job spec from which to
-      extract the tests to execute. Parsed if the `tests` parameter above is
-      not provided.
   target_mastername (str): Which master to derive the configuration off of.
   target_testername (str): likewise
   revision (str): A string representing the commit hash of the revision to
                   test.
-Returns: (tests, target_buildername)
+Returns: (target_buildername, checked_out_revision, cached_revision)
 
 &mdash; **def [existing\_targets](/scripts/slave/recipe_modules/findit/api.py#98)(self, targets, mb_mastername, mb_buildername):**
 
@@ -1936,7 +1926,7 @@ Args:
   solution_name (str): the gclient solution name, eg:
       "src" for chromium, "src/third_party/pdfium" for pdfium.
 
-&mdash; **def [record\_previous\_revision](/scripts/slave/recipe_modules/findit/api.py#381)(self, api, bot_config):**
+&mdash; **def [record\_previous\_revision](/scripts/slave/recipe_modules/findit/api.py#357)(self, api, bot_config):**
 
 Records the latest checked out and cached revisions.
 
