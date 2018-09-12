@@ -102,8 +102,15 @@ _AddBuildSpec('Linux Compile Perf FYI', 'linux')
 # TODO(crbug.com/828443): Remove 'Mac Builder Perf'
 _AddBuildSpec('Mac Builder Perf FYI', 'mac')
 
+#TODO(crbug.com/790465): remove Mojo Linux Perf once linux-perf-fyi function
+# correctly.
 _AddIsolatedTestSpec('Mojo Linux Perf', 'linux',
                      parent_buildername='Linux Compile Perf FYI')
+
+_AddIsolatedTestSpec('linux-perf-fyi', 'linux',
+                     parent_buildername='linux-perf-builder',
+                     parent_mastername='chromium.perf')
+
 _AddIsolatedTestSpec(
     'One Buildbot Step Test Builder', 'linux',
     parent_buildername='Linux Compile Perf FYI')
