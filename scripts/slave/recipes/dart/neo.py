@@ -135,7 +135,7 @@ def GenTests(api):
       api.test('builders/dart2js-win10-debug-x64-firefox-try') +
       api.properties.generic(
         buildername='dart2js-win10-debug-x64-firefox-try',
-        got_revision='3456abcd78ef')
+        revision='3456abcd78ef')
    )
    yield (
       api.test('builders/try-cl-builder') +
