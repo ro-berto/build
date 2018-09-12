@@ -3380,7 +3380,7 @@ Args:
   results_file: Path to file containing result json. Supported format are:
     ttest format & full json results format (
     http://www.chromium.org/developers/the-json-test-results-format).
-  test_type: Test type string, e.g. webkit_tests.
+  test_type: Test type string, e.g. webkit_layout_tests.
   test_results_server: Server where results should be uploaded.
   downgrade_error_to_warning: If True, treat a failure to upload as a
       warning.
@@ -3394,9 +3394,9 @@ Returns:
 
 #### **class [TestUtilsApi](/scripts/slave/recipe_modules/test_utils/api.py#27)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#283)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#281)(self, data):**
 
-&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#286)(self, data):**
+&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#284)(self, data):**
 
 &mdash; **def [determine\_new\_failures](/scripts/slave/recipe_modules/test_utils/api.py#183)(self, caller_api, tests, deapply_patch_fn):**
 
@@ -3426,7 +3426,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#303)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#301)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3491,7 +3491,7 @@ Returns:
 
 &mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#169)(self, caller_api, tests):**
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#293)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#291)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 

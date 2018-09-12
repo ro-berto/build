@@ -19,7 +19,7 @@
       "--builder-name",
       "test_buildername",
       "--step-name",
-      "webkit_tests (with patch)",
+      "webkit_layout_tests (with patch)",
       "--no-show-results",
       "--clobber-old-results",
       "--exit-after-n-failures",
@@ -29,7 +29,7 @@
       "--debug-rwt-logging",
       "--js-flags=--future"
     ],
-    "name": "webkit_tests (with patch)",
+    "name": "webkit_layout_tests (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 101",
       "@@@STEP_TEXT@<br/>Total tests: 131<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 127 (0 expected, >>>127 unexpected<<<)<br/>* Flaky: 3 (0 expected, >>>3 unexpected<<<)<br/><br/>Unexpected Failures:<br/>* bad/failing0.html<br/>* bad/failing1.html<br/>* bad/failing10.html<br/>* bad/failing100.html<br/>* bad/failing101.html<br/>* bad/failing102.html<br/>* bad/failing103.html<br/>* bad/failing104.html<br/>* bad/failing105.html<br/>* bad/failing106.html<br/>* bad/failing107.html<br/>* bad/failing108.html<br/>* bad/failing109.html<br/>* bad/failing11.html<br/>* bad/failing110.html<br/>* bad/failing111.html<br/>* bad/failing112.html<br/>* bad/failing113.html<br/>* bad/failing114.html<br/>* bad/failing115.html<br/>* bad/failing116.html<br/>* bad/failing117.html<br/>* bad/failing118.html<br/>* bad/failing119.html<br/>* bad/failing12.html<br/>* bad/failing120.html<br/>* bad/failing121.html<br/>* bad/failing122.html<br/>* bad/failing123.html<br/>* bad/failing124.html<br/>* ... 97 more (127 total) ...<br/><br/>Unexpected Flakes:<br/>* flake/slow.html<br/>* flake/timeout-then-crash.html<br/>* flake/totally-flakey.html<br/>@@@",
@@ -50,13 +50,13 @@
       "--build-number",
       "123",
       "--test-type",
-      "webkit_tests (with patch)",
+      "webkit_layout_tests (with patch)",
       "--chrome-revision",
       "0",
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "name": "Upload to test-results [webkit_tests (with patch)]"
+    "name": "Upload to test-results [webkit_layout_tests (with patch)]"
   },
   {
     "cmd": [
@@ -102,7 +102,7 @@
   },
   {
     "name": "$result",
-    "reason": "Step('webkit_tests (with patch)') failed with return_code 101",
+    "reason": "Step('webkit_layout_tests (with patch)') failed with return_code 101",
     "recipe_result": null,
     "status_code": 101
   }

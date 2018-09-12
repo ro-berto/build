@@ -258,9 +258,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       elif ignored_failures:
         self.m.step.active_result.presentation.status = self.m.step.WARNING
 
-      # TODO(crbug/706192): Remove the check for webkit_tests, once this step
-      # name no longer exists.
-      if test.name in ('webkit_tests', 'webkit_layout_tests'):
+      if test.name == 'webkit_layout_tests':
         self._archive_retry_summary({
             'failures': sorted(new_failures),
             'ignored': sorted(ignored_failures)

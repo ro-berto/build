@@ -24,7 +24,7 @@ class TestResultsApi(recipe_api.RecipeApi):
       results_file: Path to file containing result json. Supported format are:
         ttest format & full json results format (
         http://www.chromium.org/developers/the-json-test-results-format).
-      test_type: Test type string, e.g. webkit_tests.
+      test_type: Test type string, e.g. webkit_layout_tests.
       test_results_server: Server where results should be uploaded.
       downgrade_error_to_warning: If True, treat a failure to upload as a
           warning.

@@ -11,7 +11,7 @@ module dependencies.
 Example usage:
 
     ./upload_test_results.py
-      --test-type=webkit_tests --input-json=/tmp/gtest_input.json
+      --test-type=webkit_layout_tests --input-json=/tmp/gtest_input.json
       --master-name=chromium.webkit --build-number=2257
       --builder-name='WebKit Win7 (dbg)'
       --chrome-revision=344402

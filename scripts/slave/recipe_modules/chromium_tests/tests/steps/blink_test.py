@@ -73,7 +73,7 @@ def GenTests(api):
           buildnumber=123,
           bot_id='test_bot_id') +
       api.override_step_data(
-          'webkit_tests (with patch)',
+          'webkit_layout_tests (with patch)',
           api.test_utils.canned_test_output(
               passing=True, unexpected_flakes=True),
       retcode=0)
@@ -87,7 +87,7 @@ def GenTests(api):
           buildnumber=123,
           bot_id='test_bot_id') +
       api.override_step_data(
-          'webkit_tests (with patch)',
+          'webkit_layout_tests (with patch)',
           api.test_utils.canned_test_output(
               passing=False, num_additional_failures=125))
   )

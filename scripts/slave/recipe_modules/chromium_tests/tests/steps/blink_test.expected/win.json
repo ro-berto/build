@@ -19,7 +19,7 @@
       "--builder-name",
       "test_buildername",
       "--step-name",
-      "webkit_tests (with patch)",
+      "webkit_layout_tests (with patch)",
       "--no-show-results",
       "--clobber-old-results",
       "--exit-after-n-failures",
@@ -29,7 +29,7 @@
       "--debug-rwt-logging",
       "--js-flags=--future"
     ],
-    "name": "webkit_tests (with patch)",
+    "name": "webkit_layout_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total tests: 5<br/>* Passed: 4 (4 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@"
     ]
@@ -48,13 +48,13 @@
       "--build-number",
       "123",
       "--test-type",
-      "webkit_tests (with patch)",
+      "webkit_layout_tests (with patch)",
       "--chrome-revision",
       "0",
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "name": "Upload to test-results [webkit_tests (with patch)]"
+    "name": "Upload to test-results [webkit_layout_tests (with patch)]"
   },
   {
     "cmd": [
@@ -120,7 +120,7 @@
       "--builder-name",
       "test_buildername",
       "--step-name",
-      "webkit_tests (without patch)",
+      "webkit_layout_tests (without patch)",
       "--no-show-results",
       "--clobber-old-results",
       "--exit-after-n-failures",
@@ -134,7 +134,7 @@
       "--skipped",
       "always"
     ],
-    "name": "webkit_tests (without patch)",
+    "name": "webkit_layout_tests (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total tests: 5<br/>* Passed: 4 (4 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@"
     ]

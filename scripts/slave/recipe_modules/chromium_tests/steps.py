@@ -1279,8 +1279,7 @@ class LayoutTestResultsHandler(JSONResultsHandler):
     # TODO: The naming of the archive step is clunky, but the step should
     # really be triggered src-side as part of the post-collect merge and
     # upload, and so this should go away when we make that change.
-    custom_step_name = not (step_name.startswith('webkit_tests') or
-                            step_name.startswith('webkit_layout_tests'))
+    custom_step_name = not step_name.startswith('webkit_layout_tests')
     archive_step_name = 'archive_webkit_tests_results'
     if custom_step_name:
       archive_layout_test_args += ['--step-name', step_name]
@@ -2336,7 +2335,7 @@ class BlinkTest(Test):
   # TODO(dpranke): This should be converted to a PythonBasedTest, although it
   # will need custom behavior because we archive the results as well.
   def __init__(self, extra_args=None):
-    super(BlinkTest, self).__init__('webkit_tests')
+    super(BlinkTest, self).__init__('webkit_layout_tests')
     self._extra_args = extra_args
     self.results_handler = LayoutTestResultsHandler()
 

@@ -621,7 +621,7 @@
       "--builder-name",
       "V8-Blink Linux 64 - future",
       "--step-name",
-      "webkit_tests (with patch)",
+      "webkit_layout_tests (with patch)",
       "--no-show-results",
       "--clobber-old-results",
       "--exit-after-n-failures",
@@ -637,7 +637,7 @@
       "--js-flags=--future"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
-    "name": "webkit_tests (with patch)",
+    "name": "webkit_layout_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total tests: 6<br/>* Passed: 5 (5 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@"
     ]
@@ -656,14 +656,14 @@
       "--build-number",
       "571",
       "--test-type",
-      "webkit_tests (with patch)",
+      "webkit_layout_tests (with patch)",
       "--chrome-revision",
       "43426",
       "--test-results-server",
       "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
-    "name": "Upload to test-results [webkit_tests (with patch)]"
+    "name": "Upload to test-results [webkit_layout_tests (with patch)]"
   },
   {
     "cmd": [
