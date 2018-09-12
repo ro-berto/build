@@ -741,6 +741,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def run_tests_on_tryserver(self, bot_config, tests, bot_update_step,
                              affected_files, mb_mastername=None,
                              mb_buildername=None, disable_deapply_patch=False):
+    """Runs tests with retries.
+
+    This function runs tests with the CL patched in. On failure, this will
+    deapply the patch, rebuild/isolate binaries, and run the failing tests.
+    """
+    # This function is only used if the patch needs to be deapplied. It
+    # deapplies the patch, rebuilds/isolates binaries.
     def deapply_patch_fn(failing_tests):
       self.deapply_patch(bot_update_step)
       compile_targets = list(itertools.chain(
@@ -771,6 +778,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     deapply_patch = True
     deapply_patch_reason = 'unknown reason'
 
+    # We skip the deapply_patch step if there are modifications that affect the
+    # recipe itself, since that would potentially invalidate the previous test
+    # results.
     exclusion_regexs = [re.compile(path) for path in RECIPE_CONFIG_PATHS]
     for f in affected_files:
       for regex in exclusion_regexs:
@@ -784,6 +794,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     with self.wrap_chromium_tests(bot_config, tests):
       if deapply_patch:
+        # Runs tests with patch. If there are failures, deapplies patch using
+        # deapply_patch_fn, and then runs failing tests again.
         self.m.test_utils.determine_new_failures(
             self.m, tests, deapply_patch_fn)
       else:
@@ -988,29 +1000,79 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         self.m.swarming.report_stats()
 
   def _trybot_steps_internal(self, builders=None, trybots=None):
+    """Initial configuration for all trybots.
+
+    The main purpose of this method is to determine which tests need to be run.
+
+    Args:
+      builders: An optional mapping from <mastername, buildername> to
+                build/test settings. For an example of defaults for chromium,
+                see scripts/slave/recipe_modules/chromium_tests/chromium.py
+      trybots: An optional mapping from <mastername, buildername> of the trybot to
+               configurations of the mirrored CI bot. Defaults are in
+               ChromiumTestsApi.
+
+    Returns: [a 5-tuple of the following]
+      bot_config_object: Configuration for the tests to be run.
+      bot_update_step: Holds state on build properties. Used to pass state between
+                       methods.
+      affected_files: A list of paths affected by the CL.
+      tests: A list of Test objects [see chromium_tests/steps.py]. Stateful
+             objects that can run tests [possibly remotely via swarming] and parse
+             the results. Running tests multiple times is not idempotent -- the
+             results of previous runs affect future runs.
+      disable_deapply_patch: A flag that prevents the "deapply patch" series of
+                             steps from running.
+    """
+    # Most trybots mirror a CI bot. They run the same suite of tests with the
+    # same configuration.
+    # This logic takes the <mastername, buildername> of the triggering trybot,
+    # and looks up the configuration of the mirrored bot. For example,
+    # <tryserver.chromium.mac, mac_chromium_dbg_ng> will return:
+    # {
+    #   'bot_ids': {
+    #                'mastername': 'chromium.mac',
+    #                'buildername': 'Mac Builder (dbg)',
+    #                'tester': 'Mac10.13 Tests (dbg)',
+    #              },
+    #   'analyze_mode': None
+    # }
+    # See ChromiumTestsApi for more details.
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
     trybot_config = (trybots or self.trybots).get(mastername, {}).get(
         'builders', {}).get(buildername)
 
+    # Some trybots do not mirror a CI bot. In this case, return a configuration
+    # that uses the same <mastername, buildername> of the triggering trybot.
     if not trybot_config:
       trybot_config = {
         'bot_ids': [self.create_bot_id(mastername, buildername)],
       }
 
+    # bot_config_object contains build/test settings for the mirrored
+    # <mastername, buildername>.
     bot_config_object = self.create_generalized_bot_config_object(
         trybot_config['bot_ids'], builders=builders)
 
     self._report_builders(bot_config_object)
     self.set_precommit_mode()
+
+    # Applies build/test configurations from bot_config_object.
     self.configure_build(bot_config_object, override_bot_type='builder_tester')
 
     self.m.chromium_swarming.configure_swarming('chromium', precommit=True)
 
     self.m.chromium.apply_config('trybot_flavor')
 
+    # This rolls chromium checkout, applies the patch, runs gclient sync to
+    # update all DEPs.
     bot_update_step, bot_db = self.prepare_checkout(bot_config_object)
 
+    # Determine the tests that would be run if this were a CI tester.
+    # Tests are instances of class(Test) from chromium_tests/steps.py. These
+    # objects know how to dispatch isolate tasks, parse results, and keep
+    # state on the results of previous test runs.
     if self.c.staging:
       test_config = bot_config_object.get_tests_staging(bot_db)
       tests = test_config.tests_in_scope()
@@ -1023,6 +1085,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver:
       self.m.tryserver.set_subproject_tag('chromium')
 
+    # Determine the compile targets for the tests that would be run.
     compile_targets = self.get_compile_targets(
         bot_config_object,
         bot_db,
@@ -1030,6 +1093,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     test_targets = sorted(set(
         self._all_compile_targets(tests + tests_including_triggered)))
 
+    # Use analyze to determine the compile targets that are affected by the CL.
+    # Use this to prune the relevant compile targets and test targets.
     if self.m.tryserver.is_tryserver:
       additional_compile_targets = sorted(
           set(compile_targets) - set(test_targets))
@@ -1045,10 +1110,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           mb_config_path=mb_config_path,
           additional_names=analyze_names)
 
+    # If this is a compile-only trybot, then clear our all tests. This cannot be
+    # done sooner because we still want to determine the minimal set of binaries
+    # that need to be compiled, which requires knowing the set of tests that
+    # would be run.
     if trybot_config.get('analyze_mode') == 'compile':
       tests = []
       tests_including_triggered = []
 
+    # Compiles and isolates test suites.
     if compile_targets:
       tests = self._tests_in_compile_targets(test_targets, tests)
       tests_including_triggered = self._tests_in_compile_targets(
@@ -1072,6 +1142,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       else:
         tests = []
 
+    # A special configuration to disable the deapply_patch step for
+    # mac_optional_gpu_tests_rel. This should not be necessary. See
+    # https://crbug.com/883308.
     disable_deapply_patch = not trybot_config.get('deapply_patch', True)
     return (bot_config_object, bot_update_step, affected_files, tests,
             disable_deapply_patch)
