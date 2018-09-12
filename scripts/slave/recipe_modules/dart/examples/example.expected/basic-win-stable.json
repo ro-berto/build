@@ -1600,7 +1600,8 @@
       "[CACHE]\\builder\\sdk\\tools\\sdks\\dart-sdk\\bin\\dart.exe",
       "tools/bots/add_fields.dart",
       "logs/run.json",
-      "1234567"
+      "1234567",
+      "3456abcd78ef"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
@@ -1920,7 +1921,8 @@
       "[CACHE]\\builder\\sdk\\tools\\sdks\\dart-sdk\\bin\\dart.exe",
       "tools/bots/add_fields.dart",
       "logs/run.json",
-      "1234567"
+      "1234567",
+      "3456abcd78ef"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {

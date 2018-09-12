@@ -163,12 +163,16 @@ def RunSteps(api):
 def GenTests(api):
   yield (api.test('basic') + api.properties(
       shards='2', shard_timeout='600', branch="refs/head/master",
-      buildername='dart2js-linux-release-chrome-try', buildnumber='1357') +
+      buildername='dart2js-linux-release-chrome-try',
+      buildnumber='1357',
+      got_revision='3456abcd78ef') +
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')))
 
   yield (api.test('analyzer-none-linux-release-be') + api.properties(
-      buildername='analyzer-none-linux-release-be', buildnumber='1357') +
+      buildername='analyzer-none-linux-release-be',
+      buildnumber='1357',
+      got_revision='3456abce78ef') +
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')) +
       api.step_data('buildbucket.put',
@@ -194,7 +198,8 @@ def GenTests(api):
   yield (api.test('basic-win-stable') +
       api.platform('win', 64) +
       api.properties(buildername='dart2js-win10-debug-x64-firefox-stable',
-           buildnumber='1357') +
+                     buildnumber='1357',
+                     got_revision='3456abcd78ef') +
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')) +
       api.step_data('buildbucket.put',
@@ -204,6 +209,7 @@ def GenTests(api):
       buildername='dart2js-win10-debug-x64-firefox',
       buildnumber='1357',
       revision='a' * 40,
+      got_revision='b' * 40,
       parent_fileset='isolate_hash_123',
       parent_fileset_name='nameoffileset') +
       api.step_data('upload testing fileset fileset1',

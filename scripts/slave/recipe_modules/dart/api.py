@@ -583,11 +583,14 @@ class DartApi(recipe_api.RecipeApi):
                       cipd_packages=cipd_packages)
       if shards == 0 or local_shard:
         self.read_result_file('read results of %s' % step_name, 'result.log')
+        commit_hash = self.m.properties.get('got_revision',
+                                            'no_got_revision_property')
         self.m.step('Add commit hash to run.json',
                     [self.dart_executable(),
                      'tools/bots/add_fields.dart',
                      'logs/run.json',
-                     commit_time])
+                     commit_time,
+                     commit_hash])
         self.upload_results(step_name)
 
   def run_script(self, step_name, script, args, isolate_hash, shards,
