@@ -14,6 +14,13 @@ import traceback
 
 from recipe_engine.types import freeze
 
+# TODO(martiniss): The class structure in this file isn't very optimal; there
+# are too many methods in the Test class, leading to many of its subclasses not
+# implementing abstract methods which shouldn't really exist in Test. Test
+# should be refactored to move those methods to another class. See
+# https://crbug.com/883150 for more.
+# pylint: disable=abstract-method
+
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 MAX_FAILS = 30
@@ -171,6 +178,7 @@ class Test(object):
 
   def pre_run(self, api, suffix):  # pragma: no cover
     """Steps to execute before running the test."""
+    del api, suffix
     return []
 
   def run(self, api, suffix):  # pragma: no cover
@@ -207,6 +215,7 @@ class Test(object):
     return '%s (%s)' % (self.name, suffix)
 
   def step_metadata(self, api, suffix=None):
+    del api
     data = {
         'waterfall_mastername': self._waterfall_mastername,
         'waterfall_buildername': self._waterfall_buildername,
@@ -323,7 +332,8 @@ class ExperimentalTest(TestWrapper):
 
     criteria = [
       api.properties.get('buildername', ''),
-      api.properties.get('patch_issue') or api.properties.get('buildnumber') or '0',
+      api.properties.get('patch_issue') or api.properties.get(
+          'buildnumber') or '0',
       self.name,
     ]
 
@@ -733,7 +743,8 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
   return [string.Template(arg).safe_substitute(substitutions) for arg in args]
 
 
-def generator_common(api, spec, swarming_delegate, local_delegate, swarming_dimensions):
+def generator_common(api, spec, swarming_delegate, local_delegate,
+                     swarming_dimensions):
   """Common logic for generating tests from JSON specs.
 
   Args:
@@ -879,6 +890,8 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
                    bot_update_step,
                    swarming_dimensions=None, scripts_compile_targets=None,
                    bot_config=None):
+  del scripts_compile_targets, bot_config
+
   def canonicalize_test(test):
     if isinstance(test, basestring):
       canonical_test = {'test': test}
@@ -890,6 +903,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
     return canonical_test
 
   def get_tests(api):
+    del api
     tests = [canonicalize_test(t) for t in
              test_spec.get(buildername, {}).get('gtest_tests', [])]
 
@@ -898,7 +912,8 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
     tests.sort(key=lambda x: x.get('swarming',{}).get('shards', 1))
     return tests
 
-  def gtest_delegate_common(spec, name=None, **kwargs):
+  def gtest_delegate_common(spec, **kwargs):
+    del kwargs
     common_gtest_kwargs = {}
     args = get_args_for_test(api, chromium_tests_api, spec, bot_update_step)
     if spec['shard_index'] != 0 or spec['total_shards'] != 1:
@@ -937,10 +952,14 @@ def generate_instrumentation_test(api, chromium_tests_api, mastername,
                                   swarming_dimensions=None,
                                   scripts_compile_targets=None,
                                   bot_config=None):
+  del mastername, swarming_dimensions
+  del scripts_compile_targets, bot_config
+
   # Do not try to add swarming support here.
   # Instead, swarmed instrumentation tests should be specified as gtests.
   # (Yes, it's a little weird.)
   def instrumentation_swarming_delegate(spec, **kwargs):
+    del spec, kwargs
     api.python.failing_step(
         'instrumentation test swarming error',
         'The tests can only be run locally.')
@@ -966,6 +985,8 @@ def generate_junit_test(api, chromium_tests_api, mastername, buildername,
                         swarming_dimensions=None,
                         scripts_compile_targets=None,
                         bot_config=None):
+  del api, chromium_tests_api, bot_update_step
+  del swarming_dimensions, scripts_compile_targets, bot_config
   for test in test_spec.get(buildername, {}).get('junit_tests', []):
     yield AndroidJunitTest(
         str(test['test']),
@@ -977,6 +998,10 @@ def generate_cts_test(api, chromium_tests_api, mastername, buildername,
                       swarming_dimensions=None,
                       scripts_compile_targets=None,
                       bot_config=None):
+  # Unused arguments
+  del api, chromium_tests_api, bot_update_step, swarming_dimensions
+  del scripts_compile_targets, bot_config
+
   for test in test_spec.get(buildername, {}).get('cts_tests', []):
     yield WebViewCTSTest(
         platform=str(test['platform']),
@@ -989,6 +1014,10 @@ def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
                     bot_update_step,
                     swarming_dimensions=None, scripts_compile_targets=None,
                     bot_config=None):
+  # Unused arguments
+  del api, chromium_tests_api, bot_update_step, swarming_dimensions
+  del bot_config
+
   for script_spec in test_spec.get(buildername, {}).get('scripts', []):
     yield ScriptTest(
         str(script_spec['name']),
@@ -1000,7 +1029,8 @@ def generate_script(api, chromium_tests_api, mastername, buildername, test_spec,
 
 
 class ResultsHandler(object):
-  def upload_results(self, api, results, step_name, step_suffix=None):  # pragma: no cover
+  def upload_results(self, api, results, step_name,
+                     step_suffix=None):  # pragma: no cover
     """Uploads test results to the Test Results Server.
 
     Args:
@@ -1203,7 +1233,7 @@ class FakeCustomResultsHandler(ResultsHandler):
     presentation.links['uploaded'] = 'fake://'
 
   def upload_results(self, api, results, step_name, step_suffix=None):
-    test_results = api.test_utils.create_results_from_json(results)
+    api.test_utils.create_results_from_json(results)
 
 
 class LayoutTestResultsHandler(JSONResultsHandler):
@@ -1494,7 +1524,8 @@ class SwarmingTest(Test):
 
       if api.step.active_result:
         api.step.active_result.presentation.logs['step_metadata'] = (
-            json.dumps(self.step_metadata(api, suffix), sort_keys=True, indent=2)
+            json.dumps(self.step_metadata(api, suffix), sort_keys=True,
+                       indent=2)
         ).splitlines()
 
   def has_valid_results(self, api, suffix):
@@ -1722,7 +1753,7 @@ class LocalIsolatedScriptTest(Test):
       self._test_runs[suffix] = api.step.active_result
       results = self._test_runs[suffix].json.output
       presentation = self._test_runs[suffix].presentation
-      valid, failures = self.results_handler.validate_results(api, results)
+      valid, _ = self.results_handler.validate_results(api, results)
       self._test_results[suffix] = (
           api.test_utils.create_results_from_json_if_needed(
               results) if valid else None)
@@ -1805,9 +1836,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       shards = 1
 
     # For the time being, we assume all isolated_script_test are not idempotent
-    # TODO(crbug.com/549140): remove the self._idempotent parameter once Telemetry
-    # tests are idempotent, since that will make all isolated_script_tests
-    # idempotent.
+    # TODO(crbug.com/549140): remove the self._idempotent parameter once
+    # Telemetry tests are idempotent, since that will make all
+    # isolated_script_tests idempotent.
     return api.swarming.isolated_script_task(
         title=self._step_name(suffix),
         ignore_task_failure=self._ignore_task_failure,
@@ -1881,7 +1912,9 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
                              test_spec, bot_update_step,
                              swarming_dimensions=None,
                              scripts_compile_targets=None):
+  del scripts_compile_targets
   def isolated_script_delegate_common(test, name=None, **kwargs):
+    del kwargs
 
     common_kwargs = {}
 
@@ -1899,7 +1932,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
 
     # TODO(tansell): Remove this once custom handling of results is no longer
     # needed.
-    results_handler_name = spec.get('results_handler', 'default')
+    results_handler_name = test.get('results_handler', 'default')
     try:
         common_kwargs['results_handler'] = {
             'default': lambda: None,
@@ -1962,7 +1995,8 @@ class PythonBasedTest(Test):
           api,
           suffix,
           cmd_args,
-          step_test_data=lambda: api.test_utils.test_api.canned_test_output(True))
+          step_test_data=lambda: api.test_utils.test_api.canned_test_output(
+              True))
     finally:
       step_result = api.step.active_result
       self._test_runs[suffix] = step_result
@@ -1992,7 +2026,7 @@ class PythonBasedTest(Test):
     return self._test_runs[suffix].test_utils.test_results.unexpected_failures
 
 
-class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
+class PrintPreviewTests(PythonBasedTest):
   def __init__(self, **kwargs):
     super(PrintPreviewTests, self).__init__('print_preview_tests')
 
@@ -2019,15 +2053,19 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
           **kwargs)
 
   def compile_targets(self, api):
+    del api
     return ['browser_tests', 'blink_tests']
 
 
-class BisectTest(Test):  # pylint: disable=W0232
-  def __init__(self, test_parameters={}, **kwargs):
+class BisectTest(Test):
+  def __init__(self, test_parameters=None, **kwargs):
+    if not test_parameters:
+      test_parameters = {}
     super(BisectTest, self).__init__('bisect_test')
     self._test_parameters = test_parameters
     self.run_results = {}
     self.kwargs = kwargs
+    self.test_config = None
 
   @property
   def abort_on_failure(self):
@@ -2056,12 +2094,15 @@ class BisectTest(Test):  # pylint: disable=W0232
     return self._failures  # pragma: no cover
 
 
-class BisectTestStaging(Test):  # pylint: disable=W0232
-  def __init__(self, test_parameters={}, **kwargs):
+class BisectTestStaging(Test):
+  def __init__(self, test_parameters=None, **kwargs):
+    if not test_parameters:
+      test_parameters = {}
     super(BisectTestStaging, self).__init__('bisect test staging')
     self._test_parameters = test_parameters
     self.run_results = {}
     self.kwargs = kwargs
+    self.test_config = None
 
   @property
   def abort_on_failure(self):
@@ -2163,7 +2204,8 @@ class AndroidJunitTest(AndroidTest):
     return api.chromium_android.run_java_unit_test_suite(
         self.name, verbose=True, suffix=suffix,
         json_results_file=json_results_file,
-        step_test_data=lambda: api.test_utils.test_api.canned_gtest_output(False))
+        step_test_data=lambda: api.test_utils.test_api.canned_gtest_output(
+            False))
 
 
 class AndroidInstrumentationTest(AndroidTest):
@@ -2226,7 +2268,8 @@ class AndroidInstrumentationTest(AndroidTest):
         or AndroidInstrumentationTest._DEFAULT_SUITES_BY_TARGET.get(name)
         or {})
     if not compile_targets:
-      compile_targets = [suite_defaults.get('compile_target', target_name or name)]
+      compile_targets = [
+          suite_defaults.get('compile_target', target_name or name)]
       compile_targets.extend(
           suite_defaults.get('additional_compile_targets', []))
 
@@ -2284,7 +2327,8 @@ class AndroidInstrumentationTest(AndroidTest):
         store_tombstones=self._store_tombstones,
         wrapper_script_suite_name=self._wrapper_script_suite_name,
         trace_output=self._trace_output,
-        step_test_data=lambda: api.test_utils.test_api.canned_gtest_output(False),
+        step_test_data=lambda: api.test_utils.test_api.canned_gtest_output(
+            False),
         args=self._args)
 
 
@@ -2636,7 +2680,8 @@ class MockTest(Test):
       api.step('%s%s' % (self.name, self._mock_suffix(suffix)), None)
 
   def has_valid_results(self, api, suffix):
-    api.step('has_valid_results %s%s' % (self.name, self._mock_suffix(suffix)), None)
+    api.step(
+        'has_valid_results %s%s' % (self.name, self._mock_suffix(suffix)), None)
     return self._has_valid_results
 
   def failures(self, api, suffix):
