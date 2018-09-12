@@ -7,7 +7,7 @@
     ],
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Using configs from the following builders:<br/>Linux Builder on chromium.linux<br/>GPU Linux Builder on chromium.gpu@@@"
+      "@@@STEP_TEXT@<br/>running tester 'Linux Tests' on master 'chromium.linux' against builder 'Linux Builder' on master 'chromium.linux'<br/>running tester 'Linux Release (NVIDIA)' on master 'chromium.gpu' against builder 'GPU Linux Builder' on master 'chromium.gpu'@@@"
     ]
   },
   {

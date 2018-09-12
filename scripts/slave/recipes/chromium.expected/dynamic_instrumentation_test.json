@@ -10,7 +10,7 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Using configs from the following builder:<br/>KitKat Phone Tester (rel) on chromium.android@@@"
+      "@@@STEP_TEXT@<br/>running builder/tester 'KitKat Phone Tester (rel)' on master 'chromium.android'@@@"
     ]
   },
   {

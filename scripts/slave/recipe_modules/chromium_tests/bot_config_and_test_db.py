@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import ast
+import collections
 import copy
 
 from recipe_engine.types import freeze
@@ -18,26 +19,39 @@ class BotConfig(object):
     self._bots_dict = bots_dict
 
     assert len(bot_ids) >= 1
-    self._bot_ids = bot_ids
+
+    def normalize(bot_id):
+      if not isinstance(bot_id, BotConfig.BotId):
+        bot_id = BotConfig.BotId(**bot_id)
+      return bot_id
+
+    self._bot_ids = tuple(normalize(b) for b in bot_ids)
 
     for bot_id in self._bot_ids:
-      m = bot_id['mastername']
-      b = bot_id['buildername']
+      m = bot_id.mastername
+      b = bot_id.buildername
       if not m in self._bots_dict:
         raise Exception('No configuration present for master %s' % m)
       master_dict = self._bots_dict[m]
       if not b in master_dict.get('builders', {}):
         raise Exception('No configuration present for builder %s in master %s' % (b, m))
 
-  @property
-  def builders(self):
-    """The builders to be executed by the associated bot.
+  class BotId(collections.namedtuple('BotId',
+                                     ('mastername', 'buildername', 'tester', 'tester_mastername'))):
 
-    Returns:
-      The list of builders to be executed as tuples of the form
-      (mastername, buildername).
-    """
-    return [(b['mastername'], b['buildername']) for b in self._bot_ids]
+    __slots__ = ()
+
+    def __new__(cls, mastername, buildername, tester=None, tester_mastername=None):
+      tester_mastername = tester_mastername or mastername if tester else None
+      return super(BotConfig.BotId, cls).__new__(
+          cls, mastername, buildername, tester, tester_mastername)
+
+  @property
+  def bot_ids(self):
+    return self._bot_ids
+
+  def get_bot_type(self, bot_id):
+    return self._get(bot_id, 'bot_type', 'builder_tester')
 
   def _consistent_get(self, getter, name, default=None):
     # This logic must be kept in sync with checkConsistentGet in
@@ -56,8 +70,8 @@ class BotConfig(object):
   def _get_builder_bot_config(self, bot_id):
     # WARNING: This doesn't take into account dynamic
     # tests from test spec etc. If you need that, please use bot_db.
-    return self._bots_dict.get(bot_id['mastername'], {}).get(
-        'builders', {}).get(bot_id['buildername'], {})
+    return self._bots_dict.get(bot_id.mastername, {}).get(
+        'builders', {}).get(bot_id.buildername, {})
 
   def _get(self, bot_id, name, default=None):
     return self._get_builder_bot_config(bot_id).get(name, default)
@@ -72,7 +86,7 @@ class BotConfig(object):
       # The official builders specify the test spec using a test_spec property in
       # the bot_config instead of reading it from a file.
       if 'test_spec' in bot_config: # pragma: no cover
-        return { self._bot_ids[0]['buildername']: bot_config['test_spec'] }
+        return { self._bot_ids[0].buildername: bot_config['test_spec'] }
 
 
     test_spec_file = self.get('testing', {}).get(
@@ -111,8 +125,8 @@ class BotConfig(object):
 
     masternames = set()
     for bot_id in self._bot_ids:
-      bot_master_name = bot_id['mastername']
-      bot_builder_name = bot_id['buildername']
+      bot_master_name = bot_id.mastername
+      bot_builder_name = bot_id.buildername
       masternames.add(bot_master_name)
 
       for master_name, master_config in self._bots_dict.iteritems():
@@ -155,18 +169,18 @@ class BotConfig(object):
     tests = []
     for bot_id in self._bot_ids:
       bot_config = bot_db.get_bot_config(
-          bot_id['mastername'], bot_id['buildername'])
+          bot_id.mastername, bot_id.buildername)
       tests.extend([copy.deepcopy(t) for t in bot_config.get('tests', [])])
 
-      if bot_id.get('tester'):
+      if bot_id.tester:
         bot_config = bot_db.get_bot_config(
-            bot_id['mastername'], bot_id['tester'])
+            bot_id.tester_mastername, bot_id.tester)
         tests.extend([copy.deepcopy(t) for t in bot_config.get('tests', [])])
 
     tests_including_triggered = list(tests)
     for bot_id in self._bot_ids:
       for _, _, _, test_bot in bot_db.bot_configs_matching_parent_buildername(
-          bot_id['mastername'], bot_id['buildername']):
+          bot_id.mastername, bot_id.buildername):
         tests_including_triggered.extend(test_bot.get('tests', []))
 
     return tests, tests_including_triggered
@@ -179,10 +193,10 @@ class BotConfig(object):
     compile_targets = set()
     for bot_id in self._bot_ids:
       bot_config = bot_db.get_bot_config(
-          bot_id['mastername'], bot_id['buildername'])
+          bot_id.mastername, bot_id.buildername)
       compile_targets.update(set(bot_config.get('compile_targets', [])))
       compile_targets.update(bot_db.get_test_spec(
-          bot_id['mastername'], bot_id['buildername']).get(
+          bot_id.mastername, bot_id.buildername).get(
               'additional_compile_targets', []))
 
     if self.get('add_tests_as_compile_targets', True):
@@ -225,22 +239,18 @@ class _TestConfig(object):
     self._config = self._ConfigNode(None, False, None)
 
     for bot_id in bot_ids:
-      mastername = bot_id['mastername']
-      buildername = bot_id['buildername']
       builder_bot_config = bot_db.get_bot_config(
-          mastername, buildername)
-      builder_key = (mastername, buildername)
-      if builder_key not in self._config.children:
-        self._config.children[builder_key] = self._ConfigNode(
-            builder_key, True, builder_bot_config.get('tests', []))
-      builder_config = self._config.children[builder_key]
+          bot_id.mastername, bot_id.buildername)
+      key = bot_id.mastername, bot_id.buildername
+      if key not in self._config.children:
+        self._config.children[key] = self._ConfigNode(
+            key, True, builder_bot_config.get('tests', []))
+      builder_config = self._config.children[key]
 
-      if 'tester' in bot_id:
-        tester_mastername = bot_id.get('tester_mastername', mastername)
-        tester_buildername = bot_id['tester']
-        tester_key = (tester_mastername, tester_buildername)
+      if bot_id.tester:
         tester_bot_config = bot_db.get_bot_config(
-            tester_mastername, tester_buildername)
+            bot_id.tester_mastername, bot_id.tester)
+        tester_key = bot_id.tester_mastername, bot_id.tester
         builder_config.children[tester_key] = self._ConfigNode(
             tester_key, True, tester_bot_config.get('tests', []))
 
@@ -250,7 +260,7 @@ class _TestConfig(object):
             triggered_buildername,
             triggered_bot_config
           ) in bot_db.bot_configs_matching_parent_buildername(
-              mastername, buildername):
+              bot_id.mastername, bot_id.buildername):
         triggered_key = (triggered_mastername, triggered_buildername)
         if triggered_key not in builder_config.children:
           builder_config.children[triggered_key] = self._ConfigNode(

@@ -10,7 +10,7 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Using configs from the following builders:<br/>GPU FYI Mac Builder on chromium.gpu.fyi<br/>GPU FYI Mac Builder on chromium.gpu.fyi<br/>GPU FYI Mac Builder on chromium.gpu.fyi@@@"
+      "@@@STEP_TEXT@<br/>running tester 'Optional Mac Release (Intel)' on master 'chromium.gpu.fyi' against builder 'GPU FYI Mac Builder' on master 'chromium.gpu.fyi'<br/>running tester 'Optional Mac Retina Release (NVIDIA)' on master 'chromium.gpu.fyi' against builder 'GPU FYI Mac Builder' on master 'chromium.gpu.fyi'<br/>running tester 'Optional Mac Retina Release (AMD)' on master 'chromium.gpu.fyi' against builder 'GPU FYI Mac Builder' on master 'chromium.gpu.fyi'@@@"
     ]
   },
   {

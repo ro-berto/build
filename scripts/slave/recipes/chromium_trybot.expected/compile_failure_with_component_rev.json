@@ -10,7 +10,7 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Using configs from the following builder:<br/>V8 Linux GN on client.v8.fyi@@@"
+      "@@@STEP_TEXT@<br/>running builder 'V8 Linux GN' on master 'client.v8.fyi'@@@"
     ]
   },
   {

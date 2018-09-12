@@ -692,8 +692,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         #TODO(prasadv): Remove this hack and implement specific functions
         # at the point of call.
         perf_setup = bot_config.matches_any_bot_id(lambda bot_id:
-            bot_id['mastername'].startswith('chromium.perf') or
-            bot_id['mastername'].startswith('tryserver.chromium.perf'))
+            bot_id.mastername.startswith('chromium.perf') or
+            bot_id.mastername.startswith('tryserver.chromium.perf'))
         self.m.chromium_android.common_tests_setup_steps(perf_setup=perf_setup)
 
       for test in (tests or []):
@@ -1151,10 +1151,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def _report_builders(self, bot_config):
     """Reports the builders being executed by the bot."""
-    builders = bot_config.builders
-    lines = (['Using configs from the following builder%s:'
-              % ('s' if len(builders) > 1 else '')]
-             + ['%s on %s' % (b[1], b[0]) for b in builders])
+    def present_bot(bot_id):
+      if bot_id.tester:
+        return ('running tester %r on master %r against builder %r on master %r'
+                % (bot_id.tester, bot_id.tester_mastername,
+                   bot_id.buildername, bot_id.mastername))
+      bot_type = bot_config.get_bot_type(bot_id)
+      if bot_type == 'builder_tester':
+        bot_type = 'builder/tester'
+      return ('running %s %r on master %r'
+              % (bot_type, bot_id.buildername, bot_id.mastername))
+
+
+    lines = [''] + [present_bot(b) for b in bot_config.bot_ids]
     self.m.python.succeeding_step('report builders', '<br/>'.join(lines))
 
   def _all_compile_targets(self, tests):

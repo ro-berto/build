@@ -10,7 +10,7 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Using configs from the following builder:<br/>Lollipop Phone Tester on chromium.android@@@"
+      "@@@STEP_TEXT@<br/>running tester 'Lollipop Phone Tester' on master 'chromium.android'@@@"
     ]
   },
   {

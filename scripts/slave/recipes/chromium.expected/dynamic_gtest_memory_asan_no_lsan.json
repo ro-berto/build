@@ -10,7 +10,7 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Using configs from the following builder:<br/>Linux ASan Tests (sandboxed) on chromium.memory@@@"
+      "@@@STEP_TEXT@<br/>running tester 'Linux ASan Tests (sandboxed)' on master 'chromium.memory'@@@"
     ]
   },
   {

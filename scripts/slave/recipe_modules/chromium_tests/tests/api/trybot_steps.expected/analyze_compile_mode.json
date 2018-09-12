@@ -7,7 +7,7 @@
     ],
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Using configs from the following builder:<br/>linux-rel on chromium@@@"
+      "@@@STEP_TEXT@<br/>running builder/tester 'linux-rel' on master 'chromium'@@@"
     ]
   },
   {

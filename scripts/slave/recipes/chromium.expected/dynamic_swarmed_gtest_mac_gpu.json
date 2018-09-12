@@ -10,7 +10,7 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Using configs from the following builder:<br/>Mac10.13 Tests on chromium.mac@@@"
+      "@@@STEP_TEXT@<br/>running tester 'Mac10.13 Tests' on master 'chromium.mac'@@@"
     ]
   },
   {

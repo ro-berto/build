@@ -10,7 +10,7 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Using configs from the following builder:<br/>Linux remote_run Builder on chromium.fyi@@@"
+      "@@@STEP_TEXT@<br/>running builder 'Linux remote_run Builder' on master 'chromium.fyi'@@@"
     ]
   },
   {
