@@ -119,7 +119,7 @@
       "--root=[START_DIR]/pdfium",
       "gen",
       "//out/release_xfa_v8_msan",
-      "--args=is_debug=false is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\" is_msan=true use_prebuilt_instrumented_libraries=true"
+      "--args=is_debug=false is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\" is_msan=true use_prebuilt_instrumented_libraries=true"
     ],
     "cwd": "[START_DIR]/pdfium",
     "name": "gn gen"
@@ -388,7 +388,7 @@
       "--gold_properties",
       "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux_xfa_msan build_number 1234",
       "--gold_key",
-      "debug false is_standalone true msan true os linux skia false use_prebuilt_instrumented_libraries true v8 true xfa true",
+      "debug false is_standalone true msan true os linux skia false skia_paths false use_prebuilt_instrumented_libraries true v8 true xfa true",
       "--gold_output_dir",
       "[START_DIR]/pdfium/out/release_xfa_v8_msan/gold_output"
     ],
@@ -452,7 +452,7 @@
       "--gold_properties",
       "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux_xfa_msan build_number 1234",
       "--gold_key",
-      "debug false is_standalone true msan true os linux skia false use_prebuilt_instrumented_libraries true v8 true xfa true",
+      "debug false is_standalone true msan true os linux skia false skia_paths false use_prebuilt_instrumented_libraries true v8 true xfa true",
       "--gold_output_dir",
       "[START_DIR]/pdfium/out/release_xfa_v8_msan/gold_output"
     ],
@@ -524,7 +524,7 @@
       "--gold_properties",
       "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder linux_xfa_msan build_number 1234",
       "--gold_key",
-      "debug false is_standalone true msan true os linux skia false use_prebuilt_instrumented_libraries true v8 true xfa true",
+      "debug false is_standalone true msan true os linux skia false skia_paths false use_prebuilt_instrumented_libraries true v8 true xfa true",
       "--gold_output_dir",
       "[START_DIR]/pdfium/out/release_xfa_v8_msan/gold_output"
     ],

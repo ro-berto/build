@@ -118,8 +118,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gn.py",
       "--root=[START_DIR]\\pdfium",
       "gen",
-      "//out/debug_xfa_v8_jumbo",
-      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]\\goma\\client\" symbol_level=1 is_clang=true use_jumbo_build=true jumbo_file_merge_limit=50"
+      "//out/debug_skiapaths_xfa_v8",
+      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_use_skia_paths=true pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]\\goma\\client\" symbol_level=1 is_clang=true"
     ],
     "cwd": "[START_DIR]\\pdfium",
     "name": "gn gen"
@@ -138,7 +138,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\data\\windows_xfa_jumbo"
+      "[CACHE]\\goma\\data\\windows_skia_paths"
     ],
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -155,7 +155,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\windows_xfa_jumbo",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\windows_skia_paths",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -197,7 +197,7 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-C",
-      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo",
+      "[START_DIR]\\pdfium\\out\\debug_skiapaths_xfa_v8",
       "-j",
       "20",
       "pdfium_all"
@@ -218,7 +218,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\windows_xfa_jumbo",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\windows_skia_paths",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -250,7 +250,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\windows_xfa_jumbo",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\windows_skia_paths",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -271,7 +271,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\windows_xfa_jumbo",
+      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\windows_skia_paths",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -302,9 +302,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo",
+      "[START_DIR]\\pdfium\\out\\debug_skiapaths_xfa_v8",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-C\", \"[START_DIR]\\\\pdfium\\\\out\\\\debug_xfa_v8_jumbo\", \"-j\", 20, \"pdfium_all\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-C\", \"[START_DIR]\\\\pdfium\\\\out\\\\debug_skiapaths_xfa_v8\", \"-j\", 20, \"pdfium_all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -318,9 +318,9 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]\\crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": \"master.client.pdfium\", \"builder\": \"windows_xfa_jumbo\", \"project\": \"\"}",
+      "{\"bucket\": \"master.client.pdfium\", \"builder\": \"windows_skia_paths\", \"project\": \"\"}",
       "--buildbot-buildername",
-      "windows_xfa_jumbo",
+      "windows_skia_paths",
       "--buildbot-mastername",
       "client.pdfium",
       "--buildbot-slavename",
@@ -357,219 +357,6 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
-  },
-  {
-    "cmd": [
-      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo\\pdfium_unittests.exe"
-    ],
-    "cwd": "[START_DIR]\\pdfium",
-    "name": "unittests"
-  },
-  {
-    "cmd": [
-      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo\\pdfium_embeddertests.exe"
-    ],
-    "cwd": "[START_DIR]\\pdfium",
-    "name": "embeddertests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]\\pdfium\\testing\\tools\\run_javascript_tests.py",
-      "--build-dir",
-      "out\\debug_xfa_v8_jumbo",
-      "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_xfa_jumbo build_number 1234",
-      "--gold_key",
-      "clang true debug true is_standalone true jumbo_file_merge_limit 50 os windows skia false skia_paths false symbol_level 1 use_jumbo_build true v8 true xfa true",
-      "--gold_output_dir",
-      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo\\gold_output"
-    ],
-    "cwd": "[START_DIR]\\pdfium",
-    "name": "javascript tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport contextlib\nimport math\nimport socket\nimport sys\nimport time\nimport urllib2\n\nHASHES_URL = 'https://pdfium-gold.skia.org/_/hashes'\nRETRIES = 5\nTIMEOUT = 60\nWAIT_BASE = 15\n\nsocket.setdefaulttimeout(TIMEOUT)\nfor retry in range(RETRIES):\n  try:\n    with contextlib.closing(\n        urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:\n      hashes = w.read()\n      with open(sys.argv[1], 'w') as f:\n        f.write(hashes)\n        break\n  except Exception as e:\n    print 'Failed to get uninteresting hashes from %s:' % HASHES_URL\n    print e\n    if retry == RETRIES:\n      raise\n    waittime = WAIT_BASE * math.pow(2, retry)\n    print 'Retry in %d seconds.' % waittime\n    time.sleep(waittime)\n",
-      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo\\ignore_hashes.txt"
-    ],
-    "cwd": "[START_DIR]\\pdfium",
-    "infra_step": true,
-    "name": "get uninteresting hashes",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import contextlib@@@",
-      "@@@STEP_LOG_LINE@python.inline@import math@@@",
-      "@@@STEP_LOG_LINE@python.inline@import socket@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@import time@@@",
-      "@@@STEP_LOG_LINE@python.inline@import urllib2@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@HASHES_URL = 'https://pdfium-gold.skia.org/_/hashes'@@@",
-      "@@@STEP_LOG_LINE@python.inline@RETRIES = 5@@@",
-      "@@@STEP_LOG_LINE@python.inline@TIMEOUT = 60@@@",
-      "@@@STEP_LOG_LINE@python.inline@WAIT_BASE = 15@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@socket.setdefaulttimeout(TIMEOUT)@@@",
-      "@@@STEP_LOG_LINE@python.inline@for retry in range(RETRIES):@@@",
-      "@@@STEP_LOG_LINE@python.inline@  try:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    with contextlib.closing(@@@",
-      "@@@STEP_LOG_LINE@python.inline@        urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:@@@",
-      "@@@STEP_LOG_LINE@python.inline@      hashes = w.read()@@@",
-      "@@@STEP_LOG_LINE@python.inline@      with open(sys.argv[1], 'w') as f:@@@",
-      "@@@STEP_LOG_LINE@python.inline@        f.write(hashes)@@@",
-      "@@@STEP_LOG_LINE@python.inline@        break@@@",
-      "@@@STEP_LOG_LINE@python.inline@  except Exception as e:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print 'Failed to get uninteresting hashes from %s:' % HASHES_URL@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print e@@@",
-      "@@@STEP_LOG_LINE@python.inline@    if retry == RETRIES:@@@",
-      "@@@STEP_LOG_LINE@python.inline@      raise@@@",
-      "@@@STEP_LOG_LINE@python.inline@    waittime = WAIT_BASE * math.pow(2, retry)@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print 'Retry in %d seconds.' % waittime@@@",
-      "@@@STEP_LOG_LINE@python.inline@    time.sleep(waittime)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]\\pdfium\\testing\\tools\\run_pixel_tests.py",
-      "--build-dir",
-      "out\\debug_xfa_v8_jumbo",
-      "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_xfa_jumbo build_number 1234",
-      "--gold_key",
-      "clang true debug true is_standalone true jumbo_file_merge_limit 50 os windows skia false skia_paths false symbol_level 1 use_jumbo_build true v8 true xfa true",
-      "--gold_output_dir",
-      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo\\gold_output"
-    ],
-    "cwd": "[START_DIR]\\pdfium",
-    "name": "pixel tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "glob",
-      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo\\gold_output",
-      "*.png"
-    ],
-    "infra_step": true,
-    "name": "find images",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@glob@[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo\\gold_output\\someimage.png@@@",
-      "@@@STEP_LOG_END@glob@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "-m",
-      "----",
-      "cp",
-      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo\\gold_output\\*.png",
-      "gs://skia-pdfium-gm/dm-images-v1"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload images"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "----",
-      "cp",
-      "-z",
-      "json,log",
-      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo\\gold_output\\dm.json",
-      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/windows_xfa_jumbo/1337000003/pixel/dm.json"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload JSON"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]\\pdfium\\testing\\tools\\run_corpus_tests.py",
-      "--build-dir",
-      "out\\debug_xfa_v8_jumbo",
-      "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_xfa_jumbo build_number 1234",
-      "--gold_key",
-      "clang true debug true is_standalone true jumbo_file_merge_limit 50 os windows skia false skia_paths false symbol_level 1 use_jumbo_build true v8 true xfa true",
-      "--gold_output_dir",
-      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo\\gold_output"
-    ],
-    "cwd": "[START_DIR]\\pdfium",
-    "name": "corpus tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "glob",
-      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo\\gold_output",
-      "*.png"
-    ],
-    "infra_step": true,
-    "name": "find images (2)",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@glob@[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo\\gold_output\\someimage.png@@@",
-      "@@@STEP_LOG_END@glob@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "-m",
-      "----",
-      "cp",
-      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo\\gold_output\\*.png",
-      "gs://skia-pdfium-gm/dm-images-v1"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload images (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
-      "----",
-      "cp",
-      "-z",
-      "json,log",
-      "[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo\\gold_output\\dm.json",
-      "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/windows_xfa_jumbo/1337000006/corpus/dm.json"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload JSON (2)"
   },
   {
     "name": "$result",

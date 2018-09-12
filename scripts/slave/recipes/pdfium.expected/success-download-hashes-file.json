@@ -119,7 +119,7 @@
       "--root=[START_DIR]/pdfium",
       "gen",
       "//out/debug",
-      "--args=is_debug=true is_component_build=false pdf_enable_v8=false pdf_enable_xfa=false pdf_use_skia=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\" target_os=\"android\""
+      "--args=is_debug=true is_component_build=false pdf_enable_v8=false pdf_enable_xfa=false pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\" target_os=\"android\""
     ],
     "cwd": "[START_DIR]/pdfium",
     "name": "gn gen"
@@ -426,7 +426,7 @@
       "--gold_properties",
       "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder android build_number 1234",
       "--gold_key",
-      "debug true is_standalone true os android skia false target_os \"android\" v8 false xfa false",
+      "debug true is_standalone true os android skia false skia_paths false target_os \"android\" v8 false xfa false",
       "--gold_output_dir",
       "[START_DIR]/pdfium/out/debug/gold_output",
       "--gold_ignore_hashes",
@@ -497,7 +497,7 @@
       "--gold_properties",
       "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder android build_number 1234",
       "--gold_key",
-      "debug true is_standalone true os android skia false target_os \"android\" v8 false xfa false",
+      "debug true is_standalone true os android skia false skia_paths false target_os \"android\" v8 false xfa false",
       "--gold_output_dir",
       "[START_DIR]/pdfium/out/debug/gold_output",
       "--gold_ignore_hashes",

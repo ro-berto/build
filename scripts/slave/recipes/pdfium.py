@@ -32,6 +32,7 @@ UPLOAD_ATTEMPTS = 5
 
 PROPERTIES = {
   'skia': Property(default=False, kind=bool),
+  'skia_paths': Property(default=False, kind=bool),
   'xfa': Property(default=False, kind=bool),
   'memory_tool': Property(default=None, kind=str),
   'v8': Property(default=True, kind=bool),
@@ -55,10 +56,12 @@ def _CheckoutSteps(api, target_os):
   api.gclient.runhooks()
   return update_step.presentation.properties['got_revision']
 
-def _OutPath(memory_tool, skia, xfa, v8, clang, msvc, rel, jumbo):
+def _OutPath(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel, jumbo):
   out_dir = 'release' if rel else 'debug'
   if skia:
     out_dir += "_skia"
+  if skia_paths:
+    out_dir += "_skiapaths"
   if xfa:
     out_dir += "_xfa"
   if v8:
@@ -78,8 +81,8 @@ def _OutPath(memory_tool, skia, xfa, v8, clang, msvc, rel, jumbo):
 
 # _GNGenBuilds calls 'gn gen' and returns a dictionary of
 # the used build configuration to be used by Gold.
-def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
-                 jumbo, target_os, out_dir):
+def _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
+                 msvc, rel, jumbo, target_os, out_dir):
   api.goma.ensure_goma()
   gn_bool = {True: 'true', False: 'false'}
   # Generate build files by GN.
@@ -93,6 +96,7 @@ def _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
       'pdf_enable_v8=%s' % gn_bool[v8],
       'pdf_enable_xfa=%s' % gn_bool[xfa],
       'pdf_use_skia=%s' % gn_bool[skia],
+      'pdf_use_skia_paths=%s' % gn_bool[skia_paths],
       'pdf_is_standalone=true',
       'use_goma=true',
       'goma_dir="%s"' % api.goma.goma_dir,
@@ -254,14 +258,16 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
     raise test_exception # pylint: disable=E0702
 
 
-def RunSteps(api, memory_tool, skia, xfa, v8, target_cpu, clang, msvc, rel,
-             jumbo, skip_test, target_os):
+def RunSteps(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
+             msvc, rel, jumbo, skip_test, target_os):
   revision = _CheckoutSteps(api, target_os)
 
-  out_dir = _OutPath(memory_tool, skia, xfa, v8, clang, msvc, rel, jumbo)
+  out_dir = _OutPath(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel,
+                     jumbo)
 
-  build_config = _GNGenBuilds(api, memory_tool, skia, xfa, v8, target_cpu,
-                              clang, msvc, rel, jumbo, target_os, out_dir)
+  build_config = _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8,
+                              target_cpu, clang, msvc, rel, jumbo, target_os,
+                              out_dir)
 
   _BuildSteps(api, clang, out_dir)
 
@@ -549,6 +555,18 @@ def GenTests(api):
   )
 
   yield (
+      api.test('win_skia_paths') +
+      api.platform('win', 64) +
+      api.properties(skia_paths=True,
+                     xfa=True,
+                     skip_test=True,
+                     mastername="client.pdfium",
+                     buildername='windows_skia_paths',
+                     buildnumber='1234',
+                     bot_id="test_slave")
+  )
+
+  yield (
       api.test('win_xfa_32') +
       api.platform('win', 64) +
       api.properties(xfa=True,
@@ -627,6 +645,18 @@ def GenTests(api):
   )
 
   yield (
+      api.test('linux_skia_paths') +
+      api.platform('linux', 64) +
+      api.properties(skia_paths=True,
+                     xfa=True,
+                     skip_test=True,
+                     mastername="client.pdfium",
+                     buildername='linux_skia_paths',
+                     buildnumber='1234',
+                     bot_id="test_slave")
+  )
+
+  yield (
       api.test('linux_xfa') +
       api.platform('linux', 64) +
       api.properties(xfa=True,
@@ -666,6 +696,18 @@ def GenTests(api):
                      skip_test=True,
                      mastername="client.pdfium",
                      buildername='mac_skia',
+                     buildnumber='1234',
+                     bot_id="test_slave")
+  )
+
+  yield (
+      api.test('mac_skia_paths') +
+      api.platform('mac', 64) +
+      api.properties(skia_paths=True,
+                     xfa=True,
+                     skip_test=True,
+                     mastername="client.pdfium",
+                     buildername='mac_skia_paths',
                      buildnumber='1234',
                      bot_id="test_slave")
   )

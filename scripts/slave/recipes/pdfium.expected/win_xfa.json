@@ -119,7 +119,7 @@
       "--root=[START_DIR]\\pdfium",
       "gen",
       "//out/debug_xfa_v8",
-      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]\\goma\\client\" symbol_level=1 is_clang=true"
+      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]\\goma\\client\" symbol_level=1 is_clang=true"
     ],
     "cwd": "[START_DIR]\\pdfium",
     "name": "gn gen"
@@ -382,7 +382,7 @@
       "--gold_properties",
       "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_xfa build_number 1234",
       "--gold_key",
-      "clang true debug true is_standalone true os windows skia false symbol_level 1 v8 true xfa true",
+      "clang true debug true is_standalone true os windows skia false skia_paths false symbol_level 1 v8 true xfa true",
       "--gold_output_dir",
       "[START_DIR]\\pdfium\\out\\debug_xfa_v8\\gold_output"
     ],
@@ -443,7 +443,7 @@
       "--gold_properties",
       "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_xfa build_number 1234",
       "--gold_key",
-      "clang true debug true is_standalone true os windows skia false symbol_level 1 v8 true xfa true",
+      "clang true debug true is_standalone true os windows skia false skia_paths false symbol_level 1 v8 true xfa true",
       "--gold_output_dir",
       "[START_DIR]\\pdfium\\out\\debug_xfa_v8\\gold_output"
     ],
@@ -512,7 +512,7 @@
       "--gold_properties",
       "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master client.pdfium builder windows_xfa build_number 1234",
       "--gold_key",
-      "clang true debug true is_standalone true os windows skia false symbol_level 1 v8 true xfa true",
+      "clang true debug true is_standalone true os windows skia false skia_paths false symbol_level 1 v8 true xfa true",
       "--gold_output_dir",
       "[START_DIR]\\pdfium\\out\\debug_xfa_v8\\gold_output"
     ],

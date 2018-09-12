@@ -119,7 +119,7 @@
       "--root=[START_DIR]\\pdfium",
       "gen",
       "//out/debug_skia_xfa_v8",
-      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=true pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]\\goma\\client\" symbol_level=1 is_clang=true"
+      "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=true pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]\\goma\\client\" symbol_level=1 is_clang=true"
     ],
     "cwd": "[START_DIR]\\pdfium",
     "name": "gn gen"
