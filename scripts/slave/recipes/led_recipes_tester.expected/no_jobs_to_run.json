@@ -1,0 +1,13 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "exiting",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@no tryjobs to run, exiting@@@"
+    ]
+  }
+]

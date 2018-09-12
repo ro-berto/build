@@ -5,7 +5,7 @@
 """Tests a recipe CL by running a chromium builder."""
 
 from recipe_engine.recipe_api import Property
-from recipe_engine.post_process import DoesNotRun
+from recipe_engine.post_process import Filter
 
 DEPS = [
   'recipe_engine/context',
@@ -48,21 +48,52 @@ def _checkout_project(api, workdir, gclient_config, patch):
     api.bot_update.ensure_checkout(
         patch=patch, gclient_config=gclient_config)
 
+
+def should_trigger_recipe(api, recipe, repo_path, recipes_py_path):
+  recipes_cfg_path = repo_path.join('infra', 'config', 'recipes.cfg')
+
+  affected_files = api.tryserver.get_files_affected_by_patch(repo_path)
+  try:
+    roll_step = api.python(
+      'analyze %s' % recipe,
+      recipes_py_path, [
+        '--package', recipes_cfg_path,
+        'analyze',
+        api.json.input({
+            'files': affected_files,
+            'recipes': [recipe],
+        }),
+        api.json.output()],
+      venv=True)
+  except api.step.StepFailure:
+    roll_step = api.step.active_result
+    if roll_step.json.output:
+      roll_step.presentation.logs['error'] = roll_step.json.output['error']
+
+  if recipe in roll_step.json.output.get('invalid_recipes', []):
+    api.python.failing_step(
+        'recipe invalid',
+        'analyze reported that the recipe \'%s\' was invalid. Something may'
+        ' be wrong with the swarming task this is based on.' % recipe)
+
+  return recipe in roll_step.json.output['recipes']
+
+
+# TODO(martiniss): make this work if repo_name != 'build'
 def RunSteps(api, repo_name):
-  workdir_base = api.path['cache'].join('builder')
+  workdir_base = api.path['cache']
   cl_workdir = workdir_base.join(repo_name)
   client_py_workdir = workdir_base.join('client_py')
+  recipes_dir = workdir_base.join('recipe_engine')
+
+  # Needed to run `recipes.py analyze`.
+  recipes_config = api.gclient.make_config('recipes_py')
+  _checkout_project(api, recipes_dir, recipes_config, False)
+  recipes_dir = recipes_dir.join('infra', 'recipes-py')
 
   # Check out the repo for the CL, applying the patch.
   cl_config = api.gclient.make_config(repo_name)
   _checkout_project(api, cl_workdir, cl_config, True)
-
-  # Check out the client-py repo, which gives us swarming.py.
-  client_py_config = api.gclient.make_config()
-  soln = client_py_config.solutions.add()
-  soln.name = 'client-py'
-  soln.url = 'https://chromium.googlesource.com/infra/luci/client-py'
-  _checkout_project(api, client_py_workdir, client_py_config, False)
 
   triggered_jobs = {}
 
@@ -76,8 +107,20 @@ def RunSteps(api, repo_name):
 
   for builder in builders:
     with api.context(cwd=cl_workdir.join('build')):
-      result = (api.
-                led('get-builder', builder).
+      # intermediate result
+      ir = (api.
+            led('get-builder', builder))
+      recipe = ir.result['userland']['recipe_name']
+      if not should_trigger_recipe(
+          api, recipe, cl_workdir.join(repo_name),
+          recipes_dir.join('recipes.py')):
+        result = api.python.succeeding_step(
+            'not running a tryjob for %s' % recipe,
+            '`recipes.py analyze` indicates this recipe is not affected by the'
+            ' files changed by the CL.')
+        continue
+
+      result = (ir.
                 then('edit-recipe-bundle').
                 # Force the job to be experimental, since we don't want it
                 # affecting production services.
@@ -85,7 +128,18 @@ def RunSteps(api, repo_name):
                      '"is_experimental":true, "is_luci": true}').
                 then('launch')).result
 
-    triggered_jobs[builder] = result['swarming']
+      triggered_jobs[builder] = result['swarming']
+
+  if not triggered_jobs:
+    api.python.succeeding_step('exiting', 'no tryjobs to run, exiting')
+    return
+
+  # Check out the client-py repo, which gives us swarming.py.
+  client_py_config = api.gclient.make_config()
+  soln = client_py_config.solutions.add()
+  soln.name = 'client-py'
+  soln.url = 'https://chromium.googlesource.com/infra/luci/client-py'
+  _checkout_project(api, client_py_workdir, client_py_config, False)
 
   for builder, job in triggered_jobs.items():
     result = None
@@ -118,12 +172,67 @@ def GenTests(api):
                           'task_id': 'beeeeeeeee5',
                       }
                     })) +
-    api.override_step_data(
-      'gerrit changes', api.json.output(
-        [{'revisions': {1: {'_number': 12, 'commit': {
-          'message': 'nothing important'}}}}])) +
-    api.override_step_data(
-        'parse description', api.json.output({}))
+      api.step_data('led get-builder',
+                    stdout=api.json.output({
+                      'userland': {
+                          'recipe_name': 'foo_recipe',
+                      }
+                    })) +
+      api.step_data('analyze foo_recipe',
+                    api.json.output({
+                      'recipes': ['foo_recipe'],
+                    })) +
+      api.override_step_data(
+        'gerrit changes', api.json.output(
+          [{'revisions': {1: {'_number': 12, 'commit': {
+            'message': 'nothing important'}}}}])) +
+      api.override_step_data(
+          'parse description', api.json.output({}))
+  )
+
+  yield (
+      api.test('no_jobs_to_run') +
+      api.properties.tryserver(repo_name='build') +
+      api.step_data('led get-builder',
+                    stdout=api.json.output({
+                      'userland': {
+                          'recipe_name': 'foo_recipe',
+                      }
+                    })) +
+      api.step_data('analyze foo_recipe',
+                    api.json.output({
+                      'recipes': [],
+                    })) +
+      api.override_step_data(
+        'gerrit changes', api.json.output(
+          [{'revisions': {1: {'_number': 12, 'commit': {
+            'message': 'nothing important'}}}}])) +
+      api.override_step_data(
+          'parse description', api.json.output({})) +
+      api.post_process(Filter('exiting'))
+  )
+
+  yield (
+      api.test('analyze_failure') +
+      api.properties.tryserver(repo_name='build') +
+      api.step_data('led get-builder',
+                    stdout=api.json.output({
+                      'userland': {
+                          'recipe_name': 'foo_recipe',
+                      }
+                    })) +
+      api.step_data('analyze foo_recipe',
+                    api.json.output({
+                      'error': 'Bad analyze!!!!',
+                      'invalid_recipes': ['foo_recipe'],
+                    }), retcode=1) +
+      api.override_step_data(
+        'gerrit changes', api.json.output(
+          [{'revisions': {1: {'_number': 12, 'commit': {
+            'message': 'nothing important'}}}}])) +
+      api.override_step_data(
+          'parse description', api.json.output({})) +
+      api.post_process(Filter('recipe invalid'))
   )
 
   yield (
@@ -136,11 +245,22 @@ def GenTests(api):
                           'task_id': 'beeeeeeeee5',
                       }
                     })) +
-    api.override_step_data(
-      'gerrit changes', api.json.output(
-        [{'revisions': {1: {'_number': 12, 'commit': {
-          'message': BUILDER_FOOTER + ': arbitrary.blah'}}}}])) +
-    api.override_step_data(
-        'parse description', api.json.output(
-            {BUILDER_FOOTER: ['arbitrary.blah']}))
+      api.step_data('led get-builder',
+                    stdout=api.json.output({
+                      'userland': {
+                          'recipe_name': 'foo_recipe',
+                      }
+                    })) +
+      api.step_data('analyze foo_recipe',
+                    api.json.output({
+                      'recipes': ['foo_recipe'],
+                    })) +
+      api.override_step_data(
+        'gerrit changes', api.json.output(
+          [{'revisions': {1: {'_number': 12, 'commit': {
+            'message': BUILDER_FOOTER + ': arbitrary.blah'}}}}])) +
+      api.override_step_data(
+          'parse description', api.json.output(
+              {BUILDER_FOOTER: ['arbitrary.blah']})) +
+      api.post_process(Filter('led get-builder'))
   )

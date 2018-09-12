@@ -1,0 +1,16 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(1)"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "name": "recipe invalid",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@analyze reported that the recipe 'foo_recipe' was invalid. Something may be wrong with the swarming task this is based on.@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  }
+]
