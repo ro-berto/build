@@ -911,14 +911,26 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       if bot_type == 'tester':
         isolate_transfer = (
+            # Some of the old buildbot trigger infrastructure may not be
+            # able to handle the large number of hashes added to trigger
+            # properties below (e.g. crbug.com/882889), so we restrict
+            # isolate transfer to LUCI.
+            self.m.runtime.is_luci and
+
             all(t.uses_isolate
                 for t in test_config.tests_on(mastername, buildername)))
         package_transfer = not isolate_transfer
       else:
         isolate_transfer = (
+            # Same as above.
+            self.m.runtime.is_luci and
+
             any(t.uses_isolate
                 for t in test_config.tests_triggered_by(mastername, buildername)))
         package_transfer = (
+            # Always use package transfer on buildbot.
+            not self.m.runtime.is_luci or
+
             any(not t.uses_isolate
                 for t in test_config.tests_triggered_by(mastername, buildername)))
     else:

@@ -2,6 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import itertools
+import json
+
 from recipe_engine import post_process
 
 DEPS = [
@@ -157,11 +160,23 @@ def GenTests(api):
   )
 
   def TriggersBuilderWithProperties(check, step_odict, builder='', properties=None):
-    trigger_specs = step_odict['trigger']['trigger_specs']
-    for t in trigger_specs:
-      if t['builder_name'] == builder:
-        check(all(p in t['properties'] for p in properties))
-        return step_odict
+    trigger_step = step_odict['trigger']
+    check(
+        'TriggersBuilderWithProperties only supports LUCI builds.',
+        'trigger_specs' not in trigger_step)
+    check(
+        '"trigger" step did not run expected command.',
+        'cmd' in trigger_step and
+        'scheduler.Scheduler.EmitTriggers' in trigger_step['cmd'] and
+        'stdin' in trigger_step)
+    trigger_json = json.loads(trigger_step['stdin'])
+
+    for batch in trigger_json.get('batches', []):
+      if any(builder == j.get('job') for j in batch.get('jobs', [])):
+        actual_properties = (
+            batch.get('trigger', {}).get('buildbucket', {}).get('properties', {}))
+        check(all(p in actual_properties for p in properties))
+        break
     else:  # pragma: no cover
       check('"%s" not triggered' % builder, False)
 
@@ -173,6 +188,7 @@ def GenTests(api):
           buildnumber=123,
           custom_bot_config=True,
           mastername='chromium.example') +
+      api.runtime(is_luci=True, is_experimental=False) +
       api.override_step_data(
           'read test spec (chromium.example.json)',
           api.json.output({
@@ -209,6 +225,7 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
+      api.runtime(is_luci=True, is_experimental=False) +
       api.override_step_data(
           'read test spec (chromium.example.json)',
           api.json.output({
@@ -241,6 +258,7 @@ def GenTests(api):
           buildnumber=123,
           custom_bot_config=True,
           mastername='chromium.example') +
+      api.runtime(is_luci=True, is_experimental=False) +
       api.override_step_data(
           'read test spec (chromium.example.json)',
           api.json.output({
@@ -272,3 +290,83 @@ def GenTests(api):
           properties=['swarm_hashes']) +
       api.post_process(post_process.DropExpectation)
   )
+
+  def TriggersBuilderWithoutProperties(check, step_odict, builder='', properties=None):
+    trigger_specs = step_odict['trigger']['trigger_specs']
+    for t in trigger_specs:
+      if t['builder_name'] == builder:
+        check(all(p not in t['properties'] for p in properties))
+        return step_odict
+    else:  # pragma: no cover
+      check('"%s" not triggered' % builder, False)
+
+  yield (
+      api.test('isolate_transfer_builder_buildbot') +
+      api.properties(
+          bot_id='isolated_transfer_builder_id',
+          buildername='Isolated Transfer Builder',
+          buildnumber=123,
+          custom_bot_config=True,
+          mastername='chromium.example') +
+      api.runtime(is_luci=False, is_experimental=False) +
+      api.override_step_data(
+          'read test spec (chromium.example.json)',
+          api.json.output({
+              'Isolated Transfer Tester': {
+                  'gtest_tests': [
+                      {
+                          'args': ['--sample-argument'],
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          },
+                          'test': 'base_unittests',
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.post_process(post_process.MustRun, 'package build') +
+      api.post_process(
+          TriggersBuilderWithoutProperties,
+          builder='Isolated Transfer Tester',
+          properties=['swarm_hashes']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('isolate_transfer_tester_buildbot') +
+      api.properties(
+          bot_id='isolated_transfer_tester_id',
+          buildername='Isolated Transfer Tester',
+          buildnumber=123,
+          custom_bot_config=True,
+          mastername='chromium.example',
+          parent_buildername='Isolated Transfer Builder',
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.runtime(is_luci=False, is_experimental=False) +
+      api.override_step_data(
+          'read test spec (chromium.example.json)',
+          api.json.output({
+              'Isolated Transfer Tester': {
+                  'gtest_tests': [
+                      {
+                          'args': ['--sample-argument'],
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          },
+                          'test': 'base_unittests',
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.override_step_data(
+          'find isolated tests',
+          api.json.output({})
+      ) +
+      api.post_process(post_process.MustRun, 'extract build') +
+      api.post_process(post_process.DropExpectation)
+  )
+
