@@ -37,7 +37,7 @@ def RunSteps(api):
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
         'compile_targets: %r' % test.compile_targets(api),
-        'isolate_target: %r' % test.isolate_target(api),
+        'isolate_target: %r' % test.isolate_target,
         'uses_local_devices: %r' % test.uses_local_devices,
         'uses_isolate: %r' % test.uses_isolate,
     ]

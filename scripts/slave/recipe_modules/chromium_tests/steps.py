@@ -103,7 +103,8 @@ class Test(object):
   applied patch.
   """
 
-  def __init__(self, waterfall_mastername=None, waterfall_buildername=None):
+  def __init__(self, name, target_name=None, override_isolate_target=None,
+               waterfall_mastername=None, waterfall_buildername=None):
     """
     Args:
       waterfall_mastername (str): Matching waterfall buildbot master name.
@@ -116,6 +117,10 @@ class Test(object):
     self._waterfall_mastername = waterfall_mastername
     self._waterfall_buildername = waterfall_buildername
     self._test_options = None
+
+    self._name = name
+    self._target_name = target_name
+    self._override_isolate_target = override_isolate_target
 
   @property
   def set_up(self):
@@ -140,22 +145,25 @@ class Test(object):
     return False
 
   @property
-  def name(self):  # pragma: no cover
-    """Name of the test."""
-    raise NotImplementedError()
+  def name(self):
+    return self._name
+
+  @property
+  def target_name(self):
+    return self._target_name or self._name
 
   @property
   def canonical_name(self):
     """Canonical name of the test, no suffix attached."""
     return self.name
 
-  def isolate_target(self, _api):
+  @property
+  def isolate_target(self):
     """Returns isolate target name. Defaults to name.
-
-    The _api is here in case classes want to use api information to alter the
-    isolation target.
     """
-    return self.name  # pragma: no cover
+    if self._override_isolate_target:
+      return self._override_isolate_target
+    return self.target_name
 
   def compile_targets(self, api):
     """List of compile targets needed by this test."""
@@ -203,7 +211,7 @@ class Test(object):
         'waterfall_mastername': self._waterfall_mastername,
         'waterfall_buildername': self._waterfall_buildername,
         'canonical_step_name': self.canonical_name,
-        'isolate_target_name': self.isolate_target(api),
+        'isolate_target_name': self.isolate_target,
     }
     if suffix is not None:
       data['patched'] = (suffix == 'with patch')
@@ -216,8 +224,8 @@ class TestWrapper(Test):  # pragma: no cover
   By default, all functionality defers to the wrapped Test.
   """
 
-  def __init__(self, test):
-    super(TestWrapper, self).__init__()
+  def __init__(self, test, **kwargs):
+    super(TestWrapper, self).__init__(test.name, **kwargs)
     self._test = test
 
   @property
@@ -244,8 +252,9 @@ class TestWrapper(Test):  # pragma: no cover
   def name(self):
     return self._test.name
 
-  def isolate_target(self, api):
-    return self._test.isolate_target(api)
+  @property
+  def isolate_target(self):
+    return self._test.isolate_target
 
   def compile_targets(self, api):
     return self._test.compile_targets(api)
@@ -372,7 +381,8 @@ class ExperimentalTest(TestWrapper):
 
 
 class ArchiveBuildStep(Test):
-  def __init__(self, gs_bucket, gs_acl=None):
+  def __init__(self, gs_bucket, gs_acl=None, **kwargs):
+    super(ArchiveBuildStep, self).__init__('archive build', **kwargs)
     self.gs_bucket = gs_bucket
     self.gs_acl = gs_acl
 
@@ -391,7 +401,8 @@ class ArchiveBuildStep(Test):
 
 
 class SizesStep(Test):
-  def __init__(self, results_url, perf_id):
+  def __init__(self, results_url, perf_id, **kwargs):
+    super(SizesStep, self).__init__('sizes', **kwargs)
     self.results_url = results_url
     self.perf_id = perf_id
 
@@ -400,10 +411,6 @@ class SizesStep(Test):
 
   def compile_targets(self, _):
     return ['chrome']
-
-  @property
-  def name(self):
-    return 'sizes'  # pragma: no cover
 
   def has_valid_results(self, api, suffix):
     # TODO(sebmarchand): implement this function as well as the
@@ -429,19 +436,14 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
   def __init__(self, name, script, all_compile_targets, script_args=None,
                override_compile_targets=None,
-               waterfall_mastername=None, waterfall_buildername=None):
+               waterfall_mastername=None, waterfall_buildername=None, **kwargs):
     super(ScriptTest, self).__init__(
-        waterfall_mastername=waterfall_mastername,
-        waterfall_buildername=waterfall_buildername)
-    self._name = name
+        name, waterfall_mastername=waterfall_mastername,
+        waterfall_buildername=waterfall_buildername, **kwargs)
     self._script = script
     self._all_compile_targets = all_compile_targets
     self._script_args = script_args
     self._override_compile_targets = override_compile_targets
-
-  @property
-  def name(self):
-    return self._name
 
   def compile_targets(self, api):
     if self._override_compile_targets:
@@ -552,11 +554,13 @@ class LocalGTestTest(Test):
       tear_down: Optional teardown script.
       runtest_kwargs: Additional keyword args forwarded to the runtest.
 
+
     """
     super(LocalGTestTest, self).__init__(
+        name, target_name=target_name,
+        override_isolate_target=override_isolate_target,
         waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername)
-    self._name = name
     self._args = args or []
     self._target_name = target_name
     self._revision = revision
@@ -564,9 +568,10 @@ class LocalGTestTest(Test):
     self._android_shard_timeout = android_shard_timeout
     self._android_tool = android_tool
     self._override_compile_targets = override_compile_targets
-    self._override_isolate_target = override_isolate_target
     self._commit_position_property = commit_position_property
     self._use_xvfb = use_xvfb
+    # FIXME: This should be a named argument, rather than catching all keyword
+    # arguments to this constructor.
     self._runtest_kwargs = runtest_kwargs
     self._gtest_results = {}
     self._set_up = set_up
@@ -585,21 +590,8 @@ class LocalGTestTest(Test):
     return self._tear_down
 
   @property
-  def name(self):
-    return self._name
-
-  @property
-  def target_name(self):
-    return self._target_name or self._name
-
-  @property
   def uses_local_devices(self):
     return True  # pragma: no cover
-
-  def isolate_target(self, _api):  # pragma: no cover
-    if self._override_isolate_target:
-      return self._override_isolate_target
-    return self.target_name
 
   def compile_targets(self, api):
     # TODO(phajdan.jr): clean up override_compile_targets (remove or cover).
@@ -1298,14 +1290,13 @@ class SwarmingTest(Test):
                extra_suffix=None, priority=None, expiration=None,
                hard_timeout=None, io_timeout=None,
                waterfall_mastername=None, waterfall_buildername=None,
-               set_up=None, tear_down=None):
+               set_up=None, tear_down=None, **kwargs):
     super(SwarmingTest, self).__init__(
+        name, target_name=target_name,
         waterfall_mastername=waterfall_mastername,
-        waterfall_buildername=waterfall_buildername)
-    self._name = name
+        waterfall_buildername=waterfall_buildername, **kwargs)
     self._tasks = {}
     self._results = {}
-    self._target_name = target_name
     self._dimensions = dimensions
     self._tags = tags
     self._extra_suffix = extra_suffix
@@ -1399,9 +1390,6 @@ class SwarmingTest(Test):
   def target_name(self):
     return self._target_name or self._name
 
-  def isolate_target(self, _api):
-    return self.target_name
-
   def create_task(self, api, suffix, isolated_hash):
     """Creates a swarming task. Must be overridden in subclasses.
 
@@ -1422,11 +1410,11 @@ class SwarmingTest(Test):
 
     # *.isolated may be missing if *_run target is misconfigured. It's a error
     # in gyp, not a recipe failure. So carry on with recipe execution.
-    isolated_hash = api.isolate.isolated_tests.get(self.isolate_target(api))
+    isolated_hash = api.isolate.isolated_tests.get(self.isolate_target)
     if not isolated_hash:
       return api.python.failing_step(
           '[error] %s' % self._step_name(suffix),
-          '*.isolated file for target %s is missing' % self.isolate_target(api))
+          '*.isolated file for target %s is missing' % self.isolate_target)
 
     # Create task.
     self._tasks[suffix] = self.create_task(api, suffix, isolated_hash)
@@ -1549,12 +1537,12 @@ class SwarmingGTestTest(SwarmingTest):
         name, dimensions, tags, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername,
-        set_up=set_up, tear_down=tear_down)
+        set_up=set_up, tear_down=tear_down,
+        override_isolate_target=override_isolate_target)
     self._args = args or []
     self._shards = shards
     self._upload_test_results = upload_test_results
     self._override_compile_targets = override_compile_targets
-    self._override_isolate_target = override_isolate_target
     self._cipd_packages = cipd_packages
     self._gtest_results = {}
     self._merge = merge
@@ -1568,13 +1556,6 @@ class SwarmingGTestTest(SwarmingTest):
     if self._override_compile_targets:
       return self._override_compile_targets
     return [self.target_name]
-
-  def isolate_target(self, api):
-    # TODO(agrieve,jbudorick): Remove override_isolate_target once clients
-    #     have stopped using it.
-    if self._override_isolate_target:
-      return self._override_isolate_target
-    return self.target_name
 
   def create_task(self, api, suffix, isolated_hash):
     # For local tests test_args are added inside api.chromium.runtest.
@@ -1667,10 +1648,10 @@ class LocalIsolatedScriptTest(Test):
       set_up: Optional set up scripts.
       tear_down: Optional tear_down scripts.
     """
-    super(LocalIsolatedScriptTest, self).__init__()
-    self._name = name
+    super(LocalIsolatedScriptTest, self).__init__(name, target_name=target_name)
     self._args = args or []
-    self._target_name = target_name
+    # FIXME: This should be a named argument, rather than catching all keyword
+    # arguments to this constructor.
     self._runtest_kwargs = runtest_kwargs
     self._override_compile_targets = override_compile_targets
     self._set_up = set_up
@@ -1693,9 +1674,6 @@ class LocalIsolatedScriptTest(Test):
   @property
   def target_name(self):
     return self._target_name or self._name
-
-  def isolate_target(self, _api):
-    return self.target_name
 
   @property
   def uses_isolate(self):
@@ -1964,6 +1942,9 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
 
 
 class PythonBasedTest(Test):
+  def __init__(self, name, **kwargs):
+    super(PythonBasedTest, self).__init__(name, **kwargs)
+
   def compile_targets(self, _):
     return []  # pragma: no cover
 
@@ -2012,7 +1993,8 @@ class PythonBasedTest(Test):
 
 
 class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
-  name = 'print_preview_tests'
+  def __init__(self, **kwargs):
+    super(PrintPreviewTests, self).__init__('print_preview_tests')
 
   def run_step(self, api, suffix, cmd_args, **kwargs):
     platform_arg = '.'.join(['browser_test',
@@ -2041,10 +2023,8 @@ class PrintPreviewTests(PythonBasedTest):  # pylint: disable=W032
 
 
 class BisectTest(Test):  # pylint: disable=W0232
-  name = 'bisect_test'
-
   def __init__(self, test_parameters={}, **kwargs):
-    super(BisectTest, self).__init__()
+    super(BisectTest, self).__init__('bisect_test')
     self._test_parameters = test_parameters
     self.run_results = {}
     self.kwargs = kwargs
@@ -2077,10 +2057,8 @@ class BisectTest(Test):  # pylint: disable=W0232
 
 
 class BisectTestStaging(Test):  # pylint: disable=W0232
-  name = 'bisect_test_staging'
-
   def __init__(self, test_parameters={}, **kwargs):
-    super(BisectTestStaging, self).__init__()
+    super(BisectTestStaging, self).__init__('bisect test staging')
     self._test_parameters = test_parameters
     self.run_results = {}
     self.kwargs = kwargs
@@ -2116,15 +2094,9 @@ class AndroidTest(Test):
   def __init__(self, name, compile_targets, waterfall_mastername=None,
                waterfall_buildername=None):
     super(AndroidTest, self).__init__(
-        waterfall_mastername=waterfall_mastername,
+        name, waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername)
-
-    self._name = name
     self._compile_targets = compile_targets
-
-  @property
-  def name(self):
-    return self._name
 
   def run_tests(self, api, suffix, json_results_file):
     """Runs the Android test suite and outputs the json results to a file.
@@ -2320,11 +2292,9 @@ class BlinkTest(Test):
   # TODO(dpranke): This should be converted to a PythonBasedTest, although it
   # will need custom behavior because we archive the results as well.
   def __init__(self, extra_args=None):
-    super(BlinkTest, self).__init__()
+    super(BlinkTest, self).__init__('webkit_tests')
     self._extra_args = extra_args
     self.results_handler = LayoutTestResultsHandler()
-
-  name = 'webkit_tests'
 
   def compile_targets(self, api):
     return ['blink_tests']
@@ -2409,7 +2379,8 @@ class BlinkTest(Test):
 
 
 class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
-  name = 'test_installer'
+  def __init__(self, **kwargs):
+    super(MiniInstallerTest, self).__init__('test_installer', **kwargs)
 
   def compile_targets(self, _):
     return ['mini_installer_tests']
@@ -2460,7 +2431,9 @@ class WebViewCTSTest(AndroidTest):
 
 
 class IncrementalCoverageTest(Test):
-  _name = 'incremental_coverage'
+  def __init__(self, **kwargs):
+    super(IncrementalCoverageTest, self).__init__(
+        'incremental coverage', **kwargs)
 
   @property
   def uses_local_devices(self):
@@ -2471,11 +2444,6 @@ class IncrementalCoverageTest(Test):
 
   def failures(self, api, suffix):
     return []
-
-  @property
-  def name(self):  # pragma: no cover
-    """Name of the test."""
-    return IncrementalCoverageTest._name
 
   def compile_targets(self, api):
     """List of compile targets needed by this test."""
@@ -2494,6 +2462,9 @@ class FindAnnotatedTest(Test):
       'system_webview_shell_layout_test_apk': 'SystemWebViewShellLayoutTest',
       'webview_instrumentation_test_apk': 'WebViewInstrumentationTest',
   }
+
+  def __init__(self, **kwargs):
+    super(FindAnnotatedTest, self).__init__('Find annotated test', **kwargs)
 
   def compile_targets(self, api):
     return FindAnnotatedTest._TEST_APKS.keys()
