@@ -1254,6 +1254,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
         self.record_fatal_error(
             'step %s: could not trigger builds %r: %s' %
             (section['name'], builder_names, ex))
+      raise ex
 
     try:
       spec = json.loads(spec)
@@ -1287,10 +1288,10 @@ class AnnotationObserver(buildstep.LogLineObserver):
       # buildset is added, then it is a success. This lambda function returns a
       # tuple, which is received by addAsyncOpToCursor.
       d.addCallback(lambda _: (builder.SUCCESS, None))
+      d.addErrback(handle_exception)
       self.addAsyncOpToCursor(
           d,
           'Triggering build(s) on %s' % (', '.join(builder_names),))
-      d.addErrback(handle_exception)
     except Exception as ex:
       handle_exception(ex)
 
