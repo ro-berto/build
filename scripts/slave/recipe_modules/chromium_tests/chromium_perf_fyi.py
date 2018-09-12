@@ -115,8 +115,6 @@ _AddIsolatedTestSpec(
     'One Buildbot Step Test Builder', 'linux',
     parent_buildername='Linux Compile Perf FYI')
 
-_AddIsolatedTestSpec('OBBS Mac 10.12 Perf', 'mac',
-                     parent_buildername='Mac Builder Perf FYI')
 _AddIsolatedTestSpec('android-pixel2-perf', 'android',
                      parent_mastername='chromium.perf',
                      parent_buildername='android-builder-perf')
