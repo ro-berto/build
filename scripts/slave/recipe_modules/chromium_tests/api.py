@@ -905,8 +905,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def main_waterfall_steps(self, mb_config_path=None, bot_config=None):
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
-    bot_config = (bot_config or
-                  self.create_bot_config_object(mastername, buildername))
+    if not bot_config:
+      bot_config = self.create_generalized_bot_config_object(
+          [self.create_bot_id(mastername, buildername)])
 
     self._report_builders(bot_config)
 
@@ -915,46 +916,37 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     bot_type = bot_config.get('bot_type')
 
-    if self.c.staging:
-      # TODO(jbudorick): Promote this to stable.
-      test_config = bot_config.get_tests_staging(bot_db)
-      tests = test_config.tests_on(mastername, buildername)
-      tests_including_triggered = test_config.all_tests()
+    test_config = bot_config.get_tests(bot_db)
+    if bot_type == 'tester':
+      isolate_transfer = (
+          # Some of the old buildbot trigger infrastructure may not be
+          # able to handle the large number of hashes added to trigger
+          # properties below (e.g. crbug.com/882889), so we restrict
+          # isolate transfer to LUCI.
+          self.m.runtime.is_luci and
 
-      if bot_type == 'tester':
-        isolate_transfer = (
-            # Some of the old buildbot trigger infrastructure may not be
-            # able to handle the large number of hashes added to trigger
-            # properties below (e.g. crbug.com/882889), so we restrict
-            # isolate transfer to LUCI.
-            self.m.runtime.is_luci and
-
-            all(t.uses_isolate
-                for t in test_config.tests_on(mastername, buildername)))
-        package_transfer = not isolate_transfer
-      else:
-        isolate_transfer = (
-            # Same as above.
-            self.m.runtime.is_luci and
-
-            any(t.uses_isolate
-                for t in test_config.tests_triggered_by(mastername, buildername)))
-        package_transfer = (
-            # Always use package transfer on buildbot.
-            not self.m.runtime.is_luci or
-
-            any(not t.uses_isolate
-                for t in test_config.tests_triggered_by(mastername, buildername)))
+          all(t.uses_isolate
+              for t in test_config.tests_on(mastername, buildername)))
+      package_transfer = not isolate_transfer
     else:
-      tests, tests_including_triggered = self.get_tests(bot_config, bot_db)
-      isolate_transfer = False
-      package_transfer = True
+      isolate_transfer = (
+          # Same as above.
+          self.m.runtime.is_luci and
+
+          any(t.uses_isolate
+              for t in test_config.tests_triggered_by(mastername, buildername)))
+      package_transfer = (
+          # Always use package transfer on buildbot.
+          not self.m.runtime.is_luci or
+
+          any(not t.uses_isolate
+              for t in test_config.tests_triggered_by(mastername, buildername)))
 
     compile_targets = self.get_compile_targets(
-        bot_config, bot_db, tests_including_triggered)
+        bot_config, bot_db, test_config.all_tests())
     self.compile_specific_targets(
         bot_config, update_step, bot_db,
-        compile_targets, tests_including_triggered,
+        compile_targets, test_config.all_tests(),
         mb_config_path=mb_config_path)
 
     additional_trigger_properties = {}
@@ -976,6 +968,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if package_transfer:
       self.download_and_unzip_build(mastername, buildername, update_step, bot_db)
 
+    tests = test_config.tests_on(mastername, buildername)
     if not tests:
       return
 
@@ -1073,12 +1066,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Tests are instances of class(Test) from chromium_tests/steps.py. These
     # objects know how to dispatch isolate tasks, parse results, and keep
     # state on the results of previous test runs.
-    if self.c.staging:
-      test_config = bot_config_object.get_tests_staging(bot_db)
-      tests = test_config.tests_in_scope()
-      tests_including_triggered = test_config.all_tests()
-    else:
-      tests, tests_including_triggered = self.get_tests(bot_config_object, bot_db)
+    test_config = self.get_tests(bot_config_object, bot_db)
+    tests = test_config.tests_in_scope()
+    tests_including_triggered = test_config.all_tests()
 
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
 
@@ -1089,9 +1079,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     compile_targets = self.get_compile_targets(
         bot_config_object,
         bot_db,
-        tests_including_triggered)
+        test_config.all_tests())
     test_targets = sorted(set(
-        self._all_compile_targets(tests + tests_including_triggered)))
+        self._all_compile_targets(test_config.all_tests())))
 
     # Use analyze to determine the compile targets that are affected by the CL.
     # Use this to prune the relevant compile targets and test targets.

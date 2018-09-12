@@ -166,27 +166,6 @@ class BotConfig(object):
           mastername, freeze(master_dict), freeze(test_spec))
 
   def get_tests(self, bot_db):
-    tests = []
-    for bot_id in self._bot_ids:
-      bot_config = bot_db.get_bot_config(
-          bot_id.mastername, bot_id.buildername)
-      tests.extend([copy.deepcopy(t) for t in bot_config.get('tests', [])])
-
-      if bot_id.tester:
-        bot_config = bot_db.get_bot_config(
-            bot_id.tester_mastername, bot_id.tester)
-        tests.extend([copy.deepcopy(t) for t in bot_config.get('tests', [])])
-
-    tests_including_triggered = list(tests)
-    for bot_id in self._bot_ids:
-      for _, _, _, test_bot in bot_db.bot_configs_matching_parent_buildername(
-          bot_id.mastername, bot_id.buildername):
-        tests_including_triggered.extend(test_bot.get('tests', []))
-
-    return tests, tests_including_triggered
-
-  def get_tests_staging(self, bot_db):
-    # TODO(jbudorick): Remove get_tests and replace it with this.
     return _TestConfig(self._bot_ids, bot_db)
 
   def get_compile_targets(self, chromium_tests_api, bot_db, tests):

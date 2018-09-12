@@ -85,6 +85,35 @@ CUSTOM_BUILDERS = {
           'platform': 'linux',
         },
       },
+
+      'Packaged Transfer Builder': {
+        'bot_type': 'builder',
+        'chromium_apply_config': ['mb'],
+        'chromium_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'gclient_config': 'chromium',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Packaged Transfer Tester': {
+        'bot_type': 'tester',
+        'chromium_apply_config': ['mb'],
+        'chromium_config': 'chromium',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'gclient_config': 'chromium',
+        'parent_buildername': 'Packaged Transfer Builder',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+
     },
   },
 }
@@ -370,3 +399,62 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
+  yield (
+      api.test('package_transfer_builder') +
+      api.properties(
+          bot_id='packaged_transfer_builder_id',
+          buildername='Packaged Transfer Builder',
+          buildnumber=123,
+          custom_bot_config=True,
+          mastername='chromium.example') +
+      api.override_step_data(
+          'read test spec (chromium.example.json)',
+          api.json.output({
+              'Packaged Transfer Tester': {
+                  'gtest_tests': [
+                      {
+                          'args': ['--sample-argument'],
+                          'swarming': {
+                              'can_use_on_swarming_builders': False,
+                          },
+                          'test': 'base_unittests',
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.post_process(post_process.MustRun, 'package build') +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('package_transfer_tester') +
+      api.properties(
+          bot_id='packaged_transfer_tester_id',
+          buildername='Packaged Transfer Tester',
+          buildnumber=123,
+          custom_bot_config=True,
+          mastername='chromium.example',
+          parent_buildername='Packaged Transfer Builder',
+          swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'read test spec (chromium.example.json)',
+          api.json.output({
+              'Packaged Transfer Tester': {
+                  'gtest_tests': [
+                      {
+                          'args': ['--sample-argument'],
+                          'swarming': {
+                              'can_use_on_swarming_builders': False,
+                          },
+                          'test': 'base_unittests',
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.post_process(post_process.MustRun, 'extract build') +
+      api.post_process(post_process.DropExpectation)
+  )

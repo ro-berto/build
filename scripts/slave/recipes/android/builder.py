@@ -141,10 +141,9 @@ def _GetChromiumTestsCompileTargets(api, mastername, buildername, update_step):
       mastername, buildername)
   ct_bot_db = api.chromium_tests.create_bot_db_object()
   ct_bot_config.initialize_bot_db(api.chromium_tests, ct_bot_db, update_step)
-  _, tests_including_triggered = api.chromium_tests.get_tests(
-      ct_bot_config, ct_bot_db)
+  test_config = api.chromium_tests.get_tests(ct_bot_config, ct_bot_db)
   return api.chromium_tests.get_compile_targets(
-      ct_bot_config, ct_bot_db, tests_including_triggered)
+      ct_bot_config, ct_bot_db, test_config.all_tests())
 
 def _RunStepsInternal(api, mastername, buildername, revision):
   bot_config = BUILDERS[mastername][buildername]
