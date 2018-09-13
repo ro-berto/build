@@ -108,7 +108,7 @@ _AddIsolatedTestSpec('Mojo Linux Perf', 'linux',
                      parent_buildername='Linux Compile Perf FYI')
 
 _AddIsolatedTestSpec('linux-perf-fyi', 'linux',
-                     parent_buildername='linux-perf-builder',
+                     parent_buildername='linux-builder-perf',
                      parent_mastername='chromium.perf')
 
 _AddIsolatedTestSpec(
