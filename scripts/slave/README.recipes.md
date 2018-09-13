@@ -3377,9 +3377,9 @@ Returns:
 
 #### **class [TestUtilsApi](/scripts/slave/recipe_modules/test_utils/api.py#27)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#238)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#252)(self, data):**
 
-&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#241)(self, data):**
+&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#255)(self, data):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#67)(data):**
 
@@ -3394,7 +3394,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#258)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#272)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3459,12 +3459,20 @@ Returns:
 
 &mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#169)(self, caller_api, tests):**
 
-&mdash; **def [summarize\_retried\_test](/scripts/slave/recipe_modules/test_utils/api.py#187)(self, caller_api, test):**
+&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#187)(self, caller_api, test, emit_failing_step=True):**
 
-Summarizes test results and exits with a failing status if there were new
-failures.
+Summarizes test results after a CL has been retried with patch deapplied.
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#248)(self, add_json_log=True):**
+Args:
+  emit_failing_step: Whether new failures should emit a failing step.
+
+Returns:
+  A Boolean describing whether the retry succeeded. Which is to say, all
+  tests that failed in the original run also failed in the retry, which
+  suggests that the error is due to an issue with top of tree, and should
+  not cause the CL to fail.
+
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#262)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 

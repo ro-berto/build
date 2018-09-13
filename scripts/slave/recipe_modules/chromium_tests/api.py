@@ -837,7 +837,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       finally:
         with self.m.step.defer_results():
           for t in failing_tests:
-            self.m.test_utils.summarize_retried_test(self.m, t)
+            self.m.test_utils.summarize_test_with_patch_deapplied(self.m, t)
 
   def _build_bisect_gs_archive_url(self, master_config):
     return self.m.archive.legacy_upload_url(

@@ -1230,19 +1230,6 @@
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
-    "name": "webkit_layout_tests (retry summary)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/>@@@",
-      "@@@STEP_WARNINGS@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -1262,6 +1249,19 @@
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
     "name": "archive_retry_summary"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
+    "name": "webkit_layout_tests (retry summary)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>ignored:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/>@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
   },
   {
     "name": "$result",

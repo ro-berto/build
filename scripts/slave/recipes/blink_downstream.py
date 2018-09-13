@@ -101,7 +101,7 @@ def determine_new_future_failures(caller_api, extra_args):
   finally:
     with caller_api.step.defer_results():
       for t in failing_tests:
-        caller_api.test_utils.summarize_retried_test(caller_api, t)
+        caller_api.test_utils.summarize_test_with_patch_deapplied(caller_api, t)
 
 
 def determine_new_failures(caller_api, tests, deapply_patch_fn):
@@ -133,7 +133,7 @@ def determine_new_failures(caller_api, tests, deapply_patch_fn):
   finally:
     with caller_api.step.defer_results():
       for t in failing_tests:
-        caller_api.test_utils.summarize_retried_test(caller_api, t)
+        caller_api.test_utils.summarize_test_with_patch_deapplied(caller_api, t)
 
 def RunSteps(api):
   mastername = api.properties.get('mastername')

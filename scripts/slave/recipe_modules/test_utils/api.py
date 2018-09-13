@@ -184,9 +184,19 @@ class TestUtilsApi(recipe_api.RecipeApi):
     self.m.tryserver.set_invalid_test_results_tryjob_result()
     self.m.python.failing_step(test.name, self.INVALID_RESULTS_MAGIC)
 
-  def summarize_retried_test(self, caller_api, test):
-    """Summarizes test results and exits with a failing status if there were new
-    failures."""
+  def summarize_test_with_patch_deapplied(self, caller_api, test,
+                                          emit_failing_step=True):
+    """Summarizes test results after a CL has been retried with patch deapplied.
+
+    Args:
+      emit_failing_step: Whether new failures should emit a failing step.
+
+    Returns:
+      A Boolean describing whether the retry succeeded. Which is to say, all
+      tests that failed in the original run also failed in the retry, which
+      suggests that the error is due to an issue with top of tree, and should
+      not cause the CL to fail.
+    """
     if not test.has_valid_results(caller_api, 'without patch'):
       self._invalid_test_results(test)
 
@@ -194,32 +204,36 @@ class TestUtilsApi(recipe_api.RecipeApi):
     new_failures = (
       set(test.failures(caller_api, 'with patch')) - ignored_failures)
 
+    # We add a failure_reason even if we don't mark the build as a failure. This
+    # will contribute to the failure hash if the build eventually fails.
     self.m.tryserver.add_failure_reason({
       'test_name': test.name,
       'new_failures': sorted(new_failures),
     })
+
+    if test.name == 'webkit_layout_tests':
+      self._archive_retry_summary({
+          'failures': sorted(new_failures),
+          'ignored': sorted(ignored_failures)
+      })
 
     step_name = '%s (retry summary)' % test.name
     step_text = self.format_step_text([
         ['failures:', new_failures],
         ['ignored:', ignored_failures]
     ])
-    try:
-      if new_failures:
+
+    if new_failures and emit_failing_step:
+      try:
         self.m.python.failing_step(step_name, step_text)
-      else:
-        self.m.python.succeeding_step(step_name, step_text)
-    finally:
-      if new_failures:
+      finally:
         self.m.tryserver.set_test_failure_tryjob_result()
-      elif ignored_failures:
+    else:
+      self.m.python.succeeding_step(step_name, step_text)
+      if ignored_failures:
         self.m.step.active_result.presentation.status = self.m.step.WARNING
 
-      if test.name == 'webkit_layout_tests':
-        self._archive_retry_summary({
-            'failures': sorted(new_failures),
-            'ignored': sorted(ignored_failures)
-        })
+    return bool(new_failures)
 
   def _archive_retry_summary(self, retry_summary):
     """Archives the retry summary as JSON, storing it alongside the results

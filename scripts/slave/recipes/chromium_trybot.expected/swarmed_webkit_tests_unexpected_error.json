@@ -2022,24 +2022,6 @@
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "webkit_layout_tests (retry summary)",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>test2.Test2<br/>test1.Test1<br/>@@@",
-      "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -2061,9 +2043,25 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "archive_retry_summary",
+    "name": "archive_retry_summary"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(1)"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "webkit_layout_tests (retry summary)",
     "~followup_annotations": [
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"c60e949a3ad18abea428a2089edde25ed602ae16\"@@@"
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>test2.Test2<br/>test1.Test1<br/>@@@",
+      "@@@STEP_FAILURE@@@",
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"c60e949a3ad18abea428a2089edde25ed602ae16\"@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@"
     ]
   },
   {

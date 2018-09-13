@@ -1228,20 +1228,6 @@
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
-    "name": "webkit_layout_tests (retry summary)",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/>@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -1261,6 +1247,20 @@
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
     "name": "archive_retry_summary"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(1)"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
+    "name": "webkit_layout_tests (retry summary)",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/>@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "name": "$result",
