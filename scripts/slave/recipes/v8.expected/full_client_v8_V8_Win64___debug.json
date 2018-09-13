@@ -617,7 +617,7 @@
       "--priority",
       "25",
       "--shards",
-      "2",
+      "3",
       "--task-name",
       "Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571",
       "--dump-json",
@@ -868,7 +868,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\", \"tasks\": {\"Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571:2:0\": {\"shard_index\": 0, \"task_id\": \"160000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160000\"}, \"Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571:2:1\": {\"shard_index\": 1, \"task_id\": \"160100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160100\"}}}"
+      "{\"base_task_name\": \"Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571\", \"tasks\": {\"Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571:3:0\": {\"shard_index\": 0, \"task_id\": \"160000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160000\"}, \"Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571:3:1\": {\"shard_index\": 1, \"task_id\": \"160100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160100\"}, \"Check - extra/Windows-7-SP1/[dummy has/V8 Win64 - debug/571:3:2\": {\"shard_index\": 2, \"task_id\": \"160200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/160200\"}}}"
     ],
     "infra_step": true,
     "name": "Check - extra",

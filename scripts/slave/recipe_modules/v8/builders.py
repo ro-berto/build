@@ -665,7 +665,7 @@ BUILDERS = {
       },
       'V8 Win32 - debug': {
         'tests': [
-          V8Testing(4),
+          V8Testing(5),
           Test262,
           Mozilla,
         ],
@@ -714,7 +714,7 @@ BUILDERS = {
           V8Testing(4),
           Test262,
           Mozilla,
-        ] + with_extra_variants([V8Testing(2)]),
+        ] + with_extra_variants([V8Testing(3)]),
         'testing': {'platform': 'win'},
       },
       'V8 Win64 - msvc': {
