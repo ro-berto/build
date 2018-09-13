@@ -180,54 +180,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
             failing_test_names.add(t.name)
     return failing_tests
 
-  def determine_new_failures(self, caller_api, tests, deapply_patch_fn):
-    """
-    Utility function for running steps with a patch applied, and retrying
-    failing steps without the patch. Failures from the run without the patch are
-    ignored.
-
-    Args:
-      caller_api - caller's recipe API; this is needed because self.m here
-                   is different than in the caller (different recipe modules
-                   get injected depending on caller's DEPS vs. this module's
-                   DEPS)
-      tests - iterable of objects implementing the Test interface above
-      deapply_patch_fn - function that takes a list of failing tests
-                         and undoes any effect of the previously applied patch
-    """
-    # Convert iterable to list, since it is enumerated multiple times.
-    tests = list(tests)
-
-    failing_tests = self.run_tests_with_patch(caller_api, tests)
-    if not failing_tests:
-      return
-
-    try:
-      result = deapply_patch_fn(failing_tests)
-      self.run_tests(caller_api, failing_tests, 'without patch')
-      return result
-    except Exception as e:
-      # This except is here to try to debug a strange error. Builds like
-      # https://ci.chromium.org/p/chromium/builders/luci.chromium.try/mac_chromium_rel_ng/80909
-      # seem to be failing before they run any steps to de-apply the patch. The
-      # hypothesis is that an exception is being thrown and ignored due to the
-      # defer_results() call below.
-      text = 'exception occured while de-applying patch\n%s' % (str(e))
-      step = self.m.python.succeeding_step('deapply_failure', text)
-      step.presentation.status = self.m.step.WARNING
-      step.presentation.logs['exception'] = [
-          str(e), '\n', self.m.traceback.format_exc()]
-      raise
-    finally:
-      with self.m.step.defer_results():
-        for t in failing_tests:
-          self._summarize_retried_test(caller_api, t)
-
   def _invalid_test_results(self, test):
     self.m.tryserver.set_invalid_test_results_tryjob_result()
     self.m.python.failing_step(test.name, self.INVALID_RESULTS_MAGIC)
 
-  def _summarize_retried_test(self, caller_api, test):
+  def summarize_retried_test(self, caller_api, test):
     """Summarizes test results and exits with a failing status if there were new
     failures."""
     if not test.has_valid_results(caller_api, 'without patch'):

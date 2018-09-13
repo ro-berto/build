@@ -101,8 +101,39 @@ def determine_new_future_failures(caller_api, extra_args):
   finally:
     with caller_api.step.defer_results():
       for t in failing_tests:
-        caller_api.test_utils._summarize_retried_test(caller_api, t)
+        caller_api.test_utils.summarize_retried_test(caller_api, t)
 
+
+def determine_new_failures(caller_api, tests, deapply_patch_fn):
+  """
+  Utility function for running steps with a patch applied, and retrying
+  failing steps without the patch. Failures from the run without the patch are
+  ignored.
+
+  Args:
+    caller_api - caller's recipe API; this is needed because self.m here
+                 is different than in the caller (different recipe modules
+                 get injected depending on caller's DEPS vs. this module's
+                 DEPS)
+    tests - iterable of objects implementing the Test interface above
+    deapply_patch_fn - function that takes a list of failing tests
+                       and undoes any effect of the previously applied patch
+  """
+  # Convert iterable to list, since it is enumerated multiple times.
+  tests = list(tests)
+
+  failing_tests = caller_api.test_utils.run_tests_with_patch(caller_api, tests)
+  if not failing_tests:
+    return
+
+  try:
+    result = deapply_patch_fn(failing_tests)
+    caller_api.test_utils.run_tests(caller_api, failing_tests, 'without patch')
+    return result
+  finally:
+    with caller_api.step.defer_results():
+      for t in failing_tests:
+        caller_api.test_utils.summarize_retried_test(caller_api, t)
 
 def RunSteps(api):
   mastername = api.properties.get('mastername')
@@ -175,11 +206,9 @@ def RunSteps(api):
     ]
 
     if 'future' in buildername:
-      determine_new_future_failures(
-          api.chromium_tests.m, extra_args)
+      determine_new_future_failures(api.chromium_tests.m, extra_args)
     else:
-      api.test_utils.determine_new_failures(
-          api.chromium_tests.m, tests, component_pinned_fn)
+      determine_new_failures(api.chromium_tests.m, tests, component_pinned_fn)
 
 
 def _sanitize_nonalpha(text):

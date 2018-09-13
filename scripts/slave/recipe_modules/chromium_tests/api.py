@@ -5,7 +5,6 @@
 import collections
 import contextlib
 import copy
-import functools
 import itertools
 import json
 import re
@@ -803,7 +802,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return (True, None)
 
-
   def _run_tests_on_tryserver(self, bot_config, tests, bot_update_step,
                               affected_files,
                               disable_deapply_patch=False):
@@ -813,24 +811,33 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     deapply the patch, rebuild/isolate binaries, and run the failing tests.
     """
     with self.wrap_chromium_tests(bot_config, tests):
+      # Run the test. The isolates have already been created.
+      failing_tests = self.m.test_utils.run_tests_with_patch(self.m, tests)
+
+      # If there are no failures, we're done. Success!
+      if not failing_tests:
+        return
+
+      # If there are failures but we shouldn't deapply the patch, then we're
+      # also done.
       should_deapply_patch, deapply_patch_reason = (
           self._should_retry_with_patch_deapplied(affected_files,
                                                   disable_deapply_patch))
-      if should_deapply_patch:
-        deapply_patch_fn = functools.partial(self._deapply_patch_build_isolate,
-                                             bot_update_step=bot_update_step)
-        # Runs tests with patch. If there are failures, deapplies patch using
-        # deapply_patch_fn, and then runs failing tests again.
-        self.m.test_utils.determine_new_failures(
-            self.m, tests, deapply_patch_fn)
-      else:
-        failing_tests = self.m.test_utils.run_tests_with_patch(
-            self.m, tests)
-        if failing_tests:
-          self.m.python.failing_step(
-              'test results',
-              'TESTS FAILED; retries without patch disabled (%s)'
-                  % deapply_patch_reason)
+      if not should_deapply_patch:
+        self.m.python.failing_step(
+            'test results',
+            'TESTS FAILED; retries without patch disabled (%s)'
+                % deapply_patch_reason)
+
+      # Deapply the patch. Then rerun failing tests.
+      try:
+        self._deapply_patch_build_isolate(failing_tests,
+                                          bot_update_step)
+        self.m.test_utils.run_tests(self.m, failing_tests, 'without patch')
+      finally:
+        with self.m.step.defer_results():
+          for t in failing_tests:
+            self.m.test_utils.summarize_retried_test(self.m, t)
 
   def _build_bisect_gs_archive_url(self, master_config):
     return self.m.archive.legacy_upload_url(
