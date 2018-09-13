@@ -277,8 +277,8 @@ class _TestConfig(object):
       yield (node, parent_node)
 
       for val in node.children.itervalues():
-        for node, parent_node in _iter_nodes_impl(val, node):
-          yield (node, parent_node)
+        for node_pair in _iter_nodes_impl(val, node):
+          yield node_pair
 
     for node, parent_node in _iter_nodes_impl(self._config, None):
       yield (node, parent_node)

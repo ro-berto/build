@@ -114,6 +114,56 @@ CUSTOM_BUILDERS = {
         },
       },
 
+      'Multiple Triggers: Builder': {
+        'android_config': 'main_builder',
+        'bot_type': 'builder',
+        'chromium_apply_config': ['mb'],
+        'chromium_config': 'android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+          'TARGET_PLATFORM': 'android',
+        },
+        'gclient_apply_config': ['android'],
+        'gclient_config': 'chromium',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Multiple Triggers: Mixed': {
+        'android_config': 'main_builder',
+        'bot_type': 'tester',
+        'chromium_apply_config': ['mb'],
+        'chromium_config': 'android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+          'TARGET_PLATFORM': 'android',
+        },
+        'gclient_apply_config': ['android'],
+        'gclient_config': 'chromium',
+        'parent_buildername': 'Multiple Triggers: Builder',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Multiple Triggers: Isolated': {
+        'android_config': 'main_builder',
+        'bot_type': 'tester',
+        'chromium_apply_config': ['mb'],
+        'chromium_config': 'android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+          'TARGET_PLATFORM': 'android',
+        },
+        'gclient_apply_config': ['android'],
+        'gclient_config': 'chromium',
+        'parent_buildername': 'Multiple Triggers: Builder',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
     },
   },
 }
@@ -456,5 +506,54 @@ def GenTests(api):
           })
       ) +
       api.post_process(post_process.MustRun, 'extract build') +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('multiple_triggers') +
+      api.properties(
+          bot_id='multiple_triggers_builder_id',
+          buildername='Multiple Triggers: Builder',
+          buildnumber=123,
+          custom_bot_config=True,
+          mastername='chromium.example') +
+      api.runtime(is_luci=True, is_experimental=False) +
+      api.override_step_data(
+          'read test spec (chromium.example.json)',
+          api.json.output({
+              'Multiple Triggers: Mixed': {
+                  'gtest_tests': [
+                      {
+                          'args': ['--sample-argument'],
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          },
+                          'test': 'base_unittests',
+                      },
+                  ],
+                  'junit_tests': [
+                      {
+                          'test': 'base_junit_tests',
+                      },
+                  ],
+              },
+              'Multiple Triggers: Isolated': {
+                  'gtest_tests': [
+                      {
+                          'args': ['--sample-argument'],
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          },
+                          'test': 'base_unittests',
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.post_process(post_process.MustRun, 'package build') +
+      api.post_process(
+          TriggersBuilderWithProperties,
+          builder='Multiple Triggers: Mixed',
+          properties=['swarm_hashes']) +
       api.post_process(post_process.DropExpectation)
   )
