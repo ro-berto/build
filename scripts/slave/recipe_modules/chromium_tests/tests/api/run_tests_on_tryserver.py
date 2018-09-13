@@ -17,7 +17,7 @@ def RunSteps(api):
       bot_config['bot_ids'])
   api.chromium_tests.configure_build(bot_config_object)
   update_step, _bot_db = api.chromium_tests.prepare_checkout(bot_config_object)
-  api.chromium_tests.run_tests_on_tryserver(
+  api.chromium_tests._run_tests_on_tryserver(
       bot_config_object,
       tests=[api.chromium_tests.steps.SwarmingGTestTest('base_unittests')],
       bot_update_step=update_step,
