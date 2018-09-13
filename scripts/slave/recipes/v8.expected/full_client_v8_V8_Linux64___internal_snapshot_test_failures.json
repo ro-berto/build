@@ -153,7 +153,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@bot_default@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
@@ -1122,7 +1121,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "Bisect a0.generate_build_files",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@bot_default@@@",
@@ -1555,7 +1553,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "Bisect a2.generate_build_files",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@bot_default@@@",

@@ -723,7 +723,6 @@ class V8Api(recipe_api.RecipeApi):
               mb_config_path or
               self.m.path['checkout'].join(*mb_config_rel_path.split('/'))),
           isolated_targets=isolate_targets,
-          stdout=self.m.raw_io.output_text(),
           build_dir=build_dir,
           gn_args_location=self.m.gn.LOGS)
 

@@ -175,8 +175,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "generate_build_files",
-    "stdout": "/path/to/tmp/"
+    "name": "generate_build_files"
   },
   {
     "cmd": [

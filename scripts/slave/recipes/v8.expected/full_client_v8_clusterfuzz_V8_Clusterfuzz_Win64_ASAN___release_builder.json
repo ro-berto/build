@@ -164,8 +164,7 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "generate_build_files",
-    "stdout": "/path/to/tmp/"
+    "name": "generate_build_files"
   },
   {
     "cmd": [
