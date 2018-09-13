@@ -52,12 +52,9 @@ SPEC = {
         'url_unittests',
         'views_unittests',
       ],
-      'tests': [
-        steps.ArchiveBuildStep(
-            'chromium-browser-snapshots',
-            gs_acl='public-read',
-        ),
-      ],
+      'archive_build': True,
+      'gs_bucket': 'chromium-browser-snapshots',
+      'gs_acl': 'public-read',
       'testing': {
         'platform': 'linux',
       },

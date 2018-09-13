@@ -390,26 +390,6 @@ class ExperimentalTest(TestWrapper):
     return []
 
 
-class ArchiveBuildStep(Test):
-  def __init__(self, gs_bucket, gs_acl=None, **kwargs):
-    super(ArchiveBuildStep, self).__init__('archive build', **kwargs)
-    self.gs_bucket = gs_bucket
-    self.gs_acl = gs_acl
-
-  def run(self, api, suffix):
-    bucket = self.gs_bucket
-    if api.chromium.m.runtime.is_experimental:
-      bucket += "/experimental"
-    return api.chromium.archive_build(
-        'archive build',
-        bucket,
-        gs_acl=self.gs_acl,
-    )
-
-  def compile_targets(self, _):
-    return []
-
-
 class SizesStep(Test):
   def __init__(self, results_url, perf_id, **kwargs):
     super(SizesStep, self).__init__('sizes', **kwargs)

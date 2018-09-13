@@ -1127,6 +1127,8 @@ class ChromiumApi(recipe_api.RecipeApi):
   def archive_build(self, step_name, gs_bucket, gs_acl=None, mode=None,
                     build_name=None, **kwargs):
     """Returns a step invoking archive_build.py to archive a Chromium build."""
+    if self.m.runtime.is_experimental:
+      gs_bucket += "/experimental"
 
     # archive_build.py insists on inspecting factory properties. For now just
     # provide these options in the format it expects.

@@ -156,7 +156,6 @@
   * [chromium_tests:tests/configs](#recipes-chromium_tests_tests_configs)
   * [chromium_tests:tests/steps/android_instrumentation_test](#recipes-chromium_tests_tests_steps_android_instrumentation_test)
   * [chromium_tests:tests/steps/android_junit_test](#recipes-chromium_tests_tests_steps_android_junit_test)
-  * [chromium_tests:tests/steps/archive_build_step](#recipes-chromium_tests_tests_steps_archive_build_step)
   * [chromium_tests:tests/steps/bisect_test](#recipes-chromium_tests_tests_steps_bisect_test)
   * [chromium_tests:tests/steps/bisect_test_staging](#recipes-chromium_tests_tests_steps_bisect_test_staging)
   * [chromium_tests:tests/steps/blink_test](#recipes-chromium_tests_tests_steps_blink_test)
@@ -992,7 +991,7 @@ Returns (ChromiumApi.Layout): The configured Chromium build layout.
 
 &mdash; **def [ensure\_toolchains](/scripts/slave/recipe_modules/chromium/api.py#846)(self):**
 
-&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1167)(self, test_name):**
+&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1169)(self, test_name):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [get\_clang\_version](/scripts/slave/recipe_modules/chromium/api.py#727)(self, \*\*kwargs):**
 
@@ -4194,9 +4193,9 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/analyze.py#11)(api):**
 ### *recipes* / [chromium:tests/archive\_build](/scripts/slave/recipe_modules/chromium/tests/archive_build.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium/tests/archive_build.py#5): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/chromium/tests/archive_build.py#5): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/archive_build.py#13)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/archive_build.py#14)(api):**
 ### *recipes* / [chromium:tests/compile](/scripts/slave/recipe_modules/chromium/tests/compile.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/compile.py#5): [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
@@ -4554,11 +4553,6 @@ without error.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/android_junit_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_tests](#recipe_modules-chromium_tests), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/android_junit_test.py#18)(api):**
-### *recipes* / [chromium\_tests:tests/steps/archive\_build\_step](/scripts/slave/recipe_modules/chromium_tests/tests/steps/archive_build_step.py)
-
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/archive_build_step.py#7): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/archive_build_step.py#18)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/bisect\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/bisect_test.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/bisect_test.py#5): [bisect\_tester](#recipe_modules-bisect_tester), [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
