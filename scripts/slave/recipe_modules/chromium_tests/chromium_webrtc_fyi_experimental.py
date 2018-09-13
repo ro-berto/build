@@ -16,7 +16,7 @@ SPEC = {
       'build_gs_bucket': 'chromium-webrtc'
   },
   'builders': {
-    'Android Builder': {
+    'WebRTC Chromium FYI Android Builder': {
       'android_config': 'base_config',
       'bot_type': 'builder_tester',
       'chromium_apply_config': ['dcheck', 'mb', 'android'],
@@ -39,7 +39,7 @@ SPEC = {
         'platform': 'linux'
       }
     },
-    'Android Builder (dbg)': {
+    'WebRTC Chromium FYI Android Builder (dbg)': {
       'android_config': 'base_config',
       'bot_type': 'builder',
       'chromium_apply_config': ['dcheck', 'mb', 'android'],
@@ -62,7 +62,7 @@ SPEC = {
         'platform': 'linux'
       }
     },
-    'Android Builder ARM64 (dbg)': {
+    'WebRTC Chromium FYI Android Builder ARM64 (dbg)': {
       'android_config': 'base_config',
       'bot_type': 'builder',
       'chromium_apply_config': ['dcheck', 'mb', 'android'],
@@ -85,7 +85,7 @@ SPEC = {
         'platform': 'linux'
       }
     },
-    'Android Tests (dbg) (K Nexus5)': {
+    'WebRTC Chromium FYI Android Tests (dbg) (K Nexus5)': {
       'android_config': 'base_config',
       'bot_type': 'tester',
       'chromium_apply_config': ['android'],
@@ -116,7 +116,7 @@ SPEC = {
         'platform': 'linux'
       },
     },
-    'Android Tests (dbg) (M Nexus5X)': {
+    'WebRTC Chromium FYI Android Tests (dbg) (M Nexus5X)': {
       'android_config': 'base_config',
       'bot_type': 'tester',
       'chromium_apply_config': ['android'],
@@ -147,7 +147,7 @@ SPEC = {
         'platform': 'linux'
       },
     },
-    'Linux Builder': {
+    'WebRTC Chromium FYI Linux Builder': {
       'bot_type': 'builder',
       'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
@@ -167,7 +167,7 @@ SPEC = {
         'platform': 'linux'
       }
     },
-    'Linux Builder (dbg)': {
+    'WebRTC Chromium FYI Linux Builder (dbg)': {
       'bot_type': 'builder_tester',
       'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
@@ -187,7 +187,7 @@ SPEC = {
         'platform': 'linux'
       }
     },
-    'Linux Tester': {
+    'WebRTC Chromium FYI Linux Tester': {
       'bot_type': 'tester',
       'chromium_apply_config': [],
       'chromium_config': 'chromium',
@@ -213,7 +213,7 @@ SPEC = {
         'platform': 'linux'
       },
     },
-    'Mac Builder': {
+    'WebRTC Chromium FYI Mac Builder': {
       'bot_type': 'builder',
       'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
@@ -233,7 +233,7 @@ SPEC = {
         'platform': 'mac'
       }
     },
-    'Mac Builder (dbg)': {
+    'WebRTC Chromium FYI Mac Builder (dbg)': {
       'bot_type': 'builder_tester',
       'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
@@ -253,7 +253,7 @@ SPEC = {
         'platform': 'mac'
       }
     },
-    'Mac Tester': {
+    'WebRTC Chromium FYI Mac Tester': {
       'bot_type': 'tester',
       'chromium_apply_config': [],
       'chromium_config': 'chromium',
@@ -279,7 +279,7 @@ SPEC = {
         'platform': 'mac'
       },
     },
-    'Win Builder': {
+    'WebRTC Chromium FYI Win Builder': {
       'bot_type': 'builder',
       'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
@@ -299,7 +299,7 @@ SPEC = {
         'platform': 'win'
       }
     },
-    'Win Builder (dbg)': {
+    'WebRTC Chromium FYI Win Builder (dbg)': {
       'bot_type': 'builder_tester',
       'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
@@ -319,7 +319,7 @@ SPEC = {
         'platform': 'win'
       }
     },
-    'Win10 Tester': {
+    'WebRTC Chromium FYI Win10 Tester': {
       'bot_type': 'tester',
       'chromium_apply_config': [],
       'chromium_config': 'chromium',
@@ -345,7 +345,7 @@ SPEC = {
         'platform': 'win'
       },
     },
-    'Win7 Tester': {
+    'WebRTC Chromium FYI Win7 Tester': {
       'bot_type': 'tester',
       'chromium_apply_config': [],
       'chromium_config': 'chromium',
@@ -371,7 +371,7 @@ SPEC = {
         'platform': 'win'
       },
     },
-    'Win8 Tester': {
+    'WebRTC Chromium FYI Win8 Tester': {
       'bot_type': 'tester',
       'chromium_apply_config': [],
       'chromium_config': 'chromium',
