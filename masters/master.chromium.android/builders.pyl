@@ -11,6 +11,7 @@
 
   "builder_defaults": {
     "remote_run_repository": "https://chromium.googlesource.com/chromium/tools/build.git",
+    "use_remote_run": True,
   },
 
   "builders": {
