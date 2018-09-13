@@ -116,7 +116,7 @@ def GenTests(api):
       api.test('webrtc_fyi_experimental_tester') +
       api.properties(
           mastername='chromium.webrtc.fyi.experimental',
-          buildername='WebRTC Chromium FYI Linux Tester',
+          buildername='Linux Tester',
           buildnumber=123,
           bot_id='test_bot_id',
           parent_got_revision='builder-webrtc-tot',
