@@ -1290,8 +1290,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     }
     if gs_acl is not None:
       fake_factory_properties['gs_acl'] = gs_acl
-    if self.c.TARGET_PLATFORM == 'android':
-      fake_factory_properties['target_os'] = 'android'
+    if self.c.TARGET_PLATFORM:
+      fake_factory_properties['target_os'] = self.c.TARGET_PLATFORM
 
     sanitized_buildername = ''.join(
         c if c.isalnum() else '_' for c in self.m.properties['buildername'])

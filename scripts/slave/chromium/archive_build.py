@@ -71,7 +71,7 @@ class StagerBase(object):
       self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build', 'win')
     elif chromium_utils.IsLinux():
       # On Linux, we might have built for chromeos.  Archive the same.
-      if (options.factory_properties.get('chromeos')):
+      if options.factory_properties.get('target_os') == 'chromeos':
         self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build',
                                       'chromeos')
       # Or, we might have built for Android.

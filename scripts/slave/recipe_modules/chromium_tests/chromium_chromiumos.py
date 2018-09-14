@@ -17,6 +17,7 @@ SPEC = {
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'chromeos',
       },
       'bot_type': 'builder_tester',
       'compile_targets': [
