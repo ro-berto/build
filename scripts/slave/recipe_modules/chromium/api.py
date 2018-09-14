@@ -1143,6 +1143,75 @@ class ChromiumApi(recipe_api.RecipeApi):
       result.presentation.logs['swarming-targets-file.txt'] = (
           sorted_isolated_targets)
 
+  _LOOKUP_ARGS_RE = re.compile(r'Writing """\\?\s*(.*)""" to _path_/args.gn',
+                               re.DOTALL)
+
+  def mb_lookup(self, mastername, buildername, name=None,
+                mb_path=None, mb_config_path=None,
+                gn_args_location=None, gn_args_max_text_lines=None):
+    """Lookup the GN args for the build.
+
+    Args:
+      mastername: The name of the master for the build configuration to generate
+        build files for.
+      buildername: The name of the builder for the build configuration to
+        generate build files for.
+      name: The name of the step. If not provided 'lookup GN args' will be used.
+      mb_path: The path to the source directory containing the mb.py script. If
+        not provided, the subdirectory tools/mb within the source tree will be
+        used.
+      mb_config_path: The path to the configuration file containing the master
+        and builder specifications to be used by mb. If not provided, the
+        project_generator.config_path config value will be used. If that is
+        falsey, then mb_config.pyl under the directory identified by mb_path
+        will be used.
+      gn_args_location: Controls where the GN args for the build should be
+        presented. By default or if gn.DEFAULT, the args will be in step_text if
+        the count of lines is less than gn_args_max_text_lines or the logs
+        otherwise. To force the presentation to the step_text or logs, use
+        gn.TEXT or gn.LOGS, respectively.
+      gn_args_max_text_lines: The maximum number of lines of GN args to display
+        in the step_text when using the default behavior for displaying GN args.
+
+    Returns:
+      The content of the args.gn file.
+    """
+    name = name or 'lookup GN args'
+    result = self.run_mb_cmd(
+        name, 'lookup', mastername, buildername,
+        mb_path=mb_path,
+        mb_config_path=mb_config_path,
+        ok_ret='any',
+        stdout=self.m.raw_io.output_text(),
+        step_test_data=lambda: self.m.raw_io.test_api.stream_output(
+            '\n'
+            'Writing """\\\n'
+            'goma_dir = "/b/build/slave/cache/goma_client"\n'
+            'target_cpu = "x86"\n'
+            'use_goma = true\n'
+            '""" to _path_/args.gn.\n'
+            '\n'
+            '/fake-path/chromium/src/buildtools/linux64/gn gen _path_'
+        ))
+
+    match = self._LOOKUP_ARGS_RE.search(result.stdout)
+
+    if not match:
+      result.presentation.step_text = (
+          'Failed to extract GN args from output of "mb lookup"')
+      result.presentation.logs['mb lookup output'] = result.stdout.splitlines()
+      result.presentation.status = self.m.step.EXCEPTION
+      raise self.m.step.InfraFailure('Failed to extract GN args')
+
+    gn_args = match.group(1)
+    if gn_args is not None:
+      reformatted_gn_args = self.m.gn.reformat_args(gn_args)
+      self.m.gn.present_args(result, reformatted_gn_args,
+                             location=gn_args_location,
+                             max_text_lines=gn_args_max_text_lines)
+
+    return gn_args
+
   @_with_chromium_layout
   def mb_gen(self, mastername, buildername, name=None,
              mb_path=None, mb_config_path=None, use_goma=True,
@@ -1178,6 +1247,15 @@ class ChromiumApi(recipe_api.RecipeApi):
     Returns:
       The content of the args.gn file.
     """
+    # Get the GN args before running any other steps so that if any subsequent
+    # steps fail, developers will have the information about what the GN args
+    # are so that they can reproduce the issue locally
+    gn_args = self.mb_lookup(
+        mastername, buildername,
+        mb_path=mb_path, mb_config_path=mb_config_path,
+        gn_args_location=gn_args_location,
+        gn_args_max_text_lines=gn_args_max_text_lines)
+
     mb_args = []
 
     # This runs with an almost-bare env being passed along, so we get a clean
@@ -1252,10 +1330,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       # well formed for any operation that requires an absolute path
       build_dir = self.m.path['checkout'].join(*build_dir.split('/'))
 
-    return self.m.gn.get_args(
-        build_dir,
-        location=gn_args_location,
-        max_text_lines=gn_args_max_text_lines)
+    return gn_args
 
   def taskkill(self):
     self.m.build.python(

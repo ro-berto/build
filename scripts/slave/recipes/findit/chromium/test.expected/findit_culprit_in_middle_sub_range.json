@@ -664,6 +664,30 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "chromium.mac",
+      "-b",
+      "Mac Builder",
+      "--config-file",
+      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl"
+    ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "test r5.lookup GN args",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.mac",
@@ -688,27 +712,6 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@gl_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/mac/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r5.read GN args",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -1674,6 +1677,30 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "chromium.mac",
+      "-b",
+      "Mac Builder",
+      "--config-file",
+      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl"
+    ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "test r6.lookup GN args",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.mac",
@@ -1698,27 +1725,6 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@gl_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/mac/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r6.read GN args",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -2684,6 +2690,30 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "chromium.mac",
+      "-b",
+      "Mac Builder",
+      "--config-file",
+      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl"
+    ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "test r2.lookup GN args",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.mac",
@@ -2708,27 +2738,6 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@gl_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/mac/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r2.read GN args",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -3694,6 +3703,30 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "chromium.mac",
+      "-b",
+      "Mac Builder",
+      "--config-file",
+      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl"
+    ],
+    "cwd": "[BUILDER_CACHE]/mac/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "test r3.lookup GN args",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.mac",
@@ -3718,27 +3751,6 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@gl_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/mac/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r3.read GN args",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {

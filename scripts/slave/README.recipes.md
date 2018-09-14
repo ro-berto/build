@@ -96,6 +96,7 @@
   * [chromium:tests/get_env](#recipes-chromium_tests_get_env)
   * [chromium:tests/get_version](#recipes-chromium_tests_get_version)
   * [chromium:tests/mb_gen](#recipes-chromium_tests_mb_gen)
+  * [chromium:tests/mb_lookup](#recipes-chromium_tests_mb_lookup)
   * [chromium:tests/process_dumps](#recipes-chromium_tests_process_dumps)
   * [chromium:tests/run_gn](#recipes-chromium_tests_run_gn)
   * [chromium:tests/run_mb](#recipes-chromium_tests_run_mb)
@@ -928,7 +929,7 @@ Returns: (context manager) A context manager that inserts system python
 
 #### **class [ChromiumApi](/scripts/slave/recipe_modules/chromium/api.py#29)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1278)(self, step_name, gs_bucket, gs_acl=None, mode=None, build_name=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1353)(self, step_name, gs_bucket, gs_acl=None, mode=None, build_name=None, \*\*kwargs):**
 
 Returns a step invoking archive_build.py to archive a Chromium build.
 
@@ -992,7 +993,7 @@ Returns (ChromiumApi.Layout): The configured Chromium build layout.
 
 &mdash; **def [ensure\_toolchains](/scripts/slave/recipe_modules/chromium/api.py#846)(self):**
 
-&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1321)(self, test_name):**
+&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1396)(self, test_name):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [get\_clang\_version](/scripts/slave/recipe_modules/chromium/api.py#727)(self, \*\*kwargs):**
 
@@ -1014,7 +1015,7 @@ Args:
 
 &mdash; **def [get\_version](/scripts/slave/recipe_modules/chromium/api.py#160)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_gen](/scripts/slave/recipe_modules/chromium/api.py#1146)(self, mastername, buildername, name=None, mb_path=None, mb_config_path=None, use_goma=True, isolated_targets=None, build_dir=None, phase=None, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_gen](/scripts/slave/recipe_modules/chromium/api.py#1215)(self, mastername, buildername, name=None, mb_path=None, mb_config_path=None, use_goma=True, isolated_targets=None, build_dir=None, phase=None, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None, \*\*kwargs):**
 
 Generate the build files in the source tree.
 
@@ -1044,11 +1045,40 @@ Args:
 Returns:
   The content of the args.gn file.
 
+&mdash; **def [mb\_lookup](/scripts/slave/recipe_modules/chromium/api.py#1149)(self, mastername, buildername, name=None, mb_path=None, mb_config_path=None, gn_args_location=None, gn_args_max_text_lines=None):**
+
+Lookup the GN args for the build.
+
+Args:
+  mastername: The name of the master for the build configuration to generate
+    build files for.
+  buildername: The name of the builder for the build configuration to
+    generate build files for.
+  name: The name of the step. If not provided 'lookup GN args' will be used.
+  mb_path: The path to the source directory containing the mb.py script. If
+    not provided, the subdirectory tools/mb within the source tree will be
+    used.
+  mb_config_path: The path to the configuration file containing the master
+    and builder specifications to be used by mb. If not provided, the
+    project_generator.config_path config value will be used. If that is
+    falsey, then mb_config.pyl under the directory identified by mb_path
+    will be used.
+  gn_args_location: Controls where the GN args for the build should be
+    presented. By default or if gn.DEFAULT, the args will be in step_text if
+    the count of lines is less than gn_args_max_text_lines or the logs
+    otherwise. To force the presentation to the step_text or logs, use
+    gn.TEXT or gn.LOGS, respectively.
+  gn_args_max_text_lines: The maximum number of lines of GN args to display
+    in the step_text when using the default behavior for displaying GN args.
+
+Returns:
+  The content of the args.gn file.
+
 &emsp; **@property**<br>&mdash; **def [output\_dir](/scripts/slave/recipe_modules/chromium/api.py#142)(self):**
 
 Return the path to the built executable directory.
 
-&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1266)(self, \*\*kwargs):**
+&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1341)(self, \*\*kwargs):**
 
 &mdash; **def [reload\_version](/scripts/slave/recipe_modules/chromium/api.py#165)(self):**
 
@@ -1111,7 +1141,7 @@ Return a runtest.py invocation.
 Return a sizes.py invocation.
 This uses runtests.py to upload the results to the perf dashboard.
 
-&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#1260)(self):**
+&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#1335)(self):**
 
 &emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_launcher\_filter](/scripts/slave/recipe_modules/chromium/api.py#570)(self, tests):**
 
@@ -4295,6 +4325,11 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/mb_gen.py#5): [chromium](#recipe_modules-chromium), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/mb_gen.py#12)(api):**
+### *recipes* / [chromium:tests/mb\_lookup](/scripts/slave/recipe_modules/chromium/tests/mb_lookup.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium/tests/mb_lookup.py#7): [chromium](#recipe_modules-chromium), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/mb_lookup.py#13)(api):**
 ### *recipes* / [chromium:tests/process\_dumps](/scripts/slave/recipe_modules/chromium/tests/process_dumps.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/process_dumps.py#5): [chromium](#recipe_modules-chromium)

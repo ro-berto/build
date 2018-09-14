@@ -530,51 +530,25 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/ChromeOS_Swarm/src/tools/mb/mb.py",
-      "gen",
+      "lookup",
       "-m",
       "chromium.swarm",
       "-b",
       "ChromeOS Swarm",
       "--config-file",
-      "[BUILDER_CACHE]/ChromeOS_Swarm/src/tools/mb/mb_config.pyl",
-      "--goma-dir",
-      "[GOMA_CACHE]/client",
-      "--swarming-targets-file",
-      "browser_tests\n",
-      "//out_arm-generic/Release"
+      "[BUILDER_CACHE]/ChromeOS_Swarm/src/tools/mb/mb_config.pyl"
     ],
     "cwd": "[BUILDER_CACHE]/ChromeOS_Swarm/src",
     "env": {
-      "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
+      "CHROME_HEADLESS": "1"
     },
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/python_bin"
       ]
     },
-    "name": "generate_build_files",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
-      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/ChromeOS_Swarm/src/out_arm-generic/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "read GN args",
+    "name": "lookup GN args",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
@@ -681,6 +655,159 @@
     },
     "infra_step": true,
     "name": "system_python.create_link (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/cros",
+      "chrome-sdk",
+      "--nogn-gen",
+      "--board=arm-generic",
+      "--nocolor",
+      "--log-level=debug",
+      "--cache-dir",
+      "[BUILDER_CACHE]/ChromeOS_Swarm/src/build/cros_cache",
+      "--use-external-config",
+      "--gomadir",
+      "[GOMA_CACHE]/client",
+      "--nostart-goma",
+      "--",
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/ChromeOS_Swarm/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.swarm",
+      "-b",
+      "ChromeOS Swarm",
+      "--config-file",
+      "[BUILDER_CACHE]/ChromeOS_Swarm/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[GOMA_CACHE]/client",
+      "--swarming-targets-file",
+      "browser_tests\n",
+      "//out_arm-generic/Release"
+    ],
+    "cwd": "[BUILDER_CACHE]/ChromeOS_Swarm/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/python_bin"
+      ]
+    },
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@browser_tests@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "system_python (4)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/python_bin"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "system_python.create_dir (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/python_bin/python"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "system_python.remove_link (7)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/python_bin/python2"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "system_python.remove_link (8)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "symlink",
+      "/usr/bin/python",
+      "[START_DIR]/python_bin/python"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "system_python.create_link (7)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "symlink",
+      "/usr/bin/python2",
+      "[START_DIR]/python_bin/python2"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "system_python.create_link (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
