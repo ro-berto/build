@@ -4802,8 +4802,8 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
-    "name": "Archive Flutter.dSYM for release",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/src/out/release/Flutter.dSYM\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/src/out/release/Flutter.dSYM.zip\", \"root\": \"[START_DIR]/src/out/release/Flutter.dSYM\"}"
+    "name": "Zip Flutter.dSYM",
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/src/out/release/Flutter.dSYM\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/src/out/release/Flutter.dSYM.zip\", \"root\": \"[START_DIR]/src/out/release\"}"
   },
   {
     "cmd": [

@@ -420,9 +420,9 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
 
   if label == 'release':
     dsym_zip = label_dir.join('Flutter.dSYM.zip')
-    api.zip.directory('Archive Flutter.dSYM for %s' % label,
-      label_dir.join('Flutter.dSYM'),
-      dsym_zip)
+    pkg = api.zip.make_package(label_dir, dsym_zip)
+    pkg.add_directory(label_dir.join('Flutter.dSYM'))
+    pkg.zip('Zip Flutter.dSYM')
     remote_name = '%s/Flutter.dSYM.zip' % bucket_name
     remote_zip = GetCloudPath(api, remote_name)
     api.gsutil.upload(dsym_zip, BUCKET_NAME, remote_zip,
