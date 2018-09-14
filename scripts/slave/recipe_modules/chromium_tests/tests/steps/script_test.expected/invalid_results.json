@@ -1,0 +1,54 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/testing/scripts/script.py",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"checkout\": \"None\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "--properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"slavename\": \"test_bot_id\", \"target_platform\": \"linux\"}",
+      "--args",
+      "[\"some\", \"args\"]",
+      "run",
+      "--output",
+      "/path/to/tmp/json"
+    ],
+    "name": "script_test",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(1)"
+    ],
+    "name": "script_test with suffix  had an invalid result",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@The recipe expected the result to contain the key 'failures'. Contents are:",
+      "{}@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@compile_targets: ['other_target']@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: False@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "reason": "Step('script_test with suffix  had an invalid result') failed with return_code 1",
+    "recipe_result": null,
+    "status_code": 1
+  }
+]

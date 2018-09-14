@@ -43,3 +43,15 @@ def GenTests(api):
           buildnumber=123,
           bot_id='test_bot_id')
   )
+
+  yield (
+      api.test('invalid_results') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id') +
+      api.override_step_data(
+          'script_test',
+          api.json.output({}))
+  )

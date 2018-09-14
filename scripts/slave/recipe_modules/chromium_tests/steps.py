@@ -14,13 +14,6 @@ import traceback
 
 from recipe_engine.types import freeze
 
-# TODO(martiniss): The class structure in this file isn't very optimal; there
-# are too many methods in the Test class, leading to many of its subclasses not
-# implementing abstract methods which shouldn't really exist in Test. Test
-# should be refactored to move those methods to another class. See
-# https://crbug.com/883150 for more.
-# pylint: disable=abstract-method
-
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
 MAX_FAILS = 30
@@ -107,6 +100,9 @@ class Test(object):
         This value would be different from trybot builder name.
     """
     super(Test, self).__init__()
+    # Contains a record of test runs, one for each suffix. Maps suffix to a dict
+    # with the keys 'valid' and 'failures'. These correspond to if the test run
+    # was valid, and the failures during the test run.
     self._test_runs = {}
     self._waterfall_mastername = waterfall_mastername
     self._waterfall_buildername = waterfall_buildername
@@ -183,11 +179,19 @@ class Test(object):
     and the test failing to even report its results in machine-readable
     format.
     """
-    raise NotImplementedError()
+    del api
+    if suffix not in self._test_runs:
+      return False
+
+    return self._test_runs[suffix]['valid']
 
   def failures(self, api, suffix):  # pragma: no cover
     """Return list of failures (list of strings)."""
-    raise NotImplementedError()
+    del api
+    if suffix not in self._test_runs:
+      return []
+
+    return self._test_runs[suffix]['failures']
 
   @property
   def uses_isolate(self):
@@ -512,31 +516,33 @@ class ScriptTest(Test):  # pylint: disable=W0232
           step_test_data=lambda: api.json.test_api.output(
               {'valid': True, 'failures': []}))
     finally:
-      self._test_runs[suffix] = api.step.active_result
-      if self.has_valid_results(api, suffix):
-        _, failures = api.test_utils.limit_failures(
-            self.failures(api, suffix), MAX_FAILS)
-        self._test_runs[suffix].presentation.step_text += (
-            api.test_utils.format_step_text([
-              ['failures:', failures]
-            ]))
+      result = api.step.active_result
+
+      if not 'failures' in result.json.output:
+        self._test_runs[suffix] = {
+            'valid': False,
+            'failures': [],
+        }
+        api.python.failing_step(
+            '%s with suffix %s had an invalid result' % (self.name, suffix),
+            'The recipe expected the result to contain the key \'failures\'.'
+            ' Contents are:\n%s' % api.json.dumps(
+                result.json.output, indent=2))
+
+      self._test_runs[suffix] = {
+          'failures': result.json.output['failures'],
+          'valid': result.json.output['valid'],
+      }
+
+      _, failures = api.test_utils.limit_failures(
+          self._test_runs[suffix]['failures'], MAX_FAILS)
+      result.presentation.step_text += (
+          api.test_utils.format_step_text([
+            ['failures:', failures]
+          ]))
+
 
     return self._test_runs[suffix]
-
-  def has_valid_results(self, api, suffix):
-    try:
-      # Make sure the JSON includes all necessary data.
-      self.failures(api, suffix)
-
-      return self._test_runs[suffix].json.output['valid']
-    except Exception as e:  # pragma: no cover
-      if suffix in self._test_runs:
-        self._test_runs[suffix].presentation.logs['no_results_exc'] = [
-          str(e), '\n', api.traceback.format_exc()]
-      return False
-
-  def failures(self, api, suffix):
-    return self._test_runs[suffix].json.output['failures']
 
 
 class LocalGTestTest(Test):
@@ -659,7 +665,19 @@ class LocalGTestTest(Test):
       # JSON files. crbug.com/584469
     finally:
       step_result = api.step.active_result
-      self._test_runs[suffix] = step_result
+      if not hasattr(step_result, 'test_utils'): # pragma: no cover
+        self._test_runs[suffix] = {
+            'valid': False,
+            'failures': [],
+        }
+      else:
+        gtest_results = step_result.test_utils.gtest_results
+        self._test_runs[suffix] = {
+            'valid': gtest_results.valid and (
+                'UNRELIABLE_RESULTS' not in gtest_results.raw.get(
+                    'global_tags', [])),
+            'failures': gtest_results.failures,
+        }
 
       r = api.test_utils.present_gtest_failures(step_result)
       if r:
@@ -678,20 +696,6 @@ class LocalGTestTest(Test):
       # test_result exists and is not None.
       return self._gtest_results[suffix].pass_fail_counts
     return {}
-
-  def has_valid_results(self, api, suffix):
-    if suffix not in self._test_runs:
-      return False  # pragma: no cover
-    if not hasattr(self._test_runs[suffix], 'test_utils'):
-      return False  # pragma: no cover
-    gtest_results = self._test_runs[suffix].test_utils.gtest_results
-    if not gtest_results.valid:  # pragma: no cover
-      return False
-    global_tags = gtest_results.raw.get('global_tags', [])
-    return 'UNRELIABLE_RESULTS' not in global_tags
-
-  def failures(self, api, suffix):
-    return self._test_runs[suffix].test_utils.gtest_results.failures
 
 
 def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
@@ -1318,7 +1322,6 @@ class SwarmingTest(Test):
         waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername, **kwargs)
     self._tasks = {}
-    self._results = {}
     self._dimensions = dimensions
     self._tags = tags
     self._extra_suffix = extra_suffix
@@ -1498,7 +1501,7 @@ class SwarmingTest(Test):
 
   def run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
-    assert suffix not in self._results, (
+    assert suffix not in self._test_runs, (
         'Results of %s were already collected' % self._step_name(suffix))
 
     # Emit error if test wasn't triggered. This happens if *.isolated is not
@@ -1511,26 +1514,16 @@ class SwarmingTest(Test):
     try:
       api.swarming.collect_task(self._tasks[suffix])
     finally:
-      valid, failures = self.validate_task_results(api, api.step.active_result)
-      self._results[suffix] = {'valid': valid, 'failures': failures}
+      step_result = api.step.active_result
 
-      if api.step.active_result:
-        api.step.active_result.presentation.logs['step_metadata'] = (
-            json.dumps(self.step_metadata(api, suffix), sort_keys=True,
-                       indent=2)
-        ).splitlines()
+      step_result.presentation.logs['step_metadata'] = (
+          json.dumps(self.step_metadata(api, suffix), sort_keys=True,
+                     indent=2)
+      ).splitlines()
 
-  def has_valid_results(self, api, suffix):
-    # Test wasn't triggered or wasn't collected.
-    if suffix not in self._tasks or not suffix in self._results:
-      # TODO(kbr): figure out how to cover this line of code with
-      # tests after the removal of the GPU recipe. crbug.com/584469
-      return False  # pragma: no cover
-    return self._results[suffix]['valid']
+      valid, failures = self.validate_task_results(api, step_result)
+      self._test_runs[suffix] = {'valid': valid, 'failures': failures}
 
-  def failures(self, api, suffix):
-    assert self.has_valid_results(api, suffix)
-    return self._results[suffix]['failures']
 
   @property
   def uses_isolate(self):
@@ -1889,10 +1882,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     finally:
       results = self._isolated_script_results
 
-      valid = self._results.get(suffix, {}).get('valid')
-      self._test_results[suffix] = (
-          api.test_utils.create_results_from_json_if_needed(
-              results) if valid else None)
+      if self._test_runs.get(suffix, {}).get('valid'):
+        self._test_results[suffix] = (
+            api.test_utils.create_results_from_json_if_needed(results))
 
       if results and self._upload_test_results:
         self.results_handler.upload_results(
@@ -1995,9 +1987,20 @@ class PythonBasedTest(Test):
               True))
     finally:
       step_result = api.step.active_result
-      self._test_runs[suffix] = step_result
+      if not hasattr(step_result, 'test_utils'): # pragma: no cover
+        self._test_runs[suffix] = {
+            'valid': False,
+            'failures': [],
+        }
+      else:
+        valid = (step_result.test_utils.test_results.valid and
+            step_result.retcode <= api.test_utils.MAX_FAILURES_EXIT_STATUS and
+            (step_result.retcode == 0) or self.failures(api, suffix))
+        self._test_runs[suffix] = {
+            'valid': valid,
+            'failures': step_result.test_utils.test_results.unexpected_failures,
+        }
 
-      if hasattr(step_result, 'test_utils'):
         r = step_result.test_utils.test_results
         p = step_result.presentation
         _, failures = api.test_utils.limit_failures(
@@ -2007,19 +2010,6 @@ class PythonBasedTest(Test):
         ])
 
     return step_result
-
-  def has_valid_results(self, api, suffix):
-    # TODO(dpranke): we should just return zero/nonzero for success/fail.
-    # crbug.com/357866
-    step = self._test_runs[suffix]
-    if not hasattr(step, 'test_utils'):
-      return False  # pragma: no cover
-    return (step.test_utils.test_results.valid and
-            step.retcode <= api.test_utils.MAX_FAILURES_EXIT_STATUS and
-            (step.retcode == 0) or self.failures(api, suffix))
-
-  def failures(self, api, suffix):
-    return self._test_runs[suffix].test_utils.test_results.unexpected_failures
 
 
 class PrintPreviewTests(PythonBasedTest):
@@ -2079,15 +2069,13 @@ class BisectTest(Test):
         self._test_parameters.get('bisect_config',
                                   api.properties.get('bisect_config')))
 
-  def run(self, api, _):
+  def run(self, api, suffix):
     self.run_results = api.bisect_tester.run_test(
         self.test_config, **self.kwargs)
-
-  def has_valid_results(self, *_):
-    return bool(self.run_results.get('retcodes')) # pragma: no cover
-
-  def failures(self, *_):
-    return self._failures  # pragma: no cover
+    self._test_runs[suffix] = {
+        'valid': bool(self.run_results.get('retcodes')),
+        'failures': [],
+    }
 
 
 class BisectTestStaging(Test):
@@ -2116,15 +2104,13 @@ class BisectTestStaging(Test):
         self._test_parameters.get('bisect_config',
                                   api.properties.get('bisect_config')))
 
-  def run(self, api, _):
+  def run(self, api, suffix):
     self.run_results = api.bisect_tester_staging.run_test(
         self.test_config, **self.kwargs)
-
-  def has_valid_results(self, *_):
-    return bool(self.run_results.get('retcodes')) # pragma: no cover
-
-  def failures(self, *_):
-    return self._failures  # pragma: no cover
+    self._test_runs[suffix] = {
+        'valid': bool(self.run_results.get('retcodes')),
+        'failures': [],
+    }
 
 
 class AndroidTest(Test):
@@ -2173,15 +2159,6 @@ class AndroidTest(Test):
 
   def compile_targets(self, _):
     return self._compile_targets
-
-  def has_valid_results(self, api, suffix):
-    if suffix not in self._test_runs:
-      return False  # pragma: no cover
-    return self._test_runs[suffix]['valid']
-
-  def failures(self, api, suffix):
-    assert self.has_valid_results(api, suffix)
-    return self._test_runs[suffix]['failures']
 
 
 class AndroidJunitTest(AndroidTest):
@@ -2391,7 +2368,19 @@ class BlinkTest(Test):
         step_result.presentation.status = api.step.WARNING
     finally:
       step_result = api.step.active_result
-      self._test_runs[suffix] = step_result
+      self._test_runs[suffix] = {
+        # TODO(dpranke): crbug.com/357866 - note that all comparing against
+        # MAX_FAILURES_EXIT_STATUS tells us is that we did not exit early
+        # or abnormally; it does not tell us how many failures there actually
+        # were, which might be much higher (up to 5000 diffs, where we
+        # would bail out early with --exit-after-n-failures) or lower
+        # if we bailed out after 100 crashes w/ -exit-after-n-crashes, in
+        # which case the retcode is actually 130
+        'valid': (step_result.test_utils.test_results.valid and
+                  step_result.retcode <=
+                    api.test_utils.MAX_FAILURES_EXIT_STATUS),
+        'failures': step_result.test_utils.test_results.unexpected_failures,
+      }
 
       if step_result:
         results = step_result.test_utils.test_results
@@ -2400,23 +2389,6 @@ class BlinkTest(Test):
             api, results, step_result.presentation)
 
         self.results_handler.upload_results(api, results, step_name, suffix)
-
-  def has_valid_results(self, api, suffix):  # pragma: no cover
-    if suffix not in self._test_runs:
-      return False
-    step = self._test_runs[suffix]
-    # TODO(dpranke): crbug.com/357866 - note that all comparing against
-    # MAX_FAILURES_EXIT_STATUS tells us is that we did not exit early
-    # or abnormally; it does not tell us how many failures there actually
-    # were, which might be much higher (up to 5000 diffs, where we
-    # would bail out early with --exit-after-n-failures) or lower
-    # if we bailed out after 100 crashes w/ -exit-after-n-crashes, in
-    # which case the retcode is actually 130
-    return (step.test_utils.test_results.valid and
-            step.retcode <= api.test_utils.MAX_FAILURES_EXIT_STATUS)
-
-  def failures(self, api, suffix):
-    return self._test_runs[suffix].test_utils.test_results.unexpected_failures
 
 
 class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
@@ -2684,6 +2656,10 @@ class MockTest(Test):
   def failures(self, api, suffix):
     api.step('failures %s%s' % (self.name, self._mock_suffix(suffix)), None)
     return self._failures
+
+  def compile_targets(self, api): # pragma: no cover
+    del api
+    return []
 
   @property
   def abort_on_failure(self):
