@@ -374,6 +374,11 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
     '--simulator-out-dir',
     api.path.join(out_dir, sim_out),
   ]
+  if label == 'release':
+    create_ios_framework_cmd.extend([
+      "--dsym",
+      "--strip",
+    ])
   with api.context(cwd=checkout):
     api.step('Create iOS %s Flutter.framework' % label,
       create_ios_framework_cmd)
@@ -393,6 +398,7 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
     '--armv7-out-dir',
     api.path.join(out_dir, armv7_out),
   ]
+
   with api.context(cwd=checkout):
     api.step('Create macOS %s gen_snapshot' % label,
       create_macos_gen_snapshot_cmd)
@@ -411,6 +417,10 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
     artifacts.append(
       'out/%s/dart_entry_points/entry_points_extra.json' % arm64_out)
   UploadArtifacts(api, bucket_name, artifacts)
+
+  if label == 'release':
+    UploadFolder(api, 'Flutter.dSYM for %s' % label, 'out/%s/' % label,
+      'Flutter.dSYM', '%s/symbols.zip' % arm64_out)
 
 
 def BuildIOS(api):

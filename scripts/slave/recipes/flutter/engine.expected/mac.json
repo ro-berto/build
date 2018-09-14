@@ -4699,7 +4699,9 @@
       "--armv7-out-dir",
       "[START_DIR]/src/out/ios_release_arm",
       "--simulator-out-dir",
-      "[START_DIR]/src/out/ios_debug_sim"
+      "[START_DIR]/src/out/ios_debug_sim",
+      "--dsym",
+      "--strip"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -4792,8 +4794,60 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/flutter/tools/gen_objcdoc.sh",
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+    },
+    "name": "Zip Flutter.dSYM",
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/out/release/Flutter.dSYM\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/tmp_tmp_11/ios_release/symbols.zip\", \"root\": \"[START_DIR]/out/release/\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[TMP_BASE]/tmp_tmp_11/ios_release/symbols.zip",
+      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/ios_release/symbols.zip"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+    },
+    "infra_step": true,
+    "name": "gsutil upload ios_release/symbols.zip",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/ios_release/symbols.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
       "[TMP_BASE]/tmp_tmp_11"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+    },
+    "infra_step": true,
+    "name": "temp dir for Flutter.dSYM for release"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/src/flutter/tools/gen_objcdoc.sh",
+      "[TMP_BASE]/tmp_tmp_12"
     ],
     "cwd": "[START_DIR]/src/flutter",
     "env": {
@@ -4813,7 +4867,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "archive obj-c doc",
-    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]/tmp_tmp_11\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/src/out/ios-objcdoc.zip\", \"root\": \"[TMP_BASE]/tmp_tmp_11\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]/tmp_tmp_12\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/src/out/ios-objcdoc.zip\", \"root\": \"[TMP_BASE]/tmp_tmp_12\"}"
   },
   {
     "cmd": [
@@ -4823,7 +4877,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_11"
+      "[TMP_BASE]/tmp_tmp_12"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
