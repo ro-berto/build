@@ -768,6 +768,7 @@ TRYBOTS = freeze({
         ],
       },
       'win7_chromium_rel_ng': {
+        'retry_with_patch': True,
         'bot_ids': [
           {
             'mastername': 'chromium.win',
