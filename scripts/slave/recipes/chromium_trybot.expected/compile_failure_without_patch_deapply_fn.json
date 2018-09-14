@@ -1398,30 +1398,12 @@
     "name": "postprocess_for_goma.stop cloudtail (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "base_unittests",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
-      "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"212d0eb2385b1eaa828053689225258ece065725\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"5efacf6fa93d551b32a0023e205679db72d8ac1f\"@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "1 out of 1 aggregated steps failed. Failures: Step('base_unittests') failed with return_code 1",
+    "reason": "Step('compile (without patch)') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }

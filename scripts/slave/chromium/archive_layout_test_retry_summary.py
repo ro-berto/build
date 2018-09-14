@@ -29,7 +29,7 @@ def ArchiveRetrySummary(args):
   gs_base = '/'.join([args.gs_bucket, args.builder_name, args.build_number])
   slave_utils.GSUtilCopyFile(args.retry_summary_json, gs_base,
                              cache_control='public, max-age=31556926',
-                             dest_filename='retry_summary.json')
+                             dest_filename=args.dest_filename)
   return 0
 
 
@@ -40,6 +40,7 @@ def _ParseArgs():
   parser.add_argument('--builder-name', type=str, required=True)
   parser.add_argument('--build-number', type=str, required=True)
   parser.add_argument('--gs-bucket', type=str, required=True)
+  parser.add_argument('--dest-filename', type=str, required=True)
   slave_utils_callback = slave_utils.AddArgs(parser)
   args = parser.parse_args()
   slave_utils_callback(args)

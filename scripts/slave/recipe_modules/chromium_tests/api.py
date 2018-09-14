@@ -738,6 +738,43 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self.m.path['checkout']):
       self.m.chromium.runhooks(name='runhooks (without patch)')
 
+
+  def _build_and_isolate_failing_tests(self, failing_tests, bot_update_step,
+                                       suffix):
+    """Builds and isolates test suites in |failing_tests|.
+
+    Args:
+      failing_tests: An iterable of test_suites that need to be rebuilt.
+      bot_update_step: Contains information about the current checkout. Used to
+                       set swarming properties.
+      suffix: Should be either 'without patch' or 'retry with patch'. Used to
+              annotate steps and swarming properties.
+    """
+    compile_targets = list(itertools.chain(
+        *[t.compile_targets(self.m) for t in failing_tests]))
+    if compile_targets:
+      # Remove duplicate targets.
+      compile_targets = sorted(set(compile_targets))
+      failing_swarming_tests = [
+          t.isolate_target
+          for t in failing_tests if t.uses_isolate]
+      if failing_swarming_tests:
+        self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
+      self.run_mb_and_compile(compile_targets, failing_swarming_tests,
+                              ' (%s)' % suffix)
+      if failing_swarming_tests:
+        swarm_hashes_property_name = 'swarm_hashes'
+        if 'got_revision_cp' in bot_update_step.presentation.properties:
+          revision_cp = (bot_update_step.
+              presentation.properties['got_revision_cp'].replace('@', '(at)'))
+          swarm_hashes_property_name = 'swarm_hashes_%s_%s' % (
+              revision_cp, suffix.replace(' ', '_'))
+        self.m.isolate.isolate_tests(
+            self.m.chromium.output_dir,
+            swarm_hashes_property_name=swarm_hashes_property_name,
+            verbose=True)
+
+
   def _deapply_patch_build_isolate(self, failing_tests, bot_update_step):
     """Deapplies patch. Then builds and isolates failing test suites.
 
@@ -759,29 +796,46 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # application. bot_update.deapply_patch will update DEPS, since it's
     # possible that the patch was a DEPS change.
     self.deapply_patch(bot_update_step)
+    self._build_and_isolate_failing_tests(failing_tests, bot_update_step,
+                                          'without patch')
 
-    compile_targets = list(itertools.chain(
-        *[t.compile_targets(self.m) for t in failing_tests]))
-    if compile_targets:
-      # Remove duplicate targets.
-      compile_targets = sorted(set(compile_targets))
-      failing_swarming_tests = [
-          t.isolate_target
-          for t in failing_tests if t.uses_isolate]
-      if failing_swarming_tests:
-        self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
-      self.run_mb_and_compile(compile_targets, failing_swarming_tests,
-                              ' (without patch)')
-      if failing_swarming_tests:
-        swarm_hashes_property_name = 'swarm_hashes'
-        if 'got_revision_cp' in bot_update_step.presentation.properties:
-          swarm_hashes_property_name = 'swarm_hashes_%s_without_patch' % (
-              bot_update_step.presentation.properties['got_revision_cp']
-              .replace('@', '(at)'))
-        self.m.isolate.isolate_tests(
-            self.m.chromium.output_dir,
-            swarm_hashes_property_name=swarm_hashes_property_name,
-            verbose=True)
+
+  def _reapply_patch(self, bot_config):
+    """Rolls checkout. Reapplies patch.
+
+    Args:
+      bot_config: Contains checkout configuration.
+
+    Returns: An update_step that contains information about the checkout
+             revision.
+    """
+    assert self.m.tryserver.is_tryserver
+
+    # First, we must roll checkout and reapply the patch. The chromium_checkout
+    # recipe_module is stateful and uses revisions pinned by the dictionary
+    # gclient.c.revisions. We clear all pinned revisions.
+    self.m.gclient.c.revisions.clear()
+
+    update_step = self.m.chromium_checkout.ensure_checkout(bot_config)
+
+    with self.m.context(cwd=self.m.path['checkout']):
+      self.m.chromium.runhooks(name='runhooks (retry with patch)')
+
+    return update_step
+
+  def _reapply_patch_build_isolate(self, failing_tests, bot_config):
+    """Rolls checkout. Reapplies patch. Builds and isolates failing test suites.
+
+    Args:
+      failing_tests: An iterable of Test objects. Each represents a failing test
+                     suite. The list of exact test failures are stored on the
+                     Test object itself.
+      bot_config: Contains checkout configuration.
+    """
+    update_step = self._reapply_patch(bot_config)
+    self._build_and_isolate_failing_tests(failing_tests, update_step,
+                                          'retry with patch')
+
 
   def _should_retry_with_patch_deapplied(self, affected_files, disable_deapply_patch):
     """Whether to retry failing test suites with patch deapplied.
@@ -804,7 +858,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def _run_tests_on_tryserver(self, bot_config, tests, bot_update_step,
                               affected_files,
-                              disable_deapply_patch=False):
+                              disable_deapply_patch,
+                              enable_retry_with_patch):
     """Runs tests with retries.
 
     This function runs tests with the CL patched in. On failure, this will
@@ -830,14 +885,37 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                 % deapply_patch_reason)
 
       # Deapply the patch. Then rerun failing tests.
-      try:
-        self._deapply_patch_build_isolate(failing_tests,
-                                          bot_update_step)
-        self.m.test_utils.run_tests(self.m, failing_tests, 'without patch')
-      finally:
-        with self.m.step.defer_results():
-          for t in failing_tests:
-            self.m.test_utils.summarize_test_with_patch_deapplied(self.m, t)
+      self._deapply_patch_build_isolate(failing_tests,
+                                        bot_update_step)
+      self.m.test_utils.run_tests(self.m, failing_tests, 'without patch')
+
+      # Summarize results.
+      deferred_retry_results = []
+      with self.m.step.defer_results():
+        for t in failing_tests:
+          deferred_result = self.m.test_utils.summarize_test_with_patch_deapplied(
+              self.m, t, emit_failing_step=not enable_retry_with_patch)
+          deferred_retry_results.append((deferred_result, t))
+
+      # Looks for test suites that have to be retried.
+      test_suites_to_retry_with_patch = []
+      for deferred_result, test in deferred_retry_results:
+        if not deferred_result.get_result():
+          test_suites_to_retry_with_patch.append(test)
+
+      # Early exit if all test_suites are passing or if we don't want to retry
+      # with patch.
+      if not test_suites_to_retry_with_patch or not enable_retry_with_patch:
+        return
+
+      # Reapply the patch. Then rerun failing tests.
+      self._reapply_patch_build_isolate(test_suites_to_retry_with_patch,
+                                        bot_config)
+      self.m.test_utils.run_tests(self.m, test_suites_to_retry_with_patch,
+                                  'retry with patch')
+      with self.m.step.defer_results():
+        for t in test_suites_to_retry_with_patch:
+          self.m.test_utils.summarize_test_with_patch_reapplied(self.m, t)
 
   def _build_bisect_gs_archive_url(self, master_config):
     return self.m.archive.legacy_upload_url(
@@ -1014,14 +1092,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def trybot_steps(self, builders=None, trybots=None):
     with self.m.tryserver.set_failure_hash():
       (bot_config_object, bot_update_step, affected_files, tests,
-       disable_deapply_patch) = self._trybot_steps_internal(
-           builders=builders, trybots=trybots)
+       disable_deapply_patch, enable_retry_with_patch) = (
+          self._trybot_steps_internal(builders=builders, trybots=trybots))
 
       self.m.python.succeeding_step('mark: before_tests', '')
       if tests:
         self._run_tests_on_tryserver(
             bot_config_object, tests, bot_update_step,
-            affected_files, disable_deapply_patch=disable_deapply_patch)
+            affected_files, disable_deapply_patch=disable_deapply_patch,
+            enable_retry_with_patch=enable_retry_with_patch)
         self.m.swarming.report_stats()
 
   def _trybot_steps_internal(self, builders=None, trybots=None):
@@ -1037,7 +1116,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                configurations of the mirrored CI bot. Defaults are in
                ChromiumTestsApi.
 
-    Returns: [a 5-tuple of the following]
+    Returns: [a 6-tuple of the following]
       bot_config_object: Configuration for the tests to be run.
       bot_update_step: Holds state on build properties. Used to pass state between
                        methods.
@@ -1048,6 +1127,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
              results of previous runs affect future runs.
       disable_deapply_patch: A flag that prevents the "deapply patch" series of
                              steps from running.
+      enable_retry_with_patch: A flag that adds a "retry with patch" step.
     """
     # Most trybots mirror a CI bot. They run the same suite of tests with the
     # same configuration.
@@ -1168,8 +1248,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # mac_optional_gpu_tests_rel. This should not be necessary. See
     # https://crbug.com/883308.
     disable_deapply_patch = not trybot_config.get('deapply_patch', True)
+
+    enable_retry_with_patch = trybot_config.get('retry_with_patch', False)
     return (bot_config_object, bot_update_step, affected_files, tests,
-            disable_deapply_patch)
+            disable_deapply_patch, enable_retry_with_patch)
 
   def _report_builders(self, bot_config):
     """Reports the builders being executed by the bot."""

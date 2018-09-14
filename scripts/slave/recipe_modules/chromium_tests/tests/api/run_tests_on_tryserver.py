@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine.post_process import Filter
+
 DEPS = [
     'chromium_tests',
     'recipe_engine/properties',
@@ -22,7 +24,8 @@ def RunSteps(api):
       tests=[api.chromium_tests.steps.SwarmingGTestTest('base_unittests')],
       bot_update_step=update_step,
       affected_files=api.properties.get('affected_files', []),
-      disable_deapply_patch=api.properties.get('disable_deapply_patch'))
+      disable_deapply_patch=api.properties.get('disable_deapply_patch'),
+      enable_retry_with_patch=api.properties.get('enable_retry_with_patch'))
 
 
 def GenTests(api):
@@ -53,6 +56,71 @@ def GenTests(api):
           'base_unittests (with patch)',
           api.swarming.canned_summary_output(failure=True) +
           api.test_utils.canned_gtest_output(False))
+  )
+
+  retry_with_tests_filter = Filter().include_re(r'.*retry with patch.*')
+  yield (
+      api.test('enable_retry_with_patch_recipes') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux_chromium_rel_ng',
+          enable_retry_with_patch=True,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=True)) +
+      api.post_process(retry_with_tests_filter)
+  )
+
+  yield (
+      api.test('enable_retry_with_patch_succeed_after_deapply') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux_chromium_rel_ng',
+          enable_retry_with_patch=True,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(passing=False))
+  )
+
+
+  yield (
+      api.test('enable_retry_with_patch_invalid_test_results') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux_chromium_rel_ng',
+          enable_retry_with_patch=True,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=True)) +
+      api.override_step_data(
+          'base_unittests (retry with patch)',
+          api.test_utils.canned_isolated_script_output(passing=False,
+                                                       valid=False)) +
+      api.post_process(retry_with_tests_filter)
   )
 
   yield (

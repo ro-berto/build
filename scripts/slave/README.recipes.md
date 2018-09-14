@@ -1471,11 +1471,11 @@ Returns:
 
 &mdash; **def [generate\_tests\_from\_test\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#231)(self, test_spec, builder_dict, buildername, mastername, swarming_dimensions, scripts_compile_targets, generators, bot_update_step, bot_config):**
 
-&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#873)(self, bot_config=None):**
+&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#951)(self, bot_config=None):**
 
 &mdash; **def [get\_compile\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#302)(self, bot_config, bot_db, tests):**
 
-&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#905)(self, bot_config=None):**
+&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#983)(self, bot_config=None):**
 
 This gets the combined compile_targets information from the
 //testing/scripts/get_compile_targets.py script.
@@ -1512,7 +1512,7 @@ are committed.
 
 &mdash; **def [log](/scripts/slave/recipe_modules/chromium_tests/api.py#48)(self, message):**
 
-&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#937)(self, mb_config_path=None, bot_config=None):**
+&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1015)(self, mb_config_path=None, bot_config=None):**
 
 &mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#428)(self, mastername, buildername, update_step, bot_db):**
 
@@ -1549,7 +1549,7 @@ be undone.
 
 &mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#517)(self, mastername, buildername, update_step, bot_db, additional_properties=None):**
 
-&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1014)(self, builders=None, trybots=None):**
+&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1092)(self, builders=None, trybots=None):**
 
 &emsp; **@property**<br>&mdash; **def [trybots](/scripts/slave/recipe_modules/chromium_tests/api.py#43)(self):**
 
@@ -3431,9 +3431,9 @@ Returns:
 
 #### **class [TestUtilsApi](/scripts/slave/recipe_modules/test_utils/api.py#27)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#252)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#296)(self, data):**
 
-&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#255)(self, data):**
+&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#299)(self, data):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#67)(data):**
 
@@ -3448,7 +3448,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#272)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#316)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3513,7 +3513,7 @@ Returns:
 
 &mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#169)(self, caller_api, tests):**
 
-&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#187)(self, caller_api, test, emit_failing_step=True):**
+&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#235)(self, caller_api, test, emit_failing_step=True):**
 
 Summarizes test results after a CL has been retried with patch deapplied.
 
@@ -3526,7 +3526,16 @@ Returns:
   suggests that the error is due to an issue with top of tree, and should
   not cause the CL to fail.
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#262)(self, add_json_log=True):**
+&mdash; **def [summarize\_test\_with\_patch\_reapplied](/scripts/slave/recipe_modules/test_utils/api.py#258)(self, caller_api, test):**
+
+Summarizes test results after a CL has been retried with patch reapplied.
+
+Returns:
+  A Boolean describing whether the retry succeeded. Which is to say, whether
+  there are tests that failed in 'with patch' and 'retry with patch', but
+  not in 'without patch'.
+
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#306)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 
@@ -4559,9 +4568,9 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/prepare_checkout.py#39)(api):**
 ### *recipes* / [chromium\_tests:tests/api/run\_tests\_on\_tryserver](/scripts/slave/recipe_modules/chromium_tests/tests/api/run_tests_on_tryserver.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/run_tests_on_tryserver.py#5): [chromium\_tests](#recipe_modules-chromium_tests), [swarming](#recipe_modules-swarming), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/run_tests_on_tryserver.py#7): [chromium\_tests](#recipe_modules-chromium_tests), [swarming](#recipe_modules-swarming), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/run_tests_on_tryserver.py#13)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/run_tests_on_tryserver.py#15)(api):**
 ### *recipes* / [chromium\_tests:tests/api/runhooks](/scripts/slave/recipe_modules/chromium_tests/tests/api/runhooks.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/runhooks.py#5): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

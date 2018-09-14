@@ -184,6 +184,54 @@ class TestUtilsApi(recipe_api.RecipeApi):
     self.m.tryserver.set_invalid_test_results_tryjob_result()
     self.m.python.failing_step(test.name, self.INVALID_RESULTS_MAGIC)
 
+  def _summarize_new_and_ignored_failures(self, test, new_failures, ignored_failures, suffix, emit_failing_step):
+    """Summarizes new and ignored failures in the test_suite |test|.
+
+    Args:
+      test: A test suite that's been retried.
+      new_failures: Failures that are potentially caused by the patched CL.
+      ignored_failures: Failures that are not caused by the patched CL.
+      suffix: Should be either 'retry with patch summary' or 'retry summary'.
+      emit_failing_step: Whether to emit a failing step.
+
+    Returns:
+      A Boolean describing whether the retry succeeded. Which is to say, the
+      patched CL did not cause the test suite to have deterministically failing
+      tests.
+    """
+    # We add a failure_reason even if we don't mark the build as a failure. This
+    # will contribute to the failure hash if the build eventually fails.
+    self.m.tryserver.add_failure_reason({
+      'test_name': test.name,
+      'new_failures': sorted(new_failures),
+    })
+
+    if test.name == 'webkit_layout_tests':
+      dest_file = '%s.json' % suffix.replace(' ', '_')
+      self._archive_retry_summary({
+          'failures': sorted(new_failures),
+          'ignored': sorted(ignored_failures)
+      }, dest_file)
+
+    step_name = '%s (%s)' % (test.name, suffix)
+    step_text = self.format_step_text([
+        ['failures:', new_failures],
+        ['ignored:', ignored_failures]
+    ])
+
+    if new_failures and emit_failing_step:
+      try:
+        self.m.python.failing_step(step_name, step_text)
+      finally:
+        self.m.tryserver.set_test_failure_tryjob_result()
+    else:
+      self.m.python.succeeding_step(step_name, step_text)
+      if ignored_failures:
+        self.m.step.active_result.presentation.status = self.m.step.WARNING
+
+    return not bool(new_failures)
+
+
   def summarize_test_with_patch_deapplied(self, caller_api, test,
                                           emit_failing_step=True):
     """Summarizes test results after a CL has been retried with patch deapplied.
@@ -204,38 +252,34 @@ class TestUtilsApi(recipe_api.RecipeApi):
     new_failures = (
       set(test.failures(caller_api, 'with patch')) - ignored_failures)
 
-    # We add a failure_reason even if we don't mark the build as a failure. This
-    # will contribute to the failure hash if the build eventually fails.
-    self.m.tryserver.add_failure_reason({
-      'test_name': test.name,
-      'new_failures': sorted(new_failures),
-    })
+    return self._summarize_new_and_ignored_failures(
+        test, new_failures, ignored_failures,
+        'retry summary', emit_failing_step)
 
-    if test.name == 'webkit_layout_tests':
-      self._archive_retry_summary({
-          'failures': sorted(new_failures),
-          'ignored': sorted(ignored_failures)
-      })
+  def summarize_test_with_patch_reapplied(self, caller_api, test):
+    """Summarizes test results after a CL has been retried with patch reapplied.
 
-    step_name = '%s (retry summary)' % test.name
-    step_text = self.format_step_text([
-        ['failures:', new_failures],
-        ['ignored:', ignored_failures]
-    ])
+    Returns:
+      A Boolean describing whether the retry succeeded. Which is to say, whether
+      there are tests that failed in 'with patch' and 'retry with patch', but
+      not in 'without patch'.
+    """
+    if not test.has_valid_results(caller_api, 'retry with patch'):
+      self._invalid_test_results(test)
 
-    if new_failures and emit_failing_step:
-      try:
-        self.m.python.failing_step(step_name, step_text)
-      finally:
-        self.m.tryserver.set_test_failure_tryjob_result()
-    else:
-      self.m.python.succeeding_step(step_name, step_text)
-      if ignored_failures:
-        self.m.step.active_result.presentation.status = self.m.step.WARNING
+    failures_with_patch = set(test.failures(caller_api, 'with patch'))
+    failures_without_patch = set(test.failures(caller_api, 'without patch'))
+    failures_with_patch_reapplied = set(test.failures(caller_api,
+                                                      'retry with patch'))
 
-    return bool(new_failures)
+    new_failures = ((failures_with_patch & failures_with_patch_reapplied)
+        - failures_without_patch)
+    ignored_failures = ((failures_with_patch | failures_without_patch |
+                        failures_with_patch_reapplied) - new_failures)
 
-  def _archive_retry_summary(self, retry_summary):
+    return self._summarize_new_and_ignored_failures(test, new_failures, ignored_failures, 'retry with patch summary', emit_failing_step=True)
+
+  def _archive_retry_summary(self, retry_summary, dest_filename):
     """Archives the retry summary as JSON, storing it alongside the results
     from the first run."""
     script = self.m.chromium.package_repo_resource(
@@ -245,6 +289,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         '--build-number', self.m.properties['buildnumber'],
         '--builder-name', self.m.properties['buildername'],
         '--gs-bucket', 'gs://chromium-layout-test-archives',
+        '--dest-filename', dest_filename
     ]
     args += self.m.build.slave_utils_args
     self.m.build.python('archive_retry_summary', script, args)
