@@ -55,6 +55,7 @@ def chromium_bare(c):
   p['webrtc'] = ('src/third_party/webrtc', 'HEAD')
 
   p = c.repo_path_map
+  p['https://chromium.googlesource.com/src'] = ('src', None)
   p['https://chromium.googlesource.com/angle/angle'] = (
       'src/third_party/angle', None)
   p['https://chromium.googlesource.com/chromium/buildtools'] = (
