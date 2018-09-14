@@ -11,6 +11,7 @@ DEPS = [
   'chromium_android',
   'depot_tools/gclient',
   'depot_tools/tryserver',
+  'recipe_engine/buildbucket',
   'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -120,13 +121,21 @@ def GenTests(api):
     if fail_android_archive:
       test += api.step_data('build android archive', retcode=1)
 
+    git_repo = 'https://webrtc.googlesource.com/src'
+    if is_chromium:
+      git_repo = 'https://chromium.googlesource.com/chromium/src'
     if mastername.startswith('tryserver'):
-      kwargs = dict(mastername=mastername,
-                    buildername=buildername)
-      if not is_chromium:
-        kwargs.update(gerrit_url='https://webrtc-review.googlesource.com',
-                      gerrit_project='src')
-      test += api.properties.tryserver(**kwargs)
+      test += api.buildbucket.try_build(
+          project='webrtc',
+          builder=buildername,
+          git_repo=git_repo,
+          revision=revision or None)
+    else:
+      test += api.buildbucket.ci_build(
+          project='webrtc',
+          builder=buildername,
+          git_repo=git_repo,
+          revision=revision or 'a' * 40)
     test += api.properties(buildnumber=1337)
 
     return test
@@ -140,9 +149,6 @@ def GenTests(api):
   buildername = 'linux_compile_rel'
   yield generate_builder(mastername, buildername, revision=None,
                          is_chromium=True, suffix='_chromium')
-  yield (generate_builder(mastername, buildername, revision=None,
-                          is_chromium=True, suffix='_chromium_failing_patch') +
-         api.step_data('apply patch', retcode=1))
 
   # Forced builds (not specifying any revision) and test failures.
   mastername = 'client.webrtc'

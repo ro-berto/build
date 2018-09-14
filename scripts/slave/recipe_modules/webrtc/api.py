@@ -156,7 +156,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.m.git('apply', *includes,
                    stdin=self.m.raw_io.input_text(patch_diff),
                    name='apply patch', infra_step=False)
-      except recipe_api.StepFailure:
+      except recipe_api.StepFailure:  # pragma: no cover
         self.m.step.active_result.presentation.step_text = 'Patch failure'
         self.m.tryserver.set_patch_failure_tryjob_result()
         raise
@@ -164,7 +164,7 @@ class WebRTCApi(recipe_api.RecipeApi):
   def checkout(self, **kwargs):
     self._working_dir = self.m.chromium_checkout.get_checkout_dir({})
 
-    is_chromium = self.m.properties.get('patch_repository_url') == CHROMIUM_REPO
+    is_chromium = self.m.tryserver.gerrit_change_repo_url == CHROMIUM_REPO
 
     if is_chromium:
       for subdir in CHROMIUM_DEPS:
@@ -184,8 +184,8 @@ class WebRTCApi(recipe_api.RecipeApi):
         self.revision_cp))
 
     if is_chromium:
-      self._apply_patch(self.m.properties['patch_repository_url'],
-                        self.m.properties['patch_ref'],
+      self._apply_patch(self.m.tryserver.gerrit_change_repo_url,
+                        self.m.tryserver.gerrit_change_fetch_ref,
                         include_subdirs=CHROMIUM_DEPS)
 
   def download_audio_quality_tools(self):
