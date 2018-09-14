@@ -419,7 +419,7 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
   UploadArtifacts(api, bucket_name, artifacts)
 
   if label == 'release':
-    UploadFolder(api, 'Flutter.dSYM for %s' % label, 'out/%s/' % label,
+    UploadFolder(api, 'Flutter.dSYM for %s' % label, 'src/out/%s/' % label,
       'Flutter.dSYM', '%s/symbols.zip' % arm64_out)
 
 

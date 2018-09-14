@@ -4803,7 +4803,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "Zip Flutter.dSYM",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/out/release/Flutter.dSYM\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/tmp_tmp_11/ios_release/symbols.zip\", \"root\": \"[START_DIR]/out/release/\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/src/out/release/Flutter.dSYM\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/tmp_tmp_11/ios_release/symbols.zip\", \"root\": \"[START_DIR]/src/out/release/\"}"
   },
   {
     "cmd": [
