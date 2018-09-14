@@ -136,6 +136,62 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]\\resources\\upload_test_results.py",
+      "--input-json",
+      "{\"num_passes\": 9001, \"num_regressions\": 0, \"path_separator\": \"/\", \"tests\": {\"bad\": {\"totally-bad-probably.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"bad/totally-bad-probably.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"flake\": {\"slow.html\": {\"actual\": \"SLOW\", \"expected\": \"SLOW\"}, \"timeout-then-crash.html\": {\"actual\": \"CRASH\", \"expected\": \"CRASH\"}, \"totally-flakey.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"flake/slow.html\": {\"actual\": \"SLOW\", \"expected\": \"SLOW\"}, \"flake/timeout-then-crash.html\": {\"actual\": \"CRASH\", \"expected\": \"CRASH\"}, \"flake/totally-flakey.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}, \"tricky\": {\"totally-maybe-not-awesome.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"tricky/totally-maybe-not-awesome.html\": {\"actual\": \"PASS\", \"expected\": \"PASS\"}}, \"version\": 3}",
+      "--master-name",
+      "test_mastername",
+      "--builder-name",
+      "test_buildername",
+      "--build-number",
+      "123",
+      "--test-type",
+      "webkit_layout_tests (without patch)",
+      "--chrome-revision",
+      "0",
+      "--test-results-server",
+      "test-results.appspot.com"
+    ],
+    "name": "Upload to test-results [webkit_layout_tests (without patch)]"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\archive_layout_test_results.py",
+      "--results-dir",
+      "[START_DIR]\\layout-test-results",
+      "--build-dir",
+      "None\\out",
+      "--build-number",
+      "123",
+      "--builder-name",
+      "test_buildername",
+      "--gs-bucket",
+      "gs://chromium-layout-test-archives",
+      "--staging-dir",
+      "[CACHE]\\chrome_staging",
+      "--store-latest",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "--gs-acl",
+      "public"
+    ],
+    "name": "archive_webkit_tests_results (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test_buildername/123/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test_buildername/123/layout-test-results.zip@@@"
+    ]
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0
