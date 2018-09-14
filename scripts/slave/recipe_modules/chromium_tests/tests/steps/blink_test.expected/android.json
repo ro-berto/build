@@ -130,11 +130,7 @@
       "--debug-rwt-logging",
       "--platform",
       "android",
-      "--js-flags=--future",
-      "--test-list",
-      "",
-      "--skipped",
-      "always"
+      "--js-flags=--future"
     ],
     "name": "webkit_layout_tests (without patch)",
     "~followup_annotations": [

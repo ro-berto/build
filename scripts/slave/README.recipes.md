@@ -1342,7 +1342,7 @@ Uploads android apks for functional bisects.
 
 #### **class [ChromiumCheckoutApi](/scripts/slave/recipe_modules/chromium_checkout/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/chromium_checkout/api.py#80)(self, bot_config, root_solution_revision=None, disable_syntax_validation=False):**
+&mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/chromium_checkout/api.py#83)(self, bot_config, root_solution_revision=None, disable_syntax_validation=False):**
 
 Wrapper for bot_update.ensure_checkout with chromium-specific additions.
     
@@ -3431,9 +3431,9 @@ Returns:
 
 #### **class [TestUtilsApi](/scripts/slave/recipe_modules/test_utils/api.py#27)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#296)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#297)(self, data):**
 
-&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#299)(self, data):**
+&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#300)(self, data):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#67)(data):**
 
@@ -3448,7 +3448,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#316)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#317)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3526,7 +3526,7 @@ Returns:
   suggests that the error is due to an issue with top of tree, and should
   not cause the CL to fail.
 
-&mdash; **def [summarize\_test\_with\_patch\_reapplied](/scripts/slave/recipe_modules/test_utils/api.py#258)(self, caller_api, test):**
+&mdash; **def [summarize\_test\_with\_patch\_reapplied](/scripts/slave/recipe_modules/test_utils/api.py#259)(self, caller_api, test):**
 
 Summarizes test results after a CL has been retried with patch reapplied.
 
@@ -3535,7 +3535,7 @@ Returns:
   there are tests that failed in 'with patch' and 'retry with patch', but
   not in 'without patch'.
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#306)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#307)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 
@@ -4447,9 +4447,9 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_android/tests/zip_and_upload_build.py#11)(api):**
 ### *recipes* / [chromium\_checkout:tests/full](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#7): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#7): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#18)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_checkout/tests/full.py#19)(api):**
 ### *recipes* / [chromium\_clang\_coverage\_reports](/scripts/slave/recipes/chromium_clang_coverage_reports.py)
 
 [DEPS](/scripts/slave/recipes/chromium_clang_coverage_reports.py#7): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -5291,9 +5291,9 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/halt/examples/full.py#9)(api):**
 ### *recipes* / [ios/try](/scripts/slave/recipes/ios/try.py)
 
-[DEPS](/scripts/slave/recipes/ios/try.py#5): [ios](#recipe_modules-ios), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/ios/try.py#5): [ios](#recipe_modules-ios), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/ios/try.py#16)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/ios/try.py#17)(api):**
 ### *recipes* / [ios/unified\_builder\_tester](/scripts/slave/recipes/ios/unified_builder_tester.py)
 
 [DEPS](/scripts/slave/recipes/ios/unified_builder_tester.py#5): [ios](#recipe_modules-ios), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]

@@ -167,6 +167,7 @@
       "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
+      "--gtest_filter=Test.Two",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "infra_step": true,
@@ -280,7 +281,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"base_unittests (retry with patch)\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"base_unittests\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"patched\": true, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"120000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",

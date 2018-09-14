@@ -35,7 +35,14 @@
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "base_unittests (with patch)"
+    "name": "base_unittests (with patch)",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
+      "@@@STEP_LOG_END@Test.Two@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
@@ -43,7 +50,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":(\", \"status\": \"FAILURE\"}]}]}",
       "--master-name",
       "test_mastername",
       "--builder-name",
@@ -97,10 +104,10 @@
       "--slave-name=test_bot_id",
       "--build-number=123",
       "base_unittests",
-      "--gtest_filter=foo.bar",
       "--gtest_repeat=2",
       "--test-launcher-retry-limit=3",
-      "--gtest_also_run_disabled_tests"
+      "--gtest_also_run_disabled_tests",
+      "--gtest_filter=Test.Two"
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
@@ -157,10 +164,10 @@
       "--slave-name=test_bot_id",
       "--build-number=123",
       "base_unittests",
-      "--gtest_filter=foo.bar",
       "--gtest_repeat=2",
       "--test-launcher-retry-limit=3",
-      "--gtest_also_run_disabled_tests"
+      "--gtest_also_run_disabled_tests",
+      "--gtest_filter=Test.Two"
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
@@ -192,7 +199,8 @@
   },
   {
     "name": "$result",
+    "reason": "Step('base_unittests (with patch)') failed with return_code 1",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]

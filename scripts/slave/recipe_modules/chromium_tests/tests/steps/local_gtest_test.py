@@ -43,6 +43,7 @@ def RunSteps(api):
     ]
 
     test.run(api, 'without patch')
+    test.run(api, 'retry with patch')
 
 
 def GenTests(api):
@@ -53,6 +54,21 @@ def GenTests(api):
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123)
+  )
+
+  yield (
+      api.test('retry') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          bot_id='test_bot_id',
+          buildnumber=123) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.test_utils.canned_gtest_output(passing=True))
   )
 
   yield (

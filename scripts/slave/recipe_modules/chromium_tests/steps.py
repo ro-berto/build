@@ -92,22 +92,9 @@ def _merge_args_and_test_options(test, args):
   return args
 
 
-def _merge_failures_for_retry(args, step, api, suffix):
-    if suffix == 'without patch':
-      # This will override any existing --gtest_filter specification; this
-      # is okay because the failures are a subset of the initial specified
-      # tests. When a patch is adding a new test (and it fails), the test
-      # runner is required to just ignore the unknown test.
-      failures = step.failures(api, 'with patch')
-      if failures:
-        return _merge_arg(args, '--gtest_filter', ':'.join(failures))
-    return args
-
-
 class Test(object):
   """
-  Base class for tests that can be retried after deapplying a previously
-  applied patch.
+  Base class for test suites that can be retried.
   """
 
   def __init__(self, name, target_name=None, override_isolate_target=None,
@@ -182,7 +169,10 @@ class Test(object):
     return []
 
   def run(self, api, suffix):  # pragma: no cover
-    """Run the test. suffix is 'with patch' or 'without patch'."""
+    """Run the test.
+
+    suffix is 'with patch', 'without patch' or 'retry with patch'.
+    """
     raise NotImplementedError()
 
   def has_valid_results(self, api, suffix):  # pragma: no cover
@@ -223,8 +213,40 @@ class Test(object):
         'isolate_target_name': self.isolate_target,
     }
     if suffix is not None:
-      data['patched'] = (suffix == 'with patch')
+      data['patched'] = suffix in ('with patch', 'retry with patch')
     return data
+
+  def tests_to_retry(self, api, suffix):
+    """Computes the tests to run on an invocation of the test suite.
+
+    Args:
+      suffix: A unique identifier for this test suite invocation. Must be 'with
+      patch', 'without patch', or 'retry with patch'.
+
+    Returns:
+      A set of tests to retry. Returning None means all tests should be run.
+    """
+    # For the initial invocation, run every test in the test suite.
+    if suffix == 'with patch':
+      return None
+
+    # For the second invocation, run previously failing tests.
+    # When a patch is adding a new test (and it fails), the test runner is
+    # required to just ignore the unknown test.
+    if suffix == 'without patch':
+      return set(self.failures(api, 'with patch'))
+
+    # For the third invocation, run tests that failed in 'with patch', but not
+    # in 'without patch'.
+    if suffix == 'retry with patch':
+      initial_failures = self.failures(api, 'with patch')
+      persistent_failures = self.failures(api, 'without patch')
+      return set(initial_failures) - set(persistent_failures)
+
+    # If we don't recognize the step, then return None. This makes it easy for
+    # bugs to slip through, but this matches the previous behavior. Importantly,
+    # all the tests fail to pass a suffix.
+    return None
 
 
 class TestWrapper(Test):  # pragma: no cover
@@ -466,9 +488,11 @@ class ScriptTest(Test):  # pylint: disable=W0232
       name += ' (%s)' % suffix  # pragma: no cover
 
     run_args = []
-    if suffix == 'without patch':
+
+    tests_to_retry = self.tests_to_retry(api, suffix)
+    if tests_to_retry:
       run_args.extend([
-          '--filter-file', api.json.input(self.failures(api, 'with patch'))
+          '--filter-file', api.json.input(tests_to_retry)
       ])  # pragma: no cover
 
     try:
@@ -594,7 +618,10 @@ class LocalGTestTest(Test):
     is_fuchsia = api.chromium.c.TARGET_PLATFORM == 'fuchsia'
 
     args = _merge_args_and_test_options(self, self._args)
-    args = _merge_failures_for_retry(args, self, api, suffix)
+
+    tests_to_retry = self.tests_to_retry(api, suffix)
+    if tests_to_retry:
+      args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
 
     gtest_results_file = api.test_utils.gtest_results(add_json_log=False)
     step_test_data = lambda: api.test_utils.test_api.canned_gtest_output(True)
@@ -604,7 +631,6 @@ class LocalGTestTest(Test):
       'args': args,
       'step_test_data': step_test_data,
     }
-
     if is_android:
       kwargs['json_results_file'] = gtest_results_file
       kwargs['shard_timeout'] = self._android_shard_timeout
@@ -1224,6 +1250,7 @@ class LayoutTestResultsHandler(JSONResultsHandler):
       None,
       '',
       'with patch',
+      'retry with patch',
       'experimental',
   )
 
@@ -1528,7 +1555,7 @@ class SwarmingTest(Test):
     if suffix is not None:
       data['full_step_name'] = api.swarming.get_step_name(
           prefix=None, task=self._tasks[suffix])
-      data['patched'] = (suffix == 'with patch')
+      data['patched'] = suffix in ('with patch', 'retry with patch')
       data['dimensions'] = self._tasks[suffix].dimensions
       data['swarm_task_ids'] = self._tasks[suffix].get_task_ids()
     return data
@@ -1572,7 +1599,10 @@ class SwarmingGTestTest(SwarmingTest):
     args = self._args + api.chromium.c.runtests.test_args
 
     args = _merge_args_and_test_options(self, args)
-    args = _merge_failures_for_retry(args, self, api, suffix)
+
+    tests_to_retry = self.tests_to_retry(api, suffix)
+    if tests_to_retry:
+      args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
     args.extend(api.chromium.c.runtests.swarming_extra_args)
 
     return api.swarming.gtest_task(
@@ -1805,9 +1835,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     # We've run into issues in the past with command lines hitting a character
     # limit on windows. Do a sanity check, and only pass this list if we failed
     # less than 100 tests.
-    if suffix == 'without patch' and len(
-        self.failures(api, 'with patch')) < 100:
-      test_list = "::".join(self.failures(api, 'with patch'))
+    tests_to_retry = self.tests_to_retry(api, suffix)
+    if tests_to_retry and len(tests_to_retry) < 100:
+      test_list = "::".join(tests_to_retry)
       args.extend(['--isolated-script-test-filter', test_list])
 
       # Only run the tests on one shard; we don't need more, and layout tests
@@ -1966,8 +1996,9 @@ class PythonBasedTest(Test):
   def run(self, api, suffix):
     cmd_args = ['--write-full-results-to',
                 api.test_utils.test_results(add_json_log=False)]
-    if suffix == 'without patch':
-      cmd_args.extend(self.failures(api, 'with patch'))  # pragma: no cover
+    tests_to_retry = self.tests_to_retry(api, suffix)
+    if tests_to_retry:
+      cmd_args.extend(tests_to_retry)  # pragma: no cover
 
     try:
       self.run_step(
@@ -2352,8 +2383,9 @@ class BlinkTest(Test):
     if self._extra_args:
       args.extend(self._extra_args)
 
-    if suffix == 'without patch':
-      test_list = "\n".join(self.failures(api, 'with patch'))
+    tests_to_retry = self.tests_to_retry(api, suffix)
+    if tests_to_retry:
+      test_list = "\n".join(tests_to_retry)
       args.extend(['--test-list', api.raw_io.input_text(test_list),
                    '--skipped', 'always'])
 

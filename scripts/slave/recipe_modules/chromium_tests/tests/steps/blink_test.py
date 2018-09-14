@@ -38,8 +38,7 @@ def RunSteps(api):
             api, ''),
         'uses_local_devices: %r' % test.uses_local_devices,
     ]
-
-  test.run(api, 'without patch')
+    test.run(api, 'without patch')
 
 
 def GenTests(api):
