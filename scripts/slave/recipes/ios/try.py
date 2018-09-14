@@ -41,11 +41,11 @@ def GenTests(api):
         })
     )
 
-  def try_build():
+  def try_build(git_repo=None):
     return api.buildbucket.try_build(
         project='ios',
         builder='linux',
-        git_repo='https://chromium.googlesource.com/src/third_party/icu')
+        git_repo=git_repo or 'https://chromium.googlesource.com/chromium/src')
 
   yield (
     api.test('basic')
@@ -151,7 +151,7 @@ def GenTests(api):
   # The same test as above but applying an icu patch.
   yield (
     api.test('icu_patch')
-    + try_build()
+    + try_build(git_repo='https://chromium.googlesource.com/chromium/deps/icu')
     + api.platform('mac', 64)
     + api.properties(
       buildername='ios-simulator',
