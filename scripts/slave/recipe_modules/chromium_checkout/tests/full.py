@@ -7,6 +7,7 @@ from recipe_engine import post_process
 DEPS = [
     'chromium_checkout',
     'chromium_tests',
+    'recipe_engine/buildbucket',
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
@@ -39,8 +40,15 @@ def GenTests(api):
     check(step['cwd'] == str(expected_path))
     return {}
 
+  def try_build():
+    return api.buildbucket.try_build(
+        project='chromium',
+        builder='linux',
+        git_repo='https://chromium.googlesource.com/src')
+
   yield (
       api.test('buildbot_annotated_run') +
+      try_build() +
       api.platform('win', 64) +
       api.properties(
           buildername='example_buildername',
@@ -50,6 +58,7 @@ def GenTests(api):
 
   yield (
       api.test('buildbot_remote_run') +
+      try_build() +
       api.properties(
           buildername='example_buildername',
           path_config='kitchen') + # not a typo... T_T
@@ -59,6 +68,7 @@ def GenTests(api):
 
   yield (
       api.test('buildbot_remote_run_kitchen') +
+      try_build() +
       api.properties(
           buildername='example_buildername',
           path_config='generic') +
@@ -68,6 +78,7 @@ def GenTests(api):
 
   yield (
       api.test('luci') +
+      try_build() +
       api.runtime(is_luci=True, is_experimental=False) +
       api.properties(
           buildername='does not matter') +

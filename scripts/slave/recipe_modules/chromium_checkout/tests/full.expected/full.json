@@ -150,26 +150,10 @@
   },
   {
     "cmd": [],
-    "name": "details"
-  },
-  {
-    "cmd": [
-      "git",
-      "-c",
-      "core.quotePath=false",
-      "diff",
-      "--cached",
-      "--name-only"
-    ],
-    "cwd": "[START_DIR]/src",
-    "infra_step": true,
-    "name": "git diff to analyze patch",
-    "stdout": "/path/to/tmp/",
+    "name": "details",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@foo.cc@@@",
-      "@@@STEP_LOG_END@files@@@",
       "@@@STEP_LOG_LINE@details@working_dir: Path('start_dir')@@@",
-      "@@@STEP_LOG_LINE@details@affected_files: ['foo.cc']@@@",
+      "@@@STEP_LOG_LINE@details@affected_files: []@@@",
       "@@@STEP_LOG_END@details@@@"
     ]
   },

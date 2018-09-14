@@ -6,6 +6,7 @@ DEPS = [
   'ios',
   'depot_tools/gclient',
   'depot_tools/tryserver',
+  'recipe_engine/buildbucket',
   'recipe_engine/json',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -22,6 +23,7 @@ def RunSteps(api):
     api.ios.test_swarming()
 
 def GenTests(api):
+
   def suppress_analyze():
     """Overrides analyze step data so that all targets get compiled."""
     return api.override_step_data(
@@ -39,8 +41,15 @@ def GenTests(api):
         })
     )
 
+  def try_build():
+    return api.buildbucket.try_build(
+        project='ios',
+        builder='linux',
+        git_repo='https://chromium.googlesource.com/src/third_party/icu')
+
   yield (
     api.test('basic')
+    + try_build()
     + api.platform('mac', 64)
     + api.properties(
       buildername='ios-simulator',
@@ -76,6 +85,7 @@ def GenTests(api):
 
   yield (
     api.test('no_compilation')
+    + try_build()
     + api.platform('mac', 64)
     + api.properties(
       buildername='ios-simulator',
@@ -110,6 +120,7 @@ def GenTests(api):
 
   yield (
     api.test('no_tests')
+    + try_build()
     + api.platform('mac', 64)
     + api.properties(
       buildername='ios-simulator',
@@ -140,6 +151,7 @@ def GenTests(api):
   # The same test as above but applying an icu patch.
   yield (
     api.test('icu_patch')
+    + try_build()
     + api.platform('mac', 64)
     + api.properties(
       buildername='ios-simulator',
@@ -175,6 +187,7 @@ def GenTests(api):
 
   yield (
     api.test('parent')
+    + try_build()
     + api.platform('mac', 64)
     + api.properties(
       buildername='ios',
@@ -212,6 +225,7 @@ def GenTests(api):
 
   yield (
     api.test('gn')
+    + try_build()
     + api.platform('mac', 64)
     + api.properties(
       buildername='ios-simulator-gn',
@@ -251,6 +265,7 @@ def GenTests(api):
 
   yield (
     api.test('goma_compilation_failure')
+    + try_build()
     + api.platform('mac', 64)
     + api.properties(
       buildername='ios-simulator-gn',
@@ -287,6 +302,7 @@ def GenTests(api):
 
   yield (
     api.test('additional_compile_targets')
+    + try_build()
     + api.platform('mac', 64)
     + api.properties(
       buildername='ios-simulator',
@@ -317,6 +333,7 @@ def GenTests(api):
 
   yield (
     api.test('patch_failure')
+    + try_build()
     + api.platform('mac', 64)
     + api.properties(
       buildername='ios-simulator',
