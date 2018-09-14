@@ -798,9 +798,9 @@ class Failure(object):
       # The variant the failing test ran in.
       'variant': self.results[0]['variant'],
       # Extra arguments passed to the V8 test runner.
-      # TODO(machenbach): This does not yet include the arguments from
-      # V8-side test configs.
-      'extra_args': test_config.get('test_args', []),
+      # TODO(machenbach): The api should hide the details how to get the args.
+      'extra_args': test_config.get('test_args', []) +
+                    list(self.test_step_config.test_args),
     }
     return (
         'echo \'%s\' | buildbucket.py put -b luci.v8.try -n v8_flako -p -'
