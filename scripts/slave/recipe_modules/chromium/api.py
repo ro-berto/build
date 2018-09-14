@@ -973,6 +973,73 @@ class ChromiumApi(recipe_api.RecipeApi):
         self.m.step(name='gn', cmd=[gn_path] + step_args, **kwargs)
 
   @_with_chromium_layout
+  def run_mb_cmd(self, name, mb_command, mastername, buildername,
+                 additional_args=None, env=None,
+                 mb_path=None, mb_config_path=None,
+                 **kwargs):
+    """Run an arbitrary mb command.
+
+    Args:
+      name: The name of the step.
+      mb_command: The mb command to run.
+      mastername: The name of the master of the configuration to run mb for.
+      buildername: The name of the builder of the configuration to run mb for.
+      additional_args: Any args to the mb script besodes those for setting the
+        master, builder and the path to the config file.
+      env: An optional dict to use as the environment for executing the mb
+        command. The environment will be combined with the current context
+        environment with values from the context taking precedence.
+      mb_path: The path to the source directory containing the mb.py script. If
+        not provided, the subdirectory tools/mb within the source tree will be
+        used.
+      mb_config_path: The path to the configuration file containing the master
+        and builder specifications to be used by mb. If not provided, the
+        project_generator.config_path config value will be used. If that is
+        falsey, then mb_config.pyl under the directory identified by mb_path
+        will be used.
+      **kwargs: Additional arguments to be forwarded onto the python API.
+    """
+    mb_path = mb_path or self.m.path['checkout'].join('tools', 'mb')
+    mb_config_path = (
+        mb_config_path or self.c.project_generator.config_path or
+        self.m.path.join(mb_path, 'mb_config.pyl'))
+
+    args = [
+        mb_command,
+        '-m', mastername,
+        '-b', buildername,
+        '--config-file', mb_config_path,
+    ]
+
+    step_kwargs = {
+        'name': name,
+        'script': mb_path.join('mb.py'),
+        'args': args + (additional_args or []),
+    }
+
+    # TODO(crbug.com/810460): Remove the system python wrapping.
+    optional_system_python = contextlib.contextmanager(
+        lambda: (x for x in [None]))()
+    if self.c.TARGET_CROS_BOARD:
+      # Wrap 'mb' through 'cros chrome-sdk'
+      step_kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper()
+      optional_system_python = self.m.chromite.with_system_python()
+
+    step_kwargs.update(kwargs)
+
+    # If an environment was provided, copy it so that we don't modify the
+    # caller's data
+    env = dict(env) if env else {}
+    env.update(self.m.context.env)
+
+    with optional_system_python:
+      with self.m.context(
+          # TODO(phajdan.jr): get cwd from context, not kwargs.
+          cwd=kwargs.get('cwd', self.m.path['checkout']),
+          env=env):
+        return self.m.python(**step_kwargs)
+
+  @_with_chromium_layout
   def run_mb(self, mastername, buildername, use_goma=True, mb_path=None,
              mb_config_path=None, isolated_targets=None, name=None,
              build_dir=None, android_version_code=None,
@@ -993,11 +1060,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     Returns:
       The content of the args.gn file.
     """
-    mb_path = mb_path or self.m.path['checkout'].join('tools', 'mb')
-    mb_config_path = (
-        mb_config_path or self.c.project_generator.config_path or
-        self.m.path.join(mb_path, 'mb_config.pyl'))
-
     isolated_targets = isolated_targets or []
 
     out_dir = 'out'
@@ -1006,12 +1068,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     build_dir = build_dir or '//%s/%s' % (out_dir, self.c.build_config_fs)
 
-    args=[
-        mb_command,
-        '-m', mastername,
-        '-b', buildername,
-        '--config-file', mb_config_path,
-    ]
+    args = []
 
     if self.c.project_generator.isolate_map_paths:
       for isolate_map_path in self.c.project_generator.isolate_map_paths:
@@ -1045,20 +1102,6 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     args += [build_dir]
 
-    step_kwargs = {
-      'name': name or 'generate_build_files',
-      'script': mb_path.join('mb.py'),
-      'args': args,
-    }
-
-    # TODO(crbug.com/810460): Remove the system python wrapping.
-    optional_system_python = contextlib.contextmanager(
-        lambda: (x for x in [None]))()
-    if self.c.TARGET_CROS_BOARD:
-      # Wrap 'mb' through 'cros chrome-sdk'
-      step_kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper()
-      optional_system_python = self.m.chromite.with_system_python()
-
     # This runs with an almost-bare env being passed along, so we get a clean
     # environment without any GYP_DEFINES being present to cause confusion.
     env = self.get_env()
@@ -1071,23 +1114,18 @@ class ChromiumApi(recipe_api.RecipeApi):
       # but we want to utilize remote cpu resource more.
       env['GOMA_USE_LOCAL'] = 'false'
 
-    env.update(self.m.context.env)
-
     if self.c.use_gyp_env and self.c.gyp_env.GYP_MSVS_VERSION:
       # TODO(machenbach): Remove this as soon as it's not read anymore by
       # vs_toolchain.py (currently called by gn).
       env['GYP_MSVS_VERSION'] = self.c.gyp_env.GYP_MSVS_VERSION
 
-    step_kwargs.update(kwargs)
-    with optional_system_python:
-      with self.m.context(
-          # TODO(phajdan.jr): get cwd from context, not kwargs.
-          cwd=kwargs.get('cwd', self.m.path['checkout']),
-          env=env):
-        self.m.python(**step_kwargs)
+    name = name or 'generate_build_files'
+    result = self.run_mb_cmd(name, mb_command, mastername, buildername,
+                             additional_args=args, env=env,
+                             mb_path=mb_path, mb_config_path=mb_config_path,
+                             **kwargs)
 
     # Comes after self.m.python so the log appears in the correct step result.
-    result = self.m.step.active_result
     if isolated_targets and result:
       result.presentation.logs['swarming-targets-file.txt'] = (
           sorted_isolated_targets)
