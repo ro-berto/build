@@ -29,33 +29,45 @@ def RunSteps(api):
       phase='test_phase',
       isolated_targets=['base_unittests_run'],
       android_version_code=3,
-      android_version_name='example')
+      android_version_name='example',
+      **api.properties.get('run_mb_kwargs', {}))
 
 
 def GenTests(api):
-  yield api.test('basic')
+  def BaseTests():
+    yield api.test('basic')
 
-  yield (
-      api.test('cros_board') +
-      api.properties(
-          target_platform='chromeos',
-          target_cros_board='x86-generic')
-  )
+    yield (
+        api.test('cros_board') +
+        api.properties(
+            target_platform='chromeos',
+            target_cros_board='x86-generic')
+    )
 
-  yield (
-      api.test('win') +
-      api.properties(chromium_apply_config=['msvs2015', 'win_analyze'])
-  )
+    yield (
+        api.test('win') +
+        api.properties(chromium_apply_config=['msvs2015', 'win_analyze'])
+    )
 
-  yield (
-      api.test('mac') +
-      api.platform('mac', 64) +
-      api.properties(target_platform='mac')
-  )
+    yield (
+        api.test('mac') +
+        api.platform('mac', 64) +
+        api.properties(target_platform='mac')
+    )
 
-  yield (
-      api.test('explicit_mb') +
-      api.properties(
-          use_explicit_isolate_map_path=True,
-          chromium_apply_config=['chromium_official'])
-  )
+    yield (
+        api.test('explicit_mb') +
+        api.properties(
+            use_explicit_isolate_map_path=True,
+            chromium_apply_config=['chromium_official'])
+    )
+
+  test_parameters = [
+      ('', {}),
+      ('-non_gen', {'mb_command': 'isolate-everything'}),
+  ]
+
+  for t in BaseTests():
+    for suffix, run_mb_kwargs in test_parameters:
+      t.name += suffix
+      yield t + api.properties(run_mb_kwargs=run_mb_kwargs)

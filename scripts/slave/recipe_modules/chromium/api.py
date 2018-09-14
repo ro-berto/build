@@ -1060,6 +1060,19 @@ class ChromiumApi(recipe_api.RecipeApi):
     Returns:
       The content of the args.gn file.
     """
+    # TODO(gbeaty) Migrate all callers using run_mb for 'mb gen' to mb_gen, then
+    # refactor to remove unnecessary code and reduce duplication
+    if mb_command == 'gen':
+      return self.mb_gen(
+          mastername, buildername, use_goma=use_goma, mb_path=mb_path,
+          mb_config_path=mb_config_path, isolated_targets=isolated_targets,
+          name=name, build_dir=build_dir,
+          android_version_code=android_version_code,
+          android_version_name=android_version_name, phase=phase,
+          gn_args_location=gn_args_location,
+          gn_args_max_text_lines=gn_args_max_text_lines,
+          **kwargs)
+
     isolated_targets = isolated_targets or []
 
     out_dir = 'out'
@@ -1130,6 +1143,108 @@ class ChromiumApi(recipe_api.RecipeApi):
       result.presentation.logs['swarming-targets-file.txt'] = (
           sorted_isolated_targets)
 
+  @_with_chromium_layout
+  def mb_gen(self, mastername, buildername, name=None,
+             mb_path=None, mb_config_path=None, use_goma=True,
+             isolated_targets=None, build_dir=None, phase=None,
+             android_version_code=None, android_version_name=None,
+             gn_args_location=None, gn_args_max_text_lines=None,
+             **kwargs):
+    """Generate the build files in the source tree.
+
+    Args:
+      mastername: The name of the master for the build configuration to generate
+        build files for.
+      buildername: The name of the builder for the build configuration to
+        generate build files for.
+      name: The name of the step. If not provided 'generate_build_files' will be
+        used.
+      mb_path: The path to the source directory containing the mb.py script. If
+        not provided, the subdirectory tools/mb within the source tree will be
+        used.
+      mb_config_path: The path to the configuration file containing the master
+        and builder specifications to be used by mb. If not provided, the
+        project_generator.config_path config value will be used. If that is
+        falsey, then mb_config.pyl under the directory identified by mb_path
+        will be used.
+      gn_args_location: Controls where the GN args for the build should be
+        presented. By default or if gn.DEFAULT, the args will be in step_text if
+        the count of lines is less than gn_args_max_text_lines or the logs
+        otherwise. To force the presentation to the step_text or logs, use
+        gn.TEXT or gn.LOGS, respectively.
+      gn_args_max_text_lines: The maximum number of lines of GN args to display
+        in the step_text when using the default behavior for displaying GN args.
+
+    Returns:
+      The content of the args.gn file.
+    """
+    mb_args = []
+
+    # This runs with an almost-bare env being passed along, so we get a clean
+    # environment without any GYP_DEFINES being present to cause confusion.
+    env = self.get_env()
+
+    if self.c.project_generator.isolate_map_paths:
+      for isolate_map_path in self.c.project_generator.isolate_map_paths:
+        mb_args += ['--isolate-map-file', isolate_map_path]
+
+    if phase is not None:
+      mb_args += [ '--phase', str(phase) ]
+
+    if use_goma:
+      goma_dir = self.c.compile_py.goma_dir
+      # TODO(gbeaty): remove this weird goma fallback or cover it
+      if not goma_dir:  # pragma: no cover
+        # This method defaults to use_goma=True, which doesn't necessarily
+        # match build-side configuration. However, MB is configured
+        # src-side, and so it might be actually using goma.
+        self.ensure_goma()
+        goma_dir = self.c.compile_py.goma_dir
+      if goma_dir:
+        mb_args += ['--goma-dir', goma_dir]
+
+      # Do not allow goma to invoke local compiler.
+      # GOMA_USE_LOCAL is passed to gomacc from ninja.
+      # And in windows, env var for ninja is specified in `gn gen` step.
+      # We don't need to disallow local compile,
+      # but we want to utilize remote cpu resource more.
+      env['GOMA_USE_LOCAL'] = 'false'
+
+    if isolated_targets:
+      sorted_isolated_targets = sorted(set(isolated_targets))
+      # TODO(dpranke): Change the MB flag to '--isolate-targets-file', maybe?
+      data = '\n'.join(sorted_isolated_targets) + '\n'
+      mb_args += ['--swarming-targets-file', self.m.raw_io.input_text(data)]
+
+    if android_version_code:
+      mb_args += ['--android-version-code=%s' % android_version_code]
+    if android_version_name:
+      mb_args += ['--android-version-name=%s' % android_version_name]
+
+    if not build_dir:
+      out_dir = 'out'
+      if self.c.TARGET_CROS_BOARD:
+        out_dir += '_%s' % self.c.TARGET_CROS_BOARD
+      build_dir = '//%s/%s' % (out_dir, self.c.build_config_fs)
+
+    mb_args += [build_dir]
+
+    if self.c.use_gyp_env and self.c.gyp_env.GYP_MSVS_VERSION:
+      # TODO(machenbach): Remove this as soon as it's not read anymore by
+      # vs_toolchain.py (currently called by gn).
+      env['GYP_MSVS_VERSION'] = self.c.gyp_env.GYP_MSVS_VERSION
+
+    name = name or 'generate_build_files'
+    result = self.run_mb_cmd(
+        name, 'gen', mastername, buildername,
+        additional_args=mb_args, env=env,
+        mb_path=mb_path, mb_config_path=mb_config_path,
+        **kwargs)
+
+    if isolated_targets:
+      result.presentation.logs['swarming-targets-file.txt'] = (
+          sorted_isolated_targets)
+
     # If build_dir is a string, convert it to a Path
     if isinstance(build_dir, str):
       # The / splitting is required because Path.join on Windows won't convert
@@ -1141,7 +1256,6 @@ class ChromiumApi(recipe_api.RecipeApi):
         build_dir,
         location=gn_args_location,
         max_text_lines=gn_args_max_text_lines)
-
 
   def taskkill(self):
     self.m.build.python(

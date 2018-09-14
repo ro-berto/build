@@ -1,0 +1,79 @@
+[
+  {
+    "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "ensure_goma"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/goma/client",
+      "-ensure-file",
+      "infra_internal/goma/client/mac-amd64 release",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-goma-client.json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "ensure_goma.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/mac-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/tools/mb/mb.py",
+      "isolate-everything",
+      "-m",
+      "test_mastername",
+      "-b",
+      "test_buildername",
+      "--config-file",
+      "None/tools/mb/mb_config.pyl",
+      "--phase",
+      "test_phase",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "--swarming-targets-file",
+      "base_unittests_run\n",
+      "--android-version-code=3",
+      "--android-version-name=example",
+      "//out/Release"
+    ],
+    "cwd": "None",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@base_unittests_run@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
