@@ -419,8 +419,14 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
   UploadArtifacts(api, bucket_name, artifacts)
 
   if label == 'release':
-    UploadFolder(api, 'Flutter.dSYM for %s' % label, 'src/out/%s/' % label,
-      'Flutter.dSYM', '%s/symbols.zip' % arm64_out)
+    dsym_zip = label_dir.join('Flutter.dSYM.zip')
+    api.zip.directory('Archive Flutter.dSYM for %s' % label,
+      label_dir.join('Flutter.dSYM'),
+      dsym_zip)
+    remote_name = '%s/Flutter.dSYM.zip' % bucket_name
+    remote_zip = GetCloudPath(api, remote_name)
+    api.gsutil.upload(dsym_zip, BUCKET_NAME, remote_zip,
+        name='upload "%s"' % remote_name)
 
 
 def BuildIOS(api):

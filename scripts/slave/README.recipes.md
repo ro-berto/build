@@ -5055,9 +5055,9 @@ world-readable cloud location.
 
 &mdash; **def [Build](/scripts/slave/recipes/flutter/engine.py#35)(api, config, \*targets, \*\*kwargs):**
 
-&mdash; **def [BuildIOS](/scripts/slave/recipes/flutter/engine.py#426)(api):**
+&mdash; **def [BuildIOS](/scripts/slave/recipes/flutter/engine.py#432)(api):**
 
-&mdash; **def [BuildJavadoc](/scripts/slave/recipes/flutter/engine.py#506)(api):**
+&mdash; **def [BuildJavadoc](/scripts/slave/recipes/flutter/engine.py#512)(api):**
 
 &mdash; **def [BuildLinux](/scripts/slave/recipes/flutter/engine.py#242)(api):**
 
@@ -5065,13 +5065,13 @@ world-readable cloud location.
 
 &mdash; **def [BuildMac](/scripts/slave/recipes/flutter/engine.py#304)(api):**
 
-&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#522)(api):**
+&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#528)(api):**
 
 Builds documentation for the Objective-C variant of engine.
 
-&mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#454)(api):**
+&mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#460)(api):**
 
-&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#538)(api):**
+&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#544)(api):**
 
 &mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/engine.py#28)(api, path):**
 
@@ -5087,7 +5087,7 @@ Locates and switches to a version of Xcode matching target_version.
 
 &mdash; **def [RunHostTests](/scripts/slave/recipes/flutter/engine.py#46)(api, out_dir, exe_extension=''):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#553)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#559)(api):**
 
 &mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/engine.py#296)(api):**
 
