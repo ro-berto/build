@@ -163,12 +163,9 @@ class FinditApi(recipe_api.RecipeApi):
     abbreviated_revision = revision[:7]
     with api.m.step.nest('test %s' % str(abbreviated_revision)):
       # Checkout code at the given revision to recompile.
-      bot_id = {
-          'mastername': target_mastername,
-          'buildername': target_buildername}
-      if target_buildername != target_testername:
-        bot_id['tester'] = target_testername
-
+      # TODO(stgao): refactor this out.
+      bot_id = api.chromium_tests.create_bot_id(
+          target_mastername, target_buildername, target_testername)
       bot_config = api.m.chromium_tests.create_generalized_bot_config_object(
           [bot_id])
       bot_update_step, bot_db = api.m.chromium_tests.prepare_checkout(
@@ -297,7 +294,7 @@ class FinditApi(recipe_api.RecipeApi):
       return results, failed_tests_dict
 
   def configure_and_sync(self, api, target_mastername, target_testername,
-                         revision):
+                         revision, builders=None):
     """Applies compile/test configs & syncs code.
 
     These are common tasks done in preparation ahead of building and testing
@@ -310,20 +307,22 @@ class FinditApi(recipe_api.RecipeApi):
       target_testername (str): likewise
       revision (str): A string representing the commit hash of the revision to
                       test.
+      builders (dict): A dict of the same format as api.chromium_tests.builders.
     Returns: (target_buildername, checked_out_revision, cached_revision)
     """
     # Figure out which builder configuration we should match for compile config.
     # Sometimes, the builder itself runs the tests and there is no tester. In
     # such cases, just treat the builder as a "tester". Thus, we default to
     # the target tester.
-    tester_config = api.chromium_tests.builders.get(
+    builders = builders or api.chromium_tests.builders
+    tester_config = builders.get(
         target_mastername).get('builders', {}).get(target_testername)
     target_buildername = (tester_config.get('parent_buildername') or
                           target_testername)
 
     # Configure to match the compile config on the builder.
     bot_config = api.chromium_tests.create_bot_config_object(
-        target_mastername, target_buildername)
+        target_mastername, target_buildername, builders=builders)
     api.chromium_tests.configure_build(
         bot_config, override_bot_type='builder_tester')
 

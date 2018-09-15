@@ -58,8 +58,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         [self.create_bot_id(mastername, buildername)],
         builders=builders)
 
-  def create_bot_id(self, mastername, buildername):
-    return {'mastername': mastername, 'buildername': buildername}
+  def create_bot_id(self, mastername, buildername, testername=None):
+    bot_id = {
+        'mastername': mastername,
+        'buildername': buildername,
+    }
+    # TODO(crbug.com/884425): Figure out a better solution to mimic a tester.
+    if testername and testername != buildername:
+      bot_id['tester'] = testername
+    return bot_id
 
   def create_generalized_bot_config_object(self, bot_ids, builders=None):
     try:
