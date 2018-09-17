@@ -1248,7 +1248,21 @@ class FakeCustomResultsHandler(ResultsHandler):
 
 class LayoutTestResultsHandler(JSONResultsHandler):
   """Uploads layout test results to Google storage."""
+
+  # Step name suffixes that we will archive results for.
+  archive_results_suffixes = (
+      None,
+      '',
+      'with patch',
+      'retry with patch',
+      'experimental',
+  )
+
   def upload_results(self, api, results, step_name, step_suffix=None):
+    # Don't archive the results unless the step_suffix matches
+    if step_suffix not in self.archive_results_suffixes:
+        return
+
     # Also upload to standard JSON results handler
     JSONResultsHandler.upload_results(
         self, api, results, step_name, step_suffix)

@@ -1328,62 +1328,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
-      "--input-json",
-      "{\"num_passes\": 9001, \"num_regressions\": 5, \"path_separator\": \"/\", \"tests\": {\"bad\": {\"totally-bad-probably.html\": {\"actual\": \"FAIL\", \"expected\": \"PASS\", \"is_unexpected\": true}}, \"bad/totally-bad-probably.html\": {\"actual\": \"FAIL\", \"expected\": \"PASS\", \"is_unexpected\": true}, \"flake\": {\"slow.html\": {\"actual\": \"TIMEOUT SLOW\", \"expected\": \"SLOW\", \"is_unexpected\": true}, \"timeout-then-crash.html\": {\"actual\": \"TIMEOUT CRASH\", \"expected\": \"CRASH\", \"is_unexpected\": true}, \"totally-flakey.html\": {\"actual\": \"TIMEOUT PASS\", \"expected\": \"PASS\", \"is_unexpected\": true}}, \"flake/slow.html\": {\"actual\": \"TIMEOUT SLOW\", \"expected\": \"SLOW\", \"is_unexpected\": true}, \"flake/timeout-then-crash.html\": {\"actual\": \"TIMEOUT CRASH\", \"expected\": \"CRASH\", \"is_unexpected\": true}, \"flake/totally-flakey.html\": {\"actual\": \"TIMEOUT PASS\", \"expected\": \"PASS\", \"is_unexpected\": true}, \"tricky\": {\"totally-maybe-not-awesome.html\": {\"actual\": \"FAIL\", \"expected\": \"PASS\", \"is_unexpected\": true}}, \"tricky/totally-maybe-not-awesome.html\": {\"actual\": \"FAIL\", \"expected\": \"PASS\", \"is_unexpected\": true}}, \"version\": 3}",
-      "--master-name",
-      "client.v8.fyi",
-      "--builder-name",
-      "V8-Blink Mac",
-      "--build-number",
-      "571",
-      "--test-type",
-      "webkit_layout_tests (without patch)",
-      "--chrome-revision",
-      "43426",
-      "--test-results-server",
-      "test-results.appspot.com"
-    ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
-    "name": "Upload to test-results [webkit_layout_tests (without patch)]"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_layout_test_results.py",
-      "--results-dir",
-      "[START_DIR]/layout-test-results",
-      "--build-dir",
-      "[BUILDER_CACHE]/V8_Blink_Mac/src/out",
-      "--build-number",
-      "571",
-      "--builder-name",
-      "V8-Blink Mac",
-      "--gs-bucket",
-      "gs://chromium-layout-test-archives",
-      "--staging-dir",
-      "[CACHE]/chrome_staging",
-      "--store-latest",
-      "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
-    ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
-    "name": "archive_webkit_tests_results (2)",
-    "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Mac/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Mac/571/layout-test-results.zip@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
