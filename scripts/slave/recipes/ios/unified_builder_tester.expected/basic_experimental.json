@@ -296,33 +296,6 @@
       "python",
       "-u",
       "[CACHE]/builder/src/tools/mb/mb.py",
-      "lookup",
-      "-m",
-      "chromium.fake",
-      "-b",
-      "ios",
-      "--config-file",
-      "[CACHE]/builder/src/tools/mb/mb_config.pyl"
-    ],
-    "cwd": "[CACHE]/builder/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "",
-      "LANDMINES_VERBOSE": "1",
-      "fake env var 1": "fake env value 1",
-      "fake env var 2": "fake env value 2"
-    },
-    "name": "lookup GN args",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.fake",
@@ -341,6 +314,30 @@
       "fake env var 2": "fake env value 2"
     },
     "name": "generate build files (mb)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/Debug-iphonesimulator/args.gn",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "",
+      "LANDMINES_VERBOSE": "1",
+      "fake env var 1": "fake env value 1",
+      "fake env var 2": "fake env value 2"
+    },
+    "infra_step": true,
+    "name": "read GN args",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
   },
   {
     "cmd": [

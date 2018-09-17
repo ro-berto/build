@@ -319,31 +319,6 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/ios/src/tools/mb/mb.py",
-      "lookup",
-      "-m",
-      "chromium.fake",
-      "-b",
-      "ios",
-      "--config-file",
-      "[BUILDER_CACHE]/ios/src/tools/mb/mb_config.pyl"
-    ],
-    "cwd": "[BUILDER_CACHE]/ios/src",
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "",
-      "LANDMINES_VERBOSE": "1"
-    },
-    "name": "lookup GN args",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/ios/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.fake",
@@ -363,6 +338,28 @@
       "LANDMINES_VERBOSE": "1"
     },
     "name": "generate build files (mb)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[BUILDER_CACHE]/ios/src/out/Release-iphoneos/args.gn",
+      "/path/to/tmp/"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "",
+      "LANDMINES_VERBOSE": "1"
+    },
+    "infra_step": true,
+    "name": "read GN args",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
   },
   {
     "cmd": [],
