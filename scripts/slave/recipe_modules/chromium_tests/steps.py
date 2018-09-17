@@ -1442,6 +1442,9 @@ class SwarmingTest(Test):
     """
     raise NotImplementedError()  # pragma: no cover
 
+  def get_task(self, suffix):
+    return self._tasks.get(suffix)
+
   def pre_run(self, api, suffix):
     """Launches the test on Swarming."""
     assert suffix not in self._tasks, (
@@ -2627,10 +2630,11 @@ class MockTest(Test):
     FAILURE = 1
     INFRA_FAILURE = 2
 
-  def __init__(self, name='MockTest',
+  def __init__(self, name='MockTest', target_name=None,
                waterfall_mastername=None, waterfall_buildername=None,
                abort_on_failure=False, has_valid_results=True, failures=None):
     super(MockTest, self).__init__(waterfall_mastername, waterfall_buildername)
+    self._target_name = target_name
     self._abort_on_failure = abort_on_failure
     self._failures = failures or []
     self._has_valid_results = has_valid_results
@@ -2678,3 +2682,7 @@ class MockTest(Test):
   @property
   def abort_on_failure(self):
     return self._abort_on_failure
+
+
+class MockSwarmingTest(SwarmingIsolatedScriptTest, MockTest):
+  pass

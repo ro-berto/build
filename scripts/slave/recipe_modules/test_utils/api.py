@@ -13,6 +13,7 @@ from .util import GTestResults, TestResults
 import DEPS
 JsonOutputPlaceholder = DEPS['json'].api.JsonOutputPlaceholder
 
+
 class TestResultsOutputPlaceholder(JsonOutputPlaceholder):
   def result(self, presentation, test):
     ret = super(TestResultsOutputPlaceholder, self).result(presentation, test)
@@ -137,32 +138,45 @@ class TestUtilsApi(recipe_api.RecipeApi):
                    is different than in the caller (different recipe modules
                    get injected depending on caller's DEPS vs. this module's
                    DEPS)
+                   This must include the 'swarming' recipe module, in order to
+                   use the grouping logic in this method. Unfortunately we can't
+                   import this module in the test_utils module, as it would
+                   cause a circular dependency.
       tests - iterable of objects implementing the Test interface above
       suffix - custom suffix, e.g. "with patch", "without patch" indicating
                context of the test run
     Returns:
       The list of failed tests.
+
+
     """
-    failed_tests = []
+    if not hasattr(caller_api, 'swarming'):
+      self.m.python.failing_step(
+          'invalid caller_api',
+          'caller_api must include the swarming recipe module')
 
+    local_tests = []
+    swarming_tests = []
+    for test in tests:
+      # Some callers don't deps in chromium_tests. That's fine, this is just a
+      # temporary condition for now.
+      is_staging = (
+          hasattr(caller_api, 'chromium_tests') and
+          caller_api.chromium_tests.c and caller_api.chromium_tests.c.staging)
+      if is_staging and isinstance(
+          test, caller_api.chromium_tests.steps.SwarmingTest):
+        swarming_tests.append(test)
+      else:
+        local_tests.append(test)
+
+    groups = [LocalGroup(local_tests), SwarmingGroup(swarming_tests)]
     with self.m.step.nest('test_pre_run'):
-      for t in tests:
-        try:
-          t.pre_run(caller_api, suffix)
-        except caller_api.step.InfraFailure:
-          raise
-        except caller_api.step.StepFailure:
-          failed_tests.append(t)
+      for group in groups:
+        group.pre_run(caller_api, suffix)
 
-    for t in tests:
-      try:
-        t.run(caller_api, suffix)
-      except caller_api.step.InfraFailure:
-        raise
-      except caller_api.step.StepFailure:
-        failed_tests.append(t)
-        if t.abort_on_failure:
-          raise
+    failed_tests = []
+    for group in groups:
+      failed_tests.extend(group.run(caller_api, suffix))
 
     return failed_tests
 
@@ -325,3 +339,138 @@ class TestUtilsApi(recipe_api.RecipeApi):
     The test_results will be an instance of the GTestResults class.
     """
     return GTestResultsOutputPlaceholder(self, add_json_log)
+
+class TestGroup(object):
+  def __init__(self, tests):
+    self._tests = tests
+    self._failed_tests = []
+
+  def pre_run(self, caller_api, suffix): # pragma: no cover
+    """Executes the |pre_run| method of each test.
+
+    Args:
+      caller_api - The api object given by the caller of this module.
+      suffix - The test name suffix.
+    """
+    raise NotImplementedError()
+
+  def run(self, caller_api, suffix): # pragma: no cover
+    """Executes the |run| method of each test.
+
+    Args:
+      caller_api - The api object given by the caller of this module.
+      suffix - The test name suffix.
+    Returns:
+      A list of failed tests.
+    """
+    raise NotImplementedError()
+
+  def _run_func(self, test, test_func, caller_api, suffix, raise_on_failure):
+    """Runs a function on a test, and handles errors appropriately."""
+    try:
+      test_func(caller_api, suffix)
+    except caller_api.step.InfraFailure:
+      raise
+    except caller_api.step.StepFailure:
+      self._failed_tests.append(test)
+      if raise_on_failure and test.abort_on_failure:
+        raise
+
+
+class LocalGroup(TestGroup):
+  def __init__(self, tests):
+    super(LocalGroup, self).__init__(tests)
+
+  def pre_run(self, caller_api, suffix):
+    """Executes the |pre_run| method of each test."""
+    for t in self._tests:
+      self._run_func(t, t.pre_run, caller_api, suffix, False)
+
+  def run(self, caller_api, suffix):
+    """Executes the |run| method of each test."""
+    for t in self._tests:
+      self._run_func(t, t.run, caller_api, suffix, True)
+
+    return self._failed_tests
+
+
+class SwarmingGroup(TestGroup):
+  def __init__(self, tests):
+    super(SwarmingGroup, self).__init__(tests)
+    self._all_task_ids = set()
+    self._task_ids_to_test = {}
+
+  def pre_run(self, caller_api, suffix):
+    """Executes the |pre_run| method of each test."""
+    for t in self._tests:
+      self._run_func(t, t.pre_run, caller_api, suffix, False)
+      task = t.get_task(suffix)
+
+      task_ids = frozenset(task.get_task_ids())
+      self._all_task_ids.update(task_ids)
+      self._task_ids_to_test[task_ids] = t
+
+  def run(self, caller_api, suffix):
+    """Executes the |run| method of each test."""
+    unfinished_tasks = set(self._all_task_ids)
+    attempts = 0
+    while unfinished_tasks:
+      collected = False
+
+      states = caller_api.swarming.get_states(
+          list(unfinished_tasks), suffix=(
+              (' (%s)' % suffix) if suffix else ''))
+      for task_id, state in states.items():
+        if state not in ('PENDING', 'RUNNING'):
+          unfinished_tasks.discard(task_id)
+
+      for task_ids, test in self._task_ids_to_test.items():
+        # Some swarming tasks are done. We want to make sure that all of the
+        # swarming tasks for a test are finished before we run collect on it.
+        # If any task is still unfinished, don't collect the task.
+        if unfinished_tasks.intersection(task_ids):
+          continue
+
+        collected = True
+        self._run_func(test, test.run, caller_api, suffix, True)
+        del self._task_ids_to_test[task_ids]
+
+      # If we collected something, it possible more tasks are waiting to be
+      # collected. Try collecting immediately, rather than sleeping.
+      if collected:
+        continue
+
+      attempts += 1
+      time_to_sleep_sec = 2 ** attempts
+      # Cap the sleep time at 2 minutes. Waiting longer than that could start to
+      # impact the actual cycle time of the builder; if we wait for 16 minutes,
+      # and (potentially) the final task finished one minute into that sleep,
+      # we'd waste 15 minutes of time just sitting there. Ideally this would be
+      # interrupt driven, rather than polling, but that's hard given the current
+      # architecture of recipes.
+      time_to_sleep_sec = min(time_to_sleep_sec, 2 * 60)
+      caller_api.time.sleep(time_to_sleep_sec)
+
+    # Testing this suite is hard, because the step_test_data for get_states
+    # means that it's hard to force it to never return COMPLETED for tasks. This
+    # shouldn't happen anyways, so hopefully not testing this will be fine.
+    if self._task_ids_to_test: # pragma: no cover
+      # Something weird is going on, just collect tasks like normal, and log a
+      # warning.
+      result = caller_api.python.succeeding_step(
+          'swarming tasks.get_states issue', (
+          'swarming tasks.get_states seemed to indicate that all tasks for this'
+          ' build were finished collecting, but the recipe thinks the following'
+          ' tests still need to be collected:\n%s\nSomething is probably wrong'
+          ' with the swarming server. Falling back on the old collection logic.'
+          % ', '.join(
+              test.name for test in self._task_ids_to_test.values())))
+      result.presentation.status = caller_api.step.WARNING
+
+      for task_ids, test in self._task_ids_to_test.items():
+        # We won't collect any already collected tasks, as they're removed from
+        # self._task_ids_to_test
+        self._run_func(test, test.run, caller_api, suffix, True)
+
+    return self._failed_tests
+

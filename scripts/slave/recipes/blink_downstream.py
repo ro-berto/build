@@ -151,6 +151,7 @@ def RunSteps(api):
     api.gclient.apply_config(c)
   for c in bot_config.get('chromium_apply_config', []):
     api.chromium.apply_config(c)
+  api.chromium_tests.set_config('chromium')
 
   # Sync component to current component revision.
   component_revision = api.properties.get('revision') or 'HEAD'

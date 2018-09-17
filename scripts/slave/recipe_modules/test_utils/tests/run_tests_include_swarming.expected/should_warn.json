@@ -1,0 +1,21 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(1)"
+    ],
+    "name": "invalid caller_api",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@caller_api must include the swarming recipe module@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "reason": "Step('invalid caller_api') failed with return_code 1",
+    "recipe_result": null,
+    "status_code": 1
+  }
+]

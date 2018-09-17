@@ -13,6 +13,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/runtime',
+    'swarming',
 ]
 
 CUSTOM_BUILDERS = {

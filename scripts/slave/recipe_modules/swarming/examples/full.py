@@ -147,6 +147,7 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
     # build.
     api.swarming.get_states(task_ids)
     api.swarming.get_states(task_ids)
+    api.swarming.get_states(task_ids)
     return
 
   # Wait for all tasks to complete.
