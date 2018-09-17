@@ -87,13 +87,12 @@ def setup_host_x86(api,
           'TARGET_BUILD_TYPE': 'release',
           'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
           'ANDROID_BUILD_TOP': build_top_dir,
-          'JACK_SERVER': 'false',
-          'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
-                                                    'tools', 'jacks')),
           'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
-                  api.path.pathsep + '%(PATH)s',
+                  api.path.pathsep +
+                  str(build_top_dir.join('prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
+                  api.path.pathsep +
+                  '%(PATH)s',
           'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
-          'ART_TEST_FULL': 'false',
           'ART_TEST_KEEP_GOING': 'true' }
 
   if bitness == 32:
@@ -233,11 +232,9 @@ def setup_target(api,
          'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
          'ANDROID_SERIAL': serial,
          'ANDROID_BUILD_TOP': build_top_dir,
-         'JACK_SERVER': 'false',
-         'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk', 'tools',
-                                                   'jacks')),
+         'PATH': str(build_top_dir.join('prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
+                 api.path.pathsep + '%(PATH)s',
          'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
-         'ART_TEST_FULL': 'false',
          'USE_DEX2OAT_DEBUG': 'false',
          'ART_BUILD_HOST_DEBUG': 'false',
          'ART_TEST_KEEP_GOING': 'true'}
@@ -279,7 +276,10 @@ def setup_target(api,
   test_env = gtest_env.copy()
   test_env.update(
       { 'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
-                api.path.pathsep + '%(PATH)s' })
+                api.path.pathsep +
+                str(build_top_dir.join('prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
+                api.path.pathsep +
+                '%(PATH)s' })
 
   # Decrease the number of parallel tests, as some tests eat lots of memory.
   if debug and device == 'fugu':
