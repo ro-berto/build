@@ -182,10 +182,6 @@ SPEC = {
         'platform': 'linux',
       },
       'archive_build': False,
-      'swarming_dimensions': {
-        'cpu': 'armv7l-32',
-        'os': 'Ubuntu-14.04',
-      },
     },
     # There are no slaves for the following two "Dummy Builders" and they
     # do not appear on the actual continuous waterfall; this configuration
