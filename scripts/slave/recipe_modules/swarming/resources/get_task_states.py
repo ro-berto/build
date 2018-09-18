@@ -26,6 +26,7 @@ def main():
       'task_id=%s' % task for task in args.task_id)
 
   cmd = [
+      sys.executable,
       args.swarming_py_path,
       'query',
       '-S', args.swarming_server,
