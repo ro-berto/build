@@ -100,7 +100,7 @@ SPEC = {
                                          'parent_got_cr_revision')],
       'gclient_apply_config': ['android'],
       'gclient_config': 'chromium_webrtc_tot',
-      'parent_buildername': 'Android Builder (dbg)',
+      'parent_buildername': 'WebRTC Chromium FYI Android Builder (dbg)',
       'root_devices': True,
       'set_component_rev': {
         'name': 'src/third_party/webrtc',
@@ -131,7 +131,7 @@ SPEC = {
                                          'parent_got_cr_revision')],
       'gclient_apply_config': ['android'],
       'gclient_config': 'chromium_webrtc_tot',
-      'parent_buildername': 'Android Builder ARM64 (dbg)',
+      'parent_buildername': 'WebRTC Chromium FYI Android Builder ARM64 (dbg)',
       'root_devices': True,
       'set_component_rev': {
         'name': 'src/third_party/webrtc',
@@ -199,7 +199,7 @@ SPEC = {
                                          'parent_got_cr_revision')],
       'gclient_apply_config': ['webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc_tot',
-      'parent_buildername': 'Linux Builder',
+      'parent_buildername': 'WebRTC Chromium FYI Linux Builder',
       'set_component_rev': {
         'name': 'src/third_party/webrtc',
         'rev_str': '%s'
@@ -265,7 +265,7 @@ SPEC = {
                                          'parent_got_cr_revision')],
       'gclient_apply_config': ['webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc_tot',
-      'parent_buildername': 'Mac Builder',
+      'parent_buildername': 'WebRTC Chromium FYI Mac Builder',
       'set_component_rev': {
         'name': 'src/third_party/webrtc',
         'rev_str': '%s'
@@ -331,7 +331,7 @@ SPEC = {
                                          'parent_got_cr_revision')],
       'gclient_apply_config': ['webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc_tot',
-      'parent_buildername': 'Win Builder',
+      'parent_buildername': 'WebRTC Chromium FYI Win Builder',
       'set_component_rev': {
         'name': 'src/third_party/webrtc',
         'rev_str': '%s'
@@ -357,7 +357,7 @@ SPEC = {
                                          'parent_got_cr_revision')],
       'gclient_apply_config': ['webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc_tot',
-      'parent_buildername': 'Win Builder',
+      'parent_buildername': 'WebRTC Chromium FYI Win Builder',
       'set_component_rev': {
         'name': 'src/third_party/webrtc',
         'rev_str': '%s'
@@ -383,7 +383,7 @@ SPEC = {
                                          'parent_got_cr_revision')],
       'gclient_apply_config': ['webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc_tot',
-      'parent_buildername': 'Win Builder',
+      'parent_buildername': 'WebRTC Chromium FYI Win Builder',
       'set_component_rev': {
         'name': 'src/third_party/webrtc',
         'rev_str': '%s'
