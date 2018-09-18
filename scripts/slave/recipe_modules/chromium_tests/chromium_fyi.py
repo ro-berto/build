@@ -822,7 +822,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder_tester',
-      'test_results_config': 'staging_server',
       'testing': { 'platform': 'linux', },
     },
     'Mojo Linux': {
@@ -834,7 +833,6 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder_tester',
-      'test_results_config': 'staging_server',
       'testing': {
         'platform': 'linux',
       },
@@ -849,7 +847,6 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'builder_tester',
-      'test_results_config': 'staging_server',
       'testing': { 'platform': 'win', },
     },
 
