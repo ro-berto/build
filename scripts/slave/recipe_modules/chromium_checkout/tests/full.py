@@ -44,7 +44,7 @@ def GenTests(api):
     return api.buildbucket.try_build(
         project='chromium',
         builder='linux',
-        git_repo='https://chromium.googlesource.com/src')
+        git_repo='https://chromium.googlesource.com/chromium/src')
 
   yield (
       api.test('buildbot_annotated_run') +

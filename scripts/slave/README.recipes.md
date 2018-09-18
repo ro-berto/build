@@ -1345,7 +1345,7 @@ Uploads android apks for functional bisects.
 
 #### **class [ChromiumCheckoutApi](/scripts/slave/recipe_modules/chromium_checkout/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/chromium_checkout/api.py#83)(self, bot_config, root_solution_revision=None, disable_syntax_validation=False):**
+&mdash; **def [ensure\_checkout](/scripts/slave/recipe_modules/chromium_checkout/api.py#84)(self, bot_config, root_solution_revision=None, disable_syntax_validation=False):**
 
 Wrapper for bot_update.ensure_checkout with chromium-specific additions.
     
@@ -5521,7 +5521,7 @@ Checks that properties get to recipes from remote_run properly
 
 [DEPS](/scripts/slave/recipes/run_presubmit.py#5): [v8](#recipe_modules-v8), [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [depot\_tools/presubmit][depot_tools/recipe_modules/presubmit], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/run_presubmit.py#109)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/run_presubmit.py#108)(api):**
 ### *recipes* / [swarming/deterministic\_build](/scripts/slave/recipes/swarming/deterministic_build.py)
 
 [DEPS](/scripts/slave/recipes/swarming/deterministic_build.py#14): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [isolate](#recipe_modules-isolate), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]

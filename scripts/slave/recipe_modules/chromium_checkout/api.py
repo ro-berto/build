@@ -67,16 +67,17 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
     if not self.m.tryserver.gerrit_change:
       # There is no patch to begin with.
       return []
-    patch_root = self.m.gclient.calculate_patch_root(
-        patch_project=self.m.properties.get('patch_project'),
-        patch_repo=self.m.properties.get('patch_repository_url'))
+    patch_root = self.m.gclient.get_gerrit_patch_root()
+    assert patch_root, (
+        'local path is not configured for %s' %
+            self.m.tryserver.gerrit_change_repo_url)
     if not cwd and self.working_dir:
       cwd = self.working_dir.join(patch_root)
     with self.m.context(cwd=cwd):
       files = self.m.tryserver.get_files_affected_by_patch(patch_root)
     for i, path in enumerate(files):
       path = str(path)
-      assert path.startswith(relative_to)
+      assert path.startswith(relative_to), (path, relative_to)
       files[i] = path[len(relative_to):]
     return files
 

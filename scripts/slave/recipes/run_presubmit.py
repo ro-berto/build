@@ -37,8 +37,7 @@ def _RunStepsInternal(api):
 
   bot_update_step = api.bot_update.ensure_checkout(
       gclient_config=gclient_config)
-  relative_root = api.gclient.calculate_patch_root(
-      api.properties['patch_project'],
+  relative_root = api.gclient.get_gerrit_patch_root(
       gclient_config=gclient_config).rstrip('/')
   got_revision_properties = api.bot_update.get_project_revision_properties(
       relative_root, gclient_config or api.gclient.c)
