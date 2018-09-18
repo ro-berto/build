@@ -974,9 +974,10 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   @_with_chromium_layout
   def run_mb_cmd(self, name, mb_command, mastername, buildername,
-                 additional_args=None, env=None,
                  mb_path=None, mb_config_path=None,
-                 **kwargs):
+                 phase=None, use_goma=True,
+                 android_version_code=None, android_version_name=None,
+                 additional_args=None, **kwargs):
     """Run an arbitrary mb command.
 
     Args:
@@ -1011,6 +1012,26 @@ class ChromiumApi(recipe_api.RecipeApi):
         '--config-file', mb_config_path,
     ]
 
+    if phase is not None:
+      args += [ '--phase', str(phase) ]
+
+    if use_goma:
+      goma_dir = self.c.compile_py.goma_dir
+      # TODO(gbeaty): remove this weird goma fallback or cover it
+      if not goma_dir:  # pragma: no cover
+        # This method defaults to use_goma=True, which doesn't necessarily
+        # match build-side configuration. However, MB is configured
+        # src-side, and so it might be actually using goma.
+        self.ensure_goma()
+        goma_dir = self.c.compile_py.goma_dir
+      if goma_dir:
+        args += ['--goma-dir', goma_dir]
+
+    if android_version_code:
+      args += ['--android-version-code=%s' % android_version_code]
+    if android_version_name:
+      args += ['--android-version-name=%s' % android_version_name]
+
     step_kwargs = {
         'name': name,
         'script': mb_path.join('mb.py'),
@@ -1029,7 +1050,23 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     # If an environment was provided, copy it so that we don't modify the
     # caller's data
-    env = dict(env) if env else {}
+    # This runs with an almost-bare env being passed along, so we get a clean
+    # environment without any GYP_DEFINES being present to cause confusion.
+    env = self.get_env()
+
+    if use_goma:
+      # Do not allow goma to invoke local compiler.
+      # GOMA_USE_LOCAL is passed to gomacc from ninja.
+      # And in windows, env var for ninja is specified in `gn gen` step.
+      # We don't need to disallow local compile,
+      # but we want to utilize remote cpu resource more.
+      env['GOMA_USE_LOCAL'] = 'false'
+
+    if self.c.use_gyp_env and self.c.gyp_env.GYP_MSVS_VERSION:
+      # TODO(machenbach): Remove this as soon as it's not read anymore by
+      # vs_toolchain.py (currently called by gn).
+      env['GYP_MSVS_VERSION'] = self.c.gyp_env.GYP_MSVS_VERSION
+
     env.update(self.m.context.env)
 
     with optional_system_python:
@@ -1087,55 +1124,21 @@ class ChromiumApi(recipe_api.RecipeApi):
       for isolate_map_path in self.c.project_generator.isolate_map_paths:
         args += ['--isolate-map-file', isolate_map_path]
 
-    if phase is not None:
-      args += [ '--phase', str(phase) ]
-
-    if use_goma:
-      goma_dir = self.c.compile_py.goma_dir
-      # TODO(phajdan.jr): remove this weird goma fallback or cover it
-      if not goma_dir:  # pragma: no cover
-        # This method defaults to use_goma=True, which doesn't necessarily
-        # match build-side configuration. However, MB is configured
-        # src-side, and so it might be actually using goma.
-        self.ensure_goma()
-        goma_dir = self.c.compile_py.goma_dir
-      if goma_dir:
-        args += ['--goma-dir', goma_dir]
-
     if isolated_targets:
       sorted_isolated_targets = sorted(set(isolated_targets))
       # TODO(dpranke): Change the MB flag to '--isolate-targets-file', maybe?
       data = '\n'.join(sorted_isolated_targets) + '\n'
       args += ['--swarming-targets-file', self.m.raw_io.input_text(data)]
 
-    if android_version_code:
-      args += ['--android-version-code=%s' % android_version_code]
-    if android_version_name:
-      args += ['--android-version-name=%s' % android_version_name]
-
     args += [build_dir]
-
-    # This runs with an almost-bare env being passed along, so we get a clean
-    # environment without any GYP_DEFINES being present to cause confusion.
-    env = self.get_env()
-
-    if use_goma:
-      # Do not allow goma to invoke local compiler.
-      # GOMA_USE_LOCAL is passed to gomacc from ninja.
-      # And in windows, env var for ninja is specified in `gn gen` step.
-      # We don't need to disallow local compile,
-      # but we want to utilize remote cpu resource more.
-      env['GOMA_USE_LOCAL'] = 'false'
-
-    if self.c.use_gyp_env and self.c.gyp_env.GYP_MSVS_VERSION:
-      # TODO(machenbach): Remove this as soon as it's not read anymore by
-      # vs_toolchain.py (currently called by gn).
-      env['GYP_MSVS_VERSION'] = self.c.gyp_env.GYP_MSVS_VERSION
 
     name = name or 'generate_build_files'
     result = self.run_mb_cmd(name, mb_command, mastername, buildername,
-                             additional_args=args, env=env,
                              mb_path=mb_path, mb_config_path=mb_config_path,
+                             phase=phase, use_goma=use_goma,
+                             android_version_code=android_version_code,
+                             android_version_name=android_version_name,
+                             additional_args=args,
                              **kwargs)
 
     # Comes after self.m.python so the log appears in the correct step result.
@@ -1180,46 +1183,16 @@ class ChromiumApi(recipe_api.RecipeApi):
     """
     mb_args = []
 
-    # This runs with an almost-bare env being passed along, so we get a clean
-    # environment without any GYP_DEFINES being present to cause confusion.
-    env = self.get_env()
 
     if self.c.project_generator.isolate_map_paths:
       for isolate_map_path in self.c.project_generator.isolate_map_paths:
         mb_args += ['--isolate-map-file', isolate_map_path]
-
-    if phase is not None:
-      mb_args += [ '--phase', str(phase) ]
-
-    if use_goma:
-      goma_dir = self.c.compile_py.goma_dir
-      # TODO(gbeaty): remove this weird goma fallback or cover it
-      if not goma_dir:  # pragma: no cover
-        # This method defaults to use_goma=True, which doesn't necessarily
-        # match build-side configuration. However, MB is configured
-        # src-side, and so it might be actually using goma.
-        self.ensure_goma()
-        goma_dir = self.c.compile_py.goma_dir
-      if goma_dir:
-        mb_args += ['--goma-dir', goma_dir]
-
-      # Do not allow goma to invoke local compiler.
-      # GOMA_USE_LOCAL is passed to gomacc from ninja.
-      # And in windows, env var for ninja is specified in `gn gen` step.
-      # We don't need to disallow local compile,
-      # but we want to utilize remote cpu resource more.
-      env['GOMA_USE_LOCAL'] = 'false'
 
     if isolated_targets:
       sorted_isolated_targets = sorted(set(isolated_targets))
       # TODO(dpranke): Change the MB flag to '--isolate-targets-file', maybe?
       data = '\n'.join(sorted_isolated_targets) + '\n'
       mb_args += ['--swarming-targets-file', self.m.raw_io.input_text(data)]
-
-    if android_version_code:
-      mb_args += ['--android-version-code=%s' % android_version_code]
-    if android_version_name:
-      mb_args += ['--android-version-name=%s' % android_version_name]
 
     if not build_dir:
       out_dir = 'out'
@@ -1229,16 +1202,14 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     mb_args += [build_dir]
 
-    if self.c.use_gyp_env and self.c.gyp_env.GYP_MSVS_VERSION:
-      # TODO(machenbach): Remove this as soon as it's not read anymore by
-      # vs_toolchain.py (currently called by gn).
-      env['GYP_MSVS_VERSION'] = self.c.gyp_env.GYP_MSVS_VERSION
-
     name = name or 'generate_build_files'
     result = self.run_mb_cmd(
         name, 'gen', mastername, buildername,
-        additional_args=mb_args, env=env,
         mb_path=mb_path, mb_config_path=mb_config_path,
+        phase=phase, use_goma=use_goma,
+        android_version_code=android_version_code,
+        android_version_name=android_version_name,
+        additional_args=mb_args,
         **kwargs)
 
     if isolated_targets:
