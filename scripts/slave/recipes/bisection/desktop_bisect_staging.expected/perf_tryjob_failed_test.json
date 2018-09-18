@@ -27,7 +27,7 @@
       "--limit",
       "1",
       "-p",
-      "change=456789",
+      "change=123456",
       "-o",
       "ALL_REVISIONS",
       "-o",
@@ -45,8 +45,8 @@
       "@@@STEP_LOG_LINE@json.output@    \"branch\": \"master\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"12\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/89/456789/12\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"7\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/56/123456/7\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -72,7 +72,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium@refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/chromium/src@refs/changes/56/123456/7",
       "--revision",
       "src@HEAD",
       "--disable-syntax-validation"
@@ -382,7 +382,7 @@
       "cr-buildbucket.appspot.com",
       "-service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
-      "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf-tryjob/Linux Builder/full-build-linuxf27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_123456.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"patch_gerrit_url\\\": \\\"https://chromium-review.googlesource.com\\\", \\\"patch_issue\\\": 456789, \\\"patch_project\\\": \\\"chromium\\\", \\\"patch_ref\\\": \\\"refs/changes/89/456789/12\\\", \\\"patch_repository_url\\\": \\\"https://chromium.googlesource.com/chromium\\\", \\\"patch_set\\\": 12, \\\"patch_storage\\\": \\\"gerrit\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"buildset:patch/gerrit/chromium-review.googlesource.com/456789/12\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf-tryjob/Linux Builder/full-build-linuxf27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_123456.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"patch_gerrit_url\\\": \\\"https://chromium-review.googlesource.com\\\", \\\"patch_issue\\\": 456789, \\\"patch_project\\\": \\\"chromium\\\", \\\"patch_ref\\\": \\\"refs/changes/89/456789/12\\\", \\\"patch_repository_url\\\": \\\"https://chromium.googlesource.com/chromium\\\", \\\"patch_set\\\": 12, \\\"patch_storage\\\": \\\"gerrit\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"buildset:patch/gerrit/chromium-review.googlesource.com/123456/7\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "infra_step": true,
@@ -828,7 +828,7 @@
       "cr-buildbucket.appspot.com",
       "-service-account-json",
       "/creds/service_accounts/service-account-chromium-bisect.json",
-      "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linuxf27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"buildset:patch/gerrit/chromium-review.googlesource.com/456789/12\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"master.tryserver.chromium.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"linux_perf_bisect_builder\\\", \\\"properties\\\": {\\\"build_archive_url\\\": \\\"gs://chrome-perf/Linux Builder/full-build-linuxf27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.zip\\\", \\\"clobber\\\": true, \\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\"}}\", \"tags\": [\"builder:linux_perf_bisect_builder\", \"buildset:patch/gerrit/chromium-review.googlesource.com/123456/7\", \"master:tryserver.chromium.perf\", \"parent_buildername:linux_perf_bisect\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "infra_step": true,
