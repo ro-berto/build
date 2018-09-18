@@ -38,8 +38,6 @@
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_deps': {'sdk/tools/swarming_client': 'https://chromium.googlesource.com/infra/luci/client-py.git@88229872dd17e71658fe96763feaa77915d8cbd6'}, 'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://dart.googlesource.com/sdk.git'}]",
-      "--patch_root",
-      "sdk",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",

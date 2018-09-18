@@ -6,8 +6,6 @@
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': False, 'name': 'sdk', 'url': 'https://dart.googlesource.com/sdk.git'}]\ntarget_os = ['android']",
-      "--patch_root",
-      "sdk",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",

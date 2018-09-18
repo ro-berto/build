@@ -6,8 +6,6 @@
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'crashpad', 'url': 'https://chromium.googlesource.com/crashpad/crashpad.git'}]\ntarget_os = ['win']",
-      "--patch_root",
-      "crashpad",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",

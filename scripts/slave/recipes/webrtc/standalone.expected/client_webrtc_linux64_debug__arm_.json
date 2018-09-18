@@ -6,8 +6,6 @@
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]\ntarget_cpu = ['arm64']",
-      "--patch_root",
-      "src",
       "--revision_mapping_file",
       "{\"got_revision\": \"src\"}",
       "--git-cache-dir",
