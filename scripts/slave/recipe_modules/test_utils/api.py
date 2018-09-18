@@ -415,6 +415,14 @@ class SwarmingGroup(TestGroup):
     unfinished_tasks = set(self._all_task_ids)
     attempts = 0
     while unfinished_tasks:
+      if len(self._task_ids_to_test.values()) == 1:
+        # We only have one test left to collect, just collect it normally.
+        key = list(self._task_ids_to_test.keys())[0]
+        test = self._task_ids_to_test[key]
+        self._run_func(test, test.run, caller_api, suffix, True)
+        del self._task_ids_to_test[key]
+        break
+
       collected = False
 
       states = caller_api.swarming.get_states(

@@ -90,6 +90,33 @@ def GenTests(api):
   yield (
       # Tests that test_utils will poll swarming several times, waiting for the
       # task to complete.
+      api.test('success_swarming_one_task_still_pending') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          bot_id='test_bot_id',
+          buildnumber=123,
+          test_name='base_unittests',
+          test_swarming=True,
+          swarm_hashes={
+            'base_unittests': '[dummy hash for base_unittests]',
+            'base_unittests_2': '[dummy hash for base_unittests_2]',
+          }) +
+      api.swarming.get_states([
+          ['PENDING', 'PENDING',],
+          ['PENDING', 'COMPLETED',]]) +
+      # There's no call to get_states after there's only one test left pending,
+      # as the test_utils logic just calls the regular collect logic on that
+      # test.
+      api.post_process(post_process.DoesNotRun, 'sleep') +
+      api.post_process(post_process.MustRun, 'base_unittests') +
+      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      # Tests that test_utils will poll swarming several times, waiting for the
+      # task to complete.
       api.test('success_swarming_long_pending') +
       api.properties(
           mastername='test_mastername',
@@ -104,14 +131,14 @@ def GenTests(api):
           }) +
       api.swarming.get_states([
           ['PENDING', 'PENDING',],
-          ['PENDING', 'COMPLETED',],
-          ['PENDING'],
-          ['PENDING'],
-          ['PENDING'],
-          ['PENDING'],
-          ['PENDING']]) +
+          ['PENDING', 'PENDING',],
+          ['PENDING', 'PENDING',],
+          ['PENDING', 'PENDING',],
+          ['PENDING', 'PENDING',],
+          ['PENDING', 'PENDING',],
+          ['COMPLETED', 'COMPLETED',]]) +
+      api.post_process(post_process.MustRun, 'sleep') +
       api.post_process(post_process.StatusCodeIn, 0) +
-      api.post_process(post_process.Filter('sleep')) +
       api.post_process(post_process.DropExpectation)
   )
 
