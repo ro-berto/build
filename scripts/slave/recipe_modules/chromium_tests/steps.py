@@ -228,7 +228,7 @@ class Test(object):
       patch', 'without patch', or 'retry with patch'.
 
     Returns:
-      A set of tests to retry. Returning None means all tests should be run.
+      A list of tests to retry. Returning None means all tests should be run.
     """
     # For the initial invocation, run every test in the test suite.
     if suffix == 'with patch':
@@ -238,14 +238,14 @@ class Test(object):
     # When a patch is adding a new test (and it fails), the test runner is
     # required to just ignore the unknown test.
     if suffix == 'without patch':
-      return set(self.failures(api, 'with patch'))
+      return sorted(self.failures(api, 'with patch'))
 
     # For the third invocation, run tests that failed in 'with patch', but not
     # in 'without patch'.
     if suffix == 'retry with patch':
       initial_failures = self.failures(api, 'with patch')
       persistent_failures = self.failures(api, 'without patch')
-      return set(initial_failures) - set(persistent_failures)
+      return sorted(set(initial_failures) - set(persistent_failures))
 
     # If we don't recognize the step, then return None. This makes it easy for
     # bugs to slip through, but this matches the previous behavior. Importantly,
