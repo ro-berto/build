@@ -73,9 +73,18 @@ def RunGN(api, *args):
   api.step('gn %s' % ' '.join(args), gn_cmd)
 
 
+# The relative_paths parameter is a list of strings and pairs of strings.
+# If the path is a string, then it will be used as the source filename,
+# and its basename will be used as the destination filename in the archive.
+# If the path is a pair, then the first element will be used as the source
+# filename, and the second element will be used as the destination filename
+# in the archive.
 def AddFiles(api, pkg, relative_paths):
   for path in relative_paths:
-    pkg.add_file(pkg.root.join(path), archive_name=api.path.basename(path))
+    if isinstance(path, tuple):
+      pkg.add_file(pkg.root.join(path[0]), archive_name=path[1])
+    else:
+      pkg.add_file(pkg.root.join(path), archive_name=api.path.basename(path))
 
 
 def UploadArtifacts(api, platform, file_paths, archive_name='artifacts.zip'):
@@ -242,17 +251,29 @@ def BuildLinuxAndroid(api):
 def BuildLinux(api):
   RunGN(api, '--runtime-mode', 'debug')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
+  RunGN(api, '--runtime-mode', 'release', '--dynamic')
   RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
   Build(api, 'host_debug_unopt')
   Build(api, 'host_debug')
+  Build(api, 'host_dynamic_release')
   Build(api, 'android_release_vulkan')
   RunHostTests(api, 'out/host_debug_unopt')
   UploadArtifacts(api, 'linux-x64', [
     ICU_DATA_PATH,
     'out/host_debug_unopt/flutter_tester',
+    # Flutter debug and dynamic profile modes for all target platforms use Dart
+    # RELEASE VM snapshot that comes from host debug build and has the metadata
+    # related to development tools.
     'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
     'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
+    # Flutter dynamic release mode for all target platforms uses Dart PRODUCT
+    # VM snapshot from host dynamic release build that strips out the metadata
+    # related to development tools.
+    ('out/host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin',
+     'product_isolate_snapshot.bin'),
+    ('out/host_dynamic_release/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+     'product_vm_isolate_snapshot.bin'),
   ])
   UploadArtifacts(api, 'linux-x64', [
     'out/host_debug/flutter_embedder.h',
