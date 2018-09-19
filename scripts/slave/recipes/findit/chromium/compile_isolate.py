@@ -24,8 +24,10 @@ DEPS = [
     'chromium_checkout',
     'chromium_swarming',
     'chromium_tests',
+    'commit_position',
     'depot_tools/bot_update',
     'depot_tools/gclient',
+    'depot_tools/git',
     'findit',
     'isolate',
     'recipe_engine/context',
@@ -37,6 +39,8 @@ DEPS = [
     'recipe_engine/raw_io',
     'recipe_engine/step',
     'swarming',
+    'test_results',
+    'test_utils',
 ]
 
 
