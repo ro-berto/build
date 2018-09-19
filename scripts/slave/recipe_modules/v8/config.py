@@ -44,10 +44,5 @@ def stress_incremental_marking(c):
 
 
 @config_ctx()
-def verbose(c):
-  c.testing.test_args.append('--verbose')
-
-
-@config_ctx()
 def verify_heap_skip_remembered_set(c):
   c.testing.test_args.append('--extra-flags=--verify-heap-skip-remembered-set')

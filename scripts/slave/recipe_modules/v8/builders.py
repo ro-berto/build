@@ -1647,7 +1647,6 @@ BUILDERS = {
         'triggers_proxy': True,
       },
       'V8 Android Arm64 - N5X': {
-        'v8_apply_config': ['verbose'],
         'tests': [
           V8Testing(3),
           Test262(5),
