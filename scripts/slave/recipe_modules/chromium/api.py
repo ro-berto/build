@@ -206,9 +206,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     # Note that we have to call gclient.set_config() and apply_config() *after*
     # calling chromium.set_config(), above, because otherwise the chromium
     # call would reset the gclient config to its defaults.
-    self.m.gclient.set_config(
-        'chromium',
-        PATCH_PROJECT=self.m.properties.get('patch_project'))
+    self.m.gclient.set_config('chromium')
     for c in bot_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
 
