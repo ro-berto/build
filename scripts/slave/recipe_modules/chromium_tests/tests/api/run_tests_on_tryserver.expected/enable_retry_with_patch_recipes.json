@@ -320,6 +320,10 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "name": "base_unittests (retry with patch summary)"
+    "name": "base_unittests (retry with patch summary)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
   }
 ]

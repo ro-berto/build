@@ -220,18 +220,6 @@ class Test(object):
       data['patched'] = suffix in ('with patch', 'retry with patch')
     return data
 
-  def failures_or_invalid_results(self, api, suffix):
-    """If results are valid, returns the test failures.
-
-    Returns: A tuple (valid_results, failures).
-      valid_results: A Boolean indicating whether results are valid.
-      failures: A dictionary whose keys are failures. Only valid if
-                valid_results is True.
-    """
-    if self.has_valid_results(api, suffix):
-      return (True, self.failures(api, suffix))
-    return (False, None)
-
   def tests_to_retry(self, api, suffix):
     """Computes the tests to run on an invocation of the test suite.
 
@@ -250,26 +238,13 @@ class Test(object):
     # When a patch is adding a new test (and it fails), the test runner is
     # required to just ignore the unknown test.
     if suffix == 'without patch':
-      # Invalid results should be treated as if every test failed.
-      valid_results, failures = self.failures_or_invalid_results(api,
-                                                                 'with patch')
-      return sorted(failures) if valid_results else None
+      return sorted(self.failures(api, 'with patch'))
 
     # For the third invocation, run tests that failed in 'with patch', but not
     # in 'without patch'.
     if suffix == 'retry with patch':
-      # Invalid results should be treated as if every test failed.
-      valid_results, initial_failures = self.failures_or_invalid_results(
-          api, 'with patch')
-      if not valid_results:
-        return None
-
-      # Invalid results without patch should be ignored.
-      valid_results, persistent_failures = self.failures_or_invalid_results(
-          api, 'without patch')
-      if not valid_results:
-        persistent_failures = []
-
+      initial_failures = self.failures(api, 'with patch')
+      persistent_failures = self.failures(api, 'without patch')
       return sorted(set(initial_failures) - set(persistent_failures))
 
     # If we don't recognize the step, then return None. This makes it easy for

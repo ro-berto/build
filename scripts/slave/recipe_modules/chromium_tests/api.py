@@ -873,8 +873,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     with self.wrap_chromium_tests(bot_config, tests):
       # Run the test. The isolates have already been created.
-      failing_tests = self.m.test_utils.run_tests_with_patch(
-          self.m, tests, invalid_is_fatal=not enable_retry_with_patch)
+      failing_tests = self.m.test_utils.run_tests_with_patch(self.m, tests)
 
       # If there are no failures, we're done. Success!
       if not failing_tests:
