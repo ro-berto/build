@@ -171,8 +171,6 @@
       "--tag",
       "os:win",
       "--tag",
-      "rietveld:https://codereview.chromium.org/123/#ps1001",
-      "--tag",
       "stepname:hello_world on Windows-7-SP1",
       "--verbose",
       "--idempotent",

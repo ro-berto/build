@@ -6,6 +6,7 @@ import json
 
 DEPS = [
   'isolate',
+  'recipe_engine/buildbucket',
   'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -244,46 +245,28 @@ def GenTests(api):
           service_account='test@example.com'))
 
   yield (
-      api.test('rietveld_trybot') +
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.properties(
-          rietveld='https://codereview.chromium.org',
-          issue='123',
-          patchset='1001'))
-
-  yield (
       api.test('gerrit_trybot') +
+      api.buildbucket.try_build(
+          project='chromium',
+          builder='linux',
+          git_repo='https://chromium.googlesource.com/chromium/src') +
       api.step_data(
           'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.properties(
-          patch_gerrit_url='https://chromium-review.googlesource.com',
-          patch_issue='123',
-          patch_set='1'))
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')))
 
   yield (
       api.test('show_shards_in_collect_step') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.properties(
-          rietveld='https://codereview.chromium.org',
-          issue='123',
-          patchset='1001',
-          show_shards_in_collect_step=True))
+      api.properties(show_shards_in_collect_step=True))
 
   yield (
       api.test('show_isolated_out_in_collect_step') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.properties(
-          rietveld='https://codereview.chromium.org',
-          issue='123',
-          patchset='1001',
-          show_isolated_out_in_collect_step=False))
+      api.properties(show_isolated_out_in_collect_step=False))
 
   data = {
     'shards': [

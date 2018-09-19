@@ -750,21 +750,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     if self.m.properties.get('bot_id'):
       tags.add('slavename:%s' % self.m.properties['bot_id'])
     tags.add('stepname:%s' % self.get_step_name('', task))
-    rietveld = self.m.properties.get('rietveld')
-    issue = self.m.properties.get('issue')
-    patchset = self.m.properties.get('patchset')
-    if rietveld and issue and patchset:
-      # The expected format is strict to the usage of buildbot properties on the
-      # Chromium Try Server. Fix if necessary.
-      tags.add('rietveld:%s/%s/#ps%s' % (rietveld, issue, patchset))
-    gerrit_url = self.m.properties.get('patch_gerrit_url')
-    gerrit_issue = self.m.properties.get('patch_issue')
-    gerrit_patchset = self.m.properties.get('patch_set')
-    if gerrit_url and gerrit_issue and gerrit_patchset:
-      # Ditto on the previous comment. The properties and/or url format may
-      # evolve. Fix if necessary.
-      tags.add(
-          'gerrit:%s/c/%s/%s' %(gerrit_url, gerrit_issue, gerrit_patchset))
+    for cl in self.m.buildbucket.build.input.gerrit_changes:
+      tags.add('gerrit:https://%s/c/%s/%s' % (cl.host, cl.change, cl.patchset))
     for tag in sorted(tags):
       assert ':' in tag, tag
       args.extend(['--tag', tag])
