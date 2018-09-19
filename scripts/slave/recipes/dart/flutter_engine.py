@@ -35,6 +35,10 @@ def AnalyzeDartUI(api, checkout_dir):
   with api.context(cwd=checkout_dir):
     api.step('analyze dart_ui', ['/bin/bash', 'flutter/ci/analyze.sh'])
 
+def TestEngine(api, checkout_dir):
+  with api.context(cwd=checkout_dir.join('flutter')):
+    api.step('test engine', ['/bin/bash', 'ci/test.sh'])
+
 def BuildLinuxAndroidx86(api, checkout_dir):
   for x86_variant in ['x64', 'x86']:
     RunGN(api, checkout_dir, '--android', '--android-cpu=' + x86_variant)
@@ -150,6 +154,7 @@ def RunSteps(api):
       # The context adds prebuilt dart-sdk to the path.
       with api.context(env=engine_env):
         AnalyzeDartUI(api, checkout_dir)
+        TestEngine(api, checkout_dir)
         TestObservatory(api, checkout_dir)
         BuildLinuxAndroidArm(api, checkout_dir)
         BuildLinuxAndroidx86(api, checkout_dir)
