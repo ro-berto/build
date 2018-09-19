@@ -785,8 +785,8 @@ class Failure(object):
           self.test.task.dimensions),
       # The isolated name is either specified in the test configurations or
       # corresponds to the name of the test suite.
-      'isolated_name': test_config.get(
-          'isolated_target', test_config['tests'][0]),
+      'isolated_name': test_config.get('isolated_target') or
+                       test_config['tests'][0],
       # Full qualified test name that failed (e.g. mjsunit/foo/bar).
       'test_name': self.results[0]['name'],
       # Release or Debug.
