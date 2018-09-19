@@ -42,6 +42,32 @@
       "python",
       "-u",
       "None/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "test_mastername",
+      "-b",
+      "test_buildername",
+      "--config-file",
+      "None/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client"
+    ],
+    "cwd": "None",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "lookup GN args",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/tools/mb/mb.py",
       "gen",
       "-m",
       "test_mastername",
@@ -59,26 +85,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate build files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "None/out/Debug/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "read GN args",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
   },
   {
     "cmd": [

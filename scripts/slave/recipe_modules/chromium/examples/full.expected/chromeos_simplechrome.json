@@ -498,7 +498,7 @@
       "python",
       "-u",
       "[START_DIR]/src/tools/mb/mb.py",
-      "gen",
+      "lookup",
       "-m",
       "chromium.chromiumos",
       "-b",
@@ -508,8 +508,7 @@
       "--goma-dir",
       "[CACHE]/goma/client",
       "--android-version-code=3",
-      "--android-version-name=example",
-      "//out_amd64-generic/Release"
+      "--android-version-name=example"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -521,24 +520,8 @@
         "[START_DIR]/python_bin"
       ]
     },
-    "name": "generate_build_files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/out_amd64-generic/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "read GN args",
+    "name": "lookup GN args",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
@@ -645,6 +628,155 @@
     },
     "infra_step": true,
     "name": "system_python.create_link (6)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/cros",
+      "chrome-sdk",
+      "--nogn-gen",
+      "--board=amd64-generic",
+      "--nocolor",
+      "--log-level=debug",
+      "--cache-dir",
+      "[START_DIR]/src/build/cros_cache",
+      "--use-external-config",
+      "--gomadir",
+      "[CACHE]/goma/client",
+      "--nostart-goma",
+      "--",
+      "python",
+      "-u",
+      "[START_DIR]/src/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "chromium.chromiumos",
+      "-b",
+      "chromeos-amd64-generic-rel",
+      "--config-file",
+      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client",
+      "--android-version-code=3",
+      "--android-version-name=example",
+      "//out_amd64-generic/Release"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/python_bin"
+      ]
+    },
+    "name": "generate_build_files"
+  },
+  {
+    "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "system_python (4)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/python_bin"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "system_python.create_dir (4)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/python_bin/python"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "system_python.remove_link (7)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/python_bin/python2"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "system_python.remove_link (8)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "symlink",
+      "/usr/bin/python",
+      "[START_DIR]/python_bin/python"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "system_python.create_link (7)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "symlink",
+      "/usr/bin/python2",
+      "[START_DIR]/python_bin/python2"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "system_python.create_link (8)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

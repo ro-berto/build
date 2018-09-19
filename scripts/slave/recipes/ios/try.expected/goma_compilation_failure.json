@@ -366,6 +366,34 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "chromium.mac",
+      "-b",
+      "ios-simulator-gn",
+      "--config-file",
+      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[GOMA_CACHE]/client"
+    ],
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "",
+      "GOMA_USE_LOCAL": "false",
+      "LANDMINES_VERBOSE": "1"
+    },
+    "name": "lookup GN args",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.mac",
@@ -385,28 +413,6 @@
       "LANDMINES_VERBOSE": "1"
     },
     "name": "generate build files (mb) (with patch)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "",
-      "LANDMINES_VERBOSE": "1"
-    },
-    "infra_step": true,
-    "name": "read GN args",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
   },
   {
     "cmd": [

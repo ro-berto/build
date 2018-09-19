@@ -567,6 +567,33 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/linux/src/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "chromium.linux",
+      "-b",
+      "Linux Builder",
+      "--config-file",
+      "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[GOMA_CACHE]/client"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "test r4.lookup GN args",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/linux/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.linux",
@@ -586,27 +613,6 @@
     "name": "test r4.generate_build_files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/linux/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r4.read GN args",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -640,6 +646,33 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/linux/src/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "chromium.linux",
+      "-b",
+      "Linux Builder",
+      "--config-file",
+      "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[GOMA_CACHE]/client"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "test r4.lookup GN args (2)",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/linux/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.linux",
@@ -659,27 +692,6 @@
     "name": "test r4.generate_build_files (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/linux/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r4.read GN args (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -1267,6 +1279,33 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/linux/src/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "chromium.linux",
+      "-b",
+      "Linux Builder",
+      "--config-file",
+      "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[GOMA_CACHE]/client"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "test r5.lookup GN args",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/linux/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.linux",
@@ -1286,27 +1325,6 @@
     "name": "test r5.generate_build_files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/linux/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r5.read GN args",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -1340,6 +1358,33 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/linux/src/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "chromium.linux",
+      "-b",
+      "Linux Builder",
+      "--config-file",
+      "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[GOMA_CACHE]/client"
+    ],
+    "cwd": "[BUILDER_CACHE]/linux/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "test r5.lookup GN args (2)",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/linux/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.linux",
@@ -1359,27 +1404,6 @@
     "name": "test r5.generate_build_files (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/linux/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "test r5.read GN args (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {

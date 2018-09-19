@@ -218,6 +218,32 @@
       "python",
       "-u",
       "[START_DIR]/src/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "chromium.fyi",
+      "-b",
+      "Libfuzzer Upload Linux MSan",
+      "--config-file",
+      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "--goma-dir",
+      "[CACHE]/goma/client"
+    ],
+    "cwd": "[START_DIR]/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "lookup GN args",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.fyi",
@@ -235,26 +261,6 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/src/out/Release/args.gn",
-      "/path/to/tmp/"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "read GN args",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
-    ]
   },
   {
     "cmd": [
