@@ -22,9 +22,6 @@ def v8(c):
   # them instead of this gclient garbage.
   c.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
 
-  p = c.patch_projects
-  p['icu'] = ('v8/third_party/icu', 'HEAD')
-
   p = c.repo_path_map
   p['https://chromium.googlesource.com/chromium/deps/icu'] = (
       'v8/third_party/icu', 'HEAD')
