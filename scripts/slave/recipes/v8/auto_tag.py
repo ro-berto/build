@@ -39,6 +39,11 @@ REPO = 'https://chromium.googlesource.com/v8/v8'
 BRANCH_RE = re.compile(r'^\d+\.\d+$')
 MAX_COMMIT_WAIT_RETRIES = 5
 
+# TODO(sergiyb): Replace with api.service_account.default().get_email() when
+# https://crbug.com/846923 is resolved.
+PUSH_ACCOUNT = (
+    'v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com')
+
 
 def InitClean(api):
   """Ensures a clean state of the git checkout."""
@@ -93,11 +98,6 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
   """
 
   # Create a fresh work branch.
-  push_account = (
-      # TODO(sergiyb): Replace with api.service_account.default().get_email()
-      # when https://crbug.com/846923 is resolved.
-      'v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com'
-      if api.runtime.is_luci else 'v8-autoroll@chromium.org')
   with api.context(
       cwd=api.path['checkout'],
       env_prefixes={'PATH': [api.v8.depot_tools_path]}):
@@ -106,7 +106,7 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
         'config', 'user.name', 'V8 Autoroll', name='git config user.name',
     )
     api.git(
-        'config', 'user.email', push_account, name='git config user.email',
+        'config', 'user.email', PUSH_ACCOUNT, name='git config user.email',
     )
 
   # Increment patch level and update file content.
@@ -133,7 +133,7 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
       cwd=api.path['checkout'],
       env_prefixes={'PATH': [api.v8.depot_tools_path]}):
     api.git('cl', 'upload', '-f', '--bypass-hooks', '--send-mail',
-            '--tbrs', 'machenbach@chromium.org')
+            '--no-autocc', '--tbrs', PUSH_ACCOUNT)
     api.git('cl', 'land', '-f', '--bypass-hooks', name='git cl land')
 
   # Function to check if commit has landed.

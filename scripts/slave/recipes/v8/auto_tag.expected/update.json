@@ -188,7 +188,7 @@
       "git",
       "config",
       "user.email",
-      "v8-autoroll@chromium.org"
+      "v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env_prefixes": {
@@ -232,8 +232,9 @@
       "-f",
       "--bypass-hooks",
       "--send-mail",
+      "--no-autocc",
       "--tbrs",
-      "machenbach@chromium.org"
+      "v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env_prefixes": {
