@@ -26,6 +26,22 @@ class GTestResultsOutputPlaceholder(JsonOutputPlaceholder):
     return GTestResults(ret)
 
 class TestUtilsApi(recipe_api.RecipeApi):
+  """This class helps run tests and parse results.
+
+  Tests are run in [up to] three stages:
+    * 'with patch'
+    * 'without patch'
+    * 'retry with patch'
+
+  The first stage applies the patch and runs the tests. If this passes, we're
+  finished. Assuming that tests fail or return invalid results, then we deapply
+  the patch and try running the tests again. If the failures are the same, then
+  this is an issue with tip of tree and we ignore the failures.
+
+  Finally, we roll the checkout and reapply the patch, and then rerun the
+  failing tests. This helps confirm whether the failures were flakes or
+  deterministic errors.
+  """
 
   # Some test runners (such as run_web_tests.py and python tests) returns the
   # number of failures as the return code. They need to cap the return code at
