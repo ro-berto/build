@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/path',
@@ -438,184 +439,174 @@ def setup_aosp_builder(api, read_barrier):
 
 
 _CONFIG_MAP = {
-  'client.art': {
-
-    'x86': {
-      'host-x86-ndebug': {
-        'debug': False,
-        'bitness': 32,
-      },
-      'host-x86-debug': {
-        'debug': True,
-        'bitness': 32,
-      },
-      'host-x86_64-ndebug': {
-        'debug': False,
-        'bitness': 64,
-      },
-      'host-x86_64-debug': {
-        'debug': True,
-        'bitness': 64,
-      },
-      'host-x86-cms': {
-        'debug': True,
-        'bitness': 32,
-        'concurrent_collector': False,
-      },
-      'host-x86_64-cms': {
-        'debug': True,
-        'bitness': 64,
-        'concurrent_collector': False,
-      },
-      'host-x86-poison-debug': {
-        'debug': True,
-        'bitness': 32,
-        'heap_poisoning': True,
-      },
-      'host-x86_64-poison-debug': {
-        'debug': True,
-        'bitness': 64,
-        'heap_poisoning': True,
-      },
-      'host-x86-gcstress-debug': {
-        'bitness': 32,
-        'debug': True,
-        'generational_cc': True,
-        'gcstress': True,
-      },
-      'host-x86_64-generational-cc': {
-        'bitness': 64,
-        'debug': True,
-        'generational_cc': True,
-      },
-      'host-x86_64-cdex-fast': {
-        'debug': True,
-        'bitness': 64,
-        'cdex_level': 'fast',
-      },
+  'x86': {
+    'host-x86-ndebug': {
+      'debug': False,
+      'bitness': 32,
     },
-    # TODO: Remove device names.
-    'target': {
-      'angler-armv7-ndebug': {
-        'serial': '84B7N16728001219',
-        'device': 'angler-armv7',
-        'debug': False,
-      },
-      'angler-armv7-debug': {
-        'serial': '84B7N15B03000729',
-        'device': 'angler-armv7',
-        'debug': True,
-      },
-      'volantis-armv7-poison-debug': {
-        'serial': 'FA7BN1A04406',
-        'device': 'volantis-armv7',
-        'debug': True,
-        'heap_poisoning': True
-      },
-      'volantis-armv8-poison-ndebug': {
-        'serial': 'FA7BN1A04412',
-        'device': 'volantis-armv8',
-        'debug': False,
-        'heap_poisoning': True,
-      },
-      'volantis-armv8-poison-debug': {
-        'serial': 'FA7BN1A04433',
-        'device': 'volantis-armv8',
-        'debug': True,
-        'heap_poisoning': True
-      },
-      'fugu-ndebug': {
-        'serial': '0BCDB85D',
-        'device': 'fugu',
-        'debug': False,
-      },
-      'fugu-debug': {
-        'serial': 'E6B27F19',
-        'device': 'fugu',
-        'debug': True,
-      },
-      'angler-armv7-generational-cc': {
-        'serial': '84B7N15B03000329',
-        'device': 'angler-armv7',
-        'debug': True,
-        'concurrent_collector': True,
-        'generational_cc': True,
-      },
-      'angler-armv8-ndebug': {
-        'serial': '84B7N16728001299',
-        'device': 'angler-armv8',
-        'debug': False,
-      },
-      'angler-armv8-debug': {
-        'serial': '84B7N15B03000660',
-        'device': 'angler-armv8',
-        'debug': True,
-      },
-      'angler-armv8-generational-cc': {
-        'serial': '84B7N15B03000641',
-        'device': 'angler-armv8',
-        'debug': True,
-        'concurrent_collector': True,
-        'generational_cc': True,
-      },
-      'bullhead-armv8-gcstress-ndebug': {
-        'serial': '00c5a4683f54164f',
-        'device': 'bullhead-armv8',
-        'debug': False,
-        'concurrent_collector': True,
-        'generational_cc': True,
-        'gcstress': True,
-      },
-      'bullhead-armv8-gcstress-debug': {
-        'serial': '01e0c128ccf732ca',
-        'device': 'bullhead-armv8',
-        'debug': True,
-        'concurrent_collector': True,
-        'generational_cc': True,
-        'gcstress': True,
-      },
-      'bullhead-armv7-gcstress-ndebug': {
-        'serial': '02022c7ec2834126',
-        'device': 'bullhead-armv7',
-        'debug': False,
-        'concurrent_collector': True,
-        'generational_cc': True,
-        'gcstress': True,
-      },
+    'host-x86-debug': {
+      'debug': True,
+      'bitness': 32,
     },
+    'host-x86_64-ndebug': {
+      'debug': False,
+      'bitness': 64,
+    },
+    'host-x86_64-debug': {
+      'debug': True,
+      'bitness': 64,
+    },
+    'host-x86-cms': {
+      'debug': True,
+      'bitness': 32,
+      'concurrent_collector': False,
+    },
+    'host-x86_64-cms': {
+      'debug': True,
+      'bitness': 64,
+      'concurrent_collector': False,
+    },
+    'host-x86-poison-debug': {
+      'debug': True,
+      'bitness': 32,
+      'heap_poisoning': True,
+    },
+    'host-x86_64-poison-debug': {
+      'debug': True,
+      'bitness': 64,
+      'heap_poisoning': True,
+    },
+    'host-x86-gcstress-debug': {
+      'bitness': 32,
+      'debug': True,
+      'generational_cc': True,
+      'gcstress': True,
+    },
+    'host-x86_64-generational-cc': {
+      'bitness': 64,
+      'debug': True,
+      'generational_cc': True,
+    },
+    'host-x86_64-cdex-fast': {
+      'debug': True,
+      'bitness': 64,
+      'cdex_level': 'fast',
+    },
+  },
+  # TODO: Remove device names.
+  'target': {
+    'angler-armv7-ndebug': {
+      'serial': '84B7N16728001219',
+      'device': 'angler-armv7',
+      'debug': False,
+    },
+    'angler-armv7-debug': {
+      'serial': '84B7N15B03000729',
+      'device': 'angler-armv7',
+      'debug': True,
+    },
+    'volantis-armv7-poison-debug': {
+      'serial': 'FA7BN1A04406',
+      'device': 'volantis-armv7',
+      'debug': True,
+      'heap_poisoning': True
+    },
+    'volantis-armv8-poison-ndebug': {
+      'serial': 'FA7BN1A04412',
+      'device': 'volantis-armv8',
+      'debug': False,
+      'heap_poisoning': True,
+    },
+    'volantis-armv8-poison-debug': {
+      'serial': 'FA7BN1A04433',
+      'device': 'volantis-armv8',
+      'debug': True,
+      'heap_poisoning': True
+    },
+    'fugu-ndebug': {
+      'serial': '0BCDB85D',
+      'device': 'fugu',
+      'debug': False,
+    },
+    'fugu-debug': {
+      'serial': 'E6B27F19',
+      'device': 'fugu',
+      'debug': True,
+    },
+    'angler-armv7-generational-cc': {
+      'serial': '84B7N15B03000329',
+      'device': 'angler-armv7',
+      'debug': True,
+      'concurrent_collector': True,
+      'generational_cc': True,
+    },
+    'angler-armv8-ndebug': {
+      'serial': '84B7N16728001299',
+      'device': 'angler-armv8',
+      'debug': False,
+    },
+    'angler-armv8-debug': {
+      'serial': '84B7N15B03000660',
+      'device': 'angler-armv8',
+      'debug': True,
+    },
+    'angler-armv8-generational-cc': {
+      'serial': '84B7N15B03000641',
+      'device': 'angler-armv8',
+      'debug': True,
+      'concurrent_collector': True,
+      'generational_cc': True,
+    },
+    'bullhead-armv8-gcstress-ndebug': {
+      'serial': '00c5a4683f54164f',
+      'device': 'bullhead-armv8',
+      'debug': False,
+      'concurrent_collector': True,
+      'generational_cc': True,
+      'gcstress': True,
+    },
+    'bullhead-armv8-gcstress-debug': {
+      'serial': '01e0c128ccf732ca',
+      'device': 'bullhead-armv8',
+      'debug': True,
+      'concurrent_collector': True,
+      'generational_cc': True,
+      'gcstress': True,
+    },
+    'bullhead-armv7-gcstress-ndebug': {
+      'serial': '02022c7ec2834126',
+      'device': 'bullhead-armv7',
+      'debug': False,
+      'concurrent_collector': True,
+      'generational_cc': True,
+      'gcstress': True,
+    },
+  },
 
-    'aosp': {
-      'aosp-builder-cms': {
-        'read_barrier': False
-      },
-      'aosp-builder-cc': {
-        'read_barrier': True
-      },
+  'aosp': {
+    'aosp-builder-cms': {
+      'read_barrier': False
+    },
+    'aosp-builder-cc': {
+      'read_barrier': True
     },
   },
 }
 
 _CONFIG_DISPATCH_MAP = {
-  'client.art': {
-    'x86': setup_host_x86,
-    'target': setup_target,
-    'aosp': setup_aosp_builder,
-  }
+  'x86': setup_host_x86,
+  'target': setup_target,
+  'aosp': setup_aosp_builder,
 }
 
 def RunSteps(api):
-  if api.properties['mastername'] not in _CONFIG_MAP: # pragma: no cover
-    error = "Master not found in recipe's local config!"
-    raise KeyError(error)
-
   builder_found = False
-  config = _CONFIG_MAP[api.properties['mastername']]
-  for builder_type in config:
-    if api.properties['buildername'] in config[builder_type]:
+  buildername = api.buildbucket.build.builder.builder
+  for builder_type, builder_config in _CONFIG_MAP.iteritems():
+    if buildername in builder_config:
       builder_found = True
-      builder_dict = config[builder_type][api.properties['buildername']]
-      _CONFIG_DISPATCH_MAP[api.properties['mastername']][builder_type](api,
-          **builder_dict)
+      builder_dict = builder_config[buildername]
+      _CONFIG_DISPATCH_MAP[builder_type](api, **builder_dict)
       break
 
   if not builder_found: # pragma: no cover
@@ -623,62 +614,45 @@ def RunSteps(api):
     raise KeyError(error)
 
 def GenTests(api):
-  for mastername, config_dict in _CONFIG_MAP.iteritems():
-    for builders in config_dict.values():
-      for buildername in builders:
-        for clb in (None, True):
-          yield (
-              api.test("%s__ON__%s__%s" % (buildername, mastername,
-                ("" if clb else "no") + "clobber")) +
-              api.properties(
-                mastername=mastername,
-                buildername=buildername,
-                bot_id='TestSlave',
-                # Buildbot uses clobber='' to mean clobber, however
-                # api.properties(clobber=None) will set clobber=None!
-                # so we have to not even mention it to avoid our
-                # 'clobber' in api.properties logic triggering above.
-              ) + (api.properties(clobber='') if clb else api.properties())
-            )
+
+  def test(name, builder):
+    return (
+        api.test(name) +
+        api.buildbucket.ci_build(
+            project='art',
+            builder=builder,
+        ) +
+        api.properties(bot_id='TestSlave')
+    )
+
+  for builders in _CONFIG_MAP.values():
+    for buildername in builders:
+      for clb in (None, True):
+        yield (
+            test(
+                '%s__%s' % (
+                    buildername, ('' if clb else 'no') + 'clobber'),
+                buildername,
+            ) +
+            (api.properties(clobber='') if clb else api.properties())
+          )
   yield (
-      api.test('x86_32_test_failure') +
-      api.properties(
-        mastername='client.art',
-        buildername='host-x86-ndebug',
-        bot_id='TestSlave',
-      ) +
+      test('x86_32_test_failure', 'host-x86-ndebug') +
+      api.step_data('test jdwp interpreter', retcode=1))
+
+  yield (
+      test('target_angler_setup_failure', 'angler-armv7-ndebug') +
+      api.step_data('setup device', retcode=1))
+  yield (
+      test('target_angler_test_failure', 'angler-armv7-ndebug') +
       api.step_data('test jdwp interpreter', retcode=1))
   yield (
-      api.test('target_angler_setup_failure') +
-      api.properties(
-        mastername='client.art',
-        buildername='angler-armv7-ndebug',
-        bot_id='TestSlave',
-      )
-      + api.step_data('setup device', retcode=1))
-  yield (
-      api.test('target_angler_test_failure') +
-      api.properties(
-        mastername='client.art',
-        buildername='angler-armv7-ndebug',
-        bot_id='TestSlave',
-      ) +
-      api.step_data('test jdwp interpreter', retcode=1))
-  yield (
-      api.test('target_angler_device_pre_run_cleanup_failure') +
-      api.properties(
-        mastername='client.art',
-        buildername='angler-armv7-ndebug',
-        bot_id='TestSlave',
-      ) +
+      test(
+          'target_angler_device_pre_run_cleanup_failure',
+          'angler-armv7-ndebug') +
       api.step_data('device pre-run cleanup', retcode=1))
   yield (
-      api.test('aosp_x86_build_failure') +
-      api.properties(
-        mastername='client.art',
-        buildername='aosp-builder-cms',
-        bot_id='TestSlave',
-      ) +
+      test('aosp_x86_build_failure', 'aosp-builder-cms') +
       api.step_data('build x86', retcode=1))
 #  These tests *should* exist, but can't be included as they cause the recipe
 #  simulation to error out, instead of showing that the build should become
