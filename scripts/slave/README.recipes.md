@@ -5831,9 +5831,9 @@ which has offset 0.
 
 See PROPERTIES for documentation on the recipe's interface.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/flako.py#403)(api, bisect_mastername, bisect_buildername, build_config, extra_args, initial_commit_offset, isolated_name, repetitions, swarming_dimensions, test_name, timeout_sec, total_timeout_sec, to_revision, variant):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/flako.py#415)(api, bisect_mastername, bisect_buildername, build_config, extra_args, initial_commit_offset, isolated_name, repetitions, swarming_dimensions, test_name, timeout_sec, total_timeout_sec, to_revision, variant):**
 
-&mdash; **def [bisect](/scripts/slave/recipes/v8/flako.py#304)(api, depot, initial_commit_offset, is_bad_func, offset):**
+&mdash; **def [bisect](/scripts/slave/recipes/v8/flako.py#316)(api, depot, initial_commit_offset, is_bad_func, offset):**
 
 Exercises the bisection control flow.
 
@@ -5846,7 +5846,7 @@ Args:
       bad.
   offset: Offset at which to start bisection.
 
-&mdash; **def [setup\_swarming](/scripts/slave/recipes/v8/flako.py#387)(api, swarming_dimensions):**
+&mdash; **def [setup\_swarming](/scripts/slave/recipes/v8/flako.py#399)(api, swarming_dimensions):**
 ### *recipes* / [v8/node\_integration](/scripts/slave/recipes/v8/node_integration.py)
 
 [DEPS](/scripts/slave/recipes/v8/node_integration.py#13): [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [trigger](#recipe_modules-trigger), [v8](#recipe_modules-v8), [zip](#recipe_modules-zip), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]

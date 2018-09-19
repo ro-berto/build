@@ -42,15 +42,15 @@ PROPERTIES = {
   'bisect_mastername': Property(kind=str),
   # Name of the builder that produced the builds for bisection.
   'bisect_buildername': Property(kind=str),
+  # Build config passed to V8's run-tests.py script (there it's parameter
+  # --mode, example: Release or Debug).
+  'build_config': Property(kind=str),
   # Extra arguments to V8's run-tests.py script.
   'extra_args': Property(default=None, kind=list),
   # Number of commits, backwards bisection will initially leap over.
   'initial_commit_offset': Property(default=1, kind=int),
   # Name of the isolated file (e.g. bot_default, mjsunit).
   'isolated_name': Property(kind=str),
-  # Build config passed to V8's run-tests.py script (there it's parameter
-  # --mode, example: Release or Debug).
-  'build_config': Property(kind=str),
   # Initial number of test repetitions (passed to --random-seed-stress-count
   # option).
   'repetitions': Property(default=5000, kind=int),
@@ -85,6 +85,9 @@ MAX_CALIBRATION_ATTEMPTS = 5
 # any revision that should be tested. We don't look further as a safeguard.
 MAX_ISOLATE_OFFSET = 32
 
+# Maximum number of test name characters printed in UI in step names.
+MAX_LABEL_SIZE = 32
+
 # Minimim number of flakes needed to have confidence in a run.
 MIN_FLAKE_THRESHOLD = 4
 
@@ -113,6 +116,7 @@ class Command(object):
   def __init__(self, test_name, build_config, variant, repetitions,
                total_timeout_sec, timeout=60, extra_args=None):
     self.repetitions = repetitions
+    self.test_name = test_name
     self.total_timeout_sec = total_timeout_sec
     self.base_cmd = [
       'tools/run-tests.py',
@@ -123,6 +127,13 @@ class Command(object):
       '--swarming',
       '--variants=%s' % variant,
     ] + (extra_args or []) + [test_name]
+
+  @property
+  def label(self):
+    """Test name for UI output limited to MAX_LABEL_SIZE chars."""
+    if len(self.test_name) > MAX_LABEL_SIZE:
+      return self.test_name[:MAX_LABEL_SIZE - 3] + '...'
+    return self.test_name
 
   def raw_cmd(self, multiplier):
     if self.total_timeout_sec:
@@ -265,7 +276,8 @@ class Runner(object):
     isolated_hash = self.depot.get_isolated_hash(offset)
     with self.api.tempfile.temp_dir('v8-flake-bisect-') as path:
       task = self.api.swarming.task(
-          'check flakes for #%d - %d' % (offset, self.multiplier),
+          'check %s at #%d - %d' %
+            (self.command.label, offset, self.multiplier),
           isolated_hash,
           task_output_dir=path.join('task_output_dir'),
           raw_cmd=self.command.raw_cmd(self.multiplier),
@@ -462,7 +474,7 @@ def GenTests(api):
         ]}),
     )
 
-  def is_flaky(offset, multiplier, flakes):
+  def is_flaky(offset, multiplier, flakes, test_name='mjsunit/foobar'):
     test_data = api.swarming.canned_summary_output_raw()
     if flakes:
       output = TEST_FAILED_TEMPLATE % flakes
@@ -473,7 +485,7 @@ def GenTests(api):
     test_data['shards'][0]['outputs'][0] = output
     test_data['shards'][0]['exit_codes'][0] = exit_code
     return api.step_data(
-        'check flakes for #%d - %d' % (offset, multiplier),
+        'check %s at #%d - %d' % (test_name, offset, multiplier),
         api.swarming.summary(test_data),
         retcode=exit_code,
     )
@@ -596,14 +608,18 @@ def GenTests(api):
   )
 
   # Simulate not finding enough flakes during calibration.
+  # Also test cutting off overly long test names in step names.
+  long_test_name = (29 * '*') + 'too_long'
+  shortened_test_name = (29 * '*') + '...'
   yield (
       test('no_confidence') +
+      api.properties(test_name=long_test_name) +
       isolated_lookup(0, True) +
-      is_flaky(0, 1, 0) +
-      is_flaky(0, 2, 2) +
-      is_flaky(0, 4, 1) +
-      is_flaky(0, 8, 3) +
-      is_flaky(0, 16, 3) +
+      is_flaky(0, 1, 0, test_name=shortened_test_name) +
+      is_flaky(0, 2, 2, test_name=shortened_test_name) +
+      is_flaky(0, 4, 1, test_name=shortened_test_name) +
+      is_flaky(0, 8, 3, test_name=shortened_test_name) +
+      is_flaky(0, 16, 3, test_name=shortened_test_name) +
       verify_failure_reason('Could not reach enough confidence.') +
       api.post_process(DropExpectation)
   )
