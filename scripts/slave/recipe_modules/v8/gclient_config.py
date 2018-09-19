@@ -25,6 +25,8 @@ def v8(c):
   p = c.repo_path_map
   p['https://chromium.googlesource.com/chromium/deps/icu'] = (
       'v8/third_party/icu', 'HEAD')
+  p['https://chromium.googlesource.com/catapult'] = (
+      'v8/third_party/catapult', 'HEAD')
 
 
 @CONFIG_CTX(includes=['v8'])
