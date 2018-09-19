@@ -404,9 +404,10 @@ class V8Api(recipe_api.RecipeApi):
       self.m.swarming.add_default_tag('purpose:pre-commit')
       self.m.swarming.default_priority = 30
 
-      patch_project = self.m.properties.get('patch_project')
-      if patch_project:
-        self.m.swarming.add_default_tag('patch_project:%s' % patch_project)
+      changes = self.m.buildbucket.build.input.gerrit_changes
+      assert len(changes) <= 1
+      if changes and changes[0].project:
+        self.m.swarming.add_default_tag('patch_project:%s' % changes[0].project)
     else:
       if self.m.properties['mastername'] in ['client.v8', 'client.v8.ports']:
         self.m.swarming.default_priority = 25

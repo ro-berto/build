@@ -401,7 +401,7 @@
       "--tag",
       "name:Check",
       "--tag",
-      "patch_project:v8",
+      "patch_project:v8/v8",
       "--tag",
       "project:v8",
       "--tag",
