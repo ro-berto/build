@@ -145,9 +145,9 @@ def GenTests(api):
           'base_unittests (retry with patch)',
           api.swarming.canned_summary_output() +
           api.test_utils.canned_gtest_output(passing=True)) +
-      api.post_process(retry_with_tests_filter) +
       api.post_process(post_process.MustRun,
-          'test_pre_run.[trigger] base_unittests (retry with patch)')
+          'test_pre_run.[trigger] base_unittests (retry with patch)') +
+      api.post_process(post_process.DropExpectation)
   )
 
   yield (
@@ -171,9 +171,9 @@ def GenTests(api):
           'base_unittests (retry with patch)',
           api.swarming.canned_summary_output() +
           api.test_utils.canned_gtest_output(passing=True)) +
-      api.post_process(retry_with_tests_filter) +
       api.post_process(post_process.MustRun,
-          'test_pre_run.[trigger] base_unittests (retry with patch)')
+          'test_pre_run.[trigger] base_unittests (retry with patch)') +
+      api.post_process(post_process.DropExpectation)
   )
 
   yield (
