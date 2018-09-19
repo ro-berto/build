@@ -88,7 +88,8 @@ def determine_new_future_failures(caller_api, extra_args):
     ),
   ]
 
-  failing_tests = caller_api.test_utils.run_tests_with_patch(caller_api, tests)
+  failing_tests = caller_api.test_utils.run_tests_with_patch(
+      caller_api, tests, invalid_is_fatal=True)
   if not failing_tests:
     return
 
@@ -122,7 +123,8 @@ def determine_new_failures(caller_api, tests, deapply_patch_fn):
   # Convert iterable to list, since it is enumerated multiple times.
   tests = list(tests)
 
-  failing_tests = caller_api.test_utils.run_tests_with_patch(caller_api, tests)
+  failing_tests = caller_api.test_utils.run_tests_with_patch(
+      caller_api, tests, invalid_is_fatal=True)
   if not failing_tests:
     return
 

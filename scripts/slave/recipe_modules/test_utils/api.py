@@ -180,23 +180,49 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return failed_tests
 
-  def run_tests_with_patch(self, caller_api, tests):
+  def run_tests_with_patch(self, caller_api, tests, invalid_is_fatal):
+    """Run tests and returns failures.
+
+    Args:
+      caller_api: The api object given by the caller of this module.
+      tests: A list of test suites to run with the patch.
+      invalid_is_fatal: Whether invalid test results should be treated as a
+                        fatal failing step.
+
+    Returns: A list of test suites that either have invalid results or failing
+    tests.
+    """
     failing_tests = self.run_tests(caller_api, tests, 'with patch')
     failing_test_names = set(f.name for f in failing_tests)
     with self.m.step.defer_results():
       for t in tests:
-        if not t.has_valid_results(caller_api, 'with patch'):
-          self._invalid_test_results(t)
-          failing_test_names.discard(t)
-        elif t.failures(caller_api, 'with patch'):
-          if t.name not in failing_test_names:
-            failing_tests.append(t)
-            failing_test_names.add(t.name)
+        valid_results, failures = t.failures_or_invalid_results(
+            caller_api, 'with patch')
+
+        if not valid_results:
+          self._invalid_test_results(t, fatal=invalid_is_fatal)
+
+        # No need to re-add a test_suite that is already in the return list.
+        if t in failing_tests:
+          continue
+
+        if not valid_results or failures:
+          failing_tests.append(t)
     return failing_tests
 
-  def _invalid_test_results(self, test):
+  def _invalid_test_results(self, test, fatal):
+    """Marks test results as invalid.
+
+    If |fatal| is True, emits a failing step. Otherwise emits a succeeding step.
+    """
     self.m.tryserver.set_invalid_test_results_tryjob_result()
-    self.m.python.failing_step(test.name, self.INVALID_RESULTS_MAGIC)
+
+    # Record a step with INVALID_RESULTS_MAGIC, which chromium_try_flakes uses
+    # for analysis.
+    if fatal:
+      self.m.python.failing_step(test.name, self.INVALID_RESULTS_MAGIC)
+    else:
+      self.m.python.succeeding_step(test.name, self.INVALID_RESULTS_MAGIC)
 
   def _summarize_new_and_ignored_failures(self, test, new_failures, ignored_failures, suffix, emit_failing_step):
     """Summarizes new and ignored failures in the test_suite |test|.
@@ -259,12 +285,23 @@ class TestUtilsApi(recipe_api.RecipeApi):
       suggests that the error is due to an issue with top of tree, and should
       not cause the CL to fail.
     """
-    if not test.has_valid_results(caller_api, 'without patch'):
-      self._invalid_test_results(test)
+    valid_results, failures = test.failures_or_invalid_results(
+        caller_api, 'without patch')
 
-    ignored_failures = set(test.failures(caller_api, 'without patch'))
-    new_failures = (
-      set(test.failures(caller_api, 'with patch')) - ignored_failures)
+    if not valid_results:
+      self._invalid_test_results(test, fatal=emit_failing_step)
+
+    # If there are invalid results from the deapply patch step, treat this as if
+    # all tests passed which prevents us from ignoring any test failures from
+    # 'with patch'.
+    ignored_failures = set(failures) if valid_results else set()
+
+    valid_results, failures = test.failures_or_invalid_results(
+        caller_api, 'with patch')
+    if valid_results:
+      new_failures = set(failures) - ignored_failures
+    else:
+      new_failures = set(['all initial tests failed'])
 
     return self._summarize_new_and_ignored_failures(
         test, new_failures, ignored_failures,
@@ -278,20 +315,37 @@ class TestUtilsApi(recipe_api.RecipeApi):
       there are tests that failed in 'with patch' and 'retry with patch', but
       not in 'without patch'.
     """
-    if not test.has_valid_results(caller_api, 'retry with patch'):
-      self._invalid_test_results(test)
+    valid_results, new_failures = test.failures_or_invalid_results(
+        caller_api, 'retry with patch')
 
-    failures_with_patch = set(test.failures(caller_api, 'with patch'))
-    failures_without_patch = set(test.failures(caller_api, 'without patch'))
-    failures_with_patch_reapplied = set(test.failures(caller_api,
-                                                      'retry with patch'))
+    # We currently do not attempt to recover from invalid test results on the
+    # retry. Record a failing step with INVALID_RESULTS_MAGIC, which
+    # chromium_try_flakes uses for analysis.
+    if not valid_results:
+      self._invalid_test_results(test, fatal=True)
 
-    new_failures = ((failures_with_patch & failures_with_patch_reapplied)
-        - failures_without_patch)
-    ignored_failures = ((failures_with_patch | failures_without_patch |
-                        failures_with_patch_reapplied) - new_failures)
+    # Assuming both 'with patch' and 'retry with patch' produced valid results,
+    # look for the intersection of failures.
+    valid_results, initial_failures = test.failures_or_invalid_results(
+        caller_api, 'with patch')
+    if valid_results:
+      repeated_failures = new_failures & initial_failures
+    else:
+      repeated_failures = new_failures
 
-    return self._summarize_new_and_ignored_failures(test, new_failures, ignored_failures, 'retry with patch summary', emit_failing_step=True)
+    # Assuming 'without patch' produced valid results, subtract those from
+    # repeated failures, as they're likely problems with tip of tree.
+    valid_results, without_patch_failures = test.failures_or_invalid_results(
+        caller_api, 'without patch')
+    if valid_results:
+      new_failures = repeated_failures - without_patch_failures
+      ignored_failures = without_patch_failures
+    else:
+      new_failures = repeated_failures
+      ignored_failures = set()
+
+    return self._summarize_new_and_ignored_failures(test, new_failures,
+        ignored_failures, 'retry with patch summary', emit_failing_step=True)
 
   def _archive_retry_summary(self, retry_summary, dest_filename):
     """Archives the retry summary as JSON, storing it alongside the results
