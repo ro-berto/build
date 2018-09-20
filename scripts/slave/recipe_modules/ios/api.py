@@ -685,21 +685,21 @@ class iOSApi(recipe_api.RecipeApi):
         lambda: self.m.raw_io.test_api.stream_output(
           'name 0x1064b8438 CacheTestCase' \
           'baseMethods 0x1068586d8 (struct method_list_t *)' \
-          'imp -[CacheTestCase testA]' \
+          'imp 0x1075e6887 -[CacheTestCase testA]' \
           'types 0x1064cc3e1' \
-          'imp -[CacheTestCase testB]' \
-          'imp -[CacheTestCase testc]' \
+          'imp 0x1075e6887 -[CacheTestCase testB]' \
+          'imp 0x1075e6887 -[CacheTestCase testc]' \
           'name 0x1064b8438 TabUITestCase' \
           'baseMethods 0x1068586d8 (struct method_list_t *)' \
-          'imp -[TabUITestCase testD]' \
+          'imp 0x1075e6887 -[TabUITestCase testD]' \
           'types 0x1064cc3e1 v16@0:8' \
-          'imp -[TabUITestCase testE]' \
+          'imp 0x1075e6887 -[TabUITestCase testE]' \
           'name 0x1064b8438 KeyboardTestCase' \
-          'imp -[KeyboardTestCase testF]' \
+          'imp 0x1075e6887 -[KeyboardTestCase testF]' \
           'name 0x1064b8438 PasswordsTestCase' \
-          'imp -[PasswordsTestCase testG]' \
+          'imp 0x1075e6887 -[PasswordsTestCase testG]' \
           'name 0x1064b8438 ToolBarTestCase' \
-          'imp -[ToolBarTestCase testH]' \
+          'imp 0x1075e6887 -[ToolBarTestCase testH]' \
         )
       )
     )
@@ -707,8 +707,8 @@ class iOSApi(recipe_api.RecipeApi):
     # Shard tests by testSuites first.  Get the information of testMethods
     # as well in case we want to shard tests more evenly.
     test_pattern = re.compile(
-      'imp -\[(?P<testSuite>[A-Za-z_][A-Za-z0-9_]*Test[Case]*) '
-      '(?P<testMethod>test[A-Za-z0-9_]*)\]')
+      'imp (?:0[xX][0-9a-fA-F]+ )?-\[(?P<testSuite>[A-Za-z_][A-Za-z0-9_]'
+      '*Test[Case]*) (?P<testMethod>test[A-Za-z0-9_]*)\]')
     test_names = test_pattern.findall(step_result.stdout)
     tests_set = set()
     for test_name in test_names:
