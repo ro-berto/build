@@ -225,10 +225,6 @@ def BuildLinuxAndroid(api):
       Build(api, build_output_dir)
 
       UploadArtifacts(api, upload_dir, [
-        'third_party/dart/runtime/bin/dart_io_entries.txt',
-        'flutter/runtime/dart_vm_entry_points.txt',
-        'out/%s/dart_entry_points/entry_points.json' % build_output_dir,
-        'out/%s/dart_entry_points/entry_points_extra.json' % build_output_dir,
         'out/%s/flutter.jar' % build_output_dir,
       ])
 
@@ -426,17 +422,11 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
 
   # Upload the artifacts to cloud storage.
   artifacts = [
-    'third_party/dart/runtime/bin/dart_io_entries.txt',
-    'flutter/runtime/dart_vm_entry_points.txt',
     'flutter/lib/snapshot/snapshot.dart',
     'flutter/shell/platform/darwin/ios/framework/Flutter.podspec',
     'out/%s/gen_snapshot' % label,
     'out/%s/Flutter.framework.zip' % label,
   ]
-  if label in ['profile', 'release']:
-    artifacts.append('out/%s/dart_entry_points/entry_points.json' % arm64_out)
-    artifacts.append(
-      'out/%s/dart_entry_points/entry_points_extra.json' % arm64_out)
   UploadArtifacts(api, bucket_name, artifacts)
 
   if label == 'release':
