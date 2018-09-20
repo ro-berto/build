@@ -601,7 +601,7 @@ _CONFIG_DISPATCH_MAP = {
 
 def RunSteps(api):
   builder_found = False
-  buildername = api.buildbucket.build.builder.builder
+  buildername = api.buildbucket.builder_name
   for builder_type, builder_config in _CONFIG_MAP.iteritems():
     if buildername in builder_config:
       builder_found = True

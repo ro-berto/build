@@ -109,8 +109,8 @@ class GomaApi(recipe_api.RecipeApi):
 
   @property
   def default_cache_path(self):
-    buildername = self.m.buildbucket.build.builder.builder
-    safe_buildername = re.sub(r'[^a-zA-Z0-9]', '_', buildername)
+    safe_buildername = re.sub(
+        r'[^a-zA-Z0-9]', '_', self.m.buildbucket.builder_name)
     data_cache = self.default_cache_path_per_slave.join('data')
     return data_cache.join(safe_buildername)
 
