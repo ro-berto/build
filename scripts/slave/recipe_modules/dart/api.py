@@ -66,7 +66,8 @@ class DartApi(recipe_api.RecipeApi):
       self.m.step('cloudkms get key',
                [cloudkms_dir.join('cloudkms%s' % executable_suffix), 'decrypt',
                '-input', file_name,
-               '-output', secret_key, 'dart-ci/us-central1/dart-ci/dart-ci'])
+               '-output', secret_key,
+               'projects/dart-ci/locations/us-central1/keyRings/dart-ci/cryptoKeys/dart-ci'])
       return secret_key
 
   def kill_tasks(self):

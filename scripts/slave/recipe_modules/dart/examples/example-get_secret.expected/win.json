@@ -7,7 +7,7 @@
       "not_a_secret.encrypted",
       "-output",
       "[CLEANUP]\\not_a_secret.key",
-      "dart-ci/us-central1/dart-ci/dart-ci"
+      "projects/dart-ci/locations/us-central1/keyRings/dart-ci/cryptoKeys/dart-ci"
     ],
     "cwd": "[CLEANUP]",
     "name": "cloudkms get key"

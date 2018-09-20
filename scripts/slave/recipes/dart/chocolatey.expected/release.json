@@ -105,7 +105,7 @@
       "chocolatey.encrypted",
       "-output",
       "[CLEANUP]\\chocolatey.key",
-      "dart-ci/us-central1/dart-ci/dart-ci"
+      "projects/dart-ci/locations/us-central1/keyRings/dart-ci/cryptoKeys/dart-ci"
     ],
     "cwd": "[CLEANUP]",
     "env": {
