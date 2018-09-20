@@ -74,7 +74,7 @@
       "--revision-properties",
       "got_revision",
       "--build-db",
-      "blink_build_db.json",
+      "[CACHE]/builder/blink_build_db.json",
       "--password-file",
       ".blink_status_password",
       "--default-from-email",
