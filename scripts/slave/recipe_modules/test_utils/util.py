@@ -15,16 +15,9 @@ def convert_trie_to_flat_paths(trie, prefix, sep):
 
 
 class TestResults(object):
-  def __init__(self, jsonish=None):
-    self.raw = jsonish or {'version': 3}
-    self.valid = (jsonish is not None)
+  def __init__(self, jsonish):
+    self.raw = jsonish
     self.interrupted = False
-    self.version = self.raw.get('version', 'simplified')
-
-    tests = self.raw.get('tests', {})
-    sep = self.raw.get('path_delimiter', '/')
-    self.tests = convert_trie_to_flat_paths(tests, prefix=None, sep=sep)
-
     self.passes = {}
     self.unexpected_passes = {}
     self.failures = {}
@@ -34,8 +27,18 @@ class TestResults(object):
     self.skipped = {}
     self.unexpected_skipped = {}
     self.unknown = {}
-
     self.pass_fail_counts = {}
+
+    if self.raw is None:
+      self.version = 'simplified'
+      self.tests = {}
+      self.valid = False
+      return
+
+    self.version = self.raw.get('version', 'simplified')
+    tests = self.raw.get('tests', {})
+    sep = self.raw.get('path_delimiter', '/')
+    self.tests = convert_trie_to_flat_paths(tests, prefix=None, sep=sep)
 
     # TODO(dpranke): https://crbug.com/357866 - we should simplify the handling
     # of both the return code and parsing the actual results.
@@ -44,6 +47,8 @@ class TestResults(object):
       self._simplified_json_results()
     else:
       self._json_results()
+    assert self.valid is not None, ("TestResults.valid must be set to a "
+        "non-None value when the constructor returns.")
 
   @property
   def total_test_runs(self):
@@ -240,7 +245,3 @@ class GTestResults(object):
               ['<truncated>'] +
               lines[len(lines) - (self.MAX_LOG_LINES - remove_from_start):])
     return lines
-
-  def as_jsonish(self):
-    ret = self.raw.copy()
-    return ret

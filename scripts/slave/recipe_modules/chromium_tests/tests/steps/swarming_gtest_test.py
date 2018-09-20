@@ -126,7 +126,7 @@ def GenTests(api):
       api.override_step_data(
           'base_unittests',
           api.swarming.canned_summary_output() +
-          api.test_utils.raw_gtest_output(None, 255)) +
+          api.test_utils.gtest_results(None, 255)) +
       api.post_process(verify_log_fields, {'pass_fail_counts': {}}) +
       api.post_process(post_process.DropExpectation)
   )

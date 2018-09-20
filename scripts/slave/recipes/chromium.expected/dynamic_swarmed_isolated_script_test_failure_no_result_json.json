@@ -538,7 +538,7 @@
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: n/a<br/>@@@",
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",

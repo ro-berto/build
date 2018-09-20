@@ -379,7 +379,7 @@
     "name": "base_unittests on Intel GPU on Linux (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br/>Total tests: n/a<br/>@@@",
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
       "@@@STEP_LOG_END@json.output (exception)@@@",

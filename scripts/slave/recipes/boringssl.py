@@ -199,14 +199,13 @@ def _GetTargetEnv(buildername, bot_utils):
   return env
 
 
-def _LogFailingTests(api, deferred):
-  if not deferred.is_ok:
-    error = deferred.get_error()
-    if hasattr(error.result, 'test_utils'):
-      r = error.result.test_utils.test_results
-      p = error.result.presentation
+def _LogFailingTests(api, step_result):
+  if (step_result.test_utils.test_results.valid and
+      step_result.retcode <= api.test_utils.MAX_FAILURES_EXIT_STATUS):
+      failures = step_result.test_utils.test_results.unexpected_failures
+      p = step_result.presentation
       p.step_text += api.test_utils.format_step_text([
-        ['unexpected_failures:', r.unexpected_failures.keys()],
+        ['unexpected_failures:', failures.keys()],
       ])
 
 
@@ -304,7 +303,7 @@ def RunSteps(api, buildername):
         if _HasToken(buildername, 'sde'):
           all_tests_args += ['-sde', '-sde-path', sde_path.join('sde')]
         if _HasToken(buildername, 'android'):
-          deferred = api.python('unit tests', go_env, [
+          api.python('unit tests', go_env, [
               'go', 'run',
               api.path.join('util', 'run_android_tests.go'), '-build-dir',
               build_dir, '-adb', adb_path, '-suite', 'unit', '-all-tests-args',
@@ -312,12 +311,13 @@ def RunSteps(api, buildername):
               api.test_utils.test_results()
           ])
         else:
-          deferred = api.python('unit tests', go_env, msvc_prefix + [
+          api.python('unit tests', go_env, msvc_prefix + [
               'go', 'run',
               api.path.join('util', 'all_tests.go'), '-json-output',
               api.test_utils.test_results()
           ] + all_tests_args)
-      _LogFailingTests(api, deferred)
+
+        _LogFailingTests(api, api.step.active_result)
 
       # Run the SSL tests.
       if (not _HasToken(buildername, 'sde') and
@@ -332,7 +332,7 @@ def RunSteps(api, buildername):
           runner_args += ['-num-workers', '1']
         if _HasToken(buildername, 'android'):
           with api.context(cwd=api.path['checkout'], env=env):
-            deferred = api.python('ssl tests', go_env, [
+            api.python('ssl tests', go_env, [
                 'go', 'run',
                 api.path.join('util', 'run_android_tests.go'), '-build-dir',
                 build_dir, '-adb', adb_path, '-suite', 'ssl', '-runner-args',
@@ -341,11 +341,12 @@ def RunSteps(api, buildername):
             ])
         else:
           with api.context(cwd=runner_dir, env=env):
-            deferred = api.python(
+            api.python(
                 'ssl tests', go_env, msvc_prefix +
                 ['go', 'test', '-json-output',
                  api.test_utils.test_results()] + runner_args)
-      _LogFailingTests(api, deferred)
+
+        _LogFailingTests(api, api.step.active_result)
 
 
 def GenTests(api):

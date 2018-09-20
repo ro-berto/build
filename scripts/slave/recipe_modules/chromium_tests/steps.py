@@ -2015,42 +2015,48 @@ class PythonBasedTest(Test):
     raise NotImplementedError()  # pragma: no cover
 
   def run(self, api, suffix):
+    # These arguments must be passed to an invocation of the recipe engine. The
+    # recipe engine will recognize that the second argument is a subclass of
+    # OutputPlaceholder and use that to populate
+    # step_result.test_utils.test_results.
     cmd_args = ['--write-full-results-to',
                 api.test_utils.test_results(add_json_log=False)]
     tests_to_retry = self.tests_to_retry(api, suffix)
     if tests_to_retry:
       cmd_args.extend(tests_to_retry)  # pragma: no cover
 
-    try:
-      self.run_step(
-          api,
-          suffix,
-          cmd_args,
-          step_test_data=lambda: api.test_utils.test_api.canned_test_output(
-              True))
-    finally:
-      step_result = api.step.active_result
-      if not hasattr(step_result, 'test_utils'): # pragma: no cover
-        self._test_runs[suffix] = {
-            'valid': False,
-            'failures': [],
-        }
-      else:
-        valid = (step_result.test_utils.test_results.valid and
-            step_result.retcode <= api.test_utils.MAX_FAILURES_EXIT_STATUS and
-            (step_result.retcode == 0) or self.failures(api, suffix))
-        self._test_runs[suffix] = {
-            'valid': valid,
-            'failures': step_result.test_utils.test_results.unexpected_failures,
-        }
+    default_factory_for_tests = (lambda:
+        api.test_utils.test_api.canned_test_output(passing=True))
+    step_result = self.run_step(
+        api,
+        suffix,
+        cmd_args,
+        step_test_data=default_factory_for_tests,
+        ok_ret='any')
+    test_results = step_result.test_utils.test_results
+    presentation = step_result.presentation
 
-        r = step_result.test_utils.test_results
-        p = step_result.presentation
-        _, failures = api.test_utils.limit_failures(
-            r.unexpected_failures.keys(), MAX_FAILS)
-        p.step_text += api.test_utils.format_step_text([
-            ['unexpected_failures:', failures],
-        ])
+    if (test_results.valid and
+        step_result.retcode <= api.test_utils.MAX_FAILURES_EXIT_STATUS):
+      self._test_runs[suffix] = {
+          'valid': True,
+          'failures': test_results.unexpected_failures,
+      }
+
+      _, failures = api.test_utils.limit_failures(
+          test_results.unexpected_failures.keys(), MAX_FAILS)
+      presentation.step_text += api.test_utils.format_step_text([
+          ['unexpected_failures:', failures],
+      ])
+      if failures:
+        presentation.status = api.step.FAILURE
+    else:
+      self._test_runs[suffix] = {
+          'valid': False,
+          'failures': [],
+      }
+      presentation.status = api.step.EXCEPTION
+      presentation.step_text = api.test_utils.INVALID_RESULTS_MAGIC
 
     return step_result
 
@@ -2396,13 +2402,14 @@ class BlinkTest(Test):
                    '--skipped', 'always'])
 
     try:
+      default_factory_for_tests = (lambda:
+          api.test_utils.test_api.canned_test_output(passing=True, minimal=True))
       step_result = api.python(
         step_name,
         api.path['checkout'].join('third_party', 'blink', 'tools',
                                   'run_web_tests.py'),
         args,
-        step_test_data=lambda: api.test_utils.test_api.canned_test_output(
-            passing=True, minimal=True))
+        step_test_data=default_factory_for_tests)
 
       # Mark steps with unexpected flakes as warnings. Do this here instead of
       # "finally" blocks because we only want to do this if step was successful.

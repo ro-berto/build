@@ -7,15 +7,28 @@ from .util import GTestResults, TestResults
 
 class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
   @recipe_test_api.placeholder_step_data
-  def test_results(self, test_results, retcode=None):
-    return self.m.json.output(test_results.as_jsonish(), retcode)
+  def test_results(self, test_results_json, retcode=None, name=None):
+    """Returns mock JSON output for a recipe step.
+
+    The output will be promptly consumed by
+    TestResultsOutputPlaceholder.result() to construct a TestResults instance.
+
+    The name must be |test_results| to mirror the method |test_results| in
+    test_utils/api.py
+
+    Args:
+      test_results_json - Mock JSON output from the test runner.
+      retcode - The return code of the test runner.
+    """
+    return test_results_json, retcode, name
 
   def canned_test_output(self, passing, minimal=False, passes=9001,
                          num_additional_failures=0,
                          path_separator=None,
                          retcode=None,
                          unexpected_flakes=False):
-    """Produces a 'json test results' compatible object with some canned tests.
+    """Produces mock output for a recipe step that outputs a TestResults object.
+
     Args:
       passing - Determines if this test result is passing or not.
       passes - The number of (theoretically) passing tests.
@@ -23,9 +36,11 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                 effect of running fewer than the total number of tests.
       num_additional_failures - the number of failed tests to simulate in
                 addition to the three generated if passing is False
+
+    Returns: A test_results placeholder
     """
     if_failing = lambda fail_val: None if passing else fail_val
-    t = TestResults()
+    t = TestResults({'version': 3})
     sep = path_separator or '/'
     t.raw['path_separator'] = sep
     t.raw['num_passes'] = passes
@@ -46,21 +61,34 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         t.add_result('bad%sfailing%d.html' % (sep, i), 'PASS', 'FAIL')
     if unexpected_flakes:
       t.add_result('flake%sflakey.html' % sep, 'PASS', 'FAIL PASS')
-    ret = self.test_results(t)
-    if retcode is not None:
-        ret.retcode = retcode
-    else:
-        ret.retcode = min(
-            t.raw['num_regressions'], TestUtilsApi.MAX_FAILURES_EXIT_STATUS)
-    return ret
+
+    if not passing and retcode is None:
+      retcode = min(
+          t.raw['num_regressions'], TestUtilsApi.MAX_FAILURES_EXIT_STATUS)
+
+    return self.test_results(json.dumps(t.as_jsonish()), retcode)
 
   @recipe_test_api.placeholder_step_data
-  def gtest_results(self, test_results, retcode=None, name=None):
-    return self.m.json.output(test_results.as_jsonish(), retcode, name)
+  def gtest_results(self, test_results_json, retcode=None, name=None):
+    """Returns mock JSON output for a recipe step.
+
+    The output will be promptly consumed by
+    GTestResultsOutputPlaceholder.result() to construct a GTestResults instance.
+
+    The name must be |gtest_results| to mirror the method |gtest_results| in
+    test_utils/api.py
+
+    Args:
+      test_results_json - Mock JSON output from the test runner.
+      retcode - The return code of the test runner.
+    """
+    return test_results_json, retcode, name
 
   def canned_gtest_output(self, passing, minimal=False, passes=9001,
                           extra_json=None, name=None):
-    """Produces a 'json test results' compatible object with some canned tests.
+    """Produces mock output for a recipe step that outputs a GTestResults
+    object.
+
     Args:
       passing - Determines if this test result is passing or not.
       passes - The number of (theoretically) passing tests.
@@ -68,6 +96,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                 effect of running fewer than the total number of tests.
       extra_json - dict with additional keys to add to gtest JSON.
       name - Optional string name of the json output.
+
+    Returns: A gtest_results placeholder
     """
     cur_iteration_data = {
       'Test.One': [
@@ -101,12 +131,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     canned_jsonish.update(extra_json or {})
 
     retcode = None if passing else 1
-    return self.raw_gtest_output(canned_jsonish, retcode, name)
-
-  def raw_gtest_output(self, jsonish, retcode, name=None):
-    t = GTestResults(jsonish)
-    ret = self.gtest_results(t, retcode=retcode, name=name)
-    return ret
+    return self.gtest_results(json.dumps(canned_jsonish), retcode)
 
   # TODO(tansell): https://crbug.com/704066 - Kill simplified JSON format.
   def generate_simplified_json_results(self, shards, isolated_script_passing,
@@ -321,8 +346,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
         'per_iteration_data': [cur_iteration_data]
     }
 
-    return self.raw_gtest_output(
-        canned_jsonish, 1 if failed_test_names else 0)
+    return self.gtest_results(json.dumps(canned_jsonish),
+                              retcode=1 if failed_test_names else 0)
 
   def simulated_isolated_script_output(
       self, failed_test_names=(), passed_test_names=(),

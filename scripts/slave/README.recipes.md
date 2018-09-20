@@ -4253,7 +4253,7 @@ Args:
 
 [DEPS](/scripts/slave/recipes/boringssl.py#8): [chromium](#recipe_modules-chromium), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/boringssl.py#231)(api, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/boringssl.py#230)(api, buildername):**
 ### *recipes* / [boringssl\_docs](/scripts/slave/recipes/boringssl_docs.py)
 
 [DEPS](/scripts/slave/recipes/boringssl_docs.py#8): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4643,9 +4643,9 @@ Returns: the list of matched targets.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/prepare_checkout.py#39)(api):**
 ### *recipes* / [chromium\_tests:tests/api/run\_tests\_on\_tryserver](/scripts/slave/recipe_modules/chromium_tests/tests/api/run_tests_on_tryserver.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/run_tests_on_tryserver.py#7): [chromium\_tests](#recipe_modules-chromium_tests), [swarming](#recipe_modules-swarming), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/run_tests_on_tryserver.py#9): [chromium\_tests](#recipe_modules-chromium_tests), [swarming](#recipe_modules-swarming), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/run_tests_on_tryserver.py#15)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/run_tests_on_tryserver.py#17)(api):**
 ### *recipes* / [chromium\_tests:tests/api/runhooks](/scripts/slave/recipe_modules/chromium_tests/tests/api/runhooks.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/runhooks.py#5): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -4789,9 +4789,9 @@ without error.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/local_isolated_script_test.py#17)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/mini\_installer\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/mini_installer_test.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/mini_installer_test.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/mini_installer_test.py#7): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/mini_installer_test.py#16)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/steps/mini_installer_test.py#18)(api):**
 ### *recipes* / [chromium\_tests:tests/steps/mock\_test](/scripts/slave/recipe_modules/chromium_tests/tests/steps/mock_test.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/steps/mock_test.py#5): [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]

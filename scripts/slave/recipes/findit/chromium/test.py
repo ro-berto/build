@@ -1524,7 +1524,7 @@ def GenTests(api):
       api.override_step_data(
           'test r1.services_unittests (r1)',
           api.swarming.canned_summary_output() +
-          api.test_utils.raw_gtest_output(None, 255)) +
+          api.test_utils.gtest_results(None, 255)) +
       api.post_process(
           verify_report_fields,
           {'result': {

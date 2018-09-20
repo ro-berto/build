@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
+
 from recipe_engine import post_process
 
 DEPS = [
@@ -236,5 +238,6 @@ def GenTests(api):
       api.override_step_data(
           'base_unittests (with patch)',
           api.swarming.canned_summary_output(failure=True) +
-          api.test_utils.raw_gtest_output({'per_iteration_data': []}, 1))
+          api.test_utils.gtest_results(json.dumps({'per_iteration_data': []}),
+                                       retcode=1))
   )

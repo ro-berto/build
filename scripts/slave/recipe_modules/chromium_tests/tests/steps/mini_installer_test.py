@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
+
 DEPS = [
     'chromium',
     'chromium_tests',
@@ -30,3 +32,67 @@ def RunSteps(api):
 
 def GenTests(api):
   yield api.test('basic')
+
+  example_failure_results = (
+  """
+      {
+        "tests": {
+          "__main__": {
+            "InstallerTest": {
+              "ChromeSystemLevel": {
+                "expected": "PASS",
+                "actual": "FAIL",
+                "is_unexpected": true
+              },
+              "MigrateMultiStrandedBinariesOnUpdate": {
+                "expected": "PASS",
+                "actual": "FAIL",
+                "is_unexpected": true
+              }
+            }
+          }
+        },
+        "interrupted": false,
+        "path_delimiter": ".",
+        "version": 3,
+        "seconds_since_epoch": 1537304440.948,
+        "num_failures_by_type": {
+          "FAIL": 2,
+          "PASS": 0
+        }
+      }
+  """
+  )
+
+  yield (
+      api.test('basic_failure') +
+      api.override_step_data(
+          'test_installer',
+          api.test_utils.test_results(example_failure_results, retcode=1)) +
+      api.post_process(post_process.MustRun, 'test_installer') +
+      api.post_process(post_process.AnnotationContains,
+          'test_installer', ['STEP_FAILURE']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('invalid_results_but_still_valid_json') +
+      api.override_step_data(
+          'test_installer',
+          api.test_utils.test_results('{}', retcode=1)) +
+      api.post_process(post_process.MustRun, 'test_installer') +
+      api.post_process(post_process.AnnotationContains,
+          'test_installer', ['STEP_EXCEPTION']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('invalid_json') +
+      api.override_step_data(
+          'test_installer',
+          api.test_utils.test_results('{', retcode=1)) +
+      api.post_process(post_process.MustRun, 'test_installer') +
+      api.post_process(post_process.AnnotationContains,
+          'test_installer', ['STEP_EXCEPTION']) +
+      api.post_process(post_process.DropExpectation)
+  )

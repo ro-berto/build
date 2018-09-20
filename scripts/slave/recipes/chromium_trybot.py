@@ -129,7 +129,7 @@ def GenTests(api):
     api.override_step_data('base_unittests (with patch)',
                            canned_test(passing=False)) +
     api.override_step_data('base_unittests (without patch)',
-                           api.test_utils.raw_gtest_output(None, retcode=1))
+                           api.test_utils.gtest_results(None, retcode=1))
   )
 
   yield (
