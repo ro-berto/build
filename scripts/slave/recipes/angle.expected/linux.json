@@ -20,7 +20,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'angle_root': 'angle'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'angle', 'url': 'https://chromium.googlesource.com/angle/angle.git'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'angle_root': 'angle'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'angle', 'url': 'https://chromium.googlesource.com/angle/angle'}]",
       "--revision_mapping_file",
       "{\"got_revision\": \"angle\"}",
       "--git-cache-dir",
