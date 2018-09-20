@@ -163,12 +163,12 @@ _AddBuildSpec('android-builder-perf', 'android', target_bits=32,
               extra_compile_targets=['android_tools',
                                      'cc_perftests',
                                      'chrome_public_apk',
+                                     'dump_syms',
                                      'gpu_perftests',
-                                     'monochrome_public_apk',
+                                     'microdump_stackwalk',
                                      'push_apps_to_background_apk',
                                      'system_webview_apk',
-                                     'system_webview_shell_apk',],
-              )
+                                     'system_webview_shell_apk',])
 
 # LUCI builder
 _AddBuildSpec('android_arm64-builder-perf', 'android', target_bits=64,
@@ -202,9 +202,9 @@ _AddBuildSpec('linux-builder-perf', 'linux', add_to_bisect=True,
 
 # 32 bit android swarming
 _AddIsolatedTestSpec('android-nexus5x-perf', 'android',
-                     'Android Compile Perf', target_bits=32)
+                     'android-builder-perf', target_bits=32)
 _AddIsolatedTestSpec('Android Nexus5 Perf', 'android',
-                     'Android Compile Perf', target_bits=32)
+                     'android-builder-perf', target_bits=32)
 
 _AddIsolatedTestSpec('android-go-perf', 'android',
                      'android-builder-perf', target_bits=32)
@@ -213,7 +213,7 @@ _AddIsolatedTestSpec('android-go-perf', 'android',
 _AddIsolatedTestSpec('Android Nexus5X WebView Perf', 'android',
                      'android_arm64-builder-perf')
 _AddIsolatedTestSpec('Android Nexus6 WebView Perf', 'android',
-                     'Android Compile Perf', target_bits=32)
+                     'android-builder-perf', target_bits=32)
 
 
 _AddIsolatedTestSpec('win-10-perf', 'win', 'Win x64 Builder Perf')
