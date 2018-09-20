@@ -390,8 +390,7 @@
       "--slave-name=test_bot",
       "--build-number=571",
       "--enable-msan",
-      "base_unittests",
-      "--test-launcher-print-test-stdio=always"
+      "base_unittests"
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",

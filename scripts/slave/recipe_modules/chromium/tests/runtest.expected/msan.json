@@ -35,8 +35,7 @@
       "--point-id=123456",
       "--revision=some_sha",
       "--enable-msan",
-      "base_unittests",
-      "--test-launcher-print-test-stdio=always"
+      "base_unittests"
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",

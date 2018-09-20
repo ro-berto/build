@@ -387,9 +387,7 @@
       "--slave-name=test_bot",
       "--build-number=571",
       "--enable-asan",
-      "browser_tests",
-      "--test-launcher-print-test-stdio=always",
-      "--test-launcher-batch-limit=1"
+      "browser_tests"
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",

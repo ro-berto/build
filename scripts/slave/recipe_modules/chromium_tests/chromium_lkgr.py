@@ -103,7 +103,7 @@ SPEC = {
       'testing': { 'platform': 'mac' },
     },
     'ASAN Release': {
-      'chromium_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_asan',
       'chromium_apply_config': ['mb', 'clobber',
                                 'enable_ipc_fuzzer'],
       'gclient_config': 'chromium',
@@ -119,7 +119,7 @@ SPEC = {
       'testing': { 'platform': 'linux' },
     },
     'ASAN Release Media': {
-      'chromium_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_asan',
       'chromium_apply_config': ['mb', 'clobber',
                                 'enable_ipc_fuzzer',
                                 'chromeos_with_codecs'],
@@ -138,7 +138,7 @@ SPEC = {
       'testing': { 'platform': 'linux' },
     },
     'ASAN Debug': {
-      'chromium_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_asan',
       'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -155,7 +155,7 @@ SPEC = {
       'testing': { 'platform': 'linux' },
     },
     'ChromiumOS ASAN Release': {
-      'chromium_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_asan',
       'chromium_apply_config': ['mb', 'clobber',
                                 'enable_ipc_fuzzer',
                                 'chromiumos'],
@@ -178,7 +178,7 @@ SPEC = {
     # The build process is described at
     # https://sites.google.com/a/chromium.org/dev/developers/testing/addresssanitizer#TOC-Building-with-v8_target_arch-arm
     'ASan Debug (32-bit x86 with V8-ARM)': {
-      'chromium_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_asan',
       'chromium_apply_config': ['mb', 'clobber',
                                 'static_library'],
       'gclient_config': 'chromium',
@@ -197,7 +197,7 @@ SPEC = {
       'testing': { 'platform': 'linux' },
     },
     'ASan Release (32-bit x86 with V8-ARM)': {
-      'chromium_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_asan',
       'chromium_apply_config': ['mb', 'clobber',
                                 'enable_ipc_fuzzer'],
       'gclient_config': 'chromium',
@@ -216,7 +216,7 @@ SPEC = {
       'testing': { 'platform': 'linux' },
     },
     'ASan Release Media (32-bit x86 with V8-ARM)': {
-      'chromium_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_asan',
       'chromium_apply_config': ['mb', 'clobber',
                                 'enable_ipc_fuzzer', 'chromeos_with_codecs'],
       'gclient_config': 'chromium',

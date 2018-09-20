@@ -24,7 +24,7 @@ SPEC = {
       'testing': {'platform': 'linux'},
     },
     'Linux ASan LSan Builder': {
-      'chromium_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_asan',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -37,7 +37,7 @@ SPEC = {
       'testing': {'platform': 'linux'},
     },
     'Linux ASan LSan Tests (1)': {
-      'chromium_config': 'chromium_linux_asan_no_test_args',
+      'chromium_config': 'chromium_asan',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -51,7 +51,7 @@ SPEC = {
       'testing': {'platform': 'linux'},
     },
     'Linux ASan Tests (sandboxed)': {
-      'chromium_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_asan',
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',

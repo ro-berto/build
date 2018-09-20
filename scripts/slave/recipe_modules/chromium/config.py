@@ -535,14 +535,8 @@ def clang_tot_linux(c):
 def clang_tot_mac(c):
   fastbuild(c, final=False)  # final=False so clang_tot_mac_asan can override.
 
-@config_ctx()
-def asan_test_batch(c):
-  c.runtests.test_args.append('--test-launcher-batch-limit=1')
-
-@config_ctx(includes=['clang_tot_linux', 'asan', 'chromium_sanitizer',
-                      'asan_test_batch'])
+@config_ctx(includes=['clang_tot_linux', 'asan'])
 def clang_tot_linux_asan(c):
-  # Like chromium_linux_asan, without goma.
   pass
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'clobber',
@@ -559,8 +553,7 @@ def chromium_linux_ubsan_vptr(c):
 def clang_tot_linux_ubsan_vptr(c):
   pass
 
-@config_ctx(includes=['clang_tot_mac', 'asan', 'chromium_sanitizer',
-            'static_library'])
+@config_ctx(includes=['clang_tot_mac', 'asan', 'static_library'])
 def clang_tot_mac_asan(c):
   pass
 
@@ -584,29 +577,15 @@ def clang_tot_android_dbg(c):
 def chromium_win_asan(c):
   c.runtests.run_asan_test = True
 
-@config_ctx()
-def chromium_sanitizer(c):
-  c.runtests.test_args.append('--test-launcher-print-test-stdio=always')
-
-@config_ctx(includes=['ninja', 'clang', 'goma', 'asan', 'chromium_sanitizer'])
+@config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
 def chromium_asan(c):
   pass
 
-@config_ctx(includes=['chromium_asan', 'asan_test_batch'])
-def chromium_linux_asan(c):
-  pass
-
-@config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
-def chromium_linux_asan_no_test_args(c):
-  # TODO(jbudorick): Once all bots have migrated to this,
-  # remove chromium_linux_asan and rename this.
-  pass
-
-@config_ctx(includes=['ninja', 'clang', 'goma', 'msan', 'chromium_sanitizer'])
+@config_ctx(includes=['ninja', 'clang', 'goma', 'msan'])
 def chromium_msan(c):
   c.compile_py.default_targets = ['all']
 
-@config_ctx(includes=['ninja', 'clang', 'goma', 'tsan2', 'chromium_sanitizer'])
+@config_ctx(includes=['ninja', 'clang', 'goma', 'tsan2'])
 def chromium_tsan2(c):
   c.compile_py.default_targets = ['all']
 
@@ -614,7 +593,7 @@ def chromium_tsan2(c):
 def chromium_chromeos(c):  # pragma: no cover
   c.compile_py.default_targets = ['all']
 
-@config_ctx(includes=['chromium_asan', 'chromiumos', 'asan_test_batch'])
+@config_ctx(includes=['chromium_asan', 'chromiumos'])
 def chromium_chromiumos_asan(c):
   pass
 

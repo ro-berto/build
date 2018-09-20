@@ -144,7 +144,7 @@ SPEC = {
       },
     },
     'Linux ASAN Builder': {
-      'chromium_config': 'chromium_linux_asan',
+      'chromium_config': 'chromium_asan',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
