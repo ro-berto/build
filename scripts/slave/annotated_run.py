@@ -42,7 +42,9 @@ B_DIR = os.path.dirname(os.path.dirname(os.path.dirname(BUILDER_DIR)))
 _ENGINE_FLAGS = {
   # None is the default set of engine flags, and is used if nothing else
   # matches. It MUST be defined.
-  None: {},
+  None: {
+    'use_result_proto': True,
+  },
 
   'chromium.fyi': {
     'use_result_proto': True,
