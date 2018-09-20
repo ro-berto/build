@@ -95,29 +95,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "ensure xcode",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Ensuring Xcode version 9c40b in [CACHE]/xcode_mac_9c40b.app@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[BUILDER_CACHE]/V8_Mac64___node_js_baseline/v8/build/mac_files"
-    ],
-    "infra_step": true,
-    "name": "ensure xcode.delete deprecated Xcode cache",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
     "cmd": [
       "cipd",
       "ensure",
@@ -128,9 +105,11 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "name": "ensure xcode.ensure_installed",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "ensure_installed",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -144,36 +123,6 @@
   },
   {
     "cmd": [
-      "[START_DIR]/mac_toolchain",
-      "install",
-      "-kind",
-      "mac",
-      "-xcode-version",
-      "9c40b",
-      "-output-dir",
-      "[CACHE]/xcode_mac_9c40b.app",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-xcode-cipd-access.json"
-    ],
-    "name": "ensure xcode.install xcode",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "sudo",
-      "xcode-select",
-      "-switch",
-      "[CACHE]/xcode_mac_9c40b.app"
-    ],
-    "name": "ensure xcode.select xcode",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
@@ -181,7 +130,10 @@
     ],
     "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_baseline/v8",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
+      "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
       "PATH": [

@@ -240,9 +240,6 @@ class V8Api(recipe_api.RecipeApi):
     for c in self.bot_config.get('v8_apply_config', []):
       self.apply_config(c)
 
-    if self.m.chromium.c.TARGET_PLATFORM == 'mac':
-      self.m.chromium.apply_config('mac_toolchain')
-
     # Infer gclient variable that instructs sysroot download.
     if (self.m.chromium.c.TARGET_PLATFORM != 'android' and
         self.m.chromium.c.TARGET_ARCH == 'arm'):
@@ -425,7 +422,6 @@ class V8Api(recipe_api.RecipeApi):
       self.m.swarming.default_priority = 60
 
   def runhooks(self, **kwargs):
-    self.m.chromium.ensure_toolchains()
     if (self.m.chromium.c.compile_py.compiler and
         self.m.chromium.c.compile_py.compiler.startswith('goma')):
       # Only ensure goma if we want to use it. Otherwise it might break bots

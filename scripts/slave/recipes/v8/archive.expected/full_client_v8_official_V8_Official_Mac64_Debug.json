@@ -12,6 +12,7 @@
     "cwd": "[BUILDER_CACHE]/V8_Official_Mac64_Debug/v8",
     "env": {
       "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "gn"
@@ -38,6 +39,7 @@
     "cwd": "[BUILDER_CACHE]/V8_Official_Mac64_Debug/v8",
     "env": {
       "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "compile"
