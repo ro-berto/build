@@ -718,7 +718,7 @@ TRYBOTS = freeze({
       }),
       'Win x64 Builder Perf': simple_bot({
         'mastername': 'chromium.perf',
-        'buildername': 'Win x64 Builder Perf',
+        'buildername': 'win64-builder-perf',
       }),
       # Optional One Buildbot Step Tester.
       'obbs_fyi': simple_bot({

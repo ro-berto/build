@@ -218,7 +218,7 @@ _AddIsolatedTestSpec('Android Nexus6 WebView Perf', 'android',
 
 _AddIsolatedTestSpec('win-10-perf', 'win', 'win64-builder-perf')
 _AddIsolatedTestSpec('Win 7 Perf', 'win', 'Win Builder Perf', target_bits=32)
-_AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'win', 'Win x64 Builder Perf')
+_AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'win', 'win64-builder-perf')
 
 
 _AddIsolatedTestSpec('mac-10_12_laptop_low_end-perf', 'mac', 'mac-builder-perf')
