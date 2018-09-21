@@ -17,7 +17,7 @@ SPEC = {
 def AddBuildSpec(name, platform):
   spec = chromium_webrtc.BuildSpec(
       platform, target_bits=64, build_config='Release',
-      gclient_config='chromium')
+      gclient_config='chromium_no_telemetry_dependencies')
   SPEC['builders'][name] = spec
 
 
