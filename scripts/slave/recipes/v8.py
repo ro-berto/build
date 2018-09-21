@@ -355,6 +355,18 @@ def GenTests(api):
       api.post_process(Filter('Test262 (flakes)'))
   )
 
+  # Test that infra-side test configs are taken into account for flako cmd line.
+  yield (
+      api.v8.test(
+          'client.v8',
+          'V8 Mac64 GC Stress',
+          'flako',
+      ) +
+      api.override_step_data(
+          'Check - d8', api.v8.output_json(has_failures=True, flakes=True)) +
+      api.post_process(Filter('Check - d8 (flakes)'))
+  )
+
   yield (
     api.v8.test(
         'client.v8',

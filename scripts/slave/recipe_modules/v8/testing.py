@@ -800,6 +800,7 @@ class Failure(object):
       # Extra arguments passed to the V8 test runner.
       # TODO(machenbach): The api should hide the details how to get the args.
       'extra_args': list(test_config.get('test_args', [])) +
+                    list(self.api.v8.c.testing.test_args) +
                     list(self.test_step_config.test_args),
     }
     return (
