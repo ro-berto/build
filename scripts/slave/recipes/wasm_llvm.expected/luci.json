@@ -5,7 +5,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/WebAssembly/waterfall'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'depot_tools', 'url': 'https://chromium.googlesource.com/chromium/tools/depot_tools'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/WebAssembly/waterfall.git'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'depot_tools', 'url': 'https://chromium.googlesource.com/chromium/tools/depot_tools.git'}]",
       "--revision_mapping_file",
       "{\"got_revision\": \"depot_tools\", \"got_waterfall_revision\": \"src\"}",
       "--git-cache-dir",
