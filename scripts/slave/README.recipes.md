@@ -5832,13 +5832,13 @@ The recipe will:
 - Update a ref called <B>-lkgr to point to the latest commit that has a unique,
   incremented version and that is tagged with that version.
 
-&mdash; **def [GetCommitForRef](/scripts/slave/recipes/v8/auto_tag.py#61)(api, repo, ref):**
+&mdash; **def [GetCommitForRef](/scripts/slave/recipes/v8/auto_tag.py#66)(api, repo, ref):**
 
-&mdash; **def [Git](/scripts/slave/recipes/v8/auto_tag.py#51)(api, \*args, \*\*kwargs):**
+&mdash; **def [Git](/scripts/slave/recipes/v8/auto_tag.py#56)(api, \*args, \*\*kwargs):**
 
 Convenience wrapper.
 
-&mdash; **def [IncrementVersion](/scripts/slave/recipes/v8/auto_tag.py#83)(api, ref, latest_version, latest_version_file):**
+&mdash; **def [IncrementVersion](/scripts/slave/recipes/v8/auto_tag.py#88)(api, ref, latest_version, latest_version_file):**
 
 Increment the version on branch 'ref' to the next patch level and wait
 for the committed ref to be gnumbd-ed or time out.
@@ -5850,13 +5850,13 @@ Args:
   latest_version: The currently latest version to be incremented.
   latest_version_file: The content of the current version file.
 
-&mdash; **def [InitClean](/scripts/slave/recipes/v8/auto_tag.py#43)(api):**
+&mdash; **def [InitClean](/scripts/slave/recipes/v8/auto_tag.py#48)(api):**
 
 Ensures a clean state of the git checkout.
 
-&mdash; **def [LogStep](/scripts/slave/recipes/v8/auto_tag.py#79)(api, text):**
+&mdash; **def [LogStep](/scripts/slave/recipes/v8/auto_tag.py#84)(api, text):**
 
-&mdash; **def [PushRef](/scripts/slave/recipes/v8/auto_tag.py#74)(api, repo, ref, hsh):**
+&mdash; **def [PushRef](/scripts/slave/recipes/v8/auto_tag.py#79)(api, repo, ref, hsh):**
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_tag.py#164)(api):**
 
