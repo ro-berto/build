@@ -71,9 +71,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'swarming_dimensions': {
-        'os': 'Mac-10.13',
-      },
     },
     'Mac10.10 Tests': {
       'chromium_config': 'chromium',
@@ -87,9 +84,6 @@ SPEC = {
       'parent_buildername': 'Mac Builder',
       'testing': {
         'platform': 'mac',
-      },
-      'swarming_dimensions': {
-        'os': 'Mac-10.10',
       },
     },
     'Mac10.11 Tests': {
@@ -105,9 +99,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'swarming_dimensions': {
-        'os': 'Mac-10.11',
-      },
     },
     'Mac10.12 Tests': {
       'chromium_config': 'chromium',
@@ -121,9 +112,6 @@ SPEC = {
       'parent_buildername': 'Mac Builder',
       'testing': {
         'platform': 'mac',
-      },
-      'swarming_dimensions': {
-        'os': 'Mac-10.12',
       },
     },
     'Mac Builder (dbg)': {
@@ -155,9 +143,6 @@ SPEC = {
       'parent_buildername': 'Mac Builder (dbg)',
       'testing': {
         'platform': 'mac',
-      },
-      'swarming_dimensions': {
-        'os': 'Mac-10.13',
       },
     },
   },
