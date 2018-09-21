@@ -42,9 +42,7 @@ class Gatekeeper(recipe_api.RecipeApi):
       if tree_args.get('revision-properties'):
         args.extend(['--revision-properties', tree_args['revision-properties']])
       if tree_args.get('build-db'):
-        args.extend(['--build-db',
-                     self.m.path['cache'].join(
-                         'builder', tree_args['build-db'])])
+        args.extend(['--build-db', tree_args['build-db']])
       if tree_args.get('password-file'):
         args.extend(['--password-file', tree_args['password-file']])
       if tree_args.get('use-project-email-address'):

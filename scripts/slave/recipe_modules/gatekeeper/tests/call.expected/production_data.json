@@ -288,7 +288,7 @@
       "--service-account-path",
       "/creds/service_accounts/service-account-gatekeeper.json",
       "--build-db",
-      "[CACHE]/builder/v8_mail_notifiers_build_db.json",
+      "v8_mail_notifiers_build_db.json",
       "https://build.chromium.org/p/client.v8.fyi",
       "https://build.chromium.org/p/client.v8",
       "https://build.chromium.org/p/client.v8.chromium"
@@ -317,7 +317,7 @@
       "--revision-properties",
       "got_revision_cp",
       "--build-db",
-      "[CACHE]/builder/v8_tree_closers_build_db.json",
+      "v8_tree_closers_build_db.json",
       "--password-file",
       "/creds/gatekeeper/v8_status_password",
       "https://build.chromium.org/p/client.v8.fyi",
@@ -347,7 +347,7 @@
       "--revision-properties",
       "got_revision_cp",
       "--build-db",
-      "[CACHE]/builder/nacl_ports_build_db.json",
+      "nacl_ports_build_db.json",
       "--password-file",
       "/creds/gatekeeper/nacl_ports_status_password",
       "https://build.chromium.org/p/client.nacl.ports"
@@ -419,7 +419,7 @@
       "--revision-properties",
       "got_revision_cp",
       "--build-db",
-      "[CACHE]/builder/pdfium_build_db.json",
+      "pdfium_build_db.json",
       "--password-file",
       "/creds/gatekeeper/pdfium_status_password",
       "https://build.chromium.org/p/client.pdfium"
@@ -441,7 +441,7 @@
       "--service-account-path",
       "/creds/service_accounts/service-account-gatekeeper.json",
       "--build-db",
-      "[CACHE]/builder/ios_db.json",
+      "ios_db.json",
       "https://build.chromium.org/p/chromium.mac:ios-device,ios-device-xcode-clang,ios-simulator,ios-simulator-full-configs,ios-simulator-xcode-clang"
     ],
     "name": "gatekeeper: ios"
@@ -489,7 +489,7 @@
       "--revision-properties",
       "got_revision_cp",
       "--build-db",
-      "[CACHE]/builder/nacl_build_db.json",
+      "nacl_build_db.json",
       "--password-file",
       "/creds/gatekeeper/nacl_status_password",
       "https://build.chromium.org/p/client.nacl"
@@ -515,7 +515,7 @@
       "--set-status",
       "--open-tree",
       "--build-db",
-      "[CACHE]/builder/infra_db.json",
+      "infra_db.json",
       "--password-file",
       "/creds/gatekeeper/infra_status_password",
       "https://build.chromium.org/p/chromium.infra"
@@ -537,7 +537,7 @@
       "--service-account-path",
       "/creds/service_accounts/service-account-gatekeeper.json",
       "--build-db",
-      "[CACHE]/builder/build_db.json",
+      "build_db.json",
       "https://build.chromium.org/p/chromium.tools.build"
     ],
     "name": "gatekeeper: build"
@@ -577,7 +577,7 @@
       "--service-account-path",
       "/creds/service_accounts/service-account-gatekeeper.json",
       "--build-db",
-      "[CACHE]/builder/dart_build_db.json",
+      "dart_build_db.json",
       "https://build.chromium.org/p/client.dart"
     ],
     "name": "gatekeeper: dart"
@@ -604,7 +604,7 @@
       "--revision-properties",
       "got_revision_cp",
       "--build-db",
-      "[CACHE]/builder/waterfall_build_db.json",
+      "waterfall_build_db.json",
       "--password-file",
       "/creds/gatekeeper/chromium_status_password",
       "https://build.chromium.org/p/chromium",
@@ -641,7 +641,7 @@
       "--revision-properties",
       "got_revision",
       "--build-db",
-      "[CACHE]/builder/webrtc_build_db.json",
+      "webrtc_build_db.json",
       "--password-file",
       "/creds/gatekeeper/webrtc_status_password",
       "https://build.chromium.org/p/client.webrtc"
