@@ -12,6 +12,8 @@ class Gatekeeper(recipe_api.RecipeApi):
       'reading %s' % self.m.path.basename(gatekeeper_trees_json),
       gatekeeper_trees_json,
     ).json.output
+    self.m.file.ensure_directory(
+        'ensure cache', self.m.path['cache'].join('builder'))
 
     for tree_name, tree_args in config.iteritems():
       # Use tree-specific config if specified, otherwise use default.
@@ -42,7 +44,9 @@ class Gatekeeper(recipe_api.RecipeApi):
       if tree_args.get('revision-properties'):
         args.extend(['--revision-properties', tree_args['revision-properties']])
       if tree_args.get('build-db'):
-        args.extend(['--build-db', tree_args['build-db']])
+        args.extend(['--build-db',
+                     self.m.path['cache'].join(
+                         'builder', tree_args['build-db'])])
       if tree_args.get('password-file'):
         args.extend(['--password-file', tree_args['password-file']])
       if tree_args.get('use-project-email-address'):

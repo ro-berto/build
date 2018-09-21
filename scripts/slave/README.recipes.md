@@ -2058,7 +2058,7 @@ Args:
 &emsp; **@property**<br>&mdash; **def [platforms](/scripts/slave/recipe_modules/gae_sdk/api.py#58)(self):**
 ### *recipe_modules* / [gatekeeper](/scripts/slave/recipe_modules/gatekeeper)
 
-[DEPS](/scripts/slave/recipe_modules/gatekeeper/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/gatekeeper/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [Gatekeeper](/scripts/slave/recipe_modules/gatekeeper/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 

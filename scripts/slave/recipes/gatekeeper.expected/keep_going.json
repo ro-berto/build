@@ -37,6 +37,21 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder"
+    ],
+    "infra_step": true,
+    "name": "ensure cache"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -78,7 +93,7 @@
       "--revision-properties",
       "got_revision",
       "--build-db",
-      "blink_build_db.json",
+      "[CACHE]/builder/blink_build_db.json",
       "--password-file",
       ".blink_status_password",
       "--default-from-email",
