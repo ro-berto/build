@@ -43,7 +43,8 @@ BUILDERS = {
 
 def RunSteps(api):
   bot_config_object = api.chromium_tests.create_bot_config_object(
-      api.properties['mastername'], api.properties['buildername'],
+      [api.chromium_tests.create_bot_id(
+          api.properties['mastername'], api.properties['buildername'])],
       builders=BUILDERS)
   api.chromium_tests.configure_build(bot_config_object)
 

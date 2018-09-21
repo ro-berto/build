@@ -12,9 +12,12 @@ DEPS = [
 
 
 def RunSteps(api):
-  api.chromium_tests.create_generalized_bot_config_object(
-      [{'mastername': api.properties['mastername'],
-        'buildername': api.properties['buildername']}],
+  api.chromium_tests.create_bot_config_object(
+      [
+          api.chromium_tests.create_bot_id(
+              api.properties['mastername'],
+              api.properties['buildername'])
+      ],
       builders={
         'chromium.foo': {
           'builders': {

@@ -85,7 +85,8 @@ PROPERTIES = {'mastername': Property(), 'buildername': Property(),}
 
 def RunSteps(api, mastername, buildername):
   bot_config = api.chromium_tests.create_bot_config_object(
-      mastername, buildername, builders=BUILDERS)
+      [api.chromium_tests.create_bot_id(mastername, buildername)],
+      builders=BUILDERS)
   # The following lines configures android bisect bot to to checkout codes,
   # executes runhooks, provisions devices and runs legacy bisect script.
   recipe_config = bot_config.get('recipe_config', 'perf')

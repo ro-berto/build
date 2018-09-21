@@ -74,8 +74,9 @@ def _run_compile_at_revision(api, target_mastername, target_buildername,
                              revision, compile_targets, use_analyze):
   with api.step.nest('test %s' % str(revision)):
     # Checkout code at the given revision to recompile.
-    bot_config = api.chromium_tests.create_bot_config_object(
-        target_mastername, target_buildername)
+    bot_config = api.chromium_tests.create_bot_config_object([
+        api.chromium_tests.create_bot_id(
+            target_mastername, target_buildername)])
     bot_update_step, bot_db = api.chromium_tests.prepare_checkout(
         bot_config, root_solution_revision=revision)
 
@@ -152,8 +153,9 @@ def RunSteps(api, target_mastername, target_buildername,
         get_build_result.stdout['build']['parameters_json']).get(
             'additional_build_parameters', {}).get('compile_targets')
 
-  bot_config = api.chromium_tests.create_bot_config_object(
-      target_mastername, target_buildername)
+  bot_config = api.chromium_tests.create_bot_config_object([
+      api.chromium_tests.create_bot_id(
+          target_mastername, target_buildername)])
   api.chromium_tests.configure_build(
       bot_config, override_bot_type='builder_tester')
 

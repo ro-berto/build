@@ -68,7 +68,7 @@ def RunSteps(api, target_mastername, target_testername,
 
   bot_id = api.chromium_tests.create_bot_id(
       target_mastername, target_buildername, target_testername)
-  bot_config = api.m.chromium_tests.create_generalized_bot_config_object(
+  bot_config = api.m.chromium_tests.create_bot_config_object(
       [bot_id], builders=api.properties.get('builders'))
   bot_update_step, bot_db = api.m.chromium_tests.prepare_checkout(
       bot_config, root_solution_revision=revision)

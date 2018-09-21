@@ -28,7 +28,7 @@ def RunSteps(api):
 
   with api.chromium.chromium_layout():
     bot_config = api.chromium_tests.create_bot_config_object(
-        mastername, buildername)
+        [api.chromium_tests.create_bot_id(mastername, buildername)])
     api.chromium_tests.configure_build(bot_config)
 
     if failfast:

@@ -39,13 +39,15 @@ def RunSteps(api):
         tear_down=[{'name': 'tear_down',
                     'script': 'tear_down_script', 'args': []}]))
   if api.tryserver.is_tryserver:
-    bot_config = api.chromium_tests.trybots[
+    trybot_config = api.chromium_tests.trybots[
         api.properties['mastername']]['builders'][api.properties['buildername']]
-    bot_config_object = api.chromium_tests.create_generalized_bot_config_object(
-        bot_config['bot_ids'])
+    bot_ids = trybot_config['bot_ids']
   else:
-    bot_config_object = api.chromium_tests.create_bot_config_object(
-        api.properties['mastername'], api.properties['buildername'])
+    bot_ids = [
+        api.chromium_tests.create_bot_id(
+            api.properties['mastername'], api.properties['buildername'])
+    ]
+  bot_config_object = api.chromium_tests.create_bot_config_object(bot_ids)
   api.chromium_tests.configure_build(bot_config_object)
   with api.chromium_tests.wrap_chromium_tests(bot_config_object, tests=tests):
     pass

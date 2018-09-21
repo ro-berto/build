@@ -174,8 +174,8 @@ def RunSteps(api):
   bot_config = None
   if api.properties.get('custom_bot_config'):
     bot_config = api.chromium_tests.create_bot_config_object(
-        api.properties['mastername'],
-        api.properties['buildername'],
+        [api.chromium_tests.create_bot_id(
+            api.properties['mastername'], api.properties['buildername'])],
         builders=CUSTOM_BUILDERS)
   api.chromium_tests.main_waterfall_steps(bot_config=bot_config)
 

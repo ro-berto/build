@@ -125,7 +125,7 @@ def RunStepsForFile(api, filename, extra_arguments, step_suffix):
 def RunSteps(api):
   # Replicate the config of a vanilla linux builder.
   bot_config = api.chromium_tests.create_bot_config_object(
-      'chromium.linux', 'Linux Builder')
+      [api.chromium_tests.create_bot_id('chromium.linux', 'Linux Builder')])
   api.chromium_tests.configure_build(bot_config)
   api.chromium_tests.prepare_checkout(bot_config)
 

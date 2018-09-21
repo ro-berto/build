@@ -27,8 +27,8 @@ def RunSteps(api):
   # Dupe of bisection/desktop_bisect recipe.
   mastername = api.properties.get('mastername')
   buildername = api.properties.get('buildername')
-  bot_config = api.chromium_tests.create_bot_config_object(mastername,
-                                                           buildername)
+  bot_config = api.chromium_tests.create_bot_config_object(
+      [api.chromium_tests.create_bot_id(mastername, buildername)])
   api.chromium_tests.configure_build(bot_config)
   api.gclient.apply_config('perf')
   api.gclient.c.got_revision_mapping.pop('catapult', None)

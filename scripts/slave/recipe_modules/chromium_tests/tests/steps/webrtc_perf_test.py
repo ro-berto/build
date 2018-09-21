@@ -49,8 +49,8 @@ def RunSteps(api):
       commit_position_property,
       upload_wav_files_from_test=True)
 
-  bot_config = api.chromium_tests.create_bot_config_object(mastername,
-                                                           buildername)
+  bot_config = api.chromium_tests.create_bot_config_object(
+      [api.chromium_tests.create_bot_id(mastername, buildername)])
   api.chromium_tests.configure_build(bot_config)
   api.chromium_checkout.ensure_checkout(bot_config)
 

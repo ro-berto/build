@@ -37,17 +37,16 @@ def RunSteps(api):
     tests.append(api.chromium_tests.steps.SwarmingGTestTest('base_unittests'))
 
   mastername = api.properties['mastername']
+  buildername = api.properties['buildername']
   if api.tryserver.is_tryserver and mastername in api.chromium_tests.trybots:
-    bot_config = api.chromium_tests.trybots[
-        mastername]['builders'][api.properties['buildername']]
-    bot_config_object = api.chromium_tests.create_generalized_bot_config_object(
+    bot_config = api.chromium_tests.trybots[mastername]['builders'][buildername]
+    bot_config_object = api.chromium_tests.create_bot_config_object(
         bot_config['bot_ids'])
-  elif 'fake.master' in mastername :
-    bot_config_object = api.chromium_tests.create_bot_config_object(
-        mastername, api.properties['buildername'], builders=BUILDERS)
   else:
+    builders = BUILDERS if 'fake.master' in mastername else None
     bot_config_object = api.chromium_tests.create_bot_config_object(
-        mastername, api.properties['buildername'])
+        [api.chromium_tests.create_bot_id(mastername, buildername)],
+        builders=builders)
   api.chromium_tests.configure_build(bot_config_object)
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config_object)
   api.chromium_tests.compile_specific_targets(

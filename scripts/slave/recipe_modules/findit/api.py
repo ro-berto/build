@@ -166,8 +166,7 @@ class FinditApi(recipe_api.RecipeApi):
       # TODO(stgao): refactor this out.
       bot_id = api.chromium_tests.create_bot_id(
           target_mastername, target_buildername, target_testername)
-      bot_config = api.m.chromium_tests.create_generalized_bot_config_object(
-          [bot_id])
+      bot_config = api.m.chromium_tests.create_bot_config_object([bot_id])
       bot_update_step, bot_db = api.m.chromium_tests.prepare_checkout(
           bot_config, root_solution_revision=revision)
 
@@ -321,8 +320,10 @@ class FinditApi(recipe_api.RecipeApi):
                           target_testername)
 
     # Configure to match the compile config on the builder.
-    bot_config = api.chromium_tests.create_bot_config_object(
-        target_mastername, target_buildername, builders=builders)
+    bot_config = api.chromium_tests.create_bot_config_object([
+        api.chromium_tests.create_bot_id(
+            target_mastername, target_buildername)],
+        builders=builders)
     api.chromium_tests.configure_build(
         bot_config, override_bot_type='builder_tester')
 

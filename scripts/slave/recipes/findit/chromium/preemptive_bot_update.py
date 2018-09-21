@@ -69,7 +69,7 @@ def TargetMasterAndBuilder(api):
 
 def RunSteps(api):
   bot_config = api.chromium_tests.create_bot_config_object(
-      *TargetMasterAndBuilder(api))
+      [api.chromium_tests.create_bot_id(*TargetMasterAndBuilder(api))])
   api.chromium_tests.configure_build(
       bot_config, override_bot_type='builder_tester')
 

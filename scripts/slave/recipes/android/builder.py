@@ -138,7 +138,7 @@ def _GetChromiumTestsCompileTargets(api, mastername, buildername, update_step):
   # This is a bridge to the chromium recipe for the perf bots, allowing us to
   # solely use src/-side test specifications before switching.
   ct_bot_config = api.chromium_tests.create_bot_config_object(
-      mastername, buildername)
+      [api.chromium_tests.create_bot_id(mastername, buildername)])
   ct_bot_db = api.chromium_tests.create_bot_db_object()
   ct_bot_config.initialize_bot_db(api.chromium_tests, ct_bot_db, update_step)
   test_config = api.chromium_tests.get_tests(ct_bot_config, ct_bot_db)

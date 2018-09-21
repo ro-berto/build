@@ -12,8 +12,9 @@ DEPS = [
 
 
 def RunSteps(api):
-  bot_config = api.chromium_tests.create_bot_config_object(
-      api.properties['mastername'], api.properties['buildername'])
+  bot_config = api.chromium_tests.create_bot_config_object([
+      api.chromium_tests.create_bot_id(
+          api.properties['mastername'], api.properties['buildername'])])
   api.chromium_tests.configure_build(bot_config)
   update_step, bot_db = api.chromium_tests.prepare_checkout(bot_config)
   api.chromium_tests.package_build(

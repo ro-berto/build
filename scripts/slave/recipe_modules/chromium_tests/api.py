@@ -53,11 +53,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """Adds builders to our builder map"""
     self._builders.update(builders)
 
-  def create_bot_config_object(self, mastername, buildername, builders=None):
-    return self.create_generalized_bot_config_object(
-        [self.create_bot_id(mastername, buildername)],
-        builders=builders)
-
   def create_bot_id(self, mastername, buildername, testername=None):
     bot_id = {
         'mastername': mastername,
@@ -68,7 +63,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       bot_id['tester'] = testername
     return bot_id
 
-  def create_generalized_bot_config_object(self, bot_ids, builders=None):
+  def create_bot_config_object(self, bot_ids, builders=None):
     try:
       return bdb_module.BotConfig(builders or self.builders, bot_ids)
     except Exception:
@@ -1023,7 +1018,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
     if not bot_config:
-      bot_config = self.create_generalized_bot_config_object(
+      bot_config = self.create_bot_config_object(
           [self.create_bot_id(mastername, buildername)])
 
     self._report_builders(bot_config)
@@ -1164,7 +1159,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     # bot_config_object contains build/test settings for the mirrored
     # <mastername, buildername>.
-    bot_config_object = self.create_generalized_bot_config_object(
+    bot_config_object = self.create_bot_config_object(
         trybot_config['bot_ids'], builders=builders)
 
     self._report_builders(bot_config_object)
