@@ -6,6 +6,7 @@ from recipe_engine.types import freeze
 DEPS = [
     'chromium',
     'depot_tools/bot_update',
+    'depot_tools/depot_tools',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -94,7 +95,8 @@ def RunSteps(api):
   cmd_args.extend(['--coverage-tools-dir', coverage_tools_dir_path])
 
   cmd_args.extend(['-v'])
-  api.python('run coverage script', coverage_script_path, cmd_args)
+  with api.depot_tools.on_path():
+    api.python('run coverage script', coverage_script_path, cmd_args)
 
   # TODO(crbug.com/790747): Test fuzzer targets on Mac when the bug is fixed.
   executed_targets = SAMPLE_TARGETS if api.platform.is_mac else (

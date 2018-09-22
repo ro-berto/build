@@ -322,6 +322,11 @@
       "[START_DIR]/src/third_party/llvm-build/Release+Asserts/bin",
       "-v"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "run coverage script"
   },
   {
