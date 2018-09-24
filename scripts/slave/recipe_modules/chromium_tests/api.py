@@ -1251,7 +1251,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # https://crbug.com/883308.
     disable_deapply_patch = not trybot_config.get('deapply_patch', True)
 
-    enable_retry_with_patch = trybot_config.get('retry_with_patch', False)
+    enable_retry_with_patch = trybot_config.get('retry_with_patch', True)
     return (bot_config_object, bot_update_step, affected_files, tests,
             disable_deapply_patch, enable_retry_with_patch)
 
