@@ -8,6 +8,7 @@ DEPS = [
   'depot_tools/git',
   'depot_tools/gitiles',
   'depot_tools/gsutil',
+  'depot_tools/osx_sdk',
   'depot_tools/tryserver',
   'docker',
   'gn',
