@@ -132,6 +132,11 @@ def GenTests(api):
       api.buildbucket.ci_build(project='dawn', builder='linux', git_repo=DAWN_REPO)
   )
   yield (
+      api.test('mac') +
+      api.platform('mac', 64) +
+      api.buildbucket.ci_build(project='dawn', builder='mac', git_repo=DAWN_REPO)
+  )
+  yield (
       api.test('win') +
       api.platform('win', 64) +
       api.buildbucket.ci_build(project='dawn', builder='win', git_repo=DAWN_REPO)
