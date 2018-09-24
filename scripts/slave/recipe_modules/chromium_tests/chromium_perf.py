@@ -176,10 +176,6 @@ _AddBuildSpec('android_arm64-builder-perf', 'android', target_bits=64,
 # well.
 _AddBuildSpec(
   'Win Builder Perf', 'win', target_bits=32, force_exparchive=True)
-# TODO(crbug.com/828466): remove this builder once win64-builder-perf works
-# well.
-_AddBuildSpec(
-  'Win x64 Builder Perf', 'win', add_to_bisect=True, force_exparchive=True)
 _AddBuildSpec(
   'win32-builder-perf', 'win', target_bits=32, force_exparchive=True)
 _AddBuildSpec(
