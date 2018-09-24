@@ -238,7 +238,6 @@ def main(argv):
       'master.client.webrtc.fyi': 'WebRTCFYI',
       'master.client.webrtc.perf': 'WebRTCPerf',
       'master.tryserver.chromium.android': 'TryserverChromiumAndroid',
-      'master.tryserver.chromium.linux': 'TryServerChromiumLinux',
       'master.tryserver.chromium.mac': 'TryServerChromiumMac',
       'master.tryserver.chromium.win': 'TryServerChromiumWin',
       'master.tryserver.chromium.perf': 'ChromiumPerfTryServer',
