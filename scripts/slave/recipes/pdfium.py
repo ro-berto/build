@@ -6,9 +6,8 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
-  'depot_tools/gsutil',
-  'depot_tools/osx_sdk',
   'goma',
+  'depot_tools/gsutil',
   'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
@@ -267,17 +266,16 @@ def RunSteps(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
   out_dir = _OutPath(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel,
                      jumbo)
 
-  with api.osx_sdk('mac'):
-    build_config = _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8,
-                                target_cpu, clang, msvc, rel, jumbo, target_os,
-                                out_dir)
-    _BuildSteps(api, clang, out_dir)
+  build_config = _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8,
+                              target_cpu, clang, msvc, rel, jumbo, target_os,
+                              out_dir)
 
-    if skip_test:
-      return
+  _BuildSteps(api, clang, out_dir)
 
-    _RunTests(api, memory_tool, v8, out_dir, build_config, revision)
+  if skip_test:
+    return
 
+  _RunTests(api, memory_tool, v8, out_dir, build_config, revision)
 
 def get_gold_params(api, build_config, revision):
   """Get the parameters to be passed to the testing call to

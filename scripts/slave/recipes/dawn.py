@@ -6,9 +6,8 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
-  'depot_tools/gsutil',
-  'depot_tools/osx_sdk',
   'goma',
+  'depot_tools/gsutil',
   'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
@@ -90,7 +89,8 @@ def _get_compiler_name(api, clang):
   # The non-Clang compiler is OS-dependent.
   if api.platform.is_win:
     return 'msvc'
-  return 'gcc'
+  else:
+    return 'gcc'
 
 def _build_steps(api, out_dir, clang):
   debug_path = api.path['checkout'].join('out', out_dir)
@@ -115,10 +115,9 @@ def RunSteps(api, target_cpu, debug, clang):
   with api.context(env=env):
     _checkout_steps(api)
     out_dir = _out_path(target_cpu, debug, clang)
-    with api.osx_sdk('mac'):
-      _gn_gen_builds(api, target_cpu, debug, clang, out_dir)
-      _build_steps(api, out_dir, clang)
-      _run_unittests(api, out_dir)
+    _gn_gen_builds(api, target_cpu, debug, clang, out_dir)
+    _build_steps(api, out_dir, clang)
+    _run_unittests(api, out_dir)
 
 def GenTests(api):
   yield (
