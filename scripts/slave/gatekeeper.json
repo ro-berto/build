@@ -561,9 +561,6 @@
           "chromium_tree_closer",
           "experimental_tests"
         ],
-        "excluded_builders" : [
-          "mac-cocoa-rel"
-        ],
         "builders": {
           "ios-device": {
             "sheriff_classes": ["sheriff_ios"]
