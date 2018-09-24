@@ -1316,11 +1316,8 @@ class LayoutTestResultsHandler(JSONResultsHandler):
     # TODO: The naming of the archive step is clunky, but the step should
     # really be triggered src-side as part of the post-collect merge and
     # upload, and so this should go away when we make that change.
-    custom_step_name = not step_name.startswith('webkit_layout_tests')
-    archive_step_name = 'archive_webkit_tests_results'
-    if custom_step_name:
-      archive_layout_test_args += ['--step-name', step_name]
-      archive_step_name = 'archive results for ' + step_name
+    archive_layout_test_args += ['--step-name', step_name]
+    archive_step_name = 'archive results for ' + step_name
 
     archive_layout_test_args += api.build.slave_utils_args
     # TODO(phajdan.jr): Pass gs_acl as a parameter, not build property.
@@ -1336,8 +1333,7 @@ class LayoutTestResultsHandler(JSONResultsHandler):
     base = (
       "https://test-results.appspot.com/data/layout_results/%s/%s"
       % (sanitized_buildername, buildnumber))
-    if custom_step_name:
-      base += '/' + step_name
+    base += '/' + step_name
 
     archive_result.presentation.links['layout_test_results'] = (
         base + '/layout-test-results/results.html')
