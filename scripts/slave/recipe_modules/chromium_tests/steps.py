@@ -2387,6 +2387,11 @@ class BlinkTest(Test):
         '--exit-after-n-failures', '5000',
         '--exit-after-n-crashes-or-timeouts', '100',
         '--debug-rwt-logging',
+
+        # layout test failures are retried 3 times when '--test-list' is not
+        # passed, but only once when '--test-list' is passed. We want to always
+        # retry 3 times, so we explicitly specify it.
+        '--num-retries', '3',
     ]
 
     if api.chromium.c.TARGET_PLATFORM == 'android':

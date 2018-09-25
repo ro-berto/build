@@ -27,6 +27,8 @@
       "--exit-after-n-crashes-or-timeouts",
       "100",
       "--debug-rwt-logging",
+      "--num-retries",
+      "3",
       "--js-flags=--future"
     ],
     "name": "webkit_layout_tests (with patch)",
@@ -127,6 +129,8 @@
       "--exit-after-n-crashes-or-timeouts",
       "100",
       "--debug-rwt-logging",
+      "--num-retries",
+      "3",
       "--js-flags=--future"
     ],
     "name": "webkit_layout_tests (without patch)",
