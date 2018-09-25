@@ -96,10 +96,6 @@ SPEC = {
       'bot_type': 'tester',
       'parent_buildername': 'Linux MSan Builder',
       'testing': {'platform': 'linux'},
-      'swarming_dimensions': {
-        'cpu': 'x86-64',
-        'os': 'Ubuntu-14.04',
-      },
     },
     'Linux ChromiumOS MSan Builder': {
       'chromium_config': 'chromium_msan',
@@ -125,10 +121,6 @@ SPEC = {
       'bot_type': 'tester',
       'parent_buildername': 'Linux ChromiumOS MSan Builder',
       'testing': {'platform': 'linux'},
-      'swarming_dimensions': {
-        'cpu': 'x86-64',
-        'os': 'Ubuntu-14.04',
-      },
     },
     'Linux TSan Builder': {
       'chromium_config': 'chromium_tsan2',
