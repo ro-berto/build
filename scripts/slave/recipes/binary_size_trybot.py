@@ -12,6 +12,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'depot_tools/gerrit',
+  'depot_tools/gsutil',
   'depot_tools/tryserver',
   'filter',
   'recipe_engine/context',
@@ -37,6 +38,10 @@ _PATCH_FIXED_BUILD_STEP_NAME = (
     'Not measuring binary size because build is broken without patch.')
 _FOOTER_PRESENT_STEP_NAME = (
     'Not measuring binary size because Binary-Size justification was provided.')
+_NDJSON_GS_BUCKET = 'chromium-binary-size-trybot-results'
+_HTML_REPORT_BASE_URL = (
+    'https://storage.googleapis.com/chrome-supersize/viewer.html?load_url='
+    'https://storage.cloud.google.com/' + _NDJSON_GS_BUCKET)
 
 
 def RunSteps(api):
@@ -102,11 +107,46 @@ def RunSteps(api):
     api.chromium.runhooks(name='runhooks' + suffix)
 
     with api.context(cwd=api.path['checkout']):
-      resource_sizes_diff_path, diff_summary_str = _ResourceSizesDiff(
-          api, without_results_dir, with_results_dir)
-      _SupersizeDiff(api, without_results_dir, with_results_dir)
-      _CheckForUnexpectedIncrease(
-          api, resource_sizes_diff_path, author, diff_summary_str)
+      output_dir = api.chromium.output_dir
+      resource_sizes_diff_path = output_dir.join('resource_sizes_diff.txt')
+      dex_method_count_diff_path = output_dir.join('dex_method_counts_diff.txt')
+      supersize_diff_path = output_dir.join('supersize_diff.txt')
+      ndjson_path = output_dir.join('report.ndjson')
+      results_path = output_dir.join('results.json')
+
+      _CreateDiffs(api, author, without_results_dir, with_results_dir,
+                   resource_sizes_diff_path, supersize_diff_path,
+                   dex_method_count_diff_path, ndjson_path, results_path)
+
+      gs_dest = '{}/{}.ndjson'.format(
+          api.properties['buildername'], api.properties['revision'])
+      upload_result = api.gsutil.upload(
+          source=ndjson_path,
+          bucket=_NDJSON_GS_BUCKET,
+          dest=gs_dest,
+          name='upload Supersize HTML report',
+          link_name='Supersize HTML Report')
+      report_link_text = '>>> View Supersize HTML Report <<<'
+      upload_result.presentation.links[report_link_text] = (
+          _HTML_REPORT_BASE_URL + '/' + gs_dest)
+
+      _DisplayDiffResults(api, 'Resource Sizes', resource_sizes_diff_path,
+                          '(Look here for high-level metrics)')
+      _DisplayDiffResults(api, 'Supersize', supersize_diff_path,
+                          '(Look here for detailed breakdown)')
+      _DisplayDiffResults(api, 'Dex Method Count', dex_method_count_diff_path,
+                          '(Look here for added/removed Java methods)')
+
+      step_result = api.json.read(
+          'Check for undocumented increase', results_path,
+          step_test_data=lambda: api.json.test_api.output({
+              'status_code': 0,
+              'details': 'Binary size checks passed.'
+          }))
+      step_result.presentation.logs['results_details'] = (
+          step_result.json.output['details'].splitlines())
+      if step_result.json.output['status_code'] != 0:
+        raise api.step.StepFailure('Undocumented size increase detected')
 
 
 def _BuildAndMeasure(api, with_patch):
@@ -139,57 +179,32 @@ def _BuildAndMeasure(api, with_patch):
   return results_dir
 
 
-def _SupersizeDiff(api, without_results_dir, with_results_dir):
-  diagnose_bloat = api.path['checkout'].join(
-      'tools', 'binary_size', 'diagnose_bloat.py')
-  diff_output_path = api.chromium.output_dir.join('supersize_diff.txt')
-  api.python('Supersize diff', diagnose_bloat, [
-      'diff',
-      '--apk-name', _APK_NAME,
-      '--diff-type', 'native',
-      '--before-dir', without_results_dir,
-      '--after-dir', with_results_dir,
-      '--diff-output', diff_output_path,
-  ])
-  diff_text = api.file.read_text('Show Supersize Diff', diff_output_path)
+def _DisplayDiffResults(api, name, path, description):
+  diff_text = api.file.read_text('Show {} Diff'.format(name), path,
+                                 test_data='Test output data')
   read_step_result = api.step.active_result
-  read_step_result.presentation.step_text = '(Look here for detailed breakdown)'
-  read_step_result.presentation.logs['>>> Show Diff <<<'] = (
+  read_step_result.presentation.step_text = description
+  read_step_result.presentation.logs['>>> {} <<<'.format(name)] = (
       diff_text.splitlines())
 
 
-def _ResourceSizesDiff(api, without_results_dir, with_results_dir):
-  diagnose_bloat = api.path['checkout'].join(
-      'tools', 'binary_size', 'diagnose_bloat.py')
-  diff_output_path = api.chromium.output_dir.join('resource_sizes_diff.txt')
-  api.python('resource_sizes diff', diagnose_bloat, [
-      'diff',
-      '--apk-name', _APK_NAME,
-      '--diff-type', 'sizes',
-      '--before-dir', without_results_dir,
-      '--after-dir', with_results_dir,
-      '--diff-output', diff_output_path,
-  ])
-  diff_text = api.file.read_text(
-      'Show Resource Sizes Diff', diff_output_path,
-      test_data='MonochromePublic.apk_Specifics normalized apk size=-5\n')
-  diff_lines = diff_text.splitlines()
-  diff_summary_str = 'Normalized apk size: ' + diff_lines[-1].partition('=')[2]
-  read_step_result = api.step.active_result
-  read_step_result.presentation.step_text = '(Look here for high-level metrics)'
-  read_step_result.presentation.logs['>>> Show Diff <<<'] = diff_lines
-  return diff_output_path, diff_summary_str
-
-
-def _CheckForUnexpectedIncrease(api, resource_sizes_diff_path, author,
-                                diff_summary_str):
+def _CreateDiffs(api, author, before_dir, after_dir, resource_sizes_diff_path,
+                 supersize_diff_path, dex_method_count_diff_path,
+                 ndjson_path, results_path):
   checker_script = api.path['checkout'].join(
       'tools', 'binary_size', 'trybot_commit_size_checker.py')
-  step_result = api.python('check for undocumented increase', checker_script, [
+
+  api.python('Generate diffs', checker_script, [
       '--author', author,
-      '--resource-sizes-diff', resource_sizes_diff_path,
+      '--apk-name', _APK_NAME,
+      '--before-dir', before_dir,
+      '--after-dir', after_dir,
+      '--resource-sizes-diff-path', resource_sizes_diff_path,
+      '--supersize-diff-path', supersize_diff_path,
+      '--dex-method-count-diff-path', dex_method_count_diff_path,
+      '--ndjson-path', ndjson_path,
+      "--results-path", results_path
   ])
-  step_result.presentation.step_text = '({})'.format(diff_summary_str)
 
 
 def GenTests(api):
@@ -260,4 +275,11 @@ def GenTests(api):
   yield (
       props('normal_build') +
       override_analyze()
+  )
+  yield (
+      props('unexpected_increase') +
+      override_analyze() +
+      api.override_step_data(
+          'Check for undocumented increase',
+          api.json.output({'status_code': 1, 'details': 'Failed'}))
   )

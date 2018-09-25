@@ -1795,17 +1795,18 @@
     "name": "Check for undocumented increase",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"details\": \"Binary size checks passed.\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"details\": \"Failed\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 1@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@results_details@Binary size checks passed.@@@",
+      "@@@STEP_LOG_LINE@results_details@Failed@@@",
       "@@@STEP_LOG_END@results_details@@@"
     ]
   },
   {
     "name": "$result",
+    "reason": "Undocumented size increase detected",
     "recipe_result": null,
-    "status_code": 0
+    "status_code": 1
   }
 ]
