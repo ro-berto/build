@@ -60,10 +60,6 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
-      'swarming_dimensions': {
-        'cpu': 'x86-64',
-        'os': 'Windows-10-15063',
-      },
     },
     'Win7 (32) Tests': {
       'chromium_config': 'chromium',
@@ -83,10 +79,6 @@ SPEC = {
       'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
-      },
-      'swarming_dimensions': {
-        'cpu': 'x86-32',
-        'os': 'Windows-7-SP1',
       },
     },
     'Win7 Tests (1)': {
@@ -201,10 +193,6 @@ SPEC = {
       'checkout_dir': 'win',
       'testing': {
         'platform': 'win',
-      },
-      'swarming_dimensions': {
-        'cpu': 'x86-64',
-        'os': 'Windows-10-15063',
       },
     },
   },
