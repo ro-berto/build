@@ -717,7 +717,7 @@ class V8Api(recipe_api.RecipeApi):
       if self.m.chromium.c.project_generator.tool == 'mb':
         mb_config_rel_path = self.m.properties.get(
             'mb_config_path', 'infra/mb/mb_config.pyl')
-        gn_args = self.m.chromium.run_mb(
+        gn_args = self.m.chromium.mb_gen(
             self.m.properties['mastername'],
             self.m.properties['buildername'],
             use_goma=use_goma,

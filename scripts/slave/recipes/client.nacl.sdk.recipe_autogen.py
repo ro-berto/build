@@ -45,7 +45,7 @@ def sdk_multi_steps(api):
       api.chromium.runhooks()
 
     # generate_build_files step
-    api.chromium.run_mb(api.properties.get('mastername'),
+    api.chromium.mb_gen(api.properties.get('mastername'),
                         api.properties.get('buildername'))
 
     # compile step
@@ -89,7 +89,7 @@ def sdk_multirel_steps(api):
       api.chromium.runhooks()
 
     # generate_build_files step
-    api.chromium.run_mb(api.properties.get('mastername'),
+    api.chromium.mb_gen(api.properties.get('mastername'),
                         api.properties.get('buildername'))
 
     # compile step

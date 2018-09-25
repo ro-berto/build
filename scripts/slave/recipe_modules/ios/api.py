@@ -385,7 +385,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     if use_mb:
       with self.m.context(env=env):
-        self.m.chromium.run_mb(
+        self.m.chromium.mb_gen(
             self.__config['mastername'],
             self.m.properties['buildername'],
             build_dir='//out/%s' % build_sub_path,

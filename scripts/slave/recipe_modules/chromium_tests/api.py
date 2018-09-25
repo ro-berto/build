@@ -593,7 +593,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       mb_buildername = mb_buildername or self.m.properties['buildername']
       use_goma = (self.m.chromium.c.compile_py.compiler and
                   'goma' in self.m.chromium.c.compile_py.compiler)
-      self.m.chromium.run_mb(mb_mastername, mb_buildername,
+      self.m.chromium.mb_gen(mb_mastername, mb_buildername,
                              mb_config_path=mb_config_path,
                              use_goma=use_goma,
                              isolated_targets=isolated_targets,

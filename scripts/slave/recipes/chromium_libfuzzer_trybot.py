@@ -63,7 +63,7 @@ def RunSteps(api):
 
       api.chromium.runhooks()
       api.chromium.ensure_goma()
-      api.chromium.run_mb(mastername, buildername, use_goma=True)
+      api.chromium.mb_gen(mastername, buildername, use_goma=True)
 
       # Calculate the GN labels of all fuzz targets.
       all_fuzz_labels = api.gn.refs(
@@ -84,7 +84,7 @@ def RunSteps(api):
 
       # Run MB one more time since filter calls above wipes out the specified
       # goma dir.
-      api.chromium.run_mb(
+      api.chromium.mb_gen(
           mastername, buildername, use_goma=True, gn_args_location=api.gn.LOGS)
 
       # Convert the GN labels to ninja targets and pass them into compile.

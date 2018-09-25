@@ -54,7 +54,7 @@ class CodesearchApi(recipe_api.RecipeApi):
                                     mb_config_path=None):
     mastername = self.m.properties['mastername']
     buildername = self.m.properties['buildername']
-    self.m.chromium.run_mb(mastername,
+    self.m.chromium.mb_gen(mastername,
                            buildername,
                            build_dir=self.c.debug_path,
                            name='generate build files',

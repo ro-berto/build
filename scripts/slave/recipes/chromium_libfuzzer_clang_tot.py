@@ -45,7 +45,7 @@ def RunSteps(api):
 
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-  api.chromium.run_mb(mastername, buildername, use_goma=False)
+  api.chromium.mb_gen(mastername, buildername, use_goma=False)
 
   api.chromium.compile(targets=['empty_fuzzer'],
                        use_goma_module=True)

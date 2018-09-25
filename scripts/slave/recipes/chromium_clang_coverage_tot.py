@@ -61,7 +61,7 @@ def RunSteps(api):
                                 test_data='332838-1')
   api.step.active_result.presentation.step_text = revision
 
-  api.chromium.run_mb(mastername, buildername, use_goma=True)
+  api.chromium.mb_gen(mastername, buildername, use_goma=True)
 
   coverage_script = 'coverage.py'
   coverage_script_path = api.path['checkout'].join('tools', 'code_coverage',

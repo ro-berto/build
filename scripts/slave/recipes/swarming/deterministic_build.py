@@ -166,7 +166,7 @@ def RunSteps(api, buildername):
   # Do a first build and move the build artifact to the temp directory.
   api.chromium.ensure_goma()
   api.chromium.runhooks()
-  api.chromium.run_mb(api.properties.get('mastername'), buildername)
+  api.chromium.mb_gen(api.properties.get('mastername'), buildername)
   api.chromium.run_mb(api.properties.get('mastername'), buildername,
                       name='generate .isolate files',
                       mb_command='isolate-everything')
@@ -180,7 +180,7 @@ def RunSteps(api, buildername):
 
   # Do the second build and move the build artifact to the temp directory.
   api.chromium.runhooks()
-  api.chromium.run_mb(api.properties.get('mastername'), buildername)
+  api.chromium.mb_gen(api.properties.get('mastername'), buildername)
   api.chromium.run_mb(api.properties.get('mastername'), buildername,
                       name='generate .isolate files',
                       mb_command='isolate-everything')

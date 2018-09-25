@@ -236,7 +236,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.chromium.c.build_config_fs = (
           self._sanitize_dir_name(self.buildername))
 
-    self.m.chromium.run_mb(
+    self.m.chromium.mb_gen(
       self.mastername, self.buildername, phase=phase, use_goma=True,
       mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
       isolated_targets=self._isolated_targets)

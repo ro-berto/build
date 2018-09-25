@@ -73,7 +73,7 @@ def RunSteps(api, mastername, buildername):
   api.chromium.runhooks()
 
   if api.chromium.c.project_generator.tool == 'mb':
-    api.chromium.run_mb(mastername, buildername, use_goma=True)
+    api.chromium.mb_gen(mastername, buildername, use_goma=True)
 
   targets = []
   for target in builder.get('unittests', []):

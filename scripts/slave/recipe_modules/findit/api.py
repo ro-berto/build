@@ -114,7 +114,7 @@ class FinditApi(recipe_api.RecipeApi):
     """
     # Run mb to generate or update ninja build files.
     if self.m.chromium.c.project_generator.tool == 'mb':
-      self.m.chromium.run_mb(mb_mastername, mb_buildername,
+      self.m.chromium.mb_gen(mb_mastername, mb_buildername,
                              name='generate_build_files')
 
     # Run ninja to check existences of targets.

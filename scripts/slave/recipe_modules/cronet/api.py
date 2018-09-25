@@ -82,7 +82,7 @@ class CronetApi(recipe_api.RecipeApi):
           use_goma=use_goma,
           gn_path=gn_path)
     elif self.m.chromium.c.project_generator.tool == 'mb':
-      self.m.chromium.run_mb(
+      self.m.chromium.mb_gen(
           mastername,
           buildername,
           use_goma=use_goma)

@@ -182,7 +182,7 @@ def _RunStepsInternal(api, mastername, buildername, revision):
   api.chromium.runhooks()
 
   if bot_config.get('run_mb'):
-    api.chromium.run_mb(mastername, buildername, use_goma=True)
+    api.chromium.mb_gen(mastername, buildername, use_goma=True)
 
   targets = list(bot_config.get('targets', []))
   targets += _GetChromiumTestsCompileTargets(

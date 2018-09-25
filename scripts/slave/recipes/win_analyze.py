@@ -36,7 +36,7 @@ def RunSteps(api):
   api.chromium.c.compile_py.compiler = None
   api.chromium.c.compile_py.goma_dir = None
 
-  api.chromium.run_mb('chromium.fyi', 'Chromium Windows Analyze',
+  api.chromium.mb_gen('chromium.fyi', 'Chromium Windows Analyze',
                       use_goma=False)
 
   api.chromium.compile(targets=['chrome'])

@@ -44,7 +44,7 @@ def RunSteps(api):
 
     mb_config_path = api.properties.get('mb_config_path')
 
-    api.chromium.run_mb(mastername, buildername, use_goma=True,
+    api.chromium.mb_gen(mastername, buildername, use_goma=True,
                         mb_config_path=mb_config_path,
                         android_version_code=3,
                         android_version_name="example")
