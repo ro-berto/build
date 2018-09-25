@@ -20,6 +20,19 @@ def v8(c):
     # We sould remove it when crbug.com/470681 is resolved.
     c.build_config_fs = c.BUILD_CONFIG
 
+  if c.HOST_PLATFORM == 'mac':
+    # There are several ways to download hermetic XCode:
+    #  - via recipe logic in api.chromium.runhooks and mac_toolchains DEPS hook
+    #  - via api.chromium.ensure_toolchains method
+    #  - via osx_sdk recipe module
+    #
+    # The first mechanism is deprecated and is being phased out, the second
+    # mechanism does not work on LUCI yet. The setting below disables the recipe
+    # logic for the DEPS hook, thus preventing the XCode being fetched by the
+    # chromium module as it thinks that we use api.chromium.ensure_toolchains,
+    # but in practice we do not call it and use osx_sdk module instead.
+    c.mac_toolchain.enabled = True
+
 
 @CONFIG_CTX(includes=['v8'])
 def arm_hard_float(c):

@@ -96,33 +96,6 @@
   },
   {
     "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[START_DIR]",
-      "-ensure-file",
-      "infra/tools/mac_toolchain/${platform} git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-git_revision:796\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/mac_toolchain/${platform}\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
@@ -131,9 +104,7 @@
     "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_baseline/v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
-      "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
-      "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
+      "FORCE_MAC_TOOLCHAIN": "1"
     },
     "env_suffixes": {
       "PATH": [
