@@ -631,10 +631,14 @@ SPEC = {
 
     'Android Remoting Tests': {
       'chromium_config': 'android',
+      'chromium_apply_config': [
+        'mb',
+        'download_vr_test_apks'
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
+        'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
@@ -656,15 +660,20 @@ SPEC = {
     },
     'Android Find Annotated Test': {
       'chromium_config': 'android',
+      'chromium_apply_config': [
+        'mb',
+        'download_vr_test_apks'
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
       'parent_buildername': 'Android Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'main_builder_mb',
+      'android_config': 'main_builder',
       'android_apply_config': ['remove_all_system_webviews'],
       'tests': [
         steps.FindAnnotatedTest(),
@@ -714,18 +723,22 @@ SPEC = {
     },
     'Android VR Tests': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['download_vr_test_apks'],
+      'chromium_apply_config': [
+        'mb',
+        'download_vr_test_apks'
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
         'android',
       ],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
       'bot_type': 'tester',
       'parent_buildername': 'Android Builder (dbg)',
-      'android_config': 'main_builder_mb',
+      'android_config': 'main_builder',
       'android_apply_config': [
         'use_devil_provision',
         'remove_system_vrcore',
@@ -911,6 +924,7 @@ SPEC['builders'].update([
     stock_config('linux-blink-gen-property-trees', config='Debug'),
     stock_config('linux-blink-heap-incremental-marking', config='Debug'),
     stock_config('linux-blink-heap-unified-gc',
+                 config='Debug',
                  bot_type='tester',
                  parent_mastername='chromium.linux',
                  parent_buildername='Linux Builder (dbg)'),

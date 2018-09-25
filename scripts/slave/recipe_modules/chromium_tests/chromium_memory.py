@@ -45,7 +45,7 @@ SPEC = {
       },
       # Enable LSan at runtime. This disables the sandbox in browser tests.
       # http://crbug.com/336218
-      'chromium_apply_config': ['lsan'],
+      'chromium_apply_config': ['lsan', 'mb', 'goma_high_parallel'],
       'bot_type': 'tester',
       'parent_buildername': 'Linux ASan LSan Builder',
       'testing': {'platform': 'linux'},
@@ -88,6 +88,7 @@ SPEC = {
     'Linux MSan Tests': {
       'chromium_config': 'chromium_msan',
       'gclient_config': 'chromium',
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -116,6 +117,7 @@ SPEC = {
       'chromium_config': 'chromium_msan',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chromeos'],
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -144,6 +146,7 @@ SPEC = {
     'Linux TSan Tests': {
       'chromium_config': 'chromium_tsan2',
       'gclient_config': 'chromium',
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -173,6 +176,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
+      'chromium_apply_config': ['mb'],
       'bot_type': 'tester',
       'parent_buildername': 'Mac ASan 64 Builder',
       'testing': {'platform': 'mac'},
@@ -197,7 +201,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'chromium_apply_config': ['lsan'],
+      'chromium_apply_config': ['lsan', 'mb'],
       'parent_buildername': 'Linux Chromium OS ASan LSan Builder',
       'bot_type': 'tester',
       'testing': {'platform': 'linux'},

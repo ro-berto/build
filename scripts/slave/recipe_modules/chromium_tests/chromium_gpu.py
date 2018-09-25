@@ -46,7 +46,12 @@ SPEC = {
     },
     'Win10 Release (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'goma_high_parallel',
+        'goma_enable_global_file_stat_cache',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -60,7 +65,10 @@ SPEC = {
     },
     'Win10 Debug (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -111,7 +119,11 @@ SPEC = {
     },
     'Linux Release (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+        'goma_high_parallel',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -172,7 +184,10 @@ SPEC = {
     },
     'Mac Release (Intel)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -186,7 +201,10 @@ SPEC = {
     },
     'Mac Debug (Intel)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -200,7 +218,10 @@ SPEC = {
     },
     'Mac Retina Release (AMD)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -214,7 +235,10 @@ SPEC = {
     },
     'Mac Retina Debug (AMD)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',

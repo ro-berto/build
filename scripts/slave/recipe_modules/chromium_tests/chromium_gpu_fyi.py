@@ -73,7 +73,11 @@ SPEC = {
     },
     'Win7 FYI Release (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'build_angle_deqp_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -88,7 +92,11 @@ SPEC = {
     },
     'Win10 FYI dEQP Release (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'build_angle_deqp_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -103,7 +111,11 @@ SPEC = {
     },
     'Win10 FYI Exp Release (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'build_angle_deqp_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -118,7 +130,11 @@ SPEC = {
     },
     'Win10 FYI Release (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'build_angle_deqp_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -133,7 +149,10 @@ SPEC = {
     },
     'Win10 FYI Debug (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -148,7 +167,11 @@ SPEC = {
     },
     'Win7 FYI Release (AMD)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'build_angle_deqp_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -163,7 +186,10 @@ SPEC = {
     },
     'Win7 FYI Debug (AMD)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -178,7 +204,11 @@ SPEC = {
     },
     'Win7 FYI dEQP Release (AMD)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'build_angle_deqp_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -193,7 +223,11 @@ SPEC = {
     },
     'Win10 FYI Release (Intel HD 630)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'build_angle_deqp_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -208,7 +242,11 @@ SPEC = {
     },
     'Win10 FYI dEQP Release (Intel HD 630)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'build_angle_deqp_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -223,7 +261,11 @@ SPEC = {
     },
     'Win10 FYI Exp Release (Intel HD 630)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'build_angle_deqp_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -300,7 +342,11 @@ SPEC = {
     },
     'Win7 FYI x64 Release (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'build_angle_deqp_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -315,7 +361,11 @@ SPEC = {
     },
     'Win7 FYI x64 dEQP Release (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'build_angle_deqp_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -439,7 +489,11 @@ SPEC = {
     },
     'Linux FYI Release (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+          'build_angle_deqp_tests'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -469,7 +523,11 @@ SPEC = {
     },
     'Linux FYI dEQP Release (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+          'build_angle_deqp_tests'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -484,7 +542,11 @@ SPEC = {
     },
     'Linux FYI Release (Intel HD 630)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+          'build_angle_deqp_tests'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -499,7 +561,11 @@ SPEC = {
     },
     'Linux FYI dEQP Release (Intel HD 630)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+          'build_angle_deqp_tests'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -531,7 +597,11 @@ SPEC = {
     },
     'Linux FYI Release (AMD R7 240)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+          'build_angle_deqp_tests'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -546,7 +616,7 @@ SPEC = {
     },
     'GPU FYI Mac Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config':[
+      'chromium_apply_config': [
           'mb',
           'ninja_confirm_noop'
       ],
@@ -564,7 +634,7 @@ SPEC = {
     },
     'GPU FYI Mac Builder (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config':[
+      'chromium_apply_config': [
           'mb',
           'ninja_confirm_noop'
       ],
@@ -582,7 +652,7 @@ SPEC = {
     },
     'GPU FYI Mac dEQP Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config':[
+      'chromium_apply_config': [
           'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
@@ -605,7 +675,10 @@ SPEC = {
     },
     'Mac FYI Release (Intel)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -620,7 +693,10 @@ SPEC = {
     },
     'Mac FYI Debug (Intel)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -635,7 +711,10 @@ SPEC = {
     },
     'Mac Pro FYI Release (AMD)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -650,7 +729,10 @@ SPEC = {
     },
     'Mac FYI Retina Release (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -665,7 +747,10 @@ SPEC = {
     },
     'Mac FYI Retina Debug (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -680,7 +765,10 @@ SPEC = {
     },
     'Mac FYI Retina Release (AMD)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -695,7 +783,10 @@ SPEC = {
     },
     'Mac FYI Retina Debug (AMD)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -710,7 +801,10 @@ SPEC = {
     },
     'Mac FYI Experimental Release (Intel)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -725,7 +819,10 @@ SPEC = {
     },
     'Mac FYI Experimental Retina Release (AMD)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -740,7 +837,10 @@ SPEC = {
     },
     'Mac FYI Experimental Retina Release (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -771,8 +871,9 @@ SPEC = {
     },
     'Mac FYI dEQP Release AMD': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb',
-                                'ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -788,8 +889,9 @@ SPEC = {
     },
     'Mac FYI dEQP Release Intel': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb',
-                                'ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
       'chromium_config_kwargs': {
@@ -1076,10 +1178,14 @@ SPEC = {
 
     'Linux FYI Ozone (Intel)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+        'ozone',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
+        'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
@@ -1096,7 +1202,11 @@ SPEC = {
     # terms of them.
     'Optional Win10 Release (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'build_angle_deqp_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1110,7 +1220,11 @@ SPEC = {
     },
     'Optional Win10 Release (Intel HD 630)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'build_angle_deqp_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1124,7 +1238,11 @@ SPEC = {
     },
     'Optional Linux Release (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+          'build_angle_deqp_tests'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1138,7 +1256,11 @@ SPEC = {
     },
     'Optional Linux Release (Intel HD 630)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+          'build_angle_deqp_tests'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1152,7 +1274,10 @@ SPEC = {
     },
     'Optional Mac Release (Intel)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1166,7 +1291,10 @@ SPEC = {
     },
     'Optional Mac Retina Release (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1180,7 +1308,10 @@ SPEC = {
     },
     'Optional Mac Retina Release (AMD)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1220,7 +1351,11 @@ SPEC = {
     # the Win AMD bot's tests on the win_angle_rel_ng tryserver.
     'Win7 ANGLE Tryserver (AMD)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['ninja_confirm_noop'],
+      'chromium_apply_config': [
+        'build_angle_deqp_tests',
+        'mb',
+        'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',

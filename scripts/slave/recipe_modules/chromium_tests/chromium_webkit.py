@@ -32,7 +32,12 @@ SPEC['builders'] = {
   },
   'WebKit Win10': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
+    'chromium_apply_config': [
+      'goma_high_parallel',
+      'goma_enable_global_file_stat_cache',
+      'mb',
+      'ninja_confirm_noop',
+    ],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
@@ -65,7 +70,10 @@ SPEC['builders'] = {
   },
   'WebKit Mac10.13 (retina)': {
     'chromium_config': 'chromium',
-    'chromium_apply_config': ['mb'],
+    'chromium_apply_config': [
+      'mb',
+      'ninja_confirm_noop',
+    ],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',

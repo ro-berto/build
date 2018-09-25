@@ -140,7 +140,7 @@ SPEC = {
     'KitKat Phone Tester (dbg)': {
       'chromium_config': 'android',
       'chromium_apply_config': [
-          'mb',
+        'download_vr_test_apks',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
@@ -149,7 +149,7 @@ SPEC = {
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
-      'android_config': 'main_builder',
+      'android_config': 'main_builder_mb',
       'bot_type': 'tester',
       'parent_buildername': 'Android arm Builder (dbg)',
       'testing': {
@@ -179,10 +179,14 @@ SPEC = {
 
     'KitKat Tablet Tester': {
       'chromium_config': 'android',
+      'chromium_apply_config': [
+        'download_vr_test_apks',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
       'parent_buildername': 'Android arm Builder (dbg)',
@@ -196,15 +200,19 @@ SPEC = {
 
     'Marshmallow 64 bit Tester': {
       'chromium_config': 'android',
+      'chromium_apply_config': [
+        'download_vr_test_apks',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
         'TARGET_PLATFORM': 'android',
       },
       'parent_buildername': 'Android arm64 Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'arm64_builder_mb',
+      'android_config': 'main_builder_mb',
       'testing': {
         'platform': 'linux',
       },
@@ -212,10 +220,14 @@ SPEC = {
 
     'Lollipop Phone Tester': {
       'chromium_config': 'android',
+      'chromium_apply_config': [
+        'download_vr_test_apks',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
       'parent_buildername': 'Android arm Builder (dbg)',
@@ -228,10 +240,14 @@ SPEC = {
 
     'Lollipop Tablet Tester': {
       'chromium_config': 'android',
+      'chromium_apply_config': [
+        'download_vr_test_apks',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
       'parent_buildername': 'Android arm Builder (dbg)',
@@ -268,10 +284,14 @@ SPEC = {
 
     'Marshmallow Tablet Tester': {
       'chromium_config': 'android',
+      'chromium_apply_config': [
+        'download_vr_test_apks',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
       'parent_buildername': 'Android arm Builder (dbg)',
@@ -285,10 +305,14 @@ SPEC = {
 
     'Nougat Phone Tester': {
       'chromium_config': 'android',
+      'chromium_apply_config': [
+        'download_vr_test_apks',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
         'TARGET_PLATFORM': 'android',
       },
       'parent_buildername': 'Android arm64 Builder (dbg)',
@@ -302,15 +326,19 @@ SPEC = {
 
     'Oreo Phone Tester': {
       'chromium_config': 'android',
+      'chromium_apply_config': [
+        'download_vr_test_apks',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
         'TARGET_PLATFORM': 'android',
       },
       'parent_buildername': 'Android arm64 Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'arm64_builder_mb',
+      'android_config': 'main_builder_mb',
       'android_apply_config': ['use_devil_provision'],
       'testing': {
         'platform': 'linux',
@@ -319,10 +347,14 @@ SPEC = {
 
     'Android WebView L (dbg)': {
       'chromium_config': 'android',
+      'chromium_apply_config': [
+        'download_vr_test_apks',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
       'parent_buildername': 'Android arm Builder (dbg)',
@@ -336,10 +368,14 @@ SPEC = {
 
     'Android WebView M (dbg)': {
       'chromium_config': 'android',
+      'chromium_apply_config': [
+        'download_vr_test_apks',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android',
       },
       'parent_buildername': 'Android arm Builder (dbg)',
@@ -353,15 +389,19 @@ SPEC = {
 
     'Android WebView N (dbg)': {
       'chromium_config': 'android',
+      'chromium_apply_config': [
+        'download_vr_test_apks',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
         'TARGET_PLATFORM': 'android',
       },
       'parent_buildername': 'Android arm64 Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'arm64_builder_mb',
+      'android_config': 'main_builder_mb',
       'android_apply_config': ['remove_all_system_webviews'],
       'testing': {
         'platform': 'linux',
@@ -370,15 +410,19 @@ SPEC = {
 
     'Android WebView O (dbg)': {
       'chromium_config': 'android',
+      'chromium_apply_config': [
+        'download_vr_test_apks',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
         'TARGET_PLATFORM': 'android',
       },
       'parent_buildername': 'Android arm64 Builder (dbg)',
       'bot_type': 'tester',
-      'android_config': 'arm64_builder_mb',
+      'android_config': 'main_builder_mb',
       'android_apply_config': ['remove_all_system_webviews', 'restart_usb'],
       'testing': {
         'platform': 'linux',

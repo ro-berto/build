@@ -131,6 +131,7 @@ SPEC = {
         'chromium_lkgr',
         'show_v8_revision',
       ],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,

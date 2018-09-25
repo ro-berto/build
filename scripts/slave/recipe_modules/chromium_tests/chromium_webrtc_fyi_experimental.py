@@ -88,7 +88,7 @@ SPEC = {
     'WebRTC Chromium FYI Android Tests (dbg) (K Nexus5)': {
       'android_config': 'base_config',
       'bot_type': 'tester',
-      'chromium_apply_config': ['android'],
+      'chromium_apply_config': ['dcheck', 'mb', 'android'],
       'chromium_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -119,7 +119,7 @@ SPEC = {
     'WebRTC Chromium FYI Android Tests (dbg) (M Nexus5X)': {
       'android_config': 'base_config',
       'bot_type': 'tester',
-      'chromium_apply_config': ['android'],
+      'chromium_apply_config': ['dcheck', 'mb', 'android'],
       'chromium_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -189,7 +189,7 @@ SPEC = {
     },
     'WebRTC Chromium FYI Linux Tester': {
       'bot_type': 'tester',
-      'chromium_apply_config': [],
+      'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -255,7 +255,7 @@ SPEC = {
     },
     'WebRTC Chromium FYI Mac Tester': {
       'bot_type': 'tester',
-      'chromium_apply_config': [],
+      'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -321,7 +321,7 @@ SPEC = {
     },
     'WebRTC Chromium FYI Win10 Tester': {
       'bot_type': 'tester',
-      'chromium_apply_config': [],
+      'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -347,7 +347,7 @@ SPEC = {
     },
     'WebRTC Chromium FYI Win7 Tester': {
       'bot_type': 'tester',
-      'chromium_apply_config': [],
+      'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -373,7 +373,7 @@ SPEC = {
     },
     'WebRTC Chromium FYI Win8 Tester': {
       'bot_type': 'tester',
-      'chromium_apply_config': [],
+      'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',

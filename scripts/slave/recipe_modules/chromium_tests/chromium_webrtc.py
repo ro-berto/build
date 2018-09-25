@@ -111,7 +111,7 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
              enable_baremetal_tests=True, swarming=None):
   spec = BaseSpec(
       bot_type='tester',
-      chromium_apply_config=[],
+      chromium_apply_config=['dcheck', 'mb'],
       gclient_config=gclient_config,
       platform=platform,
       target_bits=target_bits,
@@ -245,7 +245,6 @@ AddTestSpec('Mac Tester', 'chromium-webrtc-rel-mac', 'mac')
 AddTestSpec('Mac Tester (long-running)', 'chromium-webrtc-rel-mac-long', 'mac')
 AddTestSpec('Linux Tester', 'chromium-webrtc-rel-linux', 'linux')
 AddTestSpec('Android Tester', None, 'android',
-            build_config='Debug',
             swarming={
               'device_type': 'bullhead',
               'device_os': 'MMB29Q',
