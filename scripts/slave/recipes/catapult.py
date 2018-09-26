@@ -8,6 +8,7 @@ DEPS = [
   'depot_tools/cipd',
   'depot_tools/gclient',
   'depot_tools/gitiles',
+  'depot_tools/osx_sdk',
   'gae_sdk',
   'recipe_engine/generator_script',
   'recipe_engine/path',
@@ -70,7 +71,8 @@ def RunSteps(api, platform):
     wct_path = api.wct.install().join('wct')
   else:
     wct_path = None
-  _RemoteSteps(api, app_engine_sdk_path, platform, wct_path)
+  with api.osx_sdk('mac'):
+    _RemoteSteps(api, app_engine_sdk_path, platform, wct_path)
 
 
 def GenTests(api):
@@ -80,6 +82,18 @@ def GenTests(api):
                    buildername='windows',
                    bot_id='windows_slave') +
     api.platform.name('win') +
+    api.generator_script(
+      'build_steps.py',
+      {'name': 'Dashboard Tests', 'cmd': ['run_py_tests', '--no-hooks']},
+    )
+  )
+
+  yield (
+    api.test('mac') +
+    api.properties(mastername='master.client.catapult',
+                   buildername='mac',
+                   bot_id='windows_slave') +
+    api.platform.name('mac') +
     api.generator_script(
       'build_steps.py',
       {'name': 'Dashboard Tests', 'cmd': ['run_py_tests', '--no-hooks']},
