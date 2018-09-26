@@ -1698,7 +1698,7 @@
       "----",
       "cp",
       "[BUILDER_CACHE]/android_binary_size/src/out/Release/report.ndjson",
-      "gs://chromium-binary-size-trybot-results/android_binary_size/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.ndjson"
+      "gs://chromium-binary-size-trybot-results/android_binary_size/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.ndjson"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
     "env": {
@@ -1707,8 +1707,8 @@
     "infra_step": true,
     "name": "gsutil upload Supersize HTML report",
     "~followup_annotations": [
-      "@@@STEP_LINK@Supersize HTML Report@https://storage.cloud.google.com/chromium-binary-size-trybot-results/android_binary_size/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.ndjson@@@",
-      "@@@STEP_LINK@>>> View Supersize HTML Report <<<@https://storage.googleapis.com/chrome-supersize/viewer.html?load_url=https://storage.cloud.google.com/chromium-binary-size-trybot-results/android_binary_size/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.ndjson@@@"
+      "@@@STEP_LINK@Supersize HTML Report@https://storage.cloud.google.com/chromium-binary-size-trybot-results/android_binary_size/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.ndjson@@@",
+      "@@@STEP_LINK@>>> View Supersize HTML Report <<<@https://storage.googleapis.com/chrome-supersize/viewer.html?load_url=https://storage.cloud.google.com/chromium-binary-size-trybot-results/android_binary_size/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.ndjson@@@"
     ]
   },
   {

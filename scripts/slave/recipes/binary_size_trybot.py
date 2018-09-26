@@ -41,7 +41,7 @@ _FOOTER_PRESENT_STEP_NAME = (
 _NDJSON_GS_BUCKET = 'chromium-binary-size-trybot-results'
 _HTML_REPORT_BASE_URL = (
     'https://storage.googleapis.com/chrome-supersize/viewer.html?load_url='
-    'https://storage.cloud.google.com/' + _NDJSON_GS_BUCKET)
+    'https://storage.cloud.google.com/' + _NDJSON_GS_BUCKET + '/')
 
 
 def RunSteps(api):
@@ -119,7 +119,8 @@ def RunSteps(api):
                    dex_method_count_diff_path, ndjson_path, results_path)
 
       gs_dest = '{}/{}.ndjson'.format(
-          api.properties['buildername'], api.properties['revision'])
+          api.properties['buildername'],
+          bot_update_step.presentation.properties['got_revision'])
       upload_result = api.gsutil.upload(
           source=ndjson_path,
           bucket=_NDJSON_GS_BUCKET,
@@ -128,7 +129,7 @@ def RunSteps(api):
           link_name='Supersize HTML Report')
       report_link_text = '>>> View Supersize HTML Report <<<'
       upload_result.presentation.links[report_link_text] = (
-          _HTML_REPORT_BASE_URL + '/' + gs_dest)
+          _HTML_REPORT_BASE_URL + gs_dest)
 
       _DisplayDiffResults(api, 'Resource Sizes', resource_sizes_diff_path,
                           '(Look here for high-level metrics)')
@@ -274,7 +275,12 @@ def GenTests(api):
   )
   yield (
       props('normal_build') +
-      override_analyze()
+      override_analyze() +
+      api.post_process(
+          post_process.AnnotationContains,
+          'gsutil upload Supersize HTML report',
+          ['{}android_binary_size/{}.ndjson'.format(
+              _HTML_REPORT_BASE_URL, api.bot_update.gen_revision('src'))])
   )
   yield (
       props('unexpected_increase') +
