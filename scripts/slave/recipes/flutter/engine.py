@@ -163,7 +163,7 @@ def UploadTreeMap(api, upload_dir, lib_flutter_path):
     destionation_dir = temp_dir.join('sizes')
     args = ['--library', library_path, '--destdir', destionation_dir]
 
-    api.python('generate treemap for %s' % lib_flutter_path, script_path, args)
+    api.python('generate treemap for %s' % upload_dir, script_path, args)
 
     remote_name = GetCloudPath(api, upload_dir)
     result = api.gsutil.upload(destionation_dir, BUCKET_NAME, remote_name,

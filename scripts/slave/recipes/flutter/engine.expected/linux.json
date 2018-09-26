@@ -5928,7 +5928,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
-    "name": "generate treemap for out/android_release/libflutter.so"
+    "name": "generate treemap for android-arm-release"
   },
   {
     "cmd": [
@@ -6848,7 +6848,7 @@
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
-    "name": "generate treemap for out/android_release_arm64/libflutter.so"
+    "name": "generate treemap for android-arm64-release"
   },
   {
     "cmd": [
