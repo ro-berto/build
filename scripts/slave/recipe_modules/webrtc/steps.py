@@ -35,9 +35,7 @@ NORMAL_TESTS = freeze({
   },
   'ortc_unittests': {},
   'peerconnection_unittests': {
-    # These tests spend a lot of time waiting, using 5x cpu cores is
-    # more effective than sharding.
-    'workers_per_cpu_core': 5,
+    'shards': 4,
   },
   'rtc_media_unittests': {},
   'rtc_pc_unittests': {},
@@ -460,14 +458,6 @@ class SwarmingPerfTest(SwarmingIsolatedScriptTest):
 
 
 class SwarmingWebRtcGtestTest(SwarmingIsolatedScriptTest):
-  def __init__(self, name, workers_per_cpu_core=None, *args, **kwargs):
-    # Reinterpret field and pass it as extra arg, so it is transparently
-    # lifted and chromium's pipeline is left unchanged.
-    if workers_per_cpu_core:
-      workers_options = ['--workers', '%sx' % workers_per_cpu_core]
-      kwargs.setdefault('args', []).extend(workers_options)
-    super(SwarmingWebRtcGtestTest, self).__init__(name, *args, **kwargs)
-
   def _output_perf_results_if_present(self, api, step_result):
     # TODO(phoglund): find out why our regular tests use
     # SwarmingIsolatedScriptTest rather than SwarmingGTestTest. For now, stop
