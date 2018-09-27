@@ -149,6 +149,10 @@ def find_new_builds(master_url, builderlist, root_json, build_db):
 
         new_builds[buildername] = current_builds
 
+  logging.info('new builds for %s:', master_url)
+  for builder in sorted(new_builds.keys()):
+    logging.info('builder: %s, new builds: %s', builder, new_builds[builder])
+
   return new_builds
 
 
