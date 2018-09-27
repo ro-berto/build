@@ -14,7 +14,7 @@ from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 
 from . import bot_config_and_test_db as bdb_module
-from . import builders
+from . import builders as chromium_tests_builders
 from . import steps
 
 
@@ -29,7 +29,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def __init__(self, *args, **kwargs):
     super(ChromiumTestsApi, self).__init__(*args, **kwargs)
     self._builders = {}
-    self.add_builders(builders.BUILDERS)
+    self.add_builders(chromium_tests_builders.BUILDERS)
     self._precommit_mode = False
 
   @property
@@ -231,7 +231,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def generate_tests_from_test_spec(self, test_spec, builder_dict,
       buildername, mastername, swarming_dimensions,
-      scripts_compile_targets, generators, bot_update_step, bot_config):
+      scripts_compile_targets, generators, bot_update_step):
     tests = builder_dict.get('tests', ())
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
     for generator in generators:
@@ -358,10 +358,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               test_data='MAJOR=51\nMINOR=0\nBUILD=2704\nPATCH=0\n'))
           self.log('version:%s' % version)
           android_version_name = ('%s.%s.%s.%s'
-              % (version['MAJOR'], version['MINOR'], version['BUILD'], version['PATCH']))
+              % (version['MAJOR'], version['MINOR'],
+                 version['BUILD'], version['PATCH']))
           self.log('android_version_name:%s' % android_version_name)
           # TODO: Consider CPU architecture
-          android_version_code = '%d%03d' % (int(version['BUILD']), int(version['PATCH']))
+          android_version_code = '%d%03d' % (
+              int(version['BUILD']), int(version['PATCH']))
           self.log('android_version_code:%s' % android_version_code)
 
         self.run_mb_and_compile(compile_targets, isolated_targets,
@@ -525,7 +527,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # Legacy buildbot-only triggering.
       # TODO(tandrii): get rid of legacy triggering.
       trigger_specs = []
-      for _, loop_mastername, loop_buildername, builder_dict in sorted(
+      for _, loop_mastername, loop_buildername, _ in sorted(
           bot_db.bot_configs_matching_parent_buildername(
               mastername, buildername)):
         trigger_spec = {
@@ -561,7 +563,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     properties.update(additional_properties)
 
     scheduler_jobs = collections.defaultdict(list)
-    for luci_project, loop_mastername, loop_buildername, builder_dict in sorted(
+    for luci_project, loop_mastername, loop_buildername, _ in sorted(
         bot_db.bot_configs_matching_parent_buildername(
             mastername, buildername)):
       # LUCI mode will emulate triggering of builds inside master.chromium*
@@ -838,7 +840,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                           'retry with patch')
 
 
-  def _should_retry_with_patch_deapplied(self, affected_files, disable_deapply_patch):
+  def _should_retry_with_patch_deapplied(self, affected_files,
+                                         disable_deapply_patch):
     """Whether to retry failing test suites with patch deapplied.
 
     Returns: (should_deapply_patch, deapply_patch_reason)
@@ -895,8 +898,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       deferred_retry_results = []
       with self.m.step.defer_results():
         for t in failing_tests:
-          deferred_result = self.m.test_utils.summarize_test_with_patch_deapplied(
-              self.m, t, emit_failing_step=not enable_retry_with_patch)
+          deferred_result = (self.m.test_utils.
+            summarize_test_with_patch_deapplied(
+                self.m, t, emit_failing_step=not enable_retry_with_patch))
           deferred_retry_results.append((deferred_result, t))
 
       # Looks for test suites that have to be retried.
@@ -1078,7 +1082,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         'build directory',
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
     if package_transfer:
-      self.download_and_unzip_build(mastername, buildername, update_step, bot_db)
+      self.download_and_unzip_build(
+          mastername, buildername, update_step, bot_db)
 
     tests = test_config.tests_on(mastername, buildername)
     if not tests:
@@ -1114,19 +1119,19 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       builders: An optional mapping from <mastername, buildername> to
                 build/test settings. For an example of defaults for chromium,
                 see scripts/slave/recipe_modules/chromium_tests/chromium.py
-      trybots: An optional mapping from <mastername, buildername> of the trybot to
-               configurations of the mirrored CI bot. Defaults are in
+      trybots: An optional mapping from <mastername, buildername> of the trybot
+               to configurations of the mirrored CI bot. Defaults are in
                ChromiumTestsApi.
 
     Returns: [a 6-tuple of the following]
       bot_config_object: Configuration for the tests to be run.
-      bot_update_step: Holds state on build properties. Used to pass state between
-                       methods.
+      bot_update_step: Holds state on build properties. Used to pass state
+                       between methods.
       affected_files: A list of paths affected by the CL.
       tests: A list of Test objects [see chromium_tests/steps.py]. Stateful
-             objects that can run tests [possibly remotely via swarming] and parse
-             the results. Running tests multiple times is not idempotent -- the
-             results of previous runs affect future runs.
+             objects that can run tests [possibly remotely via swarming] and
+             parse the results. Running tests multiple times is not idempotent
+             -- the results of previous runs affect future runs.
       disable_deapply_patch: A flag that prevents the "deapply patch" series of
                              steps from running.
       enable_retry_with_patch: A flag that adds a "retry with patch" step.
@@ -1202,7 +1207,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver:
       additional_compile_targets = sorted(
           set(compile_targets) - set(test_targets))
-      analyze_names = ['chromium'] + list(trybot_config.get('analyze_names', []))
+      analyze_names = ['chromium'] + list(
+          trybot_config.get('analyze_names', []))
       mb_config_path = (
           self.m.chromium.c.project_generator.config_path
           or self.m.path['checkout'].join('tools', 'mb', 'mb_config.pyl'))

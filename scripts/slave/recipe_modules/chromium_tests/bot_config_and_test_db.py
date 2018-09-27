@@ -34,14 +34,17 @@ class BotConfig(object):
         raise Exception('No configuration present for master %s' % m)
       master_dict = self._bots_dict[m]
       if not b in master_dict.get('builders', {}):
-        raise Exception('No configuration present for builder %s in master %s' % (b, m))
+        raise Exception(
+            'No configuration present for builder %s in master %s' % (b, m))
 
   class BotId(collections.namedtuple('BotId',
-                                     ('mastername', 'buildername', 'tester', 'tester_mastername'))):
+                                     ('mastername', 'buildername', 'tester',
+                                      'tester_mastername'))):
 
     __slots__ = ()
 
-    def __new__(cls, mastername, buildername, tester=None, tester_mastername=None):
+    def __new__(cls, mastername, buildername, tester=None,
+                tester_mastername=None):
       tester_mastername = tester_mastername or mastername if tester else None
       return super(BotConfig.BotId, cls).__new__(
           cls, mastername, buildername, tester, tester_mastername)
@@ -83,8 +86,8 @@ class BotConfig(object):
     if len(self._bot_ids) == 1:
       bot_config = self._get_builder_bot_config(self._bot_ids[0])
 
-      # The official builders specify the test spec using a test_spec property in
-      # the bot_config instead of reading it from a file.
+      # The official builders specify the test spec using a test_spec property
+      # in the bot_config instead of reading it from a file.
       if 'test_spec' in bot_config: # pragma: no cover
         return { self._bot_ids[0].buildername: bot_config['test_spec'] }
 
@@ -157,7 +160,6 @@ class BotConfig(object):
                   scripts_compile_targets,
                   test_generators,
                   bot_update_step,
-                  self
               ))
       else:
         test_spec = None
