@@ -29,7 +29,7 @@ def check(val, potentials):
 def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
                TARGET_PLATFORM, TARGET_ARCH, TARGET_BITS,
                BUILD_CONFIG, TARGET_CROS_BOARD,
-               BUILD_PATH, CHECKOUT_PATH, **_kwargs):
+               CHECKOUT_PATH, **_kwargs):
   equal_fn = lambda tup: ('%s=%s' % (tup[0], pipes.quote(str(tup[1]))))
   return ConfigGroup(
     compile_py = ConfigGroup(
@@ -128,7 +128,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     TARGET_BITS = Static(check(TARGET_BITS, HOST_TARGET_BITS)),
     TARGET_CROS_BOARD = Static(TARGET_CROS_BOARD),
 
-    BUILD_PATH = Static(BUILD_PATH),
     CHECKOUT_PATH = Static(CHECKOUT_PATH),
 
     gn_args = List(basestring),
