@@ -1331,6 +1331,36 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::swarming]/resources/get_task_states.py",
+      "--swarming-server",
+      "https://chromium-swarm.appspot.com",
+      "--swarming-py-path",
+      "[BUILDER_CACHE]/mac/src/tools/swarming_client/swarming.py",
+      "--json",
+      "/path/to/tmp/json",
+      "10000",
+      "110000"
+    ],
+    "cwd": "[BUILDER_CACHE]/mac",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "name": "test r5.collect tasks (r5)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"states\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"COMPLETED\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",

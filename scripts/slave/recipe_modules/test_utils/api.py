@@ -174,13 +174,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
     local_tests = []
     swarming_tests = []
     for test in tests:
-      # Some callers don't deps in chromium_tests. That's fine, this is just a
-      # temporary condition for now.
-      is_staging = (
-          hasattr(caller_api, 'chromium_tests') and
-          caller_api.chromium_tests.c and caller_api.chromium_tests.c.staging)
-      if is_staging and isinstance(
-          test, caller_api.chromium_tests.steps.SwarmingTest):
+      if isinstance(test, caller_api.chromium_tests.steps.SwarmingTest):
         swarming_tests.append(test)
       else:
         local_tests.append(test)
@@ -475,6 +469,8 @@ class SwarmingGroup(TestGroup):
     for t in self._tests:
       self._run_func(t, t.pre_run, caller_api, suffix, False)
       task = t.get_task(suffix)
+      if not task:
+        continue
 
       task_ids = frozenset(task.get_task_ids())
       self._all_task_ids.update(task_ids)
