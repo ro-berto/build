@@ -161,7 +161,8 @@ def UploadTreeMap(api, upload_dir, lib_flutter_path):
     script_path = checkout.join('third_party/dart/runtime/third_party/binary_size/src/run_binary_size_analysis.py')
     library_path = checkout.join(lib_flutter_path)
     destionation_dir = temp_dir.join('sizes')
-    args = ['--library', library_path, '--destdir', destionation_dir]
+    addr2line = checkout.join('third_party/android_tools/ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-addr2line')
+    args = ['--library', library_path, '--destdir', destionation_dir, "--addr2line-binary", addr2line ]
 
     api.python('generate treemap for %s' % upload_dir, script_path, args)
 
