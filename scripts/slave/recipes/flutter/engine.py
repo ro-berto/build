@@ -155,13 +155,14 @@ def AnalyzeDartUI(api):
     api.step('analyze dart_ui', ['/bin/bash', 'flutter/ci/analyze.sh'])
 
 
-def UploadTreeMap(api, upload_dir, lib_flutter_path):
+def UploadTreeMap(api, upload_dir, lib_flutter_path, android_triple):
   with MakeTempDir(api, 'treemap') as temp_dir:
     checkout = api.path['start_dir'].join('src')
     script_path = checkout.join('third_party/dart/runtime/third_party/binary_size/src/run_binary_size_analysis.py')
     library_path = checkout.join(lib_flutter_path)
     destionation_dir = temp_dir.join('sizes')
-    args = ['--library', library_path, '--destdir', destionation_dir]
+    addr2line = checkout.join('third_party/android_tools/ndk/toolchains/' + android_triple +'-4.9/prebuilt/linux-x86_64/bin/' + android_triple + '-addr2line')
+    args = ['--library', library_path, '--destdir', destionation_dir, "--addr2line-binary", addr2line ]
 
     api.python('generate treemap for %s' % upload_dir, script_path, args)
 
@@ -213,10 +214,10 @@ def BuildLinuxAndroid(api):
 
   # Build and upload engines for the runtime modes that use AOT compilation.
   aot_variants = [
-    ('arm', 'android_%s', 'android-arm-%s', 'clang_x86'),
-    ('arm64', 'android_%s_arm64', 'android-arm64-%s', 'clang_x64'),
+    ('arm', 'android_%s', 'android-arm-%s', 'clang_x86', 'arm-linux-androideabi'),
+    ('arm64', 'android_%s_arm64', 'android-arm64-%s', 'clang_x64', 'aarch64-linux-android'),
   ]
-  for android_cpu, out_dir, artifact_dir, clang_dir in aot_variants:
+  for android_cpu, out_dir, artifact_dir, clang_dir, android_triple in aot_variants:
     for runtime_mode in ['profile', 'release']:
       build_output_dir = out_dir % runtime_mode
       upload_dir = artifact_dir % runtime_mode
@@ -238,7 +239,7 @@ def BuildLinuxAndroid(api):
       ], archive_name='symbols.zip')
 
       if runtime_mode == 'release':
-        UploadTreeMap(api, upload_dir, unstripped_lib_flutter_path);
+        UploadTreeMap(api, upload_dir, unstripped_lib_flutter_path, android_triple);
 
   Build(api, 'android_debug', ':dist')
   UploadDartPackage(api, 'sky_engine')
