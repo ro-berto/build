@@ -7274,30 +7274,6 @@
     ]
   },
   {
-    "cmd": [
-      "pub",
-      "get"
-    ],
-    "cwd": "[START_DIR]/src/flutter/testing/symbols",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
-    },
-    "name": "pub get for verify_exported.dart"
-  },
-  {
-    "cmd": [
-      "dart",
-      "[START_DIR]/src/flutter/testing/symbols/verify_exported.dart",
-      "[START_DIR]/src/out"
-    ],
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
-    },
-    "name": "Verify exported symbols on release binaries"
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

@@ -155,16 +155,6 @@ def AnalyzeDartUI(api):
     api.step('analyze dart_ui', ['/bin/bash', 'flutter/ci/analyze.sh'])
 
 
-def VerifyExportedSymbols(api):
-  checkout = api.path['start_dir'].join('src')
-  out_dir = checkout.join('out')
-  script_dir = checkout.join('flutter/testing/symbols')
-  script_path = script_dir.join('verify_exported.dart')
-  with api.context(cwd=script_dir):
-    api.step('pub get for verify_exported.dart', ['pub', 'get'])
-  api.step('Verify exported symbols on release binaries', ['dart', script_path, out_dir])
-
-
 def UploadTreeMap(api, upload_dir, lib_flutter_path, android_triple):
   with MakeTempDir(api, 'treemap') as temp_dir:
     checkout = api.path['start_dir'].join('src')
@@ -604,14 +594,12 @@ def RunSteps(api):
       #TestEngine(api)
       BuildLinuxAndroid(api)
       BuildJavadoc(api)
-      VerifyExportedSymbols(api)
 
     if api.platform.is_mac:
       SetupXcode(api)
       BuildMac(api)
       BuildIOS(api)
       BuildObjcDoc(api)
-      VerifyExportedSymbols(api)
 
     if api.platform.is_win:
       BuildWindows(api)
