@@ -148,7 +148,16 @@ def find_new_builds(master_url, builderlist, root_json, build_db):
               max(finished)] = build_scan_db.gen_build(finished=True)
 
         new_builds[buildername] = current_builds
-
+  
+  logging.info('milo output for %s:', master_url)
+  for builder in sorted(root_json['builders'].keys()):
+    data = root_json['builders'][builder]
+    logging.info(
+        'builder: %s, current builds: %s, cached builds: %s',
+        builder,
+        data.get('currentBuilds') or [],
+        data.get('cachedBuilds') or [],
+    )
   logging.info('new builds for %s:', master_url)
   for builder in sorted(new_builds.keys()):
     logging.info('builder: %s, new builds: %s', builder, new_builds[builder])
