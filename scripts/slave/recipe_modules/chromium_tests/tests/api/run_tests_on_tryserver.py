@@ -32,7 +32,6 @@ def RunSteps(api):
       tests=[test],
       bot_update_step=update_step,
       affected_files=api.properties.get('affected_files', []),
-      disable_deapply_patch=api.properties.get('disable_deapply_patch'),
       enable_retry_with_patch=api.properties.get('enable_retry_with_patch'))
 
 
@@ -42,21 +41,6 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux_chromium_rel_ng',
-          swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }) +
-      api.override_step_data(
-          'base_unittests (with patch)',
-          api.swarming.canned_summary_output(failure=True) +
-          api.test_utils.canned_gtest_output(False))
-  )
-
-  yield (
-      api.test('disable_deapply_patch_recipes') +
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
-          disable_deapply_patch=True,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +

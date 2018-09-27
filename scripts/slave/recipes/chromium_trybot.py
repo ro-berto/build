@@ -904,19 +904,3 @@ def GenTests(api):
     ) +
     api.platform.name('mac')
   )
-
-  yield (
-    api.test('dont_deapply_patch') +
-    props(mastername='tryserver.chromium.mac',
-          buildername='mac_optional_gpu_tests_rel') +
-    api.platform.name('mac') +
-    api.override_step_data(
-        'read test spec (chromium.gpu.fyi.json)',
-        api.json.output({
-            'Optional Mac Retina Release (NVIDIA)': {
-                'gtest_tests': ['base_unittests'],
-            },
-        })
-    ) +
-    suppress_analyze()
-  )

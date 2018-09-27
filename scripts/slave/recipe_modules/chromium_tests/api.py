@@ -840,15 +840,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                           'retry with patch')
 
 
-  def _should_retry_with_patch_deapplied(self, affected_files,
-                                         disable_deapply_patch):
+  def _should_retry_with_patch_deapplied(self, affected_files):
     """Whether to retry failing test suites with patch deapplied.
 
     Returns: (should_deapply_patch, deapply_patch_reason)
     """
-    if disable_deapply_patch:
-      return (False, 'disabled in recipes')
-
     # We skip the deapply_patch step if there are modifications that affect the
     # recipe itself, since that would potentially invalidate the previous test
     # results.
@@ -862,7 +858,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def _run_tests_on_tryserver(self, bot_config, tests, bot_update_step,
                               affected_files,
-                              disable_deapply_patch,
                               enable_retry_with_patch):
     """Runs tests with retries.
 
@@ -881,8 +876,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # If there are failures but we shouldn't deapply the patch, then we're
       # also done.
       should_deapply_patch, deapply_patch_reason = (
-          self._should_retry_with_patch_deapplied(affected_files,
-                                                  disable_deapply_patch))
+          self._should_retry_with_patch_deapplied(affected_files))
       if not should_deapply_patch:
         self.m.python.failing_step(
             'test results',
@@ -1099,15 +1093,14 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def trybot_steps(self, builders=None, trybots=None):
     with self.m.tryserver.set_failure_hash():
       (bot_config_object, bot_update_step, affected_files, tests,
-       disable_deapply_patch, enable_retry_with_patch) = (
+       enable_retry_with_patch) = (
           self._trybot_steps_internal(builders=builders, trybots=trybots))
 
       self.m.python.succeeding_step('mark: before_tests', '')
       if tests:
         self._run_tests_on_tryserver(
             bot_config_object, tests, bot_update_step,
-            affected_files, disable_deapply_patch=disable_deapply_patch,
-            enable_retry_with_patch=enable_retry_with_patch)
+            affected_files, enable_retry_with_patch=enable_retry_with_patch)
         self.m.swarming.report_stats()
 
   def _trybot_steps_internal(self, builders=None, trybots=None):
@@ -1132,8 +1125,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
              objects that can run tests [possibly remotely via swarming] and
              parse the results. Running tests multiple times is not idempotent
              -- the results of previous runs affect future runs.
-      disable_deapply_patch: A flag that prevents the "deapply patch" series of
-                             steps from running.
       enable_retry_with_patch: A flag that adds a "retry with patch" step.
     """
     # Most trybots mirror a CI bot. They run the same suite of tests with the
@@ -1252,14 +1243,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       else:
         tests = []
 
-    # A special configuration to disable the deapply_patch step for
-    # mac_optional_gpu_tests_rel. This should not be necessary. See
-    # https://crbug.com/883308.
-    disable_deapply_patch = not trybot_config.get('deapply_patch', True)
-
     enable_retry_with_patch = trybot_config.get('retry_with_patch', True)
     return (bot_config_object, bot_update_step, affected_files, tests,
-            disable_deapply_patch, enable_retry_with_patch)
+            enable_retry_with_patch)
 
   def _report_builders(self, bot_config):
     """Reports the builders being executed by the bot."""
