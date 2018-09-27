@@ -1760,29 +1760,8 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
         'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
-####### Category: PPC
-      'V8 Linux - ppc - sim': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-        },
-        'tests': [V8Testing(3)],
-        'testing': {'platform': 'linux'},
-        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
-      },
+####### Category: IBM
       'V8 Linux - ppc64 - sim': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-        },
-        'tests': [V8Testing(3)],
-        'testing': {'platform': 'linux'},
-        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
-      },
-####### Category: S390
-      'V8 Linux - s390 - sim': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
@@ -2490,17 +2469,9 @@ for branch_name in ('stable branch', 'beta branch'):
   BRANCH_BUILDERS[name] = AddBranchBuilder(
       name, 'Release', 64, unittests_only=True)
 
-  name = 'V8 ppc - sim - %s' % branch_name
-  BRANCH_BUILDERS[name] = AddBranchBuilder(
-      name, 'Release', 32, unittests_only=True)
-
   name = 'V8 ppc64 - sim - %s' % branch_name
   BRANCH_BUILDERS[name] = AddBranchBuilder(
       name, 'Release', 64, unittests_only=True)
-
-  name = 'V8 s390 - sim - %s' % branch_name
-  BRANCH_BUILDERS[name] = AddBranchBuilder(
-      name, 'Release', 32, unittests_only=True)
 
   name = 'V8 s390x - sim - %s' % branch_name
   BRANCH_BUILDERS[name] = AddBranchBuilder(
