@@ -13,11 +13,19 @@
     'goma': {
       'filepath': 'scripts/slave/recipe_modules/goma/.+',
     },
+    'chromium_tests': {
+      'filepath': 'scripts/slave/recipe_modules/chromium/.+',
+      'filepath': 'scripts/slave/recipe_modules/chromium_checkout/.+',
+      'filepath': 'scripts/slave/recipe_modules/chromium_tests/.+',
+    },
   },
 
   'WATCHLISTS': {
     'chromium_masters': [
       'hinoka+masters@chromium.org',
+    ],
+    'chromium_tests': [
+      'martiniss+cc@chromium.org',
     ],
     'goma': [
       'tikuta+cc@chromium.org',
