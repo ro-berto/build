@@ -562,7 +562,7 @@
     "name": "preprocess_for_goma.start_goma",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:21.500000@@@"
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2016-02-02T00:00:01.500000@@@"
     ]
   },
   {
@@ -1151,7 +1151,7 @@
     "name": "preprocess_for_goma.start_goma (2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:23@@@"
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2016-02-02T00:00:03@@@"
     ]
   },
   {
@@ -1698,7 +1698,7 @@
       "----",
       "cp",
       "[BUILDER_CACHE]/android_binary_size/src/out/Release/report.ndjson",
-      "gs://chromium-binary-size-trybot-results/android_binary_size/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.ndjson"
+      "gs://chromium-binary-size-trybot-results/android_binary_size/2016/02/02/200.ndjson"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
     "env": {
@@ -1707,8 +1707,8 @@
     "infra_step": true,
     "name": "gsutil upload Supersize HTML report",
     "~followup_annotations": [
-      "@@@STEP_LINK@Supersize HTML Report@https://storage.cloud.google.com/chromium-binary-size-trybot-results/android_binary_size/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.ndjson@@@",
-      "@@@STEP_LINK@>>> View Supersize HTML Report <<<@https://storage.googleapis.com/chrome-supersize/viewer.html?load_url=https://storage.cloud.google.com/chromium-binary-size-trybot-results/android_binary_size/f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9.ndjson@@@"
+      "@@@STEP_LINK@Supersize HTML Report@https://storage.googleapis.com/chromium-binary-size-trybot-results/android_binary_size/2016/02/02/200.ndjson@@@",
+      "@@@STEP_LINK@>>> View Supersize HTML Report <<<@https://storage.googleapis.com/chrome-supersize/viewer.html?load_url=https://storage.googleapis.com/chromium-binary-size-trybot-results/android_binary_size/2016/02/02/200.ndjson@@@"
     ]
   },
   {
@@ -1730,8 +1730,8 @@
     "name": "Show Resource Sizes Diff",
     "~followup_annotations": [
       "@@@STEP_TEXT@(Look here for high-level metrics)@@@",
-      "@@@STEP_LOG_LINE@>>> Resource Sizes <<<@Test output data@@@",
-      "@@@STEP_LOG_END@>>> Resource Sizes <<<@@@"
+      "@@@STEP_LOG_LINE@>>> View Resource Sizes Diff <<<@Test output data@@@",
+      "@@@STEP_LOG_END@>>> View Resource Sizes Diff <<<@@@"
     ]
   },
   {
@@ -1753,8 +1753,8 @@
     "name": "Show Supersize Diff",
     "~followup_annotations": [
       "@@@STEP_TEXT@(Look here for detailed breakdown)@@@",
-      "@@@STEP_LOG_LINE@>>> Supersize <<<@Test output data@@@",
-      "@@@STEP_LOG_END@>>> Supersize <<<@@@"
+      "@@@STEP_LOG_LINE@>>> View Supersize Diff <<<@Test output data@@@",
+      "@@@STEP_LOG_END@>>> View Supersize Diff <<<@@@"
     ]
   },
   {
@@ -1776,8 +1776,8 @@
     "name": "Show Dex Method Count Diff",
     "~followup_annotations": [
       "@@@STEP_TEXT@(Look here for added/removed Java methods)@@@",
-      "@@@STEP_LOG_LINE@>>> Dex Method Count <<<@Test output data@@@",
-      "@@@STEP_LOG_END@>>> Dex Method Count <<<@@@"
+      "@@@STEP_LOG_LINE@>>> View Dex Method Count Diff <<<@Test output data@@@",
+      "@@@STEP_LOG_END@>>> View Dex Method Count Diff <<<@@@"
     ]
   },
   {

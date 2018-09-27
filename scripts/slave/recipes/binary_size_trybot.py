@@ -15,6 +15,7 @@ DEPS = [
   'depot_tools/gsutil',
   'depot_tools/tryserver',
   'filter',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -23,6 +24,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/step',
+  'recipe_engine/time',
 ]
 
 _ANALYZE_TARGETS = [
@@ -41,7 +43,11 @@ _FOOTER_PRESENT_STEP_NAME = (
 _NDJSON_GS_BUCKET = 'chromium-binary-size-trybot-results'
 _HTML_REPORT_BASE_URL = (
     'https://storage.googleapis.com/chrome-supersize/viewer.html?load_url='
-    'https://storage.cloud.google.com/' + _NDJSON_GS_BUCKET + '/')
+    'https://storage.googleapis.com/' + _NDJSON_GS_BUCKET + '/')
+
+_TEST_TIME = 1454371200
+_TEST_BUILDNUMBER = '200'
+_TEST_TIME_FMT = '2016/02/02'
 
 
 def RunSteps(api):
@@ -118,18 +124,7 @@ def RunSteps(api):
                    resource_sizes_diff_path, supersize_diff_path,
                    dex_method_count_diff_path, ndjson_path, results_path)
 
-      gs_dest = '{}/{}.ndjson'.format(
-          api.properties['buildername'],
-          bot_update_step.presentation.properties['got_revision'])
-      upload_result = api.gsutil.upload(
-          source=ndjson_path,
-          bucket=_NDJSON_GS_BUCKET,
-          dest=gs_dest,
-          name='upload Supersize HTML report',
-          link_name='Supersize HTML Report')
-      report_link_text = '>>> View Supersize HTML Report <<<'
-      upload_result.presentation.links[report_link_text] = (
-          _HTML_REPORT_BASE_URL + gs_dest)
+      _UploadNdJson(api, ndjson_path)
 
       _DisplayDiffResults(api, 'Resource Sizes', resource_sizes_diff_path,
                           '(Look here for high-level metrics)')
@@ -185,7 +180,7 @@ def _DisplayDiffResults(api, name, path, description):
                                  test_data='Test output data')
   read_step_result = api.step.active_result
   read_step_result.presentation.step_text = description
-  read_step_result.presentation.logs['>>> {} <<<'.format(name)] = (
+  read_step_result.presentation.logs['>>> View {} Diff <<<'.format(name)] = (
       diff_text.splitlines())
 
 
@@ -206,6 +201,24 @@ def _CreateDiffs(api, author, before_dir, after_dir, resource_sizes_diff_path,
       '--ndjson-path', ndjson_path,
       "--results-path", results_path
   ])
+
+
+def _UploadNdJson(api, ndjson_path):
+  today = api.time.utcnow().date()
+  gs_dest = '{}/{}/{}.ndjson'.format(
+      api.buildbucket.builder_name,
+      today.strftime('%Y/%m/%d'),
+      api.buildbucket.build.number)
+  upload_result = api.gsutil.upload(
+      source=ndjson_path,
+      bucket=_NDJSON_GS_BUCKET,
+      dest=gs_dest,
+      name='upload Supersize HTML report',
+      link_name='Supersize HTML Report',
+      unauthenticated_url=True)
+  report_link_text = '>>> View Supersize HTML Report <<<'
+  upload_result.presentation.links[report_link_text] = (
+      _HTML_REPORT_BASE_URL + gs_dest)
 
 
 def GenTests(api):
@@ -230,6 +243,7 @@ def GenTests(api):
             build_config='Release',
             mastername='tryserver.chromium.android',
             buildername='android_binary_size',
+            buildnumber=_TEST_BUILDNUMBER,
             patch_set=1,
             **kwargs) +
         api.platform('linux', 64) +
@@ -241,7 +255,8 @@ def GenTests(api):
                 }
             }])) +
         api.override_step_data('parse description',
-                               api.json.output(footer_json))
+                               api.json.output(footer_json)) +
+        api.time.seed(_TEST_TIME)
     )
 
 
@@ -279,8 +294,8 @@ def GenTests(api):
       api.post_process(
           post_process.AnnotationContains,
           'gsutil upload Supersize HTML report',
-          ['{}android_binary_size/{}.ndjson'.format(
-              _HTML_REPORT_BASE_URL, api.bot_update.gen_revision('src'))])
+          ['{}android_binary_size/{}/{}.ndjson'.format(
+              _HTML_REPORT_BASE_URL, _TEST_TIME_FMT, _TEST_BUILDNUMBER)])
   )
   yield (
       props('unexpected_increase') +
