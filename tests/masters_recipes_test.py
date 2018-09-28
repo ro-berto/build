@@ -207,6 +207,10 @@ FAKE_BUILDERS = {
         'gpu-manual-try-android-p-pixel-2-32-deqp',
         'gpu-manual-try-android-p-pixel-2-64',
         'gpu-manual-try-android-p-pixel-2-64-deqp',
+        'gpu-manual-try-android-p-pixel-xl-32',
+        'gpu-manual-try-android-p-pixel-xl-32-deqp',
+        'gpu-manual-try-android-p-pixel-xl-64',
+        'gpu-manual-try-android-p-pixel-xl-64-deqp',
         'try-nougat-phone-tester',
     ],
     'master.tryserver.chromium.mac': [
