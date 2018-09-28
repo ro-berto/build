@@ -843,7 +843,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def _should_retry_with_patch_deapplied(self, affected_files):
     """Whether to retry failing test suites with patch deapplied.
 
-    Returns: (should_deapply_patch, deapply_patch_reason)
+    Returns: Boolean
     """
     # We skip the deapply_patch step if there are modifications that affect the
     # recipe itself, since that would potentially invalidate the previous test
@@ -852,9 +852,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for f in affected_files:
       for regex in exclusion_regexs:
         if regex.match(f):
-          return (False, 'build config changes detected')
+          return False
 
-    return (True, None)
+    return True
 
   def _run_tests_on_tryserver(self, bot_config, tests, bot_update_step,
                               affected_files,
@@ -873,29 +873,24 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if not failing_tests:
         return
 
-      # If there are failures but we shouldn't deapply the patch, then we're
-      # also done.
-      should_deapply_patch, deapply_patch_reason = (
+      # If there are failures but we shouldn't deapply the patch, then skip the
+      # 'deapply patch' step.
+      should_deapply_patch = (
           self._should_retry_with_patch_deapplied(affected_files))
-      if not should_deapply_patch:
-        self.m.python.failing_step(
-            'test results',
-            'TESTS FAILED; retries without patch disabled (%s)'
-                % deapply_patch_reason)
-
-      # Deapply the patch. Then rerun failing tests.
-      self._deapply_patch_build_isolate(failing_tests,
-                                        bot_update_step)
-      self.m.test_utils.run_tests(self.m, failing_tests, 'without patch')
-
-      # Summarize results.
       deferred_retry_results = []
-      with self.m.step.defer_results():
-        for t in failing_tests:
-          deferred_result = (self.m.test_utils.
-            summarize_test_with_patch_deapplied(
-                self.m, t, emit_failing_step=not enable_retry_with_patch))
-          deferred_retry_results.append((deferred_result, t))
+      if should_deapply_patch:
+        # Deapply the patch. Then rerun failing tests.
+        self._deapply_patch_build_isolate(failing_tests,
+                                          bot_update_step)
+        self.m.test_utils.run_tests(self.m, failing_tests, 'without patch')
+
+        # Summarize results.
+        with self.m.step.defer_results():
+          for t in failing_tests:
+            deferred_result = (self.m.test_utils.
+              summarize_test_with_patch_deapplied(
+                  self.m, t, emit_failing_step=not enable_retry_with_patch))
+            deferred_retry_results.append((deferred_result, t))
 
       # Looks for test suites that have to be retried.
       test_suites_to_retry_with_patch = []

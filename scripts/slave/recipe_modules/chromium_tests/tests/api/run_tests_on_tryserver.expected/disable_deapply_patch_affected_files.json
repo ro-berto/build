@@ -533,22 +533,8 @@
     "name": "Upload to test-results [base_unittests (with patch)]"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "name": "test results",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@TESTS FAILED; retries without patch disabled (build config changes detected)@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
     "name": "$result",
-    "reason": "Step('test results') failed with return_code 1",
     "recipe_result": null,
-    "status_code": 1
+    "status_code": 0
   }
 ]
