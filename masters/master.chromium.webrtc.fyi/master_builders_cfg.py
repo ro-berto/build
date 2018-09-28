@@ -23,19 +23,19 @@ def m_remote_run(recipe, **kwargs):
 
 def Update(c):
   hourly_builders = [
-    'Android Builder',
-    'Android Builder (dbg)',
-    'Android Builder ARM64 (dbg)',
-    'Linux Builder',
-    'Linux Builder (dbg)',
-    'Mac Builder',
-    'Mac Builder (dbg)',
-    'ios-device',
-    'ios-simulator',
+    'WebRTC Chromium FYI Android Builder',
+    'WebRTC Chromium FYI Android Builder (dbg)',
+    'WebRTC Chromium FYI Android Builder ARM64 (dbg)',
+    'WebRTC Chromium FYI Linux Builder',
+    'WebRTC Chromium FYI Linux Builder (dbg)',
+    'WebRTC Chromium FYI Mac Builder',
+    'WebRTC Chromium FYI Mac Builder (dbg)',
+    'WebRTC Chromium FYI ios-device',
+    'WebRTC Chromium FYI ios-simulator',
   ]
   win_builders = [
-    'Win Builder',
-    'Win Builder (dbg)',
+    'WebRTC Chromium FYI Win Builder',
+    'WebRTC Chromium FYI Win Builder (dbg)',
   ]
   all_builders = hourly_builders + win_builders
 
@@ -54,38 +54,38 @@ def Update(c):
   ])
 
   specs = [
-    {'name': 'Win Builder', 'category': 'win'},
-    {'name': 'Win Builder (dbg)', 'category': 'win'},
-    {'name': 'Win7 Tester', 'category': 'win'},
-    {'name': 'Win8 Tester', 'category': 'win'},
-    {'name': 'Win10 Tester', 'category': 'win'},
-    {'name': 'Mac Builder', 'category': 'mac', 'slavebuilddir': 'mac64'},
-    {'name': 'Mac Builder (dbg)', 'category': 'mac', 'slavebuilddir': 'mac64'},
-    {'name': 'Mac Tester', 'category': 'mac'},
+    {'name': 'WebRTC Chromium FYI Win Builder', 'category': 'win'},
+    {'name': 'WebRTC Chromium FYI Win Builder (dbg)', 'category': 'win'},
+    {'name': 'WebRTC Chromium FYI Win7 Tester', 'category': 'win'},
+    {'name': 'WebRTC Chromium FYI Win8 Tester', 'category': 'win'},
+    {'name': 'WebRTC Chromium FYI Win10 Tester', 'category': 'win'},
+    {'name': 'WebRTC Chromium FYI Mac Builder', 'category': 'mac', 'slavebuilddir': 'mac64'},
+    {'name': 'WebRTC Chromium FYI Mac Builder (dbg)', 'category': 'mac', 'slavebuilddir': 'mac64'},
+    {'name': 'WebRTC Chromium FYI Mac Tester', 'category': 'mac'},
     {
-      'name': 'ios-device',
+      'name': 'WebRTC Chromium FYI ios-device',
       'category': 'ios',
       'recipe': 'webrtc/chromium_ios',
       'slavebuilddir': 'mac64',
     },
     {
-      'name': 'ios-simulator',
+      'name': 'WebRTC Chromium FYI ios-simulator',
       'category': 'ios',
       'recipe': 'webrtc/chromium_ios',
       'slavebuilddir': 'mac64',
     },
-    {'name': 'Linux Builder', 'category': 'linux'},
-    {'name': 'Linux Builder (dbg)', 'category': 'linux'},
-    {'name': 'Linux Tester', 'category': 'linux'},
-    {'name': 'Android Builder', 'category': 'android'},
-    {'name': 'Android Builder (dbg)', 'category': 'android'},
+    {'name': 'WebRTC Chromium FYI Linux Builder', 'category': 'linux'},
+    {'name': 'WebRTC Chromium FYI Linux Builder (dbg)', 'category': 'linux'},
+    {'name': 'WebRTC Chromium FYI Linux Tester', 'category': 'linux'},
+    {'name': 'WebRTC Chromium FYI Android Builder', 'category': 'android'},
+    {'name': 'WebRTC Chromium FYI Android Builder (dbg)', 'category': 'android'},
     {
-      'name': 'Android Builder ARM64 (dbg)',
+      'name': 'WebRTC Chromium FYI Android Builder ARM64 (dbg)',
       'category': 'android',
       'slavebuilddir': 'android_arm64',
     },
-    {'name': 'Android Tests (dbg) (K Nexus5)', 'category': 'android'},
-    {'name': 'Android Tests (dbg) (M Nexus5X)', 'category': 'android'},
+    {'name': 'WebRTC Chromium FYI Android Tests (dbg) (K Nexus5)', 'category': 'android'},
+    {'name': 'WebRTC Chromium FYI Android Tests (dbg) (M Nexus5X)', 'category': 'android'},
   ]
 
   for spec in specs:
