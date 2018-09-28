@@ -1716,27 +1716,6 @@
   },
   {
     "cmd": [
-      "git",
-      "show",
-      "HEAD",
-      "--format=%at",
-      "-s"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "git show",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
       "/usr/bin/xvfb-run",
       "-a",
       "--server-args=-screen 0 1024x768x24",
@@ -1817,25 +1796,6 @@
     },
     "infra_step": true,
     "name": "delete result.log (2)"
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/add_fields.dart",
-      "logs/run.json",
-      "1234567",
-      "3456abcd78ef"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "Add commit hash to run.json"
   },
   {
     "cmd": [

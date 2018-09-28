@@ -1558,7 +1558,7 @@
       "tools/bots/add_fields.dart",
       "logs/run.json",
       "1234567",
-      "3456abce78ef"
+      ""
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -1570,6 +1570,306 @@
       ]
     },
     "name": "Add commit hash to run.json"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder/sdk/LATEST"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "ensure LATEST dir"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[CACHE]/builder/sdk/LATEST/results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "ensure results.json exists"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/results.json",
+      "[CACHE]/builder/sdk/LATEST"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil download previous results.json"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[CACHE]/builder/sdk/LATEST/flaky.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "ensure flaky.json exists"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/flaky.json",
+      "[CACHE]/builder/sdk/LATEST"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil download previous flaky.json"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "ensure approved_results.json exists"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/approved_results.json",
+      "[CACHE]/builder/sdk/LATEST"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil download previous approved_results.json"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "LATEST/flaky.json",
+      "--changed",
+      "--passing",
+      "--failing",
+      "LATEST/results.json",
+      "logs/results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "List tests for deflaking",
+    "stdout": "[CACHE]/builder/sdk/logs/deflake.json"
+  },
+  {
+    "cmd": [
+      "/usr/bin/xvfb-run",
+      "-a",
+      "--server-args=-screen 0 1024x768x24",
+      "python",
+      "-u",
+      "tools/test.py",
+      "-ax64",
+      "-mrelease",
+      "--progress=status",
+      "--report",
+      "--time",
+      "--write-debug-log",
+      "--write-results",
+      "--write-result-log",
+      "--write-test-outcome-log",
+      "foo",
+      "--bar",
+      "-rchrome",
+      "-nnone-foo-release-x64-bar",
+      "--chrome=browsers/chrome/google-chrome",
+      "--repeat=5",
+      "--test-list",
+      "logs/deflake.json",
+      "--output_directory",
+      "deflaking_logs"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Test-step 2 deflaking"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/update_flakiness.dart",
+      "-i",
+      "LATEST/flaky.json",
+      "-o",
+      "deflaking_logs/flaky.json",
+      "logs/results.json",
+      "deflaking_logs/results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Evaluate flakiness"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "deflaking_logs/flaky.json",
+      "--judgement",
+      "--human",
+      "--verbose",
+      "--changed",
+      "--flaky",
+      "--failing",
+      "--passing",
+      "LATEST/results.json",
+      "logs/results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Test status after deflaking (new workflow)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "move",
+      "[CACHE]/builder/sdk/deflaking_logs/results.json",
+      "[CACHE]/builder/sdk/deflaking_logs/deflaking_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "Rename deflaking_results"
   },
   {
     "cmd": [
@@ -1593,7 +1893,7 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil upload",
+    "name": "gsutil upload logs results.json",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/results.json@@@"
     ]
@@ -1620,9 +1920,36 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil copy",
+    "name": "gsutil copy logs results.json to LATEST",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/results.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/approved_results.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/approved_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil copy",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/approved_results.json@@@"
     ]
   },
   {
@@ -1647,7 +1974,7 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil upload (2)",
+    "name": "gsutil upload logs run.json",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/run.json@@@"
     ]
@@ -1674,9 +2001,198 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil copy (2)",
+    "name": "gsutil copy logs run.json to LATEST",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/run.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/approved_results.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/approved_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil copy (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/approved_results.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CACHE]/builder/sdk/deflaking_logs/flaky.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/flaky.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload deflaking_logs flaky.json",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/flaky.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/flaky.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/flaky.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil copy deflaking_logs flaky.json to LATEST",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/flaky.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/approved_results.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/approved_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil copy (3)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/approved_results.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CACHE]/builder/sdk/deflaking_logs/deflaking_results.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/deflaking_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload deflaking_logs deflaking_results.json",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/deflaking_results.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/deflaking_results.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/deflaking_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil copy deflaking_logs deflaking_results.json to LATEST",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/deflaking_results.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 2/approved_results.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/approved_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil copy (4)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 2/approved_results.json@@@"
     ]
   },
   {
@@ -1993,7 +2509,7 @@
       "tools/bots/add_fields.dart",
       "logs/run.json",
       "1234567",
-      "3456abce78ef"
+      ""
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -2005,6 +2521,347 @@
       ]
     },
     "name": "Add commit hash to run.json (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder/sdk/LATEST"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "ensure LATEST dir (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[CACHE]/builder/sdk/LATEST/results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "ensure results.json exists (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/results.json",
+      "[CACHE]/builder/sdk/LATEST"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil download previous results.json (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[CACHE]/builder/sdk/LATEST/flaky.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "ensure flaky.json exists (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/flaky.json",
+      "[CACHE]/builder/sdk/LATEST"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil download previous flaky.json (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "ensure approved_results.json exists (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/approved_results.json",
+      "[CACHE]/builder/sdk/LATEST"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil download previous approved_results.json (2)"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "LATEST/flaky.json",
+      "--changed",
+      "--passing",
+      "--failing",
+      "LATEST/results.json",
+      "logs/results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "List tests for deflaking (2)",
+    "stdout": "[CACHE]/builder/sdk/logs/deflake.json"
+  },
+  {
+    "cmd": [
+      "/usr/bin/xvfb-run",
+      "-a",
+      "--server-args=-screen 0 1024x768x24",
+      "python",
+      "-u",
+      "tools/test.py",
+      "-ax64",
+      "-mrelease",
+      "--progress=status",
+      "--report",
+      "--time",
+      "--write-debug-log",
+      "--write-results",
+      "--write-result-log",
+      "--write-test-outcome-log",
+      "foo",
+      "--bar",
+      "-rfirefox",
+      "--append_logs",
+      "--firefox=browsers/firefox/firefox",
+      "--repeat=5",
+      "--test-list",
+      "logs/deflake.json",
+      "--output_directory",
+      "deflaking_logs"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Test-step 3 deflaking"
+  },
+  {
+    "cmd": [
+      "/usr/bin/xvfb-run",
+      "-a",
+      "--server-args=-screen 0 1024x768x24",
+      "python",
+      "-u",
+      "tools/test.py",
+      "-ax64",
+      "-mrelease",
+      "--progress=status",
+      "--report",
+      "--time",
+      "--write-debug-log",
+      "--write-results",
+      "--write-result-log",
+      "--write-test-outcome-log",
+      "foo",
+      "--bar",
+      "-rfirefox",
+      "--append_logs",
+      "--firefox=browsers/firefox/firefox",
+      "--repeat=5",
+      "--test-list",
+      "logs/deflake.json",
+      "--output_directory",
+      "deflaking_logs",
+      "--shards=2",
+      "--shard=2"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Test-step 3 deflaking_shard_2"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/update_flakiness.dart",
+      "-i",
+      "LATEST/flaky.json",
+      "-o",
+      "deflaking_logs/flaky.json",
+      "logs/results.json",
+      "deflaking_logs/results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Evaluate flakiness (2)"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "deflaking_logs/flaky.json",
+      "--judgement",
+      "--human",
+      "--verbose",
+      "--changed",
+      "--flaky",
+      "--failing",
+      "--passing",
+      "LATEST/results.json",
+      "logs/results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Test status after deflaking (new workflow) (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "move",
+      "[CACHE]/builder/sdk/deflaking_logs/results.json",
+      "[CACHE]/builder/sdk/deflaking_logs/deflaking_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "Rename deflaking_results (2)"
   },
   {
     "cmd": [
@@ -2028,7 +2885,7 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil upload (3)",
+    "name": "gsutil upload logs results.json (2)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/results.json@@@"
     ]
@@ -2055,9 +2912,36 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil copy (3)",
+    "name": "gsutil copy logs results.json to LATEST (2)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/results.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/approved_results.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/approved_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil copy (5)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/approved_results.json@@@"
     ]
   },
   {
@@ -2082,7 +2966,7 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil upload (4)",
+    "name": "gsutil upload logs run.json (2)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/run.json@@@"
     ]
@@ -2109,9 +2993,198 @@
       ]
     },
     "infra_step": true,
-    "name": "gsutil copy (4)",
+    "name": "gsutil copy logs run.json to LATEST (2)",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/run.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/approved_results.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/approved_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil copy (6)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/approved_results.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CACHE]/builder/sdk/deflaking_logs/flaky.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/flaky.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload deflaking_logs flaky.json (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/flaky.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/flaky.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/flaky.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil copy deflaking_logs flaky.json to LATEST (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/flaky.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/approved_results.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/approved_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil copy (7)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/approved_results.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CACHE]/builder/sdk/deflaking_logs/deflaking_results.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/deflaking_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload deflaking_logs deflaking_results.json (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/deflaking_results.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/deflaking_results.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/deflaking_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil copy deflaking_logs deflaking_results.json to LATEST (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/deflaking_results.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/LATEST/Test-step 3/approved_results.json",
+      "gs://dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/approved_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil copy (8)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.copy@https://storage.cloud.google.com/dart-test-results/results/analyzer-none-linux-release-be/1357/Test-step 3/approved_results.json@@@"
     ]
   },
   {

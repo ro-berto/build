@@ -235,19 +235,52 @@ class DartApi(recipe_api.RecipeApi):
                 contents = output_dir[filename]
                 self.m.step.active_result.presentation.logs['result.log'] = [contents]
 
-  def upload_results(self,  name):
-    builder = self.m.properties['buildername']
+  def download_results(self,  name):
+    builder = self.m.buildbucket.builder_name
     if builder.endswith(('-try', '-stable', '-dev')): return
-    build_number = self.m.properties['buildnumber']
-    for file in ['results.json', 'run.json']:
-      results_path = self.m.path['checkout'].join('logs', file)
-      self.m.gsutil.upload(results_path, 'dart-test-results',
-        'results/%s/%s/%s/%s' % (builder, build_number, name, file))
+    results_path = self.m.path['checkout'].join('LATEST')
+    self.m.file.ensure_directory('ensure LATEST dir', results_path)
+    for file in ['results.json', 'flaky.json', 'approved_results.json']:
+      self.m.file.write_text(
+        'ensure %s exists' % file, results_path.join(file), '')
+      self.m.gsutil.download(
+        'dart-test-results',
+        '/'.join(['results', builder, 'LATEST', name, file]),
+        results_path,
+        name='download previous %s' % file,
+        ok_ret='any')
+
+  def upload_results(self,  name):
+    builder = self.m.buildbucket.builder_name
+    build_number = self.m.buildbucket.build.number
+    self.m.file.move('Rename deflaking_results',
+      self.m.path['checkout'].join('deflaking_logs', 'results.json'),
+      self.m.path['checkout'].join('deflaking_logs', 'deflaking_results.json'))
+    
+    for file in [('logs','results.json'),
+                 ('logs', 'run.json'),
+                 ('deflaking_logs', 'flaky.json'),
+                 ('deflaking_logs', 'deflaking_results.json')]:
+      results_path = self.m.path['checkout'].join(*file)
+      filename = file[-1]
+      self.m.gsutil.upload(
+        results_path,
+        'dart-test-results',
+        '/'.join(['results', builder, str(build_number), name, filename]),
+        name='upload %s %s' % file, ok_ret='all')
       self.m.gsutil.copy(
         'dart-test-results',
-        'results/%s/%s/%s/%s' % (builder, build_number, name, file),
+        '/'.join(['results', builder, str(build_number), name, filename]),
         'dart-test-results',
-        'results/%s/%s/%s/%s' % (builder, 'LATEST', name, file))
+        '/'.join(['results', builder, 'LATEST', name, filename]),
+        name='copy %s %s to LATEST' % file, ok_ret='all')
+      self.m.gsutil.copy(
+        'dart-test-results',
+        '/'.join(['results', builder, 'LATEST', name, 'approved_results.json']),
+        'dart-test-results',
+        '/'.join(['results', builder, str(build_number), name,
+                  'approved_results.json']),
+        ok_ret='all')
 
   def read_result_file(self,  name, log_name, test_data=''):
     """Reads the result.log file
@@ -293,7 +326,7 @@ class DartApi(recipe_api.RecipeApi):
       test_matrix_path,
       step_test_data=lambda: self.m.json.test_api.output(test_data))
     test_matrix = read_json.json.output
-    builder = self.m.properties['buildername']
+    builder = self.m.properties["buildername"]
     if builder.endswith(('-be', '-try', '-stable', 'dev')):
       builder = builder[0:builder.rfind('-')]
     isolate_hashes = {}
@@ -477,7 +510,7 @@ class DartApi(recipe_api.RecipeApi):
     trigger_props = {}
     self._copy_property(self.m.properties, trigger_props, 'git_revision')
     self._copy_property(self.m.properties, trigger_props, 'revision')
-    trigger_props['parent_buildername'] = self.m.properties['buildername']
+    trigger_props['parent_buildername'] = self.m.buildbucket.builder_name
     trigger_props['parent_build_id'] = self.m.properties.get('build_id', '')
     if isolate_hash:
       trigger_props['parent_fileset'] = isolate_hash
@@ -576,23 +609,83 @@ class DartApi(recipe_api.RecipeApi):
       args = args + step['tests']
     # Fetch commit time outside deferred_results group.
     commit_time = 'unused'
-    if shards == 0 or local_shard:
+
+    # The new deflaking workflow is being developed and currently runs on the
+    # local builder, not shards, and only on the master CI, not CQ.
+    run_new_workflow = ((shards == 0 or local_shard) and
+       not self.m.buildbucket.builder_name.endswith(
+         ('-try', '-stable', '-dev')))
+    if run_new_workflow:
+      # Fetch commit time outside deferred_results group.
       commit_time = self.m.git.get_timestamp(test_data='1234567')
-    with self.m.step.defer_results():
-      self.run_script(step_name, 'tools/test.py', args, isolate_hash, shards,
-                      local_shard, environment, tasks,
-                      cipd_packages=cipd_packages)
-      if shards == 0 or local_shard:
-        self.read_result_file('read results of %s' % step_name, 'result.log')
-        commit_hash = self.m.properties.get('revision',
-                                            'no_revision_property')
+      with self.m.step.defer_results():
+        self.run_script(step_name, 'tools/test.py', args, isolate_hash, shards,
+                        local_shard, environment, tasks,
+                        cipd_packages=cipd_packages)
+        if shards == 0 or local_shard:
+          self.read_result_file('read results of %s' % step_name, 'result.log')
+        commit_hash = self.m.buildbucket.gitiles_commit.id
         self.m.step('Add commit hash to run.json',
                     [self.dart_executable(),
                      'tools/bots/add_fields.dart',
                      'logs/run.json',
                      commit_time,
                      commit_hash])
+        self.download_results(step_name)
+        self.m.step('List tests for deflaking',
+                    [self.dart_executable(),
+                     'tools/bots/compare_results.dart',
+                     '--flakiness-data',
+                     'LATEST/flaky.json',
+                     '--changed',
+                     '--passing',
+                     '--failing',
+                     'LATEST/results.json',
+                     'logs/results.json'],
+                    stdout=self.m.raw_io.output_text(
+                    leak_to=self.m.path['checkout'].join('logs','deflake.json')))
+        try:
+          self.run_script(
+            step_name + ' deflaking', 'tools/test.py',
+            args + ['--repeat=5', '--test-list', 'logs/deflake.json',
+                    '--output_directory', 'deflaking_logs'],
+            None, shards,
+            local_shard, environment, tasks,
+            cipd_packages=cipd_packages)
+          self.m.step('Evaluate flakiness',
+                      [self.dart_executable(),
+                       'tools/bots/update_flakiness.dart',
+                       '-i',
+                       'LATEST/flaky.json',
+                       '-o',
+                       'deflaking_logs/flaky.json',
+                       'logs/results.json',
+                       'deflaking_logs/results.json'], ok_ret='any')
+        except self.m.step.StepFailure: # pragma: no cover
+          pass
+
+        self.m.step('Test status after deflaking (new workflow)',
+                    [self.dart_executable(),
+                     'tools/bots/compare_results.dart',
+                     '--flakiness-data',
+                     'deflaking_logs/flaky.json',
+                     '--judgement',
+                     '--human',
+                     '--verbose',
+                     '--changed',
+                     '--flaky',
+                     '--failing',
+                     '--passing',
+                     'LATEST/results.json',
+                     'logs/results.json'])
         self.upload_results(step_name)
+    else:
+      with self.m.step.defer_results():
+        self.run_script(step_name, 'tools/test.py', args, isolate_hash, shards,
+                        local_shard, environment, tasks,
+                        cipd_packages=cipd_packages)
+        if shards == 0 or local_shard:
+          self.read_result_file('read results of %s' % step_name, 'result.log')
 
   def run_script(self, step_name, script, args, isolate_hash, shards,
                  local_shard, environment, tasks, cipd_packages=[]):
