@@ -75,6 +75,7 @@ EXCLUDED_FILES_ALL_PLATFORMS = [
   '.ninja_deps',
   '.ninja_log',
   'mksnapshot',
+  'v8_context_snapshot_generator',
   'v8_shell',
 ]
 
@@ -83,6 +84,8 @@ EXCLUDED_FILES = {
   'win': set(EXCLUDED_FILES_ALL_PLATFORMS + [
     'mksnapshot.exe',
     'mksnapshot.exe.pdb',
+    'v8_context_snapshot_generator.exe',
+    'v8_context_snapshot_generator.exe.pdb',
     'v8_shell.exe',
     'v8_shell.exe.pdb',
   ]),
