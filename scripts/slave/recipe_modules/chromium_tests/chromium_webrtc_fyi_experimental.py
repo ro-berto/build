@@ -106,11 +106,6 @@ SPEC = {
         'name': 'src/third_party/webrtc',
         'rev_str': '%s'
       },
-      'swarming_dimensions': {
-        'device_os': 'K',
-        'device_type': 'hammerhead',
-        'os': 'Android'
-      },
       'test_results_config': 'public_server',
       'testing': {
         'platform': 'linux'
@@ -136,11 +131,6 @@ SPEC = {
       'set_component_rev': {
         'name': 'src/third_party/webrtc',
         'rev_str': '%s'
-      },
-      'swarming_dimensions': {
-        'device_os': 'MMB29Q',
-        'device_type': 'bullhead',
-        'os': 'Android'
       },
       'test_results_config': 'public_server',
       'testing': {
@@ -204,10 +194,6 @@ SPEC = {
         'name': 'src/third_party/webrtc',
         'rev_str': '%s'
       },
-      'swarming_dimensions': {
-        'cpu': 'x86-64',
-        'os': 'Ubuntu-14.04'
-      },
       'test_results_config': 'public_server',
       'testing': {
         'platform': 'linux'
@@ -269,10 +255,6 @@ SPEC = {
       'set_component_rev': {
         'name': 'src/third_party/webrtc',
         'rev_str': '%s'
-      },
-      'swarming_dimensions': {
-        'gpu': '8086:0a2e',
-        'os': 'Mac-10.12.6'
       },
       'test_results_config': 'public_server',
       'testing': {
@@ -336,10 +318,6 @@ SPEC = {
         'name': 'src/third_party/webrtc',
         'rev_str': '%s'
       },
-      'swarming_dimensions': {
-        'cpu': 'x86-64',
-        'os': 'Windows-10'
-      },
       'test_results_config': 'public_server',
       'testing': {
         'platform': 'win'
@@ -362,10 +340,6 @@ SPEC = {
         'name': 'src/third_party/webrtc',
         'rev_str': '%s'
       },
-      'swarming_dimensions': {
-        'cpu': 'x86-64',
-        'os': 'Windows-7-SP1'
-      },
       'test_results_config': 'public_server',
       'testing': {
         'platform': 'win'
@@ -387,10 +361,6 @@ SPEC = {
       'set_component_rev': {
         'name': 'src/third_party/webrtc',
         'rev_str': '%s'
-      },
-      'swarming_dimensions': {
-        'cpu': 'x86-64',
-        'os': 'Windows-8.1-SP0'
       },
       'test_results_config': 'public_server',
       'testing': {
