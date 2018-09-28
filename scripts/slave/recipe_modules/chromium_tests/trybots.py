@@ -90,7 +90,6 @@ TRYBOTS = freeze({
         'buildername': 'android-kitkat-arm-rel',
       }),
       'android-marshmallow-arm64-rel': {
-        'retry_with_patch': True,
         'bot_ids': [
           {
             'mastername': 'chromium.android',
@@ -763,7 +762,6 @@ TRYBOTS = freeze({
         ],
       },
       'win7_chromium_rel_ng': {
-        'retry_with_patch': True,
         'bot_ids': [
           {
             'mastername': 'chromium.win',

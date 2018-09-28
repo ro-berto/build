@@ -31,8 +31,7 @@ def RunSteps(api):
       bot_config_object,
       tests=[test],
       bot_update_step=update_step,
-      affected_files=api.properties.get('affected_files', []),
-      enable_retry_with_patch=api.properties.get('enable_retry_with_patch'))
+      affected_files=api.properties.get('affected_files', []))
 
 
 def GenTests(api):
@@ -57,7 +56,6 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux_chromium_rel_ng',
-          enable_retry_with_patch=True,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
@@ -77,7 +75,6 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux_chromium_rel_ng',
-          enable_retry_with_patch=True,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
@@ -97,7 +94,6 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux_chromium_rel_ng',
-          enable_retry_with_patch=True,
           use_gtest=False,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -124,7 +120,6 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux_chromium_rel_ng',
-          enable_retry_with_patch=True,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
@@ -148,7 +143,6 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux_chromium_rel_ng',
-          enable_retry_with_patch=True,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
@@ -174,7 +168,6 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux_chromium_rel_ng',
-          enable_retry_with_patch=True,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +

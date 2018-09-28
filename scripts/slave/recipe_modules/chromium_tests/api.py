@@ -857,8 +857,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     return True
 
   def _run_tests_on_tryserver(self, bot_config, tests, bot_update_step,
-                              affected_files,
-                              enable_retry_with_patch):
+                              affected_files):
     """Runs tests with retries.
 
     This function runs tests with the CL patched in. On failure, this will
@@ -867,7 +866,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     with self.wrap_chromium_tests(bot_config, tests):
       # Run the test. The isolates have already been created.
       failing_tests = self.m.test_utils.run_tests_with_patch(
-          self.m, tests, invalid_is_fatal=not enable_retry_with_patch)
+          self.m, tests, invalid_is_fatal=False)
 
       # If there are no failures, we're done. Success!
       if not failing_tests:
@@ -889,7 +888,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           for t in failing_tests:
             deferred_result = (self.m.test_utils.
               summarize_test_with_patch_deapplied(
-                  self.m, t, emit_failing_step=not enable_retry_with_patch))
+                  self.m, t, emit_failing_step=False))
             deferred_retry_results.append((deferred_result, t))
 
       # Looks for test suites that have to be retried.
@@ -898,9 +897,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         if not deferred_result.get_result():
           test_suites_to_retry_with_patch.append(test)
 
-      # Early exit if all test_suites are passing or if we don't want to retry
-      # with patch.
-      if not test_suites_to_retry_with_patch or not enable_retry_with_patch:
+      # Early exit if all test_suites are passing.
+      if not test_suites_to_retry_with_patch:
         return
 
       # Reapply the patch. Then rerun failing tests.
@@ -1087,15 +1085,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def trybot_steps(self, builders=None, trybots=None):
     with self.m.tryserver.set_failure_hash():
-      (bot_config_object, bot_update_step, affected_files, tests,
-       enable_retry_with_patch) = (
+      (bot_config_object, bot_update_step, affected_files, tests) = (
           self._trybot_steps_internal(builders=builders, trybots=trybots))
 
       self.m.python.succeeding_step('mark: before_tests', '')
       if tests:
         self._run_tests_on_tryserver(
-            bot_config_object, tests, bot_update_step,
-            affected_files, enable_retry_with_patch=enable_retry_with_patch)
+            bot_config_object, tests, bot_update_step, affected_files)
         self.m.swarming.report_stats()
 
   def _trybot_steps_internal(self, builders=None, trybots=None):
@@ -1120,7 +1116,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
              objects that can run tests [possibly remotely via swarming] and
              parse the results. Running tests multiple times is not idempotent
              -- the results of previous runs affect future runs.
-      enable_retry_with_patch: A flag that adds a "retry with patch" step.
     """
     # Most trybots mirror a CI bot. They run the same suite of tests with the
     # same configuration.
@@ -1238,9 +1233,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       else:
         tests = []
 
-    enable_retry_with_patch = trybot_config.get('retry_with_patch', True)
-    return (bot_config_object, bot_update_step, affected_files, tests,
-            enable_retry_with_patch)
+    return (bot_config_object, bot_update_step, affected_files, tests)
 
   def _report_builders(self, bot_config):
     """Reports the builders being executed by the bot."""
