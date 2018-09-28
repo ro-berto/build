@@ -106,11 +106,12 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     runtests = ConfigGroup(
       enable_memcheck = Single(bool, empty_val=False, required=False),
       memory_tests_runner = Single(Path),
+      enable_asan = Single(bool, empty_val=False, required=False),
       enable_lsan = Single(bool, empty_val=False, required=False),
+      enable_msan = Single(bool, empty_val=False, required=False),
+      enable_tsan = Single(bool, empty_val=False, required=False),
       test_args = List(basestring),
       run_asan_test = Single(bool, required=False),
-      swarming_extra_args = List(basestring),
-      swarming_tags = Set(basestring),
     ),
 
     # Some platforms do not have a 1:1 correlation of BUILD_CONFIG to what is
@@ -428,7 +429,7 @@ def analysis(c):
 def asan(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('asan requires clang')
-  c.runtests.swarming_tags |= {'asan:1'}
+  c.runtests.enable_asan = True
   if c.TARGET_PLATFORM in ['mac', 'win']:
     # Set fastbuild=0 and prevent other configs from changing it.
     fastbuild(c, invert=True, optional=False)
@@ -443,14 +444,12 @@ def asan(c):
 @config_ctx(deps=['compiler'])
 def lsan(c):
   c.runtests.enable_lsan = True
-  c.runtests.swarming_extra_args += ['--lsan=1']
-  c.runtests.swarming_tags |= {'lsan:1'}
 
 @config_ctx(deps=['compiler'])
 def msan(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('msan requires clang')
-  c.runtests.swarming_tags |= {'msan:1'}
+  c.runtests.enable_msan = True
   c.gn_args.append('is_msan=true')
   c.gyp_env.GYP_DEFINES['msan'] = 1  # Read by api.py.
 
@@ -475,7 +474,7 @@ def memcheck(c):
 def tsan2(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
     raise BadConf('tsan2 requires clang')
-  c.runtests.swarming_tags |= {'tsan:1'}
+  c.runtests.enable_tsan = True
   c.gn_args.append('is_tsan=true')
   c.gyp_env.GYP_DEFINES['tsan'] = 1  # Read by api.py.
 

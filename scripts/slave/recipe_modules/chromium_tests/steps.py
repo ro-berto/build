@@ -685,7 +685,9 @@ class LocalGTestTest(Test):
         api.python(self.target_name, script, args)
       else:
         api.chromium.runtest(self.target_name, revision=self._revision,
-                             webkit_revision=self._webkit_revision, **kwargs)
+                             webkit_revision=self._webkit_revision,
+                             runtests_spec=api.chromium_tests.runtests_spec,
+                             **kwargs)
       # TODO(kbr): add functionality to generate_gtest to be able to
       # force running these local gtests via isolate from the src-side
       # JSON files. crbug.com/584469
@@ -1511,7 +1513,8 @@ class SwarmingTest(Test):
            self._tasks[suffix].dimensions[k] = v
 
     # Add config-specific tags.
-    self._tasks[suffix].tags.update(api.chromium.c.runtests.swarming_tags)
+    self._tasks[suffix].tags.update(
+        api.chromium_tests.runtests_spec.swarming_tags)
 
     # Add custom tags.
     if self._tags:
@@ -1625,7 +1628,7 @@ class SwarmingGTestTest(SwarmingTest):
     tests_to_retry = self.tests_to_retry(api, suffix)
     if tests_to_retry:
       args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
-    args.extend(api.chromium.c.runtests.swarming_extra_args)
+    args.extend(api.chromium_tests.runtests_spec.swarming_extra_args)
 
     return api.swarming.gtest_task(
         title=self._step_name(suffix),
@@ -2085,6 +2088,7 @@ class PrintPreviewTests(PythonBasedTest):
           xvfb=True,
           name=self._step_name(suffix),
           python_mode=True,
+          runtests_spec=api.chromium_tests.runtests_spec,
           **kwargs)
 
   def compile_targets(self, api):

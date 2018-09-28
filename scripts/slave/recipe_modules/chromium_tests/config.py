@@ -11,6 +11,9 @@ def BaseConfig(CHECKOUT_PATH, **_kwargs):
   return ConfigGroup(
     staging = Single(bool, empty_val=False, required=False),
     test_spec_dir = Single(Path),
+    runtests_overrides = ConfigGroup(
+        enable_lsan = Single(bool, empty_val=None, required=False),
+    ),
     CHECKOUT_PATH = Static(CHECKOUT_PATH),
   )
 
@@ -24,3 +27,7 @@ def chromium(c):
 @config_ctx()
 def staging(c):
   c.staging = True
+
+@config_ctx()
+def no_lsan(c):
+  c.runtests_overrides.enable_lsan = False

@@ -570,7 +570,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   @_with_chromium_layout
   def runtest(self, test, args=None, xvfb=False, name=None, annotate=None,
               results_url=None, perf_dashboard_id=None, test_type=None,
-              python_mode=False, parallel=False,
+              python_mode=False, parallel=False, runtests_spec=None,
               point_id=None, revision=None, webkit_revision=None,
               test_launcher_summary_output=None, perf_id=None, perf_config=None,
               chartjson_file=False, tee_stdout_file=None, **kwargs):
@@ -640,28 +640,29 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append(
           '--webkit-revision=%s' % webkit_revision)  # pragma: no cover
 
+    runtests_spec = runtests_spec or self.c.runtests
     if (self.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1 or
-        self.c.runtests.run_asan_test):
+        runtests_spec.run_asan_test):
       full_args.append('--enable-asan')
-    if self.c.runtests.enable_lsan:
+    if runtests_spec.enable_lsan:
       full_args.append('--enable-lsan')
     if self.c.gyp_env.GYP_DEFINES.get('msan', 0) == 1:
       full_args.append('--enable-msan')
     if self.c.gyp_env.GYP_DEFINES.get('tsan', 0) == 1:
       full_args.append('--enable-tsan')
-    if self.c.runtests.enable_memcheck:
+    if runtests_spec.enable_memcheck:
       full_args.extend([
         '--pass-build-dir',
         '--pass-target',
         '--run-shell-script',
-        self.c.runtests.memory_tests_runner,
+        runtests_spec.memory_tests_runner,
         '--test', t_name,
         '--tool', 'memcheck',
       ])
     else:
       full_args.append(test)
 
-    full_args.extend(self.c.runtests.test_args)
+    full_args.extend(runtests_spec.test_args)
     full_args.extend(args)
 
     runtest_path = self.package_repo_resource('scripts', 'slave', 'runtest.py')

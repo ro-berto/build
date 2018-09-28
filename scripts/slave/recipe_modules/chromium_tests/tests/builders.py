@@ -32,17 +32,7 @@ def _normalize(x):
   return x
 
 
-BLACKLIST = [
-    # TODO(gbeaty) This tester wants to run without LSan, its builder builds
-    # with LSan
-    ('chromium.memory', 'Linux ASan Tests (sandboxed)'),
-]
-
-
 def validate_tester_config(api, mastername, buildername, bot_config):
-  if (mastername, buildername) in BLACKLIST:
-    return
-
   parent_buildername = bot_config.get('parent_buildername')
   if parent_buildername == 'dummy':
     return
