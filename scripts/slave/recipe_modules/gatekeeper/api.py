@@ -76,6 +76,11 @@ class Gatekeeper(recipe_api.RecipeApi):
         else: #pragma: no cover
           args.extend(tree_args['masters'])
 
+      # TODO(machenbach): Remove temporary printing of build-db after
+      # investigation of https://crbug.com/889005.
+      if tree_args.get('build-db'):
+        self._print_build_db('db before: %s' % tree_name, tree_args['build-db'])
+
       try:
         self.m.build.python(
           'gatekeeper: %s' % str(tree_name),
@@ -84,3 +89,17 @@ class Gatekeeper(recipe_api.RecipeApi):
         )
       except self.m.step.StepFailure:
         pass
+
+      if tree_args.get('build-db'):
+        self._print_build_db('db after: %s' % tree_name, tree_args['build-db'])
+
+  def _print_build_db(self, name, build_db):  # pragma: no cover
+    try:
+      build_db_path = self.m.path['cache'].join('builder', build_db)
+      if self.m.path.exists(build_db_path):
+        self.m.json.read(
+            name, build_db_path,
+            step_test_data=lambda: self.m.json.test_api.output({}),
+        )
+    except self.m.step.StepFailure:
+      pass
