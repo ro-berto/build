@@ -295,6 +295,41 @@ def GenTests(api):
   )
 
   yield (
+      api.test('swarming_cipd_packages') +
+      api.properties(
+          single_spec={
+              'name': 'base_unittests',
+              'isolate_name': 'base_unittests_run',
+              'trigger_script': {
+                  'script': '//path/to/script.py',
+              },
+              'swarming': {
+                  'can_use_on_swarming_builders': True,
+                  'cipd_packages': [{
+                      'cipd_package': 'cipd/package/name',
+                      'location': '../../cipd/package/location',
+                      'revision': 'version:1.0',
+                   }],
+              },
+          },
+          swarm_hashes={
+              'base_unittests_run': 'deadbeef',
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=1
+      ) +
+      api.post_process(post_process.StepCommandContains,
+          '[trigger] base_unittests',
+          [
+              '--cipd-package',
+              '../../cipd/package/location:cipd/package/name:version:1.0',
+          ]
+      ) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
     api.test('experimental') +
       api.properties(single_spec={
           'experiment_percentage': '100',
