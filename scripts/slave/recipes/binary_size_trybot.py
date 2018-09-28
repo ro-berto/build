@@ -133,16 +133,7 @@ def RunSteps(api):
       _DisplayDiffResults(api, 'Dex Method Count', dex_method_count_diff_path,
                           '(Look here for added/removed Java methods)')
 
-      step_result = api.json.read(
-          'Check for undocumented increase', results_path,
-          step_test_data=lambda: api.json.test_api.output({
-              'status_code': 0,
-              'details': 'Binary size checks passed.'
-          }))
-      step_result.presentation.logs['results_details'] = (
-          step_result.json.output['details'].splitlines())
-      if step_result.json.output['status_code'] != 0:
-        raise api.step.StepFailure('Undocumented size increase detected')
+      _CheckForUndocumentedIncrease(api, results_path)
 
 
 def _BuildAndMeasure(api, with_patch):
@@ -175,13 +166,28 @@ def _BuildAndMeasure(api, with_patch):
   return results_dir
 
 
-def _DisplayDiffResults(api, name, path, description):
-  diff_text = api.file.read_text('Show {} Diff'.format(name), path,
-                                 test_data='Test output data')
-  read_step_result = api.step.active_result
-  read_step_result.presentation.step_text = description
-  read_step_result.presentation.logs['>>> View {} Diff <<<'.format(name)] = (
-      diff_text.splitlines())
+def _CheckForUndocumentedIncrease(api, results_path):
+  step_result = api.json.read(
+      'Check for undocumented increase', results_path,
+      step_test_data=lambda: api.json.test_api.output({
+          'details': 'Binary size checks passed.',
+          'normalized_apk_size': 1024,
+          'status_code': 0,
+      }))
+  result_json = step_result.json.output
+  presentation = step_result.presentation
+
+  try:
+    presentation.logs['Size delta summary'] = (
+        result_json['details'].splitlines())
+    presentation.step_text = 'Normalized apk size delta: {} bytes'.format(
+        result_json['normalized_apk_size'])
+    if result_json['status_code'] != 0:
+      presentation.status = api.step.FAILURE
+      raise api.step.StepFailure('Undocumented size increase detected')
+  except KeyError:
+    presentation.status = api.step.FAILURE
+    raise api.step.StepFailure('Malformed results JSON detected')
 
 
 def _CreateDiffs(api, author, before_dir, after_dir, resource_sizes_diff_path,
@@ -201,6 +207,15 @@ def _CreateDiffs(api, author, before_dir, after_dir, resource_sizes_diff_path,
       '--ndjson-path', ndjson_path,
       "--results-path", results_path
   ])
+
+
+def _DisplayDiffResults(api, name, path, description):
+  diff_text = api.file.read_text('Show {} Diff'.format(name), path,
+                                 test_data='Test output data')
+  read_step_result = api.step.active_result
+  read_step_result.presentation.step_text = description
+  read_step_result.presentation.logs['>>> View {} Diff <<<'.format(name)] = (
+      diff_text.splitlines())
 
 
 def _UploadNdJson(api, ndjson_path):
@@ -302,5 +317,20 @@ def GenTests(api):
       override_analyze() +
       api.override_step_data(
           'Check for undocumented increase',
-          api.json.output({'status_code': 1, 'details': 'Failed'}))
+          api.json.output({
+            'details': 'Failed',
+            'normalized_apk_size': 1024 * 17,
+            'status_code': 1
+          }))
+  )
+  yield(
+      props('malformed_results_json') +
+      override_analyze() +
+      api.override_step_data(
+          'Check for undocumented increase',
+          api.json.output({
+            'details': 'Failed',
+            'normalized_apk_size': 1024 * 17,
+            'error_code': 1
+          }))
   )

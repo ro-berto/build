@@ -1794,13 +1794,15 @@
     },
     "name": "Check for undocumented increase",
     "~followup_annotations": [
+      "@@@STEP_TEXT@Normalized apk size delta: 1024 bytes@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"details\": \"Binary size checks passed.\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"normalized_apk_size\": 1024, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status_code\": 0@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@results_details@Binary size checks passed.@@@",
-      "@@@STEP_LOG_END@results_details@@@"
+      "@@@STEP_LOG_LINE@Size delta summary@Binary size checks passed.@@@",
+      "@@@STEP_LOG_END@Size delta summary@@@"
     ]
   },
   {
