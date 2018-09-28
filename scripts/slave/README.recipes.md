@@ -3484,9 +3484,9 @@ Finally, we roll the checkout and reapply the patch, and then rerun the
 failing tests. This helps confirm whether the failures were flakes or
 deterministic errors.
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#375)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#384)(self, data):**
 
-&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#378)(self, data):**
+&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#387)(self, data):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#84)(data):**
 
@@ -3501,7 +3501,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#395)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#404)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3581,12 +3581,17 @@ Args:
 Returns: A list of test suites that either have invalid results or failing
 tests.
 
-&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#285)(self, caller_api, test, emit_failing_step=True):**
+&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#289)(self, caller_api, test, failure_is_fatal):**
 
 Summarizes test results after a CL has been retried with patch deapplied.
 
 Args:
-  emit_failing_step: Whether new failures should emit a failing step.
+  failure_is_fatal: Whether new failures should emit a fatal failing step.
+
+  If there are no new failures, this method will emit a passing step.
+  If there are new failures, this method will emit a step whose presentation
+  status is 'FAILURE'. If |failure_is_fatal| is True, then this method will
+  also throw an exception.
 
 Returns:
   A Boolean describing whether the retry succeeded. Which is to say, all
@@ -3594,7 +3599,7 @@ Returns:
   suggests that the error is due to an issue with top of tree, and should
   not cause the CL to fail.
 
-&mdash; **def [summarize\_test\_with\_patch\_reapplied](/scripts/slave/recipe_modules/test_utils/api.py#320)(self, caller_api, test):**
+&mdash; **def [summarize\_test\_with\_patch\_reapplied](/scripts/slave/recipe_modules/test_utils/api.py#329)(self, caller_api, test):**
 
 Summarizes test results after a CL has been retried with patch reapplied.
 
@@ -3603,7 +3608,7 @@ Returns:
   there are tests that failed in 'with patch' and 'retry with patch', but
   not in 'without patch'.
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#385)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#394)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 
@@ -4232,11 +4237,11 @@ Summary of the recipe flow:
 Revision Y will be the revision property as provided by buildbot or HEAD (i.e.
 in a forced build with no revision provided).
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/blink_downstream.py#140)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/blink_downstream.py#142)(api):**
 
 &mdash; **def [V8Builder](/scripts/slave/recipes/blink_downstream.py#45)(config, bits, platform):**
 
-&mdash; **def [determine\_new\_failures](/scripts/slave/recipes/blink_downstream.py#108)(caller_api, tests, deapply_patch_fn):**
+&mdash; **def [determine\_new\_failures](/scripts/slave/recipes/blink_downstream.py#109)(caller_api, tests, deapply_patch_fn):**
 
 Utility function for running steps with a patch applied, and retrying
 failing steps without the patch. Failures from the run without the patch are

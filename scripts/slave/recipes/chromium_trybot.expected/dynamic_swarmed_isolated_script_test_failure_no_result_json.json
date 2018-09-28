@@ -2032,7 +2032,9 @@
     },
     "name": "telemetry_gpu_unittests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>all initial tests failed<br/>@@@"
+      "@@@STEP_TEXT@<br/>failures:<br/>all initial tests failed<br/>@@@",
+      "@@@STEP_FAILURE@@@",
+      "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@"
     ]
   },
   {

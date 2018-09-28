@@ -923,7 +923,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           for t in failing_tests:
             deferred_result = (self.m.test_utils.
               summarize_test_with_patch_deapplied(
-                  self.m, t, emit_failing_step=False))
+                  self.m, t, failure_is_fatal=False))
             deferred_retry_results.append((deferred_result, t))
 
       # Looks for test suites that have to be retried.

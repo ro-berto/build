@@ -234,7 +234,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     else:
       self.m.python.succeeding_step(test.name, self.INVALID_RESULTS_MAGIC)
 
-  def _summarize_new_and_ignored_failures(self, test, new_failures, ignored_failures, suffix, emit_failing_step):
+  def _summarize_new_and_ignored_failures(
+      self, test, new_failures, ignored_failures, suffix, failure_is_fatal):
     """Summarizes new and ignored failures in the test_suite |test|.
 
     Args:
@@ -242,7 +243,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       new_failures: Failures that are potentially caused by the patched CL.
       ignored_failures: Failures that are not caused by the patched CL.
       suffix: Should be either 'retry with patch summary' or 'retry summary'.
-      emit_failing_step: Whether to emit a failing step.
+      failure_is_fatal: Whether a failure should be fatal.
 
     Returns:
       A Boolean describing whether the retry succeeded. Which is to say, the
@@ -269,25 +270,33 @@ class TestUtilsApi(recipe_api.RecipeApi):
         ['ignored:', ignored_failures]
     ])
 
-    if new_failures and emit_failing_step:
+    if new_failures and failure_is_fatal:
       try:
         self.m.python.failing_step(step_name, step_text)
       finally:
         self.m.tryserver.set_test_failure_tryjob_result()
     else:
-      self.m.python.succeeding_step(step_name, step_text)
-      if ignored_failures:
-        self.m.step.active_result.presentation.status = self.m.step.WARNING
+      result = self.m.python.succeeding_step(step_name, step_text)
+      if new_failures:
+        result.presentation.status = self.m.step.FAILURE
+        self.m.tryserver.set_test_failure_tryjob_result()
+      elif ignored_failures:
+        result.presentation.status = self.m.step.WARNING
 
     return not bool(new_failures)
 
 
   def summarize_test_with_patch_deapplied(self, caller_api, test,
-                                          emit_failing_step=True):
+                                          failure_is_fatal):
     """Summarizes test results after a CL has been retried with patch deapplied.
 
     Args:
-      emit_failing_step: Whether new failures should emit a failing step.
+      failure_is_fatal: Whether new failures should emit a fatal failing step.
+
+      If there are no new failures, this method will emit a passing step.
+      If there are new failures, this method will emit a step whose presentation
+      status is 'FAILURE'. If |failure_is_fatal| is True, then this method will
+      also throw an exception.
 
     Returns:
       A Boolean describing whether the retry succeeded. Which is to say, all
@@ -299,7 +308,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
         caller_api, 'without patch')
 
     if not valid_results:
-      self._invalid_test_results(test, fatal=emit_failing_step)
+      self._invalid_test_results(test, fatal=failure_is_fatal)
 
     # If there are invalid results from the deapply patch step, treat this as if
     # all tests passed which prevents us from ignoring any test failures from
@@ -315,7 +324,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return self._summarize_new_and_ignored_failures(
         test, new_failures, ignored_failures,
-        'retry summary', emit_failing_step)
+        'retry summary', failure_is_fatal)
 
   def summarize_test_with_patch_reapplied(self, caller_api, test):
     """Summarizes test results after a CL has been retried with patch reapplied.
@@ -355,7 +364,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       ignored_failures = set()
 
     return self._summarize_new_and_ignored_failures(test, new_failures,
-        ignored_failures, 'retry with patch summary', emit_failing_step=True)
+        ignored_failures, 'retry with patch summary', failure_is_fatal=True)
 
   def _archive_retry_summary(self, retry_summary, dest_filename):
     """Archives the retry summary as JSON, storing it alongside the results
