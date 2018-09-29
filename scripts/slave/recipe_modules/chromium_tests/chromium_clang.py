@@ -566,6 +566,13 @@ SPEC['builders'].update([
            target_arch='arm',
            target_bits=32),
 
+    config('ToTAndroidOfficial',
+           android_config='clang_tot_release_builder',
+           chromium_config='clang_tot_android',
+           ninja_confirm_noop=False,
+           target_arch='arm',
+           target_bits=32),
+
     config('ToTLinux'),
 
     config('ToTLinux (dbg)',
