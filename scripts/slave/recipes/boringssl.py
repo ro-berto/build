@@ -150,8 +150,12 @@ def _GetTargetCMakeArgs(buildername, path, ninja_path, platform):
     _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-DOPENSSL_SMALL=1')
     _AppendFlags(args, 'CMAKE_C_FLAGS', '-DOPENSSL_SMALL=1')
   if _HasToken(buildername, 'nothreads'):
-    _AppendFlags(args, 'CMAKE_CXX_FLAGS', '-DOPENSSL_NO_THREADS=1')
-    _AppendFlags(args, 'CMAKE_C_FLAGS', '-DOPENSSL_NO_THREADS=1')
+    _AppendFlags(
+        args, 'CMAKE_CXX_FLAGS',
+        '-DOPENSSL_NO_THREADS_CORRUPT_MEMORY_AND_LEAK_SECRETS_IF_THREADED=1')
+    _AppendFlags(
+        args, 'CMAKE_C_FLAGS',
+        '-DOPENSSL_NO_THREADS_CORRUPT_MEMORY_AND_LEAK_SECRETS_IF_THREADED=1')
   if _HasToken(buildername, 'android'):
     args['CMAKE_TOOLCHAIN_FILE'] = bot_utils.join(
         'android_ndk', 'build', 'cmake', 'android.toolchain.cmake')

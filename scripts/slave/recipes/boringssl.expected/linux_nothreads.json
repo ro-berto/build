@@ -102,8 +102,8 @@
       "[START_DIR]/boringssl/util/bot/go/env.py",
       "[START_DIR]/boringssl/util/bot/cmake-linux64/bin/cmake",
       "-GNinja",
-      "-DCMAKE_CXX_FLAGS=-DOPENSSL_NO_THREADS=1",
-      "-DCMAKE_C_FLAGS=-DOPENSSL_NO_THREADS=1",
+      "-DCMAKE_CXX_FLAGS=-DOPENSSL_NO_THREADS_CORRUPT_MEMORY_AND_LEAK_SECRETS_IF_THREADED=1",
+      "-DCMAKE_C_FLAGS=-DOPENSSL_NO_THREADS_CORRUPT_MEMORY_AND_LEAK_SECRETS_IF_THREADED=1",
       "-DCMAKE_MAKE_PROGRAM=RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "[START_DIR]/boringssl"
     ],
