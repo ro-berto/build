@@ -1365,10 +1365,9 @@ class V8Api(recipe_api.RecipeApi):
           self._copy_property(self.m.properties, trigger_props, 'git_revision')
           self._copy_property(self.m.properties, trigger_props, 'revision')
           trigger_props.update(properties)
-          try:
-            bucket_name = self.m.buildbucket.properties['build']['bucket']
-          except (TypeError, KeyError) as e:
-            bucket_name = 'master.%s' % self.m.properties['mastername']
+          bucket_name = (
+              self.m.buildbucket.bucket_v1 or
+              'master.%s' % self.m.properties['mastername'])
           # Generate a list of fake changes from the blamelist property to have
           # correct blamelist displayed on the child build. Unfortunately, this
           # only copies author names, but additional details about the list of

@@ -453,18 +453,17 @@ class GomaApi(recipe_api.RecipeApi):
           self._goma_ctl_env['GOMACTL_CRASH_REPORT_ID_FILE'],
       ])
 
-    build_id = self.m.buildbucket.build_id
+    build_id = self.m.buildbucket.build.id
     if build_id:
       args.extend(['--build-id', build_id])
 
-    builder_id = self.m.buildbucket.builder_id
-    if builder_id:
-      args.extend(['--builder-id-json',
-                   self.m.json.input({
-                       'project': builder_id.project,
-                       'bucket': builder_id.bucket,
-                       'builder': builder_id.builder,
-                   })])
+    builder_id = self.m.buildbucket.build.builder
+    args.extend(['--builder-id-json',
+                 self.m.json.input({
+                     'project': builder_id.project,
+                     'bucket': builder_id.bucket,
+                     'builder': builder_id.builder,
+                 })])
     if self.m.runtime.is_luci:
       args.append('--is-luci')
 

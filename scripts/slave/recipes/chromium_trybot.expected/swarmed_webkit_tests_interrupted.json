@@ -1163,6 +1163,8 @@
       "gs://chromium-layout-test-archives",
       "--staging-dir",
       "[CACHE]/chrome_staging",
+      "--step-name",
+      "webkit_layout_tests (with patch)",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
@@ -1170,10 +1172,10 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "archive_webkit_tests_results",
+    "name": "archive results for webkit_layout_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/571/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/571/webkit_layout_tests (with patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/571/webkit_layout_tests (with patch)/layout-test-results.zip@@@"
     ]
   },
   {
@@ -3011,6 +3013,8 @@
       "gs://chromium-layout-test-archives",
       "--staging-dir",
       "[CACHE]/chrome_staging",
+      "--step-name",
+      "webkit_layout_tests (retry with patch)",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
@@ -3018,10 +3022,10 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "archive_webkit_tests_results (2)",
+    "name": "archive results for webkit_layout_tests (retry with patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/571/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/571/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/571/webkit_layout_tests (retry with patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/571/webkit_layout_tests (retry with patch)/layout-test-results.zip@@@"
     ]
   },
   {

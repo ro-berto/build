@@ -767,16 +767,18 @@ def get_args_for_test(api, chromium_tests_api, test_spec, bot_update_step):
     args = args + extra_args
 
   # Perform substitution of known variables.
+  build = chromium_tests_api.m.buildbucket.build
+  cl = (build.input.gerrit_changes or [None])[0]
   substitutions = {
-      'buildbucket_build_id': chromium_tests_api.m.buildbucket.build_id,
-      'buildername': api.properties.get('buildername'),
-      'buildnumber': api.properties.get('buildnumber'),
+      'buildbucket_build_id': build.id,
+      'buildername': build.builder.builder,
+      'buildnumber': build.number,
       'got_revision': (
           bot_update_step.presentation.properties.get('got_revision',
           bot_update_step.presentation.properties.get('got_src_revision'))),
       'mastername': api.properties.get('mastername'),
-      'patch_issue': api.properties.get('patch_issue'),
-      'patch_set': api.properties.get('patch_set'),
+      'patch_issue': cl.change if cl else None,
+      'patch_set': cl.patchset if cl else None,
   }
   return [string.Template(arg).safe_substitute(substitutions) for arg in args]
 
@@ -1318,11 +1320,8 @@ class LayoutTestResultsHandler(JSONResultsHandler):
     # TODO: The naming of the archive step is clunky, but the step should
     # really be triggered src-side as part of the post-collect merge and
     # upload, and so this should go away when we make that change.
-    custom_step_name = not step_name.startswith('webkit_layout_tests')
-    archive_step_name = 'archive_webkit_tests_results'
-    if custom_step_name:
-      archive_layout_test_args += ['--step-name', step_name]
-      archive_step_name = 'archive results for ' + step_name
+    archive_layout_test_args += ['--step-name', step_name]
+    archive_step_name = 'archive results for ' + step_name
 
     archive_layout_test_args += api.build.slave_utils_args
     # TODO(phajdan.jr): Pass gs_acl as a parameter, not build property.
@@ -1338,8 +1337,7 @@ class LayoutTestResultsHandler(JSONResultsHandler):
     base = (
       "https://test-results.appspot.com/data/layout_results/%s/%s"
       % (sanitized_buildername, buildnumber))
-    if custom_step_name:
-      base += '/' + step_name
+    base += '/' + step_name
 
     archive_result.presentation.links['layout_test_results'] = (
         base + '/layout-test-results/results.html')

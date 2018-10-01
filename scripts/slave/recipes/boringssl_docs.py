@@ -36,7 +36,7 @@ def RunSteps(api):
     api.python('generate', go_env, ['go', 'run', 'doc.go', '-out', output])
   # Upload docs only if run after commit and on not experimental builds.
   # TODO(tandrii, davidben): remove support for buildbot.
-  if api.buildbucket.builder_id.bucket == 'ci' or not api.runtime.is_luci:
+  if api.buildbucket.build.builder.bucket == 'ci' or not api.runtime.is_luci:
     if api.runtime.is_experimental:
       api.step('skipping uploading docs on experimental build', cmd=None)
     else:
