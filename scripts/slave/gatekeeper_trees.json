@@ -109,15 +109,6 @@
         "status-url": "https://pdfium-status.appspot.com",
         "track-revisions": true
     },
-    "dart": {
-        "build-db": "dart_build_db.json",
-        "config": "dart/gatekeeper_dart.json",
-        "masters": {
-            "https://build.chromium.org/p/client.dart": ["*"]
-        },
-        "set-status": false,
-        "open-tree": false
-    },
     "v8-tree-closers": {
         "build-db": "v8_tree_closers_build_db.json",
         "config": "v8_gatekeeper/tree_closers.json",
