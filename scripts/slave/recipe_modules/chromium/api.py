@@ -969,6 +969,19 @@ class ChromiumApi(recipe_api.RecipeApi):
       else:
         self.m.step(name='gn', cmd=[gn_path] + step_args, **kwargs)
 
+  def _mb_isolate_map_file_args(self):
+    for isolate_map_path in self.c.project_generator.isolate_map_paths:
+      yield '--isolate-map-file'
+      yield isolate_map_path
+
+  def _mb_build_dir_args(self, build_dir):
+    if not build_dir:
+      out_dir = 'out'
+      if self.c.TARGET_CROS_BOARD:
+        out_dir += '_%s' % self.c.TARGET_CROS_BOARD
+      build_dir = '//%s/%s' % (out_dir, self.c.build_config_fs)
+    return [build_dir]
+
   @_with_chromium_layout
   def run_mb_cmd(self, name, mb_command, mastername, buildername,
                  mb_path=None, mb_config_path=None,
@@ -1073,79 +1086,10 @@ class ChromiumApi(recipe_api.RecipeApi):
           env=env):
         return self.m.python(**step_kwargs)
 
-  @_with_chromium_layout
-  def run_mb(self, mastername, buildername, use_goma=True, mb_path=None,
-             mb_config_path=None, isolated_targets=None, name=None,
-             build_dir=None, android_version_code=None,
-             android_version_name=None, phase=None,
-             gn_args_location=None, gn_args_max_text_lines=None,
-             mb_command='gen', **kwargs):
-    """Run mb in the source tree.
-
-    Args:
-      gn_args_location: Controls where the GN args for the build should be
-        presented. By default or if gn.DEFAULT, the args will be in step_text if
-        the count of lines is less than max_text_lines or the logs otherwise. To
-        force the presentation to the step_text or logs, use gn.TEXT or gn.LOGS,
-        respectively.
-      gn_args_max_text_lines: The maximum number of lines of GN args to display
-        in the step_text when using the default behavior for displaying GN args.
-
-    Returns:
-      The content of the args.gn file.
-    """
-    # TODO(gbeaty) Migrate all callers using run_mb for 'mb gen' to mb_gen, then
-    # refactor to remove unnecessary code and reduce duplication
-    if mb_command == 'gen':
-      return self.mb_gen(
-          mastername, buildername, use_goma=use_goma, mb_path=mb_path,
-          mb_config_path=mb_config_path, isolated_targets=isolated_targets,
-          name=name, build_dir=build_dir,
-          android_version_code=android_version_code,
-          android_version_name=android_version_name, phase=phase,
-          gn_args_location=gn_args_location,
-          gn_args_max_text_lines=gn_args_max_text_lines,
-          **kwargs)
-
-    isolated_targets = isolated_targets or []
-
-    out_dir = 'out'
-    if self.c.TARGET_CROS_BOARD:
-      out_dir += '_%s' % self.c.TARGET_CROS_BOARD
-
-    build_dir = build_dir or '//%s/%s' % (out_dir, self.c.build_config_fs)
-
-    args = []
-
-    if self.c.project_generator.isolate_map_paths:
-      for isolate_map_path in self.c.project_generator.isolate_map_paths:
-        args += ['--isolate-map-file', isolate_map_path]
-
-    if isolated_targets:
-      sorted_isolated_targets = sorted(set(isolated_targets))
-      # TODO(dpranke): Change the MB flag to '--isolate-targets-file', maybe?
-      data = '\n'.join(sorted_isolated_targets) + '\n'
-      args += ['--swarming-targets-file', self.m.raw_io.input_text(data)]
-
-    args += [build_dir]
-
-    name = name or 'generate_build_files'
-    result = self.run_mb_cmd(name, mb_command, mastername, buildername,
-                             mb_path=mb_path, mb_config_path=mb_config_path,
-                             phase=phase, use_goma=use_goma,
-                             android_version_code=android_version_code,
-                             android_version_name=android_version_name,
-                             additional_args=args,
-                             **kwargs)
-
-    # Comes after self.m.python so the log appears in the correct step result.
-    if isolated_targets and result:
-      result.presentation.logs['swarming-targets-file.txt'] = (
-          sorted_isolated_targets)
-
   _LOOKUP_ARGS_RE = re.compile(r'Writing """\\?\s*(.*)""" to _path_/args.gn',
                                re.DOTALL)
 
+  @_with_chromium_layout
   def mb_lookup(self, mastername, buildername, name=None,
                 mb_path=None, mb_config_path=None,
                 phase=None, use_goma=True,
@@ -1267,9 +1211,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     mb_args = []
 
-    if self.c.project_generator.isolate_map_paths:
-      for isolate_map_path in self.c.project_generator.isolate_map_paths:
-        mb_args += ['--isolate-map-file', isolate_map_path]
+    mb_args.extend(self._mb_isolate_map_file_args())
 
     if isolated_targets:
       sorted_isolated_targets = sorted(set(isolated_targets))
@@ -1277,13 +1219,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       data = '\n'.join(sorted_isolated_targets) + '\n'
       mb_args += ['--swarming-targets-file', self.m.raw_io.input_text(data)]
 
-    if not build_dir:
-      out_dir = 'out'
-      if self.c.TARGET_CROS_BOARD:
-        out_dir += '_%s' % self.c.TARGET_CROS_BOARD
-      build_dir = '//%s/%s' % (out_dir, self.c.build_config_fs)
-
-    mb_args += [build_dir]
+    mb_args.extend(self._mb_build_dir_args(build_dir))
 
     name = name or 'generate_build_files'
     result = self.run_mb_cmd(
@@ -1299,14 +1235,27 @@ class ChromiumApi(recipe_api.RecipeApi):
       result.presentation.logs['swarming-targets-file.txt'] = (
           sorted_isolated_targets)
 
-    # If build_dir is a string, convert it to a Path
-    if isinstance(build_dir, str):
-      # The / splitting is required because Path.join on Windows won't convert
-      # the / in target label syntax to \ and the resulting path will not be
-      # well formed for any operation that requires an absolute path
-      build_dir = self.m.path['checkout'].join(*build_dir.split('/'))
-
     return gn_args
+
+  @_with_chromium_layout
+  def mb_isolate_everything(self, mastername, buildername, use_goma=True,
+                            mb_path=None, mb_config_path=None, name=None,
+                            build_dir=None, android_version_code=None,
+                            android_version_name=None, phase=None, **kwargs):
+    args = []
+
+    args.extend(self._mb_isolate_map_file_args())
+
+    args.extend(self._mb_build_dir_args(build_dir))
+
+    name = name or 'generate .isolate files'
+    self.run_mb_cmd(name, 'isolate-everything', mastername, buildername,
+                    mb_path=mb_path, mb_config_path=mb_config_path,
+                    phase=phase, use_goma=use_goma,
+                    android_version_code=android_version_code,
+                    android_version_name=android_version_name,
+                    additional_args=args,
+                    **kwargs)
 
   def taskkill(self):
     self.m.build.python(
