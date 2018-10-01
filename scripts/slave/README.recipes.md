@@ -96,10 +96,10 @@
   * [chromium:tests/get_env](#recipes-chromium_tests_get_env)
   * [chromium:tests/get_version](#recipes-chromium_tests_get_version)
   * [chromium:tests/mb_gen](#recipes-chromium_tests_mb_gen)
+  * [chromium:tests/mb_isolate_everything](#recipes-chromium_tests_mb_isolate_everything)
   * [chromium:tests/mb_lookup](#recipes-chromium_tests_mb_lookup)
   * [chromium:tests/process_dumps](#recipes-chromium_tests_process_dumps)
   * [chromium:tests/run_gn](#recipes-chromium_tests_run_gn)
-  * [chromium:tests/run_mb](#recipes-chromium_tests_run_mb)
   * [chromium:tests/runhooks](#recipes-chromium_tests_runhooks)
   * [chromium:tests/runtest](#recipes-chromium_tests_runtest)
   * [chromium:tests/sizes](#recipes-chromium_tests_sizes)
@@ -933,7 +933,7 @@ Returns: (context manager) A context manager that inserts system python
 
 #### **class [ChromiumApi](/scripts/slave/recipe_modules/chromium/api.py#29)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1329)(self, step_name, gs_bucket, gs_acl=None, mode=None, build_name=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1278)(self, step_name, gs_bucket, gs_acl=None, mode=None, build_name=None, \*\*kwargs):**
 
 Returns a step invoking archive_build.py to archive a Chromium build.
 
@@ -997,7 +997,7 @@ Returns (ChromiumApi.Layout): The configured Chromium build layout.
 
 &mdash; **def [ensure\_toolchains](/scripts/slave/recipe_modules/chromium/api.py#843)(self):**
 
-&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1372)(self, test_name):**
+&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1321)(self, test_name):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [get\_clang\_version](/scripts/slave/recipe_modules/chromium/api.py#724)(self, \*\*kwargs):**
 
@@ -1019,7 +1019,7 @@ Args:
 
 &mdash; **def [get\_version](/scripts/slave/recipe_modules/chromium/api.py#158)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_gen](/scripts/slave/recipe_modules/chromium/api.py#1221)(self, mastername, buildername, name=None, mb_path=None, mb_config_path=None, use_goma=True, isolated_targets=None, build_dir=None, phase=None, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_gen](/scripts/slave/recipe_modules/chromium/api.py#1165)(self, mastername, buildername, name=None, mb_path=None, mb_config_path=None, use_goma=True, isolated_targets=None, build_dir=None, phase=None, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None, \*\*kwargs):**
 
 Generate the build files in the source tree.
 
@@ -1049,7 +1049,9 @@ Args:
 Returns:
   The content of the args.gn file.
 
-&mdash; **def [mb\_lookup](/scripts/slave/recipe_modules/chromium/api.py#1149)(self, mastername, buildername, name=None, mb_path=None, mb_config_path=None, phase=None, use_goma=True, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_isolate\_everything](/scripts/slave/recipe_modules/chromium/api.py#1240)(self, mastername, buildername, use_goma=True, mb_path=None, mb_config_path=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, phase=None, \*\*kwargs):**
+
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_lookup](/scripts/slave/recipe_modules/chromium/api.py#1092)(self, mastername, buildername, name=None, mb_path=None, mb_config_path=None, phase=None, use_goma=True, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None):**
 
 Lookup the GN args for the build.
 
@@ -1082,7 +1084,7 @@ Returns:
 
 Return the path to the built executable directory.
 
-&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1317)(self, \*\*kwargs):**
+&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1266)(self, \*\*kwargs):**
 
 &mdash; **def [reload\_version](/scripts/slave/recipe_modules/chromium/api.py#163)(self):**
 
@@ -1090,23 +1092,7 @@ Return the path to the built executable directory.
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gyp\_chromium](/scripts/slave/recipe_modules/chromium/api.py#900)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb](/scripts/slave/recipe_modules/chromium/api.py#1076)(self, mastername, buildername, use_goma=True, mb_path=None, mb_config_path=None, isolated_targets=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, phase=None, gn_args_location=None, gn_args_max_text_lines=None, mb_command='gen', \*\*kwargs):**
-
-Run mb in the source tree.
-
-Args:
-  gn_args_location: Controls where the GN args for the build should be
-    presented. By default or if gn.DEFAULT, the args will be in step_text if
-    the count of lines is less than max_text_lines or the logs otherwise. To
-    force the presentation to the step_text or logs, use gn.TEXT or gn.LOGS,
-    respectively.
-  gn_args_max_text_lines: The maximum number of lines of GN args to display
-    in the step_text when using the default behavior for displaying GN args.
-
-Returns:
-  The content of the args.gn file.
-
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb\_cmd](/scripts/slave/recipe_modules/chromium/api.py#972)(self, name, mb_command, mastername, buildername, mb_path=None, mb_config_path=None, phase=None, use_goma=True, android_version_code=None, android_version_name=None, additional_args=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb\_cmd](/scripts/slave/recipe_modules/chromium/api.py#985)(self, name, mb_command, mastername, buildername, mb_path=None, mb_config_path=None, phase=None, use_goma=True, android_version_code=None, android_version_name=None, additional_args=None, \*\*kwargs):**
 
 Run an arbitrary mb command.
 
@@ -1145,7 +1131,7 @@ Return a runtest.py invocation.
 Return a sizes.py invocation.
 This uses runtests.py to upload the results to the perf dashboard.
 
-&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#1311)(self):**
+&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#1260)(self):**
 
 &emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_launcher\_filter](/scripts/slave/recipe_modules/chromium/api.py#566)(self, tests):**
 
@@ -3484,9 +3470,9 @@ Finally, we roll the checkout and reapply the patch, and then rerun the
 failing tests. This helps confirm whether the failures were flakes or
 deterministic errors.
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#384)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#388)(self, data):**
 
-&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#387)(self, data):**
+&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#391)(self, data):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#84)(data):**
 
@@ -3501,7 +3487,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#404)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#408)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3568,7 +3554,7 @@ Args:
 Returns:
   The list of failed tests.
 
-&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#193)(self, caller_api, tests, invalid_is_fatal):**
+&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#197)(self, caller_api, tests, invalid_is_fatal):**
 
 Run tests and returns failures.
 
@@ -3581,7 +3567,7 @@ Args:
 Returns: A list of test suites that either have invalid results or failing
 tests.
 
-&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#289)(self, caller_api, test, failure_is_fatal):**
+&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#293)(self, caller_api, test, failure_is_fatal):**
 
 Summarizes test results after a CL has been retried with patch deapplied.
 
@@ -3599,7 +3585,7 @@ Returns:
   suggests that the error is due to an issue with top of tree, and should
   not cause the CL to fail.
 
-&mdash; **def [summarize\_test\_with\_patch\_reapplied](/scripts/slave/recipe_modules/test_utils/api.py#329)(self, caller_api, test):**
+&mdash; **def [summarize\_test\_with\_patch\_reapplied](/scripts/slave/recipe_modules/test_utils/api.py#333)(self, caller_api, test):**
 
 Summarizes test results after a CL has been retried with patch reapplied.
 
@@ -3608,7 +3594,7 @@ Returns:
   there are tests that failed in 'with patch' and 'retry with patch', but
   not in 'without patch'.
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#394)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#398)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 
@@ -4259,9 +4245,9 @@ Args:
 &mdash; **def [determine\_new\_future\_failures](/scripts/slave/recipes/blink_downstream.py#78)(caller_api, extra_args):**
 ### *recipes* / [boringssl](/scripts/slave/recipes/boringssl.py)
 
-[DEPS](/scripts/slave/recipes/boringssl.py#8): [chromium](#recipe_modules-chromium), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/boringssl.py#8): [chromium](#recipe_modules-chromium), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/boringssl.py#234)(api, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/boringssl.py#235)(api, buildername):**
 ### *recipes* / [boringssl\_docs](/scripts/slave/recipes/boringssl_docs.py)
 
 [DEPS](/scripts/slave/recipes/boringssl_docs.py#8): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4368,6 +4354,11 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/mb_gen.py#5): [chromium](#recipe_modules-chromium), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/mb_gen.py#12)(api):**
+### *recipes* / [chromium:tests/mb\_isolate\_everything](/scripts/slave/recipe_modules/chromium/tests/mb_isolate_everything.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium/tests/mb_isolate_everything.py#3): [chromium](#recipe_modules-chromium)
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/mb_isolate_everything.py#5)(api):**
 ### *recipes* / [chromium:tests/mb\_lookup](/scripts/slave/recipe_modules/chromium/tests/mb_lookup.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/mb_lookup.py#7): [chromium](#recipe_modules-chromium), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
@@ -4383,11 +4374,6 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/run_gn.py#5): [chromium](#recipe_modules-chromium), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/run_gn.py#12)(api):**
-### *recipes* / [chromium:tests/run\_mb](/scripts/slave/recipe_modules/chromium/tests/run_mb.py)
-
-[DEPS](/scripts/slave/recipe_modules/chromium/tests/run_mb.py#5): [chromium](#recipe_modules-chromium), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/run_mb.py#13)(api):**
 ### *recipes* / [chromium:tests/runhooks](/scripts/slave/recipe_modules/chromium/tests/runhooks.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/runhooks.py#5): [chromium](#recipe_modules-chromium), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

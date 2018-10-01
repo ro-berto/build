@@ -10,6 +10,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
+  'depot_tools/osx_sdk',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/path',
@@ -232,7 +233,8 @@ PROPERTIES = {
 
 
 def RunSteps(api, buildername):
-  with api.context(env=_GetBuilderEnv(buildername)), _CleanupMSVC(api):
+  with api.context(
+      env=_GetBuilderEnv(buildername)), api.osx_sdk('ios'), _CleanupMSVC(api):
     # Print the kernel version on Linux builders. BoringSSL is sensitive to
     # whether the kernel has getrandom support.
     if api.platform.is_linux:
