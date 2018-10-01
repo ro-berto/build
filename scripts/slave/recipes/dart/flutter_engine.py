@@ -113,12 +113,36 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
   with api.context(cwd=flutter):
     api.step('flutter update-packages',
              [flutter_cmd, 'update-packages'] + test_args)
+    # analyze.dart and test.dart have hardcoded references to bin/cache/dart-sdk.
+    # So we overwrite bin/cache/dart-sdk and tightly-coupled frontend_server.dart.snapshot
+    # with links that point to corresponding entries from [just_built_dart_sdk]
+    api.step('move cached dart-sdk aside',
+      ['/bin/bash', '-c', 'mv', 'bin/cache/dart-sdk', 'bin/cache/dart-sdk-downloaded'])
+    api.step('move cached flutter_tester aside',
+      ['/bin/bash', '-c', 'mv', 'bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot',
+       'bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot-downloaded'])
+    api.step('make dart-sdk a link to just built dart sdk',
+      ['/bin/bash', '-c', 'ln', '-s', just_built_dart_sdk, 'bin/cache/dart-sdk'])
+    api.step('make frontend_server.dart.snapshot a link to just version',
+      ['/bin/bash', '-c', 'ln', just_built_dart_sdk.join('../gen/frontend_server.dart.snapshot'),
+        'bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot'])
+
     # runs all flutter tests similar to Cirrus as described on this page:
     # https://github.com/flutter/flutter/blob/master/CONTRIBUTING.md
     api.step('flutter analyze', ['dart', 'dev/bots/analyze.dart',
              '--dart-sdk', just_built_dart_sdk
              ], timeout=20*60) # 20 minutes
     api.step('flutter test', test_cmd + test_args, timeout=90*60) # 90 minutes
+
+    api.step('remove frontend_server.dart.snapshot link',
+      ['/bin/bash', '-c', 'rm', 'bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot'])
+    api.step('remove dart-sdk link',
+      ['/bin/bash', '-c', 'rm', 'bin/cache/dart-sdk'])
+    api.step('restore downloaded dart-sdk',
+      ['/bin/bash', '-c', 'mv', 'bin/cache/dart-sdk-downloaded', 'bin/cache/dart-sdk'])
+    api.step('restore downloaded frontend_server.dart.snapshot',
+      ['/bin/bash', '-c', 'mv', 'bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot-downloaded',
+       'bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot'])
 
 def RunSteps(api):
   if api.runtime.is_luci:
