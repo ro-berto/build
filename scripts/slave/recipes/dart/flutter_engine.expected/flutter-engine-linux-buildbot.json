@@ -2364,11 +2364,14 @@
   },
   {
     "cmd": [
-      "/bin/bash",
-      "-c",
-      "mv",
-      "bin/cache/dart-sdk",
-      "bin/cache/dart-sdk-downloaded"
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "move",
+      "[START_DIR]/flutter/bin/cache/dart-sdk",
+      "[START_DIR]/flutter/bin/cache/dart-sdk-backup"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -2376,15 +2379,19 @@
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
     },
-    "name": "move cached dart-sdk aside"
+    "infra_step": true,
+    "name": "backup cached dart-sdk"
   },
   {
     "cmd": [
-      "/bin/bash",
-      "-c",
-      "mv",
-      "bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot",
-      "bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot-downloaded"
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "move",
+      "[START_DIR]/flutter/bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot",
+      "[START_DIR]/flutter/bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot-backup"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -2392,16 +2399,19 @@
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
     },
-    "name": "move cached flutter_tester aside"
+    "infra_step": true,
+    "name": "backup cached frontend_server snapshot"
   },
   {
     "cmd": [
-      "/bin/bash",
-      "-c",
-      "ln",
-      "-s",
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "symlink",
       "[START_DIR]/src/out/host_debug/dart-sdk",
-      "bin/cache/dart-sdk"
+      "[START_DIR]/flutter/bin/cache/dart-sdk"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -2409,15 +2419,19 @@
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
     },
+    "infra_step": true,
     "name": "make dart-sdk a link to just built dart sdk"
   },
   {
     "cmd": [
-      "/bin/bash",
-      "-c",
-      "ln",
-      "[START_DIR]/src/out/host_debug/dart-sdk/../gen/frontend_server.dart.snapshot",
-      "bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot"
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "symlink",
+      "[START_DIR]/src/out/host_debug/gen/frontend_server.dart.snapshot",
+      "[START_DIR]/flutter/bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -2425,7 +2439,8 @@
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
     },
-    "name": "make frontend_server.dart.snapshot a link to just version"
+    "infra_step": true,
+    "name": "make frontend_server.dart.snapshot a link to just built version"
   },
   {
     "cmd": [
@@ -2461,10 +2476,13 @@
   },
   {
     "cmd": [
-      "/bin/bash",
-      "-c",
-      "rm",
-      "bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot"
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/flutter/bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -2472,14 +2490,18 @@
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
     },
+    "infra_step": true,
     "name": "remove frontend_server.dart.snapshot link"
   },
   {
     "cmd": [
-      "/bin/bash",
-      "-c",
-      "rm",
-      "bin/cache/dart-sdk"
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/flutter/bin/cache/dart-sdk"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -2487,15 +2509,19 @@
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
     },
+    "infra_step": true,
     "name": "remove dart-sdk link"
   },
   {
     "cmd": [
-      "/bin/bash",
-      "-c",
-      "mv",
-      "bin/cache/dart-sdk-downloaded",
-      "bin/cache/dart-sdk"
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "move",
+      "[START_DIR]/flutter/bin/cache/dart-sdk-backup",
+      "[START_DIR]/flutter/bin/cache/dart-sdk"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -2503,15 +2529,19 @@
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
     },
-    "name": "restore downloaded dart-sdk"
+    "infra_step": true,
+    "name": "restore cached dart-sdk"
   },
   {
     "cmd": [
-      "/bin/bash",
-      "-c",
-      "mv",
-      "bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot-downloaded",
-      "bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot"
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "move",
+      "[START_DIR]/flutter/bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot-backup",
+      "[START_DIR]/flutter/bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
@@ -2519,7 +2549,8 @@
       "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
       "TEST_COMMIT_RANGE": "HEAD"
     },
-    "name": "restore downloaded frontend_server.dart.snapshot"
+    "infra_step": true,
+    "name": "restore cached frontend_server snapshot"
   },
   {
     "name": "$result",

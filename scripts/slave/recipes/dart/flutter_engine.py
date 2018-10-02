@@ -98,7 +98,7 @@ def GetCheckout(api):
   api.step('3xHEAD Flutter Hooks',
       ['src/third_party/dart/tools/3xhead_flutter_hooks.sh'])
 
-def TestFlutter(api, start_dir, just_built_dart_sdk):
+def TestFlutter(api, start_dir, just_built_dart_sdk, just_built_gen):
   engine_src = start_dir.join('src')
   flutter = start_dir.join('flutter')
   flutter_cmd = flutter.join('bin/flutter')
@@ -113,19 +113,22 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
   with api.context(cwd=flutter):
     api.step('flutter update-packages',
              [flutter_cmd, 'update-packages'] + test_args)
+
     # analyze.dart and test.dart have hardcoded references to bin/cache/dart-sdk.
     # So we overwrite bin/cache/dart-sdk and tightly-coupled frontend_server.dart.snapshot
     # with links that point to corresponding entries from [just_built_dart_sdk]
-    api.step('move cached dart-sdk aside',
-      ['/bin/bash', '-c', 'mv', 'bin/cache/dart-sdk', 'bin/cache/dart-sdk-downloaded'])
-    api.step('move cached flutter_tester aside',
-      ['/bin/bash', '-c', 'mv', 'bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot',
-       'bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot-downloaded'])
-    api.step('make dart-sdk a link to just built dart sdk',
-      ['/bin/bash', '-c', 'ln', '-s', just_built_dart_sdk, 'bin/cache/dart-sdk'])
-    api.step('make frontend_server.dart.snapshot a link to just version',
-      ['/bin/bash', '-c', 'ln', just_built_dart_sdk.join('../gen/frontend_server.dart.snapshot'),
-        'bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot'])
+    dart_sdk = flutter.join('bin', 'cache', 'dart-sdk')
+    dart_sdk_backup = flutter.join('bin', 'cache', 'dart-sdk-backup')
+    frontend_server = flutter.join(
+      'bin', 'cache', 'artifacts', 'engine', 'linux-x64', 'frontend_server.dart.snapshot')
+    frontend_server_backup  = flutter.join(
+      'bin', 'cache', 'artifacts', 'engine', 'linux-x64', 'frontend_server.dart.snapshot-backup')
+    api.file.move('backup cached dart-sdk', dart_sdk, dart_sdk_backup)
+    api.file.move('backup cached frontend_server snapshot', frontend_server, frontend_server_backup)
+    api.file.symlink('make dart-sdk a link to just built dart sdk', just_built_dart_sdk, dart_sdk)
+    api.file.symlink('make frontend_server.dart.snapshot a link to just built version',
+      just_built_gen.join('frontend_server.dart.snapshot'),
+      frontend_server)
 
     # runs all flutter tests similar to Cirrus as described on this page:
     # https://github.com/flutter/flutter/blob/master/CONTRIBUTING.md
@@ -134,15 +137,10 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
              ], timeout=20*60) # 20 minutes
     api.step('flutter test', test_cmd + test_args, timeout=90*60) # 90 minutes
 
-    api.step('remove frontend_server.dart.snapshot link',
-      ['/bin/bash', '-c', 'rm', 'bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot'])
-    api.step('remove dart-sdk link',
-      ['/bin/bash', '-c', 'rm', 'bin/cache/dart-sdk'])
-    api.step('restore downloaded dart-sdk',
-      ['/bin/bash', '-c', 'mv', 'bin/cache/dart-sdk-downloaded', 'bin/cache/dart-sdk'])
-    api.step('restore downloaded frontend_server.dart.snapshot',
-      ['/bin/bash', '-c', 'mv', 'bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot-downloaded',
-       'bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot'])
+    api.file.remove('remove frontend_server.dart.snapshot link', frontend_server)
+    api.file.remove('remove dart-sdk link', dart_sdk)
+    api.file.move('restore cached dart-sdk', dart_sdk_backup, dart_sdk)
+    api.file.move('restore cached frontend_server snapshot', frontend_server_backup, frontend_server)
 
 def RunSteps(api):
   if api.runtime.is_luci:
@@ -164,6 +162,7 @@ def RunSteps(api):
       'sdks', 'dart-sdk', 'bin')
     engine_env = { 'PATH': api.path.pathsep.join((str(prebuilt_dart_bin),
       '%(PATH)s')) }
+    just_built_gen = checkout_dir.join('out', 'host_debug', 'gen')
     just_built_dart_sdk = checkout_dir.join('out', 'host_debug', 'dart-sdk')
     flutter_env = {
       'PATH': api.path.pathsep.join((str(just_built_dart_sdk.join('bin')), '%(PATH)s')),
@@ -184,7 +183,7 @@ def RunSteps(api):
         BuildLinuxAndroidx86(api, checkout_dir)
       # The context adds freshly-built engine's dart-sdk to the path.
       with api.context(env=flutter_env):
-        TestFlutter(api, start_dir, just_built_dart_sdk)
+        TestFlutter(api, start_dir, just_built_dart_sdk, just_built_gen)
 
 def GenTests(api):
   yield (api.test('flutter-engine-linux-buildbot') + api.platform('linux', 64)
