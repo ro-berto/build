@@ -14,6 +14,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/raw_io',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'webrtc',
 ]
@@ -48,11 +49,16 @@ def RunSteps(api):
   api.gclient.runhooks()
 
   with api.context(cwd=api.path['checkout']):
+    push_account = (
+        # TODO(oprypin): Replace with api.service_account.default().get_email()
+        # when https://crbug.com/846923 is resolved.
+        'chromium-webrtc-autoroll@webrtc-ci.iam.gserviceaccount.com'
+        if api.runtime.is_luci else 'buildbot@webrtc.org')
     commits = api.gerrit.get_changes(
         GERRIT_URL,
         query_params=[
             ('project', 'src'),
-            ('owner', 'buildbot@webrtc.org'),
+            ('owner', push_account),
             ('status', 'open'),
         ],
         limit=1,
@@ -83,10 +89,15 @@ def RunSteps(api):
 
     # Run the roll script. It will take care of branch creation, modifying DEPS,
     # uploading etc. It will also delete any previous roll branch.
+    params = ['--clean', '--verbose']
+    if api.runtime.is_experimental:
+      params.append('--skip-cq')
+    else:
+      params.append('--cq-over=100')
     api.python(
         'autoroll DEPS',
         api.path['checkout'].join('tools_webrtc', 'autoroller', 'roll_deps.py'),
-        ['--clean', '--verbose', '--cq-over=100'],
+        params,
     )
 
 
@@ -96,6 +107,13 @@ def GenTests(api):
       api.properties.generic(mastername='client.webrtc.fyi',
                              buildername='Auto-roll - WebRTC DEPS') +
       api.override_step_data('gerrit changes', api.json.output([]))
+  )
+  yield (
+      api.test('rolling_activated_luci') +
+      api.properties.generic(mastername='client.webrtc.fyi',
+                             buildername='Auto-roll - WebRTC DEPS') +
+      api.override_step_data('gerrit changes', api.json.output([])) +
+      api.runtime(is_luci=True, is_experimental=True)
   )
   yield (
       api.test('rolling_deactivated') +
