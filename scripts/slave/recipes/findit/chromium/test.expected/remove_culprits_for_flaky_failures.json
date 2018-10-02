@@ -299,6 +299,21 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.fyi.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read test spec (chromium.fyi.json)",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
       "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.mac.json",
       "/path/to/tmp/json"
     ],
@@ -610,6 +625,22 @@
     "name": "test r3.get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.fyi.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "test r3.read test spec (chromium.fyi.json)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -1625,6 +1656,22 @@
     "name": "test r4.get compile targets for scripts",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.fyi.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "test r4.read test spec (chromium.fyi.json)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]

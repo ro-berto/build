@@ -146,6 +146,8 @@ SPEC = {
       },
       'checkout_dir': 'mac',
       'test_results_config': 'staging_server',
+      'parent_mastername': 'chromium.mac',
+      'parent_buildername': 'Mac Builder',
       'testing': {
         'platform': 'mac',
       },
