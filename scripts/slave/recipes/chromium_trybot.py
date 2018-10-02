@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.post_process import Filter, DropExpectation
+from recipe_engine.post_process import Filter, DropExpectation, StatusCodeIn
 
 DEPS = [
   'build',
@@ -348,6 +348,35 @@ def GenTests(api):
         'gl_tests (with patch)',
         api.swarming.canned_summary_output(failure=True) +
         canned_test(passing=False))
+  )
+
+  yield (
+    api.test('swarming_test_failure_no_patch_deapplication') +
+    props(extra_swarmed_tests=['gl_tests']) +
+    api.platform.name('linux') +
+    api.override_step_data(
+        'read test spec (chromium.linux.json)',
+        api.json.output({
+            'Linux Tests': {
+                'gtest_tests': [
+                    {
+                      'test': 'gl_tests',
+                      'swarming': {'can_use_on_swarming_builders': True},
+                    },
+                ],
+            },
+        })
+    ) +
+    suppress_analyze() +
+    api.override_step_data(
+        'gl_tests (with patch)',
+        api.swarming.canned_summary_output(failure=True) +
+        canned_test(passing=False)) +
+    api.override_step_data(
+          'git diff to analyze patch',
+          api.raw_io.stream_output('foo.cc\ntesting/buildbot/bar.json')) +
+    api.post_process(StatusCodeIn, 0) +
+    api.post_process(Filter('gl_tests (retry with patch)'))
   )
 
   yield (

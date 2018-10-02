@@ -911,8 +911,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # 'deapply patch' step.
       should_deapply_patch = (
           self._should_retry_with_patch_deapplied(affected_files))
-      deferred_retry_results = []
+      test_suites_to_retry_with_patch = []
+
       if should_deapply_patch:
+        deferred_retry_results = []
         # Deapply the patch. Then rerun failing tests.
         self._deapply_patch_build_isolate(failing_tests,
                                           bot_update_step)
@@ -926,11 +928,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                   self.m, t, failure_is_fatal=False))
             deferred_retry_results.append((deferred_result, t))
 
-      # Looks for test suites that have to be retried.
-      test_suites_to_retry_with_patch = []
-      for deferred_result, test in deferred_retry_results:
-        if not deferred_result.get_result():
-          test_suites_to_retry_with_patch.append(test)
+        # Looks for test suites that have to be retried.
+        for deferred_result, test in deferred_retry_results:
+          if not deferred_result.get_result():
+            test_suites_to_retry_with_patch.append(test)
+      else:
+        test_suites_to_retry_with_patch = failing_tests
 
       # Early exit if all test_suites are passing.
       if not test_suites_to_retry_with_patch:
