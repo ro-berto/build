@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 from contextlib import contextmanager
-from recipe_engine.recipe_api import Property
 
 DEPS = [
   'chromium',
@@ -11,6 +10,7 @@ DEPS = [
   'depot_tools/depot_tools',
   'depot_tools/gclient',
   'depot_tools/osx_sdk',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/path',
@@ -227,12 +227,8 @@ def _CleanupMSVC(api):
                ok_ret='any')
 
 
-PROPERTIES = {
-  'buildername': Property(),
-}
-
-
-def RunSteps(api, buildername):
+def RunSteps(api):
+  buildername = api.buildbucket.builder_name
   with api.context(
       env=_GetBuilderEnv(buildername)), api.osx_sdk('ios'), _CleanupMSVC(api):
     # Print the kernel version on Linux builders. BoringSSL is sensitive to
