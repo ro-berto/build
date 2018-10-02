@@ -251,7 +251,7 @@
     "name": "lookup GN args",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>target_cpu = \"x86\"<br/>use_goma = true<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
+      "@@@STEP_TEXT@<br/>use_goma = true<br/>target_cpu = arm64<br/>goma_dir = \"/b/build/slave/cache/goma_client\"@@@"
     ]
   },
   {
@@ -682,31 +682,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/tools/clang/scripts/download_objdump.py"
-    ],
-    "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
-    },
-    "name": "download objdump"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/tools/binary_size/supersize",
-      "archive",
-      "[START_DIR]/src/out/Release/apks/ChromeModernPublic.apk.size",
-      "--apk-file",
-      "[START_DIR]/src/out/Release/apks/ChromeModernPublic.apk",
-      "-v"
-    ],
-    "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
-    },
-    "name": "supersize archive (ChromeModernPublic.apk)"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -753,31 +728,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/tools/clang/scripts/download_objdump.py"
-    ],
-    "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
-    },
-    "name": "download objdump (2)"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/tools/binary_size/supersize",
-      "archive",
-      "[START_DIR]/src/out/Release/apks/ChromePublic.apk.size",
-      "--apk-file",
-      "[START_DIR]/src/out/Release/apks/ChromePublic.apk",
-      "-v"
-    ],
-    "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
-    },
-    "name": "supersize archive (ChromePublic.apk)"
-  },
-  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -822,31 +772,6 @@
       "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/src/tools/clang/scripts/download_objdump.py"
-    ],
-    "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
-    },
-    "name": "download objdump (3)"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/src/tools/binary_size/supersize",
-      "archive",
-      "[START_DIR]/src/out/Release/apks/SystemWebView.apk.size",
-      "--apk-file",
-      "[START_DIR]/src/out/Release/apks/SystemWebView.apk",
-      "-v"
-    ],
-    "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
-    },
-    "name": "supersize archive (SystemWebView.apk)"
   },
   {
     "cmd": [
