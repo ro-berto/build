@@ -24,6 +24,27 @@ SPEC = {
           'platform': 'win',
       },
     },
+    'WebKit Win10': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'goma_high_parallel',
+        'goma_enable_global_file_stat_cache',
+        'mb',
+        'ninja_confirm_noop',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 32,
+      },
+      'bot_type': 'tester',
+      'tests': [],
+      'parent_buildername': 'Win Builder',
+      'checkout_dir': 'win',
+      'testing': {
+        'platform': 'win',
+      },
+    },
     'Win Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [

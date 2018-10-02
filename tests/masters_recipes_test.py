@@ -116,6 +116,7 @@ FAKE_BUILDERS = {
         'Win10 Tests x64 (dbg)',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'win-jumbo-rel',
+        'WebKit Win10',  # this was copied from master.chromium.webkit
     ],
     'master.tryserver.chromium.win' : [
         # FIXME(tansell): Remove fake when BlinkTests are removed.
