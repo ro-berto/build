@@ -22,12 +22,13 @@ def RunSteps(api):
   test = api.chromium_tests.steps.AndroidJunitTest('test_name')
 
   try:
-    test.run(api, '')
+    test.run(api.chromium_tests.m, '')
   finally:
+    assert test.has_valid_results(api.chromium_tests.m, '')
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
-        'compile_targets: %r' % test.compile_targets(api),
-        'failures: %r' % test.failures(api, ''),
+        'compile_targets: %r' % test.compile_targets(api.chromium_tests.m),
+        'failures: %r' % test.failures(api.chromium_tests.m, ''),
         'uses_local_devices: %r' % test.uses_local_devices,
     ]
 

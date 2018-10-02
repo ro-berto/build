@@ -147,16 +147,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "junit_test",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
-      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
-      "@@@STEP_LOG_END@Test.Two@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
     "cmd": [
       "vpython",
       "-u",
@@ -165,11 +155,23 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "name": "junit_test.junit_test",
+    "name": "junit_test",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "Report junit_test results",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
+      "@@@STEP_LOG_END@Test.Two@@@"
     ]
   },
   {
@@ -192,14 +194,11 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "name": "junit_test.Upload to test-results [junit_test]",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "Upload to test-results [junit_test]"
   },
   {
     "name": "$result",
-    "reason": "Step('junit_test.junit_test') failed with return_code 1",
+    "reason": "Step('junit_test') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }

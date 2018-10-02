@@ -1,15 +1,5 @@
 [
   {
-    "cmd": [],
-    "name": "ChromePublicTest",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
-      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
-      "@@@STEP_LOG_END@Test.Two@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
     "cmd": [
       "vpython",
       "-u",
@@ -22,11 +12,23 @@
       "--adb-path",
       "None/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "name": "ChromePublicTest.ChromePublicTest",
+    "name": "ChromePublicTest",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "Report ChromePublicTest results",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
+      "@@@STEP_LOG_END@Test.Two@@@"
     ]
   },
   {
@@ -49,10 +51,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "name": "ChromePublicTest.Upload to test-results [ChromePublicTest]",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "Upload to test-results [ChromePublicTest]"
   },
   {
     "cmd": [],
@@ -65,7 +64,7 @@
   },
   {
     "name": "$result",
-    "reason": "Step('ChromePublicTest.ChromePublicTest') failed with return_code 1",
+    "reason": "Step('ChromePublicTest') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }

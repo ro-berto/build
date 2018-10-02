@@ -947,20 +947,6 @@
     "name": "test_pre_run"
   },
   {
-    "cmd": [],
-    "env": {
-      "CHROME_HEADLESS": "1",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
-    },
-    "name": "custom_test_name",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
-      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
-      "@@@STEP_LOG_END@Test.Two@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
     "cmd": [
       "vpython",
       "-u",
@@ -978,9 +964,8 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "custom_test_name.custom_test_name",
+    "name": "custom_test_name",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
     ]
@@ -1007,11 +992,27 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "custom_test_name.custom_test_name: generate result details",
+    "name": "custom_test_name: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+    },
+    "name": "Report custom_test_name results",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
+      "@@@STEP_LOG_END@Test.Two@@@"
     ]
   },
   {
@@ -1038,10 +1039,7 @@
       "CHROME_HEADLESS": "1",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "custom_test_name.Upload to test-results [custom_test_name]",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "Upload to test-results [custom_test_name]"
   },
   {
     "cmd": [

@@ -22,7 +22,7 @@ def RunSteps(api):
   test = api.chromium_tests.steps.AndroidInstrumentationTest('ChromePublicTest')
 
   try:
-    test.run(api, '')
+    test.run(api.chromium_tests.m, '')
   finally:
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [

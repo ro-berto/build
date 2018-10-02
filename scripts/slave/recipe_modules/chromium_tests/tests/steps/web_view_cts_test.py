@@ -22,7 +22,7 @@ def RunSteps(api):
   test = api.chromium_tests.steps.WebViewCTSTest('M', arch='arm64')
 
   try:
-    test.run(api, api.properties['suffix'])
+    test.run(api.chromium_tests.m, api.properties['suffix'])
   finally:
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [
@@ -39,7 +39,7 @@ def GenTests(api):
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123) +
-      api.step_data("WebView CTS: M.Run CTS", api.test_utils.canned_gtest_output(passing=True)) +
+      api.step_data("Run CTS", api.test_utils.canned_gtest_output(passing=True)) +
       api.properties.generic(suffix='')
   )
   yield (
@@ -49,7 +49,7 @@ def GenTests(api):
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123) +
-      api.step_data("WebView CTS: M.Run CTS", api.test_utils.canned_gtest_output(passing=False)) +
+      api.step_data("Run CTS", api.test_utils.canned_gtest_output(passing=False)) +
       api.properties.generic(suffix='')
   )
   yield (
@@ -59,6 +59,6 @@ def GenTests(api):
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123) +
-      api.step_data("WebView CTS: M (build suffix).Run CTS (build suffix)", api.test_utils.canned_gtest_output(passing=True)) +
+      api.step_data("Run CTS (build suffix)", api.test_utils.canned_gtest_output(passing=True)) +
       api.properties.generic(suffix='build suffix')
   )

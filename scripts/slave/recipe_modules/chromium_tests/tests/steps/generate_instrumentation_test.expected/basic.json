@@ -147,16 +147,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "example_instrumentation_test",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
-      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
-      "@@@STEP_LOG_END@Test.Two@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
     "cmd": [
       "vpython",
       "-u",
@@ -170,9 +160,8 @@
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
-    "name": "example_instrumentation_test.example_instrumentation_test",
+    "name": "example_instrumentation_test",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
     ]
@@ -195,11 +184,23 @@
       "--bucket",
       "chromium-result-details"
     ],
-    "name": "example_instrumentation_test.example_instrumentation_test: generate result details",
+    "name": "example_instrumentation_test: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "Report example_instrumentation_test results",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
+      "@@@STEP_LOG_END@Test.Two@@@"
     ]
   },
   {
@@ -222,10 +223,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "name": "example_instrumentation_test.Upload to test-results [example_instrumentation_test]",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "Upload to test-results [example_instrumentation_test]"
   },
   {
     "cmd": [],
@@ -238,7 +236,7 @@
   },
   {
     "name": "$result",
-    "reason": "Step('example_instrumentation_test.example_instrumentation_test') failed with return_code 1",
+    "reason": "Step('example_instrumentation_test') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }

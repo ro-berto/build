@@ -1,15 +1,5 @@
 [
   {
-    "cmd": [],
-    "name": "WebView CTS: M",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
-      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
-      "@@@STEP_LOG_END@Test.Two@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -21,10 +11,7 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "WebView CTS: M.get version",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "get version"
   },
   {
     "cmd": [
@@ -41,10 +28,7 @@
       "PATH": "None/third_party/android_tools/sdk/platform-tools:None/build/android:<PATH>"
     },
     "infra_step": true,
-    "name": "WebView CTS: M.install SystemWebView.apk",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "install SystemWebView.apk"
   },
   {
     "cmd": [
@@ -62,9 +46,8 @@
       "/path/to/tmp/json",
       "--verbose"
     ],
-    "name": "WebView CTS: M.Run CTS",
+    "name": "Run CTS",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
       "@@@STEP_LOG_LINE@Test.Two@:(@@@",
@@ -90,11 +73,23 @@
       "--bucket",
       "chromium-result-details"
     ],
-    "name": "WebView CTS: M.CTS: generate result details",
+    "name": "CTS: generate result details",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@result_details (logcats, flakiness links)@https://storage.cloud.google.com/chromium-result-details@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "Report WebView CTS: M results",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
+      "@@@STEP_LOG_END@Test.Two@@@"
     ]
   },
   {
@@ -111,16 +106,13 @@
       "--build-number",
       "571",
       "--test-type",
-      "WebView CTS: M",
+      "Run CTS",
       "--chrome-revision",
       "x@{#0}",
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "name": "WebView CTS: M.Upload to test-results [WebView CTS: M]",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "Upload to test-results [Run CTS]"
   },
   {
     "cmd": [],
@@ -133,7 +125,7 @@
   },
   {
     "name": "$result",
-    "reason": "Step('WebView CTS: M.Run CTS') failed with return_code 1",
+    "reason": "Step('Run CTS') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }

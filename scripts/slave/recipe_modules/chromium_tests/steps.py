@@ -2187,28 +2187,27 @@ class AndroidTest(Test):
   def run(self, api, suffix):
     assert api.chromium.c.TARGET_PLATFORM == 'android'
 
-    nested_step_name = '%s%s' % (self._name, ' (%s)' % suffix if suffix else '')
-    with api.step.nest(nested_step_name) as nested_step:
-      json_results_file = api.test_utils.gtest_results(add_json_log=False)
-      try:
-        step_result = self.run_tests(api, suffix, json_results_file)
-      except api.step.StepFailure as f:
-        step_result = f.result
-        raise
-      finally:
-        nested_step.presentation.status = step_result.presentation.status
-        self._test_runs[suffix] = {'valid': False}
-        gtest_results = api.test_utils.present_gtest_failures(
-            step_result, nested_step.presentation)
-        if gtest_results:
-          failures = gtest_results.failures
-          self._test_runs[suffix] = {'valid': True, 'failures': failures}
+    json_results_file = api.test_utils.gtest_results(add_json_log=False)
+    try:
+      step_result = self.run_tests(api, suffix, json_results_file)
+    except api.step.StepFailure as f:
+      step_result = f.result
+      raise
+    finally:
+      self._test_runs[suffix] = {'valid': False}
+      presentation_step = api.python.succeeding_step(
+          'Report %s results' % self.name, '')
+      gtest_results = api.test_utils.present_gtest_failures(
+          step_result, presentation=presentation_step.presentation)
+      if gtest_results:
+        failures = gtest_results.failures
+        self._test_runs[suffix] = {'valid': True, 'failures': failures}
 
-          api.test_results.upload(
-              api.json.input(gtest_results.raw),
-              test_type=self.name,
-              chrome_revision=api.bot_update.last_returned_properties.get(
-                  'got_revision_cp', 'x@{#0}'))
+        api.test_results.upload(
+            api.json.input(gtest_results.raw),
+            test_type=step_result.step['name'],
+            chrome_revision=api.bot_update.last_returned_properties.get(
+                'got_revision_cp', 'x@{#0}'))
 
   def compile_targets(self, _):
     return self._compile_targets

@@ -1,15 +1,5 @@
 [
   {
-    "cmd": [],
-    "name": "test_name",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
-      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
-      "@@@STEP_LOG_END@Test.Two@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
     "cmd": [
       "vpython",
       "-u",
@@ -18,11 +8,23 @@
       "--json-results-file",
       "/path/to/tmp/json"
     ],
-    "name": "test_name.test_name",
+    "name": "test_name",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "Report test_name results",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
+      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
+      "@@@STEP_LOG_END@Test.Two@@@"
     ]
   },
   {
@@ -45,10 +47,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "name": "test_name.Upload to test-results [test_name]",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "Upload to test-results [test_name]"
   },
   {
     "cmd": [],
@@ -62,7 +61,7 @@
   },
   {
     "name": "$result",
-    "reason": "Step('test_name.test_name') failed with return_code 1",
+    "reason": "Step('test_name') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }
