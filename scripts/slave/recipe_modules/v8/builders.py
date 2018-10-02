@@ -1149,23 +1149,6 @@ BUILDERS = {
         'cf_archive_name': 'd8-arm-asan',
         'testing': {'platform': 'linux'},
       },
-      'V8 Clusterfuzz Linux ASAN mipsel - debug builder': {
-        'chromium_apply_config': [
-          'clang',
-          'clobber',
-          'default_target_v8_clusterfuzz',
-          'goma',
-          'mb',
-        ],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-        },
-        'cf_archive_build': True,
-        'cf_gs_bucket': 'v8-asan',
-        'cf_gs_acl': 'public-read',
-        'cf_archive_name': 'd8-mipsel-asan',
-        'testing': {'platform': 'linux'},
-      },
       'V8 Clusterfuzz Linux64 CFI - release builder': {
         'chromium_apply_config': [
           'clang',
