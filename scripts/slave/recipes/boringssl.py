@@ -15,7 +15,6 @@ DEPS = [
   'recipe_engine/file',
   'recipe_engine/path',
   'recipe_engine/platform',
-  'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/step',
   'test_utils',
@@ -351,6 +350,20 @@ def RunSteps(api):
         _LogFailingTests(api, api.step.active_result)
 
 
+def _CIBuild(api, builder):
+  return api.buildbucket.ci_build(
+      project='boringssl',
+      builder=builder,
+      git_repo='https://boringssl.googlesource.com/boringssl')
+
+
+def _TryBuild(api, builder):
+  return api.buildbucket.try_build(
+      project='boringssl',
+      builder=builder,
+      git_repo='https://boringssl.googlesource.com/boringssl')
+
+
 def GenTests(api):
   tests = [
     # To ensure full test coverage, add a test for each builder configuration.
@@ -398,8 +411,7 @@ def GenTests(api):
     yield (
       api.test(buildername) +
       host_platform +
-      api.properties.generic(mastername='client.boringssl',
-                             buildername=buildername, bot_id='bot_id') +
+      _CIBuild(api, buildername) +
       api.override_step_data('unit tests',
                              api.test_utils.canned_test_output(True)) +
       api.override_step_data('ssl tests',
@@ -414,8 +426,7 @@ def GenTests(api):
     yield (
       api.test(buildername) +
       host_platform +
-      api.properties.generic(mastername='client.boringssl',
-                             buildername=buildername, bot_id='bot_id')
+      _CIBuild(api, buildername)
     )
 
   unit_test_only_tests = [
@@ -427,8 +438,7 @@ def GenTests(api):
     yield (
       api.test(buildername) +
       host_platform +
-      api.properties.generic(mastername='client.boringssl',
-                             buildername=buildername, bot_id='bot_id') +
+      _CIBuild(api, buildername) +
       api.override_step_data('unit tests',
                              api.test_utils.canned_test_output(True))
     )
@@ -436,8 +446,7 @@ def GenTests(api):
   yield (
     api.test('failed_imported_libraries') +
     api.platform('linux', 64) +
-    api.properties.generic(mastername='client.boringssl',
-                           buildername='linux_shared', bot_id='bot_id') +
+    _CIBuild(api, 'linux_shared') +
     api.override_step_data('check imported libraries', retcode=1) +
     api.override_step_data('unit tests',
                            api.test_utils.canned_test_output(True)) +
@@ -448,8 +457,7 @@ def GenTests(api):
   yield (
     api.test('failed_filenames') +
     api.platform('linux', 64) +
-    api.properties.generic(mastername='client.boringssl', buildername='linux',
-                           bot_id='bot_id') +
+    _CIBuild(api, 'linux') +
     api.override_step_data('check filenames', retcode=1) +
     api.override_step_data('unit tests',
                            api.test_utils.canned_test_output(True)) +
@@ -460,8 +468,7 @@ def GenTests(api):
   yield (
     api.test('failed_unit_tests') +
     api.platform('linux', 64) +
-    api.properties.generic(mastername='client.boringssl', buildername='linux',
-                           bot_id='bot_id') +
+    _CIBuild(api, 'linux') +
     api.override_step_data('unit tests',
                            api.test_utils.canned_test_output(False)) +
     api.override_step_data('ssl tests',
@@ -472,8 +479,7 @@ def GenTests(api):
   yield (
     api.test('failed_unit_tests_win') +
     api.platform('win', 64) +
-    api.properties.generic(mastername='client.boringssl', buildername='win64',
-                           bot_id='bot_id') +
+    _CIBuild(api, 'win64') +
     api.override_step_data('unit tests',
                            api.test_utils.canned_test_output(False)) +
     api.override_step_data('ssl tests',
@@ -483,8 +489,7 @@ def GenTests(api):
   yield (
     api.test('failed_ssl_tests') +
     api.platform('linux', 64) +
-    api.properties.generic(mastername='client.boringssl', buildername='linux',
-                           bot_id='bot_id') +
+    _CIBuild(api, 'linux') +
     api.override_step_data('unit tests',
                            api.test_utils.canned_test_output(True)) +
     api.override_step_data('ssl tests',
@@ -496,8 +501,7 @@ def GenTests(api):
   yield (
     api.test('failed_taskkill') +
     api.platform('win', 64) +
-    api.properties.generic(mastername='client.boringssl', buildername='win64',
-                           bot_id='bot_id') +
+    _CIBuild(api, 'win64') +
     api.override_step_data('unit tests',
                            api.test_utils.canned_test_output(True)) +
     api.override_step_data('ssl tests',
@@ -508,9 +512,5 @@ def GenTests(api):
   yield (
     api.test('gerrit_cl') +
     api.platform('linux', 64) +
-    api.properties.tryserver(
-        gerrit_project='boringssl',
-        gerrit_url='https://boringssl-review.googlesource.com',
-        mastername='actually-no-master', buildername='linux',
-        bot_id='swarming-slave')
+    _TryBuild(api, 'linux')
   )

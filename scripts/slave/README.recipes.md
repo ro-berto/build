@@ -1489,11 +1489,11 @@ Returns:
 
 &mdash; **def [generate\_tests\_from\_test\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#267)(self, test_spec, builder_dict, buildername, mastername, swarming_dimensions, scripts_compile_targets, generators, bot_update_step):**
 
-&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#983)(self, bot_config=None):**
+&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#982)(self, bot_config=None):**
 
 &mdash; **def [get\_compile\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#338)(self, bot_config, bot_db, tests):**
 
-&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1015)(self, bot_config=None):**
+&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1014)(self, bot_config=None):**
 
 This gets the combined compile_targets information from the
 //testing/scripts/get_compile_targets.py script.
@@ -1530,7 +1530,7 @@ are committed.
 
 &mdash; **def [log](/scripts/slave/recipe_modules/chromium_tests/api.py#83)(self, message):**
 
-&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1047)(self, mb_config_path=None, bot_config=None):**
+&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1046)(self, mb_config_path=None, bot_config=None):**
 
 &mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#466)(self, mastername, buildername, update_step, bot_db):**
 
@@ -1569,7 +1569,7 @@ be undone.
 
 &mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#555)(self, mastername, buildername, update_step, bot_db, additional_properties=None):**
 
-&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1125)(self, builders=None, trybots=None):**
+&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1124)(self, builders=None, trybots=None):**
 
 &emsp; **@property**<br>&mdash; **def [trybots](/scripts/slave/recipe_modules/chromium_tests/api.py#43)(self):**
 
@@ -4245,9 +4245,9 @@ Args:
 &mdash; **def [determine\_new\_future\_failures](/scripts/slave/recipes/blink_downstream.py#78)(caller_api, extra_args):**
 ### *recipes* / [boringssl](/scripts/slave/recipes/boringssl.py)
 
-[DEPS](/scripts/slave/recipes/boringssl.py#8): [chromium](#recipe_modules-chromium), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/boringssl.py#7): [chromium](#recipe_modules-chromium), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/boringssl.py#235)(api, buildername):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/boringssl.py#229)(api):**
 ### *recipes* / [boringssl\_docs](/scripts/slave/recipes/boringssl_docs.py)
 
 [DEPS](/scripts/slave/recipes/boringssl_docs.py#8): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
