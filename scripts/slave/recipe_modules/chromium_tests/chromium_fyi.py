@@ -133,6 +133,23 @@ SPEC = {
     'build_gs_bucket': 'chromium-fyi-archive',
   },
   'builders': {
+    'mac-osxbeta-rel': {
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'swarming_dimensions': {
+        'os': 'Mac-10.14',
+      },
+      'checkout_dir': 'mac',
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'mac',
+      },
+    },
     'mac-views-rel': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
