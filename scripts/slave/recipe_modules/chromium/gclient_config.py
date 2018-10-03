@@ -165,7 +165,7 @@ def chromium_webrtc(c):
   c.got_revision_reverse_mapping['got_libvpx_revision'] = (
       'src/third_party/libvpx/source')
 
-@CONFIG_CTX(includes=['chromium_webrtc'])
+@CONFIG_CTX(includes=['chromium_no_telemetry_dependencies'])
 def chromium_webrtc_tot(c):
   """Configures WebRTC ToT revision for Chromium src/third_party/webrtc.
 
@@ -175,6 +175,9 @@ def chromium_webrtc_tot(c):
   """
   c.revisions['src'] = 'HEAD'
   c.revisions['src/third_party/webrtc'] = 'HEAD'
+
+  c.got_revision_reverse_mapping['got_libvpx_revision'] = (
+      'src/third_party/libvpx/source')
 
   # Have the WebRTC revision appear in the web UI instead of Chromium's.
   # This is also important for set_component_rev to work, since got_revision
