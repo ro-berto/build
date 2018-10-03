@@ -123,7 +123,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try"
+      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -136,7 +137,8 @@
     "cmd": [],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try"
+      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -159,7 +161,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try"
+      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -184,6 +187,7 @@
       "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart_sdk_mac_try",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -222,7 +226,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try"
+      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -248,7 +253,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try"
+      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -262,7 +268,8 @@
     "cmd": [],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try"
+      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -284,6 +291,7 @@
       "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart_sdk_mac_try",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -323,6 +331,7 @@
       "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart_sdk_mac_try",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -351,6 +360,7 @@
       "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart_sdk_mac_try",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -404,7 +414,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try"
+      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -437,7 +448,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try"
+      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -460,7 +472,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try"
+      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -473,7 +486,8 @@
     "cmd": [],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try"
+      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -496,7 +510,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try"
+      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -521,6 +536,7 @@
       "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart_sdk_mac_try",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -559,7 +575,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try"
+      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -585,7 +602,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try"
+      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -599,7 +617,8 @@
     "cmd": [],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try"
+      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -621,6 +640,7 @@
       "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart_sdk_mac_try",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -660,6 +680,7 @@
       "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart_sdk_mac_try",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -688,6 +709,7 @@
       "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart_sdk_mac_try",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -741,7 +763,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try"
+      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -774,7 +797,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try"
+      "BUILDBOT_BUILDERNAME": "dart-sdk-mac-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [

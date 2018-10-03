@@ -88,7 +88,8 @@ class DartApi(recipe_api.RecipeApi):
        If an isolate is specified, it returns the hash of the isolated archive.
     """
     build_args = build_args + ['--no-start-goma', '-j200']
-    with self.m.context(cwd=self.m.path['checkout']):
+    with self.m.context(cwd=self.m.path['checkout'],
+                        env={'GOMA_DIR':self.m.goma.goma_dir}):
       with self.m.depot_tools.on_path():
         self.kill_tasks()
         build_exit_status = None
@@ -256,7 +257,7 @@ class DartApi(recipe_api.RecipeApi):
     self.m.file.move('Rename deflaking_results',
       self.m.path['checkout'].join('deflaking_logs', 'results.json'),
       self.m.path['checkout'].join('deflaking_logs', 'deflaking_results.json'))
-    
+
     for file in [('logs','results.json'),
                  ('logs', 'run.json'),
                  ('deflaking_logs', 'flaky.json'),

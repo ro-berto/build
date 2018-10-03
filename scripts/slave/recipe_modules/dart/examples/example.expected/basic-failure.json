@@ -110,6 +110,9 @@
       "--kill_vsbuild=True"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -120,6 +123,9 @@
   {
     "cmd": [],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -140,6 +146,9 @@
       "[CACHE]/goma/data/build_fail"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -162,6 +171,7 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/build_fail",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -199,6 +209,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -220,6 +233,9 @@
       "-j200"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -235,6 +251,9 @@
   {
     "cmd": [],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -254,6 +273,7 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/build_fail",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -292,6 +312,7 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/build_fail",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -319,6 +340,7 @@
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/build_fail",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -367,6 +389,9 @@
       "build-fail"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -397,6 +422,9 @@
       "[TMP_BASE]/cloudtail.pid"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"

@@ -1684,19 +1684,19 @@ If an isolate is specified, it returns the hash of the isolated archive.
 
 Checks out the dart code and prepares it for building.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/dart/api.py#205)(self, tasks):**
+&mdash; **def [collect](/scripts/slave/recipe_modules/dart/api.py#206)(self, tasks):**
 
 Collects the results of a sharded test run.
 
-&mdash; **def [collect\_all](/scripts/slave/recipe_modules/dart/api.py#222)(self, deferred_tasks):**
+&mdash; **def [collect\_all](/scripts/slave/recipe_modules/dart/api.py#223)(self, deferred_tasks):**
 
 Collects the results of a sharded test run.
 
 &mdash; **def [dart\_executable](/scripts/slave/recipe_modules/dart/api.py#80)(self):**
 
-&mdash; **def [download\_parent\_isolate](/scripts/slave/recipe_modules/dart/api.py#151)(self):**
+&mdash; **def [download\_parent\_isolate](/scripts/slave/recipe_modules/dart/api.py#152)(self):**
 
-&mdash; **def [download\_results](/scripts/slave/recipe_modules/dart/api.py#238)(self, name):**
+&mdash; **def [download\_results](/scripts/slave/recipe_modules/dart/api.py#239)(self, name):**
 
 &mdash; **def [get\_secret](/scripts/slave/recipe_modules/dart/api.py#54)(self, name):**
 
@@ -1706,11 +1706,11 @@ Decrypts the specified secret and returns the location of the result
 
 Kills leftover tasks from previous runs or steps.
 
-&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#304)(self):**
+&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#305)(self):**
 
 Reads the debug.log file
 
-&mdash; **def [read\_result\_file](/scripts/slave/recipe_modules/dart/api.py#285)(self, name, log_name, test_data=''):**
+&mdash; **def [read\_result\_file](/scripts/slave/recipe_modules/dart/api.py#286)(self, name, log_name, test_data=''):**
 
 Reads the result.log file
 Args:
@@ -1721,7 +1721,7 @@ Args:
 Returns (str) - The content of the file.
 Raises file.Error
 
-&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#690)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=[]):**
+&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#691)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=[]):**
 
 Runs a specific script with current working directory to be checkout. If
 the runtime (passed in environment) is a browser, and the system is linux,
@@ -1738,7 +1738,7 @@ Args:
   * cipd_packages ([tuple]) - list of 3-tuples specifying a cipd package
     to be downloaded
 
-&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#543)(self, step_name, append_logs, step, isolate_hash, shards, local_shard, environment, tasks, global_config):**
+&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#544)(self, step_name, append_logs, step, isolate_hash, shards, local_shard, environment, tasks, global_config):**
 
 Runs test.py with default arguments, based on configuration from.
 Args:
@@ -1754,26 +1754,26 @@ Args:
   * global_config (dict) - The global section from test_matrix.json.
     Contains version tags for the pinned browsers Firefox and Chrome.
 
-&mdash; **def [run\_trigger](/scripts/slave/recipe_modules/dart/api.py#509)(self, step_name, step, isolate_hash):**
+&mdash; **def [run\_trigger](/scripts/slave/recipe_modules/dart/api.py#510)(self, step_name, step, isolate_hash):**
 
-&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#165)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='dart.tests', num_shards=0, last_shard_is_local=False, cipd_packages=[]):**
+&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#166)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='dart.tests', num_shards=0, last_shard_is_local=False, cipd_packages=[]):**
 
 Runs test.py in the given isolate, sharded over several swarming tasks.
 Requires the 'shards' build property to be set to the number of tasks.
 Returns the created task(s), which are meant to be passed into collect().
 
-&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#315)(self, test_data):**
+&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#316)(self, test_data):**
 
 Reads the test-matrix.json file in checkout and performs each step listed
 in the file
 
 Raises StepFailure.
 
-&mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/dart/api.py#133)(self, isolate_fileset):**
+&mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/dart/api.py#134)(self, isolate_fileset):**
 
 Builds an isolate
 
-&mdash; **def [upload\_results](/scripts/slave/recipe_modules/dart/api.py#253)(self, name):**
+&mdash; **def [upload\_results](/scripts/slave/recipe_modules/dart/api.py#254)(self, name):**
 ### *recipe_modules* / [disk](/scripts/slave/recipe_modules/disk)
 
 [DEPS](/scripts/slave/recipe_modules/disk/__init__.py#1): [traceback](#recipe_modules-traceback), [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]

@@ -292,7 +292,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -306,7 +307,8 @@
     "cmd": [],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -330,7 +332,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -356,6 +359,7 @@
       "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_win10_debug_x64_firefox_try",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -395,7 +399,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -423,7 +428,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -438,7 +444,8 @@
     "cmd": [],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -461,6 +468,7 @@
       "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_win10_debug_x64_firefox_try",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -501,6 +509,7 @@
       "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_win10_debug_x64_firefox_try",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -530,6 +539,7 @@
       "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_win10_debug_x64_firefox_try",
+      "GOMA_DIR": "[CACHE]/goma/client",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -584,7 +594,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
@@ -618,7 +629,8 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try",
+      "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
       "PATH": [
