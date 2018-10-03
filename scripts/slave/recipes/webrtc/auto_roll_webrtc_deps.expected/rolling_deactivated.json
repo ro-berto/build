@@ -1,13 +1,17 @@
 [
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/pycurl.py",
-      "https://webrtc-roll-cr-rev-status.appspot.com/status"
+      "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
+      "--url",
+      "https://webrtc-roll-cr-rev-status.appspot.com/status",
+      "--status-json",
+      "/path/to/tmp/json",
+      "--outfile",
+      "/path/to/tmp/"
     ],
     "name": "check roll status",
-    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_TEXT@Rolling deactivated@@@",
       "@@@STEP_LOG_LINE@stdout@0@@@",

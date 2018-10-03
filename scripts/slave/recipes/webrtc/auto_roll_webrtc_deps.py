@@ -16,6 +16,7 @@ DEPS = [
   'recipe_engine/raw_io',
   'recipe_engine/runtime',
   'recipe_engine/step',
+  'recipe_engine/url',
   'webrtc',
 ]
 
@@ -30,20 +31,17 @@ def RunSteps(api):
   for os in ['linux', 'android', 'mac', 'ios', 'win', 'unix']:
     api.gclient.c.target_os.add(os)
 
-  step_result = api.python(
-        'check roll status',
-        api.package_repo_resource('scripts', 'tools', 'pycurl.py'),
-        args=['https://webrtc-roll-cr-rev-status.appspot.com/status'],
-        stdout=api.raw_io.output_text(),
-        step_test_data=lambda: api.raw_io.test_api.stream_output(
-            '1', stream='stdout')
-  )
-  step_result.presentation.logs['stdout'] = step_result.stdout.splitlines()
-  if step_result.stdout.strip() != '1':
-    step_result.presentation.step_text = 'Rolling deactivated'
+  output = api.url.get_text(
+      'https://webrtc-roll-cr-rev-status.appspot.com/status',
+      step_name='check roll status',
+      default_test_data='1',
+  ).output
+  api.step.active_result.presentation.logs['stdout'] = output.splitlines()
+  if output.strip() != '1':
+    api.step.active_result.presentation.step_text = 'Rolling deactivated'
     return
   else:
-    step_result.presentation.step_text = 'Rolling activated'
+    api.step.active_result.presentation.step_text = 'Rolling activated'
 
   api.webrtc.checkout()
   api.gclient.runhooks()
@@ -54,6 +52,8 @@ def RunSteps(api):
         # when https://crbug.com/846923 is resolved.
         'chromium-webrtc-autoroll@webrtc-ci.iam.gserviceaccount.com'
         if api.runtime.is_luci else 'buildbot@webrtc.org')
+
+    # Check for an open auto-roller CL.
     commits = api.gerrit.get_changes(
         GERRIT_URL,
         query_params=[
@@ -119,8 +119,7 @@ def GenTests(api):
       api.test('rolling_deactivated') +
       api.properties.generic(mastername='client.webrtc.fyi',
                              buildername='Auto-roll - WebRTC DEPS') +
-      api.override_step_data('check roll status',
-                             api.raw_io.stream_output('0', stream='stdout'))
+      api.url.text('check roll status', '0')
   )
   yield (
       api.test('stale_roll') +
