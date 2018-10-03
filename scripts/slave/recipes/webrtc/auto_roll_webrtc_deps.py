@@ -44,7 +44,6 @@ def RunSteps(api):
     api.step.active_result.presentation.step_text = 'Rolling activated'
 
   api.webrtc.checkout()
-  api.gclient.runhooks()
 
   with api.context(cwd=api.path['checkout']):
     push_account = (
