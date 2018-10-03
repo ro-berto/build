@@ -1280,11 +1280,11 @@ class LayoutTestResultsHandler(JSONResultsHandler):
   """Uploads layout test results to Google storage."""
 
   # Step name suffixes that we will archive results for.
+  # TODO(martiniss): Re-add 'retry with patch', and eventually remove.
   archive_results_suffixes = (
       None,
       '',
       'with patch',
-      'retry with patch',
       'experimental',
   )
 
