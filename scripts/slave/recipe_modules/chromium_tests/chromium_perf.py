@@ -172,10 +172,6 @@ _AddBuildSpec('android_arm64-builder-perf', 'android', target_bits=64,
                                      'system_webview_shell_apk',],
               )
 
-# TODO(crbug.com/828472): remove this builder once win32-builder-perf works
-# well.
-_AddBuildSpec(
-  'Win Builder Perf', 'win', target_bits=32, force_exparchive=True)
 _AddBuildSpec(
   'win32-builder-perf', 'win', target_bits=32, force_exparchive=True)
 _AddBuildSpec(
@@ -204,7 +200,7 @@ _AddIsolatedTestSpec('Android Nexus6 WebView Perf', 'android',
 
 
 _AddIsolatedTestSpec('win-10-perf', 'win', 'win64-builder-perf')
-_AddIsolatedTestSpec('Win 7 Perf', 'win', 'Win Builder Perf', target_bits=32)
+_AddIsolatedTestSpec('Win 7 Perf', 'win', 'win32-builder-perf', target_bits=32)
 _AddIsolatedTestSpec('Win 7 Nvidia GPU Perf', 'win', 'win64-builder-perf')
 
 

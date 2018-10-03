@@ -723,7 +723,7 @@ TRYBOTS = freeze({
       }),
       'Win Builder Perf': simple_bot({
         'mastername': 'chromium.perf',
-        'buildername': 'Win Builder Perf',
+        'buildername': 'win32-builder-perf',
       }),
       'Win x64 Builder Perf': simple_bot({
         'mastername': 'chromium.perf',
