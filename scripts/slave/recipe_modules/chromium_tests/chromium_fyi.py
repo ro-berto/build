@@ -136,7 +136,7 @@ SPEC = {
     'mac-osxbeta-rel': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -144,6 +144,7 @@ SPEC = {
       'swarming_dimensions': {
         'os': 'Mac-10.14',
       },
+      'bot_type': 'tester',
       'checkout_dir': 'mac',
       'test_results_config': 'staging_server',
       'parent_mastername': 'chromium.mac',
