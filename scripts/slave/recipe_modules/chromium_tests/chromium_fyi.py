@@ -549,6 +549,9 @@ SPEC = {
         chromium_chromiumos.SPEC['builders'][
             'chromeos-amd64-generic-rel'],
         ['goma_latest_client']),
+    # For building targets instrumented for code coverage.
+    'linux-code-coverage-generation': copy.deepcopy(
+        chromium_linux.SPEC['builders']['Linux Builder']),
     'Linux Builder Goma Latest Client': chromium_apply_configs(
         chromium_linux.SPEC['builders']['Linux Builder'],
         ['goma_latest_client','goma_use_local']),
