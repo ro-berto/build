@@ -156,6 +156,11 @@
     "env": {
       "SKIP_GCE_AUTH_FOR_GIT": "1"
     },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
     "name": "git cl",
     "~followup_annotations": [
