@@ -68,15 +68,6 @@ _AddBuildSpec('Android Builder Perf FYI', 'android', target_bits=32,
 _AddIsolatedTestSpec('Android Nexus 5X Perf FYI',
       'android', parent_buildername='Android Builder Perf FYI', target_bits=32)
 
-# TODO(crbug.com/828442): remove 'Android arm64 Builder Perf FYI'
-_AddBuildSpec('Android arm64 Builder Perf FYI', 'android',
-              extra_compile_targets=['android_tools',
-                                     'cc_perftests',
-                                     'chrome_public_apk',
-                                     'gpu_perftests',
-                                     'push_apps_to_background_apk',
-                                     'system_webview_apk',
-                                     'system_webview_shell_apk',])
 
 _AddBuildSpec('Android CFI Builder Perf FYI', 'android',
               target_bits=32,
