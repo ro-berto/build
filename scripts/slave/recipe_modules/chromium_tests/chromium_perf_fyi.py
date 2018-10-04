@@ -99,8 +99,6 @@ _AddBuildSpec('Android CFI arm64 Builder Perf FYI', 'android',
 # TODO(crbug.com/828445): remove this builder once linux-builder-perf works
 # well.
 _AddBuildSpec('Linux Compile Perf FYI', 'linux')
-# TODO(crbug.com/828443): Remove 'Mac Builder Perf'
-_AddBuildSpec('Mac Builder Perf FYI', 'mac')
 
 _AddIsolatedTestSpec('linux-perf-fyi', 'linux',
                      parent_buildername='linux-builder-perf',
