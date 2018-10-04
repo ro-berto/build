@@ -89,7 +89,7 @@ class ArchiveApi(recipe_api.RecipeApi):
                  '--build-properties', properties_json])
 
     kwargs['allow_subannotations'] = True
-    self.m.build.python(
+    return self.m.build.python(
       step_name,
       self.package_repo_resource('scripts', 'slave', 'zip_build.py'),
       args,

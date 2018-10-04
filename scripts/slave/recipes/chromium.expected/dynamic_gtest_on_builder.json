@@ -676,7 +676,14 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "package build"
+    "name": "package build",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@why is this running?@This builder is doing the full package transfer because:@@@",
+      "@@@STEP_LOG_LINE@why is this running?@ - it's still running on buildbot :(@@@",
+      "@@@STEP_LOG_LINE@why is this running?@ - base_unittests doesn't use isolate@@@",
+      "@@@STEP_LOG_LINE@why is this running?@ - browser_tests doesn't use isolate@@@",
+      "@@@STEP_LOG_END@why is this running?@@@"
+    ]
   },
   {
     "cmd": [],
@@ -708,6 +715,24 @@
     ],
     "~followup_annotations": [
       "@@@STEP_TEXT@Linux Tests@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "explain extract build",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@why is this running?@This builder is doing the full package transfer because:@@@",
+      "@@@STEP_LOG_LINE@why is this running?@ - it's still running on buildbot :(@@@",
+      "@@@STEP_LOG_LINE@why is this running?@ - base_unittests doesn't use isolate@@@",
+      "@@@STEP_LOG_LINE@why is this running?@ - browser_tests doesn't use isolate@@@",
+      "@@@STEP_LOG_END@why is this running?@@@"
     ]
   },
   {

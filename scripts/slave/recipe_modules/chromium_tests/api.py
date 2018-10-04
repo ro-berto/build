@@ -507,7 +507,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             platform=self.m.chromium.c.HOST_PLATFORM
         )
 
-      self.m.archive.zip_and_upload_build(
+      return self.m.archive.zip_and_upload_build(
           'package build',
           self.m.chromium.c.build_config_fs,
           build_url=self._build_gs_archive_url(
@@ -1059,6 +1059,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     test_config = bot_config.get_tests(bot_db)
     if bot_type == 'tester':
+      non_isolated_tests = [
+          t for t in test_config.tests_on(mastername, buildername)
+          if not t.uses_isolate]
       isolate_transfer = (
           # Some of the old buildbot trigger infrastructure may not be
           # able to handle the large number of hashes added to trigger
@@ -1066,9 +1069,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           # isolate transfer to LUCI.
           self.m.runtime.is_luci and
 
-          all(t.uses_isolate
-              for t in test_config.tests_on(mastername, buildername)))
+          not bool(non_isolated_tests))
       package_transfer = not isolate_transfer
+
     else:
       isolate_transfer = (
           # Same as above.
@@ -1076,12 +1079,25 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
           any(t.uses_isolate
               for t in test_config.tests_triggered_by(mastername, buildername)))
+      non_isolated_tests = [
+          t for t in test_config.tests_triggered_by(mastername, buildername)
+          if not t.uses_isolate]
       package_transfer = (
           # Always use package transfer on buildbot.
           not self.m.runtime.is_luci or
 
-          any(not t.uses_isolate
-              for t in test_config.tests_triggered_by(mastername, buildername)))
+          bool(non_isolated_tests))
+
+    if package_transfer:
+      package_transfer_reasons = [
+          'This builder is doing the full package transfer because:'
+      ]
+      if not self.m.runtime.is_luci:
+        package_transfer_reasons.append(
+            " - it's still running on buildbot :(")
+      for t in non_isolated_tests:
+        package_transfer_reasons.append(
+            " - %s doesn't use isolate" % t.name)
 
     compile_targets = self.get_compile_targets(
         bot_config, bot_db, test_config.all_tests())
@@ -1095,7 +1111,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       additional_trigger_properties['swarm_hashes'] = (
           self.m.isolate.isolated_tests)
     if package_transfer and bot_type == 'builder':
-      self.package_build(mastername, buildername, update_step, bot_db)
+      package_step = self.package_build(
+          mastername, buildername, update_step, bot_db)
+      package_step.presentation.logs['why is this running?'] = (
+          package_transfer_reasons)
 
     self.trigger_child_builds(
         mastername, buildername, update_step, bot_db,
@@ -1109,6 +1128,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if package_transfer:
       self.download_and_unzip_build(
           mastername, buildername, update_step, bot_db)
+      self.m.python.succeeding_step(
+          'explain extract build',
+          package_transfer_reasons,
+          as_log='why is this running?')
 
     tests = test_config.tests_on(mastername, buildername)
     if not tests:
