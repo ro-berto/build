@@ -104,10 +104,6 @@ _AddIsolatedTestSpec('linux-perf-fyi', 'linux',
                      parent_buildername='linux-builder-perf',
                      parent_mastername='chromium.perf')
 
-_AddIsolatedTestSpec(
-    'One Buildbot Step Test Builder', 'linux',
-    parent_buildername='Linux Compile Perf FYI')
-
 _AddIsolatedTestSpec('android-pixel2-perf', 'android',
                      target_bits=32,
                      parent_mastername='chromium.perf',
