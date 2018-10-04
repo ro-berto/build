@@ -774,7 +774,7 @@ BUILDERS = freeze({
           'os': 'Windows',
           'id': 'build18-m3',
         },
-        'swarming_timeout': 3600,  # 1h
+        'swarming_timeout': 4500,  # 1h15m
       },
       'Mac 10.11': {
         'recipe_config': 'webrtc_desktop_perf_swarming',
@@ -794,7 +794,7 @@ BUILDERS = freeze({
           'os': 'Mac-10.12',
           'id': 'build16-m3',
         },
-        'swarming_timeout': 3600,  # 1h
+        'swarming_timeout': 4500,  # 1h15m
       },
       'Linux Trusty': {
         'recipe_config': 'webrtc_desktop_perf_swarming',
@@ -814,7 +814,7 @@ BUILDERS = freeze({
           'os': 'Ubuntu-14.04',
           'id': 'build17-m3',
         },
-        'swarming_timeout': 3600,  # 1h
+        'swarming_timeout': 4500,  # 1h15m
       },
       'Android32 Builder': {
         'recipe_config': 'webrtc_android_perf',
