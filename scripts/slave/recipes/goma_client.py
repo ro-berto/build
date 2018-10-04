@@ -7,6 +7,7 @@ DEPS = [
     'depot_tools/cipd',
     'depot_tools/depot_tools',
     'depot_tools/gclient',
+    'depot_tools/osx_sdk',
     'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/path',
@@ -33,32 +34,33 @@ def RunSteps(api):
   build_target = 'Release'
   build_dir = build_out_dir.join(build_target)
 
-  # 2-1. gn
-  gn_args = [
-      'is_debug=false',
-      'cpu_arch="x64"',
-      'dcheck_always_on=true',
-      'use_link_time_optimization=false'
-  ]
-  api.python(
-      name='gn',
-      script=api.depot_tools.gn_py_path,
-      args=[
-          '--root=%s' % str(api.path['checkout']),
-          'gen',
-          build_dir,
-          '--args=%s' % ' '.join(gn_args)])
-
-  # 2-2. ninja
-  api.step('build', [api.depot_tools.ninja_path, '-C', build_dir])
-
-  # 3. Run test
-  with api.context():
+  with api.osx_sdk('mac'):
+    # 2-1. gn
+    gn_args = [
+        'is_debug=false',
+        'cpu_arch="x64"',
+        'dcheck_always_on=true',
+        'use_link_time_optimization=false'
+    ]
     api.python(
-        name='tests',
-        script=api.path['checkout'].join('build', 'run_unittest.py'),
-        args=['--build-dir', build_out_dir,
-              '--target', build_target, '--non-stop'])
+        name='gn',
+        script=api.depot_tools.gn_py_path,
+        args=[
+            '--root=%s' % str(api.path['checkout']),
+            'gen',
+            build_dir,
+            '--args=%s' % ' '.join(gn_args)])
+
+    # 2-2. ninja
+    api.step('build', [api.depot_tools.ninja_path, '-C', build_dir])
+
+    # 3. Run test
+    with api.context():
+      api.python(
+          name='tests',
+          script=api.path['checkout'].join('build', 'run_unittest.py'),
+          args=['--build-dir', build_out_dir,
+                '--target', build_target, '--non-stop'])
 
   # 4. Create archive.
   api.python(
