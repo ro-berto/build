@@ -33,7 +33,6 @@ NORMAL_TESTS = freeze({
   'modules_unittests': {
     'shards': 6,
   },
-  'ortc_unittests': {},
   'peerconnection_unittests': {
     'shards': 4,
   },
@@ -62,7 +61,6 @@ ANDROID_DEVICE_TESTS = freeze({
   'modules_unittests': {
     'shards': 6,
   },
-  'ortc_unittests': {},
   'peerconnection_unittests': {
     'shards': 4,
   },
