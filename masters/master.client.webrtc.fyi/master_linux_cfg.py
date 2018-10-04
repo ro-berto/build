@@ -34,15 +34,6 @@ m_annotator = annotator_factory.AnnotatorFactory()
 
 def Update(c):
   c['schedulers'].extend([
-      # Run WebRTC DEPS roller every hour.
-      Periodic(
-          name='webrtc_deps',
-          periodicBuildTimer=60*60,
-          branch=None,
-          builderNames=[
-              'Auto-roll - WebRTC DEPS',
-          ],
-      ),
       # Update LKGR revision every 5 minutes.
       Periodic(
           name='webrtc_lkgr',
@@ -55,11 +46,6 @@ def Update(c):
   ])
 
   specs = [
-    {
-      'name': 'Auto-roll - WebRTC DEPS',
-      'recipe': 'webrtc/auto_roll_webrtc_deps',
-      'slavebuilddir': 'linux_autoroll',
-    },
     {
       'name': 'WebRTC lkgr finder',
       'factory': m_remote_run(
