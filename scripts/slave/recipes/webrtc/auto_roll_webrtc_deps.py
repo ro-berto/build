@@ -5,6 +5,7 @@
 
 DEPS = [
   'depot_tools/bot_update',
+  'depot_tools/depot_tools',
   'depot_tools/gclient',
   'depot_tools/gerrit',
   'depot_tools/git',
@@ -88,16 +89,17 @@ def RunSteps(api):
 
     # Run the roll script. It will take care of branch creation, modifying DEPS,
     # uploading etc. It will also delete any previous roll branch.
+    script_path = api.path['checkout'].join(
+        'tools_webrtc', 'autoroller', 'roll_deps.py')
+
     params = ['--clean', '--verbose']
     if api.runtime.is_experimental:
       params.append('--skip-cq')
     else:
       params.append('--cq-over=100')
-    api.python(
-        'autoroll DEPS',
-        api.path['checkout'].join('tools_webrtc', 'autoroller', 'roll_deps.py'),
-        params,
-    )
+
+    with api.depot_tools.on_path():
+      api.python('autoroll DEPS', script_path, params)
 
 
 def GenTests(api):

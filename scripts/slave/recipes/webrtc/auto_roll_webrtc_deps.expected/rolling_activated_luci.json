@@ -154,6 +154,11 @@
       "--skip-cq"
     ],
     "cwd": "[CACHE]/builder/src",
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "autoroll DEPS"
   },
   {

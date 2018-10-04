@@ -204,6 +204,11 @@
       "--cq-over=100"
     ],
     "cwd": "[START_DIR]/src",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "autoroll DEPS"
   },
   {
