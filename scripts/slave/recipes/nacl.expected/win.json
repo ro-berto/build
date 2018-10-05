@@ -193,7 +193,7 @@
       "cipd.bat",
       "ensure",
       "-root",
-      "[START_DIR]\\windows_sdk",
+      "[CACHE]\\windows_sdk",
       "-ensure-file",
       "chrome_internal/third_party/sdk/windows uploaded:2018-06-13",
       "-json-output",
@@ -238,7 +238,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]\\windows_sdk\\win_sdk\\bin\\SetEnv.x64.json",
+      "[CACHE]\\windows_sdk\\win_sdk\\bin\\SetEnv.x64.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[START_DIR]\\native_client",
@@ -302,11 +302,11 @@
       "NOCONTROL_GOMA": "1",
       "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]\\scripts;RECIPE_PACKAGE_REPO[build]\\site_config",
       "RUNTEST": "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py",
-      "VSINSTALLDIR": "[START_DIR]\\windows_sdk"
+      "VSINSTALLDIR": "[CACHE]\\windows_sdk"
     },
     "env_prefixes": {
       "PATH": [
-        "[START_DIR]\\windows_sdk\\win_sdk\\bin\\x64",
+        "[CACHE]\\windows_sdk\\win_sdk\\bin\\x64",
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
