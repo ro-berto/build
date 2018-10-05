@@ -20,13 +20,5 @@ DEPS = [
   'traceback',
 ]
 
-from recipe_engine.recipe_api import Property
-
-PROPERTIES = {
-  'show_shards_in_collect_step': Property(default=False, kind=bool),
-  'show_isolated_out_in_collect_step': Property(default=True, kind=bool),
-}
-
-
 # TODO(phajdan.jr): provide coverage (http://crbug.com/693058).
 DISABLE_STRICT_COVERAGE = True
