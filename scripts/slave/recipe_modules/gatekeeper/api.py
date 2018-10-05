@@ -85,8 +85,9 @@ class Gatekeeper(recipe_api.RecipeApi):
         else: #pragma: no cover
           args.extend(tree_args['masters'])
 
-      # TODO(machenbach): Remove temporary printing of build-db after
-      # investigation of https://crbug.com/889005.
+      # TODO(machenbach): Remove printing of build-db after all gatekeeper
+      # instances have migrated to LUCI. The extra printing helps to quickly
+      # check if the build DB gets properly cached between runs.
       if tree_args.get('build-db'):
         self._print_build_db(
             'db before: %s' % tree_name,
