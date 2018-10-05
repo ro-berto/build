@@ -213,6 +213,8 @@ FAKE_BUILDERS = {
         'gpu-manual-try-android-p-pixel-xl-64',
         'gpu-manual-try-android-p-pixel-xl-64-deqp',
         'try-nougat-phone-tester',
+        # Deleted. Remove with the recipe removal.
+        'android_blink_rel',
     ],
     'master.tryserver.chromium.mac': [
         # These have been migrated to LUCI.
