@@ -2052,6 +2052,8 @@
       "--changed",
       "--passing",
       "--failing",
+      "--count",
+      "100",
       "LATEST/results.json",
       "logs/results.json"
     ],
@@ -2995,6 +2997,8 @@
       "--changed",
       "--passing",
       "--failing",
+      "--count",
+      "100",
       "LATEST/results.json",
       "logs/results.json"
     ],

@@ -641,6 +641,8 @@ class DartApi(recipe_api.RecipeApi):
                      '--changed',
                      '--passing',
                      '--failing',
+                     '--count',
+                     '100',
                      'LATEST/results.json',
                      'logs/results.json'],
                     stdout=self.m.raw_io.output_text(
