@@ -65,8 +65,14 @@ _AddBuildSpec('Android Builder Perf FYI', 'android', target_bits=32,
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
 
+# TODO(crbug.com/792928): remove this legacy buildbot builder once
+# android-nexus5x-perf-fyi functions correctly.
 _AddIsolatedTestSpec('Android Nexus 5X Perf FYI',
       'android', parent_buildername='Android Builder Perf FYI', target_bits=32)
+
+_AddIsolatedTestSpec('android-nexus5x-perf-fyi',
+      'android', parent_buildername='android-builder-perf', target_bits=32,
+      parent_mastername='chromium.perf')
 
 
 _AddBuildSpec('Android CFI Builder Perf FYI', 'android',
