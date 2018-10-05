@@ -48,7 +48,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       goma_enable_localoutputcache_small = Single(bool, empty_val=False, required=False),
       goma_enable_global_file_stat_cache = Single(bool, empty_val=False, required=False),
       ninja_confirm_noop = Single(bool, empty_val=False, required=False),
-      set_build_data_dir = Single(bool, empty_val=False, required=False),
       # TODO(tandrii): delete goma_high_parallel from here and use goma recipe
       # module property, configured per builder in cr-buildbucket.cfg.
       goma_high_parallel = Single(bool, empty_val=False, required=False),
