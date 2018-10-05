@@ -148,13 +148,7 @@ def find_new_builds(master_url, builderlist, root_json, build_db):
               max(finished)] = build_scan_db.gen_build(finished=True)
 
         new_builds[buildername] = current_builds
-
-  # TODO(machenbach): Remove this temporary debug output after investigating
-  # https://crbug.com/889005.
-  if build_db.masters[master_url].get('V8 Linux - presubmit'):
-    logging.info('Build db state for V8 Linux - presubmit: %s',
-                 build_db.masters[master_url]['V8 Linux - presubmit'])
-
+  
   logging.info('milo output for %s:', master_url)
   for builder in sorted(root_json['builders'].keys()):
     data = root_json['builders'][builder]
