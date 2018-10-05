@@ -49,18 +49,6 @@ def _AddIsolatedTestSpec(name, platform,
   SPEC['builders'][name] = spec
 
 
-# TODO(crbug.com/828444): remove this builder once 'android-builder-perf'
-# functions well.
-_AddBuildSpec('Android Builder Perf FYI', 'android', target_bits=32,
-              extra_compile_targets=['android_tools',
-                                     'cc_perftests',
-                                     'chrome_public_apk',
-                                     'gpu_perftests',
-                                     'monochrome_public_apk',
-                                     'push_apps_to_background_apk',
-                                     'system_webview_apk',
-                                     'system_webview_shell_apk',])
-
 _AddIsolatedTestSpec('android-nexus5x-perf-fyi',
       'android', parent_buildername='android-builder-perf', target_bits=32,
       parent_mastername='chromium.perf')
