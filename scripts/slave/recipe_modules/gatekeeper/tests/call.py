@@ -3,7 +3,9 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'depot_tools/infra_paths',
   'gatekeeper',
+  'recipe_engine/properties',
 ]
 
 
@@ -18,6 +20,7 @@ def RunSteps(api):
 def GenTests(api):
   yield (
     api.test('basic')
+    + api.properties.generic()
     + api.step_data(
       'reading gatekeeper_trees.json',
       api.gatekeeper.fake_test_data(),
@@ -26,6 +29,7 @@ def GenTests(api):
 
   yield (
     api.test('keep_going')
+    + api.properties.generic()
     + api.step_data(
       'reading gatekeeper_trees.json',
       api.gatekeeper.fake_test_data(),
@@ -39,6 +43,7 @@ def GenTests(api):
 
   yield (
     api.test('whitelist_config')
+    + api.properties.generic()
     + api.step_data(
         'reading gatekeeper_trees.json',
         api.gatekeeper.fake_test_data(whitelist_data)
@@ -47,8 +52,19 @@ def GenTests(api):
 
   yield (
     api.test('production_data')
+    + api.properties.generic()
     + api.step_data(
       'reading gatekeeper_trees.json',
       api.gatekeeper.production_data(),
+    )
+  )
+
+  yield (
+    api.test('kitchen')
+    + api.properties.generic(
+        buildername='Chromium Gatekeeper', path_config='kitchen')
+    + api.step_data(
+      'reading gatekeeper_trees.json',
+      api.gatekeeper.fake_test_data(),
     )
   )

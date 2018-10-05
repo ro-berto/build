@@ -12,8 +12,19 @@ class Gatekeeper(recipe_api.RecipeApi):
       'reading %s' % self.m.path.basename(gatekeeper_trees_json),
       gatekeeper_trees_json,
     ).json.output
-    self.m.file.ensure_directory(
-        'ensure cache', self.m.path['cache'].join('builder'))
+
+    if not self.m.properties['buildername'].startswith(
+        'Chromium Gatekeeper'):
+      # TODO(machenbach): Fallback for internal gatekeepers using annotated run.
+      # Please remove this when those switched to remote_run.
+      build_db_path = self.m.path['cache'].join('builder')
+    else:
+      build_db_path = self.m.path['builder_cache']
+      if not self.m.runtime.is_luci:
+        # TODO(machenbach): Deprecate after moving to LUCI.
+        build_db_path = build_db_path.join('gate_keeper')
+    
+    self.m.file.ensure_directory('ensure cache', build_db_path)
 
     for tree_name, tree_args in config.iteritems():
       # Use tree-specific config if specified, otherwise use default.
@@ -44,9 +55,7 @@ class Gatekeeper(recipe_api.RecipeApi):
       if tree_args.get('revision-properties'):
         args.extend(['--revision-properties', tree_args['revision-properties']])
       if tree_args.get('build-db'):
-        args.extend(['--build-db',
-                     self.m.path['cache'].join(
-                         'builder', tree_args['build-db'])])
+        args.extend(['--build-db', build_db_path.join(tree_args['build-db'])])
       if tree_args.get('password-file'):
         args.extend(['--password-file', tree_args['password-file']])
       if tree_args.get('use-project-email-address'):
@@ -79,7 +88,10 @@ class Gatekeeper(recipe_api.RecipeApi):
       # TODO(machenbach): Remove temporary printing of build-db after
       # investigation of https://crbug.com/889005.
       if tree_args.get('build-db'):
-        self._print_build_db('db before: %s' % tree_name, tree_args['build-db'])
+        self._print_build_db(
+            'db before: %s' % tree_name,
+            build_db_path.join(tree_args['build-db']),
+        )
 
       try:
         self.m.build.python(
@@ -91,11 +103,13 @@ class Gatekeeper(recipe_api.RecipeApi):
         pass
 
       if tree_args.get('build-db'):
-        self._print_build_db('db after: %s' % tree_name, tree_args['build-db'])
+        self._print_build_db(
+            'db after: %s' % tree_name,
+            build_db_path.join(tree_args['build-db']),
+        )
 
-  def _print_build_db(self, name, build_db):  # pragma: no cover
+  def _print_build_db(self, name, build_db_path):  # pragma: no cover
     try:
-      build_db_path = self.m.path['cache'].join('builder', build_db)
       if self.m.path.exists(build_db_path):
         self.m.json.read(
             name, build_db_path,

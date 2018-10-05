@@ -2049,7 +2049,7 @@ Args:
 &emsp; **@property**<br>&mdash; **def [platforms](/scripts/slave/recipe_modules/gae_sdk/api.py#58)(self):**
 ### *recipe_modules* / [gatekeeper](/scripts/slave/recipe_modules/gatekeeper)
 
-[DEPS](/scripts/slave/recipe_modules/gatekeeper/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/gatekeeper/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [Gatekeeper](/scripts/slave/recipe_modules/gatekeeper/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -5302,11 +5302,11 @@ Uploads the Flutter coverage output to cloud storage and Coveralls.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/gae_sdk/examples/full.py#15)(api):**
 ### *recipes* / [gatekeeper](/scripts/slave/recipes/gatekeeper.py)
 
-[DEPS](/scripts/slave/recipes/gatekeeper.py#8): [gatekeeper](#recipe_modules-gatekeeper), [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/path][recipe_engine/recipe_modules/path]
+[DEPS](/scripts/slave/recipes/gatekeeper.py#8): [gatekeeper](#recipe_modules-gatekeeper), [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 Launches the gatekeeper.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/gatekeeper.py#15)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/gatekeeper.py#16)(api):**
 ### *recipes* / [gatekeeper-failure](/scripts/slave/recipes/gatekeeper-failure.py)
 
 [DEPS](/scripts/slave/recipes/gatekeeper-failure.py#7): [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5316,9 +5316,9 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 &mdash; **def [RunSteps](/scripts/slave/recipes/gatekeeper-failure.py#12)(api):**
 ### *recipes* / [gatekeeper:tests/call](/scripts/slave/recipe_modules/gatekeeper/tests/call.py)
 
-[DEPS](/scripts/slave/recipe_modules/gatekeeper/tests/call.py#5): [gatekeeper](#recipe_modules-gatekeeper)
+[DEPS](/scripts/slave/recipe_modules/gatekeeper/tests/call.py#5): [gatekeeper](#recipe_modules-gatekeeper), [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/gatekeeper/tests/call.py#10)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/gatekeeper/tests/call.py#12)(api):**
 ### *recipes* / [git\_clone\_bundler:examples/full](/scripts/slave/recipe_modules/git_clone_bundler/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/git_clone_bundler/examples/full.py#5): [git\_clone\_bundler](#recipe_modules-git_clone_bundler), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
