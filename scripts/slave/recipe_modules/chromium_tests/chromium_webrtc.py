@@ -184,6 +184,10 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
                 '--run-manual', '--test-launcher-jobs=1']))
 
       if enable_baremetal_tests:
+        upload_wav_files_from_test = True
+        if platform == 'win':
+          # TODO(bugs.webrtc.org/9793): Flakily fails on Win
+          upload_wav_files_from_test = False
         tests.append(steps.WebRTCPerfTest(
             name='browser_tests',
             # These tests needs --test-launcher-jobs=1 since some of them are
@@ -198,7 +202,7 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
             perf_id=perf_id,
             perf_config_mappings=perf_config_mappings,
             commit_position_property=commit_position_property,
-            upload_wav_files_from_test=True))
+            upload_wav_files_from_test=upload_wav_files_from_test))
         # Run capture unittests as well since our bots have real webcams.
         tests.append(steps.LocalGTestTest(
             'capture_unittests',
