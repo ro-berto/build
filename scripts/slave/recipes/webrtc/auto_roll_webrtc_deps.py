@@ -68,7 +68,7 @@ def RunSteps(api):
           GERRIT_URL,
           query_params=[
               ('change', commits[0]['_number']),
-              ('label', 'Commit-Queue=2'),
+              ('label', 'Commit-Queue>=1'),
           ],
           limit=1,
       )

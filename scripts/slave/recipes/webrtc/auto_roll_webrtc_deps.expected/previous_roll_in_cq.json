@@ -130,7 +130,7 @@
       "-p",
       "change=123",
       "-p",
-      "label=Commit-Queue=2"
+      "label=Commit-Queue>=1"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
