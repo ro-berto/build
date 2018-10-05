@@ -623,8 +623,8 @@ class DartApi(recipe_api.RecipeApi):
         self.run_script(step_name, 'tools/test.py', args, isolate_hash, shards,
                         local_shard, environment, tasks,
                         cipd_packages=cipd_packages)
-        if shards == 0 or local_shard:
-          self.read_result_file('read results of %s' % step_name, 'result.log')
+        self.read_result_file('read results of %s' % step_name, 'result.log')
+
         commit_hash = self.m.buildbucket.gitiles_commit.id
         self.m.step('Add commit hash to run.json',
                     [self.dart_executable(),
@@ -646,27 +646,25 @@ class DartApi(recipe_api.RecipeApi):
                      'LATEST/results.json',
                      'logs/results.json'],
                     stdout=self.m.raw_io.output_text(
-                    leak_to=self.m.path['checkout'].join('logs','deflake.json')))
-        try:
-          self.run_script(
+                        leak_to=self.m.path['checkout']
+                        .join('logs','deflake.json')),
+                    ok_ret='any')
+        self.run_script(
             step_name + ' deflaking', 'tools/test.py',
             args + ['--repeat=5', '--test-list', 'logs/deflake.json',
                     '--output_directory', 'deflaking_logs'],
             None, shards,
             local_shard, environment, tasks,
-            cipd_packages=cipd_packages)
-          self.m.step('Evaluate flakiness',
-                      [self.dart_executable(),
-                       'tools/bots/update_flakiness.dart',
-                       '-i',
-                       'LATEST/flaky.json',
-                       '-o',
-                       'deflaking_logs/flaky.json',
-                       'logs/results.json',
-                       'deflaking_logs/results.json'], ok_ret='any')
-        except self.m.step.StepFailure: # pragma: no cover
-          pass
-
+            cipd_packages=cipd_packages, ok_ret='any')
+        self.m.step('Evaluate flakiness',
+                    [self.dart_executable(),
+                     'tools/bots/update_flakiness.dart',
+                     '-i',
+                     'LATEST/flaky.json',
+                     '-o',
+                     'deflaking_logs/flaky.json',
+                     'logs/results.json',
+                     'deflaking_logs/results.json'], ok_ret='any')
         self.m.step('Test status after deflaking (new workflow)',
                     [self.dart_executable(),
                      'tools/bots/compare_results.dart',
@@ -680,7 +678,8 @@ class DartApi(recipe_api.RecipeApi):
                      '--failing',
                      '--passing',
                      'LATEST/results.json',
-                     'logs/results.json'])
+                     'logs/results.json'],
+                    ok_ret='any')
         self.upload_results(step_name)
     else:
       with self.m.step.defer_results():
@@ -691,7 +690,8 @@ class DartApi(recipe_api.RecipeApi):
           self.read_result_file('read results of %s' % step_name, 'result.log')
 
   def run_script(self, step_name, script, args, isolate_hash, shards,
-                 local_shard, environment, tasks, cipd_packages=[]):
+                 local_shard, environment, tasks,
+                 cipd_packages=[], ok_ret=None):
     """Runs a specific script with current working directory to be checkout. If
     the runtime (passed in environment) is a browser, and the system is linux,
     xvfb is used. If an isolate_hash is passed in, it will swarm the command.
@@ -706,6 +706,8 @@ class DartApi(recipe_api.RecipeApi):
       * tasks ([task]) - placeholder to hold swarming tasks
       * cipd_packages ([tuple]) - list of 3-tuples specifying a cipd package
         to be downloaded
+      * ok_ret(str or [int]) - optional accepted exit codes passed to
+        non-sharded script runs.
     """
     runtime = self._get_specific_argument(args, ['-r', '--runtime'])
     if runtime is None:
@@ -729,7 +731,7 @@ class DartApi(recipe_api.RecipeApi):
                                   last_shard_is_local=local_shard,
                                   cipd_packages=cipd_packages))
         else:
-          self.m.step(step_name, cmd)
+          self.m.step(step_name, cmd, ok_ret=ok_ret)
       else:
         if isolate_hash:
           tasks.append(self.shard(step_name, isolate_hash, [script] + args,
@@ -737,9 +739,9 @@ class DartApi(recipe_api.RecipeApi):
                                   last_shard_is_local=local_shard,
                                   cipd_packages=cipd_packages))
         elif is_python:
-          self.m.python(step_name, script, args=args)
+          self.m.python(step_name, script, args=args, ok_ret=ok_ret)
         else:
-          self.m.step(step_name, [script] + args)
+          self.m.step(step_name, [script] + args, ok_ret=ok_ret)
 
       if local_shard:
         args = args + [
@@ -747,4 +749,5 @@ class DartApi(recipe_api.RecipeApi):
           '--shard=%s' % shards
         ]
         self.run_script("%s_shard_%s" % (step_name, shards), script,
-            args, None, 0, False, environment, tasks, cipd_packages)
+                        args, None, 0, False, environment, tasks,
+                        cipd_packages, ok_ret=ok_ret)

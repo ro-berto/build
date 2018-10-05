@@ -1721,7 +1721,7 @@ Args:
 Returns (str) - The content of the file.
 Raises file.Error
 
-&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#693)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=[]):**
+&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#692)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=[], ok_ret=None):**
 
 Runs a specific script with current working directory to be checkout. If
 the runtime (passed in environment) is a browser, and the system is linux,
@@ -1737,6 +1737,8 @@ Args:
   * tasks ([task]) - placeholder to hold swarming tasks
   * cipd_packages ([tuple]) - list of 3-tuples specifying a cipd package
     to be downloaded
+  * ok_ret(str or [int]) - optional accepted exit codes passed to
+    non-sharded script runs.
 
 &mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#544)(self, step_name, append_logs, step, isolate_hash, shards, local_shard, environment, tasks, global_config):**
 
