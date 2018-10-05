@@ -1044,6 +1044,12 @@
             ],
             "forgiving_optional": ["*"]
           },
+          "Libfuzzer Upload Windows ASan": {
+            "tree_notify": [
+              "chromesec-lkgr-failures@google.com"
+            ],
+            "forgiving_optional": ["*"]
+          },
           "linux-blink-heap-verification": {
             "tree_notify": [
               "mlippautz+fyi-bots@chromium.org"

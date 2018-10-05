@@ -81,6 +81,17 @@ BUILDERS = freeze({
         'upload_bucket': 'chromium-browser-libfuzzer',
         'upload_directory': 'asan',
       },
+      'Libfuzzer Upload Windows ASan': {
+        'chromium_config': 'chromium_clang',
+        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'win',
+          'TARGET_BITS': 64,
+        },
+        'upload_bucket': 'chromium-browser-libfuzzer',
+        'upload_directory': 'asan',
+      },
     },
   },
 })

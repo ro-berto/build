@@ -4554,9 +4554,9 @@ index packs (used to generate xrefs) are all generated from the same revision.
 
 [DEPS](/scripts/slave/recipes/chromium_libfuzzer.py#8): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_libfuzzer.py#104)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_libfuzzer.py#115)(api):**
 
-&mdash; **def [gn\_refs](/scripts/slave/recipes/chromium_libfuzzer.py#89)(api, step_name, args):**
+&mdash; **def [gn\_refs](/scripts/slave/recipes/chromium_libfuzzer.py#100)(api, step_name, args):**
 
 Runs gn refs with given additional arguments.
 Returns: the list of matched targets.
