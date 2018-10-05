@@ -52,11 +52,22 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  def props(mastername='chromium.linux',
+            buildername='Linux Tests',
+            parent_buildername='Linux Builder',
+            **kwargs):
+    kwargs.update({
+        'mastername': mastername,
+        'buildername':buildername,
+    })
+    if parent_buildername:
+      kwargs['parent_buildername'] = parent_buildername
+    return api.properties.generic(**kwargs)
+
+
   yield (
     api.test('dynamic_gtest') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
+    props() +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
@@ -78,8 +89,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_gtest') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Builder') +
+    props(buildername='Linux Builder',
+          parent_buildername=None) +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
@@ -98,14 +109,14 @@ def GenTests(api):
     api.test('dynamic_swarmed_serialized_gtests') +
     # The chromium.gpu.fyi bots use serialize_tests in order to reduce
     # load on the GPU bots in the Swarming pool.
-    api.properties.generic(mastername='chromium.gpu.fyi',
-                           buildername='Linux FYI Release (NVIDIA)',
-                           parent_buildername='GPU FYI Linux Builder') +
-    api.platform('linux', 64) +
-    api.properties(swarm_hashes={
-      'base_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      'browser_tests': 'ffffffffffffffffffffffffffffff',
+    props(mastername='chromium.gpu.fyi',
+          buildername='Linux FYI Release (NVIDIA)',
+          parent_buildername='GPU FYI Linux Builder',
+          swarm_hashes={
+              'base_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+              'browser_tests': 'ffffffffffffffffffffffffffffff',
     }) +
+    api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.gpu.fyi.json)',
         api.json.output({
@@ -147,11 +158,11 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_gtest_mac_gpu') +
-    api.properties.generic(mastername='chromium.mac',
-                           buildername='Mac10.13 Tests',
-                           parent_buildername='Mac Builder') +
-    api.properties(swarm_hashes={
-      'gl_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(mastername='chromium.mac',
+          buildername='Mac10.13 Tests',
+          parent_buildername='Mac Builder',
+          swarm_hashes={
+              'gl_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('mac', 64) +
     api.override_step_data(
@@ -184,12 +195,12 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_gtest_override_compile_targets') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Builder') +
-    api.platform('linux', 64) +
-    api.properties(swarm_hashes={
-      'tab_capture_end2end_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(buildername='Linux Builder',
+          parent_buildername=None,
+          swarm_hashes={
+              'tab_capture_end2end_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
+    api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
         api.json.output({
@@ -212,8 +223,8 @@ def GenTests(api):
 
   yield (
     api.test('build_dynamic_isolated_script_test') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Builder') +
+    props(buildername='Linux Builder',
+          parent_buildername=None) +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
@@ -232,11 +243,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_isolated_script_test') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -265,11 +273,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_local_isolated_script_test_with_failed_json_results') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -294,11 +299,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_local_isolated_script_test_with_unknown_json_results') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -323,11 +325,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_local_isolated_script_test_with_corrupt_json_results') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -352,11 +351,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_local_isolated_script_test_with_passed_json_results') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -381,11 +377,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_local_isolated_script_test_with_custom_results_handler') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -411,11 +404,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_isolated_script_test_harness_failure_zero_retcode') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -440,11 +430,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_isolated_script_test_harness_failure_no_json') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -467,8 +454,8 @@ def GenTests(api):
 
   yield (
     api.test('build_dynamic_isolated_script_test_compile_target_overriden') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Builder') +
+    props(buildername='Linux Builder',
+          parent_buildername=None) +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
@@ -491,8 +478,8 @@ def GenTests(api):
 
   yield (
     api.test('build_dynamic_swarmed_isolated_script_test') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Builder') +
+    props(buildername='Linux Builder',
+          parent_buildername=None) +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
@@ -513,8 +500,8 @@ def GenTests(api):
   yield (
     api.test(
         'build_dynamic_swarmed_isolated_script_test_compile_target_overidden') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Builder') +
+    props(buildername='Linux Builder',
+          parent_buildername=None) +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
@@ -538,11 +525,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_passed_isolated_script_test') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -563,18 +547,12 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_sharded_passed_isolated_script_test') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder',
-                           got_revision_cp='refs/heads/master@{#291141}',
-                           buildnumber='1234',
-                           version='v23523',
-                           git_revision='a' * 40) +
-
-    api.properties(
-      swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-      }) +
+    props(buildnumber='1234',
+          version='v23523',
+          git_revision='a' * 40,
+          swarm_hashes={
+              'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+    }) +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
@@ -605,11 +583,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_sharded_corrupt_json_isolated_script_test') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -641,11 +616,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_sharded_invalid_json_isolated_script_test') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -672,11 +644,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_sharded_failed_isolated_script_test') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -707,11 +676,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_sharded_isolated_script_test_missing_shard') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -743,11 +709,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_sharded_isolated_script_test_harness_failure') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -780,11 +743,8 @@ def GenTests(api):
   yield (
     api.test(
       'dynamic_swarmed_sharded_isolated_chartjson_test_harness_failure') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -817,12 +777,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_sharded_isolated_chartjson_test_disabled') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder',
-                           got_revision_cp='refs/heads/master@{#291141}') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -856,13 +812,8 @@ def GenTests(api):
   yield (
     api.test(
         'dynamic_swarmed_sharded_isolated_chartjson_test_missing_all_shards') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder',
-                           got_revision_cp='refs/heads/master@{#291141}'
-                           ) +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -898,13 +849,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_sharded_isolated_chartjson_test_missing_shard') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder',
-                           got_revision_cp='refs/heads/master@{#291141}'
-                           ) +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -936,11 +882,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_isolated_script_test_linux_gpu') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -969,11 +912,11 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_isolated_script_test_mac_gpu') +
-    api.properties.generic(mastername='chromium.mac',
-                           buildername='Mac10.13 Tests',
-                           parent_buildername='Mac Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(mastername='chromium.mac',
+          buildername='Mac10.13 Tests',
+          parent_buildername='Mac Builder',
+          swarm_hashes={
+              'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('mac', 64) +
     api.override_step_data(
@@ -1007,11 +950,11 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_isolated_script_test_win_gpu') +
-    api.properties.generic(mastername='chromium.win',
-                           buildername='Win7 Tests (1)',
-                           parent_buildername='Win Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(mastername='chromium.win',
+          buildername='Win7 Tests (1)',
+          parent_buildername='Win Builder',
+          swarm_hashes={
+              'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('win', 64) +
     api.override_step_data(
@@ -1049,11 +992,11 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_isolated_script_test_win_non_gpu') +
-    api.properties.generic(mastername='chromium.win',
-                           buildername='Win7 Tests (1)',
-                           parent_buildername='Win Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(mastername='chromium.win',
+          buildername='Win7 Tests (1)',
+          parent_buildername='Win Builder',
+          swarm_hashes={
+              'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('win', 64) +
     api.override_step_data(
@@ -1081,11 +1024,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_failed_isolated_script_test') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -1113,11 +1053,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_passed_with_bad_retcode_isolated_script_test') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -1146,11 +1083,8 @@ def GenTests(api):
   yield (
     api.test(
         'dynamic_swarmed_passed_isolated_script_test_with_swarming_failure') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -1180,11 +1114,8 @@ def GenTests(api):
   yield (
     api.test(
         'dynamic_swarmed_isolated_script_test_failure_no_result_json') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.properties(swarm_hashes={
-      'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -1210,12 +1141,12 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_instrumentation_test') +
-    api.properties.generic(mastername='chromium.android',
-                           buildername='KitKat Phone Tester (rel)') +
+    props(mastername='chromium.android',
+          buildername='android-kitkat-arm-rel') +
     api.override_step_data(
         'read test spec (chromium.android.json)',
         api.json.output({
-            'KitKat Phone Tester (rel)': {
+            'android-kitkat-arm-rel': {
                 'instrumentation_tests': [
                     {
                         'test': 'ChromePublicTest',
@@ -1234,12 +1165,12 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_instrumentation_test_custom_name') +
-    api.properties.generic(mastername='chromium.android',
-                           buildername='KitKat Phone Tester (rel)') +
+    props(mastername='chromium.android',
+          buildername='android-kitkat-arm-rel') +
     api.override_step_data(
         'read test spec (chromium.android.json)',
         api.json.output({
-            'KitKat Phone Tester (rel)': {
+            'android-kitkat-arm-rel': {
                 'instrumentation_tests': [
                     {
                         'name': 'custom_test_name',
@@ -1261,12 +1192,12 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_instrumentation_nodefault_build') +
-    api.properties.generic(mastername='chromium.android',
-                           buildername='KitKat Phone Tester (rel)') +
+    props(mastername='chromium.android',
+          buildername='android-kitkat-arm-rel') +
     api.override_step_data(
         'read test spec (chromium.android.json)',
         api.json.output({
-            'KitKat Phone Tester (rel)': {
+            'android-kitkat-arm-rel': {
                 'instrumentation_tests': [
                     {
                         'test': 'chrome_public_test_apk',
@@ -1279,12 +1210,12 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_instrumentation_nodefault_test') +
-    api.properties.generic(mastername='chromium.android',
-                           buildername='KitKat Phone Tester (rel)') +
+    props(mastername='chromium.android',
+          buildername='android-kitkat-arm-rel') +
     api.override_step_data(
         'read test spec (chromium.android.json)',
         api.json.output({
-            'KitKat Phone Tester (rel)': {
+            'android-kitkat-arm-rel': {
                 'instrumentation_tests': [
                     {
                         'test': 'chrome_public_test_apk',
@@ -1297,12 +1228,12 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_junit_test') +
-    api.properties.generic(mastername='chromium.android',
-                           buildername='KitKat Phone Tester (rel)') +
+    props(mastername='chromium.android',
+          buildername='android-kitkat-arm-rel') +
     api.override_step_data(
         'read test spec (chromium.android.json)',
         api.json.output({
-            'KitKat Phone Tester (rel)': {
+            'android-kitkat-arm-rel': {
                 'junit_tests': [
                     {
                         'test': 'base_junit_tests',
@@ -1315,8 +1246,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_gtest_on_builder') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Builder') +
+    props(buildername='Linux Builder',
+          parent_buildername=None) +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
@@ -1337,9 +1268,9 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_gtest_win') +
-    api.properties.generic(mastername='chromium.win',
-                           buildername='Win7 Tests (1)',
-                           parent_buildername='Win Builder') +
+    props(mastername='chromium.win',
+          buildername='Win7 Tests (1)',
+          parent_buildername='Win Builder') +
     api.platform('win', 64) +
     api.override_step_data(
         'read test spec (chromium.win.json)',
@@ -1360,9 +1291,9 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_gtest_android') +
-    api.properties.generic(mastername='chromium.android',
-                           buildername='Lollipop Phone Tester',
-                           parent_buildername='Android arm Builder (dbg)') +
+    props(mastername='chromium.android',
+          buildername='Lollipop Phone Tester',
+          parent_buildername='Android arm Builder (dbg)') +
     api.override_step_data(
         'read test spec (chromium.android.json)',
         api.json.output({
@@ -1378,8 +1309,8 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_gtest_fuchsia') +
-    api.properties.generic(mastername='chromium.fyi',
-                           buildername='Fuchsia') +
+    props(mastername='chromium.fyi',
+          buildername='Fuchsia') +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.fyi.json)',
@@ -1397,9 +1328,9 @@ def GenTests(api):
   # Tests switching on asan and swiching off lsan for sandbox tester.
   yield (
     api.test('dynamic_gtest_memory_asan_no_lsan') +
-    api.properties.generic(mastername='chromium.memory',
-                           buildername='Linux ASan Tests (sandboxed)',
-                           parent_buildername='Linux ASan LSan Builder') +
+    props(mastername='chromium.memory',
+          buildername='Linux ASan Tests (sandboxed)',
+          parent_buildername='Linux ASan LSan Builder') +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.memory.json)',
@@ -1416,9 +1347,10 @@ def GenTests(api):
   # Tests that the memory builder is using the correct compile targets.
   yield (
     api.test('dynamic_gtest_memory_builder') +
-    api.properties.generic(mastername='chromium.memory',
-                           buildername='Linux ASan LSan Builder',
-                           revision='a' * 40) +
+    props(mastername='chromium.memory',
+          buildername='Linux ASan LSan Builder',
+          parent_buildername=None,
+          revision='a' * 40) +
     api.platform('linux', 64) +
     # The builder should build 'browser_tests', because there exists a child
     # tester that uses that test.
@@ -1437,10 +1369,9 @@ def GenTests(api):
   # Tests that the memory mac tester is using the correct test flags.
   yield (
     api.test('dynamic_gtest_memory_mac64') +
-    api.properties.generic(
-        mastername='chromium.memory',
-        buildername='Mac ASan 64 Tests (1)',
-        parent_buildername='Mac ASan 64 Builder') +
+    props(mastername='chromium.memory',
+          buildername='Mac ASan 64 Tests (1)',
+          parent_buildername='Mac ASan 64 Builder') +
     api.platform('mac', 64) +
     api.override_step_data(
         'read test spec (chromium.memory.json)',
@@ -1456,9 +1387,9 @@ def GenTests(api):
 
   yield (
     api.test('tsan') +
-    api.properties.generic(mastername='chromium.memory',
-                           buildername='Linux TSan Tests',
-                           parent_buildername='Linux TSan Builder') +
+    props(mastername='chromium.memory',
+          buildername='Linux TSan Tests',
+          parent_buildername='Linux TSan Builder') +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.memory.json)',
@@ -1473,9 +1404,9 @@ def GenTests(api):
 
   yield (
     api.test('msan') +
-    api.properties.generic(mastername='chromium.memory',
-                           buildername='Linux MSan Tests',
-                           parent_buildername='Linux MSan Builder') +
+    props(mastername='chromium.memory',
+          buildername='Linux MSan Tests',
+          parent_buildername='Linux MSan Builder') +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.memory.json)',
@@ -1490,10 +1421,7 @@ def GenTests(api):
 
   yield (
     api.test('buildnumber_zero') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder',
-                           buildnumber=0) +
+    props(buildnumber=0) +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
@@ -1514,9 +1442,7 @@ def GenTests(api):
 
   yield (
     api.test('one_failure_keeps_going_dynamic_tests') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
+    props() +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
@@ -1538,9 +1464,7 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_script_test_with_args') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
+    props() +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
@@ -1560,9 +1484,7 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_script_test_failure') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
+    props() +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
@@ -1586,30 +1508,27 @@ def GenTests(api):
 
   yield (
     api.test('kitchen_path_config') +
-    api.properties(
+    props(
         mastername='chromium.fyi',
         buildername='Linux remote_run Builder',
-        bot_id='build1-a1',
         buildnumber='77457',
         path_config='kitchen')
   )
 
   yield (
     api.test('generic_path_config') +
-    api.properties(
+    props(
         mastername='chromium.fyi',
         buildername='Linux remote_run Builder',
-        bot_id='build1-a1',
         buildnumber='77457',
         path_config='generic')
   )
 
   yield (
     api.test('ensure_goma_fail') +
-    api.properties(
+    props(
         mastername='chromium.fyi',
         buildername='Linux remote_run Builder',
-        bot_id='build1-a1',
         buildnumber='77457',
         path_config='kitchen') +
     api.override_step_data('ensure_goma.ensure_installed', retcode=1)
@@ -1627,13 +1546,10 @@ def GenTests(api):
 
   yield (
     api.test('gtest_custom_merge_script') +
-    api.properties.generic(mastername='chromium.linux',
-                           parent_buildername='Linux Builder',
-                           buildername='Linux Tests') +
-    api.platform('linux', 64) +
-    api.properties(swarm_hashes={
-      'browser_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'browser_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
+    api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
         api.json.output({
@@ -1655,13 +1571,10 @@ def GenTests(api):
 
   yield (
     api.test('gtest_bad_custom_merge_script') +
-    api.properties.generic(mastername='chromium.linux',
-                           parent_buildername='Linux Builder',
-                           buildername='Linux Tests') +
-    api.platform('linux', 64) +
-    api.properties(swarm_hashes={
-      'browser_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'browser_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
+    api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
         api.json.output({
@@ -1682,13 +1595,10 @@ def GenTests(api):
 
   yield (
     api.test('isolated_script_test_custom_merge_script') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.platform('linux', 64) +
-    api.properties(swarm_hashes={
-      'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
+    api.platform('linux', 64) +
     api.step_data('fake_test', api.json.output(json_results)) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
@@ -1714,13 +1624,10 @@ def GenTests(api):
 
   yield (
     api.test('isolated_script_test_bad_custom_merge_script') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.platform('linux', 64) +
-    api.properties(swarm_hashes={
-      'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
+    api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
         api.json.output({
@@ -1744,13 +1651,10 @@ def GenTests(api):
 
   yield (
     api.test('isolated_script_test_custom_merge_script_with_args') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.platform('linux', 64) +
-    api.properties(swarm_hashes={
-      'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
+    api.platform('linux', 64) +
     api.step_data('fake_test', api.json.output(json_results)) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
@@ -1779,13 +1683,10 @@ def GenTests(api):
 
   yield (
     api.test('isolated_script_test_custom_results_handler') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.platform('linux', 64) +
-    api.properties(swarm_hashes={
-      'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
+    api.platform('linux', 64) +
     api.step_data('fake_test', api.json.output(json_results)) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
@@ -1809,13 +1710,10 @@ def GenTests(api):
 
   yield (
     api.test('isolated_script_test_invalid_results_handler') +
-    api.properties.generic(mastername='chromium.linux',
-                           buildername='Linux Tests',
-                           parent_buildername='Linux Builder') +
-    api.platform('linux', 64) +
-    api.properties(swarm_hashes={
-      'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    props(swarm_hashes={
+        'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
+    api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.linux.json)',
         api.json.output({

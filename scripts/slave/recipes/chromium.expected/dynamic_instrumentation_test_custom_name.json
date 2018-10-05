@@ -10,7 +10,7 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running builder/tester 'KitKat Phone Tester (rel)' on master 'chromium.android'@@@"
+      "@@@STEP_TEXT@<br/>running builder/tester 'android-kitkat-arm-rel' on master 'chromium.android'@@@"
     ]
   },
   {
@@ -252,7 +252,7 @@
       "--paths",
       "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"KitKat Phone Tester (rel)\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"test_bot\", \"target_platform\": \"android\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"android-kitkat-arm-rel\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"slavename\": \"test_bot\", \"target_platform\": \"android\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -278,7 +278,7 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.android.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"KitKat Phone Tester (rel)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"android-kitkat-arm-rel\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"instrumentation_tests\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"additional_apks\": [@@@",
@@ -347,7 +347,7 @@
       "-m",
       "chromium.android",
       "-b",
-      "KitKat Phone Tester (rel)",
+      "android-kitkat-arm-rel",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -374,7 +374,7 @@
       "-m",
       "chromium.android",
       "-b",
-      "KitKat Phone Tester (rel)",
+      "android-kitkat-arm-rel",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -407,7 +407,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/KitKat_Phone_Tester__rel_"
+      "[CACHE]/goma/data/android_kitkat_arm_rel"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -431,7 +431,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/KitKat_Phone_Tester__rel_",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/android_kitkat_arm_rel",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -646,9 +646,9 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": \"master.chromium.android\", \"builder\": \"KitKat Phone Tester (rel)\", \"project\": \"\"}",
+      "{\"bucket\": \"master.chromium.android\", \"builder\": \"android-kitkat-arm-rel\", \"project\": \"\"}",
       "--buildbot-buildername",
-      "KitKat Phone Tester (rel)",
+      "android-kitkat-arm-rel",
       "--buildbot-mastername",
       "chromium.android",
       "--buildbot-slavename",
@@ -996,7 +996,7 @@
       "--test-name",
       "custom_test_name",
       "--builder-name",
-      "KitKat Phone Tester (rel)",
+      "android-kitkat-arm-rel",
       "--build-number",
       "571",
       "--cs-base-url",
@@ -1041,7 +1041,7 @@
       "--master-name",
       "chromium.android",
       "--builder-name",
-      "KitKat Phone Tester (rel)",
+      "android-kitkat-arm-rel",
       "--build-number",
       "571",
       "--test-type",
@@ -1107,7 +1107,7 @@
       "----",
       "cp",
       "[START_DIR]/src/out/Release/full_log",
-      "gs://chromium-android/logcat_dumps/KitKat Phone Tester (rel)/571"
+      "gs://chromium-android/logcat_dumps/android-kitkat-arm-rel/571"
     ],
     "env": {
       "CHROME_HEADLESS": "1",
@@ -1116,7 +1116,7 @@
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/KitKat Phone Tester (rel)/571@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android-kitkat-arm-rel/571@@@"
     ]
   },
   {

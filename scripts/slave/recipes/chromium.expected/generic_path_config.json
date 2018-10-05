@@ -268,7 +268,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/Linux_remote_run_Builder/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"Linux remote_run Builder\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"slavename\": \"build1-a1\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux remote_run Builder\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -606,7 +606,7 @@
       "--buildbot-mastername",
       "chromium.fyi",
       "--buildbot-slavename",
-      "build1-a1"
+      "test_bot"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_remote_run_Builder/src",
     "env": {
@@ -674,9 +674,9 @@
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--factory-properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"Linux remote_run Builder\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"path_config\": \"generic\", \"recipe\": \"chromium\", \"slavename\": \"build1-a1\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Linux remote_run Builder\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"parent_buildername\": \"Linux Builder\", \"path_config\": \"generic\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"Linux remote_run Builder\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"path_config\": \"generic\", \"recipe\": \"chromium\", \"slavename\": \"build1-a1\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Linux remote_run Builder\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.fyi\", \"parent_buildername\": \"Linux Builder\", \"path_config\": \"generic\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
