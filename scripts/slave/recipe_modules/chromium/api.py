@@ -985,7 +985,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   @_with_chromium_layout
   def run_mb_cmd(self, name, mb_command, mastername, buildername,
                  mb_path=None, mb_config_path=None,
-                 phase=None, use_goma=True,
+                 chromium_config=None, phase=None, use_goma=True,
                  android_version_code=None, android_version_name=None,
                  additional_args=None, **kwargs):
     """Run an arbitrary mb command.
@@ -995,11 +995,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       mb_command: The mb command to run.
       mastername: The name of the master of the configuration to run mb for.
       buildername: The name of the builder of the configuration to run mb for.
-      additional_args: Any args to the mb script besodes those for setting the
-        master, builder and the path to the config file.
-      env: An optional dict to use as the environment for executing the mb
-        command. The environment will be combined with the current context
-        environment with values from the context taking precedence.
       mb_path: The path to the source directory containing the mb.py script. If
         not provided, the subdirectory tools/mb within the source tree will be
         used.
@@ -1008,11 +1003,17 @@ class ChromiumApi(recipe_api.RecipeApi):
         project_generator.config_path config value will be used. If that is
         falsey, then mb_config.pyl under the directory identified by mb_path
         will be used.
+      chromium_config: The chromium config object to use. If not provided,
+        self.c will be used.
+      additional_args: Any args to the mb script besodes those for setting the
+        master, builder and the path to the config file.
       **kwargs: Additional arguments to be forwarded onto the python API.
     """
+    chromium_config = chromium_config or self.c
+
     mb_path = mb_path or self.m.path['checkout'].join('tools', 'mb')
     mb_config_path = (
-        mb_config_path or self.c.project_generator.config_path or
+        mb_config_path or chromium_config.project_generator.config_path or
         self.m.path.join(mb_path, 'mb_config.pyl'))
 
     args = [
@@ -1026,6 +1027,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += [ '--phase', str(phase) ]
 
     if use_goma:
+      # self.c instead of chromium_config is not a mistake here, if we have
+      # already ensured goma, we don't need to do it for this config object
       goma_dir = self.c.compile_py.goma_dir
       # TODO(gbeaty): remove this weird goma fallback or cover it
       if not goma_dir:  # pragma: no cover
@@ -1051,7 +1054,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     # TODO(crbug.com/810460): Remove the system python wrapping.
     optional_system_python = contextlib.contextmanager(
         lambda: (x for x in [None]))()
-    if self.c.TARGET_CROS_BOARD:
+    if chromium_config.TARGET_CROS_BOARD:
       # Wrap 'mb' through 'cros chrome-sdk'
       step_kwargs['wrapper'] = self.get_cros_chrome_sdk_wrapper()
       optional_system_python = self.m.chromite.with_system_python()
@@ -1072,10 +1075,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       # but we want to utilize remote cpu resource more.
       env['GOMA_USE_LOCAL'] = 'false'
 
-    if self.c.use_gyp_env and self.c.gyp_env.GYP_MSVS_VERSION:
+    if chromium_config.use_gyp_env and chromium_config.gyp_env.GYP_MSVS_VERSION:
       # TODO(machenbach): Remove this as soon as it's not read anymore by
       # vs_toolchain.py (currently called by gn).
-      env['GYP_MSVS_VERSION'] = self.c.gyp_env.GYP_MSVS_VERSION
+      env['GYP_MSVS_VERSION'] = chromium_config.gyp_env.GYP_MSVS_VERSION
 
     env.update(self.m.context.env)
 
@@ -1092,7 +1095,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   @_with_chromium_layout
   def mb_lookup(self, mastername, buildername, name=None,
                 mb_path=None, mb_config_path=None,
-                phase=None, use_goma=True,
+                chromium_config=None, phase=None, use_goma=True,
                 android_version_code=None, android_version_name=None,
                 gn_args_location=None, gn_args_max_text_lines=None):
     """Lookup the GN args for the build.
@@ -1111,6 +1114,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         project_generator.config_path config value will be used. If that is
         falsey, then mb_config.pyl under the directory identified by mb_path
         will be used.
+      chromium_config: The chromium config object to use. If not provided,
+        self.c will be used.
       gn_args_location: Controls where the GN args for the build should be
         presented. By default or if gn.DEFAULT, the args will be in step_text if
         the count of lines is less than gn_args_max_text_lines or the logs
@@ -1127,6 +1132,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         name, 'lookup', mastername, buildername,
         mb_path=mb_path,
         mb_config_path=mb_config_path,
+        chromium_config=chromium_config,
         phase=phase,
         use_goma=use_goma,
         android_version_code=android_version_code,

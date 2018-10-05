@@ -131,6 +131,16 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def get_config_defaults(self):
     return {'CHECKOUT_PATH': self.m.path['checkout']}
 
+  def _chromium_config(self, bot_config):
+    chromium_config = self.m.chromium.make_config(
+        bot_config.get('chromium_config'),
+        **bot_config.get('chromium_config_kwargs', {}))
+
+    for c in bot_config.get('chromium_apply_config', []):
+      self.m.chromium.apply_config(c, chromium_config)
+
+    return chromium_config
+
   def configure_build(self, bot_config, override_bot_type=None):
     # Get the buildspec version. It can be supplied as a build property or as
     # a recipe config value.
@@ -342,6 +352,30 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     compile_targets = bot_config.get_compile_targets(self, bot_db, tests)
     return sorted(set(compile_targets))
 
+  def _get_android_version_details(self, bot_config, log_details=False):
+    version = bot_config.get('android_version')
+    if not version:
+      return None, None
+
+    version = self._convert_version(self.m.file.read_text(
+        'get version',
+        self.m.path['checkout'].join(version),
+        test_data='MAJOR=51\nMINOR=0\nBUILD=2704\nPATCH=0\n'))
+    android_version_name = '%(MAJOR)s.%(MINOR)s.%(BUILD)s.%(PATCH)s' % version
+    # TODO: Consider CPU architecture
+    android_version_code = '%d%03d' % (int(version['BUILD']),
+                                       int(version['PATCH']))
+    if log_details:
+      self.log('version:%s' % version)
+      self.log('android_version_name:%s' % android_version_name)
+      self.log('android_version_code:%s' % android_version_code)
+    return android_version_name, android_version_code
+
+  def _use_goma(self, chromium_config=None):
+    chromium_config = chromium_config or self.m.chromium.c
+    return (chromium_config.compile_py.compiler and
+            'goma' in chromium_config.compile_py.compiler)
+
   def compile_specific_targets(
       self, bot_config, update_step, bot_db,
       compile_targets, tests_including_triggered,
@@ -385,21 +419,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         if self.m.tryserver.is_tryserver:
           name_suffix=' (with patch)'
 
-        android_version_code = None
-        android_version_name = None
-        if bot_config.get('android_version'):
-          version = self._convert_version(self.m.file.read_text('get version',
-              self.m.path['checkout'].join(bot_config.get('android_version')),
-              test_data='MAJOR=51\nMINOR=0\nBUILD=2704\nPATCH=0\n'))
-          self.log('version:%s' % version)
-          android_version_name = ('%s.%s.%s.%s'
-              % (version['MAJOR'], version['MINOR'],
-                 version['BUILD'], version['PATCH']))
-          self.log('android_version_name:%s' % android_version_name)
-          # TODO: Consider CPU architecture
-          android_version_code = '%d%03d' % (
-              int(version['BUILD']), int(version['PATCH']))
-          self.log('android_version_code:%s' % android_version_code)
+        android_version_name, android_version_code = (
+            self._get_android_version_details(bot_config, log_details=True))
 
         self.run_mb_and_compile(compile_targets, isolated_targets,
                                 name_suffix=name_suffix,
@@ -628,8 +649,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if self.m.chromium.c.project_generator.tool == 'mb':
       mb_mastername = mb_mastername or self.m.properties['mastername']
       mb_buildername = mb_buildername or self.m.properties['buildername']
-      use_goma = (self.m.chromium.c.compile_py.compiler and
-                  'goma' in self.m.chromium.c.compile_py.compiler)
+      use_goma = self._use_goma()
       self.m.chromium.mb_gen(mb_mastername, mb_buildername,
                              mb_config_path=mb_config_path,
                              use_goma=use_goma,
@@ -1043,12 +1063,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.m.json.test_api.output({}))
     return result.json.output
 
-  def main_waterfall_steps(self, mb_config_path=None, bot_config=None):
+  def main_waterfall_steps(self, mb_config_path=None, builders=None):
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
-    if not bot_config:
-      bot_config = self.create_bot_config_object(
-          [self.create_bot_id(mastername, buildername)])
+    bot_config = self.create_bot_config_object(
+        [self.create_bot_id(mastername, buildername)], builders=builders)
 
     self._report_builders(bot_config)
 
@@ -1056,6 +1075,23 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     update_step, bot_db = self.prepare_checkout(bot_config)
 
     bot_type = bot_config.get('bot_type')
+    if bot_type == 'tester':
+      # Lookup GN args for the associated builder
+      parent_mastername = bot_config.get('parent_mastername', mastername)
+      parent_buildername = bot_config.get('parent_buildername')
+      parent_bot_config = self.create_bot_config_object(
+          [self.create_bot_id(parent_mastername, parent_buildername)],
+          builders=builders)
+      parent_chromium_config = self._chromium_config(parent_bot_config)
+      android_version_name, android_version_code = (
+          self._get_android_version_details(parent_bot_config))
+      self.m.chromium.mb_lookup(parent_mastername, parent_buildername,
+                                mb_config_path=mb_config_path,
+                                chromium_config=parent_chromium_config,
+                                use_goma=self._use_goma(parent_chromium_config),
+                                android_version_name=android_version_name,
+                                android_version_code=android_version_code,
+                                name='lookup builder GN args')
 
     test_config = bot_config.get_tests(bot_db)
     if bot_type == 'tester':

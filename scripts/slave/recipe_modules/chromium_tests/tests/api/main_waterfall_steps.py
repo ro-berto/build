@@ -171,13 +171,10 @@ CUSTOM_BUILDERS = {
 
 
 def RunSteps(api):
-  bot_config = None
-  if api.properties.get('custom_bot_config'):
-    bot_config = api.chromium_tests.create_bot_config_object(
-        [api.chromium_tests.create_bot_id(
-            api.properties['mastername'], api.properties['buildername'])],
-        builders=CUSTOM_BUILDERS)
-  api.chromium_tests.main_waterfall_steps(bot_config=bot_config)
+  builders = None
+  if api.properties.get('custom_builders'):
+    builders = CUSTOM_BUILDERS
+  api.chromium_tests.main_waterfall_steps(builders=builders)
 
 
 def GenTests(api):
@@ -266,7 +263,7 @@ def GenTests(api):
           bot_id='isolated_transfer_builder_id',
           buildername='Isolated Transfer Builder',
           buildnumber=123,
-          custom_bot_config=True,
+          custom_builders=True,
           mastername='chromium.example') +
       api.runtime(is_luci=True, is_experimental=False) +
       api.override_step_data(
@@ -299,7 +296,7 @@ def GenTests(api):
           bot_id='isolated_transfer_tester_id',
           buildername='Isolated Transfer Tester',
           buildnumber=123,
-          custom_bot_config=True,
+          custom_builders=True,
           mastername='chromium.example',
           parent_buildername='Isolated Transfer Builder',
           swarm_hashes={
@@ -336,7 +333,7 @@ def GenTests(api):
           bot_id='isolated_transfer_builder_id',
           buildername='Isolated Transfer: mixed builder, isolated tester (builder)',
           buildnumber=123,
-          custom_bot_config=True,
+          custom_builders=True,
           mastername='chromium.example') +
       api.runtime(is_luci=True, is_experimental=False) +
       api.override_step_data(
@@ -386,7 +383,7 @@ def GenTests(api):
           bot_id='isolated_transfer_builder_id',
           buildername='Isolated Transfer Builder',
           buildnumber=123,
-          custom_bot_config=True,
+          custom_builders=True,
           mastername='chromium.example') +
       api.runtime(is_luci=False, is_experimental=False) +
       api.override_step_data(
@@ -419,7 +416,7 @@ def GenTests(api):
           bot_id='isolated_transfer_tester_id',
           buildername='Isolated Transfer Tester',
           buildnumber=123,
-          custom_bot_config=True,
+          custom_builders=True,
           mastername='chromium.example',
           parent_buildername='Isolated Transfer Builder',
           swarm_hashes={
@@ -456,7 +453,7 @@ def GenTests(api):
           bot_id='packaged_transfer_builder_id',
           buildername='Packaged Transfer Builder',
           buildnumber=123,
-          custom_bot_config=True,
+          custom_builders=True,
           mastername='chromium.example') +
       api.override_step_data(
           'read test spec (chromium.example.json)',
@@ -484,7 +481,7 @@ def GenTests(api):
           bot_id='packaged_transfer_tester_id',
           buildername='Packaged Transfer Tester',
           buildnumber=123,
-          custom_bot_config=True,
+          custom_builders=True,
           mastername='chromium.example',
           parent_buildername='Packaged Transfer Builder',
           swarm_hashes={
@@ -516,7 +513,7 @@ def GenTests(api):
           bot_id='multiple_triggers_builder_id',
           buildername='Multiple Triggers: Builder',
           buildnumber=123,
-          custom_bot_config=True,
+          custom_builders=True,
           mastername='chromium.example') +
       api.runtime(is_luci=True, is_experimental=False) +
       api.override_step_data(
