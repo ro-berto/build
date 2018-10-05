@@ -93,10 +93,6 @@ _AddBuildSpec('Android CFI arm64 Builder Perf FYI', 'android',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
 
-# TODO(crbug.com/828445): remove this builder once linux-builder-perf works
-# well.
-_AddBuildSpec('Linux Compile Perf FYI', 'linux')
-
 _AddIsolatedTestSpec('linux-perf-fyi', 'linux',
                      parent_buildername='linux-builder-perf',
                      parent_mastername='chromium.perf')
