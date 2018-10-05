@@ -12,6 +12,8 @@
           "V8 Linux64 TSAN - concurrent marking",
           "V8 Linux64 TSAN - isolates",
           "V8 Linux64 UBSan",
+          "V8 Linux - embedded builtins",
+          "V8 Linux - embedded builtins - debug",
           "V8 Linux - full debug",
           "V8 Linux - interpreted regexp",
           "V8 Win64 ASAN"
