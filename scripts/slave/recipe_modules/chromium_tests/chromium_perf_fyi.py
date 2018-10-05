@@ -45,10 +45,6 @@ def _AddIsolatedTestSpec(name, platform,
       parent_buildername=parent_buildername)
   if parent_mastername:
     spec['parent_mastername'] = parent_mastername
-  elif not parent_buildername:
-    spec['parent_mastername'] = 'chromium.perf' #pragma: no cover
-  else:
-    spec['parent_mastername'] = 'chromium.perf.fyi'
 
   SPEC['builders'][name] = spec
 
@@ -64,11 +60,6 @@ _AddBuildSpec('Android Builder Perf FYI', 'android', target_bits=32,
                                      'push_apps_to_background_apk',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
-
-# TODO(crbug.com/792928): remove this legacy buildbot builder once
-# android-nexus5x-perf-fyi functions correctly.
-_AddIsolatedTestSpec('Android Nexus 5X Perf FYI',
-      'android', parent_buildername='Android Builder Perf FYI', target_bits=32)
 
 _AddIsolatedTestSpec('android-nexus5x-perf-fyi',
       'android', parent_buildername='android-builder-perf', target_bits=32,
