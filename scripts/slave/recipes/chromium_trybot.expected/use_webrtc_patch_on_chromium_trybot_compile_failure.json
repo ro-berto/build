@@ -38,7 +38,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
-      "https://webrtc-review.googlesource.com",
+      "https://chromium-review.googlesource.com",
       "--json_file",
       "/path/to/tmp/json",
       "--limit",
@@ -80,7 +80,7 @@
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
-      "src/third_party/webrtc",
+      "src",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
@@ -90,11 +90,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://webrtc.googlesource.com/src@refs/changes/56/123456/7",
+      "https://chromium.googlesource.com/chromium@refs/changes/56/123456/7",
       "--revision",
-      "src@HEAD",
-      "--revision",
-      "src/third_party/webrtc@HEAD"
+      "src@HEAD"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -112,8 +110,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/webrtc\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -146,7 +143,7 @@
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src/third_party/webrtc\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"src\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", @@@",
@@ -378,7 +375,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[BUILDER_CACHE]/linux/src/third_party/webrtc",
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -386,7 +383,7 @@
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@files@third_party/webrtc/foo.cc@@@",
+      "@@@STEP_LOG_LINE@files@foo.cc@@@",
       "@@@STEP_LOG_END@files@@@",
       "@@@SET_BUILD_PROPERTY@subproject_tag@\"chromium\"@@@"
     ]
@@ -433,7 +430,7 @@
       "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [], \"files\": [\"third_party/webrtc/foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -462,7 +459,7 @@
     "name": "analyze_matched_exclusion",
     "~followup_annotations": [
       "@@@STEP_TEXT@Analyze disabled: matched exclusion@@@",
-      "@@@STEP_LOG_LINE@excluded_files@third_party/webrtc/foo.cc (regex = 'third_party/webrtc/f.*')@@@",
+      "@@@STEP_LOG_LINE@excluded_files@foo.cc (regex = 'f.*')@@@",
       "@@@STEP_LOG_END@excluded_files@@@",
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",
@@ -549,7 +546,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/data/webrtc"
+      "[GOMA_CACHE]/data/linux_chromium_rel_ng"
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
@@ -572,7 +569,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/webrtc",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux_chromium_rel_ng",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -787,7 +784,7 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"webrtc\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"try\", \"builder\": \"linux_chromium_rel_ng\", \"project\": \"chromium\"}",
       "--buildbot-buildername",
       "linux_chromium_rel_ng",
       "--buildbot-mastername",
