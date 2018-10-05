@@ -23,6 +23,7 @@ DEPS = [
 
 
 GERRIT_URL = 'https://webrtc-review.googlesource.com'
+GERRIT_PROJECT = 'src'
 
 
 def RunSteps(api):
@@ -57,7 +58,7 @@ def RunSteps(api):
     commits = api.gerrit.get_changes(
         GERRIT_URL,
         query_params=[
-            ('project', 'src'),
+            ('project', GERRIT_PROJECT),
             ('owner', push_account),
             ('status', 'open'),
         ],

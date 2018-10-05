@@ -281,6 +281,7 @@
   * [libvpx/android_unittests](#recipes-libvpx_android_unittests)
   * [libvpx/unittests](#recipes-libvpx_unittests)
   * [libyuv/libyuv](#recipes-libyuv_libyuv) &mdash; Recipe for building and running tests for Libyuv stand-alone.
+  * [libyuv/roll_deps](#recipes-libyuv_roll_deps)
   * [luci_config:examples/full](#recipes-luci_config_examples_full)
   * [math_utils:examples/full](#recipes-math_utils_examples_full)
   * [math_utils:tests/mean_error](#recipes-math_utils_tests_mean_error)
@@ -5471,6 +5472,11 @@ Specifies how to launch chromoting integration test on build_internal.
 Recipe for building and running tests for Libyuv stand-alone.
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/libyuv/libyuv.py#26)(api):**
+### *recipes* / [libyuv/roll\_deps](/scripts/slave/recipes/libyuv/roll_deps.py)
+
+[DEPS](/scripts/slave/recipes/libyuv/roll_deps.py#6): [libyuv](#recipe_modules-libyuv), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/libyuv/roll_deps.py#25)(api):**
 ### *recipes* / [luci\_config:examples/full](/scripts/slave/recipe_modules/luci_config/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/luci_config/examples/full.py#7): [luci\_config](#recipe_modules-luci_config), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5929,7 +5935,7 @@ Recipe to test v8/node.js integration.
 
 [DEPS](/scripts/slave/recipes/webrtc/auto_roll_webrtc_deps.py#6): [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gerrit][depot_tools/recipe_modules/gerrit], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/auto_roll_webrtc_deps.py#28)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/auto_roll_webrtc_deps.py#29)(api):**
 ### *recipes* / [webrtc/chromium\_ios](/scripts/slave/recipes/webrtc/chromium_ios.py)
 
 [DEPS](/scripts/slave/recipes/webrtc/chromium_ios.py#12): [ios](#recipe_modules-ios), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
