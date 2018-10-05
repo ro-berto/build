@@ -289,6 +289,7 @@
   * [nacl_ports](#recipes-nacl_ports)
   * [ndk/ndk_buildbot](#recipes-ndk_ndk_buildbot)
   * [ndk:tests/cover](#recipes-ndk_tests_cover)
+  * [openscreen](#recipes-openscreen) &mdash; Recipe for building and running tests for Open Screen stand-alone.
   * [pdfium](#recipes-pdfium)
   * [perf_dashboard:examples/full](#recipes-perf_dashboard_examples_full)
   * [pinpoint/builder](#recipes-pinpoint_builder)
@@ -5513,6 +5514,13 @@ Recipe for building and running tests for Libyuv stand-alone.
 [DEPS](/scripts/slave/recipe_modules/ndk/tests/cover.py#8): [chromite](#recipe_modules-chromite), [ndk](#recipe_modules-ndk)
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/ndk/tests/cover.py#14)(api):**
+### *recipes* / [openscreen](/scripts/slave/recipes/openscreen.py)
+
+[DEPS](/scripts/slave/recipes/openscreen.py#7): [goma](#recipe_modules-goma), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+Recipe for building and running tests for Open Screen stand-alone.
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/openscreen.py#23)(api):**
 ### *recipes* / [pdfium](/scripts/slave/recipes/pdfium.py)
 
 [DEPS](/scripts/slave/recipes/pdfium.py#5): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time]
