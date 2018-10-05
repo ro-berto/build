@@ -1137,8 +1137,12 @@ class SwarmingApi(recipe_api.RecipeApi):
         '--swarming-server', self.swarming_server,
         '--swarming-py-path', self.m.swarming_client.path.join('swarming.py'),
         '--json', self.m.json.output(),
-    ] + task_ids
+    ]
 
+    if self.service_account_json:
+      args.extend(['--auth-service-account-json', self.service_account_json])
+
+    args = args + task_ids
     result =  self.m.python(
         'collect tasks%s' % (suffix or ''),
         self.resource('get_task_states.py'),

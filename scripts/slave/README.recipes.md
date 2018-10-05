@@ -3023,7 +3023,7 @@ This value can be changed per individual task.
 
 &emsp; **@default_user.setter**<br>&mdash; **def [default\_user](/scripts/slave/recipe_modules/swarming/api.py#338)(self, value):**
 
-&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/swarming/api.py#1283)(self, task):**
+&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/swarming/api.py#1287)(self, task):**
 
 SwarmingTask -> argument list for 'swarming.py' command.
 
@@ -3033,7 +3033,7 @@ Returns the states of a list of tasks.
 
 Uses the 'get_states' endpoint on the server.
 
-&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1207)(self, prefix, task):**
+&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1211)(self, prefix, task):**
 
 SwarmingTask -> name of a step of a waterfall.
 

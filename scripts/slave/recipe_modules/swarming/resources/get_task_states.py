@@ -17,6 +17,7 @@ def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--swarming-server', required=True)
   parser.add_argument('--swarming-py-path', required=True)
+  parser.add_argument('--auth-service-account-json')
   parser.add_argument('--json', required=True)
   parser.add_argument('task_id', nargs='+')
 
@@ -31,8 +32,11 @@ def main():
       'query',
       '-S', args.swarming_server,
       '--json=%s' % args.json,
-      url,
   ]
+  if args.auth_service_account_json:
+    cmd.extend(['--auth-service-account-json', args.auth_service_account_json])
+
+  cmd.append(url)
 
   logging.info('get_states cmd: %s', ' '.join(cmd))
   get_states_result = subprocess.call(cmd)
