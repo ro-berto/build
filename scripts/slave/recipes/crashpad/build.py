@@ -11,11 +11,6 @@ import contextlib
 from recipe_engine.recipe_api import Property
 
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/windows_sdk',
-  'depot_tools/osx_sdk',
-  'depot_tools/depot_tools',
-  'depot_tools/gclient',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -23,7 +18,14 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
+  'recipe_engine/runtime',
   'recipe_engine/step',
+
+  'depot_tools/bot_update',
+  'depot_tools/depot_tools',
+  'depot_tools/gclient',
+  'depot_tools/osx_sdk',
+  'depot_tools/windows_sdk',
 ]
 
 PROPERTIES = {
@@ -71,10 +73,11 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
   def noop():
     yield
   sdk = noop()
-  if is_win:
-    sdk = api.windows_sdk()
-  elif is_mac:
-    sdk = api.osx_sdk('mac')
+  if api.runtime.is_luci:
+    if is_win:
+      sdk = api.windows_sdk()
+    elif is_mac:
+      sdk = api.osx_sdk('mac')
 
   with sdk:
     api.gclient.c.target_os = {target_os}
@@ -208,6 +211,8 @@ def GenTests(api):
 
   tests = [
       (test, 'mac', ''),
+      ('luci.crashpad_try_mac_rel', 'mac', ''),
+      ('luci.crashpad_try_win_dbg', 'win', ''),
       ('crashpad_try_mac_rel', 'mac', ''),
       ('crashpad_try_win_dbg', 'win', ''),
       ('crashpad_linux_debug', 'linux', ''),
@@ -215,10 +220,20 @@ def GenTests(api):
       ('crashpad_fuchsia_arm64_rel', 'fuchsia', 'arm64'),
   ]
   for t, os, cpu in tests:
-    yield(api.test(t) +
-          api.properties.generic(buildername=t,
-                                 config='Debug' if '_dbg' in t else 'Release',
-                                 target_os=os,
-                                 target_cpu=cpu) +
-          api.path.exists(api.path['checkout'].join(
-              'build', 'swarming_test_spec.pyl')))
+    test = api.test(t)
+
+    is_luci = t.startswith('luci.')
+    if is_luci:
+      t = t[len('luci.'):]
+
+    yield (
+      test +
+      api.runtime(is_luci=is_luci, is_experimental=False) +
+      api.properties.generic(buildername=t,
+                             config='Debug' if '_dbg' in t else 'Release',
+                             target_os=os,
+                             target_cpu=cpu) +
+      api.path.exists(api.path['checkout'].join(
+        'build', 'swarming_test_spec.pyl'))
+    )
+

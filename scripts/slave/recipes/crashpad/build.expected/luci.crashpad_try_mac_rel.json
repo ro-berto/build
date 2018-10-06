@@ -5,7 +5,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'crashpad', 'url': 'https://chromium.googlesource.com/crashpad/crashpad.git'}]\ntarget_os = ['win']",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'crashpad', 'url': 'https://chromium.googlesource.com/crashpad/crashpad.git'}]\ntarget_os = ['mac']",
       "--revision_mapping_file",
       "{}",
       "--git-cache-dir",
@@ -17,7 +17,7 @@
       "--revision",
       "crashpad@HEAD"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -62,61 +62,20 @@
   },
   {
     "cmd": [
-      "[START_DIR]/buildtools/win/gn.exe",
-      "gen",
-      "[START_DIR]/crashpad/out/Debug_x86",
-      "--args=target_os=\"win\" is_debug=true target_cpu=\"x86\""
-    ],
-    "cwd": "[START_DIR]/crashpad",
-    "name": "generate build files x86"
-  },
-  {
-    "cmd": [
-      "[START_DIR]/buildtools/win/gn.exe",
-      "gen",
-      "[START_DIR]/crashpad/out/Debug_x64",
-      "--args=target_os=\"win\" is_debug=true target_cpu=\"x64\""
-    ],
-    "cwd": "[START_DIR]/crashpad",
-    "name": "generate build files x64"
-  },
-  {
-    "cmd": [
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
-      "[START_DIR]/crashpad/out/Debug_x86"
+      "[START_DIR]/crashpad/out/Release"
     ],
-    "name": "compile with ninja x86"
-  },
-  {
-    "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
-      "-C",
-      "[START_DIR]/crashpad/out/Debug_x64"
-    ],
-    "name": "compile with ninja x64"
+    "name": "compile with ninja"
   },
   {
     "cmd": [
       "python",
       "-u",
       "[START_DIR]/crashpad/build/run_tests.py",
-      "[START_DIR]/crashpad/out/Debug_x86"
+      "[START_DIR]/crashpad/out/Release"
     ],
     "name": "run tests",
-    "timeout": 300
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/crashpad/build/run_tests.py",
-      "[START_DIR]/crashpad/out/Debug_x64"
-    ],
-    "env": {
-      "CRASHPAD_TEST_32_BIT_OUTPUT": "[START_DIR]/crashpad/out/Debug_x86"
-    },
-    "name": "run tests (2)",
     "timeout": 300
   },
   {
@@ -132,24 +91,6 @@
     ],
     "infra_step": true,
     "name": "read swarming_test_spec"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/crashpad/build/run_on_swarming.py",
-      "[START_DIR]/crashpad/t/Debug/run_tests.isolate",
-      "-d",
-      "os",
-      "Windows-7",
-      "-d",
-      "os",
-      "x86-32",
-      "-d",
-      "os",
-      "Chrome"
-    ],
-    "name": "run_tests_on_x86"
   },
   {
     "name": "$result",
