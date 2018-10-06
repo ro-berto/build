@@ -2,18 +2,24 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from contextlib import contextmanager
+
 DEPS = [
-  'depot_tools/bot_update',
-  'depot_tools/depot_tools',
-  'depot_tools/gclient',
-  'depot_tools/windows_sdk',
-  'goma',
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
+  'recipe_engine/runtime',
   'recipe_engine/step',
+
+  'depot_tools/bot_update',
+  'depot_tools/depot_tools',
+  'depot_tools/gclient',
+  'depot_tools/osx_sdk',
+  'depot_tools/windows_sdk',
+
+  'goma',
   'trigger',
 ]
 
@@ -33,6 +39,21 @@ trigger_map = {
     'nacl-arm_perf_panda':
       'nacl-arm_hw_perf_panda',
 }
+
+@contextmanager
+def _PlatformSDK(api):
+  sdk = None
+  if api.runtime.is_luci:
+    if api.platform.is_win:
+      sdk = api.windows_sdk()
+    elif api.platform.is_mac:
+      sdk = api.osx_sdk('mac')
+
+  if sdk is None:
+    yield
+  else:
+    with sdk:
+      yield
 
 def _CheckoutSteps(api):
   api.gclient.set_config('nacl')
@@ -88,7 +109,7 @@ def _AnnotatedStepsSteps(api, got_revision):
   try:
     with api.context(cwd=api.path['checkout'], env=env):
       with api.depot_tools.on_path():
-        with api.windows_sdk(enabled=api.platform.is_win):
+        with _PlatformSDK(api):
           api.python('annotated steps',
                      api.path['checkout'].join(
                         'buildbot', 'buildbot_selector.py'),
@@ -119,6 +140,32 @@ def GenTests(api):
     api.properties(
       mastername = 'client.nacl',
       buildername = 'precise_64-newlib-arm_qemu-pnacl-dbg',
+      revision = 'a' * 40,
+      bot_id = 'TestSlave',
+      buildnumber = 1234,
+      slavetype = 'BuilderTester',
+    ))
+
+  yield (
+    api.test('luci_win') +
+    api.runtime(is_luci=True, is_experimental=False) +
+    api.platform('win', 64) +
+    api.properties(
+      mastername = 'client.nacl',
+      buildername = 'win7-64-glibc-dbg',
+      revision = 'a' * 40,
+      bot_id = 'TestSlave',
+      buildnumber = 1234,
+      slavetype = 'BuilderTester',
+    ))
+
+  yield (
+    api.test('luci_mac') +
+    api.runtime(is_luci=True, is_experimental=False) +
+    api.platform('mac', 64) +
+    api.properties(
+      mastername = 'client.nacl',
+      buildername = 'mac-newlib-dbg-asan',
       revision = 'a' * 40,
       bot_id = 'TestSlave',
       buildnumber = 1234,
