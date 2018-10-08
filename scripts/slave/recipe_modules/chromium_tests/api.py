@@ -649,7 +649,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def download_and_unzip_build(self, mastername, buildername, update_step,
                                bot_db, build_archive_url=None,
-                               build_revision=None, override_bot_type=None):
+                               build_revision=None, override_bot_type=None,
+                               read_gn_args=True):
     assert isinstance(bot_db, bdb_module.BotConfigAndTestDB), \
         "bot_db argument %r was not a BotConfigAndTestDB" % (bot_db)
     # We only want to do this for tester bots (i.e. those which do not compile
@@ -690,8 +691,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       build_revision=build_revision,
       build_archive_url=build_archive_url)
 
-    self.m.gn.get_args(
-        self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
+    if read_gn_args:
+      self.m.gn.get_args(
+          self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
 
   def _make_legacy_build_url(self, master_config, mastername):
     # The master where the build was zipped and uploaded from.
@@ -1146,8 +1148,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         'build directory',
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
     if package_transfer:
+      # No need to read the GN args since we looked them up for testers already
       self.download_and_unzip_build(
-          mastername, buildername, update_step, bot_db)
+          mastername, buildername, update_step, bot_db, read_gn_args=False)
       self.m.python.succeeding_step(
           'explain extract build',
           package_transfer_reasons,
