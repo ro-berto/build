@@ -65,7 +65,8 @@ def main(args):
   parser = argparse.ArgumentParser()
   parser.add_argument('path', help='Path + query to add onto the base URL.')
   parser.add_argument('--params-file', help='Request parameter JSON file.')
-  parser.add_argument('--attempts', type=int, default=1, help='Number of times to retry.')
+  parser.add_argument('--attempts', type=int, default=1,
+                      help='Number of times to retry.')
   args = parser.parse_args(args)
   params = {}
   if args.params_file:
