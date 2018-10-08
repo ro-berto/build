@@ -120,8 +120,9 @@ def base(c):
 
 
 @config_ctx(includes=['base'])
-def cros(c):
+def cros(_):
   """Base configuration for CrOS builders to inherit from."""
+  pass
 
 
 @config_ctx(includes=['cros'])
@@ -137,7 +138,7 @@ def external(c):
 
 
 @config_ctx(group='master', includes=['external'])
-def master_swarming(c):
+def master_swarming(_):
   pass
 
 @config_ctx(group='master', includes=['external'])
@@ -146,11 +147,11 @@ def master_chromiumos_chromium(c):
 
 
 @config_ctx(group='master', includes=['external'])
-def master_chromiumos(c):
+def master_chromiumos(_):
   pass
 
 @config_ctx(group='master', includes=['external'])
-def master_chromiumos_tryserver(c):
+def master_chromiumos_tryserver(_):
   pass
 
 @config_ctx(includes=['master_chromiumos'])

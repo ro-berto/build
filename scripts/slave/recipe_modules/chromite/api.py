@@ -100,7 +100,6 @@ class ChromiteApi(recipe_api.RecipeApi):
       self.m.python.failing_step('Fetch manifest config failure',
                                  'Failed to fetch manifest config.')
 
-    build_id = None
     loaded = []
     for line in reversed(commit_log['message'].splitlines()):
       # Automatic command?
