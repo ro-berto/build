@@ -13,12 +13,12 @@ DEPS = [
 ]
 
 _TARGET_DEVICE_MAP = {
-    'volantis-armv7': {
+    'walleye-armv7': {
       'bitness': 32,
       'make_jobs': 4,
       'product': 'arm_krait',
       },
-    'volantis-armv8': {
+    'walleye-armv8': {
       'bitness': 64,
       'make_jobs': 4,
       'product': 'armv8',
@@ -506,21 +506,21 @@ _CONFIG_MAP = {
       'device': 'angler-armv7',
       'debug': True,
     },
-    'volantis-armv7-poison-debug': {
+    'walleye-armv7-poison-debug': {
       'serial': 'FA7BN1A04406',
-      'device': 'volantis-armv7',
+      'device': 'walleye-armv7',
       'debug': True,
       'heap_poisoning': True
     },
-    'volantis-armv8-poison-ndebug': {
+    'walleye-armv8-poison-ndebug': {
       'serial': 'FA7BN1A04412',
-      'device': 'volantis-armv8',
+      'device': 'walleye-armv8',
       'debug': False,
       'heap_poisoning': True,
     },
-    'volantis-armv8-poison-debug': {
+    'walleye-armv8-poison-debug': {
       'serial': 'FA7BN1A04433',
-      'device': 'volantis-armv8',
+      'device': 'walleye-armv8',
       'debug': True,
       'heap_poisoning': True
     },
