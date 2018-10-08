@@ -235,7 +235,6 @@ def main(argv):
       'master.client.nacl': 'NativeClient',
       'master.client.nacl.toolchain': 'NativeClientToolchain',
       'master.client.wasm.llvm': 'WasmLlvm',
-      'master.client.webrtc.fyi': 'WebRTCFYI',
       'master.client.webrtc.perf': 'WebRTCPerf',
       'master.tryserver.chromium.android': 'TryserverChromiumAndroid',
       'master.tryserver.chromium.mac': 'TryServerChromiumMac',

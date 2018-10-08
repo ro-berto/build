@@ -142,15 +142,6 @@ def generate_tests(api, test_suite, phase, revision,
     for test, extra_args in sorted(NORMAL_TESTS.items()):
       tests.append(SwarmingWebRtcGtestTest(test, **extra_args))
 
-    if api.properties['mastername'] == 'client.webrtc.fyi' and (
-        api.platform.is_win):
-      tests.append(BaremetalTest(
-          'modules_tests',
-          name='modules_tests (screen capture disabled tests)',
-          gtest_args=['--gtest_filter=ScreenCapturerIntegrationTest.*',
-                      '--gtest_also_run_disabled_tests'],
-          parallel=True))
-
   if test_suite == 'webrtc_and_baremetal':
     def add_test(name):
       tests.append(SwarmingWebRtcGtestTest(
@@ -213,16 +204,13 @@ def generate_tests(api, test_suite, phase, revision,
                                    ANDROID_INSTRUMENTATION_TESTS.items()):
       tests.append(AndroidTest(test, **extra_args))
     for test, extra_args in sorted(ANDROID_JUNIT_TESTS.items()):
-      if api.properties['mastername'] == 'client.webrtc.fyi':
-        tests.append(AndroidTest(test, **extra_args))
-      else:
-        tests.append(AndroidJunitTest(test))
+      tests.append(AndroidJunitTest(test))
 
     if should_test_android_studio_project_generation:
        tests.append(PythonTest(
           test='gradle_project_test',
           script=str(api.path['checkout'].join('examples',  'androidtests',
-                                                 'gradle_project_test.py')),
+                                               'gradle_project_test.py')),
           args=[build_out_dir],
           env={'GOMA_DISABLED': True}))
     if api.tryserver.is_tryserver:
@@ -331,34 +319,6 @@ class Test(object):
 
   def run(self, api, suffix): # pragma: no cover:
     return []
-
-
-class BaremetalTest(Test):
-  """A WebRTC test that uses audio and/or video devices."""
-  def __init__(self, test, name=None, revision=None, parallel=False,
-               gtest_args=None, **runtest_kwargs):
-    super(BaremetalTest, self).__init__(test, name)
-    self._parallel = parallel
-    self._gtest_args = gtest_args or []
-    self._revision = revision
-    self._runtest_kwargs = runtest_kwargs
-
-  def run(self, api, suffix):
-    test_type = self._test
-    test = api.path['checkout'].join('tools_webrtc',
-                                       'gtest-parallel-wrapper.py')
-    test_ext = '.exe' if api.platform.is_win else ''
-    test_executable = api.chromium.c.build_dir.join(
-      api.chromium.c.build_config_fs, self._test + test_ext)
-
-    args = [test_executable]
-    if not self._parallel: args.append('--workers=1')
-    args += self._gtest_args
-
-    api.chromium.runtest(
-        test=test, args=args, name=self._name, annotate=None, xvfb=True,
-        python_mode=True, revision=self._revision, test_type=test_type,
-        **self._runtest_kwargs)
 
 
 class PythonTest(Test):

@@ -107,35 +107,30 @@ def RunSteps(api):
 def GenTests(api):
   yield (
       api.test('rolling_activated') +
-      api.properties.generic(mastername='client.webrtc.fyi',
-                             buildername='Auto-roll - WebRTC DEPS') +
+      api.properties.generic() +
       api.override_step_data('gerrit changes', api.json.output([]))
   )
   yield (
       api.test('rolling_activated_luci') +
-      api.properties.generic(mastername='client.webrtc.fyi',
-                             buildername='Auto-roll - WebRTC DEPS') +
+      api.properties.generic() +
       api.override_step_data('gerrit changes', api.json.output([])) +
       api.runtime(is_luci=True, is_experimental=True)
   )
   yield (
       api.test('rolling_deactivated') +
-      api.properties.generic(mastername='client.webrtc.fyi',
-                             buildername='Auto-roll - WebRTC DEPS') +
+      api.properties.generic() +
       api.url.text('check roll status', '0')
   )
   yield (
       api.test('stale_roll') +
-      api.properties.generic(mastername='client.webrtc.fyi',
-                             buildername='Auto-roll - WebRTC DEPS') +
+      api.properties.generic() +
       api.override_step_data(
           'gerrit changes', api.json.output([{'_number': '123'}])) +
       api.override_step_data('gerrit changes (2)', api.json.output([]))
   )
   yield (
       api.test('previous_roll_in_cq') +
-      api.properties.generic(mastername='client.webrtc.fyi',
-                             buildername='Auto-roll - WebRTC DEPS') +
+      api.properties.generic() +
       api.override_step_data(
           'gerrit changes', api.json.output([{'_number': '123'}])) +
       api.override_step_data(

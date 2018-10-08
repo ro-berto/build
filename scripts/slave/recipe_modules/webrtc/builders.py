@@ -684,51 +684,6 @@ BUILDERS = freeze({
       'build_gs_bucket': 'chromium-webrtc',
     },
     'builders':  {
-      'Win64 Debug (Win8)': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Windows-8.1-SP0',
-          'cpu': 'x86-64',
-        }
-      },
-      'Win64 Debug (Win10)': {
-        'recipe_config': 'webrtc',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Windows-10',
-          'cpu': 'x86-64',
-        }
-      },
-      'Android ASan (swarming)': {
-        'recipe_config': 'webrtc_android_asan',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'os': 'Android',
-          'android_devices': '1',
-          'device_type': 'bullhead', # Nexus 5X
-        }
-      },
       'Android Perf (swarming)': {
         'recipe_config': 'webrtc_android_perf_swarming',
         'chromium_config_kwargs': {
