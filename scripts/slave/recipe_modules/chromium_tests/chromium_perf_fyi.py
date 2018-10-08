@@ -53,7 +53,8 @@ _AddIsolatedTestSpec('android-nexus5x-perf-fyi',
       'android', parent_buildername='android-builder-perf', target_bits=32,
       parent_mastername='chromium.perf')
 
-
+# TODO(crbug.com/828441): remove this once android-cfi-builder-perf-fyi working
+# well.
 _AddBuildSpec('Android CFI Builder Perf FYI', 'android',
               target_bits=32,
               extra_compile_targets=['android_tools',
@@ -63,7 +64,29 @@ _AddBuildSpec('Android CFI Builder Perf FYI', 'android',
                                      'push_apps_to_background_apk',
                                      'system_webview_apk',
                                      'system_webview_shell_apk',])
+
+# TODO(crbug.com/828446): remove this once android_arm64-cfi-builder-perf-fyi
+# working well.
 _AddBuildSpec('Android CFI arm64 Builder Perf FYI', 'android',
+              extra_compile_targets=['android_tools',
+                                     'cc_perftests',
+                                     'chrome_public_apk',
+                                     'gpu_perftests',
+                                     'push_apps_to_background_apk',
+                                     'system_webview_apk',
+                                     'system_webview_shell_apk',])
+
+_AddBuildSpec('android-cfi-builder-perf-fyi', 'android',
+              target_bits=32,
+              extra_compile_targets=['android_tools',
+                                     'cc_perftests',
+                                     'chrome_public_apk',
+                                     'gpu_perftests',
+                                     'push_apps_to_background_apk',
+                                     'system_webview_apk',
+                                     'system_webview_shell_apk',])
+
+_AddBuildSpec('android_arm64-cfi-builder-perf-fyi', 'android',
               extra_compile_targets=['android_tools',
                                      'cc_perftests',
                                      'chrome_public_apk',
