@@ -136,7 +136,8 @@ def GenTests(api):
           version='test-version',
           got_revision_cp=123456) +
       api.step_data(
-          '[trigger] base_unittests on Intel GPU on Linux (with patch)', retcode=1) +
+          '[trigger] base_unittests on Intel GPU on Linux (with patch)',
+          retcode=1) +
       api.post_process(post_process.StatusCodeIn, 1) +
       api.post_process(post_process.DropExpectation)
   )
@@ -198,7 +199,8 @@ def GenTests(api):
               isolated_script_passing=False,
               shards=4, use_json_test_format=True),
           retcode=1) +
-      api.post_process(post_process.Filter('[trigger] base_unittests on Intel GPU on Linux (without patch)'))
+      api.post_process(post_process.Filter(
+          '[trigger] base_unittests on Intel GPU on Linux (without patch)'))
   )
 
   yield (

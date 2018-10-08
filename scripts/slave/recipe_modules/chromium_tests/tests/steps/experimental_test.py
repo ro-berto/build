@@ -45,7 +45,8 @@ def GenTests(api):
           buildnumber='123',
           patch_issue='456',
           experiment_percentage='100') +
-      api.post_process(post_process.MustRun, 'pre_run inner_test (experimental)') +
+      api.post_process(post_process.MustRun,
+                       'pre_run inner_test (experimental)') +
       api.post_process(post_process.MustRun, 'inner_test (experimental)') +
       api.post_process(post_process.StatusCodeIn, 0) +
       api.post_process(post_process.DropExpectation))
@@ -58,7 +59,8 @@ def GenTests(api):
           buildnumber='123',
           patch_issue='456',
           experiment_percentage='0') +
-      api.post_process(post_process.DoesNotRun, 'pre_run inner_test (experimental)') +
+      api.post_process(post_process.DoesNotRun,
+                       'pre_run inner_test (experimental)') +
       api.post_process(post_process.DoesNotRun, 'inner_test (experimental)') +
       api.post_process(post_process.StatusCodeIn, 0) +
       api.post_process(post_process.DropExpectation))
@@ -120,7 +122,8 @@ def GenTests(api):
           patch_issue='456',
           experiment_percentage='100') +
       api.override_step_data('pre_run inner_test (experimental)', retcode=1) +
-      api.post_process(post_process.MustRun, 'pre_run inner_test (experimental)') +
+      api.post_process(post_process.MustRun,
+                       'pre_run inner_test (experimental)') +
       api.post_process(post_process.StatusCodeIn, 0) +
       api.post_process(post_process.DropExpectation))
 
@@ -160,7 +163,9 @@ def GenTests(api):
           patch_issue='456',
           experiment_percentage='100',
           suffix='with patch') +
-      api.post_process(post_process.MustRun, 'pre_run inner_test (with patch, experimental)') +
-      api.post_process(post_process.MustRun, 'inner_test (with patch, experimental)') +
+      api.post_process(post_process.MustRun,
+                       'pre_run inner_test (with patch, experimental)') +
+      api.post_process(post_process.MustRun,
+                       'inner_test (with patch, experimental)') +
       api.post_process(post_process.StatusCodeIn, 0) +
       api.post_process(post_process.DropExpectation))

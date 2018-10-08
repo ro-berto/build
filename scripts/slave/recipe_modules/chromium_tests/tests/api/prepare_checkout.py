@@ -66,6 +66,7 @@ def GenTests(api):
           mastername='chromium.fake',
           buildername='cross-master-trigger-builder',
           builders=DUMMY_BUILDERS) +
-      api.post_process(post_process.MustRun, 'read test spec (chromium.fake.fyi.json)') +
+      api.post_process(post_process.MustRun,
+                       'read test spec (chromium.fake.fyi.json)') +
       api.post_process(post_process.DropExpectation)
   )

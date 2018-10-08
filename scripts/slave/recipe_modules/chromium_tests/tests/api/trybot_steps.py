@@ -95,7 +95,8 @@ def GenTests(api):
           })
       ) +
       api.filter.suppress_analyze() +
-      api.post_process(post_process.MustRun, 'staging_base_unittests (with patch)') +
+      api.post_process(post_process.MustRun,
+                       'staging_base_unittests (with patch)') +
       api.post_process(post_process.DropExpectation)
   )
 

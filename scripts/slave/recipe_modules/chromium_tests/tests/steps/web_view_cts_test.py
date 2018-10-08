@@ -39,7 +39,8 @@ def GenTests(api):
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123) +
-      api.step_data("Run CTS", api.test_utils.canned_gtest_output(passing=True)) +
+      api.step_data("Run CTS",
+                    api.test_utils.canned_gtest_output(passing=True)) +
       api.properties.generic(suffix='')
   )
   yield (
@@ -49,7 +50,8 @@ def GenTests(api):
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123) +
-      api.step_data("Run CTS", api.test_utils.canned_gtest_output(passing=False)) +
+      api.step_data("Run CTS",
+                    api.test_utils.canned_gtest_output(passing=False)) +
       api.properties.generic(suffix='')
   )
   yield (
@@ -59,6 +61,7 @@ def GenTests(api):
           buildername='test_buildername',
           bot_id='test_bot_id',
           buildnumber=123) +
-      api.step_data("Run CTS (build suffix)", api.test_utils.canned_gtest_output(passing=True)) +
+      api.step_data("Run CTS (build suffix)",
+                    api.test_utils.canned_gtest_output(passing=True)) +
       api.properties.generic(suffix='build suffix')
   )

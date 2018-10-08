@@ -236,7 +236,8 @@ def GenTests(api):
       )
   )
 
-  def TriggersBuilderWithProperties(check, step_odict, builder='', properties=None):
+  def TriggersBuilderWithProperties(check, step_odict, builder='',
+                                    properties=None):
     trigger_step = step_odict['trigger']
     check(
         'TriggersBuilderWithProperties only supports LUCI builds.',
@@ -251,7 +252,8 @@ def GenTests(api):
     for batch in trigger_json.get('batches', []):
       if any(builder == j.get('job') for j in batch.get('jobs', [])):
         actual_properties = (
-            batch.get('trigger', {}).get('buildbucket', {}).get('properties', {}))
+            batch.get('trigger', {}).get('buildbucket', {}).get(
+                'properties', {}))
         check(all(p in actual_properties for p in properties))
         break
     else:  # pragma: no cover
@@ -331,7 +333,8 @@ def GenTests(api):
       api.test('isolated_transfer__mixed_builder_isolated_tester') +
       api.properties(
           bot_id='isolated_transfer_builder_id',
-          buildername='Isolated Transfer: mixed builder, isolated tester (builder)',
+          buildername=(
+              'Isolated Transfer: mixed builder, isolated tester (builder)'),
           buildnumber=123,
           custom_builders=True,
           mastername='chromium.example') +
@@ -368,7 +371,8 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
-  def TriggersBuilderWithoutProperties(check, step_odict, builder='', properties=None):
+  def TriggersBuilderWithoutProperties(check, step_odict, builder='',
+                                       properties=None):
     trigger_specs = step_odict['trigger']['trigger_specs']
     for t in trigger_specs:
       if t['builder_name'] == builder:

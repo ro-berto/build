@@ -18,12 +18,14 @@ def RunSteps(api):
     tests.append(api.chromium_tests.steps.SwarmingGTestTest(
         'base_unittests',
         set_up=[{'name': 'set_up', 'script': 'set_up_script', 'args': []}],
-        tear_down=[{'name': 'tear_down', 'script': 'tear_down_script', 'args': []}]))
+        tear_down=[{'name': 'tear_down', 'script': 'tear_down_script',
+                    'args': []}]))
   if api.properties.get('local_isolated_script_test'):
     tests.append(api.chromium_tests.steps.LocalIsolatedScriptTest(
         'base_unittests',
         set_up=[{'name': 'set_up', 'script': 'set_up_script', 'args': []}],
-        tear_down=[{'name': 'tear_down', 'script': 'tear_down_script', 'args': []}],
+        tear_down=[{'name': 'tear_down', 'script': 'tear_down_script',
+                    'args': []}],
         override_compile_targets=['base_unittests_run']))
   if api.properties.get('script_test'):
     tests.append(api.chromium_tests.steps.ScriptTest(
