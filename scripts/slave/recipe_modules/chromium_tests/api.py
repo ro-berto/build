@@ -44,41 +44,25 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def trybots(self):
     return self.test_api.trybots
 
-  class _RuntestsSpec(object):
-    def __init__(self, chromium_tests_api):
-      self._chromium_tests_api = chromium_tests_api
-
-    def __getattr__(self, attr):
-      runtests_overrides = getattr(
-          self._chromium_tests_api.c, 'runtests_overrides', None)
-      override_value = getattr(runtests_overrides, attr, None)
-      return (override_value if override_value is not None
-              else getattr(
-                  self._chromium_tests_api.m.chromium.c.runtests, attr))
-
-    @property
-    def swarming_extra_args(self):
-      args = []
-      if self.enable_lsan:
-        args += ['--lsan=1']
-      return args
-
-    @property
-    def swarming_tags(self):
-      tags = set()
-      if self.enable_asan:
-        tags |= {'asan:1'}
-      if self.enable_lsan:
-        tags |= {'lsan:1'}
-      if self.enable_msan:
-        tags |= {'msan:1'}
-      if self.enable_tsan:
-        tags |= {'tsan:1'}
-      return tags
+  @property
+  def swarming_extra_args(self):
+    args = []
+    if self.m.chromium.c.runtests.enable_lsan:
+      args += ['--lsan=1']
+    return args
 
   @property
-  def runtests_spec(self):
-    return self._RuntestsSpec(self)
+  def swarming_tags(self):
+    tags = set()
+    if self.m.chromium.c.runtests.enable_asan:
+      tags |= {'asan:1'}
+    if self.m.chromium.c.runtests.enable_lsan:
+      tags |= {'lsan:1'}
+    if self.m.chromium.c.runtests.enable_msan:
+      tags |= {'msan:1'}
+    if self.m.chromium.c.runtests.enable_tsan:
+      tags |= {'tsan:1'}
+    return tags
 
   def log(self, message):
     presentation = self.m.step.active_result.presentation

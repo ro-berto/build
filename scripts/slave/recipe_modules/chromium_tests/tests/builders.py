@@ -32,6 +32,16 @@ def _normalize(x):
   return x
 
 
+VALIDATORS = {
+    ('chromium.memory', 'Linux ASan Tests (sandboxed)',
+     'chromium_apply_config'):
+    lambda tester_value, builder_value: (
+        builder_value - tester_value == set(['lsan']),
+        'chromium_apply_config for tester should be '
+        "the same as its builder with 'lsan' removed"),
+}
+
+
 def validate_tester_config(api, mastername, buildername, bot_config):
   parent_buildername = bot_config.get('parent_buildername')
   if parent_buildername == 'dummy':
@@ -48,13 +58,19 @@ def validate_tester_config(api, mastername, buildername, bot_config):
             'android_config_kwargs'):
     tester_value = _normalize(bot_config.get(a))
     builder_value = _normalize(parent_bot_config.get(a))
-    assert tester_value == builder_value, (
-        ('%s mismatch between tester and builder'
-         '\n  tester %s:%s: %s'
-         '\n  builder %s:%s: %s') % (
-            a,
+
+    validator = VALIDATORS.get(
+        (mastername, buildername, a),
+        lambda tester_value, builder_value: (
+            tester_value == builder_value,
+            '%s mismatch between tester and builder' % a))
+
+    valid, description = validator(tester_value, builder_value)
+    assert valid, description + (
+        '\n  tester %s:%s: %s'
+        '\n  builder %s:%s: %s') % (
             mastername, buildername, tester_value,
-            parent_mastername, parent_buildername, builder_value))
+            parent_mastername, parent_buildername, builder_value)
 
 
 def RunSteps(api, mastername, buildername):

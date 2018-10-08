@@ -57,13 +57,12 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'chromium_apply_config': ['lsan', 'mb', 'goma_high_parallel'],
+      'chromium_apply_config': ['mb', 'goma_high_parallel'],
       # We want to test ASan+sandbox as well, so run browser tests again, this
       # time with LSan disabled.
       'bot_type': 'tester',
       'parent_buildername': 'Linux ASan LSan Builder',
       'testing': {'platform': 'linux'},
-      'chromium_tests_apply_config': ['no_lsan'],
     },
     'Linux CFI': {
       'chromium_config': 'chromium',
