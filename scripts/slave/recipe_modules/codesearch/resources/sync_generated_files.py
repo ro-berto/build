@@ -49,7 +49,8 @@ def copy_generated_files(source, dest, debug_dir):
   try:
     os.makedirs(dest_root)
   except OSError as e:
-    if e.errno != errno.EEXIST: raise
+    if e.errno != errno.EEXIST:
+      raise
 
   # First, delete everything in dest that either isn't in source, or doesn't
   # match the whitelist.
@@ -69,10 +70,12 @@ def copy_generated_files(source, dest, debug_dir):
       try:
         os.mkdir(translate_root(source_root, dest_root, dirpath))
       except OSError as e:
-        if e.errno != errno.EEXIST: raise
+        if e.errno != errno.EEXIST:
+          raise
 
     for filename in filenames:
-      if not has_whitelisted_extension(filename): continue
+      if not has_whitelisted_extension(filename):
+        continue
 
       source_file = os.path.join(dirpath, filename)
       dest_file = translate_root(source_root, dest_root, source_file)
@@ -129,8 +132,8 @@ def main():
 
   check_call(['git', 'commit', '-m', opts.message], cwd=opts.dest)
   if opts.dry_run:
-    check_call(['git', 'push', '--dry-run', 'origin', 'HEAD:%s' % opts.dest_branch],
-                cwd=opts.dest)
+    check_call(['git', 'push', '--dry-run', 'origin',
+                'HEAD:%s' % opts.dest_branch], cwd=opts.dest)
   else:
     check_call(['git', 'push', 'origin', 'HEAD:%s' % opts.dest_branch],
                 cwd=opts.dest)

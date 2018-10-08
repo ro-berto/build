@@ -8,7 +8,7 @@ from recipe_engine.config import config_item_context, ConfigGroup
 from recipe_engine.config import Single, Static, Dict, List
 from recipe_engine.config_types import Path
 
-def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=[], PLATFORM=None,
+def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=None, PLATFORM=None,
                EXPERIMENTAL=False, SYNC_GENERATED_FILES=False,
                GEN_REPO_BRANCH='master', GEN_REPO_OUT_DIR='', CORPUS=None,
                ROOT=None, **_kwargs):
@@ -26,6 +26,8 @@ def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=[], PLATFORM=None,
     CORPUS: Kythe corpus to generate index packs under.
     ROOT: Kythe root to generate index packs under.
   """
+  if not COMPILE_TARGETS:
+    COMPILE_TARGETS = []
   return ConfigGroup(
     CHECKOUT_PATH = Static(CHECKOUT_PATH),
     COMPILE_TARGETS = List(COMPILE_TARGETS),
@@ -43,8 +45,9 @@ def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=[], PLATFORM=None,
                               empty_val='https://chromium.googlesource.com'),
     additional_repos = Dict(value_type=(basestring, types.NoneType)),
     generated_repo = Single(basestring, required=False),
-    generated_author_email = Single(basestring, required=False,
-                                    empty_val='git-generated-files-sync@chromium.org'),
+    generated_author_email = Single(
+        basestring, required=False,
+        empty_val='git-generated-files-sync@chromium.org'),
     generated_author_name = Single(basestring, required=False,
                                    empty_val='Automatic Generated Files Sync'),
   )
@@ -56,8 +59,9 @@ def base(c):
   c.debug_path = c.CHECKOUT_PATH.join('out', c.GEN_REPO_OUT_DIR or 'Debug')
   c.compile_commands_json_file = c.debug_path.join('compile_commands.json')
 
-@config_ctx(includes=['chromium_additional_repos', 'generate_file', 'chromium_gs'])
-def chromium(c):
+@config_ctx(includes=['chromium_additional_repos', 'generate_file',
+                      'chromium_gs'])
+def chromium(_):
   pass
 
 @config_ctx()
@@ -65,7 +69,7 @@ def chromium_gs(c):
   c.bucket_name = 'chrome-codesearch'
 
 @config_ctx()
-def chromium_git(c):
+def chromium_git(_):
   pass
 
 @config_ctx(includes=['chromium_git'])
@@ -85,7 +89,8 @@ def chromium_additional_repos(c):
       '%s/chromium/tools/depot_tools' % c.chromium_git_url)
   c.additional_repos['tools/gsd_generate_index'] = (
       '%s/chromium/tools/gsd_generate_index' % c.chromium_git_url)
-  c.additional_repos['tools/perf'] = '%s/chromium/tools/perf' % c.chromium_git_url
+  c.additional_repos['tools/perf'] = '%s/chromium/tools/perf' % (
+      c.chromium_git_url)
 
 @config_ctx()
 def generate_file(c):

@@ -63,16 +63,13 @@ class CodesearchApi(recipe_api.RecipeApi):
     output_file = output_file or self.c.compile_commands_json_file
     args = ['-p', self.c.debug_path, '-o', output_file] + list(targets)
 
-    build_exit_status = 1
     try:
       step_result = self.m.python(
           'generate compilation database',
           self.m.path['checkout'].join(
               'tools', 'clang', 'scripts', 'generate_compdb.py'),
           args)
-      build_exit_status = step_result.retcode
     except self.m.step.StepFailure as e:
-      build_exit_status = e.retcode
       raise e
 
     return step_result
@@ -93,7 +90,8 @@ class CodesearchApi(recipe_api.RecipeApi):
     try:
       self.m.python(
           'run translation_unit clang tool',
-          self.m.path['checkout'].join('tools', 'clang', 'scripts', 'run_tool.py'),
+          self.m.path['checkout'].join(
+              'tools', 'clang', 'scripts', 'run_tool.py'),
           args)
     except self.m.step.StepFailure as f:
       # For some files, the clang tool produces errors. This is a known issue,
@@ -109,7 +107,8 @@ class CodesearchApi(recipe_api.RecipeApi):
     got_revision_cp = self.m.chromium.build_properties.get('got_revision_cp')
     if not got_revision_cp:
       # For some downstream bots, the build properties 'got_revision_cp' are not
-      # generated. To resolve this issue, use 'got_revision' property here instead.
+      # generated. To resolve this issue, use 'got_revision' property here
+      # instead.
       return self._get_revision()
     return self.m.commit_position.parse_revision(got_revision_cp)
 
@@ -186,7 +185,8 @@ class CodesearchApi(recipe_api.RecipeApi):
     if not self.c.SYNC_GENERATED_FILES:
       return
     assert self.c.generated_repo, (
-        'Trying to check out generated files repo, but the repo is not indicated')
+        'Trying to check out generated files repo,'
+        ' but the repo is not indicated')
 
     # Check out the generated files repo. On LUCI, we use a named cache so that
     # the checkout stays around between builds (this saves ~15 mins of build

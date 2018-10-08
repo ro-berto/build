@@ -33,7 +33,8 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
 
     try:
       self.assertEqual(
-          open(os.path.join(self.dest_dir, 'Debug', 'gen', 'foo.cc'), 'r').read(),
+          open(os.path.join(
+              self.dest_dir, 'Debug', 'gen', 'foo.cc'), 'r').read(),
           'foo contents')
     except IOError as e:
       self.fail(e)
@@ -43,44 +44,57 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
     os.makedirs(os.path.join(self.src_dir, 'Debug', 'gen', 'dir2', 'dir21'))
     with open(os.path.join(self.src_dir, 'Debug', 'gen', 'foo.cc'), 'w') as f:
       f.write('foo contents')
-    with open(os.path.join(self.src_dir, 'Debug', 'gen', 'dir1', 'bar.css'), 'w') as f:
+    with open(os.path.join(
+        self.src_dir, 'Debug', 'gen', 'dir1', 'bar.css'), 'w') as f:
       f.write('bar contents')
-    with open(os.path.join(self.src_dir, 'Debug', 'gen', 'dir2', 'baz.js'), 'w') as f:
+    with open(os.path.join(
+        self.src_dir, 'Debug', 'gen', 'dir2', 'baz.js'), 'w') as f:
       f.write('baz contents')
-    with open(os.path.join(self.src_dir, 'Debug', 'gen', 'dir2', 'dir21', 'quux.json'), 'w') as f:
+    with open(os.path.join(
+        self.src_dir, 'Debug', 'gen', 'dir2', 'dir21', 'quux.json'), 'w') as f:
       f.write('quux contents')
-    with open(os.path.join(self.src_dir, 'Debug', 'gen', 'dir2', 'dir21', 'zip.txt'), 'w') as f:
+    with open(os.path.join(
+        self.src_dir, 'Debug', 'gen', 'dir2', 'dir21', 'zip.txt'), 'w') as f:
       f.write('zip contents')
 
     sync.copy_generated_files(self.src_dir, self.dest_dir, 'Debug')
 
     try:
       self.assertEqual(
-          open(os.path.join(self.dest_dir, 'Debug', 'gen', 'foo.cc'), 'r').read(),
+          open(os.path.join(
+              self.dest_dir, 'Debug', 'gen', 'foo.cc'), 'r').read(),
           'foo contents')
       self.assertEqual(
-          open(os.path.join(self.dest_dir, 'Debug', 'gen', 'dir1', 'bar.css'), 'r').read(),
+          open(os.path.join(
+              self.dest_dir, 'Debug', 'gen', 'dir1', 'bar.css'), 'r').read(),
           'bar contents')
       self.assertEqual(
-          open(os.path.join(self.dest_dir, 'Debug', 'gen', 'dir2', 'baz.js'), 'r').read(),
+          open(os.path.join(
+              self.dest_dir, 'Debug', 'gen', 'dir2', 'baz.js'), 'r').read(),
           'baz contents')
       self.assertEqual(
-          open(os.path.join(self.dest_dir, 'Debug', 'gen', 'dir2', 'dir21', 'quux.json'), 'r').read(),
+          open(os.path.join(
+              self.dest_dir, 'Debug', 'gen', 'dir2', 'dir21', 'quux.json'),
+               'r').read(),
           'quux contents')
       self.assertEqual(
-          open(os.path.join(self.dest_dir, 'Debug', 'gen', 'dir2', 'dir21', 'zip.txt'), 'r').read(),
+          open(os.path.join(
+              self.dest_dir, 'Debug', 'gen', 'dir2', 'dir21', 'zip.txt'),
+               'r').read(),
           'zip contents')
     except IOError as e:
       self.fail(e)
 
   def testCopyFilesNotWhitelisted(self):
-    with open(os.path.join(self.src_dir, 'Debug', 'gen', 'foo.crazy'), 'w') as f:
+    with open(os.path.join(
+        self.src_dir, 'Debug', 'gen', 'foo.crazy'), 'w') as f:
       f.write('foo contents')
 
     sync.copy_generated_files(self.src_dir, self.dest_dir, 'Debug')
 
     self.assertFalse(
-        os.path.exists(os.path.join(self.dest_dir, 'Debug', 'gen', 'foo.crazy')))
+        os.path.exists(os.path.join(
+            self.dest_dir, 'Debug', 'gen', 'foo.crazy')))
 
   def testCopyFilesContentsChanged(self):
     with open(os.path.join(self.src_dir, 'Debug', 'gen', 'foo.cc'), 'w') as f:
@@ -94,7 +108,8 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
 
     try:
       self.assertEqual(
-          open(os.path.join(self.dest_dir, 'Debug', 'gen', 'foo.cc'), 'r').read(),
+          open(os.path.join(
+              self.dest_dir, 'Debug', 'gen', 'foo.cc'), 'r').read(),
           'new foo contents')
     except IOError as e:
       self.fail(e)
@@ -104,20 +119,26 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
       f.write('foo contents')
 
     os.makedirs(os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir'))
-    with open(os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir', 'the_file.cc'), 'w') as f:
+    with open(os.path.join(
+        self.dest_dir, 'Debug', 'gen', 'the_dir', 'the_file.cc'), 'w') as f:
       f.write('the data')
 
     sync.copy_generated_files(self.src_dir, self.dest_dir, 'Debug')
 
-    self.assertFalse(os.path.exists(os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir')))
-    self.assertFalse(os.path.exists(os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir', 'the_file.cc')))
+    self.assertFalse(os.path.exists(os.path.join(
+        self.dest_dir, 'Debug', 'gen', 'the_dir')))
+    self.assertFalse(os.path.exists(os.path.join(
+        self.dest_dir, 'Debug', 'gen', 'the_dir', 'the_file.cc')))
 
   def testCopyFilesDeleteNestedEmptyDirs(self):
     with open(os.path.join(self.src_dir, 'Debug', 'gen', 'foo.cc'), 'w') as f:
       f.write('foo contents')
 
-    os.makedirs(os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir', 'inner_dir'))
-    with open(os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir', 'inner_dir', 'the_file.cc'), 'w') as f:
+    os.makedirs(os.path.join(
+        self.dest_dir, 'Debug', 'gen', 'the_dir', 'inner_dir'))
+    with open(os.path.join(
+        self.dest_dir, 'Debug', 'gen', 'the_dir', 'inner_dir', 'the_file.cc'),
+              'w') as f:
       f.write('the data')
 
     sync.copy_generated_files(self.src_dir, self.dest_dir, 'Debug')
@@ -127,23 +148,29 @@ class SyncGeneratedFilesCodesearchTest(unittest.TestCase):
     self.assertFalse(os.path.exists(
         os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir', 'inner_dir')))
     self.assertFalse(os.path.exists(
-        os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir', 'inner_dir', 'the_file.cc')))
+        os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir', 'inner_dir',
+                     'the_file.cc')))
 
   def testCopyFilesDeleteExcludedFiles(self):
     os.makedirs(os.path.join(self.src_dir, 'Debug', 'gen', 'the_dir'))
     with open(os.path.join(self.src_dir, 'Debug', 'gen', 'foo.cc'), 'w') as f:
       f.write('foo contents')
-    with open(os.path.join(self.src_dir, 'Debug', 'gen', 'the_dir', 'the_file.woah'), 'w') as f:
+    with open(os.path.join(
+        self.src_dir, 'Debug', 'gen', 'the_dir', 'the_file.woah'), 'w') as f:
       f.write('the data')
 
     os.makedirs(os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir'))
-    with open(os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir', 'the_file.woah'), 'w') as f:
+    with open(os.path.join(
+        self.dest_dir, 'Debug', 'gen', 'the_dir', 'the_file.woah'), 'w') as f:
       f.write('the data')
 
     sync.copy_generated_files(self.src_dir, self.dest_dir, 'Debug')
 
-    self.assertFalse(os.path.exists(os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir')))
-    self.assertFalse(os.path.exists(os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir', 'the_file.woah')))
+    self.assertFalse(os.path.exists(
+        os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir')))
+    self.assertFalse(os.path.exists(
+        os.path.join(self.dest_dir, 'Debug', 'gen', 'the_dir',
+                     'the_file.woah')))
 
 
 if __name__ == '__main__':

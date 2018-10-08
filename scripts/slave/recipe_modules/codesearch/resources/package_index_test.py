@@ -43,7 +43,8 @@ class PackageIndexTest(unittest.TestCase):
     os.makedirs(self.build_dir)
 
     def set_content(file_name, content):
-      with open(file_name, 'w') as f: f.write(content)
+      with open(file_name, 'w') as f:
+        f.write(content)
 
     self.test_cc_file_name = os.path.join(src_dir, 'test.cc')
     set_content(self.test_cc_file_name, TEST_CC_FILE_CONTENT)
