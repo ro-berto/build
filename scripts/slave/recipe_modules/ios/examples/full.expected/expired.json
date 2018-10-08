@@ -218,6 +218,7 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-xcode-cipd-access.json"
     ],
+    "infra_step": true,
     "name": "ensure xcode.install xcode",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -230,6 +231,7 @@
       "-switch",
       "[CACHE]/xcode_ios_9abc.app"
     ],
+    "infra_step": true,
     "name": "ensure xcode.select xcode",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

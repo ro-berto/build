@@ -229,6 +229,7 @@
       "-output-dir",
       "[CACHE]/xcode_ios_9a123.app"
     ],
+    "infra_step": true,
     "name": "ensure xcode.install xcode",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -241,6 +242,7 @@
       "-switch",
       "[CACHE]/xcode_ios_9a123.app"
     ],
+    "infra_step": true,
     "name": "ensure xcode.select xcode",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"

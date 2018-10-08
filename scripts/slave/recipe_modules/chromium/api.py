@@ -835,9 +835,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       if cipd_credentials:
         install_args.extend(['-service-account-json', cipd_credentials])
 
-      self.m.step('install xcode', install_args)
-      self.m.step('select xcode', [
-          'sudo', 'xcode-select', '-switch', xcode_app_path])
+      self.m.step('install xcode', install_args, infra_step=True)
+      self.m.step('select xcode',
+                  ['sudo', 'xcode-select', '-switch', xcode_app_path],
+                  infra_step=True)
 
   def ensure_toolchains(self):
     if self.c.HOST_PLATFORM == 'mac':
