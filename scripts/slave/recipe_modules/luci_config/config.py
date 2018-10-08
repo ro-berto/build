@@ -6,7 +6,7 @@ from recipe_engine.config import config_item_context, ConfigGroup
 from recipe_engine.config import Single
 
 
-def BaseConfig(BASE_URL, **kwargs):
+def BaseConfig(BASE_URL, **_):
   return ConfigGroup(
     base_url = Single(basestring, empty_val=BASE_URL),
     auth_token = Single(basestring),
@@ -17,5 +17,5 @@ config_ctx = config_item_context(BaseConfig)
 
 
 @config_ctx()
-def basic(c):
+def basic(_):
   pass
