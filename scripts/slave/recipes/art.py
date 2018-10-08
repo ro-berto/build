@@ -74,7 +74,7 @@ def setup_host_x86(api,
                    debug,
                    bitness,
                    concurrent_collector=True,
-                   generational_cc=False,
+                   generational_cc=True,
                    heap_poisoning=False,
                    gcstress=False,
                    cdex_level='none'):
@@ -219,7 +219,7 @@ def setup_target(api,
                  device,
                  debug,
                  concurrent_collector=True,
-                 generational_cc=False,
+                 generational_cc=True,
                  heap_poisoning=False,
                  gcstress=False):
   build_top_dir = api.path['start_dir']
@@ -460,11 +460,13 @@ _CONFIG_MAP = {
       'debug': True,
       'bitness': 32,
       'concurrent_collector': False,
+      'generational_cc': False,
     },
     'host-x86_64-cms': {
       'debug': True,
       'bitness': 64,
       'concurrent_collector': False,
+      'generational_cc': False,
     },
     'host-x86-poison-debug': {
       'debug': True,
@@ -479,13 +481,12 @@ _CONFIG_MAP = {
     'host-x86-gcstress-debug': {
       'bitness': 32,
       'debug': True,
-      'generational_cc': True,
       'gcstress': True,
     },
-    'host-x86_64-generational-cc': {
+    'host-x86_64-non-gen-cc': {
       'bitness': 64,
       'debug': True,
-      'generational_cc': True,
+      'generational_cc': False,
     },
     'host-x86_64-cdex-fast': {
       'debug': True,
@@ -533,12 +534,11 @@ _CONFIG_MAP = {
       'device': 'fugu',
       'debug': True,
     },
-    'angler-armv7-generational-cc': {
+    'angler-armv7-non-gen-cc': {
       'serial': '84B7N15B03000329',
       'device': 'angler-armv7',
       'debug': True,
-      'concurrent_collector': True,
-      'generational_cc': True,
+      'generational_cc': False,
     },
     'angler-armv8-ndebug': {
       'serial': '84B7N16728001299',
@@ -550,35 +550,28 @@ _CONFIG_MAP = {
       'device': 'angler-armv8',
       'debug': True,
     },
-    'angler-armv8-generational-cc': {
+    'angler-armv8-non-gen-cc': {
       'serial': '84B7N15B03000641',
       'device': 'angler-armv8',
       'debug': True,
-      'concurrent_collector': True,
-      'generational_cc': True,
+      'generational_cc': False,
     },
     'bullhead-armv8-gcstress-ndebug': {
       'serial': '00c5a4683f54164f',
       'device': 'bullhead-armv8',
       'debug': False,
-      'concurrent_collector': True,
-      'generational_cc': True,
       'gcstress': True,
     },
     'bullhead-armv8-gcstress-debug': {
       'serial': '01e0c128ccf732ca',
       'device': 'bullhead-armv8',
       'debug': True,
-      'concurrent_collector': True,
-      'generational_cc': True,
       'gcstress': True,
     },
     'bullhead-armv7-gcstress-ndebug': {
       'serial': '02022c7ec2834126',
       'device': 'bullhead-armv7',
       'debug': False,
-      'concurrent_collector': True,
-      'generational_cc': True,
       'gcstress': True,
     },
   },
