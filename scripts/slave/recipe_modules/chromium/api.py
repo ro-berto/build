@@ -35,6 +35,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     self._build_properties = None
     self._layout = None
     self._version = None
+    self._clang_version = None
 
   def ensure_chromium_layout(self):
     """Ensures that Chromium build layout is installed.
@@ -486,7 +487,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       compile_exit_status = 1
       try:
         with optional_system_python:
-          with self.m.context(cwd=self.m.context.cwd or self.m.path['checkout']):
+          with self.m.context(
+              cwd=self.m.context.cwd or self.m.path['checkout']):
             self._run_ninja(
                 ninja_command=command,
                 name=name or 'compile',
@@ -570,10 +572,10 @@ class ChromiumApi(recipe_api.RecipeApi):
   @_with_chromium_layout
   def runtest(self, test, args=None, xvfb=False, name=None, annotate=None,
               results_url=None, perf_dashboard_id=None, test_type=None,
-              python_mode=False, parallel=False,
-              point_id=None, revision=None, webkit_revision=None,
-              test_launcher_summary_output=None, perf_id=None, perf_config=None,
-              chartjson_file=False, tee_stdout_file=None, **kwargs):
+              python_mode=False, point_id=None, revision=None,
+              webkit_revision=None, test_launcher_summary_output=None,
+              perf_id=None, perf_config=None, chartjson_file=False,
+              tee_stdout_file=None, **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list), '%r' % args
@@ -694,11 +696,12 @@ class ChromiumApi(recipe_api.RecipeApi):
     properties_json = self.m.json.dumps(self.m.properties.legacy())
     run_tests_args.extend(['--factory-properties', properties_json,
                            '--build-properties', properties_json])
-    run_tests_args.extend(['--test-type=sizes',
-                           '--builder-name=%s' % self.m.properties['buildername'],
-                           '--slave-name=%s' % self.m.properties['bot_id'],
-                           '--build-number=%s' % self.m.properties['buildnumber'],
-                           '--run-python-script'])
+    run_tests_args.extend([
+        '--test-type=sizes',
+        '--builder-name=%s' % self.m.properties['buildername'],
+        '--slave-name=%s' % self.m.properties['bot_id'],
+        '--build-number=%s' % self.m.properties['buildnumber'],
+        '--run-python-script'])
 
     if perf_id:
       assert results_url is not None
@@ -709,7 +712,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
       # If we have a clang revision, add that to the perf data point.
       # TODO(hans): We want this for all perf data, not just sizes.
-      if hasattr(self, '_clang_version'):
+      if self._clang_version:
         clang_rev = re.match(r'(\d+)(-\d+)?', self._clang_version).group(1)
         run_tests_args.append(
             "--perf-config={'r_clang_rev': '%s'}" % clang_rev)
@@ -1324,5 +1327,5 @@ class ChromiumApi(recipe_api.RecipeApi):
       infra_step=True,
       **kwargs)
 
-  def get_annotate_by_test_name(self, test_name):
+  def get_annotate_by_test_name(self, _):
     return 'graphing'

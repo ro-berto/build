@@ -43,10 +43,14 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       show_ninja_stats = Single(bool, empty_val=False, required=False),
       goma_hermetic = Single(basestring, required=False),
       goma_failfast = Single(bool, empty_val=False, required=False),
-      goma_max_active_fail_fallback_tasks = Single(int, empty_val=None, required=False),
-      goma_enable_localoutputcache = Single(bool, empty_val=False, required=False),
-      goma_enable_localoutputcache_small = Single(bool, empty_val=False, required=False),
-      goma_enable_global_file_stat_cache = Single(bool, empty_val=False, required=False),
+      goma_max_active_fail_fallback_tasks = Single(int, empty_val=None,
+                                                   required=False),
+      goma_enable_localoutputcache = Single(bool, empty_val=False,
+                                            required=False),
+      goma_enable_localoutputcache_small = Single(bool, empty_val=False,
+                                                  required=False),
+      goma_enable_global_file_stat_cache = Single(bool, empty_val=False,
+                                                  required=False),
       ninja_confirm_noop = Single(bool, empty_val=False, required=False),
       # TODO(tandrii): delete goma_high_parallel from here and use goma recipe
       # module property, configured per builder in cr-buildbucket.cfg.
@@ -73,8 +77,10 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       GOMA_STUBBY_PROXY_IP_ADDRESS = Single(basestring, required=False),
       GOMA_SETTINGS_SERVER = Single(basestring, required=False),
       GOMA_USE_CASE = Single(basestring, required=False),
-      GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB = Single(int, required=False),
-      GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB = Single(int, required=False),
+      GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB = Single(int,
+                                                              required=False),
+      GOMA_LOCAL_OUTPUT_CACHE_THRESHOLD_CACHE_AMOUNT_IN_MB = Single(
+          int, required=False),
       FORCE_MAC_TOOLCHAIN = Single(int, required=False),
     ),
     mac_toolchain = ConfigGroup(
@@ -487,7 +493,7 @@ def clang_tot(c):
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
 
 @config_ctx(includes=['ninja', 'clang', 'asan', 'static_library'])
-def win_asan(c):
+def win_asan(_):
   pass
 
 #### 'Full' configurations
@@ -509,23 +515,23 @@ def chromium_win_clang_tot(c):
   fastbuild(c)
 
 @config_ctx(includes=['chromium_win_clang', 'official'])
-def chromium_win_clang_official(c):
+def chromium_win_clang_official(_):
   pass
 
 @config_ctx(includes=['chromium_win_clang_tot', 'official'])
-def chromium_win_clang_official_tot(c):
+def chromium_win_clang_official_tot(_):
   pass
 
 @config_ctx(includes=['win_asan', 'goma'])
-def chromium_win_clang_asan(c):
+def chromium_win_clang_asan(_):
   pass
 
 @config_ctx(includes=['win_asan', 'clang_tot'])  # No goma.
-def chromium_win_clang_asan_tot(c):
+def chromium_win_clang_asan_tot(_):
   pass
 
 @config_ctx(includes=['ninja', 'clang', 'clang_tot'])  # No goma.
-def clang_tot_linux(c):
+def clang_tot_linux(_):
   pass
 
 @config_ctx(includes=['ninja', 'clang', 'clang_tot'])  # No goma.
@@ -533,38 +539,38 @@ def clang_tot_mac(c):
   fastbuild(c, final=False)  # final=False so clang_tot_mac_asan can override.
 
 @config_ctx(includes=['clang_tot_linux', 'asan'])
-def clang_tot_linux_asan(c):
+def clang_tot_linux_asan(_):
   pass
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'clobber',
                       'ubsan'])
-def chromium_linux_ubsan(c):
+def chromium_linux_ubsan(_):
   pass
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'clobber',
                       'ubsan_vptr'])
-def chromium_linux_ubsan_vptr(c):
+def chromium_linux_ubsan_vptr(_):
   pass
 
 @config_ctx(includes=['clang_tot_linux', 'ubsan_vptr'])
-def clang_tot_linux_ubsan_vptr(c):
+def clang_tot_linux_ubsan_vptr(_):
   pass
 
 @config_ctx(includes=['clang_tot_mac', 'asan', 'static_library'])
-def clang_tot_mac_asan(c):
+def clang_tot_mac_asan(_):
   pass
 
 @config_ctx(includes=['android_common', 'ninja', 'clang', 'clang_tot'])
-def clang_tot_android(c):
+def clang_tot_android(_):
   pass
 
 @config_ctx(includes=['clang_tot_android', 'asan'])
-def clang_tot_android_asan(c):
+def clang_tot_android_asan(_):
   # Like android_clang, minus goma, minus static_libarary, plus asan.
   pass
 
 @config_ctx(includes=['clang_tot_android'])
-def clang_tot_android_dbg(c):
+def clang_tot_android_dbg(_):
   # Like android_clang, minus goma, minus static_libarary.
   pass
 
@@ -575,7 +581,7 @@ def chromium_win_asan(c):
   c.runtests.run_asan_test = True
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
-def chromium_asan(c):
+def chromium_asan(_):
   pass
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'msan'])
@@ -591,7 +597,7 @@ def chromium_chromeos(c):  # pragma: no cover
   c.compile_py.default_targets = ['all']
 
 @config_ctx(includes=['chromium_asan', 'chromiumos'])
-def chromium_chromiumos_asan(c):
+def chromium_chromiumos_asan(_):
   pass
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'chromeos'])
@@ -621,17 +627,17 @@ def blink(c):  # pragma: no cover
 
 @config_ctx(includes=['android_common', 'ninja', 'static_library',
                       'default_compiler', 'goma'])
-def android(c):
+def android(_):
   pass
 
 @config_ctx(includes=['android_common', 'ninja', 'static_library', 'clang',
                       'goma'])
-def android_clang(c):
+def android_clang(_):
   pass
 
 @config_ctx(includes=['android_common', 'ninja', 'shared_library', 'clang',
                       'goma', 'asan'])
-def android_asan(c):
+def android_asan(_):
   # ASan for Android needs shared_library, so it needs it own config.
   # See https://www.chromium.org/developers/testing/addresssanitizer.
   pass

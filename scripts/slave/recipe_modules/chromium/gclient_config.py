@@ -147,7 +147,7 @@ def perf(c):
     s.custom_deps.pop(key, None)
 
 @CONFIG_CTX(includes=['chrome_internal'])
-def chromium_perf(c):
+def chromium_perf(_):
   pass
 
 @CONFIG_CTX(includes=['chromium'])
