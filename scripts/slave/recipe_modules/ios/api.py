@@ -46,7 +46,8 @@ class iOSApi(recipe_api.RecipeApi):
   # Pinned version of
   # https://chromium.googlesource.com/infra/infra/+/master/go/src/infra/cmd/mac_toolchain
   MAC_TOOLCHAIN_PACKAGE = 'infra/tools/mac_toolchain/${platform}'
-  MAC_TOOLCHAIN_VERSION = 'git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a'
+  MAC_TOOLCHAIN_VERSION = (
+      'git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a')
   MAC_TOOLCHAIN_ROOT    = '.'
   XCODE_APP_PATH        = 'Xcode.app'
 
@@ -907,7 +908,8 @@ class iOSApi(recipe_api.RecipeApi):
       swarming_task.tags.add('platform:%s' % self.platform)
       swarming_task.tags.add('test:%s' % str(task['test']['app']))
 
-      expiration = task['test'].get('expiration_time') or self.__config.get('expiration_time')
+      expiration = task['test'].get('expiration_time') or self.__config.get(
+          'expiration_time')
       if expiration:
         swarming_task.expiration = expiration
 
@@ -1071,7 +1073,8 @@ class iOSApi(recipe_api.RecipeApi):
                            self.m.properties[revision_name]))
 
           args.append('--output-json-dashboard-url')
-          args.append(self.m.json.output(add_json_log=False, name='dashboard_url'))
+          args.append(self.m.json.output(
+              add_json_log=False, name='dashboard_url'))
 
           step_result = self.m.build.python(
               '%s Dashboard Upload' % task['test']['app'],
