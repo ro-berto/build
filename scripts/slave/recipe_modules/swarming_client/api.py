@@ -112,7 +112,7 @@ class SwarmingClientApi(recipe_api.RecipeApi):
 
     Will abort recipe execution if it is.
     """
-    step_result = self.query_script_version(
+    self.query_script_version(
         script, step_test_data=step_test_data or min_version)
     version = self.get_script_version(script)
     if version < min_version:
