@@ -9,7 +9,7 @@ RESULTS_URL = 'https://chromeperf.appspot.com'
 SPEC = {
   'builders': {
     'Google Chrome ChromeOS': {
-      'chromium_config': 'chromium_official',
+      'chromium_config': 'chromium_official_internal',
       'chromium_apply_config': ['mb', 'chromeos'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'chromeos'],
@@ -28,7 +28,7 @@ SPEC = {
       },
     },
     'Google Chrome Linux x64': {
-      'chromium_config': 'chromium_official',
+      'chromium_config': 'chromium_official_internal',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal'],
@@ -47,7 +47,7 @@ SPEC = {
       },
     },
     'Google Chrome Mac': {
-      'chromium_config': 'chromium_official',
+      'chromium_config': 'chromium_official_internal',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal'],
@@ -66,7 +66,7 @@ SPEC = {
       },
     },
     'Google Chrome Win': {
-      'chromium_config': 'chromium_official',
+      'chromium_config': 'chromium_official_internal',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal'],

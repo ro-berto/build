@@ -198,7 +198,7 @@ def GenTests(api):
       api.test('chromium_official_win') +
       api.platform('win', 64) +
       api.properties(
-          chromium_config='chromium_official',
+          chromium_config='chromium_official_internal',
           target_platform='win') +
       api.post_process(post_process.DropExpectation)
   )

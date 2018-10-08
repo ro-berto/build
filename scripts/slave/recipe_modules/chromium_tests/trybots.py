@@ -731,6 +731,15 @@ TRYBOTS = freeze({
       }),
     },
   },
+  'tryserver.chrome.win': {
+    'builders': {
+      # Optional Official trybot.
+      'win_chrome_official': simple_bot({
+        'mastername': 'chromium.chrome',
+        'buildername': 'Google Chrome Win',
+      }),
+    },
+  },
   'tryserver.chromium.win': {
     'builders': {
       'win-asan': simple_bot({
