@@ -215,7 +215,10 @@
       "[START_DIR]/openscreen/out/Default",
       "-j",
       "20",
-      "hello"
+      "hello",
+      "gn_all",
+      "demo",
+      "unittests"
     ],
     "cwd": "[START_DIR]/openscreen",
     "name": "compile"
@@ -324,7 +327,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/openscreen/out/Default",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/openscreen/out/Default\", \"-j\", 20, \"hello\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/openscreen/out/Default\", \"-j\", 20, \"hello\", \"gn_all\", \"demo\", \"unittests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

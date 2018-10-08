@@ -16,7 +16,8 @@ DEPS = [
 ]
 
 BUILD_CONFIG = 'Default'
-BUILD_TARGET = ['hello']
+# TODO: Remove 'hello' when 'gn_all' successfully builds.
+BUILD_TARGET = ['hello', 'gn_all', 'demo', 'unittests']
 OPENSCREEN_REPO = 'https://chromium.googlesource.com/openscreen'
 
 
