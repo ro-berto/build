@@ -1812,7 +1812,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                perf_dashboard_id=None, io_timeout=None,
                waterfall_mastername=None, waterfall_buildername=None,
                merge=None, trigger_script=None, results_handler=None,
-               set_up=None, tear_down=None, idempotent=True, cipd_packages=None):
+               set_up=None, tear_down=None, idempotent=True,
+               cipd_packages=None):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name, dimensions, tags, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -1879,8 +1880,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         ignore_task_failure=self._ignore_task_failure,
         isolated_hash=isolated_hash, shards=shards, idempotent=self._idempotent,
         merge=self._merge, trigger_script=self._trigger_script,
-        build_properties=api.chromium.build_properties, cipd_packages=self._cipd_packages,
-        extra_args=args)
+        build_properties=api.chromium.build_properties,
+        cipd_packages=self._cipd_packages, extra_args=args)
 
   def pass_fail_counts(self, suffix):
     if self._test_results.get(suffix):
@@ -2412,7 +2413,8 @@ class BlinkTest(Test):
 
     try:
       default_factory_for_tests = (lambda:
-          api.test_utils.test_api.canned_test_output(passing=True, minimal=True))
+          api.test_utils.test_api.canned_test_output(passing=True,
+                                                     minimal=True))
       step_result = api.python(
         step_name,
         api.path['checkout'].join('third_party', 'blink', 'tools',

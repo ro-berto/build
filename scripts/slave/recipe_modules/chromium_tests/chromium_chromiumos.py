@@ -69,7 +69,9 @@ def _config(name,
             cros_board=None,
             target_arch='intel',
             target_bits=64,
-            gclient_apply_config=['chromeos']):
+            gclient_apply_config=None):
+  if not gclient_apply_config:
+    gclient_apply_config = ['chromeos']
   build_config = 'Release' if '-rel' in name else 'Debug'
   cfg = {
     'chromium_config': 'chromium',
