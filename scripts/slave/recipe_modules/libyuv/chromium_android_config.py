@@ -8,5 +8,5 @@ from recipe_engine.config_types import Path
 
 
 @CONFIG_CTX(includes=['base_config'])
-def libyuv(c):
+def libyuv(_):
   pass

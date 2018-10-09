@@ -3,17 +3,22 @@
 # found in the LICENSE file.
 
 from recipe_engine import recipe_api
-from . import builders
+from . import builders as libyuv_builders
 
 
 class LibyuvApi(recipe_api.RecipeApi):
-  BUILDERS = builders.BUILDERS
-  RECIPE_CONFIGS = builders.RECIPE_CONFIGS
+  BUILDERS = libyuv_builders.BUILDERS
+  RECIPE_CONFIGS = libyuv_builders.RECIPE_CONFIGS
 
   def __init__(self, **kwargs):
     super(LibyuvApi, self).__init__(**kwargs)
+    self.master_config = None
+    self.bot_config = None
+    self.bot_type = None
+    self.recipe_config = None
+    self.revision = ''
 
-  def apply_bot_config(self, builders, recipe_configs, perf_config=None):
+  def apply_bot_config(self, builders, recipe_configs):
     mastername = self.m.properties.get('mastername')
     buildername = self.m.properties.get('buildername')
     master_dict = builders.get(mastername, {})
