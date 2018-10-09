@@ -1865,6 +1865,7 @@
       "--isolated",
       "[dummy hash for webkit_layout_tests]",
       "--",
+      "--gtest_repeat=10",
       "--isolated-script-test-filter",
       "test1.Test1::test2.Test2",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
