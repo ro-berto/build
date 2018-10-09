@@ -117,7 +117,7 @@
       "--priority",
       "25",
       "--shards",
-      "5",
+      "7",
       "--task-name",
       "Test262 - no variants/Android/[dummy has/V8 Android Arm64 - N5X/571",
       "--dump-json",
@@ -383,7 +383,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test262 - no variants/Android/[dummy has/V8 Android Arm64 - N5X/571\", \"tasks\": {\"Test262 - no variants/Android/[dummy has/V8 Android Arm64 - N5X/571:5:0\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}, \"Test262 - no variants/Android/[dummy has/V8 Android Arm64 - N5X/571:5:1\": {\"shard_index\": 1, \"task_id\": \"130100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130100\"}, \"Test262 - no variants/Android/[dummy has/V8 Android Arm64 - N5X/571:5:2\": {\"shard_index\": 2, \"task_id\": \"130200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130200\"}, \"Test262 - no variants/Android/[dummy has/V8 Android Arm64 - N5X/571:5:3\": {\"shard_index\": 3, \"task_id\": \"130300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130300\"}, \"Test262 - no variants/Android/[dummy has/V8 Android Arm64 - N5X/571:5:4\": {\"shard_index\": 4, \"task_id\": \"130400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130400\"}}}"
+      "{\"base_task_name\": \"Test262 - no variants/Android/[dummy has/V8 Android Arm64 - N5X/571\", \"tasks\": {\"Test262 - no variants/Android/[dummy has/V8 Android Arm64 - N5X/571:7:0\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}, \"Test262 - no variants/Android/[dummy has/V8 Android Arm64 - N5X/571:7:1\": {\"shard_index\": 1, \"task_id\": \"130100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130100\"}, \"Test262 - no variants/Android/[dummy has/V8 Android Arm64 - N5X/571:7:2\": {\"shard_index\": 2, \"task_id\": \"130200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130200\"}, \"Test262 - no variants/Android/[dummy has/V8 Android Arm64 - N5X/571:7:3\": {\"shard_index\": 3, \"task_id\": \"130300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130300\"}, \"Test262 - no variants/Android/[dummy has/V8 Android Arm64 - N5X/571:7:4\": {\"shard_index\": 4, \"task_id\": \"130400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130400\"}, \"Test262 - no variants/Android/[dummy has/V8 Android Arm64 - N5X/571:7:5\": {\"shard_index\": 5, \"task_id\": \"130500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130500\"}, \"Test262 - no variants/Android/[dummy has/V8 Android Arm64 - N5X/571:7:6\": {\"shard_index\": 6, \"task_id\": \"130600\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130600\"}}}"
     ],
     "infra_step": true,
     "name": "Test262 - no variants",
@@ -428,7 +428,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Mozilla/Android/[dummy has/V8 Android Arm64 - N5X/571\", \"tasks\": {\"Mozilla/Android/[dummy has/V8 Android Arm64 - N5X/571\": {\"shard_index\": 0, \"task_id\": \"180000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/180000\"}}}"
+      "{\"base_task_name\": \"Mozilla/Android/[dummy has/V8 Android Arm64 - N5X/571\", \"tasks\": {\"Mozilla/Android/[dummy has/V8 Android Arm64 - N5X/571\": {\"shard_index\": 0, \"task_id\": \"1100000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1100000\"}}}"
     ],
     "infra_step": true,
     "name": "Mozilla",

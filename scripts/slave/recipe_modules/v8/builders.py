@@ -1650,7 +1650,7 @@ BUILDERS = {
       'V8 Android Arm64 - N5X': {
         'tests': [
           V8Testing(3),
-          Test262(5),
+          Test262(7),
           Mozilla,
         ],
         'variants': V8Variant('default'),
