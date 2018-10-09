@@ -19,5 +19,5 @@ config_ctx = config_item_context(BaseConfig)
 
 # Only exists to be able to set the PERF_ID and PERF_CONFIG configurations.
 @config_ctx()
-def webrtc(c):
+def webrtc(_):
   pass

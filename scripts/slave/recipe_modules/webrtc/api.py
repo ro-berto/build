@@ -9,7 +9,7 @@ from recipe_engine import recipe_api
 
 WEBRTC_GS_BUCKET = 'chromium-webrtc'
 
-from . import builders
+from . import builders as webrtc_builders
 from . import steps
 
 THIS_DIR = os.path.dirname(__file__)
@@ -34,8 +34,19 @@ class WebRTCApi(recipe_api.RecipeApi):
     # None means "default value".
     self._working_dir = None
 
-  BUILDERS = builders.BUILDERS
-  RECIPE_CONFIGS = builders.RECIPE_CONFIGS
+    self.mastername = ''
+    self.buildername = ''
+    self.master_config = {}
+    self.bot_config = {}
+    self.recipe_config = {}
+    self.bot_type = ''
+
+    self.revision = ''
+    self.revision_cp = ''
+    self.revision_number = ''
+
+  BUILDERS = webrtc_builders.BUILDERS
+  RECIPE_CONFIGS = webrtc_builders.RECIPE_CONFIGS
 
 
   @property
@@ -140,7 +151,8 @@ class WebRTCApi(recipe_api.RecipeApi):
           'swarming_dimensions', {}).iteritems():
         self.m.swarming.set_default_dimension(key, value)
       if self.bot_config.get('swarming_timeout'):
-        self.m.swarming.default_hard_timeout = self.bot_config['swarming_timeout']
+        self.m.swarming.default_hard_timeout = self.bot_config[
+            'swarming_timeout']
         self.m.swarming.default_io_timeout = self.bot_config['swarming_timeout']
 
   def _apply_patch(self, repository_url, patch_ref, include_subdirs=()):

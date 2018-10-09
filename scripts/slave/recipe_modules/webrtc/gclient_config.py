@@ -11,7 +11,7 @@ def WebRTCGitURL(_c, *pieces):
   return '/'.join(('https://webrtc.googlesource.com',) + pieces)
 
 @CONFIG_CTX(includes=['_webrtc'])
-def webrtc(c):
+def webrtc(_):
   pass
 
 @CONFIG_CTX(includes=['webrtc'])

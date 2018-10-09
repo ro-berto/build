@@ -314,10 +314,10 @@ class Test(object):
     self._test = test
     self._name = name or test
 
-  def pre_run(self, api, suffix):
+  def pre_run(self, api, suffix): # pylint: disable=unused-argument
     return []
 
-  def run(self, api, suffix): # pragma: no cover:
+  def run(self, api, suffix): # pragma: no cover pylint: disable=unused-argument
     return []
 
 
