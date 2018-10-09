@@ -40,8 +40,7 @@ def chromium_perf(c):
   c.compile_py.goma_max_active_fail_fallback_tasks = 1024
 
 
-def _BaseSpec(bot_type, config_name, platform, target_bits, tests,
-              remove_system_webview=None):
+def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
   spec = {
     'bot_type': bot_type,
     'chromium_config': config_name,
@@ -108,14 +107,13 @@ def BuildSpec(
 
 
 def TestSpec(config_name, platform, target_bits,
-             parent_buildername, tests=None, remove_system_webview=None):
+             parent_buildername, tests=None):
   spec = _BaseSpec(
       bot_type='tester',
       config_name=config_name,
       platform=platform,
       target_bits=target_bits,
       tests=tests or [],
-      remove_system_webview=remove_system_webview,
   )
 
   spec['parent_buildername'] = parent_buildername
@@ -132,10 +130,6 @@ def _AddIsolatedTestSpec(name, platform, parent_buildername, target_bits=64):
 def _AddBuildSpec(
   name, platform, target_bits=64, add_to_bisect=False,
   extra_compile_targets=None, force_exparchive=False):
-  if target_bits == 64:
-    perf_id = platform
-  else:
-    perf_id = '%s-%d' % (platform, target_bits)
 
   SPEC['builders'][name] = BuildSpec(
       'chromium_perf', platform, target_bits,
