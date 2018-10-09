@@ -4,10 +4,12 @@
 
 from recipe_engine import recipe_api
 
-BLACKLIST = '^(out|xcodebuild)[/\\\\](Release|Debug|Product)\w*[/\\\\]generated_tests'
+BLACKLIST = (
+    '^(out|xcodebuild)[/\\\\](Release|Debug|Product)\w*[/\\\\]generated_tests')
 # TODO(athom): move to third_party when swarming_client.path has a setter
 SWARMING_CLIENT_PATH = 'tools/swarming_client'
-SWARMING_CLIENT_REPO = 'https://chromium.googlesource.com/infra/luci/client-py.git'
+SWARMING_CLIENT_REPO = (
+    'https://chromium.googlesource.com/infra/luci/client-py.git')
 SWARMING_CLIENT_REV = '88229872dd17e71658fe96763feaa77915d8cbd6'
 
 CHROME_PATH_ARGUMENT = {
@@ -27,8 +29,9 @@ FIREFOX_PATH_ARGUMENT = {
 }
 
 class DartApi(recipe_api.RecipeApi):
-  """Recipe module for code commonly used in dart recipes. Shouldn't be used elsewhere."""
+  """Recipe module for code commonly used in dart recipes.
 
+  Shouldn't be used elsewhere."""
   def checkout(self, clobber=False):
     """Checks out the dart code and prepares it for building."""
     self.m.gclient.set_config('dart')
@@ -40,15 +43,18 @@ class DartApi(recipe_api.RecipeApi):
     with self.m.context(cwd=self.m.path['cache'].join('builder'),
                         env={'GOMA_DIR':self.m.goma.goma_dir}):
       try:
-        self.m.bot_update.ensure_checkout(with_branch_heads=True, with_tags=True)
+        self.m.bot_update.ensure_checkout(with_branch_heads=True,
+                                          with_tags=True)
       except self.m.step.InfraFailure:
         # TODO(athom): Remove this retry once root cause is fixed
-        self.m.bot_update.ensure_checkout(with_branch_heads=True, with_tags=True)
+        self.m.bot_update.ensure_checkout(with_branch_heads=True,
+                                          with_tags=True)
 
       with self.m.context(cwd=self.m.path['checkout']):
         if clobber:
           self.m.python('clobber',
-                        self.m.path['checkout'].join('tools', 'clean_output_directory.py'))
+                        self.m.path['checkout'].join(
+                            'tools', 'clean_output_directory.py'))
       self.m.gclient.runhooks()
 
   def get_secret(self, name):
@@ -67,7 +73,8 @@ class DartApi(recipe_api.RecipeApi):
                [cloudkms_dir.join('cloudkms%s' % executable_suffix), 'decrypt',
                '-input', file_name,
                '-output', secret_key,
-               'projects/dart-ci/locations/us-central1/keyRings/dart-ci/cryptoKeys/dart-ci'])
+               'projects/dart-ci/locations/'
+                 'us-central1/keyRings/dart-ci/cryptoKeys/dart-ci'])
       return secret_key
 
   def kill_tasks(self):
@@ -82,11 +89,13 @@ class DartApi(recipe_api.RecipeApi):
     return self.m.path['checkout'].join(
       'tools','sdks', 'dart-sdk', 'bin', executable)
 
-  def build(self, build_args=[], isolate=None, name='build dart'):
+  def build(self, build_args=None, isolate=None, name='build dart'):
     """Builds dart using the specified build_args
        and optionally isolates the sdk for testing using the specified isolate.
        If an isolate is specified, it returns the hash of the isolated archive.
     """
+    if not build_args: # pragma: no cover
+      build_args = []
     build_args = build_args + ['--no-start-goma', '-j200']
     with self.m.context(cwd=self.m.path['checkout'],
                         env={'GOMA_DIR':self.m.goma.goma_dir}):
@@ -101,7 +110,8 @@ class DartApi(recipe_api.RecipeApi):
                         timeout=20 * 60)
           build_exit_status = 0
         except self.m.step.StepTimeout as e:
-          raise self.m.step.StepFailure('Step "%s" timed out after 20 minutes' % name)
+          raise self.m.step.StepFailure(
+              'Step "%s" timed out after 20 minutes' % name)
         except self.m.step.StepFailure as e:
           build_exit_status = e.retcode
           raise e
@@ -110,9 +120,9 @@ class DartApi(recipe_api.RecipeApi):
 
         if isolate is not None:
           bots_path = self.m.path['checkout'].join('tools', 'bots')
-          isolate_paths = self.m.file.glob_paths("find isolate files", bots_path, '*.isolate',
-                                            test_data=[bots_path.join('a.isolate'),
-                                                       bots_path.join('b.isolate')])
+          isolate_paths = self.m.file.glob_paths(
+              "find isolate files", bots_path, '*.isolate', test_data=[
+                  bots_path.join('a.isolate'), bots_path.join('b.isolate')])
           for path in isolate_paths:
             self.m.file.copy('copy %s to sdk root' % path.pieces[-1],
                              path,
@@ -121,11 +131,13 @@ class DartApi(recipe_api.RecipeApi):
           step_result = self.m.python(
             'upload testing isolate',
             self.m.swarming_client.path.join('isolate.py'),
-            args= ['archive',
-                   '--ignore_broken_items', # TODO(athom) find a way to avoid that
-                   '-Ihttps://isolateserver.appspot.com',
-                   '-i%s' % self.m.path['checkout'].join('%s.isolate' % isolate),
-                   '-s%s' % self.m.path['checkout'].join('%s.isolated' % isolate)],
+            args= [
+                'archive',
+                # TODO(athom) find a way to avoid that
+                '--ignore_broken_items',
+                '-Ihttps://isolateserver.appspot.com',
+                '-i%s' % self.m.path['checkout'].join('%s.isolate' % isolate),
+                '-s%s' % self.m.path['checkout'].join('%s.isolated' % isolate)],
             stdout=self.m.raw_io.output('out'))
           isolate_hash = step_result.stdout.strip()[:40]
           step_result.presentation.step_text = 'isolate hash: %s' % isolate_hash
@@ -143,10 +155,12 @@ class DartApi(recipe_api.RecipeApi):
                  '--ignore_broken_items', # TODO(athom) find a way to avoid that
                  '-Ihttps://isolateserver.appspot.com',
                  '-i%s' % self.m.path['checkout'].join('%s' % isolate_fileset),
-                 '-s%s' % self.m.path['checkout'].join('%s.isolated' % isolate_fileset)],
+                 '-s%s' % self.m.path['checkout'].join(
+                     '%s.isolated' % isolate_fileset)],
         stdout=self.m.raw_io.output('out'))
     isolate_hash = step_result.stdout.strip()[:40]
-    step_result.presentation.step_text = 'swarming fileset hash: %s' % isolate_hash
+    step_result.presentation.step_text = 'swarming fileset hash: %s' % (
+        isolate_hash)
     return isolate_hash
 
   def download_parent_isolate(self):
@@ -154,7 +168,7 @@ class DartApi(recipe_api.RecipeApi):
     isolate_hash = self.m.properties['parent_fileset']
     fileset_name = self.m.properties['parent_fileset_name']
     with self.m.context(cwd=self.m.path['cleanup']):
-      step_result = self.m.python(
+      self.m.python(
         'downloading fileset %s' % fileset_name,
         self.m.swarming_client.path.join('isolateserver.py'),
         args= ['download',
@@ -165,11 +179,13 @@ class DartApi(recipe_api.RecipeApi):
 
   def shard(self, title, isolate_hash, test_args, os=None, cpu='x86-64',
             pool='dart.tests', num_shards=0, last_shard_is_local=False,
-            cipd_packages=[]):
+            cipd_packages=None):
     """Runs test.py in the given isolate, sharded over several swarming tasks.
        Requires the 'shards' build property to be set to the number of tasks.
        Returns the created task(s), which are meant to be passed into collect().
     """
+    if not cipd_packages: # pragma: no cover
+      cipd_packages = []
     if 'shards' in self.m.properties:
       num_shards = int(self.m.properties['shards'])
     assert(num_shards > 0)
@@ -178,7 +194,8 @@ class DartApi(recipe_api.RecipeApi):
       os = self.m.platform.name
     for shard in range(num_shards):
       # TODO(athom) collect all the triggers, and present as a single step
-      if last_shard_is_local and shard == num_shards - 1: break
+      if last_shard_is_local and shard == num_shards - 1:
+        break
       task = self.m.swarming.task("%s_shard_%s" % (title, (shard + 1)),
                                isolate_hash,
                                cipd_packages=cipd_packages,
@@ -212,13 +229,15 @@ class DartApi(recipe_api.RecipeApi):
       for shard in range(num_shards):
         task = tasks[shard]
         path = self.m.path['cleanup'].join(str(shard))
-        task.task_output_dir = self.m.raw_io.output_dir(leak_to=path, name="results")
-        collect = self.m.swarming.collect_task(task)
+        task.task_output_dir = self.m.raw_io.output_dir(
+            leak_to=path, name="results")
+        self.m.swarming.collect_task(task)
         output_dir = self.m.step.active_result.raw_io.output_dir
         for filename in output_dir:
           if "result.log" in filename: # pragma: no cover
             contents = output_dir[filename]
-            self.m.step.active_result.presentation.logs['result.log'] = [contents]
+            self.m.step.active_result.presentation.logs['result.log'] = [
+                contents]
 
   def collect_all(self, deferred_tasks):
     """Collects the results of a sharded test run."""
@@ -227,28 +246,32 @@ class DartApi(recipe_api.RecipeApi):
       for index_step,deferred_task in enumerate(deferred_tasks):
         if deferred_task.is_ok:
           for index_task,task in enumerate(deferred_task.get_result()):
-            path = self.m.path['cleanup'].join(str(index_step) + '_' + str(index_task))
-            task.task_output_dir = self.m.raw_io.output_dir(leak_to=path, name="results")
-            collect = self.m.swarming.collect_task(task)
+            path = self.m.path['cleanup'].join(
+                str(index_step) + '_' + str(index_task))
+            task.task_output_dir = self.m.raw_io.output_dir(
+                leak_to=path, name="results")
+            self.m.swarming.collect_task(task)
             output_dir = self.m.step.active_result.raw_io.output_dir
             for filename in output_dir:
               if "result.log" in filename: # pragma: no cover
                 contents = output_dir[filename]
-                self.m.step.active_result.presentation.logs['result.log'] = [contents]
+                self.m.step.active_result.presentation.logs['result.log'] = [
+                    contents]
 
   def download_results(self,  name):
     builder = self.m.buildbucket.builder_name
-    if builder.endswith(('-try', '-stable', '-dev')): return
+    if builder.endswith(('-try', '-stable', '-dev')):
+      return # pragma: no cover
     results_path = self.m.path['checkout'].join('LATEST')
     self.m.file.ensure_directory('ensure LATEST dir', results_path)
-    for file in ['results.json', 'flaky.json', 'approved_results.json']:
+    for filename in ['results.json', 'flaky.json', 'approved_results.json']:
       self.m.file.write_text(
-        'ensure %s exists' % file, results_path.join(file), '')
+        'ensure %s exists' % filename, results_path.join(filename), '')
       self.m.gsutil.download(
         'dart-test-results',
-        '/'.join(['results', builder, 'LATEST', name, file]),
+        '/'.join(['results', builder, 'LATEST', name, filename]),
         results_path,
-        name='download previous %s' % file,
+        name='download previous %s' % filename,
         ok_ret='any')
 
   def upload_results(self,  name):
@@ -258,23 +281,23 @@ class DartApi(recipe_api.RecipeApi):
       self.m.path['checkout'].join('deflaking_logs', 'results.json'),
       self.m.path['checkout'].join('deflaking_logs', 'deflaking_results.json'))
 
-    for file in [('logs','results.json'),
+    for filepath in [('logs','results.json'),
                  ('logs', 'run.json'),
                  ('deflaking_logs', 'flaky.json'),
                  ('deflaking_logs', 'deflaking_results.json')]:
-      results_path = self.m.path['checkout'].join(*file)
-      filename = file[-1]
+      results_path = self.m.path['checkout'].join(*filepath)
+      filename = filepath[-1]
       self.m.gsutil.upload(
         results_path,
         'dart-test-results',
         '/'.join(['results', builder, str(build_number), name, filename]),
-        name='upload %s %s' % file, ok_ret='all')
+        name='upload %s %s' % filepath, ok_ret='all')
       self.m.gsutil.copy(
         'dart-test-results',
         '/'.join(['results', builder, str(build_number), name, filename]),
         'dart-test-results',
         '/'.join(['results', builder, 'LATEST', name, filename]),
-        name='copy %s %s to LATEST' % file, ok_ret='all')
+        name='copy %s %s to LATEST' % filepath, ok_ret='all')
       self.m.gsutil.copy(
         'dart-test-results',
         '/'.join(['results', builder, 'LATEST', name, 'approved_results.json']),
@@ -417,7 +440,8 @@ class DartApi(recipe_api.RecipeApi):
                    'mode': mode,
                    'arch': arch}
     if runtime is not None:
-      if runtime == 'ff': runtime = 'firefox'
+      if runtime == 'ff':
+        runtime = 'firefox' # pragma: no cover
       environment['runtime'] = runtime
       if runtime == 'chrome' or runtime == 'firefox':
         self._download_browser(runtime, global_config[runtime])
@@ -463,8 +487,10 @@ class DartApi(recipe_api.RecipeApi):
           isolate_hash = isolate_hashes[step['fileset']]
 
         environment_variables = step.get('environment', {})
-        environment_variables['BUILDBOT_BUILDERNAME'] = builder_name + "-%s" % channel
-        with self.m.context(cwd=self.m.path['checkout'], env=environment_variables):
+        environment_variables['BUILDBOT_BUILDERNAME'] = (
+            builder_name + "-%s" % channel)
+        with self.m.context(cwd=self.m.path['checkout'],
+                            env=environment_variables):
           with self.m.depot_tools.on_path():
             if is_build_step:
               if not self._has_specific_argument(args, ['-m', '--mode']):
@@ -537,9 +563,11 @@ class DartApi(recipe_api.RecipeApi):
         ])
     self.m.step.active_result.presentation.step_text = step_name
     for build in put_result.stdout['results']:
-      builder_tag = (x for x in build['build']['tags'] if x.startswith('builder:')).next()
+      builder_tag = (
+          x for x in build['build']['tags'] if x.startswith('builder:')).next()
       builder_name = builder_tag[len('builder:'):]
-      self.m.step.active_result.presentation.links[builder_name] = build['build']['url']
+      self.m.step.active_result.presentation.links[builder_name] = (
+          build['build']['url'])
 
   def run_test_py(self, step_name, append_logs, step, isolate_hash, shards,
                   local_shard, environment, tasks, global_config):
@@ -691,7 +719,7 @@ class DartApi(recipe_api.RecipeApi):
 
   def run_script(self, step_name, script, args, isolate_hash, shards,
                  local_shard, environment, tasks,
-                 cipd_packages=[], ok_ret=None):
+                 cipd_packages=None, ok_ret=None):
     """Runs a specific script with current working directory to be checkout. If
     the runtime (passed in environment) is a browser, and the system is linux,
     xvfb is used. If an isolate_hash is passed in, it will swarm the command.
@@ -709,6 +737,8 @@ class DartApi(recipe_api.RecipeApi):
       * ok_ret(str or [int]) - optional accepted exit codes passed to
         non-sharded script runs.
     """
+    if not cipd_packages: # pragma: no cover
+      cipd_packages = []
     runtime = self._get_specific_argument(args, ['-r', '--runtime'])
     if runtime is None:
       runtime = environment.get('runtime', None)
