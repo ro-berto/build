@@ -133,11 +133,12 @@ def run_perf_test(api, test_config, **kwargs):
             '{CHROMIUM_OUTPUT_DIR}', str(api.m.chromium.output_dir))
 
     step_name = "Performance Test%s %d of %d" % (
-        ' (%s)' % kwargs['name'] if 'name' in kwargs else '', i + 1, repeat_count)
+        ' (%s)' % kwargs['name'] if 'name' in kwargs else '',
+        i + 1, repeat_count)
     if api.m.platform.is_linux:
       os.environ['CHROME_DEVEL_SANDBOX'] = api.m.path.join(
           '/opt', 'chromium', 'chrome_sandbox')
-    out, err, retcode = _run_command(api, command, step_name, **kwargs)
+    out, _, retcode = _run_command(api, command, step_name, **kwargs)
     results['output'].append(out or '')
     if out:
       # Write stdout to a local temp location for possible buildbot parsing
@@ -241,5 +242,8 @@ def _run_command(api, command, step_name, **kwargs):
     if sf.result.stderr:  # pragma: no cover
       sf.result.presentation.logs['stderr'] = (
         sf.result.stderr).splitlines()
-    return sf.result.raw_io.output_texts.get('stdout_proxy'), sf.result.stderr, sf.result.retcode
-  return step_result.raw_io.output_texts.get('stdout_proxy'), step_result.stderr, step_result.retcode
+    return (
+        sf.result.raw_io.output_texts.get('stdout_proxy'),
+        sf.result.stderr, sf.result.retcode)
+  return (step_result.raw_io.output_texts.get('stdout_proxy'),
+          step_result.stderr, step_result.retcode)

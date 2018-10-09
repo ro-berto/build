@@ -1,10 +1,10 @@
 import math
 import re
-from functools import reduce
 
 
 def _geom_mean_and_std_dev_from_histogram(histogram):  # pragma: no cover
-  # Copied from: https://code.google.com/p/chromium/codesearch#chromium/build/scripts/common/chromium_utils.py&l=222
+  # Copied from:
+  # https://code.google.com/p/chromium/codesearch#chromium/build/scripts/common/chromium_utils.py&l=222
   # TODO(robertocn): Remove this code duplication from common.chromium_utils
   if not 'buckets' in histogram:
     return 0.0, 0.0
