@@ -1676,47 +1676,45 @@ Fetches a commit position string given a commit hash.
 
 [DEPS](/scripts/slave/recipe_modules/dart/__init__.py#1): [goma](#recipe_modules-goma), [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [DartApi](/scripts/slave/recipe_modules/dart/api.py#29)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [DartApi](/scripts/slave/recipe_modules/dart/api.py#31)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-Recipe module for code commonly used in dart recipes. Shouldn't be used elsewhere.
+Recipe module for code commonly used in dart recipes.
 
-&mdash; **def [build](/scripts/slave/recipe_modules/dart/api.py#85)(self, build_args=[], isolate=None, name='build dart'):**
+Shouldn't be used elsewhere.
+
+&mdash; **def [build](/scripts/slave/recipe_modules/dart/api.py#92)(self, build_args=None, name='build dart'):**
 
 Builds dart using the specified build_args
 and optionally isolates the sdk for testing using the specified isolate.
 If an isolate is specified, it returns the hash of the isolated archive.
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/dart/api.py#32)(self, clobber=False):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/dart/api.py#35)(self, clobber=False):**
 
 Checks out the dart code and prepares it for building.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/dart/api.py#206)(self, tasks):**
+&mdash; **def [collect\_all](/scripts/slave/recipe_modules/dart/api.py#198)(self, deferred_tasks):**
 
 Collects the results of a sharded test run.
 
-&mdash; **def [collect\_all](/scripts/slave/recipe_modules/dart/api.py#223)(self, deferred_tasks):**
+&mdash; **def [dart\_executable](/scripts/slave/recipe_modules/dart/api.py#87)(self):**
 
-Collects the results of a sharded test run.
+&mdash; **def [download\_parent\_isolate](/scripts/slave/recipe_modules/dart/api.py#141)(self):**
 
-&mdash; **def [dart\_executable](/scripts/slave/recipe_modules/dart/api.py#80)(self):**
+&mdash; **def [download\_results](/scripts/slave/recipe_modules/dart/api.py#248)(self, name):**
 
-&mdash; **def [download\_parent\_isolate](/scripts/slave/recipe_modules/dart/api.py#152)(self):**
-
-&mdash; **def [download\_results](/scripts/slave/recipe_modules/dart/api.py#239)(self, name):**
-
-&mdash; **def [get\_secret](/scripts/slave/recipe_modules/dart/api.py#54)(self, name):**
+&mdash; **def [get\_secret](/scripts/slave/recipe_modules/dart/api.py#60)(self, name):**
 
 Decrypts the specified secret and returns the location of the result
 
-&mdash; **def [kill\_tasks](/scripts/slave/recipe_modules/dart/api.py#73)(self):**
+&mdash; **def [kill\_tasks](/scripts/slave/recipe_modules/dart/api.py#80)(self):**
 
 Kills leftover tasks from previous runs or steps.
 
-&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#305)(self):**
+&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#315)(self):**
 
 Reads the debug.log file
 
-&mdash; **def [read\_result\_file](/scripts/slave/recipe_modules/dart/api.py#286)(self, name, log_name, test_data=''):**
+&mdash; **def [read\_result\_file](/scripts/slave/recipe_modules/dart/api.py#296)(self, name, log_name, test_data=''):**
 
 Reads the result.log file
 Args:
@@ -1727,7 +1725,7 @@ Args:
 Returns (str) - The content of the file.
 Raises file.Error
 
-&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#692)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=[], ok_ret=None):**
+&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#707)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=None, ok_ret=None):**
 
 Runs a specific script with current working directory to be checkout. If
 the runtime (passed in environment) is a browser, and the system is linux,
@@ -1746,7 +1744,7 @@ Args:
   * ok_ret(str or [int]) - optional accepted exit codes passed to
     non-sharded script runs.
 
-&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#544)(self, step_name, append_logs, step, isolate_hash, shards, local_shard, environment, tasks, global_config):**
+&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#559)(self, step_name, append_logs, step, isolate_hash, shards, local_shard, environment, tasks, global_config):**
 
 Runs test.py with default arguments, based on configuration from.
 Args:
@@ -1762,26 +1760,26 @@ Args:
   * global_config (dict) - The global section from test_matrix.json.
     Contains version tags for the pinned browsers Firefox and Chrome.
 
-&mdash; **def [run\_trigger](/scripts/slave/recipe_modules/dart/api.py#510)(self, step_name, step, isolate_hash):**
+&mdash; **def [run\_trigger](/scripts/slave/recipe_modules/dart/api.py#523)(self, step_name, step, isolate_hash):**
 
-&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#166)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='dart.tests', num_shards=0, last_shard_is_local=False, cipd_packages=[]):**
+&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#155)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='dart.tests', num_shards=0, last_shard_is_local=False, cipd_packages=None):**
 
 Runs test.py in the given isolate, sharded over several swarming tasks.
 Requires the 'shards' build property to be set to the number of tasks.
 Returns the created task(s), which are meant to be passed into collect().
 
-&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#316)(self, test_data):**
+&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#326)(self, test_data):**
 
 Reads the test-matrix.json file in checkout and performs each step listed
 in the file
 
 Raises StepFailure.
 
-&mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/dart/api.py#134)(self, isolate_fileset):**
+&mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/dart/api.py#121)(self, isolate_fileset):**
 
 Builds an isolate
 
-&mdash; **def [upload\_results](/scripts/slave/recipe_modules/dart/api.py#254)(self, name):**
+&mdash; **def [upload\_results](/scripts/slave/recipe_modules/dart/api.py#264)(self, name):**
 ### *recipe_modules* / [disk](/scripts/slave/recipe_modules/disk)
 
 [DEPS](/scripts/slave/recipe_modules/disk/__init__.py#1): [traceback](#recipe_modules-traceback), [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -1931,7 +1929,7 @@ are affected by the set of files that have changed.
 
 #### **class [FinditApi](/scripts/slave/recipe_modules/findit/api.py#18)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [compile\_and\_test\_at\_revision](/scripts/slave/recipe_modules/findit/api.py#130)(self, api, target_mastername, target_buildername, target_testername, revision, requested_tests, use_analyze, test_repeat_count=None, skip_tests=False):**
+&mdash; **def [compile\_and\_test\_at\_revision](/scripts/slave/recipe_modules/findit/api.py#129)(self, api, target_mastername, target_buildername, target_testername, revision, requested_tests, use_analyze, test_repeat_count=None, skip_tests=False):**
 
 Compile the targets needed to execute the specified tests and run them.
 
@@ -1960,7 +1958,7 @@ Args:
       If True, do not actually run the tests. Useful when we only want to
       isolate the targets for running elsewhere.
 
-&mdash; **def [configure\_and\_sync](/scripts/slave/recipe_modules/findit/api.py#295)(self, api, target_mastername, target_testername, revision, builders=None):**
+&mdash; **def [configure\_and\_sync](/scripts/slave/recipe_modules/findit/api.py#294)(self, api, target_mastername, target_testername, revision, builders=None):**
 
 Applies compile/test configs & syncs code.
 
@@ -1977,7 +1975,7 @@ Args:
   builders (dict): A dict of the same format as api.chromium_tests.builders.
 Returns: (target_buildername, checked_out_revision, cached_revision)
 
-&mdash; **def [existing\_targets](/scripts/slave/recipe_modules/findit/api.py#98)(self, targets, mb_mastername, mb_buildername):**
+&mdash; **def [existing\_targets](/scripts/slave/recipe_modules/findit/api.py#97)(self, targets, mb_mastername, mb_buildername):**
 
 Returns a sublist of the given targets that exist in the build graph.
 
@@ -2004,7 +2002,7 @@ Args:
   solution_name (str): the gclient solution name, eg:
       "src" for chromium, "src/third_party/pdfium" for pdfium.
 
-&mdash; **def [record\_previous\_revision](/scripts/slave/recipe_modules/findit/api.py#357)(self, api, bot_config):**
+&mdash; **def [record\_previous\_revision](/scripts/slave/recipe_modules/findit/api.py#356)(self, api, bot_config):**
 
 Records the latest checked out and cached revisions.
 
@@ -2019,7 +2017,7 @@ Returns:
   A pair of revisions (checked_out_revision, cached_revision), or None, None
   if the checkout directory does not exist.
 
-&mdash; **def [revisions\_between](/scripts/slave/recipe_modules/findit/api.py#66)(self, start_revision, end_revision, solution_name='src'):**
+&mdash; **def [revisions\_between](/scripts/slave/recipe_modules/findit/api.py#65)(self, start_revision, end_revision, solution_name='src'):**
 
 Returns the git commit hashes between the given range.
 
@@ -2356,13 +2354,13 @@ Return a failing step with the given message.
 
 #### **class [iOSApi](/scripts/slave/recipe_modules/ios/api.py#16)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [bootstrap\_swarming](/scripts/slave/recipe_modules/ios/api.py#569)(self):**
+&mdash; **def [bootstrap\_swarming](/scripts/slave/recipe_modules/ios/api.py#570)(self):**
 
 Bootstraps Swarming.
 
-&emsp; **@property**<br>&mdash; **def [bucket](/scripts/slave/recipe_modules/ios/api.py#67)(self):**
+&emsp; **@property**<br>&mdash; **def [bucket](/scripts/slave/recipe_modules/ios/api.py#68)(self):**
 
-&mdash; **def [build](/scripts/slave/recipe_modules/ios/api.py#346)(self, analyze=False, mb_path=None, suffix=None, use_mb=True):**
+&mdash; **def [build](/scripts/slave/recipe_modules/ios/api.py#347)(self, analyze=False, mb_path=None, suffix=None, use_mb=True):**
 
 Builds from this bot's build config.
 
@@ -2373,59 +2371,59 @@ Args:
   suffix: Suffix to use at the end of step names.
   use_mb: Whether or not to use mb to generate build files.
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/ios/api.py#129)(self, gclient_apply_config=None, \*\*kwargs):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/ios/api.py#130)(self, gclient_apply_config=None, \*\*kwargs):**
 
 Checks out Chromium.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#922)(self, tasks, upload_test_results=True):**
+&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#924)(self, tasks, upload_test_results=True):**
 
 Collects the given Swarming task results.
 
-&emsp; **@property**<br>&mdash; **def [configuration](/scripts/slave/recipe_modules/ios/api.py#72)(self):**
+&emsp; **@property**<br>&mdash; **def [configuration](/scripts/slave/recipe_modules/ios/api.py#73)(self):**
 
-&mdash; **def [ensure\_xcode](/scripts/slave/recipe_modules/ios/api.py#318)(self, xcode_build_version):**
+&mdash; **def [ensure\_xcode](/scripts/slave/recipe_modules/ios/api.py#319)(self, xcode_build_version):**
 
-&mdash; **def [get\_mac\_toolchain\_cmd](/scripts/slave/recipe_modules/ios/api.py#312)(self):**
+&mdash; **def [get\_mac\_toolchain\_cmd](/scripts/slave/recipe_modules/ios/api.py#313)(self):**
 
-&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1097)(self, path):**
+&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1100)(self, path):**
 
-&emsp; **@staticmethod**<br>&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/ios/api.py#575)(test):**
+&emsp; **@staticmethod**<br>&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/ios/api.py#576)(test):**
 
-&mdash; **def [isolate](/scripts/slave/recipe_modules/ios/api.py#731)(self, scripts_dir='src/ios/build/bots/scripts'):**
+&mdash; **def [isolate](/scripts/slave/recipe_modules/ios/api.py#732)(self, scripts_dir='src/ios/build/bots/scripts'):**
 
 Isolates the tests specified in this bot's build config.
 
-&mdash; **def [isolate\_earlgrey\_test](/scripts/slave/recipe_modules/ios/api.py#676)(self, test, shard_size, tmp_dir, isolate_template):**
+&mdash; **def [isolate\_earlgrey\_test](/scripts/slave/recipe_modules/ios/api.py#677)(self, test, shard_size, tmp_dir, isolate_template):**
 
 Isolate earlgrey test into small shards
 
-&mdash; **def [isolate\_test](/scripts/slave/recipe_modules/ios/api.py#596)(self, test, tmp_dir, isolate_template, test_cases=None, shard_num=None):**
+&mdash; **def [isolate\_test](/scripts/slave/recipe_modules/ios/api.py#597)(self, test, tmp_dir, isolate_template, test_cases=None, shard_num=None):**
 
 Isolates a single test.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1182)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1185)(self):**
 
 Returns the path (relative to checkout working dir) of the most recently
 compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1169)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1172)(self):**
 
 Returns the Path to the directory of the most recently compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1197)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1200)(self):**
 
 Returns the path to the most recently compiled iossim.
 
-&mdash; **def [parse\_tests](/scripts/slave/recipe_modules/ios/api.py#147)(self, tests, include_dir, start_index=0):**
+&mdash; **def [parse\_tests](/scripts/slave/recipe_modules/ios/api.py#148)(self, tests, include_dir, start_index=0):**
 
 Parses the tests dict, reading necessary includes.
 
 Args:
   tests: A list of test dicts.
 
-&emsp; **@property**<br>&mdash; **def [platform](/scripts/slave/recipe_modules/ios/api.py#81)(self):**
+&emsp; **@property**<br>&mdash; **def [platform](/scripts/slave/recipe_modules/ios/api.py#82)(self):**
 
-&mdash; **def [read\_build\_config](/scripts/slave/recipe_modules/ios/api.py#208)(self, master_name=None, build_config_base_dir=None, buildername=None):**
+&mdash; **def [read\_build\_config](/scripts/slave/recipe_modules/ios/api.py#209)(self, master_name=None, build_config_base_dir=None, buildername=None):**
 
 Reads the iOS build config for this bot.
 
@@ -2435,7 +2433,7 @@ Args:
   build_config_base_dir: Directory to search for build config master and
     test include directories.
 
-&mdash; **def [symupload](/scripts/slave/recipe_modules/ios/api.py#493)(self, artifact, url):**
+&mdash; **def [symupload](/scripts/slave/recipe_modules/ios/api.py#494)(self, artifact, url):**
 
 Uploads the given symbols file.
 
@@ -2444,19 +2442,19 @@ Args:
     out directory, so must have already been compiled.
   url: URL of the symbol server to upload to.
 
-&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1146)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
+&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1149)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
 
 Runs tests on Swarming as instructed by this bot's build config.
 
-&mdash; **def [trigger](/scripts/slave/recipe_modules/ios/api.py#812)(self, tasks):**
+&mdash; **def [trigger](/scripts/slave/recipe_modules/ios/api.py#813)(self, tasks):**
 
 Triggers the given Swarming tasks.
 
-&mdash; **def [upload](/scripts/slave/recipe_modules/ios/api.py#539)(self, base_path=None):**
+&mdash; **def [upload](/scripts/slave/recipe_modules/ios/api.py#540)(self, base_path=None):**
 
 Uploads built artifacts as instructed by this bot's build config.
 
-&mdash; **def [upload\_tgz](/scripts/slave/recipe_modules/ios/api.py#508)(self, artifact, bucket, path):**
+&mdash; **def [upload\_tgz](/scripts/slave/recipe_modules/ios/api.py#509)(self, artifact, bucket, path):**
 
 Tar gzips and uploads the given artifact to Google Storage.
 
@@ -2466,9 +2464,9 @@ Args:
   bucket: Name of the Google Storage bucket to upload to.
   path: Path to upload the artifact to relative to the bucket.
 
-&emsp; **@property**<br>&mdash; **def [use\_goma](/scripts/slave/recipe_modules/ios/api.py#94)(self):**
+&emsp; **@property**<br>&mdash; **def [use\_goma](/scripts/slave/recipe_modules/ios/api.py#95)(self):**
 
-&emsp; **@property**<br>&mdash; **def [xcode\_build\_version](/scripts/slave/recipe_modules/ios/api.py#99)(self):**
+&emsp; **@property**<br>&mdash; **def [xcode\_build\_version](/scripts/slave/recipe_modules/ios/api.py#100)(self):**
 ### *recipe_modules* / [isolate](/scripts/slave/recipe_modules/isolate)
 
 [DEPS](/scripts/slave/recipe_modules/isolate/__init__.py#5): [chromium](#recipe_modules-chromium), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]

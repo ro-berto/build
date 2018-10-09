@@ -141,12 +141,13 @@ def RunSteps(api):
 
   build_args = ['--super-fast']
   api.dart.build(build_args, name='can_time_out')
-  isolate_hash = api.dart.build(build_args, 'dart_tests')
+  isolate_hash = api.dart.upload_isolate('dart_testing_fileset')
 
   test_args = ['--all']
   if 'shards' in api.properties:
-    tasks = api.dart.shard('vm_tests', isolate_hash, test_args)
-    api.dart.collect(tasks)
+    with api.step.defer_results():
+      tasks = api.dart.shard('vm_tests', isolate_hash, test_args)
+      api.dart.collect_all([tasks])
 
   with api.step.defer_results():
     api.step('Print Hello World', ['echo', 'hello', 'world'])

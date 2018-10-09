@@ -89,7 +89,7 @@ class DartApi(recipe_api.RecipeApi):
     return self.m.path['checkout'].join(
       'tools','sdks', 'dart-sdk', 'bin', executable)
 
-  def build(self, build_args=None, isolate=None, name='build dart'):
+  def build(self, build_args=None, name='build dart'):
     """Builds dart using the specified build_args
        and optionally isolates the sdk for testing using the specified isolate.
        If an isolate is specified, it returns the hash of the isolated archive.
@@ -117,31 +117,6 @@ class DartApi(recipe_api.RecipeApi):
           raise e
         finally:
           self.m.goma.stop(build_exit_status=build_exit_status)
-
-        if isolate is not None:
-          bots_path = self.m.path['checkout'].join('tools', 'bots')
-          isolate_paths = self.m.file.glob_paths(
-              "find isolate files", bots_path, '*.isolate', test_data=[
-                  bots_path.join('a.isolate'), bots_path.join('b.isolate')])
-          for path in isolate_paths:
-            self.m.file.copy('copy %s to sdk root' % path.pieces[-1],
-                             path,
-                             self.m.path['checkout'])
-
-          step_result = self.m.python(
-            'upload testing isolate',
-            self.m.swarming_client.path.join('isolate.py'),
-            args= [
-                'archive',
-                # TODO(athom) find a way to avoid that
-                '--ignore_broken_items',
-                '-Ihttps://isolateserver.appspot.com',
-                '-i%s' % self.m.path['checkout'].join('%s.isolate' % isolate),
-                '-s%s' % self.m.path['checkout'].join('%s.isolated' % isolate)],
-            stdout=self.m.raw_io.output('out'))
-          isolate_hash = step_result.stdout.strip()[:40]
-          step_result.presentation.step_text = 'isolate hash: %s' % isolate_hash
-          return isolate_hash
 
   def upload_isolate(self, isolate_fileset):
     """Builds an isolate"""
@@ -220,31 +195,15 @@ class DartApi(recipe_api.RecipeApi):
       tasks.append(task)
     return tasks
 
-  def collect(self, tasks):
-    """Collects the results of a sharded test run."""
-    # TODO(mkroghj) remove when all swarming recipes has been converted to neo.
-    with self.m.step.defer_results():
-      # TODO(athom) collect all the output, and present as a single step
-      num_shards = int(self.m.properties['shards'])
-      for shard in range(num_shards):
-        task = tasks[shard]
-        path = self.m.path['cleanup'].join(str(shard))
-        task.task_output_dir = self.m.raw_io.output_dir(
-            leak_to=path, name="results")
-        self.m.swarming.collect_task(task)
-        output_dir = self.m.step.active_result.raw_io.output_dir
-        for filename in output_dir:
-          if "result.log" in filename: # pragma: no cover
-            contents = output_dir[filename]
-            self.m.step.active_result.presentation.logs['result.log'] = [
-                contents]
-
   def collect_all(self, deferred_tasks):
     """Collects the results of a sharded test run."""
     with self.m.step.defer_results():
       # TODO(athom) collect all the output, and present as a single step
       for index_step,deferred_task in enumerate(deferred_tasks):
         if deferred_task.is_ok:
+          results = ''
+          run = ''
+          output_dir = None
           for index_task,task in enumerate(deferred_task.get_result()):
             path = self.m.path['cleanup'].join(
                 str(index_step) + '_' + str(index_task))
@@ -252,11 +211,39 @@ class DartApi(recipe_api.RecipeApi):
                 leak_to=path, name="results")
             self.m.swarming.collect_task(task)
             output_dir = self.m.step.active_result.raw_io.output_dir
-            for filename in output_dir:
-              if "result.log" in filename: # pragma: no cover
-                contents = output_dir[filename]
-                self.m.step.active_result.presentation.logs['result.log'] = [
-                    contents]
+            for filepath in output_dir:
+              filename = filepath.split('/')[-1]  # pragma: no cover
+              if filename in (
+                  "result.log", "results.json", "run.json"): # pragma: no cover
+                contents = output_dir[filepath]
+                self.m.step.active_result.presentation.logs[
+                    filename] = [contents]
+                if filename == 'results.json':
+                  results += contents
+                  self.m.step.active_result.presentation.logs[
+                      'accumulated_results'] = [results]
+                if filename == 'run.json':
+                  run = contents
+          results_path = self.m.path['checkout'].join('results.json')
+          self.m.file.write_text("Write file", results_path, results)
+          run_path = self.m.path['checkout'].join('run.json')
+          self.m.file.write_text("Write file", run_path, run)
+          builder = self.m.buildbucket.builder_name
+          build_number = self.m.buildbucket.build.number
+          self.m.gsutil.upload(
+              results_path,
+              'dart-test-results',
+              '/'.join(['results', builder,
+                        str(build_number),
+                        'sharded tests %s' % str(index_step) , 'results.json']),
+              name='upload results')
+          self.m.gsutil.upload(
+              run_path,
+              'dart-test-results',
+              '/'.join(['results', builder,
+                        str(build_number),
+                        'sharded tests %s' % str(index_step) , 'run.json']),
+              name='upload run')
 
   def download_results(self,  name):
     builder = self.m.buildbucket.builder_name

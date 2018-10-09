@@ -436,432 +436,18 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/sdk/tools/task_kill.py",
-      "--kill_browsers=True",
-      "--kill_vsbuild=True"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "kill processes (2)"
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "preprocess_for_goma (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[CACHE]/goma/data/dart2js_linux_release_chrome_try"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "preprocess_for_goma.goma cache directory (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
-      "restart"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_linux_release_chrome_try",
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "preprocess_for_goma.start_goma (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:23@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
-      "start",
-      "--cloudtail-path",
-      "cloudtail",
-      "--cloudtail-service-account-json",
-      "/creds/service_accounts/service-account-goma-cloudtail.json",
-      "--pid-file",
-      "[TMP_BASE]/cloudtail.pid"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "preprocess_for_goma.start cloudtail (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/sdk/tools/build.py",
-      "--super-fast",
-      "--no-start-goma",
-      "-j200"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "build dart",
-    "timeout": 1200
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "postprocess_for_goma (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
-      "jsonstatus",
-      "[TMP_BASE]/goma_jsonstatus.json"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_linux_release_chrome_try",
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "postprocess_for_goma.goma_jsonstatus (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
-      "stat"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_linux_release_chrome_try",
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "postprocess_for_goma.goma_stat (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
-      "stop"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/dart2js_linux_release_chrome_try",
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
-      "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "postprocess_for_goma.stop_goma (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "vpython",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
-      "--upload-compiler-proxy-info",
-      "--log-url-json-file",
-      "/path/to/tmp/json",
-      "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "--bigquery-service-account-json",
-      "/creds/service_accounts/service-account-goma-bigquery.json",
-      "--json-status",
-      "[TMP_BASE]/goma_jsonstatus.json",
-      "--build-exit-status",
-      "0",
-      "--goma-stats-file",
-      "[TMP_BASE]/goma_stats",
-      "--goma-counterz-file",
-      "[TMP_BASE]/goma_counterz",
-      "--goma-crash-report-id-file",
-      "[TMP_BASE]/crash_report_id",
-      "--builder-id-json",
-      "{\"bucket\": \"\", \"builder\": \"dart2js-linux-release-chrome-try\", \"project\": \"\"}",
-      "--buildbot-buildername",
-      "dart2js-linux-release-chrome-try"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "postprocess_for_goma.upload_log (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"compiler_proxy_log\": \"https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@compiler_proxy_log@https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
-      "stop",
-      "--killed-pid-file",
-      "[TMP_BASE]/cloudtail.pid"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "postprocess_for_goma.stop cloudtail (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "glob",
-      "[CACHE]/builder/sdk/tools/bots",
-      "*.isolate"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "find isolate files",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/sdk/tools/bots/[CACHE]/builder/sdk/tools/bots/a.isolate@@@",
-      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/sdk/tools/bots/[CACHE]/builder/sdk/tools/bots/b.isolate@@@",
-      "@@@STEP_LOG_END@glob@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CACHE]/builder/sdk/tools/bots/[CACHE]/builder/sdk/tools/bots/a.isolate",
-      "[CACHE]/builder/sdk"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "copy a.isolate to sdk root"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CACHE]/builder/sdk/tools/bots/[CACHE]/builder/sdk/tools/bots/b.isolate",
-      "[CACHE]/builder/sdk"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "infra_step": true,
-    "name": "copy b.isolate to sdk root"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[CACHE]/builder/sdk/tools/swarming_client/isolate.py",
       "archive",
+      "--blacklist=^(out|xcodebuild)[/\\\\](Release|Debug|Product)\\w*[/\\\\]generated_tests",
       "--ignore_broken_items",
       "-Ihttps://isolateserver.appspot.com",
-      "-i[CACHE]/builder/sdk/dart_tests.isolate",
-      "-s[CACHE]/builder/sdk/dart_tests.isolated"
+      "-i[CACHE]/builder/sdk/dart_testing_fileset",
+      "-s[CACHE]/builder/sdk/dart_testing_fileset.isolated"
     ],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "upload testing isolate",
+    "name": "upload testing fileset dart_testing_fileset",
     "stdout": "/path/to/tmp/out",
     "~followup_annotations": [
-      "@@@STEP_TEXT@isolate hash: @@@"
+      "@@@STEP_TEXT@swarming fileset hash: @@@"
     ]
   },
   {
@@ -1061,7 +647,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]/0",
+      "[CLEANUP]/0_0",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -1146,7 +732,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[CLEANUP]/1",
+      "[CLEANUP]/0_1",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -1220,6 +806,70 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[CACHE]/builder/sdk/results.json"
+    ],
+    "infra_step": true,
+    "name": "Write file"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[CACHE]/builder/sdk/run.json"
+    ],
+    "infra_step": true,
+    "name": "Write file (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CACHE]/builder/sdk/results.json",
+      "gs://dart-test-results/results/dart2js-linux-release-chrome-try/1357/sharded tests 0/results.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload results",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/results/dart2js-linux-release-chrome-try/1357/sharded tests 0/results.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CACHE]/builder/sdk/run.json",
+      "gs://dart-test-results/results/dart2js-linux-release-chrome-try/1357/sharded tests 0/run.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload run",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/results/dart2js-linux-release-chrome-try/1357/sharded tests 0/run.json@@@"
+    ]
+  },
+  {
+    "cmd": [
       "echo",
       "hello",
       "world"
@@ -1265,7 +915,7 @@
       "--kill_browsers=True",
       "--kill_vsbuild=True"
     ],
-    "name": "kill processes (3)"
+    "name": "kill processes (2)"
   },
   {
     "cmd": [
@@ -2033,6 +1683,70 @@
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[CACHE]/builder/sdk/results.json"
+    ],
+    "infra_step": true,
+    "name": "Write file (3)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[CACHE]/builder/sdk/run.json"
+    ],
+    "infra_step": true,
+    "name": "Write file (4)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CACHE]/builder/sdk/results.json",
+      "gs://dart-test-results/results/dart2js-linux-release-chrome-try/1357/sharded tests 0/results.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload results (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/results/dart2js-linux-release-chrome-try/1357/sharded tests 0/results.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CACHE]/builder/sdk/run.json",
+      "gs://dart-test-results/results/dart2js-linux-release-chrome-try/1357/sharded tests 0/run.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload run (2)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/results/dart2js-linux-release-chrome-try/1357/sharded tests 0/run.json@@@"
     ]
   },
   {
