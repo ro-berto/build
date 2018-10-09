@@ -622,8 +622,11 @@ def chromium_official(c):
 
 @config_ctx(includes=['chromium_official'])
 def chromium_official_internal(c):
+   # TODO(mmoss): This isn't right, since CHECKOUT_PATH is the directory that
+   # the primary solution (i.e. 'src') is checked out to, but we need the
+   # top-level, .gclient path.
   c.project_generator.config_path = c.CHECKOUT_PATH.join(
-            'src-internal', 'tools', 'mb', 'mb_config.pyl')
+      'src-internal', 'tools', 'mb', 'mb_config.pyl')
 
 # TODO(phajdan.jr): cover or remove blink; used by blink_downstream.
 @config_ctx(includes=['chromium'])
