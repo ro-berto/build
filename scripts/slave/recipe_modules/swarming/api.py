@@ -1241,6 +1241,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     links = step_result.presentation.links
     for index, shard in enumerate(summary['shards']):
       url = task.get_shard_view_url(index)
+      duration = None
       if shard and shard.get('durations'):
         duration = shard["durations"][0]
         display_text = 'shard #%d (%.1f sec)' % (index, duration)
@@ -1261,10 +1262,17 @@ class SwarmingApi(recipe_api.RecipeApi):
         infra_failures.append((
             index, 'There isn\'t enough capacity to run your test'))
       elif self._is_timed_out(shard):
-        display_text = (
-          'shard #%d timed out, took too much time to complete' % index)
+        if duration is not None:
+          display_text = (
+              'shard #%d timed out after %.1f sec' % (index, duration))
+        else:
+          display_text = (
+              'shard #%d timed out, took too much time to complete' % index)
       elif self._get_exit_code(shard) != '0':
-        display_text = 'shard #%d (failed)' % index
+        if duration is not None:
+          display_text = 'shard #%d (failed) (%.1f sec)' % (index, duration)
+        else:
+          display_text = 'shard #%d (failed)' % index
 
       if shard and self.show_isolated_out_in_collect_step:
         isolated_out = shard.get('isolated_out')

@@ -321,7 +321,7 @@ def GenTests(api):
         'bot_id': 'vm30',
         'completed_ts': None,
         'created_ts': '2014-09-25T01:41:00.123',
-        'durations': None,
+        'durations': [60],
         'exit_codes': [],
         'failure': False,
         'id': '148aa78d7aa0100',
