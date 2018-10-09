@@ -3030,12 +3030,6 @@ This value can be changed per individual task.
 
 SwarmingTask -> argument list for 'swarming.py' command.
 
-&mdash; **def [get\_states](/scripts/slave/recipe_modules/swarming/api.py#1132)(self, task_ids, suffix=None):**
-
-Returns the states of a list of tasks.
-
-Uses the 'get_states' endpoint on the server.
-
 &mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1211)(self, prefix, task):**
 
 SwarmingTask -> name of a step of a waterfall.
@@ -3195,6 +3189,12 @@ Args:
 &emsp; **@verbose.setter**<br>&mdash; **def [verbose](/scripts/slave/recipe_modules/swarming/api.py#248)(self, value):**
 
 Enables or disables verbose output in swarming scripts.
+
+&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/swarming/api.py#1132)(self, task_sets, suffix=None, attempts=0):**
+
+Waits for a finished set of tasks.
+
+Uses the 'get_states' endpoint on the swarming server.
 ### *recipe_modules* / [swarming\_client](/scripts/slave/recipe_modules/swarming_client)
 
 [DEPS](/scripts/slave/recipe_modules/swarming_client/__init__.py#5): [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5648,7 +5648,7 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 
 [DEPS](/scripts/slave/recipe_modules/swarming/examples/full.py#7): [isolate](#recipe_modules-isolate), [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/swarming/examples/full.py#39)(api, platforms, show_isolated_out_in_collect_step, show_shards_in_collect_step, gtest_task, isolated_script_task, merge, trigger_script, named_caches, service_account, get_states):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/swarming/examples/full.py#39)(api, platforms, show_isolated_out_in_collect_step, show_shards_in_collect_step, gtest_task, isolated_script_task, merge, trigger_script, named_caches, service_account, wait_for_tasks):**
 ### *recipes* / [swarming:tests/task](/scripts/slave/recipe_modules/swarming/tests/task.py)
 
 [DEPS](/scripts/slave/recipe_modules/swarming/tests/task.py#5): [swarming](#recipe_modules-swarming), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

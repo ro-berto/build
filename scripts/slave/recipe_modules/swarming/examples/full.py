@@ -33,12 +33,12 @@ PROPERTIES = {
   'trigger_script': Property(default=None),
   'named_caches': Property(default=None),
   'service_account': Property(default=None),
-  'get_states': Property(default=None),
+  'wait_for_tasks': Property(default=None),
 }
 
 def RunSteps(api, platforms, show_isolated_out_in_collect_step,
              show_shards_in_collect_step, gtest_task, isolated_script_task,
-             merge, trigger_script, named_caches, service_account, get_states):
+             merge, trigger_script, named_caches, service_account, wait_for_tasks):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
@@ -139,16 +139,13 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
   # running on swarming.
   api.step('local step', ['echo', 'running something locally'])
 
-  if get_states:
-    task_ids = []
-    for task in tasks:
-      task_ids.extend(task.get_task_ids())
+  if wait_for_tasks:
+    task_ids = [
+        task.get_task_ids() for task in tasks
+    ]
 
-    # Call it twice to cover the case where it's called more than once in a
-    # build.
-    api.swarming.get_states(task_ids)
-    api.swarming.get_states(task_ids)
-    api.swarming.get_states(task_ids)
+    api.swarming.wait_for_finished_task_set(task_ids)
+    api.swarming.wait_for_finished_task_set(task_ids)
     return
 
   # Wait for all tasks to complete.
@@ -186,7 +183,7 @@ def GenTests(api):
       api.properties(platforms=('win', 'linux', 'mac')))
 
   yield (
-      api.test('get_states') +
+      api.test('wait_for_tasks') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
@@ -197,9 +194,16 @@ def GenTests(api):
       api.step_data(
           'archive for mac',
           stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
-      api.swarming.get_states([['PENDING'], ['COMPLETED']]) +
-      api.properties(platforms=('win', 'linux', 'mac'), get_states=True) +
-      api.post_process(post_process.Filter('collect tasks', 'collect tasks (2)')))
+      # This is probably how you'd use the test api; testing what happens if one
+      # set of tasks finishes first. This example code doesn't care what is
+      # returned, but calling code of this usually does.
+      api.swarming.wait_for_finished_task_set([
+          ([['110000', '110100']], 1),
+          ([['100000'],
+            ['130000']], 1),
+      ]) +
+      api.properties(platforms=('win', 'linux', 'mac'), wait_for_tasks=True) +
+      api.post_process(post_process.Filter('wait for tasks', 'wait for tasks (2)')))
 
   for exp in [True, False]:
     yield (
