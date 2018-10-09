@@ -676,19 +676,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "name": "explain extract build",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@why is this running?@This builder is doing the full package transfer because:@@@",
-      "@@@STEP_LOG_LINE@why is this running?@ - it's still running on buildbot :(@@@",
-      "@@@STEP_LOG_END@why is this running?@@@"
-    ]
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

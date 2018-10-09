@@ -656,7 +656,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # locally).
     bot_type = override_bot_type or bot_db.get_bot_config(
         mastername, buildername).get('bot_type')
-    if bot_type != 'tester':
+    if bot_type != 'tester':  # pragma: no cover
       return
 
     # Protect against hard to debug mismatches between directory names
@@ -1146,7 +1146,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self.m.file.rmtree(
         'build directory',
         self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs))
-    if package_transfer:
+    if package_transfer and bot_type == 'tester':
       # No need to read the GN args since we looked them up for testers already
       self.download_and_unzip_build(
           mastername, buildername, update_step, bot_db, read_gn_args=False)
