@@ -61,6 +61,7 @@ def GenTests(api):
           config='cros') +
       api.post_process(command_line_contains,
                        step_name='analyze',
-                       argument_sequence=['-f', 'path/to/custom_mb_config.pyl']) +
+                       argument_sequence=[
+                           '-f', 'path/to/custom_mb_config.pyl']) +
       api.post_process(post_process.DropExpectation)
   )

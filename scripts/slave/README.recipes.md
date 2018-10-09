@@ -1864,7 +1864,7 @@ Args:
 
 #### **class [FilterApi](/scripts/slave/recipe_modules/filter/api.py#13)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [analyze](/scripts/slave/recipe_modules/filter/api.py#270)(self, affected_files, test_targets, additional_compile_targets, config_file_name, mb_mastername=None, mb_buildername=None, mb_config_path=None, additional_names=None):**
+&mdash; **def [analyze](/scripts/slave/recipe_modules/filter/api.py#274)(self, affected_files, test_targets, additional_compile_targets, config_file_name, mb_mastername=None, mb_buildername=None, mb_config_path=None, additional_names=None):**
 
 Runs "analyze" step to determine targets affected by the patch.
 

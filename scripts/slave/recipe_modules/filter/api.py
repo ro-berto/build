@@ -145,9 +145,13 @@ class FilterApi(recipe_api.RecipeApi):
     ignore_regexs = [re.compile(ignore) for ignore in ignores]
     ignored = True
     matched_exclusion = False
+
+    first_found_path = ''
+    first_match = None
     for path in self.paths:
       first_match = self.__is_path_in_regex_list(path, exclusion_regexs)
       if first_match:
+        first_found_path = path
         matched_exclusion = True
 
       if not self.__is_path_in_regex_list(path, ignore_regexs):
@@ -243,7 +247,7 @@ class FilterApi(recipe_api.RecipeApi):
         step_result = self.m.python.succeeding_step('analyze_matched_exclusion',
             analyze_result)
         step_result.presentation.logs.setdefault('excluded_files', []).append(
-            '%s (regex = \'%s\')' % (path, first_match))
+            '%s (regex = \'%s\')' % (first_found_path, first_match))
         self._compile_targets = sorted(all_targets)
         self._test_targets = sorted(test_targets)
         self._report_analyze_result(analyze_input, {'status': analyze_result})
@@ -311,6 +315,6 @@ class FilterApi(recipe_api.RecipeApi):
 
     return self.test_targets, compile_targets
 
-  def _report_analyze_result(self, analyze_input, analyze_output):
+  def _report_analyze_result(self, _, __):
     # TODO(phajdan.jr): send data to event_mon.
     return
