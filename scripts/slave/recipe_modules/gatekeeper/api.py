@@ -23,7 +23,7 @@ class Gatekeeper(recipe_api.RecipeApi):
       if not self.m.runtime.is_luci:
         # TODO(machenbach): Deprecate after moving to LUCI.
         build_db_path = build_db_path.join('gate_keeper')
-    
+
     self.m.file.ensure_directory('ensure cache', build_db_path)
 
     for tree_name, tree_args in config.iteritems():
@@ -71,10 +71,6 @@ class Gatekeeper(recipe_api.RecipeApi):
       if tree_args.get('masters'):
         if self.c and self.c.use_new_logic:
           valid_masters = []
-
-          modifies_tree = False
-          if tree_args.get('set-status') or tree_args.get('open-tree'):
-            modifies_tree = True
 
           for master, allowed in tree_args['masters'].items():
             if '*' in allowed:

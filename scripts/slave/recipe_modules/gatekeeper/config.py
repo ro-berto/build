@@ -6,7 +6,7 @@ from recipe_engine.config import config_item_context, ConfigGroup
 from recipe_engine.config import Single
 
 
-def BaseConfig(**kwargs):
+def BaseConfig(**_):
   return ConfigGroup(
     use_new_logic = Single(bool),
   )
