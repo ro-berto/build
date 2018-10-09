@@ -113,7 +113,7 @@ class Test(object):
     self._test_runs = {}
     self._waterfall_mastername = waterfall_mastername
     self._waterfall_buildername = waterfall_buildername
-    self._test_options = None
+    self._test_options = TestOptions()
 
     self._name = name
     self._target_name = target_name
@@ -129,7 +129,7 @@ class Test(object):
 
   @property
   def test_options(self):
-    return self._test_options or TestOptions()
+    return self._test_options
 
   @test_options.setter
   def test_options(self, value):  # pragma: no cover
@@ -709,6 +709,15 @@ class LocalGTestTest(Test):
     tests_to_retry = self.tests_to_retry(api, suffix)
     if tests_to_retry:
       args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
+
+    # When retrying tests without patch, we want to run the tests a fixed number
+    # of times, regardless of whether they succeed, to see if they flaky fail.
+    # Some recipes specify an explicit repeat_count -- for those, we
+    # don't override their desired behavior.
+    if self.test_options.repeat_count is None and suffix == 'without patch':
+      # We don't modify self.test_options.repeat_count since that state is
+      # persistent across different suffixes.
+      args = _merge_arg(args, '--gtest_repeat', '10')
 
     gtest_results_file = api.test_utils.gtest_results(add_json_log=False)
     step_test_data = lambda: api.test_utils.test_api.canned_gtest_output(True)
@@ -1682,6 +1691,16 @@ class SwarmingGTestTest(SwarmingTest):
     tests_to_retry = self.tests_to_retry(api, suffix)
     if tests_to_retry:
       args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
+
+    # When retrying tests without patch, we want to run the tests a fixed number
+    # of times, regardless of whether they succeed, to see if they flaky fail.
+    # Some recipes specify an explicit repeat_count -- for those, we
+    # don't override their desired behavior.
+    if self.test_options.repeat_count is None and suffix == 'without patch':
+      # We don't modify self.test_options.repeat_count since that state is
+      # persistent across different suffixes.
+      args = _merge_arg(args, '--gtest_repeat', '10')
+
     args.extend(api.chromium_tests.swarming_extra_args)
 
     return api.swarming.gtest_task(

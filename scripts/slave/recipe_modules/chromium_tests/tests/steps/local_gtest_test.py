@@ -25,7 +25,6 @@ def RunSteps(api):
   test = api.chromium_tests.steps.LocalGTestTest('base_unittests')
 
   test_options = api.chromium_tests.steps.TestOptions(
-      repeat_count=2,
       test_filter=['foo.bar'],
       retry_limit=3,
       run_disabled=True)
