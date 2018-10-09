@@ -1818,7 +1818,7 @@ Returns:
 
 Provides steps to connect and run Docker images.
 
-&mdash; **def [login](/scripts/slave/recipe_modules/docker/api.py#11)(self, server='gcr.io', project='chromium-container-registry', service_account=None, step_name=None, \*\*kwargs):**
+&mdash; **def [login](/scripts/slave/recipe_modules/docker/api.py#17)(self, server='gcr.io', project='chromium-container-registry', service_account=None, step_name=None, \*\*kwargs):**
 
 Connect to a Docker registry.
 
@@ -1832,7 +1832,7 @@ Args:
       associated service account.
   step_name: Override step name. Default is 'docker login'.
 
-&mdash; **def [run](/scripts/slave/recipe_modules/docker/api.py#45)(self, image, step_name=None, cmd_args=None, dir_mapping=None, \*\*kwargs):**
+&mdash; **def [run](/scripts/slave/recipe_modules/docker/api.py#51)(self, image, step_name=None, cmd_args=None, dir_mapping=None, \*\*kwargs):**
 
 Run a command in a Docker image as the current user:group.
 

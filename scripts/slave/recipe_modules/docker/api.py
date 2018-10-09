@@ -8,6 +8,12 @@ from recipe_engine import recipe_api
 class DockerApi(recipe_api.RecipeApi):
   """Provides steps to connect and run Docker images."""
 
+  def __init__(self, *args, **kwargs):
+    super(DockerApi, self).__init__(*args, **kwargs)
+    self._config_file = None
+    self._project = None
+    self._server = None
+
   def login(self, server='gcr.io', project='chromium-container-registry',
             service_account=None, step_name=None, **kwargs):
     """Connect to a Docker registry.
@@ -56,7 +62,7 @@ class DockerApi(recipe_api.RecipeApi):
           mapped as read-write.
       step_name: Override step name. Default is 'docker run'.
     """
-    assert hasattr(self, '_config_file'), 'Did you forget to call docker.login?'
+    assert self._config_file, 'Did you forget to call docker.login?'
     args = [
       '--config-file', self._config_file,
       '--image', '%s/%s/%s' % (self._server, self._project, image),
