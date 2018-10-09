@@ -83,7 +83,7 @@ def main(argv):
                       help='List of sets of tasks. Each set of tasks is assumed'
                       ' to all be shards of the same root task.')
 
-  args = parser.parse_args(argv)
+  args = parser.parse_args(argv[1:])
 
   tasks = TasksToCollect.read_from_file(args.input_json)
 
