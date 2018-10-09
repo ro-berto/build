@@ -435,8 +435,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             self.m.chromium.output_dir,
             targets=list(set(isolated_targets)),
             verbose=True,
-            swarm_hashes_property_name=swarm_hashes_property_name,
-            use_exparchive=bot_config.get('force_exparchive', False))
+            swarm_hashes_property_name=swarm_hashes_property_name)
 
         if bot_config.get('perf_isolate_lookup'):
           change = {

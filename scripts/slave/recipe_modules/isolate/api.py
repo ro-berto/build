@@ -98,7 +98,7 @@ class IsolateApi(recipe_api.RecipeApi):
 
   def isolate_tests(self, build_dir, targets=None, verbose=False,
                     swarm_hashes_property_name='swarm_hashes',
-                    use_exparchive=False, step_name=None, **kwargs):
+                    step_name=None, **kwargs):
     """Archives prepared tests in |build_dir| to isolate server.
 
     src/tools/mb/mb.py is invoked to produce *.isolated.gen.json files that
@@ -118,9 +118,6 @@ class IsolateApi(recipe_api.RecipeApi):
             property (also accessible as 'isolated_tests' property). If this
             needs to be run more than once per recipe run, make sure to pass
             different propery names for each invocation.
-        use_exparchive (bool, int, float, long): Provide a boolean to
-            enable/disable exparchive, or provide a number (between 0 and 100)
-            to have n% of builds run with exparchive. IGNORED (deprecated).
     """
     # TODO(tansell): Make all steps in this function nested under one overall
     # 'isolate tests' master step.

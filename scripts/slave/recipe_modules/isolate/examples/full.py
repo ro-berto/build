@@ -14,14 +14,12 @@ DEPS = [
 ]
 
 PROPERTIES = {
-  'use_exparchive': Property(
-    kind=int, help="Force usage of exparchive.", default=0),
   'buildnumber': Property(
     kind=int, help="Number for the build.", default=100),
 }
 
 
-def RunSteps(api, use_exparchive):
+def RunSteps(api):
   # 'isolate_tests' step needs swarming checkout.
   api.swarming_client.checkout('master')
 
@@ -48,7 +46,7 @@ def RunSteps(api, use_exparchive):
   # None.
   if expected_targets is not None:
     api.isolate.isolate_tests(
-        build_path, expected_targets, use_exparchive=use_exparchive)
+        build_path, expected_targets)
 
 
 def GenTests(api):
@@ -142,13 +140,11 @@ def GenTests(api):
       'always-use-exparchive',
       ['test1', 'test2'],
       ['test_exparchive'],
-      ['test_exparchive', 'test1', 'test2']) + api.properties(
-          use_exparchive=True)
+      ['test_exparchive', 'test1', 'test2'])
   # Use force-exparchive
   for i in range(1, 11):
     yield make_test(
         'use-exparchive-20percent-build%i' % i,
         ['test1', 'test2'],
         ['test_exparchive'],
-        ['test_exparchive', 'test1', 'test2']) + api.properties(
-              use_exparchive=20, buildnumber=i)
+        ['test_exparchive', 'test1', 'test2']) + api.properties(buildnumber=i)
