@@ -50,6 +50,25 @@ class TestResults(object):
     assert self.valid is not None, ("TestResults.valid must be set to a "
         "non-None value when the constructor returns.")
 
+  def canonical_result_format(self):
+    """Returns a dictionary with results in canonical format.
+
+    There are three keys:
+      'valid': A Boolean indicating whether the test run was valid.
+      'failures': An iterable of strings -- each the name of a test that
+      failed.
+      'pass_fail_counts': A dictionary that provides the number of passes and
+      failures for each test. e.g.
+        {
+          'test3': { 'PASS_COUNT': 3, 'FAIL_COUNT': 2 }
+        }
+    """
+    return {
+      'valid': self.valid,
+      'failures': self.unexpected_failures,
+      'pass_fail_counts': self.pass_fail_counts,
+    }
+
   @property
   def total_test_runs(self):
     # Number of tests actually run, hence exclude skipped tests.
@@ -64,6 +83,14 @@ class TestResults(object):
     self.valid = self.raw.get('valid', False)
     self.passes = {x: {} for x in self.raw.get('successes', [])}
     self.unexpected_failures = {x: {} for x in self.raw.get('failures', [])}
+    for passing_test in self.passes.keys():
+      self.pass_fail_counts.setdefault(
+          passing_test, {'pass_count': 0, 'fail_count': 0})
+      self.pass_fail_counts[passing_test]['pass_count'] += 1
+    for failing_test in self.unexpected_failures.keys():
+      self.pass_fail_counts.setdefault(
+          failing_test, {'pass_count': 0, 'fail_count': 0})
+      self.pass_fail_counts[failing_test]['fail_count'] += 1
     self.tests = {}
     self.tests.update(self.passes)
     self.tests.update(self.unexpected_failures)
@@ -245,3 +272,13 @@ class GTestResults(object):
               ['<truncated>'] +
               lines[len(lines) - (self.MAX_LOG_LINES - remove_from_start):])
     return lines
+
+  def canonical_result_format(self):
+    """Returns a dictionary with results in canonical format."""
+    global_tags = self.raw.get('global_tags')
+    unreliable = 'UNRELIABLE_RESULTS' in global_tags if global_tags else False
+    return {
+      'valid': self.valid and not unreliable,
+      'failures': sorted(self.failures),
+      'pass_fail_counts': self.pass_fail_counts,
+    }

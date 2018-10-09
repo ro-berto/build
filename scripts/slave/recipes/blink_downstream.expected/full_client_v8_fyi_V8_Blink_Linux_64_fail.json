@@ -1247,7 +1247,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_layout_test_retry_summary.py",
       "--retry-summary-json",
-      "{\"failures\": [], \"ignored\": [\"bad/totally-bad-probably.html\", \"tricky/totally-maybe-not-awesome.html\"]}",
+      "{\"failures\": [], \"ignored\": [\"bad/totally-bad-probably.html\", \"flake/slow.html\", \"flake/timeout-then-crash.html\", \"flake/totally-flakey.html\", \"tricky/totally-maybe-not-awesome.html\"]}",
       "--build-number",
       "571",
       "--builder-name",
@@ -1271,7 +1271,7 @@
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
     "name": "webkit_layout_tests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/>@@@",
+      "@@@STEP_TEXT@<br/>ignored:<br/>bad/totally-bad-probably.html<br/>flake/totally-flakey.html<br/>tricky/totally-maybe-not-awesome.html<br/>flake/timeout-then-crash.html<br/>flake/slow.html<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },

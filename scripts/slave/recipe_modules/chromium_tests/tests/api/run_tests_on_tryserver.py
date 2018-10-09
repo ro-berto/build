@@ -188,6 +188,49 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
+  FAILURE_THEN_SUCCESS_DATA = (
+  """
+  {
+    "per_iteration_data": [
+      {
+        "Test.One": [{"status": "SUCCESS", "output_snippet": ""}],
+        "Test.Two": [
+          {"status": "FAILURE", "output_snippet": ""},
+          {"status": "SUCCESS", "output_snippet": ""}
+        ]
+      }
+    ]
+  }
+  """)
+  # Any failure in 'retry without patch' should cause the test to be considered
+  # flaky on tip of tree, and failures should be ignored.
+  yield (
+      api.test('retry_without_patch_any_failure') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux_chromium_rel_ng',
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+
+      # canned_gtest_output(passing=False)) marks Test.One as a success,
+      # Test.Two as a failure.
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+
+      # When running the test without patch, it first fails, then succeeds. This
+      # indicates that the test is flaky on tip of tree.
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.swarming.canned_summary_output(failure=False) +
+          api.test_utils.gtest_results(FAILURE_THEN_SUCCESS_DATA, retcode=0)) +
+      api.post_process(post_process.AnnotationContains,
+          'base_unittests (retry summary)', ['ignored:<br/>Test.Two']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
   yield (
       api.test('disable_deapply_patch_affected_files') +
       api.properties.tryserver(

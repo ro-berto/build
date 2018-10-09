@@ -2048,7 +2048,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_layout_test_retry_summary.py",
       "--retry-summary-json",
-      "{\"failures\": [\"test1.Test1\", \"test2.Test2\"], \"ignored\": []}",
+      "{\"failures\": [\"test1.Test1\", \"test2.Test2\"], \"ignored\": [\"test_common.Test1\"]}",
       "--build-number",
       "571",
       "--builder-name",
@@ -2078,7 +2078,7 @@
     },
     "name": "webkit_layout_tests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>test2.Test2<br/>test1.Test1<br/>@@@",
+      "@@@STEP_TEXT@<br/>failures:<br/>test2.Test2<br/>test1.Test1<br/><br/>ignored:<br/>test_common.Test1<br/>@@@",
       "@@@STEP_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@"
     ]

@@ -308,16 +308,22 @@ class TestUtilsApi(recipe_api.RecipeApi):
       suggests that the error is due to an issue with top of tree, and should
       not cause the CL to fail.
     """
-    valid_results, failures = test.failures_or_invalid_results(
+    valid_results, pass_fail_counts = test.pass_fail_counts_or_invalid_results(
         caller_api, 'without patch')
-
-    if not valid_results:
+    if valid_results:
+      ignored_failures = set()
+      for test_name, results in pass_fail_counts.iteritems():
+        # If a test fails at least once, then it's flaky on tip of tree and we
+        # should ignore it.
+        if results['fail_count'] > 0:
+          ignored_failures.add(test_name)
+    else:
       self._invalid_test_results(test, fatal=failure_is_fatal)
 
-    # If there are invalid results from the deapply patch step, treat this as if
-    # all tests passed which prevents us from ignoring any test failures from
-    # 'with patch'.
-    ignored_failures = failures if valid_results else set()
+      # If there are invalid results from the deapply patch step, treat this as
+      # if all tests passed which prevents us from ignoring any test failures
+      # from 'with patch'.
+      ignored_failures = set()
 
     valid_results, failures = test.failures_or_invalid_results(
         caller_api, 'with patch')

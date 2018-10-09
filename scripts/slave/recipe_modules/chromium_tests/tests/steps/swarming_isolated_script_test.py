@@ -92,7 +92,8 @@ def RunSteps(api):
     ]
     if test_repeat_count:
       api.step.active_result.presentation.logs['details'].append(
-        'pass_fail_counts: %r' % test.pass_fail_counts('with patch')
+        'pass_fail_counts: %r' % test.pass_fail_counts(
+            api, suffix='with patch')
       )
 
 

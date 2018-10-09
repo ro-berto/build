@@ -88,5 +88,5 @@ def GenTests(api):
       api.override_step_data(
           'webkit_layout_tests (with patch)',
           api.test_utils.canned_test_output(
-              passing=False, num_additional_failures=125))
+              passing=False, num_additional_failures=125, retcode=125))
   )

@@ -54,7 +54,7 @@
     "name": "details",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@details@compile_targets: ['test_name']@@@",
-      "@@@STEP_LOG_LINE@details@failures: set(['Test.Two'])@@@",
+      "@@@STEP_LOG_LINE@details@failures: ['Test.Two']@@@",
       "@@@STEP_LOG_LINE@details@uses_local_devices: False@@@",
       "@@@STEP_LOG_END@details@@@"
     ]

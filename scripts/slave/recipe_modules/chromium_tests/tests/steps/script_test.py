@@ -55,3 +55,15 @@ def GenTests(api):
           'script_test',
           api.json.output({}))
   )
+
+  yield (
+      api.test('failure') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id') +
+      api.override_step_data(
+          'script_test',
+          api.json.output({'valid': True, 'failures': ['TestOne']}))
+  )

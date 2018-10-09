@@ -101,8 +101,15 @@ class Test(object):
     """
     super(Test, self).__init__()
     # Contains a record of test runs, one for each suffix. Maps suffix to a dict
-    # with the keys 'valid' and 'failures'. These correspond to if the test run
-    # was valid, and the failures during the test run.
+    # with the keys 'valid', 'failures', and 'pass_fail_counts'.
+    #   'valid': A Boolean indicating whether the test run was valid.
+    #   'failures': An iterable of strings -- each the name of a test that
+    #   failed.
+    #   'pass_fail_counts': A dictionary that provides the number of passes and
+    #   failures for each test. e.g.
+    #     {
+    #       'test3': { 'PASS_COUNT': 3, 'FAIL_COUNT': 2 }
+    #     }
     self._test_runs = {}
     self._waterfall_mastername = waterfall_mastername
     self._waterfall_buildername = waterfall_buildername
@@ -155,6 +162,14 @@ class Test(object):
       return self._override_isolate_target
     return self.target_name
 
+  def _create_test_run_invalid_dictionary(self):
+    """Returns the dictionary for an invalid test run."""
+    return {
+      'valid': False,
+      'failures': [],
+      'pass_fail_counts': {},
+    }
+
   def compile_targets(self, api):
     """List of compile targets needed by this test."""
     raise NotImplementedError()  # pragma: no cover
@@ -184,6 +199,10 @@ class Test(object):
       return False
 
     return self._test_runs[suffix]['valid']
+
+  def pass_fail_counts(self, api, suffix):
+    """Returns a dictionary of pass and fail counts for each test."""
+    return self._test_runs[suffix]['pass_fail_counts']
 
   def failures(self, api, suffix):  # pragma: no cover
     """Return list of failures (list of strings)."""
@@ -231,6 +250,18 @@ class Test(object):
       # GTestResults.failures is a set whereas TestResults.failures is a dict.
       # In both cases, we want a set.
       return (True, set(self.failures(api, suffix)))
+    return (False, None)
+
+  def pass_fail_counts_or_invalid_results(self, api, suffix):
+    """If results are valid, returns pass fail counts
+
+    Returns: A tuple (valid_results, pass_fail_counts).
+      valid_results: A Boolean indicating whether results are valid.
+      pass_fail_counts: A dictionary of pass_fail_counts. Only valid if
+                        valid_results is True.
+    """
+    if self.has_valid_results(api, suffix):
+      return (True, self.pass_fail_counts(api, suffix))
     return (False, None)
 
   def tests_to_retry(self, api, suffix):
@@ -331,6 +362,9 @@ class TestWrapper(Test):  # pragma: no cover
 
   def failures(self, api, suffix):
     return self._test.failures(api, suffix)
+
+  def pass_fail_counts(self, api, suffix):
+    return self._test.pass_fail_counts(api, suffix)
 
   @property
   def uses_isolate(self):
@@ -441,6 +475,18 @@ class ExperimentalTest(TestWrapper):
           api, self._experimental_suffix(suffix))
     return []
 
+  def pass_fail_counts(self, api, suffix):
+    if (self._is_in_experiment(api)
+        # Only call into the implementation if we have valid results to avoid
+        # violating wrapped class implementations' preconditions.
+        and super(ExperimentalTest, self).has_valid_results(
+            api, self._experimental_suffix(suffix))):
+      # Call the wrapped test's implementation in case it has side effects,
+      # but ignore the result.
+      super(ExperimentalTest, self).pass_fail_counts(
+          api, self._experimental_suffix(suffix))
+    return {}
+
 
 class SizesStep(Test):
   def __init__(self, results_url, perf_id, **kwargs):
@@ -461,6 +507,9 @@ class SizesStep(Test):
 
   def failures(self, api, suffix):
     return []
+
+  def pass_fail_counts(self, api, suffix): # pragma: no cover
+    raise NotImplementedError("SizesStep doesn't support pass/fail counts")
 
 
 class ScriptTest(Test):  # pylint: disable=W0232
@@ -544,24 +593,30 @@ class ScriptTest(Test):  # pylint: disable=W0232
     finally:
       result = api.step.active_result
 
-      if not 'failures' in result.json.output:
-        self._test_runs[suffix] = {
-            'valid': False,
-            'failures': [],
-        }
+      failures = result.json.output.get('failures')
+      if failures is None:
+        self._test_runs[suffix] = self._create_test_run_invalid_dictionary()
         api.python.failing_step(
             '%s with suffix %s had an invalid result' % (self.name, suffix),
             'The recipe expected the result to contain the key \'failures\'.'
             ' Contents are:\n%s' % api.json.dumps(
                 result.json.output, indent=2))
 
+      # Most scripts do not emit 'successes'. If they start emitting
+      # 'successes', then we can create a proper results dictionary.
+      pass_fail_counts = {}
+      for failing_test in failures:
+        pass_fail_counts.setdefault(
+            failing_test, {'pass_count': 0, 'fail_count': 0})
+        pass_fail_counts[failing_test]['fail_count'] += 1
+
       self._test_runs[suffix] = {
-          'failures': result.json.output['failures'],
+          'failures': failures,
           'valid': result.json.output['valid'],
+          'pass_fail_counts': pass_fail_counts,
       }
 
-      _, failures = api.test_utils.limit_failures(
-          self._test_runs[suffix]['failures'], MAX_FAILS)
+      _, failures = api.test_utils.limit_failures(failures, MAX_FAILS)
       result.presentation.step_text += (
           api.test_utils.format_step_text([
             ['failures:', failures]
@@ -693,18 +748,10 @@ class LocalGTestTest(Test):
     finally:
       step_result = api.step.active_result
       if not hasattr(step_result, 'test_utils'): # pragma: no cover
-        self._test_runs[suffix] = {
-            'valid': False,
-            'failures': [],
-        }
+        self._test_runs[suffix] = self._create_test_run_invalid_dictionary()
       else:
         gtest_results = step_result.test_utils.gtest_results
-        self._test_runs[suffix] = {
-            'valid': gtest_results.valid and (
-                'UNRELIABLE_RESULTS' not in gtest_results.raw.get(
-                    'global_tags', [])),
-            'failures': gtest_results.failures,
-        }
+        self._test_runs[suffix] = gtest_results.canonical_result_format()
 
       r = api.test_utils.present_gtest_failures(step_result)
       if r:
@@ -718,7 +765,7 @@ class LocalGTestTest(Test):
 
     return step_result
 
-  def pass_fail_counts(self, suffix):
+  def pass_fail_counts(self, api, suffix):
     if self._gtest_results.get(suffix):
       # test_result exists and is not None.
       return self._gtest_results[suffix].pass_fail_counts
@@ -1098,8 +1145,10 @@ class ResultsHandler(object):
       results: Results returned by the step.
 
     Returns:
-      (valid, failures), where valid is True when results are valid, and
-      failures is a list of strings (typically names of failed tests).
+      (valid, failures, pass_fail_counts), where valid is True when results are
+      valid, and failures is a list of strings (typically names of failed
+      tests). pass_fail_counts is a dictionary that gives the number of passes
+      and fails for each test.
     """
     raise NotImplementedError()
 
@@ -1252,18 +1301,18 @@ class JSONResultsHandler(ResultsHandler):
       results = api.test_utils.create_results_from_json_if_needed(
           results)
     except Exception as e:
-      return False, [str(e), '\n', api.traceback.format_exc()]
+      return False, [str(e), '\n', api.traceback.format_exc()], None
     # If results were interrupted, we can't trust they have all the tests in
     # them. For this reason we mark them as invalid.
     return (results.valid and not results.interrupted,
-            results.unexpected_failures)
+            results.unexpected_failures, results.pass_fail_counts)
 
 
 class FakeCustomResultsHandler(ResultsHandler):
   """Result handler just used for testing."""
 
   def validate_results(self, api, results):
-    return True, []
+    return True, [], {}
 
   def render_results(self, api, results, presentation):
     presentation.step_text += api.test_utils.format_step_text([
@@ -1539,9 +1588,10 @@ class SwarmingTest(Test):
       step_result: StepResult object to examine.
 
     Returns:
-      A tuple (valid, failures), where valid is True if valid results are
-      available and failures is a list of names of failed tests (ignored if
-      valid is False).
+      A tuple (valid, failures, pass_fail_counts), where valid is True if valid
+      results are available and failures is a list of names of failed tests
+      (ignored if valid is False). pass_fail_counts is a dictionary that
+      includes the number of passes and fails for each test.
     """
     raise NotImplementedError()  # pragma: no cover
 
@@ -1567,9 +1617,13 @@ class SwarmingTest(Test):
                      indent=2)
       ).splitlines()
 
-      valid, failures = self.validate_task_results(api, step_result)
-      self._test_runs[suffix] = {'valid': valid, 'failures': failures}
-
+      valid, failures, pass_fail_counts = self.validate_task_results(
+          api, step_result)
+      self._test_runs[suffix] = {
+          'valid': valid,
+          'failures': failures,
+          'pass_fail_counts': pass_fail_counts
+      }
 
   @property
   def uses_isolate(self):
@@ -1642,19 +1696,20 @@ class SwarmingGTestTest(SwarmingTest):
 
   def validate_task_results(self, api, step_result):
     if not hasattr(step_result, 'test_utils'):
-      return False, None  # pragma: no cover
+      return False, None, None  # pragma: no cover
 
     gtest_results = step_result.test_utils.gtest_results
     if not gtest_results:
-      return False, None  # pragma: no cover
+      return False, None, None  # pragma: no cover
 
     global_tags = gtest_results.raw.get('global_tags', [])
     if 'UNRELIABLE_RESULTS' in global_tags:
-      return False, None  # pragma: no cover
+      return False, None, None  # pragma: no cover
 
-    return gtest_results.valid, gtest_results.failures
+    return (gtest_results.valid, gtest_results.failures,
+            gtest_results.pass_fail_counts)
 
-  def pass_fail_counts(self, suffix):
+  def pass_fail_counts(self, api, suffix):
     if self._gtest_results.get(suffix):
       # test_result exists and is not None.
       return self._gtest_results[suffix].pass_fail_counts
@@ -1749,7 +1804,7 @@ class LocalIsolatedScriptTest(Test):
       return self._override_compile_targets
     return [self.target_name]
 
-  def pass_fail_counts(self, suffix):
+  def pass_fail_counts(self, api, suffix):
     if self._test_results.get(suffix):
       # test_result exists and is not None.
       return self._test_results[suffix].pass_fail_counts
@@ -1784,15 +1839,20 @@ class LocalIsolatedScriptTest(Test):
       # TODO(kbr, nedn): the logic of processing the output here is very similar
       # to that of SwarmingIsolatedScriptTest. They probably should be shared
       # between the two.
-      self._test_runs[suffix] = api.step.active_result
-      results = self._test_runs[suffix].json.output
-      presentation = self._test_runs[suffix].presentation
-      valid, _ = self.results_handler.validate_results(api, results)
-      self._test_results[suffix] = (
-          api.test_utils.create_results_from_json_if_needed(
-              results) if valid else None)
+      step_result = api.step.active_result
+      results = step_result.json.output
+      presentation = step_result.presentation
+      valid, _, _ = self.results_handler.validate_results(api, results)
+      test_results = (api.test_utils.create_results_from_json_if_needed(
+          results) if valid else None)
+      self._test_results[suffix] = test_results
 
       self.results_handler.render_results(api, results, presentation)
+
+      if valid:
+        self._test_runs[suffix] = test_results.canonical_result_format()
+      else:
+        self._test_runs[suffix] = self._create_test_run_invalid_dictionary()
 
       if api.step.active_result.retcode == 0 and not valid:
         # This failure won't be caught automatically. Need to manually
@@ -1883,7 +1943,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         build_properties=api.chromium.build_properties,
         cipd_packages=self._cipd_packages, extra_args=args)
 
-  def pass_fail_counts(self, suffix):
+  def pass_fail_counts(self, api, suffix):
     if self._test_results.get(suffix):
       # test_result exists and is not None.
       return self._test_results[suffix].pass_fail_counts
@@ -1893,11 +1953,11 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     # If we didn't get a step_result object at all, we can safely
     # assume that something definitely went wrong.
     if step_result is None:  # pragma: no cover
-      return False, None
+      return False, None, None
 
     results = getattr(step_result, 'isolated_script_results', None) or {}
 
-    valid, failures = self.results_handler.validate_results(api, results)
+    valid, failures, pass_fail_counts = self.results_handler.validate_results(api, results)
     presentation = step_result.presentation
     self.results_handler.render_results(api, results, presentation)
 
@@ -1906,14 +1966,14 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     # If we got no results and a nonzero exit code, the test probably
     # did not run correctly.
     if step_result.retcode != 0 and not results:
-      return False, failures
+      return False, failures, None
 
     # Even if the output is valid, if the return code is greater than
     # MAX_FAILURES_EXIT_STATUS then the test did not complete correctly and the
     # results can't be trusted. It probably exited early due to a large number
     # of failures or an environment setup issue.
     if step_result.retcode > api.test_utils.MAX_FAILURES_EXIT_STATUS:
-      return False, failures
+      return False, failures, None
 
     if step_result.retcode == 0 and not valid:
       # This failure won't be caught automatically. Need to manually
@@ -1923,7 +1983,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     # Check for perf results and upload to results dashboard if present.
     self._output_perf_results_if_present(api, step_result)
 
-    return valid, failures
+    return valid, failures, pass_fail_counts
 
   def run(self, api, suffix):
     try:
@@ -2044,11 +2104,7 @@ class PythonBasedTest(Test):
 
     if (test_results.valid and
         step_result.retcode <= api.test_utils.MAX_FAILURES_EXIT_STATUS):
-      self._test_runs[suffix] = {
-          'valid': True,
-          'failures': test_results.unexpected_failures,
-      }
-
+      self._test_runs[suffix] = test_results.canonical_result_format()
       _, failures = api.test_utils.limit_failures(
           test_results.unexpected_failures.keys(), MAX_FAILS)
       presentation.step_text += api.test_utils.format_step_text([
@@ -2057,10 +2113,7 @@ class PythonBasedTest(Test):
       if failures:
         presentation.status = api.step.FAILURE
     else:
-      self._test_runs[suffix] = {
-          'valid': False,
-          'failures': [],
-      }
+      self._test_runs[suffix] = self._create_test_run_invalid_dictionary()
       presentation.status = api.step.EXCEPTION
       presentation.step_text = api.test_utils.INVALID_RESULTS_MAGIC
 
@@ -2127,10 +2180,8 @@ class BisectTest(Test):
   def run(self, api, suffix):
     self.run_results = api.bisect_tester.run_test(
         self.test_config, **self.kwargs)
-    self._test_runs[suffix] = {
-        'valid': bool(self.run_results.get('retcodes')),
-        'failures': [],
-    }
+    self._test_runs[suffix] = self._create_test_run_invalid_dictionary()
+    self._test_runs[suffix]['valid'] = bool(self.run_results.get('retcodes'))
 
 
 class BisectTestStaging(Test):
@@ -2162,10 +2213,8 @@ class BisectTestStaging(Test):
   def run(self, api, suffix):
     self.run_results = api.bisect_tester_staging.run_test(
         self.test_config, **self.kwargs)
-    self._test_runs[suffix] = {
-        'valid': bool(self.run_results.get('retcodes')),
-        'failures': [],
-    }
+    self._test_runs[suffix] = self._create_test_run_invalid_dictionary()
+    self._test_runs[suffix]['valid'] = bool(self.run_results.get('retcodes'))
 
 
 class AndroidTest(Test):
@@ -2196,14 +2245,13 @@ class AndroidTest(Test):
       step_result = f.result
       raise
     finally:
-      self._test_runs[suffix] = {'valid': False}
+      self._test_runs[suffix] = self._create_test_run_invalid_dictionary()
       presentation_step = api.python.succeeding_step(
           'Report %s results' % self.name, '')
       gtest_results = api.test_utils.present_gtest_failures(
           step_result, presentation=presentation_step.presentation)
       if gtest_results:
-        failures = gtest_results.failures
-        self._test_runs[suffix] = {'valid': True, 'failures': failures}
+        self._test_runs[suffix] = gtest_results.canonical_result_format()
 
         api.test_results.upload(
             api.json.input(gtest_results.raw),
@@ -2429,19 +2477,19 @@ class BlinkTest(Test):
         step_result.presentation.status = api.step.WARNING
     finally:
       step_result = api.step.active_result
-      self._test_runs[suffix] = {
-        # TODO(dpranke): crbug.com/357866 - note that all comparing against
-        # MAX_FAILURES_EXIT_STATUS tells us is that we did not exit early
-        # or abnormally; it does not tell us how many failures there actually
-        # were, which might be much higher (up to 5000 diffs, where we
-        # would bail out early with --exit-after-n-failures) or lower
-        # if we bailed out after 100 crashes w/ -exit-after-n-crashes, in
-        # which case the retcode is actually 130
-        'valid': (step_result.test_utils.test_results.valid and
-                  step_result.retcode <=
-                    api.test_utils.MAX_FAILURES_EXIT_STATUS),
-        'failures': step_result.test_utils.test_results.unexpected_failures,
-      }
+
+      # TODO(dpranke): crbug.com/357866 - note that all comparing against
+      # MAX_FAILURES_EXIT_STATUS tells us is that we did not exit early
+      # or abnormally; it does not tell us how many failures there actually
+      # were, which might be much higher (up to 5000 diffs, where we
+      # would bail out early with --exit-after-n-failures) or lower
+      # if we bailed out after 100 crashes w/ -exit-after-n-crashes, in
+      # which case the retcode is actually 130
+      if step_result.retcode > api.test_utils.MAX_FAILURES_EXIT_STATUS:
+        self._test_runs[suffix] = self._create_test_run_invalid_dictionary()
+      else:
+        self._test_runs[suffix] = (step_result.test_utils.test_results.
+            canonical_result_format())
 
       if step_result:
         results = step_result.test_utils.test_results
@@ -2518,6 +2566,10 @@ class IncrementalCoverageTest(Test):
 
   def failures(self, api, suffix):
     return []
+
+  def pass_fail_counts(self, api, suffix): # pragma: no cover
+    raise NotImplementedError(
+        "IncrementalCoverageTest doesn't support pass/fail counts")
 
   def compile_targets(self, api):
     """List of compile targets needed by this test."""
@@ -2718,6 +2770,9 @@ class MockTest(Test):
   def failures(self, api, suffix):
     api.step('failures %s%s' % (self.name, self._mock_suffix(suffix)), None)
     return self._failures
+
+  def pass_fail_counts(self, api, suffix):
+    return {}
 
   def compile_targets(self, api): # pragma: no cover
     del api

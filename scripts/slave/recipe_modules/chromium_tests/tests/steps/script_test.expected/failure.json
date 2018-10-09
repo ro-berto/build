@@ -1,0 +1,45 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "None/testing/scripts/script.py",
+      "--build-config-fs",
+      "Release",
+      "--paths",
+      "{\"checkout\": \"None\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "--properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"slavename\": \"test_bot_id\", \"target_platform\": \"linux\"}",
+      "--args",
+      "[\"some\", \"args\"]",
+      "run",
+      "--output",
+      "/path/to/tmp/json"
+    ],
+    "name": "script_test",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>TestOne<br/>@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"failures\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"TestOne\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"valid\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "details",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@details@compile_targets: ['other_target']@@@",
+      "@@@STEP_LOG_LINE@details@uses_local_devices: False@@@",
+      "@@@STEP_LOG_END@details@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]

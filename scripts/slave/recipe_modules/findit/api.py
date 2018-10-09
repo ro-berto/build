@@ -272,7 +272,8 @@ class FinditApi(recipe_api.RecipeApi):
           }
 
         if hasattr(test, 'pass_fail_counts'):
-          pass_fail_counts = test.pass_fail_counts(suffix=abbreviated_revision)
+          pass_fail_counts = test.pass_fail_counts(
+              api, suffix=abbreviated_revision)
           results[test.name]['pass_fail_counts'] = pass_fail_counts
 
         results[test.name]['step_metadata'] = test.step_metadata(

@@ -43,7 +43,7 @@ def RunSteps(api):
       'compile_targets: %r' % test.compile_targets(api),
       'uses_local_devices: %r' % test.uses_local_devices,
       'uses_isolate: %r' % test.uses_isolate,
-      'pass_fail_counts: %r' % test.pass_fail_counts(''),
+      'pass_fail_counts: %r' % test.pass_fail_counts(api, suffix=''),
     ]
 
 
