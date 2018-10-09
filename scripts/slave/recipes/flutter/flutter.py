@@ -9,6 +9,7 @@ DEPS = [
     'build',
     'depot_tools/git',
     'depot_tools/gsutil',
+    'depot_tools/depot_tools',
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/json',
@@ -245,10 +246,11 @@ def RunSteps(api):
 
   if api.platform.is_mac:
     SetupXcode(api)
-  api.python('download android tools',
-             checkout.join('dev', 'bots', 'download_android_tools.py'),
-             ['-t', 'sdk'])
-  InstallGradle(api, checkout)
+  with api.depot_tools.on_path():
+    api.python('download android tools',
+               checkout.join('dev', 'bots', 'download_android_tools.py'),
+               ['-t', 'sdk'])
+    InstallGradle(api, checkout)
 
   with api.context(env=env, cwd=checkout):
     shards = ['tests'] if not api.platform.is_linux else ['tests', 'coverage']

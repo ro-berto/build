@@ -135,6 +135,11 @@
       "-t",
       "sdk"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "download android tools"
   },
   {
@@ -149,6 +154,11 @@
       "--outfile",
       "[START_DIR]\\flutter\\dev\\bots\\gradle-2.14.1-bin.zip"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "download gradle"
   },
   {
@@ -157,6 +167,11 @@
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\unzip.py"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "unzip gradle",
     "stdin": "{\"output\": \"[START_DIR]\\\\flutter\\\\dev\\\\bots\\\\gradle\", \"quiet\": false, \"zip_file\": \"[START_DIR]\\\\flutter\\\\dev\\\\bots\\\\gradle-2.14.1-bin.zip\"}"
   },
@@ -166,6 +181,11 @@
       "/C",
       "[START_DIR]\\flutter\\dev\\bots\\android_tools\\sdk\\tools\\bin\\sdkmanager.bat --list"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "print installed android SDK components"
   },
   {
