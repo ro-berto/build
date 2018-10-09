@@ -8,6 +8,8 @@ import re
 from recipe_engine.types import freeze
 
 
+# pylint: disable=abstract-method
+
 class V8Variant(object):
   """Immutable class representing testing variants passed to v8."""
   def __init__(self, *variants):
@@ -353,6 +355,10 @@ class BaseTest(object):
 
 
 class V8Test(BaseTest):
+  def __init__(self, *args, **kwargs):
+    super(V8Test, self).__init__(*args, **kwargs)
+    self.applied_test_filter = ''
+
   def apply_filter(self):
     test_config = self.api.v8.test_configs[self.name]
     self.applied_test_filter = self.api.v8._applied_test_filter(test_config)
@@ -375,7 +381,7 @@ class V8Test(BaseTest):
         test['name'] + self.test_step_config.step_name_suffix,
         self.api.path['checkout'].join('tools', 'run-tests.py'),
         full_args,
-        step_test_data=lambda: self.api.v8.test_api.output_json(),
+        step_test_data=self.api.v8.test_api.output_json,
         **kwargs
       )
     return self.post_run(test)
@@ -488,6 +494,11 @@ def _trigger_swarming_task(api, task, test_step_config):
 
 
 class V8SwarmingTest(V8Test):
+  def __init__(self, *args, **kwargs):
+    super(V8SwarmingTest, self).__init__(*args, **kwargs)
+    self.task = None
+    self.test = None
+
   @property
   def uses_swarming(self):
     """Returns true if the test uses swarming."""
@@ -564,7 +575,7 @@ class V8SwarmingTest(V8Test):
       # swarming collect step like for local testing.
       self.api.swarming.collect_task(
         self.task,
-        step_test_data=lambda: self.api.v8.test_api.output_json(),
+        step_test_data=self.api.v8.test_api.output_json,
       )
     except self.api.step.InfraFailure as e:
       result += TestResults.infra_failure(e)
@@ -589,12 +600,16 @@ class V8Presubmit(BaseTest):
 
 
 class V8GenericSwarmingTest(BaseTest):
+  # FIXME: BaseTest.rerun is an abstract method which isn't implemented in this
+  # class.  Should it be abstract?
   def __init__(self, test_step_config, api, title=None, command=None):
     super(V8GenericSwarmingTest, self).__init__(test_step_config, api)
     self._command = command or []
     self._title = (
         title or
         self.api.v8.test_configs[self.name].get('name', 'Generic test'))
+    self.test = None
+    self.task = None
 
   @property
   def title(self):
@@ -632,6 +647,12 @@ class V8GenericSwarmingTest(BaseTest):
 
 
 class V8CompositeSwarmingTest(BaseTest):
+  # FIXME: BaseTest.rerun is an abstract method which isn't implemented in this
+  # class.  Should it be abstract?
+  def __init__(self, *args, **kwargs):
+    super(V8CompositeSwarmingTest, self).__init__(*args, **kwargs)
+    self.composites = []
+
   @property
   def composite_tests(self):
     """Returns: An iterable of V8GenericSwarmingTest instances."""
@@ -651,7 +672,6 @@ class V8CompositeSwarmingTest(BaseTest):
     for c in self.composites:
       c.run(**kwargs)
     return TestResults.empty()
-
 
 class V8CheckInitializers(V8GenericSwarmingTest):
   @property

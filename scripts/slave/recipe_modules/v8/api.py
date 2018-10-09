@@ -14,11 +14,12 @@ import random
 import re
 import urllib
 
-from builders import EmptyTestSpec, TestStepConfig, TestSpec
+# pylint: disable=relative-import
+from builders import TestSpec
 from recipe_engine.types import freeze
 from recipe_engine import recipe_api
 from . import bisection
-from . import builders
+from . import builders as v8_builders
 from . import testing
 
 
@@ -93,11 +94,25 @@ class V8Version(object):
 
 
 class V8Api(recipe_api.RecipeApi):
-  BUILDERS = builders.BUILDERS
-  FLATTENED_BUILDERS = builders.FLATTENED_BUILDERS
+  BUILDERS = v8_builders.BUILDERS
+  FLATTENED_BUILDERS = v8_builders.FLATTENED_BUILDERS
   VERSION_FILE = 'include/v8-version.h'
-  EMPTY_TEST_SPEC = EmptyTestSpec
-  TEST_SPEC = TestSpec
+  EMPTY_TEST_SPEC = v8_builders.EmptyTestSpec
+  TEST_SPEC = v8_builders.TestSpec
+
+  def __init__(self, *args, **kwargs):
+    super(V8Api, self).__init__(*args, **kwargs)
+    self.test_configs = {}
+    self.bot_config = None
+    self.rerun_failures_count = None
+    self.test_duration_sec = None
+    self.isolated_tests = None
+    self._isolate_targets_cached = None
+    self.build_environment = None
+    self.checkout_root = None
+    self.revision = None
+    self.revision_cp = None
+    self.revision_number = None
 
   def bot_config_by_buildername(self, builders=FLATTENED_BUILDERS):
     default = {}
@@ -171,7 +186,7 @@ class V8Api(recipe_api.RecipeApi):
 
   def update_test_configs(self, test_configs):
     """Update test configs without mutating previous copy."""
-    self.test_configs = dict(getattr(self, 'test_configs', {}))
+    self.test_configs = dict(self.test_configs)
     self.test_configs.update(test_configs)
 
   def load_static_test_configs(self):
@@ -377,7 +392,7 @@ class V8Api(recipe_api.RecipeApi):
         ref='master..%s' % self.m.properties['patch_ref'],
         limit=100,
         step_name='Get patches',
-        step_test_data=lambda: self.test_api.example_patch_range(),
+        step_test_data=self.test_api.example_patch_range,
     )
     # There'll be at least one commit with the patch. Maybe more for dependent
     # CLs.
@@ -473,7 +488,7 @@ class V8Api(recipe_api.RecipeApi):
     """
     return [
       testing.create_test(test, self.m)
-      for test in TestSpec.from_properties_dict(self.m.properties)
+      for test in v8_builders.TestSpec.from_properties_dict(self.m.properties)
     ]
 
   def extra_tests_from_test_spec(self, test_spec):
@@ -496,14 +511,14 @@ class V8Api(recipe_api.RecipeApi):
 
     Args:
       root: Path to checkout root with configurations.
-    Returns: TestSpec object, filtered by interesting builders (current builder
-        and all its triggered testers).
+    Returns: v8_builders.TestSpec object, filtered by interesting builders
+      (current builder and all its triggered testers).
     """
     test_spec_file = root.join('infra', 'testing', 'builders.pyl')
 
     # Fallback for branch builders.
     if not self.m.path.exists(test_spec_file):
-      return EmptyTestSpec
+      return v8_builders.EmptyTestSpec
 
     try:
       # Eval python literal file.
@@ -554,7 +569,7 @@ class V8Api(recipe_api.RecipeApi):
     if self.bot_config.get('enable_swarming', True):
       # Find tests to isolate on builders.
       for buildername in self.builderset:
-        bot_config = builders.FLATTENED_BUILDERS.get(buildername, {})
+        bot_config = v8_builders.FLATTENED_BUILDERS.get(buildername, {})
         self._isolate_targets_cached.extend(
             self.isolate_targets_from_tests(
                 [test.name for test in bot_config.get('tests', [])]))
@@ -686,8 +701,8 @@ class V8Api(recipe_api.RecipeApi):
     self.m.perf_dashboard.add_point(points)
 
   def compile(
-      self, test_spec=EmptyTestSpec, mb_config_path=None, out_dir=None,
-      **kwargs):
+      self, test_spec=v8_builders.EmptyTestSpec, mb_config_path=None,
+      out_dir=None, **kwargs):
     """Compile all desired targets and isolate tests.
 
     Args:
@@ -754,7 +769,7 @@ class V8Api(recipe_api.RecipeApi):
                 '-x', '/third_party/',
                 '-o', self.m.json.output(),
               ],
-              step_test_data=lambda: self.test_api.example_build_dependencies(),
+              step_test_data=self.test_api.example_build_dependencies,
               ok_ret='any',
               venv=True,
           ).json.output
@@ -1051,7 +1066,7 @@ class V8Api(recipe_api.RecipeApi):
     targets = [failure.failure_dict.get('target_name', 'All')]
 
     test = self.create_test(failure.test_step_config)
-    def test_func(revision):
+    def test_func(_):
       return test.rerun(failure_dict=failure.failure_dict)
 
     def is_bad(revision):
@@ -1086,8 +1101,7 @@ class V8Api(recipe_api.RecipeApi):
         # Filter the bisect range to the revisions for which isolate hashes or
         # archived builds are available, depending on whether swarming is used
         # or not.
-        available_bisect_range = self.get_available_range(
-            bisect_range, test.uses_swarming)
+        available_bisect_range = self.get_available_range(bisect_range)
       else:
         available_bisect_range = bisect_range
 
@@ -1305,7 +1319,8 @@ class V8Api(recipe_api.RecipeApi):
     if key in src:
       dest[key] = src[key]
 
-  def maybe_trigger(self, test_spec=EmptyTestSpec, **additional_properties):
+  def maybe_trigger(self, test_spec=v8_builders.EmptyTestSpec,
+                    **additional_properties):
     triggers = self.bot_config.get('triggers', [])
     triggers_proxy = self.bot_config.get('triggers_proxy', False)
     triggered_build_ids = []
@@ -1541,7 +1556,7 @@ class V8Api(recipe_api.RecipeApi):
         ref='%s~2..%s' % (oldest_change, newest_change),
         limit=100,
         step_name='Get change range',
-        step_test_data=lambda: self.test_api.example_bisection_range()
+        step_test_data=self.test_api.example_bisection_range
     )
 
     # We get minimum two commits when the first and last commit are equal (i.e.
@@ -1556,7 +1571,7 @@ class V8Api(recipe_api.RecipeApi):
         [commit['commit'] for commit in reversed(commits[:-1])],
     )
 
-  def get_available_range(self, bisect_range, use_swarming=False):
+  def get_available_range(self, bisect_range):
     assert self.bot_type == 'tester'
     archive_url_pattern = 'gs://' + self.isolated_archive_path + '/%s.json'
     # TODO(machenbach): Maybe parallelize this in a wrapper script.

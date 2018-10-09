@@ -9,6 +9,7 @@
 from collections import defaultdict
 
 from recipe_engine.types import freeze
+# pylint: disable=relative-import
 from testing import V8Variant
 
 
@@ -2431,7 +2432,7 @@ BUILDERS = {
 ####### Waterfall: client.v8.branches
 BRANCH_BUILDERS = {}
 
-def AddBranchBuilder(name, build_config, bits, presubmit=False,
+def AddBranchBuilder(name, build_config, presubmit=False,
                      unittests_only=False):
   tests = []
   if presubmit:
@@ -2463,32 +2464,35 @@ def AddBranchBuilder(name, build_config, bits, presubmit=False,
     },
   }
 
-for build_config, name_suffix in (('Release', ''), ('Debug', ' - debug')):
+def fill_branch_builders():
+  for build_config, name_suffix in (('Release', ''), ('Debug', ' - debug')):
+    for branch_name in ('stable branch', 'beta branch'):
+      name = 'V8 Linux - %s%s' % (branch_name, name_suffix)
+      BRANCH_BUILDERS[name] = AddBranchBuilder(
+          name, build_config, presubmit=True)
+      name = 'V8 Linux64 - %s%s' % (branch_name, name_suffix)
+      BRANCH_BUILDERS[name] = AddBranchBuilder(name, build_config)
+      name = 'V8 arm - sim - %s%s' % (branch_name, name_suffix)
+      BRANCH_BUILDERS[name] = AddBranchBuilder(name, build_config)
+
   for branch_name in ('stable branch', 'beta branch'):
-    name = 'V8 Linux - %s%s' % (branch_name, name_suffix)
+    name = 'V8 mipsel - sim - %s' % branch_name
     BRANCH_BUILDERS[name] = AddBranchBuilder(
-        name, build_config, 32, presubmit=True)
-    name = 'V8 Linux64 - %s%s' % (branch_name, name_suffix)
-    BRANCH_BUILDERS[name] = AddBranchBuilder(name, build_config, 64)
-    name = 'V8 arm - sim - %s%s' % (branch_name, name_suffix)
-    BRANCH_BUILDERS[name] = AddBranchBuilder(name, build_config, 32)
+        name, 'Release')
 
-for branch_name in ('stable branch', 'beta branch'):
-  name = 'V8 mipsel - sim - %s' % branch_name
-  BRANCH_BUILDERS[name] = AddBranchBuilder(
-      name, 'Release', 32)
+    name = 'V8 mips64el - sim - %s' % branch_name
+    BRANCH_BUILDERS[name] = AddBranchBuilder(
+        name, 'Release', unittests_only=True)
 
-  name = 'V8 mips64el - sim - %s' % branch_name
-  BRANCH_BUILDERS[name] = AddBranchBuilder(
-      name, 'Release', 64, unittests_only=True)
+    name = 'V8 ppc64 - sim - %s' % branch_name
+    BRANCH_BUILDERS[name] = AddBranchBuilder(
+        name, 'Release', unittests_only=True)
 
-  name = 'V8 ppc64 - sim - %s' % branch_name
-  BRANCH_BUILDERS[name] = AddBranchBuilder(
-      name, 'Release', 64, unittests_only=True)
+    name = 'V8 s390x - sim - %s' % branch_name
+    BRANCH_BUILDERS[name] = AddBranchBuilder(
+        name, 'Release', unittests_only=True)
 
-  name = 'V8 s390x - sim - %s' % branch_name
-  BRANCH_BUILDERS[name] = AddBranchBuilder(
-      name, 'Release', 64, unittests_only=True)
+fill_branch_builders()
 
 BUILDERS['client.v8.branches'] = {'builders': BRANCH_BUILDERS}
 
@@ -2496,15 +2500,19 @@ BUILDERS = freeze(BUILDERS)
 BRANCH_BUILDERS = freeze(BRANCH_BUILDERS)
 
 
-# TODO(machenbach): Temporary code to migrate to flattened builder configs.
-# Clean up the config above and remove this after testing in prod.
-FLATTENED_BUILDERS = {}
-for mastername, master_config in BUILDERS.iteritems():
-    builders = master_config['builders']
-    for buildername, bot_config in builders.iteritems():
-      assert buildername not in FLATTENED_BUILDERS, buildername
-      FLATTENED_BUILDERS[buildername] = bot_config
-FLATTENED_BUILDERS = freeze(FLATTENED_BUILDERS)
+def flatten_configs():
+  # TODO(machenbach): Temporary code to migrate to flattened builder configs.
+  # Clean up the config above and remove this after testing in prod.
+  flattened_builders = {}
+  for _, master_config in BUILDERS.iteritems():
+      builders = master_config['builders']
+      for buildername, bot_config in builders.iteritems():
+        assert buildername not in flattened_builders, buildername
+        flattened_builders[buildername] = bot_config
+  return freeze(flattened_builders)
+
+FLATTENED_BUILDERS = flatten_configs()
+
 
 
 def iter_builders(recipe='v8'):
@@ -2527,11 +2535,14 @@ def iter_builders(recipe='v8'):
 # parent-child relationships from runtime properties. Those are only simulated
 # here with the "testing" dict, but data might not be accurate.
 PARENT_MAP = {}
-for _, _, builder, bot_config in iter_builders():
-  # Statically defined triggers.
-  for triggered in bot_config.get('triggers', []):
-    PARENT_MAP[triggered] = (builder, bot_config)
-  # Simulated dynamically defined triggers.
-  for triggered in bot_config.get('testing', {}).get('properties', {}).get(
-      'triggers', []):
-    PARENT_MAP[triggered] = (builder, bot_config)
+def fill_parent_map():
+  for _, _, builder, bot_config in iter_builders():
+    # Statically defined triggers.
+    for triggered in bot_config.get('triggers', []):
+      PARENT_MAP[triggered] = (builder, bot_config)
+    # Simulated dynamically defined triggers.
+    for triggered in bot_config.get('testing', {}).get('properties', {}).get(
+        'triggers', []):
+      PARENT_MAP[triggered] = (builder, bot_config)
+
+fill_parent_map()

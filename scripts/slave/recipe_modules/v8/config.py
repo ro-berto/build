@@ -21,7 +21,7 @@ config_ctx = config_item_context(BaseConfig)
 
 
 @config_ctx()
-def v8(c):
+def v8(_):
   pass
 
 

@@ -410,7 +410,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
             stream='stdout'),
     )
 
-  def _get_test_branch_name(self, mastername, buildername):
+  def _get_test_branch_name(self, buildername):
     if re.search(r'stable branch', buildername):
       return STABLE_BRANCH
     if re.search(r'beta branch', buildername):
@@ -465,7 +465,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     parent_buildername, parent_bot_config = (
         builders.PARENT_MAP.get(
             buildername, (parent_buildername, parent_bot_config)))
-    branch=self._get_test_branch_name(mastername, buildername)
+    branch=self._get_test_branch_name(buildername)
 
     if parent_test_spec:
       kwargs.update(self.example_parent_test_spec_properties(
@@ -562,7 +562,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
 
     # TODO(machenbach): Add a better field/step dropping mechanism to the
     # engine.
-    def keep_fields(check, step_odict):
+    def keep_fields(_, step_odict):
       to_ret = OrderedDict()
       for name, step in step_odict.iteritems():
         for rx, fields in keep_fields_spec:
