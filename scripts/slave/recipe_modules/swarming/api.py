@@ -1129,42 +1129,29 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     return merged_results
 
-  def wait_for_finished_task_set(self, task_sets, suffix=None, attempts=0):
-    """Waits for a finished set of tasks.
+  def get_states(self, task_ids, suffix=None):
+    """Returns the states of a list of tasks.
 
-    Args:
-      task_sets: A list of lists. Each item in task_sets is a set of tasks,
-                 which should be collected together.
-      suffix: An optional name suffix.
-      attempts: How many times have we polled swarming for this data. Used
-                to retry at a slower rate, so we don't overload the server
-                with requests.
-
-    Returns:
-      A tuple of two items:
-        1. A list of task sets which have finished.
-        2. How many attempts we've now made to get task data.
-
-    Uses the 'get_states' endpoint on the swarming server."""
+    Uses the 'get_states' endpoint on the server."""
     args = [
         '--swarming-server', self.swarming_server,
         '--swarming-py-path', self.m.swarming_client.path.join('swarming.py'),
-        '--output-json', self.m.json.output(),
-        '--input-json', self.m.json.input(data=task_sets),
-        '--attempts', attempts,
+        '--json', self.m.json.output(),
     ]
 
     if self.service_account_json:
       args.extend(['--auth-service-account-json', self.service_account_json])
 
-    result = self.m.python(
-        'wait for tasks%s' % (suffix or ''),
-        self.resource('wait_for_finished_task_set.py'),
-        step_test_data=lambda: self.m.json.test_api.output(data=task_sets),
+    args = args + task_ids
+    result =  self.m.python(
+        'collect tasks%s' % (suffix or ''),
+        self.resource('get_task_states.py'),
+        step_test_data=lambda: self.m.json.test_api.output(data={
+            'states': ['COMPLETED'] * len(task_ids)}),
         args=args)
-    return [
-        tuple(task_set) for task_set in result.json.output['sets']
-    ], result.json.output['attempts']
+    return {
+        task_id: state for task_id, state in zip(
+            task_ids, result.json.output['states'])}
 
   def _isolated_script_collect_step(self, task, **kwargs):
     """Collects results for a step that is *not* a googletest, like telemetry.

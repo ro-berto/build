@@ -79,9 +79,9 @@ def GenTests(api):
             'base_unittests': '[dummy hash for base_unittests]',
             'base_unittests_2': '[dummy hash for base_unittests_2]',
           }) +
-      api.swarming.wait_for_finished_task_set([
-          ([], 1),
-          ([['10000'], ['110000']], 1),
+      api.swarming.get_states([
+          ['PENDING', 'PENDING'],
+          ['COMPLETED', 'COMPLETED'],
       ]) +
       api.post_process(post_process.StatusCodeIn, 0) +
       api.post_process(post_process.DropExpectation)
@@ -102,13 +102,13 @@ def GenTests(api):
             'base_unittests': '[dummy hash for base_unittests]',
             'base_unittests_2': '[dummy hash for base_unittests_2]',
           }) +
-      api.swarming.wait_for_finished_task_set([
-          ([], 1),
-          ([['110000']], 1),
-      ]) +
+      api.swarming.get_states([
+          ['PENDING', 'PENDING',],
+          ['PENDING', 'COMPLETED',]]) +
       # There's no call to get_states after there's only one test left pending,
       # as the test_utils logic just calls the regular collect logic on that
       # test.
+      api.post_process(post_process.DoesNotRun, 'sleep') +
       api.post_process(post_process.MustRun, 'base_unittests') +
       api.post_process(post_process.StatusCodeIn, 0) +
       api.post_process(post_process.DropExpectation)
@@ -129,14 +129,15 @@ def GenTests(api):
             'base_unittests': '[dummy hash for base_unittests]',
             'base_unittests_2': '[dummy hash for base_unittests_2]',
           }) +
-      api.swarming.wait_for_finished_task_set([
-          ([], 1),
-          ([], 1),
-          ([], 1),
-          ([], 1),
-          ([], 1),
-          ([['10000'], ['110000']], 1),
-      ]) +
+      api.swarming.get_states([
+          ['PENDING', 'PENDING',],
+          ['PENDING', 'PENDING',],
+          ['PENDING', 'PENDING',],
+          ['PENDING', 'PENDING',],
+          ['PENDING', 'PENDING',],
+          ['PENDING', 'PENDING',],
+          ['COMPLETED', 'COMPLETED',]]) +
+      api.post_process(post_process.MustRun, 'sleep') +
       api.post_process(post_process.StatusCodeIn, 0) +
       api.post_process(post_process.DropExpectation)
   )

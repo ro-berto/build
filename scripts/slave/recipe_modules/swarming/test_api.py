@@ -57,13 +57,14 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
   def merge_script_log_file(self, data):
     return self.m.raw_io.output(data)
 
-  def wait_for_finished_task_set(self, states, suffix=None):
+  def get_states(self, states, suffix=None):
     res = None
-    for i, (tasks, attempts) in enumerate(states):
-      name = 'wait for tasks%s%s' % (
-          suffix or '', '' if not i else ' (%d)' % (i + 1))
+    for i, s in enumerate(states):
+      name = 'collect tasks%s%s' % (suffix or '', '' if not i else ' (%d)' % (i + 1))
       data = self.step_data(
-          name, self.m.json.output(data={'sets': tasks, 'attempts': attempts}))
+          name, self.m.json.output(data={
+              'states': s,
+          }))
       if not res:
         res = data
       else:
