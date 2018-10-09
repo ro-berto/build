@@ -77,7 +77,8 @@ def GenTests(api):
          api.properties(custom_tmp_dir='/tmp/goma_goma_module') +
          api.properties.generic(**properties))
 
-  yield (api.test('linux_invalid_goma_jsonstatus') + api.platform.name('linux') +
+  yield (api.test('linux_invalid_goma_jsonstatus') +
+         api.platform.name('linux') +
          api.step_data('postprocess_for_goma.goma_jsonstatus',
                        api.json.output(data=None)) +
          api.properties.generic(**properties))

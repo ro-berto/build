@@ -407,7 +407,10 @@ class GomaApi(recipe_api.RecipeApi):
     ]
 
     json_test_data = {
-      'compiler_proxy_log': 'https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz'
+      'compiler_proxy_log': (
+          'https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/'
+          '30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log'
+          '.INFO.20170329-222936.4420.gz')
     }
 
     assert self._goma_jsonstatus_called
@@ -422,7 +425,9 @@ class GomaApi(recipe_api.RecipeApi):
           '--ninja-log-outdir', ninja_log_outdir,
           '--ninja-log-command-file', self.m.json.input(ninja_log_command),
       ])
-      json_test_data['ninja_log'] = 'https://chromium-build-stats.appspot.com/ninja_log/2017/03/30/build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz'
+      json_test_data['ninja_log'] = (
+          'https://chromium-build-stats.appspot.com/ninja_log/2017/03/30/'
+          'build11-m1/ninja_log.build11-m1.chrome-bot.20170329-224321.9976.gz')
 
     if build_exit_status is not None:
       args.extend(['--build-exit-status', build_exit_status])
