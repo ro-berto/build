@@ -275,6 +275,34 @@ def GenTests(api):
   )
 
   yield (
+      api.test('webkit_layout_tests_with_suffixes') +
+      api.properties(
+          single_spec={
+              'name': 'webkit_layout_tests',
+              'isolate_name': 'webkit_tests',
+              'results_handler': 'layout tests',
+              'swarming': {
+                  'can_use_on_swarming_builders': True,
+                  'dimension_sets': [{
+                      'os': 'Mac',
+                      'gpu': '8086:blah',
+                  }],
+              },
+          },
+          swarm_hashes={
+            'webkit_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=1
+      ) + api.post_process(post_process.Filter(
+          # Ensure that we still pass the full step name to the test result
+          # upload, but we pass a simplified step name to 'archive results'.
+          'Upload to test-results [webkit_layout_tests on Intel GPU on Mac]',
+          'archive results for webkit_layout_tests', '$result'))
+  )
+
+  yield (
       api.test('custom_webkit_tests_step_name') +
       api.properties(
           single_spec={

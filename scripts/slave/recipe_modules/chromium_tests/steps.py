@@ -1361,6 +1361,24 @@ class FakeCustomResultsHandler(ResultsHandler):
     api.test_utils.create_results_from_json(results)
 
 
+def _clean_step_name(step_name, suffix):
+  """
+  Based on
+  https://crrev.com/48baea8de14f5a17aef2edd7d0b8c00d7bbf7909/go/src/infra/appengine/test-results/frontend/builders.go#260
+  Some tests add 'suffixes' in addition to the regular suffix, in order to
+  distinguish different runs of the same test suite on different hardware. We
+  don't want this to happen for layout test result uploads, since we have no
+  easy way to discover this new name. So, we normalize the step name before
+  uploading results.
+  """
+  if ' ' in step_name:
+    step_name = step_name.split(' ')[0]
+
+  if not suffix:
+    return step_name
+
+  return '%s (%s)' % (step_name, suffix)
+
 class LayoutTestResultsHandler(JSONResultsHandler):
   """Uploads layout test results to Google storage."""
 
@@ -1405,6 +1423,7 @@ class LayoutTestResultsHandler(JSONResultsHandler):
     # TODO: The naming of the archive step is clunky, but the step should
     # really be triggered src-side as part of the post-collect merge and
     # upload, and so this should go away when we make that change.
+    step_name = _clean_step_name(step_name, step_suffix)
     archive_layout_test_args += ['--step-name', step_name]
     archive_step_name = 'archive results for ' + step_name
 
