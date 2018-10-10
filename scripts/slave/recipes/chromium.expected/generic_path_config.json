@@ -47,7 +47,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_remote_run_Builder",
     "env": {
@@ -65,7 +65,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -599,8 +599,10 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.chromium.fyi\", \"builder\": \"Linux remote_run Builder\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"Linux remote_run Builder\", \"project\": \"chromium/src\"}",
       "--buildbot-buildername",
       "Linux remote_run Builder",
       "--buildbot-mastername",

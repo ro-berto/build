@@ -14,6 +14,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gsutil',
   'isolate',
+  'recipe_engine/buildbucket',
   'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -53,16 +54,21 @@ def RunSteps(api):
 
 def GenTests(api):
   def props(mastername='chromium.linux',
-            buildername='Linux Tests',
+            builder='Linux Tests',
             parent_buildername='Linux Builder',
             **kwargs):
+    bb_kwargs = {
+        'project': 'chromium/src',
+        'builder': builder,
+    }
     kwargs.update({
         'mastername': mastername,
-        'buildername':buildername,
+        'buildername':builder,
     })
     if parent_buildername:
       kwargs['parent_buildername'] = parent_buildername
-    return api.properties.generic(**kwargs)
+    return api.properties.generic(**kwargs) + api.buildbucket.ci_build(
+        **bb_kwargs)
 
 
   yield (
@@ -89,7 +95,7 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_gtest') +
-    props(buildername='Linux Builder',
+    props(builder='Linux Builder',
           parent_buildername=None) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -110,7 +116,7 @@ def GenTests(api):
     # The chromium.gpu.fyi bots use serialize_tests in order to reduce
     # load on the GPU bots in the Swarming pool.
     props(mastername='chromium.gpu.fyi',
-          buildername='Linux FYI Release (NVIDIA)',
+          builder='Linux FYI Release (NVIDIA)',
           parent_buildername='GPU FYI Linux Builder',
           swarm_hashes={
               'base_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -159,7 +165,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_swarmed_gtest_mac_gpu') +
     props(mastername='chromium.mac',
-          buildername='Mac10.13 Tests',
+          builder='Mac10.13 Tests',
           parent_buildername='Mac Builder',
           swarm_hashes={
               'gl_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -195,7 +201,7 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_gtest_override_compile_targets') +
-    props(buildername='Linux Builder',
+    props(builder='Linux Builder',
           parent_buildername=None,
           swarm_hashes={
               'tab_capture_end2end_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -223,7 +229,7 @@ def GenTests(api):
 
   yield (
     api.test('build_dynamic_isolated_script_test') +
-    props(buildername='Linux Builder',
+    props(builder='Linux Builder',
           parent_buildername=None) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -454,7 +460,7 @@ def GenTests(api):
 
   yield (
     api.test('build_dynamic_isolated_script_test_compile_target_overriden') +
-    props(buildername='Linux Builder',
+    props(builder='Linux Builder',
           parent_buildername=None) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -478,7 +484,7 @@ def GenTests(api):
 
   yield (
     api.test('build_dynamic_swarmed_isolated_script_test') +
-    props(buildername='Linux Builder',
+    props(builder='Linux Builder',
           parent_buildername=None) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -500,7 +506,7 @@ def GenTests(api):
   yield (
     api.test(
         'build_dynamic_swarmed_isolated_script_test_compile_target_overidden') +
-    props(buildername='Linux Builder',
+    props(builder='Linux Builder',
           parent_buildername=None) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -913,7 +919,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_swarmed_isolated_script_test_mac_gpu') +
     props(mastername='chromium.mac',
-          buildername='Mac10.13 Tests',
+          builder='Mac10.13 Tests',
           parent_buildername='Mac Builder',
           swarm_hashes={
               'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -951,7 +957,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_swarmed_isolated_script_test_win_gpu') +
     props(mastername='chromium.win',
-          buildername='Win7 Tests (1)',
+          builder='Win7 Tests (1)',
           parent_buildername='Win Builder',
           swarm_hashes={
               'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -993,7 +999,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_swarmed_isolated_script_test_win_non_gpu') +
     props(mastername='chromium.win',
-          buildername='Win7 Tests (1)',
+          builder='Win7 Tests (1)',
           parent_buildername='Win Builder',
           swarm_hashes={
               'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -1142,7 +1148,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_instrumentation_test') +
     props(mastername='chromium.android',
-          buildername='android-kitkat-arm-rel') +
+          builder='android-kitkat-arm-rel') +
     api.override_step_data(
         'read test spec (chromium.android.json)',
         api.json.output({
@@ -1166,7 +1172,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_instrumentation_test_custom_name') +
     props(mastername='chromium.android',
-          buildername='android-kitkat-arm-rel') +
+          builder='android-kitkat-arm-rel') +
     api.override_step_data(
         'read test spec (chromium.android.json)',
         api.json.output({
@@ -1193,7 +1199,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_instrumentation_nodefault_build') +
     props(mastername='chromium.android',
-          buildername='android-kitkat-arm-rel') +
+          builder='android-kitkat-arm-rel') +
     api.override_step_data(
         'read test spec (chromium.android.json)',
         api.json.output({
@@ -1211,7 +1217,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_instrumentation_nodefault_test') +
     props(mastername='chromium.android',
-          buildername='android-kitkat-arm-rel') +
+          builder='android-kitkat-arm-rel') +
     api.override_step_data(
         'read test spec (chromium.android.json)',
         api.json.output({
@@ -1229,7 +1235,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_junit_test') +
     props(mastername='chromium.android',
-          buildername='android-kitkat-arm-rel') +
+          builder='android-kitkat-arm-rel') +
     api.override_step_data(
         'read test spec (chromium.android.json)',
         api.json.output({
@@ -1246,7 +1252,7 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_gtest_on_builder') +
-    props(buildername='Linux Builder',
+    props(builder='Linux Builder',
           parent_buildername=None) +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -1269,7 +1275,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_gtest_win') +
     props(mastername='chromium.win',
-          buildername='Win7 Tests (1)',
+          builder='Win7 Tests (1)',
           parent_buildername='Win Builder') +
     api.platform('win', 64) +
     api.override_step_data(
@@ -1292,7 +1298,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_gtest_android') +
     props(mastername='chromium.android',
-          buildername='Lollipop Phone Tester',
+          builder='Lollipop Phone Tester',
           parent_buildername='Android arm Builder (dbg)') +
     api.override_step_data(
         'read test spec (chromium.android.json)',
@@ -1310,7 +1316,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_gtest_fuchsia') +
     props(mastername='chromium.fyi',
-          buildername='Fuchsia') +
+          builder='Fuchsia') +
     api.platform('linux', 64) +
     api.override_step_data(
         'read test spec (chromium.fyi.json)',
@@ -1329,7 +1335,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_gtest_memory_asan_no_lsan') +
     props(mastername='chromium.memory',
-          buildername='Linux ASan Tests (sandboxed)',
+          builder='Linux ASan Tests (sandboxed)',
           parent_buildername='Linux ASan LSan Builder') +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -1348,7 +1354,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_gtest_memory_builder') +
     props(mastername='chromium.memory',
-          buildername='Linux ASan LSan Builder',
+          builder='Linux ASan LSan Builder',
           parent_buildername=None,
           revision='a' * 40) +
     api.platform('linux', 64) +
@@ -1370,7 +1376,7 @@ def GenTests(api):
   yield (
     api.test('dynamic_gtest_memory_mac64') +
     props(mastername='chromium.memory',
-          buildername='Mac ASan 64 Tests (1)',
+          builder='Mac ASan 64 Tests (1)',
           parent_buildername='Mac ASan 64 Builder') +
     api.platform('mac', 64) +
     api.override_step_data(
@@ -1388,7 +1394,7 @@ def GenTests(api):
   yield (
     api.test('tsan') +
     props(mastername='chromium.memory',
-          buildername='Linux TSan Tests',
+          builder='Linux TSan Tests',
           parent_buildername='Linux TSan Builder') +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -1405,7 +1411,7 @@ def GenTests(api):
   yield (
     api.test('msan') +
     props(mastername='chromium.memory',
-          buildername='Linux MSan Tests',
+          builder='Linux MSan Tests',
           parent_buildername='Linux MSan Builder') +
     api.platform('linux', 64) +
     api.override_step_data(
@@ -1510,7 +1516,7 @@ def GenTests(api):
     api.test('kitchen_path_config') +
     props(
         mastername='chromium.fyi',
-        buildername='Linux remote_run Builder',
+        builder='Linux remote_run Builder',
         buildnumber='77457',
         path_config='kitchen')
   )
@@ -1519,7 +1525,7 @@ def GenTests(api):
     api.test('generic_path_config') +
     props(
         mastername='chromium.fyi',
-        buildername='Linux remote_run Builder',
+        builder='Linux remote_run Builder',
         buildnumber='77457',
         path_config='generic')
   )
@@ -1528,7 +1534,7 @@ def GenTests(api):
     api.test('ensure_goma_fail') +
     props(
         mastername='chromium.fyi',
-        buildername='Linux remote_run Builder',
+        builder='Linux remote_run Builder',
         buildnumber='77457',
         path_config='kitchen') +
     api.override_step_data('ensure_goma.ensure_installed', retcode=1)

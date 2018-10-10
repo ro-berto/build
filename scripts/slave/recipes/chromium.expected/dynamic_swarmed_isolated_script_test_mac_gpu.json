@@ -29,7 +29,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@HEAD"
+      "src@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -46,7 +46,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -521,6 +521,8 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
+      "spec_name:chromium/src.ci:Mac10.13 Tests",
+      "--tag",
       "stepname:telemetry_gpu_unittests on Intel GPU on Mac on Mac-10.10",
       "--idempotent",
       "--cipd-package",
@@ -631,6 +633,8 @@
       "purpose:post-commit",
       "--tag",
       "slavename:test_bot",
+      "--tag",
+      "spec_name:chromium/src.ci:Mac10.13 Tests",
       "--tag",
       "stepname:telemetry_gpu_unittests on NVIDIA GPU on Mac Retina",
       "--idempotent",
@@ -845,6 +849,8 @@
       "telemetry_gpu_unittests on Intel GPU on Mac",
       "--chrome-revision",
       "170242",
+      "--build-id",
+      "8945511751514863184",
       "--test-results-server",
       "test-results.appspot.com"
     ],
@@ -1019,6 +1025,8 @@
       "telemetry_gpu_unittests on NVIDIA GPU on Mac Retina",
       "--chrome-revision",
       "170242",
+      "--build-id",
+      "8945511751514863184",
       "--test-results-server",
       "test-results.appspot.com"
     ],
