@@ -146,6 +146,32 @@
     "cmd": [
       "./art/test/testrunner/testrunner.py",
       "-j8",
+      "--baseline",
+      "--verbose",
+      "--host",
+      "--debug",
+      "--cdex-fast"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_DEFAULT_COMPACT_DEX_LEVEL": "fast",
+      "ART_HEAP_POISONING": "false",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_GENERATIONAL_CC": "true",
+      "ART_USE_READ_BARRIER": "true",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:[START_DIR]/prebuilts/python/linux-x86/2.7.5/bin:<PATH>",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "sdk"
+    },
+    "name": "test baseline"
+  },
+  {
+    "cmd": [
+      "./art/test/testrunner/testrunner.py",
+      "-j8",
       "--jit",
       "--verbose",
       "--host",

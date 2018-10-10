@@ -568,6 +568,117 @@
     "cmd": [
       "./art/test/testrunner/testrunner.py",
       "-j4",
+      "--baseline",
+      "--target",
+      "--verbose",
+      "--debug"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_SERIAL": "84B7N15B03000660",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "false",
+      "ART_TEST_CHROOT": "/data/local/art-test-chroot",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_NO_SYNC": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_GENERATIONAL_CC": "true",
+      "ART_USE_READ_BARRIER": "true",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "armv8",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test baseline"
+  },
+  {
+    "cmd": [
+      "adb",
+      "logcat",
+      "-d",
+      "-v",
+      "threadtime"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_SERIAL": "84B7N15B03000660",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "false",
+      "ART_TEST_CHROOT": "/data/local/art-test-chroot",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_NO_SYNC": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_GENERATIONAL_CC": "true",
+      "ART_USE_READ_BARRIER": "true",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "armv8",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test baseline: adb logcat"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_SERIAL": "84B7N15B03000660",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "false",
+      "ART_TEST_CHROOT": "/data/local/art-test-chroot",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_NO_SYNC": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_GENERATIONAL_CC": "true",
+      "ART_USE_READ_BARRIER": "true",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "armv8",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test baseline: crashes"
+  },
+  {
+    "cmd": [
+      "adb",
+      "logcat",
+      "-c"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
+      "ANDROID_SERIAL": "84B7N15B03000660",
+      "ART_BUILD_HOST_DEBUG": "false",
+      "ART_HEAP_POISONING": "false",
+      "ART_TEST_CHROOT": "/data/local/art-test-chroot",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_NO_SYNC": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_GENERATIONAL_CC": "true",
+      "ART_USE_READ_BARRIER": "true",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:<PATH>",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "armv8",
+      "USE_DEX2OAT_DEBUG": "false"
+    },
+    "name": "test baseline: adb clear log"
+  },
+  {
+    "cmd": [
+      "./art/test/testrunner/testrunner.py",
+      "-j4",
       "--jit",
       "--target",
       "--verbose",

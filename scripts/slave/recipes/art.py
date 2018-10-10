@@ -159,6 +159,10 @@ def setup_host_x86(api,
                                     '-j5',
                                     '--interpreter'] + common_options)
 
+      api.step('test baseline', ['./art/test/testrunner/testrunner.py',
+                                 '-j8',
+                                 '--baseline'] + common_options)
+
       api.step('test jit', ['./art/test/testrunner/testrunner.py',
                             '-j8',
                             '--jit'] + common_options)
@@ -352,6 +356,12 @@ def setup_target(api,
                                     '-j%d' % (make_jobs),
                                     '--interpreter'] + common_options)
     test_logging(api, 'test interpreter')
+
+    with api.context(env=test_env):
+      api.step('test baseline', ['./art/test/testrunner/testrunner.py',
+                                    '-j%d' % (make_jobs),
+                                    '--baseline'] + common_options)
+    test_logging(api, 'test baseline')
 
     with api.context(env=test_env):
       api.step('test jit', ['./art/test/testrunner/testrunner.py',

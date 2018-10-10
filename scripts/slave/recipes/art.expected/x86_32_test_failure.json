@@ -148,6 +148,32 @@
     "cmd": [
       "./art/test/testrunner/testrunner.py",
       "-j8",
+      "--baseline",
+      "--verbose",
+      "--host",
+      "--ndebug"
+    ],
+    "env": {
+      "ANDROID_BUILD_TOP": "[START_DIR]",
+      "ART_DEFAULT_COMPACT_DEX_LEVEL": "none",
+      "ART_HEAP_POISONING": "false",
+      "ART_TEST_KEEP_GOING": "true",
+      "ART_TEST_RUN_TEST_2ND_ARCH": "false",
+      "ART_USE_GENERATIONAL_CC": "true",
+      "ART_USE_READ_BARRIER": "true",
+      "HOST_PREFER_32_BIT": "true",
+      "PATH": "[START_DIR]/out/host/linux-x86/bin:[START_DIR]/prebuilts/jdk/jdk9/linux-x86/bin:[START_DIR]/prebuilts/python/linux-x86/2.7.5/bin:<PATH>",
+      "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
+      "TARGET_BUILD_TYPE": "release",
+      "TARGET_BUILD_VARIANT": "eng",
+      "TARGET_PRODUCT": "sdk"
+    },
+    "name": "test baseline"
+  },
+  {
+    "cmd": [
+      "./art/test/testrunner/testrunner.py",
+      "-j8",
       "--jit",
       "--verbose",
       "--host",
@@ -340,7 +366,7 @@
   },
   {
     "name": "$result",
-    "reason": "1 out of 12 aggregated steps failed. Failures: Step('test jdwp interpreter') failed with return_code 1",
+    "reason": "1 out of 13 aggregated steps failed. Failures: Step('test jdwp interpreter') failed with return_code 1",
     "recipe_result": null,
     "status_code": 1
   }
