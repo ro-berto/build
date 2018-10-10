@@ -92,7 +92,8 @@ def setup_host_x86(api,
                   api.path.pathsep +
                   str(build_top_dir.join('prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
                   api.path.pathsep +
-                  str(build_top_dir.join('prebuilts', 'python', 'linux-x86', '2.7.5', 'bin')) +
+                  # Python lives here.
+                  str(build_top_dir.join('prebuilts', 'gdb', 'linux-x86', 'bin')) +
                   api.path.pathsep +
                   '%(PATH)s',
           'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
