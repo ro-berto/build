@@ -17,12 +17,12 @@ SPEC = {
 
 
 @CHROMIUM_CONFIG_CTX(includes=['chromium_win_clang_official', 'mb'])
-def chromium_perf_clang(c):
+def chromium_perf_clang(_):
   pass
 
 
 @GCLIENT_CONFIG_CTX(includes=['chromium_perf'])
-def chromium_perf_clang(c):
+def chromium_perf_clang(_):
   pass
 
 
