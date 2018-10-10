@@ -1107,7 +1107,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           # Always use package transfer on buildbot.
           not self.m.runtime.is_luci or
 
-          bool(non_isolated_tests))
+          bool(non_isolated_tests) or
+
+          bot_config.get('enable_package_transfer'))
 
     if package_transfer:
       package_transfer_reasons = [
@@ -1119,6 +1121,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       for t in non_isolated_tests:
         package_transfer_reasons.append(
             " - %s doesn't use isolate" % t.name)
+      if bot_config.get('enable_package_transfer'):
+        package_transfer_reasons.append(
+            " - package transfer is explicitly enabled")
 
     compile_targets = self.get_compile_targets(
         bot_config, bot_db, test_config.all_tests())

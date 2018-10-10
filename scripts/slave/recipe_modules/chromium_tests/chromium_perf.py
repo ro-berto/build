@@ -48,6 +48,7 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': target_bits,
     },
+    'enable_package_transfer': True,
     'gclient_config': config_name,
     'testing': {
       'platform': 'linux' if platform == 'android' else platform,
