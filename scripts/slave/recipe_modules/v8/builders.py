@@ -1358,6 +1358,7 @@ BUILDERS = {
             'combined',
             [
               '--total-timeout-sec=2100', # 35 minutes
+              '--stress-delay-tasks=4',
               '--stress-deopt=2',
               '--stress-compaction=2',
               '--stress-gc=4',
@@ -1373,6 +1374,7 @@ BUILDERS = {
               '--combine-tests',
               '--combine-min=30',
               '--combine-max=50',
+              '--stress-delay-tasks=1',
               '--stress-deopt=2',
               '--stress-compaction=2',
               '--stress-gc=6',
@@ -1425,6 +1427,7 @@ BUILDERS = {
             'combined',
             [
               '--total-timeout-sec=2100', # 35 minutes
+              '--stress-delay-tasks=4',
               '--stress-deopt=2',
               '--stress-compaction=2',
               '--stress-gc=4',
@@ -1440,6 +1443,7 @@ BUILDERS = {
               '--combine-tests',
               '--combine-min=10',
               '--combine-max=30',
+              '--stress-delay-tasks=1',
               '--stress-compaction=2',
               '--stress-gc=6',
               '--stress-marking=6',
