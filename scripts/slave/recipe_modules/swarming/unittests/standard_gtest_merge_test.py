@@ -300,7 +300,7 @@ class MergeShardResultsTest(_StandardGtestMergeTest):
       abs_path = self._write_temp_file(path, content)
       self.test_files.append(abs_path)
 
-  def call(self, exit_code=0):
+  def call(self):
     stdout = cStringIO.StringIO()
     with mock.patch('sys.stdout', stdout):
       merged = standard_gtest_merge.merge_shard_results(
@@ -358,7 +358,7 @@ class MergeShardResultsTest(_StandardGtestMergeTest):
     {
       u'1/output.json': GOOD_GTEST_JSON_1,
     })
-    merged, stdout = self.call(1)
+    merged, stdout = self.call()
     merged.pop('swarming_summary')
     self.assertEqual(BAD_GTEST_JSON_ONLY_1_SHARD, merged)
     self.assertIn(
@@ -382,7 +382,7 @@ class MergeShardResultsTest(_StandardGtestMergeTest):
     {
       u'1/output.json': GOOD_GTEST_JSON_1,
     })
-    merged, stdout = self.call(1)
+    merged, stdout = self.call()
     merged.pop('swarming_summary')
     self.assertEqual(BAD_GTEST_JSON_ONLY_1_SHARD, merged)
     self.assertIn(
@@ -412,7 +412,7 @@ class MergeShardResultsTest(_StandardGtestMergeTest):
     try:
       # Override max output.json size just for this test.
       standard_gtest_merge.OUTPUT_JSON_SIZE_LIMIT = min(len0,len1)
-      merged, stdout = self.call(1)
+      merged, stdout = self.call()
       merged.pop('swarming_summary')
       self.assertEqual(BAD_GTEST_JSON_ONLY_1_SHARD, merged)
       self.assertIn(

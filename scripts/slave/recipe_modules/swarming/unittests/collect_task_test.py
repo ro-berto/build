@@ -25,11 +25,11 @@ class CollectTaskTest(unittest.TestCase):
     super(CollectTaskTest, self).setUp()
 
     self.subprocess_calls = []
-    def mocked_subprocess_call(args, **kwargs):
+    def mocked_subprocess_call(args, **_):
       self.subprocess_calls.append(args)
       return 0
 
-    def mocked_subprocess_popen(args, **kwards):
+    def mocked_subprocess_popen(args, **_):
       self.subprocess_calls.append(args)
 
       class FakeProcess(object):

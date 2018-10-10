@@ -105,7 +105,8 @@ class StandardIsolatedScriptMergeTest(unittest.TestCase):
 class CommandLineTest(common_merge_script_tests.CommandLineTest):
 
   def __init__(self, methodName='runTest'):
-    super(CommandLineTest, self).__init__(methodName, standard_isolated_script_merge)
+    super(CommandLineTest, self).__init__(
+        methodName, standard_isolated_script_merge)
 
 
 if __name__ == '__main__':

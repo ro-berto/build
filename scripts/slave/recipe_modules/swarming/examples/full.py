@@ -199,7 +199,8 @@ def GenTests(api):
           stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
       api.swarming.get_states([['PENDING'], ['COMPLETED']]) +
       api.properties(platforms=('win', 'linux', 'mac'), get_states=True) +
-      api.post_process(post_process.Filter('collect tasks', 'collect tasks (2)')))
+      api.post_process(post_process.Filter(
+          'collect tasks', 'collect tasks (2)')))
 
   for exp in [True, False]:
     yield (

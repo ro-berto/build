@@ -707,7 +707,7 @@
       "@@@STEP_LOG_LINE@no_isolated_results_exc@@@@",
       "@@@STEP_LOG_LINE@no_isolated_results_exc@Traceback (most recent call last):@@@",
       "@@@STEP_LOG_LINE@no_isolated_results_exc@  File \"<...>/recipe_modules/swarming/api.py\", line NA, in _isolated_script_collect_step@@@",
-      "@@@STEP_LOG_LINE@no_isolated_results_exc@    self._merge_isolated_script_perftest_output_shards(task, step_result)@@@",
+      "@@@STEP_LOG_LINE@no_isolated_results_exc@    task, step_result)@@@",
       "@@@STEP_LOG_LINE@no_isolated_results_exc@  File \"<...>/recipe_engine/recipe_api.py\", line NA, in _inner@@@",
       "@@@STEP_LOG_LINE@no_isolated_results_exc@    return func(*a, **kw)@@@",
       "@@@STEP_LOG_LINE@no_isolated_results_exc@  File \"<...>/recipe_modules/swarming/api.py\", line NA, in _merge_isolated_script_perftest_output_shards@@@",

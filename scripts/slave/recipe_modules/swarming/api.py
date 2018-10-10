@@ -854,7 +854,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     detailed_stats = stats + [
       'Min/mean/max: %s / %s / %s' % (
           fmt_time(min(self._shards_durations)),
-          fmt_time(total / len(self._shards_durations)),
+          fmt_time(mean),
           fmt_time(max(self._shards_durations)),
       ),
     ]
@@ -993,7 +993,8 @@ class SwarmingApi(recipe_api.RecipeApi):
               step_result.raw_io.output]
 
           links = {}
-          if hasattr(step_result, 'json') and hasattr(step_result.json, 'output'):
+          if hasattr(step_result, 'json') and hasattr(
+              step_result.json, 'output'):
             links = step_result.json.output.get('links', {})
           elif (hasattr(step_result, 'test_utils') and
                 hasattr(step_result.test_utils, 'gtest_results')):
@@ -1189,13 +1190,15 @@ class SwarmingApi(recipe_api.RecipeApi):
           outdir = filter_outdir(
               self.m.json.dumps, step_result.raw_io.output_dir)
           outdir_json = self.m.json.dumps(outdir, indent=2)
-          step_result.presentation.logs['outdir_json'] = outdir_json.splitlines()
+          step_result.presentation.logs['outdir_json'] = (
+              outdir_json.splitlines())
 
           step_result.isolated_script_results = step_result.json.output
 
           # Obtain perftest results if present
           perftest_results, is_histogramset = \
-            self._merge_isolated_script_perftest_output_shards(task, step_result)
+            self._merge_isolated_script_perftest_output_shards(
+                task, step_result)
           step_result.isolated_script_perf_results = {
             'is_histogramset': is_histogramset,
             'data': perftest_results
