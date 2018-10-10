@@ -36,7 +36,6 @@ BAREMETAL_BROWSER_TESTS_FILTER = [
 ]
 
 PERF_BROWSER_TESTS_FILTER = [
-  'WebRtcAudioQualityBrowserTest.*',
   'WebRtcInternalsPerfBrowserTest.*',
   'WebRtcStatsPerfBrowserTest.*',
   'WebRtcVideoDisplayPerfBrowserTests*',
@@ -201,8 +200,7 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
                   '--test-launcher-print-test-stdio=always'],
             perf_id=perf_id,
             perf_config_mappings=perf_config_mappings,
-            commit_position_property=commit_position_property,
-            upload_wav_files_from_test=upload_wav_files_from_test))
+            commit_position_property=commit_position_property))
         # Run capture unittests as well since our bots have real webcams.
         tests.append(steps.LocalGTestTest(
             'capture_unittests',

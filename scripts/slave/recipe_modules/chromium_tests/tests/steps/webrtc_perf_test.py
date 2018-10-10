@@ -46,8 +46,7 @@ def RunSteps(api):
       ['some', 'args'],
       'test-perf-id',
       perf_config_mappings,
-      commit_position_property,
-      upload_wav_files_from_test=True)
+      commit_position_property)
 
   bot_config = api.chromium_tests.create_bot_config_object(
       [api.chromium_tests.create_bot_id(mastername, buildername)])
@@ -74,31 +73,6 @@ def GenTests(api):
 
   yield (
       api.test('webrtc_tester') + typical_properties
-  )
-
-  yield (
-      # The test will generally not write any files if it succeeds, but the
-      # recipe doesn't assume that here.
-      api.test('upload_any_wav_files_from_audio_quality_test') +
-      typical_properties +
-      api.override_step_data('look for wav files',
-          api.file.listdir(['rec_1.wav', 'rec_2.wav']), retcode=0)
-  )
-
-  yield (
-      api.test('upload_any_wav_files_even_if_test_fails') +
-      typical_properties +
-      api.override_step_data('test_name', retcode=1) +
-      api.override_step_data('look for wav files',
-          api.file.listdir(['rec_1.wav', 'rec_2.wav']), retcode=0)
-  )
-
-
-  yield (
-      api.test('no_upload_if_no_wav_files') +
-      typical_properties +
-      api.override_step_data('look for wav files',
-        api.file.listdir([]), retcode=0)
   )
 
   yield (

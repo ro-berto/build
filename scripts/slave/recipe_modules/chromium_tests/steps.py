@@ -2663,8 +2663,7 @@ class WebRTCPerfTest(LocalGTestTest):
   enabled at the same time, which differs from the chromium.perf bots.
   """
   def __init__(self, name, args, perf_id, perf_config_mappings,
-               commit_position_property, upload_wav_files_from_test,
-               **runtest_kwargs):
+               commit_position_property, **runtest_kwargs):
     """Construct a WebRTC Perf test.
 
     Args:
@@ -2677,9 +2676,6 @@ class WebRTCPerfTest(LocalGTestTest):
         checkout. It's needed because for chromium.webrtc.fyi 'got_revision_cp'
         refers to WebRTC's commit position instead of Chromium's, so we have to
         use 'got_cr_revision_cp' instead.
-      upload_wav_files_from_test: If true, will upload all .wav files output by
-         the test. The test must obey the --webrtc_save_audio_recordings_in
-         flag. This is used by webrtc_audio_quality_browsertest.
     """
     assert perf_id
     self._perf_config_mappings = perf_config_mappings or {}
@@ -2693,32 +2689,13 @@ class WebRTCPerfTest(LocalGTestTest):
     # TODO(kjellander): See if perf_dashboard_id is still needed.
     runtest_kwargs['perf_dashboard_id'] = name
     runtest_kwargs['annotate'] = 'graphing'
-
-    self.upload_wav_files_from_test = upload_wav_files_from_test
-
     super(WebRTCPerfTest, self).__init__(
         name, args, commit_position_property=commit_position_property,
         **runtest_kwargs)
 
   def run(self, api, suffix):
     self._wire_up_perf_config(api)
-    if self.upload_wav_files_from_test:
-      recordings_dir = self._prepare_gathering_wav_files(api)
-
-    try:
-      super(WebRTCPerfTest, self).run(api, suffix)
-    finally:
-      if self.upload_wav_files_from_test:
-        self._upload_wav_files(api, recordings_dir)
-        api.file.rmtree('Remove recordings_dir', recordings_dir)
-
-  def _prepare_gathering_wav_files(self, api):
-    # Pass an arg to the test so it knows where to write the .wav files.
-    # This arg is implemented by the WebRTC audio quality browser test.
-    recordings_dir = api.path.mkdtemp(prefix='recordings_dir')
-    self._args.append(
-        '--webrtc_save_audio_recordings_in=%s' % recordings_dir)
-    return recordings_dir
+    super(WebRTCPerfTest, self).run(api, suffix)
 
   def _wire_up_perf_config(self, api):
     props = api.bot_update.last_returned_properties
@@ -2735,24 +2712,6 @@ class WebRTCPerfTest(LocalGTestTest):
     perf_config['r_webrtc_git'] = webrtc_rev
 
     self._runtest_kwargs['perf_config'] = perf_config
-
-  def _upload_wav_files(self, api, recordings_dir):
-    wav_files = api.file.listdir('look for wav files', recordings_dir)
-    if not wav_files:
-      # The test can elect to not write any files, if it succeeds.
-      return
-
-    zip_path = api.path['cleanup'].join('webrtc_wav_files.zip')
-    api.zip.directory('zip wav files from test', recordings_dir, zip_path)
-
-    props = api.properties
-    dest = 'test_artifacts/%s/%s/%s/wav_files.zip' % (props['mastername'],
-                                                      props['buildername'],
-                                                      props['buildnumber'])
-
-    api.gsutil.upload(source=zip_path, bucket='chromium-webrtc',
-        dest=dest, args=['-a', 'public-read'], unauthenticated_url=True,
-        link_name='Recordings from test')
 
 
 class MockTest(Test):

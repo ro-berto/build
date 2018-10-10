@@ -196,8 +196,7 @@
       "--build-number=123",
       "test_name",
       "some",
-      "args",
-      "--webrtc_save_audio_recordings_in=[TMP_BASE]/recordings_dir_tmp_1"
+      "args"
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
@@ -226,36 +225,6 @@
       "test-results.appspot.com"
     ],
     "name": "Upload to test-results [test_name]"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "listdir",
-      "[TMP_BASE]/recordings_dir_tmp_1"
-    ],
-    "infra_step": true,
-    "name": "look for wav files",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@listdir@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[TMP_BASE]/recordings_dir_tmp_1"
-    ],
-    "infra_step": true,
-    "name": "Remove recordings_dir"
   },
   {
     "cmd": [],
