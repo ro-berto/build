@@ -598,6 +598,8 @@ class DartApi(recipe_api.RecipeApi):
       args = args + ['--append_logs']
     if environment['system'] in ['win7', 'win8', 'win10']:
       args = args + ['--builder-tag=%s' % environment['system']]
+    if environment['system'] in ['linux']:
+      args = args + ['--copy-coredumps']
     # The --chrome flag is added here if the runtime for the bot is
     # chrome. This also catches the case where there is a specific
     # argument -r or --runtime. It misses the case where

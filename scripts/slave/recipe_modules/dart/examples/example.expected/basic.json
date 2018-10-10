@@ -1254,6 +1254,7 @@
       "-rchrome",
       "foo",
       "--bar",
+      "--copy-coredumps",
       "--chrome=browsers/chrome/google-chrome",
       "-e co19, language_2",
       "--shards=2",
@@ -1376,6 +1377,7 @@
       "-rchrome",
       "foo",
       "--bar",
+      "--copy-coredumps",
       "--chrome=browsers/chrome/google-chrome",
       "-e co19, language_2",
       "--shards=2",
@@ -1452,6 +1454,7 @@
       "-rchrome",
       "foo",
       "--bar",
+      "--copy-coredumps",
       "--chrome=browsers/chrome/google-chrome",
       "co19"
     ],
