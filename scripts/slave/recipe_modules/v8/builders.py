@@ -1348,6 +1348,13 @@ BUILDERS = {
             ],
             [NumFuzz],
         ) + with_test_args(
+            'delay',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-delay-tasks=1',
+            ],
+            [NumFuzz],
+        ) + with_test_args(
             'combined',
             [
               '--total-timeout-sec=2100', # 35 minutes
@@ -1405,6 +1412,13 @@ BUILDERS = {
             [
               '--total-timeout-sec=2100', # 35 minutes
               '--stress-thread-pool-size=1',
+            ],
+            [NumFuzz],
+        ) + with_test_args(
+            'delay',
+            [
+              '--total-timeout-sec=2100', # 35 minutes
+              '--stress-delay-tasks=1',
             ],
             [NumFuzz],
         ) + with_test_args(
