@@ -11,7 +11,6 @@ DEPS = [
   'chromium_checkout',
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
-  'gn',
   'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -98,6 +97,21 @@ BUILDERS = freeze({
 })
 
 
+def gn_refs(api, step_name, args):
+  """Runs gn refs with given additional arguments.
+  Returns: the list of matched targets.
+  """
+  with api.context(cwd=api.path['checkout'], env=api.chromium.get_env()):
+    step_result = api.python(step_name,
+            api.depot_tools.gn_py_path,
+            ['--root=%s' % str(api.path['checkout']),
+             'refs',
+             str(api.chromium.output_dir),
+            ] + args,
+            stdout=api.raw_io.output_text())
+  return step_result.stdout.split()
+
+
 def RunSteps(api):
   mastername = api.m.properties['mastername']
   buildername, bot_config = api.chromium.configure_bot(BUILDERS, ['mb'])
@@ -108,19 +122,21 @@ def RunSteps(api):
   api.chromium.runhooks()
   api.chromium.mb_gen(mastername, buildername, use_goma=True)
 
-  all_fuzzers = api.gn.refs(
-      api.chromium.output_dir,
-      ['//testing/libfuzzer:libfuzzer_main'],
-      output_type='executable',
-      output_format='output',
-      step_name='calculate all_fuzzers')
-  no_clusterfuzz = api.gn.refs(
-      api.chromium.output_dir,
-      ['//testing/libfuzzer:no_clusterfuzz'],
-      output_type='executable',
-      output_format='output',
-      step_name='calculate no_clusterfuzz')
-  targets = list(all_fuzzers - no_clusterfuzz)
+  all_fuzzers = gn_refs(
+          api,
+          'calculate all_fuzzers',
+          ['--all',
+           '--type=executable',
+           '--as=output',
+           '//testing/libfuzzer:libfuzzer_main'])
+  no_clusterfuzz = gn_refs(
+          api,
+          'calculate no_clusterfuzz',
+          ['--all',
+           '--type=executable',
+           '--as=output',
+           '//testing/libfuzzer:no_clusterfuzz'])
+  targets = list(set(all_fuzzers).difference(set(no_clusterfuzz)))
   api.step.active_result.presentation.logs['all_fuzzers'] = all_fuzzers
   api.step.active_result.presentation.logs['no_clusterfuzz'] = no_clusterfuzz
   api.step.active_result.presentation.logs['targets'] = targets
@@ -138,7 +154,7 @@ def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
     yield (test +
            api.step_data('calculate all_fuzzers',
-               stdout=api.raw_io.output_text('target1\ntarget2\ntarget3')) +
+               stdout=api.raw_io.output_text('target1 target2 target3')) +
            api.step_data('calculate no_clusterfuzz',
                stdout=api.raw_io.output_text('target1'))
            )

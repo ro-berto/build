@@ -314,36 +314,44 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
+      "--root=[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
       "refs",
-      "-q",
-      "--as=output",
+      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release",
       "--all",
       "--type=executable",
-      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release",
+      "--as=output",
       "//testing/libfuzzer:libfuzzer_main"
     ],
+    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
     "name": "calculate all_fuzzers",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text[refs]@@@"
-    ]
+    "stdout": "/path/to/tmp/"
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
+      "--root=[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
       "refs",
-      "-q",
-      "--as=output",
+      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release",
       "--all",
       "--type=executable",
-      "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release",
+      "--as=output",
       "//testing/libfuzzer:no_clusterfuzz"
     ],
+    "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
     "name": "calculate no_clusterfuzz",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text[refs]@@@",
       "@@@STEP_LOG_END@all_fuzzers@@@",
       "@@@STEP_LOG_END@no_clusterfuzz@@@",
       "@@@STEP_LOG_END@targets@@@"
