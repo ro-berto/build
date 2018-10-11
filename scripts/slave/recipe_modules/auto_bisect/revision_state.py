@@ -285,6 +285,9 @@ class RevisionState(object):
 
     revision_regex = re.compile('.git@(?P<revision>[a-fA-F0-9]+)')
     results = {}
+    print
+    print 'deps data'
+    print deps_data
     for depot_name, depot_data in depot_config.DEPOT_DEPS_NAME.iteritems():
       if (depot_data.get('platform') and
           depot_data.get('platform') not in recipe_tester_name.lower()):
@@ -295,6 +298,9 @@ class RevisionState(object):
         depot_data_src = depot_data.get('src') or depot_data.get('src_old')
         src_dir = deps_data.get(depot_data_src)
         if src_dir:
+          print
+          print src_dir
+          print depot_data_src
           re_results = revision_regex.search(src_dir)
           if re_results:
             results[depot_name] = re_results.group('revision')
