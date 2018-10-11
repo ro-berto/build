@@ -12,5 +12,5 @@ def BaseConfig(CHECKOUT_PATH, **_kwargs):
 config_ctx = config_item_context(BaseConfig)
 
 @config_ctx()
-def base_config(c):
+def base_config(_):
   pass
