@@ -113,8 +113,7 @@
   },
   {
     "cmd": [
-      "make",
-      "test-art-target-sync"
+      "[START_DIR]/art/tools/buildbot-sync.sh"
     ],
     "env": {
       "ANDROID_BUILD_TOP": "[START_DIR]",

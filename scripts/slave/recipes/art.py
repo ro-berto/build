@@ -307,7 +307,7 @@ def setup_target(api,
       api.step('setup device', [art_tools.join('setup-buildbot-device.sh')])
 
     with api.context(env=env):
-      api.step('sync target', ['make', 'test-art-target-sync'])
+      api.step('sync target', [art_tools.join('buildbot-sync.sh')])
 
     def test_logging(api, test_name):
       with api.context(env=test_env):
