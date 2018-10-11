@@ -128,6 +128,10 @@ def chromeos_amd64_generic(c):
 def chromeos_daisy(c):  # pragma: no cover
   c.solutions[0].custom_vars['cros_board'] = 'daisy'
 
+@CONFIG_CTX(includes=['chromeos'])
+def chromeos_kevin(c):  # pragma: no cover
+  c.solutions[0].custom_vars['cros_board'] = 'kevin'
+
 @CONFIG_CTX()
 def fuchsia(c):
   c.target_os.add('fuchsia')

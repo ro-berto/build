@@ -920,6 +920,27 @@ SPEC = {
       },
       'tests': {},
     },
+
+    'chromeos-kevin-rel-hw-tests': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'chromeos', 'mb', 'ninja_confirm_noop',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['chromeos_kevin'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_ARCH': 'arm',
+        'TARGET_BITS': 32,
+        'TARGET_CROS_BOARD': 'kevin',
+        'TARGET_PLATFORM': 'chromeos',
+      },
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'linux',
+      },
+      'tests': {},
+    },
   },
 }
 
