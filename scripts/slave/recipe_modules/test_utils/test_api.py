@@ -84,14 +84,12 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     """
     return test_results_json, retcode, name
 
-  def canned_gtest_output(self, passing, minimal=False, passes=9001,
-                          extra_json=None, name=None):
+  def canned_gtest_output(self, passing, minimal=False, extra_json=None):
     """Produces mock output for a recipe step that outputs a GTestResults
     object.
 
     Args:
       passing - Determines if this test result is passing or not.
-      passes - The number of (theoretically) passing tests.
       minimal - If True, the canned output will omit one test to emulate the
                 effect of running fewer than the total number of tests.
       extra_json - dict with additional keys to add to gtest JSON.
@@ -227,17 +225,20 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                                     isolated_script_passing=True,
                                     isolated_script_retcode=None,
                                     valid=None,
-                                    missing_shards=[],
-                                    empty_shards=[],
+                                    missing_shards=None,
+                                    empty_shards=None,
                                     use_json_test_format=False,
                                     output_chartjson=False,
                                     output_histograms=False,
                                     benchmark_enabled=True,
                                     corrupt=False,
                                     unknown=False,
-                                    canned_summary=None,
                                     ):
     """Produces a test results' compatible json for isolated script tests. """
+    if not missing_shards:
+      missing_shards = []
+    if not empty_shards:
+      empty_shards = []
     per_shard_results = []
     per_shard_chartjson_results = []
     for i in xrange(shards):

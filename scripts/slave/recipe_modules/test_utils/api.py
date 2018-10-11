@@ -207,7 +207,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
     tests.
     """
     failing_tests = self.run_tests(caller_api, tests, 'with patch')
-    failing_test_names = set(f.name for f in failing_tests)
     with self.m.step.defer_results():
       for t in tests:
         valid_results, failures = t.failures_or_invalid_results(
