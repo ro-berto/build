@@ -33,8 +33,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_x86",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
+      "TARGET_PRODUCT": "aosp_x86"
     },
     "name": "Clean oat x86"
   },
@@ -51,8 +50,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_x86",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
+      "TARGET_PRODUCT": "aosp_x86"
     },
     "name": "build x86",
     "~followup_annotations": [
@@ -74,8 +72,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_x86_64",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
+      "TARGET_PRODUCT": "aosp_x86_64"
     },
     "name": "Clean oat x86_64"
   },
@@ -92,8 +89,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_x86_64",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
+      "TARGET_PRODUCT": "aosp_x86_64"
     },
     "name": "build x86_64"
   },
@@ -111,8 +107,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_arm",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
+      "TARGET_PRODUCT": "aosp_arm"
     },
     "name": "Clean oat arm"
   },
@@ -129,8 +124,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_arm",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
+      "TARGET_PRODUCT": "aosp_arm"
     },
     "name": "build arm"
   },
@@ -148,8 +142,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_arm64",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
+      "TARGET_PRODUCT": "aosp_arm64"
     },
     "name": "Clean oat arm64"
   },
@@ -166,8 +159,7 @@
       "PATH": "[START_DIR]/out/host/linux-x86/bin:<PATH>",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "aosp_arm64",
-      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
+      "TARGET_PRODUCT": "aosp_arm64"
     },
     "name": "build arm64"
   },

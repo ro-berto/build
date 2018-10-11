@@ -86,8 +86,6 @@ def setup_host_x86(api,
   env = { 'TARGET_PRODUCT': 'sdk',
           'TARGET_BUILD_VARIANT': 'eng',
           'TARGET_BUILD_TYPE': 'release',
-          # Path restriction doesn't play well with vPython.
-          'TEMPORARY_DISABLE_PATH_RESTRICTIONS': 'true',
           'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
           'ANDROID_BUILD_TOP': build_top_dir,
           'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
@@ -236,8 +234,6 @@ def setup_target(api,
 
   env = {'TARGET_BUILD_VARIANT': 'eng',
          'TARGET_BUILD_TYPE': 'release',
-         # Path restriction doesn't play well with vPython.
-         'TEMPORARY_DISABLE_PATH_RESTRICTIONS': 'true',
          'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
          'ANDROID_SERIAL': serial,
          'ANDROID_BUILD_TOP': build_top_dir,
@@ -440,8 +436,6 @@ def setup_aosp_builder(api, read_barrier):
       env = { 'TARGET_PRODUCT': 'aosp_%s' % build,
               'TARGET_BUILD_VARIANT': 'eng',
               'TARGET_BUILD_TYPE': 'release',
-              # Path restriction doesn't play well with vPython.
-              'TEMPORARY_DISABLE_PATH_RESTRICTIONS': 'true',
               'ANDROID_BUILD_TOP': build_top_dir,
               'JACK_SERVER': 'false',
               'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
