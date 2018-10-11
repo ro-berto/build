@@ -408,7 +408,12 @@
     "name": "Expanding reference range.fetch file dd09cd29a0:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@Debug@{'src/v8': 'v8.git@004', 'src/third_party/WebKit': 'webkit.git@010'}@@@",
+      "@@@STEP_LOG_LINE@Debug@@@@",
+      "@@@STEP_LOG_LINE@Debug@v8.git@004@@@",
+      "@@@STEP_LOG_LINE@Debug@src/v8@@@",
+      "@@@STEP_LOG_END@Debug@@@"
     ]
   },
   {
@@ -423,7 +428,9 @@
     "name": "Expanding reference range.fetch file 6cb98fd574:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@Debug@{}@@@",
+      "@@@STEP_LOG_END@Debug@@@"
     ]
   },
   {
@@ -8059,7 +8066,12 @@
     "name": "Check bisect finished on revision chromium@3673c419cb.fetch file 3673c419cb:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@Debug@{'src/v8': 'v8.git@001', 'src/third_party/WebKit': 'webkit.git@010'}@@@",
+      "@@@STEP_LOG_LINE@Debug@@@@",
+      "@@@STEP_LOG_LINE@Debug@v8.git@001@@@",
+      "@@@STEP_LOG_LINE@Debug@src/v8@@@",
+      "@@@STEP_LOG_END@Debug@@@"
     ]
   },
   {
@@ -8074,7 +8086,12 @@
     "name": "Check bisect finished on revision chromium@3673c419cb.fetch file dd09cd29a0:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@Debug@{'src/v8': 'v8.git@004', 'src/third_party/WebKit': 'webkit.git@010'}@@@",
+      "@@@STEP_LOG_LINE@Debug@@@@",
+      "@@@STEP_LOG_LINE@Debug@v8.git@004@@@",
+      "@@@STEP_LOG_LINE@Debug@src/v8@@@",
+      "@@@STEP_LOG_END@Debug@@@"
     ]
   },
   {
@@ -9123,7 +9140,12 @@
     "name": "Check bisect finished on revision chromium@3673c419cb,v8@003.fetch file 001:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@Debug@{'src/third_party/WebKit': 'webkit.git@010', 'src/fake': 'fake.git@f1'}@@@",
+      "@@@STEP_LOG_LINE@Debug@@@@",
+      "@@@STEP_LOG_LINE@Debug@fake.git@f1@@@",
+      "@@@STEP_LOG_LINE@Debug@src/fake@@@",
+      "@@@STEP_LOG_END@Debug@@@"
     ]
   },
   {
@@ -9138,7 +9160,12 @@
     "name": "Check bisect finished on revision chromium@3673c419cb,v8@003.fetch file 003:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@Debug@{'src/third_party/WebKit': 'webkit.git@010', 'src/fake': 'fake.git@f3'}@@@",
+      "@@@STEP_LOG_LINE@Debug@@@@",
+      "@@@STEP_LOG_LINE@Debug@fake.git@f3@@@",
+      "@@@STEP_LOG_LINE@Debug@src/fake@@@",
+      "@@@STEP_LOG_END@Debug@@@"
     ]
   },
   {

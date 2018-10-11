@@ -408,7 +408,12 @@
     "name": "Expanding reference range.fetch file 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@Debug@{'src/v8': 'v8.git@004', 'src/third_party/WebKit': 'webkit.git@010'}@@@",
+      "@@@STEP_LOG_LINE@Debug@@@@",
+      "@@@STEP_LOG_LINE@Debug@v8.git@004@@@",
+      "@@@STEP_LOG_LINE@Debug@src/v8@@@",
+      "@@@STEP_LOG_END@Debug@@@"
     ]
   },
   {
@@ -423,7 +428,9 @@
     "name": "Expanding reference range.fetch file a6298e4afedbf2cd461755ea6f45b0ad64222222:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@Debug@{}@@@",
+      "@@@STEP_LOG_END@Debug@@@"
     ]
   },
   {
@@ -8059,7 +8066,12 @@
     "name": "Check bisect finished on revision chromium@dcdcdc0ff1.fetch file dcdcdc0ff1122212323134879ddceeb1240b0988:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@Debug@{'src/v8': 'v8.git@001', 'src/third_party/WebKit': 'webkit.git@010'}@@@",
+      "@@@STEP_LOG_LINE@Debug@@@@",
+      "@@@STEP_LOG_LINE@Debug@v8.git@001@@@",
+      "@@@STEP_LOG_LINE@Debug@src/v8@@@",
+      "@@@STEP_LOG_END@Debug@@@"
     ]
   },
   {
@@ -8074,7 +8086,12 @@
     "name": "Check bisect finished on revision chromium@dcdcdc0ff1.fetch file 00316c9ddfb9d7b4e1ed2fff9fe6d964d2111111:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@Debug@{'src/v8': 'v8.git@004', 'src/third_party/WebKit': 'webkit.git@010'}@@@",
+      "@@@STEP_LOG_LINE@Debug@@@@",
+      "@@@STEP_LOG_LINE@Debug@v8.git@004@@@",
+      "@@@STEP_LOG_LINE@Debug@src/v8@@@",
+      "@@@STEP_LOG_END@Debug@@@"
     ]
   },
   {

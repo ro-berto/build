@@ -285,9 +285,8 @@ class RevisionState(object):
 
     revision_regex = re.compile('.git@(?P<revision>[a-fA-F0-9]+)')
     results = {}
-    print
-    print 'deps data'
-    print deps_data
+    result_str = ''
+    result_str += '%s\n' % deps_data
     for depot_name, depot_data in depot_config.DEPOT_DEPS_NAME.iteritems():
       if (depot_data.get('platform') and
           depot_data.get('platform') not in recipe_tester_name.lower()):
@@ -298,9 +297,9 @@ class RevisionState(object):
         depot_data_src = depot_data.get('src') or depot_data.get('src_old')
         src_dir = deps_data.get(depot_data_src)
         if src_dir:
-          print
-          print src_dir
-          print depot_data_src
+          result_str += '\n'
+          result_str += '%s\n' % src_dir
+          result_str += '%s\n' % depot_data_src
           re_results = revision_regex.search(src_dir)
           if re_results:
             results[depot_name] = re_results.group('revision')
@@ -311,6 +310,7 @@ class RevisionState(object):
               self.bisector.warnings.append(warning_text)
         else:
           results[depot_name] = None
+    api.m.step.active_result.presentation.logs['Debug'] = [result_str]
     self.deps = results
     return
 
