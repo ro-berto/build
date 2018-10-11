@@ -20,7 +20,8 @@ class BuildState(object):
     if api.m.properties.get('is_test'):
       self._patch_hash = with_patch * '_123456'
     else:
-      self._patch_hash =  with_patch * ('_' + str(uuid.uuid4())) # pragma: no cover
+      self._patch_hash = (
+          with_patch * ('_' + str(uuid.uuid4()))) # pragma: no cover
     self.build_id = None
     if self.with_patch:
       self.bucket = 'chrome-perf-tryjob'
@@ -144,11 +145,9 @@ class BuildState(object):
 
   # Adapted from auto_bisect.api.start_test_run_for_bisect
   def download_build(self, update_step, bot_db,
-                     run_locally=False,
                      skip_download=False):
     mastername = self.api.m.properties.get('mastername')
     buildername = self.api.m.properties.get('buildername')
-    bot_config = bot_db.get_bot_config(mastername, buildername)
     if not skip_download:
       if self.api.m.chromium.c.TARGET_PLATFORM == 'android':
         # The best way to ensure the old build directory is not used is to
@@ -161,7 +160,8 @@ class BuildState(object):
         # different from builders on chromium.perf. In order to support both
         # forms of archives, we added this temporary hack until builders are
         # fixed. See http://crbug.com/535218.
-        zip_dir = self.api.m.path.join(self.api.m.path['checkout'], 'full-build-linux')
+        zip_dir = self.api.m.path.join(
+            self.api.m.path['checkout'], 'full-build-linux')
         if self.api.m.path.exists(zip_dir):  # pragma: no cover
           self.api.m.file.rmtree('full-build-linux directory', zip_dir)
         gs_bucket = 'gs://%s/' % self.bucket

@@ -115,7 +115,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
       self.m.perf_dashboard.post_bisect_results(
           bisect_results, halt_on_failure=True)
 
-  def _checkout_revision(self, update_step, bot_db, revision=None):
+  def _checkout_revision(self, update_step, revision=None):
     """Checkouts specific revisions and updates bot_update step."""
     if revision:
       if self.m.platform.is_win:  # pragma: no cover
@@ -151,7 +151,7 @@ class PerfTryJobApi(recipe_api.RecipeApi):
     # We don't need to do a checkout if there's a patch applied, since that will
     # overwrite the local changes and potentially change the test results.
     if not with_patch:  # pragma: no cover
-      update_step = self._checkout_revision(update_step, bot_db, revision_hash)
+      update_step = self._checkout_revision(update_step, revision_hash)
     if not revision_hash:  # pragma: no cover
       if update_step.presentation.properties:
         revision_hash = update_step.presentation.properties['got_revision']
