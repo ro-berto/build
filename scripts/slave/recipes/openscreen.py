@@ -39,6 +39,7 @@ def RunSteps(api):
         name='compile',
         ninja_command=ninja_cmd,
         ninja_log_outdir=output_path)
+    api.step('Run unit tests', [output_path.join('unittests')])
 
 
 def GenTests(api):

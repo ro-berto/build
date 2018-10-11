@@ -376,6 +376,13 @@
     ]
   },
   {
+    "cmd": [
+      "[START_DIR]/openscreen/out/Default/unittests"
+    ],
+    "cwd": "[START_DIR]/openscreen",
+    "name": "Run unit tests"
+  },
+  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0
