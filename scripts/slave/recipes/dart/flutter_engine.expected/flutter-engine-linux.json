@@ -2477,9 +2477,8 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
-      "move",
-      "[CACHE]/builder/flutter/bin/cache/dart-sdk",
-      "[CACHE]/builder/flutter/bin/cache/dart-sdk-backup"
+      "rmtree",
+      "[CACHE]/builder/flutter/bin/cache/dart-sdk"
     ],
     "cwd": "[CACHE]/builder/flutter",
     "env": {
@@ -2488,7 +2487,7 @@
       "TEST_COMMIT_RANGE": "HEAD"
     },
     "infra_step": true,
-    "name": "backup cached dart-sdk"
+    "name": "remove downloaded cached dart-sdk"
   },
   {
     "cmd": [
@@ -2497,9 +2496,8 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
-      "move",
-      "[CACHE]/builder/flutter/bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot",
-      "[CACHE]/builder/flutter/bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot-backup"
+      "remove",
+      "[CACHE]/builder/flutter/bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot"
     ],
     "cwd": "[CACHE]/builder/flutter",
     "env": {
@@ -2508,7 +2506,7 @@
       "TEST_COMMIT_RANGE": "HEAD"
     },
     "infra_step": true,
-    "name": "backup cached frontend_server snapshot"
+    "name": "remove downloaded frontend_server snapshot"
   },
   {
     "cmd": [
@@ -2528,7 +2526,7 @@
       "TEST_COMMIT_RANGE": "HEAD"
     },
     "infra_step": true,
-    "name": "make dart-sdk a link to just built dart sdk"
+    "name": "make cached dart-sdk point to just built dart sdk"
   },
   {
     "cmd": [
@@ -2548,7 +2546,7 @@
       "TEST_COMMIT_RANGE": "HEAD"
     },
     "infra_step": true,
-    "name": "make frontend_server.dart.snapshot a link to just built version"
+    "name": "make frontend_server.dart.snapshot point to just built version"
   },
   {
     "cmd": [
@@ -2581,84 +2579,6 @@
     },
     "name": "flutter test",
     "timeout": 5400
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[CACHE]/builder/flutter/bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot"
-    ],
-    "cwd": "[CACHE]/builder/flutter",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
-      "TEST_COMMIT_RANGE": "HEAD"
-    },
-    "infra_step": true,
-    "name": "remove frontend_server.dart.snapshot link"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[CACHE]/builder/flutter/bin/cache/dart-sdk"
-    ],
-    "cwd": "[CACHE]/builder/flutter",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
-      "TEST_COMMIT_RANGE": "HEAD"
-    },
-    "infra_step": true,
-    "name": "remove dart-sdk link"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "move",
-      "[CACHE]/builder/flutter/bin/cache/dart-sdk-backup",
-      "[CACHE]/builder/flutter/bin/cache/dart-sdk"
-    ],
-    "cwd": "[CACHE]/builder/flutter",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
-      "TEST_COMMIT_RANGE": "HEAD"
-    },
-    "infra_step": true,
-    "name": "restore cached dart-sdk"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "move",
-      "[CACHE]/builder/flutter/bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot-backup",
-      "[CACHE]/builder/flutter/bin/cache/artifacts/engine/linux-x64/frontend_server.dart.snapshot"
-    ],
-    "cwd": "[CACHE]/builder/flutter",
-    "env": {
-      "GOMA_DIR": "[CACHE]/goma/client",
-      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
-      "TEST_COMMIT_RANGE": "HEAD"
-    },
-    "infra_step": true,
-    "name": "restore cached frontend_server snapshot"
   },
   {
     "name": "$result",

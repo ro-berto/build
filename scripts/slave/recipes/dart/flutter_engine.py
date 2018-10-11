@@ -118,15 +118,13 @@ def TestFlutter(api, start_dir, just_built_dart_sdk, just_built_gen):
     # So we overwrite bin/cache/dart-sdk and tightly-coupled frontend_server.dart.snapshot
     # with links that point to corresponding entries from [just_built_dart_sdk]
     dart_sdk = flutter.join('bin', 'cache', 'dart-sdk')
-    dart_sdk_backup = flutter.join('bin', 'cache', 'dart-sdk-backup')
     frontend_server = flutter.join(
       'bin', 'cache', 'artifacts', 'engine', 'linux-x64', 'frontend_server.dart.snapshot')
-    frontend_server_backup  = flutter.join(
-      'bin', 'cache', 'artifacts', 'engine', 'linux-x64', 'frontend_server.dart.snapshot-backup')
-    api.file.move('backup cached dart-sdk', dart_sdk, dart_sdk_backup)
-    api.file.move('backup cached frontend_server snapshot', frontend_server, frontend_server_backup)
-    api.file.symlink('make dart-sdk a link to just built dart sdk', just_built_dart_sdk, dart_sdk)
-    api.file.symlink('make frontend_server.dart.snapshot a link to just built version',
+    api.file.rmtree('remove downloaded cached dart-sdk', dart_sdk)
+
+    api.file.remove('remove downloaded frontend_server snapshot', frontend_server)
+    api.file.symlink('make cached dart-sdk point to just built dart sdk', just_built_dart_sdk, dart_sdk)
+    api.file.symlink('make frontend_server.dart.snapshot point to just built version',
       just_built_gen.join('frontend_server.dart.snapshot'),
       frontend_server)
 
@@ -136,11 +134,6 @@ def TestFlutter(api, start_dir, just_built_dart_sdk, just_built_gen):
              '--dart-sdk', just_built_dart_sdk
              ], timeout=20*60) # 20 minutes
     api.step('flutter test', test_cmd + test_args, timeout=90*60) # 90 minutes
-
-    api.file.remove('remove frontend_server.dart.snapshot link', frontend_server)
-    api.file.remove('remove dart-sdk link', dart_sdk)
-    api.file.move('restore cached dart-sdk', dart_sdk_backup, dart_sdk)
-    api.file.move('restore cached frontend_server snapshot', frontend_server_backup, frontend_server)
 
 def RunSteps(api):
   if api.runtime.is_luci:
