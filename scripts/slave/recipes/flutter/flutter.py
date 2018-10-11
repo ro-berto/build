@@ -16,9 +16,10 @@ DEPS = [
     'recipe_engine/path',
     'recipe_engine/platform',
     'recipe_engine/properties',
-    'recipe_engine/raw_io',
-    'recipe_engine/step',
     'recipe_engine/python',
+    'recipe_engine/raw_io',
+    'recipe_engine/runtime',
+    'recipe_engine/step',
     'recipe_engine/url',
     'zip',
 ]
@@ -37,6 +38,8 @@ def GetPuppetApiTokenPath(api, token_name):
 
 
 def GetCloudPath(api, git_hash, path):
+  if api.runtime.is_experimental:
+    return 'flutter/experimental/%s/%s' % (git_hash, path)
   return 'flutter/%s/%s' % (git_hash, path)
 
 
@@ -286,6 +289,9 @@ def GenTests(api):
             api.override_step_data('upload coverage data to Coveralls',
                                    api.raw_io.output('')))
       yield test
+
+  yield (api.test('linux_master_exp') +
+         api.runtime(is_luci=False, is_experimental=True))
 
   yield (api.test('mac_cannot_find_xcode') + api.platform('mac', 64) +
          api.properties(revision='a' * 40) + api.properties(clobber='') +
