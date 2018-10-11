@@ -19,7 +19,8 @@
       "origin",
       "master",
       "--recurse-submodules",
-      "--progress"
+      "--progress",
+      "--tags"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {

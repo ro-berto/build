@@ -199,7 +199,8 @@ def RunSteps(api):
       'https://chromium.googlesource.com/external/github.com/flutter/flutter',
       ref=api.properties.get('revision'),
       recursive=True,
-      set_got_revision=True)
+      set_got_revision=True,
+      tags=True)
   checkout = api.path['checkout']
 
   dart_bin = checkout.join('bin', 'cache', 'dart-sdk', 'bin')
