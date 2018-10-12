@@ -39,6 +39,7 @@
       "--target"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -63,6 +64,7 @@
       "[START_DIR]/art/tools/cleanup-buildbot-device.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -88,6 +90,7 @@
       "[START_DIR]/art/tools/setup-buildbot-device.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -113,6 +116,7 @@
       "[START_DIR]/art/tools/buildbot-sync.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -139,6 +143,7 @@
       "test-art-target-gtest64"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -168,6 +173,7 @@
       "threadtime"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -193,6 +199,7 @@
       "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -220,6 +227,7 @@
       "-c"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -252,6 +260,7 @@
       "--ndebug"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -281,6 +290,7 @@
       "threadtime"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -306,6 +316,7 @@
       "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -333,6 +344,7 @@
       "-c"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -364,6 +376,7 @@
       "--ndebug"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -393,6 +406,7 @@
       "threadtime"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -418,6 +432,7 @@
       "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -445,6 +460,7 @@
       "-c"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -475,6 +491,7 @@
       "--ndebug"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -504,6 +521,7 @@
       "threadtime"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -529,6 +547,7 @@
       "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -556,6 +575,7 @@
       "-c"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -586,6 +606,7 @@
       "--ndebug"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -615,6 +636,7 @@
       "threadtime"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -640,6 +662,7 @@
       "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -667,6 +690,7 @@
       "-c"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -697,6 +721,7 @@
       "--ndebug"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -726,6 +751,7 @@
       "threadtime"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -751,6 +777,7 @@
       "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -778,6 +805,7 @@
       "-c"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -808,6 +836,7 @@
       "--ndebug"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -837,6 +866,7 @@
       "threadtime"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -862,6 +892,7 @@
       "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -889,6 +920,7 @@
       "-c"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -916,6 +948,7 @@
       "--variant=X64"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -945,6 +978,7 @@
       "threadtime"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -970,6 +1004,7 @@
       "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -997,6 +1032,7 @@
       "-c"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1024,6 +1060,7 @@
       "--variant=X64"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1053,6 +1090,7 @@
       "threadtime"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1078,6 +1116,7 @@
       "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1105,6 +1144,7 @@
       "-c"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1133,6 +1173,7 @@
       "--no-jit"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1162,6 +1203,7 @@
       "threadtime"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1187,6 +1229,7 @@
       "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1214,6 +1257,7 @@
       "-c"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1241,6 +1285,7 @@
       "--variant=X64"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1270,6 +1315,7 @@
       "threadtime"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1295,6 +1341,7 @@
       "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1322,6 +1369,7 @@
       "-c"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1350,6 +1398,7 @@
       "--no-jit"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1379,6 +1428,7 @@
       "threadtime"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1404,6 +1454,7 @@
       "[START_DIR]/art/tools/symbolize-buildbot-crashes.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1431,6 +1482,7 @@
       "-c"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1456,6 +1508,7 @@
       "[START_DIR]/art/tools/teardown-buildbot-device.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
@@ -1481,6 +1534,7 @@
       "[START_DIR]/art/tools/cleanup-buildbot-device.sh"
     ],
     "env": {
+      "ADB": "/opt/infra-android/tools/adb",
       "ANDROID_BUILD_TOP": "[START_DIR]",
       "ANDROID_PRODUCT_OUT": "[START_DIR]/out/target/product/armv8",
       "ANDROID_SERIAL": "84B7N16728001299",
