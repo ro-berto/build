@@ -90,20 +90,7 @@ def GenTests(api):
     for bucket in ['prod', 'luci.goma-client.ci']:
       yield (api.test('goma_client_%s_%s_rel' % (platform, bucket)) +
              api.platform(platform, 64) +
-             api.properties(
-                 buildername='%s_rel' % platform,
-                 mastername='client.goma',
-                 buildbucket={
-                     'build': {
-                         'bucket': bucket,
-                         'tags': [
-                             ('buildset:commit/git/'
-                              '8b3cd40a25a512033cc8c0797e41de9ecfc2432c'),
-                             ('buildset:commit/gitiles/'
-                              'chromium.googlesource.com/infra/goma/client/'
-                              '+/8b3cd40a25a512033cc8c0797e41de9ecfc2432c'),
-                             'gitiles_ref:refs/heads/master',
-                         ]
-                     }
-                 }
-             ))
+             api.buildbucket.ci_build(
+                 bucket=bucket,
+                 git_repo='chromium.googlesource.com/infra/goma/client',
+                 revision='8b3cd40a25a512033cc8c0797e41de9ecfc2432c'))
