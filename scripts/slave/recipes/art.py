@@ -287,6 +287,9 @@ def setup_target(api,
                 api.path.pathsep +
                 str(build_top_dir.join('prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
                 api.path.pathsep +
+                 # Add adb in the path.
+                 '/' + str(api.path.join('opt', 'infra-android', 'tools')) +
+                api.path.pathsep +
                 '%(PATH)s' })
 
   # Decrease the number of parallel tests, as some tests eat lots of memory.
