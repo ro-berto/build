@@ -1703,7 +1703,7 @@
     "cmd": [
       "[CACHE]\\builder\\sdk\\tools\\sdks\\dart-sdk\\bin\\dart.exe",
       "tools/bots/add_fields.dart",
-      "logs/run.json",
+      "[CACHE]\\builder\\sdk\\logs\\run.json",
       "1234567",
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
@@ -2071,15 +2071,14 @@
       "tools/bots/compare_results.dart",
       "--flakiness-data",
       "deflaking_logs/flaky.json",
-      "--judgement",
       "--human",
       "--verbose",
       "--changed",
       "--flaky",
       "--failing",
       "--passing",
-      "LATEST/results.json",
-      "logs/results.json"
+      "[CACHE]\\builder\\sdk\\LATEST\\results.json",
+      "[CACHE]\\builder\\sdk\\logs\\results.json"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
@@ -2652,7 +2651,7 @@
     "cmd": [
       "[CACHE]\\builder\\sdk\\tools\\sdks\\dart-sdk\\bin\\dart.exe",
       "tools/bots/add_fields.dart",
-      "logs/run.json",
+      "[CACHE]\\builder\\sdk\\logs\\run.json",
       "1234567",
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
@@ -3020,15 +3019,14 @@
       "tools/bots/compare_results.dart",
       "--flakiness-data",
       "deflaking_logs/flaky.json",
-      "--judgement",
       "--human",
       "--verbose",
       "--changed",
       "--flaky",
       "--failing",
       "--passing",
-      "LATEST/results.json",
-      "logs/results.json"
+      "[CACHE]\\builder\\sdk\\LATEST\\results.json",
+      "[CACHE]\\builder\\sdk\\logs\\results.json"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
@@ -3432,7 +3430,7 @@
     "cmd": [
       "[CACHE]\\builder\\sdk\\tools\\sdks\\dart-sdk\\bin\\dart.exe",
       "tools/bots/add_fields.dart",
-      "logs/run.json",
+      "[CACHE]\\builder\\sdk\\logs\\run.json",
       "1234567",
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
@@ -3688,15 +3686,14 @@
       "tools/bots/compare_results.dart",
       "--flakiness-data",
       "deflaking_logs/flaky.json",
-      "--judgement",
       "--human",
       "--verbose",
       "--changed",
       "--flaky",
       "--failing",
       "--passing",
-      "LATEST/results.json",
-      "logs/results.json"
+      "[CACHE]\\builder\\sdk\\LATEST\\results.json",
+      "[CACHE]\\builder\\sdk\\logs\\results.json"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "name": "deflaked status of sharded Test-step 1"
@@ -4007,7 +4004,7 @@
     "cmd": [
       "[CACHE]\\builder\\sdk\\tools\\sdks\\dart-sdk\\bin\\dart.exe",
       "tools/bots/add_fields.dart",
-      "logs/run.json",
+      "[CACHE]\\builder\\sdk\\logs\\run.json",
       "1234567",
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
@@ -4263,15 +4260,14 @@
       "tools/bots/compare_results.dart",
       "--flakiness-data",
       "deflaking_logs/flaky.json",
-      "--judgement",
       "--human",
       "--verbose",
       "--changed",
       "--flaky",
       "--failing",
       "--passing",
-      "LATEST/results.json",
-      "logs/results.json"
+      "[CACHE]\\builder\\sdk\\LATEST\\results.json",
+      "[CACHE]\\builder\\sdk\\logs\\results.json"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "name": "deflaked status of sharded Test-step 3"

@@ -154,7 +154,7 @@ class DartApi(recipe_api.RecipeApi):
 
   def shard(self, title, isolate_hash, test_args, os=None, cpu='x86-64',
             pool='dart.tests', num_shards=0, last_shard_is_local=False,
-            cipd_packages=None):
+            cipd_packages=None, ignore_failure=False):
     """Runs test.py in the given isolate, sharded over several swarming tasks.
        Requires the 'shards' build property to be set to the number of tasks.
        Returns the created task(s), which are meant to be passed into collect().
@@ -172,12 +172,13 @@ class DartApi(recipe_api.RecipeApi):
       if last_shard_is_local and shard == num_shards - 1:
         break
       task = self.m.swarming.task("%s_shard_%s" % (title, (shard + 1)),
-                               isolate_hash,
-                               cipd_packages=cipd_packages,
-                               raw_cmd=test_args +
-                                 ['--shards=%s' % num_shards,
-                                  '--shard=%s' % (shard + 1),
-                                  '--output_directory=${ISOLATED_OUTDIR}'])
+                                  isolate_hash,
+                                  cipd_packages=cipd_packages,
+                                  raw_cmd=test_args +
+                                  ['--shards=%s' % num_shards,
+                                   '--shard=%s' % (shard + 1),
+                                   '--output_directory=${ISOLATED_OUTDIR}'],
+                                  ignore_task_failure=ignore_failure)
       os_names = {
         'win': 'Windows',
         'linux': 'Linux',
@@ -262,7 +263,7 @@ class DartApi(recipe_api.RecipeApi):
                  '--failing',
                  '--count',
                  '100',
-                'LATEST/results.json',
+                 'LATEST/results.json',
                  'logs/results.json'],
                 stdout=self.m.raw_io.output_text(
                     leak_to=self.m.path['checkout']
@@ -275,7 +276,7 @@ class DartApi(recipe_api.RecipeApi):
         args + ['--repeat=5', '--test-list', 'logs/deflake.list',
                 '--output_directory', 'deflaking_logs'],
         None, None,
-        False, environment, None, ok_ret='any')
+        False, environment, None, ignore_failure=True)
     self.m.step('Update flakiness information',
                 [self.dart_executable(),
                  'tools/bots/update_flakiness.dart',
@@ -283,7 +284,7 @@ class DartApi(recipe_api.RecipeApi):
                  'LATEST/flaky.json',
                  '-o',
                  'deflaking_logs/flaky.json',
-                'logs/results.json',
+                 'logs/results.json',
                  'deflaking_logs/results.json'], ok_ret='any')
 
   def upload_results(self,  name):
@@ -292,7 +293,7 @@ class DartApi(recipe_api.RecipeApi):
     self.m.step('Add commit hash to run.json',
                 [self.dart_executable(),
                  'tools/bots/add_fields.dart',
-                 'logs/run.json',
+                 self.m.path['checkout'].join('logs', 'run.json'),
                  commit_time,
                  commit_hash])
 
@@ -328,21 +329,26 @@ class DartApi(recipe_api.RecipeApi):
         ok_ret='all')
 
   def present_results(self, step_name):
-        self.m.step('deflaked status of %s' % step_name,
-                    [self.dart_executable(),
-                     'tools/bots/compare_results.dart',
-                     '--flakiness-data',
-                     'deflaking_logs/flaky.json',
-                     '--judgement',
-                     '--human',
-                     '--verbose',
-                     '--changed',
-                     '--flaky',
-                     '--failing',
-                     '--passing',
-                     'LATEST/results.json',
-                     'logs/results.json'],
-                    ok_ret='any')
+    compare_args = [
+        self.m.path['checkout'].join('LATEST', 'results.json'),
+        self.m.path['checkout'].join('logs', 'results.json')]
+    if 'new_workflow_enabled' in self.m.properties:
+      compare_args = [
+          '--judgement',
+          self.m.path['checkout'].join('LATEST', 'approved_results.json'),
+          self.m.path['checkout'].join('logs', 'results.json')]
+    args = [self.dart_executable(),
+            'tools/bots/compare_results.dart',
+            '--flakiness-data',
+            'deflaking_logs/flaky.json',
+            '--human',
+            '--verbose',
+            '--changed',
+            '--flaky',
+            '--failing',
+            '--passing']
+    args.extend(compare_args)
+    self.m.step('deflaked status of %s' % step_name, args)
 
   def read_result_file(self,  name, log_name, test_data=''):
     """Reads the result.log file
@@ -679,9 +685,11 @@ class DartApi(recipe_api.RecipeApi):
       args = args + step['tests']
 
     with self.m.step.defer_results():
+      ignore_failure = 'new_workflow_enabled' in self.m.properties
       self.run_script(step_name, 'tools/test.py', args, isolate_hash, shards,
                       local_shard, environment, tasks,
-                      cipd_packages=cipd_packages)
+                      cipd_packages=cipd_packages,
+                      ignore_failure=ignore_failure)
       if shards == 0 or local_shard:
         self.read_result_file('read results of %s' % step_name, 'result.log')
 
@@ -698,7 +706,7 @@ class DartApi(recipe_api.RecipeApi):
 
   def run_script(self, step_name, script, args, isolate_hash, shards,
                  local_shard, environment, tasks,
-                 cipd_packages=None, ok_ret=None):
+                 cipd_packages=None, ignore_failure=False):
     """Runs a specific script with current working directory to be checkout. If
     the runtime (passed in environment) is a browser, and the system is linux,
     xvfb is used. If an isolate_hash is passed in, it will swarm the command.
@@ -718,6 +726,7 @@ class DartApi(recipe_api.RecipeApi):
     """
     if not cipd_packages: # pragma: no cover
       cipd_packages = []
+    ok_ret = 'any' if ignore_failure else {0}
     runtime = self._get_specific_argument(args, ['-r', '--runtime'])
     if runtime is None:
       runtime = environment.get('runtime', None)
@@ -739,7 +748,8 @@ class DartApi(recipe_api.RecipeApi):
               'shards': self.shard(step_name, isolate_hash, cmd,
                                    num_shards=shards,
                                    last_shard_is_local=local_shard,
-                                   cipd_packages=cipd_packages),
+                                   cipd_packages=cipd_packages,
+                                   ignore_failure=ignore_failure),
               'args': args,
               'environment': environment,
               'step_name': step_name})
@@ -751,7 +761,8 @@ class DartApi(recipe_api.RecipeApi):
               'shards': self.shard(step_name, isolate_hash, [script] + args,
                                    num_shards=shards,
                                    last_shard_is_local=local_shard,
-                                   cipd_packages=cipd_packages),
+                                   cipd_packages=cipd_packages,
+                                   ignore_failure=ignore_failure),
               'args': args,
               'environment': environment,
               'step_name': step_name})
@@ -767,4 +778,4 @@ class DartApi(recipe_api.RecipeApi):
         ]
         self.run_script("%s_shard_%s" % (step_name, shards), script,
                         args, None, 0, False, environment, None,
-                        ok_ret=ok_ret)
+                        ignore_failure=ignore_failure)

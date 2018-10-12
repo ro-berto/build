@@ -176,7 +176,8 @@ def GenTests(api):
   yield (api.test('analyzer-none-linux-release-be') + api.properties(
       buildername='analyzer-none-linux-release-be',
       buildnumber='1357',
-      revision='3456abce78ef') +
+      revision='3456abce78ef',
+      new_workflow_enabled=True) +
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')) +
       api.step_data('buildbucket.put',
