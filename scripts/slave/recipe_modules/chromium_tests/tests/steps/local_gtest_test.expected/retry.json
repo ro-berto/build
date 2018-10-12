@@ -27,6 +27,7 @@
       "--build-number=123",
       "base_unittests",
       "--gtest_filter=foo.bar",
+      "--gtest_repeat=2",
       "--test-launcher-retry-limit=3",
       "--gtest_also_run_disabled_tests"
     ],
@@ -103,10 +104,10 @@
       "--slave-name=test_bot_id",
       "--build-number=123",
       "base_unittests",
+      "--gtest_repeat=2",
       "--test-launcher-retry-limit=3",
       "--gtest_also_run_disabled_tests",
-      "--gtest_filter=Test.Two",
-      "--gtest_repeat=10"
+      "--gtest_filter=Test.Two"
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
@@ -163,6 +164,7 @@
       "--slave-name=test_bot_id",
       "--build-number=123",
       "base_unittests",
+      "--gtest_repeat=2",
       "--test-launcher-retry-limit=3",
       "--gtest_also_run_disabled_tests",
       "--gtest_filter=Test.Two"
