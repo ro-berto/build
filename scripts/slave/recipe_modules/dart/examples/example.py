@@ -147,7 +147,10 @@ def RunSteps(api):
   if 'shards' in api.properties:
     with api.step.defer_results():
       tasks = api.dart.shard('vm_tests', isolate_hash, test_args)
-      api.dart.collect_all([tasks])
+      api.dart.collect_all([{'shards':tasks,
+                             'args': ['--test_arg'],
+                             'environment': {},
+                             'step_name': 'example sharded step'}])
 
   with api.step.defer_results():
     api.step('Print Hello World', ['echo', 'hello', 'world'])
