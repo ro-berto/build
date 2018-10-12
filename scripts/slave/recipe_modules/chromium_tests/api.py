@@ -236,11 +236,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot_db._add_master_dict_and_test_spec(mastername, master_dict, {})
     return bot_db
 
-  def prepare_checkout(
-      self, bot_config, root_solution_revision=None,
-      disable_syntax_validation=False):
-    update_step = self.m.chromium_checkout.ensure_checkout(
-        bot_config, root_solution_revision, disable_syntax_validation)
+  def prepare_checkout(self, bot_config, **kwargs):
+    update_step = self.m.chromium_checkout.ensure_checkout(bot_config, **kwargs)
 
     if (self.m.chromium.c.compile_py.compiler and
         'goma' in self.m.chromium.c.compile_py.compiler):
