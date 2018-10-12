@@ -238,6 +238,9 @@ def setup_target(api,
          'ANDROID_SERIAL': serial,
          'ANDROID_BUILD_TOP': build_top_dir,
          'PATH': str(build_top_dir.join('prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
+                 api.path.pathsep +
+                 # Add adb in the path.
+                 '/' + str(api.path.join('opt', 'infra-android', 'tools')) +
                  api.path.pathsep + '%(PATH)s',
          'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
          'USE_DEX2OAT_DEBUG': 'false',
