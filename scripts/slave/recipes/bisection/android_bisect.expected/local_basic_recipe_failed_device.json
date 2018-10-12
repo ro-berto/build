@@ -893,9 +893,7 @@
     "name": "Expanding reference range.fetch file fc6dfc7ff5b1073408499478969261b826441144:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Debug@{}@@@",
-      "@@@STEP_LOG_END@Debug@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -911,9 +909,7 @@
     "name": "Expanding reference range.fetch file e28dc0d49c331def2a3bbf3ddd0096eb51551155:DEPS",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@Debug@{}@@@",
-      "@@@STEP_LOG_END@Debug@@@"
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {

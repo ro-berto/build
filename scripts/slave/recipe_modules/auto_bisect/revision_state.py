@@ -285,36 +285,28 @@ class RevisionState(object):
 
     revision_regex = re.compile('.git@(?P<revision>[a-fA-F0-9]+)')
     results = {}
-    result_str = ''
-    result_str += '%s\n' % deps_data
-    try:
-      for depot_name, depot_data in depot_config.DEPOT_DEPS_NAME.iteritems():
-        if (depot_data.get('platform') and
-            depot_data.get('platform') not in recipe_tester_name.lower()):
-          continue
+    for depot_name, depot_data in depot_config.DEPOT_DEPS_NAME.iteritems():
+      if (depot_data.get('platform') and
+          depot_data.get('platform') not in recipe_tester_name.lower()):
+        continue
 
-        if (depot_data.get('recurse') and
-            self.depot_name in depot_data.get('from')):
-          depot_data_src = depot_data.get('src') or depot_data.get('src_old')
-          src_dir = deps_data.get(depot_data_src)
-          if src_dir:
-            result_str += '\n'
-            result_str += '%s\n' % src_dir
-            result_str += '%s\n' % depot_data_src
-            re_results = revision_regex.search(src_dir)
-            if re_results:
-              results[depot_name] = re_results.group('revision')
-            else:  # pragma: no cover
-              warning_text = ('Could not parse revision for %s while bisecting '
-                              '%s' % (depot_name, self.depot))
-              if warning_text not in self.bisector.warnings:
-                self.bisector.warnings.append(warning_text)
-          else:
-            results[depot_name] = None
-    except TypeError as e:  # pragma: no cover
-      api.m.step.active_result.presentation.logs['Debug'] = [result_str]
-      raise e
-    api.m.step.active_result.presentation.logs['Debug'] = [result_str]
+      if (depot_data.get('recurse') and
+          self.depot_name in depot_data.get('from')):
+        depot_data_src = depot_data.get('src') or depot_data.get('src_old')
+        src_dir = deps_data.get(depot_data_src)
+        if src_dir:
+          if isinstance(src_dir, dict):
+            src_dir = src_dir.get('url')
+          re_results = revision_regex.search(src_dir)
+          if re_results:
+            results[depot_name] = re_results.group('revision')
+          else:  # pragma: no cover
+            warning_text = ('Could not parse revision for %s while bisecting '
+                            '%s' % (depot_name, self.depot))
+            if warning_text not in self.bisector.warnings:
+              self.bisector.warnings.append(warning_text)
+        else:
+          results[depot_name] = None
     self.deps = results
     return
 
