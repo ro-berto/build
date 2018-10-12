@@ -51,6 +51,12 @@ class iOSApi(recipe_api.RecipeApi):
   MAC_TOOLCHAIN_ROOT    = '.'
   XCODE_APP_PATH        = 'Xcode.app'
 
+  # CIPD package containing various static test utilities and binaries for WPR testing.
+  # Used with WprProxySimulatorTestRunner
+  WPR_TOOLS_PACKAGE = 'chromium/ios/autofill/wpr-ios-tools'
+  WPR_TOOLS_VERSION = 'version:1.0'
+  WPR_TOOLS_ROOT = 'wpr-ios-tools'
+
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
   UPLOAD_DASHBOARD_API_PROPERTIES = [
       'got_revision_cp',
@@ -644,6 +650,16 @@ class iOSApi(recipe_api.RecipeApi):
     ]
 
     args.extend([
+      '--config-variable', 'wpr-tools-path', (
+          self.WPR_TOOLS_ROOT if test.get('use_wpr_tools') else 'NO_PATH'),
+    ])
+
+    args.extend([
+      '--config-variable', 'replay-path', (
+          test.get('replay_path') or 'NO_PATH'),
+    ])
+
+    args.extend([
       '--config-variable', 'xcode_arg_name', 'xcode-build-version',
       '--config-variable', 'xcode_version', task['xcode build version'],
     ])
@@ -749,6 +765,8 @@ class iOSApi(recipe_api.RecipeApi):
       '--<(xcode_arg_name)', '<(xcode_version)',
       '--mac-toolchain-cmd', '%s/mac_toolchain' % self.MAC_TOOLCHAIN_ROOT,
       '--xcode-path', self.XCODE_APP_PATH,
+      '--wpr-tools-path', '<(wpr-tools-path)',
+      '--replay-path', '<(replay-path)'
     ]
     files = [
       # .apps are directories. Need the trailing slash to isolate the
@@ -756,6 +774,8 @@ class iOSApi(recipe_api.RecipeApi):
       '<(app_path)/',
       '%s/' % scripts_dir,
     ]
+    if self.__config.get('additional files'):
+      files.extend(self.__config.get('additional files'))
     if self.platform == 'simulator':
       iossim = self.most_recent_iossim
       cmd.extend([
@@ -834,17 +854,26 @@ class iOSApi(recipe_api.RecipeApi):
           ],
         }
 
+      cipd_packages = [(
+          self.MAC_TOOLCHAIN_ROOT,
+          self.MAC_TOOLCHAIN_PACKAGE,
+          self.MAC_TOOLCHAIN_VERSION,
+      )]
+
+      if task['test'].get('use_wpr_tools'):
+        cipd_packages.append((
+            self.WPR_TOOLS_ROOT,
+            self.WPR_TOOLS_PACKAGE,
+            self.WPR_TOOLS_VERSION,
+        ))
+
       swarming_task = self.m.swarming.task(
         task['step name'],
         task['isolated hash'],
         task_output_dir=task['tmp_dir'],
         trigger_script=trigger_script,
         service_account=self.SWARMING_SERVICE_ACCOUNT,
-        cipd_packages=[(
-            self.MAC_TOOLCHAIN_ROOT,
-            self.MAC_TOOLCHAIN_PACKAGE,
-            self.MAC_TOOLCHAIN_VERSION,
-        )],
+        cipd_packages=cipd_packages,
       )
 
       swarming_task.dimensions = {
