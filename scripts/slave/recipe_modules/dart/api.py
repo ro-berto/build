@@ -215,6 +215,7 @@ class DartApi(recipe_api.RecipeApi):
             output_dir = self.m.step.active_result.raw_io.output_dir
             for filepath in output_dir:
               filename = filepath.split('/')[-1]  # pragma: no cover
+              filename = filename.split('\\')[-1]  # pragma: no cover
               if filename in (
                   "result.log", "results.json", "run.json"): # pragma: no cover
                 contents = output_dir[filepath]
@@ -226,15 +227,18 @@ class DartApi(recipe_api.RecipeApi):
                       'accumulated_results'] = [results]
                 if filename == 'run.json':
                   run = contents
-          results_path = self.m.path['checkout'].join('logs', 'results.json')
-          self.m.file.write_text("Write results file", results_path, results)
-          run_path = self.m.path['checkout'].join('logs', 'run.json')
-          self.m.file.write_text("Write run file", run_path, run)
-          step_name = 'sharded %s' % info['step_name']
-          self.download_results(step_name)
-          self.deflake_results(step_name, info['args'], info['environment'])
-          self.upload_results(step_name)
-          self.present_results(step_name)
+          run_new_workflow = not self.m.buildbucket.builder_name.endswith(
+                              ('-try', '-stable', '-dev'))
+          if run_new_workflow:
+            results_path = self.m.path['checkout'].join('logs', 'results.json')
+            self.m.file.write_text("Write results file", results_path, results)
+            run_path = self.m.path['checkout'].join('logs', 'run.json')
+            self.m.file.write_text("Write run file", run_path, run)
+            step_name = 'sharded %s' % info['step_name']
+            self.download_results(step_name)
+            self.deflake_results(step_name, info['args'], info['environment'])
+            self.upload_results(step_name)
+            self.present_results(step_name)
 
   def download_results(self,  name):
     builder = self.m.buildbucket.builder_name
