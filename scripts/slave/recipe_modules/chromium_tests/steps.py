@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 import contextlib
-import copy
 import datetime
 import hashlib
 import json
@@ -64,17 +63,7 @@ def _merge_arg(args, flag, value):
     return args + [flag]
 
 
-def _merge_args_and_test_options(test, args, options):
-  """Adds args from test options.
-
-  Args:
-    test: A test suite. An instance of a subclass of Test.
-    args: The list of args of extend.
-    options: The TestOptions to use to extend args.
-
-  Returns:
-    The extended list of args.
-  """
+def _merge_args_and_test_options(test, args):
   args = args[:]
 
   if not (isinstance(test, (SwarmingGTestTest, LocalGTestTest)) or (isinstance(
@@ -84,6 +73,7 @@ def _merge_args_and_test_options(test, args, options):
     # by gtest and webkit_layout_tests.
     return args
 
+  options = test.test_options
   if options.test_filter:
     args = _merge_arg(args, '--gtest_filter', ':'.join(options.test_filter))
   if options.repeat_count and options.repeat_count > 1:
@@ -93,32 +83,6 @@ def _merge_args_and_test_options(test, args, options):
   if options.run_disabled:
     args = _merge_arg(args, '--gtest_also_run_disabled_tests', value=None)
   return args
-
-
-def _test_options_for_running(test_options, suffix):
-  """Modifes a Test's TestOptions for a given suffix.
-
-  When retrying tests without patch, we want to run the tests a fixed number of
-  times, regardless of whether they succeed, to see if they flakily fail. Some
-  recipes specify an explicit repeat_count -- for those, we don't override their
-  desired behavior.
-
-  Args:
-    test_options: The test's initial TestOptions.
-    suffix: A string suffix.
-
-  Returns:
-    A copy of the initial TestOptions, possibly modified to support the suffix.
-
-  """
-  # We make a copy of test_options since the initial reference is persistent
-  # across different suffixes.
-  test_options_copy = copy.deepcopy(test_options)
-
-  if test_options_copy.repeat_count is None and suffix == 'without patch':
-    test_options_copy._repeat_count = 10
-
-  return test_options_copy
 
 
 class Test(object):
@@ -740,12 +704,20 @@ class LocalGTestTest(Test):
     is_android = api.chromium.c.TARGET_PLATFORM == 'android'
     is_fuchsia = api.chromium.c.TARGET_PLATFORM == 'fuchsia'
 
-    test_options = _test_options_for_running(self.test_options, suffix)
-    args = _merge_args_and_test_options(self, self._args, test_options)
+    args = _merge_args_and_test_options(self, self._args)
 
     tests_to_retry = self.tests_to_retry(api, suffix)
     if tests_to_retry:
       args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
+
+    # When retrying tests without patch, we want to run the tests a fixed number
+    # of times, regardless of whether they succeed, to see if they flaky fail.
+    # Some recipes specify an explicit repeat_count -- for those, we
+    # don't override their desired behavior.
+    if self.test_options.repeat_count is None and suffix == 'without patch':
+      # We don't modify self.test_options.repeat_count since that state is
+      # persistent across different suffixes.
+      args = _merge_arg(args, '--gtest_repeat', '10')
 
     gtest_results_file = api.test_utils.gtest_results(add_json_log=False)
     step_test_data = lambda: api.test_utils.test_api.canned_gtest_output(True)
@@ -1729,12 +1701,20 @@ class SwarmingGTestTest(SwarmingTest):
     # For local tests test_args are added inside api.chromium.runtest.
     args = self._args + api.chromium.c.runtests.test_args
 
-    test_options = _test_options_for_running(self.test_options, suffix)
-    args = _merge_args_and_test_options(self, args, test_options)
+    args = _merge_args_and_test_options(self, args)
 
     tests_to_retry = self.tests_to_retry(api, suffix)
     if tests_to_retry:
       args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
+
+    # When retrying tests without patch, we want to run the tests a fixed number
+    # of times, regardless of whether they succeed, to see if they flaky fail.
+    # Some recipes specify an explicit repeat_count -- for those, we
+    # don't override their desired behavior.
+    if self.test_options.repeat_count is None and suffix == 'without patch':
+      # We don't modify self.test_options.repeat_count since that state is
+      # persistent across different suffixes.
+      args = _merge_arg(args, '--gtest_repeat', '10')
 
     args.extend(api.chromium_tests.swarming_extra_args)
 
@@ -1871,8 +1851,7 @@ class LocalIsolatedScriptTest(Test):
   # TODO(nednguyen, kbr): figure out what to do with Android.
   # (crbug.com/533480)
   def run(self, api, suffix):
-    test_options = _test_options_for_running(self.test_options, suffix)
-    args = _merge_args_and_test_options(self, self._args, test_options)
+    args = _merge_args_and_test_options(self, self._args)
 
     # TODO(nednguyen, kbr): define contract with the wrapper script to rerun
     # a subset of the tests. (crbug.com/533481)
@@ -1969,8 +1948,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._test_options = value
 
   def create_task(self, api, suffix, isolated_hash):
-    test_options = _test_options_for_running(self.test_options, suffix)
-    args = _merge_args_and_test_options(self, self._args, test_options)
+
+    args = _merge_args_and_test_options(self, self._args)
 
     shards = self._shards
 
