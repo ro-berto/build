@@ -237,11 +237,11 @@ def setup_target(api,
          'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
          'ANDROID_SERIAL': serial,
          'ANDROID_BUILD_TOP': build_top_dir,
-         'ADB': '/' + str(api.path.join('opt', 'infra-android', 'tools', 'adb')),
+         'ADB': str(build_top_dir.join('prebuilts', 'runtime', 'adb')),
          'PATH': str(build_top_dir.join('prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
                  api.path.pathsep +
                  # Add adb in the path.
-                 '/' + str(api.path.join('opt', 'infra-android', 'tools')) +
+                 str(build_top_dir.join('prebuilts', 'runtime')) +
                  api.path.pathsep + '%(PATH)s',
          'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
          'USE_DEX2OAT_DEBUG': 'false',
@@ -288,8 +288,8 @@ def setup_target(api,
                 api.path.pathsep +
                 str(build_top_dir.join('prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
                 api.path.pathsep +
-                 # Add adb in the path.
-                 '/' + str(api.path.join('opt', 'infra-android', 'tools')) +
+                # Add adb in the path.
+                str(build_top_dir.join('prebuilts', 'runtime')) +
                 api.path.pathsep +
                 '%(PATH)s' })
 
