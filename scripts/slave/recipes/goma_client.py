@@ -9,10 +9,8 @@ DEPS = [
     'depot_tools/gclient',
     'depot_tools/osx_sdk',
     'recipe_engine/buildbucket',
-    'recipe_engine/context',
     'recipe_engine/path',
     'recipe_engine/platform',
-    'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/step',
 ]
@@ -55,12 +53,11 @@ def RunSteps(api):
     api.step('build', [api.depot_tools.ninja_path, '-C', build_dir])
 
     # 3. Run test
-    with api.context():
-      api.python(
-          name='tests',
-          script=api.path['checkout'].join('build', 'run_unittest.py'),
-          args=['--build-dir', build_out_dir,
-                '--target', build_target, '--non-stop'])
+    api.python(
+        name='tests',
+        script=api.path['checkout'].join('build', 'run_unittest.py'),
+        args=['--build-dir', build_out_dir,
+              '--target', build_target, '--non-stop'])
 
   # 4. Create archive.
   api.python(
