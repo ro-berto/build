@@ -872,6 +872,19 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'mac-mojo-rel': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder_tester',
+      'testing': {
+        'platform': 'mac',
+      },
+    },
     'Mojo Windows': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
