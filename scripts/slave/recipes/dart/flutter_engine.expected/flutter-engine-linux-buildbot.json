@@ -2369,7 +2369,7 @@
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
-      "rmtree",
+      "remove",
       "[START_DIR]/flutter/bin/cache/dart-sdk"
     ],
     "cwd": "[START_DIR]/flutter",
@@ -2380,6 +2380,25 @@
     },
     "infra_step": true,
     "name": "remove downloaded cached dart-sdk"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[START_DIR]/flutter/bin/cache/dart-sdk"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[START_DIR]/src/out/host_debug/dart-sdk/bin:<PATH>",
+      "TEST_COMMIT_RANGE": "HEAD"
+    },
+    "infra_step": true,
+    "name": "remove downloaded cached dart-sdk (2)"
   },
   {
     "cmd": [
