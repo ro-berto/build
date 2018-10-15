@@ -3030,17 +3030,11 @@ This value can be changed per individual task.
 
 &emsp; **@default_user.setter**<br>&mdash; **def [default\_user](/scripts/slave/recipe_modules/swarming/api.py#338)(self, value):**
 
-&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/swarming/api.py#1298)(self, task):**
+&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/swarming/api.py#1311)(self, task):**
 
 SwarmingTask -> argument list for 'swarming.py' command.
 
-&mdash; **def [get\_states](/scripts/slave/recipe_modules/swarming/api.py#1133)(self, task_ids, suffix=None):**
-
-Returns the states of a list of tasks.
-
-Uses the 'get_states' endpoint on the server.
-
-&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1214)(self, prefix, task):**
+&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1227)(self, prefix, task):**
 
 SwarmingTask -> name of a step of a waterfall.
 
@@ -3199,6 +3193,25 @@ Args:
 &emsp; **@verbose.setter**<br>&mdash; **def [verbose](/scripts/slave/recipe_modules/swarming/api.py#248)(self, value):**
 
 Enables or disables verbose output in swarming scripts.
+
+&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/swarming/api.py#1133)(self, task_sets, suffix=None, attempts=0):**
+
+Waits for a finished set of tasks.
+
+Args:
+  task_sets: A list of lists. Each item in task_sets is a set of tasks,
+             which should be collected together.
+  suffix: An optional name suffix.
+  attempts: How many times have we polled swarming for this data. Used
+            to retry at a slower rate, so we don't overload the server
+            with requests.
+
+Returns:
+  A tuple of two items:
+    1. A list of task sets which have finished.
+    2. How many attempts we've now made to get task data.
+
+Uses the 'get_states' endpoint on the swarming server.
 ### *recipe_modules* / [swarming\_client](/scripts/slave/recipe_modules/swarming_client)
 
 [DEPS](/scripts/slave/recipe_modules/swarming_client/__init__.py#5): [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5652,7 +5665,7 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 
 [DEPS](/scripts/slave/recipe_modules/swarming/examples/full.py#7): [isolate](#recipe_modules-isolate), [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/swarming/examples/full.py#39)(api, platforms, show_isolated_out_in_collect_step, show_shards_in_collect_step, gtest_task, isolated_script_task, merge, trigger_script, named_caches, service_account, get_states):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/swarming/examples/full.py#39)(api, platforms, show_isolated_out_in_collect_step, show_shards_in_collect_step, gtest_task, isolated_script_task, merge, trigger_script, named_caches, service_account, wait_for_tasks):**
 ### *recipes* / [swarming:tests/task](/scripts/slave/recipe_modules/swarming/tests/task.py)
 
 [DEPS](/scripts/slave/recipe_modules/swarming/tests/task.py#5): [swarming](#recipe_modules-swarming), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

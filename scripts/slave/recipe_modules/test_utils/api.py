@@ -479,7 +479,6 @@ class LocalGroup(TestGroup):
 class SwarmingGroup(TestGroup):
   def __init__(self, tests):
     super(SwarmingGroup, self).__init__(tests)
-    self._all_task_ids = set()
     self._task_ids_to_test = {}
 
   def pre_run(self, caller_api, suffix):
@@ -490,16 +489,14 @@ class SwarmingGroup(TestGroup):
       if not task: # pragma: no cover
         continue
 
-      task_ids = frozenset(task.get_task_ids())
-      self._all_task_ids.update(task_ids)
+      task_ids = tuple(task.get_task_ids())
       self._task_ids_to_test[task_ids] = t
 
   def run(self, caller_api, suffix):
     """Executes the |run| method of each test."""
-    unfinished_tasks = set(self._all_task_ids)
     attempts = 0
-    while unfinished_tasks:
-      if len(self._task_ids_to_test.values()) == 1:
+    while self._task_ids_to_test:
+      if len(self._task_ids_to_test) == 1:
         # We only have one test left to collect, just collect it normally.
         key = list(self._task_ids_to_test.keys())[0]
         test = self._task_ids_to_test[key]
@@ -507,41 +504,13 @@ class SwarmingGroup(TestGroup):
         del self._task_ids_to_test[key]
         break
 
-      collected = False
-
-      states = caller_api.swarming.get_states(
-          list(unfinished_tasks), suffix=(
-              (' (%s)' % suffix) if suffix else ''))
-      for task_id, state in states.items():
-        if state not in ('PENDING', 'RUNNING'):
-          unfinished_tasks.discard(task_id)
-
-      for task_ids, test in self._task_ids_to_test.items():
-        # Some swarming tasks are done. We want to make sure that all of the
-        # swarming tasks for a test are finished before we run collect on it.
-        # If any task is still unfinished, don't collect the task.
-        if unfinished_tasks.intersection(task_ids):
-          continue
-
-        collected = True
+      finished_sets, attempts = caller_api.swarming.wait_for_finished_task_set(
+          list(self._task_ids_to_test), suffix=(
+              (' (%s)' % suffix) if suffix else ''), attempts=attempts)
+      for task_set in finished_sets:
+        test = self._task_ids_to_test[tuple(task_set)]
         self._run_func(test, test.run, caller_api, suffix, True)
-        del self._task_ids_to_test[task_ids]
-
-      # If we collected something, it possible more tasks are waiting to be
-      # collected. Try collecting immediately, rather than sleeping.
-      if collected:
-        continue
-
-      attempts += 1
-      time_to_sleep_sec = 2 ** attempts
-      # Cap the sleep time at 2 minutes. Waiting longer than that could start to
-      # impact the actual cycle time of the builder; if we wait for 16 minutes,
-      # and (potentially) the final task finished one minute into that sleep,
-      # we'd waste 15 minutes of time just sitting there. Ideally this would be
-      # interrupt driven, rather than polling, but that's hard given the current
-      # architecture of recipes.
-      time_to_sleep_sec = min(time_to_sleep_sec, 2 * 60)
-      caller_api.time.sleep(time_to_sleep_sec)
+        del self._task_ids_to_test[task_set]
 
     # Testing this suite is hard, because the step_test_data for get_states
     # means that it's hard to force it to never return COMPLETED for tasks. This
@@ -559,7 +528,7 @@ class SwarmingGroup(TestGroup):
               test.name for test in self._task_ids_to_test.values())))
       result.presentation.status = caller_api.step.WARNING
 
-      for task_ids, test in self._task_ids_to_test.items():
+      for test in self._task_ids_to_test.values():
         # We won't collect any already collected tasks, as they're removed from
         # self._task_ids_to_test
         self._run_func(test, test.run, caller_api, suffix, True)
