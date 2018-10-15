@@ -119,7 +119,8 @@ class JSONGeneratorTest(unittest.TestCase):
         [TestResult('foo/bar/baz.html', status='SUCCESS', elapsed_time=1.2)])
     individual_test_timings.append(
         [TestResult('bar.html', status='SUCCESS', elapsed_time=0.0001)])
-    trie = generate_test_timings_trie(individual_test_timings, path_delimiter='/')
+    trie = generate_test_timings_trie(
+        individual_test_timings, path_delimiter='/')
 
     expected_trie = {
       'bar.html': 0,

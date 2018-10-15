@@ -46,7 +46,8 @@ class TestResultsApi(recipe_api.RecipeApi):
           '--chrome-revision', chrome_revision
       ]
       if self.m.buildbucket.build_id is not None:
-        upload_test_results_args.extend(['--build-id', self.m.buildbucket.build_id])
+        upload_test_results_args.extend(['--build-id',
+                                         self.m.buildbucket.build_id])
 
       test_results_server = test_results_server or self.c.test_results_server
       if test_results_server:

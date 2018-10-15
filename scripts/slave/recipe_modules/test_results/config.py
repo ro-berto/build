@@ -13,7 +13,7 @@ config_ctx = config_item_context(BaseConfig)
 
 
 @config_ctx(is_root=True)
-def BASE(c):
+def BASE(_):
   pass
 
 @config_ctx()

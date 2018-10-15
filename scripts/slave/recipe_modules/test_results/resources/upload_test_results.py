@@ -136,8 +136,8 @@ def main(args):
                                 'this script.')
   option_parser.add_option('--build-id',
                            type=int,
-                           help='The buildbucket build ID of the builder running'
-                                'this script.')
+                           help='The buildbucket build ID of the builder'
+                                ' running this script.')
   option_parser.add_option('--test-results-server',
                            help='The test results server to upload the '
                                 'results.')
