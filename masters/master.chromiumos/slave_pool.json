@@ -1,17 +1,11 @@
 {
   "class_map": {
     "builder": {
-      "amd64-generic-incremental": [
-        "cros-beefy423-c2"
-      ], 
       "amd64-generic-paladin": [
         "cros-beefy468-c2"
       ], 
       "arm-generic-paladin": [
         "cros-beefy425-c2"
-      ], 
-      "daisy-incremental": [
-        "cros-beefy427-c2"
       ], 
       "moblab-generic-vm-paladin": [
         "build112-m2"
@@ -42,8 +36,10 @@
     "build98-m2", 
     "cros-beefy100-c2", 
     "cros-beefy192-c2", 
+    "cros-beefy423-c2", 
     "cros-beefy424-c2", 
     "cros-beefy426-c2", 
+    "cros-beefy427-c2", 
     "cros-beefy428-c2", 
     "cros-beefy429-c2", 
     "cros-beefy466-c2", 
