@@ -201,13 +201,18 @@ def TestSpec(parent_builder, perf_id, platform, target_bits,
             perf_id=perf_id,
             perf_config_mappings=perf_config_mappings,
             commit_position_property=commit_position_property))
-        # Run capture unittests as well since our bots have real webcams.
+
+        # Run capture unittests as well
+        capture_unittests_args =['--enable-logging',
+                                 '--v=1',
+                                 '--test-launcher-jobs=1',
+                                 '--test-launcher-print-test-stdio=always']
+        # Real webcams are unavailable on Win/Mac builders (CL:1278272)
+        if platform in ['win', 'mac']:
+            capture_unittests_args.append('--gtest_filter=-*UsingRealWebcam*')
         tests.append(steps.LocalGTestTest(
             'capture_unittests',
-            args=['--enable-logging',
-                  '--v=1',
-                  '--test-launcher-jobs=1',
-                  '--test-launcher-print-test-stdio=always']))
+            args=capture_unittests_args))
 
       tests.append(MakeTest(
           'content_unittests',
