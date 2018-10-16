@@ -158,15 +158,6 @@ def GenTests(api):
     api.step_data('bot_update', retcode=1)
   )
 
-  yield (
-    api.v8.test(
-        'client.v8',
-        'V8 Linux',
-        'swarming_collect_failure',
-    ) +
-    api.step_data('Check', retcode=1)
-  )
-
   # Minimal bot config for a release builder. Used to simulate test data for
   # triggered testers.
   release_bot_config = {
@@ -277,45 +268,66 @@ def GenTests(api):
     return (
       api.v8.test(
           'client.v8',
-          'V8 Linux64 - internal snapshot',
+          'V8 Foobar',
           'test_failures%s%s' % (results_suffix, flakes_suffix),
       ) +
+      api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
       api.override_step_data(
           'Check', api.v8.output_json(
-              has_failures=True, wrong_results=wrong_results, flakes=flakes))
+              has_failures=True, wrong_results=wrong_results, flakes=flakes)) +
+      api.post_process(Filter().include_re(r'.*Check.*'))
     )
 
   yield TestFailures(wrong_results=False, flakes=False)
   yield TestFailures(wrong_results=False, flakes=True)
   yield (
       TestFailures(wrong_results=True, flakes=False) +
-      api.expect_exception('AssertionError')
+      api.expect_exception('AssertionError') +
+      api.post_process(DropExpectation)
   )
 
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux64 - internal snapshot',
+        'V8 Foobar',
+        'swarming_collect_failure',
+        parent_buildername='V8 Foobar - builder',
+        parent_bot_config=release_bot_config,
+        parent_test_spec=test_spec,
+    ) +
+    api.step_data('Check', retcode=1)
+  )
+
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
         'empty_json',
     ) +
+    api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
     api.override_step_data('Check', api.json.output([])) +
-    api.expect_exception('AssertionError')
+    api.expect_exception('AssertionError') +
+    api.post_process(DropExpectation)
   )
 
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux64 - internal snapshot',
+        'V8 Foobar',
         'one_failure',
     ) +
+    api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
     api.override_step_data('Check', api.v8.one_failure())
   )
 
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux64',
+        'V8 Foobar',
         'one_failure_build_env_not_supported',
+        parent_buildername='V8 Foobar - builder',
+        parent_bot_config=release_bot_config,
+        parent_test_spec=test_spec,
     ) +
     api.override_step_data('Check', api.v8.one_failure()) +
     api.properties(parent_build_environment=None)
@@ -355,25 +367,49 @@ def GenTests(api):
       api.post_process(Filter('Test262 (flakes)'))
   )
 
-  # Test that infra-side test configs are taken into account for flako cmd line.
   yield (
-      api.v8.test(
-          'client.v8',
-          'V8 Mac64 GC Stress',
-          'flako',
-      ) +
-      api.override_step_data(
-          'Check - d8', api.v8.output_json(has_failures=True, flakes=True)) +
-      api.post_process(Filter('Check - d8 (flakes)'))
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'generic_swarming_task',
+        parent_buildername='V8 Foobar - builder',
+        parent_bot_config=release_bot_config,
+        parent_test_spec='{"tests": [{"name": "jsfunfuzz"}]}',
+    )
   )
 
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Fuzzer',
+        'V8 Foobar',
         'fuzz_archive',
+        parent_buildername='V8 Foobar - builder',
+        parent_bot_config=release_bot_config,
+        parent_test_spec='{"tests": [{"name": "jsfunfuzz"}]}',
     ) +
     api.step_data('Fuzz', retcode=1)
+  )
+
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'gcmole',
+        parent_buildername='V8 Foobar - builder',
+        parent_bot_config=release_bot_config,
+        parent_test_spec='{"tests": [{"name": "gcmole"}]}',
+    )
+  )
+
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'initializers',
+        parent_buildername='V8 Foobar - builder',
+        parent_bot_config=release_bot_config,
+        parent_test_spec='{"tests": [{"name": "v8initializers"}]}',
+    )
   )
 
   # Bisect over range a1, a2, a3. Assume a2 is the culprit. Steps:
@@ -384,10 +420,12 @@ def GenTests(api):
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux - predictable',
+        'V8 Foobar',
         'bisect',
+        enable_swarming=False,
     ) +
-    api.v8.fail('Check - d8') +
+    api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
+    api.v8.fail('Check') +
     api.v8.fail('Bisect a2.Retry') +
     api.time.step(120)
   )
@@ -396,9 +434,11 @@ def GenTests(api):
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux - predictable',
+        'V8 Foobar',
         'bisect_override_changes',
+        enable_swarming=False,
     ) +
+    api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
     api.properties(
         override_changes=[
           {'revision': 'a1', 'when': 1},
@@ -406,7 +446,7 @@ def GenTests(api):
           {'revision': 'a3', 'when': 3},
         ],
     ) +
-    api.v8.fail('Check - d8') +
+    api.v8.fail('Check') +
     api.v8.fail('Bisect a2.Retry') +
     api.time.step(120)
   )
@@ -416,10 +456,12 @@ def GenTests(api):
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux - predictable',
+        'V8 Foobar',
         'bisect_tests_too_long',
+        enable_swarming=False,
     ) +
-    api.v8.fail('Check - d8') +
+    api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
+    api.v8.fail('Check') +
     api.time.step(7)
   )
 
@@ -428,9 +470,10 @@ def GenTests(api):
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux - shared',
+        'V8 Foobar',
         'bisect_swarming',
     ) +
+    api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
     api.v8.fail('Check') +
     api.v8.fail('Bisect a2.Retry') +
     api.time.step(120)
@@ -444,42 +487,13 @@ def GenTests(api):
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux64',
+        'V8 Foobar',
         'bisect_tester_swarming',
+        parent_buildername='V8 Foobar - builder',
+        parent_bot_config=release_bot_config,
+        parent_test_spec=test_spec,
     ) +
     api.v8.fail('Check') +
-    api.time.step(120)
-  )
-
-  # Same as above with a slim swarming tester.
-  yield (
-    api.v8.test(
-        'client.v8',
-        'V8 Linux64 - custom snapshot - debug',
-        'slim_bisect_tester_swarming',
-    ) +
-    api.v8.fail('Mjsunit') +
-    api.override_step_data(
-        'Bisect a0.gsutil download isolated json',
-        api.json.output({'mjsunit': '[dummy hash for bisection]'}),
-    ) +
-    api.override_step_data(
-        'Bisect a1.gsutil download isolated json',
-        api.json.output({'mjsunit': '[dummy hash for bisection]'}),
-    ) +
-    api.time.step(120)
-  )
-
-  # Same as above with a windows bot. Regression test making sure that
-  # the swarming hashes are searched in a windows bucket.
-  yield (
-    api.v8.test(
-        'client.v8',
-        'V8 Win32',
-        'bisect',
-    ) +
-    api.v8.fail('Check') +
-    api.post_process(Filter().include_re(r'.*check build.*')) +
     api.time.step(120)
   )
 
@@ -488,10 +502,12 @@ def GenTests(api):
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux - predictable',
+        'V8 Foobar',
         'bisect_recurring_failure',
+        enable_swarming=False,
     ) +
-    api.v8.fail('Check - d8') +
+    api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
+    api.v8.fail('Check') +
     api.v8.fail('Bisect a0.Retry') +
     api.time.step(120)
   )
@@ -500,10 +516,12 @@ def GenTests(api):
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux - predictable',
+        'V8 Foobar',
         'bisect_one_change',
+        enable_swarming=False,
     ) +
-    api.v8.fail('Check - d8') +
+    api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
+    api.v8.fail('Check') +
     api.url.json(
         'Bisect.Fetch changes', api.v8.example_one_buildbot_change()) +
     api.override_step_data(
@@ -593,16 +611,7 @@ def GenTests(api):
         'V8 Mac64',
         'with_test_spec',
     ) +
-    # On the recipe side, we use api.path['checkout'].join('infra', ...),
-    # however due to the way path module's test_api works, this has to be
-    # manually expanded to path in terms of builder_cache as it is done by the
-    # bot_update.ensure_checkout step.
-    api.path.exists(api.path['builder_cache'].join(
-        'V8_Mac64', 'v8', 'infra', 'testing', 'builders.pyl')) +
-    api.override_step_data(
-        'read test spec (v8)',
-        api.v8.example_test_spec('V8 Mac64', test_spec),
-    ) +
+    api.v8.test_spec_in_checkout('V8 Mac64', test_spec) +
     api.post_process(
         Filter()
             .include('read test spec (v8)')
@@ -620,17 +629,8 @@ def GenTests(api):
         'V8 Linux - nosnap builder',
         'with_test_spec',
     ) +
-    # On the recipe side, we use api.path['checkout'].join('infra', ...),
-    # however due to the way path module's test_api works, this has to be
-    # manually expanded to path in terms of builder_cache as it is done by the
-    # bot_update.ensure_checkout step.
-    api.path.exists(api.path['builder_cache'].join(
-        'V8_Linux___nosnap_builder', 'v8', 'infra', 'testing',
-        'builders.pyl')) +
-    api.override_step_data(
-        'read test spec (v8)',
-        api.v8.example_test_spec('V8 Linux - nosnap', test_spec),
-    ) +
+    api.v8.test_spec_in_checkout(
+        'V8 Linux - nosnap builder', test_spec, 'V8 Linux - nosnap') +
     api.post_process(Filter(
         'read test spec (v8)',
         'generate_build_files',
@@ -747,7 +747,14 @@ def GenTests(api):
 
   # Test that swarming tasks scheduled from experimental builders have low prio.
   yield (
-      api.v8.test('client.v8', 'V8 Linux', 'experimental') +
+      api.v8.test(
+          'client.v8',
+          'V8 Foobar',
+          'experimental',
+          parent_buildername='V8 Foobar - builder',
+          parent_bot_config=release_bot_config,
+          parent_test_spec='{"tests": [{"name": "v8testing"}]}',
+      ) +
       api.runtime(is_luci=True, is_experimental=True) +
       api.post_process(Filter('[trigger] Check'))
   )

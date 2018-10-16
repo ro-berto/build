@@ -1,0 +1,733 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--spec-path",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "--revision_mapping_file",
+      "{\"got_revision\": \"v8\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
+      "--cleanup-dir",
+      "[CLEANUP]/bot_update",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "bot_update",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"v8\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#50110}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"source_manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"directories\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"version\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#50110}\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[BUILDER_CACHE]/V8_Foobar/v8/custom_deps"
+    ],
+    "infra_step": true,
+    "name": "ensure custom_deps dir"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "listdir",
+      "[BUILDER_CACHE]/V8_Foobar/v8/custom_deps"
+    ],
+    "infra_step": true,
+    "name": "list test roots",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@listdir@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[BUILDER_CACHE]/V8_Foobar/v8/infra/testing/builders.pyl",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "read test spec (v8)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@test_spec@V8 Foobar@@@",
+      "@@@STEP_LOG_LINE@test_spec@  v8testing(1) None@@@",
+      "@@@STEP_LOG_LINE@test_spec@  test262_variants(1) None@@@",
+      "@@@STEP_LOG_END@test_spec@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/V8_Foobar/v8/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "client.v8",
+      "-b",
+      "V8 Foobar",
+      "--config-file",
+      "[BUILDER_CACHE]/V8_Foobar/v8/infra/mb/mb_config.pyl",
+      "--goma-dir",
+      "[GOMA_CACHE]/client"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "lookup GN args",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
+      "@@@STEP_LOG_LINE@gn_args@use_goma = true@@@",
+      "@@@STEP_LOG_LINE@gn_args@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/V8_Foobar/v8/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "client.v8",
+      "-b",
+      "V8 Foobar",
+      "--config-file",
+      "[BUILDER_CACHE]/V8_Foobar/v8/infra/mb/mb_config.pyl",
+      "--goma-dir",
+      "[GOMA_CACHE]/client",
+      "//out/Release"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "-j",
+      "20"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "-j",
+      "20",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "compile confirm no-op",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/V8_Foobar/v8/tools/run-tests.py",
+      "--progress=verbose",
+      "--mode",
+      "Release",
+      "--outdir",
+      "out",
+      "--buildbot",
+      "--timeout=200",
+      "--random-seed=-358114921",
+      "bot_default",
+      "--variants=more,dev",
+      "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Foobar",
+      "--json-test-results",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "name": "Check",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@failures: 2<br/>@@@",
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@",
+      "@@@STEP_LOG_LINE@fast@Test: suite-name/dir/fast@@@",
+      "@@@STEP_LOG_LINE@fast@Flags: @@@",
+      "@@@STEP_LOG_LINE@fast@Command: d8 test.js@@@",
+      "@@@STEP_LOG_LINE@fast@Variant: default@@@",
+      "@@@STEP_LOG_LINE@fast@@@@",
+      "@@@STEP_LOG_LINE@fast@Build environment:@@@",
+      "@@@STEP_LOG_LINE@fast@ gn_args: target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_LINE@fast@@@@",
+      "@@@STEP_LOG_LINE@fast@Run #1@@@",
+      "@@@STEP_LOG_LINE@fast@Exit code: 1@@@",
+      "@@@STEP_LOG_LINE@fast@Result: FAIL@@@",
+      "@@@STEP_LOG_LINE@fast@Expected outcomes: PASS, SLOW@@@",
+      "@@@STEP_LOG_LINE@fast@Duration: 00:01:500@@@",
+      "@@@STEP_LOG_LINE@fast@@@@",
+      "@@@STEP_LOG_LINE@fast@Stdout:@@@",
+      "@@@STEP_LOG_LINE@fast@Some output.@@@",
+      "@@@STEP_LOG_LINE@fast@@@@",
+      "@@@STEP_LOG_LINE@fast@Stderr:@@@",
+      "@@@STEP_LOG_LINE@fast@Some errput.@@@",
+      "@@@STEP_LOG_LINE@fast@@@@",
+      "@@@STEP_LOG_END@fast@@@",
+      "@@@STEP_LOG_LINE@slow@Test: suite-name/dir/slow@@@",
+      "@@@STEP_LOG_LINE@slow@Flags: @@@",
+      "@@@STEP_LOG_LINE@slow@Command: d8 test.js@@@",
+      "@@@STEP_LOG_LINE@slow@Variant: default@@@",
+      "@@@STEP_LOG_LINE@slow@@@@",
+      "@@@STEP_LOG_LINE@slow@Build environment:@@@",
+      "@@@STEP_LOG_LINE@slow@ gn_args: target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_LINE@slow@@@@",
+      "@@@STEP_LOG_LINE@slow@Run #1@@@",
+      "@@@STEP_LOG_LINE@slow@Exit code: 1@@@",
+      "@@@STEP_LOG_LINE@slow@Result: FAIL@@@",
+      "@@@STEP_LOG_LINE@slow@Expected outcomes: PASS, SLOW@@@",
+      "@@@STEP_LOG_LINE@slow@Duration: 00:03:000@@@",
+      "@@@STEP_LOG_LINE@slow@@@@",
+      "@@@STEP_LOG_LINE@slow@Stdout:@@@",
+      "@@@STEP_LOG_LINE@slow@Some output.@@@",
+      "@@@STEP_LOG_LINE@slow@@@@",
+      "@@@STEP_LOG_LINE@slow@Stderr:@@@",
+      "@@@STEP_LOG_LINE@slow@Some errput.@@@",
+      "@@@STEP_LOG_LINE@slow@@@@",
+      "@@@STEP_LOG_END@slow@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/V8_Foobar/v8/tools/run-tests.py",
+      "--progress=verbose",
+      "--mode",
+      "Release",
+      "--outdir",
+      "out",
+      "--buildbot",
+      "--timeout=200",
+      "--random-seed=-358114921",
+      "test262",
+      "--variants=more,dev",
+      "--extra-flags=--flag",
+      "--rerun-failures-count=2",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Foobar",
+      "--json-test-results",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "name": "Test262",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Bisect"
+  },
+  {
+    "cmd": [
+      "prpc",
+      "call",
+      "-format=json",
+      "luci-milo.appspot.com",
+      "milo.Buildbot.GetBuildbotBuildJSON"
+    ],
+    "infra_step": true,
+    "name": "Bisect.Fetch changes",
+    "stdin": "{\"buildNum\": 571, \"builder\": \"V8 Foobar\", \"master\": \"client.v8\"}",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"data\": \"eyJzb3VyY2VTdGFtcCI6IHsiY2hhbmdlcyI6IFt7InJldmlzaW9uIjogImExIiwgIndoZW4iOiAxfSwgeyJyZXZpc2lvbiI6ICJhMiIsICJ3aGVuIjogMn0sIHsicmV2aXNpb24iOiAiYTMiLCAid2hlbiI6IDN9XX19\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gitiles]/resources/gerrit_client.py",
+      "--json-file",
+      "/path/to/tmp/json",
+      "--url",
+      "https://chromium.googlesource.com/v8/v8/+log/a1~2..a3",
+      "--format",
+      "json",
+      "--log-limit",
+      "100"
+    ],
+    "name": "Bisect.Get change range",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@<br />4 commits fetched@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"log\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"commit\": \"a3\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"msg\": \"Cool commit 3\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"commit\": \"a2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"msg\": \"Cool commit 2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"commit\": \"a1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"msg\": \"Cool commit 1\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"commit\": \"a0\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"msg\": \"Cool commit 0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Bisect a0"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--spec-path",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "--revision_mapping_file",
+      "{\"got_revision\": \"v8\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
+      "--cleanup-dir",
+      "[CLEANUP]/bot_update",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "v8@a0"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "Bisect a0.bot_update",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"v8\": \"a0\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#50110}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"v8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"source_manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"directories\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"version\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Bisect a0.gclient runhooks",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/V8_Foobar/v8/tools/mb/mb.py",
+      "lookup",
+      "-m",
+      "client.v8",
+      "-b",
+      "V8 Foobar",
+      "--config-file",
+      "[BUILDER_CACHE]/V8_Foobar/v8/infra/mb/mb_config.pyl",
+      "--goma-dir",
+      "[GOMA_CACHE]/client"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "Bisect a0.lookup GN args",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
+      "@@@STEP_LOG_LINE@gn_args@use_goma = true@@@",
+      "@@@STEP_LOG_LINE@gn_args@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/V8_Foobar/v8/tools/mb/mb.py",
+      "gen",
+      "-m",
+      "client.v8",
+      "-b",
+      "V8 Foobar",
+      "--config-file",
+      "[BUILDER_CACHE]/V8_Foobar/v8/infra/mb/mb_config.pyl",
+      "--goma-dir",
+      "[GOMA_CACHE]/client",
+      "//out/Release"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "Bisect a0.generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_END@gn_args@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "-j",
+      "20",
+      "d8"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "Bisect a0.compile",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "-j",
+      "20",
+      "d8",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "Bisect a0.compile confirm no-op",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILDER_CACHE]/V8_Foobar/v8/tools/run-tests.py",
+      "--progress=verbose",
+      "--mode",
+      "Release",
+      "--outdir",
+      "out",
+      "--buildbot",
+      "--timeout=200",
+      "suite-name/dir/fast",
+      "--random-seed",
+      "123",
+      "--variants=default",
+      "--rerun-failures-count=0",
+      "--mastername",
+      "client.v8",
+      "--buildername",
+      "V8 Foobar",
+      "--json-test-results",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "name": "Bisect a0.Retry",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@failures: 2<br/>@@@",
+      "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@00:00:101 mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Details:@@@",
+      "@@@STEP_LOG_LINE@durations@@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 01:01:002@@@",
+      "@@@STEP_LOG_LINE@durations@Test: mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Flags: -f -g@@@",
+      "@@@STEP_LOG_LINE@durations@Command: d8 -f mjsunit/Cool.Test2@@@",
+      "@@@STEP_LOG_LINE@durations@Duration: 00:00:101@@@",
+      "@@@STEP_LOG_END@durations@@@",
+      "@@@STEP_LOG_LINE@fast@Test: suite-name/dir/fast@@@",
+      "@@@STEP_LOG_LINE@fast@Flags: @@@",
+      "@@@STEP_LOG_LINE@fast@Command: d8 test.js@@@",
+      "@@@STEP_LOG_LINE@fast@Variant: default@@@",
+      "@@@STEP_LOG_LINE@fast@@@@",
+      "@@@STEP_LOG_LINE@fast@Build environment:@@@",
+      "@@@STEP_LOG_LINE@fast@ gn_args: target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_LINE@fast@@@@",
+      "@@@STEP_LOG_LINE@fast@Run #1@@@",
+      "@@@STEP_LOG_LINE@fast@Exit code: 1@@@",
+      "@@@STEP_LOG_LINE@fast@Result: FAIL@@@",
+      "@@@STEP_LOG_LINE@fast@Expected outcomes: PASS, SLOW@@@",
+      "@@@STEP_LOG_LINE@fast@Duration: 00:01:500@@@",
+      "@@@STEP_LOG_LINE@fast@@@@",
+      "@@@STEP_LOG_LINE@fast@Stdout:@@@",
+      "@@@STEP_LOG_LINE@fast@Some output.@@@",
+      "@@@STEP_LOG_LINE@fast@@@@",
+      "@@@STEP_LOG_LINE@fast@Stderr:@@@",
+      "@@@STEP_LOG_LINE@fast@Some errput.@@@",
+      "@@@STEP_LOG_LINE@fast@@@@",
+      "@@@STEP_LOG_END@fast@@@",
+      "@@@STEP_LOG_LINE@slow@Test: suite-name/dir/slow@@@",
+      "@@@STEP_LOG_LINE@slow@Flags: @@@",
+      "@@@STEP_LOG_LINE@slow@Command: d8 test.js@@@",
+      "@@@STEP_LOG_LINE@slow@Variant: default@@@",
+      "@@@STEP_LOG_LINE@slow@@@@",
+      "@@@STEP_LOG_LINE@slow@Build environment:@@@",
+      "@@@STEP_LOG_LINE@slow@ gn_args: target_cpu = \"x86\" use_goma = true@@@",
+      "@@@STEP_LOG_LINE@slow@@@@",
+      "@@@STEP_LOG_LINE@slow@Run #1@@@",
+      "@@@STEP_LOG_LINE@slow@Exit code: 1@@@",
+      "@@@STEP_LOG_LINE@slow@Result: FAIL@@@",
+      "@@@STEP_LOG_LINE@slow@Expected outcomes: PASS, SLOW@@@",
+      "@@@STEP_LOG_LINE@slow@Duration: 00:03:000@@@",
+      "@@@STEP_LOG_LINE@slow@@@@",
+      "@@@STEP_LOG_LINE@slow@Stdout:@@@",
+      "@@@STEP_LOG_LINE@slow@Some output.@@@",
+      "@@@STEP_LOG_LINE@slow@@@@",
+      "@@@STEP_LOG_LINE@slow@Stderr:@@@",
+      "@@@STEP_LOG_LINE@slow@Some errput.@@@",
+      "@@@STEP_LOG_LINE@slow@@@@",
+      "@@@STEP_LOG_END@slow@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "Bisection disabled - recurring failure",
+    "~followup_annotations": [
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "reason": "Failures or flakes in build.",
+    "recipe_result": null,
+    "status_code": 1
+  }
+]

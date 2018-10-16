@@ -383,6 +383,28 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         [buildername],
     ).as_properties_dict(buildername)
 
+  def test_spec_in_checkout(self, buildername, test_spec, testername=None):
+    """Simulates having a test specification in the checkout (i.e. on a
+    builder_tester bot).
+
+    If testername is specified, we simulate data for a pure compiler builder
+    that's supposed to trigger a tester.
+    """
+    # TODO(sergiyb): Deprecate this after migrating all builders to LUCI.
+    safe_buildername = ''.join(c if c.isalnum() else '_' for c in buildername)
+    return (
+        # On the recipe side, we use api.path['checkout'].join('infra', ...),
+        # however due to the way path module's test_api works, this has to be
+        # manually expanded to path in terms of builder_cache as it is done by
+        # the bot_update.ensure_checkout step.
+        self.m.path.exists(self.m.path['builder_cache'].join(
+            safe_buildername, 'v8', 'infra', 'testing', 'builders.pyl')) +
+        self.step_data(
+            'read test spec (v8)',
+            self.example_test_spec(testername or buildername, test_spec),
+        )
+    )
+
   def hide_infra_steps(self):
     """This hides some infra steps in the expectations which are tested
     sufficiently elsewhere.

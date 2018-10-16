@@ -34,7 +34,7 @@
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
-      "bot_default\nmjsunit\nmozilla\ntest262\n",
+      "mjsunit\n",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux___nosnap_builder/v8",
@@ -44,10 +44,7 @@
     },
     "name": "generate_build_files",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@bot_default@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@mjsunit@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@mozilla@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@test262@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
       "@@@STEP_LOG_END@gn_args@@@"
@@ -67,18 +64,12 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "[BUILDER_CACHE]/V8_Linux___nosnap_builder/v8/out/Release/bot_default.isolated.gen.json",
-      "[BUILDER_CACHE]/V8_Linux___nosnap_builder/v8/out/Release/mjsunit.isolated.gen.json",
-      "[BUILDER_CACHE]/V8_Linux___nosnap_builder/v8/out/Release/mozilla.isolated.gen.json",
-      "[BUILDER_CACHE]/V8_Linux___nosnap_builder/v8/out/Release/test262.isolated.gen.json"
+      "[BUILDER_CACHE]/V8_Linux___nosnap_builder/v8/out/Release/mjsunit.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"mozilla\": \"[dummy hash for mozilla]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -137,10 +128,7 @@
           },
           "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "swarm_hashes": {
-            "bot_default": "[dummy hash for bot_default]",
-            "mjsunit": "[dummy hash for mjsunit]",
-            "mozilla": "[dummy hash for mozilla]",
-            "test262": "[dummy hash for test262]"
+            "mjsunit": "[dummy hash for mjsunit]"
           }
         }
       }

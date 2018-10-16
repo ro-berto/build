@@ -338,68 +338,7 @@ BUILDERS = {
       },
       'V8 Linux - presubmit': {
         'enable_swarming': False,
-        'tests': [Presubmit],
         'testing': {'platform': 'linux'},
-      },
-      'V8 Linux': {
-        'tests': [
-          V8Initializers,
-          V8Testing,
-          OptimizeForSize,
-          Benchmarks,
-          Test262Variants(2),
-          Mozilla,
-          MjsunitSPFrameAccess,
-          GCMole,
-        ] + with_test_args(
-            'isolates',
-            ['--isolates'],
-            [V8Testing],
-        ) + with_test_args(
-            'nosse3',
-            ['--extra-flags',
-             '--noenable-sse3 --noenable-ssse3 --noenable-sse4-1 --noenable-avx'
-            ],
-            [V8Testing, Mozilla],
-        ) + with_test_args(
-            'nosse4',
-            ['--extra-flags', '--noenable-sse4-1 --noenable-avx'],
-            [V8Testing, Mozilla],
-        ) + with_extra_variants(
-            [V8Testing, Mozilla, Test262Variants, Benchmarks]),
-        'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'cpu': 'x86-64-avx2',
-        },
-      },
-      'V8 Linux - debug': {
-        'tests': [
-          V8Testing(3),
-          OptimizeForSize,
-          Benchmarks,
-          Test262Variants(6),
-          Mozilla,
-          MjsunitSPFrameAccess,
-        ] + with_test_args(
-            'isolates',
-            ['--isolates'],
-            [V8Testing(4)],
-        ) + with_test_args(
-            'nosse3',
-            ['--extra-flags',
-             '--noenable-sse3 --noenable-ssse3 --noenable-sse4-1 --noenable-avx'
-            ],
-            [V8Testing(3), Test262, Mozilla],
-        ) + with_test_args(
-            'nosse4',
-            ['--extra-flags', '--noenable-sse4-1 --noenable-avx'],
-            [V8Testing(3), Test262, Mozilla],
-        ) + with_extra_variants(
-            [V8Testing, Mozilla, Test262Variants(2), Benchmarks]),
-        'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'cpu': 'x86-64-avx2',
-        },
       },
       'V8 Linux - shared': {
         'chromium_apply_config': [
@@ -407,7 +346,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [V8Testing, Test262, Mozilla],
         'testing': {'platform': 'linux'},
         'binary_size_tracking': {
           'path_pieces_list': [['libv8.so']],
@@ -415,20 +353,12 @@ BUILDERS = {
         },
       },
       'V8 Linux - nosnap': {
-        'tests': [
-          V8Testing(3),
-          Test262(2),
-          Mozilla,
-        ],
         'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
-        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - nosnap - debug': {
-        'tests': [V8Testing(12)],
         'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
-        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - interpreted regexp': {
         'chromium_apply_config': [
@@ -437,9 +367,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
         },
         'enable_swarming': False,
-        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
-        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - noi18n - debug': {
         'chromium_apply_config': [
@@ -447,7 +375,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'tests': [V8Testing, Mozilla, Test262],
         'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
       },
@@ -457,7 +384,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - embedded builtins': {
@@ -466,7 +392,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - embedded builtins - debug': {
@@ -475,7 +400,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
       },
 ####### Category: Linux64
@@ -522,45 +446,6 @@ BUILDERS = {
           'V8 Linux64 GC Stress - custom snapshot',
         ],
       },
-      'V8 Linux64': {
-        'tests': [
-          V8Initializers,
-          V8Testing,
-          OptimizeForSize,
-          Test262Variants(2),
-          Mozilla,
-          MjsunitSPFrameAccess,
-          Benchmarks,
-        ] + with_test_args(
-            'noavx',
-            ['--extra-flags', '--noenable-avx'],
-            [V8Testing, Test262, Mozilla],
-        ) + with_extra_variants([
-          V8Testing, Mozilla, Test262Variants, Benchmarks]),
-        'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'cpu': 'x86-64-avx2',
-        },
-      },
-      'V8 Linux64 - debug': {
-        'tests': [
-          V8Testing(2),
-          OptimizeForSize,
-          Test262Variants(5),
-          Mozilla,
-          MjsunitSPFrameAccess,
-          Benchmarks,
-        ] + with_test_args(
-            'noavx',
-            ['--extra-flags', '--noenable-avx'],
-            [V8Testing(2), Test262, Mozilla],
-        ) + with_extra_variants([
-          V8Testing, Mozilla, Test262Variants(2), Benchmarks]),
-        'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'cpu': 'x86-64-avx2',
-        },
-      },
       'V8 Linux64 - internal snapshot': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb',
@@ -568,12 +453,10 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - custom snapshot - debug': {
         'v8_apply_config': ['no_harness'],
-        'tests': [Mjsunit],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - verify csa': {
@@ -582,7 +465,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - debug - header includes': {
@@ -656,14 +538,6 @@ BUILDERS = {
           'V8 Win32 - debug',
         ],
       },
-      'V8 Win32': {
-        'tests': [V8Testing, Test262, Mozilla],
-        'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-          'cpu': 'x86-64',
-        },
-      },
       'V8 Win32 - nosnap - shared': {
         'chromium_apply_config': [
           'default_compiler',
@@ -674,25 +548,8 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [V8Testing(2)],
         'variants': V8Variant('default'),
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-          'cpu': 'x86-64',
-        },
         'testing': {'platform': 'win'},
-      },
-      'V8 Win32 - debug': {
-        'tests': [
-          V8Testing(5),
-          Test262,
-          Mozilla,
-        ],
-        'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-          'cpu': 'x86-64',
-        },
       },
       'V8 Win64': {
         'chromium_apply_config': [
@@ -703,18 +560,10 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-        },
         'binary_size_tracking': {
           'path_pieces_list': [['d8.exe']],
           'category': 'win64'
         },
-        'tests': [
-          V8Testing,
-          Test262,
-          Mozilla,
-        ] + with_extra_variants([V8Testing]),
         'testing': {'platform': 'win'},
       },
       'V8 Win64 - debug': {
@@ -726,14 +575,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-        },
-        'tests': [
-          V8Testing(4),
-          Test262,
-          Mozilla,
-        ] + with_extra_variants([V8Testing(3)]),
         'testing': {'platform': 'win'},
       },
       'V8 Win64 - msvc': {
@@ -745,14 +586,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'swarming_dimensions': {
-          'os': 'Windows-7-SP1',
-        },
-        'tests': [
-          V8Testing,
-          Test262,
-          Mozilla,
-        ],
         'testing': {'platform': 'win'},
       },
 ####### Category: Mac
@@ -766,15 +599,6 @@ BUILDERS = {
           'path_pieces_list': [['d8']],
           'category': 'mac64'
         },
-        'tests': [
-          V8Testing,
-          Test262,
-          Mozilla,
-        ] + with_extra_variants([V8Testing]),
-        'swarming_dimensions': {
-          'os': 'Mac-10.13',
-          'cpu': 'x86-64',
-        },
         'testing': {'platform': 'mac'},
       },
       'V8 Mac64 - debug': {
@@ -783,26 +607,11 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'tests': [
-          V8Testing(3),
-          Test262,
-          Mozilla,
-        ] + with_extra_variants([V8Testing]),
-        'swarming_dimensions': {
-          'os': 'Mac-10.13',
-          'cpu': 'x86-64',
-        },
         'testing': {'platform': 'mac'},
       },
 ####### Category: Misc
-      'V8 Fuzzer': {
-        'tests': [Fuzz],
-        'testing': {'platform': 'linux'},
-        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
-      },
       'V8 Linux - gc stress': {
         'v8_apply_config': ['gc_stress'],
-        'tests': [D8Testing(5)],
         'testing': {'platform': 'linux'},
       },
       'V8 Mac64 GC Stress': {
@@ -812,16 +621,10 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'tests': [D8Testing(4)],
-        'swarming_dimensions': {
-          'os': 'Mac-10.13',
-          'cpu': 'x86-64',
-        },
         'testing': {'platform': 'mac'},
       },
       'V8 Linux64 GC Stress - custom snapshot': {
         'v8_apply_config': ['gc_stress', 'no_harness'],
-        'tests': [Mjsunit(3)],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux gcc 4.8': {
@@ -829,7 +632,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 gcc 4.8 - debug': {
@@ -844,10 +646,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [
-          V8Testing(2),
-          Test262Variants(5),
-        ] + with_extra_variants([V8Testing]),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 TSAN - builder': {
@@ -862,31 +660,12 @@ BUILDERS = {
         ],
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux64 TSAN': {
-        'tests': [
-          V8Testing(5),
-          Test262(3),
-          Mozilla,
-          Benchmarks,
-        ] + with_extra_variants([V8Testing(3)]),
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux64 TSAN - concurrent marking': {
         'v8_apply_config': ['stress_incremental_marking'],
-        'tests': [
-          V8Testing(4),
-          Test262(4),
-          Mozilla,
-          Benchmarks,
-        ],
         'testing': {'platform': 'linux'},
-        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux64 TSAN - isolates': {
         'v8_apply_config': ['isolates'],
-        'tests': [
-          V8Testing(5),
-        ],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - MSAN': {
@@ -898,10 +677,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [
-          V8Testing(4),
-          Test262(2),
-        ],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 - cfi': {
@@ -910,13 +685,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [
-          V8Testing,
-          OptimizeForSize,
-          Benchmarks,
-          Test262,
-          Mozilla,
-        ],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 UBSan': {
@@ -925,7 +693,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 UBSanVptr': {
@@ -934,7 +701,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Mac64 ASAN': {
@@ -942,21 +708,12 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [V8Testing(5)],
-        'swarming_dimensions': {
-          'os': 'Mac-10.13',
-          'cpu': 'x86-64',
-        },
         'testing': {'platform': 'mac'},
       },
       'V8 Win64 ASAN': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
-        },
-        'tests': [V8Testing(5)],
-        'swarming_dimensions': {
-          'os': 'Windows-10',
         },
         'testing': {'platform': 'win'},
       },
@@ -977,14 +734,6 @@ BUILDERS = {
         },
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux64 - fyi': {
-        'testing': {'platform': 'linux'},
-        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
-      },
-      'V8 Linux64 - debug - fyi': {
-        'testing': {'platform': 'linux'},
-        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
-      },
       'V8 Linux64 - gcov coverage': {
         'chromium_apply_config': [
           'clobber', 'gcc', 'goma', 'mb',
@@ -995,7 +744,6 @@ BUILDERS = {
         'gcov_coverage_folder': 'linux64_gcov_rel',
         'enable_swarming': False,
         'disable_auto_bisect': True,
-        'tests': [V8Testing],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - vtunejit': {
@@ -1013,7 +761,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
         },
         'enable_swarming': False,
-        'tests': [D8Testing, Benchmarks, Mozilla],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - full debug': {
@@ -1023,7 +770,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
         },
         'enable_swarming': False,
-        'tests': [V8Testing],
         'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
       },

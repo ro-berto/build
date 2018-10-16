@@ -155,20 +155,6 @@
     "name": "extract build"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/V8_Linux___presubmit/v8/tools/presubmit.py"
-    ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux___presubmit/v8",
-    "env_prefixes": {
-      "PATH": [
-        "[BUILDER_CACHE]/V8_Linux___presubmit/v8/third_party/depot_tools"
-      ]
-    },
-    "name": "Presubmit"
-  },
-  {
     "name": "$result",
     "recipe_result": null,
     "status_code": 0

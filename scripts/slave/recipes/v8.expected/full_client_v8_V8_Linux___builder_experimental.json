@@ -30,7 +30,7 @@
       "cp",
       "-a",
       "public-read",
-      "{\"benchmarks\": \"[dummy hash for benchmarks]\", \"bot_default\": \"[dummy hash for bot_default]\", \"check-static-initializers\": \"[dummy hash for check-static-initializers]\", \"mjsunit\": \"[dummy hash for mjsunit]\", \"mozilla\": \"[dummy hash for mozilla]\", \"optimize_for_size\": \"[dummy hash for optimize_for_size]\", \"perf\": \"[dummy hash for perf]\", \"run-gcmole\": \"[dummy hash for run-gcmole]\", \"test262\": \"[dummy hash for test262]\"}",
+      "{\"perf\": \"[dummy hash for perf]\"}",
       "gs://chromium-v8/experimental/isolated/client.v8/V8 Linux - builder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "infra_step": true,

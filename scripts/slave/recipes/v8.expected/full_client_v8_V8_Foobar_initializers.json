@@ -10,19 +10,19 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--priority",
-      "35",
+      "25",
       "--shards",
       "1",
       "--task-name",
-      "Fuzz/Ubuntu-14.04/[dummy has/V8 Fuzzer/571",
+      "Static-Initializers/Ubuntu-14.04/[dummy has/V8 Foobar/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
-      "14400",
+      "3600",
       "--io-timeout",
       "1200",
       "--hard-timeout",
-      "3600",
+      "2700",
       "--dimension",
       "cpu",
       "x86-64",
@@ -41,15 +41,15 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:V8 Fuzzer",
+      "buildername:V8 Foobar",
       "--tag",
       "buildnumber:571",
       "--tag",
-      "data:[dummy hash for jsfunfuzz]",
+      "data:[dummy hash for check-static-initializers]",
       "--tag",
       "master:client.v8",
       "--tag",
-      "name:Fuzz",
+      "name:Static-Initializers",
       "--tag",
       "project:v8",
       "--tag",
@@ -59,7 +59,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Fuzz",
+      "stepname:Static-Initializers",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -79,14 +79,13 @@
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
       "--isolated",
-      "[dummy hash for jsfunfuzz]",
+      "[dummy hash for check-static-initializers]",
       "--raw-cmd",
       "--",
-      "tools/jsfunfuzz/fuzz-harness.sh",
-      "out/Debug/d8",
-      "${ISOLATED_OUTDIR}/fuzz-results-deafbeefdeafbeefdeafbeefdeafbeefdeafbeef.tar.bz2"
+      "tools/check-static-initializers.sh",
+      "out/Release/d8"
     ],
-    "name": "[trigger] Fuzz"
+    "name": "[trigger] Static-Initializers"
   },
   {
     "cmd": [
@@ -101,7 +100,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/swarming_output_tmp_1",
+      "/path/to/tmp/",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -118,13 +117,12 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Fuzz/Ubuntu-14.04/[dummy has/V8 Fuzzer/571\", \"tasks\": {\"Fuzz/Ubuntu-14.04/[dummy has/V8 Fuzzer/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"Static-Initializers/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Static-Initializers/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
-    "name": "Fuzz",
+    "name": "Static-Initializers",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
@@ -171,32 +169,12 @@
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[TMP_BASE]/swarming_output_tmp_1/0/fuzz-results-deafbeefdeafbeefdeafbeefdeafbeefdeafbeef.tar.bz2",
-      "gs://chromium-v8/fuzzer-archives/fuzz-results-deafbeefdeafbeefdeafbeefdeafbeefdeafbeef.tar.bz2"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/fuzzer-archives/fuzz-results-deafbeefdeafbeefdeafbeefdeafbeefdeafbeef.tar.bz2@@@"
+      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
   {
     "name": "$result",
-    "reason": "1 tests failed: ['jsfunfuzz']",
     "recipe_result": null,
-    "status_code": 1
+    "status_code": 0
   }
 ]

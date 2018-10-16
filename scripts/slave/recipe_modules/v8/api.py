@@ -563,7 +563,9 @@ class V8Api(recipe_api.RecipeApi):
   @property
   def isolate_targets(self):
     """Returns the isolate targets statically known from builders.py."""
-    if self._isolate_targets_cached:
+    # TODO(machenbach): This code can be removed when no tests are specified
+    # any longer in builders.py.
+    if self._isolate_targets_cached:  # pragma: no cover
       return self._isolate_targets_cached
 
     if self.bot_config.get('enable_swarming', True):
