@@ -1285,7 +1285,8 @@ class SwarmingApi(recipe_api.RecipeApi):
           display_text = (
               'shard #%d timed out, took too much time to complete' % index)
       elif self._get_exit_code(shard) != '0':
-        if duration is not None:
+        # TODO(bpastene): Add coverage for this code.
+        if duration is not None:  # pragma: no cover
           display_text = 'shard #%d (failed) (%.1f sec)' % (index, duration)
         else:
           display_text = 'shard #%d (failed)' % index

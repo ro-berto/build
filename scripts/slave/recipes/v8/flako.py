@@ -289,11 +289,13 @@ class Runner(object):
         # Sanity checks.
         # TODO(machenbach): Add this information to the V8 test runner's json
         # output as parsing stdout is brittle.
-        assert TEST_PASSED_TEXT in data['outputs'][0]
+        assert TEST_PASSED_TEXT in data['outputs'][-1]
         return 0
       except self.api.step.StepFailure as e:
         data = e.result.swarming.summary['shards'][0]
-        if data['exit_codes'][0] == EXIT_CODE_NO_TESTS:
+        assert data['exit_codes'], (
+            'The bot might have died. Please restart the analysis')
+        if data['exit_codes'][-1] == EXIT_CODE_NO_TESTS:
           # The desired tests seem to not exist in this revision.
           # TODO(machenbach): Add special logic for dealing with tests not
           # existing. They might have been added in a revision and are flaky
@@ -301,7 +303,7 @@ class Runner(object):
           # Maybe we should not do this during initialization to make sure it's
           # not a setup error?
           return 0  # pragma: no cover
-        stdout = data['outputs'][0]
+        stdout = data['outputs'][-1]
         if TEST_PASSED_TEXT in stdout:  # pragma: no cover
           # It's possible that the return code is non-zero due to a test runner
           # leak.
@@ -482,8 +484,8 @@ def GenTests(api):
     else:
       output = TEST_PASSED_TEXT
       exit_code = 0
-    test_data['shards'][0]['outputs'][0] = output
-    test_data['shards'][0]['exit_codes'][0] = exit_code
+    test_data['shards'][0]['outputs'][-1] = output
+    test_data['shards'][0]['exit_codes'][-1] = exit_code
     return api.step_data(
         'check %s at #%d - %d' % (test_name, offset, multiplier),
         api.swarming.summary(test_data),
