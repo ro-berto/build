@@ -27,7 +27,6 @@
       "--build-number=123",
       "base_unittests",
       "--gtest_filter=foo.bar",
-      "--gtest_repeat=2",
       "--test-launcher-retry-limit=3",
       "--gtest_also_run_disabled_tests"
     ],
@@ -104,7 +103,7 @@
       "--slave-name=test_bot_id",
       "--build-number=123",
       "base_unittests",
-      "--gtest_repeat=2",
+      "--gtest_repeat=10",
       "--test-launcher-retry-limit=3",
       "--gtest_also_run_disabled_tests",
       "--gtest_filter=Test.Two"
@@ -164,7 +163,6 @@
       "--slave-name=test_bot_id",
       "--build-number=123",
       "base_unittests",
-      "--gtest_repeat=2",
       "--test-launcher-retry-limit=3",
       "--gtest_also_run_disabled_tests",
       "--gtest_filter=Test.Two"
