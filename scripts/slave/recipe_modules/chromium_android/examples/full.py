@@ -21,11 +21,6 @@ BUILDERS = freeze({
         'target': 'Release',
         'build': True,
     },
-    'restart_usb_builder': {
-        'restart_usb': True,
-        'target': 'Release',
-        'build': True,
-    },
     'coverage_builder': {
         'coverage': True,
         'target': 'Debug',
@@ -186,8 +181,7 @@ def RunSteps(api, buildername):
     api.chromium_android.device_status_check()
 
     api.path.mock_add_paths(api.chromium_android.known_devices_file)
-    api.chromium_android.device_status_check(
-      restart_usb=config.get('restart_usb', False))
+    api.chromium_android.device_status_check()
 
     api.chromium_android.provision_devices(
         skip_wipe=config.get('skip_wipe', False),

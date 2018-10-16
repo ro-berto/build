@@ -257,7 +257,7 @@ class AndroidApi(recipe_api.RecipeApi):
     # Get the commit postion for the revision to be used in archive name,
     # if not found use the git hash.
     try:
-      branch, rev = self.m.commit_position.parse(
+      _, rev = self.m.commit_position.parse(
           update_properties.get('got_revision_cp'))
     except ValueError:  # pragma: no cover
       rev = update_properties.get('got_revision')
@@ -309,7 +309,7 @@ class AndroidApi(recipe_api.RecipeApi):
         infra_step=True,
       )
 
-  def zip_and_upload_build(self, bucket):
+  def zip_and_upload_build(self, _):
     # TODO(luqui): Unify make_zip_archive and upload_build with this
     # (or at least make the difference clear).
     self.m.archive.zip_and_upload_build(
@@ -324,7 +324,8 @@ class AndroidApi(recipe_api.RecipeApi):
   def use_devil_adb(self):
     # TODO(jbudorick): Remove this after resolving
     # https://github.com/catapult-project/catapult/issues/2901
-    devil_path = self.m.path['checkout'].join('third_party', 'catapult', 'devil')
+    devil_path = self.m.path['checkout'].join(
+        'third_party', 'catapult', 'devil')
     self.m.python.inline(
         'initialize devil',
         """
@@ -387,7 +388,7 @@ class AndroidApi(recipe_api.RecipeApi):
           'authorize_adb_devices', script, args, infra_step=True)
 
   def detect_and_setup_devices(
-      self, restart_usb=False, skip_wipe=False, disable_location=False,
+      self, skip_wipe=False, disable_location=False,
       min_battery_level=None, disable_network=False, disable_java_debug=False,
       reboot_timeout=None, max_battery_temp=None): # pragma: no cover
     # TODO(jbudorick): Remove this once internal clients no longer use it.
@@ -408,7 +409,7 @@ class AndroidApi(recipe_api.RecipeApi):
     blacklisted_devices = step_result.json.output
     return [s for s in self.devices if s not in blacklisted_devices]
 
-  def device_status_check(self, restart_usb=False, **kwargs):
+  def device_status_check(self):
     self.device_recovery()
     return self.device_status()
 
@@ -640,7 +641,7 @@ class AndroidApi(recipe_api.RecipeApi):
           'build', 'android', 'provision_devices.py')
     with self.m.context(env=self.m.chromium.get_env()):
       with self.handle_exit_codes():
-        result = self.m.python(
+        return self.m.python(
           'provision_devices',
           provision_path,
           args=args,
@@ -826,8 +827,8 @@ class AndroidApi(recipe_api.RecipeApi):
     with self.m.context(env=self.m.chromium.get_env()):
       result = self.test_runner(
           'get perf test list',
-          ['perf', '--steps', config, '--output-json-list', self.m.json.output(),
-           '--blacklist-file', self.blacklist_file],
+          ['perf', '--steps', config, '--output-json-list',
+           self.m.json.output(), '--blacklist-file', self.blacklist_file],
           step_test_data=lambda: self.m.json.test_api.output([
               {'test': 'perf_test.foo', 'device_affinity': 0,
                'end_time': 1443438432.949711, 'has_archive': True},
@@ -937,7 +938,6 @@ class AndroidApi(recipe_api.RecipeApi):
                                 flakiness_dashboard=None,
                                 annotation=None, except_annotation=None,
                                 screenshot=False, verbose=False, tool=None,
-                                apk_package=None,
                                 json_results_file=None,
                                 timeout_scale=None, strict_mode=None,
                                 suffix=None, num_retries=None,
@@ -1052,12 +1052,14 @@ class AndroidApi(recipe_api.RecipeApi):
           stdout=self.m.raw_io.output_text(),
           step_test_data=(
               lambda: self.m.raw_io.test_api.stream_output(
-                  'Result Details: https://storage.cloud.google.com/chromium-result-details')))
+                  'Result Details: https://storage.cloud.google.com/'
+                  'chromium-result-details')))
       # Stdout is in the format of 'Result Details: <link>'.
       lines = result_details.stdout.strip()
       prefix = 'Result Details: '
-      return lines.splitlines()[0][len(prefix):] if lines.startswith(prefix) else ''
-    except self.m.step.StepFailure as f:
+      return lines.splitlines()[0][len(prefix):] if lines.startswith(
+          prefix) else ''
+    except self.m.step.StepFailure:
       return ('https://storage.googleapis.com/chromium-result-details/'
               'UploadQuietFailure.txt')
 

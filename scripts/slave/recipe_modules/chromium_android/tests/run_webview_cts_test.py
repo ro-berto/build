@@ -26,16 +26,19 @@ def GenTests(api):
   yield (
       api.test('basic fail') +
       api.properties.generic(cts_args={}) +
-      api.step_data("Run CTS", api.test_utils.canned_gtest_output(passing=False))
+      api.step_data("Run CTS", api.test_utils.canned_gtest_output(
+          passing=False))
   )
   yield (
       api.test('with suffix') +
       api.properties.generic(cts_args={'suffix': 'build suffix'}) +
-      api.step_data("Run CTS (build suffix)", api.test_utils.canned_gtest_output(passing=True))
+      api.step_data("Run CTS (build suffix)",
+                    api.test_utils.canned_gtest_output(passing=True))
   )
   yield (
       api.test('with commandline args') +
-      api.properties.generic(cts_args={'command_line_args': ['--webview-test-flag']}) +
+      api.properties.generic(
+          cts_args={'command_line_args': ['--webview-test-flag']}) +
       api.step_data("Run CTS", api.test_utils.canned_gtest_output(passing=True))
   )
   yield (
@@ -46,15 +49,19 @@ def GenTests(api):
   yield (
       api.test('with details fail') +
       api.properties.generic(cts_args={'result_details': True}) +
-      api.step_data("Run CTS", api.test_utils.canned_gtest_output(passing=False))
+      api.step_data("Run CTS",
+                    api.test_utils.canned_gtest_output(passing=False))
   )
   yield (
       api.test('with results file pass') +
-      api.properties.generic(cts_args={'json_results_file': '/path/to/a/json/file'}) +
+      api.properties.generic(
+          cts_args={'json_results_file': '/path/to/a/json/file'}) +
       api.step_data("Run CTS", api.test_utils.canned_gtest_output(passing=True))
   )
   yield (
       api.test('with results file fail') +
-      api.properties.generic(cts_args={'json_results_file': '/path/to/a/json/file'}) +
-      api.step_data("Run CTS", api.test_utils.canned_gtest_output(passing=False))
+      api.properties.generic(
+          cts_args={'json_results_file': '/path/to/a/json/file'}) +
+      api.step_data("Run CTS",
+                    api.test_utils.canned_gtest_output(passing=False))
   )

@@ -24,12 +24,12 @@ def main_builder(c):
       'Cannot target arm with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
 @CONFIG_CTX(includes=['main_builder', 'mb'])
-def main_builder_mb(c):
+def main_builder_mb(_):
   pass
 
 @CONFIG_CTX(includes=['main_builder_mb'],
             config_vars={'BUILD_CONFIG': 'Release'})
-def main_builder_rel_mb(c):
+def main_builder_rel_mb(_):
   pass
 
 @CONFIG_CTX(includes=['base_config', 'clang', 'goma'])
@@ -39,7 +39,7 @@ def clang_builder(c):
   c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
 
 @CONFIG_CTX(includes=['clang_builder', 'mb'])
-def clang_builder_mb(c):
+def clang_builder_mb(_):
   pass
 
 @CONFIG_CTX(includes=['main_builder'])
@@ -54,7 +54,7 @@ def x86_builder(c):
       'Cannot target x86 with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
 @CONFIG_CTX(includes=['x86_builder', 'mb'])
-def x86_builder_mb(c):
+def x86_builder_mb(_):
   pass
 
 @CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'],
@@ -64,7 +64,7 @@ def mipsel_builder(c):
     raise recipe_config.BadConf('I dunno what to put in a mips builder!')
 
 @CONFIG_CTX(includes=['mipsel_builder', 'mb'])
-def mipsel_builder_mb(c):
+def mipsel_builder_mb(_):
   pass
 
 @CONFIG_CTX(includes=['clobber'])
@@ -78,14 +78,15 @@ def cronet_builder(c):
   c.gn_args.append('use_crash_key_stubs=true')
   c.gn_args.append('use_partition_alloc=false')
   c.gn_args.append('use_platform_icu_alternatives=true')
-  c.compile_py.default_targets=['cronet_package',
-                                'cronet_perf_test_apk',
-                                'cronet_sample_test_apk',
-                                'cronet_smoketests_missing_native_library_instrumentation_apk',
-                                'cronet_smoketests_platform_only_instrumentation_apk',
-                                'cronet_test_instrumentation_apk',
-                                'cronet_unittests_android',
-                                'net_unittests']
+  c.compile_py.default_targets=[
+      'cronet_package',
+      'cronet_perf_test_apk',
+      'cronet_sample_test_apk',
+      'cronet_smoketests_missing_native_library_instrumentation_apk',
+      'cronet_smoketests_platform_only_instrumentation_apk',
+      'cronet_test_instrumentation_apk',
+      'cronet_unittests_android',
+      'net_unittests']
 
 @CONFIG_CTX()
 def cronet_official(c):
@@ -98,7 +99,7 @@ def arm_v6_builder_rel(c):  # pragma: no cover
   c.gn_args.append('arm_version=6')
 
 @CONFIG_CTX(includes=['main_builder'])
-def arm_l_builder(c):  # pragma: no cover
+def arm_l_builder(_):  # pragma: no cover
   pass
 
 @CONFIG_CTX(includes=['arm_l_builder'])
@@ -108,7 +109,7 @@ def arm_l_builder_lto(c):  # pragma: no cover
 
 @CONFIG_CTX(includes=['arm_l_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})
-def arm_l_builder_rel(c):  # pragma: no cover
+def arm_l_builder_rel(_):  # pragma: no cover
   pass
 
 @CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma', 'mb'],
@@ -121,60 +122,60 @@ def x64_builder_mb(c):
 
 @CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'],
             config_vars={'TARGET_BITS': 64})
-def arm64_builder(c):
+def arm64_builder(_):
   pass
 
 @CONFIG_CTX(includes=['arm64_builder', 'mb'])
-def arm64_builder_mb(c):
+def arm64_builder_mb(_):
   pass
 
 @CONFIG_CTX(includes=['arm64_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})
-def arm64_builder_rel(c):  # pragma: no cover
+def arm64_builder_rel(_):  # pragma: no cover
   pass
 
 @CONFIG_CTX(includes=['arm64_builder_rel', 'mb'])
-def arm64_builder_rel_mb(c):
+def arm64_builder_rel_mb(_):
   pass
 
 @CONFIG_CTX(includes=['main_builder'])
-def try_builder(c):
+def try_builder(_):
   pass  # pragma: no cover
 
 @CONFIG_CTX(includes=['x86_builder'])
-def x86_try_builder(c):
+def x86_try_builder(_):
   pass  # pragma: no cover
 
 @CONFIG_CTX(includes=['base_config'])
-def tests_base(c):
+def tests_base(_):
   pass  # pragma: no cover
 
 @CONFIG_CTX(includes=['arm64_builder_rel'])
-def tests_arm64(c):  # pragma: no cover
+def tests_arm64(_):  # pragma: no cover
   pass
 
 @CONFIG_CTX(includes=['x64_builder'])
-def tests_x64(c):  # pragma: no cover
+def tests_x64(_):  # pragma: no cover
   pass
 
 @CONFIG_CTX(includes=['tests_base'])
-def main_tests(c):
+def main_tests(_):
   pass  # pragma: no cover
 
 @CONFIG_CTX(includes=['tests_base'])
-def clang_tests(c):
+def clang_tests(_):
   pass  # pragma: no cover
 
 @CONFIG_CTX(includes=['tests_base'])
-def enormous_tests(c):
+def enormous_tests(_):
   pass  # pragma: no cover
 
 @CONFIG_CTX(includes=['tests_base'])
-def try_instrumentation_tests(c):
+def try_instrumentation_tests(_):
   pass  # pragma: no cover
 
 @CONFIG_CTX(includes=['x86_builder'])
-def x86_try_instrumentation_tests(c):
+def x86_try_instrumentation_tests(_):
   pass  # pragma: no cover
 
 @CONFIG_CTX(includes=['main_builder'],
@@ -191,7 +192,7 @@ def incremental_coverage_builder_tests(c):
   gyp_defs['emma_filter'] = 'org.chromium.*'
 
 @CONFIG_CTX(includes=['main_builder'])
-def non_device_wipe_provisioning(c):
+def non_device_wipe_provisioning(_):
   pass
 
 @CONFIG_CTX(includes=['main_builder'])
