@@ -120,6 +120,7 @@
         "*"
       ],
       "tree_notify": [
+        "sergiyb@chromium.org",
         "mtv-sf-v8-sheriff@grotations.appspotmail.com",
         "v8-waterfall-sheriff@grotations.appspotmail.com"
       ],
@@ -142,6 +143,7 @@
     },
     "v8_compile": {
       "tree_notify": [
+        "sergiyb@chromium.org",
         "mtv-sf-v8-sheriff@grotations.appspotmail.com",
         "v8-waterfall-sheriff@grotations.appspotmail.com"
       ],
