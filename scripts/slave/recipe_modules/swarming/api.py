@@ -1161,7 +1161,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     result = self.m.python(
         'wait for tasks%s' % (suffix or ''),
         self.resource('wait_for_finished_task_set.py'),
-        step_test_data=lambda: self.m.json.test_api.output(data=task_sets),
+        step_test_data=lambda: self.m.json.test_api.output(data={
+            'attempts': 0,
+            'sets': task_sets,
+        }),
         args=args)
     return [
         tuple(task_set) for task_set in result.json.output['sets']
