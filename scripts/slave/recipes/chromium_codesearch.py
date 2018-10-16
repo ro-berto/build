@@ -155,17 +155,12 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
       ROOT=root,
   )
 
-  # Checkout the repositories that are either directly needed or should be
-  # included in the source archive.
+  # Checkout the repositories that are needed for the compile.
   gclient_config = api.gclient.make_config('chromium_no_telemetry_dependencies')
   if platform == 'android':
     gclient_config.target_os = ['android']
   elif platform == 'chromeos':
     gclient_config.target_os = ['chromeos']
-  for name, url in api.codesearch.c.additional_repos.iteritems():
-    solution = gclient_config.solutions.add()
-    solution.name = name
-    solution.url = url
   api.gclient.c = gclient_config
 
   checkout_dir = api.path['cache'].join('builder')
@@ -175,8 +170,8 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
   api.chromium.set_build_properties(update_step.json.output['properties'])
 
   # Remove the llvm-build directory, so that gclient runhooks will download
-  # the pre-built clang binary and not use the locally compiled binary from
-  # the 'compile translation_unit clang tool' step.
+  # a new clang binary and not use the previous one downloaded by
+  # api.codesearch.run_clang_tool().
   api.file.rmtree('llvm-build',
                   api.path['checkout'].join('third_party', 'llvm-build'))
 

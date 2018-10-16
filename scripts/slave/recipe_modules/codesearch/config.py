@@ -43,7 +43,6 @@ def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=None, PLATFORM=None,
     bucket_name = Single(basestring, required=False),
     chromium_git_url = Single(basestring, required=False,
                               empty_val='https://chromium.googlesource.com'),
-    additional_repos = Dict(value_type=(basestring, types.NoneType)),
     generated_repo = Single(basestring, required=False),
     generated_author_email = Single(
         basestring, required=False,
@@ -59,38 +58,13 @@ def base(c):
   c.debug_path = c.CHECKOUT_PATH.join('out', c.GEN_REPO_OUT_DIR or 'Debug')
   c.compile_commands_json_file = c.debug_path.join('compile_commands.json')
 
-@config_ctx(includes=['chromium_additional_repos', 'generate_file',
-                      'chromium_gs'])
+@config_ctx(includes=['generate_file', 'chromium_gs'])
 def chromium(_):
   pass
 
 @config_ctx()
 def chromium_gs(c):
   c.bucket_name = 'chrome-codesearch'
-
-@config_ctx()
-def chromium_git(_):
-  pass
-
-@config_ctx(includes=['chromium_git'])
-def chromium_additional_repos(c):
-  # Lists the additional repositories that should be checked out to be included
-  # in the source archive that is indexed by Codesearch.
-  c.additional_repos['infra'] = '%s/infra/infra' % c.chromium_git_url
-  c.additional_repos['tools/chrome-devtools-frontend'] = (
-      '%s/chromium/tools/chrome-devtools-frontend' % c.chromium_git_url)
-  c.additional_repos['tools/chromium-jobqueue'] = (
-      '%s/chromium/tools/chromium-jobqueue' % c.chromium_git_url)
-  c.additional_repos['tools/chromium-shortener'] = (
-      '%s/chromium/tools/chromium-shortener' % c.chromium_git_url)
-  c.additional_repos['tools/command_wrapper/bin'] = (
-      '%s/chromium/tools/command_wrapper/bin' % c.chromium_git_url)
-  c.additional_repos['tools/depot_tools'] = (
-      '%s/chromium/tools/depot_tools' % c.chromium_git_url)
-  c.additional_repos['tools/gsd_generate_index'] = (
-      '%s/chromium/tools/gsd_generate_index' % c.chromium_git_url)
-  c.additional_repos['tools/perf'] = '%s/chromium/tools/perf' % (
-      c.chromium_git_url)
 
 @config_ctx()
 def generate_file(c):
