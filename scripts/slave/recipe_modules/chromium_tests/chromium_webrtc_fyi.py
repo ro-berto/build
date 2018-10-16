@@ -2,14 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import copy
-import collections
-
-from . import chromium_linux
-from . import chromium_mac
-from . import chromium_win
-from . import chromium_webrtc
-
 SPEC = {
   'settings': {
       'build_gs_bucket': 'chromium-webrtc'
