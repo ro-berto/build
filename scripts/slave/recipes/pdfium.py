@@ -145,7 +145,8 @@ def _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
 
   with api.context(cwd=checkout):
     api.python('gn gen', gn_cmd,
-               ['--root=' + str(checkout), 'gen', '//out/' + out_dir,
+               ['--check',
+                '--root=' + str(checkout), 'gen', '//out/' + out_dir,
                 '--args=' + ' '.join(args)])
 
   # convert the arguments to key values pairs for gold usage.

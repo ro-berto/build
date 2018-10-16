@@ -114,6 +114,7 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]\\gn.py",
+      "--check",
       "--root=[START_DIR]\\pdfium",
       "gen",
       "//out/debug_xfa_v8_msvc",
