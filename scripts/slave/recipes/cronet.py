@@ -182,7 +182,7 @@ def RunSteps(api, buildername):
   if cronet_kwargs.get('report_sizes') and cronet_kwargs.get('PERF_ID'):
     api.cronet.sizes(cronet_kwargs['PERF_ID'])
   if builder_config.get('run_tests'):
-    api.cronet.run_tests(kwargs['BUILD_CONFIG'])
+    api.cronet.run_tests()
   if builder_config.get('run_perf_tests'):
     api.cronet.run_perf_tests(cronet_kwargs['PERF_ID'])
 

@@ -64,7 +64,7 @@ class CronetApi(recipe_api.RecipeApi):
 
 
   def build(self, mastername=None, buildername=None, targets=None,
-            use_revision=True, use_goma=True):
+            use_goma=True):
     if not mastername:
       mastername=self.m.properties['mastername']
     if not buildername:
@@ -128,7 +128,7 @@ class CronetApi(recipe_api.RecipeApi):
 
 
   def run_tests(
-      self, build_config, unit_tests=None,
+      self, unit_tests=None,
       instrumentation_tests=INSTRUMENTATION_TESTS):
 
     if unit_tests is None:
@@ -140,7 +140,6 @@ class CronetApi(recipe_api.RecipeApi):
         unit_tests = self.UNIT_TESTS_M65_AND_BELOW
 
     droid = self.m.chromium_android
-    checkout_path = self.m.path['checkout']
     droid.common_tests_setup_steps()
     with self.m.step.defer_results():
       for suite in unit_tests:
@@ -212,7 +211,7 @@ class CronetApi(recipe_api.RecipeApi):
     if 'git_revision' in self.m.properties:
       args.extend(['--git-revision', self.m.properties['git_revision']])
 
-    step_result = self.m.build.python(
+    self.m.build.python(
         'Perf Dashboard Upload',
         self.m.chromium.package_repo_resource(
             'scripts', 'slave', 'upload_perf_dashboard_results.py'),

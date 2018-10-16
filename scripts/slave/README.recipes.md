@@ -1644,15 +1644,15 @@ Common steps for recipes that sync/build Cronet sources.
 
 #### **class [CronetApi](/scripts/slave/recipe_modules/cronet/api.py#12)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [build](/scripts/slave/recipe_modules/cronet/api.py#66)(self, mastername=None, buildername=None, targets=None, use_revision=True, use_goma=True):**
+&mdash; **def [build](/scripts/slave/recipe_modules/cronet/api.py#66)(self, mastername=None, buildername=None, targets=None, use_goma=True):**
 
 &mdash; **def [get\_version](/scripts/slave/recipe_modules/cronet/api.py#92)(self):**
 
 &mdash; **def [init\_and\_sync](/scripts/slave/recipe_modules/cronet/api.py#46)(self, recipe_config, kwargs, gyp_defs, chromium_apply_config=None):**
 
-&mdash; **def [run\_perf\_tests](/scripts/slave/recipe_modules/cronet/api.py#158)(self, perf_id):**
+&mdash; **def [run\_perf\_tests](/scripts/slave/recipe_modules/cronet/api.py#157)(self, perf_id):**
 
-&mdash; **def [run\_tests](/scripts/slave/recipe_modules/cronet/api.py#130)(self, build_config, unit_tests=None, instrumentation_tests=INSTRUMENTATION_TESTS):**
+&mdash; **def [run\_tests](/scripts/slave/recipe_modules/cronet/api.py#130)(self, unit_tests=None, instrumentation_tests=INSTRUMENTATION_TESTS):**
 
 &mdash; **def [sizes](/scripts/slave/recipe_modules/cronet/api.py#118)(self, perf_id):**
 
