@@ -136,7 +136,7 @@
       "-t",
       "sdk"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -155,7 +155,7 @@
       "--outfile",
       "[START_DIR]/flutter/dev/bots/gradle-2.14.1-bin.zip"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -168,7 +168,7 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -182,7 +182,7 @@
       "-c",
       "[START_DIR]/flutter/dev/bots/android_tools/sdk/tools/bin/sdkmanager --list"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]

@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import contextlib
+from contextlib import contextmanager
 import re
 
 DEPS = [
@@ -10,6 +10,8 @@ DEPS = [
     'depot_tools/git',
     'depot_tools/gsutil',
     'depot_tools/depot_tools',
+    'depot_tools/osx_sdk',
+    'depot_tools/windows_sdk',
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/json',
@@ -26,6 +28,22 @@ DEPS = [
 
 BUCKET_NAME = 'flutter_infra'
 PACKAGED_BRANCH_RE = re.compile(r'(dev|beta|release)$')
+
+
+@contextmanager
+def _PlatformSDK(api):
+  sdk = None
+  if api.runtime.is_luci:
+    if api.platform.is_win:
+      sdk = api.windows_sdk()
+    elif api.platform.is_mac:
+      sdk = api.osx_sdk('mac')
+
+  if sdk is None:
+    yield
+  else:
+    with sdk:
+      yield
 
 
 def GetPuppetApiTokenPath(api, token_name):
@@ -248,27 +266,28 @@ def RunSteps(api):
     api.step('flutter doctor', [flutter_executable, 'doctor'])
     api.step('download dependencies', [flutter_executable, 'update-packages'])
 
-  if api.platform.is_mac:
-    SetupXcode(api)
-  with api.depot_tools.on_path():
-    api.python('download android tools',
-               checkout.join('dev', 'bots', 'download_android_tools.py'),
-               ['-t', 'sdk'])
-    InstallGradle(api, checkout)
+  with _PlatformSDK(api):
+    if api.platform.is_mac:
+      SetupXcode(api)
+    with api.depot_tools.on_path():
+      api.python('download android tools',
+                 checkout.join('dev', 'bots', 'download_android_tools.py'),
+                 ['-t', 'sdk'])
+      InstallGradle(api, checkout)
 
-  with api.context(env=env, cwd=checkout):
-    shards = ['tests'] if not api.platform.is_linux else ['tests', 'coverage']
-    for shard in shards:
-      shard_env = env
-      shard_env['SHARD'] = shard
-      with api.context(env=shard_env):
-        api.step('run test.dart for %s shard' % shard,
-                 [dart_executable,
-                  checkout.join('dev', 'bots', 'test.dart')])
-      if shard == 'coverage':
-        UploadFlutterCoverage(api)
+    with api.context(env=env, cwd=checkout):
+      shards = ['tests'] if not api.platform.is_linux else ['tests', 'coverage']
+      for shard in shards:
+        shard_env = env
+        shard_env['SHARD'] = shard
+        with api.context(env=shard_env):
+          api.step('run test.dart for %s shard' % shard,
+                   [dart_executable,
+                    checkout.join('dev', 'bots', 'test.dart')])
+        if shard == 'coverage':
+          UploadFlutterCoverage(api)
 
-    BuildExamples(api, git_hash, flutter_executable)
+      BuildExamples(api, git_hash, flutter_executable)
 
 
 def GenTests(api):
@@ -276,7 +295,8 @@ def GenTests(api):
     for branch in ('master', 'dev', 'beta', 'release'):
       test = (
           api.test('%s_%s' % (platform, branch)) + api.platform(platform, 64) +
-          api.properties(clobber='', branch=branch))
+          api.properties(clobber='', branch=branch) +
+          api.runtime(is_luci=True, is_experimental=False))
       if platform == 'mac' and branch == 'master':
         test += (
             api.step_data('set_xcode_version',
