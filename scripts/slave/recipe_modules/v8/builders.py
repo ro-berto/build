@@ -1382,6 +1382,26 @@ BUILDERS = {
         ) + with_extra_variants([V8Testing(3)]),
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux - arm - sim - lite': {
+        'chromium_apply_config': [
+          'default_compiler', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+        },
+        'variants': V8Variant('default'),
+        'tests': [V8Testing(2)],
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - arm - sim - lite - debug': {
+        'chromium_apply_config': [
+          'default_compiler', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+        },
+        'variants': V8Variant('default'),
+        'tests': [V8Testing(4)],
+        'testing': {'platform': 'linux'},
+      },
 ####### Category: ARM64
       'V8 Android Arm64 - builder': {
         'chromium_apply_config': [
@@ -2094,6 +2114,18 @@ BUILDERS = {
             'build_config': 'Release',
             'triggers': [
               'v8_linux_arm_rel_ng_triggered',
+            ],
+          },
+          'platform': 'linux',
+        },
+      },
+      'v8_linux_arm_lite_rel_ng': {
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
+        'testing': {
+          'properties': {
+            'build_config': 'Release',
+            'triggers': [
+              'v8_linux_arm_lite_rel_ng_triggered',
             ],
           },
           'platform': 'linux',
