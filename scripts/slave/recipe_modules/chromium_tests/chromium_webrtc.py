@@ -211,13 +211,18 @@ def browser_perf_test(perf_id):
       perf_config_mappings=None,
       commit_position_property='got_revision_cp')
 
-SPEC['builders']['Linux Tester']['tests'] = browser_perf_test(
-    'chromium-webrtc-rel-linux')
-SPEC['builders']['Mac Tester']['tests'] = browser_perf_test(
-    'chromium-webrtc-rel-mac')
-SPEC['builders']['Win10 Tester']['tests'] = browser_perf_test(
-    'chromium-webrtc-rel-win10')
-SPEC['builders']['Win7 Tester']['tests'] = browser_perf_test(
-    'chromium-webrtc-rel-win7')
-SPEC['builders']['Win8 Tester']['tests'] = browser_perf_test(
-    'chromium-webrtc-rel-win8')
+SPEC['builders']['Linux Tester']['tests'] = [
+  browser_perf_test('chromium-webrtc-rel-linux')
+]
+SPEC['builders']['Mac Tester']['tests'] = [
+  browser_perf_test('chromium-webrtc-rel-mac')
+]
+SPEC['builders']['Win10 Tester']['tests'] = [
+  browser_perf_test('chromium-webrtc-rel-win10')
+]
+SPEC['builders']['Win7 Tester']['tests'] = [
+  browser_perf_test('chromium-webrtc-rel-win7')
+]
+SPEC['builders']['Win8 Tester']['tests'] = [
+  browser_perf_test('chromium-webrtc-rel-win8')
+]
