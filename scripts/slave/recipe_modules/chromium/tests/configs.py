@@ -264,3 +264,11 @@ def GenTests(api):
       ) +
       api.post_process(post_process.DropExpectation)
   )
+
+  yield (
+      api.test('android_internal_isolate_maps') +
+      api.properties(
+          chromium_apply_config=['android_internal_isolate_maps']) +
+      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.DropExpectation)
+  )

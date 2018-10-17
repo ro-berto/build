@@ -700,3 +700,10 @@ def mac_toolchain(c, xcode_build_version=None):
   # TODO(crbug.com/797051): remove this when all builds switch to the new Xcode
   # flow.
   c.env.FORCE_MAC_TOOLCHAIN = 0
+
+@config_ctx(includes=['mb'])
+def android_internal_isolate_maps(c):
+  c.project_generator.isolate_map_paths = [
+      c.CHECKOUT_PATH.join('clank', 'build', 'gn_isolate_map.pyl'),
+      c.CHECKOUT_PATH.join('testing', 'buildbot', 'gn_isolate_map.pyl'),
+  ]
