@@ -103,7 +103,8 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
 
     dirname = config
     if is_fuchsia or is_linux or is_mac:
-      gn = api.path['start_dir'].join('buildtools', 'linux64', 'gn')
+      gn = api.path['start_dir'].join(
+          'buildtools', 'mac' if is_mac else 'linux64', 'gn')
       # Generic GN build.
       path = api.path['checkout'].join('out', dirname)
       if target_cpu is "":
