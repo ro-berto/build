@@ -225,7 +225,6 @@ def main(argv):
       'master.chromium.perf': 'ChromiumPerf',
       'master.chromium.webkit': 'ChromiumWebkit',
       'master.chromium.webrtc': 'ChromiumWebRTC',
-      'master.chromium.webrtc.fyi': 'ChromiumWebRTCFYI',
       'master.chromiumos': 'ChromiumOS',
       'master.client.art': 'ART',
       'master.client.crashpad': 'ClientCrashpad',

@@ -65,8 +65,6 @@
     'chromium.memory': {},
 
     'chromium.webrtc': {},
-    'chromium.webrtc.fyi': {},
-    'chromium.webrtc.fyi.experimental': {},
 
     'chromium.gatekeeper': {},
 
@@ -89,11 +87,8 @@
     'tryserver.client.syzygy': {},
 
     # WebRTC
-    'client.webrtc': {},
-    'client.webrtc.branches': {},
     'client.webrtc.fyi': {},
     'client.webrtc.perf': {},
-    'tryserver.webrtc': {},
   },
 
   'chromiumos': {
