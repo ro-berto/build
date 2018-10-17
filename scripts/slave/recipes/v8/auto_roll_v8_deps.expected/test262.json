@@ -29,8 +29,6 @@
       "-f",
       "--use-commit-queue",
       "--bypass-hooks",
-      "--email",
-      "v8-autoroll@chromium.org",
       "--gerrit",
       "--send-mail"
     ],

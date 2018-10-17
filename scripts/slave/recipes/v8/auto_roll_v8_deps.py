@@ -250,7 +250,7 @@ def RunSteps(api):
         api.git(*args, **kwargs)
         api.git(
             'cl', 'upload', '-f', '--use-commit-queue', '--bypass-hooks',
-            '--email', push_account, '--gerrit', '--send-mail',
+            '--gerrit', '--send-mail',
         )
 
   if failed_deps:
