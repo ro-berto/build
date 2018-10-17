@@ -352,14 +352,6 @@ BUILDERS = {
           'category': 'linux32'
         },
       },
-      'V8 Linux - nosnap': {
-        'variants': V8Variant('default'),
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux - nosnap - debug': {
-        'variants': V8Variant('default'),
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux - interpreted regexp': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
@@ -375,7 +367,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - verify csa': {
@@ -548,7 +539,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'variants': V8Variant('default'),
         'testing': {'platform': 'win'},
       },
       'V8 Win64': {
@@ -770,7 +760,6 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
         },
         'enable_swarming': False,
-        'variants': V8Variant('default'),
         'testing': {'platform': 'linux'},
       },
     },
