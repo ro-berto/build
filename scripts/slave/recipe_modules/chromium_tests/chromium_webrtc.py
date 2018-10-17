@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import steps
+
 SPEC = {
   'settings': { 'build_gs_bucket': 'chromium-webrtc'},
   'builders': {
@@ -178,3 +180,44 @@ SPEC = {
     }
   },
 }
+
+# TODO(crbug.com/888429): Add this test through test_suites.pyl instead.
+# The problem is that our performance-reporting gtest doesn't report results.
+BAREMETAL_BROWSER_TESTS_FILTER = [
+  # Runs hardware-exercising test.
+  'WebRtcWebcamBrowserTests*',
+]
+
+PERF_BROWSER_TESTS_FILTER = [
+  'WebRtcInternalsPerfBrowserTest.*',
+  'WebRtcStatsPerfBrowserTest.*',
+  'WebRtcVideoDisplayPerfBrowserTests*',
+  'WebRtcVideoQualityBrowserTests*',
+]
+
+def browser_perf_test(perf_id):
+  return steps.WebRTCPerfTest(
+      name='browser_tests',
+      # These tests needs --test-launcher-jobs=1 since some of them are
+      # not able to run in parallel (they record system audio, etc).
+      args=['--gtest_filter=%s' % ':'.join(
+                BAREMETAL_BROWSER_TESTS_FILTER + PERF_BROWSER_TESTS_FILTER
+            ),
+            '--run-manual', '--ui-test-action-max-timeout=350000',
+            '--test-launcher-jobs=1',
+            '--test-launcher-bot-mode',
+            '--test-launcher-print-test-stdio=always'],
+      perf_id=perf_id,
+      perf_config_mappings=None,
+      commit_position_property='got_revision_cp')
+
+SPEC['builders']['Linux Tester']['tests'] = browser_perf_test(
+    'chromium-webrtc-rel-linux')
+SPEC['builders']['Mac Tester']['tests'] = browser_perf_test(
+    'chromium-webrtc-rel-mac')
+SPEC['builders']['Win10 Tester']['tests'] = browser_perf_test(
+    'chromium-webrtc-rel-win10')
+SPEC['builders']['Win7 Tester']['tests'] = browser_perf_test(
+    'chromium-webrtc-rel-win7')
+SPEC['builders']['Win8 Tester']['tests'] = browser_perf_test(
+    'chromium-webrtc-rel-win8')
