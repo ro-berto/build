@@ -205,8 +205,25 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
       commit_timestamp=root_solution_revision_timestamp or int(api.time.time()))
 
   # Check out the generated files repo and sync the generated files
-  # into this checkout.
-  api.codesearch.checkout_generated_files_repo_and_sync()
+  # into this checkout. This may fail due to other builders pushing to the
+  # remote repo at the same time, so we retry this 3 times before giving up.
+  _RunStepWithRetry(api, api.codesearch.checkout_generated_files_repo_and_sync)
+
+
+def _RunStepWithRetry(api, step_function, max_tries=3):
+  failures = 0
+  while failures < max_tries:
+    try:
+      step_function()
+      break
+    except api.step.StepFailure as f:
+      failures += 1
+      if failures == max_tries:
+        raise # pragma: no cover
+      else:
+        api.step.active_result.presentation.step_text = f.reason_message()
+        api.step.active_result.presentation.status = api.step.WARNING
+
 
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
@@ -266,6 +283,16 @@ def GenTests(api):
         _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
     api.step_data('generate compilation database', retcode=1) +
     api.properties.generic(buildername='codesearch-gen-chromium-chromiumos',
+                           mastername='chromium.infra.codesearch') +
+    api.runtime(is_luci=True, is_experimental=False)
+  )
+
+  yield (
+    api.test(
+        'full_%s_sync_generated_files_fail' %
+        _sanitize_nonalpha('codesearch-gen-chromium-linux')) +
+    api.step_data('sync generated files', retcode=1) +
+    api.properties.generic(buildername='codesearch-gen-chromium-linux',
                            mastername='chromium.infra.codesearch') +
     api.runtime(is_luci=True, is_experimental=False)
   )
