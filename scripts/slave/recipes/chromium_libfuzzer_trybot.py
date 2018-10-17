@@ -41,6 +41,20 @@ BUILDERS = freeze({
       },
     },
   },
+  'tryserver.chromium.win': {
+    'builders': {
+      'windows-libfuzzer-asan-rel': {
+        'chromium_config': 'chromium_clang',
+        'gclient_config': 'chromium',
+        'chromium_apply_config': [ 'proprietary_codecs' ],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'win',
+          'TARGET_BITS': 64,
+        },
+      },
+    },
+  },
 })
 
 INCLUDED_FUZZ_TARGETS = ['//testing/libfuzzer:libfuzzer_main']
