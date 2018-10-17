@@ -15,12 +15,12 @@ import sys
 from common import chromium_utils
 
 def main(argv):
-  with open(sys.argv[3], 'r') as f:
+  with open(argv[3], 'r') as f:
     zip_file_list = json.load(f)
-  (zip_dir, zip_file) = chromium_utils.MakeZip(sys.argv[1],
-                                               sys.argv[2],
+  (zip_dir, zip_file) = chromium_utils.MakeZip(argv[1],
+                                               argv[2],
                                                zip_file_list,
-                                               sys.argv[4],
+                                               argv[4],
                                                raise_error=True)
   chromium_utils.RemoveDirectory(zip_dir)
   if not os.path.exists(zip_file):

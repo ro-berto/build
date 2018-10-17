@@ -188,7 +188,7 @@ def walk_and_filter(dir_path, platform_name):
   return result
 
 
-def main(argv):
+def main():
   parser = argparse.ArgumentParser(
       description='Exclude unneeded files from the given build directory.')
 
@@ -213,4 +213,4 @@ def main(argv):
 
 
 if __name__ == '__main__':
-  sys.exit(main(sys.argv))
+  sys.exit(main())

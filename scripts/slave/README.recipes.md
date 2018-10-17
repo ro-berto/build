@@ -30,7 +30,7 @@
   * [findit](#recipe_modules-findit)
   * [gae_sdk](#recipe_modules-gae_sdk)
   * [gatekeeper](#recipe_modules-gatekeeper)
-  * [git_clone_bundler](#recipe_modules-git_clone_bundler)
+  * [git_clone_bundler](#recipe_modules-git_clone_bundler) &mdash; The 'git_clone_bundler' creates and uploads 'clone.
   * [gn](#recipe_modules-gn)
   * [goma](#recipe_modules-goma)
   * [halt](#recipe_modules-halt)
@@ -365,7 +365,7 @@ Run an ADB command.
 
 [DEPS](/scripts/slave/recipe_modules/archive/__init__.py#5): [build](#recipe_modules-build), [commit\_position](#recipe_modules-commit_position), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [ArchiveApi](/scripts/slave/recipe_modules/archive/api.py#22)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [ArchiveApi](/scripts/slave/recipe_modules/archive/api.py#23)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 Chromium specific module for zipping, uploading and downloading build
 artifacts implemented as a wrapper around zip_build.py script.
@@ -374,7 +374,7 @@ If you need to upload or download build artifacts (or any other files) for
 something other than Chromium flavor, consider using 'zip' + 'gsutil' or
 'isolate' modules instead.
 
-&mdash; **def [clusterfuzz\_archive](/scripts/slave/recipe_modules/archive/api.py#137)(self, build_dir, update_properties, gs_bucket, archive_prefix, archive_subdir_suffix='', gs_acl=None, revision_dir=None, primary_project=None, bitness=None, use_legacy=True, \*\*kwargs):**
+&mdash; **def [clusterfuzz\_archive](/scripts/slave/recipe_modules/archive/api.py#139)(self, build_dir, update_properties, gs_bucket, archive_prefix, archive_subdir_suffix='', gs_acl=None, revision_dir=None, primary_project=None, bitness=None, use_legacy=True, \*\*kwargs):**
 
 Archives and uploads a build to google storage.
 
@@ -413,12 +413,12 @@ Args:
   use_legacy: Specify if legacy paths and archive names should be used. Set
               to false for new builders.
 
-&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/archive/api.py#300)(self, step_name, target, build_url, src_dir=None, build_revision=None, build_archive_url=None, \*\*kwargs):**
+&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/archive/api.py#302)(self, step_name, target, build_url, src_dir=None, build_revision=None, build_archive_url=None, \*\*kwargs):**
 
 Returns a step invoking extract_build.py to download and unzip
 a Chromium build.
 
-&mdash; **def [legacy\_download\_url](/scripts/slave/recipe_modules/archive/api.py#409)(self, gs_bucket_name, extra_url_components=None):**
+&mdash; **def [legacy\_download\_url](/scripts/slave/recipe_modules/archive/api.py#411)(self, gs_bucket_name, extra_url_components=None):**
 
 Returns a url suitable for downloading a Chromium build from
 Google Storage.
@@ -429,11 +429,11 @@ trailing '/' which is inserted in the middle of the URL.
 The builder_name, or parent_buildername, is always automatically
 inserted into the URL.
 
-&mdash; **def [legacy\_platform\_name](/scripts/slave/recipe_modules/archive/api.py#348)(self):**
+&mdash; **def [legacy\_platform\_name](/scripts/slave/recipe_modules/archive/api.py#350)(self):**
 
 Replicates the behavior of PlatformName() in chromium_utils.py.
 
-&mdash; **def [legacy\_upload\_url](/scripts/slave/recipe_modules/archive/api.py#398)(self, gs_bucket_name, extra_url_components=None):**
+&mdash; **def [legacy\_upload\_url](/scripts/slave/recipe_modules/archive/api.py#400)(self, gs_bucket_name, extra_url_components=None):**
 
 Returns a url suitable for uploading a Chromium build to Google
 Storage.
@@ -444,7 +444,7 @@ trailing '/' which is inserted in the middle of the URL.
 The builder_name, or parent_buildername, is always automatically
 inserted into the URL.
 
-&mdash; **def [zip\_and\_upload\_build](/scripts/slave/recipe_modules/archive/api.py#30)(self, step_name, target, build_url=None, src_dir=None, build_revision=None, cros_board=None, package_dsym_files=False, exclude_files=None, exclude_perf_test_files=False, update_properties=None, store_by_hash=True, platform=None, \*\*kwargs):**
+&mdash; **def [zip\_and\_upload\_build](/scripts/slave/recipe_modules/archive/api.py#31)(self, step_name, target, build_url=None, src_dir=None, build_revision=None, cros_board=None, package_dsym_files=False, exclude_files=None, exclude_perf_test_files=False, update_properties=None, store_by_hash=True, platform=None, \*\*kwargs):**
 
 Returns a step invoking zip_build.py to zip up a Chromium build.
 If build_url is specified, also uploads the build.
@@ -2068,6 +2068,9 @@ Module for Gatekeeper NG.
 
 [DEPS](/scripts/slave/recipe_modules/git_clone_bundler/__init__.py#1): [repo](#recipe_modules-repo), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
+The 'git_clone_bundler' creates and uploads 'clone.bundle' packages to
+Google Storage for specified Git repositories.
+
 #### **class [GitCloneBundlerApi](/scripts/slave/recipe_modules/git_clone_bundler/api.py#14)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 Provides methods to encapsulate repo operations.
@@ -2076,14 +2079,12 @@ Provides methods to encapsulate repo operations.
 
 &emsp; **@property**<br>&mdash; **def [bundle\_dir](/scripts/slave/recipe_modules/git_clone_bundler/api.py#24)(self):**
 
-&mdash; **def [create](/scripts/slave/recipe_modules/git_clone_bundler/api.py#82)(self, git_path, gs_bucket, gs_subpath=None, refs=None, name=None, unauthenticated_url=False):**
+&mdash; **def [create](/scripts/slave/recipe_modules/git_clone_bundler/api.py#79)(self, git_path, gs_bucket, gs_subpath=None, name=None, unauthenticated_url=False):**
 
 Args:
   git_path: (Path) The path of the Git repository to bundle.
   gs_bucket: (str) The name of the Google Storage bucket.
   gs_subpath: (str) The path within the Google Storage bucket.
-  refs: (list) The list of refs to bundle, or empty/None to bundle all
-      objects.
   name (str): If not None, the name of this bundle operation (to
       differentiate steps).
   unauthenticated_url: (bool) If True, request an unauthenticated URL from
@@ -2091,7 +2092,7 @@ Args:
 
 Returns: (str) The Google Storage URL where the bundle was uploaded.
 
-&mdash; **def [create\_repo](/scripts/slave/recipe_modules/git_clone_bundler/api.py#102)(self, repo_manifest_url, gs_bucket, gs_subpath=None, remote_name=None, refs=None, unauthenticated_url=False):**
+&mdash; **def [create\_repo](/scripts/slave/recipe_modules/git_clone_bundler/api.py#97)(self, repo_manifest_url, gs_bucket, gs_subpath=None, remote_name=None, unauthenticated_url=False):**
 
 Traverses a 'repo' checkout and creates and uploads a Git bundle for each
 repository in the checkout.
@@ -2102,8 +2103,6 @@ Args:
   gs_subpath: (str) The path within the Google Storage bucket.
   remote_name: (str) If not None, the name of the remote to query. This is
       used to build the returned repository-to-GS mapping.
-  refs: (list) The list of refs to bundle, or empty/None to bundle all
-      objects.
   unauthenticated_url: (bool) If True, request an unauthenticated URL from
       Google Storage.
 

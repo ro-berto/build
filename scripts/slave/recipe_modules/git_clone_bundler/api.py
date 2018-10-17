@@ -1,15 +1,15 @@
 # Copyright 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
+"""
+The 'git_clone_bundler' creates and uploads 'clone.bundle' packages to
+Google Storage for specified Git repositories.
+"""
 
 import hashlib
 
 from recipe_engine import recipe_api
 
-"""
-The 'git_clone_bundler' creates and uploads 'clone.bundle' packages to
-Google Storage for specified Git repositories.
-"""
 
 class GitCloneBundlerApi(recipe_api.RecipeApi):
   """Provides methods to encapsulate repo operations."""
@@ -33,8 +33,7 @@ class GitCloneBundlerApi(recipe_api.RecipeApi):
     self.m.file.rmtree('remove old bundles', self.bundle_dir)
     self.m.file.ensure_directory('make bundles dir', self.bundle_dir)
 
-  def _bundle(self, git_path, gs_bucket, gs_subpath, refs, name,
-              unauthenticated_url):
+  def _bundle(self, git_path, gs_bucket, gs_subpath, name, unauthenticated_url):
     """
     Creates a Git bundle from a Git repository and uploads it to Google Storage.
 
@@ -42,9 +41,7 @@ class GitCloneBundlerApi(recipe_api.RecipeApi):
       git_path: (Path) The path of the Git repository to bundle.
       gs_bucket: (str) The name of the Google Storage bucket.
       gs_subpath: (str) The path within the Google Storage bucket.
-      refs: (list) The list of refs to bundle, or empty/None to bundle all
-          objects.
-      name (str): If not None, the name of this bundle operation (to
+r     name (str): If not None, the name of this bundle operation (to
           differentiate steps).
       unauthenticated_url: (bool) If True, request an unauthenticated URL from
           Google Storage.
@@ -79,15 +76,13 @@ class GitCloneBundlerApi(recipe_api.RecipeApi):
         unauthenticated_url=unauthenticated_url)
     return result.presentation.links['gsutil bundle']
 
-  def create(self, git_path, gs_bucket, gs_subpath=None, refs=None,
-             name=None, unauthenticated_url=False):
+  def create(self, git_path, gs_bucket, gs_subpath=None, name=None,
+             unauthenticated_url=False):
     """
     Args:
       git_path: (Path) The path of the Git repository to bundle.
       gs_bucket: (str) The name of the Google Storage bucket.
       gs_subpath: (str) The path within the Google Storage bucket.
-      refs: (list) The list of refs to bundle, or empty/None to bundle all
-          objects.
       name (str): If not None, the name of this bundle operation (to
           differentiate steps).
       unauthenticated_url: (bool) If True, request an unauthenticated URL from
@@ -96,11 +91,11 @@ class GitCloneBundlerApi(recipe_api.RecipeApi):
     Returns: (str) The Google Storage URL where the bundle was uploaded.
     """
     self._setup()
-    return self._bundle(git_path, gs_bucket, gs_subpath, refs, name,
+    return self._bundle(git_path, gs_bucket, gs_subpath, name,
                         unauthenticated_url)
 
   def create_repo(self, repo_manifest_url, gs_bucket, gs_subpath=None,
-                  remote_name=None, refs=None, unauthenticated_url=False):
+                  remote_name=None, unauthenticated_url=False):
     """
     Traverses a 'repo' checkout and creates and uploads a Git bundle for each
     repository in the checkout.
@@ -111,8 +106,6 @@ class GitCloneBundlerApi(recipe_api.RecipeApi):
       gs_subpath: (str) The path within the Google Storage bucket.
       remote_name: (str) If not None, the name of the remote to query. This is
           used to build the returned repository-to-GS mapping.
-      refs: (list) The list of refs to bundle, or empty/None to bundle all
-          objects.
       unauthenticated_url: (bool) If True, request an unauthenticated URL from
           Google Storage.
 
@@ -133,9 +126,6 @@ class GitCloneBundlerApi(recipe_api.RecipeApi):
       self.m.repo.init(repo_manifest_url)
       self.m.repo.sync('--no-clone-bundle')
 
-    # The repository list produces absolute paths, so we want to convert our
-    # 'checkout_root' to an absolute path for relative path calculation.
-    abs_checkout_root = self.m.path.abspath(checkout_root)
     errors = []
     bundle_map = {}
     visited = set()
@@ -152,7 +142,7 @@ class GitCloneBundlerApi(recipe_api.RecipeApi):
       if gs_subpath:
         gs_path = '%s/%s' % (gs_subpath, gs_path)
       try:
-        upload_url = self._bundle(repo_path, gs_bucket, gs_path, refs, name,
+        upload_url = self._bundle(repo_path, gs_bucket, gs_path, name,
                                   unauthenticated_url)
         if remote_name:
           with self.m.context(cwd=repo_path):

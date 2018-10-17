@@ -5,6 +5,7 @@
 import re
 import sys
 
+# pylint: disable=relative-import
 import manual_bisect_files
 from recipe_engine import recipe_api
 
@@ -81,7 +82,7 @@ class ArchiveApi(recipe_api.RecipeApi):
       if update_properties and not store_by_hash:
         commit_position = self._get_commit_position(
                             update_properties, None)
-        cp_branch, cp_number = self.m.commit_position.parse(commit_position)
+        _, cp_number = self.m.commit_position.parse(commit_position)
         args.extend(['--build_revision', cp_number])
 
     properties_json = self.m.json.dumps(self.m.properties.legacy())
@@ -105,7 +106,8 @@ class ArchiveApi(recipe_api.RecipeApi):
       key = 'got_%s_revision_cp' % primary_project
     else:
       key = 'got_revision_cp'
-    return update_properties.get(key, update_properties.get('got_src_revision_cp'))
+    return update_properties.get(key, update_properties.get(
+        'got_src_revision_cp'))
 
   def _get_git_commit(self, update_properties, primary_project):
     """Returns: (str/None) the git commit hash for a given project.
