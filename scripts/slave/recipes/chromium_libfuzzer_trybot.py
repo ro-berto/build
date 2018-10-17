@@ -43,7 +43,7 @@ BUILDERS = freeze({
   },
   'tryserver.chromium.win': {
     'builders': {
-      'windows-libfuzzer-asan-rel': {
+      'win-libfuzzer-asan-rel': {
         'chromium_config': 'chromium_clang',
         'gclient_config': 'chromium',
         'chromium_apply_config': [ 'proprietary_codecs' ],
