@@ -55,6 +55,7 @@ def RunSteps(api):
       hard_timeout=360,
       expiration=7200,
       priority='lower',
+      shards=int(api.properties.get('shards', '1')) or 1,
       dimensions=api.properties.get('dimensions', {'gpu': '8086'}))
 
   if test_repeat_count:
@@ -141,6 +142,29 @@ def GenTests(api):
           retcode=1) +
       api.post_process(post_process.StatusCodeIn, 1) +
       api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('fail_many_failures') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
+      api.properties(
+          buildnumber=123,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          shards=20,
+          run_without_patch=True,
+          got_revision_cp=123456) +
+      api.step_data(
+          '[trigger] base_unittests on Intel GPU on Linux (with patch)',
+          retcode=1, ) +
+      api.post_process(post_process.StatusCodeIn, 1) +
+      api.post_process(post_process.Filter(
+          '[trigger] base_unittests on Intel GPU on Linux (without patch)'))
   )
 
   yield (

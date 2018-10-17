@@ -147,6 +147,9 @@ class Test(object):
     #   'valid': A Boolean indicating whether the test run was valid.
     #   'failures': An iterable of strings -- each the name of a test that
     #   failed.
+    #   'total_tests_ran': How many tests this test suite executed. Ignores
+    #   retries ('pass_fail_counts' deals with that). Used to determine how many
+    #   shards to trigger when retrying tests.
     #   'pass_fail_counts': A dictionary that provides the number of passes and
     #   failures for each test. e.g.
     #     {
@@ -209,6 +212,7 @@ class Test(object):
     return {
       'valid': False,
       'failures': [],
+      'total_tests_ran': 0,
       'pass_fail_counts': {},
     }
 
@@ -245,6 +249,46 @@ class Test(object):
   def pass_fail_counts(self, api, suffix):
     """Returns a dictionary of pass and fail counts for each test."""
     return self._test_runs[suffix]['pass_fail_counts']
+
+  def shards_to_retry_with(self, api, original_num_shards, num_tests_to_retry):
+    """Calculates the number of shards to run when retrying this test.
+
+    Args:
+      api: Recipe api. Used to possibly fail the build, if preconditions aren't
+           met.
+      original_num_shards: The number of shards used to run the test when it
+                           first ran.
+      num_tests_to_retry: The number of tests we're trying to retry.
+
+    Returns:
+      The number of shards to use when retrying tests that failed.
+
+    Note that this assumes this test has run 'with patch', and knows how many
+    tests ran in that case. It doesn't make sense to ask how this test should
+    run when retried, if it hasn't run already.
+    """
+    if not self._test_runs['with patch']['total_tests_ran']: # pragma: no cover
+      api.python.failing_step(
+        'missing previous run results',
+        "We cannot compute the total number of tests to re-run if no tests "
+        "were run 'with patch'. Expected %s to contain key 'total_tests_ran', "
+        "but it didn't" % (self._test_runs['with patch']))
+
+    # We want to approximately match the previous shard load. Using only one
+    # shard can lead to a single shard running many more tests than it
+    # normally does. As the number of tests to retry approaches the total
+    # number of total tests ran, we get closer to running with the same number
+    # of shards as we originally were triggered with.
+    # Note that this technically breaks when we're running a tryjob on a CL
+    # which changes the number of tests to be run.
+    # Clamp to be 1 < value < original_num_shards, so that we don't trigger too
+    # many shards, or 0 shards.
+    return int(min(
+        max(
+            original_num_shards * (float(num_tests_to_retry) /
+                      self._test_runs['with patch']['total_tests_ran']),
+            1),
+        original_num_shards))
 
   def failures(self, api, suffix):  # pragma: no cover
     """Return list of failures (list of strings)."""
@@ -652,9 +696,13 @@ class ScriptTest(Test):  # pylint: disable=W0232
             failing_test, {'pass_count': 0, 'fail_count': 0})
         pass_fail_counts[failing_test]['fail_count'] += 1
 
+      # It looks like the contract we have with these tests doesn't expose how
+      # many tests actually ran. Just say it's the number of failures for now,
+      # this should be fine for these tests.
       self._test_runs[suffix] = {
           'failures': failures,
           'valid': result.json.output['valid'],
+          'total_tests_ran': len(failures),
           'pass_fail_counts': pass_fail_counts,
       }
 
@@ -1345,18 +1393,19 @@ class JSONResultsHandler(ResultsHandler):
       results = api.test_utils.create_results_from_json_if_needed(
           results)
     except Exception as e:
-      return False, [str(e), '\n', api.traceback.format_exc()], None
+      return False, [str(e), '\n', api.traceback.format_exc()], 0, None
     # If results were interrupted, we can't trust they have all the tests in
     # them. For this reason we mark them as invalid.
     return (results.valid and not results.interrupted,
-            results.unexpected_failures, results.pass_fail_counts)
+            results.unexpected_failures, results.total_test_runs,
+            results.pass_fail_counts)
 
 
 class FakeCustomResultsHandler(ResultsHandler):
   """Result handler just used for testing."""
 
   def validate_results(self, api, results):
-    return True, [], {}
+    return True, [], 0, {}
 
   def render_results(self, api, results, presentation):
     presentation.step_text += api.test_utils.format_step_text([
@@ -1647,10 +1696,13 @@ class SwarmingTest(Test):
       step_result: StepResult object to examine.
 
     Returns:
-      A tuple (valid, failures, pass_fail_counts), where valid is True if valid
-      results are available and failures is a list of names of failed tests
-      (ignored if valid is False). pass_fail_counts is a dictionary that
-      includes the number of passes and fails for each test.
+      A tuple (valid, failures, total_tests_ran, pass_fail_counts), where:
+        * valid is True if valid results are available
+        * failures is a list of names of failed tests (ignored if valid is
+            False).
+        * total_tests_ran counts the number of tests executed.
+        * pass_fail_counts is a dictionary that includes the number of passes
+            and fails for each test.
     """
     raise NotImplementedError()  # pragma: no cover
 
@@ -1676,11 +1728,12 @@ class SwarmingTest(Test):
                      indent=2)
       ).splitlines()
 
-      valid, failures, pass_fail_counts = self.validate_task_results(
-          api, step_result)
+      valid, failures, total_tests_ran, pass_fail_counts = (
+          self.validate_task_results(api, step_result))
       self._test_runs[suffix] = {
           'valid': valid,
           'failures': failures,
+          'total_tests_ran': total_tests_ran,
           'pass_fail_counts': pass_fail_counts
       }
 
@@ -1741,15 +1794,17 @@ class SwarmingGTestTest(SwarmingTest):
                                              tests_to_retry)
     args = _merge_args_and_test_options(self, args, test_options)
 
+    shards = self._shards
     if tests_to_retry:
       args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
 
+      shards = self.shards_to_retry_with(api, shards, len(tests_to_retry))
     args.extend(api.chromium_tests.swarming_extra_args)
 
     return api.swarming.gtest_task(
         title=self._step_name(suffix),
         isolated_hash=isolated_hash,
-        shards=self._shards,
+        shards=shards,
         test_launcher_summary_output=api.test_utils.gtest_results(
             add_json_log=False),
         cipd_packages=self._cipd_packages, extra_args=args,
@@ -1758,18 +1813,18 @@ class SwarmingGTestTest(SwarmingTest):
 
   def validate_task_results(self, api, step_result):
     if not hasattr(step_result, 'test_utils'):
-      return False, None, None  # pragma: no cover
+      return False, None, 0, None  # pragma: no cover
 
     gtest_results = step_result.test_utils.gtest_results
     if not gtest_results:
-      return False, None, None  # pragma: no cover
+      return False, None, 0, None  # pragma: no cover
 
     global_tags = gtest_results.raw.get('global_tags', [])
     if 'UNRELIABLE_RESULTS' in global_tags:
-      return False, None, None  # pragma: no cover
+      return False, None, 0, None  # pragma: no cover
 
     return (gtest_results.valid, gtest_results.failures,
-            gtest_results.pass_fail_counts)
+            gtest_results.total_tests_ran, gtest_results.pass_fail_counts)
 
   def pass_fail_counts(self, api, suffix):
     if self._gtest_results.get(suffix):
@@ -1907,7 +1962,7 @@ class LocalIsolatedScriptTest(Test):
       step_result = api.step.active_result
       results = step_result.json.output
       presentation = step_result.presentation
-      valid, _, _ = self.results_handler.validate_results(api, results)
+      valid, _, _, _ = self.results_handler.validate_results(api, results)
       test_results = (api.test_utils.create_results_from_json_if_needed(
           results) if valid else None)
       self._test_results[suffix] = test_results
@@ -1993,9 +2048,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       test_list = "::".join(tests_to_retry)
       args.extend(['--isolated-script-test-filter', test_list])
 
-      # Only run the tests on one shard; we don't need more, and layout tests
-      # complain if you run a shard which doesn't run tests.
-      shards = 1
+      shards = self.shards_to_retry_with(api, shards, len(tests_to_retry))
 
     # For the time being, we assume all isolated_script_test are not idempotent
     # TODO(crbug.com/549140): remove the self._idempotent parameter once
@@ -2019,11 +2072,12 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     # If we didn't get a step_result object at all, we can safely
     # assume that something definitely went wrong.
     if step_result is None:  # pragma: no cover
-      return False, None, None
+      return False, None, 0, None
 
     results = getattr(step_result, 'isolated_script_results', None) or {}
 
-    valid, failures, pass_fail_counts = self.results_handler.validate_results(api, results)
+    valid, failures, total_tests_ran, pass_fail_counts = (
+        self.results_handler.validate_results(api, results))
     presentation = step_result.presentation
     self.results_handler.render_results(api, results, presentation)
 
@@ -2032,14 +2086,14 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     # If we got no results and a nonzero exit code, the test probably
     # did not run correctly.
     if step_result.retcode != 0 and not results:
-      return False, failures, None
+      return False, failures, total_tests_ran, None
 
     # Even if the output is valid, if the return code is greater than
     # MAX_FAILURES_EXIT_STATUS then the test did not complete correctly and the
     # results can't be trusted. It probably exited early due to a large number
     # of failures or an environment setup issue.
     if step_result.retcode > api.test_utils.MAX_FAILURES_EXIT_STATUS:
-      return False, failures, None
+      return False, failures, total_tests_ran, None
 
     if step_result.retcode == 0 and not valid:
       # This failure won't be caught automatically. Need to manually
@@ -2049,7 +2103,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     # Check for perf results and upload to results dashboard if present.
     self._output_perf_results_if_present(api, step_result)
 
-    return valid, failures, pass_fail_counts
+    return valid, failures, total_tests_ran, pass_fail_counts
 
   def run(self, api, suffix):
     try:

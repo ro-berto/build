@@ -66,6 +66,7 @@ class TestResults(object):
     return {
       'valid': self.valid,
       'failures': self.unexpected_failures,
+      'total_tests_ran': self.total_test_runs,
       'pass_fail_counts': self.pass_fail_counts,
     }
 
@@ -265,6 +266,10 @@ class GTestResults(object):
     # in another. Remove tests that ever failed from the passing set.
     self.passes -= self.failures
 
+  @property
+  def total_tests_ran(self):
+    return len(self.passes) + len(self.failures)
+
   def _compress_list(self, lines):
     if len(lines) > self.MAX_LOG_LINES: # pragma: no cover
       remove_from_start = self.MAX_LOG_LINES / 2
@@ -280,5 +285,6 @@ class GTestResults(object):
     return {
       'valid': self.valid and not unreliable,
       'failures': sorted(self.failures),
+      'total_tests_ran': self.total_tests_ran,
       'pass_fail_counts': self.pass_fail_counts,
     }

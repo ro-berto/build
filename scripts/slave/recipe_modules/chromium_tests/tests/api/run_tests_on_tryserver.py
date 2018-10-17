@@ -23,7 +23,12 @@ def RunSteps(api):
   update_step, _bot_db = api.chromium_tests.prepare_checkout(bot_config_object)
 
   if api.properties.get('use_gtest', True):
-    test = api.chromium_tests.steps.SwarmingGTestTest('base_unittests')
+    kwargs = {}
+    if api.properties.get('shards'):
+      kwargs['shards'] = api.properties['shards']
+
+    test = api.chromium_tests.steps.SwarmingGTestTest(
+        'base_unittests', **kwargs)
   else:
     test = api.chromium_tests.steps.BlinkTest()
 
@@ -114,6 +119,33 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
+  yield (
+      api.test('retry_with_patch_failure_many_shards') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux_chromium_rel_ng',
+          shards=20,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.swarming.canned_summary_output(failure=True, shards=20) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=True)) +
+      api.override_step_data(
+          'base_unittests (retry with patch)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.post_process(
+          post_process.StepCommandContains,
+          'test_pre_run.[trigger] base_unittests (without patch)',
+          ['--shards', '6']) +
+      api.post_process(post_process.DropExpectation)
+  )
 
   yield (
       api.test('enable_retry_with_patch_invalid_test_results') +

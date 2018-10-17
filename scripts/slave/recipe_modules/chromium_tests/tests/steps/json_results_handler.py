@@ -21,7 +21,7 @@ def RunSteps(api):
   presentation_step = api.step('presentation_step', [])
   handler.render_results(api, results, presentation_step.presentation)
 
-  valid, unexpected_failures, _ = handler.validate_results(api, results)
+  valid, unexpected_failures, _, _ = handler.validate_results(api, results)
 
   api.step('details', [])
   api.step.active_result.presentation.logs['details'] = [
