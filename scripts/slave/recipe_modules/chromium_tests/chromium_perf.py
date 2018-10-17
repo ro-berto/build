@@ -59,7 +59,7 @@ def _BaseSpec(bot_type, config_name, platform, target_bits, tests):
   if platform == 'android':
     spec['android_config'] = 'chromium_perf'
     spec['android_apply_config'] = ['use_devil_adb']
-    spec['chromium_apply_config'] = ['android', 'android_internal_isolate_maps']
+    spec['chromium_apply_config'] = ['android']
     spec['chromium_config_kwargs']['TARGET_ARCH'] = 'arm'
     spec['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
     spec['gclient_apply_config'] = ['android']
