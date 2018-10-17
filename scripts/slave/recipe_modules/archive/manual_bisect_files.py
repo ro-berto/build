@@ -41,7 +41,7 @@ CHROME_REQUIRED_FILES = {
     'resources.pak',
     'v8_context_snapshot.bin',
     'xdg-mime',
-    'xdg-settings'
+    'xdg-settings',
   ],
   'win': [
     'chrome.dll',
@@ -66,26 +66,28 @@ CHROME_REQUIRED_FILES = {
     'PepperFlash/*',
     'resources.pak',
     'SecondaryTile.png',
-    'v8_context_snapshot.bin'
+    'v8_context_snapshot.bin',
+    'WidevineCdm',
+    'WidevineCdm/*',
   ],
   'mac': [
     'chromedriver',
     'Google Chrome.app',
-    'Google Chrome.app/*'
-  ]
+    'Google Chrome.app/*',
+  ],
 }
 
 CHROME_WHITELIST_FILES = {
   'linux': '',
   'win': '^\d+\.\d+\.\d+\.\d+\.manifest$',
-  'mac': ''
+  'mac': '',
 }
 
 CHROME_STRIP_LIST = {
   'linux': [
     'chrome',
     'chromedriver',
-    'nacl_helper'
+    'nacl_helper',
   ],
   'win': [
     # No stripping symbols from win64 archives.
@@ -93,5 +95,5 @@ CHROME_STRIP_LIST = {
   ],
   'mac': [
     # No stripping symbols from Mac archives.
-  ]
+  ],
 }
