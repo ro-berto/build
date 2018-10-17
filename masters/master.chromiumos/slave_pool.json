@@ -1,49 +1,31 @@
 {
-  "class_map": {
-    "builder": {
-      "amd64-generic-paladin": [
-        "cros-beefy468-c2"
-      ], 
-      "arm-generic-paladin": [
-        "cros-beefy425-c2"
-      ], 
-      "moblab-generic-vm-paladin": [
-        "build112-m2"
-      ], 
-      "tael-paladin": [
-        "cros-beefy191-c2"
-      ], 
-      "tatl-paladin": [
-        "cros-beefy439-c2"
-      ]
-    }, 
-    "floating": {
-      "paladin": [
-        "build258-m2", 
-        "build317-m2"
-      ]
-    }
-  }, 
   "unallocated": [
+    "build112-m2", 
     "build174-m2", 
     "build182-m2", 
     "build203-m2", 
     "build245-m2", 
+    "build258-m2", 
     "build263-m2", 
+    "build317-m2", 
     "build323-m2", 
     "build326-m2", 
     "build333-m2", 
     "build98-m2", 
     "cros-beefy100-c2", 
+    "cros-beefy191-c2", 
     "cros-beefy192-c2", 
     "cros-beefy423-c2", 
     "cros-beefy424-c2", 
+    "cros-beefy425-c2", 
     "cros-beefy426-c2", 
     "cros-beefy427-c2", 
     "cros-beefy428-c2", 
     "cros-beefy429-c2", 
+    "cros-beefy439-c2", 
     "cros-beefy466-c2", 
     "cros-beefy467-c2", 
+    "cros-beefy468-c2", 
     "cros-beefy499-c2", 
     "cros-beefy500-c2", 
     "cros-test0-c2", 
