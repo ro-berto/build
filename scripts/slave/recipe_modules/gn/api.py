@@ -132,9 +132,8 @@ class GnApi(recipe_api.RecipeApi):
   def _gn_cmd(self, name, cmd, gn_path=None, log_name='gn output'):
     if not gn_path:
       gn_path = self.m.depot_tools.gn_py_path
-    cmd = [gn_path] + cmd
-    return self.m.step(
-        name, cmd, stdout=self.m.raw_io.output_text(name=log_name,
+    return self.m.python(
+        name, gn_path, cmd, stdout=self.m.raw_io.output_text(name=log_name,
             add_output_log=True))
 
   def refs(self, build_dir, inputs, all_deps=True, output_type=None,

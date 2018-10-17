@@ -2111,7 +2111,7 @@ Returns: (dict) If 'remote_name' is supplied, a dictionary mapping the
     that repository's bundle was uploaded.
 ### *recipe_modules* / [gn](/scripts/slave/recipe_modules/gn)
 
-[DEPS](/scripts/slave/recipe_modules/gn/__init__.py#5): [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/gn/__init__.py#5): [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [GnApi](/scripts/slave/recipe_modules/gn/api.py#11)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -2138,7 +2138,7 @@ Args:
 Returns:
   The content of the args.gn file.
 
-&mdash; **def [ls](/scripts/slave/recipe_modules/gn/api.py#176)(self, build_dir, inputs, output_type=None, output_format='label', step_name='list gn targets'):**
+&mdash; **def [ls](/scripts/slave/recipe_modules/gn/api.py#175)(self, build_dir, inputs, output_type=None, output_format='label', step_name='list gn targets'):**
 
 List targets for a given set of inputs.
 
@@ -2201,7 +2201,7 @@ Args:
 Returns:
   The reformatted args.gn content as a single string.
 
-&mdash; **def [refs](/scripts/slave/recipe_modules/gn/api.py#140)(self, build_dir, inputs, all_deps=True, output_type=None, output_format='label', step_name='calculate gn refs'):**
+&mdash; **def [refs](/scripts/slave/recipe_modules/gn/api.py#139)(self, build_dir, inputs, all_deps=True, output_type=None, output_format='label', step_name='calculate gn refs'):**
 
 Find reverse dependencies for a given set of inputs.
 

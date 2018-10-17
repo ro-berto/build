@@ -303,6 +303,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "refs",
       "-q",
@@ -327,6 +329,8 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
       "refs",
       "-q",
