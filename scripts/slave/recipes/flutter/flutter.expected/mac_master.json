@@ -279,7 +279,7 @@
       "--json-file",
       "/path/to/tmp/json",
       "--version",
-      "9.0.1"
+      "9.2"
     ],
     "name": "set_xcode_version",
     "~followup_annotations": [

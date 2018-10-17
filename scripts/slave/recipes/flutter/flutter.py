@@ -130,6 +130,8 @@ def SetupXcode(api):
       step_suffix='ios_tools')
 
   target_version = '9.0.1'
+  if api.runtime.is_luci:
+    target_version = '9.2'
   xcode_json = RunFindXcode(api, ios_tools_path, target_version)
   if not xcode_json['matches']:
     raise api.step.StepFailure('Xcode %s not found' % target_version)
