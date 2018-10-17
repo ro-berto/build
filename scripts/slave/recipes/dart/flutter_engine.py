@@ -120,8 +120,16 @@ def TestFlutter(api, start_dir, just_built_dart_sdk, just_built_gen):
     dart_sdk = flutter.join('bin', 'cache', 'dart-sdk')
     frontend_server = flutter.join(
       'bin', 'cache', 'artifacts', 'engine', 'linux-x64', 'frontend_server.dart.snapshot')
-    api.file.remove('remove downloaded cached dart-sdk', dart_sdk) # in case symlink was left from previous run
-    api.file.rmtree('remove downloaded cached dart-sdk', dart_sdk)
+
+    try:
+      api.file.remove('remove downloaded cached dart-sdk', dart_sdk) # in case symlink was left from previous run
+    except api.file.Error: # pragma: no cover
+      pass 
+
+    try:
+      api.file.rmtree('remove downloaded cached dart-sdk', dart_sdk)
+    except api.file.Error: # pragma: no cover
+      pass 
 
     api.file.remove('remove downloaded frontend_server snapshot', frontend_server)
     api.file.symlink('make cached dart-sdk point to just built dart sdk', just_built_dart_sdk, dart_sdk)
