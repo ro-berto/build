@@ -151,8 +151,8 @@ def perf(c):
     s.custom_deps.pop(key, None)
 
 @CONFIG_CTX(includes=['chrome_internal'])
-def chromium_perf(_):
-  pass
+def chromium_perf(c):
+  c.solutions[0].custom_vars['checkout_mobile_internal'] = 'True'
 
 @CONFIG_CTX(includes=['chromium'])
 def chromium_skia(c):
@@ -239,7 +239,6 @@ def ndk_next(c):
 @CONFIG_CTX(includes=['chromium'])
 def chrome_internal(c):
   c.solutions[0].custom_vars['checkout_src_internal'] = 'True'
-  c.solutions[0].custom_vars['checkout_google_internal'] = 'True'
   # Remove some things which are generally not needed
   c.solutions[0].custom_deps = {
     "src/data/autodiscovery" : None,
