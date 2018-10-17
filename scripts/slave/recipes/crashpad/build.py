@@ -102,7 +102,7 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
       api.gclient.runhooks()
 
     dirname = config
-    if is_fuchsia or is_linux:
+    if is_fuchsia or is_linux or is_mac:
       gn = api.path['start_dir'].join('buildtools', 'linux64', 'gn')
       # Generic GN build.
       path = api.path['checkout'].join('out', dirname)
@@ -147,11 +147,6 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
                  [gn, 'gen', x86_path, '--args=' + args + ' target_cpu="x86"'])
         api.step('generate build files x64',
                  [gn, 'gen', x64_path, '--args=' + args + ' target_cpu="x64"'])
-    else:
-      assert is_mac
-      # Other platforms still default to the gyp build, so the build files have
-      # already been generated during runhooks.
-      path = api.path['checkout'].join('out', dirname)
 
     def run_tests(build_dir, env=None):
       if is_fuchsia:
