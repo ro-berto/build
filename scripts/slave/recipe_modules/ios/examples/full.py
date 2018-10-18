@@ -733,8 +733,8 @@ def GenTests(api):
           'app': 'fake test',
           'device type': 'fake device',
           'os': '8.1',
-          'use_wpr_tools': True,
-          'replay_path': 'fake/file/path1/',
+          'replay package name': 'chromium/ios/autofill/recipe-and-replay-data',
+          'replay package version': 'version:latest',
         },
       ],
     })

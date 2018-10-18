@@ -51,11 +51,13 @@ class iOSApi(recipe_api.RecipeApi):
   MAC_TOOLCHAIN_ROOT    = '.'
   XCODE_APP_PATH        = 'Xcode.app'
 
-  # CIPD package containing various static test utilities and binaries for WPR
-  # testing.  Used with WprProxySimulatorTestRunner.
+  # CIPD package containing various static test utilities and binaries for WPR testing.
+  # Used with WprProxySimulatorTestRunner.
   WPR_TOOLS_PACKAGE = 'chromium/ios/autofill/wpr-ios-tools'
   WPR_TOOLS_VERSION = 'version:1.0'
   WPR_TOOLS_ROOT = 'wpr-ios-tools'
+
+  WPR_REPLAY_DATA_ROOT = 'wpr-replay-data'
 
   DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
   UPLOAD_DASHBOARD_API_PROPERTIES = [
@@ -651,12 +653,12 @@ class iOSApi(recipe_api.RecipeApi):
 
     args.extend([
       '--config-variable', 'wpr_tools_path', (
-          self.WPR_TOOLS_ROOT if test.get('use_wpr_tools') else 'NO_PATH'),
+          self.WPR_TOOLS_ROOT if test.get('replay package name') else 'NO_PATH'),
     ])
 
     args.extend([
       '--config-variable', 'replay_path', (
-          test.get('replay_path') or 'NO_PATH'),
+          self.WPR_REPLAY_DATA_ROOT if test.get('replay package name') else 'NO_PATH'),
     ])
 
     args.extend([
@@ -860,11 +862,18 @@ class iOSApi(recipe_api.RecipeApi):
           self.MAC_TOOLCHAIN_VERSION,
       )]
 
-      if task['test'].get('use_wpr_tools'):
+      replay_package_name = task['test'].get('replay package name')
+      replay_package_version = task['test'].get('replay package version')
+      if replay_package_name and replay_package_version:
         cipd_packages.append((
             self.WPR_TOOLS_ROOT,
             self.WPR_TOOLS_PACKAGE,
             self.WPR_TOOLS_VERSION,
+        ))
+        cipd_packages.append((
+            self.WPR_REPLAY_DATA_ROOT,
+            replay_package_name,
+            replay_package_version,
         ))
 
       swarming_task = self.m.swarming.task(
