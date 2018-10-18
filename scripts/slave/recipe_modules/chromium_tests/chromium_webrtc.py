@@ -221,7 +221,7 @@ SPEC['builders']['Win10 Tester']['tests'] = [
   browser_perf_test('chromium-webrtc-rel-win10')
 ]
 SPEC['builders']['Win7 Tester']['tests'] = [
-  browser_perf_test('chromium-webrtc-rel-win7')
+  browser_perf_test('chromium-webrtc-rel-7')
 ]
 SPEC['builders']['Win8 Tester']['tests'] = [
   browser_perf_test('chromium-webrtc-rel-win8')
