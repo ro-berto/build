@@ -393,6 +393,22 @@ BUILDERS = {
         },
         'testing': {'platform': 'linux'},
       },
+      'V8 Linux - noembed': {
+        'chromium_apply_config': [
+          'default_compiler', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+        },
+        'testing': {'platform': 'linux'},
+      },
+      'V8 Linux - noembed - debug': {
+        'chromium_apply_config': [
+          'default_compiler', 'goma', 'mb'],
+        'v8_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+        },
+        'testing': {'platform': 'linux'},
+      },
 ####### Category: Linux64
       'V8 Linux64 - builder': {
         'chromium_apply_config': [
@@ -1746,6 +1762,18 @@ BUILDERS = {
             'build_config': 'Release',
             'triggers': [
               'v8_linux_embedded_builtins_rel_ng_triggered',
+            ],
+          },
+          'platform': 'linux',
+        },
+      },
+      'v8_linux_noembed_rel_ng': {
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
+        'testing': {
+          'properties': {
+            'build_config': 'Release',
+            'triggers': [
+              'v8_linux_noembed_rel_ng_triggered',
             ],
           },
           'platform': 'linux',
