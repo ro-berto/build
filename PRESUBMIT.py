@@ -21,7 +21,6 @@ def GetBlackList(input_api):
       r'.*scripts/release/.*',
       r'.*scripts/slave/recipes.py$',
       r'.*scripts/slave/recipes/.*_autogen.py$',
-      r'.*scripts/slave/recipe_modules/[^/]*/[^/]*.py$',
       r'.*scripts/gsd_generate_index/.*',
       r'.*masters/.*/templates/.*\.html$',
       r'.*masters/.*/templates/.*\.css$',

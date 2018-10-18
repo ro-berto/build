@@ -25,6 +25,8 @@ CHROMIUM_DEPS = ['base', 'build', 'ios', 'testing', 'third_party', 'tools']
 
 
 class WebRTCApi(recipe_api.RecipeApi):
+  WEBRTC_GS_BUCKET = WEBRTC_GS_BUCKET
+
   def __init__(self, **kwargs):
     super(WebRTCApi, self).__init__(**kwargs)
     self._env = {}

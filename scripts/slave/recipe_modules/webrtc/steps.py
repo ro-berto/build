@@ -15,8 +15,6 @@ sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
 from chromium_tests.steps import SwarmingGTestTest
 from chromium_tests.steps import SwarmingIsolatedScriptTest
 
-from webrtc.api import WEBRTC_GS_BUCKET
-
 PERF_CONFIG = {'a_default_rev': 'r_webrtc_git'}
 DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 # adb path relative to out dir (e.g. out/Release)
@@ -485,8 +483,9 @@ class AndroidPerfTest(PerfTest):
 
   def _prepare_test_artifacts_upload(self, api):
     gtest_results_file = api.test_utils.gtest_results(add_json_log=False)
-    self._args.extend(['--gs-test-artifacts-bucket', WEBRTC_GS_BUCKET,
-                       '--json-results-file', gtest_results_file])
+    self._args.extend(['--gs-test-artifacts-bucket',
+                       api.webrtc.WEBRTC_GS_BUCKET, '--json-results-file',
+                       gtest_results_file])
 
   def _upload_test_artifacts(self, api):
     step_result = api.step.active_result
