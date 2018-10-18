@@ -38,7 +38,8 @@ PROPERTIES = {
 
 def RunSteps(api, platforms, show_isolated_out_in_collect_step,
              show_shards_in_collect_step, gtest_task, isolated_script_task,
-             merge, trigger_script, named_caches, service_account, wait_for_tasks):
+             merge, trigger_script, named_caches, service_account,
+             wait_for_tasks):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 

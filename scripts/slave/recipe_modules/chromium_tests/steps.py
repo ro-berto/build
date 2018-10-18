@@ -246,7 +246,7 @@ class Test(object):
 
     return self._test_runs[suffix]['valid']
 
-  def pass_fail_counts(self, api, suffix):
+  def pass_fail_counts(self, _, suffix):
     """Returns a dictionary of pass and fail counts for each test."""
     return self._test_runs[suffix]['pass_fail_counts']
 
@@ -857,7 +857,7 @@ class LocalGTestTest(Test):
 
     return step_result
 
-  def pass_fail_counts(self, api, suffix):
+  def pass_fail_counts(self, _, suffix):
     if self._gtest_results.get(suffix):
       # test_result exists and is not None.
       return self._gtest_results[suffix].pass_fail_counts
@@ -1826,7 +1826,7 @@ class SwarmingGTestTest(SwarmingTest):
     return (gtest_results.valid, gtest_results.failures,
             gtest_results.total_tests_ran, gtest_results.pass_fail_counts)
 
-  def pass_fail_counts(self, api, suffix):
+  def pass_fail_counts(self, _, suffix):
     if self._gtest_results.get(suffix):
       # test_result exists and is not None.
       return self._gtest_results[suffix].pass_fail_counts
@@ -1921,7 +1921,7 @@ class LocalIsolatedScriptTest(Test):
       return self._override_compile_targets
     return [self.target_name]
 
-  def pass_fail_counts(self, api, suffix):
+  def pass_fail_counts(self, _, suffix):
     if self._test_results.get(suffix):
       # test_result exists and is not None.
       return self._test_results[suffix].pass_fail_counts
@@ -2062,7 +2062,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         build_properties=api.chromium.build_properties,
         cipd_packages=self._cipd_packages, extra_args=args)
 
-  def pass_fail_counts(self, api, suffix):
+  def pass_fail_counts(self, _, suffix):
     if self._test_results.get(suffix):
       # test_result exists and is not None.
       return self._test_results[suffix].pass_fail_counts
@@ -2850,7 +2850,7 @@ class MockTest(Test):
     api.step('failures %s%s' % (self.name, self._mock_suffix(suffix)), None)
     return self._failures
 
-  def pass_fail_counts(self, api, suffix):
+  def pass_fail_counts(self, _, suffix):
     return {}
 
   def compile_targets(self, api): # pragma: no cover

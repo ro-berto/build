@@ -51,8 +51,8 @@ class iOSApi(recipe_api.RecipeApi):
   MAC_TOOLCHAIN_ROOT    = '.'
   XCODE_APP_PATH        = 'Xcode.app'
 
-  # CIPD package containing various static test utilities and binaries for WPR testing.
-  # Used with WprProxySimulatorTestRunner
+  # CIPD package containing various static test utilities and binaries for WPR
+  # testing.  Used with WprProxySimulatorTestRunner.
   WPR_TOOLS_PACKAGE = 'chromium/ios/autofill/wpr-ios-tools'
   WPR_TOOLS_VERSION = 'version:1.0'
   WPR_TOOLS_ROOT = 'wpr-ios-tools'
