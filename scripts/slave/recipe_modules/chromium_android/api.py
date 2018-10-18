@@ -31,7 +31,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def get_config_defaults(self):
     return {
-      'REVISION': self.m.properties.get('revision', ''),
+      'REVISION': self.m.buildbucket.gitiles_commit.id,
       'CHECKOUT_PATH': self.m.path['checkout'],
     }
 
@@ -226,7 +226,7 @@ class AndroidApi(recipe_api.RecipeApi):
         test_type=test_name,
         annotate=self.m.chromium.get_annotate_by_test_name(test_name),
         results_url='https://chromeperf.appspot.com',
-        perf_id=perf_id or self.m.properties['buildername'],
+        perf_id=perf_id or self.m.buildbucket.builder_name,
         chartjson_file=chartjson_file)
 
   def supersize_archive(self, apk_path, size_path, step_suffix=''):
@@ -581,7 +581,7 @@ class AndroidApi(recipe_api.RecipeApi):
         'summary': ('Device Offline on %s %s' %
           (self.m.properties['mastername'], self.m.properties['bot_id'])),
         'comment': ('Buildbot: %s\n(Please do not change any labels)' %
-          self.m.properties['buildername']),
+          self.m.buildbucket.builder_name),
         'labels': 'Restrict-View-Google,OS-Android,Infra,Infra-Labs',
       }
       link = ('https://code.google.com/p/chromium/issues/entry?%s' %
@@ -769,8 +769,8 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def _upload_trace_results(self, trace_json_path, test_name):
     dest = '{builder}/trace_{buildnumber}_{name}.html'.format(
-        builder=self.m.properties['buildername'],
-        buildnumber=self.m.properties['buildnumber'],
+        builder=self.m.buildbucket.builder_name,
+        buildnumber=self.m.buildbucket.build.number,
         name=test_name)
 
     test_data = lambda: self.m.raw_io.test_api.output_text('test data',
@@ -878,7 +878,7 @@ class AndroidApi(recipe_api.RecipeApi):
               test_type=test_type,
               annotate=annotate,
               results_url='https://chromeperf.appspot.com',
-              perf_id=self.m.properties['buildername'],
+              perf_id=self.m.buildbucket.builder_name,
               chartjson_file=True)
       except self.m.step.StepFailure as f:
         # Only warn for failures on reference builds.
@@ -897,10 +897,10 @@ class AndroidApi(recipe_api.RecipeApi):
 
       if archive:
         dest = '{builder}/{test}/{timestamp}_build_{buildnumber}.zip'.format(
-          builder=self.m.properties['buildername'],
+          builder=self.m.buildbucket.builder_name,
           test=test_name,
           timestamp=_TimestampToIsoFormat(test_end_time),
-          buildnumber=self.m.properties['buildnumber'])
+          buildnumber=self.m.buildbucket.build.number)
         self.m.gsutil.upload(
           name='upload %s output dir archive' % test_name,
           source=archive,
@@ -1038,8 +1038,8 @@ class AndroidApi(recipe_api.RecipeApi):
   def create_result_details(self, step_name, json_results_file):
     presentation_args = ['--json-file', json_results_file,
                          '--test-name', step_name,
-                         '--builder-name', self.m.properties['buildername'],
-                         '--build-number', self.m.properties['buildnumber'],
+                         '--builder-name', self.m.buildbucket.builder_name,
+                         '--build-number', self.m.buildbucket.build.number,
                          '--cs-base-url', self.c.cs_base_url,
                          '--bucket', self.c.results_bucket]
     try:
@@ -1080,8 +1080,8 @@ class AndroidApi(recipe_api.RecipeApi):
       self.m.gsutil.upload(
           log_path,
           gs_bucket,
-          'logcat_dumps/%s/%s' % (self.m.properties['buildername'],
-                                  self.m.properties['buildnumber']),
+          'logcat_dumps/%s/%s' % (self.m.buildbucket.builder_name,
+                                  self.m.buildbucket.build.number),
           args=args,
           link_name='logcat dump',
           parallel_upload=True)
@@ -1466,7 +1466,7 @@ class AndroidApi(recipe_api.RecipeApi):
                            directory=self.coverage_dir.join('coverage_html'),
                            output=output_zip)
       gs_dest = 'java/%s/%s/' % (
-          self.m.properties['buildername'], self.m.properties['revision'])
+          self.m.buildbucket.builder_name, self.m.buildbucket.gitiles_commit.id)
       self.m.gsutil.upload(
           source=output_zip,
           bucket='chrome-code-coverage',
@@ -1537,9 +1537,9 @@ class AndroidApi(recipe_api.RecipeApi):
       step_result.presentation.properties['moreInfoURL'] = self.m.url.join(
           self.m.properties['buildbotURL'],
           'builders',
-          self.m.properties['buildername'],
+          self.m.buildbucket.builder_name,
           'builds',
-          str(self.m.properties['buildnumber']) or '0',
+          str(self.m.buildbucket.build.number) or '0',
           'steps',
           'Incremental%20coverage%20report',
           'logs',

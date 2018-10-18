@@ -394,7 +394,7 @@ class ArchiveApi(recipe_api.RecipeApi):
                  'full-build-' + self.legacy_platform_name() +
                  '.zip')
     else:
-      result += '/' + self.m.properties['buildername']
+      result += '/' + self.m.buildbucket.builder_name
     return result
 
   def legacy_upload_url(self, gs_bucket_name, extra_url_components=None):

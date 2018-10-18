@@ -773,7 +773,7 @@
       "----",
       "cp",
       "[START_DIR]/src/out/Debug/full_log",
-      "gs://chromium-android/logcat_dumps/Lollipop Phone Tester/571"
+      "gs://chromium-android/logcat_dumps/Lollipop Phone Tester/0"
     ],
     "env": {
       "CHROME_HEADLESS": "1",
@@ -782,7 +782,7 @@
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Lollipop Phone Tester/571@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/Lollipop Phone Tester/0@@@"
     ]
   },
   {

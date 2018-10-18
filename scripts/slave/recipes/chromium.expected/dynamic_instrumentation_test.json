@@ -983,7 +983,7 @@
       "--builder-name",
       "android-kitkat-arm-rel",
       "--build-number",
-      "571",
+      "0",
       "--cs-base-url",
       "http://cs.chromium.org",
       "--bucket",
@@ -1094,7 +1094,7 @@
       "----",
       "cp",
       "[START_DIR]/src/out/Release/full_log",
-      "gs://chromium-android/logcat_dumps/android-kitkat-arm-rel/571"
+      "gs://chromium-android/logcat_dumps/android-kitkat-arm-rel/0"
     ],
     "env": {
       "CHROME_HEADLESS": "1",
@@ -1103,7 +1103,7 @@
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android-kitkat-arm-rel/571@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-android/logcat_dumps/android-kitkat-arm-rel/0@@@"
     ]
   },
   {

@@ -508,7 +508,7 @@
       "--builder-name",
       "Android32 Tests (L Nexus4)",
       "--build-number",
-      "1337",
+      "0",
       "--cs-base-url",
       "http://cs.chromium.org",
       "--bucket",
@@ -617,13 +617,13 @@
       "----",
       "cp",
       "[CACHE]/builder/src/out/Release/full_log",
-      "gs://chromium-webrtc/logcat_dumps/Android32 Tests (L Nexus4)/1337"
+      "gs://chromium-webrtc/logcat_dumps/Android32 Tests (L Nexus4)/0"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-webrtc/logcat_dumps/Android32 Tests (L Nexus4)/1337@@@"
+      "@@@STEP_LINK@logcat dump@https://storage.cloud.google.com/chromium-webrtc/logcat_dumps/Android32 Tests (L Nexus4)/0@@@"
     ]
   },
   {
