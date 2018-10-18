@@ -196,6 +196,20 @@ class DartApi(recipe_api.RecipeApi):
       tasks.append(task)
     return tasks
 
+  def report_new_results(self):
+    """Boolean that controls whether to report status of
+       deflaked tests measured against
+       latest or approved results as buildbot status,
+       instead of the status-file based exit code of test.py."""
+    return 'new_workflow_enabled' in self.m.properties
+
+  def run_new_steps(self):
+    """Boolean that controls whther to run the new
+       workflow that uploads test results to cloud
+       storage and deflakes changed tests."""
+    return (self.report_new_results or
+        not self.m.buildbucket.builder_name.endswith('-try'))
+
   def collect_all(self, deferred_tasks):
     """Collects the results of a sharded test run."""
     with self.m.step.defer_results():
@@ -227,9 +241,7 @@ class DartApi(recipe_api.RecipeApi):
                       'accumulated_results'] = [results]
                 if filename == 'run.json':
                   run = contents
-          run_new_workflow = not self.m.buildbucket.builder_name.endswith(
-                              ('-try', '-stable', '-dev'))
-          if run_new_workflow:
+          if self.run_new_steps():
             results_path = self.m.path['checkout'].join('logs', 'results.json')
             self.m.file.write_text("Write results file", results_path, results)
             run_path = self.m.path['checkout'].join('logs', 'run.json')
@@ -242,8 +254,8 @@ class DartApi(recipe_api.RecipeApi):
 
   def download_results(self,  name):
     builder = self.m.buildbucket.builder_name
-    if builder.endswith(('-try', '-stable', '-dev')):
-      return # pragma: no cover
+    if builder.endswith('-try'):
+      builder = builder[:-4]
     results_path = self.m.path['checkout'].join('LATEST')
     self.m.file.ensure_directory('ensure LATEST dir', results_path)
     for filename in ['results.json', 'flaky.json', 'approved_results.json']:
@@ -292,6 +304,10 @@ class DartApi(recipe_api.RecipeApi):
                  'deflaking_logs/results.json'], ok_ret='any')
 
   def upload_results(self,  name):
+    # Try builders do not upload results.
+    builder = self.m.buildbucket.builder_name
+    if builder.endswith('try'):
+      return # pragma: no cover
     commit_hash = self.m.buildbucket.gitiles_commit.id
     commit_time = self.m.git.get_timestamp(test_data='1234567')
     self.m.step('Add commit hash to run.json',
@@ -301,7 +317,6 @@ class DartApi(recipe_api.RecipeApi):
                  commit_time,
                  commit_hash])
 
-    builder = self.m.buildbucket.builder_name
     build_number = self.m.buildbucket.build.number
     self.m.file.move('Rename deflaking_results',
       self.m.path['checkout'].join('deflaking_logs', 'results.json'),
@@ -333,14 +348,6 @@ class DartApi(recipe_api.RecipeApi):
         ok_ret='all')
 
   def present_results(self, step_name):
-    compare_args = [
-        self.m.path['checkout'].join('LATEST', 'results.json'),
-        self.m.path['checkout'].join('logs', 'results.json')]
-    if 'new_workflow_enabled' in self.m.properties:
-      compare_args = [
-          '--judgement',
-          self.m.path['checkout'].join('LATEST', 'approved_results.json'),
-          self.m.path['checkout'].join('logs', 'results.json')]
     args = [self.dart_executable(),
             'tools/bots/compare_results.dart',
             '--flakiness-data',
@@ -351,7 +358,15 @@ class DartApi(recipe_api.RecipeApi):
             '--flaky',
             '--failing',
             '--passing']
-    args.extend(compare_args)
+    previous_results = 'results.json'
+    if self.report_new_results():
+      args.append('--judgement')
+      previous_results = 'approved_results.json'
+    builder_name = self.m.buildbucket.builder_name
+    if builder_name.endswith(('-try', '-stable', '-dev')):
+      previous_results = 'results.json'
+    args.append(self.m.path['checkout'].join('LATEST', previous_results))
+    args.append(self.m.path['checkout'].join('logs', 'results.json'))
     self.m.step('deflaked status of %s' % step_name, args)
 
   def read_result_file(self,  name, log_name, test_data=''):
@@ -689,24 +704,18 @@ class DartApi(recipe_api.RecipeApi):
       args = args + step['tests']
 
     with self.m.step.defer_results():
-      ignore_failure = 'new_workflow_enabled' in self.m.properties
+      ignore_failure = self.report_new_results()
       self.run_script(step_name, 'tools/test.py', args, isolate_hash, shards,
                       local_shard, environment, tasks,
                       cipd_packages=cipd_packages,
                       ignore_failure=ignore_failure)
       if shards == 0 or local_shard:
         self.read_result_file('read results of %s' % step_name, 'result.log')
-
-      # The new deflaking workflow is being developed and currently runs on the
-      # local builder, not shards, and only on the master CI, not CQ.
-      run_new_workflow = ((shards == 0 or local_shard) and
-                          not self.m.buildbucket.builder_name.endswith(
-                              ('-try', '-stable', '-dev')))
-      if run_new_workflow:
-        self.download_results(step_name)
-        self.deflake_results(step_name, args, environment)
-        self.upload_results(step_name)
-        self.present_results(step_name)
+        if self.run_new_steps():
+          self.download_results(step_name)
+          self.deflake_results(step_name, args, environment)
+          self.upload_results(step_name)
+          self.present_results(step_name)
 
   def run_script(self, step_name, script, args, isolate_hash, shards,
                  local_shard, environment, tasks,
@@ -725,8 +734,7 @@ class DartApi(recipe_api.RecipeApi):
       * tasks ([task]) - placeholder to hold swarming tasks
       * cipd_packages ([tuple]) - list of 3-tuples specifying a cipd package
         to be downloaded
-      * ok_ret(str or [int]) - optional accepted exit codes passed to
-        non-sharded script runs.
+      * ignore_failure - Do not turn step red if this script fails.
     """
     if not cipd_packages: # pragma: no cover
       cipd_packages = []

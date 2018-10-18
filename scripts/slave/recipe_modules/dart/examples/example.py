@@ -169,7 +169,8 @@ def GenTests(api):
       shards='2', shard_timeout='600', branch="refs/head/master",
       buildername='dart2js-linux-release-chrome-try',
       buildnumber='1357',
-      revision='3456abcd78ef') +
+      revision='3456abcd78ef',
+      new_workflow_enabled=True) +
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')))
 
