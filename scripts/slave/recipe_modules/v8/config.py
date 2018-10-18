@@ -29,19 +29,6 @@ def v8(_):
 def gc_stress(c):
   c.testing.test_args.append('--gc-stress')
 
-@config_ctx()
-def isolates(c):
-  c.testing.test_args.append('--isolates')
-
-@config_ctx()
-def no_harness(c):
-  c.testing.test_args.append('--no-harness')
-
-
-@config_ctx()
-def stress_incremental_marking(c):
-  c.testing.test_args.append('--extra-flags=--stress-incremental-marking')
-
 
 @config_ctx()
 def verify_heap_skip_remembered_set(c):

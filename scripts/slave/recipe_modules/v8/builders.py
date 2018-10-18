@@ -462,10 +462,6 @@ BUILDERS = {
         },
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux64 - custom snapshot - debug': {
-        'v8_apply_config': ['no_harness'],
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux64 - verify csa': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
@@ -616,22 +612,13 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
 ####### Category: Misc
-      'V8 Linux - gc stress': {
-        'v8_apply_config': ['gc_stress'],
-        'testing': {'platform': 'linux'},
-      },
       'V8 Mac64 GC Stress': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
-        'v8_apply_config': ['gc_stress'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
         'testing': {'platform': 'mac'},
-      },
-      'V8 Linux64 GC Stress - custom snapshot': {
-        'v8_apply_config': ['gc_stress', 'no_harness'],
-        'testing': {'platform': 'linux'},
       },
       'V8 Linux gcc 4.8': {
         'chromium_apply_config': ['gcc', 'goma', 'mb'],
@@ -664,14 +651,6 @@ BUILDERS = {
           'V8 Linux64 TSAN - concurrent marking',
           'V8 Linux64 TSAN - isolates',
         ],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux64 TSAN - concurrent marking': {
-        'v8_apply_config': ['stress_incremental_marking'],
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux64 TSAN - isolates': {
-        'v8_apply_config': ['isolates'],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - MSAN': {
