@@ -227,7 +227,6 @@ def main(argv):
       'master.chromium.webrtc': 'ChromiumWebRTC',
       'master.chromiumos': 'ChromiumOS',
       'master.client.art': 'ART',
-      'master.client.crashpad': 'ClientCrashpad',
       'master.client.dart': 'Dart',
       'master.client.flutter': 'ClientFlutter',
       'master.client.nacl': 'NativeClient',
