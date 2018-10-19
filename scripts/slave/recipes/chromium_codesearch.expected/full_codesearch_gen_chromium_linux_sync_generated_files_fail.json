@@ -693,7 +693,6 @@
   {
     "cmd": [
       "git",
-      "retry",
       "fetch",
       "origin",
       "master",
@@ -804,7 +803,6 @@
   {
     "cmd": [
       "git",
-      "retry",
       "fetch",
       "origin",
       "master",

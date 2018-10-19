@@ -702,7 +702,6 @@
   {
     "cmd": [
       "git",
-      "retry",
       "fetch",
       "origin",
       "win",

@@ -27,7 +27,6 @@
   {
     "cmd": [
       "git",
-      "retry",
       "fetch",
       "origin",
       "release",
@@ -122,7 +121,6 @@
   {
     "cmd": [
       "git",
-      "retry",
       "fetch",
       "origin",
       "master",
