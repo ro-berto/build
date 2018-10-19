@@ -123,13 +123,13 @@ def TestFlutter(api, start_dir, just_built_dart_sdk, just_built_gen):
 
     try:
       api.file.remove('remove downloaded cached dart-sdk', dart_sdk) # in case symlink was left from previous run
-    except api.file.Error: # pragma: no cover
-      pass 
+    except Exception: # pragma: no cover
+      pass
 
     try:
       api.file.rmtree('remove downloaded cached dart-sdk', dart_sdk)
-    except api.file.Error: # pragma: no cover
-      pass 
+    except Exception: # pragma: no cover
+      pass
 
     api.file.remove('remove downloaded frontend_server snapshot', frontend_server)
     api.file.symlink('make cached dart-sdk point to just built dart sdk', just_built_dart_sdk, dart_sdk)
