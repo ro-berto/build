@@ -382,8 +382,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
         'scripts', 'slave', 'chromium', 'archive_layout_test_retry_summary.py')
     args = [
         '--retry-summary-json', self.m.json.input(retry_summary),
-        '--build-number', self.m.properties['buildnumber'],
-        '--builder-name', self.m.properties['buildername'],
+        '--build-number', self.m.buildbucket.build.number,
+        '--builder-name', self.m.buildbucket.builder_name,
         '--gs-bucket', 'gs://chromium-layout-test-archives',
         '--dest-filename', dest_filename
     ]

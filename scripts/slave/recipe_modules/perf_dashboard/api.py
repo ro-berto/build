@@ -85,6 +85,28 @@ class PerfDashboardApi(recipe_api.RecipeApi):
                      '%s/api/isolate' % _PINPOINT_BASE_URL,
                      data, halt_on_failure, **kwargs)
 
+
+  def get_change_info(self, commits):
+    change = {
+        'commits': commits,
+    }
+
+    deps_revision_overrides = self.m.properties.get(
+        'deps_revision_overrides')
+    if deps_revision_overrides:
+      change['commits'] += list(
+          {'repository': repository, 'git_hash': git_hash}
+          for repository, git_hash in deps_revision_overrides.iteritems())
+
+    if self.m.tryserver.is_tryserver:
+      change['patch'] = {
+          'server': self.m.tryserver.gerrit_change.host,
+          'change': self.m.tryserver.gerrit_change.change,
+          'revision': self.m.tryserver.gerrit_change.patchset,
+      }
+
+    return change
+
   def post(self, name, url, data, halt_on_failure, debug_info=None, **kwargs):
     """Send a POST request to a URL with a payload.
 

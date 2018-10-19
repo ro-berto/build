@@ -503,9 +503,9 @@ class ExperimentalTest(TestWrapper):
     # experimental builders, albeit with different experiment keys.
 
     criteria = [
-      api.properties.get('buildername', ''),
-      api.properties.get('patch_issue') or api.properties.get(
-          'buildnumber') or '0',
+      api.buildbucket.builder_name,
+      (api.tryserver.gerrit_change and api.tryserver.gerrit_change.change) or
+        api.buildbucket.build.number or '0',
       self.name,
     ]
 
@@ -1459,8 +1459,8 @@ class LayoutTestResultsHandler(JSONResultsHandler):
     # LayoutTest's special archive and upload results
     results_dir = api.path['start_dir'].join('layout-test-results')
 
-    buildername = api.properties['buildername']
-    buildnumber = api.properties['buildnumber']
+    buildername = api.buildbucket.builder_name
+    buildnumber = api.buildbucket.build.number
 
     archive_layout_test_results = api.chromium.package_repo_resource(
         'scripts', 'slave', 'chromium', 'archive_layout_test_results.py')
@@ -2552,8 +2552,8 @@ class BlinkTest(Test):
         '--build-dir', api.chromium.c.build_dir,
         '--json-test-results', api.test_utils.test_results(add_json_log=False),
         '--master-name', api.properties['mastername'],
-        '--build-number', str(api.properties['buildnumber']),
-        '--builder-name', api.properties['buildername'],
+        '--build-number', str(api.buildbucket.build.number),
+        '--builder-name', api.buildbucket.builder_name,
         '--step-name', step_name,
         '--no-show-results',
         '--clobber-old-results',  # Clobber test results before each run.
@@ -2718,7 +2718,7 @@ class FindAnnotatedTest(Test):
   def run(self, api, suffix):
     with api.tempfile.temp_dir('annotated_tests_json') as temp_output_dir:
       timestamp_string = datetime.datetime.utcnow().strftime('%Y%m%dT%H%M%S')
-      if api.properties.get('buildername') is not None:
+      if api.buildbucket.builder_name:
         timestamp_string = api.properties.get('current_time', timestamp_string)
 
       args = [

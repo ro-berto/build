@@ -40,8 +40,8 @@ class TestResultsApi(recipe_api.RecipeApi):
           '--input-json', results_file,
           '--master-name', self.m.properties['mastername'],
           '--builder-name', '%s%s' % (
-              self.m.properties['buildername'], builder_name_suffix),
-          '--build-number', self.m.properties['buildnumber'],
+              self.m.buildbucket.builder_name, builder_name_suffix),
+          '--build-number', self.m.buildbucket.build.number,
           '--test-type', test_type,
           '--chrome-revision', chrome_revision
       ]

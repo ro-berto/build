@@ -345,7 +345,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/mac10_12_blink_rel/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"mac10.12_blink_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.blink\", \"slavename\": \"test_bot\", \"target_platform\": \"mac\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"mac10.12_blink_rel\", \"buildnumber\": 0, \"mastername\": \"tryserver.blink\", \"slavename\": \"test_bot\", \"target_platform\": \"mac\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"

@@ -172,9 +172,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # webrtc, or v8, the custom deps revision of this component must be
       # dynamically set to either:
       # (1) the revision of the builder if this is a tester,
-      # (2) 'revision' from the waterfall, or
-      # (3) 'HEAD' for forced builds with unspecified 'revision'.
-      component_rev = self.m.properties.get('revision') or 'HEAD'
+      # (2) gitiles commit id from the waterfall, or
+      # (3) 'HEAD' for forced builds with unspecified gitiles commit.
+      component_rev = self.m.buildbucket.gitiles_commit.id or 'HEAD'
 
       if bot_type == 'tester':
         component_rev = self.m.properties.get(
@@ -435,32 +435,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             swarm_hashes_property_name=swarm_hashes_property_name)
 
         if bot_config.get('perf_isolate_lookup'):
-          change = {
-              'commits': [{
+          self.m.perf_dashboard.upload_isolate(
+              self.m.buildbucket.builder_name,
+              self.m.perf_dashboard.get_change_info([{
                   'repository': 'chromium',
                   'git_hash':
                       update_step.presentation.properties['got_revision'],
-              }]
-          }
-
-          # FIXME: Move this property into a recipe module.
-          deps_revision_overrides = self.m.properties.get(
-              'deps_revision_overrides')
-          if deps_revision_overrides:
-            change['commits'] += (
-                {'repository': repository, 'git_hash': git_hash}
-                for repository, git_hash in deps_revision_overrides.iteritems())
-
-          if self.m.tryserver.is_tryserver:
-            change['patch'] = {
-                'server': self.m.properties['patch_gerrit_url'],
-                'change': self.m.properties['patch_issue'],
-                'revision': self.m.properties['patch_set'],
-            }
-
-          self.m.perf_dashboard.upload_isolate(
-              self.m.properties['buildername'],
-              change,
+              }]),
               self.m.isolate.isolate_server,
               self.m.isolate.isolated_tests)
 
@@ -628,7 +609,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     use_goma_module=False
     if self.m.chromium.c.project_generator.tool == 'mb':
       mb_mastername = mb_mastername or self.m.properties['mastername']
-      mb_buildername = mb_buildername or self.m.properties['buildername']
+      mb_buildername = mb_buildername or self.m.buildbucket.builder_name
       use_goma = self._use_goma()
       self.m.chromium.mb_gen(mb_mastername, mb_buildername,
                              mb_config_path=mb_config_path,
@@ -918,8 +899,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if should_deapply_patch:
         deferred_retry_results = []
         # Deapply the patch. Then rerun failing tests.
-        self._deapply_patch_build_isolate(failing_tests,
-                                          bot_update_step)
+        self._deapply_patch_build_isolate(failing_tests, bot_update_step)
         self.m.test_utils.run_tests(self.m, failing_tests, 'without patch')
 
         # Summarize results.
@@ -999,11 +979,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     if not bot_config:
       mastername = self.m.properties.get('mastername')
-      buildername = self.m.properties.get('buildername')
+      buildername = self.m.buildbucket.builder_name
       master_dict = self.builders.get(mastername, {})
       bot_config = master_dict.get('builders', {}).get(buildername, {})
 
-    for name in ('buildername', 'bot_id', 'buildnumber', 'mastername'):
+    properties['buildername'] = self.m.buildbucket.builder_name
+    properties['buildnumber'] = self.m.buildbucket.build.number
+    for name in ('bot_id', 'mastername'):
       properties[name] = self.m.properties[name]
     properties['slavename'] = properties['bot_id']
 
@@ -1047,7 +1029,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def main_waterfall_steps(self, mb_config_path=None, builders=None):
     mastername = self.m.properties.get('mastername')
-    buildername = self.m.properties.get('buildername')
+    buildername = self.m.buildbucket.builder_name
     bot_config = self.create_bot_config_object(
         [self.create_bot_id(mastername, buildername)], builders=builders)
 
@@ -1217,7 +1199,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # }
     # See ChromiumTestsApi for more details.
     mastername = self.m.properties.get('mastername')
-    buildername = self.m.properties.get('buildername')
+    buildername = self.m.buildbucket.builder_name
     trybot_config = (trybots or self.trybots).get(mastername, {}).get(
         'builders', {}).get(buildername)
 
@@ -1330,7 +1312,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       bot_type = bot_config.get_bot_type(bot_id)
       if bot_type == 'builder_tester':
         bot_type = 'builder/tester'
-      return ('running %s %r on master %r'
+      return ('running %s \'%s\' on master %r'
               % (bot_type, bot_id.buildername, bot_id.mastername))
 
 

@@ -249,7 +249,7 @@
       "--paths",
       "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux Tests\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux Tests\", \"buildnumber\": 0, \"mastername\": \"chromium.linux\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -420,7 +420,7 @@
       "/path/to/tmp/json",
       "--builder-name=Linux Tests",
       "--slave-name=test_bot",
-      "--build-number=571",
+      "--build-number=0",
       "base_unittests"
     ],
     "env": {
@@ -441,7 +441,7 @@
       "--builder-name",
       "Linux Tests",
       "--build-number",
-      "571",
+      "0",
       "--test-type",
       "base_unittests",
       "--chrome-revision",
@@ -481,7 +481,7 @@
       "/path/to/tmp/json",
       "--builder-name=Linux Tests",
       "--slave-name=test_bot",
-      "--build-number=571",
+      "--build-number=0",
       "browser_tests",
       "--test-launcher-shard-index=0",
       "--test-launcher-total-shards=2"
@@ -504,7 +504,7 @@
       "--builder-name",
       "Linux Tests",
       "--build-number",
-      "571",
+      "0",
       "--test-type",
       "browser_tests",
       "--chrome-revision",
@@ -544,7 +544,7 @@
       "/path/to/tmp/json",
       "--builder-name=Linux Tests",
       "--slave-name=test_bot",
-      "--build-number=571",
+      "--build-number=0",
       "content_unittests"
     ],
     "env": {
@@ -565,7 +565,7 @@
       "--builder-name",
       "Linux Tests",
       "--build-number",
-      "571",
+      "0",
       "--test-type",
       "renamed_content_unittests",
       "--chrome-revision",

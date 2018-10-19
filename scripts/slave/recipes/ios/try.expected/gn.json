@@ -9,7 +9,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/ios_simulator_gn"
+      "[BUILDER_CACHE]/linux"
     ],
     "infra_step": true,
     "name": "makedirs checkout path"
@@ -33,7 +33,7 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn",
+    "cwd": "[BUILDER_CACHE]/linux",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -76,7 +76,7 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn",
+    "cwd": "[BUILDER_CACHE]/linux",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -211,7 +211,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/ios/build/bots/chromium.mac/ios-simulator-gn.json",
+      "[BUILDER_CACHE]/linux/src/ios/build/bots/chromium.mac/ios-simulator-gn.json",
       "/path/to/tmp/json"
     ],
     "name": "read build config",
@@ -351,7 +351,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
@@ -367,18 +367,18 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/linux/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "chromium.mac",
       "-b",
       "ios-simulator-gn",
       "--config-file",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "",
@@ -395,19 +395,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/linux/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.mac",
       "-b",
       "ios-simulator-gn",
       "--config-file",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "//out/Debug-iphonesimulator"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "",
@@ -425,7 +425,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "infra_step": true,
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
@@ -439,7 +439,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/testing/buildbot/trybot_analyze_config.json",
+      "[BUILDER_CACHE]/linux/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
     "name": "read filter exclusion spec",
@@ -465,7 +465,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/linux/src/tools/mb/mb.py",
       "analyze",
       "-m",
       "chromium.mac",
@@ -591,12 +591,12 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
+      "[BUILDER_CACHE]/linux/src/out/Debug-iphonesimulator",
       "-j",
       "50",
       "fake tests"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
+    "cwd": "[BUILDER_CACHE]/linux/src/out/Debug-iphonesimulator",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
@@ -701,9 +701,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
+      "[BUILDER_CACHE]/linux/src/out/Debug-iphonesimulator",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-C\", \"[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator\", \"-j\", \"50\", \"fake tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-C\", \"[BUILDER_CACHE]/linux/src/out/Debug-iphonesimulator\", \"-j\", \"50\", \"fake tests\"]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -759,17 +759,17 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "name": "bootstrap swarming"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/linux/src/tools/swarming_client/swarming.py",
       "--version"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "name": "bootstrap swarming.swarming.py --version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -779,7 +779,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "name": "isolate"
   },
   {
@@ -791,9 +791,9 @@
       "/path/to/tmp/json",
       "copy",
       "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', 'src/ios/build/bots/scripts/', 'src/out/Debug-iphonesimulator/iossim'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--args-json', '{\"test_args\": <(test_args),         \"xctest\": <(xctest),         \"test_cases\": <(test_cases),         \"restart\": <(restart)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--shards', '<(shards)', '--<(xcode_arg_name)', '<(xcode_version)', '--mac-toolchain-cmd', './mac_toolchain', '--xcode-path', 'Xcode.app', '--wpr-tools-path', '<(wpr_tools_path)', '--replay-path', '<(replay_path)', '--iossim', 'src/out/Debug-iphonesimulator/iossim', '--platform', '<(platform)', '--version', '<(version)']}}]]}",
-      "[BUILDER_CACHE]/ios_simulator_gn/template.isolate"
+      "[BUILDER_CACHE]/linux/template.isolate"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "infra_step": true,
     "name": "isolate.generate template.isolate",
     "~followup_annotations": [
@@ -854,10 +854,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests.app\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[BUILDER_CACHE]/ios_simulator_gn/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests.app\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_arg_name\", \n    \"xcode-build-version\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"9c40b\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"8.1\"\n  ], \n  \"dir\": \"[BUILDER_CACHE]/ios_simulator_gn\", \n  \"version\": 1\n}",
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests.app\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[BUILDER_CACHE]/linux/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake tests.app\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_arg_name\", \n    \"xcode-build-version\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"9c40b\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"8.1\"\n  ], \n  \"dir\": \"[BUILDER_CACHE]/linux\", \n  \"version\": 1\n}",
       "[TMP_BASE]/isolate_tmp_1/0.isolated.gen.json"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "infra_step": true,
     "name": "isolate.generate 0.isolated.gen.json",
     "~followup_annotations": [
@@ -887,7 +887,7 @@
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"xctest\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"false\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--isolate\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[BUILDER_CACHE]/ios_simulator_gn/template.isolate\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[BUILDER_CACHE]/linux/template.isolate\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--isolated\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--path-variable\", @@@",
@@ -912,7 +912,7 @@
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"version\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"8.1\"@@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@  ], @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"dir\": \"[BUILDER_CACHE]/ios_simulator_gn\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"dir\": \"[BUILDER_CACHE]/linux\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@  \"version\": 1@@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@}@@@",
       "@@@STEP_LOG_END@0.isolated.gen.json@@@"
@@ -923,7 +923,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/swarming_client",
+      "[BUILDER_CACHE]/linux/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -934,7 +934,7 @@
       "--verbose",
       "[TMP_BASE]/isolate_tmp_1/0.isolated.gen.json"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "name": "isolate.isolate tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -947,14 +947,14 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "name": "trigger"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/linux/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1043,7 +1043,7 @@
       "--isolated",
       "[dummy hash for 0]"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "infra_step": true,
     "name": "trigger.[trigger] fake tests (fake device iOS 8.1)",
     "~followup_annotations": [
@@ -1086,7 +1086,7 @@
       "--",
       "python",
       "-u",
-      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/linux/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1155,7 +1155,7 @@
       "-u",
       "import sys; sys.exit(0)"
     ],
-    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
+    "cwd": "[BUILDER_CACHE]/linux/src",
     "name": "Tests statistics",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 5s <br/>@@@",

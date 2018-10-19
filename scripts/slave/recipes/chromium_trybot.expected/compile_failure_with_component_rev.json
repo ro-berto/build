@@ -94,7 +94,7 @@
       "--revision",
       "src@origin/lkgr",
       "--revision",
-      "src/v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "src/v8@HEAD"
     ],
     "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel",
     "env": {
@@ -113,7 +113,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": \"origin/lkgr\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": \"HEAD\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -316,7 +316,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"v8_linux_chromium_gn_rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.v8\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"v8_linux_chromium_gn_rel\", \"buildnumber\": 0, \"mastername\": \"tryserver.v8\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"

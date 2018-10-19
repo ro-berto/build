@@ -267,7 +267,7 @@
       "--paths",
       "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"Mac Builder\", \"buildnumber\": \"77457\", \"mastername\": \"chromium.mac\", \"slavename\": \"build1-a1\", \"target_platform\": \"mac\"}"
+      "{\"bot_id\": \"build1-a1\", \"buildername\": \"Mac Builder\", \"buildnumber\": 77457, \"mastername\": \"chromium.mac\", \"slavename\": \"build1-a1\", \"target_platform\": \"mac\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"

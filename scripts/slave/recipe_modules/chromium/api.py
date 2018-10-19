@@ -624,12 +624,12 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     # These properties are specified on every bot, so pass them down
     # unconditionally.
-    full_args.append('--builder-name=%s' % self.m.properties['buildername'])
+    full_args.append('--builder-name=%s' % self.m.buildbucket.builder_name)
     full_args.append('--slave-name=%s' % self.m.properties['bot_id'])
     # A couple of the recipes contain tests which don't specify a buildnumber,
     # so make this optional.
     if self.m.properties.get('buildnumber') is not None:
-      full_args.append('--build-number=%s' % self.m.properties['buildnumber'])
+      full_args.append('--build-number=%s' % self.m.buildbucket.build.number)
     if ext == '.py' or python_mode:
       full_args.append('--run-python-script')
     if point_id:

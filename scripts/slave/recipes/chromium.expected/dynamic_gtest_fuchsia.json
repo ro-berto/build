@@ -250,7 +250,7 @@
       "--paths",
       "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Fuchsia\", \"buildnumber\": 571, \"mastername\": \"chromium.fyi\", \"slavename\": \"test_bot\", \"target_platform\": \"fuchsia\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Fuchsia\", \"buildnumber\": 0, \"mastername\": \"chromium.fyi\", \"slavename\": \"test_bot\", \"target_platform\": \"fuchsia\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -674,7 +674,7 @@
       "--builder-name",
       "Fuchsia",
       "--build-number",
-      "571",
+      "0",
       "--test-type",
       "base_unittests",
       "--chrome-revision",

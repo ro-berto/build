@@ -249,7 +249,7 @@
       "--paths",
       "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux ASan Tests (sandboxed)\", \"buildnumber\": 571, \"mastername\": \"chromium.memory\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"Linux ASan Tests (sandboxed)\", \"buildnumber\": 0, \"mastername\": \"chromium.memory\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -408,7 +408,7 @@
       "/path/to/tmp/json",
       "--builder-name=Linux ASan Tests (sandboxed)",
       "--slave-name=test_bot",
-      "--build-number=571",
+      "--build-number=0",
       "--enable-asan",
       "browser_tests"
     ],
@@ -430,7 +430,7 @@
       "--builder-name",
       "Linux ASan Tests (sandboxed)",
       "--build-number",
-      "571",
+      "0",
       "--test-type",
       "browser_tests",
       "--chrome-revision",
