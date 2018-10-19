@@ -100,6 +100,27 @@ class TasksToCollectTest(unittest.TestCase):
         ['a', 'b', 'c'], ['d'], ['e', 'f']])
 
 class WaitForFinishedTaskSetTest(unittest.TestCase):
+  @mock.patch('wait_for_finished_task_set.real_main')
+  def test_main(self, real_main):
+    """Tests the real main, to make sure there aren't small syntax errors."""
+    real_main.return_value = (127, None)
+    fd, fname = tempfile.mkstemp()
+    os.close(fd)
+    try:
+      with open(fname, 'w') as f:
+        json.dump([['foo']], f)
+
+      self.assertEqual(wait_for_finished_task_set.main([
+          None,
+          '--swarming-server', 'blah',
+          '--swarming-py-path', '/path/to/swarming.py',
+          '--output-json', '/path/to/out.json',
+          '--input-json', fname,
+      ]), 127)
+    finally:
+      if os.path.exists(fname):
+        os.unlink(fname)
+
   @mock.patch('wait_for_finished_task_set.subprocess.call')
   def test_integration(self, call_mock):
     m = mock.mock_open(read_data=json.dumps({
