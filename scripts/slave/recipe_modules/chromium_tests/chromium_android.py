@@ -471,6 +471,7 @@ def stock_cronet_config(name, config='Release', **kwargs):
 
 SPEC['builders'].update([
   stock_config('android-incremental-dbg', config='Debug'),
+  stock_config('android-jumbo-rel'),
   stock_config(
       'android-kitkat-arm-rel',
       chromium_apply_config=['download_vr_test_apks'],
