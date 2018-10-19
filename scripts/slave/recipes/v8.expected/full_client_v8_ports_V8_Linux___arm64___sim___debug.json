@@ -720,7 +720,7 @@
       "--priority",
       "25",
       "--shards",
-      "4",
+      "6",
       "--task-name",
       "Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm64 - sim - debug/571",
       "--dump-json",
@@ -1016,7 +1016,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm64 - sim - debug/571\", \"tasks\": {\"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm64 - sim - debug/571:4:0\": {\"shard_index\": 0, \"task_id\": \"1130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130000\"}, \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm64 - sim - debug/571:4:1\": {\"shard_index\": 1, \"task_id\": \"1130100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130100\"}, \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm64 - sim - debug/571:4:2\": {\"shard_index\": 2, \"task_id\": \"1130200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130200\"}, \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm64 - sim - debug/571:4:3\": {\"shard_index\": 3, \"task_id\": \"1130300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130300\"}}}"
+      "{\"base_task_name\": \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm64 - sim - debug/571\", \"tasks\": {\"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm64 - sim - debug/571:6:0\": {\"shard_index\": 0, \"task_id\": \"1130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130000\"}, \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm64 - sim - debug/571:6:1\": {\"shard_index\": 1, \"task_id\": \"1130100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130100\"}, \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm64 - sim - debug/571:6:2\": {\"shard_index\": 2, \"task_id\": \"1130200\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130200\"}, \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm64 - sim - debug/571:6:3\": {\"shard_index\": 3, \"task_id\": \"1130300\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130300\"}, \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm64 - sim - debug/571:6:4\": {\"shard_index\": 4, \"task_id\": \"1130400\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130400\"}, \"Check - extra/Ubuntu-14.04/[dummy has/V8 Linux - arm64 - sim - debug/571:6:5\": {\"shard_index\": 5, \"task_id\": \"1130500\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/1130500\"}}}"
     ],
     "infra_step": true,
     "name": "Check - extra",
