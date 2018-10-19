@@ -14,6 +14,7 @@
       "[[\"10000\"], [\"110000\", \"110100\"], [\"130000\"]]",
       "--attempts",
       "0",
+      "--verbose",
       "--auth-service-account-json",
       "/creds/service_accounts/service-account-chromium-builder.json"
     ],
@@ -46,6 +47,7 @@
       "[[\"10000\"], [\"110000\", \"110100\"], [\"130000\"]]",
       "--attempts",
       "0",
+      "--verbose",
       "--auth-service-account-json",
       "/creds/service_accounts/service-account-chromium-builder.json"
     ],
