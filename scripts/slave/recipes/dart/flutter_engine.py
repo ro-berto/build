@@ -36,8 +36,8 @@ def AnalyzeDartUI(api, checkout_dir):
     api.step('analyze dart_ui', ['/bin/bash', 'flutter/ci/analyze.sh'])
 
 def TestEngine(api, checkout_dir):
-  with api.context(cwd=checkout_dir.join('flutter')):
-    api.step('test engine', ['/bin/bash', 'ci/test.sh'])
+  with api.context(cwd=checkout_dir):
+    api.step('test engine', ['/bin/bash', 'flutter/testing/run_tests.sh'])
 
 def BuildLinuxAndroidx86(api, checkout_dir):
   for x86_variant in ['x64', 'x86']:

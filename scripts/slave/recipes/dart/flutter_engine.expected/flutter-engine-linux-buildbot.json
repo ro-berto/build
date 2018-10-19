@@ -660,9 +660,9 @@
   {
     "cmd": [
       "/bin/bash",
-      "ci/test.sh"
+      "flutter/testing/run_tests.sh"
     ],
-    "cwd": "[START_DIR]/src/flutter",
+    "cwd": "[START_DIR]/src",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
