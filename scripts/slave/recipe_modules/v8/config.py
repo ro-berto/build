@@ -23,13 +23,3 @@ config_ctx = config_item_context(BaseConfig)
 @config_ctx()
 def v8(_):
   pass
-
-
-@config_ctx()
-def gc_stress(c):
-  c.testing.test_args.append('--gc-stress')
-
-
-@config_ctx()
-def verify_heap_skip_remembered_set(c):
-  c.testing.test_args.append('--extra-flags=--verify-heap-skip-remembered-set')

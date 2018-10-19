@@ -252,8 +252,6 @@ class V8Api(recipe_api.RecipeApi):
       self.m.gclient.apply_config(c)
     for c in self.bot_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
-    for c in self.bot_config.get('v8_apply_config', []):
-      self.apply_config(c)
 
     # Infer gclient variable that instructs sysroot download.
     if (self.m.chromium.c.TARGET_PLATFORM != 'android' and

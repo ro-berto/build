@@ -253,20 +253,6 @@ def with_test_args(suffix, test_args, tests, variants=None, dimensions=None):
     for t in tests
   ]
 
-def with_variant(tests, variant):
-  """Convenience wrapper. As above, but to run tests with specific variant."""
-  return with_test_args(variant, None, tests, variants=V8Variant(variant))
-
-def with_extra_variants(tests):
-  """Convenience wrapper. As above, but to run tests with the 'extra' variant
-  set.
-  """
-  return with_variant(tests, 'extra')
-
-def with_dimensions(suffix, tests, dimensions):
-  """Convenience wrapper. As above, but overriding swarming dimensions."""
-  return with_test_args(suffix, None, tests, dimensions=dimensions)
-
 
 SWARMING_FYI_TASK_ATTRS = {
   'expiration': 4 * 60 * 60,
@@ -1262,97 +1248,12 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
         'triggers_proxy': True,
       },
-      'V8 Arm': {
-        'tests': [
-          V8Testing(2),
-          Benchmarks,
-          OptimizeForSize,
-        ] + with_dimensions(
-            'ODROID',
-            [V8Testing(2), Benchmarks, OptimizeForSize],
-            {
-              'cpu': 'armv7l-32-ODROID-XU4',
-              'cores': '8',
-              'os': 'Ubuntu-16.04',
-            },
-        ),
-        'swarming_task_attrs': {
-          'hard_timeout': 90 * 60,
-          'expiration': 6 * 60 * 60,
-        },
-        'swarming_dimensions': {
-          'cpu': 'armv7l',
-          'cores': '2',
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Arm - debug': {
-        'v8_apply_config': ['verify_heap_skip_remembered_set'],
-        'tests': [
-          V8Testing(3),
-          OptimizeForSize(2),
-        ] + with_dimensions(
-            'ODROID',
-            [V8Testing(3), OptimizeForSize(2)],
-            {
-              'cpu': 'armv7l-32-ODROID-XU4',
-              'cores': '8',
-              'os': 'Ubuntu-16.04',
-            },
-        ),
-        'variants': V8Variant('default'),
-        'swarming_task_attrs': {
-          'hard_timeout': 60 * 60,
-          'expiration': 6 * 60 * 60,
-        },
-        'swarming_dimensions': {
-          'cpu': 'armv7l',
-          'cores': '2',
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Arm GC Stress': {
-        'v8_apply_config': ['gc_stress', 'verify_heap_skip_remembered_set'],
-        'tests': [D8Testing(3)] + with_dimensions(
-            'ODROID',
-            [D8Testing(3)],
-            {
-              'cpu': 'armv7l-32-ODROID-XU4',
-              'cores': '8',
-              'os': 'Ubuntu-16.04',
-            },
-        ),
-        'variants': V8Variant('default'),
-        'swarming_task_attrs': {
-          'hard_timeout': 2 * 60 * 60,
-          'expiration': 6 * 60 * 60,
-        },
-        'swarming_dimensions': {
-          'cpu': 'armv7l',
-          'cores': '2',
-        },
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux - arm - sim': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [
-          V8Testing(4),
-          Test262,
-          Mozilla,
-          MjsunitSPFrameAccess,
-        ] + with_test_args(
-            'armv8-a',
-            ['--extra-flags', '--enable-armv8'],
-            [V8Testing(4), Test262, Mozilla],
-        ) + with_test_args(
-            'novfp3',
-            ['--novfp3'],
-            [V8Testing(4), Test262, Mozilla],
-        ) + with_extra_variants([V8Testing]),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - debug': {
@@ -1360,21 +1261,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'tests': [
-          V8Testing(7),
-          Test262,
-          Mozilla,
-          MjsunitSPFrameAccess,
-        ] + with_test_args(
-            'armv8-a',
-            ['--extra-flags', '--enable-armv8'],
-            [V8Testing(7), Test262, Mozilla],
-        ) + with_test_args(
-            'novfp3',
-            ['--novfp3'],
-            [V8Testing(7), Test262, Mozilla],
-            V8Variant('default'),
-        ) + with_extra_variants([V8Testing(3)]),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - lite': {
@@ -1383,8 +1269,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'variants': V8Variant('default'),
-        'tests': [V8Testing(2)],
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm - sim - lite - debug': {
@@ -1393,8 +1277,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'variants': V8Variant('default'),
-        'tests': [V8Testing(4)],
         'testing': {'platform': 'linux'},
       },
 ####### Category: ARM64
@@ -1416,32 +1298,12 @@ BUILDERS = {
         ],
         'triggers_proxy': True,
       },
-      'V8 Android Arm64 - N5X': {
-        'tests': [
-          V8Testing(3),
-          Test262(5),
-          Mozilla,
-        ],
-        'variants': V8Variant('default'),
-        'swarming_dimensions': {
-          'device_os': 'MMB29Q',
-          'device_type': 'bullhead',
-          'os': 'Android',
-        },
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux - arm64 - sim': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [
-          V8Testing(3),
-          Test262,
-          Mozilla,
-          MjsunitSPFrameAccess,
-        ] + with_extra_variants([V8Testing]),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - debug': {
@@ -1450,27 +1312,14 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'tests': [
-          V8Testing(10),
-          Test262,
-          Mozilla,
-          MjsunitSPFrameAccess,
-        ] + with_extra_variants([V8Testing(6)]),
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - arm64 - sim - gc stress': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
-        'v8_apply_config': ['gc_stress', 'verify_heap_skip_remembered_set'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'swarming_task_attrs': {
-          'expiration': 4 * 60 * 60,
-          'hard_timeout': 2 * 60 * 60,
-          'priority': 35,
-        },
-        'tests': [D8Testing(5)],
         'testing': {'platform': 'linux'},
       },
 ####### Category: MIPS
@@ -1484,19 +1333,6 @@ BUILDERS = {
         'triggers': [
           'V8 Mips - big endian - nosnap',
         ],
-      },
-      'V8 Mips - big endian - nosnap': {
-        'tests': [V8Testing(2)],
-        'variants': V8Variant('default'),
-        'testing': {'platform': 'linux'},
-        'swarming_dimensions': {
-          'os': 'Debian-8.7',
-          'cpu': 'mips-32',
-        },
-        'swarming_task_attrs': {
-          'expiration': 5 * 60 * 60,
-          'hard_timeout': 5 * 60 * 60,
-        },
       },
       'V8 Linux - mipsel - sim - builder': {
         'chromium_apply_config': [
@@ -1520,16 +1356,6 @@ BUILDERS = {
           'V8 Linux - mips64el - sim',
         ],
       },
-      'V8 Linux - mipsel - sim': {
-        'tests': [V8Testing(4), Test262],
-        'testing': {'platform': 'linux'},
-        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
-      },
-      'V8 Linux - mips64el - sim': {
-        'tests': [V8Testing(4), Test262],
-        'testing': {'platform': 'linux'},
-        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
-      },
 ####### Category: IBM
       'V8 Linux - ppc64 - sim': {
         'chromium_apply_config': [
@@ -1537,9 +1363,7 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
-        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
       'V8 Linux - s390x - sim': {
         'chromium_apply_config': [
@@ -1547,9 +1371,7 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'tests': [V8Testing(3)],
         'testing': {'platform': 'linux'},
-        'swarming_task_attrs': SWARMING_FYI_TASK_ATTRS,
       },
     },
   },
