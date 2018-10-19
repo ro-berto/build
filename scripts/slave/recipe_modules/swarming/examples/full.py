@@ -114,7 +114,8 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
       task = api.swarming.isolated_script_task(
           'hello_world', isolated_hash,
           task_output_dir=temp_dir.join('task_output_dir'),
-          merge=merge, trigger_script=trigger_script)
+          merge=merge, trigger_script=trigger_script, env={
+              'IS_GTEST': '', 'IS_SCRIPTTEST': 'True'})
     else:
       task = api.swarming.task('hello_world', isolated_hash,
                               task_output_dir=temp_dir.join('task_output_dir'),

@@ -446,7 +446,7 @@ class SwarmingApi(recipe_api.RecipeApi):
            task_output_dir=None, extra_args=None, idempotent=None,
            cipd_packages=None, build_properties=None, merge=None,
            trigger_script=None, named_caches=None, service_account=None,
-           raw_cmd=None, env_prefixes=None):
+           raw_cmd=None, env_prefixes=None, env=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -512,6 +512,9 @@ class SwarmingApi(recipe_api.RecipeApi):
       * env_prefixes: a dict {ENVVAR: [relative, paths]} which instructs
           swarming to prepend the given relative paths to the PATH-style ENVVAR
           specified.
+      * env: a dict {ENVVAR: ENVVALUE} which instructs swarming to set the
+          environment variables before invoking the command. These are applied
+          on top of the default environment variables.
     """
     if idempotent is None:
       idempotent = self.default_idempotent
@@ -522,11 +525,15 @@ class SwarmingApi(recipe_api.RecipeApi):
       spec_name = '%s.%s:%s' % (
           builder_id.project, builder_id.bucket, builder_id.builder)
 
+    init_env = dict(self.default_env)
+    if env:
+      init_env.update(env)
+
     return SwarmingTask(
         title=title,
         isolated_hash=isolated_hash,
         dimensions=self._default_dimensions,
-        env=self._default_env,
+        env=init_env,
         priority=self.default_priority,
         shards=shards,
         spec_name=spec_name,

@@ -1111,6 +1111,7 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
 
   def gtest_swarming_delegate(spec, **kwargs):
     kwargs.update(gtest_delegate_common(spec, **kwargs))
+    kwargs['isolate_coverage_data'] = spec.get('isolate_coverage_data')
     return SwarmingGTestTest(**kwargs)
 
   def gtest_local_delegate(spec, **kwargs):
@@ -1760,7 +1761,7 @@ class SwarmingGTestTest(SwarmingTest):
                override_isolate_target=None,
                cipd_packages=None, waterfall_mastername=None,
                waterfall_buildername=None, merge=None, trigger_script=None,
-               set_up=None, tear_down=None):
+               set_up=None, tear_down=None, isolate_coverage_data=False):
     super(SwarmingGTestTest, self).__init__(
         name, dimensions, tags, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -1775,6 +1776,7 @@ class SwarmingGTestTest(SwarmingTest):
     self._gtest_results = {}
     self._merge = merge
     self._trigger_script = trigger_script
+    self._isolate_coverage_data = isolate_coverage_data
 
   @Test.test_options.setter
   def test_options(self, value):
@@ -1801,6 +1803,17 @@ class SwarmingGTestTest(SwarmingTest):
       shards = self.shards_to_retry_with(api, shards, len(tests_to_retry))
     args.extend(api.chromium_tests.swarming_extra_args)
 
+    env = None
+    if self._isolate_coverage_data:
+      # Targets built with 'use_clang_coverage' will look at this environment
+      # variable to determine where to write the profile dumps. The %Nm syntax
+      # is understood by this instrumentation, see:
+      #   https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#id4
+      env = {
+          'LLVM_PROFILE_FILE':
+              '${ISOLATED_OUTDIR}/profraw/default-%4m.profraw',
+      }
+
     return api.swarming.gtest_task(
         title=self._step_name(suffix),
         isolated_hash=isolated_hash,
@@ -1809,7 +1822,7 @@ class SwarmingGTestTest(SwarmingTest):
             add_json_log=False),
         cipd_packages=self._cipd_packages, extra_args=args,
         merge=self._merge, trigger_script=self._trigger_script,
-        build_properties=api.chromium.build_properties)
+        build_properties=api.chromium.build_properties, env=env)
 
   def validate_task_results(self, api, step_result):
     if not hasattr(step_result, 'test_utils'):

@@ -29,7 +29,9 @@ def RunSteps(api):
   test = api.chromium_tests.steps.SwarmingGTestTest(
       'base_unittests',
       override_isolate_target=api.properties.get('override_isolate_target'),
-      override_compile_targets=api.properties.get('override_compile_targets'))
+      override_compile_targets=api.properties.get('override_compile_targets'),
+      isolate_coverage_data=api.properties.get('isolate_coverage_data', False)
+  )
 
   test_options = api.chromium_tests.steps.TestOptions()
   test.test_options = test_options
@@ -128,5 +130,23 @@ def GenTests(api):
           api.swarming.canned_summary_output() +
           api.test_utils.gtest_results(None, 255)) +
       api.post_process(verify_log_fields, {'pass_fail_counts': {}}) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('isolate_coverage_data') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          isolate_coverage_data=True,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.post_process(
+          post_process.StepCommandContains, '[trigger] base_unittests', [
+              '--env',
+              'LLVM_PROFILE_FILE',
+              '${ISOLATED_OUTDIR}/profraw/default-%4m.profraw']) +
       api.post_process(post_process.DropExpectation)
   )
