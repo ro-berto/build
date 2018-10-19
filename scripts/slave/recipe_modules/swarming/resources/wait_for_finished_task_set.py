@@ -102,7 +102,8 @@ def main(argv):
 
 def real_main(tasks, attempts, swarming_py_path, swarming_server,
               auth_service_account_json):
-  _, tmpfile = tempfile.mkstemp()
+  fd, tmpfile = tempfile.mkstemp()
+  os.close(fd)
 
   try:
     while True:
@@ -146,7 +147,8 @@ def real_main(tasks, attempts, swarming_py_path, swarming_server,
       logging.info('sleeping for %d seconds' % time_to_sleep_sec)
       time.sleep(time_to_sleep_sec)
   finally:
-    os.unlink(tmpfile)
+    if os.path.exists(tmpfile):
+      os.unlink(tmpfile)
 
   return 0, {
       'sets': tasks.finished_task_sets,
