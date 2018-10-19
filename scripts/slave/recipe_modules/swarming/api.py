@@ -1153,7 +1153,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         '--output-json', self.m.json.output(),
         '--input-json', self.m.json.input(data=task_sets),
         '--attempts', attempts,
-        '--verbose',
     ]
 
     if self.service_account_json:

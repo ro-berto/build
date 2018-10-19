@@ -69,7 +69,6 @@ def main(argv):
   parser.add_argument('--swarming-server', required=True)
   parser.add_argument('--swarming-py-path', required=True)
   parser.add_argument('--auth-service-account-json')
-  parser.add_argument('--verbose', action='store_true')
   parser.add_argument('--output-json', required=True,
                       help='Where to output information about the results of '
                       'running this script. Will have two keys: \'attempts\', '
@@ -83,7 +82,6 @@ def main(argv):
   parser.add_argument('--input-json', required=True,
                       help='List of sets of tasks. Each set of tasks is assumed'
                       ' to all be shards of the same root task.')
-  logging.basicConfig(level=logging.DEBUG if options.verbose else logging.ERROR)
 
   args = parser.parse_args(argv[1:])
 
