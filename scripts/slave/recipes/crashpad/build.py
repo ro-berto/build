@@ -71,14 +71,13 @@ def RunSteps(api, buildername, config, target_os, target_cpu):
 
   @contextlib.contextmanager
   def sdk(os, arch='x64'):
-    if api.runtime.is_luci:
-      if os == 'mac':
-        with api.osx_sdk('mac'):
-          yield
-      elif os == 'win':
-        assert arch in ('x86', 'x64')
-        with api.windows_sdk(target_arch=arch):
-          yield
+    if os == 'mac':
+      with api.osx_sdk('mac'):
+        yield
+    elif os == 'win':
+      assert arch in ('x86', 'x64')
+      with api.windows_sdk(target_arch=arch):
+        yield
     else:
       yield
 
@@ -215,23 +214,17 @@ def GenTests(api):
 
   tests = [
       (test, 'mac', ''),
-      ('luci.crashpad_try_mac_rel', 'mac', ''),
-      ('luci.crashpad_try_win_dbg', 'win', ''),
       ('crashpad_try_mac_rel', 'mac', ''),
-      ('crashpad_linux_debug', 'linux', ''),
-      ('crashpad_fuchsia_x64_dbg', 'fuchsia', 'x64'),
-      ('crashpad_fuchsia_arm64_rel', 'fuchsia', 'arm64'),
+      ('crashpad_try_win_dbg', 'win', ''),
+      ('crashpad_try_linux_rel', 'linux', ''),
+      ('crashpad_fuchsia_rel', 'fuchsia', ''),
   ]
   for t, os, cpu in tests:
     test = api.test(t)
 
-    is_luci = t.startswith('luci.')
-    if is_luci:
-      t = t[len('luci.'):]
-
     yield (
       test +
-      api.runtime(is_luci=is_luci, is_experimental=False) +
+      api.runtime(is_luci=True, is_experimental=False) +
       api.properties.generic(buildername=t,
                              config='Debug' if '_dbg' in t else 'Release',
                              target_os=os,

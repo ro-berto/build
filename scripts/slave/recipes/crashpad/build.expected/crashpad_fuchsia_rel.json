@@ -17,7 +17,7 @@
       "--revision",
       "crashpad@HEAD"
     ],
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -64,8 +64,8 @@
     "cmd": [
       "[START_DIR]/buildtools/linux64/gn",
       "gen",
-      "[START_DIR]/crashpad/out/Debug",
-      "--args=target_os=\"fuchsia\" target_cpu=\"x64\" is_debug=true"
+      "[START_DIR]/crashpad/out/Release",
+      "--args=target_os=\"fuchsia\" target_cpu=\"x64\" is_debug=false"
     ],
     "cwd": "[START_DIR]/crashpad",
     "name": "generate build files"
@@ -74,7 +74,7 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
-      "[START_DIR]/crashpad/out/Debug"
+      "[START_DIR]/crashpad/out/Release"
     ],
     "name": "compile with ninja"
   },
