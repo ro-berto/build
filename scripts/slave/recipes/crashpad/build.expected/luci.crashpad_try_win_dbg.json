@@ -1,65 +1,6 @@
 [
   {
     "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/windows_sdk",
-      "-ensure-file",
-      "chrome_internal/third_party/sdk/windows uploaded:2018-06-13",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "name": "ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-uploaded:2018-06\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"chrome_internal/third_party/sdk/windows\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/windows_sdk/win_sdk/bin/SetEnv.x64.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read SetEnv.x64.json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"PATH\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"..\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"..\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"win_sdk\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"bin\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"x64\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ]@@@",
-      "@@@STEP_LOG_LINE@json.output@    ], @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"VSINSTALLDIR\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      [@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"..\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"..\\\\\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      ]@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
@@ -76,14 +17,6 @@
       "--revision",
       "crashpad@HEAD"
     ],
-    "env": {
-      "VSINSTALLDIR": "[CACHE]/windows_sdk"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/windows_sdk/win_sdk/bin/x64"
-      ]
-    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -120,20 +53,73 @@
       "runhooks"
     ],
     "cwd": "[START_DIR]/crashpad",
-    "env": {
-      "VSINSTALLDIR": "[CACHE]/windows_sdk"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/windows_sdk/win_sdk/bin/x64"
-      ]
-    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/windows_sdk",
+      "-ensure-file",
+      "chrome_internal/third_party/sdk/windows uploaded:2018-06-13",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[START_DIR]/crashpad",
+    "infra_step": true,
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-uploaded:2018-06\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"chrome_internal/third_party/sdk/windows\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CACHE]/windows_sdk/win_sdk/bin/SetEnv.x86.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[START_DIR]/crashpad",
+    "name": "read SetEnv.x86.json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"PATH\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"..\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"..\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"win_sdk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"bin\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"x64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"VSINSTALLDIR\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"..\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"..\\\\\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -155,6 +141,78 @@
   },
   {
     "cmd": [
+      "taskkill.exe",
+      "/f",
+      "/t",
+      "/im",
+      "mspdbsrv.exe"
+    ],
+    "cwd": "[START_DIR]/crashpad",
+    "name": "taskkill mspdbsrv"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/windows_sdk",
+      "-ensure-file",
+      "chrome_internal/third_party/sdk/windows uploaded:2018-06-13",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[START_DIR]/crashpad",
+    "infra_step": true,
+    "name": "ensure_installed (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-uploaded:2018-06\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"chrome_internal/third_party/sdk/windows\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CACHE]/windows_sdk/win_sdk/bin/SetEnv.x64.json",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[START_DIR]/crashpad",
+    "name": "read SetEnv.x64.json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"PATH\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"..\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"..\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"win_sdk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"bin\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"x64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"VSINSTALLDIR\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"..\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"..\\\\\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[START_DIR]/buildtools/win/gn.exe",
       "gen",
       "[START_DIR]/crashpad/out/Debug_x64",
@@ -170,6 +228,76 @@
       ]
     },
     "name": "generate build files x64"
+  },
+  {
+    "cmd": [
+      "taskkill.exe",
+      "/f",
+      "/t",
+      "/im",
+      "mspdbsrv.exe"
+    ],
+    "cwd": "[START_DIR]/crashpad",
+    "name": "taskkill mspdbsrv (2)"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/windows_sdk",
+      "-ensure-file",
+      "chrome_internal/third_party/sdk/windows uploaded:2018-06-13",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "ensure_installed (3)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-uploaded:2018-06\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"chrome_internal/third_party/sdk/windows\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CACHE]/windows_sdk/win_sdk/bin/SetEnv.x86.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read SetEnv.x86.json (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"PATH\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"..\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"..\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"win_sdk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"bin\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"x64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"VSINSTALLDIR\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"..\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"..\\\\\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -189,6 +317,75 @@
   },
   {
     "cmd": [
+      "taskkill.exe",
+      "/f",
+      "/t",
+      "/im",
+      "mspdbsrv.exe"
+    ],
+    "name": "taskkill mspdbsrv (3)"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/windows_sdk",
+      "-ensure-file",
+      "chrome_internal/third_party/sdk/windows uploaded:2018-06-13",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "ensure_installed (4)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-uploaded:2018-06\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"chrome_internal/third_party/sdk/windows\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CACHE]/windows_sdk/win_sdk/bin/SetEnv.x64.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read SetEnv.x64.json (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"env\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"PATH\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"..\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"..\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"win_sdk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"bin\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"x64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"VSINSTALLDIR\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"..\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"..\\\\\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
       "[START_DIR]/crashpad/out/Debug_x64"
@@ -205,19 +402,21 @@
   },
   {
     "cmd": [
+      "taskkill.exe",
+      "/f",
+      "/t",
+      "/im",
+      "mspdbsrv.exe"
+    ],
+    "name": "taskkill mspdbsrv (4)"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[START_DIR]/crashpad/build/run_tests.py",
       "[START_DIR]/crashpad/out/Debug_x86"
     ],
-    "env": {
-      "VSINSTALLDIR": "[CACHE]/windows_sdk"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/windows_sdk/win_sdk/bin/x64"
-      ]
-    },
     "name": "run tests",
     "timeout": 300
   },
@@ -229,13 +428,7 @@
       "[START_DIR]/crashpad/out/Debug_x64"
     ],
     "env": {
-      "CRASHPAD_TEST_32_BIT_OUTPUT": "[START_DIR]/crashpad/out/Debug_x86",
-      "VSINSTALLDIR": "[CACHE]/windows_sdk"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/windows_sdk/win_sdk/bin/x64"
-      ]
+      "CRASHPAD_TEST_32_BIT_OUTPUT": "[START_DIR]/crashpad/out/Debug_x86"
     },
     "name": "run tests (2)",
     "timeout": 300
@@ -251,14 +444,6 @@
       "[START_DIR]/crashpad/build/swarming_test_spec.pyl",
       "/path/to/tmp/"
     ],
-    "env": {
-      "VSINSTALLDIR": "[CACHE]/windows_sdk"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/windows_sdk/win_sdk/bin/x64"
-      ]
-    },
     "infra_step": true,
     "name": "read swarming_test_spec"
   },
@@ -278,25 +463,7 @@
       "os",
       "Chrome"
     ],
-    "env": {
-      "VSINSTALLDIR": "[CACHE]/windows_sdk"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[CACHE]/windows_sdk/win_sdk/bin/x64"
-      ]
-    },
     "name": "run_tests_on_x86"
-  },
-  {
-    "cmd": [
-      "taskkill.exe",
-      "/f",
-      "/t",
-      "/im",
-      "mspdbsrv.exe"
-    ],
-    "name": "taskkill mspdbsrv"
   },
   {
     "name": "$result",
