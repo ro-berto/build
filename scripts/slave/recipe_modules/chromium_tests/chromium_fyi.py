@@ -68,14 +68,6 @@ def stock_config(name, config='Release', target_bits=64, staging=True,
   return name, bot_config
 
 
-def use_clang_coverage_config(base_config):
-  """use_clang_coverage copies config and adds vars to get coverage tools."""
-  config = copy.deepcopy(base_config)
-  config.setdefault('gclient_apply_config', [])
-  config['gclient_apply_config'].append('use_clang_coverage')
-  return config
-
-
 def chromium_apply_configs(base_config, config_names):
   """chromium_apply_configs returns new config from base config with config.
 
@@ -561,8 +553,44 @@ SPEC = {
             'chromeos-amd64-generic-rel'],
         ['goma_latest_client']),
     # For building targets instrumented for code coverage.
-    'linux-code-coverage-generation': use_clang_coverage_config(
-        chromium_linux.SPEC['builders']['Linux Builder']),
+    'linux-code-coverage-builder':{
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+        'goma_high_parallel',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['use_clang_coverage'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'checkout_dir': 'linux',
+    },
+    'linux-code-coverage-tester': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'mb',
+        'ninja_confirm_noop',
+        'goma_high_parallel',
+      ],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['use_clang_coverage'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'linux-code-coverage-builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Linux Builder Goma Latest Client': chromium_apply_configs(
         chromium_linux.SPEC['builders']['Linux Builder'],
         ['goma_latest_client','goma_use_local']),
