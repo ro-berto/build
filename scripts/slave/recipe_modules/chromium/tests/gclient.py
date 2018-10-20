@@ -6,6 +6,7 @@ from recipe_engine.post_process import DropExpectation
 
 DEPS = [
   'depot_tools/gclient',
+  'recipe_engine/properties',
 ]
 
 TEST_CONFIGS = [
@@ -38,8 +39,17 @@ def RunSteps(api):
     api.gclient.make_config(config_name)
 
   api.gclient.set_config('chromium')
-  api.gclient.apply_config('checkout_instrumented_libraries')
-
+  api.gclient.apply_config(api.properties.get('apply_gclient_config'))
 
 def GenTests(api):
-  yield api.test('basic') + api.post_process(DropExpectation)
+  yield (
+      api.test('basic') +
+      api.properties(apply_gclient_config='checkout_instrumented_libraries') +
+      api.post_process(DropExpectation)
+  )
+  yield (
+      api.test('clang_coverage') +
+      api.properties(apply_gclient_config='use_clang_coverage') +
+      api.post_process(DropExpectation)
+  )
+

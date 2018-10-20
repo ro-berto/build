@@ -68,6 +68,14 @@ def stock_config(name, config='Release', target_bits=64, staging=True,
   return name, bot_config
 
 
+def use_clang_coverage_config(base_config):
+  """use_clang_coverage copies config and adds vars to get coverage tools."""
+  config = copy.deepcopy(base_config)
+  config.setdefault('gclient_apply_config', [])
+  config['gclient_apply_config'].append('use_clang_coverage')
+  return config
+
+
 def chromium_apply_configs(base_config, config_names):
   """chromium_apply_configs returns new config from base config with config.
 
@@ -553,7 +561,7 @@ SPEC = {
             'chromeos-amd64-generic-rel'],
         ['goma_latest_client']),
     # For building targets instrumented for code coverage.
-    'linux-code-coverage-generation': copy.deepcopy(
+    'linux-code-coverage-generation': use_clang_coverage_config(
         chromium_linux.SPEC['builders']['Linux Builder']),
     'Linux Builder Goma Latest Client': chromium_apply_configs(
         chromium_linux.SPEC['builders']['Linux Builder'],

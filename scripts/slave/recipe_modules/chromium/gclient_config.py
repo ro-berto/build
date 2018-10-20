@@ -279,3 +279,7 @@ def arm(c):
 @CONFIG_CTX()
 def arm64(c):
   c.target_cpu.add('arm64')
+
+@CONFIG_CTX()
+def use_clang_coverage(c):
+  c.solutions[0].custom_vars['checkout_clang_coverage_tools'] = 'True'

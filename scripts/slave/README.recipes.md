@@ -4372,9 +4372,9 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/configure_bot.py#37)(api):**
 ### *recipes* / [chromium:tests/gclient](/scripts/slave/recipe_modules/chromium/tests/gclient.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium/tests/gclient.py#7): [depot\_tools/gclient][depot_tools/recipe_modules/gclient]
+[DEPS](/scripts/slave/recipe_modules/chromium/tests/gclient.py#7): [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/gclient.py#36)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/gclient.py#37)(api):**
 ### *recipes* / [chromium:tests/get\_env](/scripts/slave/recipe_modules/chromium/tests/get_env.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/get_env.py#5): [chromium](#recipe_modules-chromium), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
