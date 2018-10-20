@@ -8,6 +8,7 @@ DEPS = [
   'chromium_android',
   'chromium_checkout',
   'chromium_swarming',
+  'clang_coverage',
   'commit_position',
   'depot_tools/bot_update',
   'depot_tools/gclient',

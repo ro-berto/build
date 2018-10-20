@@ -1814,6 +1814,10 @@ class SwarmingGTestTest(SwarmingTest):
               '${ISOLATED_OUTDIR}/profraw/default-%4m.profraw',
       }
 
+      if self._merge is None:
+        self._merge = api.chromium_tests.m.clang_coverage.shard_merge(
+            self._step_name(suffix))
+
     return api.swarming.gtest_task(
         title=self._step_name(suffix),
         isolated_hash=isolated_hash,

@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import post_process
+
 DEPS = [
     'chromium_tests',
     'depot_tools/tryserver',
@@ -76,6 +78,15 @@ def GenTests(api):
       api.properties.generic(
           mastername='chromium.fyi',
           buildername='Android Remoting Tests')
+  )
+
+  yield (
+      api.test('use_clang_coverage') +
+      api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='linux-code-coverage-generation') +
+      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.DropExpectation)
   )
 
   yield (
