@@ -121,7 +121,14 @@ def TestFlutter(api, start_dir, just_built_dart_sdk, just_built_gen):
     frontend_server = flutter.join(
       'bin', 'cache', 'artifacts', 'engine', 'linux-x64', 'frontend_server.dart.snapshot')
 
-    api.file.rmtree('remove downloaded cached dart-sdk', dart_sdk) # deletes symlink as well
+    # In case dart-sdk symlink was left from previous run we need to [remove] it,
+    # rather than [rmtree] because rmtree is going to remove symlink target folder.
+    try:
+      api.file.remove('remove downloaded cached dart-sdk', dart_sdk)
+    except OSError: # pragma: no cover
+      pass
+    api.file.rmtree('remove downloaded cached dart-sdk', dart_sdk)
+
     api.file.remove('remove downloaded frontend_server snapshot', frontend_server)
     api.file.symlink('make cached dart-sdk point to just built dart sdk', just_built_dart_sdk, dart_sdk)
     api.file.symlink('make frontend_server.dart.snapshot point to just built version',
