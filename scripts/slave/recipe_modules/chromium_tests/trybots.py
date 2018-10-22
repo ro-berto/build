@@ -849,11 +849,6 @@ TRYBOTS = freeze({
         'buildername': 'GPU FYI Win Builder',
         'tester': 'Win7 FYI Release (NVIDIA)',
       }),
-      # Optional Official trybot.
-      'win_chrome_official': simple_bot({
-        'mastername': 'chromium.chrome',
-        'buildername': 'Google Chrome Win',
-      }),
     },
   },
   'tryserver.v8': {
