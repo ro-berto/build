@@ -824,3 +824,16 @@ def GenTests(api):
     ) +
     api.post_process(DropExpectation)
   )
+
+  # Cover test config entries with specific isolate targets.
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'specific_isolated_file',
+    ) +
+    api.v8.test_spec_in_checkout(
+        'V8 Foobar',
+        '{"tests": [{"name": "numfuzz"}]}') +
+    api.post_process(Filter('isolate tests'))
+  )

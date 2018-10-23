@@ -170,8 +170,6 @@
       "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64___debug_builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
-      "--swarming-targets-file",
-      "d8_default\nrun-num-fuzzer\n",
       "//out/Debug"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64___debug_builder/v8",
@@ -181,9 +179,6 @@
     },
     "name": "generate_build_files",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@d8_default@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@run-num-fuzzer@@@",
-      "@@@STEP_LOG_END@swarming-targets-file.txt@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
       "@@@STEP_LOG_END@gn_args@@@"
     ]
@@ -235,52 +230,6 @@
     },
     "name": "compile confirm no-op",
     "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64___debug_builder/v8/tools/swarming_client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
-      "--verbose",
-      "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64___debug_builder/v8/out/Debug/d8_default.isolated.gen.json",
-      "[BUILDER_CACHE]/V8_Clusterfuzz_Linux64___debug_builder/v8/out/Debug/run-num-fuzzer.isolated.gen.json"
-    ],
-    "name": "isolate tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"d8_default\": \"[dummy hash for d8_default]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"run-num-fuzzer\": \"[dummy hash for run-num-fuzzer]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "-a",
-      "public-read",
-      "{\"d8_default\": \"[dummy hash for d8_default]\", \"run-num-fuzzer\": \"[dummy hash for run-num-fuzzer]\"}",
-      "gs://chromium-v8/isolated/client.v8.clusterfuzz/V8 Clusterfuzz Linux64 - debug builder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8.clusterfuzz/V8 Clusterfuzz Linux64 - debug builder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
-    ]
   },
   {
     "cmd": [
@@ -356,7 +305,7 @@
       "gs://v8-asan/linux-debug/d8-linux-debug-v8-component-50110.zip"
     ],
     "infra_step": true,
-    "name": "gsutil upload (2)",
+    "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/v8-asan/linux-debug/d8-linux-debug-v8-component-50110.zip@@@"
     ]
@@ -389,11 +338,7 @@
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "swarm_hashes": {
-            "d8_default": "[dummy hash for d8_default]",
-            "run-num-fuzzer": "[dummy hash for run-num-fuzzer]"
-          }
+          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
         }
       }
     ],
