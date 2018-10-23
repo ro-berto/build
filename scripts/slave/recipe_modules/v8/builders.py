@@ -330,7 +330,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'enable_swarming': False,
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - noi18n - debug': {
@@ -717,7 +716,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'enable_swarming': False,
         'testing': {'platform': 'linux'},
       },
       'V8 Linux - full debug': {
@@ -726,7 +724,6 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'enable_swarming': False,
         'testing': {'platform': 'linux'},
       },
     },
@@ -1830,7 +1827,6 @@ BUILDERS = {
       },
       'v8_mips_compile_rel': {
         'chromium_apply_config': ['default_compiler', 'mb'],
-        'enable_swarming': False,
         'testing': {
           'properties': {
             'build_config': 'Release',
