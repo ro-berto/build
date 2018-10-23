@@ -17,7 +17,7 @@
       "retry",
       "fetch",
       "origin",
-      "master",
+      "refs/changes/123/456/1",
       "--recurse-submodules",
       "--progress"
     ],

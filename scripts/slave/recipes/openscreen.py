@@ -25,7 +25,9 @@ def RunSteps(api):
   build_root = api.path['start_dir']
   openscreen_root = build_root.join('openscreen')
   repository = api.properties['repository']
-  api.git.checkout(repository, dir_path=openscreen_root, recursive=True)
+  ref = api.properties.get('patch_ref', None)
+  api.git.checkout(
+      repository, dir_path=openscreen_root, ref=ref, recursive=True)
   api.goma.ensure_goma()
   checkout_path = api.path['checkout']
   output_path = checkout_path.join('out', BUILD_CONFIG)
@@ -46,4 +48,8 @@ def GenTests(api):
   yield (
       api.test('linux64_debug') +
       api.platform('linux', 64) +
-      api.properties(repository=OPENSCREEN_REPO))
+      api.properties(
+          repository=OPENSCREEN_REPO,
+          patch_ref='refs/changes/123/456/1'
+      )
+  )
