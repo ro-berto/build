@@ -348,22 +348,6 @@ BUILDERS = {
         },
         'testing': {'platform': 'linux'},
       },
-      'V8 Linux - embedded builtins': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux - embedded builtins - debug': {
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-        },
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux - noembed': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
@@ -1365,18 +1349,6 @@ BUILDERS = {
             'build_config': 'Debug',
             'triggers': [
               'v8_linux_dbg_ng_triggered',
-            ],
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_linux_embedded_builtins_rel_ng': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
-            'triggers': [
-              'v8_linux_embedded_builtins_rel_ng_triggered',
             ],
           },
           'platform': 'linux',
