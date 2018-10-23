@@ -314,7 +314,7 @@ BUILDERS = {
       },
       'V8 Linux - shared': {
         'chromium_apply_config': [
-          'default_compiler', 'goma', 'shared_library', 'mb'],
+          'default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
@@ -516,7 +516,6 @@ BUILDERS = {
         'chromium_apply_config': [
           'default_compiler',
           'goma',
-          'shared_library',
           'mb',
         ],
         'v8_config_kwargs': {
