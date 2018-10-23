@@ -217,7 +217,9 @@ def main():
         goma_crash_report=args.goma_crash_report_id_file,
         builder=args.buildbot_buildername,
         master=args.buildbot_mastername,
-        slave=args.buildbot_slavename)
+        slave=args.buildbot_slavename,
+        builder_id=builder_id,
+        is_luci=args.is_luci)
     if counter:
       tsmon_counters.append(counter)
 
@@ -232,7 +234,9 @@ def main():
         args.build_exit_status,
         builder=args.buildbot_buildername,
         master=args.buildbot_mastername,
-        slave=args.buildbot_slavename)
+        slave=args.buildbot_slavename,
+        builder_id=builder_id,
+        is_luci=args.is_luci)
     if counter:
       tsmon_counters.append(counter)
 
@@ -241,7 +245,9 @@ def main():
         args.build_exit_status,
         builder=args.buildbot_buildername,
         master=args.buildbot_mastername,
-        slave=args.buildbot_slavename)
+        slave=args.buildbot_slavename,
+        builder_id=builder_id,
+        is_luci=args.is_luci)
     if counter:
       tsmon_counters.append(counter)
 

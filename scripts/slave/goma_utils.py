@@ -117,6 +117,19 @@ def GetListOfGomaccInfoAfterCompilerProxyStart():
   return recent_gomacc_infos
 
 
+def SetBuilderIDToCounter(builder_id, counter):
+  """Set BuilderID to counter dictionary.
+
+  This function can be called only if LUCI.
+
+  Args:
+    builder_id: BuilderId dictionary to use.
+    counter: ts_mon counter dictionary to be updated.
+  """
+  for key, value in builder_id.iteritems():
+    counter[key] = value
+
+
 def UploadToGomaLogGS(file_path, gs_filename,
                       text_to_append=None,
                       metadata=None,
@@ -330,7 +343,8 @@ def IsCompilerProxyKilledByFatalError():
 
 def MakeGomaExitStatusCounter(goma_stats_file, goma_crash_report,
                               builder='unknown', master='unknown',
-                              slave='unknown'):
+                              slave='unknown', builder_id=None,
+                              is_luci=False):
   """Make Goma exit status counter. This counter indicates compiler_proxy
      has finished without problem, crashed, or killed. This counter will
      be used to alert to goma team.
@@ -341,17 +355,25 @@ def MakeGomaExitStatusCounter(goma_stats_file, goma_crash_report,
     builder: builder name
     master: master name
     slave: slave name
+    builder_id: a dictionary that represents BuilderID.
+    is_luci: True if this is LUCI.
   """
 
   try:
     counter = {
         'name': 'goma/status',
         'value': 1,
-        'builder': builder,
-        'master': master,
-        'slave': slave,
         'os': chromium_utils.PlatformName(),
     }
+    if is_luci:
+      counter['name'] = '%s_luci' % counter['name']
+      SetBuilderIDToCounter(builder_id, counter)
+    else:
+      counter.update({
+          'builder': builder,
+          'master': master,
+          'slave': slave,
+      })
     if goma_stats_file and os.path.exists(goma_stats_file):
       counter['status'] = 'success'
     elif goma_crash_report and os.path.exists(goma_crash_report):
@@ -448,12 +470,18 @@ def SendCountersToTsMon(counters):
 
 
 def MakeGomaStatusCounter(json_file, exit_status,
-                          builder='unknown', master='unknown', slave='unknown'):
+                          builder='unknown', master='unknown', slave='unknown',
+                          builder_id=None, is_luci=False):
   """Make latest Goma status counter which will be sent to ts_mon.
 
   Args:
     json_file: json filename string that has goma_ctl.py jsonstatus.
     exit_status: integer exit status of the build.
+    builder: builder name
+    master: master name
+    slave: slave name
+    builder_id: a dictionary that represents BuilderID.
+    is_luci: True if this is LUCI.
 
   Returns:
     counter dict if succeeded. None if failed.
@@ -499,12 +527,18 @@ def MakeGomaStatusCounter(json_file, exit_status,
     counter = {
         'name': 'goma/failure',
         'value': num_failure,
-        'builder': builder,
-        'master': master,
-        'slave': slave,
         'os': chromium_utils.PlatformName(),
         'ping_status_code': ping_status_code,
         'result': result}
+    if is_luci:
+      counter['name'] = '%s_luci' % counter['name']
+      SetBuilderIDToCounter(builder_id, counter)
+    else:
+      counter.update({
+          'builder': builder,
+          'master': master,
+          'slave': slave,
+      })
     start_time = GetCompilerProxyStartTime()
     if start_time:
       counter['start_time'] = int(time.mktime(start_time.timetuple()))
@@ -518,12 +552,18 @@ def MakeGomaStatusCounter(json_file, exit_status,
 
 def MakeGomaFailureReasonCounter(json_file, exit_status,
                                  builder='unknown', master='unknown',
-                                 slave='unknown'):
+                                 slave='unknown', builder_id=None,
+                                 is_luci=False):
   """Make latest Goma failure reason counter which will be sent to ts_mon.
 
   Args:
     json_file: json filename string that has goma_ctl.py jsonstatus.
     exit_status: integer exit status of the build.
+    builder: builder name
+    master: master name
+    slave: slave name
+    builder_id: a dictionary that represents BuilderID.
+    is_luci: True if this is LUCI.
 
   Returns:
     counter dict if succeeded. None if failed.
@@ -570,12 +610,18 @@ def MakeGomaFailureReasonCounter(json_file, exit_status,
     counter = {
         'name': 'goma/failure_reason',
         'value': 1,
-        'builder': builder,
-        'master': master,
-        'slave': slave,
         'os': chromium_utils.PlatformName(),
         'result': result,
         'exception_reason': reason}
+    if is_luci:
+      counter['name'] = '%s_luci' % counter['name']
+      SetBuilderIDToCounter(builder_id, counter)
+    else:
+      counter.update({
+          'builder': builder,
+          'master': master,
+          'slave': slave,
+      })
     start_time = GetCompilerProxyStartTime()
     if start_time:
       counter['start_time'] = int(time.mktime(start_time.timetuple()))
