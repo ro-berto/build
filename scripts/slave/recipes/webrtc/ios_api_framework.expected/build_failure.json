@@ -198,7 +198,7 @@
     "cmd": [],
     "name": "ensure xcode",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Ensuring Xcode version 10l232m in [CACHE]/xcode_ios_10l232m.app@@@"
+      "@@@STEP_TEXT@Ensuring Xcode version 9c40b in [CACHE]/xcode_ios_9c40b.app@@@"
     ]
   },
   {
@@ -235,9 +235,9 @@
       "-kind",
       "ios",
       "-xcode-version",
-      "10l232m",
+      "9c40b",
       "-output-dir",
-      "[CACHE]/xcode_ios_10l232m.app",
+      "[CACHE]/xcode_ios_9c40b.app",
       "-service-account-json",
       "/creds/service_accounts/service-account-xcode-cipd-access.json"
     ],
@@ -252,7 +252,7 @@
       "sudo",
       "xcode-select",
       "-switch",
-      "[CACHE]/xcode_ios_10l232m.app"
+      "[CACHE]/xcode_ios_9c40b.app"
     ],
     "infra_step": true,
     "name": "ensure xcode.select xcode",
