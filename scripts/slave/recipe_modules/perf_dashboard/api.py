@@ -100,7 +100,7 @@ class PerfDashboardApi(recipe_api.RecipeApi):
 
     if self.m.tryserver.is_tryserver:
       change['patch'] = {
-          'server': self.m.tryserver.gerrit_change.host,
+          'server': 'https://' + self.m.tryserver.gerrit_change.host,
           'change': self.m.tryserver.gerrit_change.change,
           'revision': self.m.tryserver.gerrit_change.patchset,
       }

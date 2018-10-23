@@ -6,7 +6,7 @@
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
       "https://pinpoint-dot-chromeperf.appspot.com/api/isolate",
       "-i",
-      "{\"builder_name\": \"Mac Builder Perf\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"repository\\\": \\\"chromium\\\"}, {\\\"git_hash\\\": \\\"1234567890abcdef\\\", \\\"repository\\\": \\\"src\\\"}], \\\"patch\\\": {\\\"revision\\\": 1, \\\"change\\\": 671632, \\\"server\\\": \\\"chromium-review.googlesource.com\\\"}}\", \"isolate_map\": \"{\\\"base_unittests\\\": \\\"[dummy hash for base_unittests]\\\"}\", \"isolate_server\": \"https://chrome-isolated.appspot.com\"}",
+      "{\"builder_name\": \"Mac Builder Perf\", \"change\": \"{\\\"commits\\\": [{\\\"git_hash\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"repository\\\": \\\"chromium\\\"}, {\\\"git_hash\\\": \\\"1234567890abcdef\\\", \\\"repository\\\": \\\"src\\\"}], \\\"patch\\\": {\\\"revision\\\": 1, \\\"change\\\": 671632, \\\"server\\\": \\\"https://chromium-review.googlesource.com\\\"}}\", \"isolate_map\": \"{\\\"base_unittests\\\": \\\"[dummy hash for base_unittests]\\\"}\", \"isolate_server\": \"https://chrome-isolated.appspot.com\"}",
       "-o",
       "/path/to/tmp/json"
     ],
