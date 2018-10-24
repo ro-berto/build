@@ -482,10 +482,6 @@ def _trigger_swarming_task(api, task, test_step_config):
     task.dimensions.pop('cpu')
     task.dimensions.pop('gpu')
 
-  # Add custom attributes.
-  for k, v in api.v8.bot_config.get('swarming_task_attrs', {}).iteritems():
-    setattr(task, k, v)
-
   # Override attributes with per-test settings.
   for k, v in test_step_config.swarming_task_attrs.iteritems():
     setattr(task, k, v)

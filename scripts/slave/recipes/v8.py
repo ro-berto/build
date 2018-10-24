@@ -2,7 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.post_process import Filter, DoesNotRun, DropExpectation
+from recipe_engine.post_process import (
+    Filter, DoesNotRun, DropExpectation, MustRun)
 from recipe_engine.recipe_api import Property
 
 DEPS = [
@@ -836,4 +837,18 @@ def GenTests(api):
         'V8 Foobar',
         '{"tests": [{"name": "numfuzz"}]}') +
     api.post_process(Filter('isolate tests'))
+  )
+
+  # Cover running presubmit on a builder.
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'presubmit',
+    ) +
+    api.v8.test_spec_in_checkout(
+        'V8 Foobar',
+        '{"tests": [{"name": "presubmit"}]}') +
+    api.post_process(MustRun, 'Presubmit') +
+    api.post_process(DropExpectation)
   )

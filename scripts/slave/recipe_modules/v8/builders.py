@@ -1831,44 +1831,20 @@ BUILDERS = {
 ####### Waterfall: client.v8.branches
 BRANCH_BUILDERS = {}
 
-def AddBranchBuilder(name, build_config, presubmit=False,
-                     unittests_only=False):
-  tests = []
-  if presubmit:
-    tests.append(Presubmit)
-  if unittests_only:
-    tests.append(Unittests)
-  else:
-    if build_config == 'Debug':
-      tests.append(V8Testing(3))
-    elif 'arm' in name:
-      tests.append(V8Testing(2))
-    elif 'mips' in name:
-      tests.append(V8Testing(4))
-    else:
-      tests.append(V8Testing)
-    if 'mips' not in name:
-      tests.extend([Test262, Mozilla])
+def AddBranchBuilder(name, build_config):
   return {
     'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
     'v8_config_kwargs': {
       'BUILD_CONFIG': build_config,
     },
-    'tests': tests,
     'testing': {'platform': 'linux'},
-    'swarming_task_attrs': {
-      'expiration': 4 * 60 * 60,
-      'hard_timeout': 90 * 60,
-      'priority': 35,
-    },
   }
 
 def fill_branch_builders():
   for build_config, name_suffix in (('Release', ''), ('Debug', ' - debug')):
     for branch_name in ('stable branch', 'beta branch'):
       name = 'V8 Linux - %s%s' % (branch_name, name_suffix)
-      BRANCH_BUILDERS[name] = AddBranchBuilder(
-          name, build_config, presubmit=True)
+      BRANCH_BUILDERS[name] = AddBranchBuilder(name, build_config)
       name = 'V8 Linux64 - %s%s' % (branch_name, name_suffix)
       BRANCH_BUILDERS[name] = AddBranchBuilder(name, build_config)
       name = 'V8 arm - sim - %s%s' % (branch_name, name_suffix)
@@ -1876,20 +1852,16 @@ def fill_branch_builders():
 
   for branch_name in ('stable branch', 'beta branch'):
     name = 'V8 mipsel - sim - %s' % branch_name
-    BRANCH_BUILDERS[name] = AddBranchBuilder(
-        name, 'Release')
+    BRANCH_BUILDERS[name] = AddBranchBuilder(name, 'Release')
 
     name = 'V8 mips64el - sim - %s' % branch_name
-    BRANCH_BUILDERS[name] = AddBranchBuilder(
-        name, 'Release', unittests_only=True)
+    BRANCH_BUILDERS[name] = AddBranchBuilder(name, 'Release')
 
     name = 'V8 ppc64 - sim - %s' % branch_name
-    BRANCH_BUILDERS[name] = AddBranchBuilder(
-        name, 'Release', unittests_only=True)
+    BRANCH_BUILDERS[name] = AddBranchBuilder(name, 'Release')
 
     name = 'V8 s390x - sim - %s' % branch_name
-    BRANCH_BUILDERS[name] = AddBranchBuilder(
-        name, 'Release', unittests_only=True)
+    BRANCH_BUILDERS[name] = AddBranchBuilder(name, 'Release')
 
 fill_branch_builders()
 
