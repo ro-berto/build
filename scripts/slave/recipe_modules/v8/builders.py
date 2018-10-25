@@ -40,10 +40,6 @@ class TestStepConfig(object):
       # default suffix is provided.
       self._suffix = str(variants)
 
-  def __call__(self, shards):
-    return TestStepConfig(self.name, shards, self._suffix, self.test_args,
-                          self.variants)
-
   def __str__(self):
     return '%s(%d) %s' % (self.name, self.shards, self.variants)
 
@@ -224,26 +220,6 @@ class TestSpec(object):
 
 # Empty test spec, usable as null object.
 EmptyTestSpec = TestSpec()
-
-
-# Top-level test configs for convenience.
-Benchmarks = TestStepConfig('benchmarks')
-D8Testing = TestStepConfig('d8testing')
-D8TestingRandomGC = TestStepConfig('d8testing_random_gc')
-Fuzz = TestStepConfig('jsfunfuzz')
-GCMole = TestStepConfig('gcmole')
-Mjsunit = TestStepConfig('mjsunit')
-MjsunitSPFrameAccess = TestStepConfig('mjsunit_sp_frame_access')
-Mozilla = TestStepConfig('mozilla')
-NumFuzz = TestStepConfig('numfuzz')
-OptimizeForSize = TestStepConfig('optimize_for_size')
-Presubmit = TestStepConfig('presubmit')
-Test262 = TestStepConfig('test262')
-Test262Variants = TestStepConfig('test262_variants')
-Unittests = TestStepConfig('unittests')
-V8Initializers = TestStepConfig('v8initializers')
-V8Testing = TestStepConfig('v8testing')
-Webkit = TestStepConfig('webkit')
 
 
 BUILDERS = {
@@ -1574,12 +1550,9 @@ BUILDERS = {
         'gclient_apply_config': ['llvm_compiler_rt'],
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'sanitizer_coverage_folder': 'linux64',
-        'tests': [
-          V8Testing(3),
-        ],
         'testing': {
           'properties': {
-            'build_config': 'Release',
+            'build_config': 'Release'
           },
           'platform': 'linux',
         },

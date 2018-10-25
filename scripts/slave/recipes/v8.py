@@ -852,3 +852,22 @@ def GenTests(api):
     api.post_process(MustRun, 'Presubmit') +
     api.post_process(DropExpectation)
   )
+
+  # Cover running sanitizer coverage.
+  yield (
+    api.v8.test(
+        'tryserver.v8',
+        'v8_linux64_sanitizer_coverage_rel',
+        'sanitizer_coverage',
+    ) +
+    api.v8.test_spec_in_checkout(
+        'v8_linux64_sanitizer_coverage_rel',
+        '{"tests": [{"name": "v8testing"}]}') +
+    api.post_process(Filter(
+        'Initialize coverage data',
+        'Merge coverage data',
+        'gsutil upload (2)',
+        'Split coverage data',
+        'gsutil coverage data',
+    ))
+  )
