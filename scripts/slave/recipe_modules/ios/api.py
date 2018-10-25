@@ -1057,10 +1057,7 @@ class iOSApi(recipe_api.RecipeApi):
       if self.m.bot_update.last_returned_properties and upload_test_results:
         test_results = self.m.path.join(
           task['task'].task_output_dir, '0', 'full_results.json')
-        test_type = task['test']['app']
-        if 'shard' in task['step name']:
-          test_type = '%s_shard_%s' % (test_type,
-                                       task['step name'].split(' ')[-1])
+        test_type = task['step name']
         if self.m.path.exists(test_results):
           self.m.test_results.upload(
             test_results,
