@@ -75,6 +75,9 @@ DETERMINISTIC_BUILDERS = freeze({
   },
   'Deterministic Android': {
     'chromium_config': 'android',
+    'android_config': 'main_builder',
+    'gclient_config': 'chromium',
+    'gclient_apply_config': ['android'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Release',
       'TARGET_BITS': 32,
@@ -85,6 +88,9 @@ DETERMINISTIC_BUILDERS = freeze({
   },
   'Deterministic Android (dbg)': {
     'chromium_config': 'android',
+    'android_config': 'main_builder',
+    'gclient_config': 'chromium',
+    'gclient_apply_config': ['android'],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': 'Debug',
       'TARGET_BITS': 32,
@@ -116,25 +122,17 @@ def ConfigureChromiumBuilder(api, recipe_config):
   api.gclient.set_config(recipe_config['gclient_config'],
                          **recipe_config.get('gclient_config_kwargs', {}))
 
+  for c in recipe_config.get('gclient_apply_config', []):
+    api.gclient.apply_config(c)
+
+  if recipe_config.get('android_config'):
+    api.chromium_android.configure_from_properties(
+        recipe_config.get('android_config'),
+        **recipe_config.get('chromium_config_kwargs', {}))
+
   # Checkout chromium.
   api.bot_update.ensure_checkout()
 
-
-def ConfigureAndroidBuilder(api, recipe_config):
-  kwargs = {
-    'REPO_NAME': 'src',
-    'REPO_URL': 'https://chromium.googlesource.com/chromium/src.git',
-    'Internal': False,
-  }
-  kwargs.update(recipe_config.get('chromium_config_kwargs',
-                                  {'BUILD_CONFIG': 'Release'}))
-
-  api.chromium_android.configure_from_properties(
-      'base_config', **kwargs)
-  api.chromium.set_config('base_config', **kwargs)
-  api.chromium.apply_config(recipe_config['chromium_config'])
-  api.chromium.apply_config('clobber')
-  api.chromium_android.init_and_sync()
 
 PROPERTIES = {
   'buildername': Property(),
@@ -168,10 +166,7 @@ def DoRunSteps(api, buildername, target_platform, recipe_config):
   api.file.ensure_directory('init cache if not exists', solution_path)
 
   with api.context(cwd=solution_path):
-    if target_platform in ('linux', 'mac', 'win'):
-      ConfigureChromiumBuilder(api, recipe_config)
-    elif target_platform is 'android':
-      ConfigureAndroidBuilder(api, recipe_config)
+    ConfigureChromiumBuilder(api, recipe_config)
 
   # Since disk lacks in Mac, we need to remove files before build.
   for ext in '12':
