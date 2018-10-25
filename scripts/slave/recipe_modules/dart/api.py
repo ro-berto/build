@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 from recipe_engine import recipe_api
-import json
 
 BLACKLIST = (
     '^(out|xcodebuild)[/\\\\](Release|Debug|Product)\w*[/\\\\]generated_tests')
@@ -12,8 +11,6 @@ SWARMING_CLIENT_PATH = 'tools/swarming_client'
 SWARMING_CLIENT_REPO = (
     'https://chromium.googlesource.com/infra/luci/client-py.git')
 SWARMING_CLIENT_REV = '88229872dd17e71658fe96763feaa77915d8cbd6'
-
-TEST_PY_PATH = 'tools/test.py'
 
 CHROME_PATH_ARGUMENT = {
   'linux': '--chrome=browsers/chrome/google-chrome',
@@ -30,7 +27,6 @@ FIREFOX_PATH_ARGUMENT = {
   'win10': '--firefox=browsers\\firefox\\firefox.exe',
   'win': '--firefox=browsers\\firefox\\firefox.exe'
 }
-
 
 class DartApi(recipe_api.RecipeApi):
   """Recipe module for code commonly used in dart recipes.
@@ -61,7 +57,6 @@ class DartApi(recipe_api.RecipeApi):
                             'tools', 'clean_output_directory.py'))
       self.m.gclient.runhooks()
 
-
   def get_secret(self, name):
     """Decrypts the specified secret and returns the location of the result"""
     cloudkms_dir = self.m.path['start_dir'].join('cloudkms')
@@ -82,7 +77,6 @@ class DartApi(recipe_api.RecipeApi):
                  'us-central1/keyRings/dart-ci/cryptoKeys/dart-ci'])
       return secret_key
 
-
   def kill_tasks(self):
     """Kills leftover tasks from previous runs or steps."""
     self.m.python('kill processes',
@@ -90,13 +84,10 @@ class DartApi(recipe_api.RecipeApi):
                args=['--kill_browsers=True', '--kill_vsbuild=True'],
                ok_ret='any')
 
-
   def dart_executable(self):
-    """Returns the path to the checked-in SDK dart executable."""
     executable = 'dart.exe' if self.m.platform.name == 'win' else 'dart'
     return self.m.path['checkout'].join(
       'tools','sdks', 'dart-sdk', 'bin', executable)
-
 
   def build(self, build_args=None, name='build dart'):
     """Builds dart using the specified build_args
@@ -128,7 +119,6 @@ class DartApi(recipe_api.RecipeApi):
         finally:
           self.m.goma.stop(build_exit_status=build_exit_status)
 
-
   def upload_isolate(self, isolate_fileset):
     """Builds an isolate"""
     if isolate_fileset == self.m.properties.get('parent_fileset_name', None):
@@ -149,7 +139,6 @@ class DartApi(recipe_api.RecipeApi):
         isolate_hash)
     return isolate_hash
 
-
   def download_parent_isolate(self):
     self.m.path['checkout'] = self.m.path['cleanup']
     isolate_hash = self.m.properties['parent_fileset']
@@ -163,7 +152,6 @@ class DartApi(recipe_api.RecipeApi):
                  '-s%s' % isolate_hash,
                  '--target=.'],
         stdout=self.m.raw_io.output('out'))
-
 
   def shard(self, title, isolate_hash, test_args, os=None, cpu='x86-64',
             pool='dart.tests', num_shards=0, last_shard_is_local=False,
@@ -184,7 +172,7 @@ class DartApi(recipe_api.RecipeApi):
       # TODO(athom) collect all the triggers, and present as a single step
       if last_shard_is_local and shard == num_shards - 1:
         break
-      task = self.m.swarming.task('%s_shard_%s' % (title, (shard + 1)),
+      task = self.m.swarming.task("%s_shard_%s" % (title, (shard + 1)),
                                   isolate_hash,
                                   cipd_packages=cipd_packages,
                                   raw_cmd=test_args +
@@ -209,98 +197,80 @@ class DartApi(recipe_api.RecipeApi):
       tasks.append(task)
     return tasks
 
-
-  def _report_new_results(self):
+  def report_new_results(self):
     """Boolean that controls whether to report status of
        deflaked tests measured against
        latest or approved results as buildbot status,
        instead of the status-file based exit code of test.py."""
     return 'new_workflow_enabled' in self.m.properties
 
-
-  def _run_new_steps(self):
-    """Boolean that controls whether to run the new
+  def run_new_steps(self):
+    """Boolean that controls whther to run the new
        workflow that uploads test results to cloud
        storage and deflakes changed tests."""
-    return (self._report_new_results or
+    return (self.report_new_results or
         not self.m.buildbucket.builder_name.endswith('-try'))
 
-
-  def collect_all(self, tasks, commit):
+  def collect_all(self, deferred_tasks):
     """Collects the results of a sharded test run."""
-    allResults = {}
-    # Defer results in case one of the shards has a non-zero exit code.
     with self.m.step.defer_results():
       # TODO(athom) collect all the output, and present as a single step
-      for task in tasks:
-        shards = task['shards']
-        step_name = shards[0].title.split('_shard')[0]
-        results = StepResults(step_name, self.m, commit)
-        for shard in shards:
-          shard.task_output_dir = self.m.raw_io.output_dir()
-          deferred_result = self.m.swarming.collect_task(shard)
-          bot_name = ''
-          if deferred_result.is_ok:
-            collect_result = deferred_result.get_result()
-            bot_name = collect_result.swarming.summary['shards'][0]['bot_id']
-            self._addResultsAndLinks(bot_name, results)
-        allResults[step_name] = results
-    return allResults.values()
+      for index_step,info in enumerate(deferred_tasks):
+        if info['shards'].is_ok:
+          shards = info['shards'].get_result()
+          results = ''
+          run = ''
+          output_dir = None
+          for index_task,task in enumerate(shards):
+            path = self.m.path['cleanup'].join(
+                str(index_step) + '_' + str(index_task))
+            task.task_output_dir = self.m.raw_io.output_dir(
+                leak_to=path, name="results")
+            self.m.swarming.collect_task(task)
+            output_dir = self.m.step.active_result.raw_io.output_dir
+            for filepath in output_dir:
+              filename = filepath.split('/')[-1]  # pragma: no cover
+              filename = filename.split('\\')[-1]  # pragma: no cover
+              if filename in (
+                  "result.log", "results.json", "run.json"): # pragma: no cover
+                contents = output_dir[filepath]
+                self.m.step.active_result.presentation.logs[
+                    filename] = [contents]
+                if filename == 'results.json':
+                  results += contents
+                  self.m.step.active_result.presentation.logs[
+                      'accumulated_results'] = [results]
+                if filename == 'run.json':
+                  run = contents
+          if self.run_new_steps():
+            results_path = self.m.path['checkout'].join('logs', 'results.json')
+            self.m.file.write_text("Write results file", results_path, results)
+            run_path = self.m.path['checkout'].join('logs', 'run.json')
+            self.m.file.write_text("Write run file", run_path, run)
+            step_name = 'sharded %s' % info['step_name']
+            self.download_results(step_name)
+            self.deflake_results(step_name, info['args'], info['environment'])
+            self.upload_results(step_name)
+            self.present_results(step_name)
 
-
-  def _addResultsAndLinks(self, bot_name, results):
-    output_dir = self.m.step.active_result.raw_io.output_dir
-    for filepath in output_dir:
-      filename = filepath.split('/')[-1]
-      filename = filename.split('\\')[-1]
-      if filename in (
-          'result.log', 'results.json', 'run.json'):
-        contents = output_dir[filepath]
-        self.m.step.active_result.presentation.logs[
-            filename] = [contents]
-        if filename == 'results.json':
-          results.results += contents
-        if filename == 'run.json':
-          results.addRun(bot_name, contents)
-
-
-  def _download_results(self):
-    filenames = ['results.json', 'flaky.json']
+  def download_results(self,  name):
     builder = self.m.buildbucket.builder_name
     if builder.endswith('-try'):
       builder = builder[:-4]
     results_path = self.m.path['checkout'].join('LATEST')
     self.m.file.ensure_directory('ensure LATEST dir', results_path)
-    latest_result = self.m.gsutil.download(
-        'dart-test-results',
-        'builders/%s/latest' % builder,
-        self.m.raw_io.output_text(name='latest', add_output_log=True),
-        name='find latest build',
-        ok_ret='any') # todo(athom): succeed only if file does not exist
-    latest = latest_result.raw_io.output_texts.get('latest')
-    for filename in filenames + ['approved_results.json']:
+    for filename in ['results.json', 'flaky.json', 'approved_results.json']:
       self.m.file.write_text(
         'ensure %s exists' % filename, results_path.join(filename), '')
-    if latest and latest.strip():
-      latest = latest.strip()
       self.m.gsutil.download(
         'dart-test-results',
-        'builders/%s/%s/*.json' % (builder, latest),
+        '/'.join(['results', builder, 'LATEST', name, filename]),
         results_path,
-        name='download previous results',
-        ok_ret='any' if self._report_new_results() else {0})
-    self.m.gsutil.download(
-        'dart-test-results',
-        'builders/%s/approved_results.json' % builder,
-        'LATEST/approved_results.json',
-        name='download approved results',
-        ok_ret='any') # todo(athom): succeed only if file does not exist
+        name='download previous %s' % filename,
+        ok_ret='any')
 
-
-  def _deflake_results(self, results):
-    step_name = results.step_name
-    environment = results.environment
-    deflake_list = self.m.step('list tests to deflake (%s)' % step_name,
+  def deflake_results(self, step_name, args, environment):
+    step_result = self.m.step('list tests that should be deflaked',
                 [self.dart_executable(),
                  'tools/bots/compare_results.dart',
                  '--flakiness-data',
@@ -309,75 +279,80 @@ class DartApi(recipe_api.RecipeApi):
                  '--passing',
                  '--failing',
                  '--count',
-                 '50',
+                 '100',
                  'LATEST/results.json',
-                 self.m.raw_io.input_text(results.results)],
-                stdout=self.m.raw_io.output_text(add_output_log=True),
-                ok_ret='any' if self._report_new_results() else {0}).stdout
-    args = results.args + ['--repeat=5', '--test-list',
-                           self.m.raw_io.input_text(deflake_list)]
+                 'logs/results.json'],
+                stdout=self.m.raw_io.output_text(
+                    leak_to=self.m.path['checkout']
+                    .join('logs','deflake.list')),
+                ok_ret='any')
+    contents = step_result.stdout
+    self.m.step.active_result.presentation.logs['deflake_list'] = [contents]
     self.run_script(
-        'deflake %s' % step_name, TEST_PY_PATH,
-        args,
+        step_name + ' deflaking', 'tools/test.py',
+        args + ['--repeat=5', '--test-list', 'logs/deflake.list',
+                '--output_directory', 'deflaking_logs'],
         None, None,
         False, environment, None, ignore_failure=True)
-    self._addResultsAndLinks(self.m.properties.get('bot_id'), results)
+    self.m.step('Update flakiness information',
+                [self.dart_executable(),
+                 'tools/bots/update_flakiness.dart',
+                 '-i',
+                 'LATEST/flaky.json',
+                 '-o',
+                 'deflaking_logs/flaky.json',
+                 'logs/results.json',
+                 'deflaking_logs/results.json'], ok_ret='any')
 
-
-  def _update_flakiness_information(self, results_str):
-    flaky_json = self.m.step('update flakiness information',
-           [self.dart_executable(),
-            'tools/bots/update_flakiness.dart',
-            '-i',
-            'LATEST/flaky.json',
-            '-o',
-            self.m.raw_io.output_text(name='flaky.json', add_output_log=True),
-            'LATEST/results.json',
-            self.m.raw_io.input_text(results_str, name='results.json')],
-            ok_ret='any' if self._report_new_results() else {0})
-    return flaky_json.raw_io.output_texts.get('flaky.json')
-
-
-  def _upload_results(self, flaky_json_str, results_str, runs_str):
+  def upload_results(self,  name):
     # Try builders do not upload results.
-    builder = str(self.m.buildbucket.builder_name)
+    builder = self.m.buildbucket.builder_name
     if builder.endswith('try'):
       return # pragma: no cover
+    commit_hash = self.m.buildbucket.gitiles_commit.id
+    commit_time = self.m.git.get_timestamp(test_data='1234567')
+    self.m.step('Add commit hash to run.json',
+                [self.dart_executable(),
+                 'tools/bots/add_fields.dart',
+                 self.m.path['checkout'].join('logs', 'run.json'),
+                 commit_time,
+                 commit_hash])
 
-    build_number = str(self.m.buildbucket.build.number)
+    build_number = self.m.buildbucket.build.number
+    self.m.file.move('Rename deflaking_results',
+      self.m.path['checkout'].join('deflaking_logs', 'results.json'),
+      self.m.path['checkout'].join('deflaking_logs', 'deflaking_results.json'))
 
-    self._upload_result(builder, build_number, 'result.json', results_str)
-    self._upload_result(builder, build_number, 'flaky.json', flaky_json_str)
-    self.m.gsutil.upload(
-      'LATEST/approved_results.json',
-      'dart-test-results',
-      'builders/%s/%s/approved_results.json' % (builder, build_number),
-      ok_ret='any' if self._report_new_results() else {0})
-    self._upload_result(builder, build_number, 'runs.json', runs_str)
-    # Update "latest" file
-    new_latest = self.m.raw_io.input_text(build_number, name='latest')
-    self.m.gsutil.upload(
-      new_latest,
-      'dart-test-results',
-      'builders/%s/%s' % (builder, 'latest'),
-      name='update "latest" reference',
-      ok_ret='any' if self._report_new_results() else {0})
+    for filepath in [('logs','results.json'),
+                 ('logs', 'run.json'),
+                 ('deflaking_logs', 'flaky.json'),
+                 ('deflaking_logs', 'deflaking_results.json')]:
+      results_path = self.m.path['checkout'].join(*filepath)
+      filename = filepath[-1]
+      self.m.gsutil.upload(
+        results_path,
+        'dart-test-results',
+        '/'.join(['results', builder, str(build_number), name, filename]),
+        name='upload %s %s' % filepath, ok_ret='all')
+      self.m.gsutil.copy(
+        'dart-test-results',
+        '/'.join(['results', builder, str(build_number), name, filename]),
+        'dart-test-results',
+        '/'.join(['results', builder, 'LATEST', name, filename]),
+        name='copy %s %s to LATEST' % filepath, ok_ret='all')
+      self.m.gsutil.copy(
+        'dart-test-results',
+        '/'.join(['results', builder, 'LATEST', name, 'approved_results.json']),
+        'dart-test-results',
+        '/'.join(['results', builder, str(build_number), name,
+                  'approved_results.json']),
+        ok_ret='all')
 
-
-  def _upload_result(self, builder, build_number, filename, result_str):
-    self.m.gsutil.upload(
-      self.m.raw_io.input_text(result_str, name=filename),
-      'dart-test-results',
-      'builders/%s/%s/%s' % (builder, build_number, filename),
-      name='upload %s' % filename, ok_ret='any'
-      if self._report_new_results() else {0})
-
-
-  def _present_results(self, results_str, flaky_json_str):
+  def present_results(self, step_name):
     args = [self.dart_executable(),
             'tools/bots/compare_results.dart',
             '--flakiness-data',
-            self.m.raw_io.input_text(flaky_json_str, name='flaky.json'),
+            'deflaking_logs/flaky.json',
             '--human',
             '--verbose',
             '--changed',
@@ -385,18 +360,16 @@ class DartApi(recipe_api.RecipeApi):
             '--failing',
             '--passing']
     previous_results = 'results.json'
-    if self._report_new_results():
+    if self.report_new_results():
       args.append('--judgement')
       previous_results = 'approved_results.json'
     builder_name = self.m.buildbucket.builder_name
     if builder_name.endswith(('-try', '-stable', '-dev')):
       previous_results = 'results.json'
     args.append(self.m.path['checkout'].join('LATEST', previous_results))
-    args.append(self.m.raw_io.input_text(results_str))
-    self.m.step('test results', args)
+    args.append(self.m.path['checkout'].join('logs', 'results.json'))
+    self.m.step('deflaked status of %s' % step_name, args)
 
-
-  # todo(athom): Use raw_io instead to read the result.log file.
   def read_result_file(self,  name, log_name, test_data=''):
     """Reads the result.log file
     Args:
@@ -416,7 +389,6 @@ class DartApi(recipe_api.RecipeApi):
     except self.m.file.Error: # pragma: no cover
       pass
 
-
   def read_debug_log(self):
     """Reads the debug.log file"""
     if self.m.platform.name == 'win':
@@ -427,7 +399,6 @@ class DartApi(recipe_api.RecipeApi):
       self.m.step('debug log',
                   ['cat', '.debug.log'],
                   ok_ret='any')
-
 
   def test(self, test_data):
     """Reads the test-matrix.json file in checkout and performs each step listed
@@ -456,7 +427,6 @@ class DartApi(recipe_api.RecipeApi):
     raise self.m.step.StepFailure(
         'Error, could not find builder by name %s in test-matrix' % builder)
 
-
   def _write_file_sets(self, filesets):
     """Writes the fileset to the root of the sdk to allow for swarming to pick
     up the files and isolate the files.
@@ -469,7 +439,6 @@ class DartApi(recipe_api.RecipeApi):
       self.m.file.write_text('write fileset %s to sdk root' % fileset,
                             destination_path,
                             str(isolate_fileset))
-
 
   def _build_isolates(self, config, isolate_hashes):
     """Isolate filesets from all steps in config and returns a dictionary with a
@@ -484,7 +453,6 @@ class DartApi(recipe_api.RecipeApi):
         isolate_hash = self.upload_isolate(step['fileset'])
         isolate_hashes[step['fileset']] = isolate_hash
 
-
   def _get_option(self, builder_fragments, options, default_value):
     """Gets an option from builder_fragments in options, or returns the default
     value."""
@@ -493,27 +461,22 @@ class DartApi(recipe_api.RecipeApi):
       return intersection.pop()
     return default_value
 
-
   def _get_specific_argument(self, arguments, options):
     for arg in arguments:
-      if isinstance(arg, basestring):
-        for option in options:
-          if arg.startswith(option):
-            return arg[len(option):]
+      for option in options:
+        if arg.startswith(option):
+          return arg[len(option):]
     return None
-
 
   def _has_specific_argument(self, arguments, options):
     return self._get_specific_argument(arguments, options) is not None
-
 
   def _replace_specific_argument(self, arguments, options, replacement):
     for index,arg in enumerate(arguments):
       for option in options:
         if arg.startswith(option):
-          arguments[index] = replacement
+          arguments[index] = replacement;
           return None
-
 
   def _run_steps(self, config, isolate_hashes, builder_name, global_config):
     """Executes all steps from a json test-matrix builder entry"""
@@ -541,10 +504,6 @@ class DartApi(recipe_api.RecipeApi):
                    'mode': mode,
                    'arch': arch,
                    'copy-coredumps': False}
-    environment['commit'] = {
-      'commit_hash': self.m.buildbucket.gitiles_commit.id,
-      'commit_time': self.m.git.get_timestamp(test_data='1234567')
-    }
     # Linux and vm-*-win builders should use copy-coredumps
     environment['copy-coredumps'] = (system == 'linux' or
             (system.startswith('win') and builder_name.startswith('vm-')))
@@ -562,20 +521,21 @@ class DartApi(recipe_api.RecipeApi):
         "refs/heads/stable": "stable",
         "refs/heads/dev": "dev"
       }
-      channel = channels.get(self.m.properties['branch'], 'try')
+      channel = channels.get(self.m.properties['branch'], 'try');
+    test_py_path = 'tools/test.py'
     build_py_path = 'tools/build.py'
     # Indexes the number of test.py steps.
-    test_py_index = 0
+    test_py_index = 0;
     tasks = []
-    allResults = {}
     with self.m.step.defer_results():
       for index,step in enumerate(config['steps']):
         step_name = step['name']
         # If script is not defined, use test.py.
-        script = step.get('script', TEST_PY_PATH)
+        script = step.get('script', test_py_path)
         args = step.get('arguments', [])
         is_build_step = script.endswith(build_py_path)
         is_trigger = 'trigger' in step
+        is_test_py_step = script.endswith(test_py_path)
 
         if self.m.platform.name == 'mac' and script.startswith('out/'):
           script = script.replace('out/', 'xcodebuild/', 1)
@@ -585,6 +545,7 @@ class DartApi(recipe_api.RecipeApi):
           executable_suffix = '.exe' if self.m.platform.name == 'win' else ''
           script += executable_suffix
 
+        script = self.m.path['checkout'].join(*script.split('/'))
         isolate_hash = None
         shards = step.get('shards', 0)
         local_shard = shards > 0 and index == len(config['steps']) - 1
@@ -614,13 +575,11 @@ class DartApi(recipe_api.RecipeApi):
               deferred_result.get_result() # raises build errors
             elif is_trigger:
               self.run_trigger(step_name, step, isolate_hash)
-            elif self._is_test_py_step(script):
+            elif is_test_py_step:
               append_logs = test_py_index > 0
-              script = self.m.path['checkout'].join(*script.split('/'))
-              results = self.run_test_py(step_name, append_logs, step,
+              self.run_test_py(step_name, append_logs, step,
                                isolate_hash, shards, local_shard,
                                environment, tasks, global_config)
-              self._addToAllResults(allResults, results)
               if shards == 0 or local_shard:
                 # Only count indexes that are not sharded, to help with adding
                 # append-logs.
@@ -628,43 +587,12 @@ class DartApi(recipe_api.RecipeApi):
             else:
               self.run_script(step_name, script, args, isolate_hash, shards,
                   local_shard, environment, tasks)
-      for results in self.collect_all(tasks, environment['commit']):
-        self._addToAllResults(allResults, results)
-    if self._run_new_steps():
       with self.m.context(cwd=self.m.path['checkout']):
-        with self.m.step.nest('download previous results'):
-          self._download_results()
-        for results in allResults.itervalues():
-          self._deflake_results(results)
-        results_str = ''.join(
-            (results.results for results in allResults.itervalues()))
-        flaky_json_str = self._update_flakiness_information(results_str)
-        try:
-          self._present_results(results_str, flaky_json_str)
-        finally:
-          # Upload even if present_results fails the build
-          with self.m.step.nest('upload new results'):
-            runs_str = ''.join(
-                (results.runs for results in allResults.itervalues()))
-            self._upload_results(flaky_json_str, results_str, runs_str)
-
-
-  def _is_test_py_step(self, script):
-    return script.endswith(TEST_PY_PATH)
-
-
-  def _addToAllResults(self, allResults, results):
-    step_name = results.step_name
-    if allResults.get(step_name) is None:
-      allResults[step_name] = results
-    else:
-      allResults[step_name].merge(results)
-
+        self.collect_all(tasks)
 
   def _copy_property(self, src, dest, key):
     if key in src:
       dest[key] = src[key]
-
 
   def _download_browser(self, runtime, version):
     # Download CIPD package
@@ -679,7 +607,6 @@ class DartApi(recipe_api.RecipeApi):
     version_tag = 'version:%s' % version
     package = 'dart/browsers/%s/${platform}' % runtime
     self.m.cipd.ensure(browser_path, { package: version_tag })
-
 
   def run_trigger(self, step_name, step, isolate_hash):
     trigger_props = {}
@@ -716,7 +643,6 @@ class DartApi(recipe_api.RecipeApi):
       builder_name = builder_tag[len('builder:'):]
       self.m.step.active_result.presentation.links[builder_name] = (
           build['build']['url'])
-
 
   def run_test_py(self, step_name, append_logs, step, isolate_hash, shards,
                   local_shard, environment, tasks, global_config):
@@ -789,18 +715,18 @@ class DartApi(recipe_api.RecipeApi):
       args = args + step['tests']
 
     with self.m.step.defer_results():
-      ignore_failure = self._report_new_results()
-      self.run_script(step_name, TEST_PY_PATH, args, isolate_hash, shards,
+      ignore_failure = self.report_new_results()
+      self.run_script(step_name, 'tools/test.py', args, isolate_hash, shards,
                       local_shard, environment, tasks,
                       cipd_packages=cipd_packages,
                       ignore_failure=ignore_failure)
-      results = StepResults(step_name, self.m, environment['commit'])
-      results.args = args
-      results.environment = environment
       if shards == 0 or local_shard:
-        self._addResultsAndLinks(self.m.properties.get('bot_id'), results)
-      return results
-
+        self.read_result_file('read results of %s' % step_name, 'result.log')
+        if self.run_new_steps():
+          self.download_results(step_name)
+          self.deflake_results(step_name, args, environment)
+          self.upload_results(step_name)
+          self.present_results(step_name)
 
   def run_script(self, step_name, script, args, isolate_hash, shards,
                  local_shard, environment, tasks,
@@ -830,71 +756,49 @@ class DartApi(recipe_api.RecipeApi):
     use_xvfb = (runtime in ['chrome', 'firefox'] and
                 environment['system'] == 'linux')
     is_python = str(script).endswith('.py')
-    cmd = [script]
-    if use_xvfb:
-      xvfb_cmd = [
-        '/usr/bin/xvfb-run',
-        '-a',
-        '--server-args=-screen 0 1024x768x24']
-      if is_python:
-        xvfb_cmd += ['python', '-u']
-      cmd = xvfb_cmd + cmd
 
-    with self.m.step.nest(step_name):
-      if isolate_hash:
-        tasks.append({
-            'shards': self.shard(step_name, isolate_hash, cmd + args,
-                                  num_shards=shards,
-                                  last_shard_is_local=local_shard,
-                                  cipd_packages=cipd_packages,
-                                  ignore_failure=ignore_failure),
-            'args': args,
-            'environment': environment,
-            'step_name': step_name})
-        if local_shard:
-          args = args + [
-            '--shards=%s' % shards,
-            '--shard=%s' % shards,
-          ]
-          step_name = '%s_shard_%s' % (step_name, shards)
+    with self.m.step.defer_results():
+      if use_xvfb:
+        xvfb_cmd = [
+          '/usr/bin/xvfb-run',
+          '-a',
+          '--server-args=-screen 0 1024x768x24']
+        if is_python:
+          xvfb_cmd += ['python', '-u']
+        cmd = xvfb_cmd + [script] + args
+        if isolate_hash:
+          tasks.append({
+              'shards': self.shard(step_name, isolate_hash, cmd,
+                                   num_shards=shards,
+                                   last_shard_is_local=local_shard,
+                                   cipd_packages=cipd_packages,
+                                   ignore_failure=ignore_failure),
+              'args': args,
+              'environment': environment,
+              'step_name': step_name})
         else:
-          return # Shards have been triggered, no local shard to run.
-
-      if self._is_test_py_step(script):
-        args = args + [
-            '--output_directory',
-            self.m.raw_io.output_dir(),
-        ]
-
-      if is_python and not use_xvfb:
-        self.m.python(step_name, script, args=args, ok_ret=ok_ret)
+          self.m.step(step_name, cmd, ok_ret=ok_ret)
       else:
-        self.m.step(step_name, cmd + args, ok_ret=ok_ret)
+        if isolate_hash:
+          tasks.append({
+              'shards': self.shard(step_name, isolate_hash, [script] + args,
+                                   num_shards=shards,
+                                   last_shard_is_local=local_shard,
+                                   cipd_packages=cipd_packages,
+                                   ignore_failure=ignore_failure),
+              'args': args,
+              'environment': environment,
+              'step_name': step_name})
+        elif is_python:
+          self.m.python(step_name, script, args=args, ok_ret=ok_ret)
+        else:
+          self.m.step(step_name, [script] + args, ok_ret=ok_ret)
 
-
-class StepResults:
-  def __init__(self, step_name, m, commit):
-    self.step_name = step_name
-    self.results = ''
-    self.runs = ''
-    self.args = None
-    self.environment = None
-    self.commit = commit
-    self.builder_name = m.buildbucket.builder_name
-
-
-  def addRun(self, bot_name, run_json):
-    run = json.loads(run_json)
-    run['commit_time'] = self.commit['commit_time']
-    run['commit_hash'] = self.commit['commit_hash']
-    run['builder_name'] = self.builder_name
-    run['bot_name'] = bot_name
-    self.runs += json.dumps(run) + '\n'
-
-
-  def merge(self, other):
-    self.results += other.results
-    self.runs += other.runs
-    # Environment and Args are the same for all shards
-    self.args = self.args or other.args
-    self.environment = self.environment or other.environment
+      if local_shard:
+        args = args + [
+          '--shards=%s' % shards,
+          '--shard=%s' % shards
+        ]
+        self.run_script("%s_shard_%s" % (step_name, shards), script,
+                        args, None, 0, False, environment, None,
+                        ignore_failure=ignore_failure)

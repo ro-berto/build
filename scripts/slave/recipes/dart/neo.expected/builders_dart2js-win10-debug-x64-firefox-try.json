@@ -245,19 +245,6 @@
   },
   {
     "cmd": [
-      "git",
-      "show",
-      "HEAD",
-      "--format=%at",
-      "-s"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "infra_step": true,
-    "name": "git show",
-    "stdout": "/path/to/tmp/"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
@@ -658,7 +645,27 @@
     ]
   },
   {
-    "cmd": [],
+    "cmd": [
+      "python",
+      "-u",
+      "tools/test.py",
+      "-ax64",
+      "-mdebug",
+      "--progress=status",
+      "--report",
+      "--time",
+      "--write-debug-log",
+      "--write-results",
+      "--write-result-log",
+      "--write-test-outcome-log",
+      "-rfirefox",
+      "foo",
+      "--bar",
+      "--builder-tag=win10",
+      "--firefox=browsers\\firefox\\firefox.exe",
+      "-e co19",
+      "language_2"
+    ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
@@ -674,6 +681,250 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "read results of Test-step 1",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[CACHE]/builder/sdk/logs/result.log"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "delete result.log"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder/sdk/LATEST"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "ensure LATEST dir"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[CACHE]/builder/sdk/LATEST/results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "ensure results.json exists"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/dart2js-win10-debug-x64-firefox/LATEST/Test-step 1/results.json",
+      "[CACHE]/builder/sdk/LATEST"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil download previous results.json"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[CACHE]/builder/sdk/LATEST/flaky.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "ensure flaky.json exists"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/dart2js-win10-debug-x64-firefox/LATEST/Test-step 1/flaky.json",
+      "[CACHE]/builder/sdk/LATEST"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil download previous flaky.json"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "ensure approved_results.json exists"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/dart2js-win10-debug-x64-firefox/LATEST/Test-step 1/approved_results.json",
+      "[CACHE]/builder/sdk/LATEST"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil download previous approved_results.json"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "LATEST/flaky.json",
+      "--changed",
+      "--passing",
+      "--failing",
+      "--count",
+      "100",
+      "LATEST/results.json",
+      "logs/results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "list tests that should be deflaked",
+    "stdout": "[CACHE]/builder/sdk/logs/deflake.list",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@deflake_list@@@@",
+      "@@@STEP_LOG_END@deflake_list@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "tools/test.py",
       "-ax64",
       "-mdebug",
@@ -691,8 +942,11 @@
       "--firefox=browsers\\firefox\\firefox.exe",
       "-e co19",
       "language_2",
+      "--repeat=5",
+      "--test-list",
+      "logs/deflake.list",
       "--output_directory",
-      "/path/to/tmp/"
+      "deflaking_logs"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -703,13 +957,78 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "Test-step 1.Test-step 1",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "Test-step 1 deflaking"
   },
   {
-    "cmd": [],
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/update_flakiness.dart",
+      "-i",
+      "LATEST/flaky.json",
+      "-o",
+      "deflaking_logs/flaky.json",
+      "logs/results.json",
+      "deflaking_logs/results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Update flakiness information"
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "deflaking_logs/flaky.json",
+      "--human",
+      "--verbose",
+      "--changed",
+      "--flaky",
+      "--failing",
+      "--passing",
+      "[CACHE]/builder/sdk/LATEST/results.json",
+      "[CACHE]/builder/sdk/logs/results.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "deflaked status of Test-step 1"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "tools/test.py",
+      "-ax64",
+      "--progress=status",
+      "--report",
+      "--time",
+      "--write-debug-log",
+      "--write-results",
+      "--write-result-log",
+      "--write-test-outcome-log",
+      "-rfirefox",
+      "foo",
+      "--bar",
+      "-mdebug",
+      "-nfirefox-foo-debug-x64-bar",
+      "--append_logs",
+      "--builder-tag=win10",
+      "--firefox=browsers\\firefox\\firefox.exe"
+    ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
       "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
@@ -725,24 +1044,11 @@
     "cmd": [
       "python",
       "-u",
-      "tools/test.py",
-      "-ax64",
-      "--progress=status",
-      "--report",
-      "--time",
-      "--write-debug-log",
-      "--write-results",
-      "--write-result-log",
-      "--write-test-outcome-log",
-      "-rfirefox",
-      "foo",
-      "--bar",
-      "-mdebug",
-      "-nfirefox-foo-debug-x64-bar",
-      "--append_logs",
-      "--builder-tag=win10",
-      "--firefox=browsers\\firefox\\firefox.exe",
-      "--output_directory",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/sdk/logs/result.log",
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
@@ -754,15 +1060,34 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "Test-step 2.Test-step 2",
+    "infra_step": true,
+    "name": "read results of Test-step 2",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_LOG_LINE@result.log@@@@",
+      "@@@STEP_LOG_END@result.log@@@"
     ]
   },
   {
-    "cmd": [],
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[CACHE]/builder/sdk/logs/result.log"
+    ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "download previous results"
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "delete result.log (2)"
   },
   {
     "cmd": [
@@ -777,31 +1102,16 @@
       "[CACHE]/builder/sdk/LATEST"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
-    "name": "download previous results.ensure LATEST dir",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "gs://dart-test-results/builders/dart2js-win10-debug-x64-firefox/latest",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "infra_step": true,
-    "name": "download previous results.gsutil find latest build",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output_text[latest]@@@"
-    ]
+    "name": "ensure LATEST dir (2)"
   },
   {
     "cmd": [
@@ -815,11 +1125,40 @@
       "[CACHE]/builder/sdk/LATEST/results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
-    "name": "download previous results.ensure results.json exists",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "ensure results.json exists (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/dart2js-win10-debug-x64-firefox/LATEST/Test-step 2/results.json",
+      "[CACHE]/builder/sdk/LATEST"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil download previous results.json (2)"
   },
   {
     "cmd": [
@@ -833,11 +1172,40 @@
       "[CACHE]/builder/sdk/LATEST/flaky.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
-    "name": "download previous results.ensure flaky.json exists",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "ensure flaky.json exists (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/results/dart2js-win10-debug-x64-firefox/LATEST/Test-step 2/flaky.json",
+      "[CACHE]/builder/sdk/LATEST"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil download previous flaky.json (2)"
   },
   {
     "cmd": [
@@ -851,11 +1219,16 @@
       "[CACHE]/builder/sdk/LATEST/approved_results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
-    "name": "download previous results.ensure approved_results.json exists",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "ensure approved_results.json exists (2)"
   },
   {
     "cmd": [
@@ -866,15 +1239,20 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "gs://dart-test-results/builders/dart2js-win10-debug-x64-firefox/approved_results.json",
-      "LATEST/approved_results.json"
+      "gs://dart-test-results/results/dart2js-win10-debug-x64-firefox/LATEST/Test-step 2/approved_results.json",
+      "[CACHE]/builder/sdk/LATEST"
     ],
     "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "infra_step": true,
-    "name": "download previous results.gsutil download approved results",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "gsutil download previous approved_results.json (2)"
   },
   {
     "cmd": [
@@ -886,80 +1264,25 @@
       "--passing",
       "--failing",
       "--count",
-      "50",
+      "100",
       "LATEST/results.json",
-      ""
+      "logs/results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "list tests to deflake (Test-step 1)",
-    "stdout": "/path/to/tmp/",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "list tests that should be deflaked (2)",
+    "stdout": "[CACHE]/builder/sdk/logs/deflake.list",
     "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
+      "@@@STEP_LOG_LINE@deflake_list@@@@",
+      "@@@STEP_LOG_END@deflake_list@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "deflake Test-step 1"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "tools/test.py",
-      "-ax64",
-      "-mdebug",
-      "--progress=status",
-      "--report",
-      "--time",
-      "--write-debug-log",
-      "--write-results",
-      "--write-result-log",
-      "--write-test-outcome-log",
-      "-rfirefox",
-      "foo",
-      "--bar",
-      "--builder-tag=win10",
-      "--firefox=browsers\\firefox\\firefox.exe",
-      "-e co19",
-      "language_2",
-      "--repeat=5",
-      "--test-list",
-      "",
-      "--output_directory",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "deflake Test-step 1.deflake Test-step 1",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
-      "tools/bots/compare_results.dart",
-      "--flakiness-data",
-      "LATEST/flaky.json",
-      "--changed",
-      "--passing",
-      "--failing",
-      "--count",
-      "50",
-      "LATEST/results.json",
-      ""
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "list tests to deflake (Test-step 2)",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "deflake Test-step 2"
   },
   {
     "cmd": [
@@ -984,15 +1307,20 @@
       "--firefox=browsers\\firefox\\firefox.exe",
       "--repeat=5",
       "--test-list",
-      "",
+      "logs/deflake.list",
       "--output_directory",
-      "/path/to/tmp/"
+      "deflaking_logs"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "deflake Test-step 2.deflake Test-step 2",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Test-step 2 deflaking"
   },
   {
     "cmd": [
@@ -1001,22 +1329,27 @@
       "-i",
       "LATEST/flaky.json",
       "-o",
-      "/path/to/tmp/",
-      "LATEST/results.json",
-      ""
+      "deflaking_logs/flaky.json",
+      "logs/results.json",
+      "deflaking_logs/results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "update flakiness information",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text[flaky.json]@@@"
-    ]
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "Update flakiness information (2)"
   },
   {
     "cmd": [
       "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
       "tools/bots/compare_results.dart",
       "--flakiness-data",
-      "",
+      "deflaking_logs/flaky.json",
       "--human",
       "--verbose",
       "--changed",
@@ -1024,15 +1357,18 @@
       "--failing",
       "--passing",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      ""
+      "[CACHE]/builder/sdk/logs/results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "test results"
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "upload new results"
+    "env": {
+      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "deflaked status of Test-step 2"
   },
   {
     "cmd": [
