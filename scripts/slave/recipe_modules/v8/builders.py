@@ -1775,6 +1775,7 @@ BUILDERS = {
           'properties': {
             'build_config': 'Release',
             'target_arch': 'mips',
+            'use_goma': False,
           },
           'platform': 'linux',
         },

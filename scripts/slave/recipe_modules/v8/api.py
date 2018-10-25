@@ -114,12 +114,16 @@ class V8Api(recipe_api.RecipeApi):
     self.revision_cp = None
     self.revision_number = None
 
-  def bot_config_by_buildername(self, builders=FLATTENED_BUILDERS):
+  def bot_config_by_buildername(
+      self, builders=FLATTENED_BUILDERS, use_goma=True):
     default = {}
     if not self.m.properties.get('parent_buildername'):
       # Builders and builder_testers both build and need the following set of
       # default chromium configs:
-      default['chromium_apply_config'] = ['default_compiler', 'goma', 'mb']
+      if use_goma:
+        default['chromium_apply_config'] = ['default_compiler', 'goma', 'mb']
+      else:
+        default['chromium_apply_config'] = ['default_compiler', 'mb']
     return builders.get(self.m.properties.get('buildername'), default)
 
   def update_bot_config(self, bot_config, build_config, enable_swarming,
