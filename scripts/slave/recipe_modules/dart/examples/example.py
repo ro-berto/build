@@ -67,7 +67,8 @@ TEST_MATRIX = {
     {
       "builders": [
         "dart2js-win10-debug-x64-firefox",
-        "analyzer-none-linux-release"
+        "analyzer-none-linux-release",
+        "vm-kernel-win-release-x64",
       ],
       "meta": {},
       "steps": [{
@@ -211,6 +212,17 @@ def GenTests(api):
   yield (api.test('basic-failure') + api.properties(
       buildername='build-fail') +
       api.step_data('can_time_out', retcode=1))
+
+  yield (api.test('vm-win') +
+      api.platform('win', 64) +
+      api.properties(buildername='vm-kernel-win-release-x64',
+                     buildnumber='1357',
+                     revision='3456abcd78ef') +
+      api.step_data('upload testing fileset fileset1',
+                    stdout=api.raw_io.output('test isolate hash')) +
+      api.step_data('buildbucket.put',
+                    stdout=api.json.output(TRIGGER_RESULT)))
+
 
   yield (api.test('basic-win-stable') +
       api.platform('win', 64) +

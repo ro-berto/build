@@ -539,11 +539,16 @@ class DartApi(recipe_api.RecipeApi):
       None)
     environment = {'system': system,
                    'mode': mode,
-                   'arch': arch}
+                   'arch': arch,
+                   'copy-coredumps': False}
     environment['commit'] = {
       'commit_hash': self.m.buildbucket.gitiles_commit.id,
       'commit_time': self.m.git.get_timestamp(test_data='1234567')
     }
+    # Linux and vm-*-win builders should use copy-coredumps
+    environment['copy-coredumps'] = (system == 'linux' or
+            (system.startswith('win') and builder_name.startswith('vm-')))
+
     if runtime is not None:
       if runtime == 'ff':
         runtime = 'firefox' # pragma: no cover
@@ -592,6 +597,11 @@ class DartApi(recipe_api.RecipeApi):
         environment_variables = step.get('environment', {})
         environment_variables['BUILDBOT_BUILDERNAME'] = (
             builder_name + "-%s" % channel)
+
+        # Enable Crashpad integration if a Windows bot wants to copy coredumps.
+        if environment['copy-coredumps'] and self.m.platform.name == 'win':
+          environment_variables['DART_USE_CRASHPAD'] = '1'
+
         with self.m.context(cwd=self.m.path['checkout'],
                             env=environment_variables):
           with self.m.depot_tools.on_path():
@@ -750,7 +760,7 @@ class DartApi(recipe_api.RecipeApi):
       args = args + ['--append_logs']
     if environment['system'] in ['win7', 'win8', 'win10']:
       args = args + ['--builder-tag=%s' % environment['system']]
-    if environment['system'] in ['linux']:
+    if environment['copy-coredumps']:
       args = args + ['--copy-coredumps']
     # The --chrome flag is added here if the runtime for the bot is
     # chrome. This also catches the case where there is a specific
