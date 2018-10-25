@@ -3,6 +3,24 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]\\builder"
+    ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "infra_step": true,
+    "name": "init cache if not exists"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
       "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
@@ -17,6 +35,10 @@
       "--revision",
       "src@c14d891d44f0afff64e56ed7c9702df1d807b1ee"
     ],
+    "cwd": "[CACHE]\\builder",
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -154,10 +176,13 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[START_DIR]\\src\\out\\Release.1"
+      "[CACHE]\\builder\\src\\out\\Release.1"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "infra_step": true,
-    "name": "rmtree [START_DIR]\\src\\out\\Release.1"
+    "name": "rmtree [CACHE]\\builder\\src\\out\\Release.1"
   },
   {
     "cmd": [
@@ -167,13 +192,19 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[START_DIR]\\src\\out\\Release.2"
+      "[CACHE]\\builder\\src\\out\\Release.2"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "infra_step": true,
-    "name": "rmtree [START_DIR]\\src\\out\\Release.2"
+    "name": "rmtree [CACHE]\\builder\\src\\out\\Release.2"
   },
   {
     "cmd": [],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "name": "ensure_goma"
   },
   {
@@ -189,6 +220,9 @@
       "-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
     "~followup_annotations": [
@@ -212,10 +246,12 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[START_DIR]\\src\\out\\Release"
+      "[CACHE]\\builder\\src\\out\\Release"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "clobber"
@@ -227,9 +263,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_DEFINES": "component=static_library gomadir='[CACHE]\\goma\\client' target_arch=ia32 use_goma=1"
     },
     "env_suffixes": {
@@ -243,20 +280,21 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "lookup",
       "-m",
       "chromium.swarm",
       "-b",
       "Windows deterministic",
       "--config-file",
-      "[START_DIR]\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args",
@@ -269,21 +307,22 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "chromium.swarm",
       "-b",
       "Windows deterministic",
       "--config-file",
-      "[START_DIR]\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files"
@@ -292,30 +331,32 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "isolate-everything",
       "-m",
       "chromium.swarm",
       "-b",
       "Windows deterministic",
       "--config-file",
-      "[START_DIR]\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate .isolate files"
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "preprocess_for_goma"
   },
@@ -331,9 +372,10 @@
       "0777",
       "[CACHE]\\goma\\data\\Windows_deterministic"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -348,9 +390,10 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Windows_deterministic",
@@ -386,9 +429,10 @@
       "--pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
@@ -410,14 +454,15 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "-j",
       "20",
       "all"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "First build"
@@ -428,7 +473,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "-j",
       "20",
       "all",
@@ -436,9 +481,10 @@
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "First build confirm no-op",
@@ -446,9 +492,10 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "postprocess_for_goma"
   },
@@ -460,9 +507,10 @@
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -493,9 +541,10 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -515,9 +564,10 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -549,9 +599,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]\\\\src\\\\out\\\\Release\", \"-j\", 20, \"all\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release\", \"-j\", 20, \"all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -573,9 +623,10 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
@@ -603,9 +654,10 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
@@ -621,15 +673,18 @@
       "--json-output",
       "/path/to/tmp/json",
       "glob",
-      "[START_DIR]\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "*.isolated.gen.json"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "infra_step": true,
     "name": "find isolated targets",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@glob@[START_DIR]\\src\\out\\Release\\dummy_target_1.isolated.gen.json@@@",
-      "@@@STEP_LOG_LINE@glob@[START_DIR]\\src\\out\\Release\\dummy_target_2.isolated.gen.json@@@",
+      "@@@STEP_LOG_LINE@glob@[CACHE]\\builder\\src\\out\\Release\\dummy_target_1.isolated.gen.json@@@",
+      "@@@STEP_LOG_LINE@glob@[CACHE]\\builder\\src\\out\\Release\\dummy_target_2.isolated.gen.json@@@",
       "@@@STEP_LOG_END@glob@@@"
     ]
   },
@@ -638,7 +693,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
-      "[START_DIR]\\src\\tools\\swarming_client",
+      "[CACHE]\\builder\\src\\tools\\swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -646,9 +701,12 @@
       "https://isolateserver.appspot.com",
       "--eventlog-endpoint",
       "prod",
-      "[START_DIR]\\src\\out\\Release\\dummy_target_1.isolated.gen.json",
-      "[START_DIR]\\src\\out\\Release\\dummy_target_2.isolated.gen.json"
+      "[CACHE]\\builder\\src\\out\\Release\\dummy_target_1.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\dummy_target_2.isolated.gen.json"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -664,10 +722,13 @@
       "python",
       "-u",
       "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
-      "[START_DIR]\\src\\out\\Release",
-      "[START_DIR]\\src\\out\\Release.1"
+      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release.1"
     ],
-    "name": "Move [START_DIR]\\src\\out\\Release to [START_DIR]\\src\\out\\Release.1",
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "name": "Move [CACHE]\\builder\\src\\out\\Release to [CACHE]\\builder\\src\\out\\Release.1",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
@@ -687,10 +748,12 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[START_DIR]\\src\\out\\Release"
+      "[CACHE]\\builder\\src\\out\\Release"
     ],
+    "cwd": "[CACHE]\\builder",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "clobber (2)"
@@ -702,9 +765,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GYP_DEFINES": "component=static_library gomadir='[CACHE]\\goma\\client' target_arch=ia32 use_goma=1"
     },
     "env_suffixes": {
@@ -718,20 +782,21 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "lookup",
       "-m",
       "chromium.swarm",
       "-b",
       "Windows deterministic",
       "--config-file",
-      "[START_DIR]\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args (2)",
@@ -744,21 +809,22 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "gen",
       "-m",
       "chromium.swarm",
       "-b",
       "Windows deterministic",
       "--config-file",
-      "[START_DIR]\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files (2)"
@@ -767,30 +833,32 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "isolate-everything",
       "-m",
       "chromium.swarm",
       "-b",
       "Windows deterministic",
       "--config-file",
-      "[START_DIR]\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client",
       "//out/Release"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate .isolate files (2)"
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "preprocess_for_goma (2)"
   },
@@ -806,9 +874,10 @@
       "0777",
       "[CACHE]\\goma\\data\\Windows_deterministic"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (2)",
@@ -823,9 +892,10 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "restart"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\Windows_deterministic",
@@ -861,9 +931,10 @@
       "--pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (2)",
@@ -885,14 +956,15 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "-j",
       "20",
       "all"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "Second build"
@@ -903,7 +975,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "-j",
       "20",
       "all",
@@ -911,9 +983,10 @@
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "Second build confirm no-op",
@@ -921,9 +994,10 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "postprocess_for_goma (2)"
   },
@@ -935,9 +1009,10 @@
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -968,9 +1043,10 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stat"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -990,9 +1066,10 @@
       "[CACHE]\\goma\\client\\goma_ctl.py",
       "stop"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -1024,9 +1101,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]\\\\src\\\\out\\\\Release\", \"-j\", 20, \"all\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release\", \"-j\", 20, \"all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1048,9 +1125,10 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "name": "postprocess_for_goma.upload_log (2)",
     "~followup_annotations": [
@@ -1078,9 +1156,10 @@
       "--killed-pid-file",
       "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[START_DIR]\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
-      "CHROME_HEADLESS": "1"
+      "CHROME_HEADLESS": "1",
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (2)",
@@ -1096,15 +1175,18 @@
       "--json-output",
       "/path/to/tmp/json",
       "glob",
-      "[START_DIR]\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release",
       "*.isolated.gen.json"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "infra_step": true,
     "name": "find isolated targets (2)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@glob@[START_DIR]\\src\\out\\Release\\dummy_target_1.isolated.gen.json@@@",
-      "@@@STEP_LOG_LINE@glob@[START_DIR]\\src\\out\\Release\\dummy_target_2.isolated.gen.json@@@",
+      "@@@STEP_LOG_LINE@glob@[CACHE]\\builder\\src\\out\\Release\\dummy_target_1.isolated.gen.json@@@",
+      "@@@STEP_LOG_LINE@glob@[CACHE]\\builder\\src\\out\\Release\\dummy_target_2.isolated.gen.json@@@",
       "@@@STEP_LOG_END@glob@@@"
     ]
   },
@@ -1113,7 +1195,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\isolate.py",
-      "[START_DIR]\\src\\tools\\swarming_client",
+      "[CACHE]\\builder\\src\\tools\\swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -1121,9 +1203,12 @@
       "https://isolateserver.appspot.com",
       "--eventlog-endpoint",
       "prod",
-      "[START_DIR]\\src\\out\\Release\\dummy_target_1.isolated.gen.json",
-      "[START_DIR]\\src\\out\\Release\\dummy_target_2.isolated.gen.json"
+      "[CACHE]\\builder\\src\\out\\Release\\dummy_target_1.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\dummy_target_2.isolated.gen.json"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "name": "isolate tests (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1139,10 +1224,13 @@
       "python",
       "-u",
       "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
-      "[START_DIR]\\src\\out\\Release",
-      "[START_DIR]\\src\\out\\Release.2"
+      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release.2"
     ],
-    "name": "Move [START_DIR]\\src\\out\\Release to [START_DIR]\\src\\out\\Release.2",
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
+    "name": "Move [CACHE]\\builder\\src\\out\\Release to [CACHE]\\builder\\src\\out\\Release.2",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import os@@@",
@@ -1158,11 +1246,11 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\determinism\\compare_build_artifacts.py",
+      "[CACHE]\\builder\\src\\tools\\determinism\\compare_build_artifacts.py",
       "--first-build-dir",
-      "[START_DIR]\\src\\out\\Release.1",
+      "[CACHE]\\builder\\src\\out\\Release.1",
       "--second-build-dir",
-      "[START_DIR]\\src\\out\\Release.2",
+      "[CACHE]\\builder\\src\\out\\Release.2",
       "--target-platform",
       "win",
       "--json-output",
@@ -1171,6 +1259,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "--use-isolate-files"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "name": "compare_build_artifacts",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
@@ -1190,16 +1281,19 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]\\src\\tools\\determinism\\create_diffs_tarball.py",
+      "[CACHE]\\builder\\src\\tools\\determinism\\create_diffs_tarball.py",
       "--first-build-dir",
-      "[START_DIR]\\src\\out\\Release.1",
+      "[CACHE]\\builder\\src\\out\\Release.1",
       "--second-build-dir",
-      "[START_DIR]\\src\\out\\Release.2",
+      "[CACHE]\\builder\\src\\out\\Release.2",
       "--json-input",
       "[\"base_unittest\", \"flatc\"]",
       "--output",
       "[TMP_BASE]\\deterministic_build_tmp_1\\deterministic_build_diffs.tgz"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "name": "create tarball"
   },
   {
@@ -1214,6 +1308,9 @@
       "[TMP_BASE]\\deterministic_build_tmp_1\\deterministic_build_diffs.tgz",
       "gs://chrome-determinism/Windows deterministic\\571\\deterministic_build_diffs.tgz"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
@@ -1230,6 +1327,9 @@
       "rmtree",
       "[TMP_BASE]\\deterministic_build_tmp_1"
     ],
+    "env": {
+      "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"
+    },
     "infra_step": true,
     "name": "rmtree [TMP_BASE]\\deterministic_build_tmp_1"
   },

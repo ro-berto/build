@@ -5672,19 +5672,21 @@ Checks that properties get to recipes from remote_run properly
 &mdash; **def [RunSteps](/scripts/slave/recipes/run_presubmit.py#108)(api):**
 ### *recipes* / [swarming/deterministic\_build](/scripts/slave/recipes/swarming/deterministic_build.py)
 
-[DEPS](/scripts/slave/recipes/swarming/deterministic_build.py#14): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [isolate](#recipe_modules-isolate), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/swarming/deterministic_build.py#14): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [isolate](#recipe_modules-isolate), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 Recipe to test the deterministic build.
 
 Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 
-&mdash; **def [ConfigureAndroidBuilder](/scripts/slave/recipes/swarming/deterministic_build.py#122)(api, recipe_config):**
+&mdash; **def [ConfigureAndroidBuilder](/scripts/slave/recipes/swarming/deterministic_build.py#123)(api, recipe_config):**
 
-&mdash; **def [ConfigureChromiumBuilder](/scripts/slave/recipes/swarming/deterministic_build.py#110)(api, recipe_config):**
+&mdash; **def [ConfigureChromiumBuilder](/scripts/slave/recipes/swarming/deterministic_build.py#111)(api, recipe_config):**
 
-&mdash; **def [MoveBuildDirectory](/scripts/slave/recipes/swarming/deterministic_build.py#98)(api, src_dir, dst_dir):**
+&mdash; **def [DoRunSteps](/scripts/slave/recipes/swarming/deterministic_build.py#164)(api, buildername, target_platform, recipe_config):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/swarming/deterministic_build.py#142)(api, buildername):**
+&mdash; **def [MoveBuildDirectory](/scripts/slave/recipes/swarming/deterministic_build.py#99)(api, src_dir, dst_dir):**
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/swarming/deterministic_build.py#144)(api, buildername):**
 ### *recipes* / [swarming/heartbeat](/scripts/slave/recipes/swarming/heartbeat.py)
 
 [DEPS](/scripts/slave/recipes/swarming/heartbeat.py#11): [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [swarming\_heartbeat](#recipe_modules-swarming_heartbeat), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

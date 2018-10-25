@@ -17,6 +17,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'isolate',
+  'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -133,6 +134,7 @@ def ConfigureAndroidBuilder(api, recipe_config):
   api.chromium.set_config('base_config', **kwargs)
   api.chromium.apply_config(recipe_config['chromium_config'])
   api.chromium.apply_config('clobber')
+  api.chromium_android.init_and_sync()
 
 PROPERTIES = {
   'buildername': Property(),
@@ -141,31 +143,51 @@ PROPERTIES = {
 
 def RunSteps(api, buildername):
   recipe_config = DETERMINISTIC_BUILDERS[buildername]
-  enable_isolate = True
 
-  targets = recipe_config['targets']
   if recipe_config.get('chromium_config_kwargs'):
     target_platform = recipe_config['chromium_config_kwargs'].get(
         'TARGET_PLATFORM')
   else:
     target_platform = recipe_config.get('platform')
 
-  if target_platform in ('linux', 'mac', 'win'):
-    ConfigureChromiumBuilder(api, recipe_config)
-  elif target_platform is 'android':
-    # Disable the tests isolation on Android as it's not supported yet.
-    ConfigureAndroidBuilder(api, recipe_config)
-    enable_isolate = False
-    api.chromium_android.init_and_sync()
+  # Set DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT to a cache path so that depot_tools
+  # clobbering doesn't clobber the msvc toolchain on each build.
+  env = {}
+  if target_platform == 'win':
+    env['DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT'] = (
+        api.path['cache'].join('win_toolchain'))
+
+  with api.context(env=env):
+    DoRunSteps(api, buildername, target_platform, recipe_config)
+
+
+def DoRunSteps(api, buildername, target_platform, recipe_config):
+
+  # Set up a named cache so runhooks doesn't redownload everything on each run.
+  solution_path = api.path['cache'].join('builder')
+  api.file.ensure_directory('init cache if not exists', solution_path)
+
+  with api.context(cwd=solution_path):
+    if target_platform in ('linux', 'mac', 'win'):
+      ConfigureChromiumBuilder(api, recipe_config)
+    elif target_platform is 'android':
+      ConfigureAndroidBuilder(api, recipe_config)
 
   # Since disk lacks in Mac, we need to remove files before build.
   for ext in '12':
     p = str(api.chromium.output_dir).rstrip('\\/') + '.' + ext
     api.file.rmtree('rmtree %s' % p, p)
 
-  # Do a first build and move the build artifact to the temp directory.
+  targets = recipe_config['targets']
+
+  # Disable the tests isolation on Android as it's not supported yet.
+  enable_isolate = target_platform != 'android'
+
   api.chromium.ensure_goma()
-  api.chromium.runhooks()
+
+  # Do a first build and move the build artifact to the temp directory.
+  with api.context(cwd=solution_path):
+    api.chromium.runhooks()
   api.chromium.mb_gen(api.properties.get('mastername'), buildername)
   api.chromium.mb_isolate_everything(api.properties.get('mastername'),
                                      buildername)
@@ -178,7 +200,8 @@ def RunSteps(api, buildername):
                      str(api.chromium.output_dir).rstrip('\\/') + '.1')
 
   # Do the second build and move the build artifact to the temp directory.
-  api.chromium.runhooks()
+  with api.context(cwd=solution_path):
+    api.chromium.runhooks()
   api.chromium.mb_gen(api.properties.get('mastername'), buildername)
   api.chromium.mb_isolate_everything(api.properties.get('mastername'),
                                      buildername)
