@@ -10,7 +10,7 @@ from collections import OrderedDict
 import re
 
 from recipe_engine import recipe_test_api
-from recipe_engine.post_process import Filter
+from recipe_engine.post_process import DoesNotRun, Filter, MustRun
 from . import builders
 from . import testing
 
@@ -412,7 +412,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     skip_fragments = map(re.escape, [
       'ensure builder cache dir',
       'ensure_goma',
-      'calculate the number of recommended jobs',
       'preprocess_for_goma',
       'postprocess_for_goma',
       'read revision',
@@ -572,6 +571,18 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           change_number=456789,
           patch_set=12,
       )
+
+    # If use_goma is provided (not None), check if relevant steps either are
+    # executed or not executed.
+    goma_steps = [
+      'ensure_goma',
+      'preprocess_for_goma',
+      'postprocess_for_goma'
+    ]
+    if kwargs.get('use_goma') is True:
+      test += self.post_process(MustRun, *goma_steps)
+    elif kwargs.get('use_goma') is False:
+      test += self.post_process(DoesNotRun, *goma_steps)
 
     # Skip some goma and swarming related steps in expectations.
     test += self.hide_infra_steps()

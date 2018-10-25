@@ -874,3 +874,23 @@ def GenTests(api):
         'gsutil coverage data',
     ))
   )
+
+  # Test switching goma on and off. Goma steps are asserted in the v8 test api.
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'goma',
+        use_goma=True,
+    ) +
+    api.post_process(DropExpectation)
+  )
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'no_goma',
+        use_goma=False,
+    ) +
+    api.post_process(DropExpectation)
+  )

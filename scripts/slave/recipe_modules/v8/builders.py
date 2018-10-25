@@ -1097,17 +1097,6 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
 ####### Category: MIPS
-      'V8 Mips - builder': {
-        'chromium_apply_config': ['default_compiler', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'mips',
-        },
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Mips - big endian - nosnap',
-        ],
-      },
       'V8 Linux - mipsel - sim - builder': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
@@ -1765,17 +1754,6 @@ BUILDERS = {
             'build_config': 'Release',
             'target_arch': 'arm',
             'target_platform': 'android',
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_mips_compile_rel': {
-        'chromium_apply_config': ['default_compiler', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
-            'target_arch': 'mips',
-            'use_goma': False,
           },
           'platform': 'linux',
         },
