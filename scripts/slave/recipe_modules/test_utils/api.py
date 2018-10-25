@@ -307,9 +307,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       suggests that the error is due to an issue with top of tree, and should
       not cause the CL to fail.
     """
-    valid_results, pass_fail_counts = test.pass_fail_counts_or_invalid_results(
-        caller_api, 'without patch')
-    if valid_results:
+    if test.has_valid_results(caller_api, 'without patch'):
+      pass_fail_counts = test.pass_fail_counts(caller_api, 'without patch')
       ignored_failures = set()
       for test_name, results in pass_fail_counts.iteritems():
         # If a test fails at least once, then it's flaky on tip of tree and we

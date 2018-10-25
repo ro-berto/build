@@ -338,18 +338,6 @@ class Test(object):
       return (True, set(self.failures(api, suffix)))
     return (False, None)
 
-  def pass_fail_counts_or_invalid_results(self, api, suffix):
-    """If results are valid, returns pass fail counts
-
-    Returns: A tuple (valid_results, pass_fail_counts).
-      valid_results: A Boolean indicating whether results are valid.
-      pass_fail_counts: A dictionary of pass_fail_counts. Only valid if
-                        valid_results is True.
-    """
-    if self.has_valid_results(api, suffix):
-      return (True, self.pass_fail_counts(api, suffix))
-    return (False, None)
-
   def tests_to_retry(self, api, suffix):
     """Computes the tests to run on an invocation of the test suite.
 
