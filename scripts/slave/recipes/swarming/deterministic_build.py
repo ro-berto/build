@@ -148,19 +148,6 @@ def RunSteps(api, buildername):
   else:
     target_platform = recipe_config.get('platform')
 
-  # Set DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT to a cache path so that depot_tools
-  # clobbering doesn't clobber the msvc toolchain on each build.
-  env = {}
-  if target_platform == 'win':
-    env['DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT'] = (
-        api.path['cache'].join('win_toolchain'))
-
-  with api.context(env=env):
-    DoRunSteps(api, buildername, target_platform, recipe_config)
-
-
-def DoRunSteps(api, buildername, target_platform, recipe_config):
-
   # Set up a named cache so runhooks doesn't redownload everything on each run.
   solution_path = api.path['cache'].join('builder')
   api.file.ensure_directory('init cache if not exists', solution_path)

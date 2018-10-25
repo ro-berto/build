@@ -5699,8 +5699,6 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 
 &mdash; **def [ConfigureChromiumBuilder](/scripts/slave/recipes/swarming/deterministic_build.py#117)(api, recipe_config):**
 
-&mdash; **def [DoRunSteps](/scripts/slave/recipes/swarming/deterministic_build.py#162)(api, buildername, target_platform, recipe_config):**
-
 &mdash; **def [MoveBuildDirectory](/scripts/slave/recipes/swarming/deterministic_build.py#105)(api, src_dir, dst_dir):**
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/swarming/deterministic_build.py#142)(api, buildername):**
