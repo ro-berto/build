@@ -1624,18 +1624,6 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'v8_linux_arm64_rel_ng': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
-            'triggers': [
-              'v8_linux_arm64_rel_ng_triggered',
-            ],
-          },
-          'platform': 'linux',
-        },
-      },
     },
   },
 }
