@@ -123,11 +123,11 @@ def TestFlutter(api, start_dir, just_built_dart_sdk, just_built_gen):
 
     # In case dart-sdk symlink was left from previous run we need to [remove] it,
     # rather than [rmtree] because rmtree is going to remove symlink target folder.
-    try:
-      api.file.remove('remove downloaded cached dart-sdk', dart_sdk)
-    except OSError: # pragma: no cover
-      pass
-    api.file.rmtree('remove downloaded cached dart-sdk', dart_sdk)
+    # We are not able to use api.file classes for this because there is no
+    # support for symlink checks or handling of error condition.
+    api.step('cleanup', [
+      '/bin/bash', '-c', '\"if [ -L %(s)s ]; then rm %(s)s else rm -rf %(s)s; fi\"' %
+      {'s': dart_sdk}])
 
     api.file.remove('remove downloaded frontend_server snapshot', frontend_server)
     api.file.symlink('make cached dart-sdk point to just built dart sdk', just_built_dart_sdk, dart_sdk)
