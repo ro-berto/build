@@ -14,12 +14,6 @@ from recipe_engine.post_process import DoesNotRun, Filter, MustRun
 from . import builders
 from . import testing
 
-# Simulated branch names for testing. Optionally upgrade these in branch period
-# to reflect the real branches used by the gitiles poller. Fully-qualified ref
-# format for beta branch below simulates the way branches are specified on LUCI.
-STABLE_BRANCH = '4.2'
-BETA_BRANCH = 'refs/branch-heads/4.3'
-
 # Excerpt of the v8 version file.
 VERSION_FILE_TMPL = """
 #define V8_MAJOR_VERSION 3
@@ -431,13 +425,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
             stream='stdout'),
     )
 
-  def _get_test_branch_name(self, buildername):
-    if re.search(r'stable branch', buildername):
-      return STABLE_BRANCH
-    if re.search(r'beta branch', buildername):
-      return BETA_BRANCH
-    return 'master'
-
   def _make_dummy_swarm_hashes(self, test_names):
     """Makes dummy isolate hashes for all tests of a bot.
 
@@ -486,7 +473,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     parent_buildername, parent_bot_config = (
         builders.PARENT_MAP.get(
             buildername, (parent_buildername, parent_bot_config)))
-    branch=self._get_test_branch_name(buildername)
 
     if parent_test_spec:
       kwargs.update(self.example_parent_test_spec_properties(
@@ -505,6 +491,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     else:
       properties_fn = self.m.properties.generic
 
+    kwargs.setdefault('branch', 'master')
     kwargs.setdefault('path_config', 'kitchen')
     test = (
         recipe_test_api.RecipeTestApi.test(
@@ -512,7 +499,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         properties_fn(
             mastername=mastername,
             buildername=buildername,
-            branch=branch,
             parent_buildername=parent_buildername,
             revision='deadbeef'*5,
             gerrit_project='v8/v8',

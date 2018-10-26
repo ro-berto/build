@@ -1388,48 +1388,8 @@ BUILDERS = {
   },
 }
 
-####### Waterfall: client.v8.branches
-BRANCH_BUILDERS = {}
-
-def AddBranchBuilder(name, build_config):
-  return {
-    'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-    'v8_config_kwargs': {
-      'BUILD_CONFIG': build_config,
-    },
-    'testing': {'platform': 'linux'},
-  }
-
-def fill_branch_builders():
-  for build_config, name_suffix in (('Release', ''), ('Debug', ' - debug')):
-    for branch_name in ('stable branch', 'beta branch'):
-      name = 'V8 Linux - %s%s' % (branch_name, name_suffix)
-      BRANCH_BUILDERS[name] = AddBranchBuilder(name, build_config)
-      name = 'V8 Linux64 - %s%s' % (branch_name, name_suffix)
-      BRANCH_BUILDERS[name] = AddBranchBuilder(name, build_config)
-      name = 'V8 arm - sim - %s%s' % (branch_name, name_suffix)
-      BRANCH_BUILDERS[name] = AddBranchBuilder(name, build_config)
-
-  for branch_name in ('stable branch', 'beta branch'):
-    name = 'V8 mipsel - sim - %s' % branch_name
-    BRANCH_BUILDERS[name] = AddBranchBuilder(name, 'Release')
-
-    name = 'V8 mips64el - sim - %s' % branch_name
-    BRANCH_BUILDERS[name] = AddBranchBuilder(name, 'Release')
-
-    name = 'V8 ppc64 - sim - %s' % branch_name
-    BRANCH_BUILDERS[name] = AddBranchBuilder(name, 'Release')
-
-    name = 'V8 s390x - sim - %s' % branch_name
-    BRANCH_BUILDERS[name] = AddBranchBuilder(name, 'Release')
-
-fill_branch_builders()
-
-BUILDERS['client.v8.branches'] = {'builders': BRANCH_BUILDERS}
 
 BUILDERS = freeze(BUILDERS)
-BRANCH_BUILDERS = freeze(BRANCH_BUILDERS)
-
 
 def flatten_configs():
   # TODO(machenbach): Temporary code to migrate to flattened builder configs.

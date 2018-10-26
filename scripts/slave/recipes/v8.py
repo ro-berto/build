@@ -156,8 +156,9 @@ def GenTests(api):
   yield (
     api.v8.test(
         'client.v8.branches',
-        'V8 Linux - beta branch',
+        'V8 Foobar',
         'branch_sync_failure',
+        branch='refs/branch-heads/4.3',
     ) +
     api.step_data('bot_update', retcode=1)
   )

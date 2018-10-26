@@ -29,7 +29,7 @@ V8_URL = 'https://chromium.googlesource.com/v8/v8'
 COMMIT_TEMPLATE = '%s/+/%%s' % V8_URL
 
 # Regular expressions for v8 branch names.
-RELEASE_BRANCH_RE = re.compile(r'^(?:refs/branch-heads/)?\d+\.\d+$')
+RELEASE_BRANCH_RE = re.compile(r'^refs/branch-heads/\d+\.\d+$')
 
 # With more than 23 letters, labels are to big for buildbot's popup boxes.
 MAX_LABEL_SIZE = 23
@@ -336,11 +336,7 @@ class V8Api(recipe_api.RecipeApi):
     solution = self.m.gclient.c.solutions[0]
     branch = self.m.properties.get('branch', 'master')
     if RELEASE_BRANCH_RE.match(branch):
-      if branch.startswith('refs/branch-heads/'):
-        revision = '%s:%s' % (branch, revision)
-      else:
-        # TODO(sergiyb): Deprecate this after migrating branch builders to LUCI.
-        revision = 'refs/branch-heads/%s:%s' % (branch, revision)
+      revision = '%s:%s' % (branch, revision)
     solution.revision = revision
 
     self.checkout_root = self.m.path['builder_cache']
