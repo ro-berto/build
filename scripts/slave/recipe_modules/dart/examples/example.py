@@ -13,6 +13,12 @@ DEPS = [
   'recipe_engine/step'
 ]
 
+CANNED_OUTPUT_DIR = {
+  'results.json': r'{}',
+  'run.json': r'{}',
+  'result.log': r'{}'
+}
+
 TRIGGER_RESULT = {
   "results": [
     {
@@ -146,12 +152,14 @@ def RunSteps(api):
 
   test_args = ['--all']
   if 'shards' in api.properties:
-    with api.step.defer_results():
-      tasks = api.dart.shard('vm_tests', isolate_hash, test_args)
-      api.dart.collect_all([{'shards':tasks,
-                             'args': ['--test_arg'],
-                             'environment': {},
-                             'step_name': 'example sharded step'}])
+    tasks = api.dart.shard('vm_tests', isolate_hash, test_args)
+    api.dart.collect_all([{'shards':tasks,
+                            'args': ['--test_arg'],
+                            'environment': {},
+                            'step_name': 'example sharded step'}],
+                          {'commit_hash':'deadbeef',
+                            'commit_time': '12124546'},
+                          {})
 
   with api.step.defer_results():
     api.step('Print Hello World', ['echo', 'hello', 'world'])
@@ -172,8 +180,12 @@ def GenTests(api):
       buildnumber='1357',
       revision='3456abcd78ef',
       new_workflow_enabled=True) +
+      api.step_data('Test-step 2.Test-step 2',
+                    api.raw_io.output_dir(CANNED_OUTPUT_DIR)) +
       api.step_data('upload testing fileset fileset1',
-                    stdout=api.raw_io.output('test isolate hash')))
+                    stdout=api.raw_io.output('test isolate hash')) +
+      api.step_data('download previous results.gsutil find latest build',
+                    api.raw_io.output_text('123', name='latest')))
 
   yield (api.test('analyzer-none-linux-release-be') + api.properties(
       buildername='analyzer-none-linux-release-be',
