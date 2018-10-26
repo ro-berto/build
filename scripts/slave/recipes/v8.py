@@ -793,18 +793,16 @@ def GenTests(api):
   # the infra side.
   yield (
       api.v8.test('client.v8', 'V8 Linux - builder', 'src_side_properties',
-                  build_config='Debug', target_arch='arm',
-                  target_platform='fuchsia',
-                  triggers=['V8 Foobar', 'V8 Linux']) +
+                  build_config='Debug',
+                  target_arch='arm',
+                  target_platform='fuchsia') +
       api.v8.check_in_param(
           'bot_update', '--spec-path', 'target_cpu = [\'arm\', \'arm64\']') +
       api.v8.check_in_param(
           'bot_update', '--spec-path', 'target_os = [\'fuchsia\']') +
       api.v8.check_in_any_arg('generate_build_files', 'Debug') +
       api.v8.check_in_any_arg('compile', 'Debug') +
-      # 'V8 Linux' and 'V8 Linux - presubmit' are statically defined. Check that
-      # 'V8 Foobar' is added and that 'V8 Linux' is deduped.
-      api.v8.check_triggers('V8 Foobar', 'V8 Linux', 'V8 Linux - presubmit') +
+      api.v8.check_triggers('V8 Linux', 'V8 Linux - presubmit') +
       api.post_process(DropExpectation)
   )
 

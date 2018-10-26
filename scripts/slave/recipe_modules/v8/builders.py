@@ -238,16 +238,18 @@ BUILDERS = {
         # uploads anyways because of the triggers_proxy specification.
         'should_upload_build': True,
         'testing': {
+          'properties': {
+            'triggers': [
+              'V8 Linux',
+              'V8 Linux - presubmit',
+            ],
+          },
           'platform': 'linux',
         },
         'binary_size_tracking': {
           'path_pieces_list': [['d8']],
           'category': 'linux32'
         },
-        'triggers': [
-          'V8 Linux',
-          'V8 Linux - presubmit',
-        ],
         'triggers_proxy': True,
       },
       'V8 Linux - debug builder': {
@@ -256,11 +258,15 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Linux - debug',
-          'V8 Linux - gc stress',
-        ],
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 Linux - debug',
+              'V8 Linux - gc stress',
+            ],
+          },
+          'platform': 'linux',
+        },
       },
       'V8 Linux - nosnap builder': {
         'chromium_apply_config': [
@@ -268,10 +274,14 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Linux - nosnap',
-        ],
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 Linux - nosnap',
+            ],
+          },
+          'platform': 'linux',
+        },
       },
       'V8 Linux - nosnap debug builder': {
         'chromium_apply_config': [
@@ -279,10 +289,14 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Linux - nosnap - debug',
-        ],
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 Linux - nosnap - debug',
+            ],
+          },
+          'platform': 'linux',
+        },
       },
       'V8 Linux - presubmit': {
         'enable_swarming': False,
@@ -347,16 +361,20 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'testing': {'platform': 'linux'},
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 Linux64',
+              'V8 Linux64 - fyi',
+            ],
+          },
+          'platform': 'linux',
+        },
         'track_build_dependencies': True,
         'binary_size_tracking': {
           'path_pieces_list': [['d8']],
           'category': 'linux64'
         },
-        'triggers': [
-          'V8 Linux64',
-          'V8 Linux64 - fyi',
-        ],
         'triggers_proxy': True,
       },
       'V8 Linux64 - debug builder': {
@@ -365,12 +383,16 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Fuzzer',
-          'V8 Linux64 - debug',
-          'V8 Linux64 - debug - fyi',
-        ],
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 Fuzzer',
+              'V8 Linux64 - debug',
+              'V8 Linux64 - debug - fyi',
+            ],
+          },
+          'platform': 'linux',
+        },
       },
       'V8 Linux64 - custom snapshot - debug builder': {
         'chromium_apply_config': [
@@ -378,11 +400,15 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Linux64 - custom snapshot - debug',
-          'V8 Linux64 GC Stress - custom snapshot',
-        ],
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 Linux64 - custom snapshot - debug',
+              'V8 Linux64 GC Stress - custom snapshot',
+            ],
+          },
+          'platform': 'linux',
+        },
       },
       'V8 Linux64 - internal snapshot': {
         'chromium_apply_config': [
@@ -453,10 +479,14 @@ BUILDERS = {
           'path_pieces_list': [['d8.exe']],
           'category': 'win32'
         },
-        'testing': {'platform': 'win'},
-        'triggers': [
-          'V8 Win32',
-        ],
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 Win32',
+            ],
+          },
+          'platform': 'win',
+        },
       },
       'V8 Win32 - debug builder': {
         'chromium_apply_config': [
@@ -467,10 +497,14 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'testing': {'platform': 'win'},
-        'triggers': [
-          'V8 Win32 - debug',
-        ],
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 Win32 - debug',
+            ],
+          },
+          'platform': 'win',
+        },
       },
       'V8 Win32 - nosnap - shared': {
         'chromium_apply_config': [
@@ -576,12 +610,16 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'triggers': [
-          'V8 Linux64 TSAN',
-          'V8 Linux64 TSAN - concurrent marking',
-          'V8 Linux64 TSAN - isolates',
-        ],
-        'testing': {'platform': 'linux'},
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 Linux64 TSAN',
+              'V8 Linux64 TSAN - concurrent marking',
+              'V8 Linux64 TSAN - isolates',
+            ],
+          },
+          'platform': 'linux',
+        },
       },
       'V8 Linux - arm64 - sim - MSAN': {
         'chromium_apply_config': [
@@ -704,10 +742,14 @@ BUILDERS = {
         'cf_gs_bucket': 'v8-asan',
         'cf_gs_acl': 'public-read',
         'cf_archive_name': 'd8',
-        'triggers': [
-          'V8 NumFuzz',
-        ],
-        'testing': {'platform': 'linux'},
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 NumFuzz',
+            ],
+          },
+          'platform': 'linux',
+        },
       },
       'V8 Clusterfuzz Linux64 - debug builder': {
         'chromium_apply_config': [
@@ -723,10 +765,14 @@ BUILDERS = {
         'cf_gs_bucket': 'v8-asan',
         'cf_gs_acl': 'public-read',
         'cf_archive_name': 'd8',
-        'triggers': [
-          'V8 NumFuzz - debug',
-        ],
-        'testing': {'platform': 'linux'},
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 NumFuzz - debug',
+            ],
+          },
+          'platform': 'linux',
+        },
       },
       'V8 Clusterfuzz Linux64 - nosnap release builder': {
         'chromium_apply_config': [
@@ -738,10 +784,14 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 NumFuzz - nosnap',
-        ],
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 NumFuzz - nosnap',
+            ],
+          },
+          'platform': 'linux',
+        },
       },
       'V8 Clusterfuzz Linux64 - nosnap debug builder': {
         'chromium_apply_config': [
@@ -753,10 +803,14 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 NumFuzz - nosnap debug',
-        ],
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 NumFuzz - nosnap debug',
+            ],
+          },
+          'platform': 'linux',
+        },
       },
       'V8 Clusterfuzz Linux64 ASAN no inline - release builder': {
         'chromium_apply_config': [
@@ -884,10 +938,14 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'triggers': [
-          'V8 NumFuzz - TSAN',
-        ],
-        'testing': {'platform': 'linux'},
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 NumFuzz - TSAN',
+            ],
+          },
+          'platform': 'linux',
+        },
       },
       'V8 Clusterfuzz Linux64 UBSanVptr - release builder': {
         'chromium_apply_config': [
@@ -988,10 +1046,14 @@ BUILDERS = {
           'path_pieces_list': [['d8']],
           'category': 'linux_arm32'
         },
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Arm',
-        ],
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 Arm',
+            ],
+          },
+          'platform': 'linux',
+        },
         'triggers_proxy': True,
       },
       'V8 Arm - debug builder': {
@@ -1001,11 +1063,15 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_ARCH': 'arm',
         },
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Arm - debug',
-          'V8 Arm GC Stress',
-        ],
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 Arm - debug',
+              'V8 Arm GC Stress',
+            ],
+          },
+          'platform': 'linux',
+        },
       },
       'V8 Android Arm - builder': {
         'chromium_apply_config': [
@@ -1066,10 +1132,14 @@ BUILDERS = {
           'path_pieces_list': [['d8']],
           'category': 'android_arm64'
         },
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Android Arm64 - N5X',
-        ],
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 Android Arm64 - N5X',
+            ],
+          },
+          'platform': 'linux',
+        },
         'triggers_proxy': True,
       },
       'V8 Linux - arm64 - sim': {
@@ -1103,10 +1173,14 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Linux - mipsel - sim',
-        ],
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 Linux - mipsel - sim',
+            ],
+          },
+          'platform': 'linux',
+        },
       },
       'V8 Linux - mips64el - sim - builder': {
         'chromium_apply_config': [
@@ -1114,10 +1188,14 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'testing': {'platform': 'linux'},
-        'triggers': [
-          'V8 Linux - mips64el - sim',
-        ],
+        'testing': {
+          'properties': {
+            'triggers': [
+              'V8 Linux - mips64el - sim',
+            ],
+          },
+          'platform': 'linux',
+        },
       },
 ####### Category: IBM
       'V8 Linux - ppc64 - sim': {
@@ -1860,9 +1938,6 @@ def iter_builders(recipe='v8'):
 PARENT_MAP = {}
 def fill_parent_map():
   for _, _, builder, bot_config in iter_builders():
-    # Statically defined triggers.
-    for triggered in bot_config.get('triggers', []):
-      PARENT_MAP[triggered] = (builder, bot_config)
     # Simulated dynamically defined triggers.
     for triggered in bot_config.get('testing', {}).get('properties', {}).get(
         'triggers', []):
