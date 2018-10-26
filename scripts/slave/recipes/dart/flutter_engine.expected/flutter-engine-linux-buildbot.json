@@ -2366,7 +2366,7 @@
     "cmd": [
       "/bin/bash",
       "-c",
-      "\"if [ -L [START_DIR]/flutter/bin/cache/dart-sdk ]; then rm [START_DIR]/flutter/bin/cache/dart-sdk else rm -rf [START_DIR]/flutter/bin/cache/dart-sdk; fi\""
+      "\"if [ -L [START_DIR]/flutter/bin/cache/dart-sdk ]; then rm [START_DIR]/flutter/bin/cache/dart-sdk; else rm -rf [START_DIR]/flutter/bin/cache/dart-sdk; fi\""
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
