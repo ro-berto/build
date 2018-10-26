@@ -126,7 +126,7 @@ def TestFlutter(api, start_dir, just_built_dart_sdk, just_built_gen):
     # We are not able to use api.file classes for this because there is no
     # support for symlink checks or handling of error condition.
     api.step('cleanup', [
-      '/bin/bash', '-c', '\"if [ -L %(s)s ]; then rm %(s)s; else rm -rf %(s)s; fi\"' %
+      '/bin/bash', '-c', 'if [ -L %(s)s ]; then rm %(s)s; else rm -rf %(s)s; fi' %
       {'s': dart_sdk}])
 
     api.file.remove('remove downloaded frontend_server snapshot', frontend_server)
