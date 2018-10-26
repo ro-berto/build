@@ -3,51 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[BUILDER_CACHE]/V8_Mac64/v8/infra/testing/builders.pyl",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "read test spec (v8)",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@test_spec@V8 Mac64@@@",
-      "@@@STEP_LOG_LINE@test_spec@  mjsunit(2) sweet@@@",
-      "@@@STEP_LOG_LINE@test_spec@  mjsunit(1) sour@@@",
-      "@@@STEP_LOG_END@test_spec@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/V8_Mac64/v8/tools/swarming_client",
-      "batcharchive",
-      "--dump-json",
-      "/path/to/tmp/json",
-      "--isolate-server",
-      "https://isolateserver.appspot.com",
-      "--eventlog-endpoint",
-      "prod",
-      "--verbose",
-      "[BUILDER_CACHE]/V8_Mac64/v8/out/Release/mjsunit.isolated.gen.json"
-    ],
-    "name": "isolate tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILDER_CACHE]/V8_Mac64/v8/tools/swarming_client/swarming.py",
+      "[START_DIR]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -58,7 +14,7 @@
       "--shards",
       "2",
       "--task-name",
-      "Mjsunit - sweet/Ubuntu-14.04/[dummy has/V8 Mac64/571",
+      "Mjsunit - sweet/Ubuntu-14.04/[dummy has/V8 Foobar/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -85,7 +41,7 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:V8 Mac64",
+      "buildername:V8 Foobar",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -103,7 +59,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Mjsunit - sweet on Ubuntu-14.04",
+      "stepname:Mjsunit - sweet",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -141,18 +97,18 @@
       "--mastername",
       "client.v8",
       "--buildername",
-      "V8 Mac64",
+      "V8 Foobar",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - sweet on Ubuntu-14.04"
+    "name": "[trigger] Mjsunit - sweet"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Mac64/v8/tools/swarming_client/swarming.py",
+      "[START_DIR]/swarming.client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -163,7 +119,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Mjsunit - everything/Ubuntu-14.04/[dummy has/V8 Mac64/571",
+      "Mjsunit - everything/Ubuntu-14.04/[dummy has/V8 Foobar/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -190,7 +146,7 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:V8 Mac64",
+      "buildername:V8 Foobar",
       "--tag",
       "buildnumber:571",
       "--tag",
@@ -208,7 +164,7 @@
       "--tag",
       "slavename:test_bot",
       "--tag",
-      "stepname:Mjsunit - everything on Ubuntu-14.04",
+      "stepname:Mjsunit - everything",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -248,12 +204,12 @@
       "--mastername",
       "client.v8",
       "--buildername",
-      "V8 Mac64",
+      "V8 Foobar",
       "--swarming",
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - everything on Ubuntu-14.04"
+    "name": "[trigger] Mjsunit - everything"
   },
   {
     "allow_subannotations": true,
@@ -267,7 +223,7 @@
       "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[BUILDER_CACHE]/V8_Mac64/v8/tools/swarming_client",
+      "[START_DIR]/swarming.client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -279,7 +235,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Mjsunit - sweet/Ubuntu-14.04/[dummy has/V8 Mac64/571\", \"tasks\": {\"Mjsunit - sweet/Ubuntu-14.04/[dummy has/V8 Mac64/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Mjsunit - sweet/Ubuntu-14.04/[dummy has/V8 Mac64/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
+      "{\"base_task_name\": \"Mjsunit - sweet/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Mjsunit - sweet/Ubuntu-14.04/[dummy has/V8 Foobar/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Mjsunit - sweet/Ubuntu-14.04/[dummy has/V8 Foobar/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
     ],
     "infra_step": true,
     "name": "Mjsunit - sweet",
@@ -312,7 +268,7 @@
       "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[BUILDER_CACHE]/V8_Mac64/v8/tools/swarming_client",
+      "[START_DIR]/swarming.client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -324,7 +280,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Mjsunit - everything/Ubuntu-14.04/[dummy has/V8 Mac64/571\", \"tasks\": {\"Mjsunit - everything/Ubuntu-14.04/[dummy has/V8 Mac64/571\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}"
+      "{\"base_task_name\": \"Mjsunit - everything/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Mjsunit - everything/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}"
     ],
     "infra_step": true,
     "name": "Mjsunit - everything",

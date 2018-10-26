@@ -616,10 +616,10 @@ def GenTests(api):
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Mac64',
+        'V8 Foobar',
         'with_test_spec',
     ) +
-    api.v8.test_spec_in_checkout('V8 Mac64', test_spec) +
+    api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
     api.post_process(
         Filter()
             .include('read test spec (v8)')
@@ -634,11 +634,12 @@ def GenTests(api):
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux - nosnap builder',
+        'V8 Foobar builder',
         'with_test_spec',
+        triggers=['V8 Foobar'],
     ) +
     api.v8.test_spec_in_checkout(
-        'V8 Linux - nosnap builder', test_spec, 'V8 Linux - nosnap') +
+        'V8 Foobar builder', test_spec, 'V8 Foobar') +
     api.post_process(Filter(
         'read test spec (v8)',
         'generate_build_files',
@@ -652,8 +653,10 @@ def GenTests(api):
   yield (
     api.v8.test(
         'client.v8',
-        'V8 Linux - nosnap',
-        'with_test_spec',
+        'V8 Foobar',
+        'tester_with_test_spec',
+        parent_bot_config=release_bot_config,
+        parent_buildername='V8 Foobar builder',
         parent_test_spec=test_spec,
     ) +
     api.post_process(Filter().include_re(r'.*Mjsunit.*'))

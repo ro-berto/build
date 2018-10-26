@@ -7,13 +7,13 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[BUILDER_CACHE]/V8_Linux___nosnap_builder/v8/infra/testing/builders.pyl",
+      "[BUILDER_CACHE]/V8_Foobar_builder/v8/infra/testing/builders.pyl",
       "/path/to/tmp/"
     ],
     "infra_step": true,
     "name": "read test spec (v8)",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@test_spec@V8 Linux - nosnap@@@",
+      "@@@STEP_LOG_LINE@test_spec@V8 Foobar@@@",
       "@@@STEP_LOG_LINE@test_spec@  mjsunit(2) sweet@@@",
       "@@@STEP_LOG_LINE@test_spec@  mjsunit(1) sour@@@",
       "@@@STEP_LOG_END@test_spec@@@"
@@ -23,21 +23,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Linux___nosnap_builder/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/V8_Foobar_builder/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
-      "V8 Linux - nosnap builder",
+      "V8 Foobar builder",
       "--config-file",
-      "[BUILDER_CACHE]/V8_Linux___nosnap_builder/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/V8_Foobar_builder/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "mjsunit\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux___nosnap_builder/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Foobar_builder/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -55,7 +55,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/V8_Linux___nosnap_builder/v8/tools/swarming_client",
+      "[BUILDER_CACHE]/V8_Foobar_builder/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -64,7 +64,7 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "[BUILDER_CACHE]/V8_Linux___nosnap_builder/v8/out/Release/mjsunit.isolated.gen.json"
+      "[BUILDER_CACHE]/V8_Foobar_builder/v8/out/Release/mjsunit.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -79,13 +79,13 @@
     "name": "trigger",
     "trigger_specs": [
       {
-        "builder_name": "V8 Linux - nosnap",
+        "builder_name": "V8 Foobar",
         "properties": {
           "parent_build_config": "Release",
           "parent_build_environment": {
             "gn_args": "target_cpu = \"x86\" use_goma = true"
           },
-          "parent_buildername": "V8 Linux - nosnap builder",
+          "parent_buildername": "V8 Foobar builder",
           "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
           "parent_got_revision_cp": "refs/heads/master@{#50110}",
           "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
@@ -134,7 +134,7 @@
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@V8 Linux - nosnap@@@"
+      "@@@STEP_TEXT@V8 Foobar@@@"
     ]
   }
 ]
