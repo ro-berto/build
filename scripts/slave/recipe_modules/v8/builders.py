@@ -1421,51 +1421,6 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'v8_linux_nosnap_rel': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_linux_nosnap_dbg': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Debug',
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_linux_gcc_compile_rel': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_linux_gcc_rel': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_linux_shared_compile_rel': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
-          },
-          'platform': 'linux',
-        },
-      },
       'v8_linux64_dbg_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
@@ -1474,24 +1429,6 @@ BUILDERS = {
             'triggers': [
               'v8_linux64_dbg_ng_triggered',
             ],
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_linux64_gcc_compile_dbg': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Debug',
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_linux64_header_includes_dbg': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Debug',
           },
           'platform': 'linux',
         },
@@ -1532,15 +1469,6 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'v8_linux_gc_stress_dbg': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Debug',
-          },
-          'platform': 'linux',
-        },
-      },
       'v8_linux64_asan_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
@@ -1561,42 +1489,6 @@ BUILDERS = {
             'triggers': [
               'v8_linux64_cfi_rel_ng_triggered',
             ],
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_linux64_jumbo_compile_rel': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_linux64_jumbo_limited_compile_rel': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_linux64_msan_rel': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_linux64_tsan_rel': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
           },
           'platform': 'linux',
         },
@@ -1622,24 +1514,6 @@ BUILDERS = {
             'build_config': 'Release'
           },
           'platform': 'linux',
-        },
-      },
-      'v8_win_dbg': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Debug',
-          },
-          'platform': 'win',
-        },
-      },
-      'v8_win_compile_dbg': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Debug',
-          },
-          'platform': 'win',
         },
       },
       'v8_win_rel_ng': {
@@ -1678,15 +1552,6 @@ BUILDERS = {
           'platform': 'win',
         },
       },
-      'v8_win64_msvc_compile_rel': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
-          },
-          'platform': 'win',
-        },
-      },
       'v8_win64_msvc_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
@@ -1707,15 +1572,6 @@ BUILDERS = {
             'triggers': [
               'v8_win64_rel_ng_triggered',
             ],
-          },
-          'platform': 'win',
-        },
-      },
-      'v8_win64_dbg': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Debug',
           },
           'platform': 'win',
         },
@@ -1744,24 +1600,6 @@ BUILDERS = {
           'platform': 'mac',
         },
       },
-      'v8_mac64_gc_stress_dbg': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Debug',
-          },
-          'platform': 'mac',
-        },
-      },
-      'v8_mac64_asan_rel': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
-          },
-          'platform': 'mac',
-        },
-      },
       'v8_linux_arm_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
@@ -1786,15 +1624,6 @@ BUILDERS = {
           'platform': 'linux',
         },
       },
-      'v8_linux_arm_dbg': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Debug',
-          },
-          'platform': 'linux',
-        },
-      },
       'v8_linux_arm64_rel_ng': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'testing': {
@@ -1803,53 +1632,6 @@ BUILDERS = {
             'triggers': [
               'v8_linux_arm64_rel_ng_triggered',
             ],
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_linux_arm64_dbg': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Debug',
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_linux_arm64_gc_stress_dbg': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Debug',
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_android_arm_compile_rel': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
-            'target_arch': 'arm',
-            'target_platform': 'android',
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_linux_mipsel_compile_rel': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
-          },
-          'platform': 'linux',
-        },
-      },
-      'v8_linux_mips64el_compile_rel': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'testing': {
-          'properties': {
-            'build_config': 'Release',
           },
           'platform': 'linux',
         },
