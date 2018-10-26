@@ -218,11 +218,14 @@ def GenTests(api):
   yield (
     api.v8.test(
         'tryserver.v8',
-        'v8_win64_rel_ng',
+        'v8_foobar_rel_ng',
         'test_filter_builder',
+        triggers=['v8_foobar_rel_ng_triggered'],
         testfilter=['mjsunit/regression/*', 'intl/foo', 'intl/bar'],
         extra_flags='--trace_gc --turbo_stats',
     ) +
+    api.v8.test_spec_in_checkout(
+        'v8_foobar_rel_ng', test_spec, 'v8_foobar_rel_ng_triggered') +
     api.post_process(Filter('trigger'))
   )
 
