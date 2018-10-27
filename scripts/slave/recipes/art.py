@@ -580,13 +580,13 @@ _CONFIG_MAP = {
       'gcstress': True,
     },
     'bullhead-armv8-gcstress-debug': {
-      'serial': '01e0c128ccf732ca',
+      'serial': '02022c7ec2834126',
       'device': 'bullhead-armv8',
       'debug': True,
       'gcstress': True,
     },
     'bullhead-armv7-gcstress-ndebug': {
-      'serial': '02022c7ec2834126',
+      'serial': '01e0c128ccf732ca',
       'device': 'bullhead-armv7',
       'debug': False,
       'gcstress': True,
