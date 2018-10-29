@@ -353,11 +353,26 @@
   {
     "cmd": [
       "[CACHE]/led/led",
+      "edit-cr-cl",
+      "https://chromium-review.googlesource.com/c/chromium/src/+/1286761"
+    ],
+    "cwd": "[CACHE]/build/build",
+    "name": "led edit-cr-cl",
+    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/led/led",
       "edit-recipe-bundle"
     ],
     "cwd": "[CACHE]/build/build",
     "name": "led edit-recipe-bundle",
-    "stdin": "{\"job_slices\": [{\"userland\": {\"recipe_name\": \"foo_recipe\"}}]}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_END@json.output (invalid)@@@",

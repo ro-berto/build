@@ -40,6 +40,11 @@ DEFAULT_BUILDERS = [
 ]
 
 
+# CL to use when testing a recipe which touches chromium source.
+CHROMIUM_SRC_TEST_CL = (
+    'https://chromium-review.googlesource.com/c/chromium/src/+/1286761')
+
+
 def _checkout_project(api, workdir, gclient_config, patch):
   api.file.ensure_directory(
       '%s checkout' % gclient_config.solutions[0].name, workdir)
@@ -124,6 +129,10 @@ def RunSteps(api, repo_name):
             '`recipes.py analyze` indicates this recipe is not affected by the'
             ' files changed by the CL.')
         continue
+
+      # FIXME: We should check if the recipe we're testing tests patches to
+      # chromium/src. For now just assume this works.
+      ir = ir.then('edit-cr-cl', CHROMIUM_SRC_TEST_CL)
 
       result = (ir.
                 then('edit-recipe-bundle').
