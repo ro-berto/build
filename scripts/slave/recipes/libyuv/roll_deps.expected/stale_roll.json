@@ -101,6 +101,7 @@
       "git",
       "cl",
       "set-close",
+      "--gerrit",
       "-i",
       "123"
     ],
@@ -157,7 +158,8 @@
       "-u",
       "[START_DIR]/src/tools_libyuv/autoroller/roll_deps.py",
       "--clean",
-      "--verbose"
+      "--verbose",
+      "--cq-over=2000"
     ],
     "cwd": "[START_DIR]/src",
     "env_prefixes": {

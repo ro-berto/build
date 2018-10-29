@@ -116,6 +116,7 @@
       "git",
       "cl",
       "set-close",
+      "--gerrit",
       "-i",
       "91827"
     ],
