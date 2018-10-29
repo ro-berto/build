@@ -674,7 +674,7 @@
     "cmd": [
       "python",
       "-u",
-      "tools/test.py",
+      "[CACHE]/builder/sdk/tools/test.py",
       "-ax64",
       "-mdebug",
       "--progress=status",
@@ -725,7 +725,7 @@
     "cmd": [
       "python",
       "-u",
-      "tools/test.py",
+      "[CACHE]/builder/sdk/tools/test.py",
       "-ax64",
       "--progress=status",
       "--report",
@@ -906,7 +906,7 @@
     "cmd": [
       "python",
       "-u",
-      "tools/test.py",
+      "[CACHE]/builder/sdk/tools/test.py",
       "-ax64",
       "-mdebug",
       "--progress=status",
@@ -965,7 +965,7 @@
     "cmd": [
       "python",
       "-u",
-      "tools/test.py",
+      "[CACHE]/builder/sdk/tools/test.py",
       "-ax64",
       "--progress=status",
       "--report",

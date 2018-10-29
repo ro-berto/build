@@ -1130,7 +1130,7 @@
     "cmd": [
       "python",
       "-u",
-      "tools/test.py",
+      "[CACHE]\\builder\\sdk\\tools\\test.py",
       "-mrelease",
       "--progress=status",
       "--report",
@@ -1180,7 +1180,7 @@
     "cmd": [
       "python",
       "-u",
-      "tools/test.py",
+      "[CACHE]\\builder\\sdk\\tools\\test.py",
       "-ax64",
       "-mrelease",
       "--progress=status",
@@ -1294,7 +1294,7 @@
   },
   {
     "cmd": [
-      "out/ReleaseX64/dart.exe",
+      "[CACHE]\\builder\\sdk\\out\\ReleaseX64\\dart.exe",
       "--bar",
       "foo.dart"
     ],
@@ -1451,7 +1451,7 @@
     "cmd": [
       "python",
       "-u",
-      "tools/test.py",
+      "[CACHE]\\builder\\sdk\\tools\\test.py",
       "-ax64",
       "-mrelease",
       "--progress=status",
@@ -1719,7 +1719,7 @@
     "cmd": [
       "python",
       "-u",
-      "tools/test.py",
+      "[CACHE]\\builder\\sdk\\tools\\test.py",
       "-mrelease",
       "--progress=status",
       "--report",
@@ -1775,7 +1775,7 @@
     "cmd": [
       "python",
       "-u",
-      "tools/test.py",
+      "[CACHE]\\builder\\sdk\\tools\\test.py",
       "-ax64",
       "-mrelease",
       "--progress=status",
@@ -1833,7 +1833,7 @@
     "cmd": [
       "python",
       "-u",
-      "tools/test.py",
+      "[CACHE]\\builder\\sdk\\tools\\test.py",
       "-ax64",
       "-mrelease",
       "--progress=status",

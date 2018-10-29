@@ -614,7 +614,6 @@ class DartApi(recipe_api.RecipeApi):
               self.run_trigger(step_name, step, isolate_hash)
             elif self._is_test_py_step(script):
               append_logs = test_py_index > 0
-              script = self.m.path['checkout'].join(*script.split('/'))
               self.run_test_py(step_name, append_logs, step,
                                isolate_hash, shards, local_shard,
                                environment, tasks, global_config, all_results)
@@ -837,7 +836,7 @@ class DartApi(recipe_api.RecipeApi):
     use_xvfb = (runtime in ['chrome', 'firefox'] and
                 environment['system'] == 'linux')
     is_python = str(script).endswith('.py')
-    cmd = [script]
+    xvfb_cmd = []
     if use_xvfb:
       xvfb_cmd = [
         '/usr/bin/xvfb-run',
@@ -845,12 +844,12 @@ class DartApi(recipe_api.RecipeApi):
         '--server-args=-screen 0 1024x768x24']
       if is_python:
         xvfb_cmd += ['python', '-u']
-      cmd = xvfb_cmd + cmd
 
     with self.m.step.nest(step_name):
       if isolate_hash:
         tasks.append({
-            'shards': self.shard(step_name, isolate_hash, cmd + args,
+            'shards': self.shard(step_name, isolate_hash,
+                                  xvfb_cmd + [script] + args,
                                   num_shards=shards,
                                   last_shard_is_local=local_shard,
                                   cipd_packages=cipd_packages,
@@ -873,10 +872,11 @@ class DartApi(recipe_api.RecipeApi):
             self.m.raw_io.output_dir(),
         ]
 
+      cmd = self.m.path['checkout'].join(*script.split('/'))
       if is_python and not use_xvfb:
-        self.m.python(step_name, script, args=args, ok_ret=ok_ret)
+        self.m.python(step_name, cmd, args=args, ok_ret=ok_ret)
       else:
-        self.m.step(step_name, cmd + args, ok_ret=ok_ret)
+        self.m.step(step_name, xvfb_cmd + [cmd] + args, ok_ret=ok_ret)
 
 
 class StepResults:

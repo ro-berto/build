@@ -1115,7 +1115,7 @@
     "cmd": [
       "python",
       "-u",
-      "tools/test.py",
+      "[CACHE]/builder/sdk/tools/test.py",
       "-mrelease",
       "--progress=status",
       "--report",
@@ -1167,7 +1167,7 @@
       "--server-args=-screen 0 1024x768x24",
       "python",
       "-u",
-      "tools/test.py",
+      "[CACHE]/builder/sdk/tools/test.py",
       "-ax64",
       "-mrelease",
       "--progress=status",
@@ -1278,7 +1278,7 @@
   },
   {
     "cmd": [
-      "out/ReleaseX64/dart",
+      "[CACHE]/builder/sdk/out/ReleaseX64/dart",
       "--bar",
       "foo.dart"
     ],
@@ -1440,7 +1440,7 @@
       "--server-args=-screen 0 1024x768x24",
       "python",
       "-u",
-      "tools/test.py",
+      "[CACHE]/builder/sdk/tools/test.py",
       "-ax64",
       "-mrelease",
       "--progress=status",
@@ -1707,7 +1707,7 @@
     "cmd": [
       "python",
       "-u",
-      "tools/test.py",
+      "[CACHE]/builder/sdk/tools/test.py",
       "-mrelease",
       "--progress=status",
       "--report",
@@ -1767,7 +1767,7 @@
       "--server-args=-screen 0 1024x768x24",
       "python",
       "-u",
-      "tools/test.py",
+      "[CACHE]/builder/sdk/tools/test.py",
       "-ax64",
       "-mrelease",
       "--progress=status",
@@ -1828,7 +1828,7 @@
       "--server-args=-screen 0 1024x768x24",
       "python",
       "-u",
-      "tools/test.py",
+      "[CACHE]/builder/sdk/tools/test.py",
       "-ax64",
       "-mrelease",
       "--progress=status",

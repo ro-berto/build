@@ -1275,7 +1275,7 @@
   },
   {
     "cmd": [
-      "xcodebuild/custom_thing",
+      "[CACHE]/builder/sdk/xcodebuild/custom_thing",
       "foo",
       "--bar",
       "--buildername"
