@@ -899,15 +899,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       with self.m.context(env=runhooks_env):
         self.m.gclient.runhooks(**kwargs)
 
-  # No cover because internal recipes use this.
-  @_with_chromium_layout
-  def run_gyp_chromium(self): # pragma: no cover
-    gyp_chromium_path = self.m.path['checkout'].join('build', 'gyp_chromium.py')
-    env = self.get_env()
-    env.update(self.c.gyp_env.as_jsonish())
-    with self.m.context(env=env):
-      self.m.python(name='gyp_chromium', script=gyp_chromium_path)
-
   @_with_chromium_layout
   def run_gn(self, use_goma=False, gn_path=None, build_dir=None, **kwargs):
     if not gn_path:
