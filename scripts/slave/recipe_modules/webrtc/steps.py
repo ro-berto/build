@@ -101,29 +101,41 @@ ANDROID_CIPD_PACKAGES = [
     )
 ]
 
+# Perf tests are not idempotent, because for almost all tests the binary will
+# not return the exact same perf result each time. We want to get those results
+# so the dashboard can properly determine the variance of the test.
 PERF_TESTS = freeze({
-    'isac_fix_test': {},
-    'low_bandwidth_audio_perf_test': {},
+    'isac_fix_test': {
+      'idempotent': False,
+    },
+    'low_bandwidth_audio_perf_test': {
+      'idempotent': False,
+    },
     'webrtc_perf_tests': {
         'args': [
             '--test-artifacts-dir', '${ISOLATED_OUTDIR}',
             '--save_worst_frame',
         ],
+        'idempotent': False,
     },
 })
 
 ANDROID_PERF_TESTS = freeze({
     # TODO(ehmaldonado): Add low_bandwidth_audio_perf_test and
     # video_quality_loopback_test.
-    'webrtc_perf_tests': {},
+    'webrtc_perf_tests': {
+      'idempotent': False,
+    },
     'low_bandwidth_audio_perf_test': {
         'add_adb_path': True,
         'args': [
             '--android',
-        ]
+        ],
+        'idempotent': False,
     },
     'video_quality_loopback_test': {
         'add_adb_path': True,
+        'idempotent': False,
     },
 })
 
