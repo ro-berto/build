@@ -4,6 +4,7 @@ DEPS = [
   'chromium_android',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/osx_sdk',
   'depot_tools/tryserver',
   'recipe_engine/file',
   'recipe_engine/path',

@@ -147,6 +147,7 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
+        'ensure_sdk': 'ios',
       },
       'iOS Release': {
         'recipe_config': 'libyuv_ios',
@@ -158,6 +159,7 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
+        'ensure_sdk': 'ios',
       },
       'iOS ARM64 Debug': {
         'recipe_config': 'libyuv_ios',
@@ -169,6 +171,7 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
+        'ensure_sdk': 'ios',
       },
       'iOS ARM64 Release': {
         'recipe_config': 'libyuv_ios',
@@ -180,6 +183,7 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
+        'ensure_sdk': 'ios',
       },
       'Linux32 Debug': {
         'recipe_config': 'libyuv',
@@ -497,6 +501,7 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
+        'ensure_sdk': 'ios',
       },
       'ios_rel': {
         'recipe_config': 'libyuv_ios',
@@ -508,6 +513,7 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
+        'ensure_sdk': 'ios',
       },
       'ios_arm64': {
         'recipe_config': 'libyuv_ios',
@@ -519,6 +525,7 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
+        'ensure_sdk': 'ios',
       },
       'ios_arm64_rel': {
         'recipe_config': 'libyuv_ios',
@@ -530,6 +537,7 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
+        'ensure_sdk': 'ios',
       },
       'linux': {
         'recipe_config': 'libyuv',

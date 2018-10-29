@@ -33,8 +33,9 @@ def RunSteps(api):
   api.chromium.runhooks()
 
   if libyuv.should_build:
-    api.chromium.run_gn(use_goma=True)
-    api.chromium.compile(use_goma_module=True)
+    with libyuv.ensure_sdk():
+      api.chromium.run_gn(use_goma=True)
+      api.chromium.compile(use_goma_module=True)
     if libyuv.should_upload_build:
       libyuv.package_build()
 

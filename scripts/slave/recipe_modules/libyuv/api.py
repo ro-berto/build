@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import contextlib
+
 from recipe_engine import recipe_api
 from . import builders as libyuv_builders
 
@@ -83,6 +85,14 @@ class LibyuvApi(recipe_api.RecipeApi):
     update_step = self.m.bot_update.ensure_checkout()
     assert update_step.json.output['did_run']
     self.revision = update_step.presentation.properties['got_revision']
+
+  @contextlib.contextmanager
+  def ensure_sdk(self):
+    if 'ensure_sdk' in self.bot_config:
+      with self.m.osx_sdk(self.bot_config['ensure_sdk']):
+        yield
+    else:
+      yield
 
   def maybe_trigger(self):
     triggers = self.bot_config.get('triggers')

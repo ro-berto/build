@@ -2647,31 +2647,33 @@ config: The configuration returned by create_controller.
 Returns the path to legion.py.
 ### *recipe_modules* / [libyuv](/scripts/slave/recipe_modules/libyuv)
 
-[DEPS](/scripts/slave/recipe_modules/libyuv/__init__.py#1): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/libyuv/__init__.py#1): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [LibyuvApi](/scripts/slave/recipe_modules/libyuv/api.py#9)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [LibyuvApi](/scripts/slave/recipe_modules/libyuv/api.py#11)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/libyuv/api.py#21)(self, builders, recipe_configs):**
+&mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/libyuv/api.py#23)(self, builders, recipe_configs):**
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/libyuv/api.py#82)(self):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/libyuv/api.py#84)(self):**
 
-&mdash; **def [extract\_build](/scripts/slave/recipe_modules/libyuv/api.py#116)(self):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [ensure\_sdk](/scripts/slave/recipe_modules/libyuv/api.py#89)(self):**
 
-&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/libyuv/api.py#87)(self):**
+&mdash; **def [extract\_build](/scripts/slave/recipe_modules/libyuv/api.py#126)(self):**
 
-&mdash; **def [package\_build](/scripts/slave/recipe_modules/libyuv/api.py#106)(self):**
+&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/libyuv/api.py#97)(self):**
 
-&mdash; **def [runtests](/scripts/slave/recipe_modules/libyuv/api.py#137)(self):**
+&mdash; **def [package\_build](/scripts/slave/recipe_modules/libyuv/api.py#116)(self):**
+
+&mdash; **def [runtests](/scripts/slave/recipe_modules/libyuv/api.py#147)(self):**
 
 Add a suite of test steps.
 
-&emsp; **@property**<br>&mdash; **def [should\_build](/scripts/slave/recipe_modules/libyuv/api.py#66)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_build](/scripts/slave/recipe_modules/libyuv/api.py#68)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_download\_build](/scripts/slave/recipe_modules/libyuv/api.py#78)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_download\_build](/scripts/slave/recipe_modules/libyuv/api.py#80)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_test](/scripts/slave/recipe_modules/libyuv/api.py#70)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_test](/scripts/slave/recipe_modules/libyuv/api.py#72)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_upload\_build](/scripts/slave/recipe_modules/libyuv/api.py#74)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_upload\_build](/scripts/slave/recipe_modules/libyuv/api.py#76)(self):**
 ### *recipe_modules* / [luci\_config](/scripts/slave/recipe_modules/luci_config)
 
 [DEPS](/scripts/slave/recipe_modules/luci_config/__init__.py#1): [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
