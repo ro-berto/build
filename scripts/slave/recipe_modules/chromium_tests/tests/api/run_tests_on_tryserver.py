@@ -259,7 +259,9 @@ def GenTests(api):
           api.swarming.canned_summary_output(failure=False) +
           api.test_utils.gtest_results(FAILURE_THEN_SUCCESS_DATA, retcode=0)) +
       api.post_process(post_process.AnnotationContains,
-          'base_unittests (retry summary)', ['ignored:<br/>Test.Two']) +
+          'base_unittests (retry summary)', ['ignored']) +
+      api.post_process(post_process.AnnotationContains,
+          'base_unittests (retry summary)', ['Test.Two']) +
       api.post_process(post_process.DropExpectation)
   )
 

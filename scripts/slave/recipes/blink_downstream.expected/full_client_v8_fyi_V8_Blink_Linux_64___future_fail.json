@@ -792,7 +792,7 @@
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
     "name": "webkit_layout_tests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>bad/totally-bad-probably.html<br/>flake/totally-flakey.html<br/>tricky/totally-maybe-not-awesome.html<br/>flake/timeout-then-crash.html<br/>flake/slow.html<br/>@@@",
+      "@@@STEP_TEXT@<br/>Tests ignored as they also fail without patch:<br/>bad/totally-bad-probably.html<br/>flake/totally-flakey.html<br/>tricky/totally-maybe-not-awesome.html<br/>flake/timeout-then-crash.html<br/>flake/slow.html<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },

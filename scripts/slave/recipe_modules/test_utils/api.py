@@ -238,7 +238,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       self.m.python.succeeding_step(test.name, self.INVALID_RESULTS_MAGIC)
 
   def _summarize_new_and_ignored_failures(
-      self, test, new_failures, ignored_failures, suffix, failure_is_fatal):
+      self, test, new_failures, ignored_failures, suffix, failure_is_fatal,
+      failure_text, ignored_text):
     """Summarizes new and ignored failures in the test_suite |test|.
 
     Args:
@@ -247,6 +248,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       ignored_failures: Failures that are not caused by the patched CL.
       suffix: Should be either 'retry with patch summary' or 'retry summary'.
       failure_is_fatal: Whether a failure should be fatal.
+      failure_text: A user-visible string describing new_failures.
+      ignored_text: A user-visible string describing ignored_failures.
 
     Returns:
       A Boolean describing whether the retry succeeded. Which is to say, the
@@ -269,8 +272,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     step_name = '%s (%s)' % (test.name, suffix)
     step_text = self.format_step_text([
-        ['failures:', new_failures],
-        ['ignored:', ignored_failures]
+        [failure_text, new_failures],
+        [ignored_text, ignored_failures]
     ])
 
     if new_failures and failure_is_fatal:
@@ -330,9 +333,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
     else:
       new_failures = set(['all initial tests failed'])
 
+    failure_text = ('Failed with patch, succeeded without patch:')
+    ignored_text = ('Tests ignored as they also fail without patch:')
     return self._summarize_new_and_ignored_failures(
         test, new_failures, ignored_failures,
-        'retry summary', failure_is_fatal)
+        'retry summary', failure_is_fatal, failure_text, ignored_text)
 
   def summarize_test_with_patch_reapplied(self, caller_api, test):
     """Summarizes test results after a CL has been retried with patch reapplied.
@@ -371,8 +376,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
       new_failures = repeated_failures
       ignored_failures = set()
 
-    return self._summarize_new_and_ignored_failures(test, new_failures,
-        ignored_failures, 'retry with patch summary', failure_is_fatal=True)
+    failure_text = ('Failed with patch twice, succeeded without patch:')
+    ignored_text = ('Tests ignored as they succeeded on retry:')
+    return self._summarize_new_and_ignored_failures(
+        test, new_failures, ignored_failures, 'retry with patch summary',
+        failure_is_fatal=True, failure_text=failure_text,
+        ignored_text=ignored_text)
 
   def _archive_retry_summary(self, retry_summary, dest_filename):
     """Archives the retry summary as JSON, storing it alongside the results

@@ -1327,7 +1327,7 @@
     ],
     "name": "base_unittests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>ignored:<br/>Test.Two<br/>@@@",
+      "@@@STEP_TEXT@<br/>Tests ignored as they also fail without patch:<br/>Test.Two<br/>@@@",
       "@@@STEP_WARNINGS@@@"
     ]
   },

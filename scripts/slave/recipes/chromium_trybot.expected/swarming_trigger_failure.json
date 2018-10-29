@@ -1647,7 +1647,7 @@
     },
     "name": "base_unittests (retry summary)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>all initial tests failed<br/>@@@",
+      "@@@STEP_TEXT@<br/>Failed with patch, succeeded without patch:<br/>all initial tests failed<br/>@@@",
       "@@@STEP_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
     ]
@@ -1679,7 +1679,7 @@
     },
     "name": "base_unittests (retry summary) (2)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>failures:<br/>all initial tests failed<br/>@@@",
+      "@@@STEP_TEXT@<br/>Failed with patch, succeeded without patch:<br/>all initial tests failed<br/>@@@",
       "@@@STEP_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"TEST_FAILURE\"@@@"
     ]

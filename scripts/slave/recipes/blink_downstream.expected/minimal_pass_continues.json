@@ -1272,7 +1272,7 @@
     "name": "webkit_layout_tests (retry summary)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/>@@@",
+      "@@@STEP_TEXT@<br/>Failed with patch, succeeded without patch:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
