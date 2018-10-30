@@ -1183,6 +1183,7 @@
       "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
+      "--gtest_repeat=10",
       "--gtest_filter=Test.Two",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],

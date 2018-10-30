@@ -121,7 +121,8 @@ def _test_options_for_running(test_options, suffix, tests_to_retry):
   if tests_to_retry is None or len(tests_to_retry) > 100:
     return test_options_copy
 
-  if test_options_copy.repeat_count is None and suffix == 'without patch':
+  if (test_options_copy.repeat_count is None and
+      suffix in ('without patch', 'retry with patch')):
     test_options_copy._repeat_count = 10
 
   return test_options_copy

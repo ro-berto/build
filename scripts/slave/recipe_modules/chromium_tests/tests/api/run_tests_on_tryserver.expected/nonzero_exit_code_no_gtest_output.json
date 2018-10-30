@@ -1181,6 +1181,7 @@
       "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
+      "--gtest_repeat=10",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "infra_step": true,

@@ -157,6 +157,7 @@
       "--build-number=123",
       "base_unittests",
       "--gtest_filter=foo.bar",
+      "--gtest_repeat=10",
       "--test-launcher-retry-limit=3",
       "--gtest_also_run_disabled_tests"
     ],
