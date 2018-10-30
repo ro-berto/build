@@ -343,22 +343,6 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
 ####### Category: FYI
-      'V8 Fuchsia': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'fuchsia',
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Fuchsia - debug': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'fuchsia',
-        },
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux64 - gcov coverage': {
         'chromium_apply_config': [
           'clobber', 'gcc', 'goma', 'mb',
