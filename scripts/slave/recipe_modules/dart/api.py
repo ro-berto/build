@@ -344,7 +344,7 @@ class DartApi(recipe_api.RecipeApi):
 
     build_number = str(self.m.buildbucket.build.number)
 
-    self._upload_result(builder, build_number, 'result.json', results_str)
+    self._upload_result(builder, build_number, 'results.json', results_str)
     self._upload_result(builder, build_number, 'flaky.json', flaky_json_str)
     self.m.gsutil.upload(
       'LATEST/approved_results.json',

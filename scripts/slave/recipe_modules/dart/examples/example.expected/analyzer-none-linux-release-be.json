@@ -1907,14 +1907,14 @@
       "----",
       "cp",
       "",
-      "gs://dart-test-results/builders/analyzer-none-linux-release-be/1357/result.json"
+      "gs://dart-test-results/builders/analyzer-none-linux-release-be/1357/results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
-    "name": "upload new results.gsutil upload result.json",
+    "name": "upload new results.gsutil upload results.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/analyzer-none-linux-release-be/1357/result.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/analyzer-none-linux-release-be/1357/results.json@@@"
     ]
   },
   {
