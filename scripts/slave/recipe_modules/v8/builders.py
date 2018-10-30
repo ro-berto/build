@@ -688,23 +688,6 @@ BUILDERS = {
         },
         'triggers_proxy': True,
       },
-      'V8 Arm - debug builder': {
-        'chromium_apply_config': [
-            'default_compiler', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_ARCH': 'arm',
-        },
-        'testing': {
-          'properties': {
-            'triggers': [
-              'V8 Arm - debug',
-              'V8 Arm GC Stress',
-            ],
-          },
-          'platform': 'linux',
-        },
-      },
       'V8 Android Arm - builder': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
