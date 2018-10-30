@@ -938,7 +938,7 @@ Returns: (context manager) A context manager that inserts system python
 
 #### **class [ChromiumApi](/scripts/slave/recipe_modules/chromium/api.py#29)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1288)(self, step_name, gs_bucket, gs_acl=None, mode=None, build_name=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1279)(self, step_name, gs_bucket, gs_acl=None, mode=None, build_name=None, \*\*kwargs):**
 
 Returns a step invoking archive_build.py to archive a Chromium build.
 
@@ -1002,7 +1002,7 @@ Returns (ChromiumApi.Layout): The configured Chromium build layout.
 
 &mdash; **def [ensure\_toolchains](/scripts/slave/recipe_modules/chromium/api.py#847)(self):**
 
-&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1331)(self, _):**
+&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1322)(self, _):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [get\_clang\_version](/scripts/slave/recipe_modules/chromium/api.py#727)(self, \*\*kwargs):**
 
@@ -1024,7 +1024,7 @@ Args:
 
 &mdash; **def [get\_version](/scripts/slave/recipe_modules/chromium/api.py#159)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_gen](/scripts/slave/recipe_modules/chromium/api.py#1175)(self, mastername, buildername, name=None, mb_path=None, mb_config_path=None, use_goma=True, isolated_targets=None, build_dir=None, phase=None, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_gen](/scripts/slave/recipe_modules/chromium/api.py#1166)(self, mastername, buildername, name=None, mb_path=None, mb_config_path=None, use_goma=True, isolated_targets=None, build_dir=None, phase=None, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None, \*\*kwargs):**
 
 Generate the build files in the source tree.
 
@@ -1054,9 +1054,9 @@ Args:
 Returns:
   The content of the args.gn file.
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_isolate\_everything](/scripts/slave/recipe_modules/chromium/api.py#1250)(self, mastername, buildername, use_goma=True, mb_path=None, mb_config_path=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, phase=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_isolate\_everything](/scripts/slave/recipe_modules/chromium/api.py#1241)(self, mastername, buildername, use_goma=True, mb_path=None, mb_config_path=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, phase=None, \*\*kwargs):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_lookup](/scripts/slave/recipe_modules/chromium/api.py#1099)(self, mastername, buildername, name=None, mb_path=None, mb_config_path=None, chromium_config=None, phase=None, use_goma=True, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_lookup](/scripts/slave/recipe_modules/chromium/api.py#1090)(self, mastername, buildername, name=None, mb_path=None, mb_config_path=None, chromium_config=None, phase=None, use_goma=True, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None):**
 
 Lookup the GN args for the build.
 
@@ -1091,15 +1091,13 @@ Returns:
 
 Return the path to the built executable directory.
 
-&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1276)(self, \*\*kwargs):**
+&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1267)(self, \*\*kwargs):**
 
 &mdash; **def [reload\_version](/scripts/slave/recipe_modules/chromium/api.py#164)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gn](/scripts/slave/recipe_modules/chromium/api.py#912)(self, use_goma=False, gn_path=None, build_dir=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gn](/scripts/slave/recipe_modules/chromium/api.py#903)(self, use_goma=False, gn_path=None, build_dir=None, \*\*kwargs):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_gyp\_chromium](/scripts/slave/recipe_modules/chromium/api.py#904)(self):**
-
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb\_cmd](/scripts/slave/recipe_modules/chromium/api.py#989)(self, name, mb_command, mastername, buildername, mb_path=None, mb_config_path=None, chromium_config=None, phase=None, use_goma=True, android_version_code=None, android_version_name=None, additional_args=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [run\_mb\_cmd](/scripts/slave/recipe_modules/chromium/api.py#980)(self, name, mb_command, mastername, buildername, mb_path=None, mb_config_path=None, chromium_config=None, phase=None, use_goma=True, android_version_code=None, android_version_name=None, additional_args=None, \*\*kwargs):**
 
 Run an arbitrary mb command.
 
@@ -1137,7 +1135,7 @@ Return a runtest.py invocation.
 Return a sizes.py invocation.
 This uses runtests.py to upload the results to the perf dashboard.
 
-&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#1270)(self):**
+&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#1261)(self):**
 
 &emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_launcher\_filter](/scripts/slave/recipe_modules/chromium/api.py#568)(self, tests):**
 
@@ -4612,14 +4610,9 @@ index packs (used to generate xrefs) are all generated from the same revision.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py#11)(api):**
 ### *recipes* / [chromium\_libfuzzer](/scripts/slave/recipes/chromium_libfuzzer.py)
 
-[DEPS](/scripts/slave/recipes/chromium_libfuzzer.py#8): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/chromium_libfuzzer.py#8): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [gn](#recipe_modules-gn), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_libfuzzer.py#115)(api):**
-
-&mdash; **def [gn\_refs](/scripts/slave/recipes/chromium_libfuzzer.py#100)(api, step_name, args):**
-
-Runs gn refs with given additional arguments.
-Returns: the list of matched targets.
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_libfuzzer.py#101)(api):**
 ### *recipes* / [chromium\_libfuzzer\_clang\_tot](/scripts/slave/recipes/chromium_libfuzzer_clang_tot.py)
 
 [DEPS](/scripts/slave/recipes/chromium_libfuzzer_clang_tot.py#8): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
