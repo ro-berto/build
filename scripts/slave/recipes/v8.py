@@ -858,7 +858,7 @@ def GenTests(api):
         'V8 Foobar',
         '{"tests": [{"name": "presubmit"}]}') +
     api.post_process(MustRun, 'Presubmit') +
-    api.post_process(DropExpectation)
+    api.post_process(Filter('Presubmit'))
   )
 
   # Cover running sanitizer coverage.

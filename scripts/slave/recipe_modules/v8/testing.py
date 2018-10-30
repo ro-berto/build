@@ -590,7 +590,7 @@ class V8Presubmit(BaseTest):
         env_prefixes={'PATH': [self.api.v8.depot_tools_path]}):
       self.api.python(
         'Presubmit',
-        self.api.path['checkout'].join('tools', 'presubmit.py'),
+        self.api.path['checkout'].join('tools', 'v8_presubmit.py'),
       )
     return TestResults.empty()
 
