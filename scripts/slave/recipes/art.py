@@ -388,9 +388,11 @@ def setup_target(api,
     if gcstress:
       libcore_command += ['--vm-arg', '-Xgc:gcstress']
 
-    with api.context(env=test_env):
-      api.step('test libcore', libcore_command)
-    test_logging(api, 'test libcore')
+    # Disable libcore runs with gcstress and debug, they time out.
+    if not (gcstress and debug):
+      with api.context(env=test_env):
+        api.step('test libcore', libcore_command)
+      test_logging(api, 'test libcore')
 
     jdwp_command = [art_tools.join('run-jdwp-tests.sh'),
                     '--mode=device',
@@ -574,7 +576,7 @@ _CONFIG_MAP = {
       'generational_cc': False,
     },
     'bullhead-armv8-gcstress-ndebug': {
-      'serial': '00c5a4683f54164f',
+      'serial': '00c5089e3fac5057',
       'device': 'bullhead-armv8',
       'debug': False,
       'gcstress': True,
