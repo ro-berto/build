@@ -343,31 +343,29 @@ BUILDERS = {
         'testing': {'platform': 'mac'},
       },
 ####### Category: Misc
-      # TODO(machenbach): Investigate if the gcc or clang setting have any
-      # implications not covered by MB.
       'V8 Linux gcc 4.8': {
-        'chromium_apply_config': ['gcc', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 gcc 4.8 - debug': {
-        'chromium_apply_config': ['gcc', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 ASAN': {
-        'chromium_apply_config': ['clang', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
         'testing': {'platform': 'linux'},
       },
       'V8 Linux64 TSAN - builder': {
-        'chromium_apply_config': ['clang', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
@@ -384,7 +382,7 @@ BUILDERS = {
       },
       'V8 Linux - arm64 - sim - MSAN': {
         'chromium_apply_config': [
-          'clang',
+          'default_compiler',
           'goma',
           'mb',
         ],
@@ -394,7 +392,7 @@ BUILDERS = {
         'testing': {'platform': 'linux'},
       },
       'V8 Mac64 ASAN': {
-        'chromium_apply_config': ['clang', 'goma', 'mb'],
+        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
