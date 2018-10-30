@@ -285,9 +285,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('presubmit') failed with return_code 2",
-    "recipe_result": null,
-    "status_code": 2
+    "failure": {
+      "failure": {
+        "step": "presubmit"
+      },
+      "humanReason": "Step('presubmit') failed with return_code 2"
+    },
+    "name": "$result"
   }
 ]

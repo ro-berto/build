@@ -25,9 +25,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Warning: Step('provision_devices') returned 88",
-    "recipe_result": null,
-    "status_code": 88
+    "failure": {
+      "failure": {
+        "step": "provision_devices"
+      },
+      "humanReason": "Warning: Step('provision_devices') returned 88"
+    },
+    "name": "$result"
   }
 ]

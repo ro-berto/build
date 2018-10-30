@@ -1196,9 +1196,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "1 tests failed: ['ChromePublicTest']",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "1 tests failed: ['ChromePublicTest']"
+    },
+    "name": "$result"
   }
 ]

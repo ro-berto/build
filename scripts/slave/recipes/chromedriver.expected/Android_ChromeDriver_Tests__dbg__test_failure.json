@@ -1330,9 +1330,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Test failures",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Test failures"
+    },
+    "name": "$result"
   }
 ]

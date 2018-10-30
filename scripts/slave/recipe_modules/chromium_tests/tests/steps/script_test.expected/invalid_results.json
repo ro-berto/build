@@ -46,9 +46,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('script_test with suffix  had an invalid result') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "script_test with suffix  had an invalid result"
+      },
+      "humanReason": "Step('script_test with suffix  had an invalid result') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

@@ -37,8 +37,7 @@
     "name": "resource_sizes (test.apk)"
   },
   {
-    "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "jsonResult": null,
+    "name": "$result"
   }
 ]

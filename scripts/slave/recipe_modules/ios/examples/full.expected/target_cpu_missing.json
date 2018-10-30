@@ -231,9 +231,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Missing required gn_arg: target_cpu",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Missing required gn_arg: target_cpu"
+    },
+    "name": "$result"
   }
 ]

@@ -24,9 +24,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('[error] base_unittests') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "[error] base_unittests"
+      },
+      "humanReason": "Step('[error] base_unittests') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

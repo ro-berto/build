@@ -459,9 +459,12 @@
     "name": "fake commit and send to CQ"
   },
   {
-    "name": "$result",
-    "reason": "Failed to update deps: foo/bar",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Failed to update deps: foo/bar"
+    },
+    "name": "$result"
   }
 ]

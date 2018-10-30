@@ -142,9 +142,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('webkit_layout_tests (with patch)') failed with return_code 125",
-    "recipe_result": null,
-    "status_code": 125
+    "failure": {
+      "failure": {
+        "step": "webkit_layout_tests (with patch)"
+      },
+      "humanReason": "Step('webkit_layout_tests (with patch)') failed with return_code 125"
+    },
+    "name": "$result"
   }
 ]

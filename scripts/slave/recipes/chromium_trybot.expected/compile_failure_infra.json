@@ -821,9 +821,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Infra compile failure: Step Failure in compile (with patch)",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Infra compile failure: Step Failure in compile (with patch)"
+    },
+    "name": "$result"
   }
 ]

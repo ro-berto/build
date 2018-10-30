@@ -1,8 +1,11 @@
 [
   {
-    "name": "$result",
-    "reason": "Failed to parse branch from: foo/var@{missing-hash}",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Failed to parse branch from: foo/var@{missing-hash}"
+    },
+    "name": "$result"
   }
 ]

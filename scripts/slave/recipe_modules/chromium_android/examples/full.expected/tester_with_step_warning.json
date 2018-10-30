@@ -962,9 +962,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Warning: Step('unittests') returned 88",
-    "recipe_result": null,
-    "status_code": 88
+    "failure": {
+      "failure": {
+        "step": "unittests"
+      },
+      "humanReason": "Warning: Step('unittests') returned 88"
+    },
+    "name": "$result"
   }
 ]

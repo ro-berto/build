@@ -776,9 +776,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Results already exist for commit position 3333333333",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Results already exist for commit position 3333333333"
+    },
+    "name": "$result"
   }
 ]

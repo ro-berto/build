@@ -63,9 +63,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('ChromePublicTest') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "ChromePublicTest"
+      },
+      "humanReason": "Step('ChromePublicTest') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

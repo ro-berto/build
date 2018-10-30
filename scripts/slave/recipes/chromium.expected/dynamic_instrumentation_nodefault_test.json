@@ -1190,9 +1190,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "1 tests failed: ['chrome_public_test_apk']",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "1 tests failed: ['chrome_public_test_apk']"
+    },
+    "name": "$result"
   }
 ]

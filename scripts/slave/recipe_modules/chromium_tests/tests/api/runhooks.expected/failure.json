@@ -367,9 +367,12 @@
     "name": "gclient runhooks (without patch)"
   },
   {
-    "name": "$result",
-    "reason": "Step('gclient runhooks (with patch)') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "gclient runhooks (with patch)"
+      },
+      "humanReason": "Step('gclient runhooks (with patch)') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

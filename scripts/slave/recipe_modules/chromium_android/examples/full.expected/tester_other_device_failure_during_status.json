@@ -581,9 +581,12 @@
     "name": "stack_tool_for_asan"
   },
   {
-    "name": "$result",
-    "reason": "Infra Failure: Step('device_status') returned 2",
-    "recipe_result": null,
-    "status_code": 2
+    "failure": {
+      "failure": {
+        "step": "device_status"
+      },
+      "humanReason": "Infra Failure: Step('device_status') returned 2"
+    },
+    "name": "$result"
   }
 ]

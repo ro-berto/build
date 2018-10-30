@@ -944,9 +944,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "1 tests failed: ['base_unittests on NVIDIA GPU on Linux']",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "1 tests failed: ['base_unittests on NVIDIA GPU on Linux']"
+    },
+    "name": "$result"
   }
 ]

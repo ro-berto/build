@@ -365,9 +365,12 @@
     "name": "test dx"
   },
   {
-    "name": "$result",
-    "reason": "1 out of 13 aggregated steps failed. Failures: Step('test jdwp interpreter') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "Aggregate step failure."
+      },
+      "humanReason": "1 out of 13 aggregated steps failed. Failures: Step('test jdwp interpreter') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

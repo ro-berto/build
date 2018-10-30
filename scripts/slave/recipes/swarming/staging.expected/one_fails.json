@@ -955,9 +955,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "1 tests failed: ['browser_tests']",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "1 tests failed: ['browser_tests']"
+    },
+    "name": "$result"
   }
 ]

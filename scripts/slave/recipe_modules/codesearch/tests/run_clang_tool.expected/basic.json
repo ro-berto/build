@@ -21,8 +21,7 @@
     "name": "run translation_unit clang tool"
   },
   {
-    "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "jsonResult": null,
+    "name": "$result"
   }
 ]

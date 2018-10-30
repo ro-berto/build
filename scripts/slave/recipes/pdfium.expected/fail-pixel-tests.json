@@ -575,9 +575,12 @@
     "name": "gsutil upload JSON (2)"
   },
   {
-    "name": "$result",
-    "reason": "Step('pixel tests') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "pixel tests"
+      },
+      "humanReason": "Step('pixel tests') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

@@ -345,9 +345,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Invalid value 'crbug.com/123123' for \"bug_id\".",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Invalid value 'crbug.com/123123' for \"bug_id\"."
+    },
+    "name": "$result"
   }
 ]

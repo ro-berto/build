@@ -1306,9 +1306,12 @@
     "name": "rmtree [TMP_BASE]\\deterministic_build_tmp_1"
   },
   {
-    "name": "$result",
-    "reason": "Step('compare_build_artifacts') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "compare_build_artifacts"
+      },
+      "humanReason": "Step('compare_build_artifacts') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

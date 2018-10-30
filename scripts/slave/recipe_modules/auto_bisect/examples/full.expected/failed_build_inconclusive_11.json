@@ -6361,9 +6361,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Failed to post to Perf Dashboard. Error response: None",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Failed to post to Perf Dashboard. Error response: None"
+    },
+    "name": "$result"
   }
 ]

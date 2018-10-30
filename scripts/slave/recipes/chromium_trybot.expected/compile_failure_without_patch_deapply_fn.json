@@ -1419,9 +1419,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('compile (without patch)') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "compile (without patch)"
+      },
+      "humanReason": "Step('compile (without patch)') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

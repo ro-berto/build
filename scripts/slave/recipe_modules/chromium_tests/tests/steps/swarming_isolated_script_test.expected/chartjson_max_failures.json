@@ -556,9 +556,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('base_unittests on Intel GPU on Linux (with patch)') failed with return_code 102",
-    "recipe_result": null,
-    "status_code": 102
+    "failure": {
+      "failure": {
+        "step": "base_unittests on Intel GPU on Linux (with patch)"
+      },
+      "humanReason": "Step('base_unittests on Intel GPU on Linux (with patch)') failed with return_code 102"
+    },
+    "name": "$result"
   }
 ]

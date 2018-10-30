@@ -81,9 +81,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Error, following targets were not found: invalid, another one",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Error, following targets were not found: invalid, another one"
+    },
+    "name": "$result"
   }
 ]

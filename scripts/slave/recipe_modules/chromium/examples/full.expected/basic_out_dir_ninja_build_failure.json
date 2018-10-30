@@ -395,9 +395,12 @@
     "name": "upload_ninja_log"
   },
   {
-    "name": "$result",
-    "reason": "Step('compile') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "compile"
+      },
+      "humanReason": "Step('compile') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

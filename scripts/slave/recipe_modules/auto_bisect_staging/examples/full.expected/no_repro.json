@@ -2241,9 +2241,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Bisect cannot identify a culprit: Bisect failed to reproduce the regression with enough confidence.",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Bisect cannot identify a culprit: Bisect failed to reproduce the regression with enough confidence."
+    },
+    "name": "$result"
   }
 ]

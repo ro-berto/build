@@ -147,8 +147,14 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Uncaught Exception: AssertionError('Trying to check out generated files repo, but the repo is not indicated',)",
-    "status_code": -1
+    "failure": {
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
+      },
+      "humanReason": "Uncaught Exception: AssertionError('Trying to check out generated files repo, but the repo is not indicated',)"
+    },
+    "name": "$result"
   }
 ]

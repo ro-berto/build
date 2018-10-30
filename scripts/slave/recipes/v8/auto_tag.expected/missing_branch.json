@@ -1,8 +1,11 @@
 [
   {
-    "name": "$result",
-    "reason": "A release branch must be specified.",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "A release branch must be specified."
+    },
+    "name": "$result"
   }
 ]

@@ -305,9 +305,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('hello_world') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "hello_world"
+      },
+      "humanReason": "Step('hello_world') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

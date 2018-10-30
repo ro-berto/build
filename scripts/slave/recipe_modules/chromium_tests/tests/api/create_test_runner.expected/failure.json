@@ -64,9 +64,12 @@
     "name": "Upload to test-results [base_unittests]"
   },
   {
-    "name": "$result",
-    "reason": "1 tests failed: ['base_unittests']",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "1 tests failed: ['base_unittests']"
+    },
+    "name": "$result"
   }
 ]

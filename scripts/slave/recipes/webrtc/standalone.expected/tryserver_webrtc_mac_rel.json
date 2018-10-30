@@ -6157,8 +6157,7 @@
     "name": "Upload to test-results [video_capture_tests]"
   },
   {
-    "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "jsonResult": null,
+    "name": "$result"
   }
 ]

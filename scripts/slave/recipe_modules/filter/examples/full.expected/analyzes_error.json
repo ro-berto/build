@@ -80,9 +80,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Error: ERROR",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Error: ERROR"
+    },
+    "name": "$result"
   }
 ]

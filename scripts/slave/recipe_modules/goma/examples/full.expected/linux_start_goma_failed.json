@@ -189,9 +189,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Infra Failure: Step('preprocess_for_goma.start_goma') returned 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "preprocess_for_goma.start_goma"
+      },
+      "humanReason": "Infra Failure: Step('preprocess_for_goma.start_goma') returned 1"
+    },
+    "name": "$result"
   }
 ]

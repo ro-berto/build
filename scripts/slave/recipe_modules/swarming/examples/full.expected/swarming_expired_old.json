@@ -299,9 +299,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step(\"Shard #0 failed: There isn't enough capacity to run your test\") failed with return_code 0",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "Shard #0 failed: There isn't enough capacity to run your test"
+      },
+      "humanReason": "Step(\"Shard #0 failed: There isn't enough capacity to run your test\") failed with return_code 0"
+    },
+    "name": "$result"
   }
 ]

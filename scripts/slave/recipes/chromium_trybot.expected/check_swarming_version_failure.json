@@ -285,9 +285,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('swarming.py --version') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "swarming.py --version"
+      },
+      "humanReason": "Step('swarming.py --version') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

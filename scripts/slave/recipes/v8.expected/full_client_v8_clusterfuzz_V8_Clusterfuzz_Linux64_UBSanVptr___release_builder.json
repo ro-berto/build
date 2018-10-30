@@ -324,8 +324,7 @@
     "name": "d8-ubsan-vptr-linux-release-v8-component-50110.zip"
   },
   {
-    "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "jsonResult": null,
+    "name": "$result"
   }
 ]

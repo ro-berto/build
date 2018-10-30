@@ -1289,9 +1289,12 @@
     "name": "stack_tool_for_asan"
   },
   {
-    "name": "$result",
-    "reason": "sharded perf tests failed [StepFailure(\"Step('perf_test.foo') failed with return_code 1\",)]",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "sharded perf tests failed [StepFailure(\"Step('perf_test.foo') failed with return_code 1\",)]"
+    },
+    "name": "$result"
   }
 ]

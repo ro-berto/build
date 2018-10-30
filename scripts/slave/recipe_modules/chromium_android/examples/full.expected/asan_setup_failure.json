@@ -1138,9 +1138,12 @@
     "name": "stack_tool_for_asan"
   },
   {
-    "name": "$result",
-    "reason": "Infra Failure: Step('Set up ASAN on devices.wait_for_devices') returned 87",
-    "recipe_result": null,
-    "status_code": 87
+    "failure": {
+      "failure": {
+        "step": "Set up ASAN on devices.wait_for_devices"
+      },
+      "humanReason": "Infra Failure: Step('Set up ASAN on devices.wait_for_devices') returned 87"
+    },
+    "name": "$result"
   }
 ]

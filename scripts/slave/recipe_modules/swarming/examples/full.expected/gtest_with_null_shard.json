@@ -294,9 +294,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('Shard #0 failed: Internal swarming failure') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "Shard #0 failed: Internal swarming failure"
+      },
+      "humanReason": "Step('Shard #0 failed: Internal swarming failure') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

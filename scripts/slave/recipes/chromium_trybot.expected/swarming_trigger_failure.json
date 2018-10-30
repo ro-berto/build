@@ -2422,9 +2422,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "2 out of 2 aggregated steps failed. Failures: Step('base_unittests (4)') failed with return_code 1, Step('base_unittests (5)') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "Aggregate step failure."
+      },
+      "humanReason": "2 out of 2 aggregated steps failed. Failures: Step('base_unittests (4)') failed with return_code 1, Step('base_unittests (5)') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

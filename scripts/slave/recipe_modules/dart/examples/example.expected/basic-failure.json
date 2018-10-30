@@ -437,9 +437,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('can_time_out') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "can_time_out"
+      },
+      "humanReason": "Step('can_time_out') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

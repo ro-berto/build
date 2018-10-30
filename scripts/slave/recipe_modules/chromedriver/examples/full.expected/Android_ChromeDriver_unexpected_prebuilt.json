@@ -208,9 +208,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Unexpected prebuilt filename: [TMP_BASE]/prebuilt_tmp_1/rNone.zip",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Unexpected prebuilt filename: [TMP_BASE]/prebuilt_tmp_1/rNone.zip"
+    },
+    "name": "$result"
   }
 ]

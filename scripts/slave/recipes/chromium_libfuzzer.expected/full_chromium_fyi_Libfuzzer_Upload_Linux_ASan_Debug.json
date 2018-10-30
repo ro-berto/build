@@ -741,8 +741,7 @@
     "name": "libfuzzer-linux-debug-170242.zip"
   },
   {
-    "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "jsonResult": null,
+    "name": "$result"
   }
 ]

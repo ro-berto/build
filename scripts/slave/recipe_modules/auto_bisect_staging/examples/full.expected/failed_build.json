@@ -1607,9 +1607,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Bisect cannot identify a culprit: Testing the \"bad\" revision failed: Failed to compile revision chromium@dcdcdc0ff1. Buildbucket job id 1201331270",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Bisect cannot identify a culprit: Testing the \"bad\" revision failed: Failed to compile revision chromium@dcdcdc0ff1. Buildbucket job id 1201331270"
+    },
+    "name": "$result"
   }
 ]

@@ -60,9 +60,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('test_name') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "test_name"
+      },
+      "humanReason": "Step('test_name') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

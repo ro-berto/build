@@ -314,9 +314,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('test spec format error') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "test spec format error"
+      },
+      "humanReason": "Step('test spec format error') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

@@ -1,8 +1,11 @@
 [
   {
-    "name": "$result",
-    "reason": "Invalid commit hash: foo",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Invalid commit hash: foo"
+    },
+    "name": "$result"
   }
 ]

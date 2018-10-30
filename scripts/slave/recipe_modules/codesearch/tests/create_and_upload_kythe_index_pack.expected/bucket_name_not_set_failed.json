@@ -169,8 +169,14 @@
     "name": "create kythe index pack"
   },
   {
-    "name": "$result",
-    "reason": "Uncaught Exception: AssertionError('Trying to upload Kythe index pack but no google storage bucket name',)",
-    "status_code": -1
+    "failure": {
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
+      },
+      "humanReason": "Uncaught Exception: AssertionError('Trying to upload Kythe index pack but no google storage bucket name',)"
+    },
+    "name": "$result"
   }
 ]

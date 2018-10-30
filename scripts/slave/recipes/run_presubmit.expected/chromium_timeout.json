@@ -279,9 +279,12 @@
     "timeout": 480
   },
   {
-    "name": "$result",
-    "reason": "Step Timeout: Step('presubmit') timed out after 480",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Step Timeout: Step('presubmit') timed out after 480"
+    },
+    "name": "$result"
   }
 ]

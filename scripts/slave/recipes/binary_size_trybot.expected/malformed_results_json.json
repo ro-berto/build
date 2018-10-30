@@ -1807,9 +1807,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Malformed results JSON detected",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Malformed results JSON detected"
+    },
+    "name": "$result"
   }
 ]

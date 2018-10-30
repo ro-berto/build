@@ -22,9 +22,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('Run CTS') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "Run CTS"
+      },
+      "humanReason": "Step('Run CTS') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

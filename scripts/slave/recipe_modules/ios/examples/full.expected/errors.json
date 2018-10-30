@@ -1048,9 +1048,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Failed fake test 1 (fake device iOS 8.1), fake test 3 (fake device iOS 8.1), fake test 4 (iPhone 5s iOS 8.1).",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Failed fake test 1 (fake device iOS 8.1), fake test 3 (fake device iOS 8.1), fake test 4 (iPhone 5s iOS 8.1)."
+    },
+    "name": "$result"
   }
 ]

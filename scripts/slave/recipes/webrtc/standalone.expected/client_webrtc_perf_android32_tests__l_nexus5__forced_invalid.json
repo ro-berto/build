@@ -178,9 +178,12 @@
     "name": "gclient runhooks"
   },
   {
-    "name": "$result",
-    "reason": "Testers cannot be forced without providing revision information. Please select a previous build and click [Rebuild] or force a build for a Builder instead (will trigger new runs for the testers).",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Testers cannot be forced without providing revision information. Please select a previous build and click [Rebuild] or force a build for a Builder instead (will trigger new runs for the testers)."
+    },
+    "name": "$result"
   }
 ]

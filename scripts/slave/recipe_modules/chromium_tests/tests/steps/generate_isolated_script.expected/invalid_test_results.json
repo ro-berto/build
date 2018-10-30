@@ -181,9 +181,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "TEST RESULTS WERE INVALID",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "TEST RESULTS WERE INVALID"
+    },
+    "name": "$result"
   }
 ]

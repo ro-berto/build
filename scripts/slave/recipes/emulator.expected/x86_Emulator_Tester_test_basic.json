@@ -963,8 +963,7 @@
     "name": "[emulator] deleting all temp avds after running"
   },
   {
-    "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "jsonResult": null,
+    "name": "$result"
   }
 ]

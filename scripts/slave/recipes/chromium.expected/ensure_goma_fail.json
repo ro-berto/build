@@ -217,9 +217,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Infra Failure: Step('ensure_goma.ensure_installed') returned 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "ensure_goma.ensure_installed"
+      },
+      "humanReason": "Infra Failure: Step('ensure_goma.ensure_installed') returned 1"
+    },
+    "name": "$result"
   }
 ]

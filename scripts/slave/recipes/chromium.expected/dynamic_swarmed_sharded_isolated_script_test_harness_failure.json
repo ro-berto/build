@@ -713,9 +713,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "1 tests failed: ['telemetry_gpu_unittests']",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "1 tests failed: ['telemetry_gpu_unittests']"
+    },
+    "name": "$result"
   }
 ]

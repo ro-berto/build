@@ -23,9 +23,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('Failed to fetch') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "Failed to fetch"
+      },
+      "humanReason": "Step('Failed to fetch') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

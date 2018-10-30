@@ -664,9 +664,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Error, could not find builder by name this-name-does-not-exist-in-test-matrix in test-matrix",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Error, could not find builder by name this-name-does-not-exist-in-test-matrix in test-matrix"
+    },
+    "name": "$result"
   }
 ]

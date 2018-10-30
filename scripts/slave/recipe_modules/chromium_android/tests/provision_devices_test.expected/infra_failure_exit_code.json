@@ -25,9 +25,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Infra Failure: Step('provision_devices') returned 87",
-    "recipe_result": null,
-    "status_code": 87
+    "failure": {
+      "failure": {
+        "step": "provision_devices"
+      },
+      "humanReason": "Infra Failure: Step('provision_devices') returned 87"
+    },
+    "name": "$result"
   }
 ]

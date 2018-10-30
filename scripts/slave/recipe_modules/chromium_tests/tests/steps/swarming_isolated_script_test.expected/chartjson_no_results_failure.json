@@ -428,9 +428,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('base_unittests on Intel GPU on Linux (with patch)') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "base_unittests on Intel GPU on Linux (with patch)"
+      },
+      "humanReason": "Step('base_unittests on Intel GPU on Linux (with patch)') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

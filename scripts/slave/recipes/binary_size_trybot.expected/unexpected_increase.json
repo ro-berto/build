@@ -1807,9 +1807,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Undocumented size increase detected",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Undocumented size increase detected"
+    },
+    "name": "$result"
   }
 ]

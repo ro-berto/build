@@ -429,9 +429,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Failures or flakes in build.",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Failures or flakes in build."
+    },
+    "name": "$result"
   }
 ]

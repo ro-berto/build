@@ -238,9 +238,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Xcode 9.0.1 not found",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Xcode 9.0.1 not found"
+    },
+    "name": "$result"
   }
 ]

@@ -22,9 +22,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Could not resolve abcdeabcde0123456789abcdeabcde0123456789",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Could not resolve abcdeabcde0123456789abcdeabcde0123456789"
+    },
+    "name": "$result"
   }
 ]

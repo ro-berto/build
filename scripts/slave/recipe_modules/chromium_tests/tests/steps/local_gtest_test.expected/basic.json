@@ -190,8 +190,7 @@
     "name": "Upload to test-results [base_unittests] (3)"
   },
   {
-    "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "jsonResult": null,
+    "name": "$result"
   }
 ]

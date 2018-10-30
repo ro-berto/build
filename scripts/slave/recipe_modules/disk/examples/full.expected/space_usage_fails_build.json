@@ -24,9 +24,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Could not get disk info: 'capacity'",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Could not get disk info: 'capacity'"
+    },
+    "name": "$result"
   }
 ]

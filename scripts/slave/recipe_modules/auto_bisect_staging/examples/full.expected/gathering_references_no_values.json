@@ -2226,9 +2226,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Bisect cannot identify a culprit: Testing the \"good\" revision failed: Test runs failed to produce output.",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Bisect cannot identify a culprit: Testing the \"good\" revision failed: Test runs failed to produce output."
+    },
+    "name": "$result"
   }
 ]

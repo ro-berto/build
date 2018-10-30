@@ -502,9 +502,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('gclient runhooks (without patch)') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "gclient runhooks (without patch)"
+      },
+      "humanReason": "Step('gclient runhooks (without patch)') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

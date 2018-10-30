@@ -338,8 +338,7 @@
     "name": "d8-asan-win64-release-v8-component-50110.zip"
   },
   {
-    "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "jsonResult": null,
+    "name": "$result"
   }
 ]

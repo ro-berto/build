@@ -858,9 +858,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Failures in tryjob.",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Failures in tryjob."
+    },
+    "name": "$result"
   }
 ]

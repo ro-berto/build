@@ -121,8 +121,7 @@
     "name": "chrome-asan-linux-release-refs_heads_B1-123456.zip"
   },
   {
-    "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "jsonResult": null,
+    "name": "$result"
   }
 ]

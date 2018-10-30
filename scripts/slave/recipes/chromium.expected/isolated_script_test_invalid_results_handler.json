@@ -307,9 +307,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('isolated_scripts spec format error') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "isolated_scripts spec format error"
+      },
+      "humanReason": "Step('isolated_scripts spec format error') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

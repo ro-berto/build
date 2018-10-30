@@ -14,9 +14,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Step('Recipe failed. Reason: Fake failure') failed with return_code 1",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "Recipe failed. Reason: Fake failure"
+      },
+      "humanReason": "Step('Recipe failed. Reason: Fake failure') failed with return_code 1"
+    },
+    "name": "$result"
   }
 ]

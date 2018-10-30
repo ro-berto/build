@@ -21,6 +21,7 @@ See PROPERTIES for documentation on the recipe's interface.
 import re
 
 from recipe_engine.post_process import DoesNotRun, DropExpectation, MustRun
+from recipe_engine.post_process import ResultReasonRE
 from recipe_engine.recipe_api import Property
 
 
@@ -593,19 +594,13 @@ def GenTests(api):
       api.post_process(DropExpectation)
   )
 
-  def verify_failure_reason(reason):
-    """Helper for verifing the failure reason text of the recipe."""
-    def _verify_failure_reason(check, steps):
-      check(steps['$result']['reason'] == reason)
-    return api.post_process(_verify_failure_reason)
-
   # Simulate not finding any isolates.
   yield (
       test('no_isolates') +
       sum((isolated_lookup(i, False) + get_revisions(i, 'a%d' % i)
            for i in range(1, MAX_ISOLATE_OFFSET)),
           isolated_lookup(0, False)) +
-      verify_failure_reason('Couldn\'t find isolates.') +
+      api.post_process(ResultReasonRE, 'Couldn\'t find isolates.') +
       api.post_process(DropExpectation)
   )
 
@@ -622,6 +617,6 @@ def GenTests(api):
       is_flaky(0, 4, 1, test_name=shortened_test_name) +
       is_flaky(0, 8, 3, test_name=shortened_test_name) +
       is_flaky(0, 16, 3, test_name=shortened_test_name) +
-      verify_failure_reason('Could not reach enough confidence.') +
+      api.post_process(ResultReasonRE, 'Could not reach enough confidence.') +
       api.post_process(DropExpectation)
   )

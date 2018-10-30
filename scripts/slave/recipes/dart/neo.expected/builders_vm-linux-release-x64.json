@@ -234,9 +234,12 @@
     "name": "debug log"
   },
   {
-    "name": "$result",
-    "reason": "1 out of 3 aggregated steps failed. Failures: Error, could not find builder by name builders/vm-linux-release-x64 in test-matrix",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": "Aggregate step failure."
+      },
+      "humanReason": "1 out of 3 aggregated steps failed. Failures: Error, could not find builder by name builders/vm-linux-release-x64 in test-matrix"
+    },
+    "name": "$result"
   }
 ]

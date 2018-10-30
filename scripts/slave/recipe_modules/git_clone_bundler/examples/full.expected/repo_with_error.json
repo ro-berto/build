@@ -135,9 +135,12 @@
     "stdout": "/path/to/tmp/"
   },
   {
-    "name": "$result",
-    "reason": "Encountered 1 bundler failure(s)",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Encountered 1 bundler failure(s)"
+    },
+    "name": "$result"
   }
 ]

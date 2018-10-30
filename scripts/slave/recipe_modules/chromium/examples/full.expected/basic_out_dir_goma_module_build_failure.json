@@ -629,9 +629,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Infra compile failure: Step Failure in compile",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Infra compile failure: Step Failure in compile"
+    },
+    "name": "$result"
   }
 ]

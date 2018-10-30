@@ -118,8 +118,7 @@
     "name": "chrome-asan-linux-release-x10-component-234.zip"
   },
   {
-    "name": "$result",
-    "recipe_result": null,
-    "status_code": 0
+    "jsonResult": null,
+    "name": "$result"
   }
 ]

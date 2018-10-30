@@ -231,9 +231,12 @@
     ]
   },
   {
-    "name": "$result",
-    "reason": "Missing required gn_arg: is_debug",
-    "recipe_result": null,
-    "status_code": 1
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "Missing required gn_arg: is_debug"
+    },
+    "name": "$result"
   }
 ]
