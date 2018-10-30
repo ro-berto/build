@@ -61,6 +61,8 @@ def BuildLinux(api, checkout_dir):
   Build(api, checkout_dir, 'host_debug')
   RunGN(api, checkout_dir, '--unoptimized')
   Build(api, checkout_dir, 'host_debug_unopt')
+  # analyze step needs dart ui sources
+  Build(api, checkout_dir, 'host_debug_unopt', 'generate_dart_ui')
 
 def TestObservatory(api, checkout_dir):
   flutter_tester_path = checkout_dir.join('out/host_debug/flutter_tester')
