@@ -915,8 +915,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           fmt_time(min_duration[0]), min_duration[1]))
 
   def _default_collect_step(
-      self, task, merged_test_output=None,
-      step_test_data=None,
+      self, task, merged_test_output=None, name=None, step_test_data=None,
       **kwargs):
     """Produces a step that collects a result of an arbitrary task."""
     task_output_dir = task.task_output_dir or self.m.raw_io.output_dir()
@@ -983,7 +982,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     try:
       with self.m.context(cwd=self.m.path['start_dir']):
         return self.m.build.python(
-            name=self.get_step_name('', task),
+            name=name or self.get_step_name('', task),
             script=self.resource('collect_task.py'),
             args=task_args,
             ok_ret=allowed_return_codes,
