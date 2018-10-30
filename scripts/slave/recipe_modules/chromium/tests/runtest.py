@@ -8,6 +8,7 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
+  'recipe_engine/runtime',
 ]
 
 
@@ -63,6 +64,17 @@ def GenTests(api):
           buildnumber=123,
           bot_id='test_bot_id',
           target_platform='android')
+  )
+
+  # In order to get coverage of the LUCI-specific code in runtest.
+  yield (
+      api.test('luci') +
+      api.properties(
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+          target_platform='android') +
+      api.runtime(is_luci=True, is_experimental=False)
   )
 
   yield (

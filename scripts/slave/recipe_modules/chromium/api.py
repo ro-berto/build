@@ -672,6 +672,18 @@ class ChromiumApi(recipe_api.RecipeApi):
       runtest_path = self.package_repo_resource(
           'scripts', 'slave', 'tee.py')
     with self.m.build.gsutil_py_env():
+      # We need this, as otherwise runtest.py fails due to expecting the cwd to
+      # be the checkout, when instead it's kitchen-workdir. We also can't use
+      # self.m.path['checkout'] since that has an extra '/src' added onto it
+      # compared to what runtest.py expects.
+      if self.m.runtime.is_luci:
+        with self.m.context(cwd=self.m.path['cache'].join('builder')):
+          return self.m.build.python(
+            step_name,
+            runtest_path,
+            args=full_args,
+            **kwargs
+          )
       return self.m.build.python(
         step_name,
         runtest_path,

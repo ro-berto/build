@@ -1,0 +1,57 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "[TMP_BASE]/stdout.log",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--test-platform",
+      "android",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\", \"target_platform\": \"android\"}",
+      "--build-properties",
+      "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"recipe\": \"chromium:tests/runtest\", \"slavename\": \"test_bot_id\", \"target_platform\": \"android\"}",
+      "--results-url=https://example/url",
+      "--perf-dashboard-id=test_perf_dashboard_id",
+      "--perf-id=test_perf_id",
+      "--perf-config",
+      "{\"a_default_rev\": \"some_sha\"}",
+      "--test-type=base_unittests",
+      "--step-name=base_unittests",
+      "--chartjson-file",
+      "/path/to/tmp/json",
+      "--builder-name=test_buildername",
+      "--slave-name=test_bot_id",
+      "--build-number=123",
+      "--point-id=123456",
+      "--revision=some_sha",
+      "base_unittests"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "base_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "name": "$result",
+    "recipe_result": null,
+    "status_code": 0
+  }
+]
