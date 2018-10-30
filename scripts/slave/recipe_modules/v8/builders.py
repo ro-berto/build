@@ -342,62 +342,6 @@ BUILDERS = {
         },
         'testing': {'platform': 'mac'},
       },
-####### Category: Misc
-      'V8 Linux gcc 4.8': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux64 gcc 4.8 - debug': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux64 ASAN': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Linux64 TSAN - builder': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-        },
-        'testing': {
-          'properties': {
-            'triggers': [
-              'V8 Linux64 TSAN',
-              'V8 Linux64 TSAN - concurrent marking',
-              'V8 Linux64 TSAN - isolates',
-            ],
-          },
-          'platform': 'linux',
-        },
-      },
-      'V8 Linux - arm64 - sim - MSAN': {
-        'chromium_apply_config': [
-          'default_compiler',
-          'goma',
-          'mb',
-        ],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Mac64 ASAN': {
-        'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-        },
-        'testing': {'platform': 'mac'},
-      },
 ####### Category: FYI
       'V8 Fuchsia': {
         'chromium_apply_config': ['default_compiler', 'goma', 'mb'],
