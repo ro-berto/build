@@ -29,9 +29,18 @@ DEPS = [
 PROPERTIES = {
   # One of Release|Debug.
   'build_config': Property(default=None, kind=str),
+  # Switch to clobber build dir before runhooks.
+  'clobber': Property(default=False, kind=bool),
+  # Additional configurations set for archiving builds to GS buckets for
+  # clusterfuzz. The mapping consists of "name", "bucket" and optional
+  # "bitness".
+  'clusterfuzz_archive': Property(default=None, kind=dict),
   # Mapping of custom dependencies to sync (dependency name as in DEPS file ->
   # deps url).
   'custom_deps': Property(default=None, kind=dict),
+  # Optional list of default targets. If not specified the implicit "all" target
+  # will be built.
+  'default_targets': Property(default=None, kind=list),
   # Switch to enable/disable swarming.
   'enable_swarming': Property(default=None, kind=bool),
   # Optional path to a different MB config. The path must be relative to the
@@ -50,18 +59,20 @@ PROPERTIES = {
 }
 
 
-def RunSteps(api, build_config, custom_deps, enable_swarming, mb_config_path,
-             set_gclient_var, target_arch, target_platform, triggers,
-             use_goma):
+def RunSteps(api, build_config, clobber, clusterfuzz_archive, custom_deps,
+             default_targets, enable_swarming, mb_config_path, set_gclient_var,
+             target_arch, target_platform, triggers, use_goma):
   v8 = api.v8
   v8.load_static_test_configs()
   bot_config = v8.update_bot_config(
       v8.bot_config_by_buildername(use_goma=use_goma),
-      build_config, enable_swarming, target_arch, target_platform, triggers
+      build_config, clusterfuzz_archive, enable_swarming, target_arch,
+      target_platform, triggers
   )
   v8.apply_bot_config(bot_config)
   v8.set_gclient_custom_var(set_gclient_var)
   v8.set_gclient_custom_deps(custom_deps)
+  v8.set_chromium_configs(clobber, default_targets)
 
   # Opt out of using gyp environment variables.
   api.chromium.c.use_gyp_env = False
@@ -898,4 +909,28 @@ def GenTests(api):
         use_goma=False,
     ) +
     api.post_process(DropExpectation)
+  )
+
+  # Test configurations for clusterfuzz builders.
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'clusterfuzz',
+        clobber=True,
+        clusterfuzz_archive={
+          'name': 'd8_bar',
+          'bucket': 'v8_clusterfoo',
+          'bitness': 64,
+        },
+        default_targets=['v8_foobar'],
+    ) +
+    api.post_process(MustRun, 'clobber') +
+    api.post_process(Filter(
+        'compile',
+        'create staging_dir',
+        'filter build_dir',
+        'zipping',
+        'gsutil upload',
+    ))
   )

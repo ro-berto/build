@@ -126,13 +126,16 @@ class V8Api(recipe_api.RecipeApi):
         default['chromium_apply_config'] = ['default_compiler', 'mb']
     return builders.get(self.m.properties.get('buildername'), default)
 
-  def update_bot_config(self, bot_config, build_config, enable_swarming,
-                        target_arch, target_platform, triggers):
+  def update_bot_config(self, bot_config, build_config, clusterfuzz_archive,
+                        enable_swarming, target_arch, target_platform,
+                        triggers):
     """Update bot_config dict with src-side properties.
 
     Args:
       bot_config: The bot_config dict to update.
       build_config: Config value for BUILD_CONFIG in chromium recipe module.
+      clusterfuzz_archive: Additional configurations set for archiving builds to
+          GS buckets for clusterfuzz.
       enable_swarming: Switch to enable/disable swarming.
       target_arch: Config value for TARGET_ARCH in chromium recipe module.
       target_platform: Config value for TARGET_PLATFORM in chromium recipe
@@ -155,6 +158,8 @@ class V8Api(recipe_api.RecipeApi):
         bot_config['v8_config_kwargs'][k] = v
     if enable_swarming is not None:
       bot_config['enable_swarming'] = enable_swarming
+    if clusterfuzz_archive is not None:
+      bot_config['clusterfuzz_archive'] = clusterfuzz_archive
     # Make mutable copy.
     bot_config['triggers'] = list(bot_config.get('triggers', []))
     bot_config['triggers'].extend(triggers or [])
@@ -312,6 +317,12 @@ class V8Api(recipe_api.RecipeApi):
     """Configures additional gclient custom_deps to be synced."""
     for name, path in (custom_deps or {}).iteritems():
       self.m.gclient.c.solutions[0].custom_deps[name] = path
+
+  def set_chromium_configs(self, clobber, default_targets):
+    if clobber:
+      self.m.chromium.c.clobber_before_runhooks = clobber
+    if default_targets:
+      self.m.chromium.c.compile_py.default_targets = default_targets
 
   def testing_random_seed(self):
     """Return a random seed suitable for v8 testing.

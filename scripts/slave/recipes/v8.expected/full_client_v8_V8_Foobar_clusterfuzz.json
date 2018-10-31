@@ -1,0 +1,107 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "-j",
+      "20",
+      "v8_foobar"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CLEANUP]/chrome_staging"
+    ],
+    "infra_step": true,
+    "name": "create staging_dir"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::archive]/resources/filter_build_files.py",
+      "--dir",
+      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "--platform",
+      "linux",
+      "--output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "filter build_dir",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"file1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"file2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
+      "[CLEANUP]/chrome_staging",
+      "d8_bar-linux64-release-v8-component-50110",
+      "[\"file1\", \"file2\"]",
+      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release"
+    ],
+    "infra_step": true,
+    "name": "zipping"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--",
+      "-h",
+      "x-goog-meta-Cr-Commit-Position:refs/heads/master@{#50110}",
+      "-h",
+      "x-goog-meta-Cr-Commit-Position-Number:50110",
+      "-h",
+      "x-goog-meta-Cr-Git-Commit:f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
+      "cp",
+      "-a",
+      "public-read",
+      "[CLEANUP]/chrome_staging/d8_bar-linux64-release-v8-component-50110.zip",
+      "gs://v8_clusterfoo/linux64-release/d8_bar-linux64-release-v8-component-50110.zip"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/v8_clusterfoo/linux64-release/d8_bar-linux64-release-v8-component-50110.zip@@@"
+    ]
+  }
+]
