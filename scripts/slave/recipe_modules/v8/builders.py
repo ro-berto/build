@@ -508,6 +508,7 @@ BUILDERS = {
       },
       'V8 Clusterfuzz Linux64 CFI - release builder': {
         'chromium_apply_config': [
+          'clobber',
           'default_compiler',
           'goma',
           'mb',
@@ -523,6 +524,7 @@ BUILDERS = {
       },
       'V8 Clusterfuzz Linux MSAN no origins': {
         'chromium_apply_config': [
+          'clobber',
           'default_compiler',
           'goma',
           'mb',
@@ -538,6 +540,7 @@ BUILDERS = {
       },
       'V8 Clusterfuzz Linux MSAN chained origins': {
         'chromium_apply_config': [
+          'clobber',
           'default_compiler',
           'goma',
           'mb',
@@ -572,6 +575,7 @@ BUILDERS = {
       },
       'V8 Clusterfuzz Linux64 UBSanVptr - release builder': {
         'chromium_apply_config': [
+          'clobber',
           'default_compiler',
           'goma',
           'mb',
@@ -587,6 +591,7 @@ BUILDERS = {
       },
       'V8 Clusterfuzz Mac64 ASAN - release builder': {
         'chromium_apply_config': [
+          'clobber',
           'default_compiler',
           'goma',
           'mb',
@@ -602,6 +607,7 @@ BUILDERS = {
       },
       'V8 Clusterfuzz Mac64 ASAN - debug builder': {
         'chromium_apply_config': [
+          'clobber',
           'default_compiler',
           'goma',
           'mb',
@@ -617,6 +623,7 @@ BUILDERS = {
       },
       'V8 Clusterfuzz Win64 ASAN - release builder': {
         'chromium_apply_config': [
+          'clobber',
           'default_compiler',
           'goma',
           'mb',
@@ -633,6 +640,7 @@ BUILDERS = {
       },
       'V8 Clusterfuzz Win64 ASAN - debug builder': {
         'chromium_apply_config': [
+          'clobber',
           'default_compiler',
           'goma',
           'mb',
