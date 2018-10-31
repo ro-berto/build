@@ -84,7 +84,7 @@ def GenTests(api):
       api.test('use_clang_coverage') +
       api.properties.generic(
           mastername='chromium.fyi',
-          buildername='linux-code-coverage-builder') +
+          buildername='linux-code-coverage') +
       api.post_process(post_process.StatusCodeIn, 0) +
       api.post_process(post_process.DropExpectation)
   )

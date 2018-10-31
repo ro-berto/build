@@ -553,7 +553,7 @@ SPEC = {
             'chromeos-amd64-generic-rel'],
         ['goma_latest_client']),
     # For building targets instrumented for code coverage.
-    'linux-code-coverage-builder':{
+    'linux-code-coverage':{
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
@@ -566,30 +566,11 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'bot_type': 'builder',
+      'bot_type': 'builder_tester',
       'testing': {
         'platform': 'linux',
       },
       'checkout_dir': 'linux',
-    },
-    'linux-code-coverage-tester': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb',
-        'ninja_confirm_noop',
-        'goma_high_parallel',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['use_clang_coverage'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'linux-code-coverage-builder',
-      'testing': {
-        'platform': 'linux',
-      },
     },
     'Linux Builder Goma Latest Client': chromium_apply_configs(
         chromium_linux.SPEC['builders']['Linux Builder'],
