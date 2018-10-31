@@ -118,6 +118,10 @@ def _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
     # All other platforms already build with Clang, so no need to set it.
     assert not clang
 
+  if skia or skia_paths:
+    # PDFium defaults to C++11 but newer Skia requires C++14.
+    args.append('use_cxx11=false')
+
   if jumbo:
     # Note: The jumbo_file_merge_limit value below comes from
     # build/config/jumbo.gni. It is set here to make this jumbo/goma build act
