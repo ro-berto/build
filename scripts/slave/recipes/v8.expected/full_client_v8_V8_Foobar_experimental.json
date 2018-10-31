@@ -102,6 +102,6 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check"
+    "name": "trigger tests.[trigger] Check"
   }
 ]

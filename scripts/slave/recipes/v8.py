@@ -85,51 +85,54 @@ def RunSteps(api, build_config, clobber, clusterfuzz_archive, custom_deps,
   tests = v8.dedupe_tests(v8.extra_tests_from_properties(), tests)
 
   if v8.is_pure_swarming_tester:
-    api.swarming_client.checkout()
+    with api.step.nest('initialization'):
+      api.swarming_client.checkout()
 
-    # Simulate a v8 update on slim swarming testers. The revision
-    # property is mandatory. The commit position is required by gatekeeper.
-    api.step.active_result.presentation.properties['got_revision'] = (
-        api.properties['revision'])
-    api.step.active_result.presentation.properties['got_revision_cp'] = (
-        api.properties.get('parent_got_revision_cp'))
-    v8.set_up_swarming()
+      # Simulate a v8 update on slim swarming testers. The revision
+      # property is mandatory. The commit position is required by gatekeeper.
+      api.step.active_result.presentation.properties['got_revision'] = (
+          api.properties['revision'])
+      api.step.active_result.presentation.properties['got_revision_cp'] = (
+          api.properties.get('parent_got_revision_cp'))
+      v8.set_up_swarming()
   else:
-    # Make sure we don't run a non-pure swarming tester on a subdir slave.
-    # Subdir slaves have the name pattern 'slaveN-c3#M'.
-    assert '#' not in api.properties.get('bot_id', ''), (
-        'Can only use pure swarming testers on subdir slaves.')
+    with api.step.nest('initialization'):
+      # Make sure we don't run a non-pure swarming tester on a subdir slave.
+      # Subdir slaves have the name pattern 'slaveN-c3#M'.
+      assert '#' not in api.properties.get('bot_id', ''), (
+          'Can only use pure swarming testers on subdir slaves.')
 
-    if api.platform.is_win:
-      api.chromium.taskkill()
+      if api.platform.is_win:
+        api.chromium.taskkill()
 
-    if v8.generate_sanitizer_coverage:
-      # When collecting code coverage, we need to sync to the revision that
-      # fits to the patch for the line numbers to match.
-      revision = v8.calculate_patch_base_gerrit()
-      update_step = v8.checkout(revision=revision, suffix='with patch base')
-    else:
-      update_step = v8.checkout()
+      if v8.generate_sanitizer_coverage:
+        # When collecting code coverage, we need to sync to the revision that
+        # fits to the patch for the line numbers to match.
+        revision = v8.calculate_patch_base_gerrit()
+        update_step = v8.checkout(revision=revision, suffix='with patch base')
+      else:
+        update_step = v8.checkout()
 
-    update_properties = update_step.json.output['properties']
+      update_properties = update_step.json.output['properties']
 
-    if update_properties.get('got_swarming_client_revision'):
-      additional_trigger_properties['parent_got_swarming_client_revision'] = (
-          update_properties['got_swarming_client_revision'])
+      if update_properties.get('got_swarming_client_revision'):
+        additional_trigger_properties['parent_got_swarming_client_revision'] = (
+            update_properties['got_swarming_client_revision'])
 
-    v8.set_up_swarming()
-    v8.runhooks()
+      v8.set_up_swarming()
+      v8.runhooks()
 
-    if v8.generate_gcov_coverage:
-      v8.init_gcov_coverage()
+      if v8.generate_gcov_coverage:
+        v8.init_gcov_coverage()
 
-    # Dynamically load more test specifications from all discovered test roots.
-    test_roots = v8.get_test_roots()
-    for test_root in test_roots:
-      v8.update_test_configs(v8.load_dynamic_test_configs(test_root))
-      test_spec.update(v8.read_test_spec(test_root))
-      # Tests from dynamic test roots have precedence.
-      tests = v8.dedupe_tests(v8.extra_tests_from_test_spec(test_spec), tests)
+      # Dynamically load more test specifications from all discovered test
+      # roots.
+      test_roots = v8.get_test_roots()
+      for test_root in test_roots:
+        v8.update_test_configs(v8.load_dynamic_test_configs(test_root))
+        test_spec.update(v8.read_test_spec(test_root))
+        # Tests from dynamic test roots have precedence.
+        tests = v8.dedupe_tests(v8.extra_tests_from_test_spec(test_spec), tests)
 
     if v8.should_build:
       v8.compile(test_spec)
@@ -171,7 +174,7 @@ def GenTests(api):
         'branch_sync_failure',
         branch='refs/branch-heads/4.3',
     ) +
-    api.step_data('bot_update', retcode=1)
+    api.step_data('initialization.bot_update', retcode=1)
   )
 
   # Minimal bot config for a release builder. Used to simulate test data for
@@ -633,8 +636,8 @@ def GenTests(api):
     api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
     api.post_process(
         Filter()
-            .include('read test spec (v8)')
-            .include('isolate tests')
+            .include('initialization.read test spec (v8)')
+            .include('build.isolate tests')
             .include_re(r'.*Mjsunit.*')
     )
   )
@@ -652,9 +655,9 @@ def GenTests(api):
     api.v8.test_spec_in_checkout(
         'V8 Foobar builder', test_spec, 'V8 Foobar') +
     api.post_process(Filter(
-        'read test spec (v8)',
-        'generate_build_files',
-        'isolate tests',
+        'initialization.read test spec (v8)',
+        'build.generate_build_files',
+        'build.isolate tests',
         'trigger',
     ))
   )
@@ -694,8 +697,8 @@ def GenTests(api):
         parent_test_spec=android_test_spec,
         swarm_hashes={'mjsunit': 'hash'},
     ) +
-    api.v8.check_not_in_any_arg('[trigger] Mjsunit on Android', 'cpu') +
-    api.v8.check_not_in_any_arg('[trigger] Mjsunit on Android', 'gpu') +
+    api.v8.check_not_in_any_arg('trigger tests.[trigger] Mjsunit on Android', 'cpu') +
+    api.v8.check_not_in_any_arg('trigger tests.[trigger] Mjsunit on Android', 'gpu') +
     api.post_process(DropExpectation)
   )
 
@@ -734,18 +737,20 @@ def GenTests(api):
             'testing', 'builders.pyl'),
     ) +
     api.override_step_data(
-        'read test config (test_checkout)',
+        'initialization.read test config (test_checkout)',
         api.v8.example_test_config(extra_test_config),
     ) +
     api.override_step_data(
-        'read test spec (test_checkout)',
+        'initialization.read test spec (test_checkout)',
         api.v8.example_test_spec('V8 Foobar', extra_test_spec),
     ) +
-    api.post_process(DoesNotRun, 'isolate tests') +
+    api.post_process(DoesNotRun, 'build.isolate tests') +
     api.post_process(
         Filter()
-            .include('read test config (test_checkout)')
-            .include('read test spec (test_checkout)')
+            .include(
+              'initialization.read test config (test_checkout)')
+            .include(
+              'initialization.read test spec (test_checkout)')
             .include_re(r'.*Foounit.*')
     )
   )
@@ -756,9 +761,10 @@ def GenTests(api):
   yield (
       api.v8.test('client.v8', 'V8 Linux - builder', 'experimental') +
       api.runtime(is_luci=False, is_experimental=True) +
-      api.post_process(DoesNotRun, 'trigger (2)') +
+      api.post_process(DoesNotRun, 'trigger internal') +
       api.post_process(Filter(
-        'gsutil upload', 'package build', 'perf dashboard post'))
+        'build.gsutil upload', 'package build',
+        'measurements.perf dashboard post'))
   )
 
   yield (
@@ -778,7 +784,7 @@ def GenTests(api):
           parent_test_spec='{"tests": [{"name": "v8testing"}]}',
       ) +
       api.runtime(is_luci=True, is_experimental=True) +
-      api.post_process(Filter('[trigger] Check'))
+      api.post_process(Filter('trigger tests.[trigger] Check'))
   )
 
   # Test triggering CI child builders on LUCI.
@@ -795,13 +801,13 @@ def GenTests(api):
                   mb_config_path='somewhere/else/mb_config.pyl',
                   set_gclient_var='download_gcmole') +
       api.v8.check_in_param(
-          'bot_update',
+          'initialization.bot_update',
           '--spec-path', '\'custom_vars\': {\'download_gcmole\': \'True\'}') +
       api.v8.check_in_param(
-          'bot_update',
+          'initialization.bot_update',
           '--spec-path', '\'custom_deps\': {\'v8/foo\': \'bar\'}') +
       api.v8.check_in_param(
-          'generate_build_files',
+          'build.generate_build_files',
           '--config-file', 'somewhere/else/mb_config.pyl') +
       api.post_process(DropExpectation)
   )
@@ -815,11 +821,13 @@ def GenTests(api):
                   target_arch='arm',
                   target_platform='fuchsia') +
       api.v8.check_in_param(
-          'bot_update', '--spec-path', 'target_cpu = [\'arm\', \'arm64\']') +
+          'initialization.bot_update',
+          '--spec-path', 'target_cpu = [\'arm\', \'arm64\']') +
       api.v8.check_in_param(
-          'bot_update', '--spec-path', 'target_os = [\'fuchsia\']') +
-      api.v8.check_in_any_arg('generate_build_files', 'Debug') +
-      api.v8.check_in_any_arg('compile', 'Debug') +
+          'initialization.bot_update',
+          '--spec-path', 'target_os = [\'fuchsia\']') +
+      api.v8.check_in_any_arg('build.generate_build_files', 'Debug') +
+      api.v8.check_in_any_arg('build.compile', 'Debug') +
       api.v8.check_triggers('V8 Linux', 'V8 Linux - presubmit') +
       api.post_process(DropExpectation)
   )
@@ -855,7 +863,7 @@ def GenTests(api):
     api.v8.test_spec_in_checkout(
         'V8 Foobar',
         '{"tests": [{"name": "numfuzz"}]}') +
-    api.post_process(Filter('isolate tests'))
+    api.post_process(Filter('build.isolate tests'))
   )
 
   # Cover running presubmit on a builder.
@@ -885,7 +893,7 @@ def GenTests(api):
     api.post_process(Filter(
         'Initialize coverage data',
         'Merge coverage data',
-        'gsutil upload (2)',
+        'build.gsutil upload',
         'Split coverage data',
         'gsutil coverage data',
     ))
@@ -925,9 +933,9 @@ def GenTests(api):
         },
         default_targets=['v8_foobar'],
     ) +
-    api.post_process(MustRun, 'clobber') +
+    api.post_process(MustRun, 'initialization.clobber') +
     api.post_process(Filter(
-        'compile',
+        'build.compile',
         'create staging_dir',
         'filter build_dir',
         'zipping',

@@ -1,5 +1,9 @@
 [
   {
+    "cmd": [],
+    "name": "initialization"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -24,8 +28,9 @@
       ]
     },
     "infra_step": true,
-    "name": "bot_update",
+    "name": "initialization.bot_update",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
@@ -93,7 +98,10 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "gclient runhooks"
+    "name": "initialization.gclient runhooks",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -108,7 +116,10 @@
       "[BUILDER_CACHE]/V8_Linux___shared/v8/custom_deps"
     ],
     "infra_step": true,
-    "name": "ensure custom_deps dir"
+    "name": "initialization.ensure custom_deps dir",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -121,11 +132,16 @@
       "[BUILDER_CACHE]/V8_Linux___shared/v8/custom_deps"
     ],
     "infra_step": true,
-    "name": "list test roots",
+    "name": "initialization.list test roots",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@listdir@@@"
     ]
+  },
+  {
+    "cmd": [],
+    "name": "build"
   },
   {
     "cmd": [
@@ -147,9 +163,10 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "lookup GN args",
+    "name": "build.lookup GN args",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
       "@@@STEP_LOG_LINE@gn_args@use_goma = true@@@",
       "@@@STEP_LOG_LINE@gn_args@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
@@ -177,8 +194,9 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "generate_build_files",
+    "name": "build.generate_build_files",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
       "@@@STEP_LOG_END@gn_args@@@"
     ]
@@ -206,7 +224,10 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "compile"
+    "name": "build.compile",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -226,8 +247,15 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "build.compile confirm no-op",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "measurements"
   },
   {
     "cmd": [
@@ -240,9 +268,10 @@
       "[BUILDER_CACHE]/V8_Linux___shared/v8/out/Release/libv8.so"
     ],
     "infra_step": true,
-    "name": "Check binary size",
+    "name": "measurements.Check binary size",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@filesizes@[BUILDER_CACHE]/V8_Linux___shared/v8/out/Release/libv8.so: \t111@@@",
       "@@@STEP_LOG_END@filesizes@@@"
     ]
@@ -258,8 +287,9 @@
       "-o",
       "/path/to/tmp/json"
     ],
-    "name": "perf dashboard post",
+    "name": "measurements.perf dashboard post",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",

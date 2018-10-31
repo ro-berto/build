@@ -1,5 +1,9 @@
 [
   {
+    "cmd": [],
+    "name": "initialization"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -13,8 +17,9 @@
       "--log-limit",
       "100"
     ],
-    "name": "Get patches",
+    "name": "initialization.Get patches",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@<br />2 commits fetched@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"log\": [@@@",
@@ -59,8 +64,9 @@
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
     "infra_step": true,
-    "name": "gerrit fetch current CL info",
+    "name": "initialization.gerrit fetch current CL info",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"branch\": \"master\", @@@",
@@ -104,8 +110,9 @@
       ]
     },
     "infra_step": true,
-    "name": "bot_update - with patch base",
+    "name": "initialization.bot_update - with patch base",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
@@ -173,7 +180,10 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "gclient runhooks"
+    "name": "initialization.gclient runhooks",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -188,7 +198,10 @@
       "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8/custom_deps"
     ],
     "infra_step": true,
-    "name": "ensure custom_deps dir"
+    "name": "initialization.ensure custom_deps dir",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -201,11 +214,16 @@
       "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8/custom_deps"
     ],
     "infra_step": true,
-    "name": "list test roots",
+    "name": "initialization.list test roots",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@listdir@@@"
     ]
+  },
+  {
+    "cmd": [],
+    "name": "build"
   },
   {
     "cmd": [
@@ -227,9 +245,10 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "lookup GN args",
+    "name": "build.lookup GN args",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
       "@@@STEP_LOG_LINE@gn_args@use_goma = true@@@",
       "@@@STEP_LOG_LINE@gn_args@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
@@ -257,8 +276,9 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "generate_build_files",
+    "name": "build.generate_build_files",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
       "@@@STEP_LOG_END@gn_args@@@"
     ]
@@ -286,7 +306,10 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "compile"
+    "name": "build.compile",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -306,8 +329,11 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "build.compile confirm no-op",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [

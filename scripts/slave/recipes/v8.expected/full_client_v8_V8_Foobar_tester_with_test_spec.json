@@ -102,7 +102,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - sweet"
+    "name": "trigger tests.[trigger] Mjsunit - sweet"
   },
   {
     "cmd": [
@@ -209,7 +209,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - everything"
+    "name": "trigger tests.[trigger] Mjsunit - everything"
   },
   {
     "allow_subannotations": true,

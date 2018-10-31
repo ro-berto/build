@@ -343,7 +343,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
   def example_test_roots(self, *roots):
     """Simulates dynamically optained test-root directories."""
     return self.override_step_data(
-        'list test roots',
+        'initialization.list test roots',
         self.m.file.listdir(roots),
     )
 
@@ -394,7 +394,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         self.m.path.exists(self.m.path['builder_cache'].join(
             safe_buildername, 'v8', 'infra', 'testing', 'builders.pyl')) +
         self.step_data(
-            'read test spec (v8)',
+            'initialization.read test spec (v8)',
             self.example_test_spec(testername or buildername, test_spec),
         )
     )
@@ -404,13 +404,13 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     sufficiently elsewhere.
     """
     skip_fragments = map(re.escape, [
-      'ensure builder cache dir',
-      'ensure_goma',
-      'preprocess_for_goma',
-      'postprocess_for_goma',
-      'read revision',
-      'swarming_client',
-      'swarming.py --version',
+      'initialization.ensure builder cache dir',
+      'initialization.ensure_goma',
+      'build.preprocess_for_goma',
+      'build.postprocess_for_goma',
+      'initialization.read revision',
+      'initialization.swarming_client',
+      'initialization.swarming.py --version',
     ])
     return self.post_process(
         Filter().include_re(r'^((?!%s).)*$' % '|'.join(skip_fragments)))
@@ -561,9 +561,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     # If use_goma is provided (not None), check if relevant steps either are
     # executed or not executed.
     goma_steps = [
-      'ensure_goma',
-      'preprocess_for_goma',
-      'postprocess_for_goma'
+      'initialization.ensure_goma',
+      'build.preprocess_for_goma',
+      'build.postprocess_for_goma'
     ]
     if kwargs.get('use_goma') is True:
       test += self.post_process(MustRun, *goma_steps)
@@ -576,7 +576,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     # Only show the command for swarming trigger steps (i.e. drop logs).
     # List of (step-name regexp, tuple of fields to keep).
     keep_fields_spec = [
-      ('\[trigger\].*', ('cmd',)),
+      ('trigger tests.\[trigger\].*', ('cmd',)),
     ]
 
     # TODO(machenbach): Add a better field/step dropping mechanism to the

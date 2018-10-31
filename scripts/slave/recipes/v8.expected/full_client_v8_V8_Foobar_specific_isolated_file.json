@@ -15,8 +15,9 @@
       "--verbose",
       "[BUILDER_CACHE]/V8_Foobar/v8/out/Release/run-num-fuzzer.isolated.gen.json"
     ],
-    "name": "isolate tests",
+    "name": "build.isolate tests",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"run-num-fuzzer\": \"[dummy hash for run-num-fuzzer]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",

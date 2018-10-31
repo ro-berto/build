@@ -1,5 +1,9 @@
 [
   {
+    "cmd": [],
+    "name": "initialization"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -26,8 +30,9 @@
       ]
     },
     "infra_step": true,
-    "name": "bot_update",
+    "name": "initialization.bot_update",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -84,9 +89,9 @@
   {
     "failure": {
       "failure": {
-        "step": "bot_update"
+        "step": "initialization.bot_update"
       },
-      "humanReason": "Infra Failure: Step('bot_update') returned 1"
+      "humanReason": "Infra Failure: Step('initialization.bot_update') returned 1"
     },
     "name": "$result"
   }

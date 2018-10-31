@@ -3,6 +3,27 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "-a",
+      "public-read",
+      "{\"bot_default\": \"[dummy hash for bot_default]\"}",
+      "gs://chromium-v8/isolated/tryserver.v8/v8_linux64_sanitizer_coverage_rel/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
+    ],
+    "infra_step": true,
+    "name": "build.gsutil upload",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/tryserver.v8/v8_linux64_sanitizer_coverage_rel/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8/tools/sanitizers/sancov_formatter.py",
       "all",
       "--json-output",
@@ -24,24 +45,6 @@
       "[TMP_BASE]/coverage_output_tmp_1"
     ],
     "name": "Merge coverage data"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
-      "gs://chromium-v8/tryserver/sanitizer_coverage/gerrit/456789/12/linux64/data.json"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload (2)",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/tryserver/sanitizer_coverage/gerrit/456789/12/linux64/data.json@@@"
-    ]
   },
   {
     "cmd": [

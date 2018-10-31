@@ -93,6 +93,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "build"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -109,9 +113,10 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "lookup GN args",
+    "name": "build.lookup GN args",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
       "@@@STEP_LOG_LINE@gn_args@use_goma = true@@@",
       "@@@STEP_LOG_LINE@gn_args@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
@@ -138,8 +143,9 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "generate_build_files",
+    "name": "build.generate_build_files",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@bot_default@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
@@ -166,7 +172,10 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "compile"
+    "name": "build.compile",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -183,8 +192,11 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "build.compile confirm no-op",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -210,7 +222,10 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "upload_ninja_log"
+    "name": "build.upload_ninja_log",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -228,8 +243,9 @@
       "--verbose",
       "[BUILDER_CACHE]/TestBuilder/v8/out/Release/bot_default.isolated.gen.json"
     ],
-    "name": "isolate tests",
+    "name": "build.isolate tests",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -251,8 +267,9 @@
       "gs://chromium-v8/isolated/chromium.testing.master/TestBuilder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "infra_step": true,
-    "name": "gsutil upload",
+    "name": "build.gsutil upload",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/chromium.testing.master/TestBuilder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
     ]
   },

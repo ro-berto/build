@@ -741,65 +741,68 @@ class V8Api(recipe_api.RecipeApi):
           test_spec.get_all_test_names())
       isolate_targets = sorted(list(set(self.isolate_targets + extra_targets)))
 
-      build_dir = None
-      if out_dir:  # pragma: no cover
-        build_dir = '//%s/%s' % (out_dir, self.m.chromium.c.build_config_fs)
-      if self.m.chromium.c.project_generator.tool == 'mb':
-        mb_config_rel_path = self.m.properties.get(
-            'mb_config_path', 'infra/mb/mb_config.pyl')
-        gn_args = self.m.chromium.mb_gen(
-            self.m.properties['mastername'],
-            self.m.properties['buildername'],
-            use_goma=use_goma,
-            mb_config_path=(
-                mb_config_path or
-                self.m.path['checkout'].join(*mb_config_rel_path.split('/'))),
-            isolated_targets=isolate_targets,
-            build_dir=build_dir,
-            gn_args_location=self.m.gn.LOGS)
+      with self.m.step.nest('build'):
+        build_dir = None
+        if out_dir:  # pragma: no cover
+          build_dir = '//%s/%s' % (out_dir, self.m.chromium.c.build_config_fs)
+        if self.m.chromium.c.project_generator.tool == 'mb':
+          mb_config_rel_path = self.m.properties.get(
+              'mb_config_path', 'infra/mb/mb_config.pyl')
+          gn_args = self.m.chromium.mb_gen(
+              self.m.properties['mastername'],
+              self.m.properties['buildername'],
+              use_goma=use_goma,
+              mb_config_path=(
+                  mb_config_path or
+                  self.m.path['checkout'].join(*mb_config_rel_path.split('/'))),
+              isolated_targets=isolate_targets,
+              build_dir=build_dir,
+              gn_args_location=self.m.gn.LOGS)
 
-        # Update the build environment dictionary, which is printed to the
-        # user on test failures for easier build reproduction.
-        self._update_build_environment(gn_args)
+          # Update the build environment dictionary, which is printed to the
+          # user on test failures for easier build reproduction.
+          self._update_build_environment(gn_args)
 
-        # Create logs surfacing GN arguments. This information is critical to
-        # developers for reproducing failures locally.
-        if 'gn_args' in self.build_environment:
-          self.m.step.active_result.presentation.logs['gn_args'] = (
-              self.build_environment['gn_args'].splitlines())
-      elif self.m.chromium.c.project_generator.tool == 'gn':
-        self.m.chromium.run_gn(use_goma=use_goma, build_dir=build_dir)
+          # Create logs surfacing GN arguments. This information is critical to
+          # developers for reproducing failures locally.
+          if 'gn_args' in self.build_environment:
+            self.m.step.active_result.presentation.logs['gn_args'] = (
+                self.build_environment['gn_args'].splitlines())
+        elif self.m.chromium.c.project_generator.tool == 'gn':
+          self.m.chromium.run_gn(use_goma=use_goma, build_dir=build_dir)
 
-      if use_goma:
-        kwargs['use_goma_module'] = True
-      self.m.chromium.compile(out_dir=out_dir, **kwargs)
+        if use_goma:
+          kwargs['use_goma_module'] = True
+        self.m.chromium.compile(out_dir=out_dir, **kwargs)
 
-      if self.bot_config.get('track_build_dependencies', False):
-        with self.m.context(env_prefixes={'PATH': [self.depot_tools_path]}):
-          deps = self.m.python(
-              name='track build dependencies (fyi)',
-              script=self.resource('build-dep-stats.py'),
-              args=[
-                '-C', self.build_output_dir,
-                '-x', '/third_party/',
-                '-o', self.m.json.output(),
-              ],
-              step_test_data=self.test_api.example_build_dependencies,
-              ok_ret='any',
-              venv=True,
-          ).json.output
-        if deps:
-          self._upload_build_dependencies(deps)
+        self.isolate_tests(isolate_targets, out_dir=out_dir)
 
-      # Track binary size if specified.
-      tracking_config = self.bot_config.get('binary_size_tracking', {})
-      if tracking_config:
-        self._track_binary_size(
-          tracking_config['path_pieces_list'],
-          tracking_config['category'],
-        )
+      track_deps = self.bot_config.get('track_build_dependencies', False)
+      track_binary_size = self.bot_config.get('binary_size_tracking', {})
+      with self.maybe_nest(track_deps or track_binary_size, 'measurements'):
+        if track_deps:
+          with self.m.context(env_prefixes={'PATH': [self.depot_tools_path]}):
+            deps = self.m.python(
+                name='track build dependencies (fyi)',
+                script=self.resource('build-dep-stats.py'),
+                args=[
+                  '-C', self.build_output_dir,
+                  '-x', '/third_party/',
+                  '-o', self.m.json.output(),
+                ],
+                step_test_data=self.test_api.example_build_dependencies,
+                ok_ret='any',
+                venv=True,
+            ).json.output
+          if deps:
+            self._upload_build_dependencies(deps)
 
-      self.isolate_tests(isolate_targets, out_dir=out_dir)
+        # Track binary size if specified.
+        if track_binary_size:
+          self._track_binary_size(
+            track_binary_size['path_pieces_list'],
+            track_binary_size['category'],
+          )
 
   @property
   def depot_tools_path(self):
@@ -993,6 +996,14 @@ class V8Api(recipe_api.RecipeApi):
     return (self.bot_type == 'tester' and
             self.bot_config.get('enable_swarming', True))
 
+  @contextlib.contextmanager
+  def maybe_nest(self, condition, parent_step_name):
+    if not condition:
+      yield
+    else:
+      with self.m.step.nest(parent_step_name):
+        yield
+
   def runtests(self, tests):
     if self.extra_flags:
       result = self.m.step('Customized run with extra flags', cmd=None)
@@ -1015,15 +1026,16 @@ class V8Api(recipe_api.RecipeApi):
     # Creates a coverage context if coverage is tracked. Null object otherwise.
     coverage_context = self.create_coverage_context()
 
-    # Make sure swarming triggers come first.
-    # TODO(machenbach): Port this for rerun for bisection.
-    for t in swarming_tests + non_swarming_tests:
-      try:
-        t.pre_run(coverage_context=coverage_context)
-      except self.m.step.InfraFailure:  # pragma: no cover
-        raise
-      except self.m.step.StepFailure:  # pragma: no cover
-        failed_tests.append(t)
+    with self.maybe_nest(swarming_tests, 'trigger tests'):
+      # Make sure swarming triggers come first.
+      # TODO(machenbach): Port this for rerun for bisection.
+      for t in swarming_tests + non_swarming_tests:
+        try:
+          t.pre_run(coverage_context=coverage_context)
+        except self.m.step.InfraFailure:  # pragma: no cover
+          raise
+        except self.m.step.StepFailure:  # pragma: no cover
+          failed_tests.append(t)
 
     # Setup initial zero coverage after all swarming jobs are triggered.
     coverage_context.setup()
@@ -1339,127 +1351,129 @@ class V8Api(recipe_api.RecipeApi):
                     **additional_properties):
     triggers = self.bot_config.get('triggers', [])
     triggers_proxy = self.bot_config.get('triggers_proxy', False)
+    if not triggers and not triggers_proxy:
+      return
+
+    # Careful! Before adding new properties, note the following:
+    # Triggered bots on CQ will either need new properties to be explicitly
+    # whitelisted or their name should be prefixed with 'parent_'.
+    properties = {
+      'parent_got_revision': self.revision,
+      'parent_buildername': self.m.properties['buildername'],
+      'parent_build_config': self.m.chromium.c.BUILD_CONFIG,
+    }
+    if self.revision_cp:
+      properties['parent_got_revision_cp'] = self.revision_cp
+    if self.m.tryserver.is_tryserver:
+      properties.update(
+        category=self.m.properties.get('category', 'manual_ts'),
+        reason=str(self.m.properties.get('reason', 'ManualTS')),
+        # On tryservers, set revision to the same as on the current bot,
+        # as CQ expects builders and testers to match the revision field.
+        revision=str(self.m.properties.get('revision', 'HEAD')),
+      )
+      for p in ['issue', 'master', 'patch_gerrit_url', 'patch_git_url',
+                'patch_issue', 'patch_project', 'patch_ref',
+                'patch_repository_url', 'patch_set', 'patch_storage',
+                'patchset', 'requester', 'rietveld']:
+        try:
+          properties[p] = str(self.m.properties[p])
+        except KeyError:
+          pass
+    else:
+      # On non-tryservers, we can set the revision to whatever the
+      # triggering builder checked out.
+      properties['revision'] = self.revision
+
+    if self.m.properties.get('testfilter'):
+      properties.update(testfilter=list(self.m.properties['testfilter']))
+    self._copy_property(self.m.properties, properties, 'extra_flags')
+
+    # TODO(machenbach): Also set meaningful buildbucket tags of triggering
+    # parent.
+
+    # Pass build environment to testers if it doesn't exceed buildbot's
+    # limits.
+    # TODO(machenbach): Remove the check in the after-buildbot age.
+    if len(self.m.json.dumps(self.build_environment)) < 1024:
+      properties['parent_build_environment'] = self.build_environment
+
+    swarm_hashes = self.isolated_tests
+    if swarm_hashes:
+      properties['swarm_hashes'] = swarm_hashes
+    properties.update(**additional_properties)
+
     triggered_build_ids = []
-    if triggers or triggers_proxy:
-      # Careful! Before adding new properties, note the following:
-      # Triggered bots on CQ will either need new properties to be explicitly
-      # whitelisted or their name should be prefixed with 'parent_'.
-      properties = {
-        'parent_got_revision': self.revision,
-        'parent_buildername': self.m.properties['buildername'],
-        'parent_build_config': self.m.chromium.c.BUILD_CONFIG,
-      }
-      if self.revision_cp:
-        properties['parent_got_revision_cp'] = self.revision_cp
+    if triggers:
       if self.m.tryserver.is_tryserver:
-        properties.update(
-          category=self.m.properties.get('category', 'manual_ts'),
-          reason=str(self.m.properties.get('reason', 'ManualTS')),
-          # On tryservers, set revision to the same as on the current bot,
-          # as CQ expects builders and testers to match the revision field.
-          revision=str(self.m.properties.get('revision', 'HEAD')),
-        )
-        for p in ['issue', 'master', 'patch_gerrit_url', 'patch_git_url',
-                  'patch_issue', 'patch_project', 'patch_ref',
-                  'patch_repository_url', 'patch_set', 'patch_storage',
-                  'patchset', 'requester', 'rietveld']:
-          try:
-            properties[p] = str(self.m.properties[p])
-          except KeyError:
-            pass
-      else:
-        # On non-tryservers, we can set the revision to whatever the
-        # triggering builder checked out.
-        properties['revision'] = self.revision
-
-      if self.m.properties.get('testfilter'):
-        properties.update(testfilter=list(self.m.properties['testfilter']))
-      self._copy_property(self.m.properties, properties, 'extra_flags')
-
-      # TODO(machenbach): Also set meaningful buildbucket tags of triggering
-      # parent.
-
-      # Pass build environment to testers if it doesn't exceed buildbot's
-      # limits.
-      # TODO(machenbach): Remove the check in the after-buildbot age.
-      if len(self.m.json.dumps(self.build_environment)) < 1024:
-        properties['parent_build_environment'] = self.build_environment
-
-      swarm_hashes = self.isolated_tests
-      if swarm_hashes:
-        properties['swarm_hashes'] = swarm_hashes
-      properties.update(**additional_properties)
-
-      if triggers:
-        if self.m.tryserver.is_tryserver:
-          trigger_props = {}
-          self._copy_property(self.m.properties, trigger_props, 'git_revision')
-          self._copy_property(self.m.properties, trigger_props, 'revision')
-          trigger_props.update(properties)
-          bucket_name = (
-              self.m.buildbucket.bucket_v1 or
-              'master.%s' % self.m.properties['mastername'])
-          # Generate a list of fake changes from the blamelist property to have
-          # correct blamelist displayed on the child build. Unfortunately, this
-          # only copies author names, but additional details about the list of
-          # changes associated with the build are currently not accessible from
-          # the recipe code.
-          step_result = self.buildbucket_trigger(
-              bucket_name, self.get_changes(),
-              [{
-                'builder_name': builder_name,
-                'properties': dict(
-                    trigger_props,
-                    **test_spec.as_properties_dict(builder_name)
-                ),
-              } for builder_name in triggers],
-              # Tryserver uses custom buildset that is set by the buildbucket
-              # module itself.
-              no_buildset=True,
-          )
-          triggered_build_ids.extend(
-              build['build']['id'] for build in step_result.stdout['results'])
-        else:
-          ci_properties = dict(properties)
-          if self.should_upload_build:
-            ci_properties['archive'] = self._get_default_archive()
-          if self.m.runtime.is_luci:
-            self.m.scheduler.emit_triggers(
-                [(
-                  self.m.scheduler.BuildbucketTrigger(
-                    properties=dict(
-                      ci_properties,
-                      **test_spec.as_properties_dict(builder_name)
-                    ),
-                    tags={
-                      'buildset': 'commit/gitiles/chromium.googlesource.com/v8/'
-                                  'v8/+/%s' % ci_properties['revision']
-                    }
-                  ), 'v8', [builder_name],
-                ) for builder_name in triggers],
-                step_name='trigger'
-            )
-          else:
-            self.m.trigger(*[{
+        trigger_props = {}
+        self._copy_property(self.m.properties, trigger_props, 'git_revision')
+        self._copy_property(self.m.properties, trigger_props, 'revision')
+        trigger_props.update(properties)
+        bucket_name = (
+            self.m.buildbucket.bucket_v1 or
+            'master.%s' % self.m.properties['mastername'])
+        # Generate a list of fake changes from the blamelist property to have
+        # correct blamelist displayed on the child build. Unfortunately, this
+        # only copies author names, but additional details about the list of
+        # changes associated with the build are currently not accessible from
+        # the recipe code.
+        step_result = self.buildbucket_trigger(
+            bucket_name, self.get_changes(),
+            [{
               'builder_name': builder_name,
-              # Attach additional builder-specific test-spec properties.
               'properties': dict(
-                  ci_properties,
+                  trigger_props,
                   **test_spec.as_properties_dict(builder_name)
               ),
-            } for builder_name in triggers])
-
-      if triggers_proxy and not self.m.runtime.is_experimental:
-        proxy_properties = {'archive': self._get_default_archive()}
-        proxy_properties.update(properties)
-        self.buildbucket_trigger(
-            'luci.v8-internal.ci', self.get_changes(),
-            [{
-              'properties': proxy_properties,
-              'builder_name': 'v8_trigger_proxy'
-            }],
-            step_name='trigger_internal'
+            } for builder_name in triggers],
+            # Tryserver uses custom buildset that is set by the buildbucket
+            # module itself.
+            no_buildset=True,
         )
+        triggered_build_ids.extend(
+            build['build']['id'] for build in step_result.stdout['results'])
+      else:
+        ci_properties = dict(properties)
+        if self.should_upload_build:
+          ci_properties['archive'] = self._get_default_archive()
+        if self.m.runtime.is_luci:
+          self.m.scheduler.emit_triggers(
+              [(
+                self.m.scheduler.BuildbucketTrigger(
+                  properties=dict(
+                    ci_properties,
+                    **test_spec.as_properties_dict(builder_name)
+                  ),
+                  tags={
+                    'buildset': 'commit/gitiles/chromium.googlesource.com/v8/'
+                                'v8/+/%s' % ci_properties['revision']
+                  }
+                ), 'v8', [builder_name],
+              ) for builder_name in triggers],
+              step_name='trigger'
+          )
+        else:
+          self.m.trigger(*[{
+            'builder_name': builder_name,
+            # Attach additional builder-specific test-spec properties.
+            'properties': dict(
+                ci_properties,
+                **test_spec.as_properties_dict(builder_name)
+            ),
+          } for builder_name in triggers])
+
+    if triggers_proxy and not self.m.runtime.is_experimental:
+      proxy_properties = {'archive': self._get_default_archive()}
+      proxy_properties.update(properties)
+      self.buildbucket_trigger(
+          'luci.v8-internal.ci', self.get_changes(),
+          [{
+            'properties': proxy_properties,
+            'builder_name': 'v8_trigger_proxy'
+          }],
+          step_name='trigger_internal'
+      )
 
     if triggered_build_ids:
       output_properties = self.m.step.active_result.presentation.properties

@@ -11,8 +11,9 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "read test spec (v8)",
+    "name": "initialization.read test spec (v8)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@test_spec@V8 Foobar@@@",
       "@@@STEP_LOG_LINE@test_spec@  mjsunit(2) sweet@@@",
       "@@@STEP_LOG_LINE@test_spec@  mjsunit(1) sour@@@",
@@ -42,8 +43,9 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "generate_build_files",
+    "name": "build.generate_build_files",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@mjsunit@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\" use_goma = true@@@",
@@ -66,8 +68,9 @@
       "--verbose",
       "[BUILDER_CACHE]/V8_Foobar_builder/v8/out/Release/mjsunit.isolated.gen.json"
     ],
-    "name": "isolate tests",
+    "name": "build.isolate tests",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",

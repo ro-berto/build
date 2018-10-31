@@ -11,7 +11,10 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "read test config (test_checkout)"
+    "name": "initialization.read test config (test_checkout)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -25,8 +28,9 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "read test spec (test_checkout)",
+    "name": "initialization.read test spec (test_checkout)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@test_spec@V8 Foobar@@@",
       "@@@STEP_LOG_LINE@test_spec@  foounit(1) None@@@",
       "@@@STEP_LOG_END@test_spec@@@"

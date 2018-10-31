@@ -1,5 +1,9 @@
 [
   {
+    "cmd": [],
+    "name": "initialization"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -24,8 +28,9 @@
       ]
     },
     "infra_step": true,
-    "name": "bot_update",
+    "name": "initialization.bot_update",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
@@ -79,7 +84,10 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "gclient runhooks"
+    "name": "initialization.gclient runhooks",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -94,7 +102,10 @@
       "[BUILDER_CACHE]/V8_Linux___presubmit/v8/custom_deps"
     ],
     "infra_step": true,
-    "name": "ensure custom_deps dir"
+    "name": "initialization.ensure custom_deps dir",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -107,9 +118,10 @@
       "[BUILDER_CACHE]/V8_Linux___presubmit/v8/custom_deps"
     ],
     "infra_step": true,
-    "name": "list test roots",
+    "name": "initialization.list test roots",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@listdir@@@"
     ]
   },

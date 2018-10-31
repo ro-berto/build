@@ -11,8 +11,9 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "read test spec (v8)",
+    "name": "initialization.read test spec (v8)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@test_spec@V8 Foobar@@@",
       "@@@STEP_LOG_LINE@test_spec@  mjsunit(2) sweet@@@",
       "@@@STEP_LOG_LINE@test_spec@  mjsunit(1) sour@@@",
@@ -35,8 +36,9 @@
       "--verbose",
       "[BUILDER_CACHE]/V8_Foobar/v8/out/Release/mjsunit.isolated.gen.json"
     ],
-    "name": "isolate tests",
+    "name": "build.isolate tests",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"mjsunit\": \"[dummy hash for mjsunit]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -146,7 +148,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - sweet"
+    "name": "trigger tests.[trigger] Mjsunit - sweet"
   },
   {
     "cmd": [
@@ -253,7 +255,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Mjsunit - everything"
+    "name": "trigger tests.[trigger] Mjsunit - everything"
   },
   {
     "allow_subannotations": true,

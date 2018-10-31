@@ -177,7 +177,7 @@ def GenTests(api):
             'bot_update', '--revision',
             'v8@refs/branch-heads/3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') +
         api.post_process(
-            MustRun, 'clobber', 'gclient runhooks', 'gn', 'compile',
+            MustRun, 'clobber', 'gclient runhooks', 'build.gn', 'build.compile',
             'zipping', 'gsutil upload', 'archive link')
     )
 
@@ -192,8 +192,8 @@ def GenTests(api):
           'bot_update', '--spec-path', 'target_cpu = [\'arm\', \'arm64\']')
 
     expected_steps = [
-        'gn', 'compile', 'filter build files', 'zipping', 'gsutil upload',
-        'archive link',
+        'build.gn', 'build.compile', 'filter build files', 'zipping',
+        'gsutil upload', 'archive link',
     ]
     if 'Debug' not in buildername:
       expected_steps.extend([

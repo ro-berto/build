@@ -1,5 +1,9 @@
 [
   {
+    "cmd": [],
+    "name": "initialization"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -24,8 +28,9 @@
       ]
     },
     "infra_step": true,
-    "name": "bot_update",
+    "name": "initialization.bot_update",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
@@ -93,7 +98,10 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "gclient runhooks"
+    "name": "initialization.gclient runhooks",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -108,7 +116,10 @@
       "[BUILDER_CACHE]/V8_Foobar/v8/custom_deps"
     ],
     "infra_step": true,
-    "name": "ensure custom_deps dir"
+    "name": "initialization.ensure custom_deps dir",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -121,9 +132,10 @@
       "[BUILDER_CACHE]/V8_Foobar/v8/custom_deps"
     ],
     "infra_step": true,
-    "name": "list test roots",
+    "name": "initialization.list test roots",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@listdir@@@"
     ]
   },
@@ -139,13 +151,18 @@
       "/path/to/tmp/"
     ],
     "infra_step": true,
-    "name": "read test spec (v8)",
+    "name": "initialization.read test spec (v8)",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@test_spec@V8 Foobar@@@",
       "@@@STEP_LOG_LINE@test_spec@  v8testing(1) None@@@",
       "@@@STEP_LOG_LINE@test_spec@  test262_variants(1) None@@@",
       "@@@STEP_LOG_END@test_spec@@@"
     ]
+  },
+  {
+    "cmd": [],
+    "name": "build"
   },
   {
     "cmd": [
@@ -167,9 +184,10 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "lookup GN args",
+    "name": "build.lookup GN args",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@gn_args@target_cpu = \"x86\"@@@",
       "@@@STEP_LOG_LINE@gn_args@use_goma = true@@@",
       "@@@STEP_LOG_LINE@gn_args@goma_dir = \"/b/build/slave/cache/goma_client\"@@@",
@@ -199,8 +217,9 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "generate_build_files",
+    "name": "build.generate_build_files",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@bot_default@@@",
       "@@@STEP_LOG_LINE@swarming-targets-file.txt@test262@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@",
@@ -231,7 +250,10 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "compile"
+    "name": "build.compile",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -251,8 +273,11 @@
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "compile confirm no-op",
-    "stdout": "/path/to/tmp/"
+    "name": "build.compile confirm no-op",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -271,8 +296,9 @@
       "[BUILDER_CACHE]/V8_Foobar/v8/out/Release/bot_default.isolated.gen.json",
       "[BUILDER_CACHE]/V8_Foobar/v8/out/Release/test262.isolated.gen.json"
     ],
-    "name": "isolate tests",
+    "name": "build.isolate tests",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"bot_default\": \"[dummy hash for bot_default]\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test262\": \"[dummy hash for test262]\"@@@",
@@ -295,10 +321,15 @@
       "gs://chromium-v8/isolated/client.v8/V8 Foobar/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "infra_step": true,
-    "name": "gsutil upload",
+    "name": "build.gsutil upload",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/client.v8/V8 Foobar/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
     ]
+  },
+  {
+    "cmd": [],
+    "name": "trigger tests"
   },
   {
     "cmd": [
@@ -403,7 +434,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Check"
+    "name": "trigger tests.[trigger] Check"
   },
   {
     "cmd": [
@@ -509,7 +540,7 @@
       "--json-test-results",
       "${ISOLATED_OUTDIR}/output.json"
     ],
-    "name": "[trigger] Test262"
+    "name": "trigger tests.[trigger] Test262"
   },
   {
     "allow_subannotations": true,
