@@ -18,6 +18,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     # A single temporary directory to contain the profile data for all targets
     # in the build.
     self._base_profdata_dir = None
+    # Temp dir for report.
+    self._report_dir = None
     # Maps step names to subdirectories of the above.
     self._profdata_dirs = {}
 
@@ -45,12 +47,26 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     """
     return self.resource('merge_profiles.py')
 
+  def _llvm_exec(self, name):
+    return self.m.path['checkout'].join('third_party', 'llvm-build',
+                                        'Release+Asserts', 'bin', name)
+
   @property
   def profdata_executable(self):
-    """Returns the path to the llvm-profdata deployed by gclient hooks."""
-    return self.m.path['checkout'].join('third_party', 'llvm-build',
-                                        'Release+Asserts', 'bin',
-                                        'llvm-profdata')
+    """Returns the path to the llvm-profdata executable."""
+    return self._llvm_exec('llvm-profdata')
+
+  @property
+  def cov_executable(self):
+    """Returns the path to the llvm-cov executable."""
+    return self._llvm_exec('llvm-cov')
+
+  @property
+  def report_dir(self):
+    """A temporary directory to save a report to. Created on first access."""
+    if not self._report_dir:
+      self._report_dir = self.m.path.mkdtemp()
+    return self._report_dir
 
   def profdata_dir(self, step_name=None):
     """Ensures a directory exists for writing the step-level merged profdata.
@@ -86,11 +102,24 @@ class ClangCoverageApi(recipe_api.RecipeApi):
             and 'checkout_clang_coverage_tools'
                 in self.m.gclient.c.solutions[0].custom_vars)
 
-  def create_report(self):
-    """Placeholder for report generation.
+  def _get_binaries(self, test):
+    """Returns a path to the binary for the given test object."""
+    # TODO(crbug.com/899974): Implement a sturdier approach that also works in
+    # separate builder-tester setup.
 
-    At the moment, this only merges the profile data of all the steps in the
-    build into a single profdata file, and uploads to google storage.
+    # This naive approach relies on the test binary sharing a name with the test
+    # target. Also, this only works for builder_tester.
+    return [self.m.chromium.output_dir.join(test.target_name)]
+
+  def create_report(self, tests):
+    """Generate coverage report for tests in build.
+
+    Produce a coverage report for the instrumented test targets and upload to
+    the appropriate bucket.
+
+    Args:
+      tests (list of self.m.chromium_tests.stepsl.Test): A list of test objects
+          whose binaries we are to create a coverage report for.
     """
     if len(self._profdata_dirs):
       out_file = self.profdata_dir().join('merged.profdata')
@@ -102,10 +131,24 @@ class ClangCoverageApi(recipe_api.RecipeApi):
               '--output-file', out_file,
               '--llvm-profdata', self.profdata_executable,
           ])
+
+      binaries = sum((self._get_binaries(test) for test in tests), [])
+
+      self.m.python(
+          'generate html report for %d targets' % len(self._profdata_dirs),
+          self.resource('make_report.py'),
+          args=[
+              '--report-directory', self.report_dir,
+              '--profdata-path', out_file,
+              '--llvm-cov', self.cov_executable] + binaries)
+
+      report_zip = self.m.path.mkdtemp().join('coverage_report.zip')
+      self.m.zip.directory('zip report', self.report_dir, report_zip)
+
       self.m.gsutil.upload(
-          out_file, _BUCKET_NAME, '%s/%s/merged.profdata' % (
+          report_zip, _BUCKET_NAME, '%s/%s/coverage_report.zip' % (
           self.m.properties['buildername'], self.m.properties['buildnumber']),
-          name='upload merged profile data')
+          name='upload coverage report')
 
   def shard_merge(self, step_name):
     """Returns a merge object understood by the swarming module.

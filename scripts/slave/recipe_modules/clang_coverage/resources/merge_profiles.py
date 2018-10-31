@@ -2,7 +2,6 @@
 # Copyright 2018 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-
 """This script merges code coverage profiles from multiple shards.
 
 It is functionally identical to merge_steps.py but it accepts the parameters
@@ -40,9 +39,9 @@ def main():
   desc = "Merge profraw files in <--task-output-dir> into a single profdata."
   parser = _MergeAPIArgumentParser(description=desc)
   params = parser.parse_args()
-  merger.MergeProfiles(params.task_output_dir,
-                       os.path.join(params.profdata_dir, 'default.profdata'),
-                       '.profraw', params.llvm_profdata)
+  merger.merge_profiles(params.task_output_dir,
+                        os.path.join(params.profdata_dir, 'default.profdata'),
+                        '.profraw', params.llvm_profdata)
 
 
 if __name__ == '__main__':

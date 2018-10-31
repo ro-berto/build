@@ -727,7 +727,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         yield
       finally:
         if self.m.clang_coverage.using_coverage:
-          self.m.clang_coverage.create_report()
+          self.m.clang_coverage.create_report(tests)
         for test in (tests or []):
           for tear_down_step in (test.tear_down or []):
             self.m.python(

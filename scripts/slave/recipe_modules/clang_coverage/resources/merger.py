@@ -1,7 +1,6 @@
 # Copyright 2018 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-
 """Functions for interacting with llvm-profdata"""
 
 import json
@@ -10,8 +9,8 @@ import os
 import subprocess
 
 
-def _CallProfdataTool(profile_input_file_paths, profile_output_file_path,
-                      profdata_tool_path):
+def _call_profdata_tool(profile_input_file_paths, profile_output_file_path,
+                        profdata_tool_path):
   """Calls the llvm-profdata tool.
 
   Args:
@@ -41,7 +40,7 @@ def _CallProfdataTool(profile_input_file_paths, profile_output_file_path,
   logging.info('Profile data is created as: "%s".', profile_output_file_path)
 
 
-def _GetProfilePaths(input_dir, input_extension):
+def _get_profile_paths(input_dir, input_extension):
   """Finds all the profiles in the given directory (recursively)."""
   paths = []
   for dir_path, _sub_dirs, file_names in os.walk(input_dir):
@@ -53,7 +52,7 @@ def _GetProfilePaths(input_dir, input_extension):
   return paths
 
 
-def MergeProfiles(input_dir, output_file, input_extension, profdata_tool_path):
+def merge_profiles(input_dir, output_file, input_extension, profdata_tool_path):
   """Merges the profiles produced by the shards using llvm-profdata.
 
   Args:
@@ -63,9 +62,9 @@ def MergeProfiles(input_dir, output_file, input_extension, profdata_tool_path):
         e.g. '.profdata' or '.profraw'
     profdata_tool_path: The path to the llvm-profdata executable.
   """
-  profile_input_file_paths = _GetProfilePaths(input_dir, input_extension)
+  profile_input_file_paths = _get_profile_paths(input_dir, input_extension)
 
-  _CallProfdataTool(
+  _call_profdata_tool(
       profile_input_file_paths=profile_input_file_paths,
       profile_output_file_path=output_file,
       profdata_tool_path=profdata_tool_path)

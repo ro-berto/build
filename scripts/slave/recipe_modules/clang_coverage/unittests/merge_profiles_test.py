@@ -41,7 +41,7 @@ class MergeProfilesTest(unittest.TestCase):
         task_output_dir, '--profdata-dir', profdata_dir, '--llvm-profdata',
         'llvm-profdata', 'a.json', 'b.json', 'c.json'
     ]
-    with mock.patch.object(merger, 'MergeProfiles') as mock_merge:
+    with mock.patch.object(merger, 'merge_profiles') as mock_merge:
       with mock.patch.object(sys, 'argv', args):
         merge_profiles.main()
         self.assertEqual(
@@ -62,7 +62,7 @@ class MergeProfilesTest(unittest.TestCase):
         '--llvm-profdata',
         'llvm-profdata',
     ]
-    with mock.patch.object(merger, 'MergeProfiles') as mock_merge:
+    with mock.patch.object(merger, 'merge_profiles') as mock_merge:
       with mock.patch.object(sys, 'argv', args):
         merge_steps.main()
         self.assertEqual(
@@ -85,8 +85,8 @@ class MergeProfilesTest(unittest.TestCase):
       with mock.patch.object(os, 'remove'):
         mock_walk.return_value = mock_input_dir_walk
         with mock.patch.object(subprocess, 'check_output') as mock_exec_cmd:
-          merger.MergeProfiles('/b/some/path', 'output/dir/default.profdata',
-                                  '.profraw', 'llvm-profdata')
+          merger.merge_profiles('/b/some/path', 'output/dir/default.profdata',
+                                '.profraw', 'llvm-profdata')
           self.assertEqual(
               mock.call([
                   'llvm-profdata', 'merge', '-o', 'output/dir/default.profdata',
@@ -103,20 +103,22 @@ class MergeProfilesTest(unittest.TestCase):
   def test_merge_profdata(self):
     mock_input_dir_walk = [
         ('/b/some/path', ['base_unittests', 'url_unittests'], ['summary.json']),
-        ('/b/some/path/base_unittests', [],
-         ['output.json', 'default.profdata']),
-        ('/b/some/path/url_unittests', [],
-         ['output.json', 'default.profdata']),
+        ('/b/some/path/base_unittests', [], ['output.json',
+                                             'default.profdata']),
+        ('/b/some/path/url_unittests', [], ['output.json', 'default.profdata']),
     ]
     with mock.patch.object(os, 'walk') as mock_walk:
       with mock.patch.object(os, 'remove'):
         mock_walk.return_value = mock_input_dir_walk
         with mock.patch.object(subprocess, 'check_output') as mock_exec_cmd:
-          merger.MergeProfiles('/b/some/path', 'output/dir/default.profdata',
-                                  '.profdata', 'llvm-profdata')
+          merger.merge_profiles('/b/some/path', 'output/dir/default.profdata',
+                                '.profdata', 'llvm-profdata')
           self.assertEqual(
               mock.call([
-                  'llvm-profdata', 'merge', '-o', 'output/dir/default.profdata',
+                  'llvm-profdata',
+                  'merge',
+                  '-o',
+                  'output/dir/default.profdata',
                   '-sparse=true',
                   '/b/some/path/base_unittests/default.profdata',
                   '/b/some/path/url_unittests/default.profdata',
