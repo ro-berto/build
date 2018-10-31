@@ -918,23 +918,6 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@*.isolated file for target base_unittests is missing@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "[collect error] base_unittests (with patch)",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@base_unittests wasn't triggered@@@",
       "@@@STEP_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
     ]
@@ -1564,58 +1547,6 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@*.isolated file for target base_unittests is missing@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "test_pre_run.[error] base_unittests (without patch) (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@*.isolated file for target base_unittests is missing@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "[collect error] base_unittests (without patch)",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@base_unittests wasn't triggered@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "[collect error] base_unittests (without patch) (2)",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@base_unittests wasn't triggered@@@",
       "@@@STEP_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
     ]
@@ -1646,38 +1577,6 @@
       "CHROME_HEADLESS": "1"
     },
     "name": "base_unittests (retry summary)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Failed with patch, succeeded without patch:<br/>all initial tests failed<br/>@@@",
-      "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "base_unittests (3)",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "base_unittests (retry summary) (2)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Failed with patch, succeeded without patch:<br/>all initial tests failed<br/>@@@",
       "@@@STEP_FAILURE@@@",
@@ -2329,58 +2228,6 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@*.isolated file for target base_unittests is missing@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "test_pre_run.[error] base_unittests (retry with patch) (2)",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@*.isolated file for target base_unittests is missing@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "[collect error] base_unittests (retry with patch)",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@base_unittests wasn't triggered@@@",
-      "@@@STEP_FAILURE@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "[collect error] base_unittests (retry with patch) (2)",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@base_unittests wasn't triggered@@@",
       "@@@STEP_FAILURE@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
     ]
@@ -2395,30 +2242,12 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "base_unittests (4)",
+    "name": "base_unittests (3)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
       "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_type@\"INVALID_TEST_RESULTS\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(1)"
-    ],
-    "cwd": "[BUILDER_CACHE]/linux",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "base_unittests (5)",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
-      "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"c2f0a299a6ec651e1e15b466651d9e38a7f531d3\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"c8350c1b4a540e254d34ba66251b0dd2de3127e1\"@@@"
     ]
   },
   {
@@ -2426,7 +2255,7 @@
       "failure": {
         "step": "Aggregate step failure."
       },
-      "humanReason": "2 out of 2 aggregated steps failed. Failures: Step('base_unittests (4)') failed with return_code 1, Step('base_unittests (5)') failed with return_code 1"
+      "humanReason": "1 out of 1 aggregated steps failed. Failures: Step('base_unittests (3)') failed with return_code 1"
     },
     "name": "$result"
   }

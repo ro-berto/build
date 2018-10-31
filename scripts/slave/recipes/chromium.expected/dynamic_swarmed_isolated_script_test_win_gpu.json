@@ -774,6 +774,65 @@
     "cmd": [
       "python",
       "-u",
+      "[START_DIR]\\src\\chrome\\test\\mini_installer\\test_installer.py",
+      "--build-dir",
+      "[START_DIR]\\src\\out",
+      "--target",
+      "Release",
+      "--force-clean",
+      "--config",
+      "[START_DIR]\\src\\chrome\\test\\mini_installer\\config\\config.config",
+      "--write-full-results-to",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "test_installer"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::swarming]\\resources\\wait_for_finished_task_set.py",
+      "--swarming-server",
+      "https://chromium-swarm.appspot.com",
+      "--swarming-py-path",
+      "[START_DIR]\\src\\tools\\swarming_client\\swarming.py",
+      "--output-json",
+      "/path/to/tmp/json",
+      "--input-json",
+      "[[\"120000\"], [\"110000\"], [\"10000\"]]",
+      "--attempts",
+      "0",
+      "--verbose"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "wait for tasks",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"attempts\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sets\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"120000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"110000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"10000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -802,14 +861,14 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"telemetry_gpu_unittests on NVIDIA GPU on Windows/Windows/eeeeeeeeee/Win7 Tests (1)/571\", \"tasks\": {\"telemetry_gpu_unittests on NVIDIA GPU on Windows/Windows/eeeeeeeeee/Win7 Tests (1)/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"telemetry_gpu_unittests on (15ad) GPU on Windows/Windows/eeeeeeeeee/Win7 Tests (1)/571\", \"tasks\": {\"telemetry_gpu_unittests on (15ad) GPU on Windows/Windows/eeeeeeeeee/Win7 Tests (1)/571\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "telemetry_gpu_unittests on NVIDIA GPU on Windows",
+    "name": "telemetry_gpu_unittests on (15ad) GPU on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -898,22 +957,22 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"telemetry_gpu_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"10de:104a\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"15ad:0405\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Windows\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests on NVIDIA GPU on Windows\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests on (15ad) GPU on Windows\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"telemetry_gpu_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"120000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Win7 Tests (1)\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.win\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {
@@ -930,7 +989,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "telemetry_gpu_unittests on NVIDIA GPU on Windows",
+      "telemetry_gpu_unittests on (15ad) GPU on Windows",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -941,7 +1000,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "Upload to test-results [telemetry_gpu_unittests on NVIDIA GPU on Windows]"
+    "name": "Upload to test-results [telemetry_gpu_unittests on (15ad) GPU on Windows]"
   },
   {
     "cmd": [
@@ -1148,14 +1207,14 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"telemetry_gpu_unittests on (15ad) GPU on Windows/Windows/eeeeeeeeee/Win7 Tests (1)/571\", \"tasks\": {\"telemetry_gpu_unittests on (15ad) GPU on Windows/Windows/eeeeeeeeee/Win7 Tests (1)/571\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}",
+      "{\"base_task_name\": \"telemetry_gpu_unittests on NVIDIA GPU on Windows/Windows/eeeeeeeeee/Win7 Tests (1)/571\", \"tasks\": {\"telemetry_gpu_unittests on NVIDIA GPU on Windows/Windows/eeeeeeeeee/Win7 Tests (1)/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "telemetry_gpu_unittests on (15ad) GPU on Windows",
+    "name": "telemetry_gpu_unittests on NVIDIA GPU on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1244,22 +1303,22 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"telemetry_gpu_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"15ad:0405\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"10de:104a\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Windows\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests on (15ad) GPU on Windows\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"telemetry_gpu_unittests on NVIDIA GPU on Windows\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"telemetry_gpu_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"120000\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  ], @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_buildername\": \"Win7 Tests (1)\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.win\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/120000@@@"
+      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   },
   {
@@ -1276,7 +1335,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "telemetry_gpu_unittests on (15ad) GPU on Windows",
+      "telemetry_gpu_unittests on NVIDIA GPU on Windows",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -1287,27 +1346,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "Upload to test-results [telemetry_gpu_unittests on (15ad) GPU on Windows]"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]\\src\\chrome\\test\\mini_installer\\test_installer.py",
-      "--build-dir",
-      "[START_DIR]\\src\\out",
-      "--target",
-      "Release",
-      "--force-clean",
-      "--config",
-      "[START_DIR]\\src\\chrome\\test\\mini_installer\\config\\config.config",
-      "--write-full-results-to",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "test_installer"
+    "name": "Upload to test-results [telemetry_gpu_unittests on NVIDIA GPU on Windows]"
   },
   {
     "cmd": [
