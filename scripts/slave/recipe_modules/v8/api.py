@@ -257,6 +257,10 @@ class V8Api(recipe_api.RecipeApi):
     for c in self.bot_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
 
+    # On clusterfuzz builders use the default clusterfuzz gn target.
+    if self.bot_config.get('clusterfuzz_archive'):
+      self.m.chromium.apply_config('default_target_v8_clusterfuzz')
+
     # Infer gclient variable that instructs sysroot download.
     if (self.m.chromium.c.TARGET_PLATFORM != 'android' and
         self.m.chromium.c.TARGET_ARCH == 'arm'):
@@ -826,18 +830,19 @@ class V8Api(recipe_api.RecipeApi):
     )
 
   def maybe_create_clusterfuzz_archive(self, update_step):
-    if self.bot_config.get('cf_archive_build', False):
+    clusterfuzz_archive = self.bot_config.get('clusterfuzz_archive')
+    if clusterfuzz_archive:
       kwargs = {}
-      if self.bot_config.get('cf_archive_bitness'):
+      if clusterfuzz_archive.get('bitness'):
         kwargs['use_legacy'] = False
-        kwargs['bitness'] = self.bot_config['cf_archive_bitness']
+        kwargs['bitness'] = clusterfuzz_archive['bitness']
       self.m.archive.clusterfuzz_archive(
           revision_dir='v8',
           build_dir=self.build_output_dir,
           update_properties=update_step.presentation.properties,
-          gs_bucket=self.bot_config.get('cf_gs_bucket'),
-          gs_acl=self.bot_config.get('cf_gs_acl'),
-          archive_prefix=self.bot_config.get('cf_archive_name'),
+          gs_bucket=clusterfuzz_archive.get('bucket'),
+          gs_acl='public-read',
+          archive_prefix=clusterfuzz_archive.get('name'),
           **kwargs
       )
 

@@ -362,18 +362,17 @@ BUILDERS = {
     'builders': {
       'V8 Clusterfuzz Linux64 - release builder': {
         'chromium_apply_config': [
-          'clang',
+          'default_compiler',
           'goma',
           'mb',
-          'default_target_v8_clusterfuzz',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'cf_archive_build': True,
-        'cf_gs_bucket': 'v8-asan',
-        'cf_gs_acl': 'public-read',
-        'cf_archive_name': 'd8',
+        'clusterfuzz_archive': {
+          'bucket': 'v8-asan',
+          'name': 'd8',
+        },
         'testing': {
           'properties': {
             'triggers': [
@@ -385,18 +384,17 @@ BUILDERS = {
       },
       'V8 Clusterfuzz Linux64 - debug builder': {
         'chromium_apply_config': [
-          'clang',
+          'default_compiler',
           'goma',
           'mb',
-          'default_target_v8_clusterfuzz',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'cf_archive_build': True,
-        'cf_gs_bucket': 'v8-asan',
-        'cf_gs_acl': 'public-read',
-        'cf_archive_name': 'd8',
+        'clusterfuzz_archive': {
+          'bucket': 'v8-asan',
+          'name': 'd8',
+        },
         'testing': {
           'properties': {
             'triggers': [
@@ -408,7 +406,7 @@ BUILDERS = {
       },
       'V8 Clusterfuzz Linux64 - nosnap release builder': {
         'chromium_apply_config': [
-          'clang',
+          'default_compiler',
           'goma',
           'mb',
           'default_target_v8_clusterfuzz',
@@ -427,7 +425,7 @@ BUILDERS = {
       },
       'V8 Clusterfuzz Linux64 - nosnap debug builder': {
         'chromium_apply_config': [
-          'clang',
+          'default_compiler',
           'goma',
           'mb',
           'default_target_v8_clusterfuzz',
@@ -446,118 +444,111 @@ BUILDERS = {
       },
       'V8 Clusterfuzz Linux64 ASAN no inline - release builder': {
         'chromium_apply_config': [
-          'clang',
+          'default_compiler',
           'goma',
           'mb',
           'clobber',
-          'default_target_v8_clusterfuzz',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'cf_archive_build': True,
-        'cf_gs_bucket': 'v8-asan',
-        'cf_gs_acl': 'public-read',
-        'cf_archive_name': 'd8-asan-no-inline',
+        'clusterfuzz_archive': {
+          'bucket': 'v8-asan',
+          'name': 'd8-asan-no-inline',
+        },
         'testing': {'platform': 'linux'},
       },
       'V8 Clusterfuzz Linux64 ASAN - debug builder': {
         'chromium_apply_config': [
-          'clang',
+          'default_compiler',
           'clobber',
-          'default_target_v8_clusterfuzz',
           'goma',
           'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'cf_archive_build': True,
-        'cf_gs_bucket': 'v8-asan',
-        'cf_gs_acl': 'public-read',
-        'cf_archive_name': 'd8-asan',
+        'clusterfuzz_archive': {
+          'bucket': 'v8-asan',
+          'name': 'd8-asan',
+        },
         'testing': {'platform': 'linux'},
       },
       'V8 Clusterfuzz Linux64 ASAN arm64 - debug builder': {
         'chromium_apply_config': [
-          'clang',
+          'default_compiler',
           'clobber',
-          'default_target_v8_clusterfuzz',
           'goma',
           'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'cf_archive_build': True,
-        'cf_gs_bucket': 'v8-asan',
-        'cf_gs_acl': 'public-read',
-        'cf_archive_name': 'd8-arm64-asan',
+        'clusterfuzz_archive': {
+          'bucket': 'v8-asan',
+          'name': 'd8-arm64-asan',
+        },
         'testing': {'platform': 'linux'},
       },
       'V8 Clusterfuzz Linux ASAN arm - debug builder': {
         'chromium_apply_config': [
-          'clang',
+          'default_compiler',
           'clobber',
-          'default_target_v8_clusterfuzz',
           'goma',
           'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'cf_archive_build': True,
-        'cf_gs_bucket': 'v8-asan',
-        'cf_gs_acl': 'public-read',
-        'cf_archive_name': 'd8-arm-asan',
+        'clusterfuzz_archive': {
+          'bucket': 'v8-asan',
+          'name': 'd8-arm-asan',
+        },
         'testing': {'platform': 'linux'},
       },
       'V8 Clusterfuzz Linux64 CFI - release builder': {
         'chromium_apply_config': [
-          'clang',
-          'default_target_v8_clusterfuzz',
+          'default_compiler',
           'goma',
           'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'cf_archive_build': True,
-        'cf_gs_bucket': 'v8-cfi',
-        'cf_gs_acl': 'public-read',
-        'cf_archive_name': 'd8-cfi',
+        'clusterfuzz_archive': {
+          'bucket': 'v8-cfi',
+          'name': 'd8-cfi',
+        },
         'testing': {'platform': 'linux'},
       },
       'V8 Clusterfuzz Linux MSAN no origins': {
         'chromium_apply_config': [
-          'clang',
-          'default_target_v8_clusterfuzz',
+          'default_compiler',
           'goma',
           'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'cf_archive_build': True,
-        'cf_gs_bucket': 'v8-msan',
-        'cf_gs_acl': 'public-read',
-        'cf_archive_name': 'd8-msan-no-origins',
+        'clusterfuzz_archive': {
+          'bucket': 'v8-msan',
+          'name': 'd8-msan-no-origins',
+        },
         'testing': {'platform': 'linux'},
       },
       'V8 Clusterfuzz Linux MSAN chained origins': {
         'chromium_apply_config': [
-          'clang',
-          'default_target_v8_clusterfuzz',
+          'default_compiler',
           'goma',
           'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'cf_archive_build': True,
-        'cf_gs_bucket': 'v8-msan',
-        'cf_gs_acl': 'public-read',
-        'cf_archive_name': 'd8-msan-chained-origins',
+        'clusterfuzz_archive': {
+          'bucket': 'v8-msan',
+          'name': 'd8-msan-chained-origins',
+        },
         'testing': {'platform': 'linux'},
       },
       'V8 Clusterfuzz Linux64 TSAN - release builder': {
@@ -583,82 +574,77 @@ BUILDERS = {
         'chromium_apply_config': [
           'default_compiler',
           'goma',
-          'default_target_v8_clusterfuzz',
           'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'cf_archive_build': True,
-        'cf_gs_bucket': 'v8-ubsan',
-        'cf_gs_acl': 'public-read',
-        'cf_archive_name': 'd8-ubsan-vptr',
+        'clusterfuzz_archive': {
+          'bucket': 'v8-ubsan',
+          'name': 'd8-ubsan-vptr',
+        },
         'testing': {'platform': 'linux'},
       },
       'V8 Clusterfuzz Mac64 ASAN - release builder': {
         'chromium_apply_config': [
           'default_compiler',
           'goma',
-          'default_target_v8_clusterfuzz',
           'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'cf_archive_build': True,
-        'cf_gs_bucket': 'v8-asan',
-        'cf_gs_acl': 'public-read',
-        'cf_archive_name': 'd8-asan',
+        'clusterfuzz_archive': {
+          'bucket': 'v8-asan',
+          'name': 'd8-asan',
+        },
         'testing': {'platform': 'mac'},
       },
       'V8 Clusterfuzz Mac64 ASAN - debug builder': {
         'chromium_apply_config': [
           'default_compiler',
           'goma',
-          'default_target_v8_clusterfuzz',
           'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'cf_archive_build': True,
-        'cf_gs_bucket': 'v8-asan',
-        'cf_gs_acl': 'public-read',
-        'cf_archive_name': 'd8-asan',
+        'clusterfuzz_archive': {
+          'bucket': 'v8-asan',
+          'name': 'd8-asan',
+        },
         'testing': {'platform': 'mac'},
       },
       'V8 Clusterfuzz Win64 ASAN - release builder': {
         'chromium_apply_config': [
           'default_compiler',
           'goma',
-          'default_target_v8_clusterfuzz',
           'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        'cf_archive_build': True,
-        'cf_archive_bitness': 64,
-        'cf_gs_bucket': 'v8-asan',
-        'cf_gs_acl': 'public-read',
-        'cf_archive_name': 'd8-asan',
+        'clusterfuzz_archive': {
+          'bitness': 64,
+          'bucket': 'v8-asan',
+          'name': 'd8-asan',
+        },
         'testing': {'platform': 'win'},
       },
       'V8 Clusterfuzz Win64 ASAN - debug builder': {
         'chromium_apply_config': [
           'default_compiler',
           'goma',
-          'default_target_v8_clusterfuzz',
           'mb',
         ],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
         },
-        'cf_archive_build': True,
-        'cf_archive_bitness': 64,
-        'cf_gs_bucket': 'v8-asan',
-        'cf_gs_acl': 'public-read',
-        'cf_archive_name': 'd8-asan',
+        'clusterfuzz_archive': {
+          'bitness': 64,
+          'bucket': 'v8-asan',
+          'name': 'd8-asan',
+        },
         'testing': {'platform': 'win'},
       },
     },
