@@ -506,6 +506,25 @@ SPEC = {
       },
       'serialize_tests': True,
     },
+    'Linux FYI Experimental Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+          'build_angle_deqp_tests'
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Linux Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+      'serialize_tests': True,
+    },
     'Linux FYI Debug (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
