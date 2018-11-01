@@ -326,6 +326,9 @@
       "//testing/libfuzzer:libfuzzer_main"
     ],
     "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
     "name": "calculate all_fuzzers",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -346,6 +349,9 @@
       "//testing/libfuzzer:no_clusterfuzz"
     ],
     "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
     "name": "calculate no_clusterfuzz",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [

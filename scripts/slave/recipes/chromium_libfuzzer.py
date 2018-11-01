@@ -108,7 +108,7 @@ def RunSteps(api):
   api.chromium.runhooks()
   api.chromium.mb_gen(mastername, buildername, use_goma=True)
 
-  with api.context(cwd=api.path['checkout']):
+  with api.context(cwd=api.path['checkout'], env=api.chromium.get_env()):
     all_fuzzers = api.gn.refs(
         api.chromium.output_dir,
         ['//testing/libfuzzer:libfuzzer_main'],
