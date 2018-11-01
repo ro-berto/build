@@ -184,10 +184,6 @@ def tests_base(_):  # pragma: no cover
 def tests_arm64(_):  # pragma: no cover
   pass
 
-@config_ctx(includes=['x64_builder'])
-def tests_x64(_):  # pragma: no cover
-  pass
-
 @config_ctx(includes=['tests_base'])
 def instrumentation_tests(c):  # pragma: no cover
   c.tests.append('smoke_instrumentation_tests')
