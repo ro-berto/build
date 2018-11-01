@@ -82,10 +82,6 @@
     'client.wasm.llvm': {},
     'tryserver.nacl': {},
 
-    # Syzygy
-    'client.syzygy': {},
-    'tryserver.client.syzygy': {},
-
     # WebRTC
     'client.webrtc.fyi': {},
     'client.webrtc.perf': {},

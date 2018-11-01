@@ -81,7 +81,6 @@ class Master(object):
   trunk_internal_url_src = None
   slave_internal_url = None
   git_internal_server_url = None
-  syzygy_internal_url = None
   v8_internal_url = None
 
 
