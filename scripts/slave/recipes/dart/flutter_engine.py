@@ -122,6 +122,7 @@ def TestFlutter(api, start_dir, just_built_dart_sdk, just_built_gen):
     dart_sdk = flutter.join('bin', 'cache', 'dart-sdk')
     frontend_server = flutter.join(
       'bin', 'cache', 'artifacts', 'engine', 'linux-x64', 'frontend_server.dart.snapshot')
+    flutter_tools_snapshot = flutter.join('bin', 'cache', 'flutter_tools.snapshot')
 
     # In case dart-sdk symlink was left from previous run we need to [remove] it,
     # rather than [rmtree] because rmtree is going to remove symlink target folder.
@@ -130,6 +131,12 @@ def TestFlutter(api, start_dir, just_built_dart_sdk, just_built_gen):
     api.step('cleanup', [
       '/bin/bash', '-c', 'if [ -L "%(s)s" ]; then rm "%(s)s"; else rm -rf "%(s)s"; fi' %
       {'s': dart_sdk}])
+
+    # In case there is a cached version of "flutter_tools.snapshot" we have to
+    # delete it.
+    api.step('cleanup', [
+      '/bin/bash', '-c', 'if [ -f "%(file)s" ]; then rm "%(file)s"; fi' %
+      {'file': flutter_tools_snapshot}])
 
     api.file.remove('remove downloaded frontend_server snapshot', frontend_server)
     api.file.symlink('make cached dart-sdk point to just built dart sdk', just_built_dart_sdk, dart_sdk)

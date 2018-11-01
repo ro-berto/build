@@ -2749,6 +2749,20 @@
   },
   {
     "cmd": [
+      "/bin/bash",
+      "-c",
+      "if [ -f \"[CACHE]/builder/flutter/bin/cache/flutter_tools.snapshot\" ]; then rm \"[CACHE]/builder/flutter/bin/cache/flutter_tools.snapshot\"; fi"
+    ],
+    "cwd": "[CACHE]/builder/flutter",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
+      "TEST_COMMIT_RANGE": "HEAD"
+    },
+    "name": "cleanup (2)"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
