@@ -50,7 +50,6 @@
   * [swarming](#recipe_modules-swarming)
   * [swarming_client](#recipe_modules-swarming_client)
   * [swarming_heartbeat](#recipe_modules-swarming_heartbeat)
-  * [syzygy](#recipe_modules-syzygy)
   * [tar](#recipe_modules-tar)
   * [test_results](#recipe_modules-test_results)
   * [test_utils](#recipe_modules-test_utils)
@@ -307,13 +306,6 @@
   * [swarming:tests/task](#recipes-swarming_tests_task)
   * [swarming_client:examples/full](#recipes-swarming_client_examples_full)
   * [swarming_heartbeat:examples/full](#recipes-swarming_heartbeat_examples_full)
-  * [syzygy/continuous](#recipes-syzygy_continuous) &mdash; Buildbot recipe definition for the various Syzygy continuous builders.
-  * [syzygy/coverage](#recipes-syzygy_coverage) &mdash; Buildbot recipe definition for the various Syzygy coverage builder.
-  * [syzygy/kasko_official](#recipes-syzygy_kasko_official) &mdash; Buildbot recipe definition for the official Kasko builder.
-  * [syzygy/smoke_test](#recipes-syzygy_smoke_test) &mdash; Buildbot recipe definition for the various Syzygy Smoke Test builder.
-  * [syzygy:examples/full](#recipes-syzygy_examples_full) &mdash; Example of using the Syzygy recipe module.
-  * [syzygy:tests/configs](#recipes-syzygy_tests_configs)
-  * [syzygy:tests/upload_kasko_symbols](#recipes-syzygy_tests_upload_kasko_symbols)
   * [tar:examples/full](#recipes-tar_examples_full)
   * [test_results:examples/full](#recipes-test_results_examples_full)
   * [test_utils:tests/run_tests](#recipes-test_utils_tests_run_tests)
@@ -3335,114 +3327,6 @@ Defines support to run automated heartbeat.
 &mdash; **def [run](/scripts/slave/recipe_modules/swarming_heartbeat/api.py#10)(self):**
 
 Runs job_runs_fine.py to run an heartbeat check.
-### *recipe_modules* / [syzygy](/scripts/slave/recipe_modules/syzygy)
-
-[DEPS](/scripts/slave/recipe_modules/syzygy/__init__.py#1): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-#### **class [SyzygyApi](/scripts/slave/recipe_modules/syzygy/api.py#12)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
-
-&mdash; **def [archive\_binaries](/scripts/slave/recipe_modules/syzygy/api.py#246)(self):**
-
-Returns a step that archives the official binaries.
-
-Only meant to be called from an official build.
-
-&mdash; **def [archive\_coverage](/scripts/slave/recipe_modules/syzygy/api.py#230)(self):**
-
-Returns a step that archives the coverage report.
-
-Only meant to be called from the 'Coverage' configuration.
-
-&mdash; **def [archive\_metrics](/scripts/slave/recipe_modules/syzygy/api.py#295)(self):**
-
-Returns a step that archives any metrics collected by the unittests.
-This can be called from any build configuration.
-
-&mdash; **def [benchmark\_chrome](/scripts/slave/recipe_modules/syzygy/api.py#207)(self):**
-
-Returns a test step that benchmarks an optimized Chrome.
-
-&emsp; **@property**<br>&mdash; **def [build\_dir](/scripts/slave/recipe_modules/syzygy/api.py#58)(self):**
-
-Returns the build directory for the project.
-
-&mdash; **def [capture\_unittest\_coverage](/scripts/slave/recipe_modules/syzygy/api.py#216)(self):**
-
-Returns a step that runs the coverage script.
-
-Only meant to be called from the 'Coverage' configuration.
-
-&mdash; **def [checkout](/scripts/slave/recipe_modules/syzygy/api.py#157)(self):**
-
-Checks out the Syzygy code using the current gclient configuration.
-
-&mdash; **def [clobber\_metrics](/scripts/slave/recipe_modules/syzygy/api.py#289)(self):**
-
-Returns a step that clobbers an existing metrics file.
-
-&mdash; **def [compile](/scripts/slave/recipe_modules/syzygy/api.py#168)(self):**
-
-Generates a step to compile the project.
-
-&mdash; **def [download\_binaries](/scripts/slave/recipe_modules/syzygy/api.py#312)(self):**
-
-Returns a step that downloads the current official binaries.
-
-&mdash; **def [get\_config\_defaults](/scripts/slave/recipe_modules/syzygy/api.py#53)(self):**
-
-&emsp; **@property**<br>&mdash; **def [internal\_scripts\_dir](/scripts/slave/recipe_modules/syzygy/api.py#68)(self):**
-
-Returns the internal Syzygy build scripts directory.
-
-&emsp; **@property**<br>&mdash; **def [public\_scripts\_dir](/scripts/slave/recipe_modules/syzygy/api.py#63)(self):**
-
-Returns the public Syzygy build scripts directory.
-
-&mdash; **def [randomly\_reorder\_chrome](/scripts/slave/recipe_modules/syzygy/api.py#198)(self):**
-
-Returns a test step that randomly reorders Chrome and ensures it runs.
-
-&mdash; **def [read\_unittests\_gypi](/scripts/slave/recipe_modules/syzygy/api.py#173)(self):**
-
-Reads and parses unittests.gypi from the checkout, returning a list.
-
-&emsp; **@property**<br>&mdash; **def [revision](/scripts/slave/recipe_modules/syzygy/api.py#95)(self):**
-
-Returns the revision that is inferred by the gclient step.
-
-If this is not yet set then returns the global 'revision' property. If this
-is not yet set, then simply returns an empty string.
-
-&mdash; **def [run\_unittests](/scripts/slave/recipe_modules/syzygy/api.py#182)(self, unittests):**
-
-&mdash; **def [runhooks](/scripts/slave/recipe_modules/syzygy/api.py#165)(self):**
-
-&mdash; **def [smoke\_test](/scripts/slave/recipe_modules/syzygy/api.py#323)(self):**
-
-Returns a step that launches the smoke test script.
-
-&mdash; **def [taskkill](/scripts/slave/recipe_modules/syzygy/api.py#147)(self):**
-
-Run chromium.taskkill.
-
-This invokes a dummy step on the test slave as killing all instances of
-Chrome seriously impairs development.
-
-&mdash; **def [upload\_kasko\_symbols](/scripts/slave/recipe_modules/syzygy/api.py#277)(self):**
-
-Returns a step that source indexes and uploads symbols for Kasko.
-
-Only meant to be called from an official build.
-
-&mdash; **def [upload\_symbols](/scripts/slave/recipe_modules/syzygy/api.py#264)(self):**
-
-Returns a step that source indexes and uploads symbols.
-
-Only meant to be called from an official build.
-
-&emsp; **@property**<br>&mdash; **def [version](/scripts/slave/recipe_modules/syzygy/api.py#73)(self):**
-
-Returns the version tuple associated with the checkout.
 ### *recipe_modules* / [tar](/scripts/slave/recipe_modules/tar)
 
 [DEPS](/scripts/slave/recipe_modules/tar/__init__.py#5): [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python]
@@ -5740,111 +5624,6 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 [DEPS](/scripts/slave/recipe_modules/swarming_heartbeat/examples/full.py#5): [swarming\_heartbeat](#recipe_modules-swarming_heartbeat), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/swarming_heartbeat/examples/full.py#11)(api):**
-### *recipes* / [syzygy/continuous](/scripts/slave/recipes/syzygy/continuous.py)
-
-[DEPS](/scripts/slave/recipes/syzygy/continuous.py#22): [chromium](#recipe_modules-chromium), [syzygy](#recipe_modules-syzygy), [trigger](#recipe_modules-trigger), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-Buildbot recipe definition for the various Syzygy continuous builders.
-
-To be tested using a command-line like:
-
-  /build/scripts/slave/recipes.py run syzygy/continuous
-      revision=0e9f25b1098271be2b096fd1c095d6d907cf86f7
-      mastername=master.client.syzygy
-      "buildername=Syzygy Debug"
-      bot_id=fake_slave
-      buildnumber=1
-
-Places resulting output in build/slave/fake_slave.
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/syzygy/continuous.py#59)(api, buildername, blamelist, revision):**
-
-Generates the sequence of steps that will be run by the slave.
-### *recipes* / [syzygy/coverage](/scripts/slave/recipes/syzygy/coverage.py)
-
-[DEPS](/scripts/slave/recipes/syzygy/coverage.py#26): [chromium](#recipe_modules-chromium), [syzygy](#recipe_modules-syzygy), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-Buildbot recipe definition for the various Syzygy coverage builder.
-
-To be tested using a command-line like:
-
-  /build/scripts/slave/recipes.py run syzygy/continuous
-      revision=0e9f25b1098271be2b096fd1c095d6d907cf86f7
-      mastername=master.client.syzygy
-      "buildername=Syzygy Coverage"
-      bot_id=fake_slave
-      buildnumber=1
-
-Places resulting output in build/slave/fake_slave. In order for the Coverage
-builder to run successfully the appropriate gsutil boto credentials must be
-placed in build/site_config/.boto. Cloud storage destinations will be prefixed
-with 'test/' in order to not pollute the official coverage archives during
-testing.
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/syzygy/coverage.py#48)(api, buildername):**
-
-Generates the sequence of steps that will be run on the coverage bot.
-### *recipes* / [syzygy/kasko\_official](/scripts/slave/recipes/syzygy/kasko_official.py)
-
-[DEPS](/scripts/slave/recipes/syzygy/kasko_official.py#20): [chromium](#recipe_modules-chromium), [syzygy](#recipe_modules-syzygy), [trigger](#recipe_modules-trigger), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-Buildbot recipe definition for the official Kasko builder.
-
-To be tested using a command-line like:
-
-  /build/scripts/slave/recipes.py run syzygy/official_kasko
-      revision=0e9f25b1098271be2b096fd1c095d6d907cf86f7
-      mastername=master.client.syzygy
-      "buildername=Kasko Official"
-      bot_id=fake_slave
-      buildnumber=1
-
-Places resulting output in build/slave/fake_slave.
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/syzygy/kasko_official.py#41)(api, buildername):**
-
-Generates the sequence of steps that will be run by the slave.
-### *recipes* / [syzygy/smoke\_test](/scripts/slave/recipes/syzygy/smoke_test.py)
-
-[DEPS](/scripts/slave/recipes/syzygy/smoke_test.py#24): [chromium](#recipe_modules-chromium), [syzygy](#recipe_modules-syzygy), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-Buildbot recipe definition for the various Syzygy Smoke Test builder.
-
-To be tested using a command-line like:
-
-  /build/scripts/slave/recipes.py run syzygy/continuous
-      revision=0e9f25b1098271be2b096fd1c095d6d907cf86f7
-      mastername=master.client.syzygy
-      "buildername=Syzygy Smoke Test"
-      bot_id=fake_slave
-      buildnumber=1
-
-Places resulting output in build/slave/fake_slave. In order for the Smoke Test
-builder to run successfully the appropriate gsutil boto credentials must be
-placed in build/site_config/.boto. Cloud storage destinations will be prefixed
-with 'test/' in order to not pollute the official coverage archives during
-testing.
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/syzygy/smoke_test.py#40)(api, buildername):**
-
-Generates the sequence of steps that will be run on the coverage bot.
-### *recipes* / [syzygy:examples/full](/scripts/slave/recipe_modules/syzygy/examples/full.py)
-
-[DEPS](/scripts/slave/recipe_modules/syzygy/examples/full.py#8): [chromium](#recipe_modules-chromium), [syzygy](#recipe_modules-syzygy), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-Example of using the Syzygy recipe module.
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/syzygy/examples/full.py#24)(api, buildername):**
-### *recipes* / [syzygy:tests/configs](/scripts/slave/recipe_modules/syzygy/tests/configs.py)
-
-[DEPS](/scripts/slave/recipe_modules/syzygy/tests/configs.py#8): [chromium](#recipe_modules-chromium), [syzygy](#recipe_modules-syzygy), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/syzygy/tests/configs.py#16)(api):**
-### *recipes* / [syzygy:tests/upload\_kasko\_symbols](/scripts/slave/recipe_modules/syzygy/tests/upload_kasko_symbols.py)
-
-[DEPS](/scripts/slave/recipe_modules/syzygy/tests/upload_kasko_symbols.py#5): [chromium](#recipe_modules-chromium), [syzygy](#recipe_modules-syzygy)
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/syzygy/tests/upload_kasko_symbols.py#11)(api):**
 ### *recipes* / [tar:examples/full](/scripts/slave/recipe_modules/tar/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/tar/examples/full.py#5): [tar](#recipe_modules-tar), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -6076,19 +5855,19 @@ The changes are:
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/zip/examples/full.py#14)(api):**
 
-[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/24bca4e741a98a0f6ed9bdeb64c07816243d2873/recipes/README.recipes.md#recipe_modules-bot_update
-[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/24bca4e741a98a0f6ed9bdeb64c07816243d2873/recipes/README.recipes.md#recipe_modules-cipd
-[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/24bca4e741a98a0f6ed9bdeb64c07816243d2873/recipes/README.recipes.md#recipe_modules-depot_tools
-[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/24bca4e741a98a0f6ed9bdeb64c07816243d2873/recipes/README.recipes.md#recipe_modules-gclient
-[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/24bca4e741a98a0f6ed9bdeb64c07816243d2873/recipes/README.recipes.md#recipe_modules-gerrit
-[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/24bca4e741a98a0f6ed9bdeb64c07816243d2873/recipes/README.recipes.md#recipe_modules-git
-[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/24bca4e741a98a0f6ed9bdeb64c07816243d2873/recipes/README.recipes.md#recipe_modules-gitiles
-[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/24bca4e741a98a0f6ed9bdeb64c07816243d2873/recipes/README.recipes.md#recipe_modules-gsutil
-[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/24bca4e741a98a0f6ed9bdeb64c07816243d2873/recipes/README.recipes.md#recipe_modules-infra_paths
-[depot_tools/recipe_modules/osx_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/24bca4e741a98a0f6ed9bdeb64c07816243d2873/recipes/README.recipes.md#recipe_modules-osx_sdk
-[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/24bca4e741a98a0f6ed9bdeb64c07816243d2873/recipes/README.recipes.md#recipe_modules-presubmit
-[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/24bca4e741a98a0f6ed9bdeb64c07816243d2873/recipes/README.recipes.md#recipe_modules-tryserver
-[depot_tools/recipe_modules/windows_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/24bca4e741a98a0f6ed9bdeb64c07816243d2873/recipes/README.recipes.md#recipe_modules-windows_sdk
+[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8f8a50d00a8b3501e8b373b88e8ba03950eab58e/recipes/README.recipes.md#recipe_modules-bot_update
+[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8f8a50d00a8b3501e8b373b88e8ba03950eab58e/recipes/README.recipes.md#recipe_modules-cipd
+[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8f8a50d00a8b3501e8b373b88e8ba03950eab58e/recipes/README.recipes.md#recipe_modules-depot_tools
+[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8f8a50d00a8b3501e8b373b88e8ba03950eab58e/recipes/README.recipes.md#recipe_modules-gclient
+[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8f8a50d00a8b3501e8b373b88e8ba03950eab58e/recipes/README.recipes.md#recipe_modules-gerrit
+[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8f8a50d00a8b3501e8b373b88e8ba03950eab58e/recipes/README.recipes.md#recipe_modules-git
+[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8f8a50d00a8b3501e8b373b88e8ba03950eab58e/recipes/README.recipes.md#recipe_modules-gitiles
+[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8f8a50d00a8b3501e8b373b88e8ba03950eab58e/recipes/README.recipes.md#recipe_modules-gsutil
+[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8f8a50d00a8b3501e8b373b88e8ba03950eab58e/recipes/README.recipes.md#recipe_modules-infra_paths
+[depot_tools/recipe_modules/osx_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8f8a50d00a8b3501e8b373b88e8ba03950eab58e/recipes/README.recipes.md#recipe_modules-osx_sdk
+[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8f8a50d00a8b3501e8b373b88e8ba03950eab58e/recipes/README.recipes.md#recipe_modules-presubmit
+[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8f8a50d00a8b3501e8b373b88e8ba03950eab58e/recipes/README.recipes.md#recipe_modules-tryserver
+[depot_tools/recipe_modules/windows_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/8f8a50d00a8b3501e8b373b88e8ba03950eab58e/recipes/README.recipes.md#recipe_modules-windows_sdk
 [recipe_engine/recipe_modules/buildbucket]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/ee0e2c37c03936c3683be03d215f58d47d04ee08/README.recipes.md#recipe_modules-buildbucket
 [recipe_engine/recipe_modules/context]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/ee0e2c37c03936c3683be03d215f58d47d04ee08/README.recipes.md#recipe_modules-context
 [recipe_engine/recipe_modules/file]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/ee0e2c37c03936c3683be03d215f58d47d04ee08/README.recipes.md#recipe_modules-file
