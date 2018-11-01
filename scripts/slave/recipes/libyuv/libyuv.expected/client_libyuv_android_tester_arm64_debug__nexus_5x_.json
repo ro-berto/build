@@ -17,6 +17,7 @@
       "--revision",
       "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
+    "cwd": "[CACHE]/builder",
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -69,12 +70,12 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 target_arch=arm64",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "env_suffixes": {
       "PATH": [
@@ -91,7 +92,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[START_DIR]/src/out/Debug"
+      "[CACHE]/builder/src/out/Debug"
     ],
     "infra_step": true,
     "name": "build directory"
@@ -111,7 +112,7 @@
       "--target",
       "Debug",
       "--src-dir",
-      "[START_DIR]/src",
+      "[CACHE]/builder/src",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",
@@ -130,11 +131,12 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/symlink.py",
+      "[CACHE]/builder/src/build/symlink.py",
       "-f",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb",
       "~/adb"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "create adb symlink"
   },
@@ -149,12 +151,13 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
       "--",
-      "[START_DIR]/src/build/android/adb_logcat_monitor.py",
-      "[START_DIR]/src/out/logcat",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[CACHE]/builder/src/build/android/adb_logcat_monitor.py",
+      "[CACHE]/builder/src/out/logcat",
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "spawn_logcat_monitor"
@@ -174,12 +177,13 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid",
       "--",
-      "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
+      "[CACHE]/builder/src/third_party/catapult/devil/devil/android/tools/device_monitor.py",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json"
+      "[CACHE]/builder/src/out/bad_devices.json"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "spawn_device_monitor"
   },
@@ -195,27 +199,29 @@
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "authorize_adb_devices"
   },
   {
     "cmd": [
-      "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
+      "[CACHE]/builder/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
+      "[CACHE]/builder/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "device_recovery"
@@ -224,41 +230,43 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/android/provision_devices.py",
+      "[CACHE]/builder/src/build/android/provision_devices.py",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
+      "[CACHE]/builder/src/out/bad_devices.json",
       "--output-device-blacklist",
       "/path/to/tmp/json",
       "-t",
       "Debug",
       "-v"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "provision_devices"
   },
   {
     "cmd": [
-      "[START_DIR]/src/third_party/catapult/devil/devil/android/tools/device_status.py",
+      "[CACHE]/builder/src/third_party/catapult/devil/devil/android/tools/device_status.py",
       "--json-output",
       "/path/to/tmp/json",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
+      "[CACHE]/builder/src/out/bad_devices.json",
       "--known-devices-file",
       "[HOME]/.android/known_devices.json",
       "--buildbot-path",
       "/home/chrome-bot/.adb_device_info",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb",
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb",
       "-v",
       "--overwrite-known-devices-files"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "device_status",
@@ -361,15 +369,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "[START_DIR]/src/out/Debug/bin/run_libyuv_unittest",
+      "[CACHE]/builder/src/out/Debug/bin/run_libyuv_unittest",
       "--blacklist-file",
-      "[START_DIR]/src/out/bad_devices.json",
+      "[CACHE]/builder/src/out/bad_devices.json",
       "--verbose",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "name": "libyuv_unittest"
   },
@@ -388,6 +397,7 @@
       "--pid-file-path",
       "/tmp/device_monitor.pid"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "shutdown_device_monitor"
   },
@@ -395,11 +405,12 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/build/android/adb_logcat_printer.py",
+      "[CACHE]/builder/src/build/android/adb_logcat_printer.py",
       "--output-path",
-      "[START_DIR]/src/out/Debug/full_log",
-      "[START_DIR]/src/out/logcat"
+      "[CACHE]/builder/src/out/Debug/full_log",
+      "[CACHE]/builder/src/out/logcat"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "logcat_dump"
   },
@@ -414,9 +425,10 @@
       "GSUtil:parallel_composite_upload_threshold=50M",
       "----",
       "cp",
-      "[START_DIR]/src/out/Debug/full_log",
+      "[CACHE]/builder/src/out/Debug/full_log",
       "gs://chromium-libyuv/logcat_dumps/Android Tester ARM64 Debug (Nexus 5X)/1337"
     ],
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
@@ -425,31 +437,33 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/third_party/android_platform/development/scripts/stack",
+      "[CACHE]/builder/src/third_party/android_platform/development/scripts/stack",
       "--arch",
       "arm64",
       "--more-info",
-      "[START_DIR]/src/out/Debug/full_log"
+      "[CACHE]/builder/src/out/Debug/full_log"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Debug",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "CHROMIUM_OUTPUT_DIR": "[CACHE]/builder/src/out/Debug",
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "stack_tool_with_logcat_dump"
   },
   {
     "cmd": [
-      "[START_DIR]/src/build/android/tombstones.py",
+      "[CACHE]/builder/src/build/android/tombstones.py",
       "-a",
       "-s",
       "-w",
       "--adb-path",
-      "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
+      "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
-      "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Debug",
-      "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
+      "CHROMIUM_OUTPUT_DIR": "[CACHE]/builder/src/out/Debug",
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "stack_tool_for_tombstones"
@@ -459,8 +473,9 @@
       "python",
       "-u",
       "\nimport glob, os, sys\nfor report in glob.glob(sys.argv[1]):\n  with open(report, 'r') as f:\n    for l in f.readlines():\n      print l\n  os.remove(report)\n",
-      "[START_DIR]/src/out/Debug/test_logs/*.log"
+      "[CACHE]/builder/src/out/Debug/test_logs/*.log"
     ],
+    "cwd": "[CACHE]/builder",
     "name": "test_report",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",

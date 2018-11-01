@@ -82,9 +82,10 @@ class LibyuvApi(recipe_api.RecipeApi):
     return self.bot_config.get('parent_buildername')
 
   def checkout(self):
-    update_step = self.m.bot_update.ensure_checkout()
-    assert update_step.json.output['did_run']
-    self.revision = update_step.presentation.properties['got_revision']
+    with self.m.context(cwd=self.m.chromium_checkout.get_checkout_dir({})):
+      update_step = self.m.bot_update.ensure_checkout()
+      assert update_step.json.output['did_run']
+      self.revision = update_step.presentation.properties['got_revision']
 
   @contextlib.contextmanager
   def ensure_sdk(self):
@@ -146,14 +147,15 @@ class LibyuvApi(recipe_api.RecipeApi):
 
   def runtests(self):
     """Add a suite of test steps."""
-    with self.m.step.defer_results():
-      if self.m.chromium.c.TARGET_PLATFORM == 'android':
-        self.m.chromium_android.common_tests_setup_steps()
-        self.m.chromium_android.run_test_suite('libyuv_unittest')
-        self.m.chromium_android.shutdown_device_monitor()
-        self.m.chromium_android.logcat_dump(
-            gs_bucket=self.master_config.get('build_gs_bucket'))
-        self.m.chromium_android.stack_tool_steps(force_latest_version=True)
-        self.m.chromium_android.test_report()
-      else:
-        self.m.chromium.runtest('libyuv_unittest')
+    with self.m.context(cwd=self.m.chromium_checkout.get_checkout_dir({})):
+      with self.m.step.defer_results():
+        if self.m.chromium.c.TARGET_PLATFORM == 'android':
+          self.m.chromium_android.common_tests_setup_steps()
+          self.m.chromium_android.run_test_suite('libyuv_unittest')
+          self.m.chromium_android.shutdown_device_monitor()
+          self.m.chromium_android.logcat_dump(
+              gs_bucket=self.master_config.get('build_gs_bucket'))
+          self.m.chromium_android.stack_tool_steps(force_latest_version=True)
+          self.m.chromium_android.test_report()
+        else:
+          self.m.chromium.runtest('libyuv_unittest')
