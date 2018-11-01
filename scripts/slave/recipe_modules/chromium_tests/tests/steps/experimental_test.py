@@ -50,7 +50,7 @@ def GenTests(api):
       api.post_process(post_process.MustRun,
                        'pre_run inner_test (experimental)') +
       api.post_process(post_process.MustRun, 'inner_test (experimental)') +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation))
 
   yield (
@@ -64,7 +64,7 @@ def GenTests(api):
       api.post_process(post_process.DoesNotRun,
                        'pre_run inner_test (experimental)') +
       api.post_process(post_process.DoesNotRun, 'inner_test (experimental)') +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation))
 
   yield (
@@ -126,7 +126,7 @@ def GenTests(api):
       api.override_step_data('pre_run inner_test (experimental)', retcode=1) +
       api.post_process(post_process.MustRun,
                        'pre_run inner_test (experimental)') +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation))
 
   yield (
@@ -139,7 +139,7 @@ def GenTests(api):
           experiment_percentage='100') +
       api.override_step_data('inner_test (experimental)', retcode=1) +
       api.post_process(post_process.MustRun, 'inner_test (experimental)') +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation))
 
   yield (
@@ -153,7 +153,7 @@ def GenTests(api):
           failures=['foo'],
           abort_on_failure=True) +
       api.post_process(post_process.MustRun, 'inner_test (experimental)') +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation))
 
   yield (
@@ -169,5 +169,5 @@ def GenTests(api):
                        'pre_run inner_test (with patch, experimental)') +
       api.post_process(post_process.MustRun,
                        'inner_test (with patch, experimental)') +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation))

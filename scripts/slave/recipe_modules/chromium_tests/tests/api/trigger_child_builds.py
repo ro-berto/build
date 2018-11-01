@@ -91,7 +91,7 @@ def GenTests(api):
           mastername='chromium.example',
           parent_buildername='Android arm Builder (dbg)',
           parent_mastername='chromium.android') +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(trigger_includes_bucket,
                        builder='Fake Tester',
                        bucket='master.chromium.example2') +

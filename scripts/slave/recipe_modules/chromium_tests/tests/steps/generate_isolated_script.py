@@ -369,5 +369,5 @@ def GenTests(api):
         'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
       }) +
     api.step_data('base_unittests', retcode=1) +
-    api.post_process(post_process.StatusCodeIn, 0) +
+    api.post_process(post_process.StatusSuccess) +
     api.post_process(post_process.DropExpectation))

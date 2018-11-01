@@ -33,7 +33,7 @@ def GenTests(api):
       api.properties.generic(
           mastername='chromium.foo',
           buildername='Foo Builder') +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -42,7 +42,7 @@ def GenTests(api):
       api.properties.generic(
           mastername='chromium.bar',
           buildername='Bar Builder') +
-      api.post_process(post_process.StatusCodeIn, 1) +
+      api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -51,6 +51,6 @@ def GenTests(api):
       api.properties.generic(
           mastername='chromium.foo',
           buildername='Bar Builder') +
-      api.post_process(post_process.StatusCodeIn, 1) +
+      api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )

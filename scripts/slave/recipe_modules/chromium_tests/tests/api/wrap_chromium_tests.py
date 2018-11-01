@@ -85,7 +85,7 @@ def GenTests(api):
       api.properties.generic(
           mastername='chromium.fyi',
           buildername='linux-code-coverage') +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
 

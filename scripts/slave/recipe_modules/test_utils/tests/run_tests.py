@@ -62,7 +62,7 @@ def GenTests(api):
           buildnumber=123,
           test_name='base_unittests') +
       api.post_process(post_process.MustRun, 'test2') +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -83,7 +83,7 @@ def GenTests(api):
           ([], 1),
           ([['10000'], ['110000']], 1),
       ]) +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -110,7 +110,7 @@ def GenTests(api):
       # as the test_utils logic just calls the regular collect logic on that
       # test.
       api.post_process(post_process.MustRun, 'base_unittests') +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -137,7 +137,7 @@ def GenTests(api):
           ([], 1),
           ([['10000'], ['110000']], 1),
       ]) +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -151,7 +151,7 @@ def GenTests(api):
           test_name='base_unittests') +
       api.override_step_data('base_unittests', retcode=failure_code) +
       api.post_process(post_process.MustRun, 'test2') +
-      api.post_process(post_process.StatusCodeIn, 1) +
+      api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -166,7 +166,7 @@ def GenTests(api):
           abort_on_failure=True) +
       api.override_step_data('base_unittests', retcode=failure_code) +
       api.post_process(post_process.DoesNotRun, 'test2') +
-      api.post_process(post_process.StatusCodeIn, 1) +
+      api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -180,7 +180,7 @@ def GenTests(api):
           test_name='base_unittests') +
       api.override_step_data('base_unittests', retcode=infra_code) +
       api.post_process(post_process.DoesNotRun, 'test2') +
-      api.post_process(post_process.StatusCodeIn, 2) +
+      api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -197,7 +197,7 @@ def GenTests(api):
           retcode=failure_code) +
       api.post_process(post_process.MustRun, 'base_unittests') +
       api.post_process(post_process.MustRun, 'test2') +
-      api.post_process(post_process.StatusCodeIn, 1) +
+      api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -213,6 +213,6 @@ def GenTests(api):
           'test_pre_run.pre_run base_unittests',
           retcode=infra_code) +
       api.post_process(post_process.DoesNotRun, 'base_unittests') +
-      api.post_process(post_process.StatusCodeIn, 2) +
+      api.post_process(post_process.StatusFailure) +
       api.post_process(post_process.DropExpectation)
   )

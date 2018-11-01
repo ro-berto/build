@@ -50,7 +50,7 @@ def GenTests(api):
           buildbucket='{"build": {"id": "12345"}}',
           expected_args=[u"12345"],
       ) +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -66,7 +66,7 @@ def GenTests(api):
           buildbucket=u'{"build": {"id": "12345"}}',
           expected_args=[u"12345"],
       ) +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -82,6 +82,6 @@ def GenTests(api):
           buildbucket={"build": {"id": "12345"}},
           expected_args=[u"12345"],
       ) +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )

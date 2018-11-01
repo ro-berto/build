@@ -51,7 +51,7 @@ def GenTests(api):
           post_process.MustRun, 'zip report')
       + api.post_process(
           post_process.MustRun, 'gsutil upload coverage report')
-      + api.post_process(post_process.StatusCodeIn, 0)
+      + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
   )
 

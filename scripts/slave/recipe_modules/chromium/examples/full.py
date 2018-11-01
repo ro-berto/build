@@ -159,7 +159,7 @@ def GenTests(api):
              stdout=api.raw_io.output(
                  "ninja explain: chrome is dirty\n")) +
          api.post_process(post_process.MustRun, 'compile confirm no-op') +
-         api.post_process(post_process.StatusCodeIn, 0) +
+         api.post_process(post_process.StatusSuccess) +
          api.post_process(post_process.DropExpectation))
 
   yield (api.test('basic_out_dir_goma_module_start_failure') +

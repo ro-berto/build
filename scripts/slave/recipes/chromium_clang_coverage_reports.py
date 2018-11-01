@@ -57,7 +57,7 @@ def GenTests(api):
       api.post_process(post_process.MustRun, 'bot_update') +
       api.post_process(post_process.MustRun, 'ensure_goma') +
       api.post_process(post_process.MustRun, 'gclient runhooks') +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -70,6 +70,6 @@ def GenTests(api):
       api.post_process(post_process.MustRun, 'bot_update') +
       api.post_process(post_process.MustRun, 'ensure_goma') +
       api.post_process(post_process.MustRun, 'gclient runhooks') +
-      api.post_process(post_process.StatusCodeIn, 0) +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )

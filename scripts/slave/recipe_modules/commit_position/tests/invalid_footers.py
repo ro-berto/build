@@ -18,7 +18,7 @@ def RunSteps(api):
 def GenTests(api):
   yield (
       api.test('invalid') +
-      api.post_process(post_process.StatusCodeIn, 1) +
+      api.post_process(post_process.StatusFailure) +
       api.post_process(
           post_process.ResultReasonRE,
           r'^Could not parse commit position from git output: $') +
