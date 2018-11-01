@@ -569,6 +569,8 @@ def GetCheckout(api):
   soln.name = 'src/flutter'
   soln.url = \
       'https://chromium.googlesource.com/external/github.com/flutter/engine'
+  if api.properties.get('branch'):
+    soln.revision = 'origin/' + api.properties['branch']
   # TODO(eseidel): What does parent_got_revision_mapping do?  Do I care?
   src_cfg.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
   src_cfg.target_os = set(['android'])
@@ -643,4 +645,9 @@ def GenTests(api):
     api.step_data('set_xcode_version', api.json.output({
       'matches': {}
     }))
+  )
+
+  yield (
+    api.test('linux_on_alternate_branch') +
+    api.properties(mastername='client.flutter', buildername='Linux Engine', bot_id='fake-m1', clobber='', branch='some_branch')
   )
