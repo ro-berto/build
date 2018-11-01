@@ -17,8 +17,6 @@ def RunSteps(api):
   for config in api.properties.get('chromium_apply_config', []):
     api.chromium.apply_config(config)
 
-  api.chromium.c.env.ADB_VENDOR_KEYS = api.path['start_dir'].join('.adb_key')
-
   with api.context(env=api.chromium.get_env()):
     api.step('test', [])
 

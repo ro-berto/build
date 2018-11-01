@@ -134,9 +134,6 @@ def RunSteps(api, buildername):
   api.chromium_android.c.coverage = config.get('coverage', False)
   api.chromium_android.c.asan_symbolize = True
 
-  if config.get('adb_vendor_keys'):
-    api.chromium.c.env.ADB_VENDOR_KEYS = api.path['start_dir'].join('.adb_key')
-
   for c in config.get('chromium_apply_config', []):
     api.chromium.apply_config(c)
 

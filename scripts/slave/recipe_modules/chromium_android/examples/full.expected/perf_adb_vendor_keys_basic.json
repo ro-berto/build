@@ -182,7 +182,6 @@
     ],
     "cwd": "[START_DIR]/src",
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "CHROME_HEADLESS": "1",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 target_arch=arm",
@@ -229,7 +228,6 @@
       "/path/to/tmp/json"
     ],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -366,7 +364,6 @@
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -384,7 +381,6 @@
       "-v"
     ],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -407,7 +403,6 @@
       "--overwrite-known-devices-files"
     ],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -519,7 +514,6 @@
       "-v"
     ],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -542,7 +536,6 @@
       "--overwrite-known-devices-files"
     ],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -660,7 +653,6 @@
       "1800"
     ],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -694,7 +686,6 @@
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -739,7 +730,6 @@
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -757,7 +747,6 @@
       "-v"
     ],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -780,7 +769,6 @@
       "--skip-wipe"
     ],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -803,7 +791,6 @@
       "--overwrite-known-devices-files"
     ],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "infra_step": true,
@@ -966,7 +953,6 @@
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
     "name": "unittests"
@@ -1013,7 +999,6 @@
       "[START_DIR]/src/out/Release/full_log"
     ],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -1028,7 +1013,6 @@
       "-w"
     ],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
@@ -1042,7 +1026,6 @@
       "[START_DIR]/src/out/Release/full_log"
     ],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "CHROMIUM_OUTPUT_DIR": "[START_DIR]/src/out/Release",
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },

@@ -112,8 +112,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.env.PATH:
       ret['PATH'] = self.m.path.pathsep.join(
           map(str, self.c.env.PATH) + ['%(PATH)s'])
-    if self.c.env.ADB_VENDOR_KEYS:
-      ret['ADB_VENDOR_KEYS'] = self.c.env.ADB_VENDOR_KEYS
     if self.c.env.LLVM_FORCE_HEAD_REVISION:
       ret['LLVM_FORCE_HEAD_REVISION'] = self.c.env.LLVM_FORCE_HEAD_REVISION
     if self.c.env.GOMA_STUBBY_PROXY_IP_ADDRESS:

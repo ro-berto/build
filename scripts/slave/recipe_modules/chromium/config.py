@@ -72,7 +72,6 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     use_gyp_env = Single(bool, empty_val=True, required=False),
     env = ConfigGroup(
       PATH = List(Path),
-      ADB_VENDOR_KEYS = Single(Path, required=False),
       LLVM_FORCE_HEAD_REVISION = Single(basestring, required=False),
       GOMA_STUBBY_PROXY_IP_ADDRESS = Single(basestring, required=False),
       GOMA_SETTINGS_SERVER = Single(basestring, required=False),

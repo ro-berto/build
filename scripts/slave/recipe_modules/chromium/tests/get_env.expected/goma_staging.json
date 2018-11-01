@@ -2,7 +2,6 @@
   {
     "cmd": [],
     "env": {
-      "ADB_VENDOR_KEYS": "[START_DIR]/.adb_key",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_STUBBY_PROXY_IP_ADDRESS": "sandbox.google.com"
     },
