@@ -155,10 +155,6 @@ def tests_base(_):
 def tests_arm64(_):  # pragma: no cover
   pass
 
-@CONFIG_CTX(includes=['x64_builder'])
-def tests_x64(_):  # pragma: no cover
-  pass
-
 @CONFIG_CTX(includes=['tests_base'])
 def main_tests(_):
   pass  # pragma: no cover
