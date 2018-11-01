@@ -11,7 +11,7 @@ SPEC = {
   'builders': {
     'Android CFI': {
       'chromium_config': 'android',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'download_vr_test_apks'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['android'],
       'chromium_config_kwargs': {
