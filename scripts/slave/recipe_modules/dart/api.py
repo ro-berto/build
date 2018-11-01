@@ -45,7 +45,10 @@ class DartApi(recipe_api.RecipeApi):
     self.m.goma.ensure_goma()
 
     with self.m.context(cwd=self.m.path['cache'].join('builder'),
-                        env={'GOMA_DIR':self.m.goma.goma_dir}):
+                        env={'GOMA_DIR':self.m.goma.goma_dir,
+                             'GIT_TRACE_CURL': '1',
+                             'GIT_TRACE_CURL_NO_DATA': '1',
+                             'GIT_REDACT_COOKIES': 'o,SSO,GSSO_UberProxy'}):
       try:
         self.m.bot_update.ensure_checkout(with_branch_heads=True,
                                           with_tags=True)
