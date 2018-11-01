@@ -142,14 +142,18 @@ class ClangCoverageApi(recipe_api.RecipeApi):
               '--profdata-path', out_file,
               '--llvm-cov', self.cov_executable] + binaries)
 
-      report_zip = self.m.path.mkdtemp().join('coverage_report.zip')
-      self.m.zip.directory('zip report', self.report_dir, report_zip)
-
-      self.m.gsutil.upload(
-          report_zip, _BUCKET_NAME, '%s/%s/coverage_report.zip' % (
-          self.m.properties['buildername'], self.m.properties['buildnumber']),
-          name='upload coverage report')
-
+      report_gs_path = '%s/%s/coverage_report' % (
+          self.m.properties['buildername'], self.m.properties['buildnumber'])
+      upload_step = self.m.gsutil.upload(self.report_dir,
+                                         _BUCKET_NAME,
+                                         report_gs_path,
+                                         link_name=None,
+                                         args=['-r'],
+                                         multithreaded=True,
+                                         name='upload coverage report')
+      upload_step.presentation.links['coverage report'] = (
+          'https://storage.googleapis.com/%s/%s/index.html' % (_BUCKET_NAME,
+                                                               report_gs_path))
   def shard_merge(self, step_name):
     """Returns a merge object understood by the swarming module.
 

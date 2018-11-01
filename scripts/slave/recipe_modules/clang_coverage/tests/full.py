@@ -48,8 +48,6 @@ def GenTests(api):
       + api.post_process(
           post_process.MustRun, 'generate html report for 3 targets')
       + api.post_process(
-          post_process.MustRun, 'zip report')
-      + api.post_process(
           post_process.MustRun, 'gsutil upload coverage report')
       + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
