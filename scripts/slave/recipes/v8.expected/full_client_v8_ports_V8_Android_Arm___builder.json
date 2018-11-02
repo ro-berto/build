@@ -371,9 +371,9 @@
       "--build-url",
       "gs://chromium-v8/archives/client.v8.ports/V8 Android Arm - builder",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"V8 Android Arm - builder\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.v8.ports\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"v8\", \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"V8 Android Arm - builder\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.v8.ports\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"v8\", \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"slavename\": \"TestSlavename\", \"triggers_proxy\": true, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"V8 Android Arm - builder\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.v8.ports\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"v8\", \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"V8 Android Arm - builder\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.v8.ports\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"v8\", \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"slavename\": \"TestSlavename\", \"triggers_proxy\": true, \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "infra_step": true,
     "name": "package build"

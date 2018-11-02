@@ -54,6 +54,8 @@ PROPERTIES = {
   'target_platform': Property(default=None, kind=str),
   # List of tester names to trigger.
   'triggers': Property(default=None, kind=list),
+  # Weather to trigger the internal trigger proxy.
+  'triggers_proxy': Property(default=False, kind=bool),
   # Weather to use goma for compilation.
   'use_goma': Property(default=True, kind=bool),
 }
@@ -61,13 +63,13 @@ PROPERTIES = {
 
 def RunSteps(api, build_config, clobber, clusterfuzz_archive, custom_deps,
              default_targets, enable_swarming, mb_config_path, set_gclient_var,
-             target_arch, target_platform, triggers, use_goma):
+             target_arch, target_platform, triggers, triggers_proxy, use_goma):
   v8 = api.v8
   v8.load_static_test_configs()
   bot_config = v8.update_bot_config(
       v8.bot_config_by_buildername(use_goma=use_goma),
       build_config, clusterfuzz_archive, enable_swarming, target_arch,
-      target_platform, triggers
+      target_platform, triggers, triggers_proxy,
   )
   v8.apply_bot_config(bot_config)
   v8.set_gclient_custom_var(set_gclient_var)

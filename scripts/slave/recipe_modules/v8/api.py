@@ -128,7 +128,7 @@ class V8Api(recipe_api.RecipeApi):
 
   def update_bot_config(self, bot_config, build_config, clusterfuzz_archive,
                         enable_swarming, target_arch, target_platform,
-                        triggers):
+                        triggers, triggers_proxy):
     """Update bot_config dict with src-side properties.
 
     Args:
@@ -141,6 +141,7 @@ class V8Api(recipe_api.RecipeApi):
       target_platform: Config value for TARGET_PLATFORM in chromium recipe
           module.
       triggers: List of tester names to trigger on success.
+      triggers_proxy: Weather to trigger the internal trigger proxy.
 
     Returns:
       An updated copy of the bot_config dict.
@@ -166,6 +167,7 @@ class V8Api(recipe_api.RecipeApi):
     # TODO(machenbach): Temporarily also dedupe, during migrating triggers src
     # side. Should be removed when everything has migrated.
     bot_config['triggers'] = sorted(list(set(bot_config['triggers'])))
+    bot_config['triggers_proxy'] = triggers_proxy
     return bot_config
 
   def get_test_roots(self):

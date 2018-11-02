@@ -243,6 +243,7 @@ BUILDERS = {
               'V8 Linux',
               'V8 Linux - presubmit',
             ],
+            'triggers_proxy': True,
           },
           'platform': 'linux',
         },
@@ -250,7 +251,6 @@ BUILDERS = {
           'path_pieces_list': [['d8']],
           'category': 'linux32'
         },
-        'triggers_proxy': True,
       },
       'V8 Linux - shared': {
         'chromium_apply_config': [
@@ -277,6 +277,7 @@ BUILDERS = {
               'V8 Linux64',
               'V8 Linux64 - fyi',
             ],
+            'triggers_proxy': True,
           },
           'platform': 'linux',
         },
@@ -285,7 +286,6 @@ BUILDERS = {
           'path_pieces_list': [['d8']],
           'category': 'linux64'
         },
-        'triggers_proxy': True,
       },
 ####### Category: Windows
       'V8 Win32 - builder': {
@@ -373,10 +373,10 @@ BUILDERS = {
             'triggers': [
               'V8 Arm',
             ],
+            'triggers_proxy': True,
           },
           'platform': 'linux',
         },
-        'triggers_proxy': True,
       },
       'V8 Android Arm - builder': {
         'chromium_apply_config': [
@@ -390,8 +390,12 @@ BUILDERS = {
           'path_pieces_list': [['d8']],
           'category': 'android_arm32'
         },
-        'testing': {'platform': 'linux'},
-        'triggers_proxy': True,
+        'testing': {
+          'properties': {
+            'triggers_proxy': True,
+          },
+          'platform': 'linux',
+        },
       },
 ####### Category: ARM64
       'V8 Android Arm64 - builder': {
@@ -411,10 +415,10 @@ BUILDERS = {
             'triggers': [
               'V8 Android Arm64 - N5X',
             ],
+            'triggers_proxy': True,
           },
           'platform': 'linux',
         },
-        'triggers_proxy': True,
       },
     },
   },
