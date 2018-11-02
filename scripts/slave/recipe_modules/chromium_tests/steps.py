@@ -984,7 +984,6 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
     kwargs['io_timeout'] = swarming_spec.get('io_timeout')
     kwargs['priority'] = swarming_spec.get('priority_adjustment')
     kwargs['shards'] = swarming_spec.get('shards', 1)
-    kwargs['tags'] = set(swarming_spec.get('tags', []))
     kwargs['upload_test_results'] = swarming_spec.get(
         'upload_test_results', True)
 
@@ -1498,7 +1497,7 @@ class SwarmingTest(Test):
     'lower': +10,
   }
 
-  def __init__(self, name, dimensions=None, tags=None, target_name=None,
+  def __init__(self, name, dimensions=None, target_name=None,
                extra_suffix=None, priority=None, expiration=None,
                hard_timeout=None, io_timeout=None,
                waterfall_mastername=None, waterfall_buildername=None,
@@ -1509,7 +1508,6 @@ class SwarmingTest(Test):
         waterfall_buildername=waterfall_buildername, **kwargs)
     self._tasks = {}
     self._dimensions = dimensions
-    self._tags = tags
     self._extra_suffix = extra_suffix
     self._priority = priority
     self._expiration = expiration
@@ -1656,15 +1654,6 @@ class SwarmingTest(Test):
          else:
            self._tasks[suffix].dimensions[k] = v
 
-    # Add config-specific tags.
-    self._tasks[suffix].tags.update(api.chromium_tests.swarming_tags)
-
-    # Add custom tags.
-    if self._tags:
-      # TODO(kbr): figure out how to cover this line of code with
-      # tests after the removal of the GPU recipe. crbug.com/584469
-      self._tasks[suffix].tags.update(self._tags)  # pragma: no cover
-
     # Set default value.
     if 'os' not in self._tasks[suffix].dimensions:
       self._tasks[suffix].dimensions['os'] = api.swarming.prefered_os_dimension(
@@ -1740,7 +1729,7 @@ class SwarmingTest(Test):
 
 class SwarmingGTestTest(SwarmingTest):
   def __init__(self, name, args=None, target_name=None, shards=1,
-               dimensions=None, tags=None, extra_suffix=None, priority=None,
+               dimensions=None, extra_suffix=None, priority=None,
                expiration=None, hard_timeout=None, io_timeout=None,
                upload_test_results=True, override_compile_targets=None,
                override_isolate_target=None,
@@ -1748,7 +1737,7 @@ class SwarmingGTestTest(SwarmingTest):
                waterfall_buildername=None, merge=None, trigger_script=None,
                set_up=None, tear_down=None, isolate_coverage_data=False):
     super(SwarmingGTestTest, self).__init__(
-        name, dimensions, tags, target_name, extra_suffix, priority, expiration,
+        name, dimensions, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername,
         set_up=set_up, tear_down=tear_down,
@@ -1987,7 +1976,7 @@ class LocalIsolatedScriptTest(Test):
 class SwarmingIsolatedScriptTest(SwarmingTest):
 
   def __init__(self, name, args=None, target_name=None, shards=1,
-               dimensions=None, tags=None, extra_suffix=None,
+               dimensions=None, extra_suffix=None,
                ignore_task_failure=False, priority=None, expiration=None,
                hard_timeout=None, upload_test_results=True,
                override_compile_targets=None, perf_id=None, results_url=None,
@@ -1997,7 +1986,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                set_up=None, tear_down=None, idempotent=True,
                cipd_packages=None):
     super(SwarmingIsolatedScriptTest, self).__init__(
-        name, dimensions, tags, target_name, extra_suffix, priority, expiration,
+        name, dimensions, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername,
         set_up=set_up, tear_down=tear_down)

@@ -51,19 +51,6 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       args += ['--lsan=1']
     return args
 
-  @property
-  def swarming_tags(self):
-    tags = set()
-    if self.m.chromium.c.runtests.enable_asan:
-      tags |= {'asan:1'}
-    if self.m.chromium.c.runtests.enable_lsan:
-      tags |= {'lsan:1'}
-    if self.m.chromium.c.runtests.enable_msan:
-      tags |= {'msan:1'}
-    if self.m.chromium.c.runtests.enable_tsan:
-      tags |= {'tsan:1'}
-    return tags
-
   def log(self, message):
     presentation = self.m.step.active_result.presentation
     presentation.logs.setdefault('stdout', []).append(message)
