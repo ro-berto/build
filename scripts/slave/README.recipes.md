@@ -321,6 +321,7 @@
   * [v8/auto_tag](#recipes-v8_auto_tag) &mdash; This recipe checks if a version update on branch <B> is necessary, where 'version' refers to the contents of the v8 version file (part of the v8 sources).
   * [v8/flako](#recipes-v8_flako) &mdash; Recipe to bisect flaky tests in V8.
   * [v8/node_integration](#recipes-v8_node_integration) &mdash; Recipe to test v8/node.
+  * [v8/presubmit](#recipes-v8_presubmit) &mdash; Recipe for running presubmit in V8 CI.
   * [v8:tests/example](#recipes-v8_tests_example)
   * [wasm_llvm](#recipes-wasm_llvm)
   * [wct:tests/full](#recipes-wct_tests_full)
@@ -5784,6 +5785,13 @@ Recipe to test v8/node.js integration.
 &mdash; **def [RunSteps](/scripts/slave/recipes/v8/node_integration.py#259)(api):**
 
 &emsp; **@contextmanager**<br>&mdash; **def [goma\_wrapper](/scripts/slave/recipes/v8/node_integration.py#112)(api):**
+### *recipes* / [v8/presubmit](/scripts/slave/recipes/v8/presubmit.py)
+
+[DEPS](/scripts/slave/recipes/v8/presubmit.py#11): [chromium](#recipe_modules-chromium), [v8](#recipe_modules-v8), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+
+Recipe for running presubmit in V8 CI.
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/presubmit.py#23)(api):**
 ### *recipes* / [v8:tests/example](/scripts/slave/recipe_modules/v8/tests/example.py)
 
 [DEPS](/scripts/slave/recipe_modules/v8/tests/example.py#7): [v8](#recipe_modules-v8), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
