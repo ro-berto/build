@@ -61,6 +61,7 @@ def BuildLinux(api, checkout_dir):
   Build(api, checkout_dir, 'host_debug')
   RunGN(api, checkout_dir, '--unoptimized')
   Build(api, checkout_dir, 'host_debug_unopt')
+  RunGN(api, checkout_dir, '--runtime-mode=release', '--dynamic')
   Build(api, checkout_dir, 'host_dynamic_release', 'flutter/lib/snapshot')
   # analyze step needs dart ui sources
   Build(api, checkout_dir, 'host_debug_unopt', 'generate_dart_ui')

@@ -676,6 +676,23 @@
     ]
   },
   {
+    "cmd": [
+      "[CACHE]/builder/src/flutter/tools/gn",
+      "--runtime-mode=release",
+      "--dynamic"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gn --runtime-mode=release --dynamic"
+  },
+  {
     "cmd": [],
     "cwd": "[CACHE]/builder",
     "env": {
