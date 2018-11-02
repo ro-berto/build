@@ -224,8 +224,8 @@ def BASE(c):
     c.mac_toolchain.cipd_credentials = (
         '/creds/service_accounts/service-account-xcode-cipd-access.json')
 
-  # TODO(crbug.com/797051): remove this when all builds switch to the new
-  # Xcode flow.
+  # TODO(sergeyberezin): remove this when all builds switch to the new Xcode
+  # flow.
   if c.TARGET_PLATFORM == 'mac':
     c.env.FORCE_MAC_TOOLCHAIN = 1
 
