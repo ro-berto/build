@@ -167,7 +167,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "target_arch=arm64"
     },
     "env_suffixes": {

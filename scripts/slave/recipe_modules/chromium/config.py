@@ -58,14 +58,8 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     ),
     gyp_env = ConfigGroup(
       DOWNLOAD_VR_TEST_APKS = Single(int, required=False),
-      GYP_CROSSCOMPILE = Single(int, jsonish_fn=str, required=False),
       GYP_DEFINES = Dict(equal_fn, ' '.join, (basestring,int,Path)),
-      GYP_GENERATORS = Set(basestring, ','.join),
-      GYP_GENERATOR_FLAGS = Dict(equal_fn, ' '.join, (basestring,int)),
-      GYP_INCLUDE_LAST = Single(Path, required=False),
       GYP_MSVS_VERSION = Single(basestring, required=False),
-      GYP_USE_SEPARATE_MSPDBSRV = Single(int, jsonish_fn=str, required=False),
-      LLVM_DOWNLOAD_GOLD_PLUGIN = Single(int, required=False),
     ),
     # This allows clients to opt out of using GYP variables in the environment.
     # TODO(machenbach): This does not expand to Chromium's runtests yet.
@@ -179,9 +173,6 @@ def BASE(c):
     if not c.TARGET_PLATFORM == 'chromeos':  # pragma: no cover
       raise BadConf("Cannot specify CROS board for non-'chromeos' platform")
 
-  if c.HOST_PLATFORM != c.TARGET_PLATFORM or c.HOST_ARCH != c.TARGET_ARCH:
-    c.gyp_env.GYP_CROSSCOMPILE = 1
-
   if c.HOST_BITS < c.TARGET_BITS:
     raise BadConf('host bits < targ bits')  # pragma: no cover
 
@@ -246,9 +237,6 @@ def win_analyze(c):
 
 @config_ctx(group='builder')
 def ninja(c):
-  if c.TARGET_PLATFORM == 'ios':
-    c.gyp_env.GYP_GENERATORS.add('ninja')
-
   out_path = 'out'
   if c.TARGET_CROS_BOARD:
     out_path += '_%s' % (c.TARGET_CROS_BOARD,)
@@ -328,7 +316,6 @@ def ninja_confirm_noop(c):
 def xcode(c):  # pragma: no cover
   if c.HOST_PLATFORM != 'mac':
     raise BadConf('can not use xcodebuild on "%s"' % c.HOST_PLATFORM)
-  c.gyp_env.GYP_GENERATORS.add('xcode')
 
 def _clang_common(c):
   c.compile_py.compiler = 'clang'

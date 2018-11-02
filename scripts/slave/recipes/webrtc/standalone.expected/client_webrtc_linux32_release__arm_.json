@@ -115,7 +115,6 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=arm use_goma=1"
     },
     "env_suffixes": {
