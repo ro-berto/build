@@ -1072,13 +1072,8 @@ def generate_gtest(api, chromium_tests_api, mastername, buildername, test_spec,
 
   def get_tests(api):
     del api
-    tests = [canonicalize_test(t) for t in
-             test_spec.get(buildername, {}).get('gtest_tests', [])]
-
-    # Sort the test by the number of shards.
-    # TODO(tikuta): Remove this when crbug.com/828937 is fixed.
-    tests.sort(key=lambda x: x.get('swarming',{}).get('shards', 1))
-    return tests
+    return [canonicalize_test(t) for t in
+            test_spec.get(buildername, {}).get('gtest_tests', [])]
 
   def gtest_delegate_common(spec, **kwargs):
     del kwargs
