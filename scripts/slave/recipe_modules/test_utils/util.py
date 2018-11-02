@@ -109,11 +109,6 @@ class TestResults(object):
         # SLOW - Layout test specific. The test is expected to take longer than
         # normal to run.
         'SLOW',
-        # REBASELINE, NEEDSREBASELINE, NEEDSMANUALREBASELINE - Layout test
-        # specific. The expected test result is out of date and will be ignored
-        # (any result other than a crash or timeout will be considered as
-        # passing).
-        'REBASELINE', 'NEEDSREBASELINE', 'NEEDSMANUALREBASELINE',
         # WONTFIX - **Undocumented** - Test is failing and won't be fixed?
         'WONTFIX',
     )
