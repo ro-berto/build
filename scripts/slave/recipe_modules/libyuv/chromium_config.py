@@ -37,7 +37,7 @@ def libyuv_android(c):
 
   _libyuv_static_build(c)
 
-@CONFIG_CTX(includes=['chromium', 'static_library'])
+@CONFIG_CTX(includes=['chromium'])
 def libyuv_ios(c):
   if c.HOST_PLATFORM != 'mac':
     raise BadConf('Only "mac" host platform is supported for iOS (got: "%s")' %

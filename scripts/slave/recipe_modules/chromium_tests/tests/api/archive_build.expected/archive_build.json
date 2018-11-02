@@ -217,7 +217,7 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -281,7 +281,7 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"gclient_env\": {\"GYP_DEFINES\": \"component=static_library gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1\"}, \"gs_acl\": \"public-read\", \"gs_bucket\": \"gs://chromium-browser-snapshots\", \"target_os\": \"linux\"}",
+      "{\"gclient_env\": {\"GYP_DEFINES\": \"gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1\"}, \"gs_acl\": \"public-read\", \"gs_bucket\": \"gs://chromium-browser-snapshots\", \"target_os\": \"linux\"}",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-properties",

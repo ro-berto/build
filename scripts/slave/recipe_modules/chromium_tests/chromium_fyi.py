@@ -448,7 +448,7 @@ SPEC = {
         ['goma_canary', 'goma_use_local']),
     'Win Builder (dbg) Goma Canary': chromium_apply_configs(
         chromium_win.SPEC['builders']['Win Builder (dbg)'],
-        ['goma_canary', 'shared_library']),
+        ['goma_canary']),
     'Win Goma Canary LocalOutputCache': chromium_apply_configs(
         no_archive(chromium.SPEC['builders']['win-rel']),
         ['goma_canary', 'goma_localoutputcache']),
@@ -516,7 +516,7 @@ SPEC = {
         ['goma_latest_client', 'goma_use_local']),
     'Win Builder (dbg) Goma Latest Client': chromium_apply_configs(
         chromium_win.SPEC['builders']['Win Builder (dbg)'],
-        ['goma_latest_client', 'shared_library']),
+        ['goma_latest_client']),
     'Win Goma Latest Client LocalOutputCache': chromium_apply_configs(
         no_archive(chromium.SPEC['builders']['win-rel']),
         ['goma_latest_client', 'goma_localoutputcache']),

@@ -126,7 +126,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library gomadir='[GOMA_CACHE]/client' lsan=1 target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "asan=1 clang=1 gomadir='[GOMA_CACHE]/client' lsan=1 target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [

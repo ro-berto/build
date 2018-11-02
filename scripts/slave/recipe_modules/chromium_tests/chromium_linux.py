@@ -198,7 +198,7 @@ SPEC = {
     },
 
     'Cast Audio Linux': {
-      'chromium_config': 'cast_linux',
+      'chromium_config': 'chromium_clang',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -210,7 +210,7 @@ SPEC = {
       },
     },
     'Cast Linux': {
-      'chromium_config': 'cast_linux',
+      'chromium_config': 'chromium_clang',
       'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {

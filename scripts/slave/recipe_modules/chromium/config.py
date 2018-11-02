@@ -229,13 +229,7 @@ def BASE(c):
   if c.TARGET_PLATFORM == 'mac':
     c.env.FORCE_MAC_TOOLCHAIN = 1
 
-  if c.BUILD_CONFIG in ['Coverage', 'Release']:
-    # The 'Coverage' target is not explicitly used by Chrome, but by some other
-    # projects in the Chrome ecosystem (ie: Syzygy).
-    static_library(c, final=False)
-  elif c.BUILD_CONFIG == 'Debug':
-    shared_library(c, final=False)
-  else:  # pragma: no cover
+  if c.BUILD_CONFIG not in ['Coverage', 'Release', 'Debug']: # pragma: no cover
     raise BadConf('Unknown build config "%s"' % c.BUILD_CONFIG)
 
 @config_ctx()
@@ -370,19 +364,10 @@ def goma(c):
 @config_ctx()
 def dcheck(c, invert=False):
   c.gn_args.append('dcheck_always_on=%s' % str(not invert).lower())
-  c.gyp_env.GYP_DEFINES['dcheck_always_on'] = int(not invert)
 
 @config_ctx()
 def fastbuild(c, invert=False):
   c.gn_args.append('symbol_level=%d' % (1 if invert else 2))
-
-@config_ctx(group='link_type')
-def shared_library(c):
-  c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
-
-@config_ctx(group='link_type')
-def static_library(c):
-  c.gyp_env.GYP_DEFINES['component'] = 'static_library'
 
 @config_ctx()
 def ffmpeg_branding(c, branding=None):
@@ -415,7 +400,7 @@ def ozone(c):
 def clobber(c):
   c.clobber_before_runhooks = True
 
-@config_ctx(includes=['static_library', 'clobber'])
+@config_ctx(includes=['clobber'])
 def official(c):
   c.gyp_env.GYP_DEFINES['branding'] = 'Chrome'
   c.gyp_env.GYP_DEFINES['buildtype'] = 'Official'
@@ -487,7 +472,7 @@ def trybot_flavor(c):
 def clang_tot(c):
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
 
-@config_ctx(includes=['ninja', 'clang', 'asan', 'static_library'])
+@config_ctx(includes=['ninja', 'clang', 'asan'])
 def win_asan(_):
   pass
 
@@ -551,7 +536,7 @@ def chromium_linux_ubsan_vptr(_):
 def clang_tot_linux_ubsan_vptr(_):
   pass
 
-@config_ctx(includes=['clang_tot_mac', 'asan', 'static_library'])
+@config_ctx(includes=['clang_tot_mac', 'asan'])
 def clang_tot_mac_asan(_):
   pass
 
@@ -628,21 +613,18 @@ def chromium_official_internal(c):
 def blink(c):  # pragma: no cover
   c.compile_py.default_targets = ['blink_tests']
 
-@config_ctx(includes=['android_common', 'ninja', 'static_library',
-                      'default_compiler', 'goma'])
+@config_ctx(includes=['android_common', 'ninja', 'default_compiler', 'goma'])
 def android(_):
   pass
 
-@config_ctx(includes=['android_common', 'ninja', 'static_library', 'clang',
+@config_ctx(includes=['android_common', 'ninja', 'clang',
                       'goma'])
 def android_clang(_):
   pass
 
-@config_ctx(includes=['android_common', 'ninja', 'shared_library', 'clang',
+@config_ctx(includes=['android_common', 'ninja', 'clang',
                       'goma', 'asan'])
 def android_asan(_):
-  # ASan for Android needs shared_library, so it needs it own config.
-  # See https://www.chromium.org/developers/testing/addresssanitizer.
   pass
 
 @config_ctx()
@@ -656,24 +638,16 @@ def android_common(c):
           'third_party', 'android_tools', 'sdk', 'platform-tools'),
       c.CHECKOUT_PATH.join('build', 'android')])
 
-@config_ctx(includes=['ninja', 'shared_library', 'clang', 'goma'])
+@config_ctx(includes=['ninja', 'clang', 'goma'])
 def codesearch(c):
   # -k 0 prevents stopping on errors, so the compile step tries to do as much as
   # possible.
   c.compile_py.build_args = ['-k' ,'0']
 
-@config_ctx()
-def v8_optimize_medium(c):
-  c.gyp_env.GYP_DEFINES['v8_optimized_debug'] = 1
-
 # TODO(thakis): Remove references, then delete.
 @config_ctx()
 def enable_ipc_fuzzer(c):
   c.gyp_env.GYP_DEFINES['enable_ipc_fuzzer'] = 1
-
-@config_ctx(includes=['chromium_clang'])
-def cast_linux(c):
-  c.gyp_env.GYP_DEFINES['chromecast'] = 1
 
 @config_ctx()
 def build_angle_deqp_tests(c):

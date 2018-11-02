@@ -179,8 +179,7 @@ SPEC = {
     # https://sites.google.com/a/chromium.org/dev/developers/testing/addresssanitizer#TOC-Building-with-v8_target_arch-arm
     'ASan Debug (32-bit x86 with V8-ARM)': {
       'chromium_config': 'chromium_asan',
-      'chromium_apply_config': ['mb', 'clobber',
-                                'static_library'],
+      'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',

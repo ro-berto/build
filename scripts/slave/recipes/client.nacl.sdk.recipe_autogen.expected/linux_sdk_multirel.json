@@ -161,7 +161,7 @@
       "CHROME_HEADLESS": "1",
       "CHROMIUM_GYP_SYNTAX_CHECK": "1",
       "DEPOT_TOOLS_UPDATE": "0",
-      "GYP_DEFINES": "component=static_library gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1",
       "LANDMINES_VERBOSE": "1"
     },
     "env_suffixes": {

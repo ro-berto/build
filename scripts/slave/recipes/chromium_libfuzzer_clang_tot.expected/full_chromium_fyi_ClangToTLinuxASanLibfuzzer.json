@@ -188,7 +188,7 @@
     "cwd": "[START_DIR]/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "clang=1 component=static_library gomadir='[CACHE]/goma/client' proprietary_codecs=1 target_arch=x64 use_goma=1",
+      "GYP_DEFINES": "clang=1 gomadir='[CACHE]/goma/client' proprietary_codecs=1 target_arch=x64 use_goma=1",
       "LLVM_FORCE_HEAD_REVISION": "YES"
     },
     "env_suffixes": {

@@ -165,7 +165,7 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"gclient_env\": {\"GYP_CROSSCOMPILE\": \"1\", \"GYP_DEFINES\": \"OS=android component=static_library fastbuild=1 target_arch=x64\"}, \"gs_acl\": \"public\", \"gs_bucket\": \"gs://sample-bucket/experimental\", \"target_os\": \"android\"}",
+      "{\"gclient_env\": {\"GYP_CROSSCOMPILE\": \"1\", \"GYP_DEFINES\": \"OS=android fastbuild=1 target_arch=x64\"}, \"gs_acl\": \"public\", \"gs_bucket\": \"gs://sample-bucket/experimental\", \"target_os\": \"android\"}",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-properties",

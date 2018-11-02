@@ -308,7 +308,7 @@
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -487,7 +487,7 @@
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1"
+      "GYP_DEFINES": "gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [

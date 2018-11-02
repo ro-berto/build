@@ -8,7 +8,7 @@ from recipe_engine import config as recipe_config
 import DEPS
 CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
 
-@CONFIG_CTX(includes=['android_common', 'ninja', 'static_library'],
+@CONFIG_CTX(includes=['android_common', 'ninja'],
             config_vars={'TARGET_ARCH': 'arm', 'TARGET_BITS': 32,
                          'TARGET_PLATFORM': 'android', 'BUILD_CONFIG': 'Debug'})
 def base_config(c):
@@ -34,17 +34,12 @@ def main_builder_rel_mb(_):
 
 @CONFIG_CTX(includes=['base_config', 'clang', 'goma'])
 def clang_builder(c):
-  c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
   c.gyp_env.GYP_DEFINES['asan'] = 1
   c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
 
 @CONFIG_CTX(includes=['clang_builder', 'mb'])
 def clang_builder_mb(_):
   pass
-
-@CONFIG_CTX(includes=['main_builder'])
-def component_builder(c):
-  c.gyp_env.GYP_DEFINES['component'] = 'shared_library'  # pragma: no cover
 
 @CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'],
             config_vars={'TARGET_ARCH': 'intel'})
@@ -106,7 +101,6 @@ def arm_l_builder(_):  # pragma: no cover
 @CONFIG_CTX(includes=['arm_l_builder'])
 def arm_l_builder_lto(c):  # pragma: no cover
   c.gyp_env.GYP_DEFINES['use_lto'] = 1
-  c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
 
 @CONFIG_CTX(includes=['arm_l_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})

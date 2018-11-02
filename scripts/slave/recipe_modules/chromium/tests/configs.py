@@ -216,20 +216,8 @@ def GenTests(api):
   )
 
   yield (
-      api.test('v8_optimize_medium') +
-      api.properties(chromium_apply_config=['v8_optimize_medium']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
       api.test('enable_ipc_fuzzer') +
       api.properties(chromium_apply_config=['enable_ipc_fuzzer']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('cast_linux') +
-      api.properties(chromium_config='cast_linux') +
       api.post_process(post_process.DropExpectation)
   )
 

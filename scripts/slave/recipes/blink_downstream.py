@@ -43,13 +43,9 @@ DEPS = [
 
 
 def V8Builder(config, bits, platform):
-  chromium_configs = []
-
-  if config == 'Debug':
-    chromium_configs.append('v8_optimize_medium')
   return {
     'gclient_apply_config': ['show_v8_revision'],
-    'chromium_apply_config': chromium_configs,
+    'chromium_apply_config': [],
     'chromium_config_kwargs': {
       'BUILD_CONFIG': config,
       'TARGET_BITS': bits,
@@ -153,8 +149,6 @@ def RunSteps(api):
 
   for c in bot_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
-  for c in bot_config.get('chromium_apply_config', []):
-    api.chromium.apply_config(c)
   api.chromium_tests.set_config('chromium')
 
   # Sync component to current component revision.

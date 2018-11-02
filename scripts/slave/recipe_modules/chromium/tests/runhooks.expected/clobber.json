@@ -25,7 +25,7 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "component=static_library target_arch=x64"
+      "GYP_DEFINES": "target_arch=x64"
     },
     "env_suffixes": {
       "PATH": [
