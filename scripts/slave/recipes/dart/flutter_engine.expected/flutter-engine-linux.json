@@ -1824,7 +1824,8 @@
     "cmd": [
       "[CACHE]/builder/src/flutter/tools/gn",
       "--android",
-      "--runtime-mode=profile"
+      "--runtime-mode=release",
+      "--android-cpu=arm"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -1836,7 +1837,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "gn --android --runtime-mode=profile"
+    "name": "gn --android --runtime-mode=release --android-cpu=arm"
   },
   {
     "cmd": [],
@@ -1931,14 +1932,15 @@
       "-j",
       "20",
       "-C",
-      "[CACHE]/builder/src/out/android_profile"
+      "[CACHE]/builder/src/out/android_release",
+      "gen_snapshot"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
-    "name": "build android_profile"
+    "name": "build android_release gen_snapshot"
   },
   {
     "cmd": [],
@@ -2054,7 +2056,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build android_profile",
+      "build android_release gen_snapshot",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -2115,7 +2117,7 @@
     "cmd": [
       "[CACHE]/builder/src/flutter/tools/gn",
       "--android",
-      "--runtime-mode=release"
+      "--runtime-mode=profile"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -2127,7 +2129,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "gn --android --runtime-mode=release"
+    "name": "gn --android --runtime-mode=profile"
   },
   {
     "cmd": [],
@@ -2222,14 +2224,14 @@
       "-j",
       "20",
       "-C",
-      "[CACHE]/builder/src/out/android_release"
+      "[CACHE]/builder/src/out/android_profile"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
-    "name": "build android_release"
+    "name": "build android_profile"
   },
   {
     "cmd": [],
@@ -2345,7 +2347,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build android_release",
+      "build android_profile",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -2406,7 +2408,7 @@
     "cmd": [
       "[CACHE]/builder/src/flutter/tools/gn",
       "--android",
-      "--android-cpu=x64"
+      "--runtime-mode=release"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -2418,7 +2420,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "gn --android --android-cpu=x64"
+    "name": "gn --android --runtime-mode=release"
   },
   {
     "cmd": [],
@@ -2513,14 +2515,14 @@
       "-j",
       "20",
       "-C",
-      "[CACHE]/builder/src/out/android_debug_x64"
+      "[CACHE]/builder/src/out/android_release"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
-    "name": "build android_debug_x64"
+    "name": "build android_release"
   },
   {
     "cmd": [],
@@ -2636,7 +2638,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build android_debug_x64",
+      "build android_release",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -2697,7 +2699,7 @@
     "cmd": [
       "[CACHE]/builder/src/flutter/tools/gn",
       "--android",
-      "--android-cpu=x86"
+      "--android-cpu=x64"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -2709,7 +2711,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "gn --android --android-cpu=x86"
+    "name": "gn --android --android-cpu=x64"
   },
   {
     "cmd": [],
@@ -2804,14 +2806,14 @@
       "-j",
       "20",
       "-C",
-      "[CACHE]/builder/src/out/android_debug_x86"
+      "[CACHE]/builder/src/out/android_debug_x64"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
       "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
-    "name": "build android_debug_x86"
+    "name": "build android_debug_x64"
   },
   {
     "cmd": [],
@@ -2927,7 +2929,7 @@
       "--build-exit-status",
       "0",
       "--build-step-name",
-      "build android_debug_x86",
+      "build android_debug_x64",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -2980,6 +2982,297 @@
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (10)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/src/flutter/tools/gn",
+      "--android",
+      "--android-cpu=x86"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "gn --android --android-cpu=x86"
+  },
+  {
+    "cmd": [],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+    },
+    "name": "preprocess_for_goma (11)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/goma/data/flutter_engine_linux"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma.goma cache directory (11)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "restart"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma.start_goma (11)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@cloudtail@https://console.cloud.google.com/logs/viewer?project=goma-logs&resource=gce_instance%2Finstance_id%2Ffakevm999-m9&timestamp=2012-05-14T12:53:36.500000@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "start",
+      "--cloudtail-path",
+      "cloudtail",
+      "--cloudtail-service-account-json",
+      "/creds/service_accounts/service-account-goma-cloudtail.json",
+      "--pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+    },
+    "infra_step": true,
+    "name": "preprocess_for_goma.start cloudtail (11)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-j",
+      "20",
+      "-C",
+      "[CACHE]/builder/src/out/android_debug_x86"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+    },
+    "name": "build android_debug_x86"
+  },
+  {
+    "cmd": [],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+    },
+    "name": "postprocess_for_goma (11)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "jsonstatus",
+      "[TMP_BASE]/goma_jsonstatus.json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+    },
+    "name": "postprocess_for_goma.goma_jsonstatus (11)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"notice\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"infra_status\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"num_user_error\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ping_status_code\": 200@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "stat"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+    },
+    "name": "postprocess_for_goma.goma_stat (11)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/goma/client/goma_ctl.py",
+      "stop"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/flutter_engine_linux",
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_HERMETIC": "error",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+    },
+    "name": "postprocess_for_goma.stop_goma (11)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "--upload-compiler-proxy-info",
+      "--log-url-json-file",
+      "/path/to/tmp/json",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--bigquery-service-account-json",
+      "/creds/service_accounts/service-account-goma-bigquery.json",
+      "--json-status",
+      "[TMP_BASE]/goma_jsonstatus.json",
+      "--build-exit-status",
+      "0",
+      "--build-step-name",
+      "build android_debug_x86",
+      "--goma-stats-file",
+      "[TMP_BASE]/goma_stats",
+      "--goma-counterz-file",
+      "[TMP_BASE]/goma_counterz",
+      "--goma-crash-report-id-file",
+      "[TMP_BASE]/crash_report_id",
+      "--builder-id-json",
+      "{\"bucket\": \"master.client.dart.internal\", \"builder\": \"flutter-engine-linux\", \"project\": \"\"}",
+      "--is-luci",
+      "--buildbot-buildername",
+      "flutter-engine-linux",
+      "--buildbot-mastername",
+      "client.dart.internal",
+      "--buildbot-slavename",
+      "fake-m1"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+    },
+    "name": "postprocess_for_goma.upload_log (11)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"compiler_proxy_log\": \"https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@compiler_proxy_log@https://chromium-build-stats.appspot.com/compiler_proxy_log/2017/03/30/build11-m1/compiler_proxy.exe.BUILD11-M1.chrome-bot.log.INFO.20170329-222936.4420.gz@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "stop",
+      "--killed-pid-file",
+      "[TMP_BASE]/cloudtail.pid"
+    ],
+    "cwd": "[CACHE]/builder",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
+    },
+    "infra_step": true,
+    "name": "postprocess_for_goma.stop cloudtail (11)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3285,6 +3578,45 @@
     },
     "infra_step": true,
     "name": "copy product_vm_isolate_snapshot.bin"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[CACHE]/builder/flutter/bin/cache/artifacts/engine/android-arm-release/linux-x64/gen_snapshot"
+    ],
+    "cwd": "[CACHE]/builder/flutter",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
+      "TEST_COMMIT_RANGE": "HEAD"
+    },
+    "infra_step": true,
+    "name": "remove gen_snapshot"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[CACHE]/builder/src/out/android_release/clang_x86/gen_snapshot",
+      "[CACHE]/builder/flutter/bin/cache/artifacts/engine/android-arm-release/linux-x64/gen_snapshot"
+    ],
+    "cwd": "[CACHE]/builder/flutter",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client",
+      "PATH": "[CACHE]/builder/src/out/host_debug/dart-sdk/bin:<PATH>",
+      "TEST_COMMIT_RANGE": "HEAD"
+    },
+    "infra_step": true,
+    "name": "copy gen_snapshot"
   },
   {
     "cmd": [

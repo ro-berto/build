@@ -48,6 +48,8 @@ def BuildLinuxAndroidArm(api, checkout_dir):
   RunGN(api, checkout_dir, '--android')
   Build(api, checkout_dir, 'android_debug')
   Build(api, checkout_dir, 'android_debug', ':dist')
+  RunGN(api, checkout_dir, '--android', '--runtime-mode=release', '--android-cpu=arm')
+  Build(api, checkout_dir, 'android_release', 'gen_snapshot')
 
   # Build and upload engines for the runtime modes that use AOT compilation.
   for runtime_mode in ['profile', 'release']:
@@ -115,9 +117,9 @@ def CopyArtifacts(api, engine_src, cached_dest, file_paths):
 
 def UpdateCachedEngineArtifacts(api, flutter, engine_src):
   ICU_DATA_PATH = 'third_party/icu/flutter/icudtl.dat'
-  cached_dest = flutter.join('bin', 'cache', 'artifacts', 'engine', 'linux-x64')
-  CopyArtifacts(api, engine_src, cached_dest, [
-    ICU_DATA_PATH,
+  CopyArtifacts(api, engine_src,
+    flutter.join('bin', 'cache', 'artifacts', 'engine', 'linux-x64'),
+    [ICU_DATA_PATH,
     'out/host_debug_unopt/flutter_tester',
     # Flutter debug and dynamic profile modes for all target platforms use Dart
     # RELEASE VM snapshot that comes from host debug build and has the metadata
@@ -132,7 +134,12 @@ def UpdateCachedEngineArtifacts(api, flutter, engine_src):
      'product_isolate_snapshot.bin'),
     ('out/host_dynamic_release/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
      'product_vm_isolate_snapshot.bin'),
-  ])
+    ]
+  )
+
+  CopyArtifacts(api, engine_src,
+    flutter.join('bin', 'cache', 'artifacts', 'engine', 'android-arm-release', 'linux-x64'),
+    ['out/android_release/clang_x86/gen_snapshot'])
 
   flutter_patched_sdk = flutter.join('bin', 'cache', 'artifacts', 'engine', 'common', 'flutter_patched_sdk')
   dart_sdk = flutter.join('bin', 'cache', 'dart-sdk')
