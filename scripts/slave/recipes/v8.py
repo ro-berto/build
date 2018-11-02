@@ -768,7 +768,15 @@ def GenTests(api):
   )
 
   yield (
-      api.v8.test('client.v8', 'V8 Linux - presubmit', 'experimental') +
+      api.v8.test(
+          'client.v8',
+          'V8 Foobar',
+          'tester_experimental',
+          archive='gs://dummy-path-to-archive',
+          parent_buildername='V8 Foobar - builder',
+          parent_bot_config=release_bot_config,
+          enable_swarming=False,
+      ) +
       api.runtime(is_luci=True, is_experimental=True) +
       api.post_process(Filter('extract build'))
   )

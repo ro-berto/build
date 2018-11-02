@@ -252,10 +252,6 @@ BUILDERS = {
         },
         'triggers_proxy': True,
       },
-      'V8 Linux - presubmit': {
-        'enable_swarming': False,
-        'testing': {'platform': 'linux'},
-      },
       'V8 Linux - shared': {
         'chromium_apply_config': [
           'default_compiler', 'goma', 'mb'],
