@@ -2907,7 +2907,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[START_DIR]/src/out/third_party/icu/flutter/icudtl.dat",
+      "[START_DIR]/src/third_party/icu/flutter/icudtl.dat",
       "[START_DIR]/flutter/bin/cache/artifacts/engine/linux-x64/icudtl.dat"
     ],
     "cwd": "[START_DIR]/flutter",

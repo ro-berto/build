@@ -113,24 +113,24 @@ def CopyArtifacts(api, engine_src, cached_dest, file_paths):
     api.file.remove('remove %s' % target, cached_dest.join(target))
     api.file.copy('copy %s' % target, engine_src.join(source), cached_dest.join(target))
 
-def UpdateCachedEngineArtifacts(api, flutter, just_built_out):
+def UpdateCachedEngineArtifacts(api, flutter, engine_src):
   ICU_DATA_PATH = 'third_party/icu/flutter/icudtl.dat'
   cached_dest = flutter.join('bin', 'cache', 'artifacts', 'engine', 'linux-x64')
-  CopyArtifacts(api, just_built_out, cached_dest, [
+  CopyArtifacts(api, engine_src, cached_dest, [
     ICU_DATA_PATH,
-    'host_debug_unopt/flutter_tester',
+    'out/host_debug_unopt/flutter_tester',
     # Flutter debug and dynamic profile modes for all target platforms use Dart
     # RELEASE VM snapshot that comes from host debug build and has the metadata
     # related to development tools.
-    'host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
-    'host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
-    'host_debug_unopt/gen/frontend_server.dart.snapshot',
+    'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
+    'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+    'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
     # Flutter dynamic release mode for all target platforms uses Dart PRODUCT
     # VM snapshot from host dynamic release build that strips out the metadata
     # related to development tools.
-    ('host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin',
+    ('out/host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin',
      'product_isolate_snapshot.bin'),
-    ('host_dynamic_release/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+    ('out/host_dynamic_release/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
      'product_vm_isolate_snapshot.bin'),
   ])
 
@@ -147,9 +147,9 @@ def UpdateCachedEngineArtifacts(api, flutter, just_built_out):
     '/bin/bash', '-c', 'if [ -L "%(dir)s" ]; then rm "%(dir)s"; else rm -rf "%(dir)s"; fi' %
     {'dir': flutter_patched_sdk}])
   api.file.symlink('make cached dart-sdk point to just built dart sdk',
-    just_built_out.join('host_debug', 'dart-sdk'), dart_sdk)
+    engine_src.join('out', 'host_debug', 'dart-sdk'), dart_sdk)
   api.file.symlink('make cached flutter_patched_sdk point to just built flutter_patched_sdk',
-    just_built_out.join('host_debug', 'flutter_patched_sdk'), flutter_patched_sdk)
+    engine_src.join('out', 'host_debug', 'flutter_patched_sdk'), flutter_patched_sdk)
 
   # In case there is a cached version of "flutter_tools.snapshot" we have to
   # delete it.
@@ -158,7 +158,7 @@ def UpdateCachedEngineArtifacts(api, flutter, just_built_out):
     '/bin/bash', '-c', 'if [ -f "%(file)s" ]; then rm "%(file)s"; fi' %
     {'file': flutter_tools_snapshot}])
 
-def TestFlutter(api, start_dir, just_built_dart_sdk, just_built_out):
+def TestFlutter(api, start_dir, just_built_dart_sdk):
   engine_src = start_dir.join('src')
   flutter = start_dir.join('flutter')
   flutter_cmd = flutter.join('bin/flutter')
@@ -176,8 +176,9 @@ def TestFlutter(api, start_dir, just_built_dart_sdk, just_built_out):
 
     # analyze.dart and test.dart have hardcoded references to bin/cache/dart-sdk.
     # So we overwrite bin/cache/dart-sdk and tightly-coupled frontend_server.dart.snapshot
-    # with links that point to corresponding entries from [just_built_dart_sdk]
-    UpdateCachedEngineArtifacts(api, flutter, just_built_out)
+    # with links that point to corresponding entries from binaries generated into 
+    # [engine_src]
+    UpdateCachedEngineArtifacts(api, flutter, engine_src)
 
     # runs all flutter tests similar to Cirrus as described on this page:
     # https://github.com/flutter/flutter/blob/master/CONTRIBUTING.md
@@ -206,8 +207,7 @@ def RunSteps(api):
       'sdks', 'dart-sdk', 'bin')
     engine_env = { 'PATH': api.path.pathsep.join((str(prebuilt_dart_bin),
       '%(PATH)s')) }
-    just_built_out = checkout_dir.join('out')
-    just_built_dart_sdk = just_built_out.join('host_debug', 'dart-sdk')
+    just_built_dart_sdk = checkout_dir.join('out', 'host_debug', 'dart-sdk')
     flutter_env = {
       'PATH': api.path.pathsep.join((str(just_built_dart_sdk.join('bin')), '%(PATH)s')),
       # Prevent test.dart from using git merge-base to determine a fork point.
@@ -227,7 +227,7 @@ def RunSteps(api):
         BuildLinuxAndroidx86(api, checkout_dir)
       # The context adds freshly-built engine's dart-sdk to the path.
       with api.context(env=flutter_env):
-        TestFlutter(api, start_dir, just_built_dart_sdk, just_built_out)
+        TestFlutter(api, start_dir, just_built_dart_sdk)
 
 def GenTests(api):
   yield (api.test('flutter-engine-linux-buildbot') + api.platform('linux', 64)

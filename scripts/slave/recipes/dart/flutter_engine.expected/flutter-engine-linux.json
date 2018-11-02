@@ -3040,7 +3040,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[CACHE]/builder/src/out/third_party/icu/flutter/icudtl.dat",
+      "[CACHE]/builder/src/third_party/icu/flutter/icudtl.dat",
       "[CACHE]/builder/flutter/bin/cache/artifacts/engine/linux-x64/icudtl.dat"
     ],
     "cwd": "[CACHE]/builder/flutter",
