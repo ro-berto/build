@@ -261,11 +261,6 @@ def ninja(c):
   c.build_dir = c.CHECKOUT_PATH.join(out_path)
 
 @config_ctx()
-def msvs2015(c):
-  c.gn_args.append('visual_studio_version=2015')
-  c.gyp_env.GYP_MSVS_VERSION = '2015'
-
-@config_ctx()
 def goma_failfast(c):
   c.compile_py.goma_failfast = True
 

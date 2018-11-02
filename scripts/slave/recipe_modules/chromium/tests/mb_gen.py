@@ -43,7 +43,7 @@ def GenTests(api):
 
   yield (
       api.test('win') +
-      api.properties(chromium_apply_config=['msvs2015', 'win_analyze'])
+      api.properties(chromium_apply_config=['win_analyze'])
   )
 
   yield (

@@ -1080,11 +1080,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       # but we want to utilize remote cpu resource more.
       env['GOMA_USE_LOCAL'] = 'false'
 
-    if chromium_config.use_gyp_env and chromium_config.gyp_env.GYP_MSVS_VERSION:
-      # TODO(machenbach): Remove this as soon as it's not read anymore by
-      # vs_toolchain.py (currently called by gn).
-      env['GYP_MSVS_VERSION'] = chromium_config.gyp_env.GYP_MSVS_VERSION
-
     env.update(self.m.context.env)
 
     with optional_system_python:

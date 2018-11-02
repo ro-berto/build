@@ -930,7 +930,7 @@ Returns: (context manager) A context manager that inserts system python
 
 #### **class [ChromiumApi](/scripts/slave/recipe_modules/chromium/api.py#29)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1289)(self, step_name, gs_bucket, gs_acl=None, mode=None, build_name=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium/api.py#1284)(self, step_name, gs_bucket, gs_acl=None, mode=None, build_name=None, \*\*kwargs):**
 
 Returns a step invoking archive_build.py to archive a Chromium build.
 
@@ -994,7 +994,7 @@ Returns (ChromiumApi.Layout): The configured Chromium build layout.
 
 &mdash; **def [ensure\_toolchains](/scripts/slave/recipe_modules/chromium/api.py#857)(self):**
 
-&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1332)(self, _):**
+&mdash; **def [get\_annotate\_by\_test\_name](/scripts/slave/recipe_modules/chromium/api.py#1327)(self, _):**
 
 &emsp; **@_with_chromium_layout**<br>&mdash; **def [get\_clang\_version](/scripts/slave/recipe_modules/chromium/api.py#737)(self, \*\*kwargs):**
 
@@ -1016,7 +1016,7 @@ Args:
 
 &mdash; **def [get\_version](/scripts/slave/recipe_modules/chromium/api.py#157)(self):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_gen](/scripts/slave/recipe_modules/chromium/api.py#1176)(self, mastername, buildername, name=None, mb_path=None, mb_config_path=None, use_goma=True, isolated_targets=None, build_dir=None, phase=None, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_gen](/scripts/slave/recipe_modules/chromium/api.py#1171)(self, mastername, buildername, name=None, mb_path=None, mb_config_path=None, use_goma=True, isolated_targets=None, build_dir=None, phase=None, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None, \*\*kwargs):**
 
 Generate the build files in the source tree.
 
@@ -1046,9 +1046,9 @@ Args:
 Returns:
   The content of the args.gn file.
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_isolate\_everything](/scripts/slave/recipe_modules/chromium/api.py#1251)(self, mastername, buildername, use_goma=True, mb_path=None, mb_config_path=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, phase=None, \*\*kwargs):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_isolate\_everything](/scripts/slave/recipe_modules/chromium/api.py#1246)(self, mastername, buildername, use_goma=True, mb_path=None, mb_config_path=None, name=None, build_dir=None, android_version_code=None, android_version_name=None, phase=None, \*\*kwargs):**
 
-&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_lookup](/scripts/slave/recipe_modules/chromium/api.py#1100)(self, mastername, buildername, name=None, mb_path=None, mb_config_path=None, chromium_config=None, phase=None, use_goma=True, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None):**
+&emsp; **@_with_chromium_layout**<br>&mdash; **def [mb\_lookup](/scripts/slave/recipe_modules/chromium/api.py#1095)(self, mastername, buildername, name=None, mb_path=None, mb_config_path=None, chromium_config=None, phase=None, use_goma=True, android_version_code=None, android_version_name=None, gn_args_location=None, gn_args_max_text_lines=None):**
 
 Lookup the GN args for the build.
 
@@ -1083,7 +1083,7 @@ Returns:
 
 Return the path to the built executable directory.
 
-&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1277)(self, \*\*kwargs):**
+&mdash; **def [process\_dumps](/scripts/slave/recipe_modules/chromium/api.py#1272)(self, \*\*kwargs):**
 
 &mdash; **def [reload\_version](/scripts/slave/recipe_modules/chromium/api.py#162)(self):**
 
@@ -1127,7 +1127,7 @@ Return a runtest.py invocation.
 Return a sizes.py invocation.
 This uses runtests.py to upload the results to the perf dashboard.
 
-&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#1271)(self):**
+&mdash; **def [taskkill](/scripts/slave/recipe_modules/chromium/api.py#1266)(self):**
 
 &emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_launcher\_filter](/scripts/slave/recipe_modules/chromium/api.py#566)(self, tests):**
 

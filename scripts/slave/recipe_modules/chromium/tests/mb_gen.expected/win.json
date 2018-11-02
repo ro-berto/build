@@ -19,8 +19,7 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false",
-      "GYP_MSVS_VERSION": "2015"
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args",
     "stdout": "/path/to/tmp/",
@@ -51,8 +50,7 @@
     "cwd": "None",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false",
-      "GYP_MSVS_VERSION": "2015"
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files",
     "~followup_annotations": [
