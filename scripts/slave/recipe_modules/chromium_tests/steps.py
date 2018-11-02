@@ -984,6 +984,7 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
     kwargs['io_timeout'] = swarming_spec.get('io_timeout')
     kwargs['priority'] = swarming_spec.get('priority_adjustment')
     kwargs['shards'] = swarming_spec.get('shards', 1)
+    kwargs['tags'] = set(swarming_spec.get('tags', []))
     kwargs['upload_test_results'] = swarming_spec.get(
         'upload_test_results', True)
 
