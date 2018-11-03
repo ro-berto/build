@@ -2205,7 +2205,7 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_1/artifacts.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/darwin-x64/artifacts.zip"
+      "gs://flutter_infra/flutter/None/darwin-x64/artifacts.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2214,7 +2214,7 @@
     "infra_step": true,
     "name": "gsutil upload \"darwin-x64/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/darwin-x64/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/darwin-x64/artifacts.zip@@@"
     ]
   },
   {
@@ -2257,7 +2257,7 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_2/artifacts.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/darwin-x64/FlutterEmbedder.framework.zip"
+      "gs://flutter_infra/flutter/None/darwin-x64/FlutterEmbedder.framework.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2266,7 +2266,7 @@
     "infra_step": true,
     "name": "gsutil upload \"darwin-x64/FlutterEmbedder.framework.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/darwin-x64/FlutterEmbedder.framework.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/darwin-x64/FlutterEmbedder.framework.zip@@@"
     ]
   },
   {
@@ -2309,7 +2309,7 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_3/artifacts.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/darwin-x64.zip"
+      "gs://flutter_infra/flutter/None/android-arm-profile/darwin-x64.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2318,7 +2318,7 @@
     "infra_step": true,
     "name": "gsutil upload \"android-arm-profile/darwin-x64.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/darwin-x64.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/android-arm-profile/darwin-x64.zip@@@"
     ]
   },
   {
@@ -2361,7 +2361,7 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_4/artifacts.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm64-profile/darwin-x64.zip"
+      "gs://flutter_infra/flutter/None/android-arm64-profile/darwin-x64.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2370,7 +2370,7 @@
     "infra_step": true,
     "name": "gsutil upload \"android-arm64-profile/darwin-x64.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm64-profile/darwin-x64.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/android-arm64-profile/darwin-x64.zip@@@"
     ]
   },
   {
@@ -2413,7 +2413,7 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_5/artifacts.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/darwin-x64.zip"
+      "gs://flutter_infra/flutter/None/android-arm-release/darwin-x64.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2422,7 +2422,7 @@
     "infra_step": true,
     "name": "gsutil upload \"android-arm-release/darwin-x64.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/darwin-x64.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/android-arm-release/darwin-x64.zip@@@"
     ]
   },
   {
@@ -2465,7 +2465,7 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_6/artifacts.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm64-release/darwin-x64.zip"
+      "gs://flutter_infra/flutter/None/android-arm64-release/darwin-x64.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2474,7 +2474,7 @@
     "infra_step": true,
     "name": "gsutil upload \"android-arm64-release/darwin-x64.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm64-release/darwin-x64.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/android-arm64-release/darwin-x64.zip@@@"
     ]
   },
   {
@@ -2517,7 +2517,7 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_7/dart-sdk-darwin-x64.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/dart-sdk-darwin-x64.zip"
+      "gs://flutter_infra/flutter/None/dart-sdk-darwin-x64.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2526,7 +2526,7 @@
     "infra_step": true,
     "name": "gsutil upload dart-sdk-darwin-x64.zip",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/dart-sdk-darwin-x64.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/dart-sdk-darwin-x64.zip@@@"
     ]
   },
   {
@@ -4557,7 +4557,7 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_8/artifacts.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/ios/artifacts.zip"
+      "gs://flutter_infra/flutter/None/ios/artifacts.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4566,7 +4566,7 @@
     "infra_step": true,
     "name": "gsutil upload \"ios/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/ios/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/ios/artifacts.zip@@@"
     ]
   },
   {
@@ -4658,7 +4658,7 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_9/artifacts.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/ios-profile/artifacts.zip"
+      "gs://flutter_infra/flutter/None/ios-profile/artifacts.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4667,7 +4667,7 @@
     "infra_step": true,
     "name": "gsutil upload \"ios-profile/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/ios-profile/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/ios-profile/artifacts.zip@@@"
     ]
   },
   {
@@ -4761,7 +4761,7 @@
       "----",
       "cp",
       "[TMP_BASE]/tmp_tmp_10/artifacts.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/ios-release/artifacts.zip"
+      "gs://flutter_infra/flutter/None/ios-release/artifacts.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4770,7 +4770,7 @@
     "infra_step": true,
     "name": "gsutil upload \"ios-release/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/ios-release/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/ios-release/artifacts.zip@@@"
     ]
   },
   {
@@ -4813,7 +4813,7 @@
       "----",
       "cp",
       "[START_DIR]/src/out/release/Flutter.dSYM.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/ios-release/Flutter.dSYM.zip"
+      "gs://flutter_infra/flutter/None/ios-release/Flutter.dSYM.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4822,7 +4822,7 @@
     "infra_step": true,
     "name": "gsutil upload \"ios-release/Flutter.dSYM.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/ios-release/Flutter.dSYM.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/ios-release/Flutter.dSYM.zip@@@"
     ]
   },
   {
@@ -4877,7 +4877,7 @@
       "----",
       "cp",
       "[START_DIR]/src/out/ios-objcdoc.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/ios-objcdoc.zip"
+      "gs://flutter_infra/flutter/None/ios-objcdoc.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4886,7 +4886,7 @@
     "infra_step": true,
     "name": "gsutil upload obj-c doc",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/ios-objcdoc.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/ios-objcdoc.zip@@@"
     ]
   },
   {

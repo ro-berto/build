@@ -26,9 +26,7 @@ GOMA_JOBS = '200'
 ICU_DATA_PATH = 'third_party/icu/flutter/icudtl.dat'
 
 def GetCloudPath(api, path):
-  # TODO(eseidel): api.bot_update.last_returned_properties is supposedly a known
-  # api wart. iannucci says it will be improved at some point.
-  git_hash = api.bot_update.last_returned_properties['got_engine_revision']
+  git_hash = api.properties.get('revision')
   return 'flutter/%s/%s' % (git_hash, path)
 
 

@@ -1873,7 +1873,7 @@
       "----",
       "cp",
       "[TMP_BASE]\\tmp_tmp_1\\artifacts.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/windows-x64/artifacts.zip"
+      "gs://flutter_infra/flutter/None/windows-x64/artifacts.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -1882,7 +1882,7 @@
     "infra_step": true,
     "name": "gsutil upload \"windows-x64/artifacts.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/windows-x64/artifacts.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/windows-x64/artifacts.zip@@@"
     ]
   },
   {
@@ -1925,7 +1925,7 @@
       "----",
       "cp",
       "[TMP_BASE]\\tmp_tmp_2\\artifacts.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/windows-x64/windows-x64-embedder.zip"
+      "gs://flutter_infra/flutter/None/windows-x64/windows-x64-embedder.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -1934,7 +1934,7 @@
     "infra_step": true,
     "name": "gsutil upload \"windows-x64/windows-x64-embedder.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/windows-x64/windows-x64-embedder.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/windows-x64/windows-x64-embedder.zip@@@"
     ]
   },
   {
@@ -1977,7 +1977,7 @@
       "----",
       "cp",
       "[TMP_BASE]\\tmp_tmp_3\\artifacts.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/windows-x64.zip"
+      "gs://flutter_infra/flutter/None/android-arm-profile/windows-x64.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -1986,7 +1986,7 @@
     "infra_step": true,
     "name": "gsutil upload \"android-arm-profile/windows-x64.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-profile/windows-x64.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/android-arm-profile/windows-x64.zip@@@"
     ]
   },
   {
@@ -2029,7 +2029,7 @@
       "----",
       "cp",
       "[TMP_BASE]\\tmp_tmp_4\\artifacts.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm64-profile/windows-x64.zip"
+      "gs://flutter_infra/flutter/None/android-arm64-profile/windows-x64.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -2038,7 +2038,7 @@
     "infra_step": true,
     "name": "gsutil upload \"android-arm64-profile/windows-x64.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm64-profile/windows-x64.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/android-arm64-profile/windows-x64.zip@@@"
     ]
   },
   {
@@ -2081,7 +2081,7 @@
       "----",
       "cp",
       "[TMP_BASE]\\tmp_tmp_5\\artifacts.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/windows-x64.zip"
+      "gs://flutter_infra/flutter/None/android-arm-release/windows-x64.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -2090,7 +2090,7 @@
     "infra_step": true,
     "name": "gsutil upload \"android-arm-release/windows-x64.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm-release/windows-x64.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/android-arm-release/windows-x64.zip@@@"
     ]
   },
   {
@@ -2133,7 +2133,7 @@
       "----",
       "cp",
       "[TMP_BASE]\\tmp_tmp_6\\artifacts.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm64-release/windows-x64.zip"
+      "gs://flutter_infra/flutter/None/android-arm64-release/windows-x64.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -2142,7 +2142,7 @@
     "infra_step": true,
     "name": "gsutil upload \"android-arm64-release/windows-x64.zip\"",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/android-arm64-release/windows-x64.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/android-arm64-release/windows-x64.zip@@@"
     ]
   },
   {
@@ -2185,7 +2185,7 @@
       "----",
       "cp",
       "[TMP_BASE]\\tmp_tmp_7\\dart-sdk-windows-x64.zip",
-      "gs://flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/dart-sdk-windows-x64.zip"
+      "gs://flutter_infra/flutter/None/dart-sdk-windows-x64.zip"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client",
@@ -2194,7 +2194,7 @@
     "infra_step": true,
     "name": "gsutil upload dart-sdk-windows-x64.zip",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/9221bca00ddbd888260084def81f09543281b952/dart-sdk-windows-x64.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/None/dart-sdk-windows-x64.zip@@@"
     ]
   },
   {
