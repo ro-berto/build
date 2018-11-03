@@ -41,7 +41,7 @@ BUILDERS = freeze({
       },
       'V8 Linux64 - node.js integration': {
         'triggers': [
-          'v8_node_linux64_haswell_perf',
+          'v8_node_linux64_perf',
         ],
         'testing': {
           'platform': 'linux',
@@ -307,7 +307,7 @@ def RunSteps(api):
       api.step('fake trigger', cmd=None)
     else:
       api.v8.buildbucket_trigger(
-          'master.internal.client.v8',
+          'luci.v8-internal.ci',
           api.v8.get_changes(),
           [
             {
