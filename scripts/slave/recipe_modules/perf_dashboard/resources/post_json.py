@@ -29,8 +29,9 @@ def main():
     data = json.load(sys.stdin)
 
   headers = utils.default_headers()
-  if args.oauth_token:
-    headers['Authorization'] = 'Bearer %s' % args.oauth_token
+  if args.oauth_token_file:
+    with open(args.oauth_token_file) as oauth_token_fd:
+      headers['Authorization'] = 'Bearer %s' % oauth_token_fd.read()
 
   response = requests.post(args.url, data=data, headers=headers)
   print_response(response, args.output)
@@ -41,8 +42,8 @@ def parse_arguments():
   parser.add_argument('url', help='URL to post to.')
   parser.add_argument('-i', '--input',
                       help='Input file for JSON to pass to server')
-  parser.add_argument('-t', '--oauth-token',
-                      help='oauth token string to pass to server')
+  parser.add_argument('-t', '--oauth-token-file',
+                      help='file with oauth token string to pass to server')
   parser.add_argument('-o', '--output',
                       help='Output file for response in JSON format.')
   return parser.parse_args()

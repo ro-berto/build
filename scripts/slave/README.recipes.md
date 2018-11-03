@@ -2795,7 +2795,7 @@ Returns:
 #### **class [NdkApi](/scripts/slave/recipe_modules/ndk/api.py#7)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 ### *recipe_modules* / [perf\_dashboard](/scripts/slave/recipe_modules/perf_dashboard)
 
-[DEPS](/scripts/slave/recipe_modules/perf_dashboard/__init__.py#5): [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/perf_dashboard/__init__.py#5): [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [PerfDashboardApi](/scripts/slave/recipe_modules/perf_dashboard/api.py#16)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -5539,9 +5539,9 @@ https://skia.googlesource.com/skia/+/master/infra/bots/recipes/upload_dm_results
 test_type is expected to be 'corpus', 'javascript', or 'pixel'
 ### *recipes* / [perf\_dashboard:examples/full](/scripts/slave/recipe_modules/perf_dashboard/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/perf_dashboard/examples/full.py#5): [perf\_dashboard](#recipe_modules-perf_dashboard), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/perf_dashboard/examples/full.py#5): [perf\_dashboard](#recipe_modules-perf_dashboard), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/perf_dashboard/examples/full.py#20)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/perf_dashboard/examples/full.py#21)(api):**
 ### *recipes* / [pinpoint/builder](/scripts/slave/recipes/pinpoint/builder.py)
 
 [DEPS](/scripts/slave/recipes/pinpoint/builder.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

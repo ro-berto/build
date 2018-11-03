@@ -8,6 +8,7 @@ DEPS = [
     'recipe_engine/json',
     'recipe_engine/platform',
     'recipe_engine/properties',
+    'recipe_engine/runtime',
     'recipe_engine/step',
 ]
 
@@ -62,5 +63,6 @@ def GenTests(api):
                           buildername='multivm-windows-perf-be',
                           buildnumber=75,
                           mastername='client.dart.fyi') +
+           api.runtime(is_luci=True, is_experimental=False) +
            api.step_data('Post bisect results',
                          api.json.output(bisect_response)))

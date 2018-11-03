@@ -1,6 +1,17 @@
 [
   {
     "cmd": [
+      "luci-auth",
+      "token",
+      "-lifetime",
+      "3m"
+    ],
+    "infra_step": true,
+    "name": "get access token for default account",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]\\resources\\post_json.py",
@@ -8,7 +19,9 @@
       "-i",
       "{\"data\": \"[{\\\"buildername\\\": \\\"multivm-windows-perf-be\\\", \\\"masterid\\\": \\\"client.dart.fyi\\\", \\\"test\\\": \\\"sunspider/string-unpack-code/ref\\\", \\\"supplemental_columns\\\": {\\\"d_supplemental\\\": \\\"167808\\\"}, \\\"bot\\\": \\\"multivm-windows-perf-be\\\", \\\"value\\\": \\\"18.5\\\", \\\"buildnumber\\\": 75, \\\"master\\\": \\\"client.dart.fyi\\\", \\\"error\\\": \\\"0.5\\\", \\\"units\\\": \\\"ms\\\", \\\"revision\\\": 33241}, {\\\"buildername\\\": \\\"multivm-windows-perf-be\\\", \\\"masterid\\\": \\\"client.dart.fyi\\\", \\\"test\\\": \\\"sunspider/string-unpack-code\\\", \\\"supplemental_columns\\\": {\\\"d_supplemental\\\": \\\"167808\\\"}, \\\"bot\\\": \\\"multivm-windows-perf-be\\\", \\\"value\\\": \\\"18.4\\\", \\\"buildnumber\\\": 75, \\\"master\\\": \\\"client.dart.fyi\\\", \\\"error\\\": \\\"0.4898\\\", \\\"units\\\": \\\"ms\\\", \\\"revision\\\": 33241}]\"}",
       "-o",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "-t",
+      "extra.secret.token.should.not.be.logged"
     ],
     "name": "perf dashboard post",
     "~followup_annotations": [
@@ -22,6 +35,17 @@
   },
   {
     "cmd": [
+      "luci-auth",
+      "token",
+      "-lifetime",
+      "3m"
+    ],
+    "infra_step": true,
+    "name": "get access token for default account (2)",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]\\resources\\post_json.py",
@@ -29,7 +53,9 @@
       "-i",
       "{\"data\": \"{\\\"status\\\": \\\"completed\\\", \\\"try_job_id\\\": 1}\"}",
       "-o",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "-t",
+      "extra.secret.token.should.not.be.logged"
     ],
     "name": "Post bisect results",
     "~followup_annotations": [
