@@ -404,16 +404,16 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     sufficiently elsewhere.
     """
     skip_fragments = map(re.escape, [
-      'initialization.ensure builder cache dir',
-      'initialization.ensure_goma',
-      'build.preprocess_for_goma',
-      'build.postprocess_for_goma',
-      'initialization.read revision',
-      'initialization.swarming_client',
-      'initialization.swarming.py --version',
+      'ensure builder cache dir',
+      'ensure_goma',
+      'preprocess_for_goma',
+      'postprocess_for_goma',
+      'read revision',
+      'swarming_client',
+      'swarming.py --version',
     ])
     return self.post_process(
-        Filter().include_re(r'^((?!%s).)*$' % '|'.join(skip_fragments)))
+        Filter().include_re(r'^((?!(.*\.)?%s).)*$' % '|'.join(skip_fragments)))
 
   def version_file(self, patch_level, desc, count=1):
     # Recipe step name disambiguation.

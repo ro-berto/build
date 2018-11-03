@@ -141,6 +141,10 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "build"
+  },
+  {
     "cmd": [
       "cipd",
       "ensure",
@@ -152,8 +156,9 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
-    "name": "ensure_installed",
+    "name": "build.ensure_installed",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
@@ -179,7 +184,10 @@
       "[CACHE]/osx_sdk/XCode.app"
     ],
     "infra_step": true,
-    "name": "install xcode"
+    "name": "build.install xcode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -189,11 +197,10 @@
       "[CACHE]/osx_sdk/XCode.app"
     ],
     "infra_step": true,
-    "name": "select XCode"
-  },
-  {
-    "cmd": [],
-    "name": "build"
+    "name": "build.select XCode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -310,8 +317,78 @@
     ]
   },
   {
+    "cmd": [
+      "sudo",
+      "xcode-select",
+      "--reset"
+    ],
+    "infra_step": true,
+    "name": "build.reset XCode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "measurements"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/osx_sdk",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "measurements.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:796\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/osx_sdk/mac_toolchain",
+      "install",
+      "-kind",
+      "mac",
+      "-xcode-version",
+      "9c40b",
+      "-output-dir",
+      "[CACHE]/osx_sdk/XCode.app"
+    ],
+    "infra_step": true,
+    "name": "measurements.install xcode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "sudo",
+      "xcode-select",
+      "--switch",
+      "[CACHE]/osx_sdk/XCode.app"
+    ],
+    "infra_step": true,
+    "name": "measurements.select XCode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -360,7 +437,10 @@
       "--reset"
     ],
     "infra_step": true,
-    "name": "reset XCode"
+    "name": "measurements.reset XCode",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "jsonResult": null,

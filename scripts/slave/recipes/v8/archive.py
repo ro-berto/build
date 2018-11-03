@@ -148,7 +148,9 @@ def RunSteps(api):
     return
 
   api.v8.runhooks()
-  api.v8.compile()
+
+  with api.step.nest('build'):
+    api.v8.compile()
 
   if api.chromium.c.BUILD_CONFIG == 'Debug':
     # Debug binaries require libraries to be present in the same archive to run.

@@ -743,68 +743,73 @@ class V8Api(recipe_api.RecipeApi):
           test_spec.get_all_test_names())
       isolate_targets = sorted(list(set(self.isolate_targets + extra_targets)))
 
-      with self.m.step.nest('build'):
-        build_dir = None
-        if out_dir:  # pragma: no cover
-          build_dir = '//%s/%s' % (out_dir, self.m.chromium.c.build_config_fs)
-        if self.m.chromium.c.project_generator.tool == 'mb':
-          mb_config_rel_path = self.m.properties.get(
-              'mb_config_path', 'infra/mb/mb_config.pyl')
-          gn_args = self.m.chromium.mb_gen(
-              self.m.properties['mastername'],
-              self.m.properties['buildername'],
-              use_goma=use_goma,
-              mb_config_path=(
-                  mb_config_path or
-                  self.m.path['checkout'].join(*mb_config_rel_path.split('/'))),
-              isolated_targets=isolate_targets,
-              build_dir=build_dir,
-              gn_args_location=self.m.gn.LOGS)
+      build_dir = None
+      if out_dir:  # pragma: no cover
+        build_dir = '//%s/%s' % (out_dir, self.m.chromium.c.build_config_fs)
+      if self.m.chromium.c.project_generator.tool == 'mb':
+        mb_config_rel_path = self.m.properties.get(
+            'mb_config_path', 'infra/mb/mb_config.pyl')
+        gn_args = self.m.chromium.mb_gen(
+            self.m.properties['mastername'],
+            self.m.properties['buildername'],
+            use_goma=use_goma,
+            mb_config_path=(
+                mb_config_path or
+                self.m.path['checkout'].join(*mb_config_rel_path.split('/'))),
+            isolated_targets=isolate_targets,
+            build_dir=build_dir,
+            gn_args_location=self.m.gn.LOGS)
 
-          # Update the build environment dictionary, which is printed to the
-          # user on test failures for easier build reproduction.
-          self._update_build_environment(gn_args)
+        # Update the build environment dictionary, which is printed to the
+        # user on test failures for easier build reproduction.
+        self._update_build_environment(gn_args)
 
-          # Create logs surfacing GN arguments. This information is critical to
-          # developers for reproducing failures locally.
-          if 'gn_args' in self.build_environment:
-            self.m.step.active_result.presentation.logs['gn_args'] = (
-                self.build_environment['gn_args'].splitlines())
-        elif self.m.chromium.c.project_generator.tool == 'gn':
-          self.m.chromium.run_gn(use_goma=use_goma, build_dir=build_dir)
+        # Create logs surfacing GN arguments. This information is critical to
+        # developers for reproducing failures locally.
+        if 'gn_args' in self.build_environment:
+          self.m.step.active_result.presentation.logs['gn_args'] = (
+              self.build_environment['gn_args'].splitlines())
+      elif self.m.chromium.c.project_generator.tool == 'gn':
+        self.m.chromium.run_gn(use_goma=use_goma, build_dir=build_dir)
 
-        if use_goma:
-          kwargs['use_goma_module'] = True
-        self.m.chromium.compile(out_dir=out_dir, **kwargs)
+      if use_goma:
+        kwargs['use_goma_module'] = True
+      self.m.chromium.compile(out_dir=out_dir, **kwargs)
 
-        self.isolate_tests(isolate_targets, out_dir=out_dir)
+      self.isolate_tests(isolate_targets, out_dir=out_dir)
 
-      track_deps = self.bot_config.get('track_build_dependencies', False)
-      track_binary_size = self.bot_config.get('binary_size_tracking', {})
-      with self.maybe_nest(track_deps or track_binary_size, 'measurements'):
-        if track_deps:
-          with self.m.context(env_prefixes={'PATH': [self.depot_tools_path]}):
-            deps = self.m.python(
-                name='track build dependencies (fyi)',
-                script=self.resource('build-dep-stats.py'),
-                args=[
-                  '-C', self.build_output_dir,
-                  '-x', '/third_party/',
-                  '-o', self.m.json.output(),
-                ],
-                step_test_data=self.test_api.example_build_dependencies,
-                ok_ret='any',
-                venv=True,
-            ).json.output
-          if deps:
-            self._upload_build_dependencies(deps)
+  @property
+  def should_collect_post_compile_metrics(self):
+    return (
+        self.m.v8.bot_config.get('track_build_dependencies') or
+        self.m.v8.bot_config.get('binary_size_tracking'))
 
-        # Track binary size if specified.
-        if track_binary_size:
-          self._track_binary_size(
-            track_binary_size['path_pieces_list'],
-            track_binary_size['category'],
-          )
+  def collect_post_compile_metrics(self):
+    with self.m.osx_sdk('mac'):  # this is no-op on non-Mac hosts
+      if self.bot_config.get('track_build_dependencies', False):
+        with self.m.context(env_prefixes={'PATH': [self.depot_tools_path]}):
+          deps = self.m.python(
+              name='track build dependencies (fyi)',
+              script=self.resource('build-dep-stats.py'),
+              args=[
+                '-C', self.build_output_dir,
+                '-x', '/third_party/',
+                '-o', self.m.json.output(),
+              ],
+              step_test_data=self.test_api.example_build_dependencies,
+              ok_ret='any',
+              venv=True,
+          ).json.output
+        if deps:
+          self._upload_build_dependencies(deps)
+
+      # Track binary size if specified.
+      tracking_config = self.bot_config.get('binary_size_tracking', {})
+      if tracking_config:
+        self._track_binary_size(
+          tracking_config['path_pieces_list'],
+          tracking_config['category'],
+        )
 
   @property
   def depot_tools_path(self):

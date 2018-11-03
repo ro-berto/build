@@ -36,7 +36,7 @@ def GenTests(api):
 
   yield (
       test('custom_out_dir', out_dir='out-ref') +
-      api.v8.check_in_any_arg('build.compile', 'v8/out-ref/Release') +
-      api.v8.check_in_any_arg('build.isolate tests', 'v8/out-ref/Release') +
+      api.v8.check_in_any_arg('compile', 'v8/out-ref/Release') +
+      api.v8.check_in_any_arg('isolate tests', 'v8/out-ref/Release') +
       api.post_process(DropExpectation)
   )

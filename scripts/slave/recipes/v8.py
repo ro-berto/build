@@ -137,7 +137,11 @@ def RunSteps(api, build_config, clobber, clusterfuzz_archive, custom_deps,
         tests = v8.dedupe_tests(v8.extra_tests_from_test_spec(test_spec), tests)
 
     if v8.should_build:
-      v8.compile(test_spec)
+      with api.step.nest('build'):
+        v8.compile(test_spec)
+      if api.v8.should_collect_post_compile_metrics:
+        with api.step.nest('measurements'):
+          api.v8.collect_post_compile_metrics()
 
     if v8.should_upload_build:
       v8.upload_build()
