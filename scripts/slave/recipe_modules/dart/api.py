@@ -848,8 +848,8 @@ class DartApi(recipe_api.RecipeApi):
       if is_python:
         xvfb_cmd += ['python', '-u']
 
-    with self.m.step.nest(step_name):
-      if isolate_hash:
+    if isolate_hash:
+      with self.m.step.nest('trigger shards for %s' % step_name):
         tasks.append({
             'shards': self.shard(step_name, isolate_hash,
                                   xvfb_cmd + [script] + args,
@@ -860,26 +860,26 @@ class DartApi(recipe_api.RecipeApi):
             'args': args,
             'environment': environment,
             'step_name': step_name})
-        if local_shard:
-          args = args + [
-            '--shards=%s' % shards,
-            '--shard=%s' % shards,
-          ]
-          step_name = '%s_shard_%s' % (step_name, shards)
-        else:
-          return # Shards have been triggered, no local shard to run.
-
-      if self._is_test_py_step(script):
+      if local_shard:
         args = args + [
-            '--output_directory',
-            self.m.raw_io.output_dir(),
+          '--shards=%s' % shards,
+          '--shard=%s' % shards,
         ]
-
-      cmd = self.m.path['checkout'].join(*script.split('/'))
-      if is_python and not use_xvfb:
-        self.m.python(step_name, cmd, args=args, ok_ret=ok_ret)
+        step_name = '%s_shard_%s' % (step_name, shards)
       else:
-        self.m.step(step_name, xvfb_cmd + [cmd] + args, ok_ret=ok_ret)
+        return # Shards have been triggered, no local shard to run.
+
+    if self._is_test_py_step(script):
+      args = args + [
+          '--output_directory',
+          self.m.raw_io.output_dir(),
+      ]
+
+    cmd = self.m.path['checkout'].join(*script.split('/'))
+    if is_python and not use_xvfb:
+      self.m.python(step_name, cmd, args=args, ok_ret=ok_ret)
+    else:
+      self.m.step(step_name, xvfb_cmd + [cmd] + args, ok_ret=ok_ret)
 
 
 class StepResults:

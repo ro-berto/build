@@ -664,19 +664,6 @@
     ]
   },
   {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "Test-step 1"
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -709,23 +696,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "Test-step 1.Test-step 1",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "Test-step 2"
+    "name": "Test-step 1"
   },
   {
     "cmd": [
@@ -760,10 +731,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "Test-step 2.Test-step 2",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "Test-step 2"
   },
   {
     "cmd": [],
@@ -904,11 +872,6 @@
     ]
   },
   {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "deflake Test-step 1"
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -936,10 +899,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "deflake Test-step 1.deflake Test-step 1",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "deflake Test-step 1"
   },
   {
     "cmd": [
@@ -961,11 +921,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "deflake Test-step 2"
   },
   {
     "cmd": [
@@ -995,10 +950,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "deflake Test-step 2.deflake Test-step 2",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "deflake Test-step 2"
   },
   {
     "cmd": [

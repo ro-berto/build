@@ -180,7 +180,7 @@ def GenTests(api):
       buildnumber='1357',
       revision='3456abcd78ef',
       new_workflow_enabled=True) +
-      api.step_data('Test-step 2.Test-step 2',
+      api.step_data('Test-step 2',
                     api.raw_io.output_dir(CANNED_OUTPUT_DIR)) +
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')) +

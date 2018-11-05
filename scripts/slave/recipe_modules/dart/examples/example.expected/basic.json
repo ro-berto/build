@@ -1132,7 +1132,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "Test-step 1"
+    "name": "trigger shards for Test-step 1"
   },
   {
     "cmd": [
@@ -1240,7 +1240,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Test-step 1.[trigger] Test-step 1_shard_1",
+    "name": "trigger shards for Test-step 1.[trigger] Test-step 1_shard_1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
@@ -1364,7 +1364,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Test-step 1.[trigger] Test-step 1_shard_2",
+    "name": "trigger shards for Test-step 1.[trigger] Test-step 1_shard_2",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
@@ -1381,19 +1381,6 @@
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/130000@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "Test-step custom"
   },
   {
     "cmd": [
@@ -1416,23 +1403,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "Test-step custom.Test-step custom",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-linux-release-chrome-try"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "Test-step 2"
+    "name": "Test-step custom"
   },
   {
     "cmd": [
@@ -1469,9 +1440,8 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "Test-step 2.Test-step 2",
+    "name": "Test-step 2",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@result.log@{}@@@",
       "@@@STEP_LOG_END@result.log@@@",
       "@@@STEP_LOG_LINE@results.json@{}@@@",
@@ -1809,11 +1779,6 @@
     ]
   },
   {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "deflake Test-step 1"
-  },
-  {
     "cmd": [
       "/usr/bin/xvfb-run",
       "-a",
@@ -1843,10 +1808,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "deflake Test-step 1.deflake Test-step 1",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "deflake Test-step 1"
   },
   {
     "cmd": [
@@ -1868,11 +1830,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/sdk",
-    "name": "deflake Test-step 2"
   },
   {
     "cmd": [
@@ -1904,10 +1861,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "deflake Test-step 2.deflake Test-step 2",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "deflake Test-step 2"
   },
   {
     "cmd": [

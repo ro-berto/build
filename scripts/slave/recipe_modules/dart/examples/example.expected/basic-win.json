@@ -1138,7 +1138,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "Test-step 1"
+    "name": "trigger shards for Test-step 1"
   },
   {
     "cmd": [
@@ -1241,7 +1241,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Test-step 1.[trigger] Test-step 1_shard_1 on Windows",
+    "name": "trigger shards for Test-step 1.[trigger] Test-step 1_shard_1 on Windows",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
@@ -1360,7 +1360,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Test-step 1.[trigger] Test-step 1_shard_2 on Windows",
+    "name": "trigger shards for Test-step 1.[trigger] Test-step 1_shard_2 on Windows",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
@@ -1377,19 +1377,6 @@
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/110000@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]\\builder\\sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "Test-step 2"
   },
   {
     "cmd": [
@@ -1423,10 +1410,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "Test-step 2.Test-step 2",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "Test-step 2"
   },
   {
     "cmd": [
@@ -1492,19 +1476,6 @@
     ]
   },
   {
-    "cmd": [],
-    "cwd": "[CACHE]\\builder\\sdk",
-    "env": {
-      "BUILDBOT_BUILDERNAME": "dart2js-win10-debug-x64-firefox-try"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "Test-step dart"
-  },
-  {
     "cmd": [
       "[CACHE]\\builder\\sdk\\out\\ReleaseX64\\dart.exe",
       "--bar",
@@ -1519,10 +1490,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "Test-step dart.Test-step dart",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "Test-step dart"
   },
   {
     "cmd": [],
@@ -1535,7 +1503,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "Test-step 3"
+    "name": "trigger shards for Test-step 3"
   },
   {
     "cmd": [
@@ -1638,7 +1606,7 @@
       ]
     },
     "infra_step": true,
-    "name": "Test-step 3.[trigger] Test-step 3_shard_1 on Windows",
+    "name": "trigger shards for Test-step 3.[trigger] Test-step 3_shard_1 on Windows",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
@@ -1690,10 +1658,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "Test-step 3.Test-step 3_shard_2",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "Test-step 3_shard_2"
   },
   {
     "cmd": [
@@ -2089,11 +2054,6 @@
     ]
   },
   {
-    "cmd": [],
-    "cwd": "[CACHE]\\builder\\sdk",
-    "name": "deflake Test-step 1"
-  },
-  {
     "cmd": [
       "python",
       "-u",
@@ -2120,10 +2080,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
-    "name": "deflake Test-step 1.deflake Test-step 1",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "deflake Test-step 1"
   },
   {
     "cmd": [
@@ -2145,11 +2102,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]\\builder\\sdk",
-    "name": "deflake Test-step 2"
   },
   {
     "cmd": [
@@ -2178,10 +2130,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
-    "name": "deflake Test-step 2.deflake Test-step 2",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "deflake Test-step 2"
   },
   {
     "cmd": [
@@ -2203,11 +2152,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]\\builder\\sdk",
-    "name": "deflake Test-step 3"
   },
   {
     "cmd": [
@@ -2236,10 +2180,7 @@
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
-    "name": "deflake Test-step 3.deflake Test-step 3",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
+    "name": "deflake Test-step 3"
   },
   {
     "cmd": [
