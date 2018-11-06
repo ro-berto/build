@@ -330,6 +330,7 @@ def SetupXcode(api):
 def BuildMac(api):
   RunGN(api, '--runtime-mode', 'debug', '--no-lto')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto')
+  RunGN(api, '--runtime-mode', 'release', '--dynamic')
   RunGN(api, '--runtime-mode', 'profile', '--android')
   RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
   RunGN(api, '--runtime-mode', 'release', '--android')
@@ -338,6 +339,7 @@ def BuildMac(api):
 
   Build(api, 'host_debug_unopt')
   Build(api, 'host_debug')
+  Build(api, 'host_dynamic_release')
   RunHostTests(api, 'out/host_debug_unopt')
 
   Build(api, 'android_profile', 'flutter/lib/snapshot')
@@ -358,6 +360,10 @@ def BuildMac(api):
     'out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin',
     'out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
     'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
+    ('out/host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin',
+     'product_isolate_snapshot.bin'),
+    ('out/host_dynamic_release/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+     'product_vm_isolate_snapshot.bin'),
   ])
 
   UploadArtifacts(api, 'darwin-x64', [
@@ -480,6 +486,7 @@ def BuildIOS(api):
 def BuildWindows(api):
   RunGN(api, '--runtime-mode', 'debug')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized')
+  RunGN(api, '--runtime-mode', 'release', '--dynamic')
   RunGN(api, '--runtime-mode', 'profile', '--android')
   RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
   RunGN(api, '--runtime-mode', 'release', '--android')
@@ -487,6 +494,7 @@ def BuildWindows(api):
 
   Build(api, 'host_debug_unopt')
   Build(api, 'host_debug')
+  Build(api, 'host_dynamic_release')
   Build(api, 'android_profile', 'gen_snapshot')
   Build(api, 'android_profile_arm64', 'gen_snapshot')
   Build(api, 'android_release', 'gen_snapshot')
@@ -500,6 +508,10 @@ def BuildWindows(api):
     'out/host_debug/gen/flutter/lib/snapshot/isolate_snapshot.bin',
     'out/host_debug/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
     'out/host_debug/gen/frontend_server.dart.snapshot',
+    ('out/host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin',
+     'product_isolate_snapshot.bin'),
+    ('out/host_dynamic_release/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+     'product_vm_isolate_snapshot.bin'),
   ])
 
   UploadArtifacts(api, 'windows-x64', [
