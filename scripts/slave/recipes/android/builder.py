@@ -14,7 +14,6 @@ DEPS = [
   'depot_tools/gclient',
   'recipe_engine/path',
   'recipe_engine/properties',
-  'recipe_engine/raw_io',
   'recipe_engine/step',
   'depot_tools/tryserver',
 ]
@@ -182,9 +181,8 @@ def _RunStepsInternal(api, mastername, buildername, revision):
 
   api.chromium.runhooks()
 
-  gn_args = ''
   if bot_config.get('run_mb'):
-    gn_args = api.chromium.mb_gen(mastername, buildername, use_goma=True)
+    api.chromium.mb_gen(mastername, buildername, use_goma=True)
 
   targets = list(bot_config.get('targets', []))
   targets += _GetChromiumTestsCompileTargets(
@@ -195,9 +193,7 @@ def _RunStepsInternal(api, mastername, buildername, revision):
     apk_path = api.chromium_android.apk_path(apk_name)
     size_path = api.chromium_android.apk_path(apk_name + '.size')
     api.chromium_android.resource_sizes(apk_path, chartjson_file=True)
-    # Supersize is broken on 64 bit builds (https://crbug.com/890891).
-    if 'arm64' not in gn_args:
-      api.chromium_android.supersize_archive(apk_path, size_path)
+    api.chromium_android.supersize_archive(apk_path, size_path)
 
   upload_for_bisect = bot_config.get('upload_for_bisect')
   if upload_for_bisect:
@@ -224,7 +220,7 @@ def GenTests(api):
   # tests bots in BUILDERS
   for mastername, builders in BUILDERS.iteritems():
     for buildername in builders:
-      test = (
+      yield (
         api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
                                  _sanitize_nonalpha(buildername))) +
         api.properties.generic(buildername=buildername,
@@ -235,15 +231,3 @@ def GenTests(api):
             patchset='1',
             revision='a' * 40,
             got_revision='a' * 40))
-      if buildername == 'Android arm64 Builder Perf':
-        test += (
-          api.override_step_data('lookup GN args', api.raw_io.stream_output(
-              '\n'
-              'Writing """\\\n'
-              'goma_dir = "/b/build/slave/cache/goma_client"\n'
-              'use_goma = true\n'
-              'target_cpu = arm64\n'
-              '""" to _path_/args.gn.\n'
-              '\n'
-              '/fake-path/chromium/src/buildtools/linux64/gn gen _path_')))
-      yield test
