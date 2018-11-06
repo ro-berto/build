@@ -669,21 +669,16 @@ class V8Api(recipe_api.RecipeApi):
     if points:
       self.m.perf_dashboard.add_point(points)
 
-  def _track_binary_size(self, path_pieces_list, category):
+  def _track_binary_size(self, binary, category):
     """Track and upload binary size of configured binaries.
 
     Args:
-      path_pieces_list: List of path pieces to be joined to the build output
-          folder respectively. Each path should point to a binary to track.
+      binary: Binary name joined to the build output folder.
       category: ChromePerf category for qualifying the graph names, e.g.
           linux32 or linux64.
     """
-    files = [
-      self.build_output_dir.join(*path_pieces)
-      for path_pieces in path_pieces_list
-    ]
-
-    sizes = self.m.file.filesizes('Check binary size', files)
+    size = self.m.file.filesizes(
+        'Check binary size', [self.build_output_dir.join(binary)])[0]
 
     point_defaults = {
       'units': 'bytes',
@@ -700,17 +695,14 @@ class V8Api(recipe_api.RecipeApi):
 
     trace_prefix.append('binary_size')
 
-    points = []
-    for path_pieces, size in zip(path_pieces_list, sizes):
-      p = self.m.perf_dashboard.get_skeleton_point(
-          '/'.join(trace_prefix + [path_pieces[-1]]),
-          self.revision_number,
-          str(size),
-          bot=category,
-      )
-      p.update(point_defaults)
-      points.append(p)
-    self.m.perf_dashboard.add_point(points)
+    point = self.m.perf_dashboard.get_skeleton_point(
+        '/'.join(trace_prefix + [binary]),
+        self.revision_number,
+        str(size),
+        bot=category,
+    )
+    point.update(point_defaults)
+    self.m.perf_dashboard.add_point([point])
 
   def compile(
       self, test_spec=v8_builders.EmptyTestSpec, mb_config_path=None,
@@ -802,7 +794,7 @@ class V8Api(recipe_api.RecipeApi):
       tracking_config = self.bot_config.get('binary_size_tracking', {})
       if tracking_config:
         self._track_binary_size(
-          tracking_config['path_pieces_list'],
+          tracking_config['binary'],
           tracking_config['category'],
         )
 

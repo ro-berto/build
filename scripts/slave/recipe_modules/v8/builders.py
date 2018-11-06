@@ -243,7 +243,7 @@ BUILDERS = {
           'platform': 'linux',
         },
         'binary_size_tracking': {
-          'path_pieces_list': [['d8']],
+          'binary': 'd8',
           'category': 'linux32'
         },
       },
@@ -255,7 +255,7 @@ BUILDERS = {
         },
         'testing': {'platform': 'linux'},
         'binary_size_tracking': {
-          'path_pieces_list': [['libv8.so']],
+          'binary': 'libv8.so',
           'category': 'linux32'
         },
       },
@@ -278,7 +278,7 @@ BUILDERS = {
         },
         'track_build_dependencies': True,
         'binary_size_tracking': {
-          'path_pieces_list': [['d8']],
+          'binary': 'd8',
           'category': 'linux64'
         },
       },
@@ -293,7 +293,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
         },
         'binary_size_tracking': {
-          'path_pieces_list': [['d8.exe']],
+          'binary': 'd8.exe',
           'category': 'win32'
         },
         'testing': {
@@ -315,7 +315,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
         },
         'binary_size_tracking': {
-          'path_pieces_list': [['d8.exe']],
+          'binary': 'd8.exe',
           'category': 'win64'
         },
         'testing': {'platform': 'win'},
@@ -328,7 +328,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
         },
         'binary_size_tracking': {
-          'path_pieces_list': [['d8']],
+          'binary': 'd8',
           'category': 'mac64'
         },
         'testing': {'platform': 'mac'},
@@ -360,7 +360,7 @@ BUILDERS = {
           'TARGET_ARCH': 'arm',
         },
         'binary_size_tracking': {
-          'path_pieces_list': [['d8']],
+          'binary': 'd8',
           'category': 'linux_arm32'
         },
         'testing': {
@@ -382,7 +382,7 @@ BUILDERS = {
           'TARGET_PLATFORM': 'android',
         },
         'binary_size_tracking': {
-          'path_pieces_list': [['d8']],
+          'binary': 'd8',
           'category': 'android_arm32'
         },
         'testing': {
@@ -402,7 +402,7 @@ BUILDERS = {
           'TARGET_PLATFORM': 'android',
         },
         'binary_size_tracking': {
-          'path_pieces_list': [['d8']],
+          'binary': 'd8',
           'category': 'android_arm64'
         },
         'testing': {
