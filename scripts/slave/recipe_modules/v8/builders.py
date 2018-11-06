@@ -233,15 +233,10 @@ BUILDERS = {
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
         },
-        # TODO(machenbach): Get presubmit on swarming. Currently this builder
-        # needs to upload a legacy build because of presubmit. It currently
-        # uploads anyways because of the triggers_proxy specification.
-        'should_upload_build': True,
         'testing': {
           'properties': {
             'triggers': [
               'V8 Linux',
-              'V8 Linux - presubmit',
             ],
             'triggers_proxy': True,
           },

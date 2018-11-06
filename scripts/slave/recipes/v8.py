@@ -148,9 +148,6 @@ def RunSteps(api, build_config, clobber, clusterfuzz_archive, custom_deps,
 
     v8.maybe_create_clusterfuzz_archive(update_step)
 
-    if v8.should_download_build:
-      v8.download_build()
-
   if v8.should_test:
     test_results = v8.runtests(tests)
     v8.maybe_bisect(test_results)
@@ -761,9 +758,8 @@ def GenTests(api):
     )
   )
 
-  # Test that uploading/downloading binaries happens to/from experimental GS
-  # folder when running in LUCI experimental mode and that internal proxy
-  # builder is not triggered.
+  # Test that uploading binaries happens to experimental GS folder when running
+  # in LUCI experimental mode and that internal proxy builder is not triggered.
   yield (
       api.v8.test('client.v8', 'V8 Linux - builder', 'experimental') +
       api.runtime(is_luci=False, is_experimental=True) +
@@ -771,20 +767,6 @@ def GenTests(api):
       api.post_process(Filter(
         'build.gsutil upload', 'package build',
         'measurements.perf dashboard post'))
-  )
-
-  yield (
-      api.v8.test(
-          'client.v8',
-          'V8 Foobar',
-          'tester_experimental',
-          archive='gs://dummy-path-to-archive',
-          parent_buildername='V8 Foobar - builder',
-          parent_bot_config=release_bot_config,
-          enable_swarming=False,
-      ) +
-      api.runtime(is_luci=True, is_experimental=True) +
-      api.post_process(Filter('extract build'))
   )
 
   # Test that swarming tasks scheduled from experimental builders have low prio.
@@ -842,7 +824,7 @@ def GenTests(api):
           '--spec-path', 'target_os = [\'fuchsia\']') +
       api.v8.check_in_any_arg('build.generate_build_files', 'Debug') +
       api.v8.check_in_any_arg('build.compile', 'Debug') +
-      api.v8.check_triggers('V8 Linux', 'V8 Linux - presubmit') +
+      api.v8.check_triggers('V8 Linux') +
       api.post_process(DropExpectation)
   )
 
@@ -878,20 +860,6 @@ def GenTests(api):
         'V8 Foobar',
         '{"tests": [{"name": "numfuzz"}]}') +
     api.post_process(Filter('build.isolate tests'))
-  )
-
-  # Cover running presubmit on a builder.
-  yield (
-    api.v8.test(
-        'client.v8',
-        'V8 Foobar',
-        'presubmit',
-    ) +
-    api.v8.test_spec_in_checkout(
-        'V8 Foobar',
-        '{"tests": [{"name": "presubmit"}]}') +
-    api.post_process(MustRun, 'Presubmit') +
-    api.post_process(Filter('Presubmit'))
   )
 
   # Cover running sanitizer coverage.

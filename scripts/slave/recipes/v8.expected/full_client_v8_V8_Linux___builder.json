@@ -371,9 +371,9 @@
       "--build-url",
       "gs://chromium-v8/archives/client.v8/V8 Linux - builder",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"V8 Linux - builder\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.v8\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"v8\", \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"slavename\": \"TestSlavename\", \"triggers\": [\"V8 Linux\", \"V8 Linux - presubmit\"], \"triggers_proxy\": true, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"V8 Linux - builder\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.v8\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"v8\", \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"slavename\": \"TestSlavename\", \"triggers\": [\"V8 Linux\"], \"triggers_proxy\": true, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"V8 Linux - builder\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.v8\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"v8\", \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"slavename\": \"TestSlavename\", \"triggers\": [\"V8 Linux\", \"V8 Linux - presubmit\"], \"triggers_proxy\": true, \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"branch\": \"master\", \"buildername\": \"V8 Linux - builder\", \"buildnumber\": 571, \"gerrit_project\": \"v8/v8\", \"mastername\": \"client.v8\", \"parent_buildername\": null, \"path_config\": \"kitchen\", \"recipe\": \"v8\", \"revision\": \"deadbeefdeadbeefdeadbeefdeadbeefdeadbeef\", \"slavename\": \"TestSlavename\", \"triggers\": [\"V8 Linux\"], \"triggers_proxy\": true, \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "infra_step": true,
     "name": "package build"
@@ -399,28 +399,10 @@
             "perf": "[dummy hash for perf]"
           }
         }
-      },
-      {
-        "builder_name": "V8 Linux - presubmit",
-        "properties": {
-          "archive": "gs://chromium-v8/archives/client.v8/V8 Linux - builder",
-          "parent_build_config": "Release",
-          "parent_build_environment": {
-            "gn_args": "target_cpu = \"x86\" use_goma = true"
-          },
-          "parent_buildername": "V8 Linux - builder",
-          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "parent_got_revision_cp": "refs/heads/master@{#50110}",
-          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "swarm_hashes": {
-            "perf": "[dummy hash for perf]"
-          }
-        }
       }
     ],
     "~followup_annotations": [
-      "@@@STEP_TEXT@V8 Linux<br />V8 Linux - presubmit@@@"
+      "@@@STEP_TEXT@V8 Linux@@@"
     ]
   },
   {

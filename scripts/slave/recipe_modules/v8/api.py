@@ -486,12 +486,7 @@ class V8Api(recipe_api.RecipeApi):
 
   @property
   def should_upload_build(self):
-    return (self.bot_config.get('triggers_proxy') or
-            self.bot_config.get('should_upload_build'))
-
-  @property
-  def should_download_build(self):
-    return self.bot_type == 'tester' and not self.is_pure_swarming_tester
+    return self.bot_config.get('triggers_proxy')
 
   @property
   def relative_path_to_d8(self):
@@ -866,14 +861,6 @@ class V8Api(recipe_api.RecipeApi):
           archive_prefix=clusterfuzz_archive.get('name'),
           **kwargs
       )
-
-  def download_build(self, name_suffix='', archive=None):
-    self.m.file.rmtree('build directory' + name_suffix, self.build_output_dir)
-    self.m.archive.download_and_unzip_build(
-          'extract build' + name_suffix,
-          self.m.chromium.c.build_config_fs,
-          archive or self.m.properties.get('archive'),
-          src_dir=self.checkout_root.join('v8'))
 
   def download_isolated_json(self, revision):
     archive = 'gs://' + self.isolated_archive_path + '/%s.json' % revision

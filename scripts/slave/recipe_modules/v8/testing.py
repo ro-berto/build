@@ -583,18 +583,6 @@ class V8SwarmingTest(V8Test):
     return self.run(**kwargs)
 
 
-class V8Presubmit(BaseTest):
-  def run(self, **kwargs):
-    with self.api.context(
-        cwd=self.api.path['checkout'],
-        env_prefixes={'PATH': [self.api.v8.depot_tools_path]}):
-      self.api.python(
-        'Presubmit',
-        self.api.path['checkout'].join('tools', 'v8_presubmit.py'),
-      )
-    return TestResults.empty()
-
-
 class V8GenericSwarmingTest(BaseTest):
   # FIXME: BaseTest.rerun is an abstract method which isn't implemented in this
   # class.  Should it be abstract?
@@ -725,11 +713,6 @@ class V8GCMole(V8CompositeSwarmingTest):
           command=['tools/gcmole/run-gcmole.py', arch],
       ) for arch in ['ia32', 'x64', 'arm', 'arm64']
     ]
-
-
-V8_NON_STANDARD_TESTS = freeze({
-  'presubmit': V8Presubmit,
-})
 
 
 TOOL_TO_TEST = freeze({
@@ -911,15 +894,12 @@ class TestResults(object):
 
 
 def create_test(test_step_config, api):
-  test_cls = V8_NON_STANDARD_TESTS.get(test_step_config.name)
-  if not test_cls:
-    # TODO(machenbach): Implement swarming for non-standard tests.
-    if api.v8.bot_config.get('enable_swarming', True):
-      tools_mapping = TOOL_TO_TEST_SWARMING
-    else:
-      tools_mapping = TOOL_TO_TEST
+  if api.v8.bot_config.get('enable_swarming', True):
+    tools_mapping = TOOL_TO_TEST_SWARMING
+  else:
+    tools_mapping = TOOL_TO_TEST
 
-    # The tool the test is going to use. Default: V8 test runner (run-tests).
-    tool = api.v8.test_configs[test_step_config.name].get('tool', 'run-tests')
-    test_cls = tools_mapping[tool]
+  # The tool the test is going to use. Default: V8 test runner (run-tests).
+  tool = api.v8.test_configs[test_step_config.name].get('tool', 'run-tests')
+  test_cls = tools_mapping[tool]
   return test_cls(test_step_config, api)
