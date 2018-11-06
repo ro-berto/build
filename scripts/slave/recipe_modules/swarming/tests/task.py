@@ -12,9 +12,11 @@ from recipe_engine import post_process
 
 
 def RunSteps(api):
+  opt_dims = {60: [{'os': 'Ubuntu-14.04'}]}
   task = api.swarming.task(
       api.properties.get('task_name', 'sample_task'),
-      '0123456789012345678901234567890123456789')
+      '0123456789012345678901234567890123456789',
+      optional_dimensions=opt_dims)
   task.dimensions['os'] = api.swarming.prefered_os_dimension(
       api.platform.name)
   if api.properties.get('wait_for_capacity'):
@@ -49,5 +51,18 @@ def GenTests(api):
         command_line_contains,
         step_name='[trigger] capacity-constrained task',
         argument_sequence=['--wait-for-capacity']) +
+    api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+    api.test('optional_dimensions') +
+    api.properties(
+        task_name='optional-dimension task',
+        wait_for_capacity=True) +
+    api.post_process(
+        command_line_contains,
+        step_name='[trigger] optional-dimension task',
+        argument_sequence=[
+            '--optional-dimension', 'os', 'Ubuntu-14.04', '60']) +
     api.post_process(post_process.DropExpectation)
   )

@@ -104,6 +104,40 @@ def GenTests(api):
   )
 
   yield (
+      api.test('swarming_plus_optional_dimension') +
+      api.properties(
+          single_spec={
+              'test': 'base_unittests',
+              'swarming': {
+                  'can_use_on_swarming_builders': True,
+                  'dimension_sets': [
+                      {
+                          'os': 'Linux',
+                      },
+                  ],
+                  'optional_dimensions': {
+                      60: [{'os': 'Ubuntu-14.04'}],
+                  },
+                  'cipd_packages': [
+                      {
+                          'location': '{$HOME}/logdog',
+                          'cipd_package': 'infra/logdog/linux-386',
+                          'revision': 'git_revision:deadbeef',
+                      },
+                  ],
+              },
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+      )
+  )
+
+  yield (
       api.test('merge') +
       api.properties(
           single_spec={

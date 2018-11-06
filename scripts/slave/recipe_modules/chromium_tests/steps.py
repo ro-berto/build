@@ -979,6 +979,8 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
   swarming_spec = spec.get('swarming', {})
   if swarming_spec.get('can_use_on_swarming_builders'):
     swarming_dimension_sets = swarming_spec.get('dimension_sets')
+    swarming_optional_dimensions = swarming_spec.get(
+        'optional_dimensions')
     kwargs['expiration'] = swarming_spec.get('expiration')
     kwargs['hard_timeout'] = swarming_spec.get('hard_timeout')
     kwargs['io_timeout'] = swarming_spec.get('io_timeout')
@@ -1039,6 +1041,9 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
       new_dimensions = dict(swarming_dimensions)
       new_dimensions.update(dimensions)
       kwargs['dimensions'] = new_dimensions
+
+      # Also, add in optional dimensions.
+      kwargs['optional_dimensions'] = swarming_optional_dimensions
 
       tests.append(swarming_delegate(spec, **kwargs))
 
@@ -1501,13 +1506,15 @@ class SwarmingTest(Test):
                extra_suffix=None, priority=None, expiration=None,
                hard_timeout=None, io_timeout=None,
                waterfall_mastername=None, waterfall_buildername=None,
-               set_up=None, tear_down=None, **kwargs):
+               set_up=None, tear_down=None, optional_dimensions=None,
+               **kwargs):
     super(SwarmingTest, self).__init__(
         name, target_name=target_name,
         waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername, **kwargs)
     self._tasks = {}
     self._dimensions = dimensions
+    self._optional_dimensions = optional_dimensions
     self._extra_suffix = extra_suffix
     self._priority = priority
     self._expiration = expiration
@@ -1654,6 +1661,10 @@ class SwarmingTest(Test):
          else:
            self._tasks[suffix].dimensions[k] = v
 
+    # Add optional dimensions.
+    if self._optional_dimensions:
+        self._tasks[suffix].optional_dimensions = self._optional_dimensions
+
     # Set default value.
     if 'os' not in self._tasks[suffix].dimensions:
       self._tasks[suffix].dimensions['os'] = api.swarming.prefered_os_dimension(
@@ -1735,13 +1746,15 @@ class SwarmingGTestTest(SwarmingTest):
                override_isolate_target=None,
                cipd_packages=None, waterfall_mastername=None,
                waterfall_buildername=None, merge=None, trigger_script=None,
-               set_up=None, tear_down=None, isolate_coverage_data=False):
+               set_up=None, tear_down=None, isolate_coverage_data=False,
+               optional_dimensions=None):
     super(SwarmingGTestTest, self).__init__(
         name, dimensions, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername,
         set_up=set_up, tear_down=tear_down,
-        override_isolate_target=override_isolate_target)
+        override_isolate_target=override_isolate_target,
+        optional_dimensions=optional_dimensions)
     self._args = args or []
     self._shards = shards
     self._upload_test_results = upload_test_results
@@ -1984,12 +1997,13 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                waterfall_mastername=None, waterfall_buildername=None,
                merge=None, trigger_script=None, results_handler=None,
                set_up=None, tear_down=None, idempotent=True,
-               cipd_packages=None):
+               cipd_packages=None, optional_dimensions=None):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name, dimensions, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername,
-        set_up=set_up, tear_down=tear_down)
+        set_up=set_up, tear_down=tear_down,
+        optional_dimensions=optional_dimensions)
     self._args = args or []
     self._shards = shards
     self._upload_test_results = upload_test_results

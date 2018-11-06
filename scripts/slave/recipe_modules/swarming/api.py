@@ -446,7 +446,7 @@ class SwarmingApi(recipe_api.RecipeApi):
            task_output_dir=None, extra_args=None, idempotent=None,
            cipd_packages=None, build_properties=None, merge=None,
            trigger_script=None, named_caches=None, service_account=None,
-           raw_cmd=None, env_prefixes=None, env=None):
+           raw_cmd=None, env_prefixes=None, env=None, optional_dimensions=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -515,6 +515,10 @@ class SwarmingApi(recipe_api.RecipeApi):
       * env: a dict {ENVVAR: ENVVALUE} which instructs swarming to set the
           environment variables before invoking the command. These are applied
           on top of the default environment variables.
+      * optional_dimensions: {expiration: [{key: value]} mapping with swarming
+          dimensions that specify on what Swarming slaves tasks can run.  These
+          are similar to what is specified in dimensions but will create
+          additional 'fallback' task slice(s) with the optional dimensions.
     """
     if idempotent is None:
       idempotent = self.default_idempotent
@@ -556,6 +560,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         service_account=service_account,
         raw_cmd=raw_cmd,
         env_prefixes=env_prefixes,
+        optional_dimensions=optional_dimensions,
     )
 
   def gtest_task(self, title, isolated_hash, test_launcher_summary_output=None,
@@ -716,10 +721,20 @@ class SwarmingApi(recipe_api.RecipeApi):
       '--io-timeout', str(task.io_timeout),
       '--hard-timeout', str(task.hard_timeout),
     ]
+
     for name, value in sorted(task.dimensions.iteritems()):
       assert isinstance(value, basestring), \
         'dimension %s is not a string: %s' % (name, value)
       args.extend(['--dimension', name, value])
+
+    if task.optional_dimensions:
+      for exp, dimensions in task.optional_dimensions.iteritems():
+        for d in dimensions:
+          for name, value in d.iteritems():
+            assert isinstance(value, basestring), \
+                'optional-dimension %s is not a string: %s' % (name, value)
+            args.extend(['--optional-dimension', name, value, exp])
+
     for name, value in sorted(task.env.iteritems()):
       assert isinstance(value, basestring), \
         'env var %s is not a string: %s' % (name, value)
@@ -1369,7 +1384,7 @@ class SwarmingTask(object):
                extra_args, collect_step, task_output_dir, cipd_packages=None,
                build_properties=None, merge=None, trigger_script=None,
                named_caches=None, service_account=None, raw_cmd=None,
-               env_prefixes=None):
+               env_prefixes=None, optional_dimensions=None):
     """Configuration of a swarming task.
 
     Args:
@@ -1454,6 +1469,10 @@ class SwarmingTask(object):
       * env_prefixes: a dict {ENVVAR: [relative, paths]} which instructs
           swarming to prepend the given relative paths to the PATH-style ENVVAR
           specified.
+      * optional_dimensions: {expiration: [{key: value]} mapping with swarming
+          dimensions that specify on what Swarming slaves tasks can run.  These
+          are similar to what is specified in dimensions but will create
+          additional 'fallback' task slice(s) with the optional dimensions.
     """
 
     self._trigger_output = None
@@ -1485,6 +1504,10 @@ class SwarmingTask(object):
     self.user = user
     self.env_prefixes = {
       var: list(paths) for var, paths in (env_prefixes or {}).iteritems()}
+    if optional_dimensions:
+      self.optional_dimensions = optional_dimensions.copy()
+    else:
+      self.optional_dimensions = None
     self.wait_for_capacity = False
 
   @property

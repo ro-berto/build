@@ -237,6 +237,28 @@ def GenTests(api):
   )
 
   yield (
+      api.test('swarming_dimension_sets_plus_optional') +
+      api.properties(single_spec={
+          'name': 'base_unittests',
+          'isolate_name': 'base_unittests_run',
+          'swarming': {
+              'can_use_on_swarming_builders': True,
+              'dimension_sets': [
+                  {'os': 'Linux'},
+              ],
+              'optional_dimensions': {
+                  60: [{'os': 'Ubuntu-14.04'}],
+              },
+          },
+      }, swarm_hashes={
+            'base_unittests_run': 'ffffffffffffffffffffffffffffffffffffffff',
+      },
+      mastername='test_mastername',
+      buildername='test_buildername',
+      buildnumber=1)
+  )
+
+  yield (
       api.test('spec_error') +
       api.properties(single_spec={
           'name': 'base_unittests',
