@@ -382,7 +382,6 @@ class DartApi(recipe_api.RecipeApi):
             '--human',
             '--verbose',
             '--changed',
-            '--flaky',
             '--failing',
             '--passing']
     previous_results = 'results.json'
