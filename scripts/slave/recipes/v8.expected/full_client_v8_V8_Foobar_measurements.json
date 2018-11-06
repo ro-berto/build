@@ -1,0 +1,100 @@
+[
+  {
+    "cmd": [
+      "vpython",
+      "-u",
+      "RECIPE_MODULE[build::v8]/resources/build-dep-stats.py",
+      "-C",
+      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "-x",
+      "/third_party/",
+      "-o",
+      "/path/to/tmp/json"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/V8_Foobar/v8/third_party/depot_tools"
+      ]
+    },
+    "name": "measurements.track build dependencies (fyi)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"avg_deps\": 1.2, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"by_extension\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"h\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"avg_deps\": 53.7, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"num_files\": 53, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"top100_avg_deps\": 67.2, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"top200_avg_deps\": 55.1, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"top500_avg_deps\": 34.94@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"num_files\": 3615, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"top100_avg_deps\": 1.3@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
+      "https://chromeperf.appspot.com/add_point",
+      "-i",
+      "{\"data\": \"[{\\\"buildnumber\\\": 571, \\\"masterid\\\": \\\"client.v8\\\", \\\"units\\\": \\\"count\\\", \\\"master\\\": \\\"client.v8\\\", \\\"supplemental_columns\\\": {\\\"r_v8_git\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"a_default_rev\\\": \\\"r_v8_git\\\"}, \\\"buildername\\\": \\\"V8 Foobar\\\", \\\"test\\\": \\\"v8.infra/build_dependencies/ext_h_top500_avg_deps\\\", \\\"bot\\\": \\\"V8 Foobar\\\", \\\"value\\\": \\\"34.94\\\", \\\"revision\\\": \\\"50110\\\"}, {\\\"buildnumber\\\": 571, \\\"masterid\\\": \\\"client.v8\\\", \\\"units\\\": \\\"count\\\", \\\"master\\\": \\\"client.v8\\\", \\\"supplemental_columns\\\": {\\\"r_v8_git\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"a_default_rev\\\": \\\"r_v8_git\\\"}, \\\"buildername\\\": \\\"V8 Foobar\\\", \\\"test\\\": \\\"v8.infra/build_dependencies/ext_h_top100_avg_deps\\\", \\\"bot\\\": \\\"V8 Foobar\\\", \\\"value\\\": \\\"67.2\\\", \\\"revision\\\": \\\"50110\\\"}, {\\\"buildnumber\\\": 571, \\\"masterid\\\": \\\"client.v8\\\", \\\"units\\\": \\\"count\\\", \\\"master\\\": \\\"client.v8\\\", \\\"supplemental_columns\\\": {\\\"r_v8_git\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"a_default_rev\\\": \\\"r_v8_git\\\"}, \\\"buildername\\\": \\\"V8 Foobar\\\", \\\"test\\\": \\\"v8.infra/build_dependencies/ext_h_avg_deps\\\", \\\"bot\\\": \\\"V8 Foobar\\\", \\\"value\\\": \\\"53.7\\\", \\\"revision\\\": \\\"50110\\\"}, {\\\"buildnumber\\\": 571, \\\"masterid\\\": \\\"client.v8\\\", \\\"units\\\": \\\"count\\\", \\\"master\\\": \\\"client.v8\\\", \\\"supplemental_columns\\\": {\\\"r_v8_git\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"a_default_rev\\\": \\\"r_v8_git\\\"}, \\\"buildername\\\": \\\"V8 Foobar\\\", \\\"test\\\": \\\"v8.infra/build_dependencies/ext_h_top200_avg_deps\\\", \\\"bot\\\": \\\"V8 Foobar\\\", \\\"value\\\": \\\"55.1\\\", \\\"revision\\\": \\\"50110\\\"}]\"}",
+      "-o",
+      "/path/to/tmp/json"
+    ],
+    "name": "measurements.perf dashboard post",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "filesizes",
+      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release/d8"
+    ],
+    "infra_step": true,
+    "name": "measurements.Check binary size",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@filesizes@[BUILDER_CACHE]/V8_Foobar/v8/out/Release/d8: \t111@@@",
+      "@@@STEP_LOG_END@filesizes@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
+      "https://chromeperf.appspot.com/add_point",
+      "-i",
+      "{\"data\": \"[{\\\"buildnumber\\\": 571, \\\"masterid\\\": \\\"client.v8\\\", \\\"units\\\": \\\"bytes\\\", \\\"master\\\": \\\"client.v8\\\", \\\"supplemental_columns\\\": {\\\"r_v8_git\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"a_default_rev\\\": \\\"r_v8_git\\\"}, \\\"buildername\\\": \\\"V8 Foobar\\\", \\\"test\\\": \\\"v8.infra/binary_size/d8\\\", \\\"bot\\\": \\\"foo64\\\", \\\"value\\\": \\\"111\\\", \\\"revision\\\": \\\"50110\\\"}]\"}",
+      "-o",
+      "/path/to/tmp/json"
+    ],
+    "name": "measurements.perf dashboard post (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Failed to post to Perf Dashboard. Error response: None@@@",
+      "@@@STEP_LOG_END@json.output (invalid)@@@",
+      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
+      "@@@STEP_LOG_END@json.output (exception)@@@",
+      "@@@STEP_WARNINGS@@@"
+    ]
+  }
+]

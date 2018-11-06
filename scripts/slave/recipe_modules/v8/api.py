@@ -126,13 +126,16 @@ class V8Api(recipe_api.RecipeApi):
         default['chromium_apply_config'] = ['default_compiler', 'mb']
     return builders.get(self.m.properties.get('buildername'), default)
 
-  def update_bot_config(self, bot_config, build_config, clusterfuzz_archive,
-                        enable_swarming, target_arch, target_platform,
-                        triggers, triggers_proxy):
+  def update_bot_config(self, bot_config, binary_size_tracking, build_config,
+                        clusterfuzz_archive, enable_swarming, target_arch,
+                        target_platform, track_build_dependencies, triggers,
+                        triggers_proxy):
     """Update bot_config dict with src-side properties.
 
     Args:
       bot_config: The bot_config dict to update.
+      binary_size_tracking: Additional configurations to enable binary size
+          tracking.
       build_config: Config value for BUILD_CONFIG in chromium recipe module.
       clusterfuzz_archive: Additional configurations set for archiving builds to
           GS buckets for clusterfuzz.
@@ -140,12 +143,14 @@ class V8Api(recipe_api.RecipeApi):
       target_arch: Config value for TARGET_ARCH in chromium recipe module.
       target_platform: Config value for TARGET_PLATFORM in chromium recipe
           module.
+      track_build_dependencies: Weather to track and upload build-dependencies.
       triggers: List of tester names to trigger on success.
       triggers_proxy: Weather to trigger the internal trigger proxy.
 
     Returns:
       An updated copy of the bot_config dict.
     """
+    # TODO(machenbach): Turn the bot_config dict into a proper class.
     # Make mutable copy.
     bot_config = dict(bot_config)
     bot_config['v8_config_kwargs'] = dict(
@@ -159,8 +164,12 @@ class V8Api(recipe_api.RecipeApi):
         bot_config['v8_config_kwargs'][k] = v
     if enable_swarming is not None:
       bot_config['enable_swarming'] = enable_swarming
+    if binary_size_tracking is not None:
+      bot_config['binary_size_tracking'] = binary_size_tracking
     if clusterfuzz_archive is not None:
       bot_config['clusterfuzz_archive'] = clusterfuzz_archive
+    if track_build_dependencies is not None:
+      bot_config['track_build_dependencies'] = track_build_dependencies
     # Make mutable copy.
     bot_config['triggers'] = list(bot_config.get('triggers', []))
     bot_config['triggers'].extend(triggers or [])

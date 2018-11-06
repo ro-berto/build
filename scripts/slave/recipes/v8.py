@@ -27,6 +27,9 @@ DEPS = [
 ]
 
 PROPERTIES = {
+  # Additional configurations to enable binary size tracking. The mapping
+  # consists of "binary" and "category".
+  'binary_size_tracking': Property(default=None, kind=dict),
   # One of Release|Debug.
   'build_config': Property(default=None, kind=str),
   # Switch to clobber build dir before runhooks.
@@ -52,6 +55,8 @@ PROPERTIES = {
   'target_arch': Property(default=None, kind=str),
   # One of android|fuchsia|linux|mac|win.
   'target_platform': Property(default=None, kind=str),
+  # Weather to track and upload build-dependencies stats.
+  'track_build_dependencies': Property(default=None, kind=bool),
   # List of tester names to trigger.
   'triggers': Property(default=None, kind=list),
   # Weather to trigger the internal trigger proxy.
@@ -61,15 +66,17 @@ PROPERTIES = {
 }
 
 
-def RunSteps(api, build_config, clobber, clusterfuzz_archive, custom_deps,
-             default_targets, enable_swarming, mb_config_path, set_gclient_var,
-             target_arch, target_platform, triggers, triggers_proxy, use_goma):
+def RunSteps(api, binary_size_tracking, build_config, clobber,
+             clusterfuzz_archive, custom_deps, default_targets, enable_swarming,
+             mb_config_path, set_gclient_var, target_arch, target_platform,
+             track_build_dependencies, triggers, triggers_proxy, use_goma):
   v8 = api.v8
   v8.load_static_test_configs()
   bot_config = v8.update_bot_config(
       v8.bot_config_by_buildername(use_goma=use_goma),
-      build_config, clusterfuzz_archive, enable_swarming, target_arch,
-      target_platform, triggers, triggers_proxy,
+      binary_size_tracking, build_config, clusterfuzz_archive, enable_swarming,
+      target_arch, target_platform, track_build_dependencies,
+      triggers, triggers_proxy,
   )
   v8.apply_bot_config(bot_config)
   v8.set_gclient_custom_var(set_gclient_var)
@@ -924,3 +931,24 @@ def GenTests(api):
         'gsutil upload',
     ))
   )
+
+  # Test configurations for post-compilation build measurements.
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'measurements',
+        binary_size_tracking={
+          'binary': 'd8',
+          'category': 'foo64',
+        },
+        track_build_dependencies=True,
+    ) +
+    api.post_process(Filter(
+        'measurements.track build dependencies (fyi)',
+        'measurements.Check binary size',
+        'measurements.perf dashboard post',
+        'measurements.perf dashboard post (2)',
+    ))
+  )
+
