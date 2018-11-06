@@ -225,6 +225,14 @@ def angle_top_of_tree(c):  # pragma: no cover
   # TODO(tandrii): I think patch_projects in bare_chromium fixed this.
   c.revisions['src/third_party/angle'] = 'HEAD'
 
+@CONFIG_CTX()
+def dawn_top_of_tree(c):  # pragma: no cover
+  """Configures the top-of-tree Dawn in a Chromium checkout.
+
+  Sets up ToT instead of the DEPS-pinned revision for Dawn.
+  """
+  c.revisions['src/third_party/dawn'] = 'HEAD'
+
 # TODO(phajdan.jr): Move to proper repo and add coverage.
 @CONFIG_CTX()
 def valgrind(c):  # pragma: no cover

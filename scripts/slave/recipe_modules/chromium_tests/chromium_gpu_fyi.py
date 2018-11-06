@@ -17,7 +17,8 @@ SPEC = {
         'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
+                               'dawn_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32,
@@ -35,7 +36,8 @@ SPEC = {
         'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
+                               'dawn_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32,
@@ -286,7 +288,8 @@ SPEC = {
         'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
+                               'dawn_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -304,7 +307,8 @@ SPEC = {
         'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
+                               'dawn_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -389,7 +393,8 @@ SPEC = {
           'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
+                               'dawn_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_PLATFORM': 'win',
@@ -415,7 +420,8 @@ SPEC = {
           'build_angle_deqp_tests'
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
+                               'dawn_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -434,7 +440,8 @@ SPEC = {
         'ozone',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
+                               'dawn_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -451,7 +458,8 @@ SPEC = {
           'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
+                               'dawn_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -603,7 +611,7 @@ SPEC = {
                                 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal',
-                               'angle_top_of_tree'],
+                               'angle_top_of_tree', 'dawn_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -640,7 +648,8 @@ SPEC = {
           'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
+                               'dawn_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -658,7 +667,7 @@ SPEC = {
           'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree', 'dawn_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -877,7 +886,8 @@ SPEC = {
       'chromium_apply_config': ['mb',
                                 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
+                               'dawn_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -894,7 +904,8 @@ SPEC = {
           'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
+                               'dawn_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -912,7 +923,8 @@ SPEC = {
           'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
+      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
+                               'dawn_top_of_tree'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
