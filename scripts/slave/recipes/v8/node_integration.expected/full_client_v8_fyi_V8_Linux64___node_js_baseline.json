@@ -1,5 +1,9 @@
 [
   {
+    "cmd": [],
+    "name": "initialization"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -26,8 +30,9 @@
       ]
     },
     "infra_step": true,
-    "name": "bot_update",
+    "name": "initialization.bot_update",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
@@ -110,7 +115,15 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "gclient runhooks"
+    "name": "initialization.gclient runhooks",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_baseline/node.js",
+    "name": "build"
   },
   {
     "cmd": [
@@ -123,7 +136,10 @@
       "use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_baseline/node.js",
-    "name": "configure node.js"
+    "name": "build.configure node.js",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -131,7 +147,10 @@
       "-j8"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_baseline/node.js",
-    "name": "build node.js"
+    "name": "build.build node.js",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -139,7 +158,10 @@
       "test-addons-clean"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_baseline/node.js",
-    "name": "clean addons"
+    "name": "build.clean addons",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -148,7 +170,10 @@
       "clear-stalled"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_baseline/node.js",
-    "name": "clear stalled"
+    "name": "build.clear stalled",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -157,7 +182,10 @@
       "build-addons"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_baseline/node.js",
-    "name": "build addons"
+    "name": "build.build addons",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -166,7 +194,10 @@
       "build-addons-napi"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_baseline/node.js",
-    "name": "build addons-napi"
+    "name": "build.build addons-napi",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -175,7 +206,10 @@
       "doc-only"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_baseline/node.js",
-    "name": "build doc-only"
+    "name": "build.build doc-only",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [

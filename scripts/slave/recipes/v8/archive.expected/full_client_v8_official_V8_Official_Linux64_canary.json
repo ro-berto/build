@@ -14,8 +14,9 @@
       "gs://chromium-v8/official/canary/v8-linux64-rel-3.4.3.1.zip"
     ],
     "infra_step": true,
-    "name": "gsutil upload",
+    "name": "make archive.gsutil upload",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/canary/v8-linux64-rel-3.4.3.1.zip@@@"
     ]
   },
@@ -34,8 +35,9 @@
       "gs://chromium-v8/official/canary/v8-linux64-rel-latest.json"
     ],
     "infra_step": true,
-    "name": "gsutil upload json",
+    "name": "make archive.gsutil upload json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/canary/v8-linux64-rel-latest.json@@@"
     ]
   }

@@ -415,11 +415,11 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     return self.post_process(
         Filter().include_re(r'^((?!(.*\.)?%s).)*$' % '|'.join(skip_fragments)))
 
-  def version_file(self, patch_level, desc, count=1):
+  def version_file(self, patch_level, desc, count=1, prefix=''):
     # Recipe step name disambiguation.
     suffix = ' (%d)' % count if count > 1 else ''
     return self.override_step_data(
-        'Check %s version file%s' % (desc, suffix),
+        '%sCheck %s version file%s' % (prefix, desc, suffix),
         self.m.raw_io.stream_output(
             VERSION_FILE_TMPL % patch_level,
             stream='stdout'),

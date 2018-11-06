@@ -51,6 +51,13 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "make archive",
+    "~followup_annotations": [
+      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-mac64-dbg-3.4.3.17.zip@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -65,8 +72,9 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
-    "name": "filter build files",
+    "name": "make archive.filter build files",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Official_Mac64_Debug/v8/out/Debug/d8\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Official_Mac64_Debug/v8/out/Debug/icudtl.dat\"@@@",
@@ -80,8 +88,11 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
-    "name": "zipping",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Mac64_Debug/v8/out/Debug/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Mac64_Debug/v8/out/Debug/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/V8_Official_Mac64_Debug/v8/out/Debug\"}"
+    "name": "make archive.zipping",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Mac64_Debug/v8/out/Debug/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Mac64_Debug/v8/out/Debug/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/V8_Official_Mac64_Debug/v8/out/Debug\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -98,16 +109,10 @@
       "gs://chromium-v8/official/3.4/v8-mac64-dbg-3.4.3.17.zip"
     ],
     "infra_step": true,
-    "name": "gsutil upload",
+    "name": "make archive.gsutil upload",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/3.4/v8-mac64-dbg-3.4.3.17.zip@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "archive link",
-    "~followup_annotations": [
-      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-mac64-dbg-3.4.3.17.zip@@@"
     ]
   }
 ]

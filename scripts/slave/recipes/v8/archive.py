@@ -36,118 +36,119 @@ FIRST_BUILD_IN_MILESTONE_RE = re.compile(r'^\d+\.\d+\.\d+$')
 
 def make_archive(api, branch, version, archive_type, step_suffix='',
                  archive_suffix=''):
-  # Make a list of files to archive.
-  build_dir = api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)
-  file_list_test_data = map(str, map(build_dir.join, ['d8', 'icudtl.dat']))
-  file_list = api.python(
-      'filter build files' + step_suffix,
-      api.path['checkout'].join('tools', 'release', 'filter_build_files.py'),
-      [
-        '--dir', build_dir,
-        '--platform', api.chromium.c.TARGET_PLATFORM,
-        '--type', archive_type,
-        '--json-output', api.json.output(),
-      ],
-      infra_step=True,
-      step_test_data=lambda: api.json.test_api.output(file_list_test_data),
-  ).json.output
+  with api.step.nest('make archive' + step_suffix) as parent:
+    # Make a list of files to archive.
+    build_dir = api.chromium.c.build_dir.join(api.chromium.c.build_config_fs)
+    file_list_test_data = map(str, map(build_dir.join, ['d8', 'icudtl.dat']))
+    file_list = api.python(
+        'filter build files',
+        api.path['checkout'].join('tools', 'release', 'filter_build_files.py'),
+        [
+          '--dir', build_dir,
+          '--platform', api.chromium.c.TARGET_PLATFORM,
+          '--type', archive_type,
+          '--json-output', api.json.output(),
+        ],
+        infra_step=True,
+        step_test_data=lambda: api.json.test_api.output(file_list_test_data),
+    ).json.output
 
-  # Zip build.
-  zip_file = api.path['cleanup'].join('archive.zip')
-  package = api.zip.make_package(build_dir, zip_file)
-  map(package.add_file, map(api.path.abs_to_path, file_list))
-  package.zip('zipping' + step_suffix)
+    # Zip build.
+    zip_file = api.path['cleanup'].join('archive.zip')
+    package = api.zip.make_package(build_dir, zip_file)
+    map(package.add_file, map(api.path.abs_to_path, file_list))
+    package.zip('zipping')
 
-  # Upload to google storage bucket.
-  if api.chromium.c.TARGET_ARCH != 'intel':
-    # Only disambiguate non-intel architectures. This is closest to our naming
-    # conventions.
-    arch_name = '-%s' % api.chromium.c.TARGET_ARCH
-  else:
-    arch_name = ''
-  build_config = 'rel' if api.chromium.c.BUILD_CONFIG == 'Release' else 'dbg'
-  archive_prefix = (
-      'v8-%s%s%s%s-%s' %
-      (api.chromium.c.TARGET_PLATFORM, arch_name, api.chromium.c.TARGET_BITS,
-      archive_suffix, build_config)
-  )
-  archive_name = '%s-%s.zip' % (archive_prefix, version)
-  branch_match = RELEASE_BRANCH_RE.match(branch)
-  gs_path_suffix = branch_match.group(1) if branch_match else 'canary'
-  gs_path = 'chromium-v8/official/%s' % gs_path_suffix
-  api.gsutil.upload(
-      zip_file,
-      gs_path,
-      archive_name,
-      args=['-a', 'public-read'],
-      name='upload' + step_suffix,
-  )
-
-  if gs_path_suffix == 'canary':
-    api.gsutil.upload(
-        api.json.input({'version': version}),
-        gs_path,
-        '%s-latest.json' % archive_prefix,
-        args=['-a', 'public-read'],
-        name='upload json' + step_suffix,
+    # Upload to google storage bucket.
+    if api.chromium.c.TARGET_ARCH != 'intel':
+      # Only disambiguate non-intel architectures. This is closest to our naming
+      # conventions.
+      arch_name = '-%s' % api.chromium.c.TARGET_ARCH
+    else:
+      arch_name = ''
+    build_config = 'rel' if api.chromium.c.BUILD_CONFIG == 'Release' else 'dbg'
+    archive_prefix = (
+        'v8-%s%s%s%s-%s' %
+        (api.chromium.c.TARGET_PLATFORM, arch_name, api.chromium.c.TARGET_BITS,
+        archive_suffix, build_config)
     )
-
-  # Upload first build for the latest milestone to a known location. We use
-  # these binaries for running reference perf tests.
-  if (RELEASE_BRANCH_RE.match(branch) and
-      FIRST_BUILD_IN_MILESTONE_RE.match(version) and
-      archive_type == 'exe'):
-    platform = '%s%s%s%s' % (api.chromium.c.TARGET_PLATFORM, arch_name,
-                             api.chromium.c.TARGET_BITS, archive_suffix)
+    archive_name = '%s-%s.zip' % (archive_prefix, version)
+    branch_match = RELEASE_BRANCH_RE.match(branch)
+    gs_path_suffix = branch_match.group(1) if branch_match else 'canary'
+    gs_path = 'chromium-v8/official/%s' % gs_path_suffix
     api.gsutil.upload(
         zip_file,
-        'chromium-v8/official/refbuild',
-        'v8-%s-rel.zip' % platform,
+        gs_path,
+        archive_name,
         args=['-a', 'public-read'],
-        name='update refbuild binaries' + step_suffix,
-    )
-    api.v8.buildbucket_trigger(
-        'luci.v8-internal.ci',
-        api.v8.get_changes(),
-        [{
-          'builder_name': 'v8_refbuild_bundler',
-          'properties': {
-            'revision': api.v8.revision,
-            'platform': platform,
-          },
-        }],
-        step_name='trigger refbuild bundler' + step_suffix,
+        name='upload',
     )
 
-  api.step('archive link' + step_suffix, cmd=None)
-  api.step.active_result.presentation.links['download'] = (
-      ARCHIVE_LINK % (gs_path_suffix, archive_name))
+    if gs_path_suffix == 'canary':
+      api.gsutil.upload(
+          api.json.input({'version': version}),
+          gs_path,
+          '%s-latest.json' % archive_prefix,
+          args=['-a', 'public-read'],
+          name='upload json',
+      )
+
+    # Upload first build for the latest milestone to a known location. We use
+    # these binaries for running reference perf tests.
+    if (RELEASE_BRANCH_RE.match(branch) and
+        FIRST_BUILD_IN_MILESTONE_RE.match(version) and
+        archive_type == 'exe'):
+      platform = '%s%s%s%s' % (api.chromium.c.TARGET_PLATFORM, arch_name,
+                               api.chromium.c.TARGET_BITS, archive_suffix)
+      api.gsutil.upload(
+          zip_file,
+          'chromium-v8/official/refbuild',
+          'v8-%s-rel.zip' % platform,
+          args=['-a', 'public-read'],
+          name='update refbuild binaries',
+      )
+      api.v8.buildbucket_trigger(
+          'luci.v8-internal.ci',
+          api.v8.get_changes(),
+          [{
+            'builder_name': 'v8_refbuild_bundler',
+            'properties': {
+              'revision': api.v8.revision,
+              'platform': platform,
+            },
+          }],
+          step_name='trigger refbuild bundler',
+      )
+
+    parent.presentation.links['download'] = (
+        ARCHIVE_LINK % (gs_path_suffix, archive_name))
 
 
 def RunSteps(api):
-  # Ensure a proper branch is specified.
-  branch = api.properties.get('branch')
-  if not branch or not BRANCH_RE.match(branch):
-    api.step('Skipping due to missing release branch.', cmd=None)
-    return
+  with api.step.nest('initialization'):
+    # Ensure a proper branch is specified.
+    branch = api.properties.get('branch')
+    if not branch or not BRANCH_RE.match(branch):
+      api.step('Skipping due to missing release branch.', cmd=None)
+      return
 
-  api.v8.apply_bot_config(api.v8.bot_config_by_buildername(use_goma=True))
+    api.v8.apply_bot_config(api.v8.bot_config_by_buildername(use_goma=True))
 
-  # Opt out of using gyp environment variables.
-  api.chromium.c.use_gyp_env = False
-  api.v8.checkout()
+    # Opt out of using gyp environment variables.
+    api.chromium.c.use_gyp_env = False
+    api.v8.checkout()
 
-  version = str(api.v8.read_version_from_ref(api.v8.revision, 'head'))
-  tags = set(x.strip() for x in api.git(
-      'describe', '--tags', 'HEAD',
-      stdout=api.raw_io.output_text(),
-  ).stdout.strip().splitlines())
+    version = str(api.v8.read_version_from_ref(api.v8.revision, 'head'))
+    tags = set(x.strip() for x in api.git(
+        'describe', '--tags', 'HEAD',
+        stdout=api.raw_io.output_text(),
+    ).stdout.strip().splitlines())
 
-  if version not in tags:
-    api.step('Skipping due to missing tag.', cmd=None)
-    return
+    if version not in tags:
+      api.step('Skipping due to missing tag.', cmd=None)
+      return
 
-  api.v8.runhooks()
+    api.v8.runhooks()
 
   with api.step.nest('build'):
     api.v8.compile()
@@ -172,35 +173,40 @@ def GenTests(api):
                                revision='a' * 40,
                                path_config='kitchen') +
         api.platform(bot_config['testing']['platform'], 64) +
-        api.v8.version_file(17, 'head') +
+        api.v8.version_file(17, 'head', prefix='initialization.') +
         api.override_step_data(
-            'git describe', api.raw_io.stream_output('3.4.3.17')) +
+            'initialization.git describe',
+            api.raw_io.stream_output('3.4.3.17')) +
         api.v8.check_param_equals(
-            'bot_update', '--revision',
-            'v8@refs/branch-heads/3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') +
+            'initialization.bot_update', '--revision', 'v8@refs/branch-heads/' +
+            '3.4:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') +
         api.post_process(
-            MustRun, 'clobber', 'gclient runhooks', 'build.gn', 'build.compile',
-            'zipping', 'gsutil upload', 'archive link')
+            MustRun, 'initialization.clobber',
+            'initialization.gclient runhooks', 'build.gn', 'build.compile',
+            'make archive.zipping', 'make archive.gsutil upload')
     )
 
     if 'android' in buildername.lower():
       # Make sure bot_update specifies target_os on Android builders.
       test += api.v8.check_in_param(
-          'bot_update', '--spec-path', 'target_os = [\'android\']')
+          'initialization.bot_update', '--spec-path',
+          'target_os = [\'android\']')
 
     if buildername == 'V8 Official Arm32':
       # Make sure bot_update specifies target_cpu on Arm builders.
       test += api.v8.check_in_param(
-          'bot_update', '--spec-path', 'target_cpu = [\'arm\', \'arm64\']')
+          'initialization.bot_update', '--spec-path',
+          'target_cpu = [\'arm\', \'arm64\']')
 
     expected_steps = [
-        'build.gn', 'build.compile', 'filter build files', 'zipping',
-        'gsutil upload', 'archive link',
+        'build.gn', 'build.compile', 'make archive',
+        'make archive.filter build files', 'make archive.zipping',
+        'make archive.gsutil upload',
     ]
     if 'Debug' not in buildername:
       expected_steps.extend([
-        'filter build files (libs)', 'zipping (libs)', 'gsutil upload (libs)',
-        'archive link (libs)',
+        'make archive (libs)', 'make archive (libs).filter build files',
+        'make archive (libs).zipping', 'make archive (libs).gsutil upload',
       ])
 
     test += api.post_process(Filter(*expected_steps))
@@ -215,10 +221,12 @@ def GenTests(api):
                              buildername=buildername,
                              revision='a' * 40,
                              path_config='kitchen') +
-      api.post_process(MustRun, 'Skipping due to missing release branch.') +
       api.post_process(
-          DoesNotRun, 'gclient runhooks', 'gn', 'compile', 'zipping',
-          'gsutil upload', 'archive link') +
+        MustRun, 'initialization.Skipping due to missing release branch.') +
+      api.post_process(
+          DoesNotRun, 'initialization.gclient runhooks', 'build.gn',
+          'build.compile', 'make archive.zipping',
+          'make archive.gsutil upload') +
       api.post_process(DropExpectation)
   )
 
@@ -232,13 +240,15 @@ def GenTests(api):
                              branch='refs/branch-heads/3.4',
                              revision='a' * 40,
                              path_config='kitchen') +
-      api.v8.version_file(17, 'head') +
+      api.v8.version_file(17, 'head', prefix='initialization.') +
       api.override_step_data(
-          'git describe', api.raw_io.stream_output('3.4.3.17-blabla')) +
-      api.post_process(MustRun, 'Skipping due to missing tag.') +
+          'initialization.git describe',
+          api.raw_io.stream_output('3.4.3.17-blabla')) +
+      api.post_process(MustRun, 'initialization.Skipping due to missing tag.') +
       api.post_process(
-          DoesNotRun, 'gclient runhooks', 'gn', 'compile', 'zipping',
-          'gsutil upload', 'archive link') +
+          DoesNotRun, 'initialization.gclient runhooks', 'build.gn',
+          'build.compile', 'make archive.zipping',
+          'make archive.gsutil upload') +
       api.post_process(DropExpectation)
   )
 
@@ -250,9 +260,9 @@ def GenTests(api):
       api.properties.generic(mastername=mastername, buildername=buildername,
                              branch='refs/branch-heads/3.4',
                              revision='a' * 40, path_config='kitchen') +
-      api.v8.version_file(0, 'head') +
+      api.v8.version_file(0, 'head', prefix='initialization.') +
       api.override_step_data(
-          'git describe', api.raw_io.stream_output('3.4.3')) +
+          'initialization.git describe', api.raw_io.stream_output('3.4.3')) +
       api.post_process(Filter().include_re('.*refbuild.*'))
   )
 
@@ -264,11 +274,11 @@ def GenTests(api):
       api.properties.generic(mastername=mastername, buildername=buildername,
                              branch='refs/heads/3.4.3', revision='a' * 40,
                              path_config='kitchen') +
-      api.v8.version_file(1, 'head') +
+      api.v8.version_file(1, 'head', prefix='initialization.') +
       api.override_step_data(
-          'git describe', api.raw_io.stream_output('3.4.3.1')) +
+          'initialization.git describe', api.raw_io.stream_output('3.4.3.1')) +
       api.post_process(Filter(
-          'gsutil upload',
-          'gsutil upload json',
+          'make archive.gsutil upload',
+          'make archive.gsutil upload json',
       ))
   )

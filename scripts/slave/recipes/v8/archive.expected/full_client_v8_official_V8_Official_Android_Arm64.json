@@ -49,6 +49,13 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "make archive",
+    "~followup_annotations": [
+      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-android-arm64-rel-3.4.3.17.zip@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -63,8 +70,9 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
-    "name": "filter build files",
+    "name": "make archive.filter build files",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Official_Android_Arm64/v8/out/Release/d8\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Official_Android_Arm64/v8/out/Release/icudtl.dat\"@@@",
@@ -78,8 +86,11 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
-    "name": "zipping",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Android_Arm64/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Android_Arm64/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/V8_Official_Android_Arm64/v8/out/Release\"}"
+    "name": "make archive.zipping",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Android_Arm64/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Android_Arm64/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/V8_Official_Android_Arm64/v8/out/Release\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -96,16 +107,17 @@
       "gs://chromium-v8/official/3.4/v8-android-arm64-rel-3.4.3.17.zip"
     ],
     "infra_step": true,
-    "name": "gsutil upload",
+    "name": "make archive.gsutil upload",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/3.4/v8-android-arm64-rel-3.4.3.17.zip@@@"
     ]
   },
   {
     "cmd": [],
-    "name": "archive link",
+    "name": "make archive (libs)",
     "~followup_annotations": [
-      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-android-arm64-rel-3.4.3.17.zip@@@"
+      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-android-arm64-libs-rel-3.4.3.17.zip@@@"
     ]
   },
   {
@@ -123,8 +135,9 @@
       "/path/to/tmp/json"
     ],
     "infra_step": true,
-    "name": "filter build files (libs)",
+    "name": "make archive (libs).filter build files",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Official_Android_Arm64/v8/out/Release/d8\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Official_Android_Arm64/v8/out/Release/icudtl.dat\"@@@",
@@ -138,8 +151,11 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
-    "name": "zipping (libs)",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Android_Arm64/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Android_Arm64/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/V8_Official_Android_Arm64/v8/out/Release\"}"
+    "name": "make archive (libs).zipping",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Android_Arm64/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Android_Arm64/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/V8_Official_Android_Arm64/v8/out/Release\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -156,16 +172,10 @@
       "gs://chromium-v8/official/3.4/v8-android-arm64-libs-rel-3.4.3.17.zip"
     ],
     "infra_step": true,
-    "name": "gsutil upload (libs)",
+    "name": "make archive (libs).gsutil upload",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/3.4/v8-android-arm64-libs-rel-3.4.3.17.zip@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "archive link (libs)",
-    "~followup_annotations": [
-      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-android-arm64-libs-rel-3.4.3.17.zip@@@"
     ]
   }
 ]

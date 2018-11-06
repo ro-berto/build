@@ -1,5 +1,9 @@
 [
   {
+    "cmd": [],
+    "name": "initialization"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -26,8 +30,9 @@
       ]
     },
     "infra_step": true,
-    "name": "bot_update",
+    "name": "initialization.bot_update",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Some step text@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
@@ -111,7 +116,10 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "gclient runhooks"
+    "name": "initialization.gclient runhooks",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -124,6 +132,11 @@
     "name": "update v8"
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_integration/node.js",
+    "name": "build"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -134,7 +147,10 @@
       "use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
     "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_integration/node.js",
-    "name": "configure node.js"
+    "name": "build.configure node.js",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -142,7 +158,10 @@
       "-j8"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_integration/node.js",
-    "name": "build node.js"
+    "name": "build.build node.js",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -150,7 +169,10 @@
       "test-addons-clean"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_integration/node.js",
-    "name": "clean addons"
+    "name": "build.clean addons",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -159,7 +181,10 @@
       "clear-stalled"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_integration/node.js",
-    "name": "clear stalled"
+    "name": "build.clear stalled",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -168,7 +193,10 @@
       "build-addons"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_integration/node.js",
-    "name": "build addons"
+    "name": "build.build addons",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -177,7 +205,10 @@
       "build-addons-napi"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_integration/node.js",
-    "name": "build addons-napi"
+    "name": "build.build addons-napi",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -186,7 +217,10 @@
       "doc-only"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_integration/node.js",
-    "name": "build doc-only"
+    "name": "build.build doc-only",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -215,6 +249,13 @@
     "name": "run tests"
   },
   {
+    "cmd": [],
+    "name": "build and upload",
+    "~followup_annotations": [
+      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/node-mac-rel/node-mac-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -227,7 +268,10 @@
       "use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
     "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_integration/node.js",
-    "name": "configure node.js - install"
+    "name": "build and upload.configure node.js - install",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -242,7 +286,10 @@
       "[CLEANUP]/archive-build"
     ],
     "infra_step": true,
-    "name": "install directory"
+    "name": "build and upload.install directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -252,7 +299,10 @@
       "DESTDIR=[CLEANUP]/archive-build"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_integration/node.js",
-    "name": "build and install node.js"
+    "name": "build and upload.build and install node.js",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -260,8 +310,11 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
-    "name": "zipping",
-    "stdin": "{\"entries\": [{\"path\": \"[CLEANUP]/archive-build\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]/node-mac-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip\", \"root\": \"[CLEANUP]/archive-build\"}"
+    "name": "build and upload.zipping",
+    "stdin": "{\"entries\": [{\"path\": \"[CLEANUP]/archive-build\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]/node-mac-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip\", \"root\": \"[CLEANUP]/archive-build\"}",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -278,16 +331,10 @@
       "gs://chromium-v8/node-mac-rel/node-mac-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip"
     ],
     "infra_step": true,
-    "name": "gsutil upload",
+    "name": "build and upload.gsutil upload",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/node-mac-rel/node-mac-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "name": "Archive link",
-    "~followup_annotations": [
-      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/node-mac-rel/node-mac-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip@@@"
     ]
   },
   {

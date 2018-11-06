@@ -131,51 +131,52 @@ def _run_make(api, step_name, args):
 
 def _build_and_test(api, goma_dir):
   with api.context(cwd=api.v8.checkout_root.join('node.js')):
-    args = [
-      '--build-v8-with-gn',
-      '--build-v8-with-gn-max-jobs=%d' % api.goma.recommended_goma_jobs,
-      '--build-v8-with-gn-extra-gn-args',
-      'use_goma=true goma_dir="%s"' % goma_dir,
-    ]
+    with api.step.nest('build'):
+      args = [
+        '--build-v8-with-gn',
+        '--build-v8-with-gn-max-jobs=%d' % api.goma.recommended_goma_jobs,
+        '--build-v8-with-gn-extra-gn-args',
+        'use_goma=true goma_dir="%s"' % goma_dir,
+      ]
 
-    build_config = 'Release'
-    if api.v8.bot_config.get('is_debug', False):
-      args.append('--debug')
-      build_config = 'Debug'
+      build_config = 'Release'
+      if api.v8.bot_config.get('is_debug', False):
+        args.append('--debug')
+        build_config = 'Debug'
 
-    env = {}
-    if api.platform.is_win:
-      # TODO(machenbach): Also switch other platforms to ninja eventually.
-      # TODO(machenbach): Also linux/mac should be built with either all clang
-      # or all gcc. Currently, the node.js part is built with gcc, while v8 is
-      # built with clang.
-      args += ['--ninja', '--use-clang-cl']
-      # Configure script sets this to 0 by default.
-      env['DEPOT_TOOLS_WIN_TOOLCHAIN'] = '1'
-    with api.context(env=env):
-      api.python(
-        name='configure node.js',
-        script=api.v8.checkout_root.join('node.js', 'configure'),
-        args=args,
-      )
-
-    with goma_wrapper(api):
+      env = {}
       if api.platform.is_win:
-        # TODO(machenbach): Figure out what to do with clear-stalled and addons.
-        api.step(
-          'build node.js',
-          ['ninja', '-C', api.path.join('out', build_config)],
+        # TODO(machenbach): Also switch other platforms to ninja eventually.
+        # TODO(machenbach): Also linux/mac should be built with either all clang
+        # or all gcc. Currently, the node.js part is built with gcc, while v8 is
+        # built with clang.
+        args += ['--ninja', '--use-clang-cl']
+        # Configure script sets this to 0 by default.
+        env['DEPOT_TOOLS_WIN_TOOLCHAIN'] = '1'
+      with api.context(env=env):
+        api.python(
+          name='configure node.js',
+          script=api.v8.checkout_root.join('node.js', 'configure'),
+          args=args,
         )
-      else:
-        _run_make(api, 'build node.js', ['-j8'])
-        _run_make(api, 'clean addons', ['test-addons-clean'])
 
-        # TODO(machenbach): This contains all targets test-ci depends on.
-        # Migrate this to ninja.
-        _run_make(api, 'clear stalled', ['-j8', 'clear-stalled'])
-        _run_make(api, 'build addons', ['-j8', 'build-addons'])
-        _run_make(api, 'build addons-napi', ['-j8', 'build-addons-napi'])
-        _run_make(api, 'build doc-only', ['-j8', 'doc-only'])
+      with goma_wrapper(api):
+        if api.platform.is_win:
+          # TODO(machenbach): Figure out what to do with clear-stalled and addons.
+          api.step(
+            'build node.js',
+            ['ninja', '-C', api.path.join('out', build_config)],
+          )
+        else:
+          _run_make(api, 'build node.js', ['-j8'])
+          _run_make(api, 'clean addons', ['test-addons-clean'])
+
+          # TODO(machenbach): This contains all targets test-ci depends on.
+          # Migrate this to ninja.
+          _run_make(api, 'clear stalled', ['-j8', 'clear-stalled'])
+          _run_make(api, 'build addons', ['-j8', 'build-addons'])
+          _run_make(api, 'build addons-napi', ['-j8', 'build-addons-napi'])
+          _run_make(api, 'build doc-only', ['-j8', 'doc-only'])
 
     api.step(
       'run cctest',
@@ -205,54 +206,54 @@ def _build_and_test(api, goma_dir):
     )
 
 def _build_and_upload(api, goma_dir):
-  with api.context(cwd=api.v8.checkout_root.join('node.js')):
-    api.python(
-      name='configure node.js - install',
-      script=api.v8.checkout_root.join('node.js', 'configure'),
-      args=[
-        '--prefix=/',
-        '--tag=v8-build-%s' % api.v8.revision,
-        '--build-v8-with-gn',
-        '--build-v8-with-gn-max-jobs=%d' % api.goma.recommended_goma_jobs,
-        '--build-v8-with-gn-extra-gn-args',
-        'use_goma=true goma_dir="%s"' % goma_dir,
-      ],
-    )
-
-  archive_dir = api.path['cleanup'].join('archive-build')
-  archive_name = ('node-%s-rel-%s-%s.zip' %
-                  (api.platform.name, api.v8.revision_number, api.v8.revision))
-  zip_file = api.path['cleanup'].join(archive_name)
-
-  # Make archive directory.
-  api.file.ensure_directory('install directory', archive_dir)
-
-  # Build and install.
-  with goma_wrapper(api):
+  with api.step.nest('build and upload') as parent:
     with api.context(cwd=api.v8.checkout_root.join('node.js')):
-      _run_make(
-          api, 'build and install node.js',
-          ['-j8', 'install', 'DESTDIR=%s' % archive_dir],
+      api.python(
+        name='configure node.js - install',
+        script=api.v8.checkout_root.join('node.js', 'configure'),
+        args=[
+          '--prefix=/',
+          '--tag=v8-build-%s' % api.v8.revision,
+          '--build-v8-with-gn',
+          '--build-v8-with-gn-max-jobs=%d' % api.goma.recommended_goma_jobs,
+          '--build-v8-with-gn-extra-gn-args',
+          'use_goma=true goma_dir="%s"' % goma_dir,
+        ],
       )
 
-  # Zip build.
-  package = api.zip.make_package(archive_dir, zip_file)
-  package.add_directory(archive_dir)
-  package.zip('zipping')
+    archive_dir = api.path['cleanup'].join('archive-build')
+    archive_name = ('node-%s-rel-%s-%s.zip' %
+                    (api.platform.name, api.v8.revision_number, api.v8.revision))
+    zip_file = api.path['cleanup'].join(archive_name)
 
-  # Upload to google storage bucket.
-  if api.runtime.is_experimental:
-    api.step('fake upload to GS', cmd=None)
-  else:
-    api.gsutil.upload(
-      zip_file,
-      'chromium-v8/node-%s-rel' % api.platform.name,
-      archive_name,
-      args=['-a', 'public-read'],
-    )
+    # Make archive directory.
+    api.file.ensure_directory('install directory', archive_dir)
 
-  api.step('Archive link', cmd=None)
-  api.step.active_result.presentation.links['download'] = (
+    # Build and install.
+    with goma_wrapper(api):
+      with api.context(cwd=api.v8.checkout_root.join('node.js')):
+        _run_make(
+            api, 'build and install node.js',
+            ['-j8', 'install', 'DESTDIR=%s' % archive_dir],
+        )
+
+    # Zip build.
+    package = api.zip.make_package(archive_dir, zip_file)
+    package.add_directory(archive_dir)
+    package.zip('zipping')
+
+    # Upload to google storage bucket.
+    if api.runtime.is_experimental:
+      api.step('fake upload to GS', cmd=None)
+    else:
+      api.gsutil.upload(
+        zip_file,
+        'chromium-v8/node-%s-rel' % api.platform.name,
+        archive_name,
+        args=['-a', 'public-read'],
+      )
+
+  parent.presentation.links['download'] = (
       ARCHIVE_LINK % (api.platform.name, archive_name))
 
 
@@ -263,10 +264,11 @@ def RunSteps(api):
   # Opt out of using gyp environment variables.
   api.chromium.c.use_gyp_env = False
   api.gclient.apply_config('node_js')
-  v8.checkout()
-  v8.runhooks()
 
-  goma_dir = api.goma.ensure_goma()
+  with api.step.nest('initialization'):
+    v8.checkout()
+    v8.runhooks()
+    goma_dir = api.goma.ensure_goma()
 
   if v8.bot_config.get('baseline_only', False):
     _build_and_test(api, goma_dir)
