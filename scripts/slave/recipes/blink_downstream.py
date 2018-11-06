@@ -174,8 +174,6 @@ def RunSteps(api):
         name_suffix=' (with patch)',
     )
 
-    api.chromium.runtest('webkit_unit_tests', xvfb=True)
-
     def component_pinned_fn(_failing_steps):
       bot_update_json = step_result.json.output
       api.gclient.c.revisions['src'] = str(

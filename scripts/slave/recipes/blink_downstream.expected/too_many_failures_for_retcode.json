@@ -570,36 +570,6 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
-      "--target",
-      "Release",
-      "--xvfb",
-      "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Linux 64\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"V8-Blink Linux 64\", \"buildnumber\": 571, \"mastername\": \"client.v8.fyi\", \"path_config\": \"kitchen\", \"recipe\": \"blink_downstream\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--step-name=webkit_unit_tests",
-      "--builder-name=V8-Blink Linux 64",
-      "--slave-name=test_bot",
-      "--build-number=571",
-      "webkit_unit_tests"
-    ],
-    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
-    "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "webkit_unit_tests"
-  },
-  {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
     "name": "test_pre_run"
