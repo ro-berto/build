@@ -137,6 +137,27 @@ class TestResults(object):
         'SKIP',
     )
 
+    def result_is_regression(actual_result, expected_results):
+      """Returns whether a failed result is regression.
+
+      The logic here should match the calculation of is_regression: cannot use
+      is_regression directly though because is_regression only reflects the
+      *last* result.
+      Reference: https://chromium.googlesource.com/chromium/src/+/f481306ad989755ebe61cfed4ab2a4fa53044b29/third_party/blink/tools/blinkpy/web_tests/models/test_expectations.py
+
+      Args:
+        actual_result: actual result of a test execution.
+        expected_results: set of results listed in test_expectations.
+      """
+      local_expected = set(expected_results)
+      if not local_expected:
+        local_expected = {'PASS'}
+
+      if actual_result in ('TEXT', 'AUDIO', 'IMAGE', 'IMAGE+TEXT'
+                           ) and 'FAIL' in local_expected:
+        return True
+      return actual_result in local_expected
+
     for (test, result) in self.tests.iteritems():
       key = 'unexpected_' if result.get('is_unexpected') else ''
       data = result['actual']
@@ -172,8 +193,8 @@ class TestResults(object):
           test, {'pass_count': 0, 'fail_count': 0})
       for actual_result in actual_results:
         if (actual_result in failing_statuses and
-            actual_result not in expected_results):
-          # Only considers an unexpected failure as failure.
+            not result_is_regression(actual_result, expected_results)):
+          # Only considers a regression (unexpected failure) as a failure.
           self.pass_fail_counts[test]['fail_count'] += 1
         elif actual_result not in skipping_statuses:
           # Considers passing runs (expected or unexpected) and expected failing

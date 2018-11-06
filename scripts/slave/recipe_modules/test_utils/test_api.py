@@ -154,9 +154,12 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     return per_shard_results
 
   def generate_json_test_results(self, shards, isolated_script_passing,
-                                 benchmark_enabled):
+                                 benchmark_enabled, customized_test_results):
     per_shard_results = []
     for i in xrange(shards):
+      if customized_test_results:
+        per_shard_results.append(customized_test_results)
+        continue
       jsonish_results = {
         'interrupted': False,
         'path_delimiter': '.',
@@ -233,6 +236,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
                                     benchmark_enabled=True,
                                     corrupt=False,
                                     unknown=False,
+                                    customized_test_results=None
                                     ):
     """Produces a test results' compatible json for isolated script tests. """
     if not missing_shards:
@@ -259,7 +263,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     if use_json_test_format:
       assert valid is None, "valid flag not used in full JSON format."
       per_shard_results = self.generate_json_test_results(
-          shards, isolated_script_passing, benchmark_enabled)
+          shards, isolated_script_passing, benchmark_enabled,
+          customized_test_results)
     else:
       if valid is None:
         valid = True

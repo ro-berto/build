@@ -229,6 +229,77 @@ def GenTests(api):
   )
 
   yield (
+      api.test('expected_failures') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
+      api.properties(
+          buildnumber=123,
+          swarm_hashes={
+            'webkit_layout_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp=123456,
+          test_filter=['test1', 'test2'],
+          repeat_count=20) +
+      api.override_step_data(
+          'webkit_layout_tests on Intel GPU on Linux (with patch)',
+          api.swarming.canned_summary_output(failure=True)
+          + api.test_utils.canned_isolated_script_output(
+              passing=False, swarming=True, benchmark_enabled=True,
+              isolated_script_passing=False,
+              shards=1, use_json_test_format=True,
+              customized_test_results={
+                'interrupted': False,
+                'path_delimiter': '.',
+                'version': 3,
+                'seconds_since_epoch': 14000000,
+                'num_failures_by_type': {
+                  'FAIL': 2,
+                  'PASS': 0
+                },
+                'tests': {
+                  'test1': {
+                    'Test1': {
+                      'expected': '',
+                      'actual': 'FAIL'
+                    },
+                    'Test2': {
+                      'expected': 'FAIL',
+                      'actual': 'TEXT'
+                    },
+                    'Test3': {
+                      'expected': 'FAIL',
+                      'actual': 'PASS'
+                    },
+                    'Test4': {
+                      'expected': '',
+                      'actual': 'PASS'
+                    }
+                  }
+                },
+              }),
+          retcode=0) +
+      api.post_process(
+          verify_log_fields,
+          {'pass_fail_counts': {
+              'test1.Test1': {
+                  'pass_count': 0,
+                  'fail_count': 1},
+              'test1.Test2': {
+                  'pass_count': 1,
+                  'fail_count': 0},
+              'test1.Test3': {
+                  'pass_count': 1,
+                  'fail_count': 0},
+              'test1.Test4': {
+                  'pass_count': 1,
+                  'fail_count': 0}}}) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
       api.test('customized_test_options') +
       api.properties.generic(
           mastername='chromium.linux',
