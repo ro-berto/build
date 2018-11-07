@@ -6,7 +6,7 @@ from recipe_engine import recipe_api
 import json
 
 BLACKLIST = (
-    '^(out|xcodebuild)[/\\\\](Release|Debug|Product)\w*[/\\\\]generated_tests')
+    r'^(out|xcodebuild)[/\\](Release|Debug|Product)\w*[/\\](generated_tests|obj)[/\\]')
 # TODO(athom): move to third_party when swarming_client.path has a setter
 SWARMING_CLIENT_PATH = 'tools/swarming_client'
 SWARMING_CLIENT_REPO = (
