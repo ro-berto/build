@@ -87,6 +87,11 @@ def merge_shard_results(
     # TODO(machenbach): Implement using a tag in the test results that makes
     # the step know they're incomplete.
 
+  # Handle the case when all shards fail. Return minimalistic dict that has all
+  # fields that a calling recipe expects to avoid recipe-level exceptions.
+  if len(missing_shards) == len(summary['shards']):
+    return [{'slowest_tests': [], 'results': []}]
+
   # Each shard must have used the same arch and mode configuration.
   assert len(set(archs)) == 1
   assert len(set(modes)) == 1
