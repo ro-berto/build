@@ -13,7 +13,8 @@ def config(name,
            chromium_config='clang_tot_linux',
            ninja_confirm_noop=True,
            target_arch='intel',
-           target_bits=64):
+           target_bits=64,
+           sizes=True):
   cfg = {
     'chromium_config': chromium_config,
     'chromium_apply_config': [
@@ -30,9 +31,6 @@ def config(name,
     'testing': {
       'platform': 'linux',
     },
-    'tests': {
-      steps.SizesStep(RESULTS_URL, name)
-    },
 
     # TODO(dpranke): Get rid of this flag, it's a misfeature. This was
     # added to allow the bots to run `ninja` instead of `ninja all`
@@ -41,6 +39,9 @@ def config(name,
     # automatically. This shouldn't be configurable per bot.
     'add_tests_as_compile_targets': False,
   }
+
+  if sizes:
+    cfg['tests'] = { steps.SizesStep(RESULTS_URL, name) }
 
   if android_config:
       cfg['android_config'] = android_config
@@ -579,15 +580,19 @@ SPEC['builders'].update([
            build_config='Debug'),
 
     config('ToTLinuxASan',
-           chromium_config='clang_tot_linux_asan'),
+           chromium_config='clang_tot_linux_asan',
+           sizes=False),
 
     config('ToTLinuxASanLibfuzzer',
-           chromium_config='clang_tot_linux_asan'),
+           chromium_config='clang_tot_linux_asan',
+           sizes=False),
 
-    config('ToTLinuxMSan'),
+    config('ToTLinuxMSan',
+           sizes=False),
 
     config('ToTLinuxThinLTO'),
 
     config('ToTLinuxUBSanVptr',
-           chromium_config='clang_tot_linux_ubsan_vptr'),
+           chromium_config='clang_tot_linux_ubsan_vptr',
+           sizes=False),
 ])
