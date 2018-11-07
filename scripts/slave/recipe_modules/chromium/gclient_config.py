@@ -25,16 +25,18 @@ def chromium_bare(c):
   }
   m = c.got_revision_reverse_mapping
   m['got_revision'] = 'src'
+  m['got_angle_revision'] = 'src/third_party/angle'
+  m['got_buildtools_revision'] = 'src/buildtools'
+  m['got_dawn_revision'] = 'src/third_party/dawn'
   m['got_nacl_revision'] = 'src/native_client'
   m['got_swarming_client_revision'] = 'src/tools/swarming_client'
   m['got_v8_revision'] = 'src/v8'
-  m['got_angle_revision'] = 'src/third_party/angle'
   m['got_webrtc_revision'] = 'src/third_party/webrtc'
-  m['got_buildtools_revision'] = 'src/buildtools'
 
   p = c.parent_got_revision_mapping
   p['parent_got_revision'] = None
   p['parent_got_angle_revision'] = 'angle_revision'
+  p['parent_got_dawn_revision'] = 'dawn_revision'
   p['parent_got_nacl_revision'] = 'nacl_revision'
   p['parent_got_swarming_client_revision'] = 'swarming_revision'
   p['parent_got_v8_revision'] = 'v8_revision'
@@ -44,6 +46,8 @@ def chromium_bare(c):
   p['https://chromium.googlesource.com/chromium/src'] = ('src', None)
   p['https://chromium.googlesource.com/angle/angle'] = (
       'src/third_party/angle', None)
+  p['https://dawn.googlesource.com/dawn'] = (
+      'src/third_party/dawn', None)
   p['https://chromium.googlesource.com/chromium/buildtools'] = (
       'src/buildtools', 'HEAD')
   p['https://chromium.googlesource.com/catapult'] = (
