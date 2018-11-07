@@ -21,24 +21,33 @@ CELAB_REPO = "https://chromium.googlesource.com/enterprise/cel"
 
 def RunSteps(api):
   # 1. Checkout the CELab repo
-  goroot = api.path['start_dir'].join('go')
-  srcroot = goroot.join('src', "chromium.googlesource.com", "enterprise")
-  api.file.ensure_directory('init srcroot if not exists', srcroot)
+  go_root = api.path['start_dir'].join('go')
+  src_root = go_root.join('src', "chromium.googlesource.com", "enterprise")
+  api.file.ensure_directory('init src_root if not exists', src_root)
 
-  with api.context(cwd=srcroot):
+  with api.context(cwd=src_root):
     api.gclient.set_config('celab')
     api.bot_update.ensure_checkout()
     api.gclient.runhooks()
-
-  # 2. Build CELab
   checkout = api.path['checkout']
-  goenv = {'GOPATH': goroot}
 
-  with api.context(cwd=checkout, env=goenv):
+  # 2. Install Go & Protoc
+  bootstrap_script = str(checkout.join('infra', 'bootstrap.py'))
+  bootstrap_root = api.path['start_dir'].join("bootstrap")
+  api.python('celab bootstrap', bootstrap_script, [str(bootstrap_root)])
+  add_paths = [
+    go_root.join('bin'),
+    bootstrap_root.join('golang', 'go', 'bin'),
+    bootstrap_root.join('protoc', 'bin'),
+  ]
+
+  # 3. Build CELab
+  goenv = {"GOPATH": go_root}
+  with api.context(cwd=checkout, env=goenv, env_suffixes={'PATH': add_paths}):
     api.python('install deps', 'build.py', ['deps', '--install', '--verbose'])
     api.python('build', 'build.py', ['build', '--verbose'])
 
-  # 3. Upload binaries for CI builds
+  # 4. Upload binaries for CI builds
   if api.buildbucket.build.builder.bucket == 'ci':
     today = api.time.utcnow().date()
     gs_dest = '%s/%s/%s' % (

@@ -12,7 +12,7 @@
       "[START_DIR]/go/src/chromium.googlesource.com/enterprise"
     ],
     "infra_step": true,
-    "name": "init srcroot if not exists"
+    "name": "init src_root if not exists"
   },
   {
     "cmd": [
@@ -141,6 +141,15 @@
     "cmd": [
       "python",
       "-u",
+      "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/infra/bootstrap.py",
+      "[START_DIR]/bootstrap"
+    ],
+    "name": "celab bootstrap"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "build.py",
       "deps",
       "--install",
@@ -149,6 +158,13 @@
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
     "env": {
       "GOPATH": "[START_DIR]/go"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "[START_DIR]/go/bin",
+        "[START_DIR]/bootstrap/golang/go/bin",
+        "[START_DIR]/bootstrap/protoc/bin"
+      ]
     },
     "name": "install deps"
   },
@@ -163,6 +179,13 @@
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
     "env": {
       "GOPATH": "[START_DIR]/go"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "[START_DIR]/go/bin",
+        "[START_DIR]/bootstrap/golang/go/bin",
+        "[START_DIR]/bootstrap/protoc/bin"
+      ]
     },
     "name": "build"
   },
