@@ -97,6 +97,9 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       isolate_map_paths = List(Path),
     ),
     build_dir = Single(Path),
+    code_coverage = ConfigGroup(
+        clang_instrumented_paths_file = Single(Path),
+    ),
     cros_sdk = ConfigGroup(
       external = Single(bool, empty_val=True, required=False),
       args = List(basestring),
@@ -241,6 +244,16 @@ def ninja(c):
   if c.TARGET_CROS_BOARD:
     out_path += '_%s' % (c.TARGET_CROS_BOARD,)
   c.build_dir = c.CHECKOUT_PATH.join(out_path)
+
+@config_ctx()
+def partial_coverage_instrumentation(c):
+  # Location of input file for the use of the code coverage compile wrapper.
+  # See:
+  # https://chromium.googlesource.com/chromium/src/+/master/docs/clang_code_coverage_wrapper.md
+  c.code_coverage.clang_instrumented_paths_file = c.build_dir.join(
+      'coverage_instrumentation_input_file.txt')
+  c.gn_args.append('coverage_instrumentation_input_file = "%s"' %
+                   c.code_coverage.clang_instrumented_paths_file)
 
 @config_ctx()
 def goma_failfast(c):

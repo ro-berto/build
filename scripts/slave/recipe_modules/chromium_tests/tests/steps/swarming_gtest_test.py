@@ -39,6 +39,7 @@ def RunSteps(api):
   try:
     test.pre_run(api, '')
     test.run(api, '')
+    assert test.runs_on_swarming and test.is_gtest
   finally:
     api.step('details', [])
     api.step.active_result.presentation.logs['details'] = [

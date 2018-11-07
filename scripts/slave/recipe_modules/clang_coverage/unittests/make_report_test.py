@@ -28,38 +28,55 @@ class MakeReportTest(unittest.TestCase):
       # Not the real path.
       llvm_cov = '/usr/bin/llvm_cov'
       binaries = ['binary1', 'binary2']
+      sources = ['base/file1.cc', 'base/file2.cc']
 
-      # Test successful call.
+      # Test successful call, without sources.
       args = [
           'make_report.py', '--report-directory', out_dir, '--profdata-path',
-          profdata_file, '--llvm-cov', llvm_cov
-      ] + binaries
+          profdata_file, '--llvm-cov', llvm_cov, '--binaries',
+      ]
+      args.extend(binaries)
       with mock.patch('os.path.exists'):
         with mock.patch('os.path.isfile'):
           with mock.patch('os.access'):
             with mock.patch('sys.argv', args):
               make_report.main()
       self.assertEqual(
-          mock.call(llvm_cov, profdata_file, out_dir, binaries),
+          mock.call(llvm_cov, profdata_file, out_dir, binaries, None),
+          mock_gen_report.call_args)
+
+
+      # With sources.
+      args.append('--sources')
+      args.extend(sources)
+      with mock.patch('os.path.exists'):
+        with mock.patch('os.path.isfile'):
+          with mock.patch('os.access'):
+            with mock.patch('sys.argv', args):
+              make_report.main()
+      self.assertEqual(
+          mock.call(llvm_cov, profdata_file, out_dir, binaries, sources),
           mock_gen_report.call_args)
 
       # Test validation.
       args = [
           'make_report.py', '--report-directory', out_dir, '--profdata-path',
-          profdata_file, '--llvm-cov', llvm_cov
-      ] + binaries
+          profdata_file, '--llvm-cov', llvm_cov, '--binaries',
+      ]
+      args.extend(binaries)
+      args.append('--sources')
+      args.extend(sources)
       with mock.patch('sys.argv', args):
         with mock.patch('os.path.isfile'):
           with mock.patch('os.path.exists') as mock_exists:
             with mock.patch('os.access') as mock_access:
               # Report dir does not exist.
-              with self.assertRaisesRegexp(
-                  RuntimeError, '.*Output directory.*'):
+              with self.assertRaisesRegexp(RuntimeError,
+                                           '.*Output directory.*'):
                 mock_exists.side_effect = lambda x: 'out-dir' not in x
                 make_report.main()
               # Profdata does not exist
-              with self.assertRaisesRegexp(
-                  RuntimeError, '.*profdata.*'):
+              with self.assertRaisesRegexp(RuntimeError, '.*profdata.*'):
                 mock_exists.side_effect = lambda x: 'profdata' not in x
                 make_report.main()
               # llvm-cov is not executable.
@@ -88,13 +105,15 @@ class MakeReportTest(unittest.TestCase):
       # Not the real path.
       llvm_cov = '/usr/bin/llvm_cov'
       binaries = ['binary1', 'binary2']
-      reporter.generate_report(llvm_cov, profdata_file, out_dir, binaries)
+      sources = ['base/file1.cc', 'base/file2.cc']
+      reporter.generate_report(llvm_cov, profdata_file, out_dir, binaries,
+                               sources)
       self.assertEqual(
           mock.call([
               '/usr/bin/llvm_cov', 'show', '-format=html',
               '-output-dir=out-dir', '-instr-profile=merge.profdata',
               '-Xdemangler', 'c++filt', '-Xdemangler', '-n', 'binary1',
-              '-object', 'binary2'
+              '-object', 'binary2', 'base/file1.cc', 'base/file2.cc'
           ]), mock_run.call_args)
 
 

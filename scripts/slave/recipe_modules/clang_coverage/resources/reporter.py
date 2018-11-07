@@ -10,7 +10,7 @@ import subprocess
 
 
 def _call_cov_tool(cov_tool_path, profile_input_file_path,
-                   report_output_dir_path, binaries):
+                   report_output_dir_path, binaries, sources):
   """Calls the llvm-cov tool.
 
   Args:
@@ -20,6 +20,8 @@ def _call_cov_tool(cov_tool_path, profile_input_file_path,
         are to be written.
     binaries (list of str): list of paths to the instrumented executables to
         create a report for.
+    sources (list of str): list of paths to the source files to include in the
+        report, includes all if not specified.
 
   Raises:
     CalledProcessError: An error occurred generating the report.
@@ -35,6 +37,8 @@ def _call_cov_tool(cov_tool_path, profile_input_file_path,
     ]
     for binary in binaries[1:]:
       subprocess_cmd.extend(['-object', binary])
+    if sources:
+      subprocess_cmd.extend(sources)
 
     output = subprocess.check_output(subprocess_cmd)
     logging.debug('Report generation output: %s', output)
@@ -45,7 +49,8 @@ def _call_cov_tool(cov_tool_path, profile_input_file_path,
   logging.info('Report created in: "%s".', report_output_dir_path)
 
 
-def generate_report(llvm_cov, profdata_path, report_directory, binaries):
+def generate_report(llvm_cov, profdata_path, report_directory, binaries,
+                    sources=None):
   """Generates an html report for profile data using llvm-cov.
 
   Args:
@@ -53,5 +58,7 @@ def generate_report(llvm_cov, profdata_path, report_directory, binaries):
     profdata_path (str): The path to the merged input profile.
     report_directory (str): Where to write the report.
     binaries (list of str): The binaries to write a report for.
+    sources (list of str): list of paths to the source files to include in the
+        report, includes all if not specified.
   """
-  _call_cov_tool(llvm_cov, profdata_path, report_directory, binaries)
+  _call_cov_tool(llvm_cov, profdata_path, report_directory, binaries, sources)

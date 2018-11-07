@@ -23,6 +23,7 @@ def RunSteps(api):
   api.test_results.set_config('public_server')
 
   test = api.chromium_tests.steps.LocalGTestTest('base_unittests')
+  assert test.is_gtest and not test.runs_on_swarming
 
   test_options = api.chromium_tests.steps.TestOptions(
       test_filter=['foo.bar'],

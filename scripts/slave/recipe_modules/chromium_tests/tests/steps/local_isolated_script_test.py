@@ -21,6 +21,8 @@ def RunSteps(api):
       test_name,
       override_compile_targets=api.properties.get('override_compile_targets'))
 
+  assert not test.is_gtest and not test.runs_on_swarming
+
   test_repeat_count = api.properties.get('repeat_count')
   if test_repeat_count:
       test.test_options = api.chromium_tests.steps.TestOptions(

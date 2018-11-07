@@ -22,6 +22,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     self._report_dir = None
     # Maps step names to subdirectories of the above.
     self._profdata_dirs = {}
+    # When set, subset of files to include in the coverage report.
+    self._affected_files = None
 
   @staticmethod
   def _dir_name_for_step(step_name):
@@ -100,7 +102,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     return (self.m.gclient.c
             and self.m.gclient.c.solutions
             and 'checkout_clang_coverage_tools'
-                in self.m.gclient.c.solutions[0].custom_vars)
+            in self.m.gclient.c.solutions[0].custom_vars)
 
   def _get_binaries(self, test):
     """Returns a path to the binary for the given test object."""
@@ -109,7 +111,28 @@ class ClangCoverageApi(recipe_api.RecipeApi):
 
     # This naive approach relies on the test binary sharing a name with the test
     # target. Also, this only works for builder_tester.
-    return [self.m.chromium.output_dir.join(test.target_name)]
+    return ([self.m.chromium.output_dir.join(test.isolate_target)]
+            if test.is_gtest and test.runs_on_swarming else [])
+
+  def instrument(self, affected_files):
+    """Saves source paths to generate coverage instrumentation for to a file.
+
+    Args:
+      affected_files (list of str): paths to the files we want to instrument,
+          relative to the checkout path.
+    """
+    self._affected_files = affected_files
+    return self.m.python(
+        'save paths of affected files',
+        self.resource('write_paths_to_instrument.py'),
+        args=[
+            '--write-to',
+            self.m.chromium.c.code_coverage.clang_instrumented_paths_file,
+            '--src-path',
+            self.m.path['checkout'],
+            '--build-path',
+            self.m.chromium.c.build_dir,
+        ] + affected_files)
 
   def create_report(self, tests):
     """Generate coverage report for tests in build.
@@ -127,43 +150,55 @@ class ClangCoverageApi(recipe_api.RecipeApi):
           'merge profile data for %d targets' % len(self._profdata_dirs),
           self.resource('merge_steps.py'),
           args=[
-              '--input-dir', self.profdata_dir(),
-              '--output-file', out_file,
-              '--llvm-profdata', self.profdata_executable,
+              '--input-dir',
+              self.profdata_dir(),
+              '--output-file',
+              out_file,
+              '--llvm-profdata',
+              self.profdata_executable,
           ])
 
-      binaries = sum((self._get_binaries(test) for test in tests), [])
+      binaries = list(set(sum((self._get_binaries(t) for t in tests), [])))
+      args = [
+          '--report-directory', self.report_dir, '--profdata-path', out_file,
+          '--llvm-cov', self.cov_executable, '--binaries']
+      args.extend(binaries)
+      if self._affected_files:
+        args.append('--sources')
+        args.extend(self._affected_files)
 
       self.m.python(
           'generate html report for %d targets' % len(self._profdata_dirs),
           self.resource('make_report.py'),
-          args=[
-              '--report-directory', self.report_dir,
-              '--profdata-path', out_file,
-              '--llvm-cov', self.cov_executable] + binaries)
+          args=args
+      )
 
       report_gs_path = '%s/%s/coverage_report' % (
           self.m.properties['buildername'], self.m.properties['buildnumber'])
-      upload_step = self.m.gsutil.upload(self.report_dir,
-                                         _BUCKET_NAME,
-                                         report_gs_path,
-                                         link_name=None,
-                                         args=['-r'],
-                                         multithreaded=True,
-                                         name='upload coverage report')
+      upload_step = self.m.gsutil.upload(
+          self.report_dir,
+          _BUCKET_NAME,
+          report_gs_path,
+          link_name=None,
+          args=['-r'],
+          multithreaded=True,
+          name='upload coverage report')
       upload_step.presentation.links['coverage report'] = (
           'https://storage.googleapis.com/%s/%s/index.html' % (_BUCKET_NAME,
                                                                report_gs_path))
+
   def shard_merge(self, step_name):
     """Returns a merge object understood by the swarming module.
 
     See the docstring for the `merge` parameter of api.swarming.task.
     """
     return {
-        'script': self.raw_profile_merge_script,
+        'script':
+            self.raw_profile_merge_script,
         'args': [
-            '--profdata-dir', self.profdata_dir(step_name),
-            '--llvm-profdata', self.profdata_executable,
+            '--profdata-dir',
+            self.profdata_dir(step_name),
+            '--llvm-profdata',
+            self.profdata_executable,
         ],
     }
-

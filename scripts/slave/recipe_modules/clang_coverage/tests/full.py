@@ -4,16 +4,13 @@
 
 from recipe_engine import post_process
 
+
 DEPS = [
     'chromium_tests',
     'clang_coverage',
     'recipe_engine/properties',
 ]
 
-
-class mock_test():
-  def __init__(self, target_name):
-    self.target_name = target_name
 
 def RunSteps(api):
   mastername = api.properties['mastername']
@@ -22,12 +19,18 @@ def RunSteps(api):
       [api.chromium_tests.create_bot_id(mastername, buildername)],
       builders=None)
   api.chromium_tests.configure_build(bot_config_object)
+  if 'tryserver' in mastername:
+    api.clang_coverage.instrument([
+        'some/path/to/file.cc',
+        'some/other/path/to/file.cc',
+    ])
 
   for i in range(3):
     step = 'step %d' % i
     api.clang_coverage.profdata_dir(step)
     api.clang_coverage.shard_merge(step)
-  api.clang_coverage.create_report([mock_test('base_unittests')])
+  api.clang_coverage.create_report([api.chromium_tests.steps.SwarmingGTestTest(
+      'base_unittests')])
 
   # Exercise these properties to provide coverage only.
   _ = api.clang_coverage.using_coverage
@@ -41,6 +44,26 @@ def GenTests(api):
           mastername='chromium.fyi',
           buildername='linux-code-coverage',
           buildnumber=54)
+      + api.post_process(
+          post_process.MustRunRE, 'ensure profdata dir for .*', 3, 3)
+      + api.post_process(
+          post_process.MustRun, 'merge profile data for 3 targets')
+      + api.post_process(
+          post_process.MustRun, 'generate html report for 3 targets')
+      + api.post_process(
+          post_process.MustRun, 'gsutil upload coverage report')
+      + api.post_process(post_process.StatusSuccess)
+      + api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('tryserver')
+      + api.properties.generic(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-coverage-rel',
+          buildnumber=54)
+      + api.post_process(
+          post_process.MustRun, 'save paths of affected files')
       + api.post_process(
           post_process.MustRunRE, 'ensure profdata dir for .*', 3, 3)
       + api.post_process(

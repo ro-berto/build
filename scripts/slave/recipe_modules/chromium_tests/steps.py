@@ -208,6 +208,14 @@ class Test(object):
       return self._override_isolate_target
     return self.target_name
 
+  @property
+  def is_gtest(self):
+    return False
+
+  @property
+  def runs_on_swarming(self):
+    return False
+
   def _create_test_run_invalid_dictionary(self):
     """Returns the dictionary for an invalid test run."""
     return {
@@ -772,6 +780,10 @@ class LocalGTestTest(Test):
   @property
   def uses_local_devices(self):
     return True  # pragma: no cover
+
+  @property
+  def is_gtest(self):
+    return True
 
   def compile_targets(self, api):
     # TODO(phajdan.jr): clean up override_compile_targets (remove or cover).
@@ -1606,6 +1618,10 @@ class SwarmingTest(Test):
   def target_name(self):
     return self._target_name or self._name
 
+  @property
+  def runs_on_swarming(self):
+    return True
+
   def create_task(self, api, suffix, isolated_hash):
     """Creates a swarming task. Must be overridden in subclasses.
 
@@ -1768,6 +1784,10 @@ class SwarmingGTestTest(SwarmingTest):
   @Test.test_options.setter
   def test_options(self, value):
     self._test_options = value
+
+  @property
+  def is_gtest(self):
+    return True
 
   def compile_targets(self, api):
     if self._override_compile_targets:

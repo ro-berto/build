@@ -57,6 +57,7 @@ def RunSteps(api):
       priority='lower',
       shards=int(api.properties.get('shards', '1')) or 1,
       dimensions=api.properties.get('dimensions', {'gpu': '8086'}))
+  assert test.runs_on_swarming and not test.is_gtest
 
   if test_repeat_count:
       test.test_options = api.chromium_tests.steps.TestOptions(

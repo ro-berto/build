@@ -1228,6 +1228,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     affected_files = self.m.chromium_checkout.get_files_affected_by_patch()
 
+    if self.m.clang_coverage.using_coverage:
+      self.m.clang_coverage.instrument(affected_files)
+
     if self.m.tryserver.is_tryserver:
       self.m.tryserver.set_subproject_tag('chromium')
 
