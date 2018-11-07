@@ -384,15 +384,9 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     If testername is specified, we simulate data for a pure compiler builder
     that's supposed to trigger a tester.
     """
-    # TODO(sergiyb): Deprecate this after migrating all builders to LUCI.
-    safe_buildername = ''.join(c if c.isalnum() else '_' for c in buildername)
     return (
-        # On the recipe side, we use api.path['checkout'].join('infra', ...),
-        # however due to the way path module's test_api works, this has to be
-        # manually expanded to path in terms of builder_cache as it is done by
-        # the bot_update.ensure_checkout step.
         self.m.path.exists(self.m.path['builder_cache'].join(
-            safe_buildername, 'v8', 'infra', 'testing', 'builders.pyl')) +
+            'v8', 'infra', 'testing', 'builders.pyl')) +
         self.step_data(
             'initialization.read test spec (v8)',
             self.example_test_spec(testername or buildername, test_spec),
@@ -507,7 +501,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         self.m.platform(
             bot_config.get('testing', {}).get('platform', 'linux'),
             v8_config_kwargs.get('TARGET_BITS', 64),
-        )
+        ) +
+        self.m.runtime(is_luci=True, is_experimental=False)
     )
     if parent_buildername:
       # The parent build config (Release or Debug) is either statically defined
@@ -651,17 +646,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       if self._check_step(check, steps, step):
         check(not any(value in arg for arg in steps[step]['cmd']))
     return self.post_process(check_any, step, value)
-
-  def check_triggers(self, *expected_builders):
-    """Verify expected triggered builders."""
-    def check_triggers_internal(check, steps):
-      if self._check_step(check, steps, 'trigger'):
-        actual_builders = [
-            spec['builder_name'] for spec in steps['trigger']['trigger_specs']]
-        check(len(actual_builders) == len(expected_builders))
-        for expected, actual in zip(expected_builders, actual_builders):
-          check(expected == actual)
-    return self.post_process(check_triggers_internal)
 
   def buildbucket_test_data(self, num_requests):
     return self.m.json.output_stream({

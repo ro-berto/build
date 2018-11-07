@@ -740,10 +740,10 @@ def GenTests(api):
     api.v8.example_test_roots('test_checkout') +
     api.path.exists(
         api.path['builder_cache'].join(
-            'V8_Foobar', 'v8', 'custom_deps', 'test_checkout', 'infra',
+            'v8', 'custom_deps', 'test_checkout', 'infra',
             'testing', 'config.pyl'),
         api.path['builder_cache'].join(
-            'V8_Foobar', 'v8', 'custom_deps', 'test_checkout', 'infra',
+            'v8', 'custom_deps', 'test_checkout', 'infra',
             'testing', 'builders.pyl'),
     ) +
     api.override_step_data(
@@ -763,38 +763,6 @@ def GenTests(api):
               'initialization.read test spec (test_checkout)')
             .include_re(r'.*Foounit.*')
     )
-  )
-
-  # Test that uploading binaries happens to experimental GS folder when running
-  # in LUCI experimental mode and that internal proxy builder is not triggered.
-  yield (
-      api.v8.test('client.v8', 'V8 Linux - builder', 'experimental') +
-      api.runtime(is_luci=False, is_experimental=True) +
-      api.post_process(DoesNotRun, 'trigger internal') +
-      api.post_process(Filter(
-        'build.gsutil upload', 'package build',
-        'measurements.perf dashboard post'))
-  )
-
-  # Test that swarming tasks scheduled from experimental builders have low prio.
-  yield (
-      api.v8.test(
-          'client.v8',
-          'V8 Foobar',
-          'experimental',
-          parent_buildername='V8 Foobar - builder',
-          parent_bot_config=release_bot_config,
-          parent_test_spec='{"tests": [{"name": "v8testing"}]}',
-      ) +
-      api.runtime(is_luci=True, is_experimental=True) +
-      api.post_process(Filter('trigger tests.[trigger] Check'))
-  )
-
-  # Test triggering CI child builders on LUCI.
-  yield (
-      api.v8.test('client.v8', 'V8 Linux - builder', 'trigger_on_luci') +
-      api.runtime(is_luci=True, is_experimental=False) +
-      api.post_process(Filter('trigger'))
   )
 
   # Test using custom_deps, set_gclient_var and mb_config_path property.
@@ -831,15 +799,16 @@ def GenTests(api):
           '--spec-path', 'target_os = [\'fuchsia\']') +
       api.v8.check_in_any_arg('build.generate_build_files', 'Debug') +
       api.v8.check_in_any_arg('build.compile', 'Debug') +
-      api.v8.check_triggers('V8 Linux') +
-      api.post_process(DropExpectation)
+      api.post_process(Filter('trigger'))
   )
 
-  # Test uploading coverage reports is done to experimental bucket.
+  # Test triggering a non-luci builder.
   yield (
-      api.v8.test('client.v8', 'V8 Linux64 - gcov coverage', 'experimental') +
-      api.runtime(is_luci=True, is_experimental=True) +
-      api.post_process(Filter('gsutil coverage report'))
+      api.v8.test('client.v8', 'V8 Foobar - builder', 'non_luci',
+                  build_config='Release',
+                  triggers='V8 Foobar') +
+      api.runtime(is_luci=False, is_experimental=False) + 
+      api.post_process(Filter('trigger'))
   )
 
   # Test for covering a hack in swarming/api.py for crbug.com/842234.

@@ -13,12 +13,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20",
       "v8_foobar"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -49,7 +49,7 @@
       "-u",
       "RECIPE_MODULE[build::archive]/resources/filter_build_files.py",
       "--dir",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "--platform",
       "linux",
       "--output",
@@ -78,7 +78,7 @@
       "[CLEANUP]/chrome_staging",
       "d8_bar-linux64-release-v8-component-50110",
       "[\"file1\", \"file2\"]",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release"
+      "[BUILDER_CACHE]/v8/out/Release"
     ],
     "infra_step": true,
     "name": "zipping"

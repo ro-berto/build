@@ -456,10 +456,6 @@ class V8Api(recipe_api.RecipeApi):
       self.m.swarming.add_default_tag('purpose:post-commit')
       self.m.swarming.add_default_tag('purpose:CI')
 
-    if self.m.runtime.is_experimental:
-      # Use lower priority for tasks scheduled from experimental builds.
-      self.m.swarming.default_priority = 60
-
   def runhooks(self, **kwargs):
     if (self.m.chromium.c.compile_py.compiler and
         self.m.chromium.c.compile_py.compiler.startswith('goma')):
@@ -661,11 +657,7 @@ class V8Api(recipe_api.RecipeApi):
       'ext_h_top500_avg_deps': deps['by_extension']['h']['top500_avg_deps'],
     }
     points = []
-    root = '/'.join([
-      'v8.infra.experimental' if self.m.runtime.is_experimental else 'v8.infra',
-      'build_dependencies',
-      '',
-    ])
+    root = '/'.join(['v8.infra', 'build_dependencies', ''])
     for k, v in values.iteritems():
       p = self.m.perf_dashboard.get_skeleton_point(
           root + k, self.revision_number, str(v))
@@ -697,15 +689,8 @@ class V8Api(recipe_api.RecipeApi):
       },
     }
 
-    if self.m.runtime.is_experimental:
-      trace_prefix = ['v8.infra.experimental']
-    else:
-      trace_prefix = ['v8.infra']
-
-    trace_prefix.append('binary_size')
-
     point = self.m.perf_dashboard.get_skeleton_point(
-        '/'.join(trace_prefix + [binary]),
+        '/'.join(['v8.infra', 'binary_size', binary]),
         self.revision_number,
         str(size),
         bot=category,
@@ -815,8 +800,7 @@ class V8Api(recipe_api.RecipeApi):
     return self.m.path['checkout'].join('third_party', 'depot_tools')
 
   def _get_default_archive(self):
-    return 'gs://chromium-v8/%sarchives/%s/%s' % (
-        'experimental/' if self.m.runtime.is_experimental else '',
+    return 'gs://chromium-v8/archives/%s/%s' % (
         self.m.properties['mastername'],
         self.m.properties['buildername'],
     )
@@ -832,8 +816,7 @@ class V8Api(recipe_api.RecipeApi):
   def isolated_archive_path(self):
     buildername = (self.m.properties.get('parent_buildername') or
                    self.m.properties['buildername'])
-    return 'chromium-v8/%sisolated/%s/%s' % (
-        'experimental/' if self.m.runtime.is_experimental else '',
+    return 'chromium-v8/isolated/%s/%s' % (
         self.m.properties['mastername'],
         buildername,
     )
@@ -954,8 +937,6 @@ class V8Api(recipe_api.RecipeApi):
 
     # Upload report to google storage.
     dest = '%s/%s' % (self.bot_config['gcov_coverage_folder'], self.revision)
-    if self.m.runtime.is_experimental:
-      dest = 'experimental/%s' % dest
     result = self.m.gsutil(
         [
           '-m', 'cp', '-a', 'public-read', '-R', report_dir,
@@ -1458,7 +1439,7 @@ class V8Api(recipe_api.RecipeApi):
             ),
           } for builder_name in triggers])
 
-    if triggers_proxy and not self.m.runtime.is_experimental:
+    if triggers_proxy:
       proxy_properties = {'archive': self._get_default_archive()}
       proxy_properties.update(properties)
       self.buildbucket_trigger(

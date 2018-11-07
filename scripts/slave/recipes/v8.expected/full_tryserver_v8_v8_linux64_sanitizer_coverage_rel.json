@@ -59,7 +59,7 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel",
+    "cwd": "[BUILDER_CACHE]",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -103,8 +103,8 @@
       "--revision",
       "v8@[master-branch-point hsh]"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel",
-    "env_prefixes": {
+    "cwd": "[BUILDER_CACHE]",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -171,7 +171,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -195,7 +195,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8/custom_deps"
+      "[BUILDER_CACHE]/v8/custom_deps"
     ],
     "infra_step": true,
     "name": "initialization.ensure custom_deps dir",
@@ -211,7 +211,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8/custom_deps"
+      "[BUILDER_CACHE]/v8/custom_deps"
     ],
     "infra_step": true,
     "name": "initialization.list test roots",
@@ -229,18 +229,18 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
       "lookup",
       "-m",
       "tryserver.v8",
       "-b",
       "v8_linux64_sanitizer_coverage_rel",
       "--config-file",
-      "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -259,19 +259,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "tryserver.v8",
       "-b",
       "v8_linux64_sanitizer_coverage_rel",
       "--config-file",
-      "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -297,11 +297,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -317,14 +317,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -339,7 +339,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8/tools/sanitizers/sancov_formatter.py",
+      "[BUILDER_CACHE]/v8/tools/sanitizers/sancov_formatter.py",
       "all",
       "--json-output",
       "[TMP_BASE]/coverage_output_tmp_1/data.json"
@@ -368,7 +368,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8_linux64_sanitizer_coverage_rel/v8/tools/sanitizers/sancov_formatter.py",
+      "[BUILDER_CACHE]/v8/tools/sanitizers/sancov_formatter.py",
       "split",
       "--json-input",
       "[TMP_BASE]/coverage_output_tmp_1/data.json",

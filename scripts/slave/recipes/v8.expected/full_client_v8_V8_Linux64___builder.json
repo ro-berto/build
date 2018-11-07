@@ -21,8 +21,8 @@
       "--revision",
       "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___builder",
-    "env_prefixes": {
+    "cwd": "[BUILDER_CACHE]",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -89,7 +89,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___builder/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -113,7 +113,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/V8_Linux64___builder/v8/custom_deps"
+      "[BUILDER_CACHE]/v8/custom_deps"
     ],
     "infra_step": true,
     "name": "initialization.ensure custom_deps dir",
@@ -129,7 +129,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[BUILDER_CACHE]/V8_Linux64___builder/v8/custom_deps"
+      "[BUILDER_CACHE]/v8/custom_deps"
     ],
     "infra_step": true,
     "name": "initialization.list test roots",
@@ -147,18 +147,18 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Linux64___builder/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
       "lookup",
       "-m",
       "client.v8",
       "-b",
       "V8 Linux64 - builder",
       "--config-file",
-      "[BUILDER_CACHE]/V8_Linux64___builder/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___builder/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -177,21 +177,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Linux64___builder/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Linux64 - builder",
       "--config-file",
-      "[BUILDER_CACHE]/V8_Linux64___builder/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "perf\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___builder/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -219,11 +219,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Linux64___builder/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___builder/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -239,14 +239,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Linux64___builder/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___builder/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -262,7 +262,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/V8_Linux64___builder/v8/tools/swarming_client",
+      "[BUILDER_CACHE]/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -271,7 +271,7 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "[BUILDER_CACHE]/V8_Linux64___builder/v8/out/Release/perf.isolated.gen.json"
+      "[BUILDER_CACHE]/v8/out/Release/perf.isolated.gen.json"
     ],
     "name": "build.isolate tests (perf)",
     "~followup_annotations": [
@@ -313,7 +313,7 @@
       "-u",
       "RECIPE_MODULE[build::v8]/resources/build-dep-stats.py",
       "-C",
-      "[BUILDER_CACHE]/V8_Linux64___builder/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-x",
       "/third_party/",
       "-o",
@@ -321,7 +321,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "[BUILDER_CACHE]/V8_Linux64___builder/v8/third_party/depot_tools"
+        "[BUILDER_CACHE]/v8/third_party/depot_tools"
       ]
     },
     "name": "measurements.track build dependencies (fyi)",
@@ -346,6 +346,20 @@
   },
   {
     "cmd": [
+      "luci-auth",
+      "token",
+      "-lifetime",
+      "3m"
+    ],
+    "infra_step": true,
+    "name": "measurements.get access token for default account",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::perf_dashboard]/resources/post_json.py",
@@ -353,7 +367,9 @@
       "-i",
       "{\"data\": \"[{\\\"buildnumber\\\": 571, \\\"masterid\\\": \\\"client.v8\\\", \\\"units\\\": \\\"count\\\", \\\"master\\\": \\\"client.v8\\\", \\\"supplemental_columns\\\": {\\\"r_v8_git\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"a_default_rev\\\": \\\"r_v8_git\\\"}, \\\"buildername\\\": \\\"V8 Linux64 - builder\\\", \\\"test\\\": \\\"v8.infra/build_dependencies/ext_h_top500_avg_deps\\\", \\\"bot\\\": \\\"V8 Linux64 - builder\\\", \\\"value\\\": \\\"34.94\\\", \\\"revision\\\": \\\"50110\\\"}, {\\\"buildnumber\\\": 571, \\\"masterid\\\": \\\"client.v8\\\", \\\"units\\\": \\\"count\\\", \\\"master\\\": \\\"client.v8\\\", \\\"supplemental_columns\\\": {\\\"r_v8_git\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"a_default_rev\\\": \\\"r_v8_git\\\"}, \\\"buildername\\\": \\\"V8 Linux64 - builder\\\", \\\"test\\\": \\\"v8.infra/build_dependencies/ext_h_top100_avg_deps\\\", \\\"bot\\\": \\\"V8 Linux64 - builder\\\", \\\"value\\\": \\\"67.2\\\", \\\"revision\\\": \\\"50110\\\"}, {\\\"buildnumber\\\": 571, \\\"masterid\\\": \\\"client.v8\\\", \\\"units\\\": \\\"count\\\", \\\"master\\\": \\\"client.v8\\\", \\\"supplemental_columns\\\": {\\\"r_v8_git\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"a_default_rev\\\": \\\"r_v8_git\\\"}, \\\"buildername\\\": \\\"V8 Linux64 - builder\\\", \\\"test\\\": \\\"v8.infra/build_dependencies/ext_h_avg_deps\\\", \\\"bot\\\": \\\"V8 Linux64 - builder\\\", \\\"value\\\": \\\"53.7\\\", \\\"revision\\\": \\\"50110\\\"}, {\\\"buildnumber\\\": 571, \\\"masterid\\\": \\\"client.v8\\\", \\\"units\\\": \\\"count\\\", \\\"master\\\": \\\"client.v8\\\", \\\"supplemental_columns\\\": {\\\"r_v8_git\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"a_default_rev\\\": \\\"r_v8_git\\\"}, \\\"buildername\\\": \\\"V8 Linux64 - builder\\\", \\\"test\\\": \\\"v8.infra/build_dependencies/ext_h_top200_avg_deps\\\", \\\"bot\\\": \\\"V8 Linux64 - builder\\\", \\\"value\\\": \\\"55.1\\\", \\\"revision\\\": \\\"50110\\\"}]\"}",
       "-o",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "-t",
+      "extra.secret.token.should.not.be.logged"
     ],
     "name": "measurements.perf dashboard post",
     "~followup_annotations": [
@@ -373,15 +389,29 @@
       "--json-output",
       "/path/to/tmp/json",
       "filesizes",
-      "[BUILDER_CACHE]/V8_Linux64___builder/v8/out/Release/d8"
+      "[BUILDER_CACHE]/v8/out/Release/d8"
     ],
     "infra_step": true,
     "name": "measurements.Check binary size",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@filesizes@[BUILDER_CACHE]/V8_Linux64___builder/v8/out/Release/d8: \t111@@@",
+      "@@@STEP_LOG_LINE@filesizes@[BUILDER_CACHE]/v8/out/Release/d8: \t111@@@",
       "@@@STEP_LOG_END@filesizes@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "luci-auth",
+      "token",
+      "-lifetime",
+      "3m"
+    ],
+    "infra_step": true,
+    "name": "measurements.get access token for default account (2)",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -393,7 +423,9 @@
       "-i",
       "{\"data\": \"[{\\\"buildnumber\\\": 571, \\\"masterid\\\": \\\"client.v8\\\", \\\"units\\\": \\\"bytes\\\", \\\"master\\\": \\\"client.v8\\\", \\\"supplemental_columns\\\": {\\\"r_v8_git\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"a_default_rev\\\": \\\"r_v8_git\\\"}, \\\"buildername\\\": \\\"V8 Linux64 - builder\\\", \\\"test\\\": \\\"v8.infra/binary_size/d8\\\", \\\"bot\\\": \\\"linux64\\\", \\\"value\\\": \\\"111\\\", \\\"revision\\\": \\\"50110\\\"}]\"}",
       "-o",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "-t",
+      "extra.secret.token.should.not.be.logged"
     ],
     "name": "measurements.perf dashboard post (2)",
     "~followup_annotations": [
@@ -423,7 +455,7 @@
       "--staging-dir",
       "[CACHE]/chrome_staging",
       "--src-dir",
-      "[BUILDER_CACHE]/V8_Linux64___builder/v8",
+      "[BUILDER_CACHE]/v8",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",
@@ -437,48 +469,93 @@
     "name": "package build"
   },
   {
-    "cmd": [],
-    "name": "trigger",
-    "trigger_specs": [
-      {
-        "builder_name": "V8 Linux64",
-        "properties": {
-          "archive": "gs://chromium-v8/archives/client.v8/V8 Linux64 - builder",
-          "parent_build_config": "Release",
-          "parent_build_environment": {
-            "gn_args": "target_cpu = \"x86\" use_goma = true"
-          },
-          "parent_buildername": "V8 Linux64 - builder",
-          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "parent_got_revision_cp": "refs/heads/master@{#50110}",
-          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "swarm_hashes": {
-            "perf": "[dummy hash for perf]"
-          }
-        }
-      },
-      {
-        "builder_name": "V8 Linux64 - fyi",
-        "properties": {
-          "archive": "gs://chromium-v8/archives/client.v8/V8 Linux64 - builder",
-          "parent_build_config": "Release",
-          "parent_build_environment": {
-            "gn_args": "target_cpu = \"x86\" use_goma = true"
-          },
-          "parent_buildername": "V8 Linux64 - builder",
-          "parent_got_revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "parent_got_revision_cp": "refs/heads/master@{#50110}",
-          "parent_got_swarming_client_revision": "e4fee0b18f8163be6097c9c571640038896debc4",
-          "revision": "f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
-          "swarm_hashes": {
-            "perf": "[dummy hash for perf]"
-          }
-        }
-      }
+    "cmd": [
+      "prpc",
+      "call",
+      "-format=json",
+      "luci-scheduler.appspot.com",
+      "scheduler.Scheduler.EmitTriggers"
     ],
+    "infra_step": true,
+    "name": "trigger",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"V8 Linux64\", \"project\": \"v8\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"archive\": \"gs://chromium-v8/archives/client.v8/V8 Linux64 - builder\", \"parent_build_config\": \"Release\", \"parent_build_environment\": {\"gn_args\": \"target_cpu = \\\"x86\\\" use_goma = true\"}, \"parent_buildername\": \"V8 Linux64 - builder\", \"parent_got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"parent_got_revision_cp\": \"refs/heads/master@{#50110}\", \"parent_got_swarming_client_revision\": \"e4fee0b18f8163be6097c9c571640038896debc4\", \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"swarm_hashes\": {\"perf\": \"[dummy hash for perf]\"}}, \"tags\": [\"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"parent_buildername:V8 Linux64 - builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"V8 Linux64 - builder/571\"}}, {\"jobs\": [{\"job\": \"V8 Linux64 - fyi\", \"project\": \"v8\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"archive\": \"gs://chromium-v8/archives/client.v8/V8 Linux64 - builder\", \"parent_build_config\": \"Release\", \"parent_build_environment\": {\"gn_args\": \"target_cpu = \\\"x86\\\" use_goma = true\"}, \"parent_buildername\": \"V8 Linux64 - builder\", \"parent_got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"parent_got_revision_cp\": \"refs/heads/master@{#50110}\", \"parent_got_swarming_client_revision\": \"e4fee0b18f8163be6097c9c571640038896debc4\", \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"swarm_hashes\": {\"perf\": \"[dummy hash for perf]\"}}, \"tags\": [\"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"parent_buildername:V8 Linux64 - builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00002\", \"title\": \"V8 Linux64 - builder/571\"}}], \"timestamp\": 1337000003000000}",
+    "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_TEXT@V8 Linux64<br />V8 Linux64 - fyi@@@"
+      "@@@STEP_TEXT@input {",
+      "    \"batches\": [",
+      "        {",
+      "            \"jobs\": [",
+      "                {",
+      "                    \"job\": \"V8 Linux64\", ",
+      "                    \"project\": \"v8\"",
+      "                }",
+      "            ], ",
+      "            \"trigger\": {",
+      "                \"buildbucket\": {",
+      "                    \"properties\": {",
+      "                        \"archive\": \"gs://chromium-v8/archives/client.v8/V8 Linux64 - builder\", ",
+      "                        \"parent_build_config\": \"Release\", ",
+      "                        \"parent_build_environment\": {",
+      "                            \"gn_args\": \"target_cpu = \\\"x86\\\" use_goma = true\"",
+      "                        }, ",
+      "                        \"parent_buildername\": \"V8 Linux64 - builder\", ",
+      "                        \"parent_got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", ",
+      "                        \"parent_got_revision_cp\": \"refs/heads/master@{#50110}\", ",
+      "                        \"parent_got_swarming_client_revision\": \"e4fee0b18f8163be6097c9c571640038896debc4\", ",
+      "                        \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", ",
+      "                        \"swarm_hashes\": {",
+      "                            \"perf\": \"[dummy hash for perf]\"",
+      "                        }",
+      "                    }, ",
+      "                    \"tags\": [",
+      "                        \"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", ",
+      "                        \"parent_buildername:V8 Linux64 - builder\", ",
+      "                        \"parent_buildnumber:571\", ",
+      "                        \"user_agent:recipe\"",
+      "                    ]",
+      "                }, ",
+      "                \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", ",
+      "                \"title\": \"V8 Linux64 - builder/571\"",
+      "            }",
+      "        }, ",
+      "        {",
+      "            \"jobs\": [",
+      "                {",
+      "                    \"job\": \"V8 Linux64 - fyi\", ",
+      "                    \"project\": \"v8\"",
+      "                }",
+      "            ], ",
+      "            \"trigger\": {",
+      "                \"buildbucket\": {",
+      "                    \"properties\": {",
+      "                        \"archive\": \"gs://chromium-v8/archives/client.v8/V8 Linux64 - builder\", ",
+      "                        \"parent_build_config\": \"Release\", ",
+      "                        \"parent_build_environment\": {",
+      "                            \"gn_args\": \"target_cpu = \\\"x86\\\" use_goma = true\"",
+      "                        }, ",
+      "                        \"parent_buildername\": \"V8 Linux64 - builder\", ",
+      "                        \"parent_got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", ",
+      "                        \"parent_got_revision_cp\": \"refs/heads/master@{#50110}\", ",
+      "                        \"parent_got_swarming_client_revision\": \"e4fee0b18f8163be6097c9c571640038896debc4\", ",
+      "                        \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", ",
+      "                        \"swarm_hashes\": {",
+      "                            \"perf\": \"[dummy hash for perf]\"",
+      "                        }",
+      "                    }, ",
+      "                    \"tags\": [",
+      "                        \"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", ",
+      "                        \"parent_buildername:V8 Linux64 - builder\", ",
+      "                        \"parent_buildnumber:571\", ",
+      "                        \"user_agent:recipe\"",
+      "                    ]",
+      "                }, ",
+      "                \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00002\", ",
+      "                \"title\": \"V8 Linux64 - builder/571\"",
+      "            }",
+      "        }",
+      "    ], ",
+      "    \"timestamp\": 1337000003000000",
+      "}@@@"
     ]
   },
   {
@@ -487,8 +564,6 @@
       "put",
       "-host",
       "cr-buildbucket.appspot.com",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-v8-bot.json",
       "{\"bucket\": \"luci.v8-internal.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_trigger_proxy\\\", \\\"changes\\\": [{\\\"author\\\": {\\\"email\\\": \\\"cool_dev1337@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}, {\\\"author\\\": {\\\"email\\\": \\\"hax@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}], \\\"properties\\\": {\\\"archive\\\": \\\"gs://chromium-v8/archives/client.v8/V8 Linux64 - builder\\\", \\\"parent_build_config\\\": \\\"Release\\\", \\\"parent_build_environment\\\": {\\\"gn_args\\\": \\\"target_cpu = \\\\\\\"x86\\\\\\\" use_goma = true\\\"}, \\\"parent_buildername\\\": \\\"V8 Linux64 - builder\\\", \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"parent_got_swarming_client_revision\\\": \\\"e4fee0b18f8163be6097c9c571640038896debc4\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"swarm_hashes\\\": {\\\"perf\\\": \\\"[dummy hash for perf]\\\"}}}\", \"tags\": [\"builder:v8_trigger_proxy\", \"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"parent_buildername:V8 Linux64 - builder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,

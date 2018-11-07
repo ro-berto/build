@@ -7,7 +7,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[BUILDER_CACHE]/V8_Foobar/v8/custom_deps/test_checkout/infra/testing/config.pyl",
+      "[BUILDER_CACHE]/v8/custom_deps/test_checkout/infra/testing/config.pyl",
       "/path/to/tmp/"
     ],
     "infra_step": true,
@@ -24,7 +24,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[BUILDER_CACHE]/V8_Foobar/v8/custom_deps/test_checkout/infra/testing/builders.pyl",
+      "[BUILDER_CACHE]/v8/custom_deps/test_checkout/infra/testing/builders.pyl",
       "/path/to/tmp/"
     ],
     "infra_step": true,
@@ -40,7 +40,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/run-tests.py",
+      "[BUILDER_CACHE]/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -49,7 +49,7 @@
       "--buildbot",
       "--timeout=200",
       "--test-root",
-      "[BUILDER_CACHE]/V8_Foobar/v8/custom_deps/test_checkout/test",
+      "[BUILDER_CACHE]/v8/custom_deps/test_checkout/test",
       "--random-seed=-358114921",
       "foounit",
       "--variants=more,dev",
@@ -61,7 +61,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "name": "Foounit",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",

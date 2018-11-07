@@ -7,7 +7,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[BUILDER_CACHE]/V8_Foobar/v8/infra/testing/builders.pyl",
+      "[BUILDER_CACHE]/v8/infra/testing/builders.pyl",
       "/path/to/tmp/"
     ],
     "infra_step": true,
@@ -25,7 +25,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/swarming_client",
+      "[BUILDER_CACHE]/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -34,7 +34,7 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release/mjsunit.isolated.gen.json"
+      "[BUILDER_CACHE]/v8/out/Release/mjsunit.isolated.gen.json"
     ],
     "name": "build.isolate tests",
     "~followup_annotations": [
@@ -49,7 +49,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -154,7 +154,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -269,7 +269,7 @@
       "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/swarming_client",
+      "[BUILDER_CACHE]/v8/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
@@ -314,7 +314,7 @@
       "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/swarming_client",
+      "[BUILDER_CACHE]/v8/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",

@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/v8/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -116,7 +116,7 @@
       "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
       "--swarming-client-dir",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/swarming_client",
+      "[BUILDER_CACHE]/v8/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",

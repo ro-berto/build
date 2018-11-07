@@ -21,8 +21,8 @@
       "--revision",
       "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux___shared",
-    "env_prefixes": {
+    "cwd": "[BUILDER_CACHE]",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -89,7 +89,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux___shared/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -113,7 +113,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/V8_Linux___shared/v8/custom_deps"
+      "[BUILDER_CACHE]/v8/custom_deps"
     ],
     "infra_step": true,
     "name": "initialization.ensure custom_deps dir",
@@ -129,7 +129,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[BUILDER_CACHE]/V8_Linux___shared/v8/custom_deps"
+      "[BUILDER_CACHE]/v8/custom_deps"
     ],
     "infra_step": true,
     "name": "initialization.list test roots",
@@ -147,18 +147,18 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Linux___shared/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
       "lookup",
       "-m",
       "client.v8",
       "-b",
       "V8 Linux - shared",
       "--config-file",
-      "[BUILDER_CACHE]/V8_Linux___shared/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux___shared/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -177,19 +177,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Linux___shared/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Linux - shared",
       "--config-file",
-      "[BUILDER_CACHE]/V8_Linux___shared/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux___shared/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -215,11 +215,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Linux___shared/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux___shared/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -235,14 +235,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Linux___shared/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux___shared/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -265,15 +265,29 @@
       "--json-output",
       "/path/to/tmp/json",
       "filesizes",
-      "[BUILDER_CACHE]/V8_Linux___shared/v8/out/Release/libv8.so"
+      "[BUILDER_CACHE]/v8/out/Release/libv8.so"
     ],
     "infra_step": true,
     "name": "measurements.Check binary size",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@filesizes@[BUILDER_CACHE]/V8_Linux___shared/v8/out/Release/libv8.so: \t111@@@",
+      "@@@STEP_LOG_LINE@filesizes@[BUILDER_CACHE]/v8/out/Release/libv8.so: \t111@@@",
       "@@@STEP_LOG_END@filesizes@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "luci-auth",
+      "token",
+      "-lifetime",
+      "3m"
+    ],
+    "infra_step": true,
+    "name": "measurements.get access token for default account",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
@@ -285,7 +299,9 @@
       "-i",
       "{\"data\": \"[{\\\"buildnumber\\\": 571, \\\"masterid\\\": \\\"client.v8\\\", \\\"units\\\": \\\"bytes\\\", \\\"master\\\": \\\"client.v8\\\", \\\"supplemental_columns\\\": {\\\"r_v8_git\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"a_default_rev\\\": \\\"r_v8_git\\\"}, \\\"buildername\\\": \\\"V8 Linux - shared\\\", \\\"test\\\": \\\"v8.infra/binary_size/libv8.so\\\", \\\"bot\\\": \\\"linux32\\\", \\\"value\\\": \\\"111\\\", \\\"revision\\\": \\\"50110\\\"}]\"}",
       "-o",
-      "/path/to/tmp/json"
+      "/path/to/tmp/json",
+      "-t",
+      "extra.secret.token.should.not.be.logged"
     ],
     "name": "measurements.perf dashboard post",
     "~followup_annotations": [

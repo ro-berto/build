@@ -23,8 +23,8 @@
       "--refs",
       "refs/branch-heads/4.3"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar",
-    "env_prefixes": {
+    "cwd": "[BUILDER_CACHE]",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]

@@ -4,7 +4,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/swarming_client",
+      "[BUILDER_CACHE]/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -13,7 +13,7 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release/run-num-fuzzer.isolated.gen.json"
+      "[BUILDER_CACHE]/v8/out/Release/run-num-fuzzer.isolated.gen.json"
     ],
     "name": "build.isolate tests",
     "~followup_annotations": [

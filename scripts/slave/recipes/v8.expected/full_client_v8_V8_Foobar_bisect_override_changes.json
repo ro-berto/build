@@ -21,8 +21,8 @@
       "--revision",
       "v8@deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar",
-    "env_prefixes": {
+    "cwd": "[BUILDER_CACHE]",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -75,7 +75,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -99,7 +99,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/V8_Foobar/v8/custom_deps"
+      "[BUILDER_CACHE]/v8/custom_deps"
     ],
     "infra_step": true,
     "name": "initialization.ensure custom_deps dir",
@@ -115,7 +115,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[BUILDER_CACHE]/V8_Foobar/v8/custom_deps"
+      "[BUILDER_CACHE]/v8/custom_deps"
     ],
     "infra_step": true,
     "name": "initialization.list test roots",
@@ -133,7 +133,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[BUILDER_CACHE]/V8_Foobar/v8/infra/testing/builders.pyl",
+      "[BUILDER_CACHE]/v8/infra/testing/builders.pyl",
       "/path/to/tmp/"
     ],
     "infra_step": true,
@@ -154,18 +154,18 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
       "lookup",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/V8_Foobar/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -184,19 +184,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/V8_Foobar/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -222,11 +222,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -242,14 +242,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -264,7 +264,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/run-tests.py",
+      "[BUILDER_CACHE]/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -283,7 +283,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "name": "Check",
     "~followup_annotations": [
       "@@@STEP_TEXT@failures: 2<br/>@@@",
@@ -350,7 +350,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/run-tests.py",
+      "[BUILDER_CACHE]/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -370,7 +370,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "name": "Test262",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@durations@01:01:002 mjsunit/Cool.Test@@@",
@@ -478,8 +478,8 @@
       "--revision",
       "v8@a0"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar",
-    "env_prefixes": {
+    "cwd": "[BUILDER_CACHE]",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -530,7 +530,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -548,18 +548,18 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
       "lookup",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/V8_Foobar/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -578,19 +578,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/V8_Foobar/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -616,12 +616,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20",
       "d8"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -637,7 +637,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20",
       "d8",
@@ -645,7 +645,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -660,7 +660,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/run-tests.py",
+      "[BUILDER_CACHE]/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -680,7 +680,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "name": "Bisect a0.Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -731,8 +731,8 @@
       "--revision",
       "v8@a2"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar",
-    "env_prefixes": {
+    "cwd": "[BUILDER_CACHE]",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -783,7 +783,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -801,18 +801,18 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
       "lookup",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/V8_Foobar/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -831,19 +831,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/V8_Foobar/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -869,12 +869,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20",
       "d8"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -890,7 +890,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20",
       "d8",
@@ -898,7 +898,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -913,7 +913,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/run-tests.py",
+      "[BUILDER_CACHE]/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -933,7 +933,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "name": "Bisect a2.Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1019,8 +1019,8 @@
       "--revision",
       "v8@a1"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar",
-    "env_prefixes": {
+    "cwd": "[BUILDER_CACHE]",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -1071,7 +1071,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -1089,18 +1089,18 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
       "lookup",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/V8_Foobar/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1119,19 +1119,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "client.v8",
       "-b",
       "V8 Foobar",
       "--config-file",
-      "[BUILDER_CACHE]/V8_Foobar/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1157,12 +1157,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20",
       "d8"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1178,7 +1178,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-j",
       "20",
       "d8",
@@ -1186,7 +1186,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -1201,7 +1201,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Foobar/v8/tools/run-tests.py",
+      "[BUILDER_CACHE]/v8/tools/run-tests.py",
       "--progress=verbose",
       "--mode",
       "Release",
@@ -1221,7 +1221,7 @@
       "--json-test-results",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "name": "Bisect a1.Retry",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
