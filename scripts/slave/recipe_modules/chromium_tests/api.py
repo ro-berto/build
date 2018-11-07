@@ -875,8 +875,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       failing_tests = self.m.test_utils.run_tests_with_patch(
           self.m, tests, invalid_is_fatal=False)
 
-      # If there are no failures, we're done. Success!
-      if not failing_tests:
+      # If there are no failures or if the config says that we only care about
+      # the results with patch, we are done.
+      if not failing_tests or self.c.only_with_patch:
         return
 
       # If there are failures but we shouldn't deapply the patch, then skip the
