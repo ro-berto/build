@@ -5814,9 +5814,9 @@ Recipe for running presubmit in V8 CI.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/v8/tests/example.py#12)(api):**
 ### *recipes* / [wasm\_llvm](/scripts/slave/recipes/wasm_llvm.py)
 
-[DEPS](/scripts/slave/recipes/wasm_llvm.py#5): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/wasm_llvm.py#5): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/wasm_llvm.py#18)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/wasm_llvm.py#19)(api):**
 ### *recipes* / [wct:tests/full](/scripts/slave/recipe_modules/wct/tests/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/wct/tests/full.py#5): [wct](#recipe_modules-wct), [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]

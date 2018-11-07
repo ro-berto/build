@@ -188,9 +188,10 @@
     "cwd": "[BUILDER_CACHE]/src",
     "env": {
       "BUILDBOT_BUILDERNAME": "linux",
+      "BUILDBOT_BUILDNUMBER": "123456",
       "BUILDBOT_GOT_WATERFALL_REVISION": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "BUILDBOT_MASTERNAME": "client.wasm.llvm",
-      "BUILDBOT_REVISION": "abcd",
+      "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "GOMA_DIR": "[GOMA_CACHE]/client"
     },
     "env_suffixes": {
@@ -305,15 +306,13 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.client.wasm.llvm\", \"builder\": \"linux\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"wasm\"}",
       "--is-luci",
-      "--buildbot-buildername",
-      "linux",
       "--buildbot-mastername",
-      "client.wasm.llvm",
-      "--buildbot-slavename",
-      "TestBot"
+      "client.wasm.llvm"
     ],
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [

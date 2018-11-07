@@ -6,6 +6,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'goma',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -35,8 +36,9 @@ def RunSteps(api):
   goma_dir = api.goma.ensure_goma()
   env = {
       'BUILDBOT_MASTERNAME': api.properties['mastername'],
-      'BUILDBOT_BUILDERNAME': api.properties['buildername'],
-      'BUILDBOT_REVISION': api.properties['revision'],
+      'BUILDBOT_BUILDERNAME': api.buildbucket.builder_name,
+      'BUILDBOT_REVISION': api.buildbucket.gitiles_commit.id,
+      'BUILDBOT_BUILDNUMBER': api.buildbucket.build.number,
       'BUILDBOT_GOT_WATERFALL_REVISION': got_revision,
       'GOMA_DIR': goma_dir,
   }
@@ -59,32 +61,29 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  yield (
-    api.test('linux') +
-    api.properties(
-      mastername = 'client.wasm.llvm',
-      buildername = 'linux',
-      bot_id = 'TestBot',
-      revision = 'abcd',
-    ))
+  def test(name, **kwargs):
+    return (
+        api.test(name) +
+        api.properties(
+          mastername='client.wasm.llvm',
+          **kwargs
+        ) +
+        api.buildbucket.ci_build(
+          project='wasm',
+          bucket='ci',
+          builder='linux',
+          build_number=123456,
+        )
+    )
+
+  yield test('linux')
 
   yield (
-    api.test('linux_fail') +
-    api.properties(
-      mastername = 'client.wasm.llvm',
-      buildername = 'linux',
-      bot_id = 'TestBot',
-      revision = 'abcd',
-    ) + api.step_data('annotated steps', retcode=1))
+      test('linux_fail') +
+      api.step_data('annotated steps', retcode=1)
+  )
 
   yield (
-    api.test('luci') +
-    api.properties(
-      mastername = 'client.wasm.llvm',
-      buildername = 'linux',
-      bot_id = 'TestBot',
-      revision = 'abcd',
-      path_config='kitchen',
-    ) +
-    api.runtime(is_luci=True, is_experimental=False)
+      test('luci', path_config='kitchen') +
+      api.runtime(is_luci=True, is_experimental=False)
   )
