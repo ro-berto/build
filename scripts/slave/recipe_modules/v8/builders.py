@@ -247,9 +247,7 @@ BUILDERS = {
       'V8 Official Arm32': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
-          'arm_hard_float', 'clobber', 'default_compiler',
-          'default_target_v8_archive', 'v8_static_library', 'goma',
-          'gn'],
+          'default_compiler', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
@@ -260,8 +258,7 @@ BUILDERS = {
       'V8 Official Android Arm32': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
-          'clobber', 'default_compiler', 'default_target_v8_archive',
-          'v8_android', 'v8_static_library', 'goma', 'gn'],
+          'default_compiler', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
@@ -273,8 +270,7 @@ BUILDERS = {
       'V8 Official Android Arm64': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
-          'clobber', 'default_compiler', 'default_target_v8_archive',
-          'v8_android', 'v8_static_library', 'goma', 'gn'],
+          'default_compiler', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_ARCH': 'arm',
@@ -286,8 +282,7 @@ BUILDERS = {
       'V8 Official Linux32': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
-          'clobber', 'clang', 'default_target_v8_archive',
-          'v8_static_library', 'goma', 'gn'],
+          'default_compiler', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -297,8 +292,7 @@ BUILDERS = {
       'V8 Official Linux32 Debug': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
-          'clobber', 'clang', 'default_target_v8_archive',
-          'slow_dchecks', 'goma', 'gn'],
+          'default_compiler', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -308,8 +302,7 @@ BUILDERS = {
       'V8 Official Linux64': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
-          'clobber', 'clang', 'default_target_v8_archive',
-          'v8_static_library', 'goma', 'gn'],
+          'default_compiler', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -319,8 +312,7 @@ BUILDERS = {
       'V8 Official Linux64 Debug': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
-          'clobber', 'clang', 'default_target_v8_archive',
-          'slow_dchecks', 'goma', 'gn'],
+          'default_compiler', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -330,8 +322,7 @@ BUILDERS = {
       'V8 Official Win32': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
-          'clobber', 'clang', 'default_target_v8_archive',
-          'v8_static_library', 'goma', 'gn'],
+          'default_compiler', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -341,8 +332,7 @@ BUILDERS = {
       'V8 Official Win32 Debug': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
-          'clobber', 'clang', 'default_target_v8_archive',
-          'slow_dchecks', 'goma', 'gn'],
+          'default_compiler', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
@@ -352,8 +342,7 @@ BUILDERS = {
       'V8 Official Win64': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
-          'clobber', 'clang', 'default_target_v8_archive',
-          'v8_static_library', 'goma', 'gn'],
+          'default_compiler', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -363,8 +352,7 @@ BUILDERS = {
       'V8 Official Win64 Debug': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
-          'clobber', 'clang', 'default_target_v8_archive',
-          'slow_dchecks', 'goma', 'gn'],
+          'default_compiler', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -374,8 +362,7 @@ BUILDERS = {
       'V8 Official Mac64': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
-          'clobber', 'clang', 'default_target_v8_archive',
-          'v8_static_library', 'goma', 'gn'],
+          'default_compiler', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
@@ -385,8 +372,7 @@ BUILDERS = {
       'V8 Official Mac64 Debug': {
         'recipe': 'v8/archive',
         'chromium_apply_config': [
-          'clobber', 'clang', 'default_target_v8_archive',
-          'slow_dchecks', 'goma', 'gn'],
+          'default_compiler', 'goma', 'gn'],
         'v8_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,

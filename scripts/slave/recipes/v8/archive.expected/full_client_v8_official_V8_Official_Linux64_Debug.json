@@ -7,7 +7,7 @@
       "--root=[BUILDER_CACHE]/V8_Official_Linux64_Debug/v8",
       "gen",
       "//out/Debug",
-      "--args=is_clang=true v8_enable_slow_dchecks=true is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
+      "--args=v8_enable_slow_dchecks=true is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
     "cwd": "[BUILDER_CACHE]/V8_Official_Linux64_Debug/v8",
     "env": {

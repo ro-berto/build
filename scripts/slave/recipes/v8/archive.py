@@ -133,6 +133,16 @@ def RunSteps(api):
       return
 
     api.v8.apply_bot_config(api.v8.bot_config_by_buildername(use_goma=True))
+    api.chromium.apply_config('clobber')
+    api.chromium.apply_config('default_target_v8_archive')
+    if api.chromium.c.build_config_fs == 'Release':
+      api.chromium.apply_config('v8_static_library')
+    else:
+      api.chromium.apply_config('slow_dchecks')
+    if api.chromium.c.TARGET_PLATFORM == 'android':
+      api.chromium.apply_config('v8_android')
+    elif api.chromium.c.TARGET_ARCH == 'arm':
+      api.chromium.apply_config('arm_hard_float')
 
     # Opt out of using gyp environment variables.
     api.chromium.c.use_gyp_env = False

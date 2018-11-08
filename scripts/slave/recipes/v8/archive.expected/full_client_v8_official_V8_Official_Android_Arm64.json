@@ -7,7 +7,7 @@
       "--root=[BUILDER_CACHE]/V8_Official_Android_Arm64/v8",
       "gen",
       "//out/Release",
-      "--args=symbol_level=1 v8_android_log_stdout=true v8_static_library=true is_debug=false target_os=\"android\" target_cpu=\"arm64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
+      "--args=v8_static_library=true symbol_level=1 v8_android_log_stdout=true is_debug=false target_os=\"android\" target_cpu=\"arm64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
     "cwd": "[BUILDER_CACHE]/V8_Official_Android_Arm64/v8",
     "env": {
