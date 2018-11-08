@@ -767,7 +767,7 @@ def GenTests(api):
 
   # Test using custom_deps, set_gclient_var and mb_config_path property.
   yield (
-      api.v8.test('client.v8', 'V8 Linux - builder', 'set_gclient_var',
+      api.v8.test('client.v8', 'V8 Foobar - builder', 'set_gclient_var',
                   custom_deps={'v8/foo': 'bar'},
                   mb_config_path='somewhere/else/mb_config.pyl',
                   set_gclient_var='download_gcmole') +
@@ -783,14 +783,15 @@ def GenTests(api):
       api.post_process(DropExpectation)
   )
 
-  # Test using source side properties. The properties we set make no sense at
-  # all. We merely test that they will override the properties specified on
-  # the infra side.
+  # Test using source side properties.
   yield (
-      api.v8.test('client.v8', 'V8 Linux - builder', 'src_side_properties',
+      api.v8.test('client.v8', 'V8 Foobar - builder', 'src_side_properties',
                   build_config='Debug',
                   target_arch='arm',
-                  target_platform='fuchsia') +
+                  target_platform='fuchsia',
+                  triggers=['V8 Foobar'],
+                  triggers_proxy=True,
+      ) +
       api.v8.check_in_param(
           'initialization.bot_update',
           '--spec-path', 'target_cpu = [\'arm\', \'arm64\']') +
@@ -919,5 +920,17 @@ def GenTests(api):
         'measurements.perf dashboard post',
         'measurements.perf dashboard post (2)',
     ))
+  )
+
+  # Test windows-specific build steps.
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'windows',
+    ) +
+    api.platform('win', 64) +
+    api.post_process(MustRun, 'initialization.taskkill') +
+    api.post_process(DropExpectation)
   )
 

@@ -464,9 +464,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     """
     bot_config = builders.FLATTENED_BUILDERS.get(buildername, {})
     v8_config_kwargs = bot_config.get('v8_config_kwargs', {})
-    parent_buildername, parent_bot_config = (
-        builders.PARENT_MAP.get(
-            buildername, (parent_buildername, parent_bot_config)))
 
     if parent_test_spec:
       kwargs.update(self.example_parent_test_spec_properties(
