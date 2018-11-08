@@ -6,6 +6,7 @@ DEPS = [
     'chromium',
     'depot_tools/gclient',
     'depot_tools/gsutil',
+    'recipe_engine/buildbucket',
     'recipe_engine/file',
     'recipe_engine/path',
     'recipe_engine/properties',

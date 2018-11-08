@@ -29,8 +29,8 @@ def RunSteps(api):
     step = 'step %d' % i
     api.clang_coverage.profdata_dir(step)
     api.clang_coverage.shard_merge(step)
-  api.clang_coverage.create_report([api.chromium_tests.steps.SwarmingGTestTest(
-      'base_unittests')])
+  api.clang_coverage.process_coverage_data([
+      api.chromium_tests.steps.SwarmingGTestTest('base_unittests')])
 
   # Exercise these properties to provide coverage only.
   _ = api.clang_coverage.using_coverage
@@ -51,7 +51,11 @@ def GenTests(api):
       + api.post_process(
           post_process.MustRun, 'generate html report for 3 targets')
       + api.post_process(
-          post_process.MustRun, 'gsutil upload coverage report')
+          post_process.MustRun, 'gsutil upload html report')
+      + api.post_process(
+          post_process.MustRun, 'generate metadata for 3 targets')
+      + api.post_process(
+          post_process.MustRun, 'gsutil upload metadata')
       + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
   )
@@ -71,7 +75,11 @@ def GenTests(api):
       + api.post_process(
           post_process.MustRun, 'generate html report for 3 targets')
       + api.post_process(
-          post_process.MustRun, 'gsutil upload coverage report')
+          post_process.MustRun, 'gsutil upload html report')
+      + api.post_process(
+          post_process.MustRun, 'generate metadata for 3 targets')
+      + api.post_process(
+          post_process.MustRun, 'gsutil upload metadata')
       + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
   )

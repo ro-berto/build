@@ -20,6 +20,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     self._base_profdata_dir = None
     # Temp dir for report.
     self._report_dir = None
+    # Temp dir for json metadata
+    self._json_metadata_dir = None
     # Maps step names to subdirectories of the above.
     self._profdata_dirs = {}
     # When set, subset of files to include in the coverage report.
@@ -70,6 +72,13 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       self._report_dir = self.m.path.mkdtemp()
     return self._report_dir
 
+  @property
+  def json_metadata_dir(self):
+    """A temporary directory for the json metadata. Created on first access."""
+    if not self._json_metadata_dir:
+      self._json_metadata_dir = self.m.path.mkdtemp()
+    return self._json_metadata_dir
+
   def profdata_dir(self, step_name=None):
     """Ensures a directory exists for writing the step-level merged profdata.
 
@@ -104,15 +113,18 @@ class ClangCoverageApi(recipe_api.RecipeApi):
             and 'checkout_clang_coverage_tools'
             in self.m.gclient.c.solutions[0].custom_vars)
 
-  def _get_binaries(self, test):
+  def _get_binaries(self, tests):
     """Returns a path to the binary for the given test object."""
     # TODO(crbug.com/899974): Implement a sturdier approach that also works in
     # separate builder-tester setup.
 
     # This naive approach relies on the test binary sharing a name with the test
     # target. Also, this only works for builder_tester.
-    return ([self.m.chromium.output_dir.join(test.isolate_target)]
-            if test.is_gtest and test.runs_on_swarming else [])
+    binaries = []
+    for t in tests:
+      if t.is_gtest and t.runs_on_swarming:
+        binaries.append(self.m.chromium.output_dir.join(t.isolate_target))
+    return list(set(binaries))
 
   def instrument(self, affected_files):
     """Saves source paths to generate coverage instrumentation for to a file.
@@ -134,58 +146,69 @@ class ClangCoverageApi(recipe_api.RecipeApi):
             self.m.chromium.c.build_dir,
         ] + affected_files)
 
-  def create_report(self, tests):
-    """Generate coverage report for tests in build.
-
-    Produce a coverage report for the instrumented test targets and upload to
-    the appropriate bucket.
+  def process_coverage_data(self, tests):
+    """Processes the coverage data for html report or metadata.
 
     Args:
       tests (list of self.m.chromium_tests.stepsl.Test): A list of test objects
           whose binaries we are to create a coverage report for.
     """
-    if len(self._profdata_dirs):
-      out_file = self.profdata_dir().join('merged.profdata')
-      self.m.python(
-          'merge profile data for %d targets' % len(self._profdata_dirs),
-          self.resource('merge_steps.py'),
-          args=[
-              '--input-dir',
-              self.profdata_dir(),
-              '--output-file',
-              out_file,
-              '--llvm-profdata',
-              self.profdata_executable,
-          ])
+    if not self._profdata_dirs:  # pragma: no cover.
+      return
 
-      binaries = list(set(sum((self._get_binaries(t) for t in tests), [])))
-      args = [
-          '--report-directory', self.report_dir, '--profdata-path', out_file,
-          '--llvm-cov', self.cov_executable, '--binaries']
-      args.extend(binaries)
-      if self._affected_files:
-        args.append('--sources')
-        args.extend(self._affected_files)
+    out_file = self.profdata_dir().join('merged.profdata')
+    self.m.python(
+        'merge profile data for %d targets' % len(self._profdata_dirs),
+        self.resource('merge_steps.py'),
+        args=[
+            '--input-dir',
+            self.profdata_dir(),
+            '--output-file',
+            out_file,
+            '--llvm-profdata',
+            self.profdata_executable,
+        ])
 
-      self.m.python(
-          'generate html report for %d targets' % len(self._profdata_dirs),
-          self.resource('make_report.py'),
-          args=args
-      )
+    binaries = self._get_binaries(tests)
 
-      report_gs_path = '%s/%s/coverage_report' % (
-          self.m.properties['buildername'], self.m.properties['buildnumber'])
-      upload_step = self.m.gsutil.upload(
-          self.report_dir,
-          _BUCKET_NAME,
-          report_gs_path,
-          link_name=None,
-          args=['-r'],
-          multithreaded=True,
-          name='upload coverage report')
-      upload_step.presentation.links['coverage report'] = (
-          'https://storage.googleapis.com/%s/%s/index.html' % (_BUCKET_NAME,
-                                                               report_gs_path))
+    self._generate_html_report(binaries, out_file)
+    self._generate_metadata(binaries, out_file)
+
+
+  def _generate_html_report(self, binaries, profdata_path):
+    """Generate html coverage report for the given binaries.
+
+    Produce a coverage report for the instrumented test targets and upload to
+    the appropriate bucket.
+    """
+    args = [
+        '--report-directory', self.report_dir, '--profdata-path', profdata_path,
+        '--llvm-cov', self.cov_executable, '--binaries']
+    args.extend(binaries)
+    if self._affected_files:
+      args.append('--sources')
+      args.extend(
+          [self.m.path['checkout'].join(s) for s in self._affected_files])
+
+    self.m.python(
+        'generate html report for %d targets' % len(self._profdata_dirs),
+        self.resource('make_report.py'),
+        args=args
+    )
+
+    report_gs_path = self._compose_gs_path_for_coverage_data('html')
+    upload_step = self.m.gsutil.upload(
+        self.report_dir,
+        _BUCKET_NAME,
+        report_gs_path,
+        link_name=None,
+        args=['-r'],
+        multithreaded=True,
+        name='upload html report')
+    upload_step.presentation.links['html report'] = (
+        'https://storage.googleapis.com/%s/%s/index.html' % (
+            _BUCKET_NAME, report_gs_path))
+    upload_step.presentation.properties['coverage_html_gs'] = report_gs_path
 
   def shard_merge(self, step_name):
     """Returns a merge object understood by the swarming module.
@@ -202,3 +225,65 @@ class ClangCoverageApi(recipe_api.RecipeApi):
             self.profdata_executable,
         ],
     }
+
+  def _compose_gs_path_for_coverage_data(self, data_type):
+    build = self.m.buildbucket.build
+    if build.input.gerrit_changes:  # pragma: no cover. TODO: mock the build.
+      # Assume that there is only one gerrit patchset which is true for
+      # Chromium CQ in practice.
+      gerrit_change = build.input.gerrit_changes[0]
+      return 'presubmit/%s/%s/%s/%s/%s/%s/%s' % (
+          gerrit_change.host,
+          gerrit_change.change,  # Change id is unique in a Gerrit host.
+          gerrit_change.patchset,
+          build.builder.bucket,
+          build.builder.builder,
+          build.id,
+          data_type,
+      )
+    else:
+      commit = build.input.gitiles_commit
+      assert commit is not None, 'No gitiles commit'
+      return 'postsubmit/%s/%s/%s/%s/%s/%s/%s' % (
+          commit.host,
+          commit.project,
+          commit.id,  # A commit HEX SHA1 is unique in a Gitiles project.
+          build.builder.bucket,
+          build.builder.builder,
+          build.id,
+          data_type,
+      )
+
+  def _generate_metadata(self, binaries, profdata_path):
+    """Generates the coverage info in metadata format."""
+    args = [
+        '--src-path', self.m.path['checkout'],
+        '--output-dir', self.json_metadata_dir,
+        '--profdata-path', profdata_path,
+        '--llvm-cov', self.cov_executable,
+        '--binaries',
+    ]
+    args.extend(binaries)
+    if self._affected_files:
+      args.append('--sources')
+      args.extend(
+          [self.m.path['checkout'].join(s) for s in self._affected_files])
+
+    self.m.python(
+        'generate metadata for %d targets' %
+            len(self._profdata_dirs),
+        self.resource('generate_coverage_metadata.py'),
+        args=args)
+
+    gs_path = self._compose_gs_path_for_coverage_data('metadata')
+    upload_step = self.m.gsutil.upload(self.json_metadata_dir,
+                                       _BUCKET_NAME,
+                                       gs_path,
+                                       link_name=None,
+                                       args=['-r'],
+                                       multithreaded=True,
+                                       name='upload metadata')
+    upload_step.presentation.links['metadata report'] = (
+        'https://storage.googleapis.com/%s/%s/' % (_BUCKET_NAME, gs_path))
+    upload_step.presentation.properties['coverage_metadata_gs_path'] = gs_path
+    upload_step.presentation.properties['coverage_gs_bucket'] = _BUCKET_NAME
