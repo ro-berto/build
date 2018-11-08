@@ -1532,6 +1532,12 @@
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@result.log@{}@@@",
+      "@@@STEP_LOG_END@result.log@@@",
+      "@@@STEP_LOG_LINE@results.json@{}@@@",
+      "@@@STEP_LOG_END@results.json@@@",
+      "@@@STEP_LOG_LINE@run.json@{}@@@",
+      "@@@STEP_LOG_END@run.json@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -1769,7 +1775,7 @@
       "--count",
       "50",
       "LATEST/results.json",
-      ""
+      "{}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "list tests to deflake (Test-step 1)",
@@ -1872,7 +1878,7 @@
       "-o",
       "/path/to/tmp/",
       "LATEST/results.json",
-      "{}"
+      "{}{}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "update flakiness information",
@@ -1893,7 +1899,7 @@
       "--passing",
       "--judgement",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "{}"
+      "{}{}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "test results"

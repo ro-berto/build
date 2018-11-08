@@ -246,7 +246,8 @@ class DartApi(recipe_api.RecipeApi):
           # Every shard is only a single task in swarming
           bot_name = active_result.swarming.summary['shards'][0]['bot_id']
           self._addResultsAndLinks(bot_name, results)
-        self._addToAllResults(all_results, results)
+        if results.runs or results.results:
+          self._addToAllResults(all_results, results)
 
 
   def _addResultsAndLinks(self, bot_name, results):
