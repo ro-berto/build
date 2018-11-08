@@ -291,11 +291,11 @@ class DartApi(recipe_api.RecipeApi):
         name='download previous results',
         ok_ret='any' if self._report_new_results() else {0})
     self.m.gsutil.download(
-        'dart-test-results',
+        'dart-test-results-approved-results',
         'builders/%s/approved_results.json' % builder,
         'LATEST/approved_results.json',
         name='download approved results',
-        ok_ret='any') # todo(athom): succeed only if file does not exist
+        ok_ret='any')
 
 
   def _deflake_results(self, results):

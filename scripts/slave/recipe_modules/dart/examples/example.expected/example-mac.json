@@ -1391,7 +1391,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "gs://dart-test-results/builders/example-mac/approved_results.json",
+      "gs://dart-test-results-approved-results/builders/example-mac/approved_results.json",
       "LATEST/approved_results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
