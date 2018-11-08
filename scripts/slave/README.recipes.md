@@ -3670,19 +3670,19 @@ Examples:
 
 #### **class [V8Api](/scripts/slave/recipe_modules/v8/api.py#96)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/v8/api.py#255)(self, bot_config):**
+&mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/v8/api.py#254)(self, bot_config):**
 
 Entry method for using the v8 api.
 
-&mdash; **def [bot\_config\_by\_buildername](/scripts/slave/recipe_modules/v8/api.py#117)(self, builders=FLATTENED_BUILDERS, use_goma=True):**
+&mdash; **def [bot\_config\_by\_buildername](/scripts/slave/recipe_modules/v8/api.py#116)(self, builders=FLATTENED_BUILDERS, use_goma=True):**
 
-&emsp; **@property**<br>&mdash; **def [bot\_type](/scripts/slave/recipe_modules/v8/api.py#468)(self):**
+&emsp; **@property**<br>&mdash; **def [bot\_type](/scripts/slave/recipe_modules/v8/api.py#464)(self):**
 
-&emsp; **@property**<br>&mdash; **def [build\_output\_dir](/scripts/slave/recipe_modules/v8/api.py#861)(self):**
+&emsp; **@property**<br>&mdash; **def [build\_output\_dir](/scripts/slave/recipe_modules/v8/api.py#839)(self):**
 
 Absolute path to the build product based on the 'checkout' path.
 
-&mdash; **def [buildbucket\_trigger](/scripts/slave/recipe_modules/v8/api.py#1464)(self, bucket, changes, requests, step_name='trigger', service_account='v8-bot', no_buildset=False):**
+&mdash; **def [buildbucket\_trigger](/scripts/slave/recipe_modules/v8/api.py#1442)(self, bucket, changes, requests, step_name='trigger', service_account='v8-bot', no_buildset=False):**
 
 Triggers builds via buildbucket.
 
@@ -3703,11 +3703,11 @@ Args:
       rely on the built-in buildset set by the buildbucket module, e.g. on
       tryserver.
 
-&emsp; **@property**<br>&mdash; **def [builderset](/scripts/slave/recipe_modules/v8/api.py#476)(self):**
+&emsp; **@property**<br>&mdash; **def [builderset](/scripts/slave/recipe_modules/v8/api.py#472)(self):**
 
 Returns a list of names of this builder and all its triggered testers.
 
-&mdash; **def [calc\_missing\_values\_in\_sequence](/scripts/slave/recipe_modules/v8/api.py#1604)(self, sequence, subsequence, value):**
+&mdash; **def [calc\_missing\_values\_in\_sequence](/scripts/slave/recipe_modules/v8/api.py#1582)(self, sequence, subsequence, value):**
 
 Calculate a list of missing values from a subsequence.
 
@@ -3720,15 +3720,15 @@ Returns: A subsequence from sequence [a..b], where b is the value and
          a-1 is either in subsequence or value was the first
          element in subsequence.
 
-&mdash; **def [calculate\_patch\_base\_gerrit](/scripts/slave/recipe_modules/v8/api.py#412)(self):**
+&mdash; **def [calculate\_patch\_base\_gerrit](/scripts/slave/recipe_modules/v8/api.py#408)(self):**
 
 Calculates the commit hash a gerrit patch was branched off.
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/v8/api.py#358)(self, revision=None, \*\*kwargs):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/v8/api.py#354)(self, revision=None, \*\*kwargs):**
 
-&mdash; **def [collect\_post\_compile\_metrics](/scripts/slave/recipe_modules/v8/api.py#768)(self):**
+&mdash; **def [collect\_post\_compile\_metrics](/scripts/slave/recipe_modules/v8/api.py#746)(self):**
 
-&mdash; **def [compile](/scripts/slave/recipe_modules/v8/api.py#701)(self, test_spec=v8_builders.EmptyTestSpec, mb_config_path=None, out_dir=None, \*\*kwargs):**
+&mdash; **def [compile](/scripts/slave/recipe_modules/v8/api.py#672)(self, test_spec=v8_builders.EmptyTestSpec, mb_config_path=None, out_dir=None, \*\*kwargs):**
 
 Compile all desired targets and isolate tests.
 
@@ -3742,51 +3742,51 @@ Args:
   out_dir: Name of the build output directory, e.g. 'out-ref'. Defaults to
     'out'. Note that it is not a path, but just the name of the directory.
 
-&mdash; **def [create\_coverage\_context](/scripts/slave/recipe_modules/v8/api.py#954)(self):**
+&mdash; **def [create\_coverage\_context](/scripts/slave/recipe_modules/v8/api.py#932)(self):**
 
-&mdash; **def [create\_test](/scripts/slave/recipe_modules/v8/api.py#960)(self, test):**
+&mdash; **def [create\_test](/scripts/slave/recipe_modules/v8/api.py#938)(self, test):**
 
 Wrapper that allows to shortcut common tests with their names.
 
 Returns: A runnable test instance.
 
-&mdash; **def [create\_tests](/scripts/slave/recipe_modules/v8/api.py#967)(self):**
+&mdash; **def [create\_tests](/scripts/slave/recipe_modules/v8/api.py#945)(self):**
 
-&mdash; **def [dedupe\_tests](/scripts/slave/recipe_modules/v8/api.py#518)(self, high_prec_tests, low_prec_tests):**
+&mdash; **def [dedupe\_tests](/scripts/slave/recipe_modules/v8/api.py#514)(self, high_prec_tests, low_prec_tests):**
 
 Dedupe tests with lower precedence.
 
-&emsp; **@property**<br>&mdash; **def [depot\_tools\_path](/scripts/slave/recipe_modules/v8/api.py#795)(self):**
+&emsp; **@property**<br>&mdash; **def [depot\_tools\_path](/scripts/slave/recipe_modules/v8/api.py#773)(self):**
 
 Returns path to depot_tools pinned in the V8 checkout.
 
-&mdash; **def [download\_isolated\_json](/scripts/slave/recipe_modules/v8/api.py#849)(self, revision):**
+&mdash; **def [download\_isolated\_json](/scripts/slave/recipe_modules/v8/api.py#827)(self, revision):**
 
-&emsp; **@property**<br>&mdash; **def [extra\_flags](/scripts/slave/recipe_modules/v8/api.py#1222)(self):**
+&emsp; **@property**<br>&mdash; **def [extra\_flags](/scripts/slave/recipe_modules/v8/api.py#1200)(self):**
 
-&mdash; **def [extra\_tests\_from\_properties](/scripts/slave/recipe_modules/v8/api.py#500)(self):**
+&mdash; **def [extra\_tests\_from\_properties](/scripts/slave/recipe_modules/v8/api.py#496)(self):**
 
 Returns runnable testing.BaseTest objects for each extra test specified
 by parent_test_spec property.
 
-&mdash; **def [extra\_tests\_from\_test\_spec](/scripts/slave/recipe_modules/v8/api.py#509)(self, test_spec):**
+&mdash; **def [extra\_tests\_from\_test\_spec](/scripts/slave/recipe_modules/v8/api.py#505)(self, test_spec):**
 
 Returns runnable testing.BaseTest objects for each extra test specified
 in the test spec of the current builder.
 
-&emsp; **@staticmethod**<br>&mdash; **def [format\_duration](/scripts/slave/recipe_modules/v8/api.py#1135)(duration_in_seconds):**
+&emsp; **@staticmethod**<br>&mdash; **def [format\_duration](/scripts/slave/recipe_modules/v8/api.py#1113)(duration_in_seconds):**
 
-&emsp; **@property**<br>&mdash; **def [generate\_gcov\_coverage](/scripts/slave/recipe_modules/v8/api.py#866)(self):**
+&emsp; **@property**<br>&mdash; **def [generate\_gcov\_coverage](/scripts/slave/recipe_modules/v8/api.py#844)(self):**
 
-&emsp; **@property**<br>&mdash; **def [generate\_sanitizer\_coverage](/scripts/slave/recipe_modules/v8/api.py#950)(self):**
+&emsp; **@property**<br>&mdash; **def [generate\_sanitizer\_coverage](/scripts/slave/recipe_modules/v8/api.py#928)(self):**
 
-&mdash; **def [get\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1580)(self, bisect_range):**
+&mdash; **def [get\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1558)(self, bisect_range):**
 
-&mdash; **def [get\_change\_range](/scripts/slave/recipe_modules/v8/api.py#1523)(self):**
+&mdash; **def [get\_change\_range](/scripts/slave/recipe_modules/v8/api.py#1501)(self):**
 
-&mdash; **def [get\_changes](/scripts/slave/recipe_modules/v8/api.py#1458)(self):**
+&mdash; **def [get\_changes](/scripts/slave/recipe_modules/v8/api.py#1436)(self):**
 
-&mdash; **def [get\_test\_roots](/scripts/slave/recipe_modules/v8/api.py#182)(self):**
+&mdash; **def [get\_test\_roots](/scripts/slave/recipe_modules/v8/api.py#181)(self):**
 
 Returns the list of default and extensible test root directories.
 
@@ -3800,24 +3800,20 @@ under v8/custom_deps.
 
 Returns: List of paths to test roots.
 
-&mdash; **def [init\_gcov\_coverage](/scripts/slave/recipe_modules/v8/api.py#870)(self):**
+&mdash; **def [init\_gcov\_coverage](/scripts/slave/recipe_modules/v8/api.py#848)(self):**
 
 Delete all gcov counter files.
 
-&emsp; **@property**<br>&mdash; **def [is\_pure\_swarming\_tester](/scripts/slave/recipe_modules/v8/api.py#970)(self):**
+&emsp; **@property**<br>&mdash; **def [is\_pure\_swarming\_tester](/scripts/slave/recipe_modules/v8/api.py#948)(self):**
 
-&emsp; **@property**<br>&mdash; **def [isolate\_targets](/scripts/slave/recipe_modules/v8/api.py#578)(self):**
-
-Returns the isolate targets statically known from builders.py.
-
-&mdash; **def [isolate\_targets\_from\_tests](/scripts/slave/recipe_modules/v8/api.py#558)(self, tests):**
+&mdash; **def [isolate\_targets\_from\_tests](/scripts/slave/recipe_modules/v8/api.py#554)(self, tests):**
 
 Returns the isolated targets associated with a list of tests.
 
 Args:
   tests: A list of test names used as keys in the V8 API's test config.
 
-&mdash; **def [isolate\_tests](/scripts/slave/recipe_modules/v8/api.py#603)(self, isolate_targets, out_dir=None):**
+&mdash; **def [isolate\_tests](/scripts/slave/recipe_modules/v8/api.py#574)(self, isolate_targets, out_dir=None):**
 
 Upload isolated tests to isolate server.
 
@@ -3826,9 +3822,9 @@ Args:
   out_dir: Name of the build output directory, e.g. 'out-ref'. Defaults to
     'out'. Note that it is not a path, but just the name of the directory.
 
-&emsp; **@property**<br>&mdash; **def [isolated\_archive\_path](/scripts/slave/recipe_modules/v8/api.py#815)(self):**
+&emsp; **@property**<br>&mdash; **def [isolated\_archive\_path](/scripts/slave/recipe_modules/v8/api.py#793)(self):**
 
-&mdash; **def [load\_dynamic\_test\_configs](/scripts/slave/recipe_modules/v8/api.py#216)(self, root):**
+&mdash; **def [load\_dynamic\_test\_configs](/scripts/slave/recipe_modules/v8/api.py#215)(self, root):**
 
 Add test configs from configured location.
 
@@ -3840,23 +3836,23 @@ Args:
       additional test checkout.
 Returns: Test config dict.
 
-&mdash; **def [load\_static\_test\_configs](/scripts/slave/recipe_modules/v8/api.py#212)(self):**
+&mdash; **def [load\_static\_test\_configs](/scripts/slave/recipe_modules/v8/api.py#211)(self):**
 
 Set predifined test configs from build repository.
 
-&mdash; **def [log\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1626)(self, available_bisect_range):**
+&mdash; **def [log\_available\_range](/scripts/slave/recipe_modules/v8/api.py#1604)(self, available_bisect_range):**
 
-&mdash; **def [maybe\_bisect](/scripts/slave/recipe_modules/v8/api.py#1039)(self, test_results):**
+&mdash; **def [maybe\_bisect](/scripts/slave/recipe_modules/v8/api.py#1017)(self, test_results):**
 
 Build-local bisection for one failure.
 
-&mdash; **def [maybe\_create\_clusterfuzz\_archive](/scripts/slave/recipe_modules/v8/api.py#832)(self, update_step):**
+&mdash; **def [maybe\_create\_clusterfuzz\_archive](/scripts/slave/recipe_modules/v8/api.py#810)(self, update_step):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [maybe\_nest](/scripts/slave/recipe_modules/v8/api.py#975)(self, condition, parent_step_name):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [maybe\_nest](/scripts/slave/recipe_modules/v8/api.py#953)(self, condition, parent_step_name):**
 
-&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/v8/api.py#1326)(self, test_spec=v8_builders.EmptyTestSpec, \*\*additional_properties):**
+&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/v8/api.py#1304)(self, test_spec=v8_builders.EmptyTestSpec, \*\*additional_properties):**
 
-&mdash; **def [parse\_revision\_props](/scripts/slave/recipe_modules/v8/api.py#389)(self, got_revision, got_revision_cp=None):**
+&mdash; **def [parse\_revision\_props](/scripts/slave/recipe_modules/v8/api.py#385)(self, got_revision, got_revision_cp=None):**
 
 Parses got_revision and got_revision_cp properties.
 
@@ -3871,7 +3867,7 @@ Args:
   got_revision_cp: Value of the Cr-Commit-Position commit footer, e.g.
       "refs/heads/master@{#12345}".
 
-&mdash; **def [read\_test\_spec](/scripts/slave/recipe_modules/v8/api.py#524)(self, root):**
+&mdash; **def [read\_test\_spec](/scripts/slave/recipe_modules/v8/api.py#520)(self, root):**
 
 Reads a test specification file under <root>/infra/testing/builders.pyl.
 
@@ -3880,48 +3876,48 @@ Args:
 Returns: v8_builders.TestSpec object, filtered by interesting builders
   (current builder and all its triggered testers).
 
-&mdash; **def [read\_version\_file](/scripts/slave/recipe_modules/v8/api.py#1642)(self, ref, step_name_desc):**
+&mdash; **def [read\_version\_file](/scripts/slave/recipe_modules/v8/api.py#1620)(self, ref, step_name_desc):**
 
 Read and return the version-file content at a paricular ref.
 
-&mdash; **def [read\_version\_from\_ref](/scripts/slave/recipe_modules/v8/api.py#1651)(self, ref, step_name_desc):**
+&mdash; **def [read\_version\_from\_ref](/scripts/slave/recipe_modules/v8/api.py#1629)(self, ref, step_name_desc):**
 
 Read and return the version at a paricular ref.
 
-&emsp; **@property**<br>&mdash; **def [relative\_path\_to\_d8](/scripts/slave/recipe_modules/v8/api.py#496)(self):**
+&emsp; **@property**<br>&mdash; **def [relative\_path\_to\_d8](/scripts/slave/recipe_modules/v8/api.py#492)(self):**
 
-&mdash; **def [report\_culprits](/scripts/slave/recipe_modules/v8/api.py#1631)(self, culprit_range):**
+&mdash; **def [report\_culprits](/scripts/slave/recipe_modules/v8/api.py#1609)(self, culprit_range):**
 
-&mdash; **def [runhooks](/scripts/slave/recipe_modules/v8/api.py#459)(self, \*\*kwargs):**
+&mdash; **def [runhooks](/scripts/slave/recipe_modules/v8/api.py#455)(self, \*\*kwargs):**
 
-&mdash; **def [runtests](/scripts/slave/recipe_modules/v8/api.py#983)(self, tests):**
+&mdash; **def [runtests](/scripts/slave/recipe_modules/v8/api.py#961)(self, tests):**
 
-&mdash; **def [set\_chromium\_configs](/scripts/slave/recipe_modules/v8/api.py#332)(self, clobber, default_targets):**
+&mdash; **def [set\_chromium\_configs](/scripts/slave/recipe_modules/v8/api.py#328)(self, clobber, default_targets):**
 
-&mdash; **def [set\_gclient\_custom\_deps](/scripts/slave/recipe_modules/v8/api.py#327)(self, custom_deps):**
+&mdash; **def [set\_gclient\_custom\_deps](/scripts/slave/recipe_modules/v8/api.py#323)(self, custom_deps):**
 
 Configures additional gclient custom_deps to be synced.
 
-&mdash; **def [set\_gclient\_custom\_var](/scripts/slave/recipe_modules/v8/api.py#318)(self, var_name):**
+&mdash; **def [set\_gclient\_custom\_var](/scripts/slave/recipe_modules/v8/api.py#314)(self, var_name):**
 
 Sets the gclient custom var `var_name` if given.
 
 This customizes gclient sync, based on conditions on the variable in the
 V8 DEPS file.
 
-&mdash; **def [set\_up\_swarming](/scripts/slave/recipe_modules/v8/api.py#428)(self):**
+&mdash; **def [set\_up\_swarming](/scripts/slave/recipe_modules/v8/api.py#424)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_build](/scripts/slave/recipe_modules/v8/api.py#484)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_build](/scripts/slave/recipe_modules/v8/api.py#480)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_collect\_post\_compile\_metrics](/scripts/slave/recipe_modules/v8/api.py#762)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_collect\_post\_compile\_metrics](/scripts/slave/recipe_modules/v8/api.py#740)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_test](/scripts/slave/recipe_modules/v8/api.py#488)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_test](/scripts/slave/recipe_modules/v8/api.py#484)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_upload\_build](/scripts/slave/recipe_modules/v8/api.py#492)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_upload\_build](/scripts/slave/recipe_modules/v8/api.py#488)(self):**
 
-&emsp; **@property**<br>&mdash; **def [test\_filter](/scripts/slave/recipe_modules/v8/api.py#1248)(self):**
+&emsp; **@property**<br>&mdash; **def [test\_filter](/scripts/slave/recipe_modules/v8/api.py#1226)(self):**
 
-&mdash; **def [testing\_random\_seed](/scripts/slave/recipe_modules/v8/api.py#338)(self):**
+&mdash; **def [testing\_random\_seed](/scripts/slave/recipe_modules/v8/api.py#334)(self):**
 
 Return a random seed suitable for v8 testing.
 
@@ -3929,7 +3925,7 @@ If there are isolate hashes, build a random seed based on the hashes.
 Otherwise use the system's PRNG. This uses a deterministic seed for
 recipe simulation.
 
-&mdash; **def [update\_bot\_config](/scripts/slave/recipe_modules/v8/api.py#129)(self, bot_config, binary_size_tracking, build_config, clusterfuzz_archive, enable_swarming, target_arch, target_platform, track_build_dependencies, triggers, triggers_proxy):**
+&mdash; **def [update\_bot\_config](/scripts/slave/recipe_modules/v8/api.py#128)(self, bot_config, binary_size_tracking, build_config, clusterfuzz_archive, enable_swarming, target_arch, target_platform, track_build_dependencies, triggers, triggers_proxy):**
 
 Update bot_config dict with src-side properties.
 
@@ -3951,19 +3947,19 @@ Args:
 Returns:
   An updated copy of the bot_config dict.
 
-&mdash; **def [update\_test\_configs](/scripts/slave/recipe_modules/v8/api.py#207)(self, test_configs):**
+&mdash; **def [update\_test\_configs](/scripts/slave/recipe_modules/v8/api.py#206)(self, test_configs):**
 
 Update test configs without mutating previous copy.
 
-&mdash; **def [upload\_build](/scripts/slave/recipe_modules/v8/api.py#808)(self, name_suffix='', archive=None):**
+&mdash; **def [upload\_build](/scripts/slave/recipe_modules/v8/api.py#786)(self, name_suffix='', archive=None):**
 
-&mdash; **def [upload\_gcov\_coverage\_report](/scripts/slave/recipe_modules/v8/api.py#880)(self):**
+&mdash; **def [upload\_gcov\_coverage\_report](/scripts/slave/recipe_modules/v8/api.py#858)(self):**
 
 Capture coverage data and upload a report.
 
-&mdash; **def [upload\_isolated\_json](/scripts/slave/recipe_modules/v8/api.py#824)(self):**
+&mdash; **def [upload\_isolated\_json](/scripts/slave/recipe_modules/v8/api.py#802)(self):**
 
-&emsp; **@staticmethod**<br>&mdash; **def [version\_from\_file](/scripts/slave/recipe_modules/v8/api.py#1655)(blob):**
+&emsp; **@staticmethod**<br>&mdash; **def [version\_from\_file](/scripts/slave/recipe_modules/v8/api.py#1633)(blob):**
 ### *recipe_modules* / [wct](/scripts/slave/recipe_modules/wct)
 
 [DEPS](/scripts/slave/recipe_modules/wct/__init__.py#5): [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]

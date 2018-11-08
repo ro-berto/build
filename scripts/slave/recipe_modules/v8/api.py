@@ -107,7 +107,6 @@ class V8Api(recipe_api.RecipeApi):
     self.rerun_failures_count = None
     self.test_duration_sec = None
     self.isolated_tests = None
-    self._isolate_targets_cached = None
     self.build_environment = None
     self.checkout_root = None
     self.revision = None
@@ -306,9 +305,6 @@ class V8Api(recipe_api.RecipeApi):
     # property (parsed by self.m.isolate.isolated_tests property getter invoked
     # here, which returns a new dict each time, thus no need to copy it here).
     self.isolated_tests = self.m.isolate.isolated_tests
-
-    # Cache to compute isolated targets only once.
-    self._isolate_targets_cached = []
 
     # This is inferred from the run_mb step or from the parent bot. If mb is
     # run multiple times, it is overwritten. It contains gn arguments.
@@ -575,31 +571,6 @@ class V8Api(recipe_api.RecipeApi):
         targets.extend(config['tests'])
     return targets
 
-  @property
-  def isolate_targets(self):
-    """Returns the isolate targets statically known from builders.py."""
-    # TODO(machenbach): This code can be removed when no tests are specified
-    # any longer in builders.py.
-    if self._isolate_targets_cached:  # pragma: no cover
-      return self._isolate_targets_cached
-
-    if self.bot_config.get('enable_swarming', True):
-      # Find tests to isolate on builders.
-      for buildername in self.builderset:
-        bot_config = v8_builders.FLATTENED_BUILDERS.get(buildername, {})
-        self._isolate_targets_cached.extend(
-            self.isolate_targets_from_tests(
-                [test.name for test in bot_config.get('tests', [])]))
-
-      # Add the performance-tests isolate everywhere, where the perf-bot proxy
-      # is triggered.
-      if self.bot_config.get('triggers_proxy', False):
-        self._isolate_targets_cached.append('perf')
-
-    self._isolate_targets_cached = sorted(list(set(
-        self._isolate_targets_cached)))
-    return self._isolate_targets_cached
-
   def isolate_tests(self, isolate_targets, out_dir=None):
     """Upload isolated tests to isolate server.
 
@@ -717,12 +688,19 @@ class V8Api(recipe_api.RecipeApi):
       use_goma = (self.m.chromium.c.compile_py.compiler and
                   'goma' in self.m.chromium.c.compile_py.compiler)
 
-      # Calculate extra targets to isolate from V8-side test specification. The
+      # Calculate targets to isolate from V8-side test specification. The
       # test_spec contains extra TestStepConfig objects for the current builder
       # and all its triggered builders.
-      extra_targets = self.isolate_targets_from_tests(
+      isolate_targets = self.isolate_targets_from_tests(
           test_spec.get_all_test_names())
-      isolate_targets = sorted(list(set(self.isolate_targets + extra_targets)))
+
+      # Add the performance-tests isolate everywhere, where the perf-bot proxy
+      # is triggered.
+      if self.bot_config.get('triggers_proxy', False):
+        isolate_targets = isolate_targets + ['perf']
+
+      # Sort and dedupe.
+      isolate_targets = sorted(list(set(isolate_targets)))
 
       build_dir = None
       if out_dir:  # pragma: no cover
