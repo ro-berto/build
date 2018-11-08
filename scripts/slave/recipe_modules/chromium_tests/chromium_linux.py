@@ -9,6 +9,38 @@ SPEC = {
     'build_gs_bucket': 'chromium-linux-archive',
   },
   'builders': {
+    'fuchsia-arm64-cast': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['fuchsia'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'fuchsia',
+      },
+      'bot_type': 'builder',
+      'checkout_dir': 'linux',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'fuchsia-x64-cast': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'gclient_apply_config': ['fuchsia'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'fuchsia',
+      },
+      'bot_type': 'builder',
+      'checkout_dir': 'linux',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'linux-gcc-rel': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [

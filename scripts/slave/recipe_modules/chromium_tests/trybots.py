@@ -391,6 +391,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.linux',
         'buildername': 'Fuchsia ARM64',
       }),
+      'fuchsia-arm64-cast': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'fuchsia-arm64-cast',
+      }),
       'fuchsia_arm64_cast_audio': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Fuchsia ARM64 Cast Audio',
@@ -402,6 +406,10 @@ TRYBOTS = freeze({
       'fuchsia_x64': simple_bot({
         'mastername': 'chromium.linux',
         'buildername': 'Fuchsia x64',
+      }),
+      'fuchsia-x64-cast': simple_bot({
+        'mastername': 'chromium.linux',
+        'buildername': 'fuchsia-x64-cast',
       }),
       'fuchsia_x64_cast_audio': simple_bot({
         'mastername': 'chromium.linux',
