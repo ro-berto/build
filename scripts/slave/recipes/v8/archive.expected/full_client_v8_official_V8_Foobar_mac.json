@@ -1,0 +1,23 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
+      "--root=[BUILDER_CACHE]/V8_Foobar/v8",
+      "gen",
+      "//out/Release",
+      "--args=is_clang=true v8_static_library=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "build.gn",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  }
+]

@@ -4,12 +4,12 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
-      "--root=[BUILDER_CACHE]/V8_Official_Linux32_Debug/v8",
+      "--root=[BUILDER_CACHE]/V8_Foobar/v8",
       "gen",
       "//out/Debug",
-      "--args=v8_enable_slow_dchecks=true is_debug=true target_cpu=\"x86\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
+      "--args=v8_enable_slow_dchecks=true is_debug=true target_cpu=\"x64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Official_Linux32_Debug/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -33,12 +33,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Official_Linux32_Debug/v8/out/Debug",
+      "[BUILDER_CACHE]/V8_Foobar/v8/out/Debug",
       "-j",
       "20",
       "v8_archive"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Official_Linux32_Debug/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -52,16 +52,16 @@
     "cmd": [],
     "name": "make archive",
     "~followup_annotations": [
-      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-linux32-dbg-3.4.3.17.zip@@@"
+      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-linux64-dbg-3.4.3.17.zip@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Official_Linux32_Debug/v8/tools/release/filter_build_files.py",
+      "[BUILDER_CACHE]/V8_Foobar/v8/tools/release/filter_build_files.py",
       "--dir",
-      "[BUILDER_CACHE]/V8_Official_Linux32_Debug/v8/out/Debug",
+      "[BUILDER_CACHE]/V8_Foobar/v8/out/Debug",
       "--platform",
       "linux",
       "--type",
@@ -74,8 +74,8 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Official_Linux32_Debug/v8/out/Debug/d8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Official_Linux32_Debug/v8/out/Debug/icudtl.dat\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Foobar/v8/out/Debug/d8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Foobar/v8/out/Debug/icudtl.dat\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -87,7 +87,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "make archive.zipping",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Linux32_Debug/v8/out/Debug/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Linux32_Debug/v8/out/Debug/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/V8_Official_Linux32_Debug/v8/out/Debug\"}",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Debug/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Debug/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Debug\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -104,13 +104,13 @@
       "-a",
       "public-read",
       "[CLEANUP]/archive.zip",
-      "gs://chromium-v8/official/3.4/v8-linux32-dbg-3.4.3.17.zip"
+      "gs://chromium-v8/official/3.4/v8-linux64-dbg-3.4.3.17.zip"
     ],
     "infra_step": true,
     "name": "make archive.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/3.4/v8-linux32-dbg-3.4.3.17.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/3.4/v8-linux64-dbg-3.4.3.17.zip@@@"
     ]
   }
 ]

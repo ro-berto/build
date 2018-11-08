@@ -174,7 +174,7 @@ def RunSteps(api, binary_size_tracking, build_config, clobber,
 
 
 def GenTests(api):
-  for mastername, _, buildername, _ in api.v8.iter_builders('v8'):
+  for mastername, _, buildername, _ in api.v8.iter_builders():
     yield api.v8.test(mastername, buildername)
 
   yield (

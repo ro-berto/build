@@ -4,15 +4,14 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
-      "--root=[BUILDER_CACHE]/V8_Official_Mac64/v8",
+      "--root=[BUILDER_CACHE]/V8_Foobar/v8",
       "gen",
       "//out/Release",
-      "--args=is_clang=true v8_static_library=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
+      "--args=v8_static_library=true arm_float_abi=\"hard\" is_debug=false target_cpu=\"arm\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Official_Mac64/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "build.gn",
@@ -34,15 +33,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/V8_Official_Mac64/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
       "-j",
       "20",
       "v8_archive"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Official_Mac64/v8",
+    "cwd": "[BUILDER_CACHE]/V8_Foobar/v8",
     "env": {
       "CHROME_HEADLESS": "1",
-      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "build.compile",
@@ -54,18 +52,18 @@
     "cmd": [],
     "name": "make archive",
     "~followup_annotations": [
-      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-mac64-rel-3.4.3.17.zip@@@"
+      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-linux-arm32-rel-3.4.3.17.zip@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Official_Mac64/v8/tools/release/filter_build_files.py",
+      "[BUILDER_CACHE]/V8_Foobar/v8/tools/release/filter_build_files.py",
       "--dir",
-      "[BUILDER_CACHE]/V8_Official_Mac64/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
       "--platform",
-      "mac",
+      "linux",
       "--type",
       "exe",
       "--json-output",
@@ -76,8 +74,8 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Official_Mac64/v8/out/Release/d8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Official_Mac64/v8/out/Release/icudtl.dat\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/d8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/icudtl.dat\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -89,7 +87,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "make archive.zipping",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Mac64/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Mac64/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/V8_Official_Mac64/v8/out/Release\"}",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -106,31 +104,31 @@
       "-a",
       "public-read",
       "[CLEANUP]/archive.zip",
-      "gs://chromium-v8/official/3.4/v8-mac64-rel-3.4.3.17.zip"
+      "gs://chromium-v8/official/3.4/v8-linux-arm32-rel-3.4.3.17.zip"
     ],
     "infra_step": true,
     "name": "make archive.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/3.4/v8-mac64-rel-3.4.3.17.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/3.4/v8-linux-arm32-rel-3.4.3.17.zip@@@"
     ]
   },
   {
     "cmd": [],
     "name": "make archive (libs)",
     "~followup_annotations": [
-      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-mac64-libs-rel-3.4.3.17.zip@@@"
+      "@@@STEP_LINK@download@https://storage.googleapis.com/chromium-v8/official/3.4/v8-linux-arm32-libs-rel-3.4.3.17.zip@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Official_Mac64/v8/tools/release/filter_build_files.py",
+      "[BUILDER_CACHE]/V8_Foobar/v8/tools/release/filter_build_files.py",
       "--dir",
-      "[BUILDER_CACHE]/V8_Official_Mac64/v8/out/Release",
+      "[BUILDER_CACHE]/V8_Foobar/v8/out/Release",
       "--platform",
-      "mac",
+      "linux",
       "--type",
       "lib",
       "--json-output",
@@ -141,8 +139,8 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Official_Mac64/v8/out/Release/d8\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Official_Mac64/v8/out/Release/icudtl.dat\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/d8\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/icudtl.dat\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -154,7 +152,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "make archive (libs).zipping",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Mac64/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Official_Mac64/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/V8_Official_Mac64/v8/out/Release\"}",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/d8\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release/icudtl.dat\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/archive.zip\", \"root\": \"[BUILDER_CACHE]/V8_Foobar/v8/out/Release\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -171,13 +169,13 @@
       "-a",
       "public-read",
       "[CLEANUP]/archive.zip",
-      "gs://chromium-v8/official/3.4/v8-mac64-libs-rel-3.4.3.17.zip"
+      "gs://chromium-v8/official/3.4/v8-linux-arm32-libs-rel-3.4.3.17.zip"
     ],
     "infra_step": true,
     "name": "make archive (libs).gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/3.4/v8-mac64-libs-rel-3.4.3.17.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/official/3.4/v8-linux-arm32-libs-rel-3.4.3.17.zip@@@"
     ]
   }
 ]

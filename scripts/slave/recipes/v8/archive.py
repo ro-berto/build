@@ -10,6 +10,7 @@ import re
 
 from recipe_engine.post_process import (
     DoesNotRun, DropExpectation, Filter, MustRun)
+from recipe_engine.recipe_api import Property
 
 DEPS = [
   'chromium',
@@ -27,6 +28,18 @@ DEPS = [
   'v8',
   'zip',
 ]
+
+
+PROPERTIES = {
+  # One of Release|Debug.
+  'build_config': Property(default=None, kind=str),
+  # One of intel|arm|mips.
+  'target_arch': Property(default=None, kind=str),
+  # One of 32|64.
+  'target_bits': Property(default=None, kind=int),
+  # One of android|fuchsia|linux|mac|win.
+  'target_platform': Property(default=None, kind=str),
+}
 
 ARCHIVE_LINK = 'https://storage.googleapis.com/chromium-v8/official/%s/%s'
 BRANCH_RE = re.compile(r'^refs/(branch-heads/\d+\.\d+|heads/\d+\.\d+\.\d+)$')
@@ -124,7 +137,7 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
         ARCHIVE_LINK % (gs_path_suffix, archive_name))
 
 
-def RunSteps(api):
+def RunSteps(api, build_config, target_arch, target_bits, target_platform):
   with api.step.nest('initialization'):
     # Ensure a proper branch is specified.
     branch = api.properties.get('branch')
@@ -132,7 +145,21 @@ def RunSteps(api):
       api.step('Skipping due to missing release branch.', cmd=None)
       return
 
-    api.v8.apply_bot_config(api.v8.bot_config_by_buildername(use_goma=True))
+    # Apply properties from cr-buildbucket.cfg.
+    bot_config = {
+      'chromium_apply_config': [
+        'default_compiler', 'goma', 'gn'],
+      'v8_config_kwargs': {},
+    }
+    for key, value in (
+        ('BUILD_CONFIG', build_config),
+        ('TARGET_ARCH', target_arch),
+        ('TARGET_BITS', target_bits),
+        ('TARGET_PLATFORM', target_platform)):
+      if value:
+        bot_config['v8_config_kwargs'][key] = value
+
+    api.v8.apply_bot_config(bot_config)
     api.chromium.apply_config('clobber')
     api.chromium.apply_config('default_target_v8_archive')
     if api.chromium.c.build_config_fs == 'Release':
@@ -173,16 +200,16 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  for mastername, _, buildername, bot_config in api.v8.iter_builders(
-      'v8/archive'):
-    test = (
-        api.test(api.v8.test_name(mastername, buildername)) +
-        api.properties.generic(mastername=mastername,
-                               buildername=buildername,
+  def test_defaults(name, platform, **kwargs):
+    return (
+        api.test(api.v8.test_name('client.v8.official', 'V8 Foobar', name)) +
+        api.properties.generic(mastername='client.v8.official',
+                               buildername='V8 Foobar',
                                branch='refs/branch-heads/3.4',
                                revision='a' * 40,
-                               path_config='kitchen') +
-        api.platform(bot_config['testing']['platform'], 64) +
+                               path_config='kitchen',
+                               **kwargs) +
+        api.platform(platform, 64) +
         api.v8.version_file(17, 'head', prefix='initialization.') +
         api.override_step_data(
             'initialization.git describe',
@@ -196,41 +223,82 @@ def GenTests(api):
             'make archive.zipping', 'make archive.gsutil upload')
     )
 
-    if 'android' in buildername.lower():
-      # Make sure bot_update specifies target_os on Android builders.
-      test += api.v8.check_in_param(
-          'initialization.bot_update', '--spec-path',
-          'target_os = [\'android\']')
-
-    if buildername == 'V8 Official Arm32':
-      # Make sure bot_update specifies target_cpu on Arm builders.
-      test += api.v8.check_in_param(
-          'initialization.bot_update', '--spec-path',
-          'target_cpu = [\'arm\', \'arm64\']')
-
+  def filter_steps(is_release):
     expected_steps = [
         'build.gn', 'build.compile', 'make archive',
         'make archive.filter build files', 'make archive.zipping',
         'make archive.gsutil upload',
     ]
-    if 'Debug' not in buildername:
+    if is_release:
       expected_steps.extend([
         'make archive (libs)', 'make archive (libs).filter build files',
         'make archive (libs).zipping', 'make archive (libs).gsutil upload',
       ])
 
-    test += api.post_process(Filter(*expected_steps))
-    yield test
+    return api.post_process(Filter(*expected_steps))
+
+  # Test standard run on linux.
+  yield (
+      test_defaults('linux', 'linux', build_config='Debug', target_bits=64) +
+      filter_steps(is_release=False)
+  )
+
+  # Test Android-specific things.
+  yield (
+      test_defaults(
+          'android', 'linux', build_config='Release',
+          target_arch='arm', target_bits=64, target_platform='android') +
+      # Make sure bot_update specifies target_os on Android builders.
+      api.v8.check_in_param(
+          'initialization.bot_update', '--spec-path',
+          'target_os = [\'android\']') +
+      filter_steps(is_release=True)
+  )
+
+  # Test Arm-specific things.
+  yield (
+      test_defaults(
+          'arm', 'linux', build_config='Release',
+          target_arch='arm', target_bits=32) +
+      # Make sure bot_update specifies target_cpu on Arm builders.
+      api.v8.check_in_param(
+          'initialization.bot_update', '--spec-path',
+          'target_cpu = [\'arm\', \'arm64\']') +
+      filter_steps(is_release=True)
+  )
+
+  # Test Windows-specific things.
+  yield (
+      test_defaults(
+          'windows', 'win', build_config='Release', target_bits=64) +
+      # Check that _x64 suffix is correctly removed on windows.
+      api.v8.check_param_equals(
+          'make archive.filter build files',
+          '--dir',
+          '[BUILDER_CACHE]\\V8_Foobar\\v8\\out\\Release') +
+      # Show GN configs to be resiliant to changes of chromium configs.
+      api.post_process(Filter('build.gn'))
+  )
+
+  # Test Mac-specific things.
+  yield (
+      test_defaults(
+          'mac', 'mac', build_config='Release', target_bits=64) +
+      # Show GN configs to be resiliant to changes of chromium configs.
+      api.post_process(Filter('build.gn'))
+  )
 
   # Test bailout on missing branch.
   mastername = 'client.v8.official'
-  buildername = 'V8 Official Linux64'
+  buildername = 'V8 Foobar'
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'no_branch')) +
       api.properties.generic(mastername=mastername,
                              buildername=buildername,
                              revision='a' * 40,
-                             path_config='kitchen') +
+                             path_config='kitchen',
+                             build_config='Release',
+                             target_bits=64) +
       api.post_process(
         MustRun, 'initialization.Skipping due to missing release branch.') +
       api.post_process(
@@ -242,14 +310,16 @@ def GenTests(api):
 
   # Test bailout on missing tag.
   mastername = 'client.v8.official'
-  buildername = 'V8 Official Linux64'
+  buildername = 'V8 Foobar'
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'no_tag')) +
       api.properties.generic(mastername=mastername,
                              buildername=buildername,
                              branch='refs/branch-heads/3.4',
                              revision='a' * 40,
-                             path_config='kitchen') +
+                             path_config='kitchen',
+                             build_config='Release',
+                             target_bits=64) +
       api.v8.version_file(17, 'head', prefix='initialization.') +
       api.override_step_data(
           'initialization.git describe',
@@ -264,12 +334,14 @@ def GenTests(api):
 
   # Test refbuilds.
   mastername = 'client.v8.official'
-  buildername = 'V8 Official Linux64'
+  buildername = 'V8 Foobar'
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'update_beta')) +
       api.properties.generic(mastername=mastername, buildername=buildername,
                              branch='refs/branch-heads/3.4',
-                             revision='a' * 40, path_config='kitchen') +
+                             revision='a' * 40, path_config='kitchen',
+                             build_config='Release',
+                             target_bits=64) +
       api.v8.version_file(0, 'head', prefix='initialization.') +
       api.override_step_data(
           'initialization.git describe', api.raw_io.stream_output('3.4.3')) +
@@ -278,12 +350,14 @@ def GenTests(api):
 
   # Test canary upload.
   mastername = 'client.v8.official'
-  buildername = 'V8 Official Linux64'
+  buildername = 'V8 Foobar'
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'canary')) +
       api.properties.generic(mastername=mastername, buildername=buildername,
                              branch='refs/heads/3.4.3', revision='a' * 40,
-                             path_config='kitchen') +
+                             path_config='kitchen',
+                             build_config='Release',
+                             target_bits=64) +
       api.v8.version_file(1, 'head', prefix='initialization.') +
       api.override_step_data(
           'initialization.git describe', api.raw_io.stream_output('3.4.3.1')) +

@@ -241,146 +241,6 @@ BUILDERS = {
       },
     },
   },
-####### Waterfall: client.v8.official
-  'client.v8.official': {
-    'builders': {
-      'V8 Official Arm32': {
-        'recipe': 'v8/archive',
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'gn'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Official Android Arm32': {
-        'recipe': 'v8/archive',
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'gn'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-          'TARGET_PLATFORM': 'android',
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Official Android Arm64': {
-        'recipe': 'v8/archive',
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'gn'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 64,
-          'TARGET_PLATFORM': 'android',
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Official Linux32': {
-        'recipe': 'v8/archive',
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'gn'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Official Linux32 Debug': {
-        'recipe': 'v8/archive',
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'gn'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Official Linux64': {
-        'recipe': 'v8/archive',
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'gn'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Official Linux64 Debug': {
-        'recipe': 'v8/archive',
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'gn'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'testing': {'platform': 'linux'},
-      },
-      'V8 Official Win32': {
-        'recipe': 'v8/archive',
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'gn'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'testing': {'platform': 'win'},
-      },
-      'V8 Official Win32 Debug': {
-        'recipe': 'v8/archive',
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'gn'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 32,
-        },
-        'testing': {'platform': 'win'},
-      },
-      'V8 Official Win64': {
-        'recipe': 'v8/archive',
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'gn'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'testing': {'platform': 'win'},
-      },
-      'V8 Official Win64 Debug': {
-        'recipe': 'v8/archive',
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'gn'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'testing': {'platform': 'win'},
-      },
-      'V8 Official Mac64': {
-        'recipe': 'v8/archive',
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'gn'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'testing': {'platform': 'mac'},
-      },
-      'V8 Official Mac64 Debug': {
-        'recipe': 'v8/archive',
-        'chromium_apply_config': [
-          'default_compiler', 'goma', 'gn'],
-        'v8_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_BITS': 64,
-        },
-        'testing': {'platform': 'mac'},
-      },
-    },
-  },
 ####### Waterfall: tryserver.v8
   'tryserver.v8': {
     'builders': {
@@ -416,8 +276,7 @@ def flatten_configs():
 FLATTENED_BUILDERS = flatten_configs()
 
 
-
-def iter_builders(recipe='v8'):
+def iter_builders():
   """Iterates tuples of (mastername, builders, buildername, bot_config).
 
   Args:
@@ -426,6 +285,4 @@ def iter_builders(recipe='v8'):
   for mastername, master_config in BUILDERS.iteritems():
     builders = master_config['builders']
     for buildername, bot_config in builders.iteritems():
-      if bot_config.get('recipe', 'v8') != recipe:
-        continue
       yield mastername, builders, buildername, bot_config
