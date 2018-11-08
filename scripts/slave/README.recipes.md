@@ -222,6 +222,7 @@
   * [dart/dart_vm_kernel](#recipes-dart_dart_vm_kernel)
   * [dart/docker](#recipes-dart_docker)
   * [dart/flutter_engine](#recipes-dart_flutter_engine)
+  * [dart/forward_branch](#recipes-dart_forward_branch)
   * [dart/misc](#recipes-dart_misc)
   * [dart/neo](#recipes-dart_neo)
   * [dart/packagebot](#recipes-dart_packagebot)
@@ -5027,6 +5028,11 @@ Generates the sequence of steps that will be run by the slave.
 &mdash; **def [TestObservatory](/scripts/slave/recipes/dart/flutter_engine.py#71)(api, checkout_dir):**
 
 &mdash; **def [UpdateCachedEngineArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#118)(api, flutter, engine_src):**
+### *recipes* / [dart/forward\_branch](/scripts/slave/recipes/dart/forward_branch.py)
+
+[DEPS](/scripts/slave/recipes/dart/forward_branch.py#8): [dart](#recipe_modules-dart), [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/forward_branch.py#19)(api):**
 ### *recipes* / [dart/misc](/scripts/slave/recipes/dart/misc.py)
 
 [DEPS](/scripts/slave/recipes/dart/misc.py#5): [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
