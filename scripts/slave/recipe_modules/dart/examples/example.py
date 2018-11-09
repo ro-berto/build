@@ -14,6 +14,7 @@ DEPS = [
 ]
 
 CANNED_OUTPUT_DIR = {
+  'logs.json': r'{}',
   'results.json': r'{}',
   'run.json': r'{}',
   'result.log': r'{}'

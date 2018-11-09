@@ -1450,6 +1450,26 @@
       "----",
       "cp",
       "",
+      "gs://dart-test-results/builders/example-mac/0/logs.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
+    "name": "upload new results.gsutil upload logs.json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/example-mac/0/logs.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "",
       "gs://dart-test-results/builders/example-mac/0/results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",

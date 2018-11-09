@@ -256,12 +256,14 @@ class DartApi(recipe_api.RecipeApi):
       filename = filepath.split('/')[-1]
       filename = filename.split('\\')[-1]
       if filename in (
-          'result.log', 'results.json', 'run.json'):
+          'logs.json', 'result.log', 'results.json', 'run.json'):
         contents = output_dir[filepath]
         self.m.step.active_result.presentation.logs[
             filename] = [contents]
         if filename == 'results.json':
           results.results += contents
+        if filename == 'logs.json':
+          results.logs += contents
         if filename == 'run.json':
           results.addRun(bot_name, contents)
 
@@ -340,7 +342,7 @@ class DartApi(recipe_api.RecipeApi):
     return flaky_json.raw_io.output_texts.get('flaky.json')
 
 
-  def _upload_results(self, flaky_json_str, results_str, runs_str):
+  def _upload_results(self, flaky_json_str, logs_str, results_str, runs_str):
     # Try builders do not upload results.
     builder = str(self.m.buildbucket.builder_name)
     if builder.endswith('try'):
@@ -348,6 +350,7 @@ class DartApi(recipe_api.RecipeApi):
 
     build_number = str(self.m.buildbucket.build.number)
 
+    self._upload_result(builder, build_number, 'logs.json', logs_str)
     self._upload_result(builder, build_number, 'results.json', results_str)
     self._upload_result(builder, build_number, 'flaky.json', flaky_json_str)
     self.m.gsutil.upload(
@@ -375,11 +378,12 @@ class DartApi(recipe_api.RecipeApi):
       if self._report_new_results() else {0})
 
 
-  def _present_results(self, results_str, flaky_json_str):
+  def _present_results(self, logs_str, results_str, flaky_json_str):
     args = [self.dart_executable(),
             'tools/bots/compare_results.dart',
             '--flakiness-data',
             self.m.raw_io.input_text(flaky_json_str, name='flaky.json'),
+            # todo(sortie): Add --logs-data file here, just like flakiness-data
             '--human',
             '--verbose',
             '--changed',
@@ -644,17 +648,20 @@ class DartApi(recipe_api.RecipeApi):
           self._download_results()
         for results in all_results.itervalues():
           self._deflake_results(results)
+        logs_str = ''.join(
+            (results.logs for results in all_results.itervalues()))
         results_str = ''.join(
             (results.results for results in all_results.itervalues()))
         flaky_json_str = self._update_flakiness_information(results_str)
         try:
-          self._present_results(results_str, flaky_json_str)
+          self._present_results(logs_str, results_str, flaky_json_str)
         finally:
           # Upload even if present_results fails the build
           with self.m.step.nest('upload new results'):
             runs_str = ''.join(
                 (results.runs for results in all_results.itervalues()))
-            self._upload_results(flaky_json_str, results_str, runs_str)
+            self._upload_results(
+                flaky_json_str, logs_str, results_str, runs_str)
 
 
   def _is_test_py_step(self, script):
@@ -749,6 +756,7 @@ class DartApi(recipe_api.RecipeApi):
                  '--write-debug-log',
                  '--write-results',
                  '--write-result-log',
+                 '--write-logs',
                  '--write-test-outcome-log']
     template = self._get_specific_argument(args, ['-n'])
     if template is not None:
@@ -885,6 +893,7 @@ class DartApi(recipe_api.RecipeApi):
 class StepResults:
   def __init__(self, step_name, m, commit):
     self.step_name = step_name
+    self.logs = ''
     self.results = ''
     self.runs = ''
     self.args = None
@@ -903,6 +912,7 @@ class StepResults:
 
 
   def merge(self, other):
+    self.logs += other.logs
     self.results += other.results
     self.runs += other.runs
     # Environment and Args are the same for all shards

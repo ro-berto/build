@@ -1219,6 +1219,7 @@
       "--write-debug-log",
       "--write-results",
       "--write-result-log",
+      "--write-logs",
       "--write-test-outcome-log",
       "-rfirefox",
       "foo",
@@ -1338,6 +1339,7 @@
       "--write-debug-log",
       "--write-results",
       "--write-result-log",
+      "--write-logs",
       "--write-test-outcome-log",
       "-rfirefox",
       "foo",
@@ -1391,6 +1393,7 @@
       "--write-debug-log",
       "--write-results",
       "--write-result-log",
+      "--write-logs",
       "--write-test-outcome-log",
       "foo",
       "--bar",
@@ -1585,6 +1588,7 @@
       "--write-debug-log",
       "--write-results",
       "--write-result-log",
+      "--write-logs",
       "--write-test-outcome-log",
       "foo",
       "--bar",
@@ -1637,6 +1641,7 @@
       "--write-debug-log",
       "--write-results",
       "--write-result-log",
+      "--write-logs",
       "--write-test-outcome-log",
       "foo",
       "--bar",
@@ -2065,6 +2070,7 @@
       "--write-debug-log",
       "--write-results",
       "--write-result-log",
+      "--write-logs",
       "--write-test-outcome-log",
       "-rfirefox",
       "foo",
@@ -2116,6 +2122,7 @@
       "--write-debug-log",
       "--write-results",
       "--write-result-log",
+      "--write-logs",
       "--write-test-outcome-log",
       "foo",
       "--bar",
@@ -2166,6 +2173,7 @@
       "--write-debug-log",
       "--write-results",
       "--write-result-log",
+      "--write-logs",
       "--write-test-outcome-log",
       "foo",
       "--bar",
@@ -2220,6 +2228,26 @@
     "cmd": [],
     "cwd": "[CACHE]\\builder\\sdk",
     "name": "upload new results"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "",
+      "gs://dart-test-results/builders/dart2js-win10-debug-x64-firefox/1357/logs.json"
+    ],
+    "cwd": "[CACHE]\\builder\\sdk",
+    "infra_step": true,
+    "name": "upload new results.gsutil upload logs.json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/dart2js-win10-debug-x64-firefox/1357/logs.json@@@"
+    ]
   },
   {
     "cmd": [

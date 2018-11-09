@@ -1219,6 +1219,7 @@
       "--write-debug-log",
       "--write-results",
       "--write-result-log",
+      "--write-logs",
       "--write-test-outcome-log",
       "-rchrome",
       "foo",
@@ -1343,6 +1344,7 @@
       "--write-debug-log",
       "--write-results",
       "--write-result-log",
+      "--write-logs",
       "--write-test-outcome-log",
       "-rchrome",
       "foo",
@@ -1421,6 +1423,7 @@
       "--write-debug-log",
       "--write-results",
       "--write-result-log",
+      "--write-logs",
       "--write-test-outcome-log",
       "-rchrome",
       "foo",
@@ -1447,7 +1450,9 @@
       "@@@STEP_LOG_LINE@results.json@{}@@@",
       "@@@STEP_LOG_END@results.json@@@",
       "@@@STEP_LOG_LINE@run.json@{}@@@",
-      "@@@STEP_LOG_END@run.json@@@"
+      "@@@STEP_LOG_END@run.json@@@",
+      "@@@STEP_LOG_LINE@logs.json@{}@@@",
+      "@@@STEP_LOG_END@logs.json@@@"
     ]
   },
   {
@@ -1538,6 +1543,8 @@
       "@@@STEP_LOG_END@results.json@@@",
       "@@@STEP_LOG_LINE@run.json@{}@@@",
       "@@@STEP_LOG_END@run.json@@@",
+      "@@@STEP_LOG_LINE@logs.json@{}@@@",
+      "@@@STEP_LOG_END@logs.json@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@"
     ]
   },
@@ -1800,6 +1807,7 @@
       "--write-debug-log",
       "--write-results",
       "--write-result-log",
+      "--write-logs",
       "--write-test-outcome-log",
       "-rchrome",
       "foo",
@@ -1853,6 +1861,7 @@
       "--write-debug-log",
       "--write-results",
       "--write-result-log",
+      "--write-logs",
       "--write-test-outcome-log",
       "-rchrome",
       "foo",
