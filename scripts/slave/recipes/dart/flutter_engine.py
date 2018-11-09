@@ -183,7 +183,7 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
 
     # analyze.dart and test.dart have hardcoded references to bin/cache/dart-sdk.
     # So we overwrite bin/cache/dart-sdk and tightly-coupled frontend_server.dart.snapshot
-    # with links that point to corresponding entries from binaries generated into 
+    # with links that point to corresponding entries from binaries generated into
     # [engine_src]
     UpdateCachedEngineArtifacts(api, flutter, engine_src)
 
@@ -207,7 +207,16 @@ def RunSteps(api):
     GetCheckout(api)
 
   api.goma.ensure_goma()
-  with api.context(cwd=start_dir, env={'GOMA_DIR':api.goma.goma_dir}):
+
+  run_env = {
+    'GOMA_DIR':api.goma.goma_dir,
+    # By setting 'ANALYZER_STATE_LOCATION_OVERRIDE' we force analyzer to emit
+    # its cached state into the given folder. If something goes wrong with
+    # the cache we can clobber it by requesting normal clobber via Buildbot
+    # UI.
+    'ANALYZER_STATE_LOCATION_OVERRIDE': start_dir.join('.dartServer')
+  }
+  with api.context(cwd=start_dir, env=run_env):
     checkout_dir = start_dir.join('src')
     BuildLinux(api, checkout_dir)
     prebuilt_dart_bin = checkout_dir.join('third_party', 'dart', 'tools',
