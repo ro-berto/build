@@ -9,6 +9,9 @@ from recipe_engine import recipe_api
 
 _BUCKET_NAME = 'cr-coverage-profile-data'
 
+# Name of the file to store local diff.
+_LOCAL_DIFF_FILE_NAME = 'local_diff.txt'
+
 
 class ClangCoverageApi(recipe_api.RecipeApi):
   """This module contains apis to interact with llvm-cov and llvm-profdata."""
@@ -20,8 +23,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     self._base_profdata_dir = None
     # Temp dir for report.
     self._report_dir = None
-    # Temp dir for json metadata
-    self._json_metadata_dir = None
+    # Temp dir for metadata
+    self._metadata_dir = None
     # Maps step names to subdirectories of the above.
     self._profdata_dirs = {}
     # When set, subset of files to include in the coverage report.
@@ -73,11 +76,11 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     return self._report_dir
 
   @property
-  def json_metadata_dir(self):
-    """A temporary directory for the json metadata. Created on first access."""
-    if not self._json_metadata_dir:
-      self._json_metadata_dir = self.m.path.mkdtemp()
-    return self._json_metadata_dir
+  def metadata_dir(self):
+    """A temporary directory for the metadata. Created on first access."""
+    if not self._metadata_dir:
+      self._metadata_dir = self.m.path.mkdtemp()
+    return self._metadata_dir
 
   def profdata_dir(self, step_name=None):
     """Ensures a directory exists for writing the step-level merged profdata.
@@ -256,9 +259,12 @@ class ClangCoverageApi(recipe_api.RecipeApi):
 
   def _generate_metadata(self, binaries, profdata_path):
     """Generates the coverage info in metadata format."""
+    if self._affected_files:
+      self._generate_and_save_local_git_diff()
+
     args = [
         '--src-path', self.m.path['checkout'],
-        '--output-dir', self.json_metadata_dir,
+        '--output-dir', self.metadata_dir,
         '--profdata-path', profdata_path,
         '--llvm-cov', self.cov_executable,
         '--binaries',
@@ -278,7 +284,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
           venv=True)
     finally:
       gs_path = self._compose_gs_path_for_coverage_data('metadata')
-      upload_step = self.m.gsutil.upload(self.json_metadata_dir,
+      upload_step = self.m.gsutil.upload(self.metadata_dir,
                                          _BUCKET_NAME,
                                          gs_path,
                                          link_name=None,
@@ -289,3 +295,28 @@ class ClangCoverageApi(recipe_api.RecipeApi):
           'https://storage.googleapis.com/%s/%s/' % (_BUCKET_NAME, gs_path))
       upload_step.presentation.properties['coverage_metadata_gs_path'] = gs_path
       upload_step.presentation.properties['coverage_gs_bucket'] = _BUCKET_NAME
+
+  def _generate_and_save_local_git_diff(self):
+    """Generates the 'git diff' output of the patch relative to the builder."""
+    test_output = ('diff --git a/path/test.txt b/path/test.txt\n'
+                   'index 0719398930..4a2b716881 100644\n'
+                   '--- a/path/test.txt\n'
+                   '+++ b/path/test.txt\n'
+                   '@@ -15,2 +15,3 @@\n'
+                   ' Line 10\n'
+                   '-Line 11\n'
+                   '+A different line 11\n'
+                   '+A newly added line 12\n')
+    local_diff_file = self.metadata_dir.join(_LOCAL_DIFF_FILE_NAME)
+
+    with self.m.context(cwd=self.m.path['checkout']):
+      self.m.git(
+          '-c',
+          'core.quotePath=false',
+          'diff',
+          '--cached',
+          name='generate git diff locally',
+          stdout=self.m.raw_io.output_text(
+              leak_to=local_diff_file, add_output_log=True),
+          step_test_data=
+          lambda: self.m.raw_io.test_api.stream_output(test_output))
