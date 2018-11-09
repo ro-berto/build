@@ -164,12 +164,14 @@ class ChromiteApi(recipe_api.RecipeApi):
     self.m.repo.sync(*repo_sync_args)
 
   # Only used by the internal goma recipe.
-  def cros_sdk(self, name, cmd, args=None, environ=None, **kwargs):
+  def cros_sdk(self, name, cmd, args=None, environ=None, chroot_cmd=None,
+               **kwargs):
     """Return a step to run a command inside the cros_sdk.
 
     Used by the internal goma recipe.
     """
-    chroot_cmd = self.chromite_path.join('bin', 'cros_sdk')
+    if not chroot_cmd:
+      chroot_cmd = self.chromite_path.join('bin', 'cros_sdk')
 
     arg_list = (args or [])[:]
     for t in sorted((environ or {}).items()):

@@ -211,6 +211,7 @@
   * [cros/cbuildbot](#recipes-cros_cbuildbot)
   * [cros/cbuildbot_tryjob](#recipes-cros_cbuildbot_tryjob)
   * [cros/swarming](#recipes-cros_swarming)
+  * [cros_flash](#recipes-cros_flash) &mdash; This recipe is used to flash a CrOS DUT on a Chromium bot.
   * [crrev:examples/full](#recipes-crrev_examples_full)
   * [custom_tabs_client](#recipes-custom_tabs_client)
   * [dart/chocolatey](#recipes-dart_chocolatey)
@@ -809,7 +810,7 @@ Uploads the given test results log to Google storage.
 
 #### **class [ChromiteApi](/scripts/slave/recipe_modules/chromite/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [build\_packages](/scripts/slave/recipe_modules/chromite/api.py#193)(self, board, args=None, \*\*kwargs):**
+&mdash; **def [build\_packages](/scripts/slave/recipe_modules/chromite/api.py#195)(self, board, args=None, \*\*kwargs):**
 
 Run the build_packages script inside the chroot.
 
@@ -837,14 +838,14 @@ Returns (bool): True if the value was found.
 
 &mdash; **def [checkout](/scripts/slave/recipe_modules/chromite/api.py#156)(self, manifest_url=None, repo_url=None, repo_sync_args=None):**
 
-&mdash; **def [checkout\_chromite](/scripts/slave/recipe_modules/chromite/api.py#247)(self):**
+&mdash; **def [checkout\_chromite](/scripts/slave/recipe_modules/chromite/api.py#249)(self):**
 
 Checks out the configured Chromite branch.
     
 
 &emsp; **@property**<br>&mdash; **def [chromite\_path](/scripts/slave/recipe_modules/chromite/api.py#28)(self):**
 
-&mdash; **def [configure](/scripts/slave/recipe_modules/chromite/api.py#202)(self, properties, config_map, \*\*KWARGS):**
+&mdash; **def [configure](/scripts/slave/recipe_modules/chromite/api.py#204)(self, properties, config_map, \*\*KWARGS):**
 
 Loads configuration from build properties into this recipe config.
 
@@ -853,7 +854,7 @@ Args:
   config_map (dict): The configuration map to use.
   KWARGS: Additional keyword arguments to forward to the configuration.
 
-&mdash; **def [cros\_sdk](/scripts/slave/recipe_modules/chromite/api.py#167)(self, name, cmd, args=None, environ=None, \*\*kwargs):**
+&mdash; **def [cros\_sdk](/scripts/slave/recipe_modules/chromite/api.py#167)(self, name, cmd, args=None, environ=None, chroot_cmd=None, \*\*kwargs):**
 
 Return a step to run a command inside the cros_sdk.
 
@@ -881,7 +882,7 @@ Args:
   repository (str): The URL of the repository hosting the change.
   revision (str): The revision hash to load the build ID from.
 
-&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#286)(self, args=None):**
+&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#288)(self, args=None):**
 
 Runs the configured 'cbuildbot' build.
 
@@ -904,7 +905,7 @@ Args:
   args (list): Initial argument list, expanded based on other values.
 Returns: (Step) the 'cbuildbot' execution step.
 
-&mdash; **def [run\_cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#229)(self, args=None, goma_canary=False):**
+&mdash; **def [run\_cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#231)(self, args=None, goma_canary=False):**
 
 Performs a Chromite repository checkout, then runs cbuildbot.
 
@@ -912,13 +913,13 @@ Args:
   args (list): Initial argument list, see run() for details.
   goma_canary (bool): Use canary version of goma if True.
 
-&mdash; **def [setup\_board](/scripts/slave/recipe_modules/chromite/api.py#183)(self, board, args=None, \*\*kwargs):**
+&mdash; **def [setup\_board](/scripts/slave/recipe_modules/chromite/api.py#185)(self, board, args=None, \*\*kwargs):**
 
 Run the setup_board script inside the chroot.
 
 Used by the internal goma recipe.
 
-&mdash; **def [with\_system\_python](/scripts/slave/recipe_modules/chromite/api.py#257)(self):**
+&mdash; **def [with\_system\_python](/scripts/slave/recipe_modules/chromite/api.py#259)(self):**
 
 Prepare a directory with the system python binary available.
 
@@ -4941,6 +4942,28 @@ Generates the sequence of steps that will be run by the slave.
 [DEPS](/scripts/slave/recipes/cros/swarming.py#7): [chromite](#recipe_modules-chromite), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/cros/swarming.py#14)(api):**
+### *recipes* / [cros\_flash](/scripts/slave/recipes/cros_flash.py)
+
+[DEPS](/scripts/slave/recipes/cros_flash.py#24): [chromite](#recipe_modules-chromite), [repo](#recipe_modules-repo), [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
+
+This recipe is used to flash a CrOS DUT on a Chromium bot.
+
+This essentially calls out to the cros-sdk's flash tool (located at
+https://codesearch.chromium.org/chromium/src/third_party/chromite/cli/flash.py).
+
+That tool however has a dependency on the cros SDK's chroot (see
+https://chromium.googlesource.com/chromiumos/docs/+/master/developer_guide.md#Create-a-chroot
+for more info). Though it's often used in CrOS development, the chroot isn't
+found in Chromium development at all, and has very limited support on Chromium
+bots. Consequently, this recipe will take care of setting it up prior to
+flashing the DUT. The basic steps of this recipe are:
+
+- Fetch a full ChromiumOS checkout via repo. The checkout will be placed in a
+  named cache for subsequent re-use.
+- Build the chroot.
+- Enter the chroot and flash the device.
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/cros_flash.py#50)(api):**
 ### *recipes* / [crrev:examples/full](/scripts/slave/recipe_modules/crrev/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/crrev/examples/full.py#9): [crrev](#recipe_modules-crrev), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]

@@ -1,0 +1,37 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(1)"
+    ],
+    "name": "unknown image format",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@Image file must end in either \".bin\" or \".tar.xz\".@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[TMP_BASE]/cros_flash_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "rmtree [TMP_BASE]/cros_flash_tmp_1"
+  },
+  {
+    "failure": {
+      "failure": {
+        "step": "unknown image format"
+      },
+      "humanReason": "Step('unknown image format') failed with return_code 1"
+    },
+    "name": "$result"
+  }
+]

@@ -1,0 +1,197 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://cros-image-bucket/some/image/path.bin",
+      "[TMP_BASE]/cros_flash_tmp_1/chromiumos_image.bin"
+    ],
+    "infra_step": true,
+    "name": "gsutil download image"
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "init",
+      "-u",
+      "https://chromium.googlesource.com/chromiumos/manifest.git",
+      "--repo-url",
+      "https://chromium.googlesource.com/external/repo.git"
+    ],
+    "cwd": "[CACHE]/cros_checkout",
+    "infra_step": true,
+    "name": "repo init"
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "sync",
+      "-j4"
+    ],
+    "cwd": "[CACHE]/cros_checkout",
+    "infra_step": true,
+    "name": "repo sync"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/cros_checkout/chromite/bin/cros_sdk",
+      "--nouse-image",
+      "--create",
+      "--debug",
+      "--",
+      "exit"
+    ],
+    "cwd": "[CACHE]/cros_checkout",
+    "name": "build chroot"
+  },
+  {
+    "cmd": [],
+    "cwd": "[CACHE]/cros_checkout",
+    "name": "system_python"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/python_bin"
+    ],
+    "cwd": "[CACHE]/cros_checkout",
+    "infra_step": true,
+    "name": "system_python.create_dir",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/python_bin/python"
+    ],
+    "cwd": "[CACHE]/cros_checkout",
+    "infra_step": true,
+    "name": "system_python.remove_link",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "remove",
+      "[START_DIR]/python_bin/python2"
+    ],
+    "cwd": "[CACHE]/cros_checkout",
+    "infra_step": true,
+    "name": "system_python.remove_link (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "symlink",
+      "/usr/bin/python",
+      "[START_DIR]/python_bin/python"
+    ],
+    "cwd": "[CACHE]/cros_checkout",
+    "infra_step": true,
+    "name": "system_python.create_link",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "symlink",
+      "/usr/bin/python2",
+      "[START_DIR]/python_bin/python2"
+    ],
+    "cwd": "[CACHE]/cros_checkout",
+    "infra_step": true,
+    "name": "system_python.create_link (2)",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/cros_checkout/chromite/bin/cros",
+      "flash",
+      "variable_chromeos_device_hostname",
+      "[TMP_BASE]/cros_flash_tmp_1/chromiumos_image.bin",
+      "--disable-rootfs-verification",
+      "--force",
+      "--debug"
+    ],
+    "cwd": "[CACHE]/cros_checkout",
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/python_bin"
+      ]
+    },
+    "name": "flash DUT"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[TMP_BASE]/cros_flash_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "rmtree [TMP_BASE]/cros_flash_tmp_1"
+  },
+  {
+    "cmd": [
+      "/usr/bin/sshpass",
+      "-p",
+      "test0000",
+      "/usr/bin/ssh-copy-id",
+      "-i",
+      "/b/id_rsa.pub",
+      "root@variable_chromeos_device_hostname"
+    ],
+    "name": "reauthorize DUT ssh access"
+  },
+  {
+    "jsonResult": null,
+    "name": "$result"
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(1)"
+    ],
+    "name": "unknown GS image URL",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@Must pass the Google Storage URL for the image to flash via the \"gs_image_bucket\" and \"gs_image_path\" recipe properties.@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "failure": {
+      "failure": {
+        "step": "unknown GS image URL"
+      },
+      "humanReason": "Step('unknown GS image URL') failed with return_code 1"
+    },
+    "name": "$result"
+  }
+]
