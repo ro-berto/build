@@ -196,12 +196,13 @@ def _get_coverage_data_in_json(
     profdata_path, llvm_cov_path, binaries, sources, output_dir):
   """Returns a json object of the coverage info."""
   coverage_json_file = os.path.join(output_dir, 'coverage.json')
+  error_out_file = os.path.join(output_dir, 'llvm_cov.stderr')
   p = None
   try:
-    with open(coverage_json_file, 'w') as f:
+    with open(coverage_json_file, 'w') as f1, open(error_out_file, 'w') as f2:
       args = _compute_llvm_args(
           profdata_path, llvm_cov_path, binaries, sources, output_dir)
-      p = subprocess.Popen(args, stdout=f)
+      p = subprocess.Popen(args, stdout=f1, stderr=f2)
       proc = None
       try:
         proc = psutil.Process(p.pid)
