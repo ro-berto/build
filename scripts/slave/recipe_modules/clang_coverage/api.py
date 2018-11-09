@@ -269,21 +269,23 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       args.extend(
           [self.m.path['checkout'].join(s) for s in self._affected_files])
 
-    self.m.python(
-        'generate metadata for %d targets' %
-            len(self._profdata_dirs),
-        self.resource('generate_coverage_metadata.py'),
-        args=args)
-
-    gs_path = self._compose_gs_path_for_coverage_data('metadata')
-    upload_step = self.m.gsutil.upload(self.json_metadata_dir,
-                                       _BUCKET_NAME,
-                                       gs_path,
-                                       link_name=None,
-                                       args=['-r'],
-                                       multithreaded=True,
-                                       name='upload metadata')
-    upload_step.presentation.links['metadata report'] = (
-        'https://storage.googleapis.com/%s/%s/' % (_BUCKET_NAME, gs_path))
-    upload_step.presentation.properties['coverage_metadata_gs_path'] = gs_path
-    upload_step.presentation.properties['coverage_gs_bucket'] = _BUCKET_NAME
+    try:
+      self.m.python(
+          'generate metadata for %d targets' %
+              len(self._profdata_dirs),
+          self.resource('generate_coverage_metadata.py'),
+          args=args,
+          venv=True)
+    finally:
+      gs_path = self._compose_gs_path_for_coverage_data('metadata')
+      upload_step = self.m.gsutil.upload(self.json_metadata_dir,
+                                         _BUCKET_NAME,
+                                         gs_path,
+                                         link_name=None,
+                                         args=['-r'],
+                                         multithreaded=True,
+                                         name='upload metadata')
+      upload_step.presentation.links['metadata report'] = (
+          'https://storage.googleapis.com/%s/%s/' % (_BUCKET_NAME, gs_path))
+      upload_step.presentation.properties['coverage_metadata_gs_path'] = gs_path
+      upload_step.presentation.properties['coverage_gs_bucket'] = _BUCKET_NAME

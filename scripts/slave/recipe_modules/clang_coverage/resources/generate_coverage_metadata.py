@@ -9,6 +9,7 @@ import collections
 import json
 import logging
 import os
+import psutil
 import subprocess
 import sys
 import time
@@ -195,18 +196,72 @@ def _get_coverage_data_in_json(
     profdata_path, llvm_cov_path, binaries, sources, output_dir):
   """Returns a json object of the coverage info."""
   coverage_json_file = os.path.join(output_dir, 'coverage.json')
+  p = None
   try:
     with open(coverage_json_file, 'w') as f:
       args = _compute_llvm_args(
           profdata_path, llvm_cov_path, binaries, sources, output_dir)
-      subprocess.check_call(args, stdout=f)
-    with open(coverage_json_file, 'r') as f:
-      return json.load(f)
+      p = subprocess.Popen(args, stdout=f)
+      proc = None
+      try:
+        proc = psutil.Process(p.pid)
+      except psutil.Error:  # The process might already finish.
+        pass
+
+      min_duration_seconds = 5
+      max_duration_seconds = 10 * 60  # 10 minutes
+      duration_seconds = min_duration_seconds
+      while p.poll() is None:
+        if proc is not None:
+          try:
+            logging.info('Thread numbers: %d', proc.num_threads())
+
+            # Dump the memory, cpu, and disk io usage of the process.
+            p_mem = proc.memory_info()
+            if p_mem.shared:
+              shared_mem = '%.2fG' % (p_mem.shared*1.0/1024/1024/1024)
+            else:
+              shared_mem = 'N/A'
+            logging.info('llvm-cov Memory: '
+                         'RSS=%.2fG,  VMS=%.2fG, shared=%s',
+                         p_mem.rss/1024./1024/1024,
+                         p_mem.vms/1024./1024/1024,
+                         shared_mem)
+
+            p_cpu_times = proc.cpu_times()
+            cpu_percent = proc.cpu_percent(interval=1)
+            logging.info('llvm-cov CPU: '
+                         'user=%.2f hours, sys=%.2f hours, percent=%.2f%%',
+                         p_cpu_times.user/60./60,
+                         p_cpu_times.system/60./60,
+                         cpu_percent)
+
+            os_disk_io = psutil.disk_io_counters()
+            logging.info('OS-level disk io: write=%.2fG, read=%.2fG',
+                         os_disk_io.write_bytes/1024./1024/1024,
+                         os_disk_io.read_bytes/1024./1024/1024)
+            p_disk_io = proc.io_counters()
+            logging.info('llvm-cov disk io: write=%.2fG, read=%.2fG',
+                         p_disk_io.write_bytes/1024./1024/1024,
+                         p_disk_io.read_bytes/1024./1024/1024)
+          except psutil.Error:  # The process might already finish.
+            pass
+
+        logging.info('waiting %d seconds...', duration_seconds)
+        time.sleep(duration_seconds)
+        duration_seconds = min(duration_seconds * 2, max_duration_seconds)
+
+    if p.returncode == 0:
+      with open(coverage_json_file, 'r') as f:
+        return json.load(f)
   finally:
     # Delete the coverage.json, because it could be huge.
     # Keep it for now for testing/debug purpose.
     # os.remove(coverage_json_file)
-    pass
+    # Wait for llvm in case the above code ran into uncaught exceptions.
+    if p is not None:
+      if p.wait() != 0:
+        sys.exit(p.returncode)
 
 
 def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
