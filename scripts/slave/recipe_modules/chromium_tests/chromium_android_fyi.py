@@ -69,26 +69,6 @@ SPEC = {
         'platform': 'linux',
       }
     },
-    'Android WebView O NetworkService (dbg)': {
-      'chromium_config': 'android',
-      'chromium_apply_config': [
-        'download_vr_test_apks',
-      ],
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'android',
-      },
-      'parent_buildername': 'Android arm64 Builder (dbg)',
-      'parent_mastername': 'chromium.android',
-      'bot_type': 'tester',
-      'android_config': 'main_builder_mb',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'Memory Infra Tester': {
       'chromium_config': 'android',
       'gclient_config': 'chromium',
