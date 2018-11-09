@@ -102,6 +102,9 @@ FAKE_BUILDERS = {
         'Mac ASan 64 Builder',
         'Mac ASan 64 Tests (1)',
         # These are pure LUCI bots, no equivalent buildbot bot.
+        'WebKit Linux Trusty ASAN',
+        'WebKit Linux Trusty MSAN',
+        'WebKit Linux Trusty Leak',
         'win-asan',
     ],
     'master.chromium.win': [

@@ -199,6 +199,44 @@ SPEC = {
       'bot_type': 'tester',
       'testing': {'platform': 'linux'},
     },
+    'WebKit Linux Trusty ASAN': {
+      'chromium_config': 'chromium_clang',
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'chromium_apply_config': ['asan', 'mb'],
+      'tests': [],
+      'testing': {'platform': 'linux'},
+      'checkout_dir': 'linux_layout',
+    },
+    'WebKit Linux Trusty MSAN': {
+      'chromium_config': 'chromium_clang',
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'chromium_apply_config': ['mb', 'msan'],
+      'tests': [],
+      'testing': {'platform': 'linux'},
+      'checkout_dir': 'linux_layout',
+    },
+    'WebKit Linux Trusty Leak': {
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'chromium_apply_config': ['mb'],
+      'compile_targets': [
+        'blink_tests',
+      ],
+      'tests': [],
+      'testing': {'platform': 'linux'},
+    },
     'win-asan': {
       'chromium_config': 'chromium_win_clang_asan',
       'gclient_config': 'chromium',
