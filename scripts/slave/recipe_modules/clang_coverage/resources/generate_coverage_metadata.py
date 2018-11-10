@@ -10,6 +10,7 @@ import json
 import logging
 import os
 import psutil
+import stat
 import subprocess
 import sys
 import time
@@ -339,12 +340,14 @@ def main():
 
   # Validate parameters
   if not os.path.exists(params.output_dir):
-    raise RuntimeError('Output directory %s must exist'
-                       % params.output_dir)
+    raise RuntimeError('Output directory %s must exist' % params.output_dir)
 
-  if not os.path.isfile(params.llvm_cov) or not os.access(
-      params.llvm_cov, os.X_OK):
-    raise RuntimeError('%s must exist and be executable' % params.llvm_cov)
+  if not os.path.isfile(params.llvm_cov):
+    raise RuntimeError('%s must exist' % params.llvm_cov)
+  elif not os.access(params.llvm_cov, os.X_OK):
+    logging.info('Setting executable bit of %s', params.llvm_cov)
+    os.chmod(params.llvm_cov, stat.S_IRUSR | stat.S_IXUSR | stat.S_IWUSR)
+    assert os.access(params.llvm_cov, os.X_OK), 'Failed to set executable bit'
 
   if not os.path.exists(params.profdata_path):
     raise RuntimeError('Input data %s missing' % params.profdata_path)
