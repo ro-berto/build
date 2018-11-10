@@ -58,6 +58,8 @@ def GenTests(api):
       + api.post_process(
           post_process.DoesNotRun, 'fetch git diff from Gerrit')
       + api.post_process(
+          post_process.DoesNotRun, 'generate diff mapping from local to Gerrit')
+      + api.post_process(
           post_process.MustRun, 'generate metadata for 3 targets')
       + api.post_process(
           post_process.MustRun, 'gsutil upload metadata')
@@ -87,6 +89,8 @@ def GenTests(api):
           post_process.MustRun, 'generate git diff locally')
       + api.post_process(
           post_process.MustRun, 'fetch git diff from Gerrit')
+      + api.post_process(
+          post_process.MustRun, 'generate diff mapping from local to Gerrit')
       + api.post_process(
           post_process.MustRun, 'generate metadata for 3 targets')
       + api.post_process(

@@ -226,8 +226,11 @@ def main():
     gerrit_diff = [line.rstrip() for line in f]
 
   file_to_line_num_mapping = generate_diff_mapping(local_diff, gerrit_diff)
+  json_mapping = json.dumps(file_to_line_num_mapping)
   with open(args.output_file, 'w') as f:
-    json.dump(file_to_line_num_mapping, f)
+    f.write(json_mapping)
+
+  sys.stdout.write(json_mapping)
 
 
 if __name__ == '__main__':

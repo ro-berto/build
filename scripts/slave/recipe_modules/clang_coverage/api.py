@@ -15,6 +15,9 @@ _LOCAL_DIFF_FILE_NAME = 'local_diff.txt'
 # Name of the file to store the diff fetched from Gerrit.
 _GERRIT_DIFF_FILE_NAME = 'gerrit_diff.txt'
 
+# Name of the file to store the diff mapping from local to Gerrit.
+_LOCAL_TO_GERRIT_DIFF_MAPPING_FILE_NAME = 'local_to_gerrit_diff_mapping.json'
+
 
 class ClangCoverageApi(recipe_api.RecipeApi):
   """This module contains apis to interact with llvm-cov and llvm-profdata."""
@@ -239,7 +242,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
 
   def _compose_gs_path_for_coverage_data(self, data_type):
     build = self.m.buildbucket.build
-    if build.input.gerrit_changes:  # pragma: no cover. TODO: mock the build.
+    if build.input.gerrit_changes:
       # Assume that there is only one gerrit patchset which is true for
       # Chromium CQ in practice.
       gerrit_change = build.input.gerrit_changes[0]
@@ -271,6 +274,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     if self._affected_files:
       self._generate_and_save_local_git_diff()
       self._fetch_and_save_gerrit_git_diff()
+      self._generate_diff_mapping_from_local_to_gerrit()
     else:
       # Download the version with multi-thread support.
       # Assume that this is running on Linux.
@@ -365,8 +369,33 @@ class ClangCoverageApi(recipe_api.RecipeApi):
             '--change',
             gerrit_change.change,
             '--patchset',
-            gerrit_change.patchset],
+            gerrit_change.patchset
+        ],
         stdout=self.m.raw_io.output_text(
                leak_to=gerrit_diff_file, add_output_log=True),
         step_test_data=
         lambda: self.m.raw_io.test_api.stream_output(test_output))
+
+  def _generate_diff_mapping_from_local_to_gerrit(self):
+    """Generates the diff mapping from local to Gerrit.
+
+    So that the coverage data produced locally by the builder can be correctly
+    displayed on Gerrit.
+    """
+    local_diff_file = self.metadata_dir.join(_LOCAL_DIFF_FILE_NAME)
+    gerrit_diff_file = self.metadata_dir.join(_GERRIT_DIFF_FILE_NAME)
+    local_to_gerrit_diff_mapping_file = self.metadata_dir.join(
+        _LOCAL_TO_GERRIT_DIFF_MAPPING_FILE_NAME)
+
+    self.m.python(
+        'generate diff mapping from local to Gerrit',
+        self.resource('rebase_git_diff.py'),
+        args=[
+            '--local-diff-file',
+            local_diff_file,
+            '--gerrit-diff-file',
+            gerrit_diff_file,
+            '--output-file',
+            local_to_gerrit_diff_mapping_file
+        ],
+        stdout=self.m.json.output())
