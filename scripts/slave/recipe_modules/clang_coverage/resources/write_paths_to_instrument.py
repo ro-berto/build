@@ -38,7 +38,9 @@ def main():
         os.path.relpath(os.path.join(params.src_path, f), params.build_path) +
         '\n' for f in params.sources
     ]
-    out_file.write(''.join(rebased_paths))
+    contents = ''.join(rebased_paths)
+    out_file.write(contents)
+    print contents
 
 
 if __name__ == '__main__':

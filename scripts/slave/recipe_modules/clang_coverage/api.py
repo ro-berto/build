@@ -139,18 +139,23 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       affected_files (list of str): paths to the files we want to instrument,
           relative to the checkout path.
     """
+    self.m.file.ensure_directory(
+        'create .clang-coverage',
+        self.m.path['checkout'].join('.clang-coverage'))
     self._affected_files = affected_files
     return self.m.python(
         'save paths of affected files',
         self.resource('write_paths_to_instrument.py'),
         args=[
             '--write-to',
-            self.m.chromium.c.code_coverage.clang_instrumented_paths_file,
+            self.m.path['checkout'].join('.clang-coverage',
+                                         'files_to_instrument.txt'),
             '--src-path',
             self.m.path['checkout'],
             '--build-path',
-            self.m.chromium.c.build_dir,
-        ] + affected_files)
+            self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs),
+        ] + affected_files, stdout=self.m.raw_io.output_text(
+            add_output_log=True))
 
   def process_coverage_data(self, tests):
     """Processes the coverage data for html report or metadata.
