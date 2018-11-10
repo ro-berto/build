@@ -8,6 +8,7 @@ from recipe_engine import post_process
 DEPS = [
     'chromium_tests',
     'clang_coverage',
+    'recipe_engine/buildbucket',
     'recipe_engine/properties',
 ]
 
@@ -55,6 +56,8 @@ def GenTests(api):
       + api.post_process(
           post_process.DoesNotRun, 'generate git diff locally')
       + api.post_process(
+          post_process.DoesNotRun, 'fetch git diff from Gerrit')
+      + api.post_process(
           post_process.MustRun, 'generate metadata for 3 targets')
       + api.post_process(
           post_process.MustRun, 'gsutil upload metadata')
@@ -68,6 +71,8 @@ def GenTests(api):
           mastername='tryserver.chromium.linux',
           buildername='linux-coverage-rel',
           buildnumber=54)
+      + api.buildbucket.try_build(
+          project='chromium/src', builder='linux-coverage-rel')
       + api.post_process(
           post_process.MustRun, 'save paths of affected files')
       + api.post_process(
@@ -80,6 +85,8 @@ def GenTests(api):
           post_process.MustRun, 'gsutil upload html report')
       + api.post_process(
           post_process.MustRun, 'generate git diff locally')
+      + api.post_process(
+          post_process.MustRun, 'fetch git diff from Gerrit')
       + api.post_process(
           post_process.MustRun, 'generate metadata for 3 targets')
       + api.post_process(

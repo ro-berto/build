@@ -12,6 +12,9 @@ _BUCKET_NAME = 'cr-coverage-profile-data'
 # Name of the file to store local diff.
 _LOCAL_DIFF_FILE_NAME = 'local_diff.txt'
 
+# Name of the file to store the diff fetched from Gerrit.
+_GERRIT_DIFF_FILE_NAME = 'gerrit_diff.txt'
+
 
 class ClangCoverageApi(recipe_api.RecipeApi):
   """This module contains apis to interact with llvm-cov and llvm-profdata."""
@@ -262,6 +265,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     llvm_cov = self.cov_executable
     if self._affected_files:
       self._generate_and_save_local_git_diff()
+      self._fetch_and_save_gerrit_git_diff()
     else:
       # Download the version with multi-thread support.
       # Assume that this is running on Linux.
@@ -330,3 +334,34 @@ class ClangCoverageApi(recipe_api.RecipeApi):
               leak_to=local_diff_file, add_output_log=True),
           step_test_data=
           lambda: self.m.raw_io.test_api.stream_output(test_output))
+
+  def _fetch_and_save_gerrit_git_diff(self):
+    """Fetches the 'git diff' output of the patch from Gerrit."""
+    test_output = ('diff --git a/path/test.txt b/path/test.txt\n'
+                   'index 0719398930..4a2b716881 100644\n'
+                   '--- a/path/test.txt\n'
+                   '+++ b/path/test.txt\n'
+                   '@@ -10,2 +10,3 @@\n'
+                   ' Line 10\n'
+                   '-Line 11\n'
+                   '+A different line 11\n'
+                   '+A newly added line 12\n')
+    gerrit_diff_file = self.metadata_dir.join(_GERRIT_DIFF_FILE_NAME)
+    gerrit_change = self.m.buildbucket.build.input.gerrit_changes[0]
+
+    self.m.python(
+        'fetch git diff from Gerrit',
+        self.resource('fetch_diff_from_gerrit.py'),
+        args=[
+            '--host',
+            gerrit_change.host,
+            '--project',
+            gerrit_change.project,
+            '--change',
+            gerrit_change.change,
+            '--patchset',
+            gerrit_change.patchset],
+        stdout=self.m.raw_io.output_text(
+               leak_to=gerrit_diff_file, add_output_log=True),
+        step_test_data=
+        lambda: self.m.raw_io.test_api.stream_output(test_output))

@@ -199,10 +199,11 @@ def _get_coverage_data_in_json(
   error_out_file = os.path.join(output_dir, 'llvm_cov.stderr')
   p = None
   try:
-    with open(coverage_json_file, 'w') as f1, open(error_out_file, 'w') as f2:
+    with open(coverage_json_file, 'w') as f_out, open(error_out_file,
+                                                      'w') as f_error:
       args = _compute_llvm_args(
           profdata_path, llvm_cov_path, binaries, sources, output_dir)
-      p = subprocess.Popen(args, stdout=f1, stderr=f2)
+      p = subprocess.Popen(args, stdout=f_out, stderr=f_error)
       proc = None
       try:
         proc = psutil.Process(p.pid)
