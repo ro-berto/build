@@ -117,6 +117,43 @@ GOOD_GTEST_JSON_1 = {
 }
 
 
+TIMED_OUT_GTEST_JSON_1 = {
+  'disabled_tests': [],
+  'global_tags': [],
+  'all_tests': [
+    'AlignedMemoryTest.DynamicAllocation',
+    'AlignedMemoryTest.ScopedDynamicAllocation',
+    'AlignedMemoryTest.StackAlignment',
+    'AlignedMemoryTest.StaticAlignment',
+  ],
+  'per_iteration_data': [{
+    'AlignedMemoryTest.StackAlignment': [{
+      'elapsed_time_ms': 54000,
+      'losless_snippet': True,
+      'output_snippet': 'timed out',
+      'output_snippet_base64': '',
+      'status': 'FAILURE',
+    }],
+    'AlignedMemoryTest.StaticAlignment': [{
+      'elapsed_time_ms': 0,
+      'losless_snippet': True,
+      'output_snippet': '',
+      'output_snippet_base64': '',
+      'status': 'NOTRUN',
+    }],
+  }],
+  'test_locations': {
+    'AlignedMemoryTest.StackAlignment': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 789,
+    },
+    'AlignedMemoryTest.StaticAlignment': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 12,
+    },
+  },
+}
+
 # GOOD_GTEST_JSON_0 and GOOD_GTEST_JSON_1 merged.
 GOOD_GTEST_JSON_MERGED = {
   'all_tests': [
@@ -243,6 +280,82 @@ BAD_GTEST_JSON_ONLY_1_SHARD = {
 }
 
 
+# GOOD_GTEST_JSON_0 and TIMED_OUT_GTEST_JSON_1 merged.
+TIMED_OUT_GTEST_JSON_MERGED = {
+  'all_tests': [
+    'AlignedMemoryTest.DynamicAllocation',
+    'AlignedMemoryTest.ScopedDynamicAllocation',
+    'AlignedMemoryTest.StackAlignment',
+    'AlignedMemoryTest.StaticAlignment',
+  ],
+  'disabled_tests': [
+    'ConditionVariableTest.TimeoutAcrossSetTimeOfDay',
+    'FileTest.TouchGetInfo',
+    'MessageLoopTestTypeDefault.EnsureDeletion',
+  ],
+  'global_tags': ['CPU_64_BITS', 'MODE_DEBUG', 'OS_LINUX', 'OS_POSIX'],
+  'missing_shards': [],
+  'per_iteration_data': [{
+    'AlignedMemoryTest.DynamicAllocation': [{
+      'elapsed_time_ms': 0,
+      'losless_snippet': True,
+      'output_snippet': 'blah\\n',
+      'output_snippet_base64': 'YmxhaAo=',
+      'status': 'SUCCESS',
+    }],
+    'AlignedMemoryTest.ScopedDynamicAllocation': [{
+      'elapsed_time_ms': 0,
+      'losless_snippet': True,
+      'output_snippet': 'blah\\n',
+      'output_snippet_base64': 'YmxhaAo=',
+      'status': 'SUCCESS',
+    }],
+    'AlignedMemoryTest.StackAlignment': [{
+      'elapsed_time_ms': 54000,
+      'losless_snippet': True,
+      'output_snippet': 'timed out',
+      'output_snippet_base64': '',
+      'status': 'FAILURE',
+    }],
+    'AlignedMemoryTest.StaticAlignment': [{
+      'elapsed_time_ms': 0,
+      'losless_snippet': True,
+      'output_snippet': '',
+      'output_snippet_base64': '',
+      'status': 'NOTRUN',
+    }],
+  }],
+  'swarming_summary': {
+    u'shards': [
+      {
+        u'state': u'COMPLETED',
+      },
+      {
+        u'state': u'TIMED_OUT',
+      },
+      ],
+  },
+  'test_locations': {
+    'AlignedMemoryTest.StackAlignment': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 789,
+    },
+    'AlignedMemoryTest.StaticAlignment': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 12,
+    },
+    'AlignedMemoryTest.DynamicAllocation': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 123,
+    },
+    'AlignedMemoryTest.ScopedDynamicAllocation': {
+      'file': 'foo/bar/allocation_test.cc',
+      'line': 456,
+    },
+  },
+}
+
+
 class _StandardGtestMergeTest(unittest.TestCase):
 
   def setUp(self):
@@ -307,6 +420,20 @@ class MergeShardResultsTest(_StandardGtestMergeTest):
           self.summary, self.test_files)
       return merged, stdout.getvalue().strip()
 
+  def assertUnicodeEquals(self, expectation, result):
+    def convert_to_unicode(key_or_value):
+      if isinstance(key_or_value, str):
+        return unicode(key_or_value)
+      if isinstance(key_or_value, dict):
+        return {convert_to_unicode(k): convert_to_unicode(v) for k, v in key_or_value.items()}
+      if isinstance(key_or_value, list):
+        return [convert_to_unicode(x) for x in key_or_value]
+      return key_or_value
+
+    unicode_expectations = convert_to_unicode(expectation)
+    unicode_result = convert_to_unicode(result)
+    self.assertEquals(unicode_expectations, unicode_result)
+
   def test_ok(self):
     # Two shards, both successfully finished.
     self.stage({
@@ -334,8 +461,30 @@ class MergeShardResultsTest(_StandardGtestMergeTest):
         }
       ],
     }
-    self.assertEqual(GOOD_GTEST_JSON_MERGED, merged)
+    self.assertUnicodeEquals(GOOD_GTEST_JSON_MERGED, merged)
     self.assertEqual('', stdout)
+
+  def test_timed_out(self):
+    # Two shards, both successfully finished.
+    self.stage({
+      'shards': [
+        {
+          'state': 'COMPLETED',
+        },
+        {
+          'state': 'TIMED_OUT',
+        },
+      ],
+    },
+    {
+      '0/output.json': GOOD_GTEST_JSON_0,
+      '1/output.json': TIMED_OUT_GTEST_JSON_1,
+    })
+    merged, stdout = self.call()
+
+    self.assertUnicodeEquals(TIMED_OUT_GTEST_JSON_MERGED, merged)
+    self.assertIn(
+        'Test runtime exceeded allocated time\n', stdout)
 
   def test_missing_summary_json(self):
     # summary.json is missing, should return None and emit warning.
@@ -360,7 +509,7 @@ class MergeShardResultsTest(_StandardGtestMergeTest):
     })
     merged, stdout = self.call()
     merged.pop('swarming_summary')
-    self.assertEqual(BAD_GTEST_JSON_ONLY_1_SHARD, merged)
+    self.assertUnicodeEquals(BAD_GTEST_JSON_ONLY_1_SHARD, merged)
     self.assertIn(
         '@@@STEP_WARNINGS@@@\nsome shards did not complete: 0\n', stdout)
     self.assertIn(
@@ -384,9 +533,9 @@ class MergeShardResultsTest(_StandardGtestMergeTest):
     })
     merged, stdout = self.call()
     merged.pop('swarming_summary')
-    self.assertEqual(BAD_GTEST_JSON_ONLY_1_SHARD, merged)
+    self.assertUnicodeEquals(BAD_GTEST_JSON_ONLY_1_SHARD, merged)
     self.assertIn(
-        '@@@STEP_WARNINGS@@@\nTask ran but no result was found: '
+        'No result was found: '
         'shard 0 test output was missing', stdout)
 
   def test_large_output_json(self):
@@ -414,9 +563,9 @@ class MergeShardResultsTest(_StandardGtestMergeTest):
       standard_gtest_merge.OUTPUT_JSON_SIZE_LIMIT = min(len0,len1)
       merged, stdout = self.call()
       merged.pop('swarming_summary')
-      self.assertEqual(BAD_GTEST_JSON_ONLY_1_SHARD, merged)
+      self.assertUnicodeEquals(BAD_GTEST_JSON_ONLY_1_SHARD, merged)
       self.assertIn(
-          '@@@STEP_WARNINGS@@@\nTask ran but no result was found: '
+          'No result was found: '
           'shard %s test output exceeded the size limit' % large_shard, stdout)
     finally:
       standard_gtest_merge.OUTPUT_JSON_SIZE_LIMIT = old_json_limit
