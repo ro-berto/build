@@ -196,6 +196,43 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     ]
     self.assertListEqual(expected_args, args)
 
+  def test_rebase_flat_data(self):
+    flat_data = {
+        'files': [{
+            'path':
+                'base/base.cc',
+            'total_lines':
+                8,
+            'lines': [{
+                'line': 1,
+                'count': 3,
+            }, {
+                'line': 2,
+                'count': 3,
+            }, {
+                'line': 3,
+                'count': 1,
+            }, {
+                'line': 4,
+                'count': 3,
+            }]
+        }]
+    }
+
+    diff_mapping = {'base/base.cc': {'3': [16, 'A line added by the patch.']}}
+    rebased_flat_data = generator._rebase_flat_data(flat_data, diff_mapping)
+    expected_flat_data = {
+        'files': [{
+            'path': 'base/base.cc',
+            'total_lines': 1,
+            'lines': [{
+                'line': 16,
+                'count': 1,
+            }]
+        }]
+    }
+    self.assertEqual(expected_flat_data, rebased_flat_data)
+
 
 if __name__ == '__main__':
   unittest.main()

@@ -271,11 +271,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
   def _generate_metadata(self, binaries, profdata_path):
     """Generates the coverage info in metadata format."""
     llvm_cov = self.cov_executable
-    if self._affected_files:
-      self._generate_and_save_local_git_diff()
-      self._fetch_and_save_gerrit_git_diff()
-      self._generate_diff_mapping_from_local_to_gerrit()
-    else:
+    if not self._affected_files:
       # Download the version with multi-thread support.
       # Assume that this is running on Linux.
       temp_dir = self.m.path.mkdtemp()
@@ -297,6 +293,17 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       args.append('--sources')
       args.extend(
           [self.m.path['checkout'].join(s) for s in self._affected_files])
+
+      # In order to correctly display the (un)covered line numbers on Gerrit.
+      # Per-cl metadata's line numbers need to be rebased because the base
+      # revision of the change in this build is different from the one on Gerrit.
+      self._generate_and_save_local_git_diff()
+      self._fetch_and_save_gerrit_git_diff()
+      self._generate_diff_mapping_from_local_to_gerrit()
+      args.extend([
+          '--diff-mapping-path',
+          self.metadata_dir.join(_LOCAL_TO_GERRIT_DIFF_MAPPING_FILE_NAME)
+      ])
 
     try:
       self.m.python(

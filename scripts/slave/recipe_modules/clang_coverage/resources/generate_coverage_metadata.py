@@ -6,6 +6,7 @@
 
 import argparse
 import collections
+import copy
 import json
 import logging
 import os
@@ -158,10 +159,6 @@ def _to_file_record(src_path, file_coverage_data, compressed_format):
   # assert len(segments) % 2 == 0, "segments should be even"
 
   line_data, block_data = _extract_coverage_info(segments)
-
-  # TODO(crbug.com/902404): for per-CL coverage, we need to map the line numbers
-  # of a file in the bot to the line numbers of the same file on Gerrit, because
-  # the base revisions are different.
   line_data = sorted(line_data.items(), key=lambda x: x[0])
 
   if not compressed_format:
@@ -266,9 +263,57 @@ def _get_coverage_data_in_json(
       if p.wait() != 0:
         sys.exit(p.returncode)
 
+def _rebase_flat_data(flat_data, diff_mapping):
+  """Rebases the line numbers of the data according to the diff mapping.
+
+  Args:
+    flat_data: todo
+    diff_mapping: A map whose key is a file name that is relative to the source
+      root, and the corresponding value is another map that maps from local
+      diff's line number to Gerrit diff's line number as well as the line
+      itself.
+
+  Returns:
+    A copy of the |flat_data| with line numbers being rebased.
+  """
+  file_records = flat_data['files']
+  rebased_file_records = []
+  for file_record in file_records:
+    # For example, a file won't be present in the mapping if it doesn't have any
+    # added lines.
+    if file_record['path'] not in diff_mapping:
+      continue
+
+    rebased_file_record = {}
+    rebased_file_record['path'] = file_record['path']
+    rebased_file_record['lines'] = []
+
+    for line_record in file_record['lines']:
+      file_path = file_record['path']
+      # Needs to be converted to string type because json.dumps
+      # automatically coerces all keys to strings.
+      line_number = str(line_record['line'])
+      if line_number not in diff_mapping[file_path]:
+        continue
+
+      rebased_line_number = diff_mapping[file_path][line_number][0]
+      rebased_line_record = {
+          'line': rebased_line_number,
+          'count': line_record['count']
+      }
+      if 'uncovered_blocks' in line_record:
+        rebased_line_record['uncovered_blocks'] = copy.deepcopy(
+            line_record['uncovered_blocks'])
+
+      rebased_file_record['lines'].append(rebased_line_record)
+
+    rebased_file_record['total_lines'] = len(rebased_file_record['lines'])
+    rebased_file_records.append(rebased_file_record)
+
+  return {'files': rebased_file_records}
 
 def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
-                       binaries, sources):
+                       binaries, sources, diff_mapping_path):
   sources = sources or []
   sources = [os.path.join(src_path, s) for s in sources]
 
@@ -301,6 +346,18 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
   }
 
   logging.info('Dumping aggregated data ...')
+  if diff_mapping_path:
+    # Only dumps the uncompressed metadata for per-cl coverage for debugging
+    # purpose because it's much smaller than the one of full-repo.
+    with open(os.path.join(output_dir, 'flat.json'), 'w') as f:
+      f.write(json.dumps(flat_data))
+
+    with open(diff_mapping_path) as f:
+      diff_mapping = json.load(f)
+    rebased_flat_data = _rebase_flat_data(flat_data, diff_mapping)
+    with open(os.path.join(output_dir, 'rebased_flat.json'), 'w') as f:
+      f.write(json.dumps(rebased_flat_data))
+
   start_time = time.time()
   with open(os.path.join(output_dir, 'compressed.json.gz'), 'w') as f:
     f.write(zlib.compress(json.dumps(compressed_data)))
@@ -332,6 +389,9 @@ def _parse_args(args):
       '--sources', nargs='*', type=str,
       help='the source files to generate the coverage for, path should be '
            'relative to the root of the code checkout')
+  parser.add_argument(
+      '--diff-mapping-path', type=str,
+      help='absoluate path to the file that stores the diff mapping.')
   return parser.parse_args(args=args)
 
 
@@ -353,7 +413,8 @@ def main():
     raise RuntimeError('Input data %s missing' % params.profdata_path)
 
   _generate_metadata(params.src_path, params.output_dir, params.profdata_path,
-                     params.llvm_cov, params.binaries, params.sources)
+                     params.llvm_cov, params.binaries, params.sources,
+                     params.diff_mapping_path)
 
 
 if __name__ == '__main__':
