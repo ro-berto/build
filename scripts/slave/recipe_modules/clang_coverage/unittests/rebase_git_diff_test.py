@@ -157,6 +157,47 @@ class RebaseGitDiffTest(unittest.TestCase):
 
     self.assertEqual(expected_mapping, mapping)
 
+  # This test tests that the rebase function correctly handles newlines in all
+  # following 3 scerios:
+  # 1. If a newline is added, the diff is: '+\n'.
+  # 2. If a newline is unchanged, the diff is: '\n'. (without prefix whitespace)
+  # 3. If a newline is deleted, the diff is: '-\n'.
+  def test_new_line_behaviors(self):
+    gerrit_diff = ('diff --git a/path/test.txt b/path/test.txt\n'
+                   'index 0719398930..4a2b716881 100644\n'
+                   '--- a/path/test.txt\n'
+                   '+++ b/path/test.txt\n'
+                   '@@ -10,3 +10,4 @@\n'
+                   ' Line 10\n'
+                   '\n'
+                   '-\n'
+                   '+A different line 11\n'
+                   '+\n')
+
+    # The difference between |local_diff| and |gerrit_diff| is that some other
+    # CL added 5 lines before Line 10.
+    local_diff = ('diff --git a/path/test.txt b/path/test.txt\n'
+                  'index 0719398930..4a2b716881 100644\n'
+                  '--- a/path/test.txt\n'
+                  '+++ b/path/test.txt\n'
+                  '@@ -15,3 +15,4 @@\n'
+                  ' Line 10\n'
+                  '\n'
+                  '-\n'
+                  '+A different line 11\n'
+                  '+\n')
+
+    expected_mapping = {
+        'path/test.txt': {
+            17: (12, 'A different line 11'),
+            18: (13, '')
+        }
+    }
+
+    mapping = rebase_git_diff.generate_diff_mapping(
+        local_diff.split('\n'), gerrit_diff.split('\n'))
+    self.assertEqual(expected_mapping, mapping)
+
 
 if __name__ == '__main__':
   unittest.main()

@@ -70,10 +70,6 @@ _DIFF_RANGE_HEADER_REGEX = re.compile(r'^@@ \-(\d+),?(\d+)? \+(\d+),?(\d+)? @@')
 # For example: '+if (num >= 0) {'
 _DIFF_ADDED_LINE_PREFIX = '+'
 
-# Identifies lines untouched by the new files.
-# For example: ' num += 2;'
-_DIFF_UNCHANGED_LINE_PREFIX = ' '
-
 
 def _parse_added_lines_from_git_diff(diff):
   """Parses the 'git diff' output and returns the line number of added lines.
@@ -114,13 +110,15 @@ def _parse_added_lines_from_git_diff(diff):
       current_offset = 0
       continue
 
-    # E.g. ' unchanged line'
-    if line.startswith(_DIFF_UNCHANGED_LINE_PREFIX):
+    # E.g. ' unchanged line' and '\n'.
+    is_unchanged_line = line.startswith(' ') or line == ''
+    if is_unchanged_line and current_base_line_num is not None:
       current_offset += 1
       continue
 
     # E.g. '+made some change to this line'
-    if line.startswith(_DIFF_ADDED_LINE_PREFIX):
+    is_new_line = line.startswith(_DIFF_ADDED_LINE_PREFIX)
+    if is_new_line and current_base_line_num is not None:
       line_num = current_base_line_num + current_offset
       file_to_added_lines[current_file].append((line[1:], line_num))
       current_offset += 1
