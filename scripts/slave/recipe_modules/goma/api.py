@@ -476,8 +476,9 @@ class GomaApi(recipe_api.RecipeApi):
       args.append('--is-experimental')
 
     # Set buildbot info used in goma_utils.MakeGomaStatusCounter etc.
+    if self.m.buildbucket.builder_name:
+      args.extend(['--buildbot-buildername', self.m.buildbucket.builder_name])
     keys = [
-      ('buildername', 'buildername'),
       ('mastername', 'mastername'),
       ('bot_id', 'slavename'),
     ]

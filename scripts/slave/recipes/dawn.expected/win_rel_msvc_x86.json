@@ -370,7 +370,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"win\", \"project\": \"dawn\"}"
+      "{\"bucket\": \"ci\", \"builder\": \"win\", \"project\": \"dawn\"}",
+      "--buildbot-buildername",
+      "win"
     ],
     "env": {
       "DEPOT_TOOLS_WIN_TOOLCHAIN_ROOT": "[CACHE]\\win_toolchain"

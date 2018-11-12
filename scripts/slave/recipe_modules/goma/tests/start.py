@@ -4,6 +4,7 @@
 
 DEPS = [
   'goma',
+  'recipe_engine/buildbucket',
   'recipe_engine/properties',
   'recipe_engine/runtime',
 ]
@@ -18,7 +19,8 @@ def RunSteps(api):
 def GenTests(api):
   yield (
       api.test('basic') +
-      api.properties(buildername='test_buildername')
+      api.properties(buildername='test_buildername') +
+      api.buildbucket.ci_build(builder='test_buildername')
   )
 
   yield (

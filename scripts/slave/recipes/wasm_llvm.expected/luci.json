@@ -311,6 +311,8 @@
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"wasm\"}",
       "--is-luci",
+      "--buildbot-buildername",
+      "linux",
       "--buildbot-mastername",
       "client.wasm.llvm"
     ],

@@ -333,7 +333,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"dawn\"}"
+      "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"dawn\"}",
+      "--buildbot-buildername",
+      "linux"
     ],
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [

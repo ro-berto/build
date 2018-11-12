@@ -309,6 +309,8 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"wasm\"}",
+      "--buildbot-buildername",
+      "linux",
       "--buildbot-mastername",
       "client.wasm.llvm"
     ],

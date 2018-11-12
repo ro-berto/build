@@ -737,7 +737,7 @@
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"linux\", \"project\": \"ios\"}",
       "--buildbot-buildername",
-      "ios-simulator-gn",
+      "linux",
       "--buildbot-mastername",
       "tryserver.fake",
       "--buildbot-slavename",
