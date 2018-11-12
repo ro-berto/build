@@ -88,7 +88,7 @@ def RunSteps(api):
           'Image file must end in either ".bin" or ".tar.xz".')
 
     # Move into the named cache, and fetch a full ChromiumOS checkout.
-    cros_checkout_path = api.path['cache'].join('cros_checkout')
+    cros_checkout_path = api.path['cache'].join('builder')
     with api.context(cwd=cros_checkout_path):
       api.chromite.checkout(repo_sync_args=['-j4'])
 

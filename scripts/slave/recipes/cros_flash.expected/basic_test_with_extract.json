@@ -33,7 +33,7 @@
       "--repo-url",
       "https://chromium.googlesource.com/external/repo.git"
     ],
-    "cwd": "[CACHE]/cros_checkout",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "repo init"
   },
@@ -43,7 +43,7 @@
       "sync",
       "-j4"
     ],
-    "cwd": "[CACHE]/cros_checkout",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "repo sync"
   },
@@ -51,19 +51,19 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cros_checkout/chromite/bin/cros_sdk",
+      "[CACHE]/builder/chromite/bin/cros_sdk",
       "--nouse-image",
       "--create",
       "--debug",
       "--",
       "exit"
     ],
-    "cwd": "[CACHE]/cros_checkout",
+    "cwd": "[CACHE]/builder",
     "name": "build chroot"
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/cros_checkout",
+    "cwd": "[CACHE]/builder",
     "name": "system_python"
   },
   {
@@ -78,7 +78,7 @@
       "0777",
       "[START_DIR]/python_bin"
     ],
-    "cwd": "[CACHE]/cros_checkout",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "system_python.create_dir",
     "~followup_annotations": [
@@ -95,7 +95,7 @@
       "remove",
       "[START_DIR]/python_bin/python"
     ],
-    "cwd": "[CACHE]/cros_checkout",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "system_python.remove_link",
     "~followup_annotations": [
@@ -112,7 +112,7 @@
       "remove",
       "[START_DIR]/python_bin/python2"
     ],
-    "cwd": "[CACHE]/cros_checkout",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "system_python.remove_link (2)",
     "~followup_annotations": [
@@ -130,7 +130,7 @@
       "/usr/bin/python",
       "[START_DIR]/python_bin/python"
     ],
-    "cwd": "[CACHE]/cros_checkout",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "system_python.create_link",
     "~followup_annotations": [
@@ -148,7 +148,7 @@
       "/usr/bin/python2",
       "[START_DIR]/python_bin/python2"
     ],
-    "cwd": "[CACHE]/cros_checkout",
+    "cwd": "[CACHE]/builder",
     "infra_step": true,
     "name": "system_python.create_link (2)",
     "~followup_annotations": [
@@ -159,7 +159,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/cros_checkout/chromite/bin/cros",
+      "[CACHE]/builder/chromite/bin/cros",
       "flash",
       "variable_chromeos_device_hostname",
       "[TMP_BASE]/cros_flash_tmp_1",
@@ -167,7 +167,7 @@
       "--force",
       "--debug"
     ],
-    "cwd": "[CACHE]/cros_checkout",
+    "cwd": "[CACHE]/builder",
     "env_prefixes": {
       "PATH": [
         "[START_DIR]/python_bin"
