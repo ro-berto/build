@@ -86,12 +86,12 @@ class DartApi(recipe_api.RecipeApi):
       return secret_key
 
 
-  def kill_tasks(self):
+  def kill_tasks(self, ok_ret='any'):
     """Kills leftover tasks from previous runs or steps."""
     self.m.python('kill processes',
                self.m.path['checkout'].join('tools', 'task_kill.py'),
                args=['--kill_browsers=True', '--kill_vsbuild=True'],
-               ok_ret='any')
+               ok_ret=ok_ret)
 
 
   def dart_executable(self):

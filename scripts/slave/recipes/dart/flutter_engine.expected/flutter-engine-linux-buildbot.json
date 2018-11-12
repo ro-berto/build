@@ -118,6 +118,14 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/src/third_party/dart/tools/task_kill.py"
+    ],
+    "name": "kill processes"
+  },
+  {
+    "cmd": [
       "[START_DIR]/src/flutter/tools/gn"
     ],
     "env": {
@@ -3743,6 +3751,14 @@
     },
     "name": "flutter test",
     "timeout": 5400
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/src/third_party/dart/tools/task_kill.py"
+    ],
+    "name": "kill processes (2)"
   },
   {
     "jsonResult": null,

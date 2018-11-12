@@ -122,6 +122,14 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/third_party/dart/tools/task_kill.py"
+    ],
+    "name": "kill processes"
+  },
+  {
+    "cmd": [
       "[CACHE]/builder/src/flutter/tools/gn"
     ],
     "cwd": "[CACHE]/builder",
@@ -3889,6 +3897,14 @@
     },
     "name": "flutter test",
     "timeout": 5400
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/third_party/dart/tools/task_kill.py"
+    ],
+    "name": "kill processes (2)"
   },
   {
     "jsonResult": null,

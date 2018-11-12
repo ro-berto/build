@@ -12,9 +12,17 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
+  'recipe_engine/python',
   'recipe_engine/runtime',
   'recipe_engine/step',
 ]
+
+def KillTasks(api, checkout_dir, ok_ret='any'):
+  """Kills leftover tasks from previous runs or steps."""
+  dart_sdk_dir = checkout_dir.join('third_party', 'dart')
+  api.python('kill processes',
+               dart_sdk_dir.join('tools', 'task_kill.py'),
+               ok_ret=ok_ret)
 
 def Build(api, checkout_dir, config, *targets):
   build_dir = checkout_dir.join('out/%s' % config)
@@ -208,6 +216,14 @@ def RunSteps(api):
 
   api.goma.ensure_goma()
 
+  checkout_dir = start_dir.join('src')
+  KillTasks(api, checkout_dir)
+  try:
+    BuildAndTest(api, start_dir, checkout_dir)
+  finally:
+    KillTasks(api, checkout_dir, ok_ret={0})
+
+def BuildAndTest(api, start_dir, checkout_dir):
   run_env = {
     'GOMA_DIR':api.goma.goma_dir,
     # By setting 'ANALYZER_STATE_LOCATION_OVERRIDE' we force analyzer to emit
@@ -217,7 +233,6 @@ def RunSteps(api):
     'ANALYZER_STATE_LOCATION_OVERRIDE': start_dir.join('.dartServer')
   }
   with api.context(cwd=start_dir, env=run_env):
-    checkout_dir = start_dir.join('src')
     BuildLinux(api, checkout_dir)
     prebuilt_dart_bin = checkout_dir.join('third_party', 'dart', 'tools',
       'sdks', 'dart-sdk', 'bin')
