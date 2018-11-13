@@ -47,9 +47,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "sdk@HEAD",
-      "--with_branch_heads",
-      "--with_tags"
+      "sdk@HEAD"
     ],
     "cwd": "[CACHE]\\builder",
     "env": {

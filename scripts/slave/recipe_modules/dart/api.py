@@ -50,12 +50,12 @@ class DartApi(recipe_api.RecipeApi):
                              'GIT_TRACE_CURL_NO_DATA': '1',
                              'GIT_REDACT_COOKIES': 'o,SSO,GSSO_UberProxy'}):
       try:
-        self.m.bot_update.ensure_checkout(with_branch_heads=True,
-                                          with_tags=True)
+        self.m.bot_update.ensure_checkout()
       except self.m.step.InfraFailure:
+        # TODO(athom): Remove this when git cache is clean on all bots
+        self.m.file.rmcontents('Clear git cache', self.m.path['cache'].join('git'))
         # TODO(athom): Remove this retry once root cause is fixed
-        self.m.bot_update.ensure_checkout(with_branch_heads=True,
-                                          with_tags=True)
+        self.m.bot_update.ensure_checkout()
 
       with self.m.context(cwd=self.m.path['checkout']):
         if clobber:
