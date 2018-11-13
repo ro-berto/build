@@ -475,6 +475,24 @@ SPEC = {
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
     },
+    'ToTWinASanLibfuzzer': {
+      'chromium_config': 'chromium_win_clang_asan_tot',
+      'chromium_apply_config': ['mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [
+        'all',
+      ],
+      'bot_type': 'builder',
+      'test_results_config': 'staging_server',
+      'testing': { 'platform': 'win', },
+      # Workaround so that recipes doesn't add random build targets to our
+      # compile line. We want to build everything.
+      'add_tests_as_compile_targets': False,
+    },
     'ToTWinLibcxx64': {
       'chromium_config': 'chromium_win_clang_official_tot',
       'chromium_apply_config': ['mb'],
