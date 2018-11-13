@@ -31,6 +31,9 @@ COMMIT_TEMPLATE = '%s/+/%%s' % V8_URL
 # Regular expressions for v8 branch names.
 RELEASE_BRANCH_RE = re.compile(r'^refs/branch-heads/\d+\.\d+$')
 
+# Regular expressions for getting target bits from gn args.
+TARGET_CPU_RE = re.compile(r'.*target_cpu\s+=\s+"([^"]*)".*')
+
 # With more than 23 letters, labels are to big for buildbot's popup boxes.
 MAX_LABEL_SIZE = 23
 
@@ -94,8 +97,6 @@ class V8Version(object):
 
 
 class V8Api(recipe_api.RecipeApi):
-  BUILDERS = v8_builders.BUILDERS
-  FLATTENED_BUILDERS = v8_builders.FLATTENED_BUILDERS
   VERSION_FILE = 'include/v8-version.h'
   EMPTY_TEST_SPEC = v8_builders.EmptyTestSpec
   TEST_SPEC = v8_builders.TestSpec
@@ -114,7 +115,7 @@ class V8Api(recipe_api.RecipeApi):
     self.revision_number = None
 
   def bot_config_by_buildername(
-      self, builders=FLATTENED_BUILDERS, use_goma=True):
+      self, builders=None, use_goma=True):
     default = {}
     if not self.m.properties.get('parent_buildername'):
       # Builders and builder_testers both build and need the following set of
@@ -123,12 +124,12 @@ class V8Api(recipe_api.RecipeApi):
         default['chromium_apply_config'] = ['default_compiler', 'goma', 'mb']
       else:
         default['chromium_apply_config'] = ['default_compiler', 'mb']
-    return builders.get(self.m.properties.get('buildername'), default)
+    return (builders or {}).get(self.m.properties.get('buildername'), default)
 
   def update_bot_config(self, bot_config, binary_size_tracking, build_config,
-                        clusterfuzz_archive, enable_swarming, target_arch,
-                        target_platform, track_build_dependencies, triggers,
-                        triggers_proxy):
+                        clusterfuzz_archive, coverage, enable_swarming,
+                        target_arch, target_platform, track_build_dependencies,
+                        triggers, triggers_proxy):
     """Update bot_config dict with src-side properties.
 
     Args:
@@ -138,6 +139,7 @@ class V8Api(recipe_api.RecipeApi):
       build_config: Config value for BUILD_CONFIG in chromium recipe module.
       clusterfuzz_archive: Additional configurations set for archiving builds to
           GS buckets for clusterfuzz.
+      coverage: Optional coverage setting.
       enable_swarming: Switch to enable/disable swarming.
       target_arch: Config value for TARGET_ARCH in chromium recipe module.
       target_platform: Config value for TARGET_PLATFORM in chromium recipe
@@ -161,6 +163,8 @@ class V8Api(recipe_api.RecipeApi):
         ('TARGET_PLATFORM', target_platform)):
       if v is not None:
         bot_config['v8_config_kwargs'][k] = v
+    if coverage is not None:
+      bot_config['coverage'] = coverage
     if enable_swarming is not None:
       bot_config['enable_swarming'] = enable_swarming
     if binary_size_tracking is not None:
@@ -267,8 +271,6 @@ class V8Api(recipe_api.RecipeApi):
     if self.m.chromium.c.TARGET_PLATFORM in ['android', 'fuchsia']:
       self.m.gclient.apply_config(self.m.chromium.c.TARGET_PLATFORM)
 
-    for c in self.bot_config.get('gclient_apply_config', []):
-      self.m.gclient.apply_config(c)
     for c in self.bot_config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
 
@@ -283,6 +285,12 @@ class V8Api(recipe_api.RecipeApi):
       # setting.
       self.m.gclient.c.target_cpu.add('arm')
       self.m.gclient.c.target_cpu.add('arm64')
+
+    # Apply additional configs for coverage builders.
+    if self.bot_config.get('coverage') == 'gcov':
+      self.bot_config['disable_auto_bisect'] = True
+    elif self.bot_config.get('coverage') == 'sanitizer':
+      self.m.gclient.apply_config('llvm_compiler_rt')
 
     if self.bot_config.get('enable_swarming', True):
       self.m.gclient.c.got_revision_reverse_mapping[
@@ -620,6 +628,15 @@ class V8Api(recipe_api.RecipeApi):
         l for l in gn_args.splitlines()
         if not l.startswith('goma_dir'))
 
+  @property
+  def target_bits(self):
+    """Returns target bits (as int) inferred from gn arguments from MB."""
+    match = TARGET_CPU_RE.match(self.build_environment.get('gn_args', ''))
+    if match:
+      return 64 if '64' in match.group(1) else 32
+    # If target_cpu is not set, gn defaults to 64 bits.
+    return 64  # pragma: no cover
+
   def _upload_build_dependencies(self, deps):
     values = {
       'ext_h_avg_deps': deps['by_extension']['h']['avg_deps'],
@@ -843,7 +860,7 @@ class V8Api(recipe_api.RecipeApi):
 
   @property
   def generate_gcov_coverage(self):
-    return bool(self.bot_config.get('gcov_coverage_folder'))
+    return self.bot_config.get('coverage') == 'gcov'
 
   def init_gcov_coverage(self):
     """Delete all gcov counter files."""
@@ -914,7 +931,8 @@ class V8Api(recipe_api.RecipeApi):
     )
 
     # Upload report to google storage.
-    dest = '%s/%s' % (self.bot_config['gcov_coverage_folder'], self.revision)
+    dest = '%s%d_gcov_rel/%s' % (
+        self.m.platform.name, self.target_bits, self.revision)
     result = self.m.gsutil(
         [
           '-m', 'cp', '-a', 'public-read', '-R', report_dir,
@@ -927,7 +945,7 @@ class V8Api(recipe_api.RecipeApi):
 
   @property
   def generate_sanitizer_coverage(self):
-    return bool(self.bot_config.get('sanitizer_coverage_folder'))
+    return self.bot_config.get('coverage') == 'sanitizer'
 
   def create_coverage_context(self):
     if self.generate_sanitizer_coverage:

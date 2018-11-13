@@ -11,13 +11,13 @@
       "-a",
       "public-read",
       "{\"bot_default\": \"[dummy hash for bot_default]\"}",
-      "gs://chromium-v8/isolated/tryserver.v8/v8_linux64_sanitizer_coverage_rel/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
+      "gs://chromium-v8/isolated/tryserver.v8/v8_foobar/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json"
     ],
     "infra_step": true,
     "name": "build.gsutil upload",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/tryserver.v8/v8_linux64_sanitizer_coverage_rel/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/tryserver.v8/v8_foobar/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
     ]
   },
   {

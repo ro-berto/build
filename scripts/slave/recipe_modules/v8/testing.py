@@ -273,7 +273,7 @@ class SanitizerCoverageContext(object):
       results_path = '/'.join(path_prefix + [
         issue,
         patchset,
-        self.api.v8.bot_config.get('sanitizer_coverage_folder'),
+        '%s%d' % (self.api.platform.name, self.api.v8.target_bits)
       ])
 
       self.api.gsutil.upload(

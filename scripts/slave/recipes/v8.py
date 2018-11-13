@@ -38,6 +38,8 @@ PROPERTIES = {
   # clusterfuzz. The mapping consists of "name", "bucket" and optional
   # "bitness".
   'clusterfuzz_archive': Property(default=None, kind=dict),
+  # Optional coverage setting. One of gcov|sanitizer.
+  'coverage': Property(default=None, kind=str),
   # Mapping of custom dependencies to sync (dependency name as in DEPS file ->
   # deps url).
   'custom_deps': Property(default=None, kind=dict),
@@ -67,15 +69,16 @@ PROPERTIES = {
 
 
 def RunSteps(api, binary_size_tracking, build_config, clobber,
-             clusterfuzz_archive, custom_deps, default_targets, enable_swarming,
-             mb_config_path, set_gclient_var, target_arch, target_platform,
-             track_build_dependencies, triggers, triggers_proxy, use_goma):
+             clusterfuzz_archive, coverage, custom_deps, default_targets,
+             enable_swarming, mb_config_path, set_gclient_var, target_arch,
+             target_platform, track_build_dependencies, triggers,
+             triggers_proxy, use_goma):
   v8 = api.v8
   v8.load_static_test_configs()
   bot_config = v8.update_bot_config(
       v8.bot_config_by_buildername(use_goma=use_goma),
-      binary_size_tracking, build_config, clusterfuzz_archive, enable_swarming,
-      target_arch, target_platform, track_build_dependencies,
+      binary_size_tracking, build_config, clusterfuzz_archive, coverage,
+      enable_swarming, target_arch, target_platform, track_build_dependencies,
       triggers, triggers_proxy,
   )
   v8.apply_bot_config(bot_config)
@@ -174,9 +177,6 @@ def RunSteps(api, binary_size_tracking, build_config, clobber,
 
 
 def GenTests(api):
-  for mastername, _, buildername, _ in api.v8.iter_builders():
-    yield api.v8.test(mastername, buildername)
-
   yield (
     api.v8.test(
         'client.v8.branches',
@@ -839,15 +839,29 @@ def GenTests(api):
     api.post_process(Filter('build.isolate tests'))
   )
 
+  # Same template as in chromium recipe, but with 64 bits target cpu.
+  fake_gn_args_x64 = (
+      '\n'
+      'Writing """\\\n'
+      'goma_dir = "/b/build/slave/cache/goma_client"\n'
+      'target_cpu = "x64"\n'
+      'use_goma = true\n'
+      '""" to _path_/args.gn.\n'
+  )
+
   # Cover running sanitizer coverage.
   yield (
     api.v8.test(
         'tryserver.v8',
-        'v8_linux64_sanitizer_coverage_rel',
+        'v8_foobar',
         'sanitizer_coverage',
+        build_config='Release',
+        coverage='sanitizer',
     ) +
+    api.step_data(
+        'build.lookup GN args', api.raw_io.stream_output(fake_gn_args_x64)) +
     api.v8.test_spec_in_checkout(
-        'v8_linux64_sanitizer_coverage_rel',
+        'v8_foobar',
         '{"tests": [{"name": "v8testing"}]}') +
     api.post_process(Filter(
         'Initialize coverage data',
@@ -855,6 +869,33 @@ def GenTests(api):
         'build.gsutil upload',
         'Split coverage data',
         'gsutil coverage data',
+    ))
+  )
+
+  # Cover running gcov coverage.
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'gcov_coverage',
+        build_config='Release',
+        clobber=True,
+        coverage='gcov',
+        enable_swarming=False,
+    ) +
+    api.step_data(
+        'build.lookup GN args', api.raw_io.stream_output(fake_gn_args_x64)) +
+    api.v8.test_spec_in_checkout(
+        'V8 Foobar',
+        '{"tests": [{"name": "v8testing"}]}') +
+    api.post_process(MustRun, 'initialization.clobber') +
+    api.post_process(Filter(
+        'initialization.docker login',
+        'initialization.lcov zero counters',
+        'lcov capture',
+        'lcov remove',
+        'genhtml',
+        'gsutil coverage report',
     ))
   )
 

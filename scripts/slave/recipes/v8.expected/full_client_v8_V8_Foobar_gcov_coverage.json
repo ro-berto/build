@@ -1,0 +1,151 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::docker]/resources/docker_login.py",
+      "--server",
+      "gcr.io",
+      "--service-account-token-file",
+      "extra.secret.token.should.not.be.logged",
+      "--config-file",
+      "[CLEANUP]/.docker"
+    ],
+    "name": "initialization.docker login",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::docker]/resources/docker_run.py",
+      "--config-file",
+      "[CLEANUP]/.docker",
+      "--image",
+      "gcr.io/chromium-container-registry/lcov:2018-01-18_17-03",
+      "--dir-map",
+      "[BUILDER_CACHE]/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
+      "--",
+      "lcov",
+      "--directory",
+      "[BUILDER_CACHE]/v8/out/Release",
+      "--zerocounters"
+    ],
+    "name": "initialization.lcov zero counters",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::docker]/resources/docker_run.py",
+      "--config-file",
+      "[CLEANUP]/.docker",
+      "--image",
+      "gcr.io/chromium-container-registry/lcov:2018-01-18_17-03",
+      "--dir-map",
+      "[BUILDER_CACHE]/v8",
+      "[BUILDER_CACHE]/v8",
+      "--dir-map",
+      "[TMP_BASE]/gcov_coverage_tmp_1",
+      "[TMP_BASE]/gcov_coverage_tmp_1",
+      "--dir-map",
+      "[TMP_BASE]/gcov_coverage_html_tmp_2",
+      "[TMP_BASE]/gcov_coverage_html_tmp_2",
+      "--",
+      "lcov",
+      "--directory",
+      "[BUILDER_CACHE]/v8/out/Release",
+      "--capture",
+      "--output-file",
+      "[TMP_BASE]/gcov_coverage_tmp_1/app.info"
+    ],
+    "name": "lcov capture"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::docker]/resources/docker_run.py",
+      "--config-file",
+      "[CLEANUP]/.docker",
+      "--image",
+      "gcr.io/chromium-container-registry/lcov:2018-01-18_17-03",
+      "--dir-map",
+      "[BUILDER_CACHE]/v8",
+      "[BUILDER_CACHE]/v8",
+      "--dir-map",
+      "[TMP_BASE]/gcov_coverage_tmp_1",
+      "[TMP_BASE]/gcov_coverage_tmp_1",
+      "--dir-map",
+      "[TMP_BASE]/gcov_coverage_html_tmp_2",
+      "[TMP_BASE]/gcov_coverage_html_tmp_2",
+      "--",
+      "lcov",
+      "--directory",
+      "[BUILDER_CACHE]/v8/out/Release",
+      "--remove",
+      "[TMP_BASE]/gcov_coverage_tmp_1/app.info",
+      "third_party/*",
+      "testing/gtest/*",
+      "testing/gmock/*",
+      "/usr/include/*",
+      "--output-file",
+      "[TMP_BASE]/gcov_coverage_tmp_1/app.info"
+    ],
+    "name": "lcov remove"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::docker]/resources/docker_run.py",
+      "--config-file",
+      "[CLEANUP]/.docker",
+      "--image",
+      "gcr.io/chromium-container-registry/lcov:2018-01-18_17-03",
+      "--dir-map",
+      "[BUILDER_CACHE]/v8",
+      "[BUILDER_CACHE]/v8",
+      "--dir-map",
+      "[TMP_BASE]/gcov_coverage_tmp_1",
+      "[TMP_BASE]/gcov_coverage_tmp_1",
+      "--dir-map",
+      "[TMP_BASE]/gcov_coverage_html_tmp_2",
+      "[TMP_BASE]/gcov_coverage_html_tmp_2",
+      "--",
+      "genhtml",
+      "--output-directory",
+      "[TMP_BASE]/gcov_coverage_html_tmp_2",
+      "[TMP_BASE]/gcov_coverage_tmp_1/app.info"
+    ],
+    "name": "genhtml"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "-m",
+      "cp",
+      "-a",
+      "public-read",
+      "-R",
+      "[TMP_BASE]/gcov_coverage_html_tmp_2",
+      "gs://chromium-v8/linux64_gcov_rel/f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
+    ],
+    "infra_step": true,
+    "name": "gsutil coverage report",
+    "~followup_annotations": [
+      "@@@STEP_LINK@report@https://storage.googleapis.com/chromium-v8/linux64_gcov_rel/f2cbea7e89a45f46819777bb78a1f5bd0241f64c/index.html@@@"
+    ]
+  }
+]

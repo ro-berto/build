@@ -28,8 +28,6 @@ def _sanitize_nonalpha(text):
 
 
 class V8TestApi(recipe_test_api.RecipeTestApi):
-  BUILDERS = builders.BUILDERS
-
   @staticmethod
   def SLOWEST_TESTS():
     return [
@@ -46,9 +44,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'duration': 0.1012,
     },
   ]
-
-  def iter_builders(self):
-    return builders.iter_builders()
 
   def output_json(self, has_failures=False, wrong_results=False, flakes=False,
                   unmarked_slow_test=False):
@@ -462,15 +457,10 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           child tester. Default value if no static config exists in builders.py.
 
     """
-    bot_config = builders.FLATTENED_BUILDERS.get(buildername, {})
-    v8_config_kwargs = bot_config.get('v8_config_kwargs', {})
-
     if parent_test_spec:
       kwargs.update(self.example_parent_test_spec_properties(
           buildername, parent_test_spec))
 
-    # Simulate properties defined in the V8 repo.
-    kwargs.update(bot_config.get('testing', {}).get('properties', {}))
     if 'triggers' in kwargs:
       # Freezing the structure in builders.py turns lists into tuples. But
       # the recipe properties api requires type list for triggers just like in
@@ -495,10 +485,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
             gerrit_project='v8/v8',
             **kwargs
         ) +
-        self.m.platform(
-            bot_config.get('testing', {}).get('platform', 'linux'),
-            v8_config_kwargs.get('TARGET_BITS', 64),
-        ) +
+        self.m.platform('linux', 64) +
         self.m.runtime(is_luci=True, is_experimental=False)
     )
     if parent_buildername:
@@ -516,16 +503,13 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
             'useful': 'envvars', 'from': 'the', 'parent': 'bot'},
           parent_build_config=parent_build_config,
       )
-      if bot_config.get('enable_swarming', True):
+      if kwargs.get('enable_swarming', True):
         # Assume each tester is triggered with the required hashes for all
         # tests. Assume extra_isolate hashes for each extra test specified by
         # parent_test_spec property.
-        swarm_hashes = self._make_dummy_swarm_hashes(
-            test.name for test in bot_config.get('tests', []))
         buider_spec = kwargs.get('parent_test_spec', {})
-        swarm_hashes.update(
-            self._make_dummy_swarm_hashes(
-                test[0] for test in buider_spec.get('tests', [])))
+        swarm_hashes = self._make_dummy_swarm_hashes(
+            test[0] for test in buider_spec.get('tests', []))
         test += self.m.properties(
           parent_got_swarming_client_revision='[dummy swarming client hash]',
           swarm_hashes=swarm_hashes,
