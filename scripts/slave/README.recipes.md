@@ -216,7 +216,6 @@
   * [custom_tabs_client](#recipes-custom_tabs_client)
   * [dart/chocolatey](#recipes-dart_chocolatey)
   * [dart/dart](#recipes-dart_dart)
-  * [dart/dart2js_nobuild](#recipes-dart_dart2js_nobuild)
   * [dart/dart_cross_compiler](#recipes-dart_dart_cross_compiler)
   * [dart/dart_cross_tester](#recipes-dart_dart_cross_tester)
   * [dart/dart_vm](#recipes-dart_dart_vm)
@@ -4989,15 +4988,6 @@ flashing the DUT. The basic steps of this recipe are:
 [DEPS](/scripts/slave/recipes/dart/dart.py#7): [dart](#recipe_modules-dart), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/dart.py#20)(api):**
-### *recipes* / [dart/dart2js\_nobuild](/scripts/slave/recipes/dart/dart2js_nobuild.py)
-
-[DEPS](/scripts/slave/recipes/dart/dart2js_nobuild.py#5): [dart](#recipe_modules-dart), [test\_utils](#recipe_modules-test_utils), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/dart2js_nobuild.py#56)(api):**
-
-&mdash; **def [RunTests](/scripts/slave/recipes/dart/dart2js_nobuild.py#27)(api, test_args, test_specs):**
-
-&mdash; **def [sdk\_url](/scripts/slave/recipes/dart/dart2js_nobuild.py#45)(channel, platform, arch, mode, revision):**
 ### *recipes* / [dart/dart\_cross\_compiler](/scripts/slave/recipes/dart/dart_cross_compiler.py)
 
 [DEPS](/scripts/slave/recipes/dart/dart_cross_compiler.py#5): [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
