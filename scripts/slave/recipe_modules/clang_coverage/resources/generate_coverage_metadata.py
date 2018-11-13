@@ -180,80 +180,106 @@ def _to_file_record(src_path, file_coverage_data, compressed_format):
 
 
 def _compute_llvm_args(
-    profdata_path, llvm_cov_path, binaries, sources, output_dir):
-  args = [llvm_cov_path, 'export', '-instr-profile', profdata_path,
-          binaries[0]]
+    profdata_path, llvm_cov_path, binaries, sources, output_dir, cpu_count):
+  shard_file_dir = os.path.join(output_dir, 'shards')
+  args = [llvm_cov_path, 'export', '-output-dir', shard_file_dir,
+          '-num-threads', str(cpu_count),
+          '-instr-profile', profdata_path, binaries[0]]
   for b in binaries[1:]:
     args.append('-object')
     args.append(b)
   args.extend(sources or [])
-  return args
+  return args, shard_file_dir
+
+
+def _show_system_resource_usage(proc):
+  if proc is None:
+    return
+
+  def bytes_to_gb(num):
+    if num is None:
+      return 'N/A'
+    else:
+      return '%.2fG' % (num/1024.0/1024/1024)
+  # Dump the memory, cpu, and disk io usage of the process.
+  try:
+    logging.info('Thread numbers: %d', proc.num_threads())
+
+    p_mem = proc.memory_info()
+    logging.info('llvm-cov Memory: '
+                 'RSS=%s,  VMS=%s, shared=%s',
+                 bytes_to_gb(p_mem.rss),
+                 bytes_to_gb(p_mem.vms),
+                 bytes_to_gb(p_mem.shared))
+
+    os_vm = psutil.virtual_memory()
+    logging.info('OS virtual Memory: '
+                 'available=%s, used=%s, free=%s, cached=%s, shared=%s',
+                 bytes_to_gb(os_vm.available),
+                 bytes_to_gb(os_vm.used),
+                 bytes_to_gb(os_vm.free),
+                 bytes_to_gb(os_vm.cached),
+                 bytes_to_gb(os_vm.shared))
+
+    os_sm = psutil.swap_memory()
+    logging.info('OS swap: '
+                 'used=%s, free=%s',
+                 bytes_to_gb(os_sm.used),
+                 bytes_to_gb(os_sm.free))
+
+    p_cpu_times = proc.cpu_times()
+    cpu_percent = proc.cpu_percent(interval=1)
+    logging.info('llvm-cov CPU: '
+                 'user=%.2f hours, sys=%.2f hours, percent=%.2f%%',
+                 p_cpu_times.user/60./60,
+                 p_cpu_times.system/60./60,
+                 cpu_percent)
+
+    os_disk_io = psutil.disk_io_counters()
+    logging.info('OS-level disk io: write=%s, read=%s',
+                 bytes_to_gb(os_disk_io.write_bytes),
+                 bytes_to_gb(os_disk_io.read_bytes))
+    p_disk_io = proc.io_counters()
+    logging.info('llvm-cov disk io: write=%s, read=%s',
+                 bytes_to_gb(p_disk_io.write_bytes),
+                 bytes_to_gb(p_disk_io.read_bytes))
+  except psutil.Error:  # The process might already finish.
+    pass
 
 
 def _get_coverage_data_in_json(
     profdata_path, llvm_cov_path, binaries, sources, output_dir):
   """Returns a json object of the coverage info."""
   coverage_json_file = os.path.join(output_dir, 'coverage.json')
-  error_out_file = os.path.join(output_dir, 'llvm_cov.stderr')
+  error_out_file = os.path.join(output_dir, 'llvm_cov.stderr.log')
   p = None
   try:
+    # Use as many cpu cores as possible for parallel processing of huge data.
+    # Leave 5 cpu cores out for other processes in the bot.
+    cpu_count = max(10, psutil.cpu_count() - 5)
+
     with open(coverage_json_file, 'w') as f_out, open(error_out_file,
                                                       'w') as f_error:
-      args = _compute_llvm_args(
-          profdata_path, llvm_cov_path, binaries, sources, output_dir)
+      args, shard_file_dir = _compute_llvm_args(
+          profdata_path, llvm_cov_path, binaries, sources, output_dir,
+          cpu_count)
       p = subprocess.Popen(args, stdout=f_out, stderr=f_error)
-      proc = None
+      llvm_cov_proc = None
       try:
-        proc = psutil.Process(p.pid)
+        llvm_cov_proc = psutil.Process(p.pid)
       except psutil.Error:  # The process might already finish.
         pass
 
       min_duration_seconds = 5
-      max_duration_seconds = 10 * 60  # 10 minutes
+      max_duration_seconds = 5 * 60  # 5 minutes
       duration_seconds = min_duration_seconds
+
       while p.poll() is None:
-        if proc is not None:
-          try:
-            logging.info('Thread numbers: %d', proc.num_threads())
-
-            # Dump the memory, cpu, and disk io usage of the process.
-            p_mem = proc.memory_info()
-            if p_mem.shared:
-              shared_mem = '%.2fG' % (p_mem.shared*1.0/1024/1024/1024)
-            else:
-              shared_mem = 'N/A'
-            logging.info('llvm-cov Memory: '
-                         'RSS=%.2fG,  VMS=%.2fG, shared=%s',
-                         p_mem.rss/1024./1024/1024,
-                         p_mem.vms/1024./1024/1024,
-                         shared_mem)
-
-            p_cpu_times = proc.cpu_times()
-            cpu_percent = proc.cpu_percent(interval=1)
-            logging.info('llvm-cov CPU: '
-                         'user=%.2f hours, sys=%.2f hours, percent=%.2f%%',
-                         p_cpu_times.user/60./60,
-                         p_cpu_times.system/60./60,
-                         cpu_percent)
-
-            os_disk_io = psutil.disk_io_counters()
-            logging.info('OS-level disk io: write=%.2fG, read=%.2fG',
-                         os_disk_io.write_bytes/1024./1024/1024,
-                         os_disk_io.read_bytes/1024./1024/1024)
-            p_disk_io = proc.io_counters()
-            logging.info('llvm-cov disk io: write=%.2fG, read=%.2fG',
-                         p_disk_io.write_bytes/1024./1024/1024,
-                         p_disk_io.read_bytes/1024./1024/1024)
-          except psutil.Error:  # The process might already finish.
-            pass
-
-        logging.info('waiting %d seconds...', duration_seconds)
+        _show_system_resource_usage(llvm_cov_proc)
+        logging.info('-----------------waiting %d seconds...', duration_seconds)
         time.sleep(duration_seconds)
         duration_seconds = min(duration_seconds * 2, max_duration_seconds)
 
-    if p.returncode == 0:
-      with open(coverage_json_file, 'r') as f:
-        return json.load(f)
   finally:
     # Delete the coverage.json, because it could be huge.
     # Keep it for now for testing/debug purpose.
@@ -262,6 +288,22 @@ def _get_coverage_data_in_json(
     if p is not None:
       if p.wait() != 0:
         sys.exit(p.returncode)
+
+  logging.info('---------------------Processing metadata--------------------')
+  this_proc = psutil.Process(os.getpid())
+  if p and p.returncode == 0:
+    with open(coverage_json_file, 'r') as f:
+      data = json.load(f)
+      for real_data in data['data']:
+        if 'file_shards' in real_data:
+          files = []
+          for file_shard in real_data['file_shards']:
+            logging.info('------------Processing %s', file_shard)
+            with open(os.path.join(shard_file_dir, file_shard), 'r') as shard:
+              files.extend(json.load(shard))
+            _show_system_resource_usage(this_proc)
+          real_data['files'] = files
+      return data
 
 def _rebase_flat_data(flat_data, diff_mapping):
   """Rebases the line numbers of the data according to the diff mapping.
@@ -317,12 +359,12 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
   sources = sources or []
   sources = [os.path.join(src_path, s) for s in sources]
 
-  logging.info('Generating coverage.json ...')
+  logging.info('Generating coverage metadata ...')
   start_time = time.time()
   data = _get_coverage_data_in_json(
       profdata_path, llvm_cov_path, binaries, sources, output_dir)
   minutes = (time.time() - start_time) / 60
-  logging.info('Generating & loading coverage.json with "llvm-cov export" '
+  logging.info('Generating & loading coverage metadata with "llvm-cov export" '
                'took %.0f minutes',  minutes)
 
   logging.info('Processing coverage data ...')
@@ -364,6 +406,17 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
   with open(os.path.join(output_dir, 'flat.json.gz'), 'w') as f:
     f.write(zlib.compress(json.dumps(flat_data)))
   minutes = (time.time() - start_time) / 60
+
+  # Create an index.html for the metadata directory.
+  all_files = []
+  for root, _, files in os.walk(output_dir):
+    for f in files:
+      all_files.append(os.path.relpath(os.path.join(root, f), output_dir))
+  with open(os.path.join(output_dir, 'index.html'), 'w') as index_f:
+    for f in sorted(all_files):
+      index_f.write('<a href="./%s">%s<a>\n' % (f, f))
+      index_f.write('<br>')
+
   logging.info('Dumping aggregated data took %.0f minutes', minutes)
 
 

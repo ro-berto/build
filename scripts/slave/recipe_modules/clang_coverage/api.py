@@ -185,8 +185,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
 
     binaries = self._get_binaries(tests)
 
-    self._generate_html_report(binaries, out_file)
     self._generate_metadata(binaries, out_file)
+    self._generate_html_report(binaries, out_file)
 
 
   def _generate_html_report(self, binaries, profdata_path):
@@ -322,7 +322,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
                                          multithreaded=True,
                                          name='upload metadata')
       upload_step.presentation.links['metadata report'] = (
-          'https://storage.googleapis.com/%s/%s/' % (_BUCKET_NAME, gs_path))
+          'https://storage.googleapis.com/%s/%s/index.html' % (
+              _BUCKET_NAME, gs_path))
       upload_step.presentation.properties['coverage_metadata_gs_path'] = gs_path
       upload_step.presentation.properties['coverage_gs_bucket'] = _BUCKET_NAME
 
