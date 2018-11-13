@@ -9,6 +9,7 @@ per-file blink_downstream.py=file:blink_downstream.expected/OWNERS
 per-file boringssl.py=file:boringssl.expected/OWNERS
 per-file boringssl_docs.py=file:boringssl.expected/OWNERS
 per-file catapult.py=file:catapult.expected/OWNERS
+per-file celab.py=file:celab.expected/OWNERS
 per-file chromium.py=set noparent
 per-file chromium.py=dpranke@chromium.org
 per-file chromium.py=iannucci@chromium.org
