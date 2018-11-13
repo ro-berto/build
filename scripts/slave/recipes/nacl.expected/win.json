@@ -140,6 +140,7 @@
     ],
     "env": {
       "BUILDBOT_BUILDERNAME": "win7-64-glibc-dbg",
+      "BUILDBOT_BUILDNUMBER": "1234",
       "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
       "BUILDBOT_MASTERNAME": "client.nacl",
       "BUILDBOT_REVISION": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -198,6 +199,7 @@
     "cwd": "[START_DIR]\\native_client",
     "env": {
       "BUILDBOT_BUILDERNAME": "win7-64-glibc-dbg",
+      "BUILDBOT_BUILDNUMBER": "1234",
       "BUILDBOT_GOT_REVISION": "a95eb4c044a154d692a53fdfa564ee8de7aeea5b",
       "BUILDBOT_MASTERNAME": "client.nacl",
       "BUILDBOT_REVISION": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",

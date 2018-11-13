@@ -5,6 +5,7 @@
 from contextlib import contextmanager
 
 DEPS = [
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -69,8 +70,9 @@ def _AnnotatedStepsSteps(api, got_revision):
   # Default environemnt; required by all builders.
   env = {
       'BUILDBOT_MASTERNAME': api.properties['mastername'],
-      'BUILDBOT_BUILDERNAME': api.properties['buildername'],
-      'BUILDBOT_REVISION': api.properties['revision'],
+      'BUILDBOT_BUILDERNAME': api.buildbucket.builder_name,
+      'BUILDBOT_REVISION': api.buildbucket.gitiles_commit.id,
+      'BUILDBOT_BUILDNUMBER': api.buildbucket.build.number,
       'BUILDBOT_GOT_REVISION': got_revision,
       'RUNTEST': api.package_repo_resource('scripts', 'slave', 'runtest.py'),
       'BUILDBOT_SLAVE_TYPE': api.properties['slavetype'],
