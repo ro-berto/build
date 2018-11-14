@@ -551,7 +551,7 @@ class DartApi(recipe_api.RecipeApi):
       'commit_time': self.m.git.get_timestamp(test_data='1234567')
     }
     # Linux and vm-*-win builders should use copy-coredumps
-    environment['copy-coredumps'] = (system == 'linux' or
+    environment['copy-coredumps'] = (system == 'linux' or system == 'mac' or
             (system.startswith('win') and builder_name.startswith('vm-')))
 
     if runtime is not None:
