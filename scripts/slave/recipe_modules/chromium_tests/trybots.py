@@ -859,6 +859,27 @@ TRYBOTS = freeze({
       }),
     },
   },
+  # Dawn GPU bots.
+  # These trybots are used to mirror the fake "Dawn GPU" builders so that they
+  # can be triggered from the Dawn CQ.
+  'tryserver.chromium.dawn': {
+    'builders': {
+      'win_dawn_rel': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Win Builder',
+            'tester': 'Dawn GPU Win10 Release (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Win Builder',
+            'tester': 'Dawn GPU Win10 Release (Intel HD 630)',
+          },
+        ],
+      },
+    },
+  },
   'tryserver.v8': {
     'builders': {
       'v8_linux_blink_rel': simple_bot({
