@@ -82,23 +82,29 @@ class BotConfig(object):
   def get(self, name, default=None):
     return self._consistent_get(self._get, name, default)
 
-  def _get_test_spec(self, chromium_tests_api, mastername):
+  def _get_source_side_spec(self, chromium_tests_api, mastername):
     if len(self._bot_ids) == 1:
       bot_config = self._get_builder_bot_config(self._bot_ids[0])
 
       # The official builders specify the test spec using a test_spec property
       # in the bot_config instead of reading it from a file.
+      if 'source_side_spec' in bot_config: # pragma: no cover
+        return { self._bot_ids[0].buildername: bot_config['source_side_spec'] }
+      # TODO(martiniss): Remove below once callers are migrated to new name.
       if 'test_spec' in bot_config: # pragma: no cover
         return { self._bot_ids[0].buildername: bot_config['test_spec'] }
-
-
-    test_spec_file = self.get('testing', {}).get(
-        'test_spec_file', '%s.json' % mastername)
 
     # TODO(phajdan.jr): Get rid of disable_tests.
     if self.get('disable_tests'):
       return {}
-    return chromium_tests_api.read_test_spec(test_spec_file)
+
+    source_side_spec_file = self.get('testing', {}).get('source_side_spec_file')
+    # TODO(martiniss): remove this
+    if not source_side_spec_file:
+      source_side_spec_file = self.get('testing', {}).get(
+          'test_spec_file', '%s.json' % mastername)
+
+    return chromium_tests_api.read_source_side_spec(source_side_spec_file)
 
   def initialize_bot_db(self, chromium_tests_api, bot_db, bot_update_step):
     # TODO(phajdan.jr): Get rid of disable_tests.
@@ -146,15 +152,15 @@ class BotConfig(object):
       master_dict = dict(self._bots_dict[mastername])
 
       if mastername in masternames:
-        test_spec = self._get_test_spec(chromium_tests_api, mastername)
+        source_side_spec = self._get_source_side_spec(chromium_tests_api, mastername)
 
         builders = master_dict['builders'] = dict(master_dict['builders'])
         for loop_buildername in builders:
           builder_dict = builders[loop_buildername] = (
               dict(builders[loop_buildername]))
           builders[loop_buildername]['tests'] = (
-              chromium_tests_api.generate_tests_from_test_spec(
-                  test_spec, builder_dict,
+              chromium_tests_api.generate_tests_from_source_side_spec(
+                  source_side_spec, builder_dict,
                   loop_buildername, mastername,
                   builder_dict.get('swarming_dimensions', {}),
                   scripts_compile_targets,
@@ -162,10 +168,10 @@ class BotConfig(object):
                   bot_update_step,
               ))
       else:
-        test_spec = None
+        source_side_spec = None
 
-      bot_db._add_master_dict_and_test_spec(
-          mastername, freeze(master_dict), freeze(test_spec))
+      bot_db._add_master_dict_and_source_side_spec(
+          mastername, freeze(master_dict), freeze(source_side_spec))
 
   def get_tests(self, bot_db):
     return _TestConfig(self._bot_ids, bot_db)
@@ -176,7 +182,7 @@ class BotConfig(object):
       bot_config = bot_db.get_bot_config(
           bot_id.mastername, bot_id.buildername)
       compile_targets.update(set(bot_config.get('compile_targets', [])))
-      compile_targets.update(bot_db.get_test_spec(
+      compile_targets.update(bot_db.get_source_side_spec(
           bot_id.mastername, bot_id.buildername).get(
               'additional_compile_targets', []))
 
@@ -305,10 +311,11 @@ class BotConfigAndTestDB(object):
 
   def __init__(self):
     # Indexed by mastername. Each entry contains a master_dict and a
-    # test_spec.
+    # source_side_spec.
     self._db = {}
 
-  def _add_master_dict_and_test_spec(self, mastername, master_dict, test_spec):
+  def _add_master_dict_and_source_side_spec(
+      self, mastername, master_dict, source_side_spec):
     """Only used during construction in chromium_tests.prepare_checkout. Do not
     call this externally.
     """
@@ -320,7 +327,7 @@ class BotConfigAndTestDB(object):
         'Illegal attempt to add multiple master dictionaries for waterfall %s' %
         (mastername))
     self._db[mastername] = { 'master_dict': master_dict,
-                             'test_spec': test_spec }
+                             'source_side_spec': source_side_spec }
 
   def get_bot_config(self, mastername, buildername):
     return self._db[mastername]['master_dict'].get('builders', {}).get(
@@ -347,5 +354,5 @@ class BotConfigAndTestDB(object):
           luci_project = master_settings.get('luci_project', 'chromium')
           yield luci_project, mastername, buildername, bot_config
 
-  def get_test_spec(self, mastername, buildername):
-    return self._db[mastername]['test_spec'].get(buildername, {})
+  def get_source_side_spec(self, mastername, buildername):
+    return self._db[mastername]['source_side_spec'].get(buildername, {})

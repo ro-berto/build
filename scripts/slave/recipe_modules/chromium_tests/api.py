@@ -220,7 +220,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   # things.
   def create_bot_db_from_master_dict(self, mastername, master_dict):
     bot_db = self.create_bot_db_object()
-    bot_db._add_master_dict_and_test_spec(mastername, master_dict, {})
+    bot_db._add_master_dict_and_source_side_spec(mastername, master_dict, {})
     return bot_db
 
   def prepare_checkout(self, bot_config, **kwargs):
@@ -242,7 +242,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     return update_step, bot_db
 
-  def generate_tests_from_test_spec(self, test_spec, builder_dict,
+  def generate_tests_from_source_side_spec(self, source_side_spec, builder_dict,
       buildername, mastername, swarming_dimensions,
       scripts_compile_targets, generators, bot_update_step):
     tests = builder_dict.get('tests', ())
@@ -250,28 +250,33 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     for generator in generators:
       tests = (
           tuple(generator(
-              self.m, self, mastername, buildername, test_spec,
+              self.m, self, mastername, buildername, source_side_spec,
               bot_update_step,
               swarming_dimensions=swarming_dimensions,
               scripts_compile_targets=scripts_compile_targets)) +
           tuple(tests))
     return tests
 
-  def read_test_spec(self, test_spec_file):
-    test_spec_path = self.c.test_spec_dir.join(test_spec_file)
-    test_spec_result = self.m.json.read(
-        'read test spec (%s)' % self.m.path.basename(test_spec_path),
-        test_spec_path,
-        step_test_data=lambda: self.m.json.test_api.output({}))
-    test_spec_result.presentation.step_text = 'path: %s' % test_spec_path
-    test_spec = test_spec_result.json.output
+  # TODO(martiniss): Remove this
+  def generate_tests_from_test_spec(self, *args): # pragma: no cover
+    return self.generate_tests_from_source_side_spec(*args)
 
-    return test_spec
+  def read_source_side_spec(self, source_side_spec_file):
+    source_side_spec_path = self.c.test_spec_dir.join(
+        source_side_spec_file)
+    spec_result = self.m.json.read(
+        'read test spec (%s)' % self.m.path.basename(source_side_spec_path),
+        source_side_spec_path,
+        step_test_data=lambda: self.m.json.test_api.output({}))
+    spec_result.presentation.step_text = 'path: %s' % source_side_spec_path
+    source_side_spec = spec_result.json.output
+
+    return source_side_spec
 
   def create_test_runner(self, tests, suffix='', serialize_tests=False):
     """Creates a test runner to run a set of tests.
 
-    Args:
+    Args
       api: API of the calling recipe.
       tests: List of step.Test objects to be run.
       suffix: Suffix to be passed when running the tests.
