@@ -1494,47 +1494,6 @@ SPEC = {
       },
     },
 
-    # The following machines don't actually exist. They are specified
-    # here only in order to allow the associated src-side JSON entries
-    # to be read, and Dawn's GPU tryservers to be specified in terms
-    # of them.
-    'Dawn GPU Win10 Release (NVIDIA)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'build_angle_deqp_tests',
-        'mb',
-        'ninja_confirm_noop',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-    },
-    'Dawn GPU Win10 Release (Intel HD 630)': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'build_angle_deqp_tests',
-        'mb',
-        'ninja_confirm_noop',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-      },
-      'bot_type': 'tester',
-      'parent_buildername': 'GPU FYI Win Builder',
-      'testing': {
-        'platform': 'win',
-      },
-    },
-
     # This machine doesn't really exist either; it is a separate
     # configuration because we don't have the capacity to run all of
     # the Win AMD bot's tests on the win_angle_rel_ng tryserver.
