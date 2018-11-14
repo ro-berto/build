@@ -260,11 +260,3 @@ def GenTests(api):
       api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )
-
-  yield (
-      api.test('partial_coverage_instrumentation') +
-      api.properties(
-          chromium_apply_config=['partial_coverage_instrumentation']) +
-      api.post_process(post_process.DropExpectation)
-  )
-

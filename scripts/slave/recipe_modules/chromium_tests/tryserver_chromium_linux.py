@@ -11,7 +11,6 @@ SPEC = {
         'mb',
         'ninja_confirm_noop',
         'goma_high_parallel',
-        'partial_coverage_instrumentation',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['use_clang_coverage'],
