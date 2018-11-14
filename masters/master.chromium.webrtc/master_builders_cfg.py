@@ -31,7 +31,6 @@ def Update(c):
                             builderNames=[
                               'Win Builder',
                               'Mac Builder',
-                              'Linux Builder',
                               'Android Builder',
                             ]),
   )
@@ -44,8 +43,6 @@ def Update(c):
     {'name': 'Mac Builder', 'category': 'mac'},
     {'name': 'Mac Tester', 'category': 'mac'},
     {'name': 'Mac Tester (long-running)', 'category': 'mac'},
-    {'name': 'Linux Builder', 'category': 'linux'},
-    {'name': 'Linux Tester', 'category': 'linux'},
     {'name': 'Android Builder', 'category': 'android'},
     {'name': 'Android Tester', 'category': 'android'},
   ]
