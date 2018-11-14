@@ -442,7 +442,7 @@
       "-u",
       "[CACHE]/builder/sdk/tools/swarming_client/isolate.py",
       "archive",
-      "--blacklist=^(out|xcodebuild)[/\\\\](Release|Debug|Product)\\w*[/\\\\](generated_tests|obj)[/\\\\]",
+      "--blacklist=(^(out|xcodebuild)[/\\\\](Release|Debug|Product)\\w*[/\\\\](clang_x64[/\\\\])?(generated_tests|obj)[/\\\\])|(^tools[/\\\\]sdks)",
       "--ignore_broken_items",
       "-Ihttps://isolateserver.appspot.com",
       "-i[CACHE]/builder/sdk/dart_testing_fileset",
@@ -1051,6 +1051,28 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "getdep",
+      "-r",
+      "sdk/tools/sdks:dart/dart-sdk/${platform}"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gclient get checked-in SDK version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
       "git",
       "show",
       "HEAD",
@@ -1107,7 +1129,7 @@
       "-u",
       "[CACHE]/builder/sdk/tools/swarming_client/isolate.py",
       "archive",
-      "--blacklist=^(out|xcodebuild)[/\\\\](Release|Debug|Product)\\w*[/\\\\](generated_tests|obj)[/\\\\]",
+      "--blacklist=(^(out|xcodebuild)[/\\\\](Release|Debug|Product)\\w*[/\\\\](clang_x64[/\\\\])?(generated_tests|obj)[/\\\\])|(^tools[/\\\\]sdks)",
       "--ignore_broken_items",
       "-Ihttps://isolateserver.appspot.com",
       "-i[CACHE]/builder/sdk/fileset1",
@@ -1182,6 +1204,8 @@
       "stepname:Test-step 1_shard_1",
       "--cipd-package",
       "browsers:dart/browsers/chrome/${platform}:version:66.0.3359.139",
+      "--cipd-package",
+      "tools/sdks:dart/dart-sdk/${platform}:",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",
@@ -1307,6 +1331,8 @@
       "stepname:Test-step 1_shard_2",
       "--cipd-package",
       "browsers:dart/browsers/chrome/${platform}:version:66.0.3359.139",
+      "--cipd-package",
+      "tools/sdks:dart/dart-sdk/${platform}:",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
       "--cipd-package",

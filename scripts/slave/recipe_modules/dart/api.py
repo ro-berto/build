@@ -6,7 +6,9 @@ from recipe_engine import recipe_api
 import json
 
 BLACKLIST = (
-    r'^(out|xcodebuild)[/\\](Release|Debug|Product)\w*[/\\](generated_tests|obj)[/\\]')
+    r'(^(out|xcodebuild)[/\\](Release|Debug|Product)\w*[/\\]' +
+    r'(clang_x64[/\\])?(generated_tests|obj)[/\\])' +
+    r'|(^tools[/\\]sdks)')
 # TODO(athom): move to third_party when swarming_client.path has a setter
 SWARMING_CLIENT_PATH = 'tools/swarming_client'
 SWARMING_CLIENT_REPO = (
@@ -542,10 +544,15 @@ class DartApi(recipe_api.RecipeApi):
       builder_fragments,
       ['none', 'd8', 'jsshell', 'edge', 'ie11', 'firefox', 'safari', 'chrome'],
       None)
+    with self.m.context(cwd=self.m.path['checkout']):
+      result = self.m.gclient('get checked-in SDK version',
+          ['getdep', '-r', 'sdk/tools/sdks:dart/dart-sdk/${platform}'],
+          stdout=self.m.raw_io.output_text(add_output_log=True))
     environment = {'system': system,
                    'mode': mode,
                    'arch': arch,
-                   'copy-coredumps': False}
+                   'copy-coredumps': False,
+                   'checked_in_sdk_version': result.stdout}
     environment['commit'] = {
       'commit_hash': self.m.buildbucket.gitiles_commit.id,
       'commit_time': self.m.git.get_timestamp(test_data='1234567')
@@ -592,7 +599,7 @@ class DartApi(recipe_api.RecipeApi):
 
         isolate_hash = None
         shards = step.get('shards', 0)
-        local_shard = shards > 0 and index == len(config['steps']) - 1
+        local_shard = shards > 1 and index == len(config['steps']) - 1
         if 'fileset' in step:
           # We build isolates here, every time we see fileset, to wait for the
           # building of Dart, which may be included in the fileset.
@@ -840,6 +847,9 @@ class DartApi(recipe_api.RecipeApi):
     """
     if not cipd_packages: # pragma: no cover
       cipd_packages = []
+    cipd_packages.append(('tools/sdks',
+        'dart/dart-sdk/${platform}',
+        environment['checked_in_sdk_version']))
     ok_ret = 'any' if ignore_failure else {0}
     runtime = self._get_specific_argument(args, ['-r', '--runtime'])
     if runtime is None:
@@ -858,13 +868,15 @@ class DartApi(recipe_api.RecipeApi):
 
     if isolate_hash:
       with self.m.step.nest('trigger shards for %s' % step_name):
+        cpu = 'arm64' if environment['arch'] == 'arm64' else 'x86-64'
         tasks.append({
             'shards': self.shard(step_name, isolate_hash,
                                   xvfb_cmd + [script] + args,
                                   num_shards=shards,
                                   last_shard_is_local=local_shard,
                                   cipd_packages=cipd_packages,
-                                  ignore_failure=ignore_failure),
+                                  ignore_failure=ignore_failure,
+                                  cpu=cpu),
             'args': args,
             'environment': environment,
             'step_name': step_name})

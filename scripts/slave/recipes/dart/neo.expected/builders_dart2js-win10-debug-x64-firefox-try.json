@@ -249,6 +249,28 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "getdep",
+      "-r",
+      "sdk/tools/sdks:dart/dart-sdk/${platform}"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gclient get checked-in SDK version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
       "git",
       "show",
       "HEAD",
