@@ -896,7 +896,6 @@ SPEC = {
       'testing': {
         'platform': 'mac',
       },
-      'serialize_tests': True,
     },
     'Mac FYI dEQP Release AMD': {
       'chromium_config': 'chromium',
