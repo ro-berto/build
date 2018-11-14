@@ -93,8 +93,7 @@ def _to_compressed_format(line_data, block_data):
   # Aggregate contiguous blocks of lines with the exact same hit count.
   last_index = 0
   for i in xrange(1, len(line_data) + 1):
-    if (i >= len(line_data) or
-        line_data[i][1] != line_data[last_index][1]):
+    if (i >= len(line_data) or line_data[i][1] != line_data[last_index][1]):
       lines.append({
           'first': line_data[last_index][0],
           'last': line_data[i - 1][0],
@@ -179,12 +178,13 @@ def _to_file_record(src_path, file_coverage_data, compressed_format):
     return data
 
 
-def _compute_llvm_args(
-    profdata_path, llvm_cov_path, binaries, sources, output_dir, cpu_count):
+def _compute_llvm_args(profdata_path, llvm_cov_path, binaries, sources,
+                       output_dir, cpu_count):
   shard_file_dir = os.path.join(output_dir, 'shards')
-  args = [llvm_cov_path, 'export', '-output-dir', shard_file_dir,
-          '-num-threads', str(cpu_count),
-          '-instr-profile', profdata_path, binaries[0]]
+  args = [
+      llvm_cov_path, 'export', '-output-dir', shard_file_dir, '-num-threads',
+      str(cpu_count), '-instr-profile', profdata_path, binaries[0]
+  ]
   for b in binaries[1:]:
     args.append('-object')
     args.append(b)
@@ -200,40 +200,36 @@ def _show_system_resource_usage(proc):
     if num is None:
       return 'N/A'
     else:
-      return '%.2fG' % (num/1024.0/1024/1024)
+      return '%.2fG' % (num / 1024.0 / 1024 / 1024)
+
   # Dump the memory, cpu, and disk io usage of the process.
   try:
     logging.info('Thread numbers: %d', proc.num_threads())
 
     p_mem = proc.memory_info()
     logging.info('llvm-cov Memory: '
-                 'RSS=%s,  VMS=%s, shared=%s',
-                 bytes_to_gb(p_mem.rss),
-                 bytes_to_gb(p_mem.vms),
-                 bytes_to_gb(p_mem.shared))
+                 'RSS=%s,  VMS=%s, shared=%s', bytes_to_gb(p_mem.rss),
+                 bytes_to_gb(p_mem.vms), bytes_to_gb(p_mem.shared))
 
     os_vm = psutil.virtual_memory()
-    logging.info('OS virtual Memory: '
-                 'available=%s, used=%s, free=%s, cached=%s, shared=%s',
-                 bytes_to_gb(os_vm.available),
-                 bytes_to_gb(os_vm.used),
-                 bytes_to_gb(os_vm.free),
-                 bytes_to_gb(os_vm.cached),
-                 bytes_to_gb(os_vm.shared))
+    logging.info(
+        'OS virtual Memory: '
+        'available=%s, used=%s, free=%s, cached=%s, shared=%s',
+        bytes_to_gb(os_vm.available), bytes_to_gb(os_vm.used),
+        bytes_to_gb(os_vm.free), bytes_to_gb(os_vm.cached),
+        bytes_to_gb(os_vm.shared))
 
     os_sm = psutil.swap_memory()
     logging.info('OS swap: '
-                 'used=%s, free=%s',
-                 bytes_to_gb(os_sm.used),
+                 'used=%s, free=%s', bytes_to_gb(os_sm.used),
                  bytes_to_gb(os_sm.free))
 
     p_cpu_times = proc.cpu_times()
     cpu_percent = proc.cpu_percent(interval=1)
-    logging.info('llvm-cov CPU: '
-                 'user=%.2f hours, sys=%.2f hours, percent=%.2f%%',
-                 p_cpu_times.user/60./60,
-                 p_cpu_times.system/60./60,
-                 cpu_percent)
+    logging.info(
+        'llvm-cov CPU: '
+        'user=%.2f hours, sys=%.2f hours, percent=%.2f%%',
+        p_cpu_times.user / 60. / 60, p_cpu_times.system / 60. / 60, cpu_percent)
 
     os_disk_io = psutil.disk_io_counters()
     logging.info('OS-level disk io: write=%s, read=%s',
@@ -247,8 +243,8 @@ def _show_system_resource_usage(proc):
     pass
 
 
-def _get_coverage_data_in_json(
-    profdata_path, llvm_cov_path, binaries, sources, output_dir):
+def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,
+                               output_dir):
   """Returns a json object of the coverage info."""
   coverage_json_file = os.path.join(output_dir, 'coverage.json')
   error_out_file = os.path.join(output_dir, 'llvm_cov.stderr.log')
@@ -260,9 +256,9 @@ def _get_coverage_data_in_json(
 
     with open(coverage_json_file, 'w') as f_out, open(error_out_file,
                                                       'w') as f_error:
-      args, shard_file_dir = _compute_llvm_args(
-          profdata_path, llvm_cov_path, binaries, sources, output_dir,
-          cpu_count)
+      args, shard_file_dir = _compute_llvm_args(profdata_path, llvm_cov_path,
+                                                binaries, sources, output_dir,
+                                                cpu_count)
       p = subprocess.Popen(args, stdout=f_out, stderr=f_error)
       llvm_cov_proc = None
       try:
@@ -304,6 +300,7 @@ def _get_coverage_data_in_json(
             _show_system_resource_usage(this_proc)
           real_data['files'] = files
       return data
+
 
 def _rebase_flat_data(flat_data, diff_mapping):
   """Rebases the line numbers of the data according to the diff mapping.
@@ -354,37 +351,190 @@ def _rebase_flat_data(flat_data, diff_mapping):
 
   return {'files': rebased_file_records}
 
+
+def _merge_summary(a, b):
+  for a_item in a:
+    for b_item in b:
+      if a_item['name'] == b_item['name']:
+        for field in ('total', 'covered'):
+          a_item[field] += b_item[field]
+        break
+  return a
+
+
+def _convert_file_summary(file_summary):
+  """Convert llvm-cov summay to metadata format"""
+  # llvm-cov uses 'lines', 'regions', 'functions', whereas metadata uses
+  # 'line', 'region', 'function'.
+  return [{
+      'name': k[:-1],
+      'covered': v['covered'],
+      'total': v['count']
+  } for k, v in file_summary.iteritems()]
+
+
+def _merge_into_dir(directory, file_summary):
+  _merge_summary(directory['summaries'], _convert_file_summary(file_summary))
+  return directory
+
+
+def _new_summaries():
+  return [{
+      'name': 'region',
+      'covered': 0,
+      'total': 0
+  }, {
+      'name': 'function',
+      'covered': 0,
+      'total': 0
+  }, {
+      'name': 'line',
+      'covered': 0,
+      'total': 0
+  }]
+
+
+def _add_file_to_directory_summary(directory_summaries, src_path, file_data):
+  """Summarize for each directory, the summary information of its files.
+
+  By incrementing the summary for each of its ancestors by the values in the
+  coverage summary of the file.
+
+  This is expected to be called with the data for each instrumented file.
+  """
+
+  def new_dir(path):
+    return {
+        'dirs': [],
+        'files': [],
+        'path': path,
+        'summaries': _new_summaries(),
+    }
+
+  full_filename = file_data['filename']
+  src_file = '//' + os.path.relpath(full_filename, src_path)
+  parent = directory = os.path.dirname(src_file) or ''
+  filename = os.path.basename(src_file)
+  summary = file_data['summary']
+  while parent != '//':
+    if parent + '/' not in directory_summaries:
+      directory_summaries[parent + '/'] = new_dir(parent)
+    directory_summaries[parent + '/'] = _merge_into_dir(
+        directory_summaries[parent + '/'], summary)
+    parent = os.path.dirname(parent)
+
+  if '//' not in directory_summaries:
+    directory_summaries['//'] = new_dir('//')
+  directory_summaries['//'] = _merge_into_dir(directory_summaries['//'], summary)
+
+  # Directories need a trailing slash as per the metadata format.
+  if directory != '//':
+    directory += '/'
+
+  directory_summaries[directory]['files'].append({
+      'name':
+          filename,
+      'summaries':
+        _convert_file_summary(summary),
+  })
+
+
+def _aggregate_dirs_and_components(directory_summaries, component_mapping):
+  """Adds every directory's summary to:
+
+     - Its parent's "dirs" field,
+     - To its component, if one is defined for it and its immediate parent
+       doesn't already count it.
+  Args:
+    directory_summaries (dict): Maps directory paths to its summary in metadata
+        format.
+
+  Returns:
+    A dict mapping components to component coverage summaries.
+  """
+  component_summaries = {}  # Result.
+  dirs_to_component = {}
+  # sort lexicographically, parents should come before the children.
+  for directory in sorted(directory_summaries.keys()):
+    if not directory or directory == '//':
+      # Root dir has no parent.
+      continue
+    while directory.endswith('/'):
+      directory = directory[:-1]
+    parent, dirname = os.path.split(directory)
+
+    if parent != '//':
+      parent += '/'
+    # this summary is used in both the parent dir, and the component entry.
+    inner_dir_summary = {
+        'name': dirname,
+        'summaries': directory_summaries[directory + '/']['summaries'],
+    }
+    directory_summaries[parent]['dirs'].append(inner_dir_summary)
+    component = None
+    if directory != '//':
+      component = component_mapping.get(directory[len('//'):])
+    # Do not add to summary if immediate parent is already considered. To reduce
+    # double counting.
+    if component and parent not in dirs_to_component:
+      dirs_to_component[directory] = component
+      if component not in component_summaries:
+        component_summaries[component] = {
+            'path': component,
+            'dirs': [],
+            'summaries': _new_summaries(),
+        }
+      component_summaries[component]['dirs'].append(inner_dir_summary)
+      # Accumulate counts for each component.
+      component_summaries[component]['summaries'] = _merge_summary(
+          component_summaries[component]['summaries'],
+          inner_dir_summary['summaries'])
+  return component_summaries
+
+
 def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
-                       binaries, sources, diff_mapping_path):
+                       binaries, sources, diff_mapping_path,
+                       component_mapping_path):
   sources = sources or []
   sources = [os.path.join(src_path, s) for s in sources]
 
+  component_mapping = json.load(open(component_mapping_path))['dir-to-component']
+
   logging.info('Generating coverage metadata ...')
   start_time = time.time()
-  data = _get_coverage_data_in_json(
-      profdata_path, llvm_cov_path, binaries, sources, output_dir)
+  data = _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries,
+                                    sources, output_dir)
   minutes = (time.time() - start_time) / 60
-  logging.info('Generating & loading coverage metadata with "llvm-cov export" '
-               'took %.0f minutes',  minutes)
+  logging.info(
+      'Generating & loading coverage metadata with "llvm-cov export" '
+      'took %.0f minutes', minutes)
 
   logging.info('Processing coverage data ...')
   start_time = time.time()
   compressed_files = []
   flat_files = []
+  directory_summaries = {}
   for datum in data['data']:
     for file_data in datum['files']:
       compressed_files.append(
           _to_file_record(src_path, file_data, compressed_format=True))
       flat_files.append(
           _to_file_record(src_path, file_data, compressed_format=False))
+      _add_file_to_directory_summary(directory_summaries, src_path, file_data)
+  component_summaries = _aggregate_dirs_and_components(directory_summaries,
+                                                       component_mapping)
   minutes = (time.time() - start_time) / 60
   logging.info('Processing coverage data took %.0f minutes', minutes)
 
   compressed_data = {
       'files': compressed_files,
+      'dirs': directory_summaries.values(),
+      'components': component_summaries.values(),
   }
   flat_data = {
       'files': flat_files,
+      'dirs': directory_summaries.values(),
+      'components': component_summaries.values(),
   }
 
   logging.info('Dumping aggregated data ...')
@@ -424,27 +574,45 @@ def _parse_args(args):
   parser = argparse.ArgumentParser(
       description='Generate the coverage data in metadata format')
   parser.add_argument(
-      '--src-path', required=True, type=str,
+      '--src-path',
+      required=True,
+      type=str,
       help='absolute path to the code checkout')
   parser.add_argument(
-      '--output-dir', required=True, type=str,
+      '--output-dir',
+      required=True,
+      type=str,
       help='absolute path to the directory to store the metadata, must exist')
   parser.add_argument(
-      '--profdata-path', required=True, type=str,
+      '--profdata-path',
+      required=True,
+      type=str,
       help='absolute path to the merged profdata')
   parser.add_argument(
-      '--llvm-cov', required=True, type=str,
+      '--llvm-cov',
+      required=True,
+      type=str,
       help='absolute path to llvm-cov executable')
   parser.add_argument(
-      '--binaries', nargs='+', type=str,
+      '--component-mapping',
+      required=True,
+      type=str,
+      help='absolute path to json file mapping dirs to monorail components')
+  parser.add_argument(
+      '--binaries',
+      nargs='+',
+      type=str,
       help='absolute path to binaries to generate the coverage for')
   parser.add_argument(
-      '--sources', nargs='*', type=str,
+      '--sources',
+      nargs='*',
+      type=str,
       help='the source files to generate the coverage for, path should be '
-           'relative to the root of the code checkout')
+      'relative to the root of the code checkout')
   parser.add_argument(
-      '--diff-mapping-path', type=str,
-      help='absoluate path to the file that stores the diff mapping.')
+      '--diff-mapping-path',
+      type=str,
+      help='absolute path to the file that stores the diff mapping.')
   return parser.parse_args(args=args)
 
 
@@ -467,10 +635,10 @@ def main():
 
   _generate_metadata(params.src_path, params.output_dir, params.profdata_path,
                      params.llvm_cov, params.binaries, params.sources,
-                     params.diff_mapping_path)
+                     params.diff_mapping_path, params.component_mapping)
 
 
 if __name__ == '__main__':
-  logging.basicConfig(format='[%(asctime)s %(levelname)s] %(message)s',
-                      level=logging.INFO)
+  logging.basicConfig(
+      format='[%(asctime)s %(levelname)s] %(message)s', level=logging.INFO)
   sys.exit(main())

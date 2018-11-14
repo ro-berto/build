@@ -60,6 +60,9 @@ def GenTests(api):
       + api.post_process(
           post_process.DoesNotRun, 'generate diff mapping from local to Gerrit')
       + api.post_process(
+          post_process.MustRun,
+          'Run component extraction script to generate mapping')
+      + api.post_process(
           post_process.MustRun, 'generate metadata for 3 targets')
       + api.post_process(
           post_process.MustRun, 'gsutil upload metadata')

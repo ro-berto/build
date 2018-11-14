@@ -268,6 +268,15 @@ class ClangCoverageApi(recipe_api.RecipeApi):
           data_type,
       )
 
+  def _generate_component_mapping(self):
+    component_mapping = self.m.path.mkdtemp().join('component_map.json')
+    command_path = self.m.path['checkout'].join(
+        'tools', 'checkteamtags', 'extract_components.py')
+    command_parts = [command_path, '-o', component_mapping]
+    self.m.step('Run component extraction script to generate mapping',
+        command_parts, stdout=self.m.raw_io.output_text(add_output_log=True))
+    return component_mapping
+
   def _generate_metadata(self, binaries, profdata_path):
     """Generates the coverage info in metadata format."""
     llvm_cov = self.cov_executable
@@ -286,6 +295,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         '--output-dir', self.metadata_dir,
         '--profdata-path', profdata_path,
         '--llvm-cov', llvm_cov,
+        '--component-mapping', self._generate_component_mapping(),
         '--binaries',
     ]
     args.extend(binaries)
