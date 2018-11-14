@@ -216,18 +216,13 @@
   * [custom_tabs_client](#recipes-custom_tabs_client)
   * [dart/chocolatey](#recipes-dart_chocolatey)
   * [dart/dart](#recipes-dart_dart)
-  * [dart/dart_cross_compiler](#recipes-dart_dart_cross_compiler)
-  * [dart/dart_cross_tester](#recipes-dart_dart_cross_tester)
-  * [dart/dart_vm](#recipes-dart_dart_vm)
   * [dart/dart_vm_kernel](#recipes-dart_dart_vm_kernel)
   * [dart/docker](#recipes-dart_docker)
   * [dart/flutter_engine](#recipes-dart_flutter_engine)
   * [dart/forward_branch](#recipes-dart_forward_branch)
   * [dart/misc](#recipes-dart_misc)
   * [dart/neo](#recipes-dart_neo)
-  * [dart/packagebot](#recipes-dart_packagebot)
   * [dart/sdk_builder](#recipes-dart_sdk_builder)
-  * [dart/sdk_gn](#recipes-dart_sdk_gn)
   * [dart/sdk_swarming](#recipes-dart_sdk_swarming)
   * [dart:examples/example](#recipes-dart_examples_example)
   * [dart:examples/example-checkout](#recipes-dart_examples_example-checkout)
@@ -4988,25 +4983,6 @@ flashing the DUT. The basic steps of this recipe are:
 [DEPS](/scripts/slave/recipes/dart/dart.py#7): [dart](#recipe_modules-dart), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/dart.py#20)(api):**
-### *recipes* / [dart/dart\_cross\_compiler](/scripts/slave/recipes/dart/dart_cross_compiler.py)
-
-[DEPS](/scripts/slave/recipes/dart/dart_cross_compiler.py#5): [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/dart_cross_compiler.py#37)(api):**
-
-&mdash; **def [tarball\_name](/scripts/slave/recipes/dart/dart_cross_compiler.py#34)(arch, mode, revision):**
-### *recipes* / [dart/dart\_cross\_tester](/scripts/slave/recipes/dart/dart_cross_tester.py)
-
-[DEPS](/scripts/slave/recipes/dart/dart_cross_tester.py#5): [dart](#recipe_modules-dart), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/dart_cross_tester.py#33)(api):**
-
-&mdash; **def [tarball\_name](/scripts/slave/recipes/dart/dart_cross_tester.py#30)(arch, mode, revision):**
-### *recipes* / [dart/dart\_vm](/scripts/slave/recipes/dart/dart_vm.py)
-
-[DEPS](/scripts/slave/recipes/dart/dart_vm.py#7): [dart](#recipe_modules-dart), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/dart_vm.py#145)(api):**
 ### *recipes* / [dart/dart\_vm\_kernel](/scripts/slave/recipes/dart/dart_vm_kernel.py)
 
 [DEPS](/scripts/slave/recipes/dart/dart_vm_kernel.py#7): [dart](#recipe_modules-dart), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5067,11 +5043,6 @@ Kills leftover tasks from previous runs or steps.
 [DEPS](/scripts/slave/recipes/dart/neo.py#5): [dart](#recipe_modules-dart), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/neo.py#75)(api):**
-### *recipes* / [dart/packagebot](/scripts/slave/recipes/dart/packagebot.py)
-
-[DEPS](/scripts/slave/recipes/dart/packagebot.py#7): [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/packagebot.py#24)(api, target, repo, project):**
 ### *recipes* / [dart/sdk\_builder](/scripts/slave/recipes/dart/sdk_builder.py)
 
 [DEPS](/scripts/slave/recipes/dart/sdk_builder.py#7): [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5079,11 +5050,6 @@ Kills leftover tasks from previous runs or steps.
 &mdash; **def [BuildBuilderNames](/scripts/slave/recipes/dart/sdk_builder.py#24)(name, channel, shards):**
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/sdk_builder.py#28)(api, revision, buildername):**
-### *recipes* / [dart/sdk\_gn](/scripts/slave/recipes/dart/sdk_gn.py)
-
-[DEPS](/scripts/slave/recipes/dart/sdk_gn.py#5): [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/sdk_gn.py#17)(api):**
 ### *recipes* / [dart/sdk\_swarming](/scripts/slave/recipes/dart/sdk_swarming.py)
 
 [DEPS](/scripts/slave/recipes/dart/sdk_swarming.py#7): [dart](#recipe_modules-dart), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
