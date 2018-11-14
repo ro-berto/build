@@ -40,6 +40,7 @@ NORMAL_TESTS = freeze({
   'rtc_unittests': {
     'shards': 6,
   },
+  'slow_tests': {},
   'system_wrappers_unittests': {},
   'test_support_unittests': {},
   'tools_unittests': {},
