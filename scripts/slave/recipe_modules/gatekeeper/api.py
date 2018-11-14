@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import base64
+
 from recipe_engine import recipe_api
 
 
@@ -35,6 +37,16 @@ class Gatekeeper(recipe_api.RecipeApi):
         gatekeeper_json = self.m.path.join(
             self.m.path.dirname(gatekeeper_trees_json),
             *tree_args['config'].split('/'))
+      elif tree_args.get('gitiles_config'):
+        # Get config file by url.
+        gatekeeper_json = self.m.raw_io.input(self.m.gitiles.download_file(
+            tree_args['gitiles_config']['repo_url'],
+            tree_args['gitiles_config']['path'],
+            branch=tree_args['gitiles_config']['ref'],
+            step_test_data= lambda: self.m.json.test_api.output({
+              'value': base64.b64encode('{}'),
+            }),
+        ))
 
       args = [
           '--json', gatekeeper_json,

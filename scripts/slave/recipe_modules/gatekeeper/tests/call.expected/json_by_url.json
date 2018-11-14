@@ -1,0 +1,74 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_trees.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "reading gatekeeper_trees.json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"foobar\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gitiles_config\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"path\": \"biz/buz.json\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"ref\": \"refs/heads/baz\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repo_url\": \"https://chromium.googlesource.com/foo/bar\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[BUILDER_CACHE]/gate_keeper"
+    ],
+    "infra_step": true,
+    "name": "ensure cache"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gitiles]/resources/gerrit_client.py",
+      "--json-file",
+      "/path/to/tmp/json",
+      "--url",
+      "https://chromium.googlesource.com/foo/bar/+/refs/heads/baz/biz/buz.json",
+      "--format",
+      "text"
+    ],
+    "name": "fetch refs/heads/baz:biz/buz.json"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
+      "--json",
+      "{}",
+      "--service-account-path",
+      "/creds/service_accounts/service-account-gatekeeper.json"
+    ],
+    "name": "gatekeeper: foobar"
+  },
+  {
+    "jsonResult": null,
+    "name": "$result"
+  }
+]

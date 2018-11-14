@@ -2110,9 +2110,9 @@ Args:
 &emsp; **@property**<br>&mdash; **def [platforms](/scripts/slave/recipe_modules/gae_sdk/api.py#58)(self):**
 ### *recipe_modules* / [gatekeeper](/scripts/slave/recipe_modules/gatekeeper)
 
-[DEPS](/scripts/slave/recipe_modules/gatekeeper/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/gatekeeper/__init__.py#1): [build](#recipe_modules-build), [puppet\_service\_account](#recipe_modules-puppet_service_account), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [Gatekeeper](/scripts/slave/recipe_modules/gatekeeper/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [Gatekeeper](/scripts/slave/recipe_modules/gatekeeper/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 Module for Gatekeeper NG.
 ### *recipe_modules* / [git\_clone\_bundler](/scripts/slave/recipe_modules/git_clone_bundler)

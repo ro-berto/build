@@ -41,6 +41,17 @@ class GatekeeperTestApi(recipe_test_api.RecipeTestApi):
       'chromium': {},
     }
 
+  def gitiles_config_data(self):
+    return self.m.json.output({
+      'foobar': {
+        'gitiles_config': {
+          'repo_url': 'https://chromium.googlesource.com/foo/bar',
+          'ref': 'refs/heads/baz',
+          'path': 'biz/buz.json',
+        },
+      },
+    })
+
   def production_data(self):
     with open(PROD_TREES_FILE) as f:
       return self.m.json.output(json.load(f))

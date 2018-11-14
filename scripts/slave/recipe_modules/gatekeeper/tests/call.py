@@ -68,3 +68,13 @@ def GenTests(api):
       api.gatekeeper.fake_test_data(),
     )
   )
+
+  yield (
+    api.test('json_by_url')
+    + api.properties.generic(
+        buildername='Chromium Gatekeeper', path_config='kitchen')
+    + api.step_data(
+      'reading gatekeeper_trees.json',
+      api.gatekeeper.gitiles_config_data(),
+    )
+  )
