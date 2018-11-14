@@ -22,7 +22,7 @@ class WCTApi(recipe_api.RecipeApi):
 
     packages = {
       wct_package_name: 'prod',
-      node_package_name: 'node_version:4.5.0',
+      node_package_name: 'node_version:8.9.4',
       chrome_package_name: 'b6b434ed592da55513d813b2cfb3422008fb280d',
     }
     self.m.cipd.ensure(cipd_root, packages)
