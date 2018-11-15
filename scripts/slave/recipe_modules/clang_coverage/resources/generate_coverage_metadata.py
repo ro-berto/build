@@ -353,12 +353,27 @@ def _rebase_flat_data(flat_data, diff_mapping):
 
 
 def _merge_summary(a, b):
-  for a_item in a:
-    for b_item in b:
-      if a_item['name'] == b_item['name']:
-        for field in ('total', 'covered'):
-          a_item[field] += b_item[field]
-        break
+  """Merges to 'summaries' fields in metadata format.
+
+  This adds the 'total' and 'covered' field of each feature in the second
+  parameter to the corresponding field in the first parameter.
+
+  Returns a reference the updated first parameter.
+
+  Each parameter is expected to be in the following format:
+  [{'name': 'line', 'total': 10, 'covered': 9},
+   {'name': 'region', 'total': 10, 'covered': 9},
+   {'name': 'function', 'total': 10, 'covered': 9}]
+  """
+
+  def make_dict(summary_list):
+    return {item['name']: item for item in summary_list}
+
+  a_dict = make_dict(a)
+  b_dict = make_dict(b)
+  for feature in a_dict:
+    for field in ('total', 'covered'):
+      a_dict[feature][field] += b_dict[feature][field]
   return a
 
 
@@ -413,7 +428,7 @@ def _add_file_to_directory_summary(directory_summaries, src_path, file_data):
 
   full_filename = file_data['filename']
   src_file = '//' + os.path.relpath(full_filename, src_path)
-  parent = directory = os.path.dirname(src_file) or ''
+  parent = directory = os.path.dirname(src_file)
   filename = os.path.basename(src_file)
   summary = file_data['summary']
   while parent != '//':
@@ -425,17 +440,16 @@ def _add_file_to_directory_summary(directory_summaries, src_path, file_data):
 
   if '//' not in directory_summaries:
     directory_summaries['//'] = new_dir('//')
-  directory_summaries['//'] = _merge_into_dir(directory_summaries['//'], summary)
+  directory_summaries['//'] = _merge_into_dir(directory_summaries['//'],
+                                              summary)
 
   # Directories need a trailing slash as per the metadata format.
   if directory != '//':
     directory += '/'
 
   directory_summaries[directory]['files'].append({
-      'name':
-          filename,
-      'summaries':
-        _convert_file_summary(summary),
+      'name': filename,
+      'summaries': _convert_file_summary(summary),
   })
 
 
@@ -498,7 +512,8 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
   sources = sources or []
   sources = [os.path.join(src_path, s) for s in sources]
 
-  component_mapping = json.load(open(component_mapping_path))['dir-to-component']
+  component_mapping = json.load(
+      open(component_mapping_path))['dir-to-component']
 
   logging.info('Generating coverage metadata ...')
   start_time = time.time()
