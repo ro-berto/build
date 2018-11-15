@@ -6,6 +6,7 @@ from recipe_engine.recipe_api import Property
 
 DEPS = [
   'dart',
+  'depot_tools/osx_sdk',
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -23,17 +24,18 @@ def RunSteps(api, buildername):
   assert channel in ['be', 'dev', 'stable', 'try']
 
   try:
-    api.dart.checkout(clobber=True)
+    with api.osx_sdk('mac'):
+      api.dart.checkout(clobber=True)
 
-    with api.context(cwd=api.path['checkout'],
-                   env={'BUILDBOT_BUILDERNAME':buildername}):
-      api.dart.build(['--mode=release', '--arch=ia32', 'create_sdk'])
-      api.dart.build(['--mode=release', '--arch=x64', 'create_sdk'])
+      with api.context(cwd=api.path['checkout'],
+                    env={'BUILDBOT_BUILDERNAME':buildername}):
+        api.dart.build(['--mode=release', '--arch=ia32', 'create_sdk'])
+        api.dart.build(['--mode=release', '--arch=x64', 'create_sdk'])
 
-      if system == 'linux':
-        api.python('generate API docs',
-            api.path['checkout'].join('tools', 'bots', 'dart_sdk.py'),
-            args=['api_docs'])
+        if system == 'linux':
+          api.python('generate API docs',
+              api.path['checkout'].join('tools', 'bots', 'dart_sdk.py'),
+              args=['api_docs'])
   finally:
     api.dart.kill_tasks()
 

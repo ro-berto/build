@@ -7,6 +7,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/depot_tools',
   'depot_tools/gclient',
+  'depot_tools/osx_sdk',
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -14,6 +15,7 @@ DEPS = [
   'test_utils',
   'swarming_client',
 ]
+
 
 TEST_MATRIX = {
   "filesets": {
@@ -72,7 +74,13 @@ TEST_MATRIX = {
   ]
 }
 
+
 def RunSteps(api):
+  with api.osx_sdk('mac'):
+    _run_steps_impl(api)
+
+
+def _run_steps_impl(api):
   # If parent_fileset is set, the bot is triggered by
   # another builder, and we should not download the sdk.
   # We rely on all files being in the isolate
@@ -118,6 +126,7 @@ def RunSteps(api):
       api.dart.kill_tasks()
       with api.context(cwd=api.path['checkout']):
         api.dart.read_debug_log()
+
 
 def GenTests(api):
    yield (

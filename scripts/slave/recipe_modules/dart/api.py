@@ -118,11 +118,10 @@ class DartApi(recipe_api.RecipeApi):
         build_exit_status = None
         try:
           self.m.goma.start()
-          with self.m.osx_sdk('mac'):
-            self.m.python(name,
-                          self.m.path['checkout'].join('tools', 'build.py'),
-                          args=build_args,
-                          timeout=20 * 60)
+          self.m.python(name,
+                        self.m.path['checkout'].join('tools', 'build.py'),
+                        args=build_args,
+                        timeout=20 * 60)
           build_exit_status = 0
         except self.m.step.StepTimeout as e:
           raise self.m.step.StepFailure(
