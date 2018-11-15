@@ -2804,6 +2804,10 @@ class WebRTCPerfTest(LocalGTestTest):
 
   def run(self, api, suffix):
     self._wire_up_perf_config(api)
+    # TODO(phoglund): hack to get perf tests working until we can migrate to
+    # src-side scripts.
+    api.chromium.build_properties['perf_dashboard_machine_group'] = (
+        'chromium.webrtc')
     super(WebRTCPerfTest, self).run(api, suffix)
 
   def _wire_up_perf_config(self, api):
