@@ -111,7 +111,11 @@
     },
     "v8-tree-closers": {
         "build-db": "v8_tree_closers_build_db.json",
-        "config": "v8_gatekeeper/tree_closers.json",
+        "gitiles-config": {
+          "repo_url": "https://chromium.googlesource.com/v8/v8",
+          "ref": "refs/heads/infra/config",
+          "path": "gatekeeper/tree_closers.json"
+        },
         "masters": {
             "https://build.chromium.org/p/client.v8": ["*"],
             "https://build.chromium.org/p/client.v8.fyi": ["*"],
@@ -126,7 +130,11 @@
     },
     "v8-mail-notifiers": {
         "build-db": "v8_mail_notifiers_build_db.json",
-        "config": "v8_gatekeeper/mail_notifiers.json",
+        "gitiles-config": {
+          "repo_url": "https://chromium.googlesource.com/v8/v8",
+          "ref": "refs/heads/infra/config",
+          "path": "gatekeeper/mail_notifiers.json"
+        },
         "masters": {
             "https://build.chromium.org/p/client.v8": ["*"],
             "https://build.chromium.org/p/client.v8.chromium": ["*"],

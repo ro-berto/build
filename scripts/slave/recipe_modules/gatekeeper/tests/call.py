@@ -70,6 +70,16 @@ def GenTests(api):
   )
 
   yield (
+    api.test('json_infra_side')
+    + api.properties.generic(
+        buildername='Chromium Gatekeeper', path_config='kitchen')
+    + api.step_data(
+      'reading gatekeeper_trees.json',
+      api.gatekeeper.infra_config_data(),
+    )
+  )
+
+  yield (
     api.test('json_by_url')
     + api.properties.generic(
         buildername='Chromium Gatekeeper', path_config='kitchen')

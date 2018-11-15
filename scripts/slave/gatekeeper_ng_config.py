@@ -343,6 +343,7 @@ def load_gatekeeper_tree_config(filename):
                       'config',
                       'default-from-email',
                       'filter-domain',
+                      'gitiles-config',
                       'masters',
                       'open-tree',
                       'password-file',
@@ -367,6 +368,7 @@ def load_gatekeeper_tree_config(filename):
     assert isinstance(tree_config.get('config', ''), basestring)
     assert isinstance(tree_config.get('default-from-email', ''), basestring)
     assert isinstance(tree_config.get('filter-domain', ''), basestring)
+    assert isinstance(tree_config.get('gitiles-config', {}), dict)
     assert isinstance(tree_config.get('open-tree', True), bool)
     assert isinstance(tree_config.get('password-file', ''), basestring)
     assert isinstance(tree_config.get('revision-properties', ''), basestring)

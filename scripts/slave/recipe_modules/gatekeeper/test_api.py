@@ -41,10 +41,17 @@ class GatekeeperTestApi(recipe_test_api.RecipeTestApi):
       'chromium': {},
     }
 
+  def infra_config_data(self):
+    return self.m.json.output({
+      'foobar': {
+        'config': 'foobar/tree_closers.json',
+      },
+    })
+
   def gitiles_config_data(self):
     return self.m.json.output({
       'foobar': {
-        'gitiles_config': {
+        'gitiles-config': {
           'repo_url': 'https://chromium.googlesource.com/foo/bar',
           'ref': 'refs/heads/baz',
           'path': 'biz/buz.json',

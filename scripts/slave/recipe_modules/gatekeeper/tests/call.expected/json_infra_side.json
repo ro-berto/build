@@ -11,11 +11,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"foobar\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"gitiles-config\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"path\": \"biz/buz.json\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"ref\": \"refs/heads/baz\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"repo_url\": \"https://chromium.googlesource.com/foo/bar\"@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"config\": \"foobar/tree_closers.json\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -40,20 +36,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::gitiles]/resources/gerrit_client.py",
-      "--json-file",
-      "/path/to/tmp/json",
-      "--url",
-      "https://chromium.googlesource.com/foo/bar/+/refs/heads/baz/biz/buz.json",
-      "--format",
-      "text"
-    ],
-    "name": "fetch refs/heads/baz:biz/buz.json"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -61,7 +43,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/gatekeeper_ng.py",
       "--json",
-      "{}",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/foobar/tree_closers.json",
       "--service-account-path",
       "/creds/service_accounts/service-account-gatekeeper.json"
     ],
