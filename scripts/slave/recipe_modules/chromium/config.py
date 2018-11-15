@@ -55,6 +55,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       # TODO(tandrii): delete goma_high_parallel from here and use goma recipe
       # module property, configured per builder in cr-buildbucket.cfg.
       goma_high_parallel = Single(bool, empty_val=False, required=False),
+      use_autoninja = Single(bool, empty_val=False, required=False),
     ),
     gyp_env = ConfigGroup(
       DOWNLOAD_VR_TEST_APKS = Single(int, required=False),
@@ -289,6 +290,7 @@ def goma_rbe(c):
   c.env.GOMA_SETTINGS_SERVER = (
       'https://cxx-compiler-service.appspot.com/settings')
   c.env.GOMA_USE_CASE = 'rbe-staging'
+  c.compile_py.use_autoninja = True
 
 @config_ctx()
 def goma_hermetic_fallback(c):
@@ -311,6 +313,10 @@ def goma_use_local(c):
 @config_ctx()
 def ninja_confirm_noop(c):
   c.compile_py.ninja_confirm_noop = True
+
+@config_ctx()
+def use_autoninja(c):
+  c.compile_py.use_autoninja = True
 
 @config_ctx(group='builder')
 def xcode(c):  # pragma: no cover

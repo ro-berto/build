@@ -19,6 +19,7 @@ def RunSteps(api):
   api.chromium.apply_config('goma_high_parallel')
   api.chromium.apply_config('goma_localoutputcache')
   api.chromium.apply_config('goma_enable_global_file_stat_cache')
+  api.chromium.apply_config('use_autoninja')
 
   for config in api.properties.get('chromium_apply_config', []):
     api.chromium.apply_config(config)
