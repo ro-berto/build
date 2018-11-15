@@ -202,7 +202,10 @@ def setup_host_x86(api,
         jdwp_command += ['--vm-arg', '-Xgc:gcstress']
 
       api.step('test jdwp jit', jdwp_command)
-      api.step('test jdwp interpreter', jdwp_command + ['--no-jit'])
+
+      # Disable interpreter jdwp runs with gcstress, they time out.
+      if not gcstress:
+        api.step('test jdwp interpreter', jdwp_command + ['--no-jit'])
 
       libjdwp_run = art_tools.join('run-libjdwp-tests.sh')
       libjdwp_common_command = [libjdwp_run,
@@ -214,7 +217,10 @@ def setup_host_x86(api,
         libjdwp_common_command += ['--vm-arg', '-Xgc:gcstress']
 
       api.step('test libjdwp jit', libjdwp_common_command)
-      api.step('test libjdwp interpreter', libjdwp_common_command + ['--no-jit'])
+
+      # Disable interpreter jdwp runs with gcstress, they time out.
+      if not gcstress:
+        api.step('test libjdwp interpreter', libjdwp_common_command + ['--no-jit'])
 
       api.step('test dx', ['./dalvik/dx/tests/run-all-tests'])
 
@@ -402,9 +408,11 @@ def setup_target(api,
     if gcstress:
       jdwp_command += ['--vm-arg', '-Xgc:gcstress']
 
-    with api.context(env=test_env):
-      api.step('test jdwp jit', jdwp_command)
-    test_logging(api, 'test jdwp jit')
+    # Disable jit jdwp runs with gcstress and debug, they time out.
+    if not (gcstress and debug):
+      with api.context(env=test_env):
+        api.step('test jdwp jit', jdwp_command)
+      test_logging(api, 'test jdwp jit')
 
     # Disable interpreter jdwp runs with gcstress, they time out.
     if not gcstress:
@@ -420,9 +428,11 @@ def setup_target(api,
     if gcstress:
       libjdwp_command += ['--vm-arg', '-Xgc:gcstress']
 
-    with api.context(env=test_env):
-      api.step('test libjdwp jit', libjdwp_command)
-    test_logging(api, 'test libjdwp jit')
+    # Disable jit libjdwp runs with gcstress and debug, they time out.
+    if not (gcstress and debug):
+      with api.context(env=test_env):
+        api.step('test libjdwp jit', libjdwp_command)
+      test_logging(api, 'test libjdwp jit')
 
     # Disable interpreter libjdwp runs with gcstress, they time out.
     if not gcstress:
