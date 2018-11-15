@@ -18,8 +18,6 @@ SPEC = {
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android'
       },
-      'extra_got_revision_properties': [('src',
-                                         'parent_got_cr_revision')],
       'gclient_apply_config': ['android'],
       'gclient_config': 'chromium_webrtc_tot',
       'set_component_rev': {
@@ -41,8 +39,6 @@ SPEC = {
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android'
       },
-      'extra_got_revision_properties': [('src',
-                                         'parent_got_cr_revision')],
       'gclient_apply_config': ['android'],
       'gclient_config': 'chromium_webrtc_tot',
       'set_component_rev': {
@@ -64,8 +60,6 @@ SPEC = {
         'TARGET_BITS': 64,
         'TARGET_PLATFORM': 'android'
       },
-      'extra_got_revision_properties': [('src',
-                                         'parent_got_cr_revision')],
       'gclient_apply_config': ['android'],
       'gclient_config': 'chromium_webrtc_tot',
       'set_component_rev': {
@@ -87,8 +81,6 @@ SPEC = {
         'TARGET_BITS': 32,
         'TARGET_PLATFORM': 'android'
       },
-      'extra_got_revision_properties': [('src',
-                                         'parent_got_cr_revision')],
       'gclient_apply_config': ['android'],
       'gclient_config': 'chromium_webrtc_tot',
       'parent_buildername': 'WebRTC Chromium FYI Android Builder (dbg)',
@@ -113,8 +105,6 @@ SPEC = {
         'TARGET_BITS': 64,
         'TARGET_PLATFORM': 'android'
       },
-      'extra_got_revision_properties': [('src',
-                                         'parent_got_cr_revision')],
       'gclient_apply_config': ['android'],
       'gclient_config': 'chromium_webrtc_tot',
       'parent_buildername': 'WebRTC Chromium FYI Android Builder ARM64 (dbg)',
@@ -136,8 +126,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64
       },
-      'extra_got_revision_properties': [('src',
-                                         'parent_got_cr_revision')],
       'gclient_apply_config': [],
       'gclient_config': 'chromium_webrtc_tot',
       'set_component_rev': {
@@ -156,8 +144,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64
       },
-      'extra_got_revision_properties': [('src',
-                                         'parent_got_cr_revision')],
       'gclient_apply_config': [],
       'gclient_config': 'chromium_webrtc_tot',
       'set_component_rev': {
@@ -176,8 +162,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64
       },
-      'extra_got_revision_properties': [('src',
-                                         'parent_got_cr_revision')],
       'gclient_apply_config': ['webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc_tot',
       'parent_buildername': 'WebRTC Chromium FYI Linux Builder',
@@ -198,8 +182,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64
       },
-      'extra_got_revision_properties': [('src',
-                                         'parent_got_cr_revision')],
       'gclient_apply_config': [],
       'gclient_config': 'chromium_webrtc_tot',
       'set_component_rev': {
@@ -218,8 +200,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64
       },
-      'extra_got_revision_properties': [('src',
-                                         'parent_got_cr_revision')],
       'gclient_apply_config': [],
       'gclient_config': 'chromium_webrtc_tot',
       'set_component_rev': {
@@ -238,8 +218,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64
       },
-      'extra_got_revision_properties': [('src',
-                                         'parent_got_cr_revision')],
       'gclient_apply_config': ['webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc_tot',
       'parent_buildername': 'WebRTC Chromium FYI Mac Builder',
@@ -260,8 +238,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32
       },
-      'extra_got_revision_properties': [('src',
-                                         'parent_got_cr_revision')],
       'gclient_apply_config': [],
       'gclient_config': 'chromium_webrtc_tot',
       'set_component_rev': {
@@ -280,8 +256,6 @@ SPEC = {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 32
       },
-      'extra_got_revision_properties': [('src',
-                                         'parent_got_cr_revision')],
       'gclient_apply_config': [],
       'gclient_config': 'chromium_webrtc_tot',
       'set_component_rev': {
@@ -300,8 +274,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32
       },
-      'extra_got_revision_properties': [('src',
-                                         'parent_got_cr_revision')],
       'gclient_apply_config': ['webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc_tot',
       'parent_buildername': 'WebRTC Chromium FYI Win Builder',
@@ -322,8 +294,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32
       },
-      'extra_got_revision_properties': [('src',
-                                         'parent_got_cr_revision')],
       'gclient_apply_config': ['webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc_tot',
       'parent_buildername': 'WebRTC Chromium FYI Win Builder',
@@ -344,8 +314,6 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32
       },
-      'extra_got_revision_properties': [('src',
-                                         'parent_got_cr_revision')],
       'gclient_apply_config': ['webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc_tot',
       'parent_buildername': 'WebRTC Chromium FYI Win Builder',
