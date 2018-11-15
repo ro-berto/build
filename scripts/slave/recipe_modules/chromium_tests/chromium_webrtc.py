@@ -45,7 +45,7 @@ SPEC = {
       'test_results_config': 'public_server',
       'testing': { 'platform': 'linux'},
     },
-    'Linux Builder': {
+    'WebRTC Chromium Linux Builder': {
       'bot_type': 'builder',
       'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
@@ -57,7 +57,7 @@ SPEC = {
       'gclient_config': 'chromium_webrtc',
       'testing': { 'platform': 'linux'}
     },
-    'Linux Tester': {
+    'WebRTC Chromium Linux Tester': {
       'bot_type': 'tester',
       'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
@@ -67,7 +67,7 @@ SPEC = {
       },
       'gclient_apply_config': [ 'webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc',
-      'parent_buildername': 'Linux Builder',
+      'parent_buildername': 'WebRTC Chromium Linux Builder',
       'test_results_config': 'public_server',
       'testing': { 'platform': 'linux'},
     },
@@ -211,7 +211,7 @@ def browser_perf_test(perf_id):
       perf_config_mappings=None,
       commit_position_property='got_revision_cp')
 
-SPEC['builders']['Linux Tester']['tests'] = [
+SPEC['builders']['WebRTC Chromium Linux Tester']['tests'] = [
   browser_perf_test('chromium-webrtc-rel-linux')
 ]
 SPEC['builders']['Mac Tester']['tests'] = [
