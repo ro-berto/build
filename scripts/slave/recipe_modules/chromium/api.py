@@ -642,14 +642,14 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append(
           '--webkit-revision=%s' % webkit_revision)  # pragma: no cover
 
-    if (self.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1 or
+    if (self.c.runtests.enable_asan or
         self.c.runtests.run_asan_test):
       full_args.append('--enable-asan')
     if self.c.runtests.enable_lsan:
       full_args.append('--enable-lsan')
-    if self.c.gyp_env.GYP_DEFINES.get('msan', 0) == 1:
+    if self.c.runtests.enable_msan:
       full_args.append('--enable-msan')
-    if self.c.gyp_env.GYP_DEFINES.get('tsan', 0) == 1:
+    if self.c.runtests.enable_tsan:
       full_args.append('--enable-tsan')
     if self.c.runtests.enable_memcheck:
       full_args.extend([

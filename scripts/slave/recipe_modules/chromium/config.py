@@ -413,11 +413,9 @@ def asan(c):
     fastbuild(c, invert=True, optional=False)
 
   c.gn_args.append('is_asan=true')
-  c.gyp_env.GYP_DEFINES['asan'] = 1  # Read by api.py.
   if c.TARGET_PLATFORM not in ('android', 'mac') and c.TARGET_BITS == 64:
     # LSAN isn't supported on Android, Mac or 32 bits platforms.
     c.gn_args.append('is_lsan=true')
-    c.gyp_env.GYP_DEFINES['lsan'] = 1  # Read by api.py.
 
 @config_ctx(deps=['compiler'])
 def lsan(c):
@@ -429,7 +427,6 @@ def msan(c):
     raise BadConf('msan requires clang')
   c.runtests.enable_msan = True
   c.gn_args.append('is_msan=true')
-  c.gyp_env.GYP_DEFINES['msan'] = 1  # Read by api.py.
 
 @config_ctx(deps=['compiler'])
 def ubsan(c):
@@ -454,7 +451,6 @@ def tsan2(c):
     raise BadConf('tsan2 requires clang')
   c.runtests.enable_tsan = True
   c.gn_args.append('is_tsan=true')
-  c.gyp_env.GYP_DEFINES['tsan'] = 1  # Read by api.py.
 
 @config_ctx()
 def trybot_flavor(c):

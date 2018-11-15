@@ -490,7 +490,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           cros_board=self.m.chromium.c.TARGET_CROS_BOARD,
           # TODO(machenbach): Make asan a configuration switch.
           package_dsym_files=(
-              self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan') and
+              self.m.chromium.c.runtests.enable_asan and
               self.m.chromium.c.HOST_PLATFORM == 'mac'),
       )
 

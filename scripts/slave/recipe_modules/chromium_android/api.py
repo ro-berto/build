@@ -1250,7 +1250,7 @@ class AndroidApi(recipe_api.RecipeApi):
     kwargs.update(provision_kwargs)
     self.provision_devices(**kwargs)
     self.device_status()
-    if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
+    if self.m.chromium.c.runtests.enable_asan:
       self.asan_device_setup()
 
   def common_tests_final_steps(self, logcat_gs_bucket='chromium-android',
@@ -1260,7 +1260,7 @@ class AndroidApi(recipe_api.RecipeApi):
       self.logcat_dump(gs_bucket=logcat_gs_bucket)
       self.stack_tool_steps(force_latest_version)
     finally:
-      if self.m.chromium.c.gyp_env.GYP_DEFINES.get('asan', 0) == 1:
+      if self.m.chromium.c.runtests.enable_asan:
         self.asan_device_teardown()
     self.test_report()
 

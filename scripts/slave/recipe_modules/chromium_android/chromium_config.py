@@ -34,7 +34,7 @@ def main_builder_rel_mb(_):
 
 @CONFIG_CTX(includes=['base_config', 'clang', 'goma'])
 def clang_builder(c):
-  c.gyp_env.GYP_DEFINES['asan'] = 1
+  c.runtests.enable_asan = True
   c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
 
 @CONFIG_CTX(includes=['clang_builder', 'mb'])
