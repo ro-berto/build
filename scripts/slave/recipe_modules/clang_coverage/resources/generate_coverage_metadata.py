@@ -433,7 +433,7 @@ def _add_file_to_directory_summary(directory_summaries, src_path, file_data):
   summary = file_data['summary']
   while parent != '//':
     if parent + '/' not in directory_summaries:
-      directory_summaries[parent + '/'] = new_dir(parent)
+      directory_summaries[parent + '/'] = new_dir(parent + '/')
     directory_summaries[parent + '/'] = _merge_into_dir(
         directory_summaries[parent + '/'], summary)
     parent = os.path.dirname(parent)
@@ -481,7 +481,8 @@ def _aggregate_dirs_and_components(directory_summaries, component_mapping):
       parent += '/'
     # this summary is used in both the parent dir, and the component entry.
     inner_dir_summary = {
-        'name': dirname,
+        'name': dirname + '/',
+        'path': directory + '/',
         'summaries': directory_summaries[directory + '/']['summaries'],
     }
     directory_summaries[parent]['dirs'].append(inner_dir_summary)
@@ -545,11 +546,13 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
       'files': compressed_files,
       'dirs': directory_summaries.values(),
       'components': component_summaries.values(),
+      'summaries': directory_summaries['//']['summaries'],
   }
   flat_data = {
       'files': flat_files,
       'dirs': directory_summaries.values(),
       'components': component_summaries.values(),
+      'summaries': directory_summaries['//']['summaries'],
   }
 
   logging.info('Dumping aggregated data ...')
