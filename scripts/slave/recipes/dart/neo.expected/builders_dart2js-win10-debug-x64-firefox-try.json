@@ -984,7 +984,6 @@
       "LATEST/flaky.json",
       "-o",
       "/path/to/tmp/",
-      "LATEST/results.json",
       ""
     ],
     "cwd": "[CACHE]/builder/sdk",

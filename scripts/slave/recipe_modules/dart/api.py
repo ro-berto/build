@@ -337,7 +337,6 @@ class DartApi(recipe_api.RecipeApi):
             'LATEST/flaky.json',
             '-o',
             self.m.raw_io.output_text(name='flaky.json', add_output_log=True),
-            'LATEST/results.json',
             self.m.raw_io.input_text(results_str, name='results.json')],
             ok_ret='any' if self._report_new_results() else {0})
     return flaky_json.raw_io.output_texts.get('flaky.json')
