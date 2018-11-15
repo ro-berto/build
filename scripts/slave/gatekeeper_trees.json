@@ -161,6 +161,7 @@
     "non-closers": {
         "filter-domain": "chromium.org,google.com,intel.com,opera.com,vewd.com",
         "masters": {
+            "https://build.chromium.org/p/chromium.fuzz": ["*"],
             "https://build.chromium.org/p/chromium.fyi": ["*"],
             "https://build.chromium.org/p/chromium.infra.cron": ["*"],
             "https://build.chromium.org/p/chromium.lkgr": ["*"],

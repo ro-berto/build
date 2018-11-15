@@ -155,6 +155,9 @@
       "@@@STEP_LOG_LINE@json.output@  \"non-closers\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"filter-domain\": \"chromium.org,google.com,intel.com,opera.com,vewd.com\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"masters\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.fuzz\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ], @@@",
       "@@@STEP_LOG_LINE@json.output@      \"https://build.chromium.org/p/chromium.fyi\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        \"*\"@@@",
       "@@@STEP_LOG_LINE@json.output@      ], @@@",
@@ -413,6 +416,7 @@
       "https://build.chromium.org/p/chromium.fyi",
       "https://build.chromium.org/p/chromium.lkgr",
       "https://build.chromium.org/p/client.boringssl",
+      "https://build.chromium.org/p/chromium.fuzz",
       "https://build.chromium.org/p/chromium.infra.cron",
       "https://build.chromium.org/p/client.crashpad",
       "https://build.chromium.org/p/client.catapult"

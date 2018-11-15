@@ -321,6 +321,22 @@
         }
       }
     ],
+    "https://build.chromium.org/p/chromium.fuzz": [
+      {
+        "tree_notify": [
+          "chrome-security-sheriff@grotations.appspotmail.com"
+        ],
+
+        "subject_template": "Fuzz build failure on %(builder_name)s",
+
+        "forgive_all": true,
+        "builders": {
+          "*": {
+            "forgiving_optional": ["*"]
+          }
+        }
+      }
+    ],
     "https://build.chromium.org/p/chromium.infra.cron": [
       {
         "close_tree": false,
