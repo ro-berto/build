@@ -2017,7 +2017,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                waterfall_mastername=None, waterfall_buildername=None,
                merge=None, trigger_script=None, results_handler=None,
                set_up=None, tear_down=None, idempotent=True,
-               cipd_packages=None, optional_dimensions=None):
+               cipd_packages=None, isolate_coverage_data=False,
+               optional_dimensions=None):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name, dimensions, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -2040,6 +2041,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._test_results = {}
     self._idempotent = idempotent
     self._cipd_packages = cipd_packages
+    self._isolate_coverage_data = isolate_coverage_data
 
   @property
   def target_name(self):
@@ -2075,6 +2077,21 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
       shards = self.shards_to_retry_with(api, shards, len(tests_to_retry))
 
+    env = None
+    if self._isolate_coverage_data:
+      # Targets built with 'use_clang_coverage' will look at this environment
+      # variable to determine where to write the profile dumps. The %Nm syntax
+      # is understood by this instrumentation, see:
+      #   https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#id4
+      env = {
+          'LLVM_PROFILE_FILE':
+              '${ISOLATED_OUTDIR}/profraw/default-%4m.profraw',
+      }
+
+      if not self._merge:
+        self._merge = api.chromium_tests.m.clang_coverage.shard_merge(
+            self._step_name(suffix))
+
     # For the time being, we assume all isolated_script_test are not idempotent
     # TODO(crbug.com/549140): remove the self._idempotent parameter once
     # Telemetry tests are idempotent, since that will make all
@@ -2085,7 +2102,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         isolated_hash=isolated_hash, shards=shards, idempotent=self._idempotent,
         merge=self._merge, trigger_script=self._trigger_script,
         build_properties=api.chromium.build_properties,
-        cipd_packages=self._cipd_packages, extra_args=args)
+        cipd_packages=self._cipd_packages, extra_args=args, env=env)
 
   def pass_fail_counts(self, _, suffix):
     if self._test_results.get(suffix):
@@ -2201,6 +2218,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
     kwargs['waterfall_buildername'] = buildername
     kwargs['waterfall_mastername'] = mastername
     kwargs['idempotent'] = swarming_spec.get('idempotent', True)
+    kwargs['isolate_coverage_data'] = spec.get('isolate_coverage_data')
 
     return SwarmingIsolatedScriptTest(**kwargs)
 

@@ -128,11 +128,13 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     # separate builder-tester setup.
 
     # This naive approach relies on the test binary sharing a name with the test
-    # target. Also, this only works for builder_tester.
+    # target. Also, this only works for builder_tester on linux.
     binaries = []
     for t in tests:
       if t.is_gtest and t.runs_on_swarming:
         binaries.append(self.m.chromium.output_dir.join(t.isolate_target))
+      elif 'webkit_layout_tests' in t.isolate_target:
+        binaries.append(self.m.chromium.output_dir.join('content_shell'))
     return list(set(binaries))
 
   def instrument(self, affected_files):

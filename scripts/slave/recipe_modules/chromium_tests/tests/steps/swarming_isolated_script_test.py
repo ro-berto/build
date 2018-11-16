@@ -44,6 +44,7 @@ def RunSteps(api):
 
   test_repeat_count = api.properties.get('repeat_count')
   test_name = 'webkit_layout_tests' if test_repeat_count else 'base_unittests'
+  isolate_coverage_data = api.properties.get('isolate_coverage_data', False)
   test = api.chromium_tests.steps.SwarmingIsolatedScriptTest(
       test_name,
       perf_id=api.properties.get('perf_id'),
@@ -56,7 +57,9 @@ def RunSteps(api):
       expiration=7200,
       priority='lower',
       shards=int(api.properties.get('shards', '1')) or 1,
-      dimensions=api.properties.get('dimensions', {'gpu': '8086'}))
+      dimensions=api.properties.get('dimensions', {'gpu': '8086'}),
+      isolate_coverage_data=isolate_coverage_data,
+  )
   assert test.runs_on_swarming and not test.is_gtest
 
   if test_repeat_count:
@@ -110,6 +113,16 @@ def GenTests(api):
       check(expected_log in followup_annotations)
     return step_odict
 
+  def verify_isolate_flag(check, step_odict):
+    step = step_odict[
+        '[trigger] base_unittests on Intel GPU on Linux (with patch)']
+    check('LLVM_PROFILE_FILE' in step['cmd'])
+    step = step_odict[
+        'base_unittests on Intel GPU on Linux (with patch)']
+    # Make sure swarming collect know how to merge coverage profile data.
+    check('RECIPE_MODULE[build::clang_coverage]/resources/merge_profiles.py'
+          in step['cmd'])
+
   yield (
       api.test('basic') +
       api.properties.generic(
@@ -123,6 +136,25 @@ def GenTests(api):
           git_revision='test_sha',
           version='test-version',
           got_revision_cp=123456)
+  )
+
+  yield (
+      api.test('isolate_coverage_data') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
+      api.properties(
+          buildnumber=123,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp=123456,
+          isolate_coverage_data=True,
+      ) +
+      api.post_process(verify_isolate_flag) +
+      api.post_process(post_process.DropExpectation)
   )
 
   yield (
