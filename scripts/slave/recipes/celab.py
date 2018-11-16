@@ -4,6 +4,7 @@
 
 DEPS = [
   'depot_tools/bot_update',
+  'depot_tools/cipd',
   'depot_tools/gclient',
   'depot_tools/gsutil',
   'recipe_engine/buildbucket',
@@ -42,13 +43,16 @@ def RunSteps(api):
   checkout = api.path['checkout']
 
   # Install Go & Protoc
-  bootstrap_script = checkout.join('infra', 'bootstrap.py')
-  bootstrap_root = api.path['start_dir'].join("bootstrap")
-  api.python('celab bootstrap', bootstrap_script, [bootstrap_root])
+  packages = {}
+  packages['infra/go/${platform}'] = 'version:1.11.2'
+  packages['infra/tools/protoc/${platform}'] = 'protobuf_version:v3.6.1'
+  packages_root = api.path['start_dir'].join('packages')
+  api.cipd.ensure(packages_root, packages)
+
   add_paths = [
     go_root.join('bin'),
-    bootstrap_root.join('golang', 'go', 'bin'),
-    bootstrap_root.join('protoc', 'bin'),
+    packages_root,
+    packages_root.join('bin'),
   ]
 
   # Build CELab

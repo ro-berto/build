@@ -95,12 +95,31 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/infra/bootstrap.py",
-      "[START_DIR]/bootstrap"
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]/packages",
+      "-ensure-file",
+      "infra/go/${platform} version:1.11.2\ninfra/tools/protoc/${platform} protobuf_version:v3.6.1",
+      "-json-output",
+      "/path/to/tmp/json"
     ],
-    "name": "celab bootstrap"
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-version:1.11.2--\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/go/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-protobuf_version\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/protoc/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -118,8 +137,8 @@
     "env_suffixes": {
       "PATH": [
         "[START_DIR]/go/bin",
-        "[START_DIR]/bootstrap/golang/go/bin",
-        "[START_DIR]/bootstrap/protoc/bin"
+        "[START_DIR]/packages",
+        "[START_DIR]/packages/bin"
       ]
     },
     "name": "install deps"
@@ -139,8 +158,8 @@
     "env_suffixes": {
       "PATH": [
         "[START_DIR]/go/bin",
-        "[START_DIR]/bootstrap/golang/go/bin",
-        "[START_DIR]/bootstrap/protoc/bin"
+        "[START_DIR]/packages",
+        "[START_DIR]/packages/bin"
       ]
     },
     "name": "build"
