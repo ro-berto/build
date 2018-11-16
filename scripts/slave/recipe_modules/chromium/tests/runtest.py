@@ -29,6 +29,10 @@ def RunSteps(api):
         'args': [api.chromium.test_launcher_filter('AtExit*')],
         'test_launcher_summary_output': api.json.output(),
     })
+  elif api.properties.get('use_histograms', False):
+    kwargs.update({
+        'use_histograms': True,
+    })
   else:
     kwargs.update({
         'chartjson_file': True,
@@ -55,6 +59,15 @@ def GenTests(api):
           buildername='test_buildername',
           buildnumber=123,
           bot_id='test_bot_id')
+  )
+
+  yield (
+      api.test('histograms') +
+      api.properties(
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+          use_histograms=True)
   )
 
   yield (

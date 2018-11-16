@@ -50,6 +50,22 @@ class SendResultsFatalException(SendResultException):
   pass
 
 
+def LuciAuthTokenGeneratorCallback(service_account_file):
+  args = ['luci-auth', 'token']
+  if service_account_file:
+    args += ['-service-account-json', service_account_file]
+  else:
+    print ('service_account_file is not set. '
+           'Use LUCI swarming task service account')
+  p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  if p.wait() == 0:
+    return p.stdout.read()
+  else:
+    raise RuntimeError(
+        'Error generating authentication token.\nStdout: %s\nStder:%s' %
+        (p.stdout.read(), p.stderr.read()))
+
+
 def SendResults(data, url, build_dir, json_url_file=None,
                 send_as_histograms=False, oauth_token=None):
   """Sends results to the Chrome Performance Dashboard.
@@ -155,7 +171,7 @@ def _SendResultsFromCache(cache_file_name, url, oauth_token):
       if is_histogramset:
         # TODO(eakuefner): Remove this discard logic once all bots use histograms.
         if oauth_token is None:
-          raise SendResultsFatalException(ERROR_NO_OAUTH_TOKEN)
+          oauth_token = LuciAuthTokenGeneratorCallback(None)
 
         _SendHistogramJson(url, json.dumps(data), oauth_token)
       else:

@@ -110,6 +110,10 @@ class PerformanceLogProcessor(object):
     """This is not the new telemetry --chartjson output format."""
     return False
 
+  def IsHistogramSet(self):
+    """This is not the newer HistogramSet format that replaces ChartJSON."""
+    return False
+
   def PerformanceLogs(self):
     if not self._finalized:
       self._FinalizeProcessing()

@@ -575,6 +575,7 @@ class ChromiumApi(recipe_api.RecipeApi):
               python_mode=False, point_id=None, revision=None,
               webkit_revision=None, test_launcher_summary_output=None,
               perf_id=None, perf_config=None, chartjson_file=False,
+              use_histograms=False,
               tee_stdout_file=None, **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
@@ -616,6 +617,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append(self.m.json.output())
       if 'step_test_data' not in kwargs:
         kwargs['step_test_data'] = lambda: self.m.json.test_api.output([])
+    if use_histograms:
+      full_args.append('--use-histograms')
     if test_launcher_summary_output:
       full_args.extend([
         '--test-launcher-summary-output',

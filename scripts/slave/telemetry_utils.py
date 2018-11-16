@@ -27,7 +27,8 @@ class TelemetryResultsProcessor(object):
 
   def ChartJson(self):
     try:
-      return json.load(open(self._chart_filename))
+      with open(self._chart_filename) as f:
+        return json.load(f)
     except (IOError, ValueError):
       logging.error('Error reading telemetry results from %s',
                     self._chart_filename)
@@ -51,6 +52,10 @@ class TelemetryResultsProcessor(object):
   def IsChartJson(self):
     """This is the new telemetry --chartjson output format."""
     return True
+
+  def IsHistogramSet(self):
+    """This is not the newer HistogramSet format that replaces ChartJSON."""
+    return False
 
   def IsReferenceBuild(self):
     return self._is_reference_build

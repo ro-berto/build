@@ -47,6 +47,7 @@ from common import gtest_utils
 from slave import annotation_utils
 from slave import build_directory
 from slave import crash_utils
+from slave import histogram_results_parser
 from slave import gtest_slave_utils
 from slave import performance_log_processor
 from slave import results_dashboard
@@ -268,6 +269,9 @@ def _SelectLogProcessor(options, is_telemetry):
   if _UsingGtestJson(options):
     return gtest_utils.GTestJSONParser
 
+  if options.use_histograms:
+    return histogram_results_parser.HistogramResultsParser
+
   if is_telemetry:
     return telemetry_utils.TelemetryResultsProcessor
 
@@ -306,7 +310,8 @@ def _CreateLogProcessor(log_processor_class, options, telemetry_info):
   if not log_processor_class:
     return None
 
-  if log_processor_class.__name__ == 'TelemetryResultsProcessor':
+  if (log_processor_class.__name__ == 'TelemetryResultsProcessor'
+      or log_processor_class.__name__ == 'HistogramResultsParser'):
     tracker_obj = log_processor_class(
         telemetry_info['filename'],
         telemetry_info['is_ref'],
@@ -458,6 +463,7 @@ def _SendResultsToDashboard(log_processor, args):
     return True
 
   results = None
+  as_histograms = False
   if log_processor.IsChartJson():
     results = _GenerateDashboardJson(log_processor, args)
     if not results:
@@ -466,6 +472,28 @@ def _SendResultsToDashboard(log_processor, args):
     log_processor.Cleanup()
     if results and not results['chart_data'].get('enabled', True):
       return True # A successful run, but the benchmark was disabled.
+  elif log_processor.IsHistogramSet():
+    histograms_file = log_processor.HistogramFilename()
+    chromium_checkout = os.getcwd()
+    testname = args['test']
+    bot = args['system']
+    buildername = args['buildername']
+    buildnumber = args['buildnumber']
+    revisions_dict = {
+      '--chromium_commit_positions': args['revisions']['rev']
+    }
+    is_reference_build = log_processor.IsReferenceBuild()
+    perf_dashboard_machine_group = args['perf_dashboard_machine_group']
+
+    results = results_dashboard.MakeHistogramSetWithDiagnostics(
+        histograms_file=histograms_file,
+        chromium_checkout_path=chromium_checkout,
+        test_name=testname, bot=bot, buildername=buildername,
+        buildnumber=buildnumber,
+        revisions_dict=revisions_dict, is_reference_build=is_reference_build,
+        perf_dashboard_machine_group=perf_dashboard_machine_group)
+    as_histograms = True
+    log_processor.Cleanup()
   else:
     charts = _GetDataFromLogProcessor(log_processor)
     results = results_dashboard.MakeListOfPoints(
@@ -476,7 +504,8 @@ def _SendResultsToDashboard(log_processor, args):
     return False
 
   logging.debug(json.dumps(results, indent=2))
-  return results_dashboard.SendResults(results, args['url'], args['build_dir'])
+  return results_dashboard.SendResults(
+      results, args['url'], args['build_dir'], send_as_histograms=as_histograms)
 
 
 def _GetDataFromLogProcessor(log_processor):
@@ -1105,7 +1134,6 @@ def _MainLinux(options, args, extra_env):
 
       command = _GenerateRunIsolatedCommand(build_dir, test_exe_path, options,
                                             command)
-
     result = _RunGTestCommand(options, command, extra_env, pipes=pipes,
                               log_processor=log_processor)
   finally:
@@ -1263,14 +1291,21 @@ def _UpdateRunBenchmarkArgs(args, options):
     None if not a telemetry test, otherwise a
     dict containing the output filename and whether it is a reference build.
   """
-  if not options.chartjson_file:
+  if not (options.chartjson_file or options.use_histograms):
     return {}
 
   script = args[0]
+  if options.use_histograms and script.endswith('run_benchmark'):
+    raise Exception('Histogram format is not supported for Telemetry via the '
+                    'build-side scripts. Use the src-side '
+                    'process_perf_results.py merge script instead.')
+
   if script.endswith('run_benchmark') or script.endswith('resource_sizes.py'):
     output_dir = tempfile.mkdtemp()
     args.extend(['--output-dir=%s' % output_dir])
-    temp_filename = os.path.join(output_dir, 'results-chart.json')
+    temp_filename = (os.path.join(output_dir, 'perf_results.json')
+                     if options.use_histograms
+                     else os.path.join(output_dir, 'results-chart.json'))
     return {'filename': temp_filename,
             'is_ref': '--browser=reference' in args,
             'cleanup_dir': True}
@@ -1407,6 +1442,10 @@ def main():
                            help='output results directory for JSON file.')
   option_parser.add_option('--chartjson-file', default='',
                            help='File to dump chartjson results.')
+  option_parser.add_option('--use-histograms', action='store_true',
+                           default=False,
+                           help='Attempt to upload perf results using the '
+                                'HistogramSet format instead of CharJSON.')
   option_parser.add_option('--log-processor-output-file', default='',
                            help='File to dump gtest log processor results.')
   option_parser.add_option('--builder-name', default=None,
@@ -1522,6 +1561,11 @@ def main():
 
   if options.run_shell_script and options.run_python_script:
     sys.stderr.write('Use either --run-shell-script OR --run-python-script, '
+                     'not both.')
+    return 1
+
+  if options.chartjson_file and options.use_histograms:
+    sys.stderr.write('Use either --chartjson-file OR --use_histograms, '
                      'not both.')
     return 1
 

@@ -84,6 +84,7 @@ class SendResultsToDashboardTest(unittest.TestCase):
     fake_points_data = [{'test': 'master/bot/chart/x', 'revision': 1000}]
     fake_results_tracker = mock.Mock()
     fake_results_tracker.IsChartJson = mock.MagicMock(return_value=False)
+    fake_results_tracker.IsHistogramSet = mock.MagicMock(return_value=False)
     GetDataFromLogProcessor.return_value = fake_charts_data
     MakeListOfPoints.return_value = fake_points_data
 
@@ -96,6 +97,7 @@ class SendResultsToDashboardTest(unittest.TestCase):
             'mastername': 'my.master',
             'buildername': 'Builder',
             'buildnumber': 123,
+            'revisions': {'rev': 343},
             'perf_dashboard_machine_group': 'SithLord',
             'supplemental_columns': {}})
 
@@ -108,7 +110,7 @@ class SendResultsToDashboardTest(unittest.TestCase):
 
     # Then a function is called to send the data (and any cached data).
     SendResults.assert_called_with(
-        fake_points_data, 'http://x.com', 'builddir')
+        fake_points_data, 'http://x.com', 'builddir', send_as_histograms=False)
 
     # No errors, should return True.
     self.assertTrue(result)
@@ -151,11 +153,65 @@ class SendResultsToDashboardTest(unittest.TestCase):
 
     # Then a function is called to send the data (and any cached data).
     SendResults.assert_called_with(
-        fake_results, 'http://x.com', 'builddir')
+        fake_results, 'http://x.com', 'builddir', send_as_histograms=False)
     fake_results_tracker.Cleanup.assert_called_with()
 
     # No errors, should return True.
     self.assertTrue(result)
+
+
+  @mock.patch('slave.results_dashboard.MakeHistogramSetWithDiagnostics')
+  @mock.patch('slave.results_dashboard.SendResults')
+  @mock.patch('os.getcwd')
+  def test_SendResultsToDashboard_Histograms(
+      self, getcwd, SendResults, MakeHistogramSetWithDiagnostics):
+    """Tests that the right methods get called in _SendResultsToDashboard."""
+    # Since this method just tests that certain methods get called when
+    # a call to _SendResultsDashboard is made, the data used below is arbitrary.
+    fake_results_tracker = mock.Mock()
+    fake_results_tracker.IsChartJson = mock.MagicMock(return_value=False)
+    fake_results_tracker.IsHistogramSet = mock.MagicMock(return_value=True)
+    fake_results_tracker.HistogramFilename = mock.MagicMock(
+        return_value='foo.json')
+    fake_results_tracker.IsReferenceBuild = mock.MagicMock(return_value=False)
+    fake_results_tracker.Cleanup = mock.MagicMock()
+    fake_results = {'doesnt': 'matter', 'chart_data': {'enabled': True}}
+    MakeHistogramSetWithDiagnostics.return_value = fake_results
+    getcwd.return_value = '/some/path/'
+
+    result = runtest._SendResultsToDashboard(
+        fake_results_tracker, {
+            'system': 'linux',
+            'test': 'sunspider',
+            'url': 'http://x.com',
+            'build_dir': 'builddir',
+            'mastername': 'my.master',
+            'buildername': 'Builder',
+            'buildnumber': 123,
+            'revisions': {'rev': 343},
+            'perf_dashboard_machine_group': 'PaiMei',
+            'supplemental_columns': {}})
+
+    # Then the data is re-formatted to a format that the dashboard accepts.
+    MakeHistogramSetWithDiagnostics.assert_called_with(
+        histograms_file='foo.json',
+        chromium_checkout_path='/some/path/',
+        test_name='sunspider',
+        bot='linux',
+        buildername='Builder',
+        buildnumber=123,
+        revisions_dict={'--chromium_commit_positions': 343},
+        is_reference_build=False,
+        perf_dashboard_machine_group='PaiMei')
+
+    # Then a function is called to send the data (and any cached data).
+    SendResults.assert_called_with(
+        fake_results, 'http://x.com', 'builddir', send_as_histograms=True)
+    fake_results_tracker.Cleanup.assert_called_with()
+
+    # No errors, should return True.
+    self.assertTrue(result)
+
 
   @mock.patch('slave.results_dashboard.MakeDashboardJsonV1')
   @mock.patch('slave.results_dashboard.SendResults')
