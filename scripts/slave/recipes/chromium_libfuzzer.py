@@ -24,6 +24,78 @@ DEPS = [
 
 
 BUILDERS = freeze({
+  'chromium.fuzz': {
+    'builders': {
+      'Libfuzzer Upload Linux ASan': {
+        'chromium_config': 'chromium_clang',
+        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
+        },
+        'upload_bucket': 'chromium-browser-libfuzzer',
+        'upload_directory': 'asan',
+      },
+      'Libfuzzer Upload Linux ASan Debug': {
+        'chromium_config': 'chromium_clang',
+        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
+        },
+        'upload_bucket': 'chromium-browser-libfuzzer',
+        'upload_directory': 'asan',
+      },
+      'Libfuzzer Upload Linux MSan': {
+        'chromium_config': 'chromium_clang',
+        'chromium_apply_config': ['clobber', 'msan',
+                                  'proprietary_codecs' ],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
+        },
+        'upload_bucket': 'chromium-browser-libfuzzer',
+        'upload_directory': 'msan',
+      },
+      'Libfuzzer Upload Linux UBSan': {
+        'chromium_config': 'chromium_clang',
+        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 64,
+        },
+        'upload_bucket': 'chromium-browser-libfuzzer',
+        'upload_directory': 'ubsan',
+      },
+      'Libfuzzer Upload Mac ASan': {
+        'chromium_config': 'chromium_clang',
+        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'mac',
+          'TARGET_BITS': 64,
+        },
+        'upload_bucket': 'chromium-browser-libfuzzer',
+        'upload_directory': 'asan',
+      },
+      'Libfuzzer Upload Windows ASan': {
+        'chromium_config': 'chromium_clang',
+        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'win',
+          'TARGET_BITS': 64,
+        },
+        'upload_bucket': 'chromium-browser-libfuzzer',
+        'upload_directory': 'asan',
+      },
+    },
+  },
+  # TODO(crbug.com/903591): Remove the fyi configs.
   'chromium.fyi': {
     'builders': {
       'Libfuzzer Upload Linux ASan': {
