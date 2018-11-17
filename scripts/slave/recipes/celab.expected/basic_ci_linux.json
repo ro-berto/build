@@ -100,7 +100,7 @@
       "-root",
       "[START_DIR]/packages",
       "-ensure-file",
-      "infra/go/${platform} version:1.11.2\ninfra/tools/protoc/${platform} protobuf_version:v3.6.1",
+      "infra/go/${platform} version:1.11.2\ninfra/third_party/cacert date:2017-01-18\ninfra/tools/protoc/${platform} protobuf_version:v3.6.1",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -111,6 +111,10 @@
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-version:1.11.2--\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/go/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-date:2017-01-18-\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/third_party/cacert\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-protobuf_version\", @@@",
@@ -132,6 +136,7 @@
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
     "env": {
+      "GIT_SSL_CAINFO": "[START_DIR]/packages/cacert.pem",
       "GOPATH": "[START_DIR]/go"
     },
     "env_suffixes": {
@@ -153,6 +158,7 @@
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
     "env": {
+      "GIT_SSL_CAINFO": "[START_DIR]/packages/cacert.pem",
       "GOPATH": "[START_DIR]/go"
     },
     "env_suffixes": {

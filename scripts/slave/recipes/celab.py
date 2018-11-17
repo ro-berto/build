@@ -46,6 +46,7 @@ def RunSteps(api):
   packages = {}
   packages['infra/go/${platform}'] = 'version:1.11.2'
   packages['infra/tools/protoc/${platform}'] = 'protobuf_version:v3.6.1'
+  packages['infra/third_party/cacert'] = 'date:2017-01-18'
   packages_root = api.path['start_dir'].join('packages')
   api.cipd.ensure(packages_root, packages)
 
@@ -56,7 +57,8 @@ def RunSteps(api):
   ]
 
   # Build CELab
-  goenv = {"GOPATH": go_root}
+  cert_file = packages_root.join('cacert.pem')
+  goenv = {"GOPATH": go_root, "GIT_SSL_CAINFO": cert_file}
   with api.context(cwd=checkout, env=goenv, env_suffixes={'PATH': add_paths}):
     api.python('install deps', 'build.py', ['deps', '--install', '--verbose'])
     api.python('build', 'build.py', ['build', '--verbose'])
