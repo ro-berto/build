@@ -2803,7 +2803,7 @@ Returns:
 #### **class [NdkApi](/scripts/slave/recipe_modules/ndk/api.py#7)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 ### *recipe_modules* / [perf\_dashboard](/scripts/slave/recipe_modules/perf_dashboard)
 
-[DEPS](/scripts/slave/recipe_modules/perf_dashboard/__init__.py#5): [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/perf_dashboard/__init__.py#5): [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [PerfDashboardApi](/scripts/slave/recipe_modules/perf_dashboard/api.py#16)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 

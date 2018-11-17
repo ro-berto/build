@@ -24,13 +24,13 @@ class PerfDashboardApi(recipe_api.RecipeApi):
     assert (value != '')
     return {
         'master': self.m.properties['mastername'],
-        'bot': bot or self.m.properties['buildername'],
+        'bot': bot or self.m.buildbucket.builder_name,
         'test': test,
         'revision': revision,
         'value': value,
         'masterid': self.m.properties['mastername'],
-        'buildername': self.m.properties['buildername'],
-        'buildnumber': self.m.properties['buildnumber']
+        'buildername': self.m.buildbucket.builder_name,
+        'buildnumber': self.m.buildbucket.build.number,
     }
 
   def add_dashboard_link(self, presentation, test, revision, bot=None):
@@ -52,7 +52,7 @@ class PerfDashboardApi(recipe_api.RecipeApi):
     assert revision
     params = urllib.urlencode({
         'masters': self.m.properties['mastername'],
-        'bots': bot or self.m.properties['buildername'],
+        'bots': bot or self.m.buildbucket.builder_name,
         'tests': test,
         'rev': revision,
     })

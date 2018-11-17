@@ -4,6 +4,7 @@
 
 DEPS = [
     'depot_tools/tryserver',
+    'recipe_engine/buildbucket',
     'recipe_engine/python',
     'recipe_engine/platform',
     'recipe_engine/properties',
