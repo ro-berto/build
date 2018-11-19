@@ -49,6 +49,9 @@ CHROMEOS_LKGM_FILE_PATH = 'chromeos/CHROMEOS_LKGM'
 # Should match something that looks like "12345.0.0".
 LKGM_RE = re.compile(r'\d+\.\d+\.\d+')
 
+# GS bucket that stores test images for all CrOS boards.
+CHROMEOS_IMAGE_BUCKET = 'chromeos-image-archive'
+
 PROPERTIES = {
   'swarming_server': Property(
       kind=str,
@@ -107,6 +110,45 @@ class DUTBot(object):
         break
 
 
+def get_closest_available_version(api, board, lkgm_base):
+  """Returns the GS path of the latest image for the given board and lkgm.
+
+  This finds the first LATEST-$lkgm file in GS closest to the current lkgm.
+  It'll decrement the lkgm until it finds one, up to 100 attempts. This logic
+  is taken from:
+  https://codesearch.chromium.org/chromium/src/third_party/chromite/cli/cros/cros_chrome_sdk.py?rcl=63924982b3fdaf3c313e0052fe0c07dae5e4628a&l=350
+
+  Once it finds a valid LATEST-$lkgm file, it returns its contents appended
+  to the board's directory in the GS image bucket, which contains the images
+  built for that board at that version.
+  (eg: gs://chromeos-image-archive/kevin-full/R72-11244.0.0-rc2/)
+  """
+  # Append '-full' to every board, which indicates we want public versions
+  # of the board's images.
+  # TODO(crbug.com/866062): Support private images (if we ever want them).
+  board += '-full'
+  gs_path_prefix = 'gs://%s/%s/' % (CHROMEOS_IMAGE_BUCKET, board)
+  with api.step.nest('find latest image at %s' % lkgm_base):
+    # Occasionally an image won't be available for the board at the current
+    # LKGM. So start decrementing the version until we find one that's
+    # available.
+    lkgm_base = int(lkgm_base)
+    for candidate_version in xrange(lkgm_base, lkgm_base-100, -1):
+      full_version_file_path = gs_path_prefix + 'LATEST-%d.0.0' % (
+          candidate_version)
+      try:
+        # Only retry the gsutil calls for the first 5 attempts.
+        should_retry = candidate_version > lkgm_base - 5
+        result = api.gsutil.cat(
+            full_version_file_path, name='cat LATEST-%d' % candidate_version,
+            use_retry_wrapper=should_retry, stdout=api.raw_io.output(),
+            infra_step=False)
+        return gs_path_prefix + result.stdout.strip()
+      except api.step.StepFailure:
+        pass  # Gracefully skip 404s.
+  return None
+
+
 def RunSteps(api, swarming_server, swarming_pool, device_type, bb_host):
   api.swarming_client.checkout(revision='master')
 
@@ -125,7 +167,13 @@ def RunSteps(api, swarming_server, swarming_pool, device_type, bb_host):
   api.step.active_result.presentation.step_text = 'current LKGM: %s ' % lkgm
   lkgm_base = lkgm.split('.')[0]
 
-  # TODO(bpastene): Get the GS path of the latest image for the given lkgm.
+  # Fetch the full path in GS for the board at the current lkgm.
+  latest_version = get_closest_available_version(api, device_type, lkgm_base)
+  if not latest_version:
+    api.python.failing_step('no available image at %s' % lkgm, '')
+  gs_image_path = latest_version + '/chromiumos_test_image.tar.xz'
+  # Do a quick GS ls to ensure the image path exists.
+  api.gsutil.list(gs_image_path, name='ls ' + gs_image_path)
 
   # Collect the number of bots in the pool that need to be flashed.
   all_bots, step_result  = get_bots_in_pool(
@@ -218,6 +266,22 @@ def GenTests(api):
     api.post_process(post_process.StatusFailure) +
     api.post_process(post_process.DropExpectation)
   )
+
+  retry_test = (
+    test_props('exhaust_all_gs_retries', include_lkgm_steps=False) +
+    api.override_step_data(
+        'fetch CHROMEOS_LKGM',
+        api.json.output({ 'value': base64.b64encode('99999.0.0') })) +
+    api.post_process(post_process.MustRun, 'no available image at 99999.0.0') +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
+  )
+  # gsutil calls return non-zero for all 100 attempts.
+  for i in xrange(100):
+    next_ver = 99999 - i
+    step_name = 'find latest image at 99999.gsutil cat LATEST-%d' % next_ver
+    retry_test += api.step_data(step_name, retcode=1)
+  yield retry_test
 
   yield (
     test_props('no_bots') +

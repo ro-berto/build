@@ -4983,13 +4983,27 @@ This recipe is intended to run several times during MTV's off-peak hours. Its
 builder should be backed by a single thin Ubuntu VM, while the tasks it launches
 run the cros_flash recipe and run on DUT swarming bots.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/cros_flash_scheduler.py#110)(api, swarming_server, swarming_pool, device_type, bb_host):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/cros_flash_scheduler.py#152)(api, swarming_server, swarming_pool, device_type, bb_host):**
 
-&mdash; **def [get\_bots\_in\_pool](/scripts/slave/recipes/cros_flash_scheduler.py#69)(api, swarming_server, pool, device_type):**
+&mdash; **def [get\_bots\_in\_pool](/scripts/slave/recipes/cros_flash_scheduler.py#72)(api, swarming_server, pool, device_type):**
 
 Returns the list of bots that belong to the given pool.
 
 This uses swarming.py's bot/list query, and returns the resulting bots.
+
+&mdash; **def [get\_closest\_available\_version](/scripts/slave/recipes/cros_flash_scheduler.py#113)(api, board, lkgm_base):**
+
+Returns the GS path of the latest image for the given board and lkgm.
+
+This finds the first LATEST-$lkgm file in GS closest to the current lkgm.
+It'll decrement the lkgm until it finds one, up to 100 attempts. This logic
+is taken from:
+https://codesearch.chromium.org/chromium/src/third_party/chromite/cli/cros/cros_chrome_sdk.py?rcl=63924982b3fdaf3c313e0052fe0c07dae5e4628a&l=350
+
+Once it finds a valid LATEST-$lkgm file, it returns its contents appended
+to the board's directory in the GS image bucket, which contains the images
+built for that board at that version.
+(eg: gs://chromeos-image-archive/kevin-full/R72-11244.0.0-rc2/)
 ### *recipes* / [crrev:examples/full](/scripts/slave/recipe_modules/crrev/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/crrev/examples/full.py#9): [crrev](#recipe_modules-crrev), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]

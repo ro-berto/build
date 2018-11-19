@@ -104,6 +104,41 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "find latest image at 12345"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cat",
+      "gs://chromeos-image-archive/some-device-type-full/LATEST-12345.0.0"
+    ],
+    "name": "find latest image at 12345.gsutil cat LATEST-12345",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "ls",
+      "gs://chromeos-image-archive/some-device-type-full//chromiumos_test_image.tar.xz"
+    ],
+    "infra_step": true,
+    "name": "gsutil ls gs://chromeos-image-archive/some-device-type-full//chromiumos_test_image.tar.xz"
+  },
+  {
     "cmd": [
       "python",
       "-u",
