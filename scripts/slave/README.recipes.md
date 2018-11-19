@@ -212,6 +212,7 @@
   * [cros/cbuildbot_tryjob](#recipes-cros_cbuildbot_tryjob)
   * [cros/swarming](#recipes-cros_swarming)
   * [cros_flash](#recipes-cros_flash) &mdash; This recipe is used to flash a CrOS DUT on a Chromium bot.
+  * [cros_flash_scheduler](#recipes-cros_flash_scheduler) &mdash; This recipe is used to keep Chrome's pools of CrOS DUTs up to date.
   * [crrev:examples/full](#recipes-crrev_examples_full)
   * [custom_tabs_client](#recipes-custom_tabs_client)
   * [dart/chocolatey](#recipes-dart_chocolatey)
@@ -4965,6 +4966,30 @@ flashing the DUT. The basic steps of this recipe are:
 - Enter the chroot and flash the device.
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/cros_flash.py#50)(api):**
+### *recipes* / [cros\_flash\_scheduler](/scripts/slave/recipes/cros_flash_scheduler.py)
+
+[DEPS](/scripts/slave/recipes/cros_flash_scheduler.py#27): [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
+
+This recipe is used to keep Chrome's pools of CrOS DUTs up to date.
+
+It does so by launching tasks into the DUT pools which flash the devices.
+When ran, this recipe aims to get a portion of a given pool on the latest
+CHROMEOS_LKGM version. It will never flash more than a third of the pool at a
+single time. This is to ensure the remainder of the pool is online for tests.
+Consequently, this recipe will need to be run multiple times to upgrade the
+entire pool.
+
+This recipe is intended to run several times during MTV's off-peak hours. Its
+builder should be backed by a single thin Ubuntu VM, while the tasks it launches
+run the cros_flash recipe and run on DUT swarming bots.
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/cros_flash_scheduler.py#110)(api, swarming_server, swarming_pool, device_type, bb_host):**
+
+&mdash; **def [get\_bots\_in\_pool](/scripts/slave/recipes/cros_flash_scheduler.py#69)(api, swarming_server, pool, device_type):**
+
+Returns the list of bots that belong to the given pool.
+
+This uses swarming.py's bot/list query, and returns the resulting bots.
 ### *recipes* / [crrev:examples/full](/scripts/slave/recipe_modules/crrev/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/crrev/examples/full.py#9): [crrev](#recipe_modules-crrev), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
