@@ -167,8 +167,8 @@ def RunSteps(api, buildername):
   check_different_build_dirs = target_platform == 'win'
 
   # Since disk lacks in Mac, we need to remove files before build.
-  # In check_different_build_dirs, only clobber the secondary build dir.
-  for ext in '2' if check_different_build_dirs else '12':
+  # In check_different_build_dirs, only the .2 build dir exists here.
+  for ext in '12':
     p = str(api.chromium.output_dir).rstrip('\\/') + '.' + ext
     api.file.rmtree('rmtree %s' % p, p)
 
