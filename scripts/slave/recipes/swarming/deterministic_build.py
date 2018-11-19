@@ -177,10 +177,10 @@ def RunSteps(api, buildername):
   enable_isolate = target_platform != 'android'
 
   api.chromium.ensure_goma()
-
-  # Do a first build and move the build artifact to the temp directory.
   with api.context(cwd=solution_path):
     api.chromium.runhooks()
+
+  # Do a first build and move the build artifact to the temp directory.
   api.chromium.mb_gen(api.properties.get('mastername'), buildername)
   api.chromium.mb_isolate_everything(api.properties.get('mastername'),
                                      buildername)
@@ -194,9 +194,6 @@ def RunSteps(api, buildername):
                        str(api.chromium.output_dir).rstrip('\\/') + '.1')
 
   # Do the second build and move the build artifact to the temp directory.
-  with api.context(cwd=solution_path):
-    api.chromium.runhooks()
-
   build_dir, target = None, None
   if check_different_build_dirs:
     build_dir = '//out/Release.2'
