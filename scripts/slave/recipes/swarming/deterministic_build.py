@@ -155,8 +155,20 @@ def RunSteps(api, buildername):
   with api.context(cwd=solution_path):
     ConfigureChromiumBuilder(api, recipe_config)
 
+  # The default setup by this recipe is to do a clobber build in one directory,
+  # move it elsewhere, then do another clobber build in the original directory,
+  # and then to compare the two directories. This doesn't check that
+  # different build directories produce the same output, and it doesn't check
+  # that incremental builds produce the same output as clobber builds.
+  # If check_different_build_dirs is set, the recipe instead does an incremental
+  # build in the usual build dir and a clobber build in a differently-named
+  # build dir and then compares the outputs.
+  # TODO(thakis): Do this on all platforms, https://crbug.com/899438
+  check_different_build_dirs = target_platform == 'win'
+
   # Since disk lacks in Mac, we need to remove files before build.
-  for ext in '12':
+  # In check_different_build_dirs, only clobber the secondary build dir.
+  for ext in '2' if check_different_build_dirs else '12':
     p = str(api.chromium.output_dir).rstrip('\\/') + '.' + ext
     api.file.rmtree('rmtree %s' % p, p)
 
@@ -178,27 +190,42 @@ def RunSteps(api, buildername):
     # This archives the results and regenerate the .isolated files.
     api.isolate.isolate_tests(api.chromium.output_dir)
 
-  MoveBuildDirectory(api, str(api.chromium.output_dir),
-                     str(api.chromium.output_dir).rstrip('\\/') + '.1')
+  if not check_different_build_dirs:
+    MoveBuildDirectory(api, str(api.chromium.output_dir),
+                       str(api.chromium.output_dir).rstrip('\\/') + '.1')
 
   # Do the second build and move the build artifact to the temp directory.
   with api.context(cwd=solution_path):
     api.chromium.runhooks()
-  api.chromium.mb_gen(api.properties.get('mastername'), buildername)
+
+  build_dir, target = None, None
+  if check_different_build_dirs:
+    build_dir = '//out/Release.2'
+    target = 'Release.2'
+  api.chromium.mb_gen(api.properties.get('mastername'), buildername,
+                      build_dir=build_dir)
   api.chromium.mb_isolate_everything(api.properties.get('mastername'),
-                                     buildername)
-  api.chromium.compile(targets, name='Second build', use_goma_module=True)
+                                     buildername, build_dir=build_dir)
+  api.chromium.compile(targets, name='Second build', use_goma_module=True,
+                       target=target)
   if enable_isolate:
     # This should be quick if the build is indeed deterministic.
-    api.isolate.isolate_tests(api.chromium.output_dir)
-  MoveBuildDirectory(api, str(api.chromium.output_dir),
-                     str(api.chromium.output_dir).rstrip('\\/') + '.2')
+    second_dir = str(api.chromium.output_dir)
+    if check_different_build_dirs:
+      second_dir = second_dir.rstrip('\\/') + '.2'
+    api.isolate.isolate_tests(api.path.abs_to_path(second_dir))
+  if not check_different_build_dirs:
+    MoveBuildDirectory(api, str(api.chromium.output_dir),
+                       str(api.chromium.output_dir).rstrip('\\/') + '.2')
 
   # Compare the artifacts from the 2 builds, raise an exception if they're
   # not equals.
   # TODO(sebmarchand): Do a smarter comparison.
+  first_dir = str(api.chromium.output_dir)
+  if not check_different_build_dirs:
+    first_dir = first_dir.rstrip('\\/') + '.1'
   api.isolate.compare_build_artifacts(
-      str(api.chromium.output_dir).rstrip('\\/') + '.1',
+      first_dir, 
       str(api.chromium.output_dir).rstrip('\\/') + '.2')
 
 
