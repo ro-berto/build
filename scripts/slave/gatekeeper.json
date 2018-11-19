@@ -331,6 +331,48 @@
 
         "forgive_all": true,
         "builders": {
+          "Afl Upload Linux ASan": {
+            "tree_notify": [
+              "chromesec-lkgr-failures@google.com"
+            ],
+            "forgiving_optional": ["*"]
+          },
+          "Libfuzzer Upload Linux ASan": {
+            "tree_notify": [
+              "chromesec-lkgr-failures@google.com"
+            ],
+            "forgiving_optional": ["*"]
+          },
+          "Libfuzzer Upload Linux ASan Debug": {
+            "tree_notify": [
+              "chromesec-lkgr-failures@google.com"
+            ],
+            "forgiving_optional": ["*"]
+          },
+          "Libfuzzer Upload Linux MSan": {
+            "tree_notify": [
+              "chromesec-lkgr-failures@google.com"
+            ],
+            "forgiving_optional": ["*"]
+          },
+          "Libfuzzer Upload Linux UBSan": {
+            "tree_notify": [
+              "chromesec-lkgr-failures@google.com"
+            ],
+            "forgiving_optional": ["*"]
+          },
+          "Libfuzzer Upload Mac ASan": {
+            "tree_notify": [
+              "chromesec-lkgr-failures@google.com"
+            ],
+            "forgiving_optional": ["*"]
+          },
+          "Libfuzzer Upload Windows ASan": {
+            "tree_notify": [
+              "chromesec-lkgr-failures@google.com"
+            ],
+            "forgiving_optional": ["*"]
+          },
           "*": {
             "forgiving_optional": ["*"]
           }
