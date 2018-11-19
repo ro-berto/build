@@ -118,7 +118,6 @@ def ConfigureChromiumBuilder(api, recipe_config):
   api.chromium.set_config(recipe_config['chromium_config'],
                           **recipe_config.get('chromium_config_kwargs',
                                               {'BUILD_CONFIG': 'Release'}))
-  api.chromium.apply_config('clobber')
   api.gclient.set_config(recipe_config['gclient_config'],
                          **recipe_config.get('gclient_config_kwargs', {}))
 
