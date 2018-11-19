@@ -590,7 +590,8 @@ SPEC['builders'].update([
            chromium_config='clang_tot_android',
            ninja_confirm_noop=False,
            target_arch='arm',
-           target_bits=32),
+           target_bits=32,
+           sizes=False),
 
     config('ToTLinux'),
 
