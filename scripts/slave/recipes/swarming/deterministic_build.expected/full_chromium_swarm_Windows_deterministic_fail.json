@@ -677,6 +677,26 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
+      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release.1"
+    ],
+    "name": "Move [CACHE]\\builder\\src\\out\\Release to [CACHE]\\builder\\src\\out\\Release.1",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[2]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  shutil.rmtree(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.move(sys.argv[1], sys.argv[2])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "lookup",
       "-m",
@@ -713,7 +733,7 @@
       "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client",
-      "//out/Release.2"
+      "//out/Release"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -736,7 +756,7 @@
       "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
       "[CACHE]\\goma\\client",
-      "//out/Release.2"
+      "//out/Release"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -844,7 +864,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Release.2",
+      "[CACHE]\\builder\\src\\out\\Release",
       "-j",
       "20",
       "all"
@@ -862,7 +882,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\Release.2",
+      "[CACHE]\\builder\\src\\out\\Release",
       "-j",
       "20",
       "all",
@@ -983,9 +1003,9 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]\\builder\\src\\out\\Release.2",
+      "[CACHE]\\builder\\src\\out\\Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release.2\", \"-j\", 20, \"all\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release\", \"-j\", 20, \"all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1055,15 +1075,15 @@
       "--json-output",
       "/path/to/tmp/json",
       "glob",
-      "[CACHE]\\builder\\src\\out\\Release.2",
+      "[CACHE]\\builder\\src\\out\\Release",
       "*.isolated.gen.json"
     ],
     "infra_step": true,
     "name": "find isolated targets (2)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@glob@[CACHE]\\builder\\src\\out\\Release.2\\dummy_target_1.isolated.gen.json@@@",
-      "@@@STEP_LOG_LINE@glob@[CACHE]\\builder\\src\\out\\Release.2\\dummy_target_2.isolated.gen.json@@@",
+      "@@@STEP_LOG_LINE@glob@[CACHE]\\builder\\src\\out\\Release\\dummy_target_1.isolated.gen.json@@@",
+      "@@@STEP_LOG_LINE@glob@[CACHE]\\builder\\src\\out\\Release\\dummy_target_2.isolated.gen.json@@@",
       "@@@STEP_LOG_END@glob@@@"
     ]
   },
@@ -1080,8 +1100,8 @@
       "https://isolateserver.appspot.com",
       "--eventlog-endpoint",
       "prod",
-      "[CACHE]\\builder\\src\\out\\Release.2\\dummy_target_1.isolated.gen.json",
-      "[CACHE]\\builder\\src\\out\\Release.2\\dummy_target_2.isolated.gen.json"
+      "[CACHE]\\builder\\src\\out\\Release\\dummy_target_1.isolated.gen.json",
+      "[CACHE]\\builder\\src\\out\\Release\\dummy_target_2.isolated.gen.json"
     ],
     "name": "isolate tests (2)",
     "~followup_annotations": [
@@ -1097,9 +1117,29 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport os\nimport shutil\nimport sys\nif os.path.exists(sys.argv[2]):\n  shutil.rmtree(sys.argv[2])\nshutil.move(sys.argv[1], sys.argv[2])",
+      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release.2"
+    ],
+    "name": "Move [CACHE]\\builder\\src\\out\\Release to [CACHE]\\builder\\src\\out\\Release.2",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(sys.argv[2]):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  shutil.rmtree(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.move(sys.argv[1], sys.argv[2])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]\\builder\\src\\tools\\determinism\\compare_build_artifacts.py",
       "--first-build-dir",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release.1",
       "--second-build-dir",
       "[CACHE]\\builder\\src\\out\\Release.2",
       "--target-platform",
@@ -1131,7 +1171,7 @@
       "-u",
       "[CACHE]\\builder\\src\\tools\\determinism\\create_diffs_tarball.py",
       "--first-build-dir",
-      "[CACHE]\\builder\\src\\out\\Release",
+      "[CACHE]\\builder\\src\\out\\Release.1",
       "--second-build-dir",
       "[CACHE]\\builder\\src\\out\\Release.2",
       "--json-input",

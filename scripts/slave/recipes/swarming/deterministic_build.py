@@ -163,7 +163,9 @@ def RunSteps(api, buildername):
   # build in the usual build dir and a clobber build in a differently-named
   # build dir and then compares the outputs.
   # TODO(thakis): Do this on all platforms, https://crbug.com/899438
-  check_different_build_dirs = target_platform == 'win'
+  # This is currently blocked on the .isolated files containing the name
+  # of the build directory.
+  check_different_build_dirs = False
 
   # Since disk lacks in Mac, we need to remove files before build.
   # In check_different_build_dirs, only the .2 build dir exists here.
@@ -196,8 +198,8 @@ def RunSteps(api, buildername):
   # Do the second build and move the build artifact to the temp directory.
   build_dir, target = None, None
   if check_different_build_dirs:
-    build_dir = '//out/Release.2'
-    target = 'Release.2'
+    build_dir = '//out/Release.2'  # pragma: no cover
+    target = 'Release.2'  # pragma: no cover
   api.chromium.mb_gen(api.properties.get('mastername'), buildername,
                       build_dir=build_dir)
   api.chromium.mb_isolate_everything(api.properties.get('mastername'),
@@ -208,7 +210,7 @@ def RunSteps(api, buildername):
     # This should be quick if the build is indeed deterministic.
     second_dir = str(api.chromium.output_dir)
     if check_different_build_dirs:
-      second_dir = second_dir.rstrip('\\/') + '.2'
+      second_dir = second_dir.rstrip('\\/') + '.2'  # pragma: no cover
     api.isolate.isolate_tests(api.path.abs_to_path(second_dir))
   if not check_different_build_dirs:
     MoveBuildDirectory(api, str(api.chromium.output_dir),
