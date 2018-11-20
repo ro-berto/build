@@ -52,6 +52,10 @@ LKGM_RE = re.compile(r'\d+\.\d+\.\d+')
 # GS bucket that stores test images for all CrOS boards.
 CHROMEOS_IMAGE_BUCKET = 'chromeos-image-archive'
 
+# The name of the builder to which every DUT swarming bot belongs. This builder
+# exists solely so the bots can run the cros_flash recipe.
+DUT_FLASHING_BUILDER = 'cros-dut-flash'
+
 PROPERTIES = {
   'swarming_server': Property(
       kind=str,
@@ -149,6 +153,36 @@ def get_closest_available_version(api, board, lkgm_base):
   return None
 
 
+def trigger_flash(api, bot, pool, gs_image_path):
+  build_req = {
+    'bucket': pool,
+    'parameters': {
+      'builder_name': DUT_FLASHING_BUILDER,
+      'properties': {
+        'gs_image_bucket': CHROMEOS_IMAGE_BUCKET,
+        # gs_image_path expects everything to the right of the bucket name
+        'gs_image_path': gs_image_path.split(CHROMEOS_IMAGE_BUCKET+'/')[1],
+      },
+      'swarming': {
+        'override_builder_cfg': {
+          'dimensions': [
+            'id:%s' % bot.id,
+            # Append the device's current OS to the request. This
+            # ensures that if its OS changes unexpectedly, we don't
+            # overwrite it.
+            'device_os:%s' % bot.os,
+          ],
+        },
+      },
+    },
+  }
+  result = api.buildbucket.put([build_req], name=bot.id)
+  build_id = result.stdout['results'][0]['build']['id']
+  build_url = result.stdout['results'][0]['build']['url']
+  result.presentation.links[build_id] = build_url
+  return build_id
+
+
 def RunSteps(api, swarming_server, swarming_pool, device_type, bb_host):
   api.swarming_client.checkout(revision='master')
 
@@ -208,7 +242,36 @@ def RunSteps(api, swarming_server, swarming_pool, device_type, bb_host):
         'No flashes are necessary since all bots are up to date.']
     return
 
-  # TODO(bpastene): Flash the out of date bots.
+  # Select a subset (of at least 10 and up to 33%) of the DUTs to flash.
+  # This ensures that at least 67% of the pool stays online so tests can
+  # continue to run.
+  num_available_bots = len(up_to_date_bots) + len(out_of_date_bots)
+  max_num_to_flash = max(num_available_bots / 3, 10)
+  bots_to_flash = out_of_date_bots[0:max_num_to_flash]
+  flashing_requests = set()
+  with api.step.nest('flash bots'):
+    for bot in bots_to_flash:
+      flashing_requests.add(
+          trigger_flash(api, bot, swarming_pool, gs_image_path))
+
+  # Wait for all the flashing jobs. Nest it under a single step since there
+  # will be several buildbucket.get_build() step calls.
+  finished_builds = []
+  with api.step.nest('wait for %d flashing jobs' % len(flashing_requests)):
+    # Sleep indefinitely if the jobs never finish. Let swarming's task timeout
+    # kill us if we won't exit.
+    while flashing_requests:
+      api.python.inline('sleep for 1 min', 'import time; time.sleep(60)')
+      for build in flashing_requests.copy():
+        result = api.buildbucket.get_build(build)
+        if result.stdout['build']['status'] == 'COMPLETED':
+          finished_builds.append(result.stdout['build'])
+          flashing_requests.remove(build)
+
+  # TODO(bpastene): Retrigger the recipe if:
+  # - all triggered flash jobs were successful
+  # - all bots that were flashed are back up and healthy
+  # - there are more bots that need flashing
 
 
 def GenTests(api):
@@ -221,6 +284,30 @@ def GenTests(api):
         {
           'key': 'device_os',
           'value': [os],
+        }
+      ]
+    }
+
+  def bb_json_get(build_id, finished=True, result='SUCCESS'):
+    build = {
+      'build': {
+        'id': build_id,
+        'status': 'COMPLETED' if finished else 'RUNNING',
+        'url': 'https://some.build.url',
+      }
+    }
+    if finished:
+      build['build']['result'] = result
+    return build
+
+  def bb_json_put(build_id):
+    return {
+      'results': [
+        {
+          'build': {
+            'id': build_id,
+            'url': 'https://some.build.url',
+          }
         }
       ]
     }
@@ -254,6 +341,19 @@ def GenTests(api):
             bot_json('unhealthy_bot', '12345', quarantined=True),
           ]
         })) +
+    api.step_data(
+        'flash bots.out_of_date_bot',
+        stdout=api.json.output(bb_json_put('1234567890'))) +
+    # Build finises after the third buildbucket query.
+    api.step_data(
+        'wait for 1 flashing jobs.buildbucket.get',
+        stdout=api.json.output(bb_json_get('1234567890', finished=False))) +
+    api.step_data(
+        'wait for 1 flashing jobs.buildbucket.get (2)',
+        stdout=api.json.output(bb_json_get('1234567890', finished=False))) +
+    api.step_data(
+        'wait for 1 flashing jobs.buildbucket.get (3)',
+        stdout=api.json.output(bb_json_get('1234567890'))) +
     api.post_process(post_process.StatusSuccess)
   )
 
