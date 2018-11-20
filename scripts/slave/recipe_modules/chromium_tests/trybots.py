@@ -864,6 +864,39 @@ TRYBOTS = freeze({
   # can be triggered from the Dawn CQ.
   'tryserver.chromium.dawn': {
     'builders': {
+      'linux-dawn-rel': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Linux Builder',
+            'tester': 'Dawn GPU Linux Release (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Linux Builder',
+            'tester': 'Dawn GPU Linux Release (Intel HD 630)',
+          },
+        ],
+      },
+      'mac-dawn-rel': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Mac Builder',
+            'tester': 'Dawn GPU Mac Release (Intel)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Mac Builder',
+            'tester': 'Dawn GPU Mac Retina Release (NVIDIA)',
+          },
+          {
+            'mastername': 'chromium.gpu.fyi',
+            'buildername': 'GPU FYI Mac Builder',
+            'tester': 'Dawn GPU Mac Retina Release (AMD)',
+          },
+        ],
+      },
       'win-dawn-rel': {
         'bot_ids': [
           {

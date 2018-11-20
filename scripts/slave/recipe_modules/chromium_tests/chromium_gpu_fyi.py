@@ -1486,6 +1486,93 @@ SPEC = {
     # here only in order to allow the associated src-side JSON entries
     # to be read, and Dawn's GPU tryservers to be specified in terms
     # of them.
+    'Dawn GPU Linux Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+          'build_angle_deqp_tests'
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Linux Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Dawn GPU Linux Release (Intel HD 630)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop',
+          'build_angle_deqp_tests'
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Linux Builder',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+    'Dawn GPU Mac Release (Intel)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop'
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Mac Builder',
+      'testing': {
+        'platform': 'mac',
+      },
+    },
+    'Dawn GPU Mac Retina Release (NVIDIA)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop'
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Mac Builder',
+      'testing': {
+        'platform': 'mac',
+      },
+    },
+    'Dawn GPU Mac Retina Release (AMD)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+          'mb',
+          'ninja_confirm_noop'
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'bot_type': 'tester',
+      'parent_buildername': 'GPU FYI Mac Builder',
+      'testing': {
+        'platform': 'mac',
+      },
+    },
     'Dawn GPU Win10 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
