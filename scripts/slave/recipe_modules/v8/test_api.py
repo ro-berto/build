@@ -472,7 +472,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     else:
       properties_fn = self.m.properties.generic
 
-    kwargs.setdefault('branch', 'master')
     kwargs.setdefault('path_config', 'kitchen')
     test = (
         recipe_test_api.RecipeTestApi.test(
@@ -519,7 +518,6 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       test += self.m.properties(
           category='cq',
           master='tryserver.v8',
-          patch_project='v8',
           reason='CQ',
           revision='deadbeef'*5,
           try_job_key='1234',

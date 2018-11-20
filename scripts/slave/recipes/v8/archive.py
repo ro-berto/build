@@ -17,6 +17,7 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/git',
   'depot_tools/gsutil',
+  'recipe_engine/buildbucket',
   'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -47,7 +48,7 @@ RELEASE_BRANCH_RE = re.compile(r'^(?:refs/branch-heads/)?(\d+\.\d+)$')
 FIRST_BUILD_IN_MILESTONE_RE = re.compile(r'^\d+\.\d+\.\d+$')
 
 
-def make_archive(api, branch, version, archive_type, step_suffix='',
+def make_archive(api, ref, version, archive_type, step_suffix='',
                  archive_suffix=''):
   with api.step.nest('make archive' + step_suffix) as parent:
     # Make a list of files to archive.
@@ -86,7 +87,7 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
         archive_suffix, build_config)
     )
     archive_name = '%s-%s.zip' % (archive_prefix, version)
-    branch_match = RELEASE_BRANCH_RE.match(branch)
+    branch_match = RELEASE_BRANCH_RE.match(ref)
     gs_path_suffix = branch_match.group(1) if branch_match else 'canary'
     gs_path = 'chromium-v8/official/%s' % gs_path_suffix
     api.gsutil.upload(
@@ -108,7 +109,7 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
 
     # Upload first build for the latest milestone to a known location. We use
     # these binaries for running reference perf tests.
-    if (RELEASE_BRANCH_RE.match(branch) and
+    if (RELEASE_BRANCH_RE.match(ref) and
         FIRST_BUILD_IN_MILESTONE_RE.match(version) and
         archive_type == 'exe'):
       platform = '%s%s%s%s' % (api.chromium.c.TARGET_PLATFORM, arch_name,
@@ -140,8 +141,8 @@ def make_archive(api, branch, version, archive_type, step_suffix='',
 def RunSteps(api, build_config, target_arch, target_bits, target_platform):
   with api.step.nest('initialization'):
     # Ensure a proper branch is specified.
-    branch = api.properties.get('branch')
-    if not branch or not BRANCH_RE.match(branch):
+    ref = api.buildbucket.gitiles_commit.ref
+    if not ref or not BRANCH_RE.match(ref):
       api.step('Skipping due to missing release branch.', cmd=None)
       return
 
@@ -192,10 +193,10 @@ def RunSteps(api, build_config, target_arch, target_bits, target_platform):
 
   if api.chromium.c.BUILD_CONFIG == 'Debug':
     # Debug binaries require libraries to be present in the same archive to run.
-    make_archive(api, branch, version, 'all')
+    make_archive(api, ref, version, 'all')
   else:
-    make_archive(api, branch, version, 'exe')
-    make_archive(api, branch, version, 'lib', ' (libs)', '-libs')
+    make_archive(api, ref, version, 'exe')
+    make_archive(api, ref, version, 'lib', ' (libs)', '-libs')
 
 
 
@@ -204,11 +205,12 @@ def GenTests(api):
     return (
         api.test(api.v8.test_name('client.v8.official', 'V8 Foobar', name)) +
         api.properties.generic(mastername='client.v8.official',
-                               buildername='V8 Foobar',
-                               branch='refs/branch-heads/3.4',
                                revision='a' * 40,
                                path_config='kitchen',
                                **kwargs) +
+        api.buildbucket.ci_build(
+          project='v8/v8', builder='V8 Foobar',
+          git_ref='refs/branch-heads/3.4') +
         api.platform(platform, 64) +
         api.v8.version_file(17, 'head', prefix='initialization.') +
         api.override_step_data(
@@ -294,11 +296,11 @@ def GenTests(api):
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'no_branch')) +
       api.properties.generic(mastername=mastername,
-                             buildername=buildername,
                              revision='a' * 40,
                              path_config='kitchen',
                              build_config='Release',
                              target_bits=64) +
+      api.buildbucket.ci_build(project='v8/v8', builder=buildername) +
       api.post_process(
         MustRun, 'initialization.Skipping due to missing release branch.') +
       api.post_process(
@@ -314,12 +316,12 @@ def GenTests(api):
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'no_tag')) +
       api.properties.generic(mastername=mastername,
-                             buildername=buildername,
-                             branch='refs/branch-heads/3.4',
                              revision='a' * 40,
                              path_config='kitchen',
                              build_config='Release',
                              target_bits=64) +
+      api.buildbucket.ci_build(
+        project='v8/v8', builder=buildername, git_ref='refs/branch-heads/3.4') +
       api.v8.version_file(17, 'head', prefix='initialization.') +
       api.override_step_data(
           'initialization.git describe',
@@ -337,11 +339,13 @@ def GenTests(api):
   buildername = 'V8 Foobar'
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'update_beta')) +
-      api.properties.generic(mastername=mastername, buildername=buildername,
-                             branch='refs/branch-heads/3.4',
+      api.properties.generic(mastername=mastername,
                              revision='a' * 40, path_config='kitchen',
                              build_config='Release',
                              target_bits=64) +
+      api.buildbucket.ci_build(
+        project='v8/v8', builder=buildername,
+        git_ref='refs/branch-heads/3.4') +
       api.v8.version_file(0, 'head', prefix='initialization.') +
       api.override_step_data(
           'initialization.git describe', api.raw_io.stream_output('3.4.3')) +
@@ -353,11 +357,13 @@ def GenTests(api):
   buildername = 'V8 Foobar'
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'canary')) +
-      api.properties.generic(mastername=mastername, buildername=buildername,
-                             branch='refs/heads/3.4.3', revision='a' * 40,
+      api.properties.generic(mastername=mastername,
+                             revision='a' * 40,
                              path_config='kitchen',
                              build_config='Release',
                              target_bits=64) +
+      api.buildbucket.ci_build(
+        project='v8/v8', builder=buildername, git_ref='refs/heads/3.4.3') +
       api.v8.version_file(1, 'head', prefix='initialization.') +
       api.override_step_data(
           'initialization.git describe', api.raw_io.stream_output('3.4.3.1')) +

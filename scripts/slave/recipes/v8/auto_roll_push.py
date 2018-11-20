@@ -6,6 +6,7 @@ DEPS = [
   'depot_tools/bot_update',
   'chromium',
   'depot_tools/gclient',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -36,7 +37,7 @@ def RunSteps(api):
 
   with api.context(cwd=api.path['checkout']):
     safe_buildername = ''.join(
-      c if c.isalnum() else '_' for c in api.properties['buildername'])
+      c if c.isalnum() else '_' for c in api.buildbucket.builder_name)
     push_arg = [] if api.runtime.is_experimental else ['--push']
     push_account = (
         # TODO(sergiyb): Replace with api.service_account.default().get_email()
