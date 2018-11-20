@@ -1863,7 +1863,7 @@ Returns:
     * used (float): disk usage, in MiB.
 ### *recipe_modules* / [docker](/scripts/slave/recipe_modules/docker)
 
-[DEPS](/scripts/slave/recipe_modules/docker/__init__.py#5): [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account]
+[DEPS](/scripts/slave/recipe_modules/docker/__init__.py#5): [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/service\_account][recipe_engine/recipe_modules/service_account], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [DockerApi](/scripts/slave/recipe_modules/docker/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -1873,7 +1873,8 @@ Provides steps to connect and run Docker images.
 
 Connect to a Docker registry.
 
-This step must be executed before any other step in this module.
+This step must be executed before any other step in this module that
+requires authentication.
 
 Args:
   server: Docker server to connect to.
@@ -1883,7 +1884,7 @@ Args:
       associated service account.
   step_name: Override step name. Default is 'docker login'.
 
-&mdash; **def [run](/scripts/slave/recipe_modules/docker/api.py#51)(self, image, step_name=None, cmd_args=None, dir_mapping=None, \*\*kwargs):**
+&mdash; **def [run](/scripts/slave/recipe_modules/docker/api.py#52)(self, image, step_name=None, cmd_args=None, dir_mapping=None, \*\*kwargs):**
 
 Run a command in a Docker image as the current user:group.
 

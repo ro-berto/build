@@ -1,6 +1,13 @@
 [
   {
     "cmd": [
+      "docker",
+      "version"
+    ],
+    "name": "docker version"
+  },
+  {
+    "cmd": [
       "luci-auth",
       "token",
       "-scopes",
@@ -43,6 +50,16 @@
       "cmd"
     ],
     "name": "docker run"
+  },
+  {
+    "cmd": [
+      "docker",
+      "--config",
+      "[CLEANUP]/.docker",
+      "push",
+      "gcr.io/chromium-container-registry/image:2018-11-16-01-25"
+    ],
+    "name": "docker push"
   },
   {
     "jsonResult": null,

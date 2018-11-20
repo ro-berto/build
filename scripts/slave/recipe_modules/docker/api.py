@@ -18,7 +18,8 @@ class DockerApi(recipe_api.RecipeApi):
             service_account=None, step_name=None, **kwargs):
     """Connect to a Docker registry.
 
-    This step must be executed before any other step in this module.
+    This step must be executed before any other step in this module that
+    requires authentication.
 
     Args:
       server: Docker server to connect to.
@@ -80,3 +81,20 @@ class DockerApi(recipe_api.RecipeApi):
         step_name or 'docker run',
         self.resource('docker_run.py'),
         args=args, **kwargs)
+
+  def __call__(self, *args, **kwargs):
+    """Executes specified docker command.
+
+    Please make sure to use api.docker.login method before if specified command
+    requires authentication.
+
+    Args:
+      args: arguments passed to the 'docker' command including subcommand name,
+          e.g. api.docker('push', 'my_image:latest').
+      kwargs: arguments passed down to api.step module.
+    """
+    cmd = ['docker']
+    if '--config' not in args and self._config_file:
+      cmd += ['--config', self._config_file]
+    step_name = kwargs.pop('step_name', 'docker %s' % args[0])
+    return self.m.step(step_name, cmd + list(args), **kwargs)
