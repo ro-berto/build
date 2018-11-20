@@ -70,12 +70,14 @@ def RunSteps(api):
       api.buildbucket.builder_name,
       today.strftime('%Y/%m/%d'),
       api.buildbucket.build.id)
-    api.gsutil.upload(
+    result = api.gsutil.upload(
       source=_get_bin_directory(api, checkout).join('**'),
       bucket='celab',
       dest=gs_dest,
       name='upload CELab binaries',
-      link_name='CELab binaries')
+      link_name=None)
+    link = 'https://console.cloud.google.com/storage/celab/%s' % gs_dest
+    result.presentation.links['CELab binaries'] = link
 
 
 def GenTests(api):
