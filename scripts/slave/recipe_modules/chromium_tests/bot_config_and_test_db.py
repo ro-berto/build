@@ -90,19 +90,13 @@ class BotConfig(object):
       # in the bot_config instead of reading it from a file.
       if 'source_side_spec' in bot_config: # pragma: no cover
         return { self._bot_ids[0].buildername: bot_config['source_side_spec'] }
-      # TODO(martiniss): Remove below once callers are migrated to new name.
-      if 'test_spec' in bot_config: # pragma: no cover
-        return { self._bot_ids[0].buildername: bot_config['test_spec'] }
 
     # TODO(phajdan.jr): Get rid of disable_tests.
     if self.get('disable_tests'):
       return {}
 
-    source_side_spec_file = self.get('testing', {}).get('source_side_spec_file')
-    # TODO(martiniss): remove this
-    if not source_side_spec_file:
-      source_side_spec_file = self.get('testing', {}).get(
-          'test_spec_file', '%s.json' % mastername)
+    source_side_spec_file = self.get('testing', {}).get(
+        'source_side_spec_file', '%s.json' % mastername)
 
     return chromium_tests_api.read_source_side_spec(source_side_spec_file)
 

@@ -12,7 +12,6 @@ def BaseConfig(CHECKOUT_PATH, **_kwargs):
     staging = Single(bool, empty_val=False, required=False),
     source_side_spec_dir = Single(Path),
     # TODO(martiniss): Remove this and all uses
-    test_spec_dir = Single(Path),
     CHECKOUT_PATH = Static(CHECKOUT_PATH),
     # If set, bypass the deapply patch and retry.
     only_with_patch = Single(bool, empty_val=False, required=False)
@@ -24,7 +23,6 @@ config_ctx = config_item_context(BaseConfig)
 @config_ctx()
 def chromium(c):
   c.source_side_spec_dir = c.CHECKOUT_PATH.join('testing', 'buildbot')
-  c.test_spec_dir = c.CHECKOUT_PATH.join('testing', 'buildbot')
 
 @config_ctx()
 def staging(c):

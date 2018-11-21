@@ -27,7 +27,7 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {
         'platform': 'linux',
-        'test_spec_file': 'chromium.linux.json',
+        'source_side_spec_file': 'chromium.linux.json',
       },
     },
     'V8 Linux GN': {
@@ -56,7 +56,7 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {
         'platform': 'linux',
-        'test_spec_file': 'chromium.linux.json',
+        'source_side_spec_file': 'chromium.linux.json',
       },
     },
     'Android Builder': {
@@ -90,7 +90,7 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {
         'platform': 'linux',
-        'test_spec_file': 'chromium.linux.json',
+        'source_side_spec_file': 'chromium.linux.json',
       },
     },
     'V8 Android GN (dbg)': {
@@ -118,7 +118,7 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {
         'platform': 'linux',
-        'test_spec_file': 'chromium.linux.json',
+        'source_side_spec_file': 'chromium.linux.json',
       },
     },
     # Bot names should be in sync with chromium.linux's names to retrieve the
@@ -141,7 +141,7 @@ SPEC = {
       'parent_buildername': 'Linux Debug Builder',
       'testing': {
         'platform': 'linux',
-        'test_spec_file': 'chromium.linux.json',
+        'source_side_spec_file': 'chromium.linux.json',
       },
     },
     'Linux ASAN Builder': {
@@ -166,7 +166,7 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'testing': {
         'platform': 'linux',
-        'test_spec_file': 'chromium.memory.json',
+        'source_side_spec_file': 'chromium.memory.json',
       },
     },
     'Linux Snapshot Builder': {
@@ -189,7 +189,7 @@ SPEC = {
       'gs_acl': 'public-read',
       'testing': {
         'platform': 'linux',
-        'test_spec_file': 'chromium.linux.json',
+        'source_side_spec_file': 'chromium.linux.json',
       },
     },
     # GPU bots.
