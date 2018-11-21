@@ -11,6 +11,7 @@ DEPS = [
   'chromium',
   'depot_tools/gclient',
   'depot_tools/infra_paths',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -182,8 +183,8 @@ def GenTests(api):
         'client.v8.branches',
         'V8 Foobar',
         'branch_sync_failure',
-        branch='refs/branch-heads/4.3',
     ) +
+    api.buildbucket.ci_build(project='v8/v8', git_ref='refs/branch-heads/4.3') +
     api.step_data('initialization.bot_update', retcode=1)
   )
 
@@ -217,7 +218,6 @@ def GenTests(api):
         parent_buildername='v8_foobar_rel_ng',
         parent_bot_config=release_bot_config,
         parent_test_spec=test_spec,
-        patch_project='v8',
         blamelist=['dude@chromium.org'],
     )
   )
@@ -573,7 +573,6 @@ def GenTests(api):
         parent_bot_config=release_bot_config,
         parent_test_spec=test_spec,
         requester='commit-bot@chromium.org',
-        patch_project='v8',
         blamelist=['dude@chromium.org'],
     ) +
     api.override_step_data(

@@ -12,6 +12,7 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/gerrit',
   'depot_tools/git',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -104,7 +105,7 @@ def GetDEPS(api, name, repo):
 
 def RunSteps(api):
   # Configure this particular instance of the auto-roller.
-  bot_config = BOT_CONFIGS[api.properties.get('buildername')]
+  bot_config = BOT_CONFIGS[api.buildbucket.builder_name]
 
   # Bail out on existing roll. Needs to be manually closed.
   # TODO(machenbach): Add auto-abandon on stale roll.
@@ -152,7 +153,7 @@ def RunSteps(api):
     'src/tools/valgrind': None,
     'src/v8': None,
   })
-  api.v8.checkout()
+  api.v8.checkout(ignore_input_commit=True)
 
   # Enforce a clean state.
   with api.context(
@@ -280,8 +281,8 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
     return (
         api.test(testname) +
         api.properties.generic(mastername='client.v8.fyi',
-                               buildername=buildername,
                                path_config='kitchen') +
+        api.buildbucket.ci_build(project='v8/v8', builder=buildername) +
         api.override_step_data(
             'gclient get v8 deps',
             api.raw_io.stream_output(v8_deps_info, stream='stdout'),
@@ -323,8 +324,8 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
   yield (
       api.test('stale_roll') +
       api.properties.generic(mastername='client.v8.fyi',
-                             buildername='Auto-roll - v8 deps',
                              path_config='kitchen') +
+      api.buildbucket.ci_build(project='v8/v8', builder='Auto-roll - v8 deps') +
       api.override_step_data(
           'gerrit changes', api.json.output(
               [{'_number': '123', 'subject': 'Update V8 DEPS.'}])) +

@@ -23,6 +23,7 @@ from recipe_engine.post_process import DropExpectation, MustRun
 DEPS = [
   'depot_tools/gclient',
   'depot_tools/git',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/path',
@@ -36,7 +37,7 @@ DEPS = [
 ]
 
 REPO = 'https://chromium.googlesource.com/v8/v8'
-BRANCH_RE = re.compile(r'^\d+\.\d+$')
+RELEASE_BRANCH_REF_RE = re.compile(r'^refs/branch-heads/\d+\.\d+$')
 MAX_COMMIT_WAIT_RETRIES = 5
 
 # TODO(sergiyb): Replace with api.service_account.default().get_email() when
@@ -163,13 +164,10 @@ def IncrementVersion(api, ref, latest_version, latest_version_file):
 
 def RunSteps(api):
   # Ensure a proper branch is specified.
-  branch = api.properties.get('branch')
-  # The luci-scheduler service specifies fully-qualified branch name, therefore
-  # remove the refs/branch-heads/ prefix if present.
-  if branch and branch.startswith('refs/branch-heads/'):
-    branch = branch[len('refs/branch-heads/'):]
-  if not branch or not BRANCH_RE.match(branch):
-    raise api.step.InfraFailure('A release branch must be specified.')
+  ref = api.buildbucket.gitiles_commit.ref
+  if not ref or not RELEASE_BRANCH_REF_RE.match(ref):
+    raise api.step.InfraFailure('A ref for release branch must be specified.')
+  branch = ref[len('refs/branch-heads/'):]
   repo = api.properties.get('repo', REPO)
 
   local_branch_ref = 'refs/remotes/branch-heads/%s' % branch
@@ -252,9 +250,10 @@ def GenTests(api):
     test_data = (
         api.test(name) +
         api.properties.generic(mastername='client.v8.fyi',
-                               buildername='Auto-tag',
-                               branch='refs/branch-heads/3.4',
                                path_config='kitchen') +
+        api.buildbucket.ci_build(
+          project='v8/v8', builder='Auto-tag',
+          git_ref='refs/branch-heads/3.4') +
         api.v8.version_file(patch_level_latest, 'latest') +
         api.v8.version_file(patch_level_previous, 'previous') +
         api.v8.version_file(patch_level_after_commit, 'head') +
@@ -345,8 +344,8 @@ def GenTests(api):
   yield (
       api.test('missing_branch') +
       api.properties.generic(mastername='client.v8.fyi',
-                             buildername='Auto-tag',
-                             path_config='kitchen')
+                             path_config='kitchen') +
+      api.buildbucket.ci_build(project='v8/v8', builder='Auto-tag')
   )
   # Experimental mode.
   yield (

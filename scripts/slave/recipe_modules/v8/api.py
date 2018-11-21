@@ -124,7 +124,7 @@ class V8Api(recipe_api.RecipeApi):
         default['chromium_apply_config'] = ['default_compiler', 'goma', 'mb']
       else:
         default['chromium_apply_config'] = ['default_compiler', 'mb']
-    return (builders or {}).get(self.m.properties.get('buildername'), default)
+    return (builders or {}).get(self.m.buildbucket.builder_name, default)
 
   def update_bot_config(self, bot_config, binary_size_tracking, build_config,
                         clusterfuzz_archive, coverage, enable_swarming,
@@ -364,7 +364,7 @@ class V8Api(recipe_api.RecipeApi):
     revision = revision or self.m.properties.get(
         'parent_got_revision', self.m.properties.get('revision', 'HEAD'))
     solution = self.m.gclient.c.solutions[0]
-    branch = self.m.properties.get('branch', 'master')
+    branch = self.m.buildbucket.gitiles_commit.ref
     if RELEASE_BRANCH_RE.match(branch):
       revision = '%s:%s' % (branch, revision)
     solution.revision = revision
@@ -375,7 +375,7 @@ class V8Api(recipe_api.RecipeApi):
     else:
       # TODO(sergiyb): Deprecate this after migrating all builders to LUCI.
       safe_buildername = ''.join(
-          c if c.isalnum() else '_' for c in self.m.properties['buildername'])
+          c if c.isalnum() else '_' for c in self.m.buildbucket.builder_name)
       self.checkout_root = self.m.path['builder_cache'].join(safe_buildername)
 
     self.m.file.ensure_directory(
@@ -417,7 +417,7 @@ class V8Api(recipe_api.RecipeApi):
     """Calculates the commit hash a gerrit patch was branched off."""
     commits, _ = self.m.gitiles.log(
         url=V8_URL,
-        ref='master..%s' % self.m.properties['patch_ref'],
+        ref='master..%s' % self.m.tryserver.gerrit_change_fetch_ref,
         limit=100,
         step_name='Get patches',
         step_test_data=self.test_api.example_patch_range,
@@ -481,7 +481,7 @@ class V8Api(recipe_api.RecipeApi):
   def builderset(self):
     """Returns a list of names of this builder and all its triggered testers."""
     return (
-        [self.m.properties['buildername']] +
+        [self.m.buildbucket.builder_name] +
         list(self.bot_config.get('triggers', []))
     )
 
@@ -516,7 +516,7 @@ class V8Api(recipe_api.RecipeApi):
     """
     return [
       testing.create_test(test, self.m)
-      for test in test_spec.get_tests(self.m.properties['buildername'])
+      for test in test_spec.get_tests(self.m.buildbucket.builder_name)
     ]
 
   def dedupe_tests(self, high_prec_tests, low_prec_tests):
@@ -727,7 +727,7 @@ class V8Api(recipe_api.RecipeApi):
             'mb_config_path', 'infra/mb/mb_config.pyl')
         gn_args = self.m.chromium.mb_gen(
             self.m.properties['mastername'],
-            self.m.properties['buildername'],
+            self.m.buildbucket.builder_name,
             use_goma=use_goma,
             mb_config_path=(
                 mb_config_path or
@@ -797,7 +797,7 @@ class V8Api(recipe_api.RecipeApi):
   def _get_default_archive(self):
     return 'gs://chromium-v8/archives/%s/%s' % (
         self.m.properties['mastername'],
-        self.m.properties['buildername'],
+        self.m.buildbucket.builder_name,
     )
 
   def upload_build(self, name_suffix='', archive=None):
@@ -810,11 +810,9 @@ class V8Api(recipe_api.RecipeApi):
   @property
   def isolated_archive_path(self):
     buildername = (self.m.properties.get('parent_buildername') or
-                   self.m.properties['buildername'])
+                   self.m.buildbucket.builder_name)
     return 'chromium-v8/isolated/%s/%s' % (
-        self.m.properties['mastername'],
-        buildername,
-    )
+        self.m.properties['mastername'], buildername)
 
   def upload_isolated_json(self):
     self.m.gsutil.upload(
@@ -1309,7 +1307,7 @@ class V8Api(recipe_api.RecipeApi):
     if self.m.properties['mastername'] != 'client.v8.branches':
       full_args += [
         '--mastername', self.m.properties['mastername'],
-        '--buildername', self.m.properties['buildername'],
+        '--buildername', self.m.buildbucket.builder_name,
       ]
 
     return full_args, env
@@ -1331,7 +1329,7 @@ class V8Api(recipe_api.RecipeApi):
     # whitelisted or their name should be prefixed with 'parent_'.
     properties = {
       'parent_got_revision': self.revision,
-      'parent_buildername': self.m.properties['buildername'],
+      'parent_buildername': self.m.buildbucket.builder_name,
       'parent_build_config': self.m.chromium.c.BUILD_CONFIG,
     }
     if self.revision_cp:
@@ -1343,14 +1341,18 @@ class V8Api(recipe_api.RecipeApi):
         # On tryservers, set revision to the same as on the current bot,
         # as CQ expects builders and testers to match the revision field.
         revision=str(self.m.properties.get('revision', 'HEAD')),
+        patch_gerrit_url='https://%s' % self.m.tryserver.gerrit_change.host,
+        patch_issue=self.m.tryserver.gerrit_change.change,
+        patch_project=self.m.tryserver.gerrit_change.project,
+        patch_set=self.m.tryserver.gerrit_change.patchset,
+        patch_storage='gerrit',
       )
-      for p in ['issue', 'master', 'patch_gerrit_url', 'patch_git_url',
-                'patch_issue', 'patch_project', 'patch_ref',
-                'patch_repository_url', 'patch_set', 'patch_storage',
-                'patchset', 'requester', 'rietveld']:
+      # TODO(sergiyb): Remove this for-loop after CQ stops using these
+      # properties to detect triggered builders.
+      for p in ['patch_ref', 'patch_repository_url']:
         try:
           properties[p] = str(self.m.properties[p])
-        except KeyError:
+        except KeyError:  # pragma: no cover
           pass
     else:
       # On non-tryservers, we can set the revision to whatever the
@@ -1401,7 +1403,7 @@ class V8Api(recipe_api.RecipeApi):
             } for builder_name in triggers],
             # Tryserver uses custom buildset that is set by the buildbucket
             # module itself.
-            no_buildset=True,
+            add_buildset_tag=False,
         )
         triggered_build_ids.extend(
             build['build']['id'] for build in step_result.stdout['results'])
@@ -1458,7 +1460,8 @@ class V8Api(recipe_api.RecipeApi):
     return [{'author': email} for email in blamelist]
 
   def buildbucket_trigger(self, bucket, changes, requests, step_name='trigger',
-                          service_account='v8-bot', no_buildset=False):
+                          service_account='v8-bot', add_buildset_tag=True,
+                          no_buildset=False):
     """Triggers builds via buildbucket.
 
     Args:
@@ -1474,9 +1477,8 @@ class V8Api(recipe_api.RecipeApi):
       step_name: Name of the triggering step that appear on the build.
       service_account: Puppet service account to be used for authentication to
           buildbucket.
-      no_buildset: Disable setting custom buildset. Useful when one needs to
-          rely on the built-in buildset set by the buildbucket module, e.g. on
-          tryserver.
+      add_buildset_tag: Adds a buildset tag based on revision property.
+      no_buildset: DEPRECATED. Opposite of add_buildset_tag above.
     """
     # TODO(sergiyb): Remove this line after migrating all builders to swarming.
     # There an implicit task account (specified in the cr-buildbucket.cfg) will
@@ -1485,27 +1487,33 @@ class V8Api(recipe_api.RecipeApi):
       self.m.buildbucket.use_service_account_key(
           self.m.puppet_service_account.get_key_path(service_account))
 
+    requests = [{
+      'bucket': bucket,
+      'tags': request.get('tags', {}),
+      'parameters': {
+        'builder_name': request['builder_name'],
+        'properties': request['properties'],
+        # This is required by Buildbot to correctly set 'revision' and
+        # 'repository' properties, which are used by Milo and the recipe.
+        # TODO(sergiyb): Remove this after migrating to LUCI/Swarming.
+        'changes': [{
+          'author': {'email': change['author']},
+          'revision': change.get(
+            'revision', request['properties']['revision']),
+          'repo_url': 'https://chromium.googlesource.com/v8/v8'
+        } for change in changes],
+      },
+    } for request in requests]
+
+    # TODO(sergiyb): Remove no_buildset parameter once all callers are updated.
+    if add_buildset_tag and not no_buildset:
+      for request in requests:
+        request['tags']['buildset'] = (
+            'commit/gitiles/chromium.googlesource.com/v8/v8/+/%s' %
+            request['parameters']['properties']['revision'])
+
     step_result = self.m.buildbucket.put(
-        [{
-          'bucket': bucket,
-          'tags': {} if no_buildset else {
-            'buildset': 'commit/gitiles/chromium.googlesource.com/v8/v8/+/%s' %
-               request['properties']['revision']
-          },
-          'parameters': {
-            'builder_name': request['builder_name'],
-            'properties': request['properties'],
-            # This is required by Buildbot to correctly set 'revision' and
-            # 'repository' properties, which are used by Milo and the recipe.
-            # TODO(sergiyb): Remove this after migrating to LUCI/Swarming.
-            'changes': [{
-              'author': {'email': change['author']},
-              'revision': change.get(
-                'revision', request['properties']['revision']),
-              'repo_url': 'https://chromium.googlesource.com/v8/v8'
-            } for change in changes],
-          },
-        } for request in requests],
+        requests,
         name=step_name,
         step_test_data=lambda: (
           self.m.v8.test_api.buildbucket_test_data(len(requests))),
@@ -1534,8 +1542,8 @@ class V8Api(recipe_api.RecipeApi):
           ],
           stdin=self.m.json.input({
             'master': self.m.properties['mastername'],
-            'builder': self.m.properties['buildername'],
-            'buildNum': self.m.properties['buildnumber'],
+            'builder': self.m.buildbucket.builder_name,
+            'buildNum': self.m.buildbucket.build.number,
           }),
           stdout=self.m.json.output(),
           infra_step=True,
