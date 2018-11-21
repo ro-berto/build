@@ -760,9 +760,7 @@ class DartApi(recipe_api.RecipeApi):
                  '--time',
                  '--write-debug-log',
                  '--write-results',
-                 '--write-result-log',
-                 '--write-logs',
-                 '--write-test-outcome-log']
+                 '--write-logs']
     template = self._get_specific_argument(args, ['-n'])
     if template is not None:
       for term in ['runtime', 'system', 'mode', 'arch']:
