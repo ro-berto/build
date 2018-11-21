@@ -4,7 +4,7 @@
       "failure": {
         "step": ""
       },
-      "humanReason": "A ref for release branch must be specified."
+      "humanReason": "A release branch must be specified."
     },
     "name": "$result"
   }

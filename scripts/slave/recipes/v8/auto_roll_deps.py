@@ -11,7 +11,6 @@ DEPS = [
   'depot_tools/gerrit',
   'depot_tools/git',
   'depot_tools/gitiles',
-  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -151,7 +150,7 @@ def RunSteps(api):
 
     with api.context(cwd=api.path['checkout'].join('v8')):
       safe_buildername = ''.join(
-        c if c.isalnum() else '_' for c in api.buildbucket.builder_name)
+        c if c.isalnum() else '_' for c in api.properties['buildername'])
       if api.runtime.is_experimental:
         api.step('fake roll deps', cmd=None)
       else:

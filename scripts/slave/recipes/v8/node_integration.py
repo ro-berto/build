@@ -16,7 +16,6 @@ DEPS = [
   'depot_tools/gsutil',
   'depot_tools/tryserver',
   'goma',
-  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -318,7 +317,7 @@ def RunSteps(api):
                 'revision': api.v8.revision,
                 'parent_got_revision': api.v8.revision,
                 'parent_got_revision_cp': api.v8.revision_cp,
-                'parent_buildername': api.buildbucket.builder_name,
+                'parent_buildername': api.properties.get('buildername'),
               },
               'builder_name': builder_name,
             } for builder_name in api.v8.bot_config['triggers']
@@ -336,27 +335,19 @@ def _sanitize_nonalpha(*chunks):
 def GenTests(api):
   for mastername, masterconf in BUILDERS.iteritems():
     for buildername, bot_config in masterconf['builders'].iteritems():
-      buildbucket_kwargs = {
-          'project': 'v8/v8',
-          'builder': buildername,
-          'build_number': 571
-      }
       if mastername.startswith('tryserver'):
         properties_fn = api.properties.tryserver
-        buildbucket_fn = api.buildbucket.try_build
-        buildbucket_kwargs['change_number'] = 456789
-        buildbucket_kwargs['patch_set'] = 12
       else:
         properties_fn = api.properties.generic
-        buildbucket_fn = api.buildbucket.ci_build
       yield (
           api.test(_sanitize_nonalpha('full', mastername, buildername)) +
           properties_fn(
               mastername=mastername,
+              buildername=buildername,
+              branch='refs/heads/master',
               revision='a' * 40,
               path_config='kitchen',
           ) +
-          buildbucket_fn(**buildbucket_kwargs) +
           api.platform(bot_config['testing']['platform'], 64) +
           api.v8.hide_infra_steps()
       )
@@ -365,11 +356,11 @@ def GenTests(api):
     api.test('experimental') +
     api.properties.generic(
       mastername='client.v8.fyi',
+      buildername='V8 Linux64 - node.js integration',
+      branch='refs/heads/master',
       revision='a' * 40,
       path_config='kitchen',
     ) +
-    api.buildbucket.ci_build(
-      project='v8/v8', builder='V8 Linux64 - node.js integration') +
     api.runtime(is_luci=True, is_experimental=True) +
     api.platform('linux', 64)
   )
@@ -378,12 +369,11 @@ def GenTests(api):
     api.test('trigger_fail') +
     api.properties.generic(
       mastername='client.v8.fyi',
+      buildername='V8 Linux64 - node.js integration',
+      branch='refs/heads/master',
       revision='a' * 40,
       path_config='kitchen',
     ) +
-    api.buildbucket.ci_build(
-      project='v8/v8', builder='V8 Linux64 - node.js integration',
-      build_number=571) +
     api.override_step_data(
       'trigger', api.json.output_stream({'error': {'message': 'foobar'}})) +
     api.post_process(Filter('trigger'))

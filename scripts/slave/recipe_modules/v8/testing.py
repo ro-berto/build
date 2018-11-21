@@ -253,11 +253,28 @@ class SanitizerCoverageContext(object):
   def maybe_upload(self):
     """Uploads coverage data to google storage if on tryserver."""
 
-    if self.api.tryserver.gerrit_change:
-      cl = self.api.tryserver.gerrit_change
-      results_path = 'tryserver/sanitizer_coverage/gerrit/%d/%d/%s%d' % (
-        cl.change, cl.patchset, self.api.platform.name, self.api.v8.target_bits)
+    path_prefix = [
+      'tryserver',
+      'sanitizer_coverage',
+    ]
 
+    if self.api.tryserver.is_tryserver:
+      issue = str(self.api.properties.get('issue', ''))
+      patchset = str(self.api.properties.get('patchset', ''))
+      if not issue:
+        # Disambiguate new gerrit paths with an extra path element to not have
+        # the issue numbers clashing at some point.
+        path_prefix.append('gerrit')
+        issue = str(self.api.properties.get('patch_issue', ''))
+        patchset = str(self.api.properties.get('patch_set', ''))
+      assert issue
+      assert patchset
+
+      results_path = '/'.join(path_prefix + [
+        issue,
+        patchset,
+        '%s%d' % (self.api.platform.name, self.api.v8.target_bits)
+      ])
 
       self.api.gsutil.upload(
           self.coverage_dir.join('data.json'),
@@ -759,7 +776,7 @@ class Failure(object):
       'bisect_mastername': self.api.properties['mastername'],
       # Use builds from parent builder to bisect if any.
       'bisect_buildername': self.api.properties.get(
-          'parent_buildername') or self.api.buildbucket.builder_name,
+          'parent_buildername') or self.api.properties['buildername'],
       # Start bisecting backwards at the revision that was tested.
       'to_revision': self.api.properties['revision'],
       # Use the same dimensions as the swarming task that ran this test.
