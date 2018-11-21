@@ -217,7 +217,6 @@
   * [custom_tabs_client](#recipes-custom_tabs_client)
   * [dart/chocolatey](#recipes-dart_chocolatey)
   * [dart/dart](#recipes-dart_dart)
-  * [dart/dart_vm_kernel](#recipes-dart_dart_vm_kernel)
   * [dart/docker](#recipes-dart_docker)
   * [dart/flutter_engine](#recipes-dart_flutter_engine)
   * [dart/forward_branch](#recipes-dart_forward_branch)
@@ -5039,11 +5038,6 @@ built for that board at that version.
 [DEPS](/scripts/slave/recipes/dart/dart.py#7): [dart](#recipe_modules-dart), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/dart.py#20)(api):**
-### *recipes* / [dart/dart\_vm\_kernel](/scripts/slave/recipes/dart/dart_vm_kernel.py)
-
-[DEPS](/scripts/slave/recipes/dart/dart_vm_kernel.py#7): [dart](#recipe_modules-dart), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/dart_vm_kernel.py#62)(api):**
 ### *recipes* / [dart/docker](/scripts/slave/recipes/dart/docker.py)
 
 [DEPS](/scripts/slave/recipes/dart/docker.py#7): [dart](#recipe_modules-dart), [zip](#recipe_modules-zip), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
