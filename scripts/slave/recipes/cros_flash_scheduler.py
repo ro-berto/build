@@ -103,6 +103,9 @@ class DUTBot(object):
 
   def __init__(self, swarming_url, swarming_dict):
     self.swarming_url = swarming_url
+    self._parse_swarming_dict(swarming_dict)
+
+  def _parse_swarming_dict(self, swarming_dict):
     self.id = swarming_dict['bot_id']
     self.is_unhealthy = swarming_dict['quarantined'] or swarming_dict['is_dead']
     self.os = 'unknown'
@@ -112,6 +115,17 @@ class DUTBot(object):
       if d['key'] == 'device_os':
         self.os = d['value'][0]
         break
+
+  def update_status(self, api):
+    cmd = [
+      'query',
+      '-S', self.swarming_url,
+      'bot/%s/get' % self.id,
+    ]
+    result = api.python('get status of %s' % self.id,
+        api.swarming_client.path.join('swarming.py'),
+        cmd, stdout=api.json.output())
+    self._parse_swarming_dict(result.stdout)
 
 
 def get_closest_available_version(api, board, lkgm_base):
@@ -260,18 +274,73 @@ def RunSteps(api, swarming_server, swarming_pool, device_type, bb_host):
   with api.step.nest('wait for %d flashing jobs' % len(flashing_requests)):
     # Sleep indefinitely if the jobs never finish. Let swarming's task timeout
     # kill us if we won't exit.
+    i = 0
     while flashing_requests:
-      api.python.inline('sleep for 1 min', 'import time; time.sleep(60)')
+      api.python.inline('1 min sleep #%d' % i, 'import time; time.sleep(60)')
+      i += 1
       for build in flashing_requests.copy():
         result = api.buildbucket.get_build(build)
         if result.stdout['build']['status'] == 'COMPLETED':
           finished_builds.append(result.stdout['build'])
           flashing_requests.remove(build)
 
-  # TODO(bpastene): Retrigger the recipe if:
-  # - all triggered flash jobs were successful
-  # - all bots that were flashed are back up and healthy
-  # - there are more bots that need flashing
+  # Add a no-op step that lists pass/fail results for each flashing job.
+  failed_jobs = []
+  step_result = api.step('collect flashing results', cmd=None)
+  for build in finished_builds:
+    if build['result'] == 'SUCCESS':
+      step_result.presentation.links['%s (passed)' % build['id']] = build['url']
+    else:
+      step_result.presentation.links['%s (failed)' % build['id']] = build['url']
+      failed_jobs.append(build)
+
+  # Quit early if any of the flashing requests failed.
+  if failed_jobs:
+    api.python.failing_step('failed %d flashing jobs' % len(failed_jobs),
+        'The following jobs failed:\n%s' % '\n'.join(
+            j['url'] for j in failed_jobs))
+
+  # Wait for all the bots that were flashed to come back up and report healthy.
+  with api.step.nest('wait for bots to become available again'):
+    # Wait at most 10 min.
+    for i in xrange(10):
+      for b in bots_to_flash:
+        b.update_status(api)
+      if any(b.is_unhealthy or b.os != lkgm_base for b in bots_to_flash):
+        api.python.inline('1 min sleep #%d' % i, 'import time; time.sleep(60)')
+      else:
+        break
+
+  # Fail the recipe if any bot wasn't safely flashed.
+  unhealthy_bots = [ b.id for b in bots_to_flash if b.is_unhealthy ]
+  out_of_date_bots = [ b.id for b in bots_to_flash if b.os != lkgm_base ]
+  if unhealthy_bots or out_of_date_bots:
+    api.python.failing_step(
+        '%d bots failed the flash' % len(unhealthy_bots + out_of_date_bots),
+        'The following bots were not successfully flashed: %s\n'
+        'The following bots were flashed but have not come back up: %s' % (
+            out_of_date_bots, unhealthy_bots))
+
+  # We did it! Now trigger ourselves again with the same properties to finish
+  # flashing the remaining bots. Use this chained triggering instead of a
+  # single loop to make the guts of this recipe a bit simpler.
+  build_req = {
+    'bucket': 'luci.chromium.ci',
+    'parameters': {
+      'builder_name': 'cros-dut-flash-scheduler',
+      'properties': {
+        'swarming_server': swarming_server,
+        'swarming_pool': swarming_pool,
+        'device_type': device_type,
+      },
+    },
+  }
+  if bb_host:
+    build_req['parameters']['properties']['bb_host'] = bb_host
+  result = api.buildbucket.put([build_req], name='retrigger myself')
+  build_id = result.stdout['results'][0]['build']['id']
+  build_url = result.stdout['results'][0]['build']['url']
+  result.presentation.links[build_id] = build_url
 
 
 def GenTests(api):
@@ -354,8 +423,67 @@ def GenTests(api):
     api.step_data(
         'wait for 1 flashing jobs.buildbucket.get (3)',
         stdout=api.json.output(bb_json_get('1234567890'))) +
+    # First the bot's online but out of date.
+    api.step_data(
+        'wait for bots to become available again.get status of out_of_date_bot',
+        stdout=api.json.output(bot_json('out_of_date_bot', '11111'))) +
+    # Then the bot's quarantined.
+    api.step_data(
+        'wait for bots to become available again.'
+            'get status of out_of_date_bot (2)',
+        stdout=api.json.output(
+            bot_json('out_of_date_bot', '12345', quarantined=True))) +
+    # Finally it's healthy and up to date.
+    api.step_data(
+        'wait for bots to become available again.'
+            'get status of out_of_date_bot (3)',
+        stdout=api.json.output(bot_json('out_of_date_bot', '12345'))) +
+    api.step_data(
+        'retrigger myself',
+        stdout=api.json.output(bb_json_put('1234567890'))) +
     api.post_process(post_process.StatusSuccess)
   )
+
+  yield (
+    test_props('one_flash_that_failed') +
+    api.step_data(
+        'get all bots',
+        stdout=api.json.output({
+          'items': [ bot_json('out_of_date_bot', '11111') ]
+        })) +
+    api.step_data(
+        'flash bots.out_of_date_bot',
+        stdout=api.json.output(bb_json_put('1234567890'))) +
+    api.step_data(
+        'wait for 1 flashing jobs.buildbucket.get',
+        stdout=api.json.output(bb_json_get('1234567890', result='FAILURE'))) +
+    api.post_process(post_process.MustRun, 'failed 1 flashing jobs') +
+    api.post_process(post_process.DropExpectation)
+  )
+
+  out_of_date_after_flashing_test = (
+    test_props('bot_offline_after_flashing') +
+    api.step_data(
+        'get all bots',
+        stdout=api.json.output({'items': [bot_json('bot', '11111')]})) +
+    api.step_data(
+        'flash bots.bot',
+        stdout=api.json.output(bb_json_put('1234567890'))) +
+    api.step_data(
+        'wait for 1 flashing jobs.buildbucket.get',
+        stdout=api.json.output(bb_json_get('1234567890'))) +
+    api.step_data(
+        'wait for bots to become available again.get status of bot',
+        stdout=api.json.output(bot_json('bot', '11111'))) +
+    api.post_process(post_process.MustRun, '1 bots failed the flash') +
+    api.post_process(post_process.DropExpectation)
+  )
+  # The bot still reports as out-of-date after all 10 queries.
+  for i in xrange(2, 11):
+    out_of_date_after_flashing_test += api.step_data(
+        'wait for bots to become available again.get status of bot (%d)' % i,
+        stdout=api.json.output(bot_json('bot', '11111')))
+  yield out_of_date_after_flashing_test
 
   yield (
     test_props('wrong_lkgm_format', include_lkgm_steps=False) +

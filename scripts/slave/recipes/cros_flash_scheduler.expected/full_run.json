@@ -248,7 +248,7 @@
       "-u",
       "import time; time.sleep(60)"
     ],
-    "name": "wait for 1 flashing jobs.sleep for 1 min",
+    "name": "wait for 1 flashing jobs.1 min sleep #0",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@import time; time.sleep(60)@@@",
@@ -284,7 +284,7 @@
       "-u",
       "import time; time.sleep(60)"
     ],
-    "name": "wait for 1 flashing jobs.sleep for 1 min (2)",
+    "name": "wait for 1 flashing jobs.1 min sleep #1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@import time; time.sleep(60)@@@",
@@ -320,7 +320,7 @@
       "-u",
       "import time; time.sleep(60)"
     ],
-    "name": "wait for 1 flashing jobs.sleep for 1 min (3)",
+    "name": "wait for 1 flashing jobs.1 min sleep #2",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@python.inline@import time; time.sleep(60)@@@",
@@ -349,6 +349,159 @@
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "collect flashing results",
+    "~followup_annotations": [
+      "@@@STEP_LINK@1234567890 (passed)@https://some.build.url@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "wait for bots to become available again"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/swarming.client/swarming.py",
+      "query",
+      "-S",
+      "some-swarming-server",
+      "bot/out_of_date_bot/get"
+    ],
+    "name": "wait for bots to become available again.get status of out_of_date_bot",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"bot_id\": \"out_of_date_bot\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dimensions\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"key\": \"device_os\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"value\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"11111\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"is_dead\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"quarantined\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import time; time.sleep(60)"
+    ],
+    "name": "wait for bots to become available again.1 min sleep #0",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@import time; time.sleep(60)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/swarming.client/swarming.py",
+      "query",
+      "-S",
+      "some-swarming-server",
+      "bot/out_of_date_bot/get"
+    ],
+    "name": "wait for bots to become available again.get status of out_of_date_bot (2)",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"bot_id\": \"out_of_date_bot\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dimensions\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"key\": \"device_os\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"value\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"12345\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"is_dead\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"quarantined\": true@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import time; time.sleep(60)"
+    ],
+    "name": "wait for bots to become available again.1 min sleep #1",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@python.inline@import time; time.sleep(60)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[START_DIR]/swarming.client/swarming.py",
+      "query",
+      "-S",
+      "some-swarming-server",
+      "bot/out_of_date_bot/get"
+    ],
+    "name": "wait for bots to become available again.get status of out_of_date_bot (3)",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"bot_id\": \"out_of_date_bot\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"dimensions\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"key\": \"device_os\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"value\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"12345\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ]@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"is_dead\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"quarantined\": false@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "buildbucket",
+      "put",
+      "-host",
+      "some-buildbucket-server",
+      "{\"bucket\": \"luci.chromium.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"cros-dut-flash-scheduler\\\", \\\"properties\\\": {\\\"bb_host\\\": \\\"some-buildbucket-server\\\", \\\"device_type\\\": \\\"some-device-type\\\", \\\"swarming_pool\\\": \\\"some-swarming-pool\\\", \\\"swarming_server\\\": \\\"some-swarming-server\\\"}}\", \"tags\": [\"builder:cros-dut-flash-scheduler\", \"user_agent:recipe\"]}"
+    ],
+    "infra_step": true,
+    "name": "retrigger myself",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"id\": \"1234567890\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"url\": \"https://some.build.url\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@1234567890@https://some.build.url@@@"
     ]
   },
   {
