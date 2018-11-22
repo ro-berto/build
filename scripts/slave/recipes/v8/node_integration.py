@@ -339,7 +339,8 @@ def GenTests(api):
       buildbucket_kwargs = {
           'project': 'v8/v8',
           'builder': buildername,
-          'build_number': 571
+          'build_number': 571,
+          'revision': 'a' * 40,
       }
       if mastername.startswith('tryserver'):
         properties_fn = api.properties.tryserver
@@ -353,7 +354,6 @@ def GenTests(api):
           api.test(_sanitize_nonalpha('full', mastername, buildername)) +
           properties_fn(
               mastername=mastername,
-              revision='a' * 40,
               path_config='kitchen',
           ) +
           buildbucket_fn(**buildbucket_kwargs) +
@@ -365,11 +365,14 @@ def GenTests(api):
     api.test('experimental') +
     api.properties.generic(
       mastername='client.v8.fyi',
-      revision='a' * 40,
       path_config='kitchen',
     ) +
     api.buildbucket.ci_build(
-      project='v8/v8', builder='V8 Linux64 - node.js integration') +
+      project='v8',
+      git_repo='https://chromium.googlesource.com/v8/v8',
+      builder='V8 Linux64 - node.js integration',
+      revision='a' * 40
+    ) +
     api.runtime(is_luci=True, is_experimental=True) +
     api.platform('linux', 64)
   )
@@ -378,12 +381,15 @@ def GenTests(api):
     api.test('trigger_fail') +
     api.properties.generic(
       mastername='client.v8.fyi',
-      revision='a' * 40,
       path_config='kitchen',
     ) +
     api.buildbucket.ci_build(
-      project='v8/v8', builder='V8 Linux64 - node.js integration',
-      build_number=571) +
+      project='v8',
+      git_repo='https://chromium.googlesource.com/v8/v8',
+      builder='V8 Linux64 - node.js integration',
+      build_number=571,
+      revision='a' * 40
+    ) +
     api.override_step_data(
       'trigger', api.json.output_stream({'error': {'message': 'foobar'}})) +
     api.post_process(Filter('trigger'))

@@ -761,7 +761,7 @@ class Failure(object):
       'bisect_buildername': self.api.properties.get(
           'parent_buildername') or self.api.buildbucket.builder_name,
       # Start bisecting backwards at the revision that was tested.
-      'to_revision': self.api.properties['revision'],
+      'to_revision': self.api.buildbucket.gitiles_commit.id,
       # Use the same dimensions as the swarming task that ran this test.
       'swarming_dimensions': self._format_swarming_dimensions(
           self.test.task.dimensions),

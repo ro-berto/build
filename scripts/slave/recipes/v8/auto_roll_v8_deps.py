@@ -282,7 +282,12 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
         api.test(testname) +
         api.properties.generic(mastername='client.v8.fyi',
                                path_config='kitchen') +
-        api.buildbucket.ci_build(project='v8/v8', builder=buildername) +
+        api.buildbucket.ci_build(
+            project='v8',
+            git_repo='https://chromium.googlesource.com/v8/v8',
+            builder=buildername,
+            revision='',
+        ) +
         api.override_step_data(
             'gclient get v8 deps',
             api.raw_io.stream_output(v8_deps_info, stream='stdout'),
@@ -325,7 +330,11 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
       api.test('stale_roll') +
       api.properties.generic(mastername='client.v8.fyi',
                              path_config='kitchen') +
-      api.buildbucket.ci_build(project='v8/v8', builder='Auto-roll - v8 deps') +
+      api.buildbucket.ci_build(
+        project='v8',
+        git_repo='https://chromium.googlesource.com/v8/v8',
+        builder='Auto-roll - v8 deps'
+      ) +
       api.override_step_data(
           'gerrit changes', api.json.output(
               [{'_number': '123', 'subject': 'Update V8 DEPS.'}])) +

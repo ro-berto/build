@@ -443,7 +443,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
     ]))
 
   def test(self, mastername, buildername, suffix='', parent_test_spec=None,
-           parent_buildername=None, parent_bot_config=None, **kwargs):
+           parent_buildername=None, parent_bot_config=None,
+           git_ref='refs/heads/master', **kwargs):
     """Convenience method to generate test data for V8 recipe runs.
 
     Args:
@@ -455,6 +456,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           tester. Default value if no static config exists in builders.py.
       parent_bot_config: Content of the parent's bot_config when simulating a
           child tester. Default value if no static config exists in builders.py.
+      git_ref: Ref from which a commit is fetched.
 
     """
     if parent_test_spec:
@@ -478,10 +480,11 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
             self.test_name(mastername, buildername, suffix)) +
         properties_fn(
             mastername=mastername,
-            buildername=buildername,
             parent_buildername=parent_buildername,
-            revision='deadbeef'*5,
             gerrit_project='v8/v8',
+            # TODO(sergiyb): Remove this property after archive module has been
+            # migrated to new buildbucket properties.
+            buildername=buildername,
             **kwargs
         ) +
         self.m.platform('linux', 64) +
@@ -519,14 +522,22 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           category='cq',
           master='tryserver.v8',
           reason='CQ',
-          revision='deadbeef'*5,
           try_job_key='1234',
       ) + self.m.buildbucket.try_build(
           project='v8',
+          revision='deadbeef'*5,
           builder=buildername,
           git_repo='https://chromium.googlesource.com/v8/v8',
           change_number=456789,
           patch_set=12,
+      )
+    else:
+      test += self.m.buildbucket.ci_build(
+          project='v8/v8',
+          builder=buildername,
+          git_ref=git_ref,
+          build_number=571,
+          revision='deadbeef'*5,
       )
 
     # If use_goma is provided (not None), check if relevant steps either are

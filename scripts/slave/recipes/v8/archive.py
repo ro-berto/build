@@ -209,8 +209,12 @@ def GenTests(api):
                                path_config='kitchen',
                                **kwargs) +
         api.buildbucket.ci_build(
-          project='v8/v8', builder='V8 Foobar',
-          git_ref='refs/branch-heads/3.4') +
+            project='v8',
+            git_repo='https://chromium.googlesource.com/v8/v8',
+            builder='V8 Foobar',
+            git_ref='refs/branch-heads/3.4',
+            revision='a'*40
+        ) +
         api.platform(platform, 64) +
         api.v8.version_file(17, 'head', prefix='initialization.') +
         api.override_step_data(
@@ -300,7 +304,11 @@ def GenTests(api):
                              path_config='kitchen',
                              build_config='Release',
                              target_bits=64) +
-      api.buildbucket.ci_build(project='v8/v8', builder=buildername) +
+      api.buildbucket.ci_build(
+        project='v8',
+        git_repo='https://chromium.googlesource.com/v8/v8',
+        builder=buildername
+      ) +
       api.post_process(
         MustRun, 'initialization.Skipping due to missing release branch.') +
       api.post_process(
@@ -321,7 +329,11 @@ def GenTests(api):
                              build_config='Release',
                              target_bits=64) +
       api.buildbucket.ci_build(
-        project='v8/v8', builder=buildername, git_ref='refs/branch-heads/3.4') +
+        project='v8',
+        git_repo='https://chromium.googlesource.com/v8/v8',
+        builder=buildername,
+        git_ref='refs/branch-heads/3.4'
+      ) +
       api.v8.version_file(17, 'head', prefix='initialization.') +
       api.override_step_data(
           'initialization.git describe',
@@ -344,8 +356,11 @@ def GenTests(api):
                              build_config='Release',
                              target_bits=64) +
       api.buildbucket.ci_build(
-        project='v8/v8', builder=buildername,
-        git_ref='refs/branch-heads/3.4') +
+        project='v8',
+        git_repo='https://chromium.googlesource.com/v8/v8',
+        builder=buildername,
+        git_ref='refs/branch-heads/3.4',
+      ) +
       api.v8.version_file(0, 'head', prefix='initialization.') +
       api.override_step_data(
           'initialization.git describe', api.raw_io.stream_output('3.4.3')) +
@@ -363,7 +378,11 @@ def GenTests(api):
                              build_config='Release',
                              target_bits=64) +
       api.buildbucket.ci_build(
-        project='v8/v8', builder=buildername, git_ref='refs/heads/3.4.3') +
+        project='v8',
+        git_repo='https://chromium.googlesource.com/v8/v8',
+        builder=buildername,
+        git_ref='refs/heads/3.4.3',
+      ) +
       api.v8.version_file(1, 'head', prefix='initialization.') +
       api.override_step_data(
           'initialization.git describe', api.raw_io.stream_output('3.4.3.1')) +

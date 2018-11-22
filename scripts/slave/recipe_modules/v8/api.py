@@ -361,8 +361,7 @@ class V8Api(recipe_api.RecipeApi):
 
   def checkout(self, revision=None, **kwargs):
     # Set revision for bot_update.
-    revision = revision or self.m.properties.get(
-        'parent_got_revision', self.m.properties.get('revision', 'HEAD'))
+    revision = revision or self.m.buildbucket.gitiles_commit.id or 'HEAD'
     solution = self.m.gclient.c.solutions[0]
     branch = self.m.buildbucket.gitiles_commit.ref
     if RELEASE_BRANCH_RE.match(branch):
@@ -1340,7 +1339,7 @@ class V8Api(recipe_api.RecipeApi):
         reason=str(self.m.properties.get('reason', 'ManualTS')),
         # On tryservers, set revision to the same as on the current bot,
         # as CQ expects builders and testers to match the revision field.
-        revision=str(self.m.properties.get('revision', 'HEAD')),
+        revision=self.m.buildbucket.gitiles_commit.id or 'HEAD',
         patch_gerrit_url='https://%s' % self.m.tryserver.gerrit_change.host,
         patch_issue=self.m.tryserver.gerrit_change.change,
         patch_project=self.m.tryserver.gerrit_change.project,
@@ -1460,8 +1459,7 @@ class V8Api(recipe_api.RecipeApi):
     return [{'author': email} for email in blamelist]
 
   def buildbucket_trigger(self, bucket, changes, requests, step_name='trigger',
-                          service_account='v8-bot', add_buildset_tag=True,
-                          no_buildset=False):
+                          service_account='v8-bot', add_buildset_tag=True):
     """Triggers builds via buildbucket.
 
     Args:
@@ -1478,7 +1476,6 @@ class V8Api(recipe_api.RecipeApi):
       service_account: Puppet service account to be used for authentication to
           buildbucket.
       add_buildset_tag: Adds a buildset tag based on revision property.
-      no_buildset: DEPRECATED. Opposite of add_buildset_tag above.
     """
     # TODO(sergiyb): Remove this line after migrating all builders to swarming.
     # There an implicit task account (specified in the cr-buildbucket.cfg) will
@@ -1505,8 +1502,7 @@ class V8Api(recipe_api.RecipeApi):
       },
     } for request in requests]
 
-    # TODO(sergiyb): Remove no_buildset parameter once all callers are updated.
-    if add_buildset_tag and not no_buildset:
+    if add_buildset_tag:
       for request in requests:
         request['tags']['buildset'] = (
             'commit/gitiles/chromium.googlesource.com/v8/v8/+/%s' %

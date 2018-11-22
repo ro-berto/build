@@ -252,8 +252,11 @@ def GenTests(api):
         api.properties.generic(mastername='client.v8.fyi',
                                path_config='kitchen') +
         api.buildbucket.ci_build(
-          project='v8/v8', builder='Auto-tag',
-          git_ref='refs/branch-heads/3.4') +
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          builder='Auto-tag',
+          git_ref='refs/branch-heads/3.4',
+        ) +
         api.v8.version_file(patch_level_latest, 'latest') +
         api.v8.version_file(patch_level_previous, 'previous') +
         api.v8.version_file(patch_level_after_commit, 'head') +
@@ -345,7 +348,11 @@ def GenTests(api):
       api.test('missing_branch') +
       api.properties.generic(mastername='client.v8.fyi',
                              path_config='kitchen') +
-      api.buildbucket.ci_build(project='v8/v8', builder='Auto-tag')
+      api.buildbucket.ci_build(
+        project='v8',
+        git_repo='https://chromium.googlesource.com/v8/v8',
+        builder='Auto-tag',
+      )
   )
   # Experimental mode.
   yield (
