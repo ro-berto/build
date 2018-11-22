@@ -22,6 +22,14 @@ BUILD_TARGET = ['hello', 'gn_all', 'demo', 'unittests']
 OPENSCREEN_REPO = 'https://chromium.googlesource.com/openscreen'
 
 
+def _GetHostToolLabel(platform):
+  if platform.is_linux and platform.bits == 64:
+    return 'linux64'
+  elif platform.is_mac:
+    return 'mac'
+  raise ValueError('unknown or unsupported platform')  # pragma: no cover
+
+
 def RunSteps(api):
   build_root = api.path['start_dir']
   openscreen_root = build_root.join('openscreen')
@@ -34,9 +42,12 @@ def RunSteps(api):
   checkout_path = api.path['checkout']
   output_path = checkout_path.join('out', BUILD_CONFIG)
   with api.context(cwd=checkout_path):
+    api.step('install build tools',
+             [checkout_path.join('tools', 'install-build-tools.sh'),
+              _GetHostToolLabel(api.platform)])
     api.step('gn gen',
-             [api.depot_tools.gn_py_path, 'gen', output_path,
-              '--args=is_debug="' + str(is_debug).lower() + '"'])
+             [checkout_path.join('gn'), 'gen', output_path,
+              '--args=is_debug=' + str(is_debug).lower()])
     # NOTE: The following just runs Ninja without setting up the Mac toolchain
     # if this is being run on a non-Mac platform.
     with api.osx_sdk('mac'):

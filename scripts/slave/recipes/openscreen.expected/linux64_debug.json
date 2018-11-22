@@ -121,10 +121,18 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
+      "[START_DIR]/openscreen/tools/install-build-tools.sh",
+      "linux64"
+    ],
+    "cwd": "[START_DIR]/openscreen",
+    "name": "install build tools"
+  },
+  {
+    "cmd": [
+      "[START_DIR]/openscreen/gn",
       "gen",
       "[START_DIR]/openscreen/out/Default",
-      "--args=is_debug=\"true\""
+      "--args=is_debug=true"
     ],
     "cwd": "[START_DIR]/openscreen",
     "name": "gn gen"
