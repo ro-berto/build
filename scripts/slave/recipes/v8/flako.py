@@ -20,7 +20,8 @@ See PROPERTIES for documentation on the recipe's interface.
 
 import re
 
-from recipe_engine.post_process import DoesNotRun, DropExpectation, MustRun
+from recipe_engine.post_process import (
+    DoesNotRun, DropExpectation, Filter, MustRun)
 from recipe_engine.post_process import ResultReasonRE
 from recipe_engine.recipe_api import Property
 
@@ -55,6 +56,8 @@ PROPERTIES = {
   # Initial number of test repetitions (passed to --random-seed-stress-count
   # option).
   'repetitions': Property(default=5000, kind=int),
+  # Switch to only attempt to reproduce with given revision. Skips bisection.
+  'repro_only': Property(default=False, kind=bool),
   # Swarming dimensions classifying the type of bot the tests should run on.
   # Passed as list of strings, each in the format name:value.
   'swarming_dimensions': Property(default=None, kind=list),
@@ -114,7 +117,7 @@ TEST_FAILED_TEMPLATE = """
 
 class Command(object):
   """Helper class representing a command line to V8's run-tests.py."""
-  def __init__(self, test_name, build_config, variant, repetitions,
+  def __init__(self, test_name, build_config, variant, repetitions, repro_only,
                total_timeout_sec, timeout=60, extra_args=None):
     self.repetitions = repetitions
     self.test_name = test_name
@@ -127,7 +130,12 @@ class Command(object):
       '--timeout=%d' % timeout,
       '--swarming',
       '--variants=%s' % variant,
-    ] + (extra_args or []) + [test_name]
+    ]
+    if repro_only:
+      # In repro-only mode we keep running skipped tests.
+      self.base_cmd.append('--run-skipped')
+    self.base_cmd += (extra_args or [])
+    self.base_cmd.append(test_name)
 
   @property
   def label(self):
@@ -259,15 +267,20 @@ class Runner(object):
     self.command = command
     self.multiplier = 1
 
-  def calibrate(self, offset):
+  def calibrate(self, offset, repro_only):
     """Calibrates the multiplier for test time or repetitions of the runner for
     the given offset.
 
     Testing is repeated until MIN_FLAKE_THRESHOLD test failures are counted in
     an attempt. The multiplier is doubled on each fresh attempt.
+
+    Args:
+      offset (int): Distance to the start commit.
+      repro_only: Returns already when at least one failure is found.
     """
     for _ in range(MAX_CALIBRATION_ATTEMPTS):
-      if self.check_num_flakes(offset) >= MIN_FLAKE_THRESHOLD:
+      num_failures = self.check_num_flakes(offset)
+      if repro_only and num_failures or num_failures >= MIN_FLAKE_THRESHOLD:
         return True
       self.multiplier *= 2
     return False
@@ -417,8 +430,8 @@ def setup_swarming(api, swarming_dimensions):
 
 def RunSteps(api, bisect_mastername, bisect_buildername, build_config,
              extra_args, initial_commit_offset, isolated_name, repetitions,
-             swarming_dimensions, test_name, timeout_sec, total_timeout_sec,
-             to_revision, variant):
+             repro_only, swarming_dimensions, test_name, timeout_sec,
+             total_timeout_sec, to_revision, variant):
   # Set up swarming client.
   setup_swarming(api, swarming_dimensions)
 
@@ -426,14 +439,25 @@ def RunSteps(api, bisect_mastername, bisect_buildername, build_config,
   depot = Depot(
       api, bisect_mastername, bisect_buildername, isolated_name, to_revision)
   command = Command(
-      test_name, build_config, variant, repetitions, total_timeout_sec,
-      timeout_sec, extra_args)
+      test_name, build_config, variant, repetitions, repro_only,
+      total_timeout_sec, timeout_sec, extra_args)
   runner = Runner(api, depot, command)
 
-  # Get confidence that the initial revision is flaky and calibrate the
-  # repetitions.
   to_offset = depot.find_closest_build(0)
-  if not runner.calibrate(to_offset):
+
+  # Get confidence that the given revision is flaky and optionally calibrate the
+  # repetitions.
+  could_reproduce = runner.calibrate(to_offset, repro_only)
+
+  if repro_only:
+    if could_reproduce:
+      api.step('Flake still reproduces.', cmd=None)
+      return
+    else:
+      # We treat it as an error if a flake belived to repro, doesn't repro.
+      raise api.step.StepFailure('Could not reproduce flake.')
+
+  if not could_reproduce:
     raise api.step.StepFailure('Could not reach enough confidence.')
 
   # Run bisection.
@@ -601,6 +625,30 @@ def GenTests(api):
            for i in range(1, MAX_ISOLATE_OFFSET)),
           isolated_lookup(0, False)) +
       api.post_process(ResultReasonRE, 'Couldn\'t find isolates.') +
+      api.post_process(DropExpectation)
+  )
+
+  # Simulate repro-only mode reproducing a flake.
+  yield (
+      test('repro_only') +
+      api.properties(repro_only=True) +
+      isolated_lookup(0, True) +
+      is_flaky(0, 1, 1) +
+      api.post_process(MustRun, 'Flake still reproduces.') +
+      api.post_process(Filter('[trigger] check mjsunit/foobar at #0 - 1'))
+  )
+
+  # Simulate repro-only mode not reproducing a flake.
+  yield (
+      test('repro_only_failed') +
+      api.properties(repro_only=True) +
+      isolated_lookup(0, True) +
+      is_flaky(0, 1, 0) +
+      is_flaky(0, 2, 0) +
+      is_flaky(0, 4, 0) +
+      is_flaky(0, 8, 0) +
+      is_flaky(0, 16, 0) +
+      api.post_process(ResultReasonRE, 'Could not reproduce flake.') +
       api.post_process(DropExpectation)
   )
 
