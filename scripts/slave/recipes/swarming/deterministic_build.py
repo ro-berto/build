@@ -170,11 +170,13 @@ def RunSteps(api, buildername):
   for ext in '12':
     p = str(api.chromium.output_dir).rstrip('\\/') + '.' + ext
     api.file.rmtree('rmtree %s' % p, p)
+  if check_different_build_dirs:
+    # In this setup, one build dir does incremental builds. Make sure no stale
+    # .isolate or .isolated hang around.
+    api.file.rmglob('rm old .isolate', api.chromium.output_dir, '*.isolate')
+    api.file.rmglob('rm old .isolated', api.chromium.output_dir, '*.isolated')
 
   targets = recipe_config['targets']
-
-  # Disable the tests isolation on Android as it's not supported yet.
-  enable_isolate = target_platform != 'android'
 
   api.chromium.ensure_goma()
   with api.context(cwd=solution_path):
@@ -185,9 +187,6 @@ def RunSteps(api, buildername):
   api.chromium.mb_isolate_everything(api.properties.get('mastername'),
                                      buildername)
   api.chromium.compile(targets, name='First build', use_goma_module=True)
-  if enable_isolate:
-    # This archives the results and regenerate the .isolated files.
-    api.isolate.isolate_tests(api.chromium.output_dir)
 
   if not check_different_build_dirs:
     MoveBuildDirectory(api, str(api.chromium.output_dir),
@@ -204,12 +203,6 @@ def RunSteps(api, buildername):
                                      buildername, build_dir=build_dir)
   api.chromium.compile(targets, name='Second build', use_goma_module=True,
                        target=target)
-  if enable_isolate:
-    # This should be quick if the build is indeed deterministic.
-    second_dir = str(api.chromium.output_dir)
-    if check_different_build_dirs:
-      second_dir = second_dir.rstrip('\\/') + '.2'
-    api.isolate.isolate_tests(api.path.abs_to_path(second_dir))
   if not check_different_build_dirs:
     MoveBuildDirectory(api, str(api.chromium.output_dir),
                        str(api.chromium.output_dir).rstrip('\\/') + '.2')
