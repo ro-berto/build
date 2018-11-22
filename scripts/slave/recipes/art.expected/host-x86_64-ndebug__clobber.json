@@ -50,7 +50,8 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "sdk",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
     },
     "name": "build sdk-eng"
   },
@@ -72,7 +73,8 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "sdk",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
     },
     "name": "test gtest"
   },
@@ -97,7 +99,8 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "sdk",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
     },
     "name": "test optimizing"
   },
@@ -123,7 +126,8 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "sdk",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
     },
     "name": "test debuggable"
   },
@@ -148,7 +152,8 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "sdk",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
     },
     "name": "test interpreter"
   },
@@ -173,7 +178,8 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "sdk",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
     },
     "name": "test baseline"
   },
@@ -198,7 +204,8 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "sdk",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
     },
     "name": "test jit"
   },
@@ -223,7 +230,8 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "sdk",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
     },
     "name": "test speed-profile"
   },
@@ -245,7 +253,8 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "sdk",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
     },
     "name": "test libcore"
   },
@@ -267,7 +276,8 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "sdk",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
     },
     "name": "test jdwp jit"
   },
@@ -290,7 +300,8 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "sdk",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
     },
     "name": "test jdwp interpreter"
   },
@@ -312,7 +323,8 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "sdk",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
     },
     "name": "test libjdwp jit"
   },
@@ -335,7 +347,8 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "sdk",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
     },
     "name": "test libjdwp interpreter"
   },
@@ -355,7 +368,8 @@
       "SOONG_ALLOW_MISSING_DEPENDENCIES": "true",
       "TARGET_BUILD_TYPE": "release",
       "TARGET_BUILD_VARIANT": "eng",
-      "TARGET_PRODUCT": "sdk"
+      "TARGET_PRODUCT": "sdk",
+      "TEMPORARY_DISABLE_PATH_RESTRICTIONS": "true"
     },
     "name": "test dx"
   },
