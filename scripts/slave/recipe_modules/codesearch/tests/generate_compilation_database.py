@@ -19,19 +19,15 @@ def RunSteps(api):
       GEN_REPO_BRANCH=api.properties.get('gen_repo_branch', 'master'),
       CORPUS=api.properties.get('corpus', 'chromium-linux'),
   )
-  api.codesearch.generate_compilation_database(api.codesearch.c.COMPILE_TARGETS)
+  api.codesearch.generate_compilation_database(api.codesearch.c.COMPILE_TARGETS,
+                                               mastername='test_mastername',
+                                               buildername='test_buildername')
 
 
 def GenTests(api):
-  yield (
-      api.test('basic') +
-      api.properties(mastername='test_mastername',
-                     buildername='test_buildername')
-  )
+  yield api.test('basic')
 
   yield (
       api.test('generate_compilation_database_failed') +
-      api.properties(mastername='test_mastername',
-                     buildername='test_buildername') +
       api.step_data('generate compilation database', retcode=1)
   )

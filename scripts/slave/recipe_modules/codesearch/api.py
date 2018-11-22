@@ -50,10 +50,8 @@ class CodesearchApi(recipe_api.RecipeApi):
                         '-mtime', ('+%d' % age_days), '-type', 'f', '-delete']
       self.m.step('delete old generated files', delete_command)
 
-  def generate_compilation_database(self, targets, output_file=None,
-                                    mb_config_path=None):
-    mastername = self.m.properties['mastername']
-    buildername = self.m.properties['buildername']
+  def generate_compilation_database(self, targets, mastername, buildername,
+                                    output_file=None, mb_config_path=None):
     self.m.chromium.mb_gen(mastername,
                            buildername,
                            build_dir=self.c.debug_path,
@@ -206,9 +204,9 @@ class CodesearchApi(recipe_api.RecipeApi):
 
     # Sync the generated files into this checkout.
     args = ['--message',
-            'Generated files from "%s" build %s, revision %s' % (
-                self.m.properties['buildername'],
-                self.m.properties['buildnumber'],
+            'Generated files from "%s" build %d, revision %s' % (
+                self.m.buildbucket.builder_name,
+                self.m.buildbucket.build.number,
                 self._get_revision()),
             '--dest-branch',
             self.c.GEN_REPO_BRANCH,

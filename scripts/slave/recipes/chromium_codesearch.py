@@ -14,6 +14,7 @@ DEPS = [
   'depot_tools/git',
   'depot_tools/gsutil',
   'goma',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -132,9 +133,7 @@ PROPERTIES = {
 }
 
 def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
-  buildername = api.properties.get('buildername')
-
-  bot_config = SPEC.get('builders', {}).get(buildername)
+  bot_config = SPEC.get('builders', {}).get(api.buildbucket.builder_name)
   platform = bot_config.get('platform', 'linux')
   experimental = bot_config.get('experimental', False)
   corpus = bot_config.get('corpus', 'chromium-linux')
@@ -188,7 +187,9 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
   # by that step may be deleted (if they've been unchanged for the past week).
   api.codesearch.cleanup_old_generated()
 
-  api.codesearch.generate_compilation_database(targets)
+  api.codesearch.generate_compilation_database(
+      targets, mastername='chromium.infra.codesearch',
+      buildername=api.buildbucket.builder_name)
 
   # If the compile fails, abort execution and don't upload the pack. When we
   # upload an incomplete (due to compile failures) pack to Kythe, it fails
@@ -233,16 +234,14 @@ def GenTests(api):
   for buildername, _ in SPEC['builders'].iteritems():
     yield (
         api.test('full_%s' % (_sanitize_nonalpha(buildername))) +
-        api.properties.generic(buildername=buildername,
-                               mastername='chromium.infra.codesearch') +
+        api.properties.generic(buildername=buildername) +
         api.runtime(is_luci=True, is_experimental=False)
     )
 
   for buildername, _ in SPEC['builders'].iteritems():
     yield (
         api.test('full_%s_with_revision' % (_sanitize_nonalpha(buildername))) +
-        api.properties.generic(buildername=buildername,
-                               mastername='chromium.infra.codesearch') +
+        api.properties.generic(buildername=buildername) +
         api.properties(root_solution_revision='a' * 40,
                        root_solution_revision_timestamp=1531887759) +
         api.runtime(is_luci=True, is_experimental=False)
@@ -253,8 +252,7 @@ def GenTests(api):
         'full_%s_delete_generated_files_fail' %
         _sanitize_nonalpha('codesearch-gen-chromium-win')) +
     api.step_data('delete old generated files', retcode=1) +
-    api.properties.generic(buildername='codesearch-gen-chromium-win',
-                           mastername='chromium.infra.codesearch') +
+    api.properties.generic(buildername='codesearch-gen-chromium-win') +
     api.runtime(is_luci=True, is_experimental=False)
   )
 
@@ -263,8 +261,7 @@ def GenTests(api):
         'full_%s_compile_fail' %
         _sanitize_nonalpha('codesearch-gen-chromium-linux')) +
     api.step_data('compile', retcode=1) +
-    api.properties.generic(buildername='codesearch-gen-chromium-linux',
-                           mastername='chromium.infra.codesearch') +
+    api.properties.generic(buildername='codesearch-gen-chromium-linux') +
     api.runtime(is_luci=True, is_experimental=False)
   )
 
@@ -272,8 +269,7 @@ def GenTests(api):
     api.test(
         'full_%s_translation_unit_fail' % _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
     api.step_data('run translation_unit clang tool', retcode=2) +
-    api.properties.generic(buildername='codesearch-gen-chromium-chromiumos',
-                           mastername='chromium.infra.codesearch') +
+    api.properties.generic(buildername='codesearch-gen-chromium-chromiumos') +
     api.runtime(is_luci=True, is_experimental=False)
   )
 
@@ -282,8 +278,7 @@ def GenTests(api):
         'full_%s_generate_compile_database_fail' %
         _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
     api.step_data('generate compilation database', retcode=1) +
-    api.properties.generic(buildername='codesearch-gen-chromium-chromiumos',
-                           mastername='chromium.infra.codesearch') +
+    api.properties.generic(buildername='codesearch-gen-chromium-chromiumos') +
     api.runtime(is_luci=True, is_experimental=False)
   )
 
@@ -292,7 +287,6 @@ def GenTests(api):
         'full_%s_sync_generated_files_fail' %
         _sanitize_nonalpha('codesearch-gen-chromium-linux')) +
     api.step_data('sync generated files', retcode=1) +
-    api.properties.generic(buildername='codesearch-gen-chromium-linux',
-                           mastername='chromium.infra.codesearch') +
+    api.properties.generic(buildername='codesearch-gen-chromium-linux') +
     api.runtime(is_luci=True, is_experimental=False)
   )

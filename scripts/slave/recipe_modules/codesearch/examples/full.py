@@ -13,6 +13,7 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/git',
   'goma',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -51,11 +52,8 @@ BUILDERS = freeze({
   },
 })
 
-PROPERTIES = {
-  'buildername': Property(),
-}
-
-def RunSteps(api, buildername):
+def RunSteps(api):
+  buildername = api.buildbucket.builder_name
   builder = BUILDERS[buildername]
 
   platform = builder.get('platform', 'linux')
@@ -88,7 +86,9 @@ def RunSteps(api, buildername):
   api.chromium.ensure_goma()
   api.chromium.runhooks()
 
-  api.codesearch.generate_compilation_database(targets)
+  api.codesearch.generate_compilation_database(
+      targets, mastername='chromium.infra.codesearch',
+      buildername=buildername)
 
   api.codesearch.cleanup_old_generated()
 
