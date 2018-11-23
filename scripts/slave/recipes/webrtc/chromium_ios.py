@@ -6,7 +6,6 @@
 
 The changes are:
 * The Chromium checkout uses WebRTC ToT in src/third_party/WebRTC
-* No tests are run.
 """
 
 DEPS = [
@@ -20,6 +19,7 @@ def RunSteps(api):
   api.ios.checkout(gclient_apply_config=['chromium_webrtc_tot'])
   api.ios.read_build_config()
   api.ios.build()
+  api.ios.test_swarming()
 
 def GenTests(api):
   yield (
@@ -39,7 +39,16 @@ def GenTests(api):
         'target_cpu="arm"',
         'use_goma=true',
       ],
+      'bucket': 'fake-bucket-1',
       'tests': [
+        {
+          'app': 'fake test',
+          'device type': 'iPhone X',
+          'os': '8.0',
+        },
       ],
-    })
+    }) + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output_text('1.2.3'),
+    )
   )

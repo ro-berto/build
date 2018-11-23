@@ -5878,15 +5878,14 @@ Recipe for running presubmit in V8 CI.
 &mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/auto_roll_webrtc_deps.py#29)(api):**
 ### *recipes* / [webrtc/chromium\_ios](/scripts/slave/recipes/webrtc/chromium_ios.py)
 
-[DEPS](/scripts/slave/recipes/webrtc/chromium_ios.py#12): [ios](#recipe_modules-ios), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
+[DEPS](/scripts/slave/recipes/webrtc/chromium_ios.py#11): [ios](#recipe_modules-ios), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
 
 Recipe based on ios/unified_builder_tester adapted for using WebRTC.
 
 The changes are:
 * The Chromium checkout uses WebRTC ToT in src/third_party/WebRTC
-* No tests are run.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/chromium_ios.py#19)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/chromium_ios.py#18)(api):**
 ### *recipes* / [webrtc/ios](/scripts/slave/recipes/webrtc/ios.py)
 
 [DEPS](/scripts/slave/recipes/webrtc/ios.py#5): [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [ios](#recipe_modules-ios), [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io]
