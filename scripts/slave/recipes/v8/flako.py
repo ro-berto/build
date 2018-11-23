@@ -130,6 +130,7 @@ class Command(object):
       '--timeout=%d' % timeout,
       '--swarming',
       '--variants=%s' % variant,
+      '--exit-after-n-failures=%d' % (1 if repro_only else MIN_FLAKE_THRESHOLD),
     ]
     if repro_only:
       # In repro-only mode we keep running skipped tests.

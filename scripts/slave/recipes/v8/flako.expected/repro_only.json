@@ -78,6 +78,7 @@
       "--timeout=20",
       "--swarming",
       "--variants=stress_foo",
+      "--exit-after-n-failures=1",
       "--run-skipped",
       "--foo-flag",
       "--bar-flag",
