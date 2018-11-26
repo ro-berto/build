@@ -1252,7 +1252,11 @@
       ""
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "test results"
+    "name": "test results",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@results.json@@@@",
+      "@@@STEP_LOG_END@results.json@@@"
+    ]
   },
   {
     "cmd": [],

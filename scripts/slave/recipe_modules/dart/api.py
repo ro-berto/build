@@ -399,6 +399,7 @@ class DartApi(recipe_api.RecipeApi):
     args.append(self.m.path['checkout'].join('LATEST', previous_results))
     args.append(self.m.raw_io.input_text(results_str))
     self.m.step('test results', args)
+    self.m.step.active_result.presentation.logs['results.json'] = [results_str]
 
 
   # todo(athom): Use raw_io instead to read the result.log file.
