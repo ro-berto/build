@@ -3,6 +3,21 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[BUILDER_CACHE]/Mac_10_11"
+    ],
+    "infra_step": true,
+    "name": "makedirs checkout path"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]",
@@ -17,8 +32,8 @@
       "--revision",
       "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
-    "cwd": "[CACHE]/builder",
-    "env_suffixes": {
+    "cwd": "[BUILDER_CACHE]/Mac_10_11",
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -67,10 +82,10 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools_webrtc/download_tools.py",
-      "[CACHE]/builder/src/tools_webrtc/audio_quality"
+      "[BUILDER_CACHE]/Mac_10_11/src/tools_webrtc/download_tools.py",
+      "[BUILDER_CACHE]/Mac_10_11/src/tools_webrtc/audio_quality"
     ],
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -82,7 +97,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[CACHE]/builder/src/out"
+      "[BUILDER_CACHE]/Mac_10_11/src/out"
     ],
     "infra_step": true,
     "name": "clean test output files"
@@ -93,7 +108,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/Release",
+      "[BUILDER_CACHE]/Mac_10_11/src/out/Release",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files"
@@ -166,11 +181,12 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1 gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1",
+      "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
@@ -184,7 +200,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Mac_10_11/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -197,18 +213,18 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
+      "[BUILDER_CACHE]/Mac_10_11/src/tools_webrtc/mb/mb.py",
       "lookup",
       "-m",
       "client.webrtc.perf",
       "-b",
       "Mac 10.11",
       "--config-file",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/Mac_10_11/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -224,21 +240,21 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
+      "[BUILDER_CACHE]/Mac_10_11/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
       "client.webrtc.perf",
       "-b",
       "Mac 10.11",
       "--config-file",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/Mac_10_11/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "isac_fix_test\nlow_bandwidth_audio_perf_test\nwebrtc_perf_tests\n",
-      "//out/Mac_10_11"
+      "//out/Release"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -264,7 +280,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[CACHE]/builder/src",
+      "[BUILDER_CACHE]/Mac_10_11/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -282,7 +298,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -300,7 +316,7 @@
       "0777",
       "[GOMA_CACHE]/data/Mac_10_11"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -317,7 +333,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -356,7 +372,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -380,14 +396,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Mac_10_11",
+      "[BUILDER_CACHE]/Mac_10_11/src/out/Release",
       "-j",
       "20",
       "isac_fix_test",
       "low_bandwidth_audio_test",
       "webrtc_perf_tests"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -401,7 +417,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Mac_10_11",
+      "[BUILDER_CACHE]/Mac_10_11/src/out/Release",
       "-j",
       "20",
       "isac_fix_test",
@@ -411,7 +427,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -422,7 +438,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -436,7 +452,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -469,7 +485,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -491,7 +507,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -525,9 +541,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Mac_10_11",
+      "[BUILDER_CACHE]/Mac_10_11/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Mac_10_11\", \"-j\", 20, \"isac_fix_test\", \"low_bandwidth_audio_test\", \"webrtc_perf_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/Mac_10_11/src/out/Release\", \"-j\", 20, \"isac_fix_test\", \"low_bandwidth_audio_test\", \"webrtc_perf_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -544,7 +560,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Mac 10.11\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "Mac 10.11",
       "--buildbot-mastername",
@@ -552,7 +567,7 @@
       "--buildbot-slavename",
       "bot_id"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -582,7 +597,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -597,7 +612,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[CACHE]/builder/src/tools/swarming_client",
+      "[BUILDER_CACHE]/Mac_10_11/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -605,9 +620,9 @@
       "https://isolateserver.appspot.com",
       "--eventlog-endpoint",
       "prod",
-      "[CACHE]/builder/src/out/Mac_10_11/isac_fix_test.isolated.gen.json",
-      "[CACHE]/builder/src/out/Mac_10_11/low_bandwidth_audio_perf_test.isolated.gen.json",
-      "[CACHE]/builder/src/out/Mac_10_11/webrtc_perf_tests.isolated.gen.json"
+      "[BUILDER_CACHE]/Mac_10_11/src/out/Release/isac_fix_test.isolated.gen.json",
+      "[BUILDER_CACHE]/Mac_10_11/src/out/Release/low_bandwidth_audio_perf_test.isolated.gen.json",
+      "[BUILDER_CACHE]/Mac_10_11/src/out/Release/webrtc_perf_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -624,7 +639,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Mac_10_11/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -676,8 +691,6 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -708,7 +721,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11",
     "infra_step": true,
     "name": "[trigger] isac_fix_test on Mac-10.12",
     "~followup_annotations": [
@@ -731,7 +744,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Mac_10_11/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -783,8 +796,6 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -815,7 +826,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11",
     "infra_step": true,
     "name": "[trigger] low_bandwidth_audio_perf_test on Mac-10.12",
     "~followup_annotations": [
@@ -838,7 +849,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Mac_10_11/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -890,8 +901,6 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
@@ -925,7 +934,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11",
     "infra_step": true,
     "name": "[trigger] webrtc_perf_tests on Mac-10.12",
     "~followup_annotations": [
@@ -967,7 +976,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Mac_10_11/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1096,7 +1105,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_perf_dashboard_results.py",
       "--build-dir",
-      "[CACHE]/builder/src/out",
+      "[BUILDER_CACHE]/Mac_10_11/src/out",
       "--buildername",
       "Mac 10.11",
       "--buildnumber",
@@ -1116,7 +1125,7 @@
       "--output-json-dashboard-url",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11",
     "name": "isac_fix_test Dashboard Upload",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -1146,7 +1155,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11",
     "name": "Upload to test-results [isac_fix_test]"
   },
   {
@@ -1172,7 +1181,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Mac_10_11/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1301,7 +1310,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_perf_dashboard_results.py",
       "--build-dir",
-      "[CACHE]/builder/src/out",
+      "[BUILDER_CACHE]/Mac_10_11/src/out",
       "--buildername",
       "Mac 10.11",
       "--buildnumber",
@@ -1321,7 +1330,7 @@
       "--output-json-dashboard-url",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11",
     "name": "low_bandwidth_audio_perf_test Dashboard Upload",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -1351,7 +1360,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11",
     "name": "Upload to test-results [low_bandwidth_audio_perf_test]"
   },
   {
@@ -1377,7 +1386,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Mac_10_11/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1506,7 +1515,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_perf_dashboard_results.py",
       "--build-dir",
-      "[CACHE]/builder/src/out",
+      "[BUILDER_CACHE]/Mac_10_11/src/out",
       "--buildername",
       "Mac 10.11",
       "--buildnumber",
@@ -1526,7 +1535,7 @@
       "--output-json-dashboard-url",
       "/path/to/tmp/json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11",
     "name": "webrtc_perf_tests Dashboard Upload",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -1556,7 +1565,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Mac_10_11",
     "name": "Upload to test-results [webrtc_perf_tests]"
   },
   {

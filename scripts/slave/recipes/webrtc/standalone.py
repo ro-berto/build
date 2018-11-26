@@ -89,6 +89,11 @@ def GenTests(api):
           'Unexpected parent_buildername for builder %r on master %r.' %
               (buildername, mastername))
 
+    # TODO(crbug.com/908001): Remove this:
+    is_luci = True
+    if mastername == 'client.webrtc.perf':
+      is_luci = False
+
     chromium_kwargs = bot_config.get('chromium_config_kwargs', {})
     test = (
       api.test('%s_%s%s' % (_sanitize_nonalpha(mastername),
@@ -100,13 +105,12 @@ def GenTests(api):
                      BUILD_CONFIG=chromium_kwargs['BUILD_CONFIG']) +
       api.platform(bot_config['testing']['platform'],
                    chromium_kwargs.get('TARGET_BITS', 64)) +
-      api.runtime(is_luci=True, is_experimental=False)
+      api.runtime(is_luci=is_luci, is_experimental=False)
     )
 
     if bot_config.get('parent_buildername'):
       test += api.properties(
           parent_buildername=bot_config['parent_buildername'])
-
     if revision:
       test += api.properties(revision=revision,
                              git_revision='a' * 40 + revision,

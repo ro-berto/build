@@ -3,6 +3,21 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[BUILDER_CACHE]/Android32_Builder"
+    ],
+    "infra_step": true,
+    "name": "makedirs checkout path"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]\ntarget_os = ['android']",
@@ -17,8 +32,8 @@
       "--revision",
       "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
-    "cwd": "[CACHE]/builder",
-    "env_suffixes": {
+    "cwd": "[BUILDER_CACHE]/Android32_Builder",
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -68,7 +83,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[CACHE]/builder/src/out"
+      "[BUILDER_CACHE]/Android32_Builder/src/out"
     ],
     "infra_step": true,
     "name": "clean test output files"
@@ -78,10 +93,10 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\n",
-      "[CACHE]/builder/src/out/Release/debug_info_dumps",
-      "[CACHE]/builder/src/out/Release/test_logs",
-      "[CACHE]/builder/src/out/build_product.zip",
-      "[CACHE]/builder/src"
+      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/debug_info_dumps",
+      "[BUILDER_CACHE]/Android32_Builder/src/out/Release/test_logs",
+      "[BUILDER_CACHE]/Android32_Builder/src/out/build_product.zip",
+      "[BUILDER_CACHE]/Android32_Builder/src"
     ],
     "infra_step": true,
     "name": "clean local files",
@@ -136,7 +151,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=arm use_goma=1"
@@ -152,18 +167,18 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
+      "[BUILDER_CACHE]/Android32_Builder/src/tools_webrtc/mb/mb.py",
       "lookup",
       "-m",
       "client.webrtc.perf",
       "-b",
       "Android32 Builder",
       "--config-file",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/Android32_Builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -178,19 +193,19 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
+      "[BUILDER_CACHE]/Android32_Builder/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
       "client.webrtc.perf",
       "-b",
       "Android32 Builder",
       "--config-file",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/Android32_Builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
-      "//out/Android32_Builder"
+      "//out/Release"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -199,7 +214,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -217,7 +232,7 @@
       "0777",
       "[GOMA_CACHE]/data/Android32_Builder"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -234,7 +249,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -272,7 +287,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -296,14 +311,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Android32_Builder",
+      "[BUILDER_CACHE]/Android32_Builder/src/out/Release",
       "-j",
       "20",
       "low_bandwidth_audio_test",
       "video_quality_loopback_test",
       "webrtc_perf_tests"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -316,7 +331,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Android32_Builder",
+      "[BUILDER_CACHE]/Android32_Builder/src/out/Release",
       "-j",
       "20",
       "low_bandwidth_audio_test",
@@ -326,7 +341,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -336,7 +351,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -350,7 +365,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -383,7 +398,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -405,7 +420,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -439,9 +454,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Android32_Builder",
+      "[BUILDER_CACHE]/Android32_Builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Android32_Builder\", \"-j\", 20, \"low_bandwidth_audio_test\", \"video_quality_loopback_test\", \"webrtc_perf_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/Android32_Builder/src/out/Release\", \"-j\", 20, \"low_bandwidth_audio_test\", \"video_quality_loopback_test\", \"webrtc_perf_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -458,7 +473,6 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"Android32 Builder\", \"project\": \"webrtc\"}",
-      "--is-luci",
       "--buildbot-buildername",
       "Android32 Builder",
       "--buildbot-mastername",
@@ -466,7 +480,7 @@
       "--buildbot-slavename",
       "bot_id"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -496,7 +510,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -518,13 +532,13 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/zip_build.py",
       "--target",
-      "Android32_Builder",
+      "Release",
       "--gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--staging-dir",
       "[CACHE]/chrome_staging",
       "--src-dir",
-      "[CACHE]/builder/src",
+      "[BUILDER_CACHE]/Android32_Builder/src",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-url",

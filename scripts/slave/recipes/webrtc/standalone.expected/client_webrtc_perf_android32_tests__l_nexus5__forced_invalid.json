@@ -3,6 +3,21 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_"
+    ],
+    "infra_step": true,
+    "name": "makedirs checkout path"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]\ntarget_os = ['android']",
@@ -17,8 +32,8 @@
       "--revision",
       "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
-    "cwd": "[CACHE]/builder",
-    "env_suffixes": {
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_",
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -67,10 +82,10 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools_webrtc/download_tools.py",
-      "[CACHE]/builder/src/tools_webrtc/audio_quality"
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/tools_webrtc/download_tools.py",
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/tools_webrtc/audio_quality"
     ],
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -81,10 +96,10 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools_webrtc/download_tools.py",
-      "[CACHE]/builder/src/tools_webrtc/video_quality_toolchain/linux"
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/tools_webrtc/download_tools.py",
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/tools_webrtc/video_quality_toolchain/linux"
     ],
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -98,9 +113,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py",
       "--bucket=chromium-webrtc-resources",
       "--directory",
-      "[CACHE]/builder/src/rtc_tools/testing"
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/rtc_tools/testing"
     ],
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -114,9 +129,9 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py",
       "--bucket=chromium-webrtc-resources",
       "--directory",
-      "[CACHE]/builder/src/rtc_tools/testing/golang/linux"
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/rtc_tools/testing/golang/linux"
     ],
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -128,7 +143,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[CACHE]/builder/src/out"
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out"
     ],
     "infra_step": true,
     "name": "clean test output files"
@@ -138,10 +153,10 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\n",
-      "[CACHE]/builder/src/out/Release/debug_info_dumps",
-      "[CACHE]/builder/src/out/Release/test_logs",
-      "[CACHE]/builder/src/out/build_product.zip",
-      "[CACHE]/builder/src"
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/debug_info_dumps",
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/Release/test_logs",
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src/out/build_product.zip",
+      "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src"
     ],
     "infra_step": true,
     "name": "clean local files",
@@ -164,7 +179,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Android32_Tests__L_Nexus5_/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "target_arch=arm"
