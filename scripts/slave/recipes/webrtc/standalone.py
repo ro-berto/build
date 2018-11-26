@@ -4,6 +4,9 @@
 
 # Recipe for building and running tests for WebRTC stand-alone.
 
+import functools
+
+
 DEPS = [
   'archive',
   'depot_tools/bot_update',
@@ -69,115 +72,40 @@ def RunSteps(api):
   webrtc.maybe_trigger()
 
 
-def _sanitize_nonalpha(text):
-  return ''.join(c if c.isalnum() else '_' for c in text.lower())
-
-
 def GenTests(api):
   builders = api.webrtc.BUILDERS
+  generate_builder = functools.partial(api.webrtc.generate_builder, builders)
 
-  def generate_builder(mastername, buildername, revision,
-                       parent_got_revision=None, failing_test=None,
-                       suffix=None, fail_android_archive=False,
-                       is_chromium=False):
-    suffix = suffix or ''
-    bot_config = builders[mastername]['builders'][buildername]
-    bot_type = bot_config.get('bot_type', 'builder_tester')
-
-    if bot_type in ('builder', 'builder_tester'):
-      assert bot_config.get('parent_buildername') is None, (
-          'Unexpected parent_buildername for builder %r on master %r.' %
-              (buildername, mastername))
-
-    # TODO(crbug.com/908001): Remove this:
-    is_luci = True
-    is_experimental = False
-    if mastername == 'client.webrtc.perf':
-      if 'Perf' in buildername:  # New names happen to all have "Perf".
-        is_experimental = True
-      else:
-        is_luci = False
-
-    chromium_kwargs = bot_config.get('chromium_config_kwargs', {})
-    test = (
-      api.test('%s_%s%s' % (_sanitize_nonalpha(mastername),
-                            _sanitize_nonalpha(buildername), suffix)) +
-      api.properties(mastername=mastername,
-                     buildername=buildername,
-                     bot_id='bot_id',
-                     path_config='kitchen',
-                     BUILD_CONFIG=chromium_kwargs['BUILD_CONFIG']) +
-      api.platform(bot_config['testing']['platform'],
-                   chromium_kwargs.get('TARGET_BITS', 64)) +
-      api.runtime(is_luci=is_luci, is_experimental=is_experimental)
-    )
-
-    if bot_config.get('parent_buildername'):
-      test += api.properties(
-          parent_buildername=bot_config['parent_buildername'])
-    if revision:
-      test += api.properties(revision=revision,
-                             git_revision='a' * 40 + revision,
-                             got_revision_cp=revision)
-    if bot_type == 'tester':
-      parent_rev = parent_got_revision or revision
-      test += api.properties(parent_got_revision=parent_rev)
-
-    if failing_test:
-      test += api.step_data(failing_test, retcode=1)
-
-    if fail_android_archive:
-      test += api.step_data('build android archive', retcode=1)
-
-    git_repo = 'https://webrtc.googlesource.com/src'
-    if is_chromium:
-      git_repo = 'https://chromium.googlesource.com/chromium/src'
-    if mastername.startswith('tryserver'):
-      test += api.buildbucket.try_build(
-          project='webrtc',
-          builder=buildername,
-          git_repo=git_repo,
-          revision=revision or None)
-    else:
-      test += api.buildbucket.ci_build(
-          project='webrtc',
-          builder=buildername,
-          git_repo=git_repo,
-          revision=revision or 'a' * 40)
-    test += api.properties(buildnumber=1337)
-
-    return test
-
-  for mastername in builders.keys():
-    master_config = builders[mastername]
+  for bucketname in builders.keys():
+    master_config = builders[bucketname]
     for buildername in master_config['builders'].keys():
-      yield generate_builder(mastername, buildername, revision='a' * 40)
+      yield generate_builder(bucketname, buildername, revision='a' * 40)
 
-  mastername = 'tryserver.webrtc'
+  bucketname = 'luci.webrtc.try'
   buildername = 'linux_compile_rel'
-  yield generate_builder(mastername, buildername, revision=None,
+  yield generate_builder(bucketname, buildername, revision=None,
                          is_chromium=True, suffix='_chromium')
 
   # Forced builds (not specifying any revision) and test failures.
-  mastername = 'client.webrtc'
+  bucketname = 'luci.webrtc.ci'
   buildername = 'Linux64 Debug'
-  yield generate_builder(mastername, buildername, revision=None,
+  yield generate_builder(bucketname, buildername, revision=None,
                          suffix='_forced')
-  yield generate_builder(mastername, buildername, revision='a' * 40,
+  yield generate_builder(bucketname, buildername, revision='a' * 40,
                          failing_test='rtc_unittests',
                          suffix='_failing_test')
-  yield generate_builder(mastername, 'Android32 (M Nexus5X)', revision='a' * 40,
+  yield generate_builder(bucketname, 'Android32 (M Nexus5X)', revision='a' * 40,
                          fail_android_archive=True, suffix='_failing_archive')
 
-  mastername = 'client.webrtc.perf'
-  yield generate_builder(mastername, 'Android32 Builder', revision=None,
+  bucketname = 'client.webrtc.perf'
+  yield generate_builder(bucketname, 'Android32 Builder', revision=None,
                          suffix='_forced')
 
   buildername = 'Android32 Tests (L Nexus5)'
-  yield generate_builder(mastername, buildername, revision=None,
+  yield generate_builder(bucketname, buildername, revision=None,
                          parent_got_revision='a' * 40, suffix='_forced')
-  yield generate_builder(mastername, buildername, revision=None,
+  yield generate_builder(bucketname, buildername, revision=None,
                          suffix='_forced_invalid')
-  yield generate_builder(mastername, buildername, revision='a' * 40,
+  yield generate_builder(bucketname, buildername, revision='a' * 40,
                          failing_test='webrtc_perf_tests',
                          suffix='_failing_test')

@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import functools
+
 from recipe_engine.types import freeze
 
 
@@ -29,7 +31,10 @@ RECIPE_CONFIGS = freeze({
 })
 
 BUILDERS = freeze({
-  'client.webrtc': {
+  'luci.webrtc.ci': {
+    'settings': {
+      'mastername': 'client.webrtc',
+    },
     'builders': {
       'Linux (more configs)': {
         'recipe_config': 'webrtc_default',
@@ -72,7 +77,10 @@ BUILDERS = freeze({
       },
     },
   },
-  'tryserver.webrtc': {
+  'luci.webrtc.try': {
+    'settings': {
+      'mastername': 'tryserver.webrtc',
+    },
     'builders': {
       'linux_more_configs': {
         'recipe_config': 'webrtc_default',
@@ -141,12 +149,10 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  tests = api.chromium.gen_tests_for_builders(
-      BUILDERS,
-      project='webrtc',
-      git_repo='https://webrtc.googlesource.com/src')
-  for test in tests:
-    yield (test +
-           api.runtime(is_luci=True, is_experimental=False) +
-           api.properties(
-               patch_repository_url='https://webrtc.googlesource.com/src'))
+  builders = BUILDERS
+  generate_builder = functools.partial(api.webrtc.generate_builder, builders)
+
+  for bucketname in builders.keys():
+    master_config = builders[bucketname]
+    for buildername in master_config['builders'].keys():
+      yield generate_builder(bucketname, buildername, revision='a' * 40)

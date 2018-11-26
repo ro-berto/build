@@ -472,7 +472,7 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"Android32 Builder\", \"project\": \"webrtc\"}",
+      "{\"bucket\": \"perf\", \"builder\": \"Android32 Builder\", \"project\": \"webrtc\"}",
       "--buildbot-buildername",
       "Android32 Builder",
       "--buildbot-mastername",

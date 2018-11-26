@@ -3,63 +3,19 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gerrit_client.py",
-      "changes",
-      "--host",
-      "https://webrtc-review.googlesource.com",
-      "--json_file",
-      "/path/to/tmp/json",
-      "--limit",
-      "1",
-      "-p",
-      "change=123456",
-      "-o",
-      "ALL_REVISIONS",
-      "-o",
-      "DOWNLOAD_COMMANDS"
-    ],
-    "cwd": "[CACHE]/builder",
-    "env": {
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
-    },
-    "infra_step": true,
-    "name": "gerrit fetch current CL info",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"master\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"7\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/56/123456/7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]\ntarget_os = ['android']",
-      "--patch_root",
-      "src",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]\ntarget_os = ['android']",
       "--revision_mapping_file",
       "{\"got_revision\": \"src\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[GIT_CACHE]",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
       "/path/to/tmp/json",
-      "--patch_ref",
-      "https://webrtc.googlesource.com/src@refs/changes/56/123456/7",
       "--revision",
-      "src@HEAD"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "cwd": "[CACHE]/builder",
     "env_suffixes": {
@@ -74,7 +30,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -116,9 +72,9 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma/client",
+      "[GOMA_CACHE]/client",
       "-ensure-file",
-      "infra_internal/goma/client/linux-amd64 release",
+      "infra_internal/goma/client/linux-386 release",
       "-json-output",
       "/path/to/tmp/json",
       "-service-account-json",
@@ -132,7 +88,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-386\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -149,7 +105,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "OS=android fastbuild=1 gomadir='[CACHE]/goma/client' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "OS=android fastbuild=1 gomadir='[GOMA_CACHE]/client' target_arch=arm use_goma=1",
       "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "env_suffixes": {
@@ -166,15 +122,15 @@
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "lookup",
       "-m",
-      "tryserver.webrtc",
+      "client.webrtc",
       "-b",
-      "android_more_configs",
+      "Android32 (more configs)",
       "--config-file",
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--phase",
       "bwe_test_logging",
       "--goma-dir",
-      "[CACHE]/goma/client"
+      "[GOMA_CACHE]/client"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -195,15 +151,15 @@
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
-      "tryserver.webrtc",
+      "client.webrtc",
       "-b",
-      "android_more_configs",
+      "Android32 (more configs)",
       "--config-file",
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--phase",
       "bwe_test_logging",
       "--goma-dir",
-      "[CACHE]/goma/client",
+      "[GOMA_CACHE]/client",
       "//out/bwe_test_logging"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -232,7 +188,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/android_more_configs"
+      "[GOMA_CACHE]/data/Android32__more_configs_"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -248,19 +204,19 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/android_more_configs",
+      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
@@ -360,7 +316,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
@@ -394,7 +350,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -416,7 +372,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -471,14 +427,14 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"android_more_configs\", \"project\": \"webrtc\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"Android32 (more configs)\", \"project\": \"webrtc\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "android_more_configs",
+      "Android32 (more configs)",
       "--buildbot-mastername",
-      "tryserver.webrtc",
+      "client.webrtc",
       "--buildbot-slavename",
-      "test_bot"
+      "bot_id"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -527,15 +483,15 @@
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "lookup",
       "-m",
-      "tryserver.webrtc",
+      "client.webrtc",
       "-b",
-      "android_more_configs",
+      "Android32 (more configs)",
       "--config-file",
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--phase",
       "dummy_audio_file_devices_no_protobuf",
       "--goma-dir",
-      "[CACHE]/goma/client"
+      "[GOMA_CACHE]/client"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -556,15 +512,15 @@
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
-      "tryserver.webrtc",
+      "client.webrtc",
       "-b",
-      "android_more_configs",
+      "Android32 (more configs)",
       "--config-file",
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--phase",
       "dummy_audio_file_devices_no_protobuf",
       "--goma-dir",
-      "[CACHE]/goma/client",
+      "[GOMA_CACHE]/client",
       "//out/dummy_audio_file_devices_no_protobuf"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -593,7 +549,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/android_more_configs"
+      "[GOMA_CACHE]/data/Android32__more_configs_"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -609,19 +565,19 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/android_more_configs",
+      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
@@ -721,7 +677,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
@@ -755,7 +711,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -777,7 +733,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -832,14 +788,14 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"android_more_configs\", \"project\": \"webrtc\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"Android32 (more configs)\", \"project\": \"webrtc\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "android_more_configs",
+      "Android32 (more configs)",
       "--buildbot-mastername",
-      "tryserver.webrtc",
+      "client.webrtc",
       "--buildbot-slavename",
-      "test_bot"
+      "bot_id"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -888,15 +844,15 @@
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "lookup",
       "-m",
-      "tryserver.webrtc",
+      "client.webrtc",
       "-b",
-      "android_more_configs",
+      "Android32 (more configs)",
       "--config-file",
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--phase",
       "rtti_no_sctp",
       "--goma-dir",
-      "[CACHE]/goma/client"
+      "[GOMA_CACHE]/client"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -917,15 +873,15 @@
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
-      "tryserver.webrtc",
+      "client.webrtc",
       "-b",
-      "android_more_configs",
+      "Android32 (more configs)",
       "--config-file",
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--phase",
       "rtti_no_sctp",
       "--goma-dir",
-      "[CACHE]/goma/client",
+      "[GOMA_CACHE]/client",
       "//out/rtti_no_sctp"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -954,7 +910,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/android_more_configs"
+      "[GOMA_CACHE]/data/Android32__more_configs_"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -970,19 +926,19 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/android_more_configs",
+      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/Android32__more_configs_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
       "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
@@ -1082,7 +1038,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
@@ -1116,7 +1072,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -1138,7 +1094,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -1193,14 +1149,14 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"android_more_configs\", \"project\": \"webrtc\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"Android32 (more configs)\", \"project\": \"webrtc\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "android_more_configs",
+      "Android32 (more configs)",
       "--buildbot-mastername",
-      "tryserver.webrtc",
+      "client.webrtc",
       "--buildbot-slavename",
-      "test_bot"
+      "bot_id"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {

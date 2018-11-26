@@ -45,13 +45,13 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]\\\\git'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
       "{\"got_revision\": \"src\"}",
       "--git-cache-dir",
-      "[CACHE]\\git",
+      "[GIT_CACHE]",
       "--cleanup-dir",
       "[CLEANUP]\\bot_update",
       "--output_json",
@@ -59,7 +59,7 @@
       "--patch_ref",
       "https://webrtc.googlesource.com/src@refs/changes/56/123456/7",
       "--revision",
-      "src@HEAD"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "cwd": "[CACHE]\\builder",
     "env_suffixes": {
@@ -74,7 +74,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -116,7 +116,7 @@
       "cipd.bat",
       "ensure",
       "-root",
-      "[CACHE]\\goma\\client",
+      "[GOMA_CACHE]\\client",
       "-ensure-file",
       "infra_internal/goma/client/windows-amd64 release",
       "-json-output",
@@ -149,7 +149,7 @@
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]\\goma\\client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "gomadir='[GOMA_CACHE]\\client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -173,7 +173,7 @@
       "--phase",
       "bwe_test_logging",
       "--goma-dir",
-      "[CACHE]\\goma\\client"
+      "[GOMA_CACHE]\\client"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -201,7 +201,7 @@
       "--phase",
       "bwe_test_logging",
       "--goma-dir",
-      "[CACHE]\\goma\\client",
+      "[GOMA_CACHE]\\client",
       "--swarming-targets-file",
       "bwe_simulations_tests\n",
       "//out/bwe_test_logging"
@@ -235,7 +235,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\data\\win_more_configs"
+      "[GOMA_CACHE]\\data\\win_more_configs"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -251,14 +251,14 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma\\client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "restart"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\win_more_configs",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\win_more_configs",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -360,7 +360,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma\\client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
@@ -394,7 +394,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma\\client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stat"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -416,7 +416,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma\\client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stop"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -478,7 +478,7 @@
       "--buildbot-mastername",
       "tryserver.webrtc",
       "--buildbot-slavename",
-      "test_bot"
+      "bot_id"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -559,7 +559,7 @@
       "--shards",
       "1",
       "--task-name",
-      "bwe_simulations_tests/Windows-7-SP1/[dummy has/win_more_configs/571",
+      "bwe_simulations_tests/Windows-7-SP1/[dummy has/win_more_configs/1337",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -588,7 +588,7 @@
       "--tag",
       "buildername:win_more_configs",
       "--tag",
-      "buildnumber:571",
+      "buildnumber:1337",
       "--tag",
       "data:[dummy hash for bwe_simulations_tests]",
       "--tag",
@@ -598,8 +598,6 @@
       "--tag",
       "name:bwe_simulations_tests",
       "--tag",
-      "patch_project:chromium/src",
-      "--tag",
       "project:webrtc",
       "--tag",
       "purpose:ManualTS",
@@ -608,7 +606,7 @@
       "--tag",
       "purpose:pre-commit",
       "--tag",
-      "slavename:test_bot",
+      "slavename:bot_id",
       "--tag",
       "spec_name:webrtc.try:win_more_configs",
       "--tag",
@@ -644,9 +642,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"bwe_simulations_tests/Windows-7-SP1/[dummy has/win_more_configs/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"bwe_simulations_tests/Windows-7-SP1/[dummy has/win_more_configs/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"bwe_simulations_tests/Windows-7-SP1/[dummy has/win_more_configs/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"bwe_simulations_tests/Windows-7-SP1/[dummy has/win_more_configs/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -687,7 +685,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"bwe_simulations_tests/Windows-7-SP1/[dummy has/win_more_configs/571\", \"tasks\": {\"bwe_simulations_tests/Windows-7-SP1/[dummy has/win_more_configs/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"bwe_simulations_tests/Windows-7-SP1/[dummy has/win_more_configs/1337\", \"tasks\": {\"bwe_simulations_tests/Windows-7-SP1/[dummy has/win_more_configs/1337\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -838,7 +836,7 @@
       "--phase",
       "dummy_audio_file_devices_no_protobuf",
       "--goma-dir",
-      "[CACHE]\\goma\\client"
+      "[GOMA_CACHE]\\client"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -866,7 +864,7 @@
       "--phase",
       "dummy_audio_file_devices_no_protobuf",
       "--goma-dir",
-      "[CACHE]\\goma\\client",
+      "[GOMA_CACHE]\\client",
       "//out/dummy_audio_file_devices_no_protobuf"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -894,7 +892,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\data\\win_more_configs"
+      "[GOMA_CACHE]\\data\\win_more_configs"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -910,14 +908,14 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma\\client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "restart"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\win_more_configs",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\win_more_configs",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -1019,7 +1017,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma\\client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
@@ -1053,7 +1051,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma\\client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stat"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -1075,7 +1073,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma\\client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stop"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -1137,7 +1135,7 @@
       "--buildbot-mastername",
       "tryserver.webrtc",
       "--buildbot-slavename",
-      "test_bot"
+      "bot_id"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -1194,7 +1192,7 @@
       "--phase",
       "rtti_no_sctp",
       "--goma-dir",
-      "[CACHE]\\goma\\client"
+      "[GOMA_CACHE]\\client"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -1222,7 +1220,7 @@
       "--phase",
       "rtti_no_sctp",
       "--goma-dir",
-      "[CACHE]\\goma\\client",
+      "[GOMA_CACHE]\\client",
       "--swarming-targets-file",
       "peerconnection_unittests\n",
       "//out/rtti_no_sctp"
@@ -1256,7 +1254,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]\\goma\\data\\win_more_configs"
+      "[GOMA_CACHE]\\data\\win_more_configs"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -1272,14 +1270,14 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma\\client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "restart"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\win_more_configs",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\win_more_configs",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -1381,7 +1379,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma\\client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]\\goma_jsonstatus.json"
     ],
@@ -1415,7 +1413,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma\\client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stat"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -1437,7 +1435,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]\\goma\\client\\goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stop"
     ],
     "cwd": "[CACHE]\\builder\\src",
@@ -1499,7 +1497,7 @@
       "--buildbot-mastername",
       "tryserver.webrtc",
       "--buildbot-slavename",
-      "test_bot"
+      "bot_id"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -1580,7 +1578,7 @@
       "--shards",
       "1",
       "--task-name",
-      "peerconnection_unittests/Windows-7-SP1/[dummy has/win_more_configs/571",
+      "peerconnection_unittests/Windows-7-SP1/[dummy has/win_more_configs/1337",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1609,7 +1607,7 @@
       "--tag",
       "buildername:win_more_configs",
       "--tag",
-      "buildnumber:571",
+      "buildnumber:1337",
       "--tag",
       "data:[dummy hash for peerconnection_unittests]",
       "--tag",
@@ -1619,8 +1617,6 @@
       "--tag",
       "name:peerconnection_unittests",
       "--tag",
-      "patch_project:chromium/src",
-      "--tag",
       "project:webrtc",
       "--tag",
       "purpose:ManualTS",
@@ -1629,7 +1625,7 @@
       "--tag",
       "purpose:pre-commit",
       "--tag",
-      "slavename:test_bot",
+      "slavename:bot_id",
       "--tag",
       "spec_name:webrtc.try:win_more_configs",
       "--tag",
@@ -1664,9 +1660,9 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"peerconnection_unittests/Windows-7-SP1/[dummy has/win_more_configs/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"peerconnection_unittests/Windows-7-SP1/[dummy has/win_more_configs/1337\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"peerconnection_unittests/Windows-7-SP1/[dummy has/win_more_configs/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"peerconnection_unittests/Windows-7-SP1/[dummy has/win_more_configs/1337\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
@@ -1707,7 +1703,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"peerconnection_unittests/Windows-7-SP1/[dummy has/win_more_configs/571\", \"tasks\": {\"peerconnection_unittests/Windows-7-SP1/[dummy has/win_more_configs/571\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
+      "{\"base_task_name\": \"peerconnection_unittests/Windows-7-SP1/[dummy has/win_more_configs/1337\", \"tasks\": {\"peerconnection_unittests/Windows-7-SP1/[dummy has/win_more_configs/1337\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],

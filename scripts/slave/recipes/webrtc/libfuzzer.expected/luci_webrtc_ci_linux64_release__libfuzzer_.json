@@ -3,64 +3,22 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gerrit_client.py",
-      "changes",
-      "--host",
-      "https://webrtc-review.googlesource.com",
-      "--json_file",
-      "/path/to/tmp/json",
-      "--limit",
-      "1",
-      "-p",
-      "change=123456",
-      "-o",
-      "ALL_REVISIONS",
-      "-o",
-      "DOWNLOAD_COMMANDS"
-    ],
-    "env": {
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
-    },
-    "infra_step": true,
-    "name": "gerrit fetch current CL info",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"master\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"7\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/56/123456/7\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]",
-      "--patch_root",
-      "src",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]",
       "--revision_mapping_file",
       "{\"got_revision\": \"src\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[GIT_CACHE]",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
       "/path/to/tmp/json",
-      "--patch_ref",
-      "https://webrtc.googlesource.com/src@refs/changes/56/123456/7",
       "--revision",
-      "src@HEAD"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -72,7 +30,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -114,7 +72,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma/client",
+      "[GOMA_CACHE]/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -144,10 +102,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -160,18 +118,18 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools_webrtc/mb/mb.py",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "lookup",
       "-m",
-      "tryserver.webrtc",
+      "client.webrtc",
       "-b",
-      "linux_libfuzzer_rel",
+      "Linux64 Release (Libfuzzer)",
       "--config-file",
-      "[START_DIR]/src/tools_webrtc/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma/client"
+      "[GOMA_CACHE]/client"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -186,19 +144,19 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools_webrtc/mb/mb.py",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
-      "tryserver.webrtc",
+      "client.webrtc",
       "-b",
-      "linux_libfuzzer_rel",
+      "Linux64 Release (Libfuzzer)",
       "--config-file",
-      "[START_DIR]/src/tools_webrtc/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
-      "[CACHE]/goma/client",
-      "//out/Release"
+      "[GOMA_CACHE]/client",
+      "//out/Linux64_Release_Libfuzzer"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -210,15 +168,15 @@
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
-      "--root=[START_DIR]/src",
+      "--root=[CACHE]/builder/src",
       "refs",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Linux64_Release_Libfuzzer",
       "--all",
       "--type=executable",
       "--as=output",
       "//test/fuzzers:webrtc_fuzzer_main"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "name": "calculate targets",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
@@ -230,7 +188,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -246,9 +204,9 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/linux_libfuzzer_rel"
+      "[GOMA_CACHE]/data/Linux64_Release__Libfuzzer_"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -262,19 +220,19 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_libfuzzer_rel",
+      "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/Linux64_Release__Libfuzzer_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
-      "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -303,7 +261,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -327,14 +285,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Linux64_Release_Libfuzzer",
       "-j",
       "20",
       "target1",
       "target2",
       "target3"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -347,7 +305,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Linux64_Release_Libfuzzer",
       "-j",
       "20",
       "target1",
@@ -357,7 +315,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -367,7 +325,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -377,11 +335,11 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -411,10 +369,10 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -433,10 +391,10 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -470,9 +428,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Release",
+      "[CACHE]/builder/src/out/Linux64_Release_Libfuzzer",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Release\", \"-j\", 20, \"target1\", \"target2\", \"target3\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Linux64_Release_Libfuzzer\", \"-j\", 20, \"target1\", \"target2\", \"target3\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -488,15 +446,16 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"linux_libfuzzer_rel\", \"project\": \"webrtc\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"Linux64 Release (Libfuzzer)\", \"project\": \"webrtc\"}",
+      "--is-luci",
       "--buildbot-buildername",
-      "linux_libfuzzer_rel",
+      "Linux64 Release (Libfuzzer)",
       "--buildbot-mastername",
-      "tryserver.webrtc",
+      "client.webrtc",
       "--buildbot-slavename",
-      "test_bot"
+      "bot_id"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -526,7 +485,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },

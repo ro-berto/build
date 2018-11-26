@@ -3,6 +3,21 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[BUILDER_CACHE]/Linux__beta_"
+    ],
+    "infra_step": true,
+    "name": "makedirs checkout path"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]",
@@ -17,8 +32,8 @@
       "--revision",
       "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
-    "cwd": "[CACHE]/builder",
-    "env_suffixes": {
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -68,7 +83,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[CACHE]/builder/src/out"
+      "[BUILDER_CACHE]/Linux__beta_/src/out"
     ],
     "infra_step": true,
     "name": "clean test output files"
@@ -79,7 +94,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/Release",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files"
@@ -123,7 +138,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
@@ -139,7 +154,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -152,18 +167,18 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools_webrtc/mb/mb.py",
       "lookup",
       "-m",
       "client.webrtc.branches",
       "-b",
       "Linux (beta)",
       "--config-file",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -178,21 +193,21 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
       "client.webrtc.branches",
       "-b",
       "Linux (beta)",
       "--config-file",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "audio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nlow_bandwidth_audio_test\nmodules_tests\nmodules_unittests\npeerconnection_unittests\nrtc_media_unittests\nrtc_pc_unittests\nrtc_stats_unittests\nrtc_unittests\nslow_tests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nwebrtc_nonparallel_tests\n",
-      "//out/Linux_beta"
+      "//out/Release"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -221,7 +236,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -239,7 +254,7 @@
       "0777",
       "[GOMA_CACHE]/data/Linux__beta_"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -256,7 +271,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -294,7 +309,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -318,11 +333,11 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Linux_beta",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release",
       "-j",
       "20"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -335,14 +350,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Linux_beta",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release",
       "-j",
       "20",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -352,7 +367,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -366,7 +381,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -399,7 +414,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -421,7 +436,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -455,9 +470,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Linux_beta",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Linux_beta\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/Linux__beta_/src/out/Release\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -473,8 +488,7 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"Linux (beta)\", \"project\": \"webrtc\"}",
-      "--is-luci",
+      "{\"bucket\": \"branches\", \"builder\": \"Linux (beta)\", \"project\": \"webrtc\"}",
       "--buildbot-buildername",
       "Linux (beta)",
       "--buildbot-mastername",
@@ -482,7 +496,7 @@
       "--buildbot-slavename",
       "bot_id"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -512,7 +526,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -527,7 +541,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[CACHE]/builder/src/tools/swarming_client",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -535,23 +549,23 @@
       "https://isolateserver.appspot.com",
       "--eventlog-endpoint",
       "prod",
-      "[CACHE]/builder/src/out/Linux_beta/audio_decoder_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Linux_beta/common_audio_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Linux_beta/common_video_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Linux_beta/low_bandwidth_audio_test.isolated.gen.json",
-      "[CACHE]/builder/src/out/Linux_beta/modules_tests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Linux_beta/modules_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Linux_beta/peerconnection_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Linux_beta/rtc_media_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Linux_beta/rtc_pc_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Linux_beta/rtc_stats_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Linux_beta/rtc_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Linux_beta/slow_tests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Linux_beta/system_wrappers_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Linux_beta/test_support_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Linux_beta/tools_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Linux_beta/video_engine_tests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Linux_beta/webrtc_nonparallel_tests.isolated.gen.json"
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/audio_decoder_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/common_audio_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/common_video_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/low_bandwidth_audio_test.isolated.gen.json",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/modules_tests.isolated.gen.json",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/modules_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/peerconnection_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/rtc_media_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/rtc_pc_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/rtc_stats_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/rtc_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/slow_tests.isolated.gen.json",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/system_wrappers_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/test_support_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/tools_unittests.isolated.gen.json",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/video_engine_tests.isolated.gen.json",
+      "[BUILDER_CACHE]/Linux__beta_/src/out/Release/webrtc_nonparallel_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -582,7 +596,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -634,13 +648,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:audio_decoder_unittests",
       "--idempotent",
@@ -667,7 +679,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] audio_decoder_unittests",
     "~followup_annotations": [
@@ -690,7 +702,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -742,13 +754,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:common_audio_unittests",
       "--idempotent",
@@ -775,7 +785,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] common_audio_unittests",
     "~followup_annotations": [
@@ -798,7 +808,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -850,13 +860,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:common_video_unittests",
       "--idempotent",
@@ -883,7 +891,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] common_video_unittests",
     "~followup_annotations": [
@@ -906,7 +914,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -958,13 +966,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:low_bandwidth_audio_test",
       "--idempotent",
@@ -991,7 +997,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] low_bandwidth_audio_test",
     "~followup_annotations": [
@@ -1014,7 +1020,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1066,13 +1072,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:modules_tests",
       "--idempotent",
@@ -1099,7 +1103,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] modules_tests",
     "~followup_annotations": [
@@ -1128,7 +1132,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1180,13 +1184,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:modules_unittests",
       "--idempotent",
@@ -1213,7 +1215,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] modules_unittests",
     "~followup_annotations": [
@@ -1266,7 +1268,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1318,13 +1320,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:peerconnection_unittests",
       "--idempotent",
@@ -1351,7 +1351,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] peerconnection_unittests",
     "~followup_annotations": [
@@ -1392,7 +1392,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1444,13 +1444,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:rtc_media_unittests",
       "--idempotent",
@@ -1477,7 +1475,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] rtc_media_unittests",
     "~followup_annotations": [
@@ -1500,7 +1498,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1552,13 +1550,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:rtc_pc_unittests",
       "--idempotent",
@@ -1585,7 +1581,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] rtc_pc_unittests",
     "~followup_annotations": [
@@ -1608,7 +1604,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1660,13 +1656,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:rtc_stats_unittests",
       "--idempotent",
@@ -1693,7 +1687,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] rtc_stats_unittests",
     "~followup_annotations": [
@@ -1716,7 +1710,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1768,13 +1762,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:rtc_unittests",
       "--idempotent",
@@ -1801,7 +1793,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] rtc_unittests",
     "~followup_annotations": [
@@ -1854,7 +1846,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1906,13 +1898,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:slow_tests",
       "--idempotent",
@@ -1939,7 +1929,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] slow_tests",
     "~followup_annotations": [
@@ -1962,7 +1952,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2014,13 +2004,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:system_wrappers_unittests",
       "--idempotent",
@@ -2047,7 +2035,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] system_wrappers_unittests",
     "~followup_annotations": [
@@ -2070,7 +2058,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2122,13 +2110,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:test_support_unittests",
       "--idempotent",
@@ -2155,7 +2141,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] test_support_unittests",
     "~followup_annotations": [
@@ -2178,7 +2164,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2230,13 +2216,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:tools_unittests",
       "--idempotent",
@@ -2263,7 +2247,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] tools_unittests",
     "~followup_annotations": [
@@ -2286,7 +2270,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2338,13 +2322,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:video_engine_tests",
       "--idempotent",
@@ -2371,7 +2353,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] video_engine_tests",
     "~followup_annotations": [
@@ -2412,7 +2394,7 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2464,13 +2446,11 @@
       "--tag",
       "purpose:CI",
       "--tag",
-      "purpose:luci",
-      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:bot_id",
       "--tag",
-      "spec_name:webrtc.ci:Linux (beta)",
+      "spec_name:webrtc.branches:Linux (beta)",
       "--tag",
       "stepname:webrtc_nonparallel_tests",
       "--idempotent",
@@ -2497,7 +2477,7 @@
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "infra_step": true,
     "name": "[trigger] webrtc_nonparallel_tests",
     "~followup_annotations": [
@@ -2539,7 +2519,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2679,7 +2659,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [audio_decoder_unittests]"
   },
   {
@@ -2705,7 +2685,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2845,7 +2825,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [common_audio_unittests]"
   },
   {
@@ -2871,7 +2851,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -3011,7 +2991,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [common_video_unittests]"
   },
   {
@@ -3037,7 +3017,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -3177,7 +3157,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [low_bandwidth_audio_test]"
   },
   {
@@ -3203,7 +3183,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -3383,7 +3363,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [modules_tests]"
   },
   {
@@ -3409,7 +3389,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -3749,7 +3729,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [modules_unittests]"
   },
   {
@@ -3775,7 +3755,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -4035,7 +4015,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [peerconnection_unittests]"
   },
   {
@@ -4061,7 +4041,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -4201,7 +4181,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [rtc_media_unittests]"
   },
   {
@@ -4227,7 +4207,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -4367,7 +4347,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [rtc_pc_unittests]"
   },
   {
@@ -4393,7 +4373,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -4533,7 +4513,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [rtc_stats_unittests]"
   },
   {
@@ -4559,7 +4539,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -4899,7 +4879,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [rtc_unittests]"
   },
   {
@@ -4925,7 +4905,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -5065,7 +5045,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [slow_tests]"
   },
   {
@@ -5091,7 +5071,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -5231,7 +5211,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [system_wrappers_unittests]"
   },
   {
@@ -5257,7 +5237,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -5397,7 +5377,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [test_support_unittests]"
   },
   {
@@ -5423,7 +5403,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -5563,7 +5543,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [tools_unittests]"
   },
   {
@@ -5589,7 +5569,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -5849,7 +5829,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [video_engine_tests]"
   },
   {
@@ -5875,7 +5855,7 @@
       "--",
       "python",
       "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "[BUILDER_CACHE]/Linux__beta_/src/tools/swarming_client/swarming.py",
       "collect",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -6015,7 +5995,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[BUILDER_CACHE]/Linux__beta_",
     "name": "Upload to test-results [webrtc_nonparallel_tests]"
   },
   {

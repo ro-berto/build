@@ -64,8 +64,9 @@ RECIPE_CONFIGS = freeze({
 })
 
 BUILDERS = freeze({
-  'client.webrtc': {
+  'luci.webrtc.ci': {
     'settings': {
+      'mastername': 'client.webrtc',
       'build_gs_bucket': 'chromium-webrtc',
     },
     'builders': {
@@ -693,8 +694,9 @@ BUILDERS = freeze({
       },
     },
   },
-  'client.webrtc.perf': {
+  'luci.webrtc.perf': {
     'settings': {
+      'mastername': 'client.webrtc.perf',
       'build_gs_bucket': 'chromium-webrtc',
     },
     'builders': {
@@ -931,6 +933,13 @@ BUILDERS = freeze({
           'device_os': 'N',
         }
       },
+    },
+  },
+  'client.webrtc.perf': {
+    'settings': {
+      'build_gs_bucket': 'chromium-webrtc',
+    },
+    'builders': {
       # TODO(oprypin): Remove the Buildbot builders below.
       'Win7': {
         'recipe_config': 'webrtc_desktop_perf_swarming',
@@ -1148,8 +1157,9 @@ BUILDERS = freeze({
       },
     },
   },
-  'tryserver.webrtc': {
+  'luci.webrtc.try': {
     'settings': {
+      'mastername': 'tryserver.webrtc',
       'build_gs_bucket': 'chromium-webrtc',
     },
     'builders': {

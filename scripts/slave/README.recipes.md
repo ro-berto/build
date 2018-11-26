@@ -3991,62 +3991,62 @@ WCTApi provides support for running Web Component Tests
 
 #### **class [WebRTCApi](/scripts/slave/recipe_modules/webrtc/api.py#27)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/webrtc/api.py#84)(self, builders, recipe_configs):**
+&mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/webrtc/api.py#85)(self, builders, recipe_configs):**
 
-&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#354)(self):**
+&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#359)(self):**
 
-&mdash; **def [check\_swarming\_version](/scripts/slave/recipe_modules/webrtc/api.py#233)(self):**
+&mdash; **def [check\_swarming\_version](/scripts/slave/recipe_modules/webrtc/api.py#238)(self):**
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#178)(self, \*\*kwargs):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#183)(self, \*\*kwargs):**
 
-&mdash; **def [clean\_test\_output](/scripts/slave/recipe_modules/webrtc/api.py#444)(self):**
+&mdash; **def [clean\_test\_output](/scripts/slave/recipe_modules/webrtc/api.py#449)(self):**
 
 Remove all test output in out/, since we have tests leaking files.
 
-&mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#437)(self):**
+&mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#442)(self):**
 
-&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#258)(self, phase=None):**
+&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#263)(self, phase=None):**
 
-&mdash; **def [configure\_isolate](/scripts/slave/recipe_modules/webrtc/api.py#130)(self, phase=None):**
+&mdash; **def [configure\_isolate](/scripts/slave/recipe_modules/webrtc/api.py#135)(self, phase=None):**
 
-&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/webrtc/api.py#141)(self):**
+&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/webrtc/api.py#146)(self):**
 
-&mdash; **def [download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#205)(self):**
+&mdash; **def [download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#210)(self):**
 
-&mdash; **def [download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#213)(self):**
+&mdash; **def [download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#218)(self):**
 
-&mdash; **def [extract\_build](/scripts/slave/recipe_modules/webrtc/api.py#411)(self):**
+&mdash; **def [extract\_build](/scripts/slave/recipe_modules/webrtc/api.py#416)(self):**
 
-&mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#266)(self, files=None, base_dir=None):**
+&mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#271)(self, files=None, base_dir=None):**
 
-&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#319)(self):**
+&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#324)(self):**
 
-&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#395)(self):**
+&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#400)(self):**
 
-&mdash; **def [package\_build](/scripts/slave/recipe_modules/webrtc/api.py#344)(self):**
+&mdash; **def [package\_build](/scripts/slave/recipe_modules/webrtc/api.py#349)(self):**
 
-&mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#242)(self, phase=None):**
+&mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#247)(self, phase=None):**
 
-&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#282)(self, phase=None):**
+&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#287)(self, phase=None):**
 
 Add a suite of test steps.
 
 Args:
   test_suite=The name of the test suite.
 
-&emsp; **@property**<br>&mdash; **def [should\_build](/scripts/slave/recipe_modules/webrtc/api.py#54)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_build](/scripts/slave/recipe_modules/webrtc/api.py#55)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#74)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#75)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_download\_build](/scripts/slave/recipe_modules/webrtc/api.py#70)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_download\_build](/scripts/slave/recipe_modules/webrtc/api.py#71)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#79)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#80)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_test](/scripts/slave/recipe_modules/webrtc/api.py#58)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_test](/scripts/slave/recipe_modules/webrtc/api.py#59)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_test\_android\_studio\_project\_generation](/scripts/slave/recipe_modules/webrtc/api.py#66)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_test\_android\_studio\_project\_generation](/scripts/slave/recipe_modules/webrtc/api.py#67)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_upload\_build](/scripts/slave/recipe_modules/webrtc/api.py#62)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_upload\_build](/scripts/slave/recipe_modules/webrtc/api.py#63)(self):**
 ### *recipe_modules* / [zip](/scripts/slave/recipe_modules/zip)
 
 [DEPS](/scripts/slave/recipe_modules/zip/__init__.py#5): [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python]
@@ -5898,14 +5898,14 @@ The changes are:
 &mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/ios_api_framework.py#26)(api):**
 ### *recipes* / [webrtc/libfuzzer](/scripts/slave/recipes/webrtc/libfuzzer.py)
 
-[DEPS](/scripts/slave/recipes/webrtc/libfuzzer.py#8): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/webrtc/libfuzzer.py#10): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/libfuzzer.py#55)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/libfuzzer.py#63)(api):**
 ### *recipes* / [webrtc/more\_configs](/scripts/slave/recipes/webrtc/more_configs.py)
 
-[DEPS](/scripts/slave/recipes/webrtc/more_configs.py#8): [chromium](#recipe_modules-chromium), [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/webrtc/more_configs.py#10): [chromium](#recipe_modules-chromium), [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/more_configs.py#121)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/more_configs.py#129)(api):**
 ### *recipes* / [webrtc/noop](/scripts/slave/recipes/webrtc/noop.py)
 
 [DEPS](/scripts/slave/recipes/webrtc/noop.py#5): [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -5913,9 +5913,9 @@ The changes are:
 &mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/noop.py#9)(api):**
 ### *recipes* / [webrtc/standalone](/scripts/slave/recipes/webrtc/standalone.py)
 
-[DEPS](/scripts/slave/recipes/webrtc/standalone.py#7): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [swarming](#recipe_modules-swarming), [test\_utils](#recipe_modules-test_utils), [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/webrtc/standalone.py#10): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [swarming](#recipe_modules-swarming), [test\_utils](#recipe_modules-test_utils), [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/standalone.py#28)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/standalone.py#31)(api):**
 ### *recipes* / [win\_analyze](/scripts/slave/recipes/win_analyze.py)
 
 [DEPS](/scripts/slave/recipes/win_analyze.py#5): [chromium](#recipe_modules-chromium), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update]

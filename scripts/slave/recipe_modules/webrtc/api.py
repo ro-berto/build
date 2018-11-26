@@ -36,6 +36,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     # None means "default value".
     self._working_dir = None
 
+    self.bucketname = ''
     self.mastername = ''
     self.buildername = ''
     self.master_config = {}
@@ -82,14 +83,18 @@ class WebRTCApi(recipe_api.RecipeApi):
         'android_perf', 'android_perf_swarming')
 
   def apply_bot_config(self, builders, recipe_configs):
-    self.mastername = self.m.properties.get('mastername')
-    self.buildername = self.m.properties.get('buildername')
-    master_dict = builders.get(self.mastername, {})
+    if self.m.runtime.is_luci:
+      self.bucketname = self.m.buildbucket.bucket_v1
+    else:
+      self.bucketname = self.m.properties.get('mastername')
+    self.buildername = self.m.buildbucket.builder_name
+    master_dict = builders.get(self.bucketname, {})
     self.master_config = master_dict.get('settings', {})
+    self.mastername = self.master_config.get('mastername', self.bucketname)
 
     self.bot_config = master_dict.get('builders', {}).get(self.buildername)
-    assert self.bot_config, ('Unrecognized builder name "%r" for master "%r".' %
-                             (self.buildername, self.mastername))
+    assert self.bot_config, ('Unrecognized builder name %r for bucket %r.' %
+                             (self.buildername, self.bucketname))
 
     self.bot_type = self.bot_config.get('bot_type', 'builder_tester')
     recipe_config_name = self.bot_config['recipe_config']
