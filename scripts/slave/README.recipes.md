@@ -2669,7 +2669,7 @@ config: The configuration returned by create_controller.
 Returns the path to legion.py.
 ### *recipe_modules* / [libyuv](/scripts/slave/recipe_modules/libyuv)
 
-[DEPS](/scripts/slave/recipe_modules/libyuv/__init__.py#1): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/libyuv/__init__.py#1): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [LibyuvApi](/scripts/slave/recipe_modules/libyuv/api.py#11)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -2679,13 +2679,13 @@ Returns the path to legion.py.
 
 &emsp; **@contextlib.contextmanager**<br>&mdash; **def [ensure\_sdk](/scripts/slave/recipe_modules/libyuv/api.py#90)(self):**
 
-&mdash; **def [extract\_build](/scripts/slave/recipe_modules/libyuv/api.py#127)(self):**
+&mdash; **def [extract\_build](/scripts/slave/recipe_modules/libyuv/api.py#121)(self):**
 
 &mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/libyuv/api.py#98)(self):**
 
-&mdash; **def [package\_build](/scripts/slave/recipe_modules/libyuv/api.py#117)(self):**
+&mdash; **def [package\_build](/scripts/slave/recipe_modules/libyuv/api.py#111)(self):**
 
-&mdash; **def [runtests](/scripts/slave/recipe_modules/libyuv/api.py#148)(self):**
+&mdash; **def [runtests](/scripts/slave/recipe_modules/libyuv/api.py#142)(self):**
 
 Add a suite of test steps.
 

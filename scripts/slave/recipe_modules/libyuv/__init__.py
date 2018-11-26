@@ -7,6 +7,7 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/osx_sdk',
   'depot_tools/tryserver',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/path',

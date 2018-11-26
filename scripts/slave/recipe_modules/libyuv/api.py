@@ -22,7 +22,7 @@ class LibyuvApi(recipe_api.RecipeApi):
 
   def apply_bot_config(self, builders, recipe_configs):
     mastername = self.m.properties.get('mastername')
-    buildername = self.m.properties.get('buildername')
+    buildername = self.m.buildbucket.builder_name
     master_dict = builders.get(mastername, {})
     self.master_config = master_dict.get('settings', {})
 
@@ -100,18 +100,12 @@ class LibyuvApi(recipe_api.RecipeApi):
     properties = {
       'revision': self.revision,
       'parent_got_revision': self.revision,
-      'parent_buildername': self.m.properties.get('buildername'),
+      'parent_buildername': self.m.buildbucket.builder_name,
     }
     if triggers:
-      if self.m.runtime.is_luci:
-        self.m.scheduler.emit_trigger(
-            self.m.scheduler.BuildbucketTrigger(properties=properties),
-            project='libyuv', jobs=triggers)
-      else:
-        self.m.trigger(*[{
-          'builder_name': builder_name,
-          'properties': properties,
-        } for builder_name in triggers])
+      self.m.scheduler.emit_trigger(
+          self.m.scheduler.BuildbucketTrigger(properties=properties),
+          project='libyuv', jobs=triggers)
 
 
   def package_build(self):

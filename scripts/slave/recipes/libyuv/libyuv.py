@@ -54,8 +54,7 @@ def _sanitize_nonalpha(text):
 def GenTests(api):
   builders = api.libyuv.BUILDERS
 
-  def generate_builder(
-        mastername, buildername, revision, suffix=None, buildbot=False):
+  def generate_builder(mastername, buildername, revision, suffix=None):
     suffix = suffix or ''
     bot_config = builders[mastername]['builders'][buildername]
     bot_type = bot_config.get('bot_type', 'builder_tester')
@@ -74,7 +73,7 @@ def GenTests(api):
         BUILD_CONFIG=chromium_kwargs['BUILD_CONFIG'])
     test += api.platform(bot_config['testing']['platform'],
                          chromium_kwargs.get('TARGET_BITS', 64))
-    test += api.runtime(is_experimental=False, is_luci=not buildbot)
+    test += api.runtime(is_experimental=False, is_luci=True)
 
     if bot_config.get('parent_buildername'):
       test += api.properties(
@@ -96,8 +95,6 @@ def GenTests(api):
   mastername = 'client.libyuv'
   yield generate_builder(mastername, 'Linux64 Debug', revision=None,
                          suffix='_forced')
-  yield generate_builder(mastername, 'Android Debug', revision=None,
-                         suffix='_buildbot', buildbot=True)
   yield generate_builder(mastername, 'Android Debug', revision=None,
                          suffix='_forced')
   yield generate_builder(mastername, 'Android Tester ARM32 Debug (Nexus 5X)',
