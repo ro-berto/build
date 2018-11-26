@@ -107,10 +107,10 @@ ANDROID_CIPD_PACKAGES = [
 # so the dashboard can properly determine the variance of the test.
 PERF_TESTS = freeze({
     'isac_fix_test': {
-      'idempotent': False,
+        'idempotent': False,
     },
     'low_bandwidth_audio_perf_test': {
-      'idempotent': False,
+        'idempotent': False,
     },
     'webrtc_perf_tests': {
         'args': [
@@ -125,7 +125,10 @@ ANDROID_PERF_TESTS = freeze({
     # TODO(ehmaldonado): Add low_bandwidth_audio_perf_test and
     # video_quality_loopback_test.
     'webrtc_perf_tests': {
-      'idempotent': False,
+        'args': [
+            '--save_worst_frame',
+        ],
+        'idempotent': False,
     },
     'low_bandwidth_audio_perf_test': {
         'add_adb_path': True,
@@ -178,11 +181,12 @@ def generate_tests(api, test_suite, phase, revision,
   if test_suite == 'desktop_perf_swarming':
     for test, extra_args in sorted(PERF_TESTS.items()):
       tests.append(SwarmingPerfTest(test, **extra_args))
+
   if test_suite == 'android_perf_swarming' and perf_id:
     for test, extra_args in sorted(ANDROID_PERF_TESTS.items()):
       tests.append(SwarmingAndroidPerfTest(test, **extra_args))
+
   if test_suite == 'android_perf' and perf_id:
-    # TODO(kjellander): Fix the Android ASan bot so we can have an assert here.
     tests.append(AndroidPerfTest(
         'webrtc_perf_tests',
         args=['--save_worst_frame'],
@@ -295,11 +299,16 @@ def _UploadToPerfDashboard(name, api, task_output_dir):
       '--results-file', api.json.input(perf_results),
       '--results-url', DASHBOARD_UPLOAD_URL,
   ]
-
   if 'git_revision' in api.properties:
     # This is the WebRTC hash we built at.
     revision = api.properties['git_revision']
     args.extend(['--got-webrtc-revision', revision])
+
+  if api.runtime.is_luci:
+    perf_bot_group = 'WebRTCPerf'
+    if api.runtime.is_experimental:
+      perf_bot_group = 'Experimental' + perf_bot_group
+    args.extend(['--perf-dashboard-machine-group', perf_bot_group])
 
   args.append('--output-json-dashboard-url')
   args.append(api.json.output(add_json_log=False, name='dashboard_url'))
@@ -413,8 +422,7 @@ class SwarmingAndroidPerfTest(AndroidTest):
       logcats = _MergeFiles(task_output_dir, 'logcats')
       step_result.presentation.logs['logcats'] = logcats.splitlines()
 
-      if not api.runtime.is_experimental:
-        _UploadToPerfDashboard(self.name, api, task_output_dir)
+      _UploadToPerfDashboard(self.name, api, task_output_dir)
 
 
 class SwarmingPerfTest(SwarmingIsolatedScriptTest):
@@ -422,8 +430,7 @@ class SwarmingPerfTest(SwarmingIsolatedScriptTest):
     # We use our own custom upload mechanism.
     # TODO(phoglund): investigate if we can move off our custom mechanism.
     task_output_dir = step_result.raw_io.output_dir
-    if not api.runtime.is_experimental:
-      _UploadToPerfDashboard(self.name, api, task_output_dir)
+    _UploadToPerfDashboard(self.name, api, task_output_dir)
 
 
 class SwarmingWebRtcGtestTest(SwarmingIsolatedScriptTest):

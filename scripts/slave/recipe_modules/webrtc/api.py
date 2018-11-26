@@ -61,7 +61,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   @property
   def should_upload_build(self):
-    return self.bot_config.get('triggers')
+    return 'buildbot_triggers' in self.bot_config
 
   @property
   def should_test_android_studio_project_generation(self):
@@ -317,17 +317,29 @@ class WebRTCApi(recipe_api.RecipeApi):
                 force_latest_version=True)
 
   def maybe_trigger(self):
+    properties = {
+      'revision': self.revision,
+      'parent_got_revision': self.revision,
+      'parent_got_revision_cp': self.revision_cp,
+    }
+
     triggers = self.bot_config.get('triggers')
     if triggers:
-      properties = {
-        'revision': self.revision,
-        'parent_got_revision': self.revision,
-        'parent_got_revision_cp': self.revision_cp,
-      }
+      self.m.buildbucket.put([{
+        'bucket': builder.split('/')[0],
+        'parameters': {
+          'builder_name': builder.split('/')[1],
+          'properties': properties,
+          'swarm_hashes': self.m.isolate.isolated_tests,
+        },
+      } for builder in triggers])
+
+    buildbot_triggers = self.bot_config.get('buildbot_triggers')
+    if buildbot_triggers:
       self.m.trigger(*[{
         'builder_name': builder_name,
         'properties': properties,
-      } for builder_name in triggers])
+      } for builder_name in buildbot_triggers])
 
   def package_build(self):
     upload_url = self.m.archive.legacy_upload_url(
@@ -397,6 +409,11 @@ class WebRTCApi(recipe_api.RecipeApi):
                            args=['-a', 'public-read'], unauthenticated_url=True)
 
   def extract_build(self):
+    if self.c.enable_swarming:
+      self.m.isolate.find_isolated_tests(self.m.chromium.output_dir,
+                                         targets=self._isolated_targets)
+      return
+
     if not self.m.properties.get('parent_got_revision'):
       raise self.m.step.StepFailure(
          'Testers cannot be forced without providing revision information. '

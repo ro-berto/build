@@ -17,6 +17,7 @@ DEPS = [
   'depot_tools/tryserver',
   'goma',
   'isolate',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',

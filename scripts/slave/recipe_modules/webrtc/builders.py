@@ -525,11 +525,21 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
+        'enable_swarming': True,
         'binary_size_files': [
           'libjingle_peerconnection_so.so',
           'libjingle_peerconnection_datachannelonly_so.so',
           'apks/AppRTCMobile.apk'
         ],
+        'triggers': [
+          'luci.webrtc.perf/Perf Android32 (K Nexus5)',
+          'luci.webrtc.perf/Perf Android32 (L Nexus4)',
+          'luci.webrtc.perf/Perf Android32 (L Nexus5)',
+          'luci.webrtc.perf/Perf Android32 (L Nexus6)',
+          'luci.webrtc.perf/Perf Android32 (L Nexus7.2)',
+          'luci.webrtc.perf/Perf Android32 (N Nexus6)',
+        ],
+
       },
       'Android64 (M Nexus5X)(dbg)': {
         'recipe_config': 'webrtc_android',
@@ -579,10 +589,15 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
+        'enable_swarming': True,
         'binary_size_files': [
           'libjingle_peerconnection_so.so',
           'libjingle_peerconnection_datachannelonly_so.so',
           'apks/AppRTCMobile.apk'
+        ],
+        'triggers': [
+          'luci.webrtc.perf/Perf Android64 (L Nexus9)',
+          'luci.webrtc.perf/Perf Android64 (N Pixel)',
         ],
       },
     },
@@ -678,12 +693,69 @@ BUILDERS = freeze({
       },
     },
   },
-  'client.webrtc.fyi': {
+  'client.webrtc.perf': {
     'settings': {
       'build_gs_bucket': 'chromium-webrtc',
     },
-    'builders':  {
-      'Android Perf (swarming)': {
+    'builders': {
+      'Perf Win7': {
+        'recipe_config': 'webrtc_desktop_perf_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-win-large-tests',
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'win'},
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'pool': 'WebRTC-perf',
+          'gpu': None,
+          'os': 'Windows',
+        },
+        'swarming_timeout': 4500,  # 1h15m
+      },
+      'Perf Mac 10.11': {
+        'recipe_config': 'webrtc_desktop_perf_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-mac-large-tests',
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'pool': 'WebRTC-perf',
+          'gpu': None,
+          'os': 'Mac-10.12',
+        },
+        'swarming_timeout': 4500,  # 1h15m
+      },
+      'Perf Linux Trusty': {
+        'recipe_config': 'webrtc_desktop_perf_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-linux-large-tests',
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'linux'},
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'pool': 'WebRTC-perf',
+          'gpu': None,
+          'os': 'Ubuntu-14.04',
+        },
+        'swarming_timeout': 4500,  # 1h15m
+      },
+      'Perf Android32 (L Nexus4)': {
         'recipe_config': 'webrtc_android_perf_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -692,25 +764,175 @@ BUILDERS = freeze({
           'TARGET_BITS': 32,
         },
         'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-swarming',
+          'PERF_ID': 'webrtc-android-tests-nexus4-lollipop',
         },
-        'bot_type': 'builder_tester',
+        'bot_type': 'tester',
+        'parent_buildername': 'Android32 Builder arm',
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Android',
+          'pool': 'WebRTC-perf',
           'android_devices': '1',
-          'device_os': 'MMB29Q', # 6.0.1
+          'device_type': 'mako', # Nexus 4
+          'device_os': 'L',
         }
       },
-    },
-  },
-  'client.webrtc.perf': {
-    'settings': {
-      'build_gs_bucket': 'chromium-webrtc',
-    },
-    'builders': {
-       'Win7': {
+      'Perf Android32 (K Nexus5)': {
+        'recipe_config': 'webrtc_android_perf_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-android-tests-nexus5-kitkat',
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android32 Builder arm',
+        'testing': {'platform': 'linux'},
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'pool': 'WebRTC-perf',
+          'android_devices': '1',
+          'device_type': 'hammerhead', # Nexus 5
+          'device_os': 'K',
+        }
+      },
+      'Perf Android32 (L Nexus5)': {
+        'recipe_config': 'webrtc_android_perf_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-android-tests-nexus5',
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android32 Builder arm',
+        'testing': {'platform': 'linux'},
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'pool': 'WebRTC-perf',
+          'android_devices': '1',
+          'device_type': 'hammerhead', # Nexus 5
+          'device_os': 'L',
+        }
+      },
+      'Perf Android32 (L Nexus6)': {
+        'recipe_config': 'webrtc_android_perf_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-android-tests-nexus6-lollipop',
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android32 Builder arm',
+        'testing': {'platform': 'linux'},
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'pool': 'WebRTC-perf',
+          'android_devices': '1',
+          'device_type': 'shamu', # Nexus 6
+          'device_os': 'L',
+        }
+      },
+      'Perf Android32 (L Nexus7.2)': {
+        'recipe_config': 'webrtc_android_perf_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-android-tests-nexus72',
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android32 Builder arm',
+        'testing': {'platform': 'linux'},
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'pool': 'WebRTC-perf',
+          'android_devices': '1',
+          'device_type': 'flo', # Nexus 7
+          'device_os': 'L',
+        }
+      },
+      'Perf Android32 (N Nexus6)': {
+        'recipe_config': 'webrtc_android_perf_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 32,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-android-tests-nexus6-nougat',
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android32 Builder arm',
+        'testing': {'platform': 'linux'},
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'pool': 'WebRTC-perf',
+          'android_devices': '1',
+          'device_type': 'shamu', # Nexus 6
+          'device_os': 'N',
+        }
+      },
+      'Perf Android64 (L Nexus9)': {
+        'recipe_config': 'webrtc_android_perf_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-android-tests-nexus9',
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android64 Builder arm64',
+        'testing': {'platform': 'linux'},
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'pool': 'WebRTC-perf',
+          'android_devices': '1',
+          'device_type': 'flounder', # Nexus 9
+          'device_os': 'L',
+        }
+      },
+      'Perf Android64 (N Pixel)': {
+        'recipe_config': 'webrtc_android_perf_swarming',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'android',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'webrtc_config_kwargs': {
+          'PERF_ID': 'webrtc-android-tests-pixel-nougat',
+        },
+        'bot_type': 'tester',
+        'parent_buildername': 'Android64 Builder arm64',
+        'testing': {'platform': 'linux'},
+        'enable_swarming': True,
+        'swarming_dimensions': {
+          'pool': 'WebRTC-perf',
+          'android_devices': '1',
+          'device_type': 'sailfish', # Pixel
+          'device_os': 'N',
+        }
+      },
+      # TODO(oprypin): Remove the Buildbot builders below.
+      'Win7': {
         'recipe_config': 'webrtc_desktop_perf_swarming',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -780,7 +1002,7 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
-        'triggers': [
+        'buildbot_triggers': [
           'Android32 Tests (K Nexus5)',
           'Android32 Tests (L Nexus4)',
           'Android32 Tests (L Nexus5)',
@@ -799,7 +1021,7 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
-        'triggers': [
+        'buildbot_triggers': [
           'Android64 Tests (L Nexus9)',
           'Android64 Tests (N Pixel)',
         ],

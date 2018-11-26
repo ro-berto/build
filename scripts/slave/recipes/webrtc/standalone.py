@@ -51,9 +51,9 @@ def RunSteps(api):
     api.chromium.ensure_goma()
   api.chromium.runhooks()
   webrtc.check_swarming_version()
+  webrtc.configure_isolate()
 
   if webrtc.should_build:
-    webrtc.configure_isolate()
     webrtc.compile()
 
   webrtc.get_binary_sizes()
@@ -91,8 +91,12 @@ def GenTests(api):
 
     # TODO(crbug.com/908001): Remove this:
     is_luci = True
+    is_experimental = False
     if mastername == 'client.webrtc.perf':
-      is_luci = False
+      if 'Perf' in buildername:  # New names happen to all have "Perf".
+        is_experimental = True
+      else:
+        is_luci = False
 
     chromium_kwargs = bot_config.get('chromium_config_kwargs', {})
     test = (
@@ -105,7 +109,7 @@ def GenTests(api):
                      BUILD_CONFIG=chromium_kwargs['BUILD_CONFIG']) +
       api.platform(bot_config['testing']['platform'],
                    chromium_kwargs.get('TARGET_BITS', 64)) +
-      api.runtime(is_luci=is_luci, is_experimental=False)
+      api.runtime(is_luci=is_luci, is_experimental=is_experimental)
     )
 
     if bot_config.get('parent_buildername'):
