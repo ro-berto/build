@@ -163,7 +163,7 @@ def RunSteps(api, buildername):
   # build in the usual build dir and a clobber build in a differently-named
   # build dir and then compares the outputs.
   # TODO(thakis): Do this on all platforms, https://crbug.com/899438
-  check_different_build_dirs = target_platform == 'win'
+  check_different_build_dirs = target_platform in ['linux', 'win']
 
   # Since disk lacks in Mac, we need to remove files before build.
   # In check_different_build_dirs, only the .2 build dir exists here.
