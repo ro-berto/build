@@ -545,7 +545,7 @@
               "experimental_tests"
             ]
           },
-          "Fuchsia ARM64 Cast Audio": {
+          "fuchsia-arm64-cast": {
             "forgiving_optional": ["*"]
           },
           "Fuchsia x64": {
@@ -554,7 +554,7 @@
               "experimental_tests"
             ]
           },
-          "Fuchsia x64 Cast Audio": {
+          "fuchsia-x64-cast": {
             "forgiving_optional": ["*"]
           }
         },
