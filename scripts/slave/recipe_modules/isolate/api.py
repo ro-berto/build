@@ -272,63 +272,27 @@ class IsolateApi(recipe_api.RecipeApi):
       cmd.extend(args)
     self.m.python(name, self._run_isolated_path, cmd, **kwargs)
 
-  def archive_differences(self, first_dir, second_dir, values):
-    """Archive different files of 2 builds."""
-    GS_BUCKET = 'chrome-determinism'
-    TARBALL_NAME = 'deterministic_build_diffs.tgz'
-
-    diffs = list(itertools.chain.from_iterable(values.itervalues()))
-    if not diffs:  # pragma: no cover
-      return
-
-    with self.m.tempfile.temp_dir('deterministic_build') as t:
-      output = self.m.path.join(t, TARBALL_NAME)
-      self.m.python('create tarball',
-                    script=self.m.path.join(self.m.path['checkout'],
-                                            'tools',
-                                            'determinism',
-                                            'create_diffs_tarball.py'),
-                    args=[
-                        '--first-build-dir', first_dir,
-                        '--second-build-dir', second_dir,
-                        '--json-input', self.m.json.input(diffs),
-                        '--output', output,
-                    ])
-      self.m.gsutil.upload(output,
-                           GS_BUCKET,
-                           self.m.path.join(
-                               self.m.properties['buildername'],
-                               self.m.properties['buildnumber'],
-                               TARBALL_NAME))
-
   def compare_build_artifacts(self, first_dir, second_dir):
     """Compare the artifacts from 2 builds."""
     args = [
         '--first-build-dir', first_dir,
         '--second-build-dir', second_dir,
         '--target-platform', self.m.chromium.c.TARGET_PLATFORM,
-        '--json-output', self.m.json.output(),
         '--ninja-path', self.m.depot_tools.ninja_path,
-        '--use-isolate-files'
+        '--use-isolate-files',
     ]
-    try:
-      with self.m.context(cwd=self.m.path['start_dir']):
-        step_result = self.m.python(
-            'compare_build_artifacts',
-            self.m.path.join(self.m.path['checkout'],
-                             'tools',
-                             'determinism',
-                             'compare_build_artifacts.py'),
-            args=args,
-            step_test_data=(lambda: self.m.json.test_api.output({
-                'expected_diffs': ['flatc'],
-                'unexpected_diffs': ['base_unittest'],
-            })))
-      self.archive_differences(first_dir, second_dir, step_result.json.output)
-    except self.m.step.StepFailure as e:
-      step_result = self.m.step.active_result
-      self.archive_differences(first_dir, second_dir, step_result.json.output)
-      raise e
+    with self.m.context(cwd=self.m.path['start_dir']):
+      step_result = self.m.python(
+          'compare_build_artifacts',
+          self.m.path.join(self.m.path['checkout'],
+                           'tools',
+                           'determinism',
+                           'compare_build_artifacts.py'),
+          args=args,
+          step_test_data=(lambda: self.m.json.test_api.output({
+              'expected_diffs': ['flatc'],
+              'unexpected_diffs': ['base_unittest'],
+          })))
 
   def compose(self, isolate_hashes, step_name=None, **kwargs):
     """Creates and uploads a new isolate composing multiple existing isolates.

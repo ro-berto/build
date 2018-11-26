@@ -1040,8 +1040,6 @@
       "[CACHE]/builder/src/out/Release.2",
       "--target-platform",
       "linux",
-      "--json-output",
-      "/path/to/tmp/json",
       "--ninja-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "--use-isolate-files"
@@ -1049,64 +1047,8 @@
     "name": "compare_build_artifacts",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"expected_diffs\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"flatc\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"unexpected_diffs\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"base_unittest\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_FAILURE@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools/determinism/create_diffs_tarball.py",
-      "--first-build-dir",
-      "[CACHE]/builder/src/out/Release",
-      "--second-build-dir",
-      "[CACHE]/builder/src/out/Release.2",
-      "--json-input",
-      "[\"base_unittest\", \"flatc\"]",
-      "--output",
-      "[TMP_BASE]/deterministic_build_tmp_1/deterministic_build_diffs.tgz"
-    ],
-    "name": "create tarball"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[TMP_BASE]/deterministic_build_tmp_1/deterministic_build_diffs.tgz",
-      "gs://chrome-determinism/Deterministic Linux (dbg)/571/deterministic_build_diffs.tgz"
-    ],
-    "infra_step": true,
-    "name": "gsutil upload",
-    "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-determinism/Deterministic Linux (dbg)/571/deterministic_build_diffs.tgz@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[TMP_BASE]/deterministic_build_tmp_1"
-    ],
-    "infra_step": true,
-    "name": "rmtree [TMP_BASE]/deterministic_build_tmp_1"
   },
   {
     "failure": {
