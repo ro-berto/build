@@ -44,29 +44,29 @@ def RunSteps(api):
     api.chromium.taskkill()
 
   webrtc.checkout()
-  if webrtc.should_download_audio_quality_tools:
+  if webrtc.bot.should_download_audio_quality_tools:
     webrtc.download_audio_quality_tools()
-  if webrtc.should_download_video_quality_tools:
+  if webrtc.bot.should_download_video_quality_tools:
     webrtc.download_video_quality_tools()
   webrtc.cleanup()
 
-  if webrtc.should_build:
+  if webrtc.bot.should_build:
     api.chromium.ensure_goma()
   api.chromium.runhooks()
   webrtc.check_swarming_version()
   webrtc.configure_isolate()
 
-  if webrtc.should_build:
+  if webrtc.bot.should_build:
     webrtc.compile()
 
   webrtc.get_binary_sizes()
 
-  if webrtc.should_upload_build:
+  if webrtc.bot.should_upload_build:
     webrtc.package_build()
-  if webrtc.should_download_build:
+  if webrtc.bot.should_download_build:
     webrtc.extract_build()
 
-  if webrtc.should_test:
+  if webrtc.bot.should_test:
     webrtc.runtests()
 
   webrtc.maybe_trigger()

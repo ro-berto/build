@@ -144,13 +144,11 @@ ANDROID_PERF_TESTS = freeze({
 })
 
 
-def generate_tests(api, test_suite, phase, revision,
-                   baremetal_swarming_dimensions, recipe_config, perf_id,
-                   revision_number,
-                   should_test_android_studio_project_generation):
+def generate_tests(api, phase, revision, revision_number, bot, perf_id):
   tests = []
   build_out_dir = api.path['checkout'].join(
       'out', api.chromium.c.build_config_fs)
+  test_suite = bot.test_suite
 
   if test_suite in ('webrtc', 'webrtc_and_baremetal'):
     for test, extra_args in sorted(NORMAL_TESTS.items()):
@@ -160,7 +158,7 @@ def generate_tests(api, test_suite, phase, revision,
     def add_test(name):
       tests.append(SwarmingWebRtcGtestTest(
           name,
-          dimensions=baremetal_swarming_dimensions,
+          dimensions=bot.config['baremetal_swarming_dimensions'],
           **BAREMETAL_TESTS[name]))
 
 
@@ -171,7 +169,8 @@ def generate_tests(api, test_suite, phase, revision,
       if api.platform.is_linux:
         add_test('isac_fix_test')
 
-      is_win_clang = (api.platform.is_win and 'clang' in recipe_config)
+      is_win_clang = (api.platform.is_win and
+                      'clang' in bot.recipe_config['chromium_config'])
 
       # TODO(kjellander): Enable on Mac when bugs.webrtc.org/7322 is fixed.
       # TODO(oprypin): Enable on MSVC when bugs.webrtc.org/9290 is fixed.
@@ -182,11 +181,11 @@ def generate_tests(api, test_suite, phase, revision,
     for test, extra_args in sorted(PERF_TESTS.items()):
       tests.append(SwarmingPerfTest(test, **extra_args))
 
-  if test_suite == 'android_perf_swarming' and perf_id:
+  if test_suite == 'android_perf_swarming':
     for test, extra_args in sorted(ANDROID_PERF_TESTS.items()):
       tests.append(SwarmingAndroidPerfTest(test, **extra_args))
 
-  if test_suite == 'android_perf' and perf_id:
+  if test_suite == 'android_perf':
     tests.append(AndroidPerfTest(
         'webrtc_perf_tests',
         args=['--save_worst_frame'],
@@ -221,7 +220,7 @@ def generate_tests(api, test_suite, phase, revision,
     for test, extra_args in sorted(ANDROID_JUNIT_TESTS.items()):
       tests.append(AndroidJunitTest(test))
 
-    if should_test_android_studio_project_generation:
+    if bot.should_test_android_studio_project_generation:
        tests.append(PythonTest(
           test='gradle_project_test',
           script=str(api.path['checkout'].join('examples',  'androidtests',

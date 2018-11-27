@@ -24,6 +24,69 @@ CHROMIUM_REPO = 'https://chromium.googlesource.com/chromium/src'
 CHROMIUM_DEPS = ['base', 'build', 'ios', 'testing', 'third_party', 'tools']
 
 
+class Bot(object):
+  def __init__(self, builders, recipe_configs, bucket, builder):
+    self._builders = builders
+    self._recipe_configs = recipe_configs
+    self.bucket = bucket
+    self.builder = builder
+
+  def __repr__(self):  # pragma: no cover
+    return '<Bot %s/%s>' % (self.bucket, self.builder)
+
+  @property
+  def config(self):
+    return self._builders[self.bucket]['builders'][self.builder]
+
+  @property
+  def bot_type(self):
+    return self.config.get('bot_type', 'builder_tester')
+
+  def triggered_bots(self):
+    for builder in self.config.get('triggers', []):
+      bucketname, buildername = builder.split('/')
+      yield (bucketname, buildername)
+
+  @property
+  def recipe_config(self):
+    return self._recipe_configs[self.config['recipe_config']]
+
+  @property
+  def test_suite(self):
+    return self.recipe_config.get('test_suite')
+
+  @property
+  def should_build(self):
+    return self.bot_type in ('builder', 'builder_tester')
+
+  @property
+  def should_test(self):
+    return self.bot_type in ('tester', 'builder_tester')
+
+  @property
+  def should_upload_build(self):
+    return 'buildbot_triggers' in self.config
+
+  @property
+  def should_download_build(self):
+    return self.config.get('parent_buildername')
+
+  @property
+  def should_download_audio_quality_tools(self):
+    return self.should_test and self.test_suite in (
+        'android_perf', 'android_perf_swarming', 'desktop_perf_swarming')
+
+  @property
+  def should_download_video_quality_tools(self):
+    return self.should_test and self.test_suite in (
+        'android_perf', 'android_perf_swarming')
+
+  @property
+  def should_test_android_studio_project_generation(self):
+    return self.config.get('test_android_studio_project_generation', False)
+
+
+
 class WebRTCApi(recipe_api.RecipeApi):
   WEBRTC_GS_BUCKET = WEBRTC_GS_BUCKET
 
@@ -36,13 +99,9 @@ class WebRTCApi(recipe_api.RecipeApi):
     # None means "default value".
     self._working_dir = None
 
-    self.bucketname = ''
-    self.mastername = ''
-    self.buildername = ''
-    self.master_config = {}
-    self.bot_config = {}
-    self.recipe_config = {}
-    self.bot_type = ''
+    self._builders = None
+    self._recipe_configs = None
+    self.bot = None
 
     self.revision = ''
     self.revision_cp = ''
@@ -52,76 +111,31 @@ class WebRTCApi(recipe_api.RecipeApi):
   RECIPE_CONFIGS = webrtc_builders.RECIPE_CONFIGS
 
 
-  @property
-  def should_build(self):
-    return self.bot_type in ('builder', 'builder_tester')
-
-  @property
-  def should_test(self):
-    return self.bot_type in ('tester', 'builder_tester')
-
-  @property
-  def should_upload_build(self):
-    return 'buildbot_triggers' in self.bot_config
-
-  @property
-  def should_test_android_studio_project_generation(self):
-    return self.bot_config.get('test_android_studio_project_generation')
-
-  @property
-  def should_download_build(self):
-    return self.bot_config.get('parent_buildername')
-
-  @property
-  def should_download_audio_quality_tools(self):
-    return self.should_test and getattr(self.c, 'TEST_SUITE', None) in (
-        'android_perf', 'android_perf_swarming', 'desktop_perf_swarming')
-
-  @property
-  def should_download_video_quality_tools(self):
-    return self.should_test and getattr(self.c, 'TEST_SUITE', None) in (
-        'android_perf', 'android_perf_swarming')
-
   def apply_bot_config(self, builders, recipe_configs):
-    if self.m.runtime.is_luci:
-      self.bucketname = self.m.buildbucket.bucket_v1
-    else:
-      self.bucketname = self.m.properties.get('mastername')
-    self.buildername = self.m.buildbucket.builder_name
-    master_dict = builders.get(self.bucketname, {})
-    self.master_config = master_dict.get('settings', {})
-    self.mastername = self.master_config.get('mastername', self.bucketname)
+    self._builders = builders
+    self._recipe_configs = recipe_configs
 
-    self.bot_config = master_dict.get('builders', {}).get(self.buildername)
-    assert self.bot_config, ('Unrecognized builder name %r for bucket %r.' %
-                             (self.buildername, self.bucketname))
+    self.bot = self.get_bot(self.bucketname, self.buildername)
 
-    self.bot_type = self.bot_config.get('bot_type', 'builder_tester')
-    recipe_config_name = self.bot_config['recipe_config']
-    self.recipe_config = recipe_configs.get(recipe_config_name)
-    assert self.recipe_config, (
-        'Cannot find recipe_config "%s" for builder "%r".' %
-        (recipe_config_name, self.buildername))
+    self.set_config('webrtc', TEST_SUITE=self.bot.test_suite,
+                    **self.bot.config.get('webrtc_config_kwargs', {}))
 
-    self.set_config('webrtc', TEST_SUITE=self.recipe_config.get('test_suite'),
-                    **self.bot_config.get('webrtc_config_kwargs', {}))
-
-    chromium_kwargs = self.bot_config.get('chromium_config_kwargs', {})
-    if self.recipe_config.get('chromium_android_config'):
+    chromium_kwargs = self.bot.config.get('chromium_config_kwargs', {})
+    if self.bot.recipe_config.get('chromium_android_config'):
       self.m.chromium_android.set_config(
-          self.recipe_config['chromium_android_config'], **chromium_kwargs)
+          self.bot.recipe_config['chromium_android_config'], **chromium_kwargs)
 
-    self.m.chromium.set_config(self.recipe_config['chromium_config'],
+    self.m.chromium.set_config(self.bot.recipe_config['chromium_config'],
                                **chromium_kwargs)
-    gclient_config = self.recipe_config['gclient_config']
+    gclient_config = self.bot.recipe_config['gclient_config']
     self.m.gclient.set_config(gclient_config)
 
     # Support applying configs both at the bot and the recipe config level.
-    for c in self.bot_config.get('chromium_apply_config', []):
+    for c in self.bot.config.get('chromium_apply_config', []):
       self.m.chromium.apply_config(c)
-    for c in self.bot_config.get('gclient_apply_config', []):
+    for c in self.bot.config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
-    for c in self.recipe_config.get('gclient_apply_config', []):
+    for c in self.bot.recipe_config.get('gclient_apply_config', []):
       self.m.gclient.apply_config(c)
 
     if self.m.tryserver.is_tryserver:
@@ -132,19 +146,39 @@ class WebRTCApi(recipe_api.RecipeApi):
       assert self.m.chromium.c.BUILD_CONFIG == 'Release', (
         'Perf tests should only be run with Release builds.')
 
+  @property
+  def bucketname(self):
+    if self.m.runtime.is_luci:
+      return self.m.buildbucket.bucket_v1
+    else:
+      return self.m.properties.get('mastername')
+
+  @property
+  def buildername(self):
+    return self.m.buildbucket.builder_name
+
+  def get_bot(self, bucketname, buildername):
+    return Bot(self._builders, self._recipe_configs, bucketname, buildername)
+
+  @property
+  def master_config(self):
+    return self._builders[self.bucketname].get('settings', {})
+
+  @property
+  def mastername(self):
+    return self.master_config.get('mastername', self.bucketname)
+
   def configure_isolate(self, phase=None):
     if self.c.enable_swarming:
       tests = steps.generate_tests(
-        self.m, self.c.TEST_SUITE, phase, self.revision,
-        self.bot_config.get('baremetal_swarming_dimensions'),
-        self.bot_config['recipe_config'], self.c.PERF_ID, self.revision_number,
-        self.should_test_android_studio_project_generation)
+          self.m, phase, self.revision, self.revision_number,
+          self.bot, self.c.PERF_ID)
       self._isolated_targets = [test._name for test in tests
                                 if isinstance(test, SwarmingTest)]
       self._isolated_targets.sort()
 
   def configure_swarming(self):
-    self.c.enable_swarming = self.bot_config.get('enable_swarming')
+    self.c.enable_swarming = self.bot.config.get('enable_swarming')
     if self.c.enable_swarming:
       self.m.chromium_swarming.configure_swarming(
           'webrtc',
@@ -154,13 +188,13 @@ class WebRTCApi(recipe_api.RecipeApi):
           'os',
           self.m.swarming.prefered_os_dimension(
               self.m.platform.name).split('-', 1)[0])
-      for key, value in self.bot_config.get(
+      for key, value in self.bot.config.get(
           'swarming_dimensions', {}).iteritems():
         self.m.swarming.set_default_dimension(key, value)
-      if self.bot_config.get('swarming_timeout'):
-        self.m.swarming.default_hard_timeout = self.bot_config[
+      if self.bot.config.get('swarming_timeout'):
+        self.m.swarming.default_hard_timeout = self.bot.config[
             'swarming_timeout']
-        self.m.swarming.default_io_timeout = self.bot_config['swarming_timeout']
+        self.m.swarming.default_io_timeout = self.bot.config['swarming_timeout']
 
   def _apply_patch(self, repository_url, patch_ref, include_subdirs=()):
     """Applies a patch by downloading the text diff from Gitiles."""
@@ -270,7 +304,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def get_binary_sizes(self, files=None, base_dir=None):
     if files is None:
-      files = self.bot_config.get('binary_size_files')
+      files = self.bot.config.get('binary_size_files')
     if not files:
       return
 
@@ -292,10 +326,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     """
     with self.m.context(cwd=self._working_dir):
       tests = steps.generate_tests(
-        self.m, self.c.TEST_SUITE, phase, self.revision,
-        self.bot_config.get('baremetal_swarming_dimensions'),
-        self.bot_config['recipe_config'], self.c.PERF_ID, self.revision_number,
-        self.should_test_android_studio_project_generation)
+          self.m, phase, self.revision, self.revision_number,
+          self.bot, self.c.PERF_ID)
       with self.m.step.defer_results():
         if tests:
           run_android_device_steps = (not self.c.enable_swarming and
@@ -308,9 +340,9 @@ class WebRTCApi(recipe_api.RecipeApi):
             test.pre_run(self.m, suffix='')
 
           # Build + upload archives while waiting for swarming tasks to finish.
-          if self.bot_config.get('build_android_archive'):
+          if self.bot.config.get('build_android_archive'):
             self.build_android_archive()
-          if self.bot_config.get('archive_apprtc'):
+          if self.bot.config.get('archive_apprtc'):
             self.package_apprtcmobile()
 
           for test in tests:
@@ -328,18 +360,18 @@ class WebRTCApi(recipe_api.RecipeApi):
       'parent_got_revision_cp': self.revision_cp,
     }
 
-    triggers = self.bot_config.get('triggers')
-    if triggers:
+    triggered_bots = list(self.bot.triggered_bots())
+    if triggered_bots:
       self.m.buildbucket.put([{
-        'bucket': builder.split('/')[0],
+        'bucket': bucketname,
         'parameters': {
-          'builder_name': builder.split('/')[1],
+          'builder_name': buildername,
           'properties': properties,
           'swarm_hashes': self.m.isolate.isolated_tests,
         },
-      } for builder in triggers])
+      } for bucketname, buildername in triggered_bots])
 
-    buildbot_triggers = self.bot_config.get('buildbot_triggers')
+    buildbot_triggers = self.bot.config.get('buildbot_triggers')
     if buildbot_triggers:
       self.m.trigger(*[{
         'builder_name': builder_name,
