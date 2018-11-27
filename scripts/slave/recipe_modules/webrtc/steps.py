@@ -290,8 +290,8 @@ def _UploadToPerfDashboard(name, api, task_output_dir):
 
   args = [
       '--build-dir', api.path['checkout'].join('out'),
-      '--buildername', api.properties['buildername'],
-      '--buildnumber', api.properties['buildnumber'],
+      '--buildername', api.buildbucket.builder_name,
+      '--buildnumber', api.buildbucket.build.number,
       '--name', name,
       '--perf-id', api.webrtc.c.PERF_ID,
       '--output-json-file', api.json.output(),

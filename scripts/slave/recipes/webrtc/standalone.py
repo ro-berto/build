@@ -33,7 +33,7 @@ def RunSteps(api):
   webrtc.apply_bot_config(webrtc.BUILDERS, webrtc.RECIPE_CONFIGS)
 
   # TODO(kjellander): Remove when https://bugs.webrtc.org/7413 is fixed.
-  if api.properties['buildername'] == 'Linux32 Release':
+  if api.buildbucket.builder_name == 'Linux32 Release':
     step_result = api.step('Disabled: see https://bugs.webrtc.org/7413',
                            cmd=None)
     step_result.presentation.status = api.step.WARNING

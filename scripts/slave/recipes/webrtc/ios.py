@@ -8,6 +8,7 @@ DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
   'ios',
+  'recipe_engine/buildbucket',
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
@@ -24,7 +25,7 @@ def RunSteps(api):
       'tools_webrtc',
       'ios',
   )
-  buildername = api.properties['buildername'].replace(' ', '_')
+  buildername = api.buildbucket.builder_name.replace(' ', '_')
   api.ios.read_build_config(build_config_base_dir=build_config_base_dir,
                             buildername=buildername)
   mb_path = api.path['checkout'].join('tools_webrtc', 'mb')
