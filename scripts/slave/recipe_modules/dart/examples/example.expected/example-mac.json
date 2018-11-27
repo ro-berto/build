@@ -1,5 +1,23 @@
 [
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/builders/example-mac/latest",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "gsutil find latest build",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text[latest]@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "ensure_goma"
   },
@@ -1132,26 +1150,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "gs://dart-test-results/builders/example-mac/latest",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[CACHE]/builder/sdk",
-    "infra_step": true,
-    "name": "download previous results.gsutil find latest build",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_END@raw_io.output_text[latest]@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
@@ -1262,6 +1260,26 @@
     "cmd": [],
     "cwd": "[CACHE]/builder/sdk",
     "name": "upload new results"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "",
+      "gs://dart-test-results/builders/example-mac/0/revision"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
+    "name": "upload new results.gsutil upload revision",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/example-mac/0/revision@@@"
+    ]
   },
   {
     "cmd": [

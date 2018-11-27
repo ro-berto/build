@@ -2,7 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+
 from recipe_engine.post_process import (DoesNotRun, DropExpectation)
+
 
 DEPS = [
   'dart',
@@ -13,12 +15,14 @@ DEPS = [
   'recipe_engine/step'
 ]
 
+
 CANNED_OUTPUT_DIR = {
   'logs.json': r'{}',
   'results.json': r'{}',
   'run.json': r'{}',
   'result.log': r'{}'
 }
+
 
 TRIGGER_RESULT = {
   "results": [
@@ -54,6 +58,7 @@ TRIGGER_RESULT = {
     }
   ]
 }
+
 
 TEST_MATRIX = {
   "filesets": {
@@ -144,8 +149,10 @@ TEST_MATRIX = {
   ]
 }
 
+
 def RunSteps(api):
-  api.dart.checkout(False)
+  latest, latest_revision = api.dart.get_latest_tested_commit()
+  api.dart.checkout(False, revision=latest_revision)
 
   build_args = ['--super-fast']
   api.dart.build(build_args, name='can_time_out')
@@ -169,10 +176,11 @@ def RunSteps(api):
   api.dart.kill_tasks()
   api.dart.read_debug_log()
 
-  api.dart.test(test_data=TEST_MATRIX)
+  api.dart.test(latest=latest, test_data=TEST_MATRIX)
 
   if 'parent_fileset' in api.properties:
     api.dart.download_parent_isolate()
+
 
 def GenTests(api):
   yield (api.test('basic') + api.properties(
@@ -187,7 +195,7 @@ def GenTests(api):
                     api.raw_io.output_dir(CANNED_OUTPUT_DIR)) +
       api.step_data('upload testing fileset fileset1',
                     stdout=api.raw_io.output('test isolate hash')) +
-      api.step_data('download previous results.gsutil find latest build',
+      api.step_data('gsutil find latest build',
                     api.raw_io.output_text('123', name='latest')))
 
   yield (api.test('analyzer-none-linux-release-be') + api.properties(

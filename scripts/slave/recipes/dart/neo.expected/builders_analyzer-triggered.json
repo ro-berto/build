@@ -3,6 +3,24 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/builders/builders/analyzer-triggered/latest",
+      "/path/to/tmp/"
+    ],
+    "infra_step": true,
+    "name": "gsutil find latest build",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text[latest]@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
       "[START_DIR]/swarming.client",

@@ -81,11 +81,12 @@ def RunSteps(api):
 
 
 def _run_steps_impl(api):
+  latest, latest_revision = api.dart.get_latest_tested_commit()
   # If parent_fileset is set, the bot is triggered by
   # another builder, and we should not download the sdk.
   # We rely on all files being in the isolate
   if 'parent_fileset' in api.properties:
-    # TODO(athom): this doesn't work on windows, see bug 785362.
+    # todo(athom): this doesn't work on windows, see bug 785362.
     api.swarming_client.checkout('master')
     api.dart.download_parent_isolate()
   else:
@@ -95,7 +96,11 @@ def _run_steps_impl(api):
     if channel not in ['be', 'dev', 'stable', 'integration', 'try']:
       channel = 'be'
     clobber = 'clobber' in api.properties
-    api.dart.checkout(clobber)
+    # todo(athom): remove the new workflow check when enabled by default
+    if channel == 'try' and 'new_workflow_enabled' in api.properties:
+      api.dart.checkout(clobber, revision=latest_revision)
+    else:
+      api.dart.checkout(clobber)
 
   api.dart.kill_tasks()
 
@@ -122,7 +127,7 @@ def _run_steps_impl(api):
             api.step("%s %s" % (api.properties[cmd_key],x), try_test_cmd)
   else:
     with api.step.defer_results():
-      api.dart.test(test_data=TEST_MATRIX)
+      api.dart.test(latest=latest, test_data=TEST_MATRIX)
       api.dart.kill_tasks()
       with api.context(cwd=api.path['checkout']):
         api.dart.read_debug_log()
@@ -144,7 +149,8 @@ def GenTests(api):
       api.test('builders/dart2js-win10-debug-x64-firefox-try') +
       api.properties.generic(
         buildername='dart2js-win10-debug-x64-firefox-try',
-        revision='3456abcd78ef')
+        revision='3456abcd78ef',
+        new_workflow_enabled='true')
    )
    yield (
       api.test('builders/try-cl-builder') +

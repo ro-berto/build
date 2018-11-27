@@ -38,7 +38,7 @@ class DartApi(recipe_api.RecipeApi):
   """Recipe module for code commonly used in dart recipes.
 
   Shouldn't be used elsewhere."""
-  def checkout(self, clobber=False):
+  def checkout(self, clobber=False, revision=None):
     """Checks out the dart code and prepares it for building."""
     self.m.gclient.set_config('dart')
     sdk = self.m.gclient.c.solutions[0]
@@ -52,11 +52,11 @@ class DartApi(recipe_api.RecipeApi):
                              'GIT_TRACE_CURL_NO_DATA': '1',
                              'GIT_REDACT_COOKIES': 'o,SSO,GSSO_UberProxy'}):
       try:
-        self.m.bot_update.ensure_checkout()
+        self.m.bot_update.ensure_checkout(root_solution_revision=revision)
       except self.m.step.InfraFailure:
-        # TODO(athom): Remove this when git cache is clean on all bots
-        self.m.file.rmcontents('Clear git cache', self.m.path['cache'].join('git'))
-        # TODO(athom): Remove this retry once root cause is fixed
+        if not revision:
+          raise
+        # Maybe we failed to because of the revision, try the latest instead.
         self.m.bot_update.ensure_checkout()
 
       with self.m.context(cwd=self.m.path['checkout']):
@@ -269,13 +269,8 @@ class DartApi(recipe_api.RecipeApi):
           results.addRun(bot_name, contents)
 
 
-  def _download_results(self):
-    filenames = ['results.json', 'flaky.json']
-    builder = self.m.buildbucket.builder_name
-    if builder.endswith('-try'):
-      builder = builder[:-4]
-    results_path = self.m.path['checkout'].join('LATEST')
-    self.m.file.ensure_directory('ensure LATEST dir', results_path)
+  def get_latest_tested_commit(self):
+    builder = self._get_builder_dir()
     latest_result = self.m.gsutil.download(
         'dart-test-results',
         'builders/%s/latest' % builder,
@@ -283,11 +278,35 @@ class DartApi(recipe_api.RecipeApi):
         name='find latest build',
         ok_ret='any') # todo(athom): succeed only if file does not exist
     latest = latest_result.raw_io.output_texts.get('latest')
+    revision = None
+    if latest:
+      latest = latest.strip()
+      revision_result = self.m.gsutil.download(
+          'dart-test-results',
+          'builders/%s/%s/revision' % (builder, latest),
+          self.m.raw_io.output_text(name='revision', add_output_log=True),
+          name='get revision for latest build',
+          ok_ret='any') # todo(athom): succeed only if file does not exist
+      revision = revision_result.raw_io.output_texts.get('revision')
+
+    return (latest, revision)
+
+
+  def _get_builder_dir(self):
+    builder = self.m.buildbucket.builder_name
+    if builder.endswith('-try'):
+      builder = builder[:-4]
+    return builder
+
+  def _download_results(self, latest):
+    filenames = ['results.json', 'flaky.json']
+    builder = self._get_builder_dir()
+    results_path = self.m.path['checkout'].join('LATEST')
+    self.m.file.ensure_directory('ensure LATEST dir', results_path)
     for filename in filenames + ['approved_results.json']:
       self.m.file.write_text(
         'ensure %s exists' % filename, results_path.join(filename), '')
-    if latest and latest.strip():
-      latest = latest.strip()
+    if latest:
       self.m.gsutil.download(
         'dart-test-results',
         'builders/%s/%s/*.json' % (builder, latest),
@@ -348,8 +367,11 @@ class DartApi(recipe_api.RecipeApi):
     if builder.endswith('try'):
       return # pragma: no cover
 
+    build_revision = str(self.m.buildbucket.gitiles_commit.id)
     build_number = str(self.m.buildbucket.build.number)
 
+
+    self._upload_result(builder, build_number, 'revision', build_revision)
     self._upload_result(builder, build_number, 'logs.json', logs_str)
     self._upload_result(builder, build_number, 'results.json', results_str)
     self._upload_result(builder, build_number, 'flaky.json', flaky_json_str)
@@ -435,7 +457,7 @@ class DartApi(recipe_api.RecipeApi):
                   ok_ret='any')
 
 
-  def test(self, test_data):
+  def test(self, latest, test_data):
     """Reads the test-matrix.json file in checkout and performs each step listed
     in the file
 
@@ -457,7 +479,7 @@ class DartApi(recipe_api.RecipeApi):
     for config in test_matrix['builder_configurations']:
       if builder in config['builders']:
         self._write_file_sets(test_matrix['filesets'])
-        self._run_steps(config, isolate_hashes, builder, global_config)
+        self._run_steps(config, isolate_hashes, builder, global_config, latest)
         return
     raise self.m.step.StepFailure(
         'Error, could not find builder by name %s in test-matrix' % builder)
@@ -521,7 +543,7 @@ class DartApi(recipe_api.RecipeApi):
           return None
 
 
-  def _run_steps(self, config, isolate_hashes, builder_name, global_config):
+  def _run_steps(self, config, isolate_hashes, builder_name, global_config, latest):
     """Executes all steps from a json test-matrix builder entry"""
     # Find information from the builder name. It should be in the form
     # <info>-<os>-<mode>-<arch>-<runtime> or <info>-<os>-<mode>-<arch>.
@@ -642,16 +664,16 @@ class DartApi(recipe_api.RecipeApi):
       # Old workflow test.py steps throw on failing tests and results need to
       # be processed in the defer_results block.
       if not self._report_new_results():
-        self._process_test_results(all_results)
+        self._process_test_results(all_results, latest)
     if self._report_new_results():
-      self._process_test_results(all_results)
+      self._process_test_results(all_results, latest)
 
 
-  def _process_test_results(self, all_results):
+  def _process_test_results(self, all_results, latest):
     if self._run_new_steps():
       with self.m.context(cwd=self.m.path['checkout']):
         with self.m.step.nest('download previous results'):
-          self._download_results()
+          self._download_results(latest)
         for results in all_results.itervalues():
           self._deflake_results(results)
         logs_str = ''.join(
