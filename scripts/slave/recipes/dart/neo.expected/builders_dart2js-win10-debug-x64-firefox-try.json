@@ -245,7 +245,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "remove",
-      ".debug.log"
+      "[CACHE]/builder/sdk/.debug.log"
     ],
     "infra_step": true,
     "name": "delete debug log"

@@ -459,7 +459,8 @@ class DartApi(recipe_api.RecipeApi):
 
   def delete_debug_log(self):
     """Deletes the debug log file"""
-    self.m.file.remove('delete debug log', '.debug.log')
+    self.m.file.remove('delete debug log',
+                       self.m.path['checkout'].join('.debug.log'))
 
 
   def test(self, latest, test_data):
