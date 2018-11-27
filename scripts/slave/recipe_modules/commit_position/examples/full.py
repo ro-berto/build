@@ -31,8 +31,6 @@ def RunSteps(api):
         api.properties['hash_to_resolve'])
 
   cp = api.properties['cp']
-  expect_revision = api.properties.get('revision')
-  expect_branch = api.properties.get('branch')
 
   # Parse a valid commit position (branch).
   try:
@@ -40,13 +38,10 @@ def RunSteps(api):
   except ValueError:
     raise recipe_api.StepFailure("Failed to parse branch from: %s" % (cp,))
   api.step('test branch parse', ['/bin/echo', branch])
-  assert branch == expect_branch, "Invalid parsed branch: %s" % (branch,)
 
   # Parse a valid commit position (revision).
   revision = api.commit_position.parse_revision(cp)
   api.step('test revision parse', ['/bin/echo', revision])
-  assert revision == expect_revision, "Invalid parsed revision: %s" % (
-      revision,)
 
   # Construct a commit position.
   value = api.commit_position.construct(branch, revision)
@@ -60,8 +55,6 @@ def GenTests(api):
       api.test('valid') +
       api.properties(
         cp=VALID_CP,
-        revision=12345,
-        branch='refs/heads/master',
         hash_to_resolve=valid_hash) +
       api.step_data('resolving hash ' + valid_hash,
                     stdout=api.raw_io.output_text(VALID_CP)))
