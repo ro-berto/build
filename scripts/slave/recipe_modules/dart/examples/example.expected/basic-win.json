@@ -694,6 +694,19 @@
       "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
+      "remove",
+      ".debug.log"
+    ],
+    "infra_step": true,
+    "name": "delete debug log"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
       "copy",
       "{'variables': {'files': '[]'}}",
       "[CACHE]\\builder\\sdk\\nameoffileset"
@@ -1629,7 +1642,6 @@
       "foo",
       "--bar",
       "-rfirefox",
-      "--append_logs",
       "--builder-tag=win10",
       "--firefox=browsers\\firefox\\firefox.exe",
       "--shards=2",
@@ -1680,7 +1692,6 @@
       "foo",
       "--bar",
       "-rfirefox",
-      "--append_logs",
       "--builder-tag=win10",
       "--firefox=browsers\\firefox\\firefox.exe",
       "--shards=2",
@@ -2186,7 +2197,6 @@
       "foo",
       "--bar",
       "-rfirefox",
-      "--append_logs",
       "--builder-tag=win10",
       "--firefox=browsers\\firefox\\firefox.exe",
       "--repeat=5",

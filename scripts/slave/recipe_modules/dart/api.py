@@ -446,7 +446,7 @@ class DartApi(recipe_api.RecipeApi):
 
 
   def read_debug_log(self):
-    """Reads the debug.log file"""
+    """Reads the debug log file"""
     if self.m.platform.name == 'win':
       self.m.step('debug log',
                   ['cmd.exe', '/c', 'type', '.debug.log'],
@@ -455,6 +455,11 @@ class DartApi(recipe_api.RecipeApi):
       self.m.step('debug log',
                   ['cat', '.debug.log'],
                   ok_ret='any')
+
+
+  def delete_debug_log(self):
+    """Deletes the debug log file"""
+    self.m.file.remove('delete debug log', '.debug.log')
 
 
   def test(self, latest, test_data):
@@ -476,13 +481,17 @@ class DartApi(recipe_api.RecipeApi):
       builder = builder[0:builder.rfind('-')]
     isolate_hashes = {}
     global_config = test_matrix['global']
-    for config in test_matrix['builder_configurations']:
-      if builder in config['builders']:
-        self._write_file_sets(test_matrix['filesets'])
-        self._run_steps(config, isolate_hashes, builder, global_config, latest)
-        return
-    raise self.m.step.StepFailure(
-        'Error, could not find builder by name %s in test-matrix' % builder)
+    config = None
+    for c in test_matrix['builder_configurations']:
+      if builder in c['builders']:
+        config = c
+        break
+    if config is None:
+      raise self.m.step.StepFailure(
+          'Error, could not find builder by name %s in test-matrix' % builder)
+    self.delete_debug_log()
+    self._write_file_sets(test_matrix['filesets'])
+    self._run_steps(config, isolate_hashes, builder, global_config, latest)
 
 
   def _write_file_sets(self, filesets):
@@ -597,8 +606,6 @@ class DartApi(recipe_api.RecipeApi):
       }
       channel = channels.get(self.m.properties['branch'], 'try')
     build_py_path = 'tools/build.py'
-    # Indexes the number of test.py steps.
-    test_py_index = 0
     tasks = []
     all_results = {}
     with self.m.step.defer_results():
@@ -648,14 +655,9 @@ class DartApi(recipe_api.RecipeApi):
             elif is_trigger:
               self.run_trigger(step_name, step, isolate_hash)
             elif self._is_test_py_step(script):
-              append_logs = test_py_index > 0
-              self.run_test_py(step_name, append_logs, step,
-                               isolate_hash, shards, local_shard,
-                               environment, tasks, global_config, all_results)
-              if shards == 0 or local_shard:
-                # Only count indexes that are not sharded, to help with adding
-                # append-logs.
-                test_py_index += 1
+              self.run_test_py(step_name, step, isolate_hash,
+                               shards, local_shard, environment,
+                               tasks, global_config, all_results)
             else:
               self.run_script(step_name, script, args, isolate_hash, shards,
                   local_shard, environment, tasks)
@@ -761,12 +763,11 @@ class DartApi(recipe_api.RecipeApi):
           build['build']['url'])
 
 
-  def run_test_py(self, step_name, append_logs, step, isolate_hash, shards,
-                  local_shard, environment, tasks, global_config, all_results):
+  def run_test_py(self, step_name, step, isolate_hash, shards, local_shard,
+                  environment, tasks, global_config, all_results):
     """Runs test.py with default arguments, based on configuration from.
     Args:
       * step_name (str) - Name of the step
-      * append_logs (bool) - Add append_log to arguments
       * step (dict) - Test-matrix step
       * isolate_hash (String) - Hash of uploadet fileset/isolate if the
         process is to be sharded
@@ -798,8 +799,6 @@ class DartApi(recipe_api.RecipeApi):
         args, ['-r', '--runtime']):
       test_args = test_args + ['-r%s' % environment['runtime']]
     args = test_args + args
-    if append_logs:
-      args = args + ['--append_logs']
     if environment['system'] in ['win7', 'win8', 'win10']:
       args = args + ['--builder-tag=%s' % environment['system']]
     if environment['copy-coredumps']:
