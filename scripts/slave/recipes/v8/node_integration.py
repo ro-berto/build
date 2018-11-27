@@ -337,7 +337,8 @@ def GenTests(api):
   for mastername, masterconf in BUILDERS.iteritems():
     for buildername, bot_config in masterconf['builders'].iteritems():
       buildbucket_kwargs = {
-          'project': 'v8/v8',
+          'project': 'v8',
+          'git_repo': 'https://chromium.googlesource.com/v8/v8',
           'builder': buildername,
           'build_number': 571,
           'revision': 'a' * 40,

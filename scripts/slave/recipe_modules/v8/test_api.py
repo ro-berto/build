@@ -533,7 +533,8 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       )
     else:
       test += self.m.buildbucket.ci_build(
-          project='v8/v8',
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
           builder=buildername,
           git_ref=git_ref,
           build_number=571,

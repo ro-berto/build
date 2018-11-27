@@ -205,7 +205,6 @@ def GenTests(api):
     return (
         api.test(api.v8.test_name('client.v8.official', 'V8 Foobar', name)) +
         api.properties.generic(mastername='client.v8.official',
-                               revision='a' * 40,
                                path_config='kitchen',
                                **kwargs) +
         api.buildbucket.ci_build(
@@ -300,14 +299,14 @@ def GenTests(api):
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'no_branch')) +
       api.properties.generic(mastername=mastername,
-                             revision='a' * 40,
                              path_config='kitchen',
                              build_config='Release',
                              target_bits=64) +
       api.buildbucket.ci_build(
         project='v8',
         git_repo='https://chromium.googlesource.com/v8/v8',
-        builder=buildername
+        builder=buildername,
+        revision='a' * 40,
       ) +
       api.post_process(
         MustRun, 'initialization.Skipping due to missing release branch.') +
@@ -324,7 +323,6 @@ def GenTests(api):
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'no_tag')) +
       api.properties.generic(mastername=mastername,
-                             revision='a' * 40,
                              path_config='kitchen',
                              build_config='Release',
                              target_bits=64) +
@@ -332,7 +330,8 @@ def GenTests(api):
         project='v8',
         git_repo='https://chromium.googlesource.com/v8/v8',
         builder=buildername,
-        git_ref='refs/branch-heads/3.4'
+        git_ref='refs/branch-heads/3.4',
+        revision='a' * 40,
       ) +
       api.v8.version_file(17, 'head', prefix='initialization.') +
       api.override_step_data(
@@ -352,7 +351,7 @@ def GenTests(api):
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'update_beta')) +
       api.properties.generic(mastername=mastername,
-                             revision='a' * 40, path_config='kitchen',
+                             path_config='kitchen',
                              build_config='Release',
                              target_bits=64) +
       api.buildbucket.ci_build(
@@ -360,6 +359,7 @@ def GenTests(api):
         git_repo='https://chromium.googlesource.com/v8/v8',
         builder=buildername,
         git_ref='refs/branch-heads/3.4',
+        revision='a' * 40,
       ) +
       api.v8.version_file(0, 'head', prefix='initialization.') +
       api.override_step_data(
@@ -373,7 +373,6 @@ def GenTests(api):
   yield (
       api.test(api.v8.test_name(mastername, buildername, 'canary')) +
       api.properties.generic(mastername=mastername,
-                             revision='a' * 40,
                              path_config='kitchen',
                              build_config='Release',
                              target_bits=64) +
@@ -382,6 +381,7 @@ def GenTests(api):
         git_repo='https://chromium.googlesource.com/v8/v8',
         builder=buildername,
         git_ref='refs/heads/3.4.3',
+        revision='a' * 40,
       ) +
       api.v8.version_file(1, 'head', prefix='initialization.') +
       api.override_step_data(

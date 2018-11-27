@@ -5,6 +5,7 @@
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'recipe_engine/buildbucket',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -53,14 +54,24 @@ def GenTests(api):
   yield (
       api.test('clusterfuzz_no_issues') +
       api.properties.generic(mastername='client.v8.fyi',
-                             buildername='Auto-roll - release process',
-                             path_config='kitchen')
+                             path_config='kitchen') +
+      api.buildbucket.ci_build(
+        project='v8',
+        git_repo='https://chromium.googlesource.com/v8/v8',
+        builder='Auto-roll - release process',
+        revision='',  # same as unspecified
+      )
   )
 
   yield (
       api.test('clusterfuzz_issues') +
       api.properties.generic(mastername='client.v8.fyi',
-                             buildername='Auto-roll - release process',
                              path_config='kitchen') +
-      api.override_step_data('check clusterfuzz', api.json.output([1, 2]))
+      api.override_step_data('check clusterfuzz', api.json.output([1, 2])) +
+      api.buildbucket.ci_build(
+        project='v8',
+        git_repo='https://chromium.googlesource.com/v8/v8',
+        builder='Auto-roll - release process',
+        revision='',  # same as unspecified
+      )
   )
