@@ -857,37 +857,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CACHE]/builder/sdk/logs/result.log",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "print result",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result.log@@@@",
-      "@@@STEP_LOG_END@result.log@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[CACHE]/builder/sdk/logs/result.log"
-    ],
-    "infra_step": true,
-    "name": "delete result.log"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[CACHE]/builder/sdk/tools/task_kill.py",
       "--kill_browsers=True",
       "--kill_vsbuild=True"
@@ -1513,8 +1482,6 @@
     },
     "name": "Test-step 2",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result.log@{}@@@",
-      "@@@STEP_LOG_END@result.log@@@",
       "@@@STEP_LOG_LINE@results.json@{}@@@",
       "@@@STEP_LOG_END@results.json@@@",
       "@@@STEP_LOG_LINE@run.json@{}@@@",
@@ -1605,8 +1572,6 @@
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@result.log@{}@@@",
-      "@@@STEP_LOG_END@result.log@@@",
       "@@@STEP_LOG_LINE@results.json@{}@@@",
       "@@@STEP_LOG_END@results.json@@@",
       "@@@STEP_LOG_LINE@run.json@{}@@@",

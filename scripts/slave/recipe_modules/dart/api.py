@@ -257,7 +257,7 @@ class DartApi(recipe_api.RecipeApi):
       filename = filepath.split('/')[-1]
       filename = filename.split('\\')[-1]
       if filename in (
-          'logs.json', 'result.log', 'results.json', 'run.json'):
+          'logs.json', 'results.json', 'run.json'):
         contents = output_dir[filepath]
         self.m.step.active_result.presentation.logs[
             filename] = [contents]
@@ -422,27 +422,6 @@ class DartApi(recipe_api.RecipeApi):
     args.append(self.m.raw_io.input_text(results_str))
     self.m.step('test results', args)
     self.m.step.active_result.presentation.logs['results.json'] = [results_str]
-
-
-  # todo(athom): Use raw_io instead to read the result.log file.
-  def read_result_file(self,  name, log_name, test_data=''):
-    """Reads the result.log file
-    Args:
-      * name (str) - Name of step
-      * log_name (str) - Name of log
-      * test_data (str) - Some default data for this step to return when running
-        under simulation.
-    Returns (str) - The content of the file.
-    Raises file.Error
-    """
-    result_log_path = self.m.path['checkout'].join('logs', 'result.log')
-    try:
-      read_data = self.m.file.read_text(
-        name, result_log_path, test_data)
-      self.m.step.active_result.presentation.logs[log_name] = [read_data]
-      self.m.file.remove("delete result.log", result_log_path)
-    except self.m.file.Error: # pragma: no cover
-      pass
 
 
   def read_debug_log(self):

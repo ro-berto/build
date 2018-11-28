@@ -85,47 +85,12 @@
       "--report",
       "--time",
       "--write-debug-log",
-      "--write-result-log",
-      "--write-test-outcome-log",
       "-cdartkp",
       "-rdart_precompiled",
       "--system=android"
     ],
     "cwd": "[START_DIR]/sdk",
     "name": "test vm"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[START_DIR]/sdk/logs/result.log",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "infra_step": true,
-    "name": "read results of test vm",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@result.log@@@@",
-      "@@@STEP_LOG_END@result.log@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "remove",
-      "[START_DIR]/sdk/logs/result.log"
-    ],
-    "cwd": "[START_DIR]/sdk",
-    "infra_step": true,
-    "name": "delete result.log"
   },
   {
     "cmd": [
