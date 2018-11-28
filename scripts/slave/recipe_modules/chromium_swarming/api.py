@@ -32,7 +32,8 @@ MASTER_SWARMING_PRIORITIES.update({
 
 
 class ChromiumSwarmingApi(recipe_api.RecipeApi):
-  def configure_swarming(self, project_name, precommit, mastername=None):
+  def configure_swarming(self, project_name, precommit, mastername=None,
+                         default_priority=None):
     """Configures default swarming dimensions and tags.
 
     Uses the 'chromium' global config to determine target platform defaults,
@@ -43,6 +44,10 @@ class ChromiumSwarmingApi(recipe_api.RecipeApi):
       project_name: Lowercase name of the project, e.g. "blink", "chromium".
       precommit: Boolean flag to indicate whether the tests are running before
           the changes are commited.
+      mastername: optional name of the mastername to use to configure the
+          default priority of swarming tasks.
+      default_priority: optional default_priority to use. Will override the
+          priority name inherited from the mastername (or the global default).
     """
 
     # Set platform-specific default dims.
@@ -76,6 +81,13 @@ class ChromiumSwarmingApi(recipe_api.RecipeApi):
       self.m.swarming.default_priority = MASTER_SWARMING_PRIORITIES[mastername]
       self.m.swarming.add_default_tag('purpose:post-commit')
       self.m.swarming.add_default_tag('purpose:CI')
+
+    if default_priority is not None:
+      # TODO(crbug.com/876570): We should move the Mojo builders to a
+      # different "master" and get rid of this code path; we don't really want
+      # different builders on the same master to have different priorities,
+      # it makes reasoning about builders harder for sheriffs and troopers.
+      self.m.swarming.default_priority = default_priority
 
     if self.m.runtime.is_experimental:
       # The experimental half of LUCI conversions should be lower than

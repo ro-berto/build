@@ -843,6 +843,12 @@ SPEC = {
       'bot_type': 'builder_tester',
       'android_config': 'arm64_builder_mb',
       'root_devices': True,
+      # TODO(crbug.com/876570): Here and below, we should move the Mojo
+      # builders to a different "master" and get rid of this property; we
+      # don't really want different builders on the same master to have
+      # different priorities, it makes reasoning about builders harder for
+      # sheriffs and troopers.
+      'swarming_default_priority': 25,
       'testing': {
         'platform': 'linux',
       },
@@ -859,6 +865,7 @@ SPEC = {
       },
       'bot_type': 'builder_tester',
       'android_config': 'arm64_builder_mb',
+      'swarming_default_priority': 25,
       'testing': {
         'platform': 'linux',
       },
@@ -874,12 +881,14 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'builder_tester',
+      'swarming_default_priority': 25,
       'testing': { 'platform': 'linux', },
     },
     'Mojo Linux': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'swarming_default_priority': 25,
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -893,6 +902,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'swarming_default_priority': 25,
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -906,6 +916,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
+      'swarming_default_priority': 25,
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_PLATFORM': 'win',

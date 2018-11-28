@@ -1129,7 +1129,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       return
 
     self.m.chromium_swarming.configure_swarming(
-        'chromium', precommit=False, mastername=mastername)
+        'chromium', precommit=False, mastername=mastername,
+        default_priority=bot_config.get('swarming_default_priority'))
     test_runner = self.create_test_runner(
         tests, serialize_tests=bot_config.get('serialize_tests'))
     with self.wrap_chromium_tests(bot_config, tests):
