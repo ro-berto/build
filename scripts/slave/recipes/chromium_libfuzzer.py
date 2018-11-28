@@ -26,6 +26,17 @@ DEPS = [
 BUILDERS = freeze({
   'chromium.fuzz': {
     'builders': {
+      'Libfuzzer Upload Chrome OS ASan': {
+        'chromium_config': 'chromium_clang',
+        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'chromeos',
+          'TARGET_BITS': 64,
+        },
+        'upload_bucket': 'chromium-browser-libfuzzer',
+        'upload_directory': 'asan',
+      },
       'Libfuzzer Upload Linux ASan': {
         'chromium_config': 'chromium_clang',
         'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
@@ -98,6 +109,17 @@ BUILDERS = freeze({
   # TODO(crbug.com/903591): Remove the fyi configs.
   'chromium.fyi': {
     'builders': {
+      'Libfuzzer Upload Chrome OS ASan': {
+        'chromium_config': 'chromium_clang',
+        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'chromeos',
+          'TARGET_BITS': 64,
+        },
+        'upload_bucket': 'chromium-browser-libfuzzer',
+        'upload_directory': 'asan',
+      },
       'Libfuzzer Upload Linux ASan': {
         'chromium_config': 'chromium_clang',
         'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],

@@ -1014,6 +1014,12 @@
             ],
             "forgiving_optional": ["*"]
           },
+          "Libfuzzer Upload Chrome OS ASan": {
+            "tree_notify": [
+              "chromesec-lkgr-failures@google.com"
+            ],
+            "forgiving_optional": ["*"]
+          },
           "Libfuzzer Upload Linux ASan": {
             "tree_notify": [
               "chromesec-lkgr-failures@google.com"
