@@ -125,6 +125,11 @@ def _test_options_for_running(test_options, suffix, tests_to_retry):
       suffix in ('without patch', 'retry with patch')):
     test_options_copy._repeat_count = 10
 
+    # If we're repeating the tests 10 times, then we want to set retry_limit=0.
+    # The default retry_limit of 3 means that failing tests will be retried 40
+    # times, which is not our intention.
+    test_options_copy._retry_limit = 0
+
   return test_options_copy
 
 

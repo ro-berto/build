@@ -1866,6 +1866,7 @@
       "[dummy hash for gl_tests]",
       "--",
       "--gtest_repeat=10",
+      "--test-launcher-retry-limit=0",
       "--gtest_filter=Test.Two",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
@@ -2778,6 +2779,7 @@
       "[dummy hash for gl_tests]",
       "--",
       "--gtest_repeat=10",
+      "--test-launcher-retry-limit=0",
       "--gtest_filter=Test.Two",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
