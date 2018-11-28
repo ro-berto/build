@@ -53,6 +53,8 @@ PROPERTIES = {
   'initial_commit_offset': Property(default=1, kind=int),
   # Name of the isolated file (e.g. bot_default, mjsunit).
   'isolated_name': Property(kind=str),
+  # Initial number of swarming shards.
+  'num_shards': Property(default=2, kind=int),
   # Initial number of test repetitions (passed to --random-seed-stress-count
   # option).
   'repetitions': Property(default=5000, kind=int),
@@ -91,6 +93,9 @@ MAX_ISOLATE_OFFSET = 32
 
 # Maximum number of test name characters printed in UI in step names.
 MAX_LABEL_SIZE = 32
+
+# Maximum number of swarming shards to be used for a single attempt.
+MAX_SWARMING_SHARDS = 8
 
 # Minimim number of flakes needed to have confidence in a run.
 MIN_FLAKE_THRESHOLD = 4
@@ -262,44 +267,89 @@ class Depot(object):
 
 class Runner(object):
   """Helper class for executing the V8 test runner to check for flakes."""
-  def __init__(self, api, depot, command):
+  def __init__(self, api, depot, command, num_shards, repro_only):
     self.api = api
     self.depot = depot
     self.command = command
+    self.num_shards = min(num_shards, MAX_SWARMING_SHARDS)
+    self.repro_only = repro_only
     self.multiplier = 1
 
-  def calibrate(self, offset, repro_only):
+  def calibrate(self, offset):
     """Calibrates the multiplier for test time or repetitions of the runner for
     the given offset.
 
     Testing is repeated until MIN_FLAKE_THRESHOLD test failures are counted in
-    an attempt. The multiplier is doubled on each fresh attempt.
+    an attempt. First the number of swarming shards, then the multiplier is
+    doubled on each fresh attempt.
 
     Args:
       offset (int): Distance to the start commit.
-      repro_only: Returns already when at least one failure is found.
     """
-    for _ in range(MAX_CALIBRATION_ATTEMPTS):
-      num_failures = self.check_num_flakes(offset)
-      if repro_only and num_failures or num_failures >= MIN_FLAKE_THRESHOLD:
+    for i in range(MAX_CALIBRATION_ATTEMPTS):
+      # Nest to disambiguate step names during calibration.
+      with self.api.step.nest('calibration attempt %d' % (i + 1)):
+        num_failures = self.check_num_flakes(offset)
+      if (self.repro_only and num_failures or
+          num_failures >= MIN_FLAKE_THRESHOLD):
         return True
-      self.multiplier *= 2
+      if self.num_shards < MAX_SWARMING_SHARDS:
+        # First double the swarming shards until reaching the maximum.
+        self.num_shards = min(self.num_shards * 2, MAX_SWARMING_SHARDS)
+      else:
+        # Then double the repetition multiplier. Use lower swarming priority
+        # given the number and time of the tasks.
+        self.api.swarming.default_priority = 35
+        self.multiplier *= 2
     return False
 
+  def _default_task_pass_test_data(self):
+    test_data = self.api.swarming.test_api.canned_summary_output_raw()
+    test_data['shards'][0]['outputs'][-1] = TEST_PASSED_TEXT
+    test_data['shards'][0]['exit_codes'][-1] = 0
+    return (
+        self.api.swarming.test_api.summary(test_data) +
+        self.api.json.test_api.output({}) +
+        self.api.raw_io.test_api.output('')
+    )
+
   def check_num_flakes(self, offset):
-    """Stress tests the given revision and returns the number of failures."""
+    """Stress tests the given revision and returns the number of failures.
+
+    Returns: Boolean indicating if enough failures have been found.
+    """
+    # TODO(machenbach): Use the sharding logic from the swarming module. We
+    # don't use it yet, since swarming sets the GTEST_SHARD_INDEX environment
+    # variable, which is used by the V8 test runner. This makes the test
+    # disappear on all but one shards, because the test runner distributes tests
+    # in a way such that each test only runs on one shard.
+    # We first need a change of that logic on V8-side to suppress using
+    # GTEST_SHARD_INDEX for flake bisection (e.g. by introducing another flag).
+    # This V8-side commit needs to age enough before using it on infra-side,
+    # so that it is availabe in each revision when bisecting backwards.
+
     isolated_hash = self.depot.get_isolated_hash(offset)
-    with self.api.tempfile.temp_dir('v8-flake-bisect-') as path:
+    step_prefix = 'check %s at #%d' % (self.command.label, offset)
+
+    def trigger_task(path, shard):
+      # TODO(machenbach): Would be nice to just use 'shard X' as step names for
+      # trigger/collect. But swarming enforces unique task titles and we can't
+      # use our optimization to not collect some tasks. Either properly
+      # cancel the task, such that they are not in the list of pending tasks or
+      # override the step names.
       task = self.api.swarming.task(
-          'check %s at #%d - %d' %
-            (self.command.label, offset, self.multiplier),
+          '%s - shard %d' % (step_prefix, shard),
           isolated_hash,
-          task_output_dir=path.join('task_output_dir'),
+          task_output_dir=path.join('task_output_dir_%d' % shard),
           raw_cmd=self.command.raw_cmd(self.multiplier),
       )
       self.api.swarming.trigger_task(task)
+      return task
+
+    def collect_task(task):
       try:
-        step_result = self.api.swarming.collect_task(task)
+        step_result = self.api.swarming.collect_task(
+            task, step_test_data=self._default_task_pass_test_data())
         data = step_result.swarming.summary['shards'][0]
         # Sanity checks.
         # TODO(machenbach): Add this information to the V8 test runner's json
@@ -328,6 +378,29 @@ class Runner(object):
         match = re.search(r'=== (\d+) tests failed', stdout)
         assert match
         return int(match.group(1))
+
+    with self.api.tempfile.temp_dir('v8-flake-bisect-') as path:
+      with self.api.step.nest(step_prefix) as parent:
+        tasks = [
+          trigger_task(path, shard)
+          for shard in range(self.num_shards)
+        ]
+        num_failures = 0
+        for task in tasks:
+          num_failures += collect_task(task)
+          if (self.repro_only and num_failures or
+              num_failures >= MIN_FLAKE_THRESHOLD):
+            # Stop waiting for more tasks early if already enough failures are
+            # found.
+            # TODO(machenbach): Cancel the tasks we don't collect. During
+            # calibration we might even want to figure out a better number of
+            # shards? E.g. when doubling from 4 to 8, maybe 5 was enough and
+            # should be used throughout.
+            break
+        if num_failures:
+          parent.presentation.status = self.api.step.FAILURE
+          parent.presentation.step_text = '%d failures' % num_failures
+        return num_failures
 
 
 def bisect(api, depot, initial_commit_offset, is_bad_func, offset):
@@ -430,9 +503,9 @@ def setup_swarming(api, swarming_dimensions):
 
 
 def RunSteps(api, bisect_mastername, bisect_buildername, build_config,
-             extra_args, initial_commit_offset, isolated_name, repetitions,
-             repro_only, swarming_dimensions, test_name, timeout_sec,
-             total_timeout_sec, to_revision, variant):
+             extra_args, initial_commit_offset, isolated_name, num_shards,
+             repetitions, repro_only, swarming_dimensions, test_name,
+             timeout_sec, total_timeout_sec, to_revision, variant):
   # Set up swarming client.
   setup_swarming(api, swarming_dimensions)
 
@@ -442,13 +515,13 @@ def RunSteps(api, bisect_mastername, bisect_buildername, build_config,
   command = Command(
       test_name, build_config, variant, repetitions, repro_only,
       total_timeout_sec, timeout_sec, extra_args)
-  runner = Runner(api, depot, command)
+  runner = Runner(api, depot, command, num_shards, repro_only)
 
   to_offset = depot.find_closest_build(0)
 
   # Get confidence that the given revision is flaky and optionally calibrate the
   # repetitions.
-  could_reproduce = runner.calibrate(to_offset, repro_only)
+  could_reproduce = runner.calibrate(to_offset)
 
   if repro_only:
     if could_reproduce:
@@ -502,20 +575,19 @@ def GenTests(api):
         ]}),
     )
 
-  def is_flaky(offset, multiplier, flakes, test_name='mjsunit/foobar'):
+  def is_flaky(offset, shard, flakes, calibration_attempt=0,
+               test_name='mjsunit/foobar'):
     test_data = api.swarming.canned_summary_output_raw()
-    if flakes:
-      output = TEST_FAILED_TEMPLATE % flakes
-      exit_code = 1
-    else:
-      output = TEST_PASSED_TEXT
-      exit_code = 0
-    test_data['shards'][0]['outputs'][-1] = output
-    test_data['shards'][0]['exit_codes'][-1] = exit_code
+    test_data['shards'][0]['outputs'][-1] = TEST_FAILED_TEMPLATE % flakes
+    test_data['shards'][0]['exit_codes'][-1] = 1
+    step_prefix = ''
+    if calibration_attempt:
+      step_prefix = 'calibration attempt %d.' % calibration_attempt
+    step_name = 'check %s at #%d' % (test_name, offset)
     return api.step_data(
-        'check %s at #%d - %d' % (test_name, offset, multiplier),
+        '%s%s.%s - shard %d' % (step_prefix, step_name, step_name, shard),
         api.swarming.summary(test_data),
-        retcode=exit_code,
+        retcode=1,
     )
 
   def verify_suspects(from_offset, to_offset):
@@ -554,14 +626,17 @@ def GenTests(api):
       isolated_lookup(3, True) +
       isolated_lookup(4, False) +
       isolated_lookup(5, True) +
-      # Calibration. We check for flakes until enough are found.
-      is_flaky(1, 1, 2) +
-      is_flaky(1, 2, 5) +
+      # Calibration. We check for flakes until enough are found. First only one
+      # shard reports 2 failures.
+      is_flaky(1, 1, 2, calibration_attempt=1) +
+      # Then 3 shards report 5 failures total.
+      is_flaky(1, 0, 2, calibration_attempt=2) +
+      is_flaky(1, 1, 1, calibration_attempt=2) +
+      is_flaky(1, 2, 2, calibration_attempt=2) +
       # Bisect backwards from a1 until good revision a5 is found.
-      is_flaky(2, 2, 3) +
-      is_flaky(5, 2, 0) +
+      is_flaky(2, 0, 3) +
       # Bisect into a5..a2.
-      is_flaky(3, 2, 3) +
+      is_flaky(3, 0, 3) +
       verify_suspects(5, 3)
   )
 
@@ -581,14 +656,12 @@ def GenTests(api):
       isolated_lookup(5, True) +
       isolated_lookup(7, True) +
       # Calibration.
-      is_flaky(0, 1, 5) +
+      is_flaky(0, 0, 5, calibration_attempt=1) +
       # Bisect backwards from a0 until good revision a7 is found.
-      is_flaky(1, 1, 3) +
-      is_flaky(3, 1, 3) +
-      is_flaky(7, 1, 0) +
+      is_flaky(1, 0, 3) +
+      is_flaky(3, 0, 3) +
       # Bisect into a7..a3.
-      is_flaky(5, 1, 0) +
-      is_flaky(4, 1, 2) +
+      is_flaky(4, 0, 2) +
       verify_suspects(5, 4) +
       api.post_process(DropExpectation)
   )
@@ -603,10 +676,8 @@ def GenTests(api):
       isolated_lookup(2, False) +
       isolated_lookup(3, False) +
       isolated_lookup(4, True) +
-      # Bad build #0.
-      is_flaky(0, 1, 5) +
-      # Good build #4.
-      is_flaky(4, 1, 0) +
+      # Bad build #0 wile #4 is a good build using default test data.
+      is_flaky(0, 0, 5, calibration_attempt=1) +
       # Check that bisect continues properly after not finding a build in one
       # half.
       api.post_process(MustRun, 'No builds in #4..#2') +
@@ -634,9 +705,11 @@ def GenTests(api):
       test('repro_only') +
       api.properties(repro_only=True) +
       isolated_lookup(0, True) +
-      is_flaky(0, 1, 1) +
+      is_flaky(0, 0, 1, calibration_attempt=1) +
       api.post_process(MustRun, 'Flake still reproduces.') +
-      api.post_process(Filter('[trigger] check mjsunit/foobar at #0 - 1'))
+      api.post_process(Filter(
+          'calibration attempt 1.check mjsunit/foobar at #0.'
+          '[trigger] check mjsunit/foobar at #0 - shard 0'))
   )
 
   # Simulate repro-only mode not reproducing a flake.
@@ -644,11 +717,6 @@ def GenTests(api):
       test('repro_only_failed') +
       api.properties(repro_only=True) +
       isolated_lookup(0, True) +
-      is_flaky(0, 1, 0) +
-      is_flaky(0, 2, 0) +
-      is_flaky(0, 4, 0) +
-      is_flaky(0, 8, 0) +
-      is_flaky(0, 16, 0) +
       api.post_process(ResultReasonRE, 'Could not reproduce flake.') +
       api.post_process(DropExpectation)
   )
@@ -659,13 +727,13 @@ def GenTests(api):
   shortened_test_name = (29 * '*') + '...'
   yield (
       test('no_confidence') +
-      api.properties(test_name=long_test_name) +
+      api.properties(test_name=long_test_name, num_shards=8) +
       isolated_lookup(0, True) +
-      is_flaky(0, 1, 0, test_name=shortened_test_name) +
-      is_flaky(0, 2, 2, test_name=shortened_test_name) +
-      is_flaky(0, 4, 1, test_name=shortened_test_name) +
-      is_flaky(0, 8, 3, test_name=shortened_test_name) +
-      is_flaky(0, 16, 3, test_name=shortened_test_name) +
+      is_flaky(0, 0, 0, calibration_attempt=1, test_name=shortened_test_name) +
+      is_flaky(0, 1, 2, calibration_attempt=2, test_name=shortened_test_name) +
+      is_flaky(0, 2, 1, calibration_attempt=3, test_name=shortened_test_name) +
+      is_flaky(0, 1, 3, calibration_attempt=4, test_name=shortened_test_name) +
+      is_flaky(0, 0, 3, calibration_attempt=5, test_name=shortened_test_name) +
       api.post_process(ResultReasonRE, 'Could not reach enough confidence.') +
       api.post_process(DropExpectation)
   )
