@@ -40,12 +40,13 @@ class FetchDiffFromGerritTest(unittest.TestCase):
                    '+A different line 11\n'
                    '+A newly added line 12\n')
 
+    mock_urlopen().getcode.side_effect = [404, 200, 404, 200]
     mock_urlopen().read.side_effect = [
         ')]}\n' + json.dumps(revisions),
         base64.b64encode(gerrit_diff)
     ]
-    fetch_diff_from_gerrit.fetch_diff(
-        'chromium-review.googlesource.com', 'chromium/src', 123456, 1)
+    fetch_diff_from_gerrit.fetch_diff('chromium-review.googlesource.com',
+                                      'chromium/src', 123456, 1)
     mock_stdout.called_once_with(gerrit_diff)
 
 

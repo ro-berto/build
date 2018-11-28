@@ -12,10 +12,36 @@ import argparse
 import base64
 import json
 import sys
+import time
 import urllib2
 
 # A fixed prefix in the http response.
 _RESPONSE_PREFIX = ')]}\n'
+
+# Number of times to retry a http request.
+_HTTP_NUM_RETRY = 3
+
+
+def _retry_urlopen(url):
+  """Retry version of urllib2.urlopen.
+
+  Args:
+    url (str): The URL.
+
+  Returns:
+    The response if status code is 200, otherwise, exception is raised.
+  """
+  tries = _HTTP_NUM_RETRY
+  delay_seconds = 1
+  while tries >= 0:
+    try:
+      return urllib2.urlopen(url)
+    except urllib2.URLError:
+      time.sleep(delay_seconds)
+      tries -= 1
+      delay_seconds *= 2
+
+  raise RuntimeError('Failed to open URL: "%s".' % url)
 
 
 def fetch_diff(host, project, change, patchset):
@@ -37,7 +63,7 @@ def fetch_diff(host, project, change, patchset):
   template_to_get_revisions = 'https://%s/changes/%s~%d?o=ALL_REVISIONS'
   url_to_get_reivisions = template_to_get_revisions % (host, project_quoted,
                                                        change)
-  response = urllib2.urlopen(url_to_get_reivisions)
+  response = _retry_urlopen(url_to_get_reivisions)
   change_details = json.loads(response.read()[len(_RESPONSE_PREFIX):])
   patchset_revision = None
 
@@ -56,7 +82,7 @@ def fetch_diff(host, project, change, patchset):
   template_to_get_patch = 'https://%s/changes/%s~%d/revisions/%s/patch'
   url_to_get_patch = template_to_get_patch % (host, project_quoted, change,
                                               patchset_revision)
-  response = urllib2.urlopen(url_to_get_patch)
+  response = _retry_urlopen(url_to_get_patch)
   diff = base64.b64decode(response.read())
   return diff
 
