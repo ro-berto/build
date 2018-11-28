@@ -62,7 +62,6 @@ def _extract_coverage_info(segments):
           line_data[i] = start[2]
         else:
           line_data[i] = -1
-        line_data[i] = start[2]
       i += 1
 
   #assert len(stack) == 0, "Some regions still open!"
@@ -507,6 +506,48 @@ def _aggregate_dirs_and_components(directory_summaries, component_mapping):
   return component_summaries
 
 
+def _write_metadata_in_shards(output_dir, compressed_files, directory_summaries,
+                              component_summaries):
+  """Writes the metadata in a sharded manner if there are too many files."""
+  compressed_data = {
+      'dirs': directory_summaries.values(),
+      'components': component_summaries.values(),
+      'summaries': directory_summaries['//']['summaries'],
+  }
+
+  # Try to split the files into 30 shards, with each shard having at least
+  # 1000 files and at most 2000 files.
+  # This is to have smaller data chunk to avoid Out-Of-Memory errors when the
+  # data is processed on Google App Engine.
+  files_in_a_shard = max(min(len(compressed_files) / 30, 2000), 1000)
+
+  if len(compressed_files) <= files_in_a_shard:
+    compressed_data['files'] = compressed_files
+  else:
+    # There are too many files, and they should be sharded.
+    files_slice = []
+    index = 0
+    while True:
+      start = index * files_in_a_shard
+      if start >= len(compressed_files):
+        break
+      files_slice.append(compressed_files[start : start + files_in_a_shard])
+      index += 1
+
+    files_dir_name = 'file_coverage'
+    os.mkdir(os.path.join(output_dir, files_dir_name))
+    file_shard_paths = []
+    for i, files in enumerate(files_slice):
+      file_name = 'files%d.json.gz' % (i + 1)
+      with open(os.path.join(output_dir, files_dir_name, file_name), 'w') as f:
+        f.write(zlib.compress(json.dumps({'files': files})))
+      file_shard_paths.append(os.path.join(files_dir_name, file_name))
+    compressed_data['file_shards'] = file_shard_paths
+
+  with open(os.path.join(output_dir, 'all.json.gz'), 'w') as f:
+    f.write(zlib.compress(json.dumps(compressed_data)))
+
+
 def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
                        binaries, sources, diff_mapping_path,
                        component_mapping_path):
@@ -542,12 +583,6 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
   minutes = (time.time() - start_time) / 60
   logging.info('Processing coverage data took %.0f minutes', minutes)
 
-  compressed_data = {
-      'files': compressed_files,
-      'dirs': directory_summaries.values(),
-      'components': component_summaries.values(),
-      'summaries': directory_summaries['//']['summaries'],
-  }
   flat_data = {
       'files': flat_files,
       'dirs': directory_summaries.values(),
@@ -569,11 +604,12 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
       f.write(json.dumps(rebased_flat_data))
 
   start_time = time.time()
-  with open(os.path.join(output_dir, 'compressed.json.gz'), 'w') as f:
-    f.write(zlib.compress(json.dumps(compressed_data)))
+  _write_metadata_in_shards(output_dir, compressed_files, directory_summaries,
+                            component_summaries)
   with open(os.path.join(output_dir, 'flat.json.gz'), 'w') as f:
     f.write(zlib.compress(json.dumps(flat_data)))
   minutes = (time.time() - start_time) / 60
+  logging.info('Dumping aggregated data took %.0f minutes', minutes)
 
   # Create an index.html for the metadata directory.
   all_files = []
@@ -584,8 +620,6 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
     for f in sorted(all_files):
       index_f.write('<a href="./%s">%s<a>\n' % (f, f))
       index_f.write('<br>')
-
-  logging.info('Dumping aggregated data took %.0f minutes', minutes)
 
 
 def _parse_args(args):
