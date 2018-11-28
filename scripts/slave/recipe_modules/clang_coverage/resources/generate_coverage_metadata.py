@@ -178,16 +178,26 @@ def _to_file_record(src_path, file_coverage_data, compressed_format):
 
 
 def _compute_llvm_args(profdata_path, llvm_cov_path, binaries, sources,
-                       output_dir, cpu_count):
-  shard_file_dir = os.path.join(output_dir, 'shards')
+                       output_dir, cpu_count, no_sharded_output):
   args = [
-      llvm_cov_path, 'export', '-output-dir', shard_file_dir, '-num-threads',
-      str(cpu_count), '-instr-profile', profdata_path, binaries[0]
+      llvm_cov_path, 'export',
   ]
+
+  shard_file_dir = None
+  if not no_sharded_output:
+    shard_file_dir = os.path.join(output_dir, 'shards')
+    args.extend([
+        '-output-dir', shard_file_dir,
+        '-num-threads', str(cpu_count),
+    ])
+
+  args.extend([
+      '-instr-profile', profdata_path, binaries[0]])
   for b in binaries[1:]:
     args.append('-object')
     args.append(b)
   args.extend(sources or [])
+
   return args, shard_file_dir
 
 
@@ -243,7 +253,7 @@ def _show_system_resource_usage(proc):
 
 
 def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,
-                               output_dir):
+                               output_dir, no_sharded_output):
   """Returns a json object of the coverage info."""
   coverage_json_file = os.path.join(output_dir, 'coverage.json')
   error_out_file = os.path.join(output_dir, 'llvm_cov.stderr.log')
@@ -257,7 +267,7 @@ def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,
                                                       'w') as f_error:
       args, shard_file_dir = _compute_llvm_args(profdata_path, llvm_cov_path,
                                                 binaries, sources, output_dir,
-                                                cpu_count)
+                                                cpu_count, no_sharded_output)
       p = subprocess.Popen(args, stdout=f_out, stderr=f_error)
       llvm_cov_proc = None
       try:
@@ -290,7 +300,7 @@ def _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries, sources,
     with open(coverage_json_file, 'r') as f:
       data = json.load(f)
       for real_data in data['data']:
-        if 'file_shards' in real_data:
+        if 'file_shards' in real_data and shard_file_dir:
           files = []
           for file_shard in real_data['file_shards']:
             logging.info('------------Processing %s', file_shard)
@@ -559,8 +569,10 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
 
   logging.info('Generating coverage metadata ...')
   start_time = time.time()
+  # For per-CL code coverage, we don't use the multi-threaded llvm-cov.
+  no_sharded_output = diff_mapping_path is not None
   data = _get_coverage_data_in_json(profdata_path, llvm_cov_path, binaries,
-                                    sources, output_dir)
+                                    sources, output_dir, no_sharded_output)
   minutes = (time.time() - start_time) / 60
   logging.info(
       'Generating & loading coverage metadata with "llvm-cov export" '

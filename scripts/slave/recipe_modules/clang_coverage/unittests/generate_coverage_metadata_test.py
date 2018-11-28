@@ -181,13 +181,13 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         src_path, file_coverage_data, compressed_format=True)
     self.assertDictEqual(expected_record, record)
 
-  def test_compute_llvm_args(self):
+  def test_compute_llvm_args_with_sharded_output(self):
     args, shard_dir = generator._compute_llvm_args(
         '/path/to/coverage.profdata',
         '/path/to/llvm-cov',
         ['/path/to/1.exe', '/path/to/2.exe'],
         ['/src/a.cc', '/src/b.cc'],
-        '/path/output/dir', 5)
+        '/path/output/dir', 5, no_sharded_output=False)
     expected_args = [
         '/path/to/llvm-cov', 'export', '-output-dir', '/path/output/dir/shards',
         '-num-threads', '5', '-instr-profile',
@@ -197,6 +197,22 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     ]
     self.assertListEqual(expected_args, args)
     self.assertEqual('/path/output/dir/shards', shard_dir)
+
+  def test_compute_llvm_args_without_sharded_output(self):
+    args, shard_dir = generator._compute_llvm_args(
+        '/path/to/coverage.profdata',
+        '/path/to/llvm-cov',
+        ['/path/to/1.exe', '/path/to/2.exe'],
+        ['/src/a.cc', '/src/b.cc'],
+        '/path/output/dir', 5, no_sharded_output=True)
+    expected_args = [
+        '/path/to/llvm-cov', 'export', '-instr-profile',
+        '/path/to/coverage.profdata', '/path/to/1.exe',
+        '-object', '/path/to/2.exe',
+        '/src/a.cc', '/src/b.cc',
+    ]
+    self.assertListEqual(expected_args, args)
+    self.assertIsNone(shard_dir)
 
   def test_rebase_flat_data(self):
     flat_data = {
