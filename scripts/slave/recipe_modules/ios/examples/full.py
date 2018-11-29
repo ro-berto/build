@@ -410,7 +410,7 @@ def GenTests(api):
         'fake test (fake device iOS 8.1)',
         api.swarming.summary({
           'shards': [{
-            'state': 112,
+            'state': 0x50, # BOT_DIED
           }],
         }),
         retcode=1,

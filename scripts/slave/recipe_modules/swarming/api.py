@@ -190,6 +190,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     if shard.get('exit_code'):
       return shard.get('exit_code')
     lst = shard.get('exit_codes', [])
+    if (shard.get('state') == self.State.COMPLETED or
+        shard.get('state') == 'COMPLETED'):
+      return str(lst[0]) if lst else '0'
     return str(lst[0]) if lst else None
 
   def __init__(self, **kwargs):
