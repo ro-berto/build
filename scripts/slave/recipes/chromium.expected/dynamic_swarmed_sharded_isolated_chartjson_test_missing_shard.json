@@ -718,9 +718,9 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_LINK@shard #0 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #0 (5.7 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1 isolated out@blah@@@",
-      "@@@STEP_LINK@shard #1 (8.7 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #1 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10100@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
@@ -762,10 +762,10 @@
     },
     "name": "Tests statistics",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 2<br/>Total runtime: 14s <br/>@@@",
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 2<br/>Total runtime: 0:01:03 <br/>@@@",
       "@@@STEP_LOG_LINE@detailed stats@Total shards: 2@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 14s @@@",
-      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 5s / 7s / 8s@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 0:01:03 @@@",
+      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 31s / 31s / 31s@@@",
       "@@@STEP_LOG_END@detailed stats@@@"
     ]
   },

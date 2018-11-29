@@ -294,6 +294,26 @@ def GenTests(api):
           api.test_utils.canned_gtest_output(True))
     )
 
+  data = {
+    'shards': [
+      {
+        'duration': 120.0,
+        'state': 'COMPLETED',
+      }
+    ]
+  }
+
+  yield (
+      api.test('gtest_with_duration') +
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+      api.step_data(
+          'hello_world on Windows-7-SP1',
+          api.swarming.summary(data) +
+          api.test_utils.canned_gtest_output(True))
+    )
+
   data = api.swarming.canned_summary_output_raw(shards=4)
   data['shards'][2]['completed_ts'] = '2014-09-25T01:49:23.123'
   data['shards'][3]['completed_ts'] = '2014-09-25T01:48:22.345'

@@ -322,10 +322,10 @@
     ],
     "name": "Tests statistics",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 5s <br/>@@@",
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 31s <br/>@@@",
       "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 5s @@@",
-      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 5s / 5s / 5s@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 31s @@@",
+      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 31s / 31s / 31s@@@",
       "@@@STEP_LOG_END@detailed stats@@@"
     ]
   },

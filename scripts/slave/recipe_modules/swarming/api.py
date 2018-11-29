@@ -172,6 +172,20 @@ class SwarmingApi(recipe_api.RecipeApi):
         shard.get('state') == self.State.TIMED_OUT or
         shard.get('state') == 'TIMED_OUT')
 
+  def _get_duration(self, shard):
+    """
+    This function supports both old and new format of summary json.
+    * 'duration' is included for a specific task run,
+      a task id ending with '1' or '2'
+    * 'durations' is included for a task result summary,
+       a task id ending with '0'
+    """
+    if shard and shard.get('duration'):
+      return shard['duration']
+    if shard and shard.get('durations'):
+      return shard['durations'][-1]
+    return None
+
   def _get_exit_code(self, shard):
     if shard.get('exit_code'):
       return shard.get('exit_code')
@@ -1282,9 +1296,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     links = step_result.presentation.links
     for index, shard in enumerate(summary['shards']):
       url = task.get_shard_view_url(index)
-      duration = None
-      if shard and shard.get('durations'):
-        duration = shard["durations"][0]
+      duration = self._get_duration(shard)
+      if duration is not None:
         display_text = 'shard #%d (%.1f sec)' % (index, duration)
         self._shards_durations.append(duration)
       else:
