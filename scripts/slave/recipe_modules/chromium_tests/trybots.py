@@ -334,25 +334,6 @@ TRYBOTS = freeze({
           },
         ],
       },
-      'win-angle-rel': {
-        'bot_ids': [
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Win Builder',
-            'tester': 'ANGLE GPU Win10 Release (NVIDIA)',
-          },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Win Builder',
-            'tester': 'ANGLE GPU Win10 Release (Intel HD 630)',
-          },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Win Builder',
-            'tester': 'Win7 ANGLE Tryserver (AMD)',
-          },
-        ],
-      },
       'win_angle_dbg_ng': simple_bot({
         # This bot is compile-only.
         # TODO(jmadill): Remove or repurpose this config.
