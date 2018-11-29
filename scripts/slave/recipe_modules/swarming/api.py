@@ -200,7 +200,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._default_user = None
     self._pending_tasks = set()
     self._service_account_json = None
-    self._show_isolated_out_in_collect_step = True
+    self._show_outputs_ref_in_collect_step = True
     self._show_shards_in_collect_step = False
     self._swarming_server = 'https://chromium-swarm.appspot.com'
     self._verbose = False
@@ -407,13 +407,13 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._default_tags.add(tag)
 
   @property
-  def show_isolated_out_in_collect_step(self):
+  def show_outputs_ref_in_collect_step(self):
     """Show the shard's isolated out link in each collect step."""
-    return self._show_isolated_out_in_collect_step
+    return self._show_outputs_ref_in_collect_step
 
-  @show_isolated_out_in_collect_step.setter
-  def show_isolated_out_in_collect_step(self, value):
-    self._show_isolated_out_in_collect_step = value
+  @show_outputs_ref_in_collect_step.setter
+  def show_outputs_ref_in_collect_step(self, value):
+    self._show_outputs_ref_in_collect_step = value
 
   @property
   def show_shards_in_collect_step(self):
@@ -1316,11 +1316,11 @@ class SwarmingApi(recipe_api.RecipeApi):
         else:
           display_text = 'shard #%d (failed)' % index
 
-      if shard and self.show_isolated_out_in_collect_step:
-        isolated_out = shard.get('isolated_out')
-        if isolated_out:
+      if shard and self.show_outputs_ref_in_collect_step:
+        outputs_ref = shard.get('outputs_ref')
+        if outputs_ref:
           link_name = 'shard #%d isolated out' % index
-          links[link_name] = isolated_out['view_url']
+          links[link_name] = outputs_ref['view_url']
 
       if url and self.show_shards_in_collect_step:
         links[display_text] = url

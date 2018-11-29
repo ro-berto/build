@@ -26,12 +26,6 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
           'failure': failure,
           'id': '148aa78d7aa%02d00' % i,
           'internal_failure': internal_failure,
-          'isolated_out': {
-            'isolated': 'abc123',
-            'isolatedserver': 'https://isolateserver.appspot.com',
-            'namespace': 'default-gzip',
-            'view_url': 'blah',
-          },
           'modified_ts': '2014-09-25 01:42:00',
           'name': 'heartbeat-canary-2014-09-25_01:41:55-os=Windows',
           'outputs': [
@@ -39,6 +33,9 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
             'Foo',
           ],
           'outputs_ref': {
+            'isolated': 'abc123',
+            'isolatedserver': 'https://isolateserver.appspot.com',
+            'namespace': 'default-gzip',
             'view_url': 'blah',
           },
           'started_ts': '2014-09-25T01:42:11.123',

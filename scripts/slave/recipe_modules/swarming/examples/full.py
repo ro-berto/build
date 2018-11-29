@@ -25,7 +25,7 @@ from recipe_engine import post_process
 
 PROPERTIES = {
   'platforms': Property(default=('win',)),
-  'show_isolated_out_in_collect_step': Property(default=True),
+  'show_outputs_ref_in_collect_step': Property(default=True),
   'show_shards_in_collect_step': Property(default=False),
   'gtest_task': Property(default=False),
   'isolated_script_task': Property(default=False),
@@ -36,7 +36,7 @@ PROPERTIES = {
   'wait_for_tasks': Property(default=None),
 }
 
-def RunSteps(api, platforms, show_isolated_out_in_collect_step,
+def RunSteps(api, platforms, show_outputs_ref_in_collect_step,
              show_shards_in_collect_step, gtest_task, isolated_script_task,
              merge, trigger_script, named_caches, service_account,
              wait_for_tasks):
@@ -64,8 +64,8 @@ def RunSteps(api, platforms, show_isolated_out_in_collect_step,
   api.swarming.set_default_dimension('inexistent', None)
 
   api.swarming.show_shards_in_collect_step = show_shards_in_collect_step
-  api.swarming.show_isolated_out_in_collect_step = (
-      show_isolated_out_in_collect_step)
+  api.swarming.show_outputs_ref_in_collect_step = (
+      show_outputs_ref_in_collect_step)
 
   try:
     # Testing ReadOnlyDict.__setattr__() coverage.
@@ -269,11 +269,11 @@ def GenTests(api):
       api.properties(show_shards_in_collect_step=True))
 
   yield (
-      api.test('show_isolated_out_in_collect_step') +
+      api.test('show_outputs_ref_in_collect_step') +
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.properties(show_isolated_out_in_collect_step=False))
+      api.properties(show_outputs_ref_in_collect_step=False))
 
   data = {
     'shards': [
@@ -333,7 +333,7 @@ def GenTests(api):
         'failure': False,
         'id': '148aa78d7aa0100',
         'internal_failure': False,
-        'isolated_out': None,
+        'outputs_ref': None,
         'modified_ts': '2014-09-25 01:42:00',
         'name': 'heartbeat-canary-2014-09-25_01:41:55-os=Windows',
         'outputs': [],
