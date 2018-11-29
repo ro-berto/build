@@ -3989,7 +3989,7 @@ WCTApi provides support for running Web Component Tests
 
 &emsp; **@property**<br>&mdash; **def [bucketname](/scripts/slave/recipe_modules/webrtc/api.py#139)(self):**
 
-&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#408)(self):**
+&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#409)(self):**
 
 &emsp; **@property**<br>&mdash; **def [buildername](/scripts/slave/recipe_modules/webrtc/api.py#146)(self):**
 
@@ -3997,11 +3997,11 @@ WCTApi provides support for running Web Component Tests
 
 &mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#235)(self, \*\*kwargs):**
 
-&mdash; **def [clean\_test\_output](/scripts/slave/recipe_modules/webrtc/api.py#498)(self):**
+&mdash; **def [clean\_test\_output](/scripts/slave/recipe_modules/webrtc/api.py#499)(self):**
 
 Remove all test output in out/, since we have tests leaking files.
 
-&mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#491)(self):**
+&mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#492)(self):**
 
 &mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#315)(self, phase=None):**
 
@@ -4013,7 +4013,7 @@ Remove all test output in out/, since we have tests leaking files.
 
 &mdash; **def [download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#270)(self):**
 
-&mdash; **def [extract\_build](/scripts/slave/recipe_modules/webrtc/api.py#465)(self):**
+&mdash; **def [extract\_build](/scripts/slave/recipe_modules/webrtc/api.py#466)(self):**
 
 &mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#323)(self, files=None, base_dir=None):**
 
@@ -4025,9 +4025,9 @@ Remove all test output in out/, since we have tests leaking files.
 
 &mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#373)(self):**
 
-&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#449)(self):**
+&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#450)(self):**
 
-&mdash; **def [package\_build](/scripts/slave/recipe_modules/webrtc/api.py#398)(self):**
+&mdash; **def [package\_build](/scripts/slave/recipe_modules/webrtc/api.py#399)(self):**
 
 &mdash; **def [related\_bots](/scripts/slave/recipe_modules/webrtc/api.py#161)(self):**
 

@@ -377,23 +377,24 @@ class WebRTCApi(recipe_api.RecipeApi):
       'parent_got_revision_cp': self.revision_cp,
     }
 
-    triggered_bots = list(self.bot.triggered_bots())
-    if triggered_bots:
-      self.m.buildbucket.put([{
-        'bucket': bucketname,
-        'parameters': {
-          'builder_name': buildername,
-          'properties': properties,
-          'swarm_hashes': self.m.isolate.isolated_tests,
-        },
-      } for bucketname, buildername in triggered_bots])
-
     buildbot_triggers = self.bot.config.get('buildbot_triggers')
     if buildbot_triggers:
       self.m.trigger(*[{
         'builder_name': builder_name,
         'properties': properties,
       } for builder_name in buildbot_triggers])
+
+    triggered_bots = list(self.bot.triggered_bots())
+    if triggered_bots:
+      if self.c.enable_swarming:
+        properties['swarm_hashes'] = self.m.isolate.isolated_tests
+      self.m.buildbucket.put([{
+        'bucket': bucketname,
+        'parameters': {
+          'builder_name': buildername,
+          'properties': properties,
+        },
+      } for bucketname, buildername in triggered_bots])
 
   def package_build(self):
     upload_url = self.m.archive.legacy_upload_url(
