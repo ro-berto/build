@@ -144,7 +144,7 @@ ANDROID_PERF_TESTS = freeze({
 })
 
 
-def generate_tests(api, phase, revision, revision_number, bot):
+def generate_tests(api, phase, revision, revision_number, bot, perf_id):
   tests = []
   build_out_dir = api.path['checkout'].join(
       'out', api.chromium.c.build_config_fs)
@@ -186,8 +186,6 @@ def generate_tests(api, phase, revision, revision_number, bot):
       tests.append(SwarmingAndroidPerfTest(test, **extra_args))
 
   if test_suite == 'android_perf':
-    perf_id = bot.config['perf_id']
-
     tests.append(AndroidPerfTest(
         'webrtc_perf_tests',
         args=['--save_worst_frame'],
@@ -452,6 +450,7 @@ class PerfTest(Test):
     assert revision_number, (
         'A revision number must be specified for perf tests as they upload '
         'data to the perf dashboard.')
+    assert perf_id
 
     self._revision_number = revision_number
     self._perf_id = perf_id
@@ -466,7 +465,6 @@ class PerfTest(Test):
     self._perf_config['r_webrtc_git'] = revision
 
   def run(self, api, suffix):
-    assert self._perf_id
     # Some of the perf tests depend on depot_tools for
     # download_from_google_storage and gsutil usage.
     with api.depot_tools.on_path():

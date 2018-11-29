@@ -67,6 +67,66 @@
     "cmd": [
       "python",
       "-u",
+      "[CACHE]/builder/src/tools_webrtc/download_tools.py",
+      "[CACHE]/builder/src/tools_webrtc/audio_quality"
+    ],
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "download audio quality tools"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools_webrtc/download_tools.py",
+      "[CACHE]/builder/src/tools_webrtc/video_quality_toolchain/linux"
+    ],
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "download video quality tools"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py",
+      "--bucket=chromium-webrtc-resources",
+      "--directory",
+      "[CACHE]/builder/src/rtc_tools/testing"
+    ],
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "download apprtc"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py",
+      "--bucket=chromium-webrtc-resources",
+      "--directory",
+      "[CACHE]/builder/src/rtc_tools/testing/golang/linux"
+    ],
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "download golang"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
       "[CACHE]/builder/src/out"
     ],
