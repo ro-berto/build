@@ -77,13 +77,13 @@ _AddIsolatedTestSpec('linux-perf-fyi', 'linux',
                      parent_mastername='chromium.perf')
 
 _AddIsolatedTestSpec('android-pixel2-perf', 'android',
-                     target_bits=32,
+                     target_bits=64,
                      parent_mastername='chromium.perf',
-                     parent_buildername='android-builder-perf')
+                     parent_buildername='android_arm64-builder-perf')
 _AddIsolatedTestSpec('android-pixel2_webview-perf', 'android',
-                     target_bits=32,
+                     target_bits=64,
                      parent_mastername='chromium.perf',
-                     parent_buildername='android-builder-perf')
+                     parent_buildername='android_arm64-builder-perf')
 _AddIsolatedTestSpec('android-go_webview-perf', 'android',
                      target_bits=32,
                      parent_buildername='android-builder-perf',
