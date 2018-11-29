@@ -862,7 +862,7 @@
           "*": { "categories": [ "webrtc_all"] }
         },
         "excluded_builders": [
-          "Android*Tests*"
+          "*UWP*"
         ]
       }
     ],
