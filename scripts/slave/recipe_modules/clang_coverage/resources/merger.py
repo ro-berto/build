@@ -34,7 +34,8 @@ def _call_profdata_tool(profile_input_file_paths, profile_output_file_path,
     output = subprocess.check_output(subprocess_cmd)
     logging.debug('Merge output: %s', output)
   except subprocess.CalledProcessError as error:
-    logging.error('Failed to merge profiles.')
+    logging.error('Failed to merge profiles, return code (%d), output: %s' % (
+        error.returncode, error.output))
     raise error
 
   logging.info('Profile data is created as: "%s".', profile_output_file_path)
