@@ -36,7 +36,6 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
             'isolated': 'abc123',
             'isolatedserver': 'https://isolateserver.appspot.com',
             'namespace': 'default-gzip',
-            'view_url': 'blah',
           },
           'started_ts': '2014-09-25T01:42:11.123',
           'state': state.State.COMPLETED,

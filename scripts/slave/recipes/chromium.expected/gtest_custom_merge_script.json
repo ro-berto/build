@@ -69,8 +69,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"outputs_ref\": {@@@",
       "@@@STEP_LOG_LINE@swarming.summary@        \"isolated\": \"abc123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        \"namespace\": \"default-gzip\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        \"view_url\": \"blah\"@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        \"namespace\": \"default-gzip\"@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      }, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"state\": 112, @@@",
@@ -100,7 +99,7 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.linux\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@",
+      "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
       "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
   }

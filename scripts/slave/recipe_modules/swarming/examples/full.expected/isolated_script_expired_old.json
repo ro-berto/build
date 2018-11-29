@@ -332,8 +332,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@      \"outputs_ref\": {@@@",
       "@@@STEP_LOG_LINE@swarming.summary@        \"isolated\": \"abc123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        \"namespace\": \"default-gzip\", @@@",
-      "@@@STEP_LOG_LINE@swarming.summary@        \"view_url\": \"blah\"@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        \"namespace\": \"default-gzip\"@@@",
       "@@@STEP_LOG_LINE@swarming.summary@      }, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"state\": 112, @@@",
@@ -349,7 +348,7 @@
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"try_number\\\": null, \\\"created_ts\\\": \\\"2014-09-25T01:41:00.123\\\", \\\"name\\\": \\\"heartbeat-canary-2014-09-25_01:41:55-os=Windows\\\", \\\"internal_failure\\\": false, \\\"outputs\\\": [], \\\"durations\\\": [60], \\\"outputs_ref\\\": null, \\\"id\\\": \\\"148aa78d7aa0100\\\", \\\"abandoned_ts\\\": \\\"2014-09-25T01:41:00.123\\\", \\\"failure\\\": false, \\\"state\\\": 48, \\\"modified_ts\\\": \\\"2014-09-25 01:42:00\\\", \\\"exit_codes\\\": [], \\\"started_ts\\\": \\\"2014-09-25T01:42:11.123\\\", \\\"user\\\": \\\"unknown\\\", \\\"completed_ts\\\": null, \\\"bot_id\\\": \\\"vm30\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_LINK@shard #0 isolated out@blah@@@"
+      "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
     ]
   },
   {

@@ -1103,7 +1103,9 @@ class SwarmingApi(recipe_api.RecipeApi):
           outputs_ref = shard.get('outputs_ref')
           if outputs_ref:
             link_name = 'shard #%d isolated out' % index
-            p.links[link_name] = outputs_ref['view_url']
+            p.links[link_name] = '%s/browse?namespace=%s&hash=%s' % (
+              outputs_ref['isolatedserver'], outputs_ref['namespace'],
+              outputs_ref['isolated'])
 
   def _merge_isolated_script_perftest_output_shards(self, task, step_result):
     # Taken from third_party/catapult/telemetry/telemetry/internal/results/
@@ -1333,7 +1335,9 @@ class SwarmingApi(recipe_api.RecipeApi):
         outputs_ref = shard.get('outputs_ref')
         if outputs_ref:
           link_name = 'shard #%d isolated out' % index
-          links[link_name] = outputs_ref['view_url']
+          links[link_name] = '%s/browse?namespace=%s&hash=%s' % (
+            outputs_ref['isolatedserver'], outputs_ref['namespace'],
+            outputs_ref['isolated'])
 
       if url and self.show_shards_in_collect_step:
         links[display_text] = url
