@@ -517,7 +517,7 @@ BUILDERS = freeze({
         }
       },
       'Android32 Builder arm': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_perf',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -581,7 +581,7 @@ BUILDERS = freeze({
         }
       },
       'Android64 Builder arm64': {
-        'recipe_config': 'webrtc_android',
+        'recipe_config': 'webrtc_android_perf',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'android',
@@ -706,9 +706,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-win-large-tests',
-        },
+        'perf_id': 'webrtc-win-large-tests',
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'enable_swarming': True,
@@ -725,9 +723,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-mac-large-tests',
-        },
+        'perf_id': 'webrtc-mac-large-tests',
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
         'enable_swarming': True,
@@ -744,9 +740,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-linux-large-tests',
-        },
+        'perf_id': 'webrtc-linux-large-tests',
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
@@ -765,9 +759,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-nexus4-lollipop',
-        },
+        'perf_id': 'webrtc-android-tests-nexus4-lollipop',
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder arm',
         'testing': {'platform': 'linux'},
@@ -787,9 +779,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-nexus5-kitkat',
-        },
+        'perf_id': 'webrtc-android-tests-nexus5-kitkat',
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder arm',
         'testing': {'platform': 'linux'},
@@ -809,9 +799,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-nexus5',
-        },
+        'perf_id': 'webrtc-android-tests-nexus5',
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder arm',
         'testing': {'platform': 'linux'},
@@ -831,9 +819,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-nexus6-lollipop',
-        },
+        'perf_id': 'webrtc-android-tests-nexus6-lollipop',
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder arm',
         'testing': {'platform': 'linux'},
@@ -853,9 +839,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-nexus72',
-        },
+        'perf_id': 'webrtc-android-tests-nexus72',
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder arm',
         'testing': {'platform': 'linux'},
@@ -875,9 +859,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-nexus6-nougat',
-        },
+        'perf_id': 'webrtc-android-tests-nexus6-nougat',
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder arm',
         'testing': {'platform': 'linux'},
@@ -897,9 +879,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-nexus9',
-        },
+        'perf_id': 'webrtc-android-tests-nexus9',
         'bot_type': 'tester',
         'parent_buildername': 'Android64 Builder arm64',
         'testing': {'platform': 'linux'},
@@ -919,9 +899,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-pixel-nougat',
-        },
+        'perf_id': 'webrtc-android-tests-pixel-nougat',
         'bot_type': 'tester',
         'parent_buildername': 'Android64 Builder arm64',
         'testing': {'platform': 'linux'},
@@ -947,9 +925,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-win-large-tests',
-        },
+        'perf_id': 'webrtc-win-large-tests',
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
         'enable_swarming': True,
@@ -967,9 +943,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-mac-large-tests',
-        },
+        'perf_id': 'webrtc-mac-large-tests',
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
         'enable_swarming': True,
@@ -987,9 +961,7 @@ BUILDERS = freeze({
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-linux-large-tests',
-        },
+        'perf_id': 'webrtc-linux-large-tests',
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
@@ -1043,9 +1015,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-nexus4-lollipop',
-        },
+        'perf_id': 'webrtc-android-tests-nexus4-lollipop',
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder',
         'testing': {'platform': 'linux'},
@@ -1058,9 +1028,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-nexus5-kitkat',
-        },
+        'perf_id': 'webrtc-android-tests-nexus5-kitkat',
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder',
         'testing': {'platform': 'linux'},
@@ -1073,9 +1041,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-nexus5',
-        },
+        'perf_id': 'webrtc-android-tests-nexus5',
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder',
         'testing': {'platform': 'linux'},
@@ -1088,9 +1054,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-nexus6-lollipop',
-        },
+        'perf_id': 'webrtc-android-tests-nexus6-lollipop',
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder',
         'testing': {'platform': 'linux'},
@@ -1103,9 +1067,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-nexus72',
-        },
+        'perf_id': 'webrtc-android-tests-nexus72',
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder Release',
         'testing': {'platform': 'linux'},
@@ -1118,9 +1080,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 32,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-nexus6-nougat',
-        },
+        'perf_id': 'webrtc-android-tests-nexus6-nougat',
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder Release',
         'testing': {'platform': 'linux'},
@@ -1133,9 +1093,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-nexus9',
-        },
+        'perf_id': 'webrtc-android-tests-nexus9',
         'bot_type': 'tester',
         'parent_buildername': 'Android64 Builder',
         'testing': {'platform': 'linux'},
@@ -1148,9 +1106,7 @@ BUILDERS = freeze({
           'TARGET_ARCH': 'arm',
           'TARGET_BITS': 64,
         },
-        'webrtc_config_kwargs': {
-          'PERF_ID': 'webrtc-android-tests-pixel-nougat',
-        },
+        'perf_id': 'webrtc-android-tests-pixel-nougat',
         'bot_type': 'tester',
         'parent_buildername': 'Android64 Builder',
         'testing': {'platform': 'linux'},
