@@ -127,6 +127,7 @@ class Command(object):
     self.repetitions = repetitions
     self.test_name = test_name
     self.total_timeout_sec = total_timeout_sec
+    self.min_failures = 1 if repro_only else MIN_FLAKE_THRESHOLD
     self.base_cmd = [
       'tools/run-tests.py',
       '--progress=verbose',
@@ -135,7 +136,6 @@ class Command(object):
       '--timeout=%d' % timeout,
       '--swarming',
       '--variants=%s' % variant,
-      '--exit-after-n-failures=%d' % (1 if repro_only else MIN_FLAKE_THRESHOLD),
     ]
     if repro_only:
       # In repro-only mode we keep running skipped tests.
@@ -150,20 +150,22 @@ class Command(object):
       return self.test_name[:MAX_LABEL_SIZE - 3] + '...'
     return self.test_name
 
-  def raw_cmd(self, multiplier):
+  def raw_cmd(self, multiplier, offset):
+    cmd = list(self.base_cmd)
     if self.total_timeout_sec:
-      return (
-          self.base_cmd +
-          [
-            '--random-seed-stress-count=1000000',
-            '--total-timeout-sec=%d' % (self.total_timeout_sec * multiplier),
-          ]
-      )
+      cmd.append('--random-seed-stress-count=1000000')
+      cmd.append(
+          '--total-timeout-sec=%d' % (self.total_timeout_sec * multiplier))
     else:
-      return (
-          self.base_cmd +
-          ['--random-seed-stress-count=%d' % (self.repetitions * multiplier)]
-      )
+      cmd.append(
+          '--random-seed-stress-count=%d' % (self.repetitions * multiplier))
+    if offset <= 1024:
+      # TODO(machenbach): Make this unconditional in 2019, when the feature has
+      # become old enough to be compatible with long backwards bisection.
+      # 1024 is a rough approximation of commits since the flag below was
+      # introduced.
+      cmd.append('--exit-after-n-failures=%d' % self.min_failures)
+    return cmd
 
 
 class Depot(object):
@@ -341,7 +343,7 @@ class Runner(object):
           '%s - shard %d' % (step_prefix, shard),
           isolated_hash,
           task_output_dir=path.join('task_output_dir_%d' % shard),
-          raw_cmd=self.command.raw_cmd(self.multiplier),
+          raw_cmd=self.command.raw_cmd(self.multiplier, offset),
       )
       self.api.swarming.trigger_task(task)
       return task

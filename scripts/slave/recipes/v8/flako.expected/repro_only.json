@@ -78,13 +78,13 @@
       "--timeout=20",
       "--swarming",
       "--variants=stress_foo",
-      "--exit-after-n-failures=1",
       "--run-skipped",
       "--foo-flag",
       "--bar-flag",
       "mjsunit/foobar",
       "--random-seed-stress-count=1000000",
-      "--total-timeout-sec=120"
+      "--total-timeout-sec=120",
+      "--exit-after-n-failures=1"
     ],
     "infra_step": true,
     "name": "calibration attempt 1.check mjsunit/foobar at #0.[trigger] check mjsunit/foobar at #0 - shard 0",
