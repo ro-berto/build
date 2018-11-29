@@ -7,7 +7,7 @@ from . import steps
 SPEC = {
   'settings': { 'build_gs_bucket': 'chromium-webrtc'},
   'builders': {
-    'Android Builder': {
+    'WebRTC Chromium Android Builder': {
       'android_config': 'base_config',
       'bot_type': 'builder',
       'chromium_apply_config': ['dcheck', 'mb', 'android'],
@@ -22,7 +22,7 @@ SPEC = {
       'gclient_config': 'chromium_webrtc',
       'testing': { 'platform': 'linux'}
     },
-    'Android Tester': {
+    'WebRTC Chromium Android Tester': {
       'android_config': 'base_config',
       'bot_type': 'tester',
       'chromium_apply_config': ['dcheck', 'mb', 'android'],
@@ -35,7 +35,7 @@ SPEC = {
       },
       'gclient_apply_config': ['android'],
       'gclient_config': 'chromium_webrtc',
-      'parent_buildername': 'Android Builder',
+      'parent_buildername': 'WebRTC Chromium Android Builder',
       'root_devices': True,
       'swarming_dimensions': {
         'device_os': 'MMB29Q',
@@ -71,7 +71,7 @@ SPEC = {
       'test_results_config': 'public_server',
       'testing': { 'platform': 'linux'},
     },
-    'Mac Builder': {
+    'WebRTC Chromium Mac Builder': {
       'bot_type': 'builder',
       'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
@@ -83,7 +83,7 @@ SPEC = {
       'gclient_config': 'chromium_webrtc',
       'testing': { 'platform': 'mac'}
     },
-    'Mac Tester': {
+    'WebRTC Chromium Mac Tester': {
       'bot_type': 'tester',
       'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
@@ -93,24 +93,11 @@ SPEC = {
       },
       'gclient_apply_config': [ 'webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc',
-      'parent_buildername': 'Mac Builder',
+      'parent_buildername': 'WebRTC Chromium Mac Builder',
       'test_results_config': 'public_server',
       'testing': { 'platform': 'mac'},
     },
-    'Mac Tester (long-running)': {
-      'bot_type': 'tester',
-      'chromium_apply_config': ['dcheck', 'mb'],
-      'chromium_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64},
-      'gclient_apply_config': [ 'webrtc_test_resources'],
-      'gclient_config': 'chromium_webrtc',
-      'parent_buildername': 'Mac Builder',
-      'test_results_config': 'public_server',
-      'testing': { 'platform': 'mac'}
-    },
-    'Win Builder': {
+    'WebRTC Chromium Win Builder': {
       'bot_type': 'builder',
       'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
@@ -122,7 +109,7 @@ SPEC = {
       'gclient_config': 'chromium_webrtc',
       'testing': { 'platform': 'win'}
     },
-    'Win10 Tester': {
+    'WebRTC Chromium Win10 Tester': {
       'bot_type': 'tester',
       'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
@@ -132,11 +119,11 @@ SPEC = {
       },
       'gclient_apply_config': [ 'webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc',
-      'parent_buildername': 'Win Builder',
+      'parent_buildername': 'WebRTC Chromium Win Builder',
       'test_results_config': 'public_server',
       'testing': { 'platform': 'win'},
     },
-    'Win7 Tester': {
+    'WebRTC Chromium Win7 Tester': {
       'bot_type': 'tester',
       'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
@@ -146,11 +133,11 @@ SPEC = {
       },
       'gclient_apply_config': [ 'webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc',
-      'parent_buildername': 'Win Builder',
+      'parent_buildername': 'WebRTC Chromium Win Builder',
       'test_results_config': 'public_server',
       'testing': { 'platform': 'win'},
     },
-    'Win7 Tester (long-running)': {
+    'WebRTC Chromium Win8 Tester': {
       'bot_type': 'tester',
       'chromium_apply_config': ['dcheck', 'mb'],
       'chromium_config': 'chromium',
@@ -160,21 +147,7 @@ SPEC = {
       },
       'gclient_apply_config': [ 'webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc',
-      'parent_buildername': 'Win Builder',
-      'test_results_config': 'public_server',
-      'testing': { 'platform': 'win'}
-    },
-    'Win8 Tester': {
-      'bot_type': 'tester',
-      'chromium_apply_config': ['dcheck', 'mb'],
-      'chromium_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32
-      },
-      'gclient_apply_config': [ 'webrtc_test_resources'],
-      'gclient_config': 'chromium_webrtc',
-      'parent_buildername': 'Win Builder',
+      'parent_buildername': 'WebRTC Chromium Win Builder',
       'test_results_config': 'public_server',
       'testing': { 'platform': 'win'},
     }
@@ -214,15 +187,15 @@ def browser_perf_test(perf_id):
 SPEC['builders']['WebRTC Chromium Linux Tester']['tests'] = [
   browser_perf_test('chromium-webrtc-rel-linux')
 ]
-SPEC['builders']['Mac Tester']['tests'] = [
+SPEC['builders']['WebRTC Chromium Mac Tester']['tests'] = [
   browser_perf_test('chromium-webrtc-rel-mac')
 ]
-SPEC['builders']['Win10 Tester']['tests'] = [
+SPEC['builders']['WebRTC Chromium Win10 Tester']['tests'] = [
   browser_perf_test('chromium-webrtc-rel-win10')
 ]
-SPEC['builders']['Win7 Tester']['tests'] = [
+SPEC['builders']['WebRTC Chromium Win7 Tester']['tests'] = [
   browser_perf_test('chromium-webrtc-rel-7')
 ]
-SPEC['builders']['Win8 Tester']['tests'] = [
+SPEC['builders']['WebRTC Chromium Win8 Tester']['tests'] = [
   browser_perf_test('chromium-webrtc-rel-win8')
 ]
