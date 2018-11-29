@@ -1493,7 +1493,6 @@
       "--build-number=0",
       "base_unittests",
       "--gtest_repeat=10",
-      "--test-launcher-retry-limit=0",
       "--gtest_filter=Test.Two"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
@@ -2166,7 +2165,6 @@
       "--build-number=0",
       "base_unittests",
       "--gtest_repeat=10",
-      "--test-launcher-retry-limit=0",
       "--gtest_filter=Test.Two"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
