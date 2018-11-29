@@ -238,6 +238,17 @@ FAKE_BUILDERS = {
         'mac-jumbo-rel',
         'WebKit Mac10.13 (retina)',  # copied from master.chromium.webkit
     ],
+    'master.tryserver.blink': [
+        # These have been migrated to LUCI.
+        'linux-blink-rel',
+        'mac10.10-blink-rel',
+        'mac10.11-blink-rel',
+        'mac10.12-blink-rel',
+        'mac10.13-blink-rel',
+        'mac10.13_retina-blink-rel',
+        'win10-blink-rel',
+        'win7-blink-rel',
+    ],
 }
 
 
