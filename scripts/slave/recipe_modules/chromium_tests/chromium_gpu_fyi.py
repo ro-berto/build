@@ -12,7 +12,6 @@ SPEC = {
     'GPU FYI Win Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -51,7 +50,6 @@ SPEC = {
     'GPU FYI Win dEQP Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -76,7 +74,6 @@ SPEC = {
     'Win7 FYI Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -95,7 +92,6 @@ SPEC = {
     'Win10 FYI dEQP Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -114,7 +110,6 @@ SPEC = {
     'Win10 FYI Exp Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -133,7 +128,6 @@ SPEC = {
     'Win10 FYI Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -170,7 +164,6 @@ SPEC = {
     'Win7 FYI Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -207,7 +200,6 @@ SPEC = {
     'Win7 FYI dEQP Release (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -226,7 +218,6 @@ SPEC = {
     'Win10 FYI Release (Intel HD 630)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -245,7 +236,6 @@ SPEC = {
     'Win10 FYI dEQP Release (Intel HD 630)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -264,7 +254,6 @@ SPEC = {
     'Win10 FYI Exp Release (Intel HD 630)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -283,7 +272,6 @@ SPEC = {
     'GPU FYI Win x64 Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -322,7 +310,6 @@ SPEC = {
     'GPU FYI Win x64 dEQP Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -347,7 +334,6 @@ SPEC = {
     'Win7 FYI x64 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -366,7 +352,6 @@ SPEC = {
     'Win7 FYI x64 dEQP Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -417,7 +402,6 @@ SPEC = {
       'chromium_apply_config': [
           'mb',
           'ninja_confirm_noop',
-          'build_angle_deqp_tests'
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
@@ -475,7 +459,6 @@ SPEC = {
       'chromium_apply_config': [
           'mb',
           'ninja_confirm_noop',
-          'build_angle_deqp_tests'
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
@@ -500,7 +483,6 @@ SPEC = {
       'chromium_apply_config': [
           'mb',
           'ninja_confirm_noop',
-          'build_angle_deqp_tests'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -519,7 +501,6 @@ SPEC = {
       'chromium_apply_config': [
           'mb',
           'ninja_confirm_noop',
-          'build_angle_deqp_tests'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -553,7 +534,6 @@ SPEC = {
       'chromium_apply_config': [
           'mb',
           'ninja_confirm_noop',
-          'build_angle_deqp_tests'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -572,7 +552,6 @@ SPEC = {
       'chromium_apply_config': [
           'mb',
           'ninja_confirm_noop',
-          'build_angle_deqp_tests'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -591,7 +570,6 @@ SPEC = {
       'chromium_apply_config': [
           'mb',
           'ninja_confirm_noop',
-          'build_angle_deqp_tests'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -627,7 +605,6 @@ SPEC = {
       'chromium_apply_config': [
           'mb',
           'ninja_confirm_noop',
-          'build_angle_deqp_tests'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1351,7 +1328,6 @@ SPEC = {
     'Optional Win10 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -1369,7 +1345,6 @@ SPEC = {
     'Optional Win10 Release (Intel HD 630)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -1389,7 +1364,6 @@ SPEC = {
       'chromium_apply_config': [
           'mb',
           'ninja_confirm_noop',
-          'build_angle_deqp_tests'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1407,7 +1381,6 @@ SPEC = {
       'chromium_apply_config': [
           'mb',
           'ninja_confirm_noop',
-          'build_angle_deqp_tests'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1503,7 +1476,6 @@ SPEC = {
       'chromium_apply_config': [
           'mb',
           'ninja_confirm_noop',
-          'build_angle_deqp_tests'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1521,7 +1493,6 @@ SPEC = {
       'chromium_apply_config': [
           'mb',
           'ninja_confirm_noop',
-          'build_angle_deqp_tests'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1588,7 +1559,6 @@ SPEC = {
     'Dawn GPU Win10 Release (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -1606,7 +1576,6 @@ SPEC = {
     'Dawn GPU Win10 Release (Intel HD 630)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],
@@ -1628,7 +1597,6 @@ SPEC = {
     'Win7 ANGLE Tryserver (AMD)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'build_angle_deqp_tests',
         'mb',
         'ninja_confirm_noop',
       ],

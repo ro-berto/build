@@ -639,10 +639,6 @@ def enable_ipc_fuzzer(c):
   c.gyp_env.GYP_DEFINES['enable_ipc_fuzzer'] = 1
 
 @config_ctx()
-def build_angle_deqp_tests(c):
-  c.gyp_env.GYP_DEFINES['build_angle_deqp_tests'] = 1
-
-@config_ctx()
 def download_vr_test_apks(c):
   c.gyp_env.DOWNLOAD_VR_TEST_APKS = 1
 

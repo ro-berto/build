@@ -222,12 +222,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('build_angle_deqp_tests') +
-      api.properties(chromium_apply_config=['build_angle_deqp_tests']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
       api.test('download_vr_test_apks') +
       api.properties(chromium_apply_config=['download_vr_test_apks']) +
       api.post_process(post_process.DropExpectation)
