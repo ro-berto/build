@@ -195,6 +195,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'serialize_tests': True,
     },
 
     'Marshmallow 64 bit Tester': {
@@ -255,6 +256,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'serialize_tests': True,
     },
 
     'Marshmallow Phone Tester (rel)': {
@@ -298,6 +300,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
+      'serialize_tests': True,
     },
 
     'Nougat Phone Tester': {
