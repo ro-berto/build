@@ -19,6 +19,11 @@ from recipe_engine.types import freeze
 RESULTS_URL = 'https://chromeperf.appspot.com'
 MAX_FAILS = 30
 
+# When we retry failing tests, we try to choose a high repeat count so that
+# flaky tests will produce both failures and successes. The tradeoff is with
+# total run time, which we want to keep low.
+REPEAT_COUNT_FOR_FAILING_TESTS = 10
+
 
 class TestOptions(object):
   """Abstracts command line flags to be passed to the test."""
@@ -131,7 +136,7 @@ def _test_options_for_running(test_options, suffix, tests_to_retry):
 
   if (test_options_copy.repeat_count is None and
       suffix in ('without patch', 'retry with patch')):
-    test_options_copy._repeat_count = 10
+    test_options_copy._repeat_count = REPEAT_COUNT_FOR_FAILING_TESTS
 
     # If we're repeating the tests 10 times, then we want to set retry_limit=0.
     # The default retry_limit of 3 means that failing tests will be retried 40
@@ -325,12 +330,20 @@ class Test(object):
     # which changes the number of tests to be run.
     # Clamp to be 1 < value < original_num_shards, so that we don't trigger too
     # many shards, or 0 shards.
-    return int(min(
+    #
+    # Since we repeat failing tests REPEAT_COUNT_FOR_FAILING_TESTS times, we
+    # artificially inflate the number of shards by that factor, since we expect
+    # tests to take that much longer to run.
+    #
+    # We never allow more than num_test_to_retry shards, since that would leave
+    # shards doing nothing.
+    return int(min(min(
         max(
-            original_num_shards * (float(num_tests_to_retry) /
-                      self._test_runs['with patch']['total_tests_ran']),
+            original_num_shards * REPEAT_COUNT_FOR_FAILING_TESTS *
+                (float(num_tests_to_retry) /
+                    self._test_runs['with patch']['total_tests_ran']),
             1),
-        original_num_shards))
+        original_num_shards), num_tests_to_retry))
 
   def failures(self, api, suffix):  # pragma: no cover
     """Return list of failures (list of strings)."""
