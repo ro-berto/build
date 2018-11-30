@@ -27,6 +27,7 @@ BUILDERS = freeze({
   'chromium.fuzz': {
     'builders': {
       'Libfuzzer Upload Chrome OS ASan': {
+        'archive_prefix': 'libfuzzer-chromeos',
         'chromium_config': 'chromium_clang',
         'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
         'chromium_config_kwargs': {
@@ -36,7 +37,7 @@ BUILDERS = freeze({
         },
         'gclient_apply_config': ['chromeos'],
         'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'asan',
+        'upload_directory': 'chromeos-asan',
       },
       'Libfuzzer Upload Linux ASan': {
         'chromium_config': 'chromium_clang',
@@ -111,6 +112,7 @@ BUILDERS = freeze({
   'chromium.fyi': {
     'builders': {
       'Libfuzzer Upload Chrome OS ASan': {
+        'archive_prefix': 'libfuzzer-chromeos',
         'chromium_config': 'chromium_clang',
         'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
         'chromium_config_kwargs': {
@@ -120,7 +122,7 @@ BUILDERS = freeze({
         },
         'gclient_apply_config': ['chromeos'],
         'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'asan',
+        'upload_directory': 'chromeos-asan',
       },
       'Libfuzzer Upload Linux ASan': {
         'chromium_config': 'chromium_clang',
@@ -227,7 +229,7 @@ def RunSteps(api):
       build_dir=api.chromium.output_dir,
       update_properties=checkout_results.json.output['properties'],
       gs_bucket=bot_config['upload_bucket'],
-      archive_prefix='libfuzzer',
+      archive_prefix=bot_config.get('archive_prefix', 'libfuzzer'),
       archive_subdir_suffix=bot_config['upload_directory'],
       gs_acl='public-read')
 

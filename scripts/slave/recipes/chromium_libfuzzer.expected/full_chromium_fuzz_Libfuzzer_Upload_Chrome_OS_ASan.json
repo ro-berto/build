@@ -710,7 +710,7 @@
       "python",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
       "[CLEANUP]/chrome_staging",
-      "libfuzzer-linux-release-170242",
+      "libfuzzer-chromeos-linux-release-170242",
       "[\"file1\", \"file2\"]",
       "[START_DIR]/src/out/Release"
     ],
@@ -732,13 +732,13 @@
       "cp",
       "-a",
       "public-read",
-      "[CLEANUP]/chrome_staging/libfuzzer-linux-release-170242.zip",
-      "gs://chromium-browser-libfuzzer/linux-release-asan/libfuzzer-linux-release-170242.zip"
+      "[CLEANUP]/chrome_staging/libfuzzer-chromeos-linux-release-170242.zip",
+      "gs://chromium-browser-libfuzzer/linux-release-chromeos-asan/libfuzzer-chromeos-linux-release-170242.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-libfuzzer/linux-release-asan/libfuzzer-linux-release-170242.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-libfuzzer/linux-release-chromeos-asan/libfuzzer-chromeos-linux-release-170242.zip@@@"
     ]
   },
   {
@@ -749,10 +749,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "remove",
-      "[CLEANUP]/chrome_staging/libfuzzer-linux-release-170242.zip"
+      "[CLEANUP]/chrome_staging/libfuzzer-chromeos-linux-release-170242.zip"
     ],
     "infra_step": true,
-    "name": "libfuzzer-linux-release-170242.zip"
+    "name": "libfuzzer-chromeos-linux-release-170242.zip"
   },
   {
     "jsonResult": null,
