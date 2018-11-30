@@ -54,6 +54,7 @@ def RunSteps(api):
       api.step.active_result.presentation.logs['details'] = [
           'compile_targets: %r' % test.compile_targets(api),
           'uses_local_devices: %r' % test.uses_local_devices,
+          'should_retry_with_patch: %r' % test.should_retry_with_patch,
       ]
 
 
@@ -101,6 +102,42 @@ def GenTests(api):
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
       )
+  )
+
+  yield (
+      api.test('disable_retry_with_patch') +
+      api.properties(
+          single_spec={
+              'test': 'base_unittests',
+              'should_retry_with_patch': False,
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+      ) +
+      api.post_process(
+          post_process.AnnotationContains, 'details',
+          ['should_retry_with_patch: False']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('enable_retry_with_patch') +
+      api.properties(
+          single_spec={
+              'test': 'base_unittests',
+              'should_retry_with_patch': True,
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+      ) +
+      api.post_process(
+          post_process.AnnotationContains, 'details',
+          ['should_retry_with_patch: True']) +
+      api.post_process(post_process.DropExpectation)
   )
 
   yield (

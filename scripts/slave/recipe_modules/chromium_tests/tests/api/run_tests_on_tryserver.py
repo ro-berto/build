@@ -32,6 +32,9 @@ def RunSteps(api):
   else:
     test = api.chromium_tests.steps.BlinkTest()
 
+  if api.properties.get('disable_retry_with_patch'):
+    test._should_retry_with_patch = False
+
   api.chromium_tests._run_tests_on_tryserver(
       bot_config_object,
       tests=[test],
@@ -73,6 +76,73 @@ def GenTests(api):
           api.swarming.canned_summary_output(failure=False) +
           api.test_utils.canned_gtest_output(passing=True)) +
       api.post_process(retry_with_tests_filter)
+  )
+
+  yield (
+      api.test('disable_retry_with_patch_and_deapply') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux_chromium_rel_ng',
+          disable_retry_with_patch=True,
+          affected_files=['testing/buildbot/chromium.linux.json'],
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.post_process(post_process.DoesNotRun,
+                       'base_unittests (without patch)') +
+      api.post_process(post_process.DoesNotRun,
+                       'base_unittests (retry with patch)') +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('disable_retry_with_patch_and_deapply_invalid_results') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux_chromium_rel_ng',
+          disable_retry_with_patch=True,
+          affected_files=['testing/buildbot/chromium.linux.json'],
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.test_utils.canned_isolated_script_output(passing=False,
+                                                       valid=False)) +
+      api.post_process(post_process.DoesNotRun,
+                       'base_unittests (without patch)') +
+      api.post_process(post_process.DoesNotRun,
+                       'base_unittests (retry with patch)') +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('disable_retry_with_patch') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux_chromium_rel_ng',
+          disable_retry_with_patch=True,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=True)) +
+      api.post_process(post_process.DoesNotRun,
+                       'base_unittests (retry with patch)') +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
   )
 
   yield (

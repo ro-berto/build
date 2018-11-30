@@ -182,6 +182,18 @@ class Test(object):
     self._target_name = target_name
     self._override_isolate_target = override_isolate_target
 
+    # Most test suites have a lot of flaky tests. Since we don't rerun passing
+    # tests, it's also very easy to introduce new flaky tests. The point of
+    # 'retry with patch' is to prevent false rejects by adding another layer of
+    # retries. There are two reasons we may want to skip this retry layer.
+    #
+    # 1) If test-suite layer retries have similar effectiveness to 'retry with
+    # patch', then 'retry with patch' may not be necessary,
+    # 2) If a test suite has exceptionally few flakes, and there is a
+    # sheriffing process to hunt down new flakes as they are introduced, then
+    # 'retry with patch' may not be necessary.
+    self._should_retry_with_patch = True
+
   @property
   def set_up(self):
     return None
@@ -224,6 +236,10 @@ class Test(object):
     if self._override_isolate_target:
       return self._override_isolate_target
     return self.target_name
+
+  @property
+  def should_retry_with_patch(self):
+    return self._should_retry_with_patch
 
   @property
   def is_gtest(self):
@@ -447,6 +463,10 @@ class TestWrapper(Test):  # pragma: no cover
   @property
   def isolate_target(self):
     return self._test.isolate_target
+
+  @property
+  def should_retry_with_patch(self):
+    return self._test.should_retry_with_patch
 
   def compile_targets(self, api):
     return self._test.compile_targets(api)
@@ -1080,7 +1100,10 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
     tests.append(local_delegate(spec, **kwargs))
 
   experiment_percentage = spec.get('experiment_percentage')
+  should_retry_with_patch = spec.get('should_retry_with_patch')
   for t in tests:
+    if should_retry_with_patch is not None:
+      t._should_retry_with_patch = should_retry_with_patch
     if experiment_percentage is not None:
       yield ExperimentalTest(t, experiment_percentage)
     else:

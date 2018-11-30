@@ -867,8 +867,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     with self.wrap_chromium_tests(bot_config, tests):
       # Run the test. The isolates have already been created.
-      failing_tests = self.m.test_utils.run_tests_with_patch(
-          self.m, tests, invalid_is_fatal=False)
+      failing_tests = self.m.test_utils.run_tests_with_patch(self.m, tests)
 
       # If there are no failures or if the config says that we only care about
       # the results with patch, we are done.
@@ -881,6 +880,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           self._should_retry_with_patch_deapplied(affected_files))
       test_suites_to_retry_with_patch = []
 
+      # If there are tests that failed, for which we are skipping both
+      # 'without patch' and 'retry with patch', then the failures are fatal.
+      if not should_deapply_patch:
+        for t in failing_tests:
+          if not t.should_retry_with_patch:
+            self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
+
       if should_deapply_patch:
         deferred_retry_results = []
         # Deapply the patch. Then rerun failing tests.
@@ -890,10 +896,15 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         # Summarize results.
         with self.m.step.defer_results():
           for t in failing_tests:
+            # If we are not planning to run 'retry with patch', then failures
+            # are fatal.
+            failure_is_fatal = not t.should_retry_with_patch
             deferred_result = (self.m.test_utils.
               summarize_test_with_patch_deapplied(
-                  self.m, t, failure_is_fatal=False))
-            deferred_retry_results.append((deferred_result, t))
+                  self.m, t, failure_is_fatal=failure_is_fatal))
+
+            if t.should_retry_with_patch:
+              deferred_retry_results.append((deferred_result, t))
 
         # Looks for test suites that have to be retried.
         for deferred_result, test in deferred_retry_results:

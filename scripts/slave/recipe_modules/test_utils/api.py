@@ -190,14 +190,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     return failed_tests
 
-  def run_tests_with_patch(self, caller_api, tests, invalid_is_fatal):
+  def run_tests_with_patch(self, caller_api, tests):
     """Run tests and returns failures.
 
     Args:
       caller_api: The api object given by the caller of this module.
       tests: A list of test suites to run with the patch.
-      invalid_is_fatal: Whether invalid test results should be treated as a
-                        fatal failing step.
 
     Returns: A list of test suites that either have invalid results or failing
     tests.
@@ -209,7 +207,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
             caller_api, 'with patch')
 
         if not valid_results:
-          self._invalid_test_results(t, fatal=invalid_is_fatal)
+          # An invalid result is fatal if and only if we are not going to run
+          # 'retry with patch'.
+          self._invalid_test_results(t, fatal=not t.should_retry_with_patch)
 
         # No need to re-add a test_suite that is already in the return list.
         if t in failing_tests:
@@ -376,6 +376,25 @@ class TestUtilsApi(recipe_api.RecipeApi):
     ignored_text = ('Tests ignored as they succeeded on retry:')
     return self._summarize_new_and_ignored_failures(
         test, new_failures, ignored_failures, 'retry with patch summary',
+        failure_is_fatal=True, failure_text=failure_text,
+        ignored_text=ignored_text)
+
+  def summarize_failing_test_with_no_retries(self, caller_api, test):
+    """Summarizes a failing test that is not going to be retried."""
+    valid_results, new_failures = test.failures_or_invalid_results(
+        caller_api, 'with patch')
+
+    if not valid_results: # pragma: nocover
+      self.m.python.infra_failing_step(
+          '{} assertion'.format(test.name),
+          'This line should never be reached. If a test has invalid results '
+          'and is not going to be retried, then a failing step should have '
+          'already been emitted.')
+
+    failure_text = ('Tests failed, not being retried')
+    ignored_text = ('Tests ignored')
+    return self._summarize_new_and_ignored_failures(
+        test, new_failures, set(), 'with patch summary',
         failure_is_fatal=True, failure_text=failure_text,
         ignored_text=ignored_text)
 

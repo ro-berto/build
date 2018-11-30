@@ -84,8 +84,12 @@ def determine_new_future_failures(caller_api, extra_args):
     ),
   ]
 
-  failing_tests = caller_api.test_utils.run_tests_with_patch(
-      caller_api, tests, invalid_is_fatal=True)
+  # Since we don't implement 'retry with patch', we also set the flag on
+  # BlinkTest.
+  for test in tests:
+    test._should_retry_with_patch = False
+
+  failing_tests = caller_api.test_utils.run_tests_with_patch(caller_api, tests)
   if not failing_tests:
     return
 
@@ -120,8 +124,12 @@ def determine_new_failures(caller_api, tests, deapply_patch_fn):
   # Convert iterable to list, since it is enumerated multiple times.
   tests = list(tests)
 
-  failing_tests = caller_api.test_utils.run_tests_with_patch(
-      caller_api, tests, invalid_is_fatal=True)
+  # Since we don't implement 'retry with patch', we set the corresponding flag
+  # on the Test instances.
+  for test in tests:
+    test._should_retry_with_patch = False
+
+  failing_tests = caller_api.test_utils.run_tests_with_patch(caller_api, tests)
   if not failing_tests:
     return
 
