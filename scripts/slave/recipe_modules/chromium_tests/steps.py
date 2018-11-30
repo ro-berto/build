@@ -39,6 +39,11 @@ class TestOptions(object):
     self._run_disabled = run_disabled
     self._retry_limit = retry_limit
 
+    # When this is true, the test suite should run all tests independently, with
+    # no state leaked between them. This can significantly increase the time it
+    # takes to run the tests.
+    self._force_independent_tests = False
+
   @property
   def repeat_count(self):
     return self._repeat_count
@@ -92,6 +97,9 @@ def _merge_args_and_test_options(test, args, options):
     args = _merge_arg(args, '--test-launcher-retry-limit', options.retry_limit)
   if options.run_disabled:
     args = _merge_arg(args, '--gtest_also_run_disabled_tests', value=None)
+  if options._force_independent_tests:
+    if isinstance(test, (SwarmingGTestTest, LocalGTestTest)):
+      args = _merge_arg(args, '--test-launcher-batch-limit', 1)
   return args
 
 
@@ -129,6 +137,10 @@ def _test_options_for_running(test_options, suffix, tests_to_retry):
     # The default retry_limit of 3 means that failing tests will be retried 40
     # times, which is not our intention.
     test_options_copy._retry_limit = 0
+
+    # Since we're retrying a small number of tests, force them to be
+    # independent. This increases run time but produces more reliable results.
+    test_options_copy._force_independent_tests = True
 
   return test_options_copy
 

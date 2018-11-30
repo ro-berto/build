@@ -106,6 +106,7 @@
       "--gtest_repeat=10",
       "--test-launcher-retry-limit=0",
       "--gtest_also_run_disabled_tests",
+      "--test-launcher-batch-limit=1",
       "--gtest_filter=Test.Two"
     ],
     "env": {
@@ -166,6 +167,7 @@
       "--gtest_repeat=10",
       "--test-launcher-retry-limit=0",
       "--gtest_also_run_disabled_tests",
+      "--test-launcher-batch-limit=1",
       "--gtest_filter=Test.Two"
     ],
     "env": {

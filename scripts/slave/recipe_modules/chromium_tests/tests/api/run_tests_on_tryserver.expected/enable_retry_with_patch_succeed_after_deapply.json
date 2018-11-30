@@ -1191,6 +1191,7 @@
       "--",
       "--gtest_repeat=10",
       "--test-launcher-retry-limit=0",
+      "--test-launcher-batch-limit=1",
       "--gtest_filter=Test.Two",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],

@@ -99,7 +99,8 @@
       "--gtest_filter=foo.bar",
       "--gtest_repeat=10",
       "--test-launcher-retry-limit=0",
-      "--gtest_also_run_disabled_tests"
+      "--gtest_also_run_disabled_tests",
+      "--test-launcher-batch-limit=1"
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
@@ -159,7 +160,8 @@
       "--gtest_filter=foo.bar",
       "--gtest_repeat=10",
       "--test-launcher-retry-limit=0",
-      "--gtest_also_run_disabled_tests"
+      "--gtest_also_run_disabled_tests",
+      "--test-launcher-batch-limit=1"
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
