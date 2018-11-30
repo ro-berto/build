@@ -88,8 +88,10 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "initialization.bot_update"
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
       },
       "humanReason": "Infra Failure: Step('initialization.bot_update') returned 1"
     },

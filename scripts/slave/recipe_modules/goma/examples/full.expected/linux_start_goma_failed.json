@@ -190,8 +190,10 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "preprocess_for_goma.start_goma"
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
       },
       "humanReason": "Infra Failure: Step('preprocess_for_goma.start_goma') returned 1"
     },

@@ -1142,8 +1142,10 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "Set up ASAN on devices.wait_for_devices"
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
       },
       "humanReason": "Infra Failure: Step('Set up ASAN on devices.wait_for_devices') returned 87"
     },

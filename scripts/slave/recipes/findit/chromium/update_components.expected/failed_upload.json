@@ -453,8 +453,10 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "gsutil upload updated mapping"
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
       },
       "humanReason": "Infra Failure: Step('gsutil upload updated mapping') returned 1"
     },

@@ -26,8 +26,10 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "provision_devices"
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
       },
       "humanReason": "Infra Failure: Step('provision_devices') returned 87"
     },

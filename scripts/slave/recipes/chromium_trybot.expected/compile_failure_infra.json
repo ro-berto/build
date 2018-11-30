@@ -836,8 +836,10 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": ""
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
       },
       "humanReason": "Infra compile failure: Step Failure in compile (with patch)"
     },

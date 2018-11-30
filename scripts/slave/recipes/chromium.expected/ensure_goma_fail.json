@@ -232,8 +232,10 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "ensure_goma.ensure_installed"
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
       },
       "humanReason": "Infra Failure: Step('ensure_goma.ensure_installed') returned 1"
     },

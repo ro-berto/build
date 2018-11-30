@@ -1,8 +1,10 @@
 [
   {
     "failure": {
-      "failure": {
-        "step": ""
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
       },
       "humanReason": "A ref for release branch must be specified."
     },

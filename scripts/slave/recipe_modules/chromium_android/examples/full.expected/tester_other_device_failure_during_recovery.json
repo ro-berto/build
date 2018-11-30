@@ -517,8 +517,10 @@
   },
   {
     "failure": {
-      "failure": {
-        "step": "device_recovery"
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
       },
       "humanReason": "Infra Failure: Step('device_recovery') returned 2"
     },
