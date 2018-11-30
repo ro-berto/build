@@ -31,6 +31,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     self._report_dir = None
     # Temp dir for metadata
     self._metadata_dir = None
+    # Temp dir for source and html report.
+    self._src_and_report_dir = None
     # Maps step names to subdirectories of the above.
     self._profdata_dirs = {}
     # When set, subset of files to include in the coverage report.
@@ -87,6 +89,13 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     if not self._metadata_dir:
       self._metadata_dir = self.m.path.mkdtemp()
     return self._metadata_dir
+
+  @property
+  def src_and_report_dir(self):
+    """A temporary directory to copy source and html report report to."""
+    if not self._src_and_report_dir:
+      self._src_and_report_dir = self.m.path.mkdtemp()
+    return self._src_and_report_dir
 
   def profdata_dir(self, step_name=None):
     """Ensures a directory exists for writing the step-level merged profdata.
@@ -190,6 +199,34 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     self._generate_metadata(binaries, out_file)
     self._generate_html_report(binaries, out_file)
 
+    # Put source file and html report file side-by-side.
+    self.m.python(
+        'copy source and html report files',
+        self.resource('copy_src_and_html_report.py'),
+        args=[
+            '--src-path',
+            self.m.path['checkout'],
+            '--html-report-dir',
+            self.report_dir,
+            '--output-dir',
+            self.src_and_report_dir,
+        ])
+
+    source_and_report_gs_path = self._compose_gs_path_for_coverage_data(
+        'source_and_report')
+    upload_step = self.m.gsutil.upload(
+        self.src_and_report_dir,
+        _BUCKET_NAME,
+        source_and_report_gs_path,
+        link_name=None,
+        args=['-r'],
+        multithreaded=True,
+        name='upload source and html report files')
+    upload_step.presentation.links['html report'] = (
+        'https://storage.googleapis.com/%s/%s/index.html' % (
+            _BUCKET_NAME, source_and_report_gs_path))
+    upload_step.presentation.properties[
+        'coverage_source_and_report_gs_path'] = source_and_report_gs_path
 
   def _generate_html_report(self, binaries, profdata_path):
     """Generate html coverage report for the given binaries.
@@ -211,20 +248,6 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         self.resource('make_report.py'),
         args=args
     )
-
-    report_gs_path = self._compose_gs_path_for_coverage_data('html')
-    upload_step = self.m.gsutil.upload(
-        self.report_dir,
-        _BUCKET_NAME,
-        report_gs_path,
-        link_name=None,
-        args=['-r'],
-        multithreaded=True,
-        name='upload html report')
-    upload_step.presentation.links['html report'] = (
-        'https://storage.googleapis.com/%s/%s/index.html' % (
-            _BUCKET_NAME, report_gs_path))
-    upload_step.presentation.properties['coverage_html_gs'] = report_gs_path
 
   def shard_merge(self, step_name):
     """Returns a merge object understood by the swarming module.

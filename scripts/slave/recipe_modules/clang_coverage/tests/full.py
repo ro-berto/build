@@ -55,7 +55,9 @@ def GenTests(api):
       + api.post_process(
           post_process.MustRun, 'generate html report for 3 targets')
       + api.post_process(
-          post_process.MustRun, 'gsutil upload html report')
+          post_process.MustRun, 'copy source and html report files')
+      + api.post_process(
+          post_process.MustRun, 'gsutil upload source and html report files')
       + api.post_process(
           post_process.DoesNotRun, 'generate git diff locally')
       + api.post_process(
@@ -90,7 +92,9 @@ def GenTests(api):
       + api.post_process(
           post_process.MustRun, 'generate html report for 3 targets')
       + api.post_process(
-          post_process.MustRun, 'gsutil upload html report')
+          post_process.MustRun, 'copy source and html report files')
+      + api.post_process(
+          post_process.MustRun, 'gsutil upload source and html report files')
       + api.post_process(
           post_process.MustRun, 'generate git diff locally')
       + api.post_process(
