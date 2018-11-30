@@ -224,7 +224,6 @@ def main(argv):
       'master.chromium.infra.cron': 'InfraCron',
       'master.chromium.perf': 'ChromiumPerf',
       'master.chromium.webkit': 'ChromiumWebkit',
-      'master.chromium.webrtc': 'ChromiumWebRTC',
       'master.client.art': 'ART',
       'master.client.dart': 'Dart',
       'master.client.flutter': 'ClientFlutter',
