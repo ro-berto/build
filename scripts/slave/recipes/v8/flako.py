@@ -307,8 +307,7 @@ class Runner(object):
 
   def _default_task_pass_test_data(self):
     test_data = self.api.swarming.test_api.canned_summary_output_raw()
-    test_data['shards'][0]['outputs'][-1] = TEST_PASSED_TEXT
-    test_data['shards'][0]['exit_codes'][-1] = 0
+    test_data['shards'][0]['output'] = TEST_PASSED_TEXT
     return (
         self.api.swarming.test_api.summary(test_data) +
         self.api.json.test_api.output({}) +
@@ -356,13 +355,19 @@ class Runner(object):
         # Sanity checks.
         # TODO(machenbach): Add this information to the V8 test runner's json
         # output as parsing stdout is brittle.
-        assert TEST_PASSED_TEXT in data['outputs'][-1]
+
+        # TODO(tikuta): Remove this line after swarming_client roll.
+        output = data.get('outputs', [None])[-1]
+
+        if 'output' in data:
+          output = data.get('output')
+        assert TEST_PASSED_TEXT in output
         return 0
       except self.api.step.StepFailure as e:
         data = e.result.swarming.summary['shards'][0]
-        assert data['exit_codes'], (
+        assert data['exit_code'], (
             'The bot might have died. Please restart the analysis')
-        if data['exit_codes'][-1] == EXIT_CODE_NO_TESTS:
+        if data['exit_code'] == EXIT_CODE_NO_TESTS:
           # The desired tests seem to not exist in this revision.
           # TODO(machenbach): Add special logic for dealing with tests not
           # existing. They might have been added in a revision and are flaky
@@ -370,14 +375,20 @@ class Runner(object):
           # Maybe we should not do this during initialization to make sure it's
           # not a setup error?
           return 0  # pragma: no cover
-        stdout = data['outputs'][-1]
-        if TEST_PASSED_TEXT in stdout:  # pragma: no cover
+
+        # TODO(tikuta): Remove this line after swarming_client roll.
+        output = data.get('outputs', [None])[-1]
+
+        if 'output' in data:
+          output = data.get('output')
+
+        if TEST_PASSED_TEXT in output:  # pragma: no cover
           # It's possible that the return code is non-zero due to a test runner
           # leak.
           # TODO(machenbach): Remove this when https://crbug.com/v8/8001 is
           # resolved.
           return 0
-        match = re.search(r'=== (\d+) tests failed', stdout)
+        match = re.search(r'=== (\d+) tests failed', output)
         assert match
         return int(match.group(1))
 
@@ -580,8 +591,8 @@ def GenTests(api):
   def is_flaky(offset, shard, flakes, calibration_attempt=0,
                test_name='mjsunit/foobar'):
     test_data = api.swarming.canned_summary_output_raw()
-    test_data['shards'][0]['outputs'][-1] = TEST_FAILED_TEMPLATE % flakes
-    test_data['shards'][0]['exit_codes'][-1] = 1
+    test_data['shards'][0]['output'] = TEST_FAILED_TEMPLATE % flakes
+    test_data['shards'][0]['exit_code'] = 1
     step_prefix = ''
     if calibration_attempt:
       step_prefix = 'calibration attempt %d.' % calibration_attempt
