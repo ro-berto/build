@@ -580,7 +580,7 @@ SPEC['builders'].update([
            ninja_confirm_noop=False,
            target_arch='arm',
            target_bits=32,
-           sizes=False),
+           sizes=True),
 
     config('ToTLinux'),
 

@@ -726,6 +726,12 @@ class ChromiumApi(recipe_api.RecipeApi):
                              '--perf-dashboard-id=sizes',
                              '--perf-id=%s' % perf_id])
 
+      # If we're on LUCI, we need to upload using the HistogramSet format
+      # because IP whitelisting (what the older ChartJSON format uses for
+      # authentication) does not really work on LUCI.
+      if self.m.runtime.is_luci:
+        run_tests_args.append('--use-histograms')
+
       # If we have a clang revision, add that to the perf data point.
       # TODO(hans): We want this for all perf data, not just sizes.
       if self._clang_version:

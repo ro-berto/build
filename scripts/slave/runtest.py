@@ -1300,7 +1300,7 @@ def _UpdateRunBenchmarkArgs(args, options):
                     'build-side scripts. Use the src-side '
                     'process_perf_results.py merge script instead.')
 
-  if script.endswith('run_benchmark') or script.endswith('resource_sizes.py'):
+  if script.endswith('run_benchmark') or script.endswith('sizes.py'):
     output_dir = tempfile.mkdtemp()
     args.extend(['--output-dir=%s' % output_dir])
     temp_filename = (os.path.join(output_dir, 'perf_results.json')
