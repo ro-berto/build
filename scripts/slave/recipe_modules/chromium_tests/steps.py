@@ -130,8 +130,11 @@ def _test_options_for_running(test_options, suffix, tests_to_retry):
   test_options_copy = copy.deepcopy(test_options)
 
   # If there are too many tests, avoid setting a repeat count since that can
-  # cause timeouts.
-  if tests_to_retry is None or len(tests_to_retry) > 100:
+  # cause timeouts. tests_to_retry can be None to indicate that all tests should
+  # be run. It can also rarely be the empty list, which is caused by an infra
+  # failure even though results are valid and all tests passed.
+  # https://crbug.com/910706.
+  if not tests_to_retry or len(tests_to_retry) > 100:
     return test_options_copy
 
   if (test_options_copy.repeat_count is None and
