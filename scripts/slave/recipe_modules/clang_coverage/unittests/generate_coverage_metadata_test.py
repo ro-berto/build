@@ -24,9 +24,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         [5, 2, 2, True, True],
         [6, 10, 0, False, False],
     ]
-    expected_line_data = dict([
-        (1, 3), (2, 3), (3, 3), (5, 2), (6, 2)
-    ])
+    expected_line_data = dict([(1, 3), (2, 3), (3, 3), (5, 2), (6, 2)])
     expected_block_data = {}
     line_data, block_data = generator._extract_coverage_info(segments)
     self.assertDictEqual(expected_line_data, line_data)
@@ -39,9 +37,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         [5, 2, 0, True, True],
         [5, 10, 0, False, False],
     ]
-    expected_line_data = dict([
-        (1, 3), (2, 3), (3, 3), (5, 0)
-    ])
+    expected_line_data = dict([(1, 3), (2, 3), (3, 3), (5, 0)])
     uncovered_blocks_line_5 = [[2, 10]]
     line_data, block_data = generator._extract_coverage_info(segments)
     self.assertDictEqual(expected_line_data, line_data)
@@ -55,71 +51,13 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         [3, 10, 0, False, False],
         [5, 10, 0, False, False],
     ]
-    expected_line_data = dict([
-        (1, 3), (2, 3), (3, 1), (4, 3), (5, 3)
-    ])
+    expected_line_data = dict([(1, 3), (2, 3), (3, 1), (4, 3), (5, 3)])
     expected_block_data = {}
     line_data, block_data = generator._extract_coverage_info(segments)
     self.assertDictEqual(expected_line_data, line_data)
     self.assertDictEqual(expected_block_data, block_data)
 
-  def test_to_file_record_flat_format(self):
-    src_path = '/path/to/chromium/src'
-    file_coverage_data = {
-        'segments': [
-            [1, 2, 3, True, True],
-            [3, 2, 1, True, True],
-            [3, 10, 0, False, False],
-            [5, 10, 0, False, False],
-            [6, 2, 0, True, True],
-            [7, 2, 0, False, False],
-        ],
-        'summary': {
-            'lines': {
-                'count': 8,
-            }
-        },
-        'filename': '/path/to/chromium/src/base/base.cc',
-    }
-    expected_record = {
-        'path': 'base/base.cc',
-        'total_lines': 8,
-        'lines': [
-            {
-                'line': 1,
-                'count': 3,
-            },
-            {
-                'line': 2,
-                'count': 3,
-            },
-            {
-                'line': 3,
-                'count': 1,
-            },
-            {
-                'line': 4,
-                'count': 3,
-            },
-            {
-                'line': 5,
-                'count': 3,
-            },
-            {
-                'line': 6,
-                'count': 0,
-            },
-            {
-                'line': 7,
-                'count': 0,
-            },
-        ]
-    }
-    record = generator._to_file_record(
-        src_path, file_coverage_data, compressed_format=False)
-    self.assertDictEqual(expected_record, record)
-
-  def test_to_file_record_compressed_format(self):
+  def test_to_compressed_file_record(self):
     src_path = '/path/to/chromium/src'
     file_coverage_data = {
         'segments': [
@@ -137,11 +75,14 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 'count': 8,
             }
         },
-        'filename': '/path/to/chromium/src/base/base.cc',
+        'filename':
+            '/path/to/chromium/src/base/base.cc',
     }
     expected_record = {
-        'path': 'base/base.cc',
-        'total_lines': 8,
+        'path':
+            'base/base.cc',
+        'total_lines':
+            8,
         'lines': [
             {
                 'first': 1,
@@ -164,36 +105,113 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 'count': 0,
             },
         ],
-        'uncovered_blocks': [
-            {
-                'line': 3,
-                'ranges': [
-                    {
-                        'first': 12,
-                        'last': 18,
-                    }
-                ]
-            }
-        ],
+        'uncovered_blocks': [{
+            'line': 3,
+            'ranges': [{
+                'first': 12,
+                'last': 18,
+            }]
+        }],
     }
     self.maxDiff = None
-    record = generator._to_file_record(
-        src_path, file_coverage_data, compressed_format=True)
+    record = generator._to_compressed_file_record(src_path, file_coverage_data)
+    self.assertDictEqual(expected_record, record)
+
+  def test_rebase_line_and_block_data(self):
+    line_data = [(1, 3), (2, 3), (3, 3), (5, 0)]
+    block_data = {5: [[2, 10]]}
+    file_name = 'base/base.cc'
+    diff_mapping = {'base/base.cc': {'5': [16, 'A line added by the patch.']}}
+
+    rebased_line_data, rebased_block_data = (
+        generator._rebase_line_and_block_data(line_data, block_data,
+                                              diff_mapping[file_name]))
+
+    expected_line_data = [(16, 0)]
+    expected_block_data = {16: [[2, 10]]}
+    self.maxDiff = None
+    self.assertListEqual(expected_line_data, rebased_line_data)
+    self.assertDictEqual(expected_block_data, rebased_block_data)
+
+  def test_to_compressed_file_record_with_diff_mapping(self):
+    src_path = '/path/to/chromium/src'
+    file_coverage_data = {
+        'segments': [
+            [1, 2, 3, True, True],
+            [3, 10, 0, False, False],
+            [5, 2, 0, True, True],
+            [5, 10, 0, False, False],
+        ],
+        'summary': {
+            'lines': {
+                'count': 5,
+            }
+        },
+        'filename':
+            '/path/to/chromium/src/base/base.cc',
+    }
+    diff_mapping = {
+        'base/base.cc': {
+            '2': [10, 'A line added by the patch.'],
+            '3': [11, 'Another added line.'],
+            '5': [16, 'One more line.']
+        }
+    }
+
+    record = generator._to_compressed_file_record(src_path, file_coverage_data,
+                                                  diff_mapping)
+
+    expected_record = {
+        'path':
+            'base/base.cc',
+        'total_lines':
+            5,
+        'lines': [
+            {
+                'first': 10,
+                'last': 11,
+                'count': 3,
+            },
+            {
+                'first': 16,
+                'last': 16,
+                'count': 0,
+            },
+        ],
+        'uncovered_blocks': [{
+            'line': 16,
+            'ranges': [{
+                'first': 2,
+                'last': 10,
+            }]
+        }],
+    }
+
+    self.maxDiff = None
     self.assertDictEqual(expected_record, record)
 
   def test_compute_llvm_args_with_sharded_output(self):
     args, shard_dir = generator._compute_llvm_args(
         '/path/to/coverage.profdata',
-        '/path/to/llvm-cov',
-        ['/path/to/1.exe', '/path/to/2.exe'],
+        '/path/to/llvm-cov', ['/path/to/1.exe', '/path/to/2.exe'],
         ['/src/a.cc', '/src/b.cc'],
-        '/path/output/dir', 5, no_sharded_output=False)
+        '/path/output/dir',
+        5,
+        no_sharded_output=False)
     expected_args = [
-        '/path/to/llvm-cov', 'export', '-output-dir', '/path/output/dir/shards',
-        '-num-threads', '5', '-instr-profile',
-        '/path/to/coverage.profdata', '/path/to/1.exe',
-        '-object', '/path/to/2.exe',
-        '/src/a.cc', '/src/b.cc',
+        '/path/to/llvm-cov',
+        'export',
+        '-output-dir',
+        '/path/output/dir/shards',
+        '-num-threads',
+        '5',
+        '-instr-profile',
+        '/path/to/coverage.profdata',
+        '/path/to/1.exe',
+        '-object',
+        '/path/to/2.exe',
+        '/src/a.cc',
+        '/src/b.cc',
     ]
     self.assertListEqual(expected_args, args)
     self.assertEqual('/path/output/dir/shards', shard_dir)
@@ -201,55 +219,24 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   def test_compute_llvm_args_without_sharded_output(self):
     args, shard_dir = generator._compute_llvm_args(
         '/path/to/coverage.profdata',
-        '/path/to/llvm-cov',
-        ['/path/to/1.exe', '/path/to/2.exe'],
+        '/path/to/llvm-cov', ['/path/to/1.exe', '/path/to/2.exe'],
         ['/src/a.cc', '/src/b.cc'],
-        '/path/output/dir', 5, no_sharded_output=True)
+        '/path/output/dir',
+        5,
+        no_sharded_output=True)
     expected_args = [
-        '/path/to/llvm-cov', 'export', '-instr-profile',
-        '/path/to/coverage.profdata', '/path/to/1.exe',
-        '-object', '/path/to/2.exe',
-        '/src/a.cc', '/src/b.cc',
+        '/path/to/llvm-cov',
+        'export',
+        '-instr-profile',
+        '/path/to/coverage.profdata',
+        '/path/to/1.exe',
+        '-object',
+        '/path/to/2.exe',
+        '/src/a.cc',
+        '/src/b.cc',
     ]
     self.assertListEqual(expected_args, args)
     self.assertIsNone(shard_dir)
-
-  def test_rebase_flat_data(self):
-    flat_data = {
-        'files': [{
-            'path':
-                'base/base.cc',
-            'total_lines':
-                8,
-            'lines': [{
-                'line': 1,
-                'count': 3,
-            }, {
-                'line': 2,
-                'count': 3,
-            }, {
-                'line': 3,
-                'count': 1,
-            }, {
-                'line': 4,
-                'count': 3,
-            }]
-        }]
-    }
-
-    diff_mapping = {'base/base.cc': {'3': [16, 'A line added by the patch.']}}
-    rebased_flat_data = generator._rebase_flat_data(flat_data, diff_mapping)
-    expected_flat_data = {
-        'files': [{
-            'path': 'base/base.cc',
-            'total_lines': 1,
-            'lines': [{
-                'line': 16,
-                'count': 1,
-            }]
-        }]
-    }
-    self.assertEqual(expected_flat_data, rebased_flat_data)
 
 
 if __name__ == '__main__':

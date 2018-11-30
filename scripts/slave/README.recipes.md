@@ -4377,9 +4377,9 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/runtest.py#15)(api):**
 ### *recipes* / [chromium:tests/sizes](/scripts/slave/recipe_modules/chromium/tests/sizes.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromium/tests/sizes.py#5): [chromium](#recipe_modules-chromium), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
+[DEPS](/scripts/slave/recipe_modules/chromium/tests/sizes.py#8): [chromium](#recipe_modules-chromium), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/sizes.py#12)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium/tests/sizes.py#15)(api):**
 ### *recipes* / [chromium:tests/taskkill](/scripts/slave/recipe_modules/chromium/tests/taskkill.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium/tests/taskkill.py#5): [chromium](#recipe_modules-chromium)
