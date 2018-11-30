@@ -680,20 +680,13 @@
       "[START_DIR]/src/infra/scripts/legacy/scripts/slave/chromium/sizes.py",
       "--target",
       "Debug",
-      "--failures",
-      "/path/to/tmp/json",
       "--platform",
       "android-cronet"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "sizes",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output[failures] (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output[failures] (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output[failures] (exception)@@@"
-    ]
+    "name": "sizes"
   },
   {
     "jsonResult": null,
