@@ -57,7 +57,14 @@ def _extract_coverage_info(segments):
     # Set line counts for all lines in the region from start[0] to segment[0].
     i = start[0]
     while i <= segment[0]:
+      # If the line already exists, it means that an inner region includes the
+      # line, and coverage info of inner region should be the true coverage for
+      # the line.
       if i not in line_data:
+        # If the line is uncoverable or uninstrumented, or skipped (a function
+        # in a header file that is not used in all source files), we record it
+        # as negative value -1; otherwise, we record the actual execution count
+        # (either 0 or a positive value).
         if start[3]:
           line_data[i] = start[2]
         else:
