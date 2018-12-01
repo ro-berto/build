@@ -6,8 +6,10 @@ import re
 
 from recipe_engine import recipe_api
 
-
 _BUCKET_NAME = 'cr-coverage-profile-data'
+
+# Name of the file to store the component map.
+_COMPONENT_MAPPING_FILE_NAME = 'component_mapping_path.json'
 
 # Name of the file to store local diff.
 _LOCAL_DIFF_FILE_NAME = 'local_diff.txt'
@@ -126,10 +128,9 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     """Checks if the current build is running coverage-instrumented targets."""
     # TODO(crbug.com/896751): Implement a cleaner way to determine if the recipe
     # is using code coverage instrumentation.
-    return (self.m.gclient.c
-            and self.m.gclient.c.solutions
-            and 'checkout_clang_coverage_tools'
-            in self.m.gclient.c.solutions[0].custom_vars)
+    return (self.m.gclient.c and self.m.gclient.c.solutions and
+            'checkout_clang_coverage_tools' in self.m.gclient.c.solutions[0]
+            .custom_vars)
 
   def _get_binaries(self, tests):
     """Returns a path to the binary for the given test object."""
@@ -168,8 +169,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
             self.m.path['checkout'],
             '--build-path',
             self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs),
-        ] + affected_files, stdout=self.m.raw_io.output_text(
-            add_output_log=True))
+        ] + affected_files,
+        stdout=self.m.raw_io.output_text(add_output_log=True))
 
   def process_coverage_data(self, tests):
     """Processes the coverage data for html report or metadata.
@@ -223,8 +224,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         multithreaded=True,
         name='upload source and html report files')
     upload_step.presentation.links['html report'] = (
-        'https://storage.googleapis.com/%s/%s/index.html' % (
-            _BUCKET_NAME, source_and_report_gs_path))
+        'https://storage.googleapis.com/%s/%s/index.html' %
+        (_BUCKET_NAME, source_and_report_gs_path))
     upload_step.presentation.properties[
         'coverage_source_and_report_gs_path'] = source_and_report_gs_path
 
@@ -236,7 +237,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     """
     args = [
         '--report-directory', self.report_dir, '--profdata-path', profdata_path,
-        '--llvm-cov', self.cov_executable, '--binaries']
+        '--llvm-cov', self.cov_executable, '--binaries'
+    ]
     args.extend(binaries)
     if self._affected_files:
       args.append('--sources')
@@ -246,8 +248,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     self.m.python(
         'generate html report for %d targets' % len(self._profdata_dirs),
         self.resource('make_report.py'),
-        args=args
-    )
+        args=args)
 
   def shard_merge(self, step_name):
     """Returns a merge object understood by the swarming module.
@@ -294,12 +295,15 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       )
 
   def _generate_component_mapping(self):
-    component_mapping = self.m.path.mkdtemp().join('component_map.json')
-    command_path = self.m.path['checkout'].join(
-        'tools', 'checkteamtags', 'extract_components.py')
+    """Generates the mapping from crbug components to directories."""
+    component_mapping = self.m.path.mkdtemp().join(_COMPONENT_MAPPING_FILE_NAME)
+    command_path = self.m.path['checkout'].join('tools', 'checkteamtags',
+                                                'extract_components.py')
     command_parts = [command_path, '-o', component_mapping]
-    self.m.step('Run component extraction script to generate mapping',
-        command_parts, stdout=self.m.raw_io.output_text(add_output_log=True))
+    self.m.step(
+        'Run component extraction script to generate mapping',
+        command_parts,
+        stdout=self.m.raw_io.output_text(add_output_log=True))
     return component_mapping
 
   def _generate_metadata(self, binaries, profdata_path):
@@ -309,18 +313,22 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       # Download the version with multi-thread support.
       # Assume that this is running on Linux.
       temp_dir = self.m.path.mkdtemp()
-      self.m.gsutil.download(_BUCKET_NAME,
-                             'llvm_cov_multithread',
-                             temp_dir,
-                             name='download llvm-cov')
+      self.m.gsutil.download(
+          _BUCKET_NAME,
+          'llvm_cov_multithread',
+          temp_dir,
+          name='download llvm-cov')
       llvm_cov = temp_dir.join('llvm_cov_multithread')
 
     args = [
-        '--src-path', self.m.path['checkout'],
-        '--output-dir', self.metadata_dir,
-        '--profdata-path', profdata_path,
-        '--llvm-cov', llvm_cov,
-        '--component-mapping', self._generate_component_mapping(),
+        '--src-path',
+        self.m.path['checkout'],
+        '--output-dir',
+        self.metadata_dir,
+        '--profdata-path',
+        profdata_path,
+        '--llvm-cov',
+        llvm_cov,
         '--binaries',
     ]
     args.extend(binaries)
@@ -339,26 +347,30 @@ class ClangCoverageApi(recipe_api.RecipeApi):
           '--diff-mapping-path',
           self.metadata_dir.join(_LOCAL_TO_GERRIT_DIFF_MAPPING_FILE_NAME)
       ])
+    else:
+      args.extend(
+          ['--component-mapping-path',
+           self._generate_component_mapping()])
 
     try:
       self.m.python(
-          'generate metadata for %d targets' %
-              len(self._profdata_dirs),
+          'generate metadata for %d targets' % len(self._profdata_dirs),
           self.resource('generate_coverage_metadata.py'),
           args=args,
           venv=True)
     finally:
       gs_path = self._compose_gs_path_for_coverage_data('metadata')
-      upload_step = self.m.gsutil.upload(self.metadata_dir,
-                                         _BUCKET_NAME,
-                                         gs_path,
-                                         link_name=None,
-                                         args=['-r'],
-                                         multithreaded=True,
-                                         name='upload metadata')
+      upload_step = self.m.gsutil.upload(
+          self.metadata_dir,
+          _BUCKET_NAME,
+          gs_path,
+          link_name=None,
+          args=['-r'],
+          multithreaded=True,
+          name='upload metadata')
       upload_step.presentation.links['metadata report'] = (
-          'https://storage.googleapis.com/%s/%s/index.html' % (
-              _BUCKET_NAME, gs_path))
+          'https://storage.googleapis.com/%s/%s/index.html' % (_BUCKET_NAME,
+                                                               gs_path))
       upload_step.presentation.properties['coverage_metadata_gs_path'] = gs_path
       upload_step.presentation.properties['coverage_gs_bucket'] = _BUCKET_NAME
 
@@ -405,19 +417,14 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         'fetch git diff from Gerrit',
         self.resource('fetch_diff_from_gerrit.py'),
         args=[
-            '--host',
-            gerrit_change.host,
-            '--project',
-            gerrit_change.project,
-            '--change',
-            gerrit_change.change,
-            '--patchset',
+            '--host', gerrit_change.host, '--project', gerrit_change.project,
+            '--change', gerrit_change.change, '--patchset',
             gerrit_change.patchset
         ],
         stdout=self.m.raw_io.output_text(
-               leak_to=gerrit_diff_file, add_output_log=True),
-        step_test_data=
-        lambda: self.m.raw_io.test_api.stream_output(test_output))
+            leak_to=gerrit_diff_file, add_output_log=True),
+        step_test_data=lambda: self.m.raw_io.test_api.stream_output(test_output)
+    )
 
   def _generate_diff_mapping_from_local_to_gerrit(self):
     """Generates the diff mapping from local to Gerrit.
@@ -434,11 +441,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         'generate diff mapping from local to Gerrit',
         self.resource('rebase_git_diff.py'),
         args=[
-            '--local-diff-file',
-            local_diff_file,
-            '--gerrit-diff-file',
-            gerrit_diff_file,
-            '--output-file',
-            local_to_gerrit_diff_mapping_file
+            '--local-diff-file', local_diff_file, '--gerrit-diff-file',
+            gerrit_diff_file, '--output-file', local_to_gerrit_diff_mapping_file
         ],
         stdout=self.m.json.output())

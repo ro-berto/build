@@ -568,12 +568,15 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
   directory_summaries = {}
   for datum in data['data']:
     for file_data in datum['files']:
-      compressed_files.append(
-          _to_compressed_file_record(src_path, file_data, diff_mapping))
+      record = _to_compressed_file_record(src_path, file_data, diff_mapping)
+      compressed_files.append(record)
       _add_file_to_directory_summary(directory_summaries, src_path, file_data)
 
-  component_summaries = _aggregate_dirs_and_components(directory_summaries,
-                                                       component_mapping)
+  component_summaries = {}
+  if component_mapping:
+    component_summaries = _aggregate_dirs_and_components(
+        directory_summaries, component_mapping)
+
   minutes = (time.time() - start_time) / 60
   logging.info('Processing coverage data took %.0f minutes', minutes)
 
@@ -619,15 +622,14 @@ def _parse_args(args):
       type=str,
       help='absolute path to llvm-cov executable')
   parser.add_argument(
-      '--component-mapping',
-      required=True,
-      type=str,
-      help='absolute path to json file mapping dirs to monorail components')
-  parser.add_argument(
       '--binaries',
       nargs='+',
       type=str,
       help='absolute path to binaries to generate the coverage for')
+  parser.add_argument(
+      '--component-mapping-path',
+      type=str,
+      help='absolute path to json file mapping dirs to monorail components')
   parser.add_argument(
       '--sources',
       nargs='*',
@@ -637,7 +639,7 @@ def _parse_args(args):
   parser.add_argument(
       '--diff-mapping-path',
       type=str,
-      help='absolute path to the file that stores the diff mapping.')
+      help='absolute path to the file that stores the diff mapping')
   return parser.parse_args(args=args)
 
 
@@ -658,18 +660,21 @@ def main():
   if not os.path.isfile(params.profdata_path):
     raise RuntimeError('Input data %s is missing' % params.profdata_path)
 
-  if not os.path.isfile(params.component_mapping):
+  if (params.component_mapping_path and
+      not os.path.isfile(params.component_mapping_path)):
     raise RuntimeError(
         'Component mapping %s is missing' % params.component_mapping)
 
-  with open(params.component_mapping) as f:
-    component_mapping = json.load(f)['dir-to-component']
+  if params.diff_mapping_path and not os.path.isfile(params.diff_mapping_path):
+    raise RuntimeError('Diff mapping %s is missing' % params.diff_mapping_path)
+
+  component_mapping = None
+  if params.component_mapping_path:
+    with open(params.component_mapping_path) as f:
+      component_mapping = json.load(f)['dir-to-component']
 
   sources = params.sources or []
   abs_sources = [os.path.join(params.src_path, s) for s in sources]
-
-  if params.diff_mapping_path and not os.path.isfile(params.diff_mapping_path):
-    raise RuntimeError('Diff mapping %s is missing' % params.diff_mapping_path)
 
   diff_mapping = None
   if params.diff_mapping_path:
