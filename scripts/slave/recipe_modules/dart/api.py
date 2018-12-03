@@ -652,7 +652,8 @@ class DartApi(recipe_api.RecipeApi):
 
 
   def _process_test_results(self, all_results, latest):
-    if self._run_new_steps():
+    # If there are no test steps, all_results will be empty.
+    if self._run_new_steps() and all_results:
       with self.m.context(cwd=self.m.path['checkout']):
         with self.m.step.nest('download previous results'):
           self._download_results(latest)
