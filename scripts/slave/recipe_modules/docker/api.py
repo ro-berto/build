@@ -14,6 +14,35 @@ class DockerApi(recipe_api.RecipeApi):
     self._project = None
     self._server = None
 
+  def ensure_installed(self, **kwargs):
+    """Checks that the docker binary is in the PATH.
+
+    Raises StepFailure if binary is not found.
+    """
+    try:
+      self.m.step('ensure docker installed', ['which', 'docker'], **kwargs)
+    except self.m.step.StepFailure as f:
+      f.result.presentation.step_text = (
+          'Error: is docker not installed or not in the PATH')
+      raise
+
+  def get_version(self, **kwargs):
+    """Returns Docker version installed or None if failed to detect."""
+    docker_version_step = self(
+        'version', stdout=self.m.raw_io.output(),
+        step_test_data=(
+          lambda: self.m.raw_io.test_api.stream_output('Version: 1.2.3')))
+    for line in docker_version_step.stdout.splitlines():
+      line = line.strip().lower()
+      if line.startswith('version: '):
+        version = line[len('version: '):]
+        docker_version_step.presentation.step_text = version
+        return version
+    else:
+      docker_version_step.presentation.step_text = 'Version unknown?'
+      return None
+
+
   def login(self, server='gcr.io', project='chromium-container-registry',
             service_account=None, step_name=None, **kwargs):
     """Connect to a Docker registry.

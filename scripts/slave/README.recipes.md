@@ -1870,7 +1870,7 @@ Returns:
 
 Provides steps to connect and run Docker images.
 
-&mdash; **def [\_\_call\_\_](/scripts/slave/recipe_modules/docker/api.py#85)(self, \*args, \*\*kwargs):**
+&mdash; **def [\_\_call\_\_](/scripts/slave/recipe_modules/docker/api.py#114)(self, \*args, \*\*kwargs):**
 
 Executes specified docker command.
 
@@ -1882,7 +1882,17 @@ Args:
       e.g. api.docker('push', 'my_image:latest').
   kwargs: arguments passed down to api.step module.
 
-&mdash; **def [login](/scripts/slave/recipe_modules/docker/api.py#17)(self, server='gcr.io', project='chromium-container-registry', service_account=None, step_name=None, \*\*kwargs):**
+&mdash; **def [ensure\_installed](/scripts/slave/recipe_modules/docker/api.py#17)(self, \*\*kwargs):**
+
+Checks that the docker binary is in the PATH.
+
+Raises StepFailure if binary is not found.
+
+&mdash; **def [get\_version](/scripts/slave/recipe_modules/docker/api.py#29)(self, \*\*kwargs):**
+
+Returns Docker version installed or None if failed to detect.
+
+&mdash; **def [login](/scripts/slave/recipe_modules/docker/api.py#46)(self, server='gcr.io', project='chromium-container-registry', service_account=None, step_name=None, \*\*kwargs):**
 
 Connect to a Docker registry.
 
@@ -1897,7 +1907,7 @@ Args:
       associated service account.
   step_name: Override step name. Default is 'docker login'.
 
-&mdash; **def [run](/scripts/slave/recipe_modules/docker/api.py#52)(self, image, step_name=None, cmd_args=None, dir_mapping=None, \*\*kwargs):**
+&mdash; **def [run](/scripts/slave/recipe_modules/docker/api.py#81)(self, image, step_name=None, cmd_args=None, dir_mapping=None, \*\*kwargs):**
 
 Run a command in a Docker image as the current user:group.
 
@@ -5126,9 +5136,9 @@ Kills leftover tasks from previous runs or steps.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/disk/examples/full.py#15)(api):**
 ### *recipes* / [docker:examples/full](/scripts/slave/recipe_modules/docker/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/docker/examples/full.py#5): [docker](#recipe_modules-docker)
+[DEPS](/scripts/slave/recipe_modules/docker/examples/full.py#8): [docker](#recipe_modules-docker), [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/docker/examples/full.py#9)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/docker/examples/full.py#14)(api):**
 ### *recipes* / [emulator](/scripts/slave/recipes/emulator.py)
 
 [DEPS](/scripts/slave/recipes/emulator.py#9): [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [emulator](#recipe_modules-emulator), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]

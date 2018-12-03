@@ -1,0 +1,23 @@
+[
+  {
+    "cmd": [
+      "which",
+      "docker"
+    ],
+    "name": "ensure docker installed",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_TEXT@Error: is docker not installed or not in the PATH@@@",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "failure": {
+      "failure": {
+        "step": "ensure docker installed"
+      },
+      "humanReason": "Step('ensure docker installed') failed with return_code 1"
+    },
+    "name": "$result"
+  }
+]

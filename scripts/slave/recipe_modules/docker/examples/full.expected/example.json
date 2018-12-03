@@ -1,10 +1,28 @@
 [
   {
     "cmd": [
+      "which",
+      "docker"
+    ],
+    "name": "ensure docker installed"
+  },
+  {
+    "cmd": [
       "docker",
       "version"
     ],
-    "name": "docker version"
+    "name": "docker version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@1.2.3@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "log version",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@1.2.3@@@"
+    ]
   },
   {
     "cmd": [

@@ -1,0 +1,13 @@
+[
+  {
+    "cmd": [
+      "docker",
+      "version"
+    ],
+    "name": "docker version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Version unknown?@@@"
+    ]
+  }
+]
