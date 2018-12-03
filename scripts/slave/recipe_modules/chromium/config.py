@@ -633,11 +633,6 @@ def codesearch(c):
   # possible.
   c.compile_py.build_args = ['-k' ,'0']
 
-# TODO(thakis): Remove references, then delete.
-@config_ctx()
-def enable_ipc_fuzzer(c):
-  c.gyp_env.GYP_DEFINES['enable_ipc_fuzzer'] = 1
-
 @config_ctx()
 def download_vr_test_apks(c):
   c.gyp_env.DOWNLOAD_VR_TEST_APKS = 1

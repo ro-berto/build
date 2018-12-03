@@ -216,12 +216,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('enable_ipc_fuzzer') +
-      api.properties(chromium_apply_config=['enable_ipc_fuzzer']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
       api.test('download_vr_test_apks') +
       api.properties(chromium_apply_config=['download_vr_test_apks']) +
       api.post_process(post_process.DropExpectation)

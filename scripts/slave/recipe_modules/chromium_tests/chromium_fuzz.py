@@ -47,8 +47,7 @@ SPEC = {
     },
     'Mac ASAN Release': {
       'chromium_config': 'chromium_asan',
-      'chromium_apply_config': ['mb', 'clobber',
-                                'enable_ipc_fuzzer'],
+      'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -68,7 +67,6 @@ SPEC = {
       'chromium_apply_config': [
           'mb',
           'clobber',
-          'enable_ipc_fuzzer',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -86,8 +84,7 @@ SPEC = {
     },
     'Mac ASAN Debug': {
       'chromium_config': 'chromium_asan',
-      'chromium_apply_config': ['mb', 'clobber',
-                                'enable_ipc_fuzzer'],
+      'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -104,8 +101,7 @@ SPEC = {
     },
     'ASAN Release': {
       'chromium_config': 'chromium_asan',
-      'chromium_apply_config': ['mb', 'clobber',
-                                'enable_ipc_fuzzer'],
+      'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -121,7 +117,6 @@ SPEC = {
     'ASAN Release Media': {
       'chromium_config': 'chromium_asan',
       'chromium_apply_config': ['mb', 'clobber',
-                                'enable_ipc_fuzzer',
                                 'chromeos_with_codecs'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -157,7 +152,6 @@ SPEC = {
     'ChromiumOS ASAN Release': {
       'chromium_config': 'chromium_asan',
       'chromium_apply_config': ['mb', 'clobber',
-                                'enable_ipc_fuzzer',
                                 'chromiumos'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chromeos'],
@@ -197,8 +191,7 @@ SPEC = {
     },
     'ASan Release (32-bit x86 with V8-ARM)': {
       'chromium_config': 'chromium_asan',
-      'chromium_apply_config': ['mb', 'clobber',
-                                'enable_ipc_fuzzer'],
+      'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -217,7 +210,7 @@ SPEC = {
     'ASan Release Media (32-bit x86 with V8-ARM)': {
       'chromium_config': 'chromium_asan',
       'chromium_apply_config': ['mb', 'clobber',
-                                'enable_ipc_fuzzer', 'chromeos_with_codecs'],
+                                'chromeos_with_codecs'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
