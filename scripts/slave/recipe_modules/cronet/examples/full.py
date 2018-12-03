@@ -19,9 +19,7 @@ BUILDERS = freeze({
     'kwargs': {
       'BUILD_CONFIG': 'Debug',
     },
-    'gyp_defs': {
-      'use_goma': 0,
-    }
+    'use_goma': False,
   },
   'gn_test': {
     'recipe_config': 'main_builder',
@@ -53,16 +51,13 @@ def RunSteps(api, buildername):
   builder_config = BUILDERS.get(buildername, {})
   recipe_config = builder_config['recipe_config']
   kwargs = builder_config.get('kwargs', {})
-  gyp_defs = builder_config.get('gyp_defs', {})
   chromium_apply_config = builder_config.get('chromium_apply_config')
 
   cronet = api.cronet
-  cronet.init_and_sync(recipe_config, kwargs, gyp_defs,
+  cronet.init_and_sync(recipe_config, kwargs,
                        chromium_apply_config=chromium_apply_config)
 
-  use_goma = True
-  if gyp_defs.get('use_goma') == 0:
-    use_goma = False
+  use_goma = builder_config.get('use_goma', True)
   cronet.build(use_goma=use_goma)
 
   cronet.upload_package(kwargs['BUILD_CONFIG'])

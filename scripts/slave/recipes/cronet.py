@@ -24,9 +24,7 @@ BUILDERS = freeze({
       'report_sizes': True,
       'PERF_ID': 'android_cronet_local_test_builder',
     },
-    'gyp_defs': {
-      'use_goma': 0,
-    }
+    'use_goma': False,
   },
   'Android Cronet Builder (dbg)': {
     'recipe_config': 'main_builder_mb',
@@ -168,15 +166,12 @@ def RunSteps(api, buildername):
   recipe_config = builder_config['recipe_config']
   kwargs = builder_config.get('kwargs', {})
   cronet_kwargs = builder_config.get('cronet_kwargs', {})
-  gyp_defs = builder_config.get('gyp_defs', {})
 
   api.cronet.init_and_sync(
-      recipe_config, kwargs, gyp_defs,
+      recipe_config, kwargs,
       chromium_apply_config=builder_config.get('chromium_apply_config'))
 
-  use_goma = True
-  if gyp_defs.get('use_goma') == 0:
-    use_goma = False
+  use_goma = builder_config.get('use_goma', True)
   api.cronet.build(use_goma=use_goma)
 
   if cronet_kwargs.get('report_sizes') and cronet_kwargs.get('PERF_ID'):
