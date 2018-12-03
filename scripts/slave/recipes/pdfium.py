@@ -47,6 +47,7 @@ PROPERTIES = {
   'target_os': Property(default=None, kind=str),
 }
 
+
 def _CheckoutSteps(api, target_os):
   # Checkout pdfium and its dependencies (specified in DEPS) using gclient.
   api.gclient.set_config('pdfium')
@@ -58,8 +59,10 @@ def _CheckoutSteps(api, target_os):
   api.gclient.runhooks()
   return update_step.presentation.properties['got_revision']
 
+
 def _OutPath(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel, jumbo):
   out_dir = 'release' if rel else 'debug'
+
   if skia:
     out_dir += "_skia"
   if skia_paths:
@@ -68,16 +71,22 @@ def _OutPath(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel, jumbo):
     out_dir += "_xfa"
   if v8:
     out_dir += "_v8"
+
   if clang:
     out_dir += "_clang"
   elif msvc:
     out_dir += "_msvc"
+
   if jumbo:
     out_dir += "_jumbo"
+
   if memory_tool == 'asan':
     out_dir += "_asan"
   elif memory_tool == 'msan':
     out_dir += "_msan"
+  elif memory_tool == 'ubsan':
+    out_dir += "_ubsan"
+
   return out_dir
 
 
@@ -141,6 +150,9 @@ def _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
   elif memory_tool == 'msan':
     assert not api.platform.is_win
     args.extend(['is_msan=true', 'use_prebuilt_instrumented_libraries=true'])
+  elif memory_tool == 'ubsan':
+    assert not api.platform.is_win
+    args.append('is_ubsan_security=true')
 
   if target_os:
     args.append('target_os="%s"' % target_os)
@@ -156,6 +168,7 @@ def _GNGenBuilds(api, memory_tool, skia, skia_paths, xfa, v8, target_cpu, clang,
   # convert the arguments to key values pairs for gold usage.
   return gold_build_config(args)
 
+
 def _BuildSteps(api, clang, out_dir):
   debug_path = api.path['checkout'].join('out', out_dir)
   ninja_cmd = [api.depot_tools.ninja_path, '-C', debug_path,
@@ -166,6 +179,7 @@ def _BuildSteps(api, clang, out_dir):
       ninja_command=ninja_cmd,
       ninja_log_outdir=debug_path,
       ninja_log_compiler='clang' if clang else 'unknown')
+
 
 # _RunTests runs the tests and uploads the results to Gold.
 def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
@@ -190,6 +204,12 @@ def _RunTests(api, memory_tool, v8, out_dir, build_config, revision):
     options.extend(COMMON_SANITIZER_OPTIONS)
     options.extend(COMMON_UNIX_SANITIZER_OPTIONS)
     env.update({'MSAN_OPTIONS': ' '.join(options)})
+  elif memory_tool == 'ubsan':
+    assert not api.platform.is_win
+    options = []
+    options.extend(COMMON_SANITIZER_OPTIONS)
+    options.extend(COMMON_UNIX_SANITIZER_OPTIONS)
+    env.update({'UBSAN_OPTIONS': ' '.join(options)})
 
   unittests_path = str(api.path['checkout'].join('out', out_dir,
                                                  'pdfium_unittests'))
@@ -329,6 +349,7 @@ def dict_to_str(props):
     ret += [k,props[k]]
   return " ".join(ret)
 
+
 def gold_build_config(args):
   """ Extracts key value pairs from the arguments handed to 'gn gen'
       and returns them as a dictionary. Since these are used as
@@ -354,6 +375,7 @@ def gold_build_config(args):
               break
           build_config[k] = v
   return build_config
+
 
 def get_gold_ignore_hashes(api, out_dir):
   """Downloads a list of MD5 hashes from Gold and
@@ -410,6 +432,7 @@ def get_gold_ignore_hashes(api, out_dir):
     return host_hashes_file
   return None
 
+
 def upload_dm_results(api, results_dir, revision, test_type):
   """ Uploads results of the tests to Gold.
   This assumes that results_dir contains a JSON file
@@ -459,6 +482,7 @@ def upload_dm_results(api, results_dir, revision, test_type):
   local_dmjson = results_dir.join(DM_JSON)
   gs_cp(api, 'JSON', local_dmjson, summary_dest_path,
         extra_args=['-z', 'json,log'])
+
 
 def gs_cp(api, name, src, dst, multithreaded=False, extra_args=None):
   """
@@ -755,6 +779,17 @@ def GenTests(api):
   )
 
   yield (
+      api.test('linux_ubsan') +
+      api.platform('linux', 64) +
+      api.properties(memory_tool='ubsan',
+                     rel=True,
+                     mastername="client.pdfium",
+                     buildername='linux_ubsan',
+                     buildnumber='1234',
+                     bot_id="test_slave")
+  )
+
+  yield (
       api.test('linux_xfa_asan_lsan') +
       api.platform('linux', 64) +
       api.properties(memory_tool='asan',
@@ -773,6 +808,18 @@ def GenTests(api):
                      xfa=True,
                      mastername="client.pdfium",
                      buildername='linux_xfa_msan',
+                     buildnumber='1234',
+                     bot_id="test_slave")
+  )
+
+  yield (
+      api.test('linux_xfa_ubsan') +
+      api.platform('linux', 64) +
+      api.properties(memory_tool='ubsan',
+                     rel=True,
+                     xfa=True,
+                     mastername="client.pdfium",
+                     buildername='linux_xfa_ubsan',
                      buildnumber='1234',
                      bot_id="test_slave")
   )
