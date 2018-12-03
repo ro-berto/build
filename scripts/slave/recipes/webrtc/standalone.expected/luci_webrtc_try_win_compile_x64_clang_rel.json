@@ -173,7 +173,7 @@
     "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[GOMA_CACHE]\\client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "clang=1 gomadir='[GOMA_CACHE]\\client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -191,7 +191,7 @@
       "-m",
       "tryserver.webrtc",
       "-b",
-      "win_compile_x64_rel",
+      "win_compile_x64_clang_rel",
       "--config-file",
       "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--goma-dir",
@@ -217,12 +217,12 @@
       "-m",
       "tryserver.webrtc",
       "-b",
-      "win_compile_x64_rel",
+      "win_compile_x64_clang_rel",
       "--config-file",
       "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]\\client",
-      "//out/win_compile_x64_rel"
+      "//out/win_compile_x64_clang_rel"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -230,6 +230,33 @@
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\clang_revision.py",
+      "--src-dir",
+      "[CACHE]\\builder\\src",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "clang_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [],
@@ -249,7 +276,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]\\data\\win_compile_x64_rel"
+      "[GOMA_CACHE]\\data\\win_compile_x64_clang_rel"
     ],
     "cwd": "[CACHE]\\builder\\src",
     "env": {
@@ -272,7 +299,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\win_compile_x64_rel",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\win_compile_x64_clang_rel",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -330,7 +357,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\win_compile_x64_rel",
+      "[CACHE]\\builder\\src\\out\\win_compile_x64_clang_rel",
       "-j",
       "20"
     ],
@@ -347,7 +374,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]\\builder\\src\\out\\win_compile_x64_rel",
+      "[CACHE]\\builder\\src\\out\\win_compile_x64_clang_rel",
       "-j",
       "20",
       "-d",
@@ -467,15 +494,15 @@
       "--json-status",
       "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]\\builder\\src\\out\\win_compile_x64_rel",
+      "[CACHE]\\builder\\src\\out\\win_compile_x64_clang_rel",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\win_compile_x64_rel\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\win_compile_x64_clang_rel\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
       "compile",
       "--ninja-log-compiler",
-      "goma",
+      "goma-clang",
       "--goma-stats-file",
       "[TMP_BASE]\\goma_stats",
       "--goma-counterz-file",
@@ -485,10 +512,10 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"win_compile_x64_rel\", \"project\": \"webrtc\"}",
+      "{\"bucket\": \"try\", \"builder\": \"win_compile_x64_clang_rel\", \"project\": \"webrtc\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "win_compile_x64_rel",
+      "win_compile_x64_clang_rel",
       "--buildbot-mastername",
       "tryserver.webrtc",
       "--buildbot-slavename",

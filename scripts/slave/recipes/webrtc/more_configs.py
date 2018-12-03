@@ -96,7 +96,7 @@ BUILDERS = freeze({
           'cpu': 'x86-64',
         },
       },
-      'android_more_configs': {
+      'android_arm_more_configs': {
         'recipe_config': 'webrtc_android',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
@@ -107,7 +107,7 @@ BUILDERS = freeze({
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
       },
-      'win_more_configs': {
+      'win_x86_more_configs': {
         'recipe_config': 'webrtc_default',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',

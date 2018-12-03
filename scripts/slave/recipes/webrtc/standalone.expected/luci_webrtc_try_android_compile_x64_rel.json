@@ -45,7 +45,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]\ntarget_os = ['android']",
       "--patch_root",
       "src",
       "--revision_mapping_file",
@@ -118,6 +118,30 @@
     "name": "clean test output files"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\ntry:\n  os.remove(sys.argv[3])\nexcept OSError:\n  pass\n",
+      "[CACHE]/builder/src/out/Release/debug_info_dumps",
+      "[CACHE]/builder/src/out/Release/test_logs",
+      "[CACHE]/builder/src/out/build_product.zip",
+      "[CACHE]/builder/src"
+    ],
+    "infra_step": true,
+    "name": "clean local files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil, sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[1], True)@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree(sys.argv[2], True)@@@",
+      "@@@STEP_LOG_LINE@python.inline@try:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.remove(sys.argv[3])@@@",
+      "@@@STEP_LOG_LINE@python.inline@except OSError:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  pass@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
     "cmd": [],
     "name": "ensure_goma"
   },
@@ -159,7 +183,8 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "OS=android fastbuild=1 gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1",
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "env_suffixes": {
       "PATH": [
@@ -177,7 +202,7 @@
       "-m",
       "tryserver.webrtc",
       "-b",
-      "linux_gcc_rel",
+      "android_compile_x64_rel",
       "--config-file",
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
@@ -186,7 +211,8 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
+      "GOMA_USE_LOCAL": "false",
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "name": "lookup GN args",
     "stdout": "/path/to/tmp/",
@@ -203,17 +229,18 @@
       "-m",
       "tryserver.webrtc",
       "-b",
-      "linux_gcc_rel",
+      "android_compile_x64_rel",
       "--config-file",
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
-      "//out/linux_gcc_rel"
+      "//out/android_compile_x64_rel"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
+      "GOMA_USE_LOCAL": "false",
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "name": "generate_build_files"
   },
@@ -235,7 +262,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/data/linux_gcc_rel"
+      "[GOMA_CACHE]/data/android_compile_x64_rel"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -258,14 +285,15 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux_gcc_rel",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/android_compile_x64_rel",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json",
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
@@ -316,14 +344,15 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/linux_gcc_rel",
+      "[CACHE]/builder/src/out/android_compile_x64_rel",
       "-j",
       "20"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
+      "GOMA_USE_LOCAL": "false",
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "name": "compile"
   },
@@ -333,7 +362,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/linux_gcc_rel",
+      "[CACHE]/builder/src/out/android_compile_x64_rel",
       "-j",
       "20",
       "-d",
@@ -343,7 +372,8 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMA_USE_LOCAL": "false"
+      "GOMA_USE_LOCAL": "false",
+      "PATH": "[CACHE]/builder/src/third_party/android_tools/sdk/platform-tools:[CACHE]/builder/src/build/android:<PATH>"
     },
     "name": "compile confirm no-op",
     "stdout": "/path/to/tmp/"
@@ -453,9 +483,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/linux_gcc_rel",
+      "[CACHE]/builder/src/out/android_compile_x64_rel",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/linux_gcc_rel\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/android_compile_x64_rel\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -471,10 +501,10 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"linux_gcc_rel\", \"project\": \"webrtc\"}",
+      "{\"bucket\": \"try\", \"builder\": \"android_compile_x64_rel\", \"project\": \"webrtc\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "linux_gcc_rel",
+      "android_compile_x64_rel",
       "--buildbot-mastername",
       "tryserver.webrtc",
       "--buildbot-slavename",
