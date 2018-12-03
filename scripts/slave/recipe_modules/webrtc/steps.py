@@ -304,6 +304,7 @@ def _UploadToPerfDashboard(name, api, task_output_dir):
     args.extend(['--got-webrtc-revision', revision])
 
   if api.runtime.is_luci:
+    args.append('--is-luci-builder')
     perf_bot_group = 'WebRTCPerf'
     if api.runtime.is_experimental:
       perf_bot_group = 'Experimental' + perf_bot_group
