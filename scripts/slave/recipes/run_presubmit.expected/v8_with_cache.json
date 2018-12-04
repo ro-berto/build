@@ -12,7 +12,7 @@
       "--limit",
       "1",
       "-p",
-      "change=456789",
+      "change=123456",
       "-o",
       "ALL_REVISIONS",
       "-o",
@@ -29,8 +29,8 @@
       "@@@STEP_LOG_LINE@json.output@    \"branch\": \"master\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"12\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/89/456789/12\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"7\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/56/123456/7\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -48,7 +48,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/v8_presubmit"
+      "[CACHE]/builder/v8_presubmit"
     ],
     "infra_step": true,
     "name": "ensure builder cache dir"
@@ -59,24 +59,24 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
+      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'v8', 'url': 'https://chromium.googlesource.com/v8/v8'}]",
       "--patch_root",
       "v8",
       "--revision_mapping_file",
       "{\"got_revision\": \"v8\"}",
       "--git-cache-dir",
-      "[GIT_CACHE]",
+      "[CACHE]/git",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/v8/v8@refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/v8/v8@refs/changes/56/123456/7",
       "--revision",
       "v8@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_presubmit",
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder/v8_presubmit",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -133,23 +133,8 @@
       "-m",
       "Committed patch"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_presubmit/v8",
+    "cwd": "[CACHE]/builder/v8_presubmit/v8",
     "name": "commit-git-patch"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
-      "runhooks"
-    ],
-    "cwd": "[BUILDER_CACHE]/v8_presubmit/v8",
-    "env_suffixes": {
-      "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
-      ]
-    },
-    "name": "gclient runhooks"
   },
   {
     "cmd": [
@@ -157,14 +142,14 @@
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/presubmit_support.py",
       "--issue",
-      "456789",
+      "123456",
       "--patchset",
-      "12",
+      "7",
       "--gerrit_url",
       "https://chromium-review.googlesource.com",
       "--gerrit_fetch",
       "--root",
-      "[BUILDER_CACHE]/v8_presubmit/v8",
+      "[CACHE]/builder/v8_presubmit/v8",
       "--commit",
       "--verbose",
       "--verbose",
@@ -175,7 +160,7 @@
       "--upstream",
       "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_presubmit",
+    "cwd": "[CACHE]/builder/v8_presubmit",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
