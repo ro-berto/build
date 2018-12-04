@@ -72,16 +72,6 @@ class Bot(object):
     return self.config.get('parent_buildername')
 
   @property
-  def should_download_audio_quality_tools(self):
-    return self.should_test and self.test_suite in (
-        'android_perf', 'android_perf_swarming', 'desktop_perf_swarming')
-
-  @property
-  def should_download_video_quality_tools(self):
-    return self.should_test and self.test_suite in (
-        'android_perf', 'android_perf_swarming')
-
-  @property
   def should_test_android_studio_project_generation(self):
     return self.config.get('test_android_studio_project_generation', False)
 
@@ -118,7 +108,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     self.bot = self.get_bot(self.bucketname, self.buildername)
 
     self.set_config('webrtc', TEST_SUITE=self.bot.test_suite,
-                    **self.bot.config.get('webrtc_config_kwargs', {}))
+                    PERF_ID=self.bot.config.get('perf_id'))
 
     chromium_kwargs = self.bot.config.get('chromium_config_kwargs', {})
     if self.bot.recipe_config.get('chromium_android_config'):
@@ -141,7 +131,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.m.tryserver.is_tryserver:
       self.m.chromium.apply_config('trybot_flavor')
 
-    if self.c.PERF_ID:
+    if self.bot.config.get('perf_id'):
       assert not self.m.tryserver.is_tryserver
       assert self.m.chromium.c.BUILD_CONFIG == 'Release', (
         'Perf tests should only be run with Release builds.')
@@ -168,14 +158,42 @@ class WebRTCApi(recipe_api.RecipeApi):
   def mastername(self):
     return self.master_config.get('mastername', self.bucketname)
 
+  def related_bots(self):
+    yield self.bot
+    for triggered_bot in self.bot.triggered_bots():
+      yield self.get_bot(*triggered_bot)
+
+  @property
+  def should_download_audio_quality_tools(self):
+    if not self.c.enable_swarming:
+      return 'perf' in self.bot.test_suite and self.bot.should_test
+
+    for bot in self.related_bots():
+      if 'perf' in bot.test_suite:
+        return self.bot.should_build
+    return False
+
+  @property
+  def should_download_video_quality_tools(self):
+    if not self.c.enable_swarming:
+      return 'android_perf' in self.bot.test_suite and self.bot.should_test
+
+    for bot in self.related_bots():
+      if 'android_perf' in bot.test_suite:
+        return self.bot.should_build
+    return False
+
   def configure_isolate(self, phase=None):
     if self.c.enable_swarming:
-      tests = steps.generate_tests(
-          self.m, phase, self.revision, self.revision_number,
-          self.bot, self.c.PERF_ID)
-      self._isolated_targets = [test._name for test in tests
-                                if isinstance(test, SwarmingTest)]
-      self._isolated_targets.sort()
+      isolated_targets = set()
+      for bot in self.related_bots():
+        if bot.should_test:
+          for test in steps.generate_tests(
+              self.m, phase, self.revision, self.revision_number, bot):
+            if isinstance(test, SwarmingTest):
+              isolated_targets.add(test._name)
+
+      self._isolated_targets = sorted(isolated_targets)
 
   def configure_swarming(self):
     self.c.enable_swarming = self.bot.config.get('enable_swarming')
@@ -335,8 +353,7 @@ class WebRTCApi(recipe_api.RecipeApi):
     """
     with self.m.context(cwd=self._working_dir):
       tests = steps.generate_tests(
-          self.m, phase, self.revision, self.revision_number,
-          self.bot, self.c.PERF_ID)
+          self.m, phase, self.revision, self.revision_number, self.bot)
       with self.m.step.defer_results():
         if tests:
           run_android_device_steps = (not self.c.enable_swarming and

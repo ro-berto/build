@@ -67,6 +67,66 @@
     "cmd": [
       "python",
       "-u",
+      "[CACHE]/builder/src/tools_webrtc/download_tools.py",
+      "[CACHE]/builder/src/tools_webrtc/audio_quality"
+    ],
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "download audio quality tools"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/src/tools_webrtc/download_tools.py",
+      "[CACHE]/builder/src/tools_webrtc/video_quality_toolchain/linux"
+    ],
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "download video quality tools"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py",
+      "--bucket=chromium-webrtc-resources",
+      "--directory",
+      "[CACHE]/builder/src/rtc_tools/testing"
+    ],
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "download apprtc"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/download_from_google_storage.py",
+      "--bucket=chromium-webrtc-resources",
+      "--directory",
+      "[CACHE]/builder/src/rtc_tools/testing/golang/linux"
+    ],
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "download golang"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
       "[CACHE]/builder/src/out"
     ],
@@ -215,7 +275,7 @@
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
-      "AppRTCMobile_test_apk\nandroid_instrumentation_test_apk\naudio_decoder_unittests\ncommon_audio_unittests\ncommon_video_unittests\nmodules_tests\nmodules_unittests\npeerconnection_unittests\nrtc_stats_unittests\nrtc_unittests\nsystem_wrappers_unittests\ntest_support_unittests\ntools_unittests\nvideo_engine_tests\nwebrtc_nonparallel_tests\n",
+      "low_bandwidth_audio_perf_test\nvideo_quality_loopback_test\nwebrtc_perf_tests\n",
       "//out/Android64_Builder_arm64"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -226,21 +286,9 @@
     },
     "name": "generate_build_files",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@AppRTCMobile_test_apk@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@android_instrumentation_test_apk@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@audio_decoder_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_audio_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@common_video_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@modules_tests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@modules_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@peerconnection_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@rtc_stats_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@rtc_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@system_wrappers_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@test_support_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@tools_unittests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@video_engine_tests@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@webrtc_nonparallel_tests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@low_bandwidth_audio_perf_test@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@video_quality_loopback_test@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@webrtc_perf_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
@@ -348,21 +396,9 @@
       "-j",
       "20",
       "default",
-      "AppRTCMobile_test_apk",
-      "android_instrumentation_test_apk",
-      "audio_decoder_unittests",
-      "common_audio_unittests",
-      "common_video_unittests",
-      "modules_tests",
-      "modules_unittests",
-      "peerconnection_unittests",
-      "rtc_stats_unittests",
-      "rtc_unittests",
-      "system_wrappers_unittests",
-      "test_support_unittests",
-      "tools_unittests",
-      "video_engine_tests",
-      "webrtc_nonparallel_tests"
+      "low_bandwidth_audio_perf_test",
+      "video_quality_loopback_test",
+      "webrtc_perf_tests"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -382,21 +418,9 @@
       "-j",
       "20",
       "default",
-      "AppRTCMobile_test_apk",
-      "android_instrumentation_test_apk",
-      "audio_decoder_unittests",
-      "common_audio_unittests",
-      "common_video_unittests",
-      "modules_tests",
-      "modules_unittests",
-      "peerconnection_unittests",
-      "rtc_stats_unittests",
-      "rtc_unittests",
-      "system_wrappers_unittests",
-      "test_support_unittests",
-      "tools_unittests",
-      "video_engine_tests",
-      "webrtc_nonparallel_tests",
+      "low_bandwidth_audio_perf_test",
+      "video_quality_loopback_test",
+      "webrtc_perf_tests",
       "-d",
       "explain",
       "-n"
@@ -517,7 +541,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Android64_Builder_arm64",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Android64_Builder_arm64\", \"-j\", 20, \"default\", \"AppRTCMobile_test_apk\", \"android_instrumentation_test_apk\", \"audio_decoder_unittests\", \"common_audio_unittests\", \"common_video_unittests\", \"modules_tests\", \"modules_unittests\", \"peerconnection_unittests\", \"rtc_stats_unittests\", \"rtc_unittests\", \"system_wrappers_unittests\", \"test_support_unittests\", \"tools_unittests\", \"video_engine_tests\", \"webrtc_nonparallel_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Android64_Builder_arm64\", \"-j\", 20, \"default\", \"low_bandwidth_audio_perf_test\", \"video_quality_loopback_test\", \"webrtc_perf_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -595,43 +619,19 @@
       "https://isolateserver.appspot.com",
       "--eventlog-endpoint",
       "prod",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/AppRTCMobile_test_apk.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/android_instrumentation_test_apk.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/audio_decoder_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/common_audio_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/common_video_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/modules_tests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/modules_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/peerconnection_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/rtc_stats_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/rtc_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/system_wrappers_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/test_support_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/tools_unittests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/video_engine_tests.isolated.gen.json",
-      "[CACHE]/builder/src/out/Android64_Builder_arm64/webrtc_nonparallel_tests.isolated.gen.json"
+      "[CACHE]/builder/src/out/Android64_Builder_arm64/low_bandwidth_audio_perf_test.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_Builder_arm64/video_quality_loopback_test.isolated.gen.json",
+      "[CACHE]/builder/src/out/Android64_Builder_arm64/webrtc_perf_tests.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"AppRTCMobile_test_apk\": \"[dummy hash for AppRTCMobile_test_apk]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"android_instrumentation_test_apk\": \"[dummy hash for android_instrumentation_test_apk]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"common_audio_unittests\": \"[dummy hash for common_audio_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"common_video_unittests\": \"[dummy hash for common_video_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"modules_tests\": \"[dummy hash for modules_tests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"modules_unittests\": \"[dummy hash for modules_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"rtc_unittests\": \"[dummy hash for rtc_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"test_support_unittests\": \"[dummy hash for test_support_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tools_unittests\": \"[dummy hash for tools_unittests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"video_engine_tests\": \"[dummy hash for video_engine_tests]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"video_quality_loopback_test\": \"[dummy hash for video_quality_loopback_test]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"AppRTCMobile_test_apk\": \"[dummy hash for AppRTCMobile_test_apk]\", \"android_instrumentation_test_apk\": \"[dummy hash for android_instrumentation_test_apk]\", \"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests]\", \"common_audio_unittests\": \"[dummy hash for common_audio_unittests]\", \"common_video_unittests\": \"[dummy hash for common_video_unittests]\", \"modules_tests\": \"[dummy hash for modules_tests]\", \"modules_unittests\": \"[dummy hash for modules_unittests]\", \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\", \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests]\", \"rtc_unittests\": \"[dummy hash for rtc_unittests]\", \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests]\", \"test_support_unittests\": \"[dummy hash for test_support_unittests]\", \"tools_unittests\": \"[dummy hash for tools_unittests]\", \"video_engine_tests\": \"[dummy hash for video_engine_tests]\", \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test]\", \"video_quality_loopback_test\": \"[dummy hash for video_quality_loopback_test]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"}@@@"
     ]
   },
   {
@@ -664,8 +664,8 @@
       "put",
       "-host",
       "cr-buildbucket.appspot.com",
-      "{\"bucket\": \"luci.webrtc.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"Perf Android64 (L Nexus9)\\\", \\\"properties\\\": {\\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#170242}\\\", \\\"revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"swarm_hashes\\\": {\\\"AppRTCMobile_test_apk\\\": \\\"[dummy hash for AppRTCMobile_test_apk]\\\", \\\"android_instrumentation_test_apk\\\": \\\"[dummy hash for android_instrumentation_test_apk]\\\", \\\"audio_decoder_unittests\\\": \\\"[dummy hash for audio_decoder_unittests]\\\", \\\"common_audio_unittests\\\": \\\"[dummy hash for common_audio_unittests]\\\", \\\"common_video_unittests\\\": \\\"[dummy hash for common_video_unittests]\\\", \\\"modules_tests\\\": \\\"[dummy hash for modules_tests]\\\", \\\"modules_unittests\\\": \\\"[dummy hash for modules_unittests]\\\", \\\"peerconnection_unittests\\\": \\\"[dummy hash for peerconnection_unittests]\\\", \\\"rtc_stats_unittests\\\": \\\"[dummy hash for rtc_stats_unittests]\\\", \\\"rtc_unittests\\\": \\\"[dummy hash for rtc_unittests]\\\", \\\"system_wrappers_unittests\\\": \\\"[dummy hash for system_wrappers_unittests]\\\", \\\"test_support_unittests\\\": \\\"[dummy hash for test_support_unittests]\\\", \\\"tools_unittests\\\": \\\"[dummy hash for tools_unittests]\\\", \\\"video_engine_tests\\\": \\\"[dummy hash for video_engine_tests]\\\", \\\"webrtc_nonparallel_tests\\\": \\\"[dummy hash for webrtc_nonparallel_tests]\\\"}}}\", \"tags\": [\"builder:Perf Android64 (L Nexus9)\", \"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Android64 Builder arm64\", \"user_agent:recipe\"]}",
-      "{\"bucket\": \"luci.webrtc.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"Perf Android64 (N Pixel)\\\", \\\"properties\\\": {\\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#170242}\\\", \\\"revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"swarm_hashes\\\": {\\\"AppRTCMobile_test_apk\\\": \\\"[dummy hash for AppRTCMobile_test_apk]\\\", \\\"android_instrumentation_test_apk\\\": \\\"[dummy hash for android_instrumentation_test_apk]\\\", \\\"audio_decoder_unittests\\\": \\\"[dummy hash for audio_decoder_unittests]\\\", \\\"common_audio_unittests\\\": \\\"[dummy hash for common_audio_unittests]\\\", \\\"common_video_unittests\\\": \\\"[dummy hash for common_video_unittests]\\\", \\\"modules_tests\\\": \\\"[dummy hash for modules_tests]\\\", \\\"modules_unittests\\\": \\\"[dummy hash for modules_unittests]\\\", \\\"peerconnection_unittests\\\": \\\"[dummy hash for peerconnection_unittests]\\\", \\\"rtc_stats_unittests\\\": \\\"[dummy hash for rtc_stats_unittests]\\\", \\\"rtc_unittests\\\": \\\"[dummy hash for rtc_unittests]\\\", \\\"system_wrappers_unittests\\\": \\\"[dummy hash for system_wrappers_unittests]\\\", \\\"test_support_unittests\\\": \\\"[dummy hash for test_support_unittests]\\\", \\\"tools_unittests\\\": \\\"[dummy hash for tools_unittests]\\\", \\\"video_engine_tests\\\": \\\"[dummy hash for video_engine_tests]\\\", \\\"webrtc_nonparallel_tests\\\": \\\"[dummy hash for webrtc_nonparallel_tests]\\\"}}}\", \"tags\": [\"builder:Perf Android64 (N Pixel)\", \"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Android64 Builder arm64\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"luci.webrtc.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"Perf Android64 (L Nexus9)\\\", \\\"properties\\\": {\\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#170242}\\\", \\\"revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"swarm_hashes\\\": {\\\"low_bandwidth_audio_perf_test\\\": \\\"[dummy hash for low_bandwidth_audio_perf_test]\\\", \\\"video_quality_loopback_test\\\": \\\"[dummy hash for video_quality_loopback_test]\\\", \\\"webrtc_perf_tests\\\": \\\"[dummy hash for webrtc_perf_tests]\\\"}}}\", \"tags\": [\"builder:Perf Android64 (L Nexus9)\", \"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Android64 Builder arm64\", \"user_agent:recipe\"]}",
+      "{\"bucket\": \"luci.webrtc.perf\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"Perf Android64 (N Pixel)\\\", \\\"properties\\\": {\\\"parent_got_revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#170242}\\\", \\\"revision\\\": \\\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\\\", \\\"swarm_hashes\\\": {\\\"low_bandwidth_audio_perf_test\\\": \\\"[dummy hash for low_bandwidth_audio_perf_test]\\\", \\\"video_quality_loopback_test\\\": \\\"[dummy hash for video_quality_loopback_test]\\\", \\\"webrtc_perf_tests\\\": \\\"[dummy hash for webrtc_perf_tests]\\\"}}}\", \"tags\": [\"builder:Perf Android64 (N Pixel)\", \"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Android64 Builder arm64\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
     "name": "buildbucket.put",
