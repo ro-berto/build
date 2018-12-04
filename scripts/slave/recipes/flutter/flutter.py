@@ -27,7 +27,7 @@ DEPS = [
 ]
 
 BUCKET_NAME = 'flutter_infra'
-PACKAGED_BRANCH_RE = re.compile(r'(dev|beta|stable|release)$')
+PACKAGED_BRANCH_RE = re.compile(r'(dev|beta|stable)$')
 
 
 @contextmanager
@@ -294,7 +294,7 @@ def RunSteps(api):
 
 def GenTests(api):
   for platform in ('mac', 'linux', 'win'):
-    for branch in ('master', 'dev', 'beta', 'release', 'stable'):
+    for branch in ('master', 'dev', 'beta', 'stable'):
       test = (
           api.test('%s_%s' % (platform, branch)) + api.platform(platform, 64) +
           api.properties(clobber='', branch=branch) +
