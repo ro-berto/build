@@ -249,6 +249,17 @@ FAKE_BUILDERS = {
         'win10-blink-rel',
         'win7-blink-rel',
     ],
+
+    'master.client.nacl.toolchain': [
+        # These have been migrated to LUCI.
+        'linux-pnacl-x86_32',
+        'linux-pnacl-x86_32-tests-mips',
+        'linux-pnacl-x86_64',
+        'linux64-toolchain_arm',
+        'linux64-glibc',
+        'win-pnacl-x86_32',
+        'win7-glibc',
+    ],
 }
 
 
