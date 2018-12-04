@@ -1874,7 +1874,7 @@ class SwarmingGTestTest(SwarmingTest):
       #   https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#id4
       env = {
           'LLVM_PROFILE_FILE':
-              '${ISOLATED_OUTDIR}/profraw/default-%4m.profraw',
+              '${ISOLATED_OUTDIR}/profraw/default-%8m.profraw',
       }
 
       if not self._merge:
@@ -2141,7 +2141,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       #   https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#id4
       env = {
           'LLVM_PROFILE_FILE':
-              '${ISOLATED_OUTDIR}/profraw/default-%4m.profraw',
+              '${ISOLATED_OUTDIR}/profraw/default-%8m.profraw',
       }
 
       if not self._merge:
