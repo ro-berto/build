@@ -1185,6 +1185,12 @@ def _MainWin(options, args, extra_env):
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
+  # Nuke anything that appears to be stale chrome items in the temporary
+  # directory from previous test runs (i.e.- from crashes or unittest leaks).
+  # This needs to be before _UpdateRunBenchmarkArgs, otherwise we can end up
+  # nuking the temporary directory we create there.
+  slave_utils.RemoveChromeTemporaryFiles()
+
   telemetry_info = _UpdateRunBenchmarkArgs(args, options)
   test_exe = args[0]
   build_dir = os.path.abspath(options.build_dir)
@@ -1206,10 +1212,6 @@ def _MainWin(options, args, extra_env):
     command = _BuildTestBinaryCommand(build_dir, test_exe_path, options)
 
   command.extend(args[1:])
-
-  # Nuke anything that appears to be stale chrome items in the temporary
-  # directory from previous test runs (i.e.- from crashes or unittest leaks).
-  slave_utils.RemoveChromeTemporaryFiles()
 
   # If --annotate=list was passed, list the log processor classes and exit.
   if _ListLogProcessors(options.annotate):
