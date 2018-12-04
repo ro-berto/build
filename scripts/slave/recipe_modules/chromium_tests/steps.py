@@ -1502,6 +1502,7 @@ class LayoutTestResultsHandler(JSONResultsHandler):
       None,
       '',
       'with patch',
+      'retry with patch',
       'experimental',
   )
 
