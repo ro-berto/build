@@ -950,6 +950,11 @@ class iOSApi(recipe_api.RecipeApi):
       if expiration:
         swarming_task.expiration = expiration
 
+      hard_timeout = task['test'].get('max runtime seconds') or self.__config.get(
+          'max runtime seconds')
+      if hard_timeout:
+        swarming_task.hard_timeout = hard_timeout
+
       try:
         self.m.swarming.trigger_task(swarming_task)
         task['task'] = swarming_task
