@@ -111,10 +111,7 @@ def RunSteps(api):
         c if c.isalnum() else '_' for c in api.properties['buildername'])
     # HACK to avoid invalidating caches when PRESUBMIT running
     # on special infra/config branch, which is typically orphan.
-    if 'infra/config' == api.gerrit.get_change_destination_branch(
-        name='get_patch_destination_branch',
-        host=api.properties['patch_gerrit_url'],
-        change=api.properties['patch_issue']):
+    if api.tryserver.gerrit_change_target_ref == 'refs/heads/infra/config':
       safe_buildername += '_infra_config'
     cwd = api.path['builder_cache'].join(safe_buildername)
     api.file.ensure_directory('ensure builder cache dir', cwd)
@@ -272,7 +269,5 @@ def GenTests(api):
         gerrit_project='v8/v8',
         runhooks=True,
         path_config='generic') +
-    api.step_data(
-      'gerrit get_patch_destination_branch',
-      api.gerrit.get_one_change_response_data(branch='infra/config'))
+    api.tryserver.gerrit_change_target_ref('refs/heads/infra/config')
   )
