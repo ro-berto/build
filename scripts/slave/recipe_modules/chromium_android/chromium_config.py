@@ -35,7 +35,6 @@ def main_builder_rel_mb(_):
 @CONFIG_CTX(includes=['base_config', 'clang', 'goma'])
 def clang_builder(c):
   c.runtests.enable_asan = True
-  c.gyp_env.GYP_DEFINES['use_allocator'] = 'none'
 
 @CONFIG_CTX(includes=['clang_builder', 'mb'])
 def clang_builder_mb(_):
@@ -91,7 +90,6 @@ def cronet_official(c):
 @CONFIG_CTX(includes=['main_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})
 def arm_v6_builder_rel(c):  # pragma: no cover
-  c.gyp_env.GYP_DEFINES['arm_version'] = 6
   c.gn_args.append('arm_version=6')
 
 @CONFIG_CTX(includes=['main_builder'])
@@ -100,7 +98,7 @@ def arm_l_builder(_):  # pragma: no cover
 
 @CONFIG_CTX(includes=['arm_l_builder'])
 def arm_l_builder_lto(c):  # pragma: no cover
-  c.gyp_env.GYP_DEFINES['use_lto'] = 1
+  del c
 
 @CONFIG_CTX(includes=['arm_l_builder'],
             config_vars={'BUILD_CONFIG': 'Release'})
@@ -172,15 +170,11 @@ def x86_try_instrumentation_tests(_):
 @CONFIG_CTX(includes=['main_builder'],
             config_vars={'BUILD_CONFIG': 'Debug'})
 def coverage_builder_tests(c):  # pragma: no cover
-  gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['emma_coverage'] = 1
-  gyp_defs['emma_filter'] = 'com.google.android.apps.chrome.*, org.chromium.*'
+  del c
 
 @CONFIG_CTX(includes=['main_builder'])
 def incremental_coverage_builder_tests(c):
-  gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['emma_coverage'] = 1
-  gyp_defs['emma_filter'] = 'org.chromium.*'
+  del c
 
 @CONFIG_CTX(includes=['main_builder'])
 def non_device_wipe_provisioning(_):
@@ -188,13 +182,12 @@ def non_device_wipe_provisioning(_):
 
 @CONFIG_CTX(includes=['main_builder'])
 def cast_builder(c):
-  c.gyp_env.GYP_DEFINES['chromecast'] = 1
+  del c
 
 @CONFIG_CTX()
 def disable_neon(c):  # pragma: no cover
   c.gn_args.append('arm_use_neon=false')
-  c.gyp_env.GYP_DEFINES['arm_neon'] = 0
 
 @CONFIG_CTX()
 def errorprone(c):
-  c.gyp_env.GYP_DEFINES['enable_errorprone'] = 1
+  del c
