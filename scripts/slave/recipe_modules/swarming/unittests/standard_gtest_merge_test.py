@@ -390,12 +390,37 @@ class LoadShardJsonTest(_StandardGtestMergeTest):
         json.dump({'all_tests': ['LoadShardJsonTest.test%d' % i]}, f)
       jsons_to_merge.append(json_path)
 
-    content, err = standard_gtest_merge.load_shard_json(0, jsons_to_merge)
+    content, err = standard_gtest_merge.load_shard_json(
+      0, None, jsons_to_merge)
     self.assertEqual({'all_tests': ['LoadShardJsonTest.test0']}, content)
     self.assertIsNone(err)
 
-    content, err = standard_gtest_merge.load_shard_json(12, jsons_to_merge)
+    content, err = standard_gtest_merge.load_shard_json(
+      12, None, jsons_to_merge)
     self.assertEqual({'all_tests': ['LoadShardJsonTest.test12']}, content)
+    self.assertIsNone(err)
+
+  def test_double_task_id_jsons(self):
+    jsons_to_merge = []
+    for i in xrange(15):
+      json_dir = os.path.join(self.temp_dir, 'deadbeef%d' % i)
+      json_path = os.path.join(json_dir, 'output.json')
+      if not os.path.exists(json_dir):
+        os.makedirs(json_dir)
+      with open(json_path, 'w') as f:
+        json.dump({'all_tests': ['LoadShardJsonTest.test%d' % i]}, f)
+      jsons_to_merge.append(json_path)
+
+    content, err = standard_gtest_merge.load_shard_json(
+      0, 'deadbeef0', jsons_to_merge)
+    self.assertEqual({'all_tests': ['LoadShardJsonTest.test0']},
+                     content)
+    self.assertIsNone(err)
+
+    content, err = standard_gtest_merge.load_shard_json(
+      12, 'deadbeef12', jsons_to_merge)
+    self.assertEqual({'all_tests': ['LoadShardJsonTest.test12']},
+                     content)
     self.assertIsNone(err)
 
 
