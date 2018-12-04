@@ -299,8 +299,8 @@
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LOG_LINE@Test.Two@:(@@@",
       "@@@STEP_LOG_END@Test.Two@@@",
-      "@@@STEP_LINK@shard #0 (failed)@https://chromium-swarm-dev.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1 (failed)@https://chromium-swarm-dev.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm-dev.appspot.com/user/task/10000@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm-dev.appspot.com/user/task/10100@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },

@@ -329,7 +329,7 @@
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LINK@shard #0 had an internal swarming failure@https://chromium-swarm-dev.appspot.com/user/task/10000@@@",
-      "@@@STEP_LINK@shard #1 (failed)@https://chromium-swarm-dev.appspot.com/user/task/10100@@@",
+      "@@@STEP_LINK@shard #1@https://chromium-swarm-dev.appspot.com/user/task/10100@@@",
       "@@@STEP_EXCEPTION@@@"
     ]
   },

@@ -151,7 +151,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
   def _get_exit_code(self, shard):
     if 'exit_code' in shard:
-      return shard['exit_code']
+      return int(shard['exit_code'])
 
     if shard.get('state') == 'COMPLETED':
       # This case, task finished successfully.

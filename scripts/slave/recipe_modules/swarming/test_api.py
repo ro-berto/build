@@ -20,7 +20,10 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
           'completed_ts': '2014-09-25T01:43:11.123',
           'created_ts': '2014-09-25T01:41:00.123',
           'duration': 31.5,
-          'exit_code': 0,
+
+          # TODO(tikuta): Remove this after switching to go client.
+          'exit_code': "0",
+
           'failure': failure,
           'task_id': '148aa78d7aa%02d00' % i,
           'internal_failure': internal_failure,
