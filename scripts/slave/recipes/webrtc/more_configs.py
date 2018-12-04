@@ -17,7 +17,7 @@ DEPS = [
 ]
 
 RECIPE_CONFIGS = freeze({
-  'webrtc_default': {
+  'webrtc': {
     'chromium_config': 'webrtc_default',
     'gclient_config': 'webrtc',
     'test_suite': 'more_configs',
@@ -37,7 +37,7 @@ BUILDERS = freeze({
     },
     'builders': {
       'Linux (more configs)': {
-        'recipe_config': 'webrtc_default',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -62,7 +62,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'Win (more configs)': {
-        'recipe_config': 'webrtc_default',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -83,7 +83,7 @@ BUILDERS = freeze({
     },
     'builders': {
       'linux_more_configs': {
-        'recipe_config': 'webrtc_default',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
@@ -108,7 +108,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
       },
       'win_x86_more_configs': {
-        'recipe_config': 'webrtc_default',
+        'recipe_config': 'webrtc',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,

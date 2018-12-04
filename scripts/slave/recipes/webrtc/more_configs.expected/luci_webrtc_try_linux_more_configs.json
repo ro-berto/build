@@ -318,7 +318,9 @@
       "-C",
       "[CACHE]/builder/src/out/bwe_test_logging",
       "-j",
-      "20"
+      "20",
+      "default",
+      "bwe_simulations_tests"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -336,6 +338,8 @@
       "[CACHE]/builder/src/out/bwe_test_logging",
       "-j",
       "20",
+      "default",
+      "bwe_simulations_tests",
       "-d",
       "explain",
       "-n"
@@ -455,7 +459,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/bwe_test_logging",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/bwe_test_logging\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/bwe_test_logging\", \"-j\", 20, \"default\", \"bwe_simulations_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1322,7 +1326,9 @@
       "-C",
       "[CACHE]/builder/src/out/rtti_no_sctp",
       "-j",
-      "20"
+      "20",
+      "default",
+      "peerconnection_unittests"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -1340,6 +1346,8 @@
       "[CACHE]/builder/src/out/rtti_no_sctp",
       "-j",
       "20",
+      "default",
+      "peerconnection_unittests",
       "-d",
       "explain",
       "-n"
@@ -1459,7 +1467,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/rtti_no_sctp",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/rtti_no_sctp\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/rtti_no_sctp\", \"-j\", 20, \"default\", \"peerconnection_unittests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

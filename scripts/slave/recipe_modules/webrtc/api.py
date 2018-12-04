@@ -296,7 +296,16 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def compile(self, phase=None):
     self.run_mb(phase)
-    self.m.chromium.compile(use_goma_module=True)
+
+    targets = self._isolated_targets
+    if targets:
+      targets = ['default'] + targets
+
+    # TODO(oprypin): remove this after migration to swarming is done.
+    if self.bot.test_suite == 'android_perf':
+      targets = sorted(steps.ANDROID_PERF_TESTS)
+
+    self.m.chromium.compile(targets=targets, use_goma_module=True)
 
     if self.c.enable_swarming:
       self.m.isolate.isolate_tests(self.m.chromium.output_dir,
