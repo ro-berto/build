@@ -496,11 +496,29 @@ def _aggregate_dirs_and_components(directory_summaries, component_mapping):
 
 def _write_metadata_in_shards(output_dir, compressed_files, directory_summaries,
                               component_summaries):
-  """Writes the metadata in a sharded manner if there are too many files."""
+  """Splits the metadata in a sharded manner if there are too many files.
+
+  Args:
+    output_dir: Absolute path output directory for the generated artifacts.
+    compressed_files: A list of json object that stores coverage info for files
+                      in compressed format. Used by both per-cl coverage and
+                      full-repo coverage.
+    directory_summaries: A json object that stores coverage info for
+                         directories, and the root src directory is represented
+                         as '//'. Used only by full-repo coverage.
+    component_summaries: A json object that stores coverage info for components.
+                         Used only by full-repo coverage.
+  """
+  # 'dirs', 'components' and 'summaries' are only meanningful to full-repo
+  # coverage.
   compressed_data = {
-      'dirs': directory_summaries.values(),
-      'components': component_summaries.values(),
-      'summaries': directory_summaries['//']['summaries'],
+      'dirs':
+          directory_summaries.values() if directory_summaries else None,
+      'components':
+          component_summaries.values() if component_summaries else None,
+      'summaries':
+          directory_summaries['//']['summaries']
+          if directory_summaries else None,
   }
 
   # Try to split the files into 30 shards, with each shard having at least
@@ -577,7 +595,9 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
     for file_data in datum['files']:
       record = _to_compressed_file_record(src_path, file_data, diff_mapping)
       compressed_files.append(record)
-      _add_file_to_directory_summary(directory_summaries, src_path, file_data)
+
+      if component_mapping:
+        _add_file_to_directory_summary(directory_summaries, src_path, file_data)
 
   component_summaries = {}
   if component_mapping:
