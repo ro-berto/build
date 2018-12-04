@@ -1024,5 +1024,6 @@ SPEC['builders'].update([
                  parent_buildername='linux-chromium-tests-staging-builder'),
     stock_config('linux-gcc-rel'),
     stock_config('linux-tcmalloc-rel'),
+    stock_config('mac-hermetic-upgrade-rel'),
     stock_config('win-annotator-rel'),
 ])
