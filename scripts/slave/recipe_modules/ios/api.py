@@ -998,11 +998,10 @@ class iOSApi(recipe_api.RecipeApi):
       swarming_summary = step_result.swarming.summary['shards'][0]
       state = swarming_summary['state']
 
-      # TODO(tikuta): remove this line
-      exit_code = (swarming_summary.get('exit_codes') or [None])[0]
-
+      exit_code = None
+      if state == 'COMPLETED':
+        exit_code = 0
       exit_code = swarming_summary.get('exit_code', exit_code)
-      exit_code = exit_code or 0
 
       # Link to isolate file browser for files emitted by the test.
       if swarming_summary.get('outputs_ref', None):
@@ -1013,7 +1012,7 @@ class iOSApi(recipe_api.RecipeApi):
             outputs_ref['isolated']))
 
       # Interpret the result and set the display appropriately.
-      if state == self.m.swarming.State.COMPLETED or state == 'COMPLETED':
+      if state == 'COMPLETED':
         # Task completed and we got an exit code from the iOS test runner.
         if exit_code == 1:
           step_result.presentation.status = self.m.step.FAILURE
@@ -1023,13 +1022,13 @@ class iOSApi(recipe_api.RecipeApi):
           step_result.presentation.status = self.m.step.EXCEPTION
           failures.add(task['step name'])
           infra_failure = True
-      elif state == self.m.swarming.State.TIMED_OUT or state == 'TIMED_OUT':
+      elif state == 'TIMED_OUT':
         # The task was killed for taking too long. This is a test failure
         # because the test itself hung.
         step_result.presentation.status = self.m.step.FAILURE
         step_result.presentation.step_text = 'Test timed out.'
         failures.add(task['step name'])
-      elif state == self.m.swarming.State.EXPIRED or state == 'EXPIRED':
+      elif state == 'EXPIRED':
         # No Swarming bot accepted the task in time.
         step_result.presentation.status = self.m.step.EXCEPTION
         step_result.presentation.step_text = (

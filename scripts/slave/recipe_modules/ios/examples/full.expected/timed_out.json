@@ -672,7 +672,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"state\": 64@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"state\": \"TIMED_OUT\"@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    }@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@swarming.summary@}@@@",

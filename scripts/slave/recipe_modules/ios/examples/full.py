@@ -220,8 +220,8 @@ def GenTests(api):
         'fake test (fake device iOS 8.1)',
         api.swarming.summary({
           'shards': [{
-            'exit_codes': [1],
-            'state': 112,
+            'exit_code': 1,
+            'state': 'COMPLETED',
           }],
         }),
         retcode=1,
@@ -295,8 +295,8 @@ def GenTests(api):
         'fake test (fake device iOS 8.1)',
         api.swarming.summary({
           'shards': [{
-            'exit_codes': [2],
-            'state': 112,
+            'exit_code': 2,
+            'state': 'COMPLETED',
           }],
         }),
         retcode=1,
@@ -334,7 +334,7 @@ def GenTests(api):
         'fake test (fake device iOS 8.1)',
         api.swarming.summary({
           'shards': [{
-            'state': 64,
+            'state': 'TIMED_OUT',
           }],
         }),
         retcode=1,
@@ -372,7 +372,7 @@ def GenTests(api):
         'fake test (fake device iOS 8.1)',
         api.swarming.summary({
           'shards': [{
-            'state': 48,
+            'state': 'EXPIRED',
           }],
         }),
         retcode=1,
@@ -410,7 +410,7 @@ def GenTests(api):
         'fake test (fake device iOS 8.1)',
         api.swarming.summary({
           'shards': [{
-            'state': 0x50, # BOT_DIED
+            'state': 'BOT_DIED',
           }],
         }),
         retcode=1,

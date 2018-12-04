@@ -153,14 +153,6 @@ def RunSteps(api, platforms, show_outputs_ref_in_collect_step,
   # Wait for all tasks to complete.
   for task in tasks:
     step_result = api.swarming.collect_task(task)
-    data = step_result.swarming.summary
-
-    shard = data['shards'][0]
-    if shard:
-      state = shard['state']
-      if api.swarming.State.COMPLETED == state:
-        state_name = api.swarming.State.to_string(state)
-        assert 'Completed' == state_name, state_name
     assert step_result.swarming_task in tasks
 
   api.swarming.report_stats()
@@ -348,8 +340,7 @@ def GenTests(api):
         'bot_id': 'vm30',
         'completed_ts': None,
         'created_ts': '2014-09-25T01:41:00.123',
-        'durations': [60],
-        'exit_codes': [],
+        'duration': 60,
         'failure': False,
         'id': '148aa78d7aa0100',
         'internal_failure': False,
@@ -358,28 +349,12 @@ def GenTests(api):
         'name': 'heartbeat-canary-2014-09-25_01:41:55-os=Windows',
         'outputs': [],
         'started_ts': '2014-09-25T01:42:11.123',
-        'state': 0x30, # EXPIRED (old)
+        'state': 'EXPIRED',
         'try_number': None,
         'user': 'unknown',
       }
     ],
   }
-
-  yield (
-      api.test('swarming_expired_old') +
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data('hello_world on Windows-7-SP1', api.swarming.summary(data)))
-  yield (
-      api.test('isolated_script_expired_old') +
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'hello_world on Windows-7-SP1',
-          api.raw_io.output_dir({'summary.json': json.dumps(data)})) +
-      api.properties(isolated_script_task=True))
 
   data['shards'][0]['state'] = 'EXPIRED'
   yield (
@@ -398,24 +373,7 @@ def GenTests(api):
           api.raw_io.output_dir({'summary.json': json.dumps(data)})) +
       api.properties(isolated_script_task=True))
 
-  data['shards'][0]['state'] = 0x40  # TIMED_OUT (old)
-  yield (
-      api.test('swarming_timeout_old') +
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data('hello_world on Windows-7-SP1', api.swarming.summary(data)))
-  yield (
-      api.test('isolated_script_timeout_old') +
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'hello_world on Windows-7-SP1',
-          api.raw_io.output_dir({'summary.json': json.dumps(data)})) +
-      api.properties(isolated_script_task=True))
-
-  data['shards'][0]['state'] = 'TIMED_OUT'  # TIMED_OUT (old)
+  data['shards'][0]['state'] = 'TIMED_OUT'
   yield (
       api.test('swarming_timeout_new') +
       api.step_data(
@@ -454,7 +412,7 @@ def GenTests(api):
   summary_data = {
     'shards': [
       {
-        'state': 0x70, # COMPLETED
+        'state': 'COMPLETED',
         'internal_failure': False,
         'exit_code': '0',
       }
@@ -507,7 +465,7 @@ def GenTests(api):
     'shards': [
       None,
       {
-        'state': 0x70, # COMPLETED
+        'state': 'COMPLETED',
         'internal_failure': False,
         'exit_code': '0',
       },
@@ -544,18 +502,18 @@ def GenTests(api):
   summary_data_deduped = {
     'shards': [
       {
-        'state': 0x70, # COMPLETED
+        'state': 'COMPLETED',
         'internal_failure': False,
         'exit_code': '0',
       },
       {
-        'state': 0x70, # COMPLETED
+        'state': 'COMPLETED',
         'internal_failure': False,
         'exit_code': '0',
         'deduped_from': None,
       },
       {
-        'state': 0x70, # COMPLETED
+        'state': 'COMPLETED',
         'internal_failure': False,
         'exit_code': '0',
         'deduped_from': 'deadbeef',

@@ -10,8 +10,6 @@ import os.path
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
 
-from . import state
-
 # Minimally supported version of swarming.py script (reported by --version).
 MINIMAL_SWARMING_VERSION = (0, 8, 6)
 
@@ -151,49 +149,14 @@ class SwarmingApi(recipe_api.RecipeApi):
   See also example.py for concrete code.
   """
 
-  State = state.State
-
-  #############################################################################
-  # The below are helper functions to help transition between the old and new #
-  # swarming result formats. TODO(martiniss): remove these                    #
-  #############################################################################
-
-  def _is_expired(self, shard):
-    # FIXME: We really should only have one format for enums. We want to move to
-    # strings, currently have numbers.
-    return (
-        shard.get('state') == self.State.EXPIRED or
-        shard.get('state') == 'EXPIRED')
-
-  def _is_timed_out(self, shard):
-    # FIXME: We really should only have one format for enums. We want to move to
-    # strings, currently have numbers.
-    return (
-        shard.get('state') == self.State.TIMED_OUT or
-        shard.get('state') == 'TIMED_OUT')
-
-  def _get_duration(self, shard):
-    """
-    This function supports both old and new format of summary json.
-    * 'duration' is included for a specific task run,
-      a task id ending with '1' or '2'
-    * 'durations' is included for a task result summary,
-       a task id ending with '0'
-    """
-    if shard and shard.get('duration'):
-      return shard['duration']
-    if shard and shard.get('durations'):
-      return shard['durations'][-1]
-    return None
-
   def _get_exit_code(self, shard):
-    if shard.get('exit_code'):
-      return shard.get('exit_code')
-    lst = shard.get('exit_codes', [])
-    if (shard.get('state') == self.State.COMPLETED or
-        shard.get('state') == 'COMPLETED'):
-      return str(lst[0]) if lst else '0'
-    return str(lst[0]) if lst else None
+    if 'exit_code' in shard:
+      return shard['exit_code']
+
+    if shard.get('state') == 'COMPLETED':
+      # This case, task finished successfully.
+      return 0
+    return None
 
   def __init__(self, **kwargs):
     super(SwarmingApi, self).__init__(**kwargs)
@@ -1301,7 +1264,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     links = step_result.presentation.links
     for index, shard in enumerate(summary['shards']):
       url = task.get_shard_view_url(index)
-      duration = self._get_duration(shard)
+      duration = shard and shard.get('duration')
       if duration is not None:
         display_text = 'shard #%d (%.1f sec)' % (index, duration)
         self._shards_durations.append(duration)
@@ -1315,19 +1278,20 @@ class SwarmingApi(recipe_api.RecipeApi):
         display_text = (
           'shard #%d had an internal swarming failure' % index)
         infra_failures.append((index, 'Internal swarming failure'))
-      elif self._is_expired(shard):
+      elif shard.get('state') == 'EXPIRED':
         display_text = (
           'shard #%d expired, not enough capacity' % index)
         infra_failures.append((
             index, 'There isn\'t enough capacity to run your test'))
-      elif self._is_timed_out(shard):
+      elif shard.get('state') == 'TIMED_OUT':
         if duration is not None:
           display_text = (
               'shard #%d timed out after %.1f sec' % (index, duration))
-        else:
+        else: # pragma: no cover
+          # TODO(tikuta): Add coverage for this code.
           display_text = (
               'shard #%d timed out, took too much time to complete' % index)
-      elif self._get_exit_code(shard) != '0':
+      elif self._get_exit_code(shard) != 0:
         # TODO(bpastene): Add coverage for this code.
         if duration is not None:  # pragma: no cover
           display_text = 'shard #%d (failed) (%.1f sec)' % (index, duration)

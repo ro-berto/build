@@ -356,11 +356,7 @@ class Runner(object):
         # TODO(machenbach): Add this information to the V8 test runner's json
         # output as parsing stdout is brittle.
 
-        # TODO(tikuta): Remove this line after swarming_client roll.
-        output = data.get('outputs', [None])[-1]
-
-        if 'output' in data:
-          output = data.get('output')
+        output = data.get('output')
         assert TEST_PASSED_TEXT in output
         return 0
       except self.api.step.StepFailure as e:
@@ -376,12 +372,7 @@ class Runner(object):
           # not a setup error?
           return 0  # pragma: no cover
 
-        # TODO(tikuta): Remove this line after swarming_client roll.
-        output = data.get('outputs', [None])[-1]
-
-        if 'output' in data:
-          output = data.get('output')
-
+        output = data.get('output')
         if TEST_PASSED_TEXT in output:  # pragma: no cover
           # It's possible that the return code is non-zero due to a test runner
           # leak.

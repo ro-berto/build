@@ -672,7 +672,7 @@
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"state\": 80@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"state\": \"BOT_DIED\"@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    }@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
       "@@@STEP_LOG_LINE@swarming.summary@}@@@",

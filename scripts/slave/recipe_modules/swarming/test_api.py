@@ -4,8 +4,6 @@
 
 from recipe_engine import recipe_test_api
 
-from . import state
-
 class SwarmingTestApi(recipe_test_api.RecipeTestApi):
 
   @recipe_test_api.placeholder_step_data
@@ -21,26 +19,22 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
           'bot_id': 'vm30',
           'completed_ts': '2014-09-25T01:43:11.123',
           'created_ts': '2014-09-25T01:41:00.123',
-          'durations': [5.7 + 3*i, 31.5],
-          'exit_codes': [0, 0],
+          'duration': 31.5,
+          'exit_code': 0,
           'failure': failure,
-          'id': '148aa78d7aa%02d00' % i,
+          'task_id': '148aa78d7aa%02d00' % i,
           'internal_failure': internal_failure,
           'modified_ts': '2014-09-25 01:42:00',
           'name': 'heartbeat-canary-2014-09-25_01:41:55-os=Windows',
-          'outputs': [
-            'Heart beat succeeded on win32.\n',
-            'Foo',
-          ],
+          'output': 'Heart beat succeeded on win32.\n'
+          'Foo',
           'outputs_ref': {
             'isolated': 'abc123',
             'isolatedserver': 'https://isolateserver.appspot.com',
             'namespace': 'default-gzip',
           },
           'started_ts': '2014-09-25T01:42:11.123',
-          'state': state.State.COMPLETED,
-          'try_number': 1,
-          'user': 'unknown',
+          'state': 'COMPLETED',
         } for i in xrange(shards)
       ],
     }
