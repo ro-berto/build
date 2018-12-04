@@ -415,12 +415,14 @@ def _add_file_to_directory_summary(directory_summaries, src_path, file_data):
 
   full_filename = file_data['filename']
   src_file = '//' + os.path.relpath(full_filename, src_path)
-  parent = directory = os.path.dirname(src_file)
   filename = os.path.basename(src_file)
   summary = file_data['summary']
+
+  parent = os.path.dirname(src_file)
   while parent != '//':
     if parent + '/' not in directory_summaries:
       directory_summaries[parent + '/'] = new_dir(parent + '/')
+
     directory_summaries[parent + '/'] = _merge_into_dir(
         directory_summaries[parent + '/'], summary)
     parent = os.path.dirname(parent)
@@ -431,6 +433,7 @@ def _add_file_to_directory_summary(directory_summaries, src_path, file_data):
                                               summary)
 
   # Directories need a trailing slash as per the metadata format.
+  directory = os.path.dirname(src_file)
   if directory != '//':
     directory += '/'
 
@@ -494,8 +497,8 @@ def _aggregate_dirs_and_components(directory_summaries, component_mapping):
   return component_summaries
 
 
-def _write_metadata_in_shards(output_dir, compressed_files, directory_summaries,
-                              component_summaries):
+def _split_metadata_in_shards_if_necessary(
+    output_dir, compressed_files, directory_summaries, component_summaries):
   """Splits the metadata in a sharded manner if there are too many files.
 
   Args:
@@ -550,8 +553,7 @@ def _write_metadata_in_shards(output_dir, compressed_files, directory_summaries,
       file_shard_paths.append(os.path.join(files_dir_name, file_name))
     compressed_data['file_shards'] = file_shard_paths
 
-  with open(os.path.join(output_dir, 'all.json.gz'), 'w') as f:
-    f.write(zlib.compress(json.dumps(compressed_data)))
+  return compressed_data
 
 
 def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
@@ -609,12 +611,22 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
 
   logging.info('Dumping aggregated data ...')
   start_time = time.time()
-  _write_metadata_in_shards(output_dir, compressed_files, directory_summaries,
-                            component_summaries)
-  minutes = (time.time() - start_time) / 60
-  logging.info('Dumping aggregated data took %.0f minutes', minutes)
 
-  # Create an index.html for the metadata directory.
+  compressed_data = _split_metadata_in_shards_if_necessary(
+      output_dir, compressed_files, directory_summaries, component_summaries)
+  minutes = (time.time() - start_time) / 60
+  logging.info(
+      'Dumping aggregated data (without all.json.gz) took %.0f minutes',
+      minutes)
+
+  return compressed_data
+
+
+def _create_index_html(output_dir):
+  """Creates an index.html that lists the files within the directory.
+
+  output_dir: The directory to create index.html for.
+  """
   all_files = []
   for root, _, files in os.walk(output_dir):
     for f in files:
@@ -708,9 +720,17 @@ def main():
     with open(params.diff_mapping_path) as f:
       diff_mapping = json.load(f)
 
-  _generate_metadata(params.src_path, params.output_dir, params.profdata_path,
-                     params.llvm_cov, params.binaries, component_mapping,
-                     abs_sources, diff_mapping)
+  assert (component_mapping is None) != (diff_mapping is None), (
+      'Either component_mapping (for full-repo coverage) or diff_mapping '
+      '(for per-cl coverage) must be specified.')
+
+  compressed_data = _generate_metadata(
+      params.src_path, params.output_dir, params.profdata_path, params.llvm_cov,
+      params.binaries, component_mapping, abs_sources, diff_mapping)
+
+  with open(os.path.join(params.output_dir, 'all.json.gz'), 'w') as f:
+    f.write(zlib.compress(json.dumps(compressed_data)))
+  _create_index_html(params.output_dir)
 
 
 if __name__ == '__main__':

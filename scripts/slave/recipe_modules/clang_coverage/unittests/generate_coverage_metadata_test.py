@@ -7,6 +7,8 @@ import os
 import sys
 import unittest
 
+import mock
+
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0,
                 os.path.abspath(os.path.join(THIS_DIR, os.pardir, 'resources')))
@@ -237,6 +239,400 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     ]
     self.assertListEqual(expected_args, args)
     self.assertIsNone(shard_dir)
+
+  @mock.patch.object(generator, '_get_coverage_data_in_json')
+  def test_generate_metadata_for_per_cl_coverage(self, mock_get_coverage_data):
+    mock_get_coverage_data.return_value = {
+        'data': [{
+            'files': [{
+                'segments': [
+                    [1, 2, 3, True, True],
+                    [3, 10, 0, False, False],
+                    [5, 2, 0, True, True],
+                    [5, 10, 0, False, False],
+                ],
+                'summary': {
+                    'lines': {
+                        'count': 5,
+                        'covered': 3,
+                        'percent': 60,
+                    },
+                    'functions': {
+                        'count': 2,
+                        'covered': 2,
+                        'percent': 100,
+                    },
+                    'regions': {
+                        'count': 4,
+                        'covered': 3,
+                        'percent': 75,
+                    },
+                },
+                'filename':
+                    '/path/to/src/dir/file.cc',
+            }]
+        }]
+    }
+
+    diff_mapping = {
+        'dir/file.cc': {
+            '2': [10, 'A line added by the patch.'],
+            '3': [11, 'Another added line.'],
+            '5': [16, 'One more line.']
+        }
+    }
+
+    compressed_data = generator._generate_metadata(
+        src_path='/path/to/src',
+        output_dir='/path/to/output_dir',
+        profdata_path='/path/to/coverage.profdata',
+        llvm_cov_path='/path/to/llvm-cov',
+        binaries=['/path/to/binary1', '/path/to/binary2'],
+        component_mapping=None,
+        sources=['/path/to/src/dir/file.cc'],
+        diff_mapping=diff_mapping)
+
+    expected_compressed_files = [{
+        'path':
+            'dir/file.cc',
+        'lines': [{
+            'count': 3,
+            'last': 11,
+            'first': 10
+        }, {
+            'count': 0,
+            'last': 16,
+            'first': 16
+        }],
+        'total_lines':
+            5,
+        'uncovered_blocks': [{
+            'ranges': [{
+                'last': 10,
+                'first': 2
+            }],
+            'line': 16
+        }]
+    }]
+    self.maxDiff = None
+    self.assertListEqual(expected_compressed_files, compressed_data['files'])
+
+  @mock.patch.object(generator, '_get_coverage_data_in_json')
+  def test_generate_metadata_for_full_repo_coverage(self,
+                                                    mock_get_coverage_data):
+    # Number of files should not exceed 1000; otherwise sharding will happen.
+    mock_get_coverage_data.return_value = {
+        'data': [{
+            'files': [
+                {
+                    'segments': [
+                        [5, 2, 0, True, True],
+                        [5, 10, 0, False, False],
+                    ],
+                    'summary': {
+                        'lines': {
+                            'count': 1,
+                            'covered': 0,
+                            'percent': 0,
+                        },
+                        'functions': {
+                            'count': 1,
+                            'covered': 0,
+                            'percent': 0,
+                        },
+                        'regions': {
+                            'count': 1,
+                            'covered': 0,
+                            'percent': 0,
+                        },
+                    },
+                    'filename':
+                        '/path/to/src/dir1/file1.cc',
+                },
+                {
+                    'segments': [
+                        [1, 1, 1, True, True],
+                        [1, 6, 0, False, False],
+                    ],
+                    'summary': {
+                        'lines': {
+                            'count': 1,
+                            'covered': 1,
+                            'percent': 100,
+                        },
+                        'functions': {
+                            'count': 1,
+                            'covered': 1,
+                            'percent': 100,
+                        },
+                        'regions': {
+                            'count': 1,
+                            'covered': 1,
+                            'percent': 100,
+                        },
+                    },
+                    'filename':
+                        '/path/to/src/dir2/file2.cc',
+                },
+            ]
+        }]
+    }
+
+    component_mapping = {'dir1': 'Test>Component', 'dir2': 'Test>Component'}
+
+    compressed_data = generator._generate_metadata(
+        src_path='/path/to/src',
+        output_dir='/path/to/output_dir',
+        profdata_path='/path/to/coverage.profdata',
+        llvm_cov_path='/path/to/llvm-cov',
+        binaries=['/path/to/binary1', '/path/to/binary2'],
+        component_mapping=component_mapping,
+        sources=[],
+        diff_mapping=None)
+
+    expected_compressed_components = [{
+        'dirs': [
+            {
+                'path':
+                    '//dir1/',
+                'name':
+                    'dir1/',
+                'summaries': [{
+                    'covered': 0,
+                    'total': 1,
+                    'name': 'region'
+                }, {
+                    'covered': 0,
+                    'total': 1,
+                    'name': 'function'
+                }, {
+                    'covered': 0,
+                    'total': 1,
+                    'name': 'line'
+                }]
+            },
+            {
+                'path':
+                    '//dir2/',
+                'name':
+                    'dir2/',
+                'summaries': [{
+                    'covered': 1,
+                    'total': 1,
+                    'name': 'region'
+                }, {
+                    'covered': 1,
+                    'total': 1,
+                    'name': 'function'
+                }, {
+                    'covered': 1,
+                    'total': 1,
+                    'name': 'line'
+                }]
+            },
+        ],
+        'path':
+            'Test>Component',
+        'summaries': [{
+            'covered': 1,
+            'total': 2,
+            'name': 'region'
+        }, {
+            'covered': 1,
+            'total': 2,
+            'name': 'function'
+        }, {
+            'covered': 1,
+            'total': 2,
+            'name': 'line'
+        }]
+    }]
+
+    self.maxDiff = None
+    self.assertListEqual(expected_compressed_components,
+                         compressed_data['components'])
+
+    expected_compressed_summaries = [{
+        'covered': 1,
+        'total': 2,
+        'name': 'region'
+    }, {
+        'covered': 1,
+        'total': 2,
+        'name': 'function'
+    }, {
+        'covered': 1,
+        'total': 2,
+        'name': 'line'
+    }]
+
+    self.assertListEqual(expected_compressed_summaries,
+                         compressed_data['summaries'])
+
+    expected_compressed_dirs = [
+        {
+            'dirs': [
+                {
+                    'path':
+                        '//dir1/',
+                    'name':
+                        'dir1/',
+                    'summaries': [{
+                        'covered': 0,
+                        'total': 1,
+                        'name': 'region'
+                    }, {
+                        'covered': 0,
+                        'total': 1,
+                        'name': 'function'
+                    }, {
+                        'covered': 0,
+                        'total': 1,
+                        'name': 'line'
+                    }]
+                },
+                {
+                    'path':
+                        '//dir2/',
+                    'name':
+                        'dir2/',
+                    'summaries': [{
+                        'covered': 1,
+                        'total': 1,
+                        'name': 'region'
+                    }, {
+                        'covered': 1,
+                        'total': 1,
+                        'name': 'function'
+                    }, {
+                        'covered': 1,
+                        'total': 1,
+                        'name': 'line'
+                    }]
+                },
+            ],
+            'files': [],
+            'summaries': [{
+                'covered': 1,
+                'total': 2,
+                'name': 'region'
+            }, {
+                'covered': 1,
+                'total': 2,
+                'name': 'function'
+            }, {
+                'covered': 1,
+                'total': 2,
+                'name': 'line'
+            }],
+            'path':
+                '//'
+        },
+        {
+            'dirs': [],
+            'files': [{
+                'name':
+                    'file1.cc',
+                'summaries': [{
+                    'covered': 0,
+                    'total': 1,
+                    'name': 'region'
+                }, {
+                    'covered': 0,
+                    'total': 1,
+                    'name': 'function'
+                }, {
+                    'covered': 0,
+                    'total': 1,
+                    'name': 'line'
+                }]
+            }],
+            'summaries': [{
+                'covered': 0,
+                'total': 1,
+                'name': 'region'
+            }, {
+                'covered': 0,
+                'total': 1,
+                'name': 'function'
+            }, {
+                'covered': 0,
+                'total': 1,
+                'name': 'line'
+            }],
+            'path':
+                '//dir1/'
+        },
+        {
+            'dirs': [],
+            'files': [{
+                'name':
+                    'file2.cc',
+                'summaries': [{
+                    'covered': 1,
+                    'total': 1,
+                    'name': 'region'
+                }, {
+                    'covered': 1,
+                    'total': 1,
+                    'name': 'function'
+                }, {
+                    'covered': 1,
+                    'total': 1,
+                    'name': 'line'
+                }]
+            }],
+            'summaries': [{
+                'covered': 1,
+                'total': 1,
+                'name': 'region'
+            }, {
+                'covered': 1,
+                'total': 1,
+                'name': 'function'
+            }, {
+                'covered': 1,
+                'total': 1,
+                'name': 'line'
+            }],
+            'path':
+                '//dir2/'
+        },
+    ]
+
+    self.assertListEqual(expected_compressed_dirs, compressed_data['dirs'])
+
+    expected_compressed_files = [
+        {
+            'path':
+                'dir1/file1.cc',
+            'lines': [{
+                'count': 0,
+                'last': 5,
+                'first': 5
+            }],
+            'total_lines':
+                1,
+            'uncovered_blocks': [{
+                'ranges': [{
+                    'last': 10,
+                    'first': 2
+                }],
+                'line': 5
+            }]
+        },
+        {
+            'path': 'dir2/file2.cc',
+            'lines': [{
+                'count': 1,
+                'last': 1,
+                'first': 1
+            }],
+            'total_lines': 1
+        },
+    ]
+
+    self.assertListEqual(expected_compressed_files, compressed_data['files'])
 
 
 if __name__ == '__main__':
