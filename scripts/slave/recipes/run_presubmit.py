@@ -5,20 +5,20 @@
 DEPS = [
   'depot_tools/bot_update',
   'depot_tools/gclient',
-  'depot_tools/gerrit',
   'depot_tools/git',
   'depot_tools/infra_paths',
   'depot_tools/presubmit',
-  'depot_tools/tryserver',
-  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
   'recipe_engine/properties',
   'recipe_engine/python',
-  'recipe_engine/runtime',
   'recipe_engine/step',
+  'depot_tools/gerrit',
+  'depot_tools/tryserver',
+  'v8',
+  'webrtc',
 ]
 
 
@@ -31,7 +31,7 @@ def _RunStepsInternal(api):
   else:
     gclient_config = api.gclient.make_config()
     solution = gclient_config.solutions.add()
-    solution.url = api.tryserver.gerrit_change_repo_url
+    solution.url = api.properties['repository_url']
     solution.name = api.properties['solution_name']
     gclient_config.got_revision_mapping[solution.name] = 'got_revision'
 
@@ -57,9 +57,9 @@ def _RunStepsInternal(api):
       api.gclient.runhooks()
 
   presubmit_args = [
-    '--issue', str(api.tryserver.gerrit_change.change),
-    '--patchset', str(api.tryserver.gerrit_change.patchset),
-    '--gerrit_url', 'https://%s' % api.tryserver.gerrit_change.host,
+    '--issue', api.properties['patch_issue'],
+    '--patchset', api.properties['patch_set'],
+    '--gerrit_url', api.properties['patch_gerrit_url'],
     '--gerrit_fetch',
   ]
   if api.properties.get('dry_run'):
@@ -106,18 +106,20 @@ def _RunStepsInternal(api):
 
 
 def RunSteps(api):
-  safe_buildername = ''.join(
-      c if c.isalnum() else '_' for c in api.buildbucket.builder_name)
-  # HACK to avoid invalidating caches when PRESUBMIT running
-  # on special infra/config branch, which is typically orphan.
-  if api.tryserver.gerrit_change_target_ref == 'refs/heads/infra/config':
-    safe_buildername += '_infra_config'
-  if api.runtime.is_luci:
-    cwd = api.path['cache'].join('builder', safe_buildername)
+  try:
+    safe_buildername = ''.join(
+        c if c.isalnum() else '_' for c in api.properties['buildername'])
+    # HACK to avoid invalidating caches when PRESUBMIT running
+    # on special infra/config branch, which is typically orphan.
+    if api.tryserver.gerrit_change_target_ref == 'refs/heads/infra/config':
+      safe_buildername += '_infra_config'
+    cwd = api.path['builder_cache'].join(safe_buildername)
     api.file.ensure_directory('ensure builder cache dir', cwd)
-  else:
+  except KeyError:
+    # No explicit builder cache directory defined. Use the "start_dir"
+    # directory.
     # TODO(machenbach): Remove this case when all builders using this recipe
-    # migrated to LUCI, hard deadline being March 1st 2019.
+    # migrated to LUCI.
     cwd = api.path['start_dir']
   with api.context(cwd=cwd):
     with api.tryserver.set_failure_hash():
@@ -149,30 +151,33 @@ def GenTests(api):
   for repo_name in REPO_NAMES:
     yield (
       api.test(repo_name) +
-      api.buildbucket.try_build(
-          project=repo_name, builder='%s_presubmit' % repo_name) +
-      api.properties(repo_name=repo_name) +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='%s_presubmit' % repo_name,
+          repo_name=repo_name,
+          gerrit_project=repo_name) +
       api.step_data('presubmit', api.json.output([['%s_presubmit' % repo_name,
                                                    ['compile']]]))
     )
 
   yield (
     api.test('chromium_timeout') +
-    api.buildbucket.try_build(
-        project='chromium', builder='chromium_presubmit',
-        git_repo='https://chromium.googlesource.com/chromium/src') +
-    api.properties(repo_name='chromium') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
+        repo_name='chromium',
+        gerrit_project='chromium/src') +
     api.step_data('presubmit', api.json.output(
         [['chromium_presubmit', ['compile']]]), times_out_after=60*20)
   )
 
   yield (
     api.test('chromium_dry_run') +
-    api.buildbucket.try_build(
-        project='chromium', builder='chromium_presubmit',
-        git_repo='https://chromium.googlesource.com/chromium/src') +
-    api.properties(
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
         repo_name='chromium',
+        gerrit_project='chromium/src',
         dry_run=True) +
     api.step_data('presubmit', api.json.output([['chromium_presubmit',
                                                  ['compile']]]))
@@ -180,11 +185,11 @@ def GenTests(api):
 
   yield (
     api.test('infra_with_runhooks') +
-    api.buildbucket.try_build(
-        project='infra', builder='infra_presubmit',
-        git_repo='https://chromium.googlesource.com/infra/infra') +
-    api.properties(
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='infra_presubmit',
         repo_name='infra',
+        gerrit_project='infra/infra',
         runhooks=True) +
     api.step_data('presubmit', api.json.output([['infra_presubmit',
                                                  ['compile']]]))
@@ -192,70 +197,77 @@ def GenTests(api):
 
   yield (
     api.test('recipes-py') +
-    api.buildbucket.try_build(
-        project='infra', builder='recipes_presubmit',
-        git_repo='https://chromium.googlesource.com/infra/luci/recipes-py') +
-    api.properties(
+    api.properties.tryserver(
+        mastername='tryserver.infra',
+        buildername='infra_presubmit',
         repo_name='recipes_py',
+        gerrit_project='infra/luci/recipes-py',
         runhooks=True) +
-    api.step_data('presubmit', api.json.output([['recipes_presubmit',
+    api.step_data('presubmit', api.json.output([['infra_presubmit',
                                                  ['compile']]]))
   )
 
   yield (
     api.test('luci-py') +
-    api.buildbucket.try_build(
-        project='infra', builder='luci_py_presubmit',
-        git_repo='https://chromium.googlesource.com/infra/luci/luci-py') +
-    api.properties(repo_name='luci_py') +
-    api.step_data('presubmit', api.json.output([['recipes_presubmit',
-                                                 ['compile']]]))
+    api.properties.tryserver(
+        mastername='luci.infra.try',
+        buildername='Luci-py Presubmit',
+        repo_name='luci_py',
+        gerrit_project='infra/luci/luci-py') +
+    api.step_data('presubmit', api.json.output({}))
   )
-
 
   yield (
     api.test('presubmit-failure') +
-    api.buildbucket.try_build(
-        project='chromium', builder='chromium_presubmit',
-        git_repo='https://chromium.googlesource.com/chromium/src') +
-    api.properties(repo_name='chromium') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
+        repo_name='chromium',
+        gerrit_project='chromium/src') +
     api.step_data('presubmit', api.json.output({}, retcode=1))
   )
 
   yield (
     api.test('presubmit-infra-failure') +
-    api.buildbucket.try_build(
-        project='chromium', builder='chromium_presubmit',
-        git_repo='https://chromium.googlesource.com/chromium/src') +
-    api.properties(repo_name='chromium') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
+        repo_name='chromium',
+        gerrit_project='chromium/src') +
     api.step_data('presubmit', api.json.output({}, retcode=2))
   )
 
   yield (
-    api.test('by_solution') +
-    api.buildbucket.try_build(
-        project='skia', builder='skia_presubmit',
-        git_repo='https://skia.googlesource.com/skia.git') +
-    api.properties(solution_name='skia') +
-    api.step_data('presubmit', api.json.output([['chromium_presubmit',
-                                                 ['compile']]]))
+    api.test('repository_url') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
+        repository_url='https://skia.googlesource.com/skia.git',
+        gerrit_project='skia',
+        solution_name='skia') +
+    api.step_data('presubmit',
+                  api.json.output([['chromium_presubmit', ['compile']]]))
   )
 
   yield (
     api.test('v8_with_cache') +
-    api.buildbucket.try_build(
-        project='v8', builder='v8_presubmit',
-        git_repo='https://chromium.googlesource.com/v8/v8') +
-    api.properties(repo_name='v8') +
-    api.runtime(is_luci=True, is_experimental=False)
+    api.properties.tryserver(
+        mastername='tryserver.v8',
+        buildername='v8_presubmit',
+        repo_name='v8',
+        gerrit_project='v8/v8',
+        runhooks=True,
+        path_config='generic')
   )
 
   yield (
     api.test('v8_with_cache_infra_config_branch') +
-    api.buildbucket.try_build(
-        project='v8', builder='v8_presubmit',
-        git_repo='https://chromium.googlesource.com/v8/v8') +
-    api.properties(repo_name='v8') +
-    api.runtime(is_luci=True, is_experimental=False) +
+    api.properties.tryserver(
+        mastername='tryserver.v8',
+        buildername='v8_presubmit',
+        repo_name='v8',
+        gerrit_project='v8/v8',
+        runhooks=True,
+        path_config='generic') +
     api.tryserver.gerrit_change_target_ref('refs/heads/infra/config')
   )
