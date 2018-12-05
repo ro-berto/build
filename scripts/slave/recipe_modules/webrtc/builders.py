@@ -1235,7 +1235,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'win'},
       },
       'win_compile_x86_clang_rel': {
-        'recipe_config': 'webrtc_and_baremetal_clang',
+        'recipe_config': 'webrtc_clang',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
@@ -1305,7 +1305,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
-          'cpu': 'x86',
+          'cpu': 'x86-64',
         },
       },
       'win_x64_clang_rel': {
@@ -1319,7 +1319,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
-          'cpu': 'x86',
+          'cpu': 'x86-64',
         },
       },
       'win_x64_uwp': {
