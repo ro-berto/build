@@ -401,26 +401,91 @@ class DartApi(recipe_api.RecipeApi):
 
 
   def _present_results(self, logs_str, results_str, flaky_json_str):
+    # CQ:
+    #   unapproved new test failures
+    #   unapproved new test failures (logs)
+    #   approved new test failures
+    #   approved new test failures (logs)
+    #   tests that began passing
+    # CI:
+    #   tests that began failing
+    #   tests that began failing (logs)
+    #   tests that began passing
+    #   unapproved failing tests
+    #   unapproved failing tests (logs)
+    #   unapproved passing tests
     args = [self.dart_executable(),
             'tools/bots/compare_results.dart',
             '--flakiness-data',
             self.m.raw_io.input_text(flaky_json_str, name='flaky.json'),
-            # todo(sortie): Add --logs-data file here, just like flakiness-data
             '--human',
             '--verbose',
-            '--changed',
-            '--failing',
-            '--passing']
-    previous_results = 'results.json'
+            self.m.path['checkout'].join('LATEST', 'results.json'),
+            self.m.raw_io.input_text(results_str),
+            self.m.path['checkout'].join('LATEST', 'approved_results.json'),
+    ]
+    args_logs = ["--logs",
+                 self.m.raw_io.input_text(logs_str, name='logs.json'),
+                 "--logs-only"]
+    links = {}
+    judgement_args = list(args)
     if self._report_new_results():
-      args.append('--judgement')
-      previous_results = 'approved_results.json'
+      judgement_args.append('--judgement')
     builder_name = self.m.buildbucket.builder_name
-    if builder_name.endswith(('-try', '-stable', '-dev')):
-      previous_results = 'results.json'
-    args.append(self.m.path['checkout'].join('LATEST', previous_results))
-    args.append(self.m.raw_io.input_text(results_str))
-    self.m.step('test results', args)
+    if builder_name.endswith('-try'):
+      links["unapproved new test failures"] = self.m.step(
+          'find unapproved new test failures',
+          args + ["--changed", "--failing", "--unapproved"],
+          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+      links["unapproved new test failures (logs)"] = self.m.step(
+          'find unapproved new test failures (logs)',
+          args + args_logs + ["--changed", "--failing", "--unapproved"],
+          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+      links["approved new test failures"] = self.m.step(
+          'find approved new test failures',
+          args + ["--changed", "--failing", "--approved"],
+          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+      links["approved new test failures (logs)"] = self.m.step(
+          'find approved new test failures (logs)',
+          args + args_logs + ["--changed", "--failing", "--approved"],
+          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+      links["tests that began passing"] = self.m.step(
+          'find tests that began passing',
+          args + ["--changed", "--passing", "--approved", "--unapproved"],
+          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+      judgement_args += ["--changed", "--passing", "--failing", "--approved",
+                         "--unapproved"]
+    else:
+      links["tests that began failing"] = self.m.step(
+          'find tests that began failing',
+          args + ["--changed", "--failing", "--approved", "--unapproved"],
+          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+      links["tests that began failing (logs)"] = self.m.step(
+          'find tests that began failing (logs)',
+          args + args_logs + ["--changed", "--failing"],
+          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+      links["tests that began passing"] = self.m.step(
+          'find tests that began passing',
+          args + ["--changed", "--passing", "--approved", "--unapproved"],
+          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+      links["unapproved failing tests"] = self.m.step(
+          'find unapproved failing tests',
+          args + ["--unapproved", "--failing"],
+          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+      links["unapproved failing tests (logs)"] = self.m.step(
+          'find unapproved failing tests (logs)',
+          args + args_logs + ["--unapproved", "--failing"],
+          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+      links["unapproved passing tests"] = self.m.step(
+          'find unapproved passing tests',
+          args + ["--unapproved", "--passing"],
+          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+      judgement_args += ["--failing", "--unapproved"]
+    self.m.step('test results', judgement_args)
+    # Show only the links with non-empty output (something happened).
+    for link, contents in links.iteritems():
+      if contents != '': # pragma: no cover
+        self.m.step.active_result.presentation.logs[link] = [contents]
     self.m.step.active_result.presentation.logs['results.json'] = [results_str]
 
 

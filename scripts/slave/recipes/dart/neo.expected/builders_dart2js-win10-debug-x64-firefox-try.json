@@ -997,12 +997,132 @@
       "",
       "--human",
       "--verbose",
+      "[CACHE]/builder/sdk/LATEST/results.json",
+      "",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--changed",
       "--failing",
-      "--passing",
-      "--judgement",
+      "--unapproved"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "find unapproved new test failures",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "",
+      "--human",
+      "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      ""
+      "",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json",
+      "--logs",
+      "",
+      "--logs-only",
+      "--changed",
+      "--failing",
+      "--unapproved"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "find unapproved new test failures (logs)",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "",
+      "--human",
+      "--verbose",
+      "[CACHE]/builder/sdk/LATEST/results.json",
+      "",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json",
+      "--changed",
+      "--failing",
+      "--approved"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "find approved new test failures",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "",
+      "--human",
+      "--verbose",
+      "[CACHE]/builder/sdk/LATEST/results.json",
+      "",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json",
+      "--logs",
+      "",
+      "--logs-only",
+      "--changed",
+      "--failing",
+      "--approved"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "find approved new test failures (logs)",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "",
+      "--human",
+      "--verbose",
+      "[CACHE]/builder/sdk/LATEST/results.json",
+      "",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json",
+      "--changed",
+      "--passing",
+      "--approved",
+      "--unapproved"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "find tests that began passing",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "",
+      "--human",
+      "--verbose",
+      "[CACHE]/builder/sdk/LATEST/results.json",
+      "",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json",
+      "--judgement",
+      "--changed",
+      "--passing",
+      "--failing",
+      "--approved",
+      "--unapproved"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "test results",
