@@ -276,7 +276,7 @@
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "branding=Chrome buildtype=Official gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [

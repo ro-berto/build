@@ -608,7 +608,7 @@
     "cwd": "[BUILDER_CACHE]/android_nexus5_perf_bisect/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "OS=android fastbuild=1 gomadir='[GOMA_CACHE]/client' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=arm use_goma=1",
       "PATH": "[BUILDER_CACHE]/android_nexus5_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5_perf_bisect/src/build/android:<PATH>"
     },
     "env_suffixes": {
@@ -1185,7 +1185,7 @@
     "cwd": "[BUILDER_CACHE]/android_nexus5_perf_bisect/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "OS=android fastbuild=1 gomadir='[GOMA_CACHE]/client' target_arch=arm use_goma=1",
+      "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=arm use_goma=1",
       "PATH": "[BUILDER_CACHE]/android_nexus5_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_nexus5_perf_bisect/src/build/android:<PATH>"
     },
     "env_suffixes": {

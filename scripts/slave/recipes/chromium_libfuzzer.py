@@ -29,7 +29,7 @@ BUILDERS = freeze({
       'Libfuzzer Upload Chrome OS ASan': {
         'archive_prefix': 'libfuzzer-chromeos',
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_apply_config': [ 'clobber' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'chromeos',
@@ -41,7 +41,7 @@ BUILDERS = freeze({
       },
       'Libfuzzer Upload Linux ASan': {
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_apply_config': [ 'clobber' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
@@ -52,7 +52,7 @@ BUILDERS = freeze({
       },
       'Libfuzzer Upload Linux ASan Debug': {
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_apply_config': [ 'clobber' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'linux',
@@ -63,8 +63,7 @@ BUILDERS = freeze({
       },
       'Libfuzzer Upload Linux MSan': {
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': ['clobber', 'msan',
-                                  'proprietary_codecs' ],
+        'chromium_apply_config': ['clobber', 'msan' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
@@ -75,7 +74,7 @@ BUILDERS = freeze({
       },
       'Libfuzzer Upload Linux UBSan': {
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_apply_config': [ 'clobber' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
@@ -86,7 +85,7 @@ BUILDERS = freeze({
       },
       'Libfuzzer Upload Mac ASan': {
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_apply_config': [ 'clobber' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'mac',
@@ -97,7 +96,7 @@ BUILDERS = freeze({
       },
       'Libfuzzer Upload Windows ASan': {
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_apply_config': [ 'clobber' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'win',
@@ -114,7 +113,7 @@ BUILDERS = freeze({
       'Libfuzzer Upload Chrome OS ASan': {
         'archive_prefix': 'libfuzzer-chromeos',
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_apply_config': [ 'clobber' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'chromeos',
@@ -126,7 +125,7 @@ BUILDERS = freeze({
       },
       'Libfuzzer Upload Linux ASan': {
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_apply_config': [ 'clobber' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
@@ -137,7 +136,7 @@ BUILDERS = freeze({
       },
       'Libfuzzer Upload Linux ASan Debug': {
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_apply_config': [ 'clobber' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Debug',
           'TARGET_PLATFORM': 'linux',
@@ -148,8 +147,7 @@ BUILDERS = freeze({
       },
       'Libfuzzer Upload Linux MSan': {
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': ['clobber', 'msan',
-                                  'proprietary_codecs' ],
+        'chromium_apply_config': ['clobber', 'msan' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
@@ -160,7 +158,7 @@ BUILDERS = freeze({
       },
       'Libfuzzer Upload Linux UBSan': {
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_apply_config': [ 'clobber' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
@@ -171,7 +169,7 @@ BUILDERS = freeze({
       },
       'Libfuzzer Upload Mac ASan': {
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_apply_config': [ 'clobber' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'mac',
@@ -182,7 +180,7 @@ BUILDERS = freeze({
       },
       'Libfuzzer Upload Windows ASan': {
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber', 'proprietary_codecs' ],
+        'chromium_apply_config': [ 'clobber' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'win',

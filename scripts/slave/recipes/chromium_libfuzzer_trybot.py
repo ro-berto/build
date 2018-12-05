@@ -32,7 +32,6 @@ BUILDERS = freeze({
       'linux-libfuzzer-asan-rel': {
         'chromium_config': 'chromium',
         'gclient_config': 'chromium',
-        'chromium_apply_config': [ 'proprietary_codecs' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',
@@ -46,7 +45,6 @@ BUILDERS = freeze({
       'win-libfuzzer-asan-rel': {
         'chromium_config': 'chromium_clang',
         'gclient_config': 'chromium',
-        'chromium_apply_config': [ 'proprietary_codecs' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'win',

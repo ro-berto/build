@@ -24,7 +24,7 @@ BUILDERS = freeze({
     'builders': {
       'ClangToTLinuxASanLibfuzzer': {
         'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clang_tot', 'proprietary_codecs' ],
+        'chromium_apply_config': [ 'clang_tot' ],
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'linux',

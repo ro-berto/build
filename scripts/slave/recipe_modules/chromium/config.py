@@ -363,31 +363,20 @@ def fastbuild(c, invert=False):
   c.gn_args.append('symbol_level=%d' % (1 if invert else 2))
 
 @config_ctx()
-def ffmpeg_branding(c, branding=None):
-  if branding:
-    c.gyp_env.GYP_DEFINES['ffmpeg_branding'] = branding
-
-@config_ctx()
-def proprietary_codecs(c, invert=False):
-  c.gyp_env.GYP_DEFINES['proprietary_codecs'] = int(not invert)
-
-@config_ctx()
 def chromeos_with_codecs(c):
-  ffmpeg_branding(c, branding='ChromeOS')
-  proprietary_codecs(c)
+  del c
 
 @config_ctx()
 def chromiumos(c):
-  c.gyp_env.GYP_DEFINES['chromeos'] = 1
+  del c
 
 @config_ctx(includes=['chromiumos'])
 def chromeos(c):
-  ffmpeg_branding(c, branding='ChromeOS')
-  proprietary_codecs(c)
+  del c
 
 @config_ctx()
 def ozone(c):
-  c.gyp_env.GYP_DEFINES['use_ozone'] = 1
+  del c
 
 @config_ctx()
 def clobber(c):
@@ -395,8 +384,6 @@ def clobber(c):
 
 @config_ctx(includes=['clobber'])
 def official(c):
-  c.gyp_env.GYP_DEFINES['branding'] = 'Chrome'
-  c.gyp_env.GYP_DEFINES['buildtype'] = 'Official'
   c.compile_py.mode = 'official'
 
 @config_ctx(deps=['compiler'])
@@ -443,7 +430,6 @@ def ubsan_vptr(c):
 @config_ctx(group='memory_tool')
 def memcheck(c):
   c.runtests.enable_memcheck = True
-  c.gyp_env.GYP_DEFINES['build_for_tool'] = 'memcheck'
 
 @config_ctx(deps=['compiler'], group='memory_tool')
 def tsan2(c):
@@ -618,10 +604,6 @@ def android_asan(_):
 
 @config_ctx()
 def android_common(c):
-  gyp_defs = c.gyp_env.GYP_DEFINES
-  gyp_defs['fastbuild'] = 1
-  gyp_defs['OS'] = 'android'
-
   c.env.PATH.extend([
       c.CHECKOUT_PATH.join(
           'third_party', 'android_tools', 'sdk', 'platform-tools'),
