@@ -171,12 +171,9 @@ class FilterApi(recipe_api.RecipeApi):
 
     env = {}
 
-    if use_mb:
-      # Ensure that mb runs in a clean environment to avoid
-      # picking up any GYP_DEFINES accidentally.
-      if self.m.chromium.c.env.FORCE_MAC_TOOLCHAIN:
-        env['FORCE_MAC_TOOLCHAIN'] = \
-            self.m.chromium.c.env.FORCE_MAC_TOOLCHAIN
+    # Ensure that mb runs in a clean environment.
+    if use_mb and self.m.chromium.c.env.FORCE_MAC_TOOLCHAIN:
+      env['FORCE_MAC_TOOLCHAIN'] = self.m.chromium.c.env.FORCE_MAC_TOOLCHAIN
 
     # If building for CrOS, execute through the "chrome_sdk" wrapper. This will
     # override GYP environment variables, so we'll refrain from defining them
