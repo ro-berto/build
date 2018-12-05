@@ -15,6 +15,7 @@ from recipe_engine import recipe_api
 
 from . import bot_config_and_test_db as bdb_module
 from . import builders as chromium_tests_builders
+from . import generators
 from . import steps
 
 
@@ -38,7 +39,31 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   @property
   def steps(self):
+    """The steps module, which contains various Test python classes.
+
+    Usage is generally discouraged.
+    """
     return steps
+
+  @property
+  def _generators(self):
+    """The generators module. Used in module unittests.
+
+    Usually, you'll probably want all_generators, which is guaranteed to contain
+    all the generators supported.
+    """
+    return generators
+
+  @property
+  def all_generators(self):
+    return [
+      generators.generate_isolated_script,
+      generators.generate_cts_test,
+      generators.generate_gtest,
+      generators.generate_instrumentation_test,
+      generators.generate_junit_test,
+      generators.generate_script,
+    ]
 
   @property
   def trybots(self):
@@ -234,10 +259,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def generate_tests_from_source_side_spec(self, source_side_spec, builder_dict,
       buildername, mastername, swarming_dimensions,
-      scripts_compile_targets, generators, bot_update_step):
+      scripts_compile_targets, bot_update_step):
     tests = builder_dict.get('tests', ())
     # TODO(phajdan.jr): Switch everything to scripts generators and simplify.
-    for generator in generators:
+    for generator in self.all_generators:
       tests = (
           tuple(generator(
               self.m, self, mastername, buildername, source_side_spec,

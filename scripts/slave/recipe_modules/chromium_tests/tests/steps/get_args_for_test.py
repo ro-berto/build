@@ -26,7 +26,7 @@ def RunSteps(api):
   single_spec = api.properties.get('single_spec')
   test_spec = single_spec if single_spec else {}
 
-  test_args = api.chromium_tests.steps.get_args_for_test(
+  test_args = api.chromium_tests._generators.get_args_for_test(
       api,
       api.chromium_tests,
       test_spec,

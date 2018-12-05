@@ -37,7 +37,7 @@ def RunSteps(api):
       }
   }
 
-  for test in api.chromium_tests.steps.generate_instrumentation_test(
+  for test in api.chromium_tests._generators.generate_instrumentation_test(
       api,
       api.chromium_tests,
       'test_mastername',

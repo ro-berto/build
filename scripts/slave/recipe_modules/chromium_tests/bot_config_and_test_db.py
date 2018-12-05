@@ -108,19 +108,6 @@ class BotConfig(object):
       scripts_compile_targets = \
           chromium_tests_api.get_compile_targets_for_scripts(self)
 
-    # chromium_tests_api.steps.generate_isolated_script should be in front.
-    # because this lets webkit_layout_tests runs later and bot's s resources
-    # are utilized by receiving result of other tests while webkit_layout_tests
-    # is running.
-    test_generators = [
-      chromium_tests_api.steps.generate_isolated_script,
-      chromium_tests_api.steps.generate_cts_test,
-      chromium_tests_api.steps.generate_gtest,
-      chromium_tests_api.steps.generate_instrumentation_test,
-      chromium_tests_api.steps.generate_junit_test,
-      chromium_tests_api.steps.generate_script,
-    ]
-
     def is_child_of(builder_config, parent_mastername, parent_buildername):
       return (
           parent_mastername == builder_config.get('parent_mastername')
@@ -146,7 +133,8 @@ class BotConfig(object):
       master_dict = dict(self._bots_dict[mastername])
 
       if mastername in masternames:
-        source_side_spec = self._get_source_side_spec(chromium_tests_api, mastername)
+        source_side_spec = self._get_source_side_spec(
+            chromium_tests_api, mastername)
 
         builders = master_dict['builders'] = dict(master_dict['builders'])
         for loop_buildername in builders:
@@ -158,7 +146,6 @@ class BotConfig(object):
                   loop_buildername, mastername,
                   builder_dict.get('swarming_dimensions', {}),
                   scripts_compile_targets,
-                  test_generators,
                   bot_update_step,
               ))
       else:

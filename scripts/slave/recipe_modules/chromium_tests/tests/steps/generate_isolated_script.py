@@ -41,7 +41,7 @@ def RunSteps(api):
       }
   }
 
-  for test in api.chromium_tests.steps.generate_isolated_script(
+  for test in api.chromium_tests._generators.generate_isolated_script(
       api,
       api.chromium_tests,
       'test_mastername',

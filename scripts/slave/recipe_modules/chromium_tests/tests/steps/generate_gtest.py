@@ -39,7 +39,7 @@ def RunSteps(api):
       }
   }
 
-  for test in api.chromium_tests.steps.generate_gtest(
+  for test in api.chromium_tests._generators.generate_gtest(
       api,
       api.chromium_tests,
       'test_mastername',
