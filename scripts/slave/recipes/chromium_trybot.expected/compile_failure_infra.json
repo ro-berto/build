@@ -828,8 +828,18 @@
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"GOMA_PING_FAILURE\"]@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "infra status",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@GOMA_PING_FAILURE@@@",
       "@@@STEP_EXCEPTION@@@",
-      "@@@SET_BUILD_PROPERTY@extra_result_code@[\"GOMA_PING_FAILURE\"]@@@",
       "@@@SET_BUILD_PROPERTY@failure_hash@\"935f5d19481d533c5ea3a8d2d4abf9174668d7fe\"@@@",
       "@@@SET_BUILD_PROPERTY@failure_type@\"COMPILE_FAILURE\"@@@"
     ]

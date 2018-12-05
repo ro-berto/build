@@ -558,9 +558,14 @@ class ChromiumApi(recipe_api.RecipeApi):
         #    since this step is executed after compile step, it is recognized as
         #    finalized step, and we cannot edit such a step.  Let us touch
         #    active result instead.
-        #    It looks like "cloudtail stop" caused exception but I believe
-        #    it much better than not showing exception.
-        self.m.step.active_result.presentation.status = self.m.step.EXCEPTION
+        #    However, if we pick the active step, the last step of
+        #    'postprocess_goma' would be chosen, and it is confusing.
+        #    Let us create a fake step to represent the case.
+        #    It might be better than both not showing exception and marking
+        #    'stop cloudtail' as exception.
+        fake_step = self.m.step('infra status', [])
+        fake_step.presentation.status = self.m.step.EXCEPTION
+        fake_step.presentation.step_text = failure_result_code
         raise self.m.step.InfraFailure('Infra compile failure: %s' % e)
 
       raise e

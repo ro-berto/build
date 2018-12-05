@@ -1012,8 +1012,19 @@
     "name": "test r1.postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
-      "@@@STEP_EXCEPTION@@@",
       "@@@SET_BUILD_PROPERTY@extra_result_code@[\"GOMA_BUILD_ERROR\"]@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "test r1.infra status",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@GOMA_BUILD_ERROR@@@",
+      "@@@STEP_EXCEPTION@@@"
     ]
   },
   {
