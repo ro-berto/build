@@ -9,8 +9,10 @@ import os
 import subprocess
 
 
-def _call_profdata_tool(profile_input_file_paths, profile_output_file_path,
-                        profdata_tool_path):
+def _call_profdata_tool(profile_input_file_paths,
+                        profile_output_file_path,
+                        profdata_tool_path,
+                        retries=2):
   """Calls the llvm-profdata tool.
 
   Args:
@@ -18,6 +20,10 @@ def _call_profdata_tool(profile_input_file_paths, profile_output_file_path,
         are to be merged.
     profile_output_file_path: The path to the merged file to write.
     profdata_tool_path: The path to the llvm-profdata executable.
+
+  Returns:
+    A list of paths to profiles that had to be excluded to get the merge to
+    succeed, suspected of being corrupted or malformed.
 
   Raises:
     CalledProcessError: An error occurred merging profiles.
@@ -34,11 +40,31 @@ def _call_profdata_tool(profile_input_file_paths, profile_output_file_path,
     output = subprocess.check_output(subprocess_cmd)
     logging.debug('Merge output: %s', output)
   except subprocess.CalledProcessError as error:
-    logging.error('Failed to merge profiles, return code (%d), output: %s' % (
-        error.returncode, error.output))
+    if len(profile_input_file_paths) > 1 and retries >= 0:
+      # The output of the llvm-profdata command will include the path of
+      # malformed files, such as
+      # `error: /.../default.profraw: Malformed instrumentation profile data`
+      valid_profiles = [
+          f for f in profile_input_file_paths if f not in error.output
+      ]
+      invalid_profiles = list(
+          set(profile_input_file_paths) - set(valid_profiles))
+      if invalid_profiles and len(valid_profiles):
+        # If some, but not all files are mentioned in the error output, try
+        # again excluding those files.
+        logging.warning(
+            '%r files removed as they were mentioned in the merge '
+            'error output. Trying with %d files', invalid_profiles,
+            len(valid_profiles))
+        return invalid_profiles + _call_profdata_tool(
+            valid_profiles, profile_output_file_path, profdata_tool_path,
+            retries - 1)
+    logging.error('Failed to merge profiles, return code (%d), output: %s' %
+                  (error.returncode, error.output))
     raise error
 
   logging.info('Profile data is created as: "%s".', profile_output_file_path)
+  return []
 
 
 def _get_profile_paths(input_dir, input_extension):
@@ -58,14 +84,17 @@ def merge_profiles(input_dir, output_file, input_extension, profdata_tool_path):
 
   Args:
     input_dir (str): The path to traverse to find input profiles.
-    output_dir (str): Where to write the merged profile.
+    output_file (str): Where to write the merged profile.
     input_extension (str): File extension to look for in the input_dir.
         e.g. '.profdata' or '.profraw'
     profdata_tool_path: The path to the llvm-profdata executable.
+  Returns:
+    The list of profiles that had to be excluded to get the merge to
+    succeed.
   """
   profile_input_file_paths = _get_profile_paths(input_dir, input_extension)
 
-  _call_profdata_tool(
+  invalid_profiles = _call_profdata_tool(
       profile_input_file_paths=profile_input_file_paths,
       profile_output_file_path=output_file,
       profdata_tool_path=profdata_tool_path)
@@ -74,4 +103,4 @@ def merge_profiles(input_dir, output_file, input_extension, profdata_tool_path):
   for input_file in profile_input_file_paths:
     os.remove(input_file)
 
-  return output_file
+  return invalid_profiles

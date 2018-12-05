@@ -11,9 +11,10 @@ import unittest
 
 import mock
 
-THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0,
-                os.path.abspath(os.path.join(THIS_DIR, os.pardir, 'resources')))
+                os.path.abspath(os.path.join(_THIS_DIR, os.pardir,
+                                             'resources')))
 
 import merge_profiles
 import merge_steps
@@ -21,6 +22,9 @@ import merger
 
 
 class MergeProfilesTest(unittest.TestCase):
+  def __init__(self, *args, **kwargs):
+    super(MergeProfilesTest, self).__init__(*args, **kwargs)
+    self.maxDiff = None
 
   def test_merge_script_api_parameters(self):
     """Test the step-level merge front-end."""
@@ -42,6 +46,7 @@ class MergeProfilesTest(unittest.TestCase):
         'llvm-profdata', 'a.json', 'b.json', 'c.json'
     ]
     with mock.patch.object(merger, 'merge_profiles') as mock_merge:
+      mock_merge.return_value = None
       with mock.patch.object(sys, 'argv', args):
         merge_profiles.main()
         self.assertEqual(
@@ -63,6 +68,7 @@ class MergeProfilesTest(unittest.TestCase):
         'llvm-profdata',
     ]
     with mock.patch.object(merger, 'merge_profiles') as mock_merge:
+      mock_merge.return_value = None
       with mock.patch.object(sys, 'argv', args):
         merge_steps.main()
         self.assertEqual(
@@ -123,6 +129,40 @@ class MergeProfilesTest(unittest.TestCase):
                   '/b/some/path/base_unittests/default.profdata',
                   '/b/some/path/url_unittests/default.profdata',
               ]), mock_exec_cmd.call_args)
+
+          # Partial failure.
+          mock_open = mock.mock_open()
+          with mock.patch('merger.merge_profiles.open', mock_open,
+                          create=True):
+            mock_exec_cmd.reset_mock()
+            mock_exec_cmd.side_effect = [
+                subprocess.CalledProcessError(
+                    255,
+                    'command',
+                    'error: '
+                    '/b/some/path/url_unittests/default.profdata invalid'),
+                'Success',
+            ]
+            merger.merge_profiles('/b/some/path', 'output/dir/default.profdata',
+                                  '.profdata', 'llvm-profdata')
+            self.assertEqual([
+                mock.call([
+                    'llvm-profdata',
+                    'merge',
+                    '-o',
+                    'output/dir/default.profdata',
+                    '-sparse=true',
+                    '/b/some/path/base_unittests/default.profdata',
+                    '/b/some/path/url_unittests/default.profdata',
+                ]),
+                mock.call([
+                    'llvm-profdata',
+                    'merge',
+                    '-o',
+                    'output/dir/default.profdata',
+                    '-sparse=true',
+                    '/b/some/path/base_unittests/default.profdata',
+                ])], mock_exec_cmd.call_args_list[-2:])
 
 
 if __name__ == '__main__':

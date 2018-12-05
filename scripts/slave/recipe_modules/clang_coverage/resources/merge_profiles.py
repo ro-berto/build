@@ -39,9 +39,14 @@ def main():
   desc = "Merge profraw files in <--task-output-dir> into a single profdata."
   parser = _MergeAPIArgumentParser(description=desc)
   params = parser.parse_args()
-  merger.merge_profiles(params.task_output_dir,
-                        os.path.join(params.profdata_dir, 'default.profdata'),
-                        '.profraw', params.llvm_profdata)
+  invalid_profiles = merger.merge_profiles(
+      params.task_output_dir,
+      os.path.join(params.profdata_dir, 'default.profdata'), '.profraw',
+      params.llvm_profdata)
+  if invalid_profiles:
+    with open(os.path.join(params.profdata_dir, 'invalid_profiles.json'),
+              'w') as f:
+      json.dump(invalid_profiles, f)
 
 
 if __name__ == '__main__':
