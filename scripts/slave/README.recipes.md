@@ -1783,7 +1783,7 @@ Kills leftover tasks from previous runs or steps.
 
 Reads the debug log file
 
-&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#828)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=None, ignore_failure=False):**
+&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#829)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=None, ignore_failure=False):**
 
 Runs a specific script with current working directory to be checkout. If
 the runtime (passed in environment) is a browser, and the system is linux,
@@ -5119,7 +5119,7 @@ Kills leftover tasks from previous runs or steps.
 
 [DEPS](/scripts/slave/recipe_modules/dart/examples/example.py#9): [dart](#recipe_modules-dart), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/dart/examples/example.py#153)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/dart/examples/example.py#154)(api):**
 ### *recipes* / [dart:examples/example-checkout](/scripts/slave/recipe_modules/dart/examples/example-checkout.py)
 
 [DEPS](/scripts/slave/recipe_modules/dart/examples/example-checkout.py#7): [dart](#recipe_modules-dart), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

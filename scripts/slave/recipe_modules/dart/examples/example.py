@@ -73,6 +73,7 @@ TEST_MATRIX = {
     {
       "builders": [
         "dart2js-win10-debug-x64-firefox",
+        "dart2js-mac-debug-x64-chrome",
         "analyzer-none-linux-release",
         "vm-kernel-win-release-x64",
       ],
@@ -84,14 +85,14 @@ TEST_MATRIX = {
       }, {
         "name": "Test-step 1",
         "script": "tools/test.py",
-        "arguments": ["foo", "--arch=x64"],
+        "arguments": ["foo", "-n${runtime}-foo-${mode}-${arch}-bar"],
         "tests": ["language_2"],
         "exclude_tests": ["co19"],
         "shards": 2,
         "fileset": "nameoffileset"
       }, {
         "name": "Test-step 2",
-        "arguments": ["foo", "--bar", "-rchrome",
+        "arguments": ["foo", "--bar",
                       "-n${runtime}-foo-${mode}-${arch}-bar"],
         "tests": []
       }, {
@@ -247,6 +248,17 @@ def GenTests(api):
 
   yield (api.test('basic-win') + api.platform('win', 64) + api.properties(
       buildername='dart2js-win10-debug-x64-firefox',
+      buildnumber='1357',
+      revision='a' * 40,
+      parent_fileset='isolate_hash_123',
+      parent_fileset_name='nameoffileset') +
+      api.step_data('upload testing fileset fileset1',
+                    stdout=api.raw_io.output('test isolate hash')) +
+      api.step_data('buildbucket.put',
+                    stdout=api.json.output(TRIGGER_RESULT)))
+
+  yield (api.test('basic-mac') + api.platform('mac', 64) + api.properties(
+      buildername='dart2js-mac-debug-x64-chrome',
       buildnumber='1357',
       revision='a' * 40,
       parent_fileset='isolate_hash_123',

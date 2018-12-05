@@ -772,13 +772,14 @@ class DartApi(recipe_api.RecipeApi):
         if '${%s}' % term in template:
           template = template.replace('${%s}' % term, environment.get(term, ''))
       self._replace_specific_argument(args, ['-n'], "-n%s" % template)
-    if not self._has_specific_argument(args, ['-m', '--mode']):
-      test_args = ['-m%s' % environment['mode']] + test_args
-    if not self._has_specific_argument(args, ['-a', '--arch']):
-      test_args = ['-a%s' % environment['arch']] + test_args
-    if 'runtime' in environment and not self._has_specific_argument(
-        args, ['-r', '--runtime']):
-      test_args = test_args + ['-r%s' % environment['runtime']]
+    else:
+      if not self._has_specific_argument(args, ['-m', '--mode']):
+        test_args = ['-m%s' % environment['mode']] + test_args
+      if not self._has_specific_argument(args, ['-a', '--arch']):
+        test_args = ['-a%s' % environment['arch']] + test_args
+      if 'runtime' in environment and not self._has_specific_argument(
+          args, ['-r', '--runtime']):
+        test_args = test_args + ['-r%s' % environment['runtime']]
     args = test_args + args
     if environment['system'] in ['win7', 'win8', 'win10']:
       args = args + ['--builder-tag=%s' % environment['system']]
@@ -793,13 +794,13 @@ class DartApi(recipe_api.RecipeApi):
     # specific test steps with runtime chrome in a bot without that
     # global runtime.
     cipd_packages = []
-    if any(arg in ['-rchrome', '--runtime=chrome'] for arg in args):
+    if any('chrome' in arg for arg in args):
       version_tag = 'version:%s' % global_config['chrome']
       cipd_packages.append(('browsers',
                             'dart/browsers/chrome/${platform}',
                             version_tag))
       args = args + [CHROME_PATH_ARGUMENT[environment['system']]]
-    if any(arg in ['-rfirefox', '--runtime=firefox'] for arg in args):
+    if any('firefox' in arg for arg in args):
       version_tag = 'version:%s' % global_config['firefox']
       cipd_packages.append(('browsers',
                             'dart/browsers/firefox/${platform}',
