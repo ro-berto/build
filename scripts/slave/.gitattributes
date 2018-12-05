@@ -6,6 +6,7 @@
 /crash_utils.py                   recipes
 /daemonizer.py                    recipes
 /extract_build.py                 recipes
+/gatekeeper_trees.json            recipes
 /goma_bq_utils.py                 recipes
 /goma_utils.py                    recipes
 /gtest_slave_utils.py             recipes
