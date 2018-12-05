@@ -243,57 +243,6 @@ SPEC = {
           'platform': 'linux',
       },
     },
-    'Print Preview Linux': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'linux',
-        'TARGET_BITS': 64,
-      },
-      'tests': [
-        steps.PrintPreviewTests(),
-      ],
-      'bot_type': 'builder_tester',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-    'Print Preview Mac': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'mac',
-        'TARGET_BITS': 64,
-      },
-      'tests': [
-        steps.PrintPreviewTests(),
-      ],
-      'bot_type': 'builder_tester',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'mac',
-      },
-    },
-    'Print Preview Win': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_PLATFORM': 'win',
-        'TARGET_BITS': 32,
-      },
-      'tests': [
-        steps.PrintPreviewTests(),
-      ],
-      'bot_type': 'builder_tester',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'win',
-      },
-    },
     # TODO(jbudorick): Remove these three once the bots have been renamed.
     'Fuchsia': {
       'chromium_config': 'chromium',

@@ -2340,37 +2340,6 @@ class PythonBasedTest(Test):
     return step_result
 
 
-class PrintPreviewTests(PythonBasedTest):
-  def __init__(self, **kwargs):
-    super(PrintPreviewTests, self).__init__('print_preview_tests')
-
-  def run_step(self, api, suffix, cmd_args, **kwargs):
-    platform_arg = '.'.join(['browser_test',
-        api.platform.normalize_platform_name(api.platform.name)])
-    args = cmd_args
-    path = api.path['checkout'].join(
-        'third_party', 'blink', 'tools', 'run_web_tests.py')
-    args.extend(['--platform', platform_arg])
-
-    env = {}
-    if api.platform.is_linux:
-      env['CHROME_DEVEL_SANDBOX'] = api.path.join(
-          '/opt', 'chromium', 'chrome_sandbox')
-
-    with api.context(env=env):
-      return api.chromium.runtest(
-          test=path,
-          args=args,
-          xvfb=True,
-          name=self._step_name(suffix),
-          python_mode=True,
-          **kwargs)
-
-  def compile_targets(self, api):
-    del api
-    return ['browser_tests', 'blink_tests']
-
-
 class BisectTest(Test):
   def __init__(self, test_parameters=None, **kwargs):
     if not test_parameters:
