@@ -775,6 +775,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
+          'os': 'Android',
           'android_devices': '1',
           'device_type': 'mako', # Nexus 4
           'device_os': 'L',
@@ -795,6 +796,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
+          'os': 'Android',
           'android_devices': '1',
           'device_type': 'hammerhead', # Nexus 5
           'device_os': 'K',
@@ -815,6 +817,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
+          'os': 'Android',
           'android_devices': '1',
           'device_type': 'hammerhead', # Nexus 5
           'device_os': 'L',
@@ -835,6 +838,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
+          'os': 'Android',
           'android_devices': '1',
           'device_type': 'shamu', # Nexus 6
           'device_os': 'L',
@@ -855,6 +859,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
+          'os': 'Android',
           'android_devices': '1',
           'device_type': 'flo', # Nexus 7
           'device_os': 'L',
@@ -875,6 +880,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
+          'os': 'Android',
           'android_devices': '1',
           'device_type': 'shamu', # Nexus 6
           'device_os': 'N',
@@ -895,6 +901,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
+          'os': 'Android',
           'android_devices': '1',
           'device_type': 'flounder', # Nexus 9
           'device_os': 'L',
@@ -915,6 +922,7 @@ BUILDERS = freeze({
         'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
+          'os': 'Android',
           'android_devices': '1',
           'device_type': 'sailfish', # Pixel
           'device_os': 'N',
