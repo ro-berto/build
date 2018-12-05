@@ -1323,9 +1323,6 @@ class V8Api(recipe_api.RecipeApi):
     if not triggers and not triggers_proxy:
       return
 
-    # Careful! Before adding new properties, note the following:
-    # Triggered bots on CQ will either need new properties to be explicitly
-    # whitelisted or their name should be prefixed with 'parent_'.
     properties = {
       'parent_got_revision': self.revision,
       'parent_buildername': self.m.buildbucket.builder_name,
@@ -1337,8 +1334,8 @@ class V8Api(recipe_api.RecipeApi):
       properties.update(
         category=self.m.properties.get('category', 'manual_ts'),
         reason=str(self.m.properties.get('reason', 'ManualTS')),
-        # On tryservers, set revision to the same as on the current bot,
-        # as CQ expects builders and testers to match the revision field.
+        # On tryservers, set revision to the same as on the current bot, as it
+        # is used to generate buildset tag in buildbucket_trigger below.
         revision=self.m.buildbucket.gitiles_commit.id or 'HEAD',
         patch_gerrit_url='https://%s' % self.m.tryserver.gerrit_change.host,
         patch_issue=self.m.tryserver.gerrit_change.change,
@@ -1346,13 +1343,6 @@ class V8Api(recipe_api.RecipeApi):
         patch_set=self.m.tryserver.gerrit_change.patchset,
         patch_storage='gerrit',
       )
-      # TODO(sergiyb): Remove this for-loop after CQ stops using these
-      # properties to detect triggered builders.
-      for p in ['patch_ref', 'patch_repository_url']:
-        try:
-          properties[p] = str(self.m.properties[p])
-        except KeyError:  # pragma: no cover
-          pass
     else:
       # On non-tryservers, we can set the revision to whatever the
       # triggering builder checked out.
@@ -1380,7 +1370,6 @@ class V8Api(recipe_api.RecipeApi):
     if triggers:
       if self.m.tryserver.is_tryserver:
         trigger_props = {}
-        self._copy_property(self.m.properties, trigger_props, 'git_revision')
         self._copy_property(self.m.properties, trigger_props, 'revision')
         trigger_props.update(properties)
         bucket_name = (
