@@ -931,6 +931,60 @@ SPEC = {
       },
       'tests': {},
     },
+
+    'linux-autofill-captured-sites-rel': {
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'linux',
+      },
+      'bot_type': 'builder_tester',
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'linux',
+      },
+    },
+
+    'mac-autofill-captured-sites-rel': {
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'mac',
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+        'captured_sites_interactive_tests',
+      ],
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'mac',
+      },
+    },
+
+    'win-autofill-captured-sites-rel': {
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_PLATFORM': 'win',
+      },
+      'bot_type': 'builder_tester',
+      'compile_targets': [
+        'captured_sites_interactive_tests',
+      ],
+      'test_results_config': 'staging_server',
+      'testing': {
+        'platform': 'win',
+      },
+    },
   },
 }
 
