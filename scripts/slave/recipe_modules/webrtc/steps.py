@@ -122,8 +122,6 @@ PERF_TESTS = freeze({
 })
 
 ANDROID_PERF_TESTS = freeze({
-    # TODO(ehmaldonado): Add low_bandwidth_audio_perf_test and
-    # video_quality_loopback_test.
     'webrtc_perf_tests': {
         'args': [
             '--save_worst_frame',
@@ -396,9 +394,6 @@ class SwarmingAndroidPerfTest(AndroidTest):
     args.extend([
         '--isolated-script-test-perf-output',
         '${ISOLATED_OUTDIR}/perftest-output.json',
-        # Disable retries, since retrying will re-invoke the binary, which in
-        # turn overwrites the perf result .json file.
-        '--num-retries=0',
     ])
     if add_adb_path:
       args.extend([
@@ -424,7 +419,7 @@ class SwarmingAndroidPerfTest(AndroidTest):
       logcats = _MergeFiles(task_output_dir, 'logcats')
       step_result.presentation.logs['logcats'] = logcats.splitlines()
 
-      _UploadToPerfDashboard(self.name, api, task_output_dir)
+    _UploadToPerfDashboard(self.name, api, task_output_dir)
 
 
 class SwarmingPerfTest(SwarmingIsolatedScriptTest):

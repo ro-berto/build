@@ -255,7 +255,6 @@
       "--android",
       "--isolated-script-test-perf-output",
       "${ISOLATED_OUTDIR}/perftest-output.json",
-      "--num-retries=0",
       "--adb-path",
       "../../third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -371,7 +370,6 @@
       "--",
       "--isolated-script-test-perf-output",
       "${ISOLATED_OUTDIR}/perftest-output.json",
-      "--num-retries=0",
       "--adb-path",
       "../../third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -487,8 +485,7 @@
       "--",
       "--save_worst_frame",
       "--isolated-script-test-perf-output",
-      "${ISOLATED_OUTDIR}/perftest-output.json",
-      "--num-retries=0"
+      "${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
