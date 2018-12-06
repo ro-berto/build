@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from recipe_engine import recipe_api
+from collections import OrderedDict
 import json
 
 BLACKLIST = (
@@ -427,7 +428,7 @@ class DartApi(recipe_api.RecipeApi):
     args_logs = ["--logs",
                  self.m.raw_io.input_text(logs_str, name='logs.json'),
                  "--logs-only"]
-    links = {}
+    links = OrderedDict()
     judgement_args = list(args)
     if self._report_new_results():
       judgement_args.append('--judgement')
@@ -481,12 +482,13 @@ class DartApi(recipe_api.RecipeApi):
           args + ["--unapproved", "--passing"],
           stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
       judgement_args += ["--failing", "--unapproved"]
-    self.m.step('test results', judgement_args)
-    # Show only the links with non-empty output (something happened).
-    for link, contents in links.iteritems():
-      if contents != '': # pragma: no cover
+    with self.m.step.defer_results():
+      self.m.step('test results', judgement_args)
+      # Show only the links with non-empty output (something happened).
+      for link, contents in links.iteritems():
         self.m.step.active_result.presentation.logs[link] = [contents]
-    self.m.step.active_result.presentation.logs['results.json'] = [results_str]
+      self.m.step.active_result.presentation.logs['results.json'] = [
+          results_str]
 
 
   def read_debug_log(self):
