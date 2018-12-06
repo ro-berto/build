@@ -1916,18 +1916,6 @@
     "cwd": "[CACHE]/builder/sdk",
     "name": "test results",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@tests that began failing@@@@",
-      "@@@STEP_LOG_END@tests that began failing@@@",
-      "@@@STEP_LOG_LINE@tests that began failing (logs)@@@@",
-      "@@@STEP_LOG_END@tests that began failing (logs)@@@",
-      "@@@STEP_LOG_LINE@tests that began passing@@@@",
-      "@@@STEP_LOG_END@tests that began passing@@@",
-      "@@@STEP_LOG_LINE@unapproved failing tests@@@@",
-      "@@@STEP_LOG_END@unapproved failing tests@@@",
-      "@@@STEP_LOG_LINE@unapproved failing tests (logs)@@@@",
-      "@@@STEP_LOG_END@unapproved failing tests (logs)@@@",
-      "@@@STEP_LOG_LINE@unapproved passing tests@@@@",
-      "@@@STEP_LOG_END@unapproved passing tests@@@",
       "@@@STEP_LOG_LINE@results.json@@@@",
       "@@@STEP_LOG_END@results.json@@@"
     ]

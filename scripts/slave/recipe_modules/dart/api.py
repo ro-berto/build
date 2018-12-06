@@ -486,7 +486,8 @@ class DartApi(recipe_api.RecipeApi):
       self.m.step('test results', judgement_args)
       # Show only the links with non-empty output (something happened).
       for link, contents in links.iteritems():
-        self.m.step.active_result.presentation.logs[link] = [contents]
+        if contents != '': # pragma: no cover
+          self.m.step.active_result.presentation.logs[link] = [contents]
       self.m.step.active_result.presentation.logs['results.json'] = [
           results_str]
 
