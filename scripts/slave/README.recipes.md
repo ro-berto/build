@@ -3107,11 +3107,11 @@ This value can be changed per individual task.
 
 &emsp; **@default_user.setter**<br>&mdash; **def [default\_user](/scripts/slave/recipe_modules/swarming/api.py#318)(self, value):**
 
-&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/swarming/api.py#1321)(self, task):**
+&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/swarming/api.py#1325)(self, task):**
 
-SwarmingTask -> argument list for 'swarming.py' command.
+SwarmingTask -> argument list for go swarming command.
 
-&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1234)(self, prefix, task):**
+&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1238)(self, prefix, task):**
 
 SwarmingTask -> name of a step of a waterfall.
 
@@ -3278,7 +3278,7 @@ Args:
 
 Enables or disables verbose output in swarming scripts.
 
-&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/swarming/api.py#1136)(self, task_sets, suffix=None, attempts=0):**
+&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/swarming/api.py#1140)(self, task_sets, suffix=None, attempts=0):**
 
 Waits for a finished set of tasks.
 

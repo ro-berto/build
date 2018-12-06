@@ -945,17 +945,21 @@ class SwarmingApi(recipe_api.RecipeApi):
           '--build-properties', self.m.json.dumps(properties),
       ])
 
-    task_args.append('--')
     # Arguments for the actual 'collect' command.
+
+    # TODO(tikuta): This line assumes the recipe is working with
+    # Chromium checkout.
     collect_cmd = [
-      'python',
-      '-u',
-      self.m.swarming_client.path.join('swarming.py'),
+      self.m.path['checkout'].join('tools', 'luci-go', 'swarming'),
     ]
+
+    # go's client does not generate summary file under output dir.
+    # Need to tell the location of summary file to collect_task.py.
+    task_args.extend(['--summary-json-file', self.summary()])
+
     collect_cmd.extend(self.get_collect_cmd_args(task))
-    collect_cmd.extend([
-      '--task-summary-json', self.summary(),
-    ])
+
+    task_args.append('--')
 
     task_args.extend(collect_cmd)
 
@@ -1319,18 +1323,25 @@ class SwarmingApi(recipe_api.RecipeApi):
           '\n'.join(template % f for f in infra_failures), result=step_result)
 
   def get_collect_cmd_args(self, task):
-    """SwarmingTask -> argument list for 'swarming.py' command."""
+    """
+    SwarmingTask -> argument list for go swarming command.
+    """
     args = [
       'collect',
-      '--swarming', self.swarming_server,
-      '--decorate',
-      '--print-status-updates',
+      '-server', self.swarming_server,
+
+      # TODO(tikuta): Tuning this if necessary.
+      '-worker', 100,
+
+      '-task-summary-python',
+      '-task-output-stdout', 'json',
     ]
+
     if self.verbose:
-      args.append('--verbose')
-    args.extend(('--json', self.m.json.input(task.trigger_output)))
+      args.append('-verbose')
+    args.extend(('-requests-json', self.m.json.input(task.trigger_output)))
     if self.service_account_json:
-      args.extend(['--auth-service-account-json', self.service_account_json])
+      args.extend(['-service-account-json', self.service_account_json])
     return args
 
   def _gen_trigger_step_test_data(self, task):
@@ -1510,7 +1521,13 @@ class SwarmingTask(object):
   @property
   def trigger_output(self):
     """JSON results of 'trigger' step or None if not triggered."""
-    return self._trigger_output
+    # JSON results of 'trigger' step converted for luci-go client.
+    # This is used for isolated script tasks.
+    tasks = sorted(self._trigger_output['tasks'].values(),
+                   key=lambda x: x['shard_index'])
+    return {
+      'tasks': [{'task_id': task['task_id']} for task in tasks],
+    }
 
   def get_shard_view_url(self, index):
     """Returns URL of HTML page with shard details or None if not available.
