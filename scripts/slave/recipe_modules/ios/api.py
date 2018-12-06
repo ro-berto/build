@@ -770,6 +770,9 @@ class iOSApi(recipe_api.RecipeApi):
       '--wpr-tools-path', '<(wpr_tools_path)',
       '--replay-path', '<(replay_path)'
     ]
+    if self.__config.get('xcode parallelization', False):
+      cmd.append('--xcode-parallelization')
+
     files = [
       # .apps are directories. Need the trailing slash to isolate the
       # contents of a directory.

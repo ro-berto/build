@@ -863,3 +863,73 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
   )
+
+  yield (
+    api.test('xparallel_run')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios',
+      buildnumber='0',
+      mastername='chromium.fyi',
+      bot_id='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode build version': '09a123',
+      'additional files': [
+        'fake/file/path1/',
+        'fake/file/path2/',
+      ],
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="x86"',
+      ],
+      'xcode parallelization': True,
+      'tests': [
+        {
+          'shards': 4,
+          'app': 'fake test',
+          'device type': 'fake device',
+          'os': '12.0.1',
+        },
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output_text('1.2.3'),
+    )
+  )
+
+  yield (
+    api.test('xparallel_run_skip')
+    + api.platform('mac', 64)
+    + api.properties(
+      buildername='ios',
+      buildnumber='0',
+      mastername='chromium.fyi',
+      bot_id='fake-vm',
+    )
+    + api.ios.make_test_build_config({
+      'xcode build version': '09a123',
+      'additional files': [
+        'fake/file/path1/',
+        'fake/file/path2/',
+      ],
+      'gn_args': [
+        'is_debug=true',
+        'target_cpu="x86"',
+      ],
+      'xcode parallelization': False,
+      'tests': [
+        {
+          'shards': 3,
+          'app': 'fake test',
+          'device type': 'fake device',
+          'os': '12.0.1',
+        },
+      ],
+    })
+    + api.step_data(
+        'bootstrap swarming.swarming.py --version',
+        stdout=api.raw_io.output_text('1.2.3'),
+    )
+  )
