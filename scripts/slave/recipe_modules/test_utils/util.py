@@ -226,6 +226,8 @@ class TestResults(object):
       self.raw['num_regressions'] += 1
 
   def as_jsonish(self):
+    if self.raw is None:
+      return None
     ret = self.raw.copy()
     ret.setdefault('tests', {}).update(self.tests)
     return ret

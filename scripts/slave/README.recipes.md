@@ -306,6 +306,7 @@
   * [test_results:examples/full](#recipes-test_results_examples_full)
   * [test_utils:tests/run_tests](#recipes-test_utils_tests_run_tests)
   * [test_utils:tests/run_tests_include_swarming](#recipes-test_utils_tests_run_tests_include_swarming)
+  * [test_utils:tests/test_results](#recipes-test_utils_tests_test_results)
   * [traceback:examples/full](#recipes-traceback_examples_full)
   * [trigger:examples/full](#recipes-trigger_examples_full)
   * [v8](#recipes-v8)
@@ -5726,6 +5727,11 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 [DEPS](/scripts/slave/recipe_modules/test_utils/tests/run_tests_include_swarming.py#5): [test\_utils](#recipe_modules-test_utils)
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_utils/tests/run_tests_include_swarming.py#9)(api):**
+### *recipes* / [test\_utils:tests/test\_results](/scripts/slave/recipe_modules/test_utils/tests/test_results.py)
+
+[DEPS](/scripts/slave/recipe_modules/test_utils/tests/test_results.py#7): [test\_utils](#recipe_modules-test_utils), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/test_utils/tests/test_results.py#13)(api):**
 ### *recipes* / [traceback:examples/full](/scripts/slave/recipe_modules/traceback/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/traceback/examples/full.py#8): [traceback](#recipe_modules-traceback), [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/step][recipe_engine/recipe_modules/step]
