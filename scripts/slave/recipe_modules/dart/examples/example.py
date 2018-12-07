@@ -8,6 +8,7 @@ from recipe_engine.post_process import (DoesNotRun, DropExpectation)
 
 DEPS = [
   'dart',
+  'recipe_engine/buildbucket',
   'recipe_engine/json',
   'recipe_engine/properties',
   'recipe_engine/platform',
@@ -17,10 +18,10 @@ DEPS = [
 
 
 CANNED_OUTPUT_DIR = {
-  'logs.json': r'{}',
-  'results.json': r'{}',
-  'run.json': r'{}',
-  'result.log': r'{}'
+  'logs.json': '{"test":"log"}\n',
+  'results.json': '{"name":"test1"}\n{"name":"test2"}\n',
+  'run.json': '{"build":123}\n',
+  'result.log': '{}\n'
 }
 
 
@@ -198,12 +199,23 @@ def GenTests(api):
       api.step_data('gsutil find latest build',
                     api.raw_io.output_text('123', name='latest')))
 
-  yield (api.test('analyzer-none-linux-release-be') + api.properties(
-      buildername='analyzer-none-linux-release-be',
-      buildnumber='1357',
-      revision='3456abce78ef',
-      new_workflow_enabled=True) +
-      api.step_data('upload testing fileset fileset1',
+  yield (api.test('analyzer-none-linux-release-be') +
+      api.properties(
+        buildername='analyzer-none-linux-release-be',
+        buildnumber='1357',
+        bot_id='trusty-dart-123',
+        revision='3456abcd78ef',
+        new_workflow_enabled=True) +
+      api.buildbucket.ci_build(revision = '3456abce78ef',
+                               build_number=1357,
+                               builder='analyzer-none-linux-release-be',
+                               git_repo='https://dart.googlesource.com/sdk',
+                               project='dart') +
+      api.step_data('Test-step 1_shard_1',
+                    api.raw_io.output_dir(CANNED_OUTPUT_DIR)) +
+      api.step_data('Test-step 2',
+                    api.raw_io.output_dir(CANNED_OUTPUT_DIR)) +
+      api.step_data('upload testing fileset nameoffileset',
                     stdout=api.raw_io.output('test isolate hash')) +
       api.step_data('buildbucket.put',
                     stdout=api.json.output(TRIGGER_RESULT)))

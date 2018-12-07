@@ -4,7 +4,7 @@
 
 from recipe_engine import recipe_api
 from collections import OrderedDict
-import json
+import json, re
 
 BLACKLIST = (
     r'(^(out|xcodebuild)[/\\](Release|Debug|Product)\w*[/\\]' +
@@ -247,12 +247,12 @@ class DartApi(recipe_api.RecipeApi):
           active_result = self.m.step.active_result
           # Every shard is only a single task in swarming
           bot_name = active_result.swarming.summary['shards'][0]['bot_id']
-          self._addResultsAndLinks(bot_name, results)
+          self._add_results_and_links(bot_name, results)
         if results.runs or results.results:
-          self._addToAllResults(all_results, results)
+          self._add_to_all_results(all_results, results)
 
 
-  def _addResultsAndLinks(self, bot_name, results):
+  def _add_results_and_links(self, bot_name, results):
     output_dir = self.m.step.active_result.raw_io.output_dir
     for filepath in output_dir:
       filename = filepath.split('/')[-1]
@@ -263,11 +263,11 @@ class DartApi(recipe_api.RecipeApi):
         self.m.step.active_result.presentation.logs[
             filename] = [contents]
         if filename == 'results.json':
-          results.results += contents
+          results.add_results(bot_name, contents)
         if filename == 'logs.json':
           results.logs += contents
         if filename == 'run.json':
-          results.addRun(bot_name, contents)
+          results.add_run(bot_name, contents)
 
 
   def get_latest_tested_commit(self):
@@ -298,6 +298,7 @@ class DartApi(recipe_api.RecipeApi):
     if builder.endswith('-try'):
       builder = builder[:-4]
     return builder
+
 
   def _download_results(self, latest):
     filenames = ['results.json', 'flaky.json']
@@ -346,7 +347,7 @@ class DartApi(recipe_api.RecipeApi):
         args,
         None, None,
         False, environment, None, ignore_failure=True)
-    self._addResultsAndLinks(self.m.properties.get('bot_id'), results)
+    self._add_results_and_links(self.m.properties.get('bot_id'), results)
 
 
   def _update_flakiness_information(self, results_str):
@@ -390,6 +391,7 @@ class DartApi(recipe_api.RecipeApi):
       'builders/%s/%s' % (builder, 'latest'),
       name='update "latest" reference',
       ok_ret='any' if self._report_new_results() else {0})
+    self._upload_results_to_bq(results_str)
 
 
   def _upload_result(self, builder, build_number, filename, result_str):
@@ -747,7 +749,7 @@ class DartApi(recipe_api.RecipeApi):
     return script.endswith(TEST_PY_PATH)
 
 
-  def _addToAllResults(self, all_results, results):
+  def _add_to_all_results(self, all_results, results):
     step_name = results.step_name
     if all_results.get(step_name) is None:
       all_results[step_name] = results
@@ -773,6 +775,26 @@ class DartApi(recipe_api.RecipeApi):
     version_tag = 'version:%s' % version
     package = 'dart/browsers/%s/${platform}' % runtime
     self.m.cipd.ensure(browser_path, { package: version_tag })
+
+
+  def _upload_results_to_bq(self, results_str):
+    if not results_str:
+      return
+    assert(results_str[-1] == '\n')
+
+    bqupload_path = self.m.path['checkout'].join('bqupload')
+    package = r'infra/tools/bqupload/${platform}'
+    self.m.cipd.ensure(bqupload_path, {package: 'latest'})
+
+    bqupload = bqupload_path.join('bqupload')
+    cmd = [bqupload , 'dart-ci.results.results']
+    with self.m.step.nest('upload test results to big query'):
+      # Upload at most 1000 lines at once
+      for match in re.finditer(r'(?:.*\n){1,1000}', results_str):
+        chunk = match.group(0)
+        self.m.step('upload results chunk to big query', cmd,
+            stdin=self.m.raw_io.input_text(chunk), infra_step=True,
+            ok_ret='any' if self._report_new_results() else {0})
 
 
   def run_trigger(self, step_name, step, isolate_hash):
@@ -889,9 +911,9 @@ class DartApi(recipe_api.RecipeApi):
       results.args = args
       results.environment = environment
       if shards == 0 or local_shard:
-        self._addResultsAndLinks(self.m.properties.get('bot_id'), results)
+        self._add_results_and_links(self.m.properties.get('bot_id'), results)
       # Add even if we don't have a local shard to record args and environment
-      self._addToAllResults(all_results, results)
+      self._add_to_all_results(all_results, results)
 
 
   def run_script(self, step_name, script, args, isolate_hash, shards,
@@ -979,10 +1001,24 @@ class StepResults:
     self.args = None
     self.environment = None
     self.commit = commit
-    self.builder_name = m.buildbucket.builder_name
+    self.builder_name = str(m.buildbucket.builder_name)
+    self.build_number = str(m.buildbucket.build.number)
 
 
-  def addRun(self, bot_name, run_json):
+  TEMPLATE = (',"commit_time":%s,"commit_hash":"%s",' +
+      '"build_number":%s,"builder_name":"%s","bot_name":"%s"}\n')
+
+
+  def add_results(self, bot_name, results_str):
+    extra = self.TEMPLATE % (str(self.commit['commit_time']),
+        str(self.commit['commit_hash']), self.build_number,
+        self.builder_name, bot_name)
+    all_matches = re.finditer(r'(^{.*)(?:})', results_str, flags=re.MULTILINE)
+    all_chunks = (chunk for match in all_matches for chunk in (match.group(1), extra))
+    self.results += ''.join(all_chunks)
+
+
+  def add_run(self, bot_name, run_json):
     run = json.loads(run_json)
     run['commit_time'] = self.commit['commit_time']
     run['commit_hash'] = self.commit['commit_hash']

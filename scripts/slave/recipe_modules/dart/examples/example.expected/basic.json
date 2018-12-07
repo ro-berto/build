@@ -1452,11 +1452,12 @@
     },
     "name": "Test-step 2",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@results.json@{}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test1\"}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test2\"}@@@",
       "@@@STEP_LOG_END@results.json@@@",
-      "@@@STEP_LOG_LINE@run.json@{}@@@",
+      "@@@STEP_LOG_LINE@run.json@{\"build\":123}@@@",
       "@@@STEP_LOG_END@run.json@@@",
-      "@@@STEP_LOG_LINE@logs.json@{}@@@",
+      "@@@STEP_LOG_LINE@logs.json@{\"test\":\"log\"}@@@",
       "@@@STEP_LOG_END@logs.json@@@"
     ]
   },
@@ -1527,11 +1528,12 @@
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
-      "@@@STEP_LOG_LINE@results.json@{}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test1\"}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test2\"}@@@",
       "@@@STEP_LOG_END@results.json@@@",
-      "@@@STEP_LOG_LINE@run.json@{}@@@",
+      "@@@STEP_LOG_LINE@run.json@{\"build\":123}@@@",
       "@@@STEP_LOG_END@run.json@@@",
-      "@@@STEP_LOG_LINE@logs.json@{}@@@",
+      "@@@STEP_LOG_LINE@logs.json@{\"test\":\"log\"}@@@",
       "@@@STEP_LOG_END@logs.json@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@"
     ]
@@ -1734,7 +1736,7 @@
       "--count",
       "50",
       "LATEST/results.json",
-      "{}"
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "list tests to deflake (Test-step 1)",
@@ -1786,7 +1788,7 @@
       "--count",
       "50",
       "LATEST/results.json",
-      "{}"
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "list tests to deflake (Test-step 2)",
@@ -1834,7 +1836,7 @@
       "LATEST/flaky.json",
       "-o",
       "/path/to/tmp/",
-      "{}{}"
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "update flakiness information",
@@ -1851,7 +1853,7 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "{}{}",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--changed",
       "--failing",
@@ -1873,10 +1875,10 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "{}{}",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
-      "{}{}",
+      "{\"test\":\"log\"}\n{\"test\":\"log\"}\n",
       "--logs-only",
       "--changed",
       "--failing",
@@ -1898,7 +1900,7 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "{}{}",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--changed",
       "--failing",
@@ -1920,10 +1922,10 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "{}{}",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
-      "{}{}",
+      "{\"test\":\"log\"}\n{\"test\":\"log\"}\n",
       "--logs-only",
       "--changed",
       "--failing",
@@ -1945,7 +1947,7 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "{}{}",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--changed",
       "--passing",
@@ -1968,7 +1970,7 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "{}{}",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--judgement",
       "--changed",
@@ -1980,7 +1982,10 @@
     "cwd": "[CACHE]/builder/sdk",
     "name": "test results",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@results.json@{}{}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}@@@",
       "@@@STEP_LOG_END@results.json@@@"
     ]
   },
