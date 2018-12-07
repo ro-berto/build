@@ -195,6 +195,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
             self.profdata_executable,
         ])
 
+    self._surface_merging_errors()
     binaries = self._get_binaries(tests)
 
     self._generate_metadata(binaries, out_file)
@@ -445,3 +446,19 @@ class ClangCoverageApi(recipe_api.RecipeApi):
             gerrit_diff_file, '--output-file', local_to_gerrit_diff_mapping_file
         ],
         stdout=self.m.json.output())
+
+  def _surface_merging_errors(self):
+    step_result = self.m.python(
+        'Finding merging errors',
+        self.resource('load_merge_errors.py'),
+        args=[
+            '--root-path', self.profdata_dir()
+        ],
+        step_test_data=lambda: self.m.json.test_api.output_stream({}),
+        stdout=self.m.json.output())
+    if step_result.stdout:
+      step_result.step_text = (
+          'FAILURES MERGING: %r' % step_result.stdout)
+      step_result.presentation.status = self.m.step.FAILURE
+      step_result.presentation.properties['bad_coverage_profile_steps'] = len(
+          step_result.stdout)

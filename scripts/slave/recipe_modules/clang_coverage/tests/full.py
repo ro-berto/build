@@ -9,6 +9,7 @@ DEPS = [
     'chromium_tests',
     'clang_coverage',
     'recipe_engine/buildbucket',
+    'recipe_engine/json',
     'recipe_engine/properties',
 ]
 
@@ -109,3 +110,14 @@ def GenTests(api):
       + api.post_process(post_process.DropExpectation)
   )
 
+  yield (
+      api.test('merge errors')
+      + api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='linux-code-coverage',
+          buildnumber=54)
+      + api.override_step_data(
+          'Finding merging errors', stdout=api.json.output(['some_step']))
+      + api.post_process(post_process.StatusSuccess)
+      + api.post_process(post_process.DropExpectation)
+  )
