@@ -260,7 +260,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/v8_foobar_rel_ng_triggered/571\", \"tasks\": {\"Check/Ubuntu-14.04/[dummy has/v8_foobar_rel_ng_triggered/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"tasks\": [{\"task_id\": \"10000\"}]}"
     ],
     "infra_step": true,
     "name": "Check",
@@ -305,7 +305,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test262/Ubuntu-14.04/[dummy has/v8_foobar_rel_ng_triggered/571\", \"tasks\": {\"Test262/Ubuntu-14.04/[dummy has/v8_foobar_rel_ng_triggered/571\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}"
+      "{\"tasks\": [{\"task_id\": \"110000\"}]}"
     ],
     "infra_step": true,
     "name": "Test262",
