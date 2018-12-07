@@ -570,7 +570,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"tasks\": [{\"task_id\": \"10000\"}]}"
+      "{\"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Check/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "infra_step": true,
     "name": "Check",
@@ -659,7 +659,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"tasks\": [{\"task_id\": \"110000\"}]}"
+      "{\"base_task_name\": \"Test262/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Test262/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}"
     ],
     "infra_step": true,
     "name": "Test262",
@@ -1127,7 +1127,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"tasks\": [{\"task_id\": \"120000\"}]}"
+      "{\"base_task_name\": \"Retry/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Retry/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}"
     ],
     "infra_step": true,
     "name": "Bisect a0.Retry",
@@ -1540,7 +1540,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"tasks\": [{\"task_id\": \"130000\"}]}"
+      "{\"base_task_name\": \"Retry/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Retry/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}}}"
     ],
     "infra_step": true,
     "name": "Bisect a2.Retry",
@@ -1988,7 +1988,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"tasks\": [{\"task_id\": \"140000\"}]}"
+      "{\"base_task_name\": \"Retry/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Retry/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"140000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/140000\"}}}"
     ],
     "infra_step": true,
     "name": "Bisect a1.Retry",

@@ -65,12 +65,11 @@ class CollectTaskTest(unittest.TestCase):
     build_props_json = os.path.join(self.temp_dir, 'build_properties.json')
     task_output_dir = os.path.join(self.temp_dir, 'task_output_dir')
     os.makedirs(task_output_dir)
-    summary_json = os.path.join(task_output_dir, 'summary.json')
     output_json = os.path.join(self.temp_dir, 'output.json')
     exit_code = collect_task.collect_task(
         collect_cmd, 'merge.py', self.merge_script_log,
-        build_props_json, None, task_output_dir, output_json,
-        summary_json)
+        build_props_json, None, task_output_dir,
+        output_json)
     self.assertEqual(0, exit_code)
 
     # Should append correct --task-output-dir to args after '--'.
@@ -82,10 +81,8 @@ class CollectTaskTest(unittest.TestCase):
                 '--swarming-arg0', '0',
                 '--swarming-arg1', '1',
                 'positional1',
-                '--output-dir',
+                '--task-output-dir',
                 task_output_dir,
-                '--task-summary-json',
-                summary_json,
             ],
             [
                 sys.executable,
@@ -124,8 +121,8 @@ class CollectTaskTest(unittest.TestCase):
     output_json = os.path.join(self.temp_dir, 'output.json')
     exit_code = collect_task.collect_task(
         collect_cmd, merge_script, self.merge_script_log,
-        build_props_json, None, task_output_dir, output_json,
-        summary_json)
+        build_props_json, None, task_output_dir,
+        output_json)
 
     self.assertEquals(0, exit_code)
     self.assertEquals(
@@ -136,8 +133,7 @@ class CollectTaskTest(unittest.TestCase):
             '--swarming-arg0', '0',
             '--swarming-arg1', '1',
             'positional1',
-            '--output-dir', task_output_dir,
-            '--task-summary-json', summary_json,
+            '--task-output-dir', task_output_dir,
           ],
           [
             sys.executable,
@@ -163,14 +159,13 @@ class CollectTaskTest(unittest.TestCase):
     merge_script = os.path.join(self.temp_dir, 'fake_custom_merge.py')
     task_output_dir = os.path.join(self.temp_dir, 'task_output_dir')
     os.makedirs(task_output_dir)
-    summary_json = os.path.join(task_output_dir, 'summary.json')
 
     build_props_json = os.path.join(self.temp_dir, 'build_properties.json')
     output_json = os.path.join(self.temp_dir, 'output.json')
     exit_code = collect_task.collect_task(
         collect_cmd, merge_script, self.merge_script_log,
-        build_props_json, None, task_output_dir, output_json,
-        summary_json)
+        build_props_json, None, task_output_dir,
+        output_json)
 
     self.assertEquals(0, exit_code)
     self.assertEquals(
@@ -181,8 +176,7 @@ class CollectTaskTest(unittest.TestCase):
             '--swarming-arg0', '0',
             '--swarming-arg1', '1',
             'positional1',
-            '--output-dir', task_output_dir,
-            '--task-summary-json', summary_json,
+            '--task-output-dir', task_output_dir,
           ],
           [
             sys.executable,
@@ -206,7 +200,6 @@ class CollectTaskTest(unittest.TestCase):
     merge_script = os.path.join(self.temp_dir, 'fake_custom_merge.py')
     task_output_dir = os.path.join(self.temp_dir, 'task_output_dir')
     os.makedirs(task_output_dir)
-    summary_json = os.path.join(task_output_dir, 'summary.json')
 
     build_props = json.dumps({
       'sample_build_property': 'sample_value'
@@ -218,7 +211,7 @@ class CollectTaskTest(unittest.TestCase):
     output_json = os.path.join(self.temp_dir, 'output.json')
     exit_code = collect_task.collect_task(
         collect_cmd, merge_script, self.merge_script_log, build_props,
-        merge_args, task_output_dir, output_json, summary_json)
+        merge_args, task_output_dir, output_json)
 
     self.assertEquals(0, exit_code)
     self.assertEquals(
@@ -229,8 +222,7 @@ class CollectTaskTest(unittest.TestCase):
             '--swarming-arg0', '0',
             '--swarming-arg1', '1',
             'positional1',
-            '--output-dir', task_output_dir,
-            '--task-summary-json', summary_json,
+            '--task-output-dir', task_output_dir,
           ],
           [
             sys.executable,
@@ -255,7 +247,6 @@ class CollectTaskTest(unittest.TestCase):
     build_props_json = os.path.join(self.temp_dir, 'build_properties.json')
     task_output_dir = os.path.join(self.temp_dir, 'task_output_dir')
     os.makedirs(task_output_dir)
-    summary_json = os.path.join(task_output_dir, 'summary.json')
 
     shard0_dir = os.path.join(task_output_dir, '0')
     os.makedirs(shard0_dir)
@@ -272,7 +263,7 @@ class CollectTaskTest(unittest.TestCase):
     output_json = os.path.join(self.temp_dir, 'output.json')
     exit_code = collect_task.collect_task(
         collect_cmd, 'merge.py', self.merge_script_log, build_props_json, None,
-        task_output_dir, output_json, summary_json)
+        task_output_dir, output_json)
     self.assertEqual(0, exit_code)
 
     # Should append correct --task-output-dir to args after '--'.
@@ -284,10 +275,8 @@ class CollectTaskTest(unittest.TestCase):
                 '--swarming-arg0', '0',
                 '--swarming-arg1', '1',
                 'positional1',
-                '--output-dir',
+                '--task-output-dir',
                 task_output_dir,
-                '--task-summary-json',
-                summary_json,
             ],
             [
                 sys.executable,
