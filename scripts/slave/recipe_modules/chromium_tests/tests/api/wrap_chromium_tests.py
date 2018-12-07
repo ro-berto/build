@@ -51,53 +51,19 @@ def RunSteps(api):
         api.chromium_tests.create_bot_id(
             api.properties['mastername'], api.properties['buildername'])
     ]
-  bot_config_object = api.chromium_tests.create_bot_config_object(
-      bot_ids,
-      builders=api.properties.get('builders') or api.chromium_tests.builders)
+  bot_config_object = api.chromium_tests.create_bot_config_object(bot_ids)
   api.chromium_tests.configure_build(bot_config_object)
   with api.chromium_tests.wrap_chromium_tests(bot_config_object, tests=tests):
     pass
 
 
 def GenTests(api):
-
-  test_builders = {
-      'chromium.example': {
-          'builders': {
-              'android-basic': {
-                  'android_config': 'main_builder',
-                  'chromium_apply_config': [
-                      'mb',
-                      'ninja_confirm_noop',
-                  ],
-                  'chromium_config': 'android',
-                  'chromium_config_kwargs': {
-                      'BUILD_CONFIG': 'Release',
-                      'TARGET_BITS': 32,
-                      'TARGET_PLATFORM': 'android',
-                  },
-                  'gclient_config': 'chromium',
-                  'gclient_apply_config': ['android'],
-                  'bot_type': 'builder_tester',
-                  'testing': {
-                      'platform': 'linux',
-                  },
-              },
-          },
-      },
-  }
-
   yield (
       api.test('require_device_steps') +
-      api.properties.generic(
-          mastername='chromium.example',
-          buildername='android-basic',
-          local_gtest=True,
-          builders=test_builders) +
-      api.post_process(post_process.MustRun, 'device_recovery') +
-      api.post_process(post_process.MustRun, 'provision_devices') +
-      api.post_process(post_process.MustRun, 'device_status') +
-      api.post_process(post_process.DropExpectation)
+      api.properties.tryserver(
+          mastername='tryserver.chromium.android',
+          buildername='android_blink_rel',
+          local_gtest=True)
   )
 
   yield (
