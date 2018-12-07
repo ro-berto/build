@@ -131,6 +131,7 @@ def override_compile_targets(base_config, compile_targets):
   config['compile_targets'] = compile_targets
   return config
 
+
 SPEC = {
   'settings': {
     'build_gs_bucket': 'chromium-fyi-archive',
@@ -209,7 +210,7 @@ SPEC = {
     # There are no slaves for the following two "Dummy Builders" and they
     # do not appear on the actual continuous waterfall; this configuration
     # is here so that a try bot can be added.
-    'WebKit Linux slimming_paint_v2 Dummy Builder': {
+    'WebKit Linux composite_after_paint Dummy Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb','ninja_confirm_noop'],
       'gclient_config': 'chromium',
@@ -227,6 +228,25 @@ SPEC = {
       },
     },
     'WebKit Linux layout_ng Dummy Builder': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['mb','ninja_confirm_noop'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'compile_targets': [
+        'blink_tests',
+      ],
+      'tests': [],
+      'test_results_config': 'staging_server',
+      'testing': {
+          'platform': 'linux',
+      },
+    },
+    # TODO(crbug.com/909899): Remove this configuration after
+    # crrev.com/c/1367655 lands.
+    'WebKit Linux slimming_paint_v2 Dummy Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb','ninja_confirm_noop'],
       'gclient_config': 'chromium',

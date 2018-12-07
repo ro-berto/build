@@ -565,6 +565,11 @@ TRYBOTS = freeze({
         'mastername': 'chromium.clang',
         'buildername': 'UBSanVptr Linux',
       }),
+      'linux_layout_tests_composite_after_paint': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'WebKit Linux composite_after_paint Dummy Builder',
+      }),
+      # TODO(crbug.com/909899): Remove this after crrev.com/c/1367655 lands.
       'linux_layout_tests_slimming_paint_v2': simple_bot({
         'mastername': 'chromium.fyi',
         'buildername': 'WebKit Linux slimming_paint_v2 Dummy Builder',
