@@ -1213,6 +1213,8 @@ class SwarmingTest(Test):
                hard_timeout=None, io_timeout=None,
                waterfall_mastername=None, waterfall_buildername=None,
                set_up=None, tear_down=None, optional_dimensions=None,
+               isolate_coverage_data=None, merge=None,
+               ignore_task_failure=None,
                **kwargs):
     super(SwarmingTest, self).__init__(
         name, target_name=target_name,
@@ -1227,7 +1229,10 @@ class SwarmingTest(Test):
     self._hard_timeout = hard_timeout
     self._io_timeout = io_timeout
     self._set_up = set_up
+    self._merge = merge
     self._tear_down = tear_down
+    self._isolate_coverage_data = isolate_coverage_data
+    self._ignore_task_failure = ignore_task_failure
     if dimensions and not extra_suffix:
       if dimensions.get('gpu'):
         self._extra_suffix = self._get_gpu_suffix(dimensions)
@@ -1328,6 +1333,55 @@ class SwarmingTest(Test):
       A SwarmingTask object.
     """
     raise NotImplementedError()  # pragma: no cover
+
+  def _create_task_common(self, api, suffix, isolated_hash, filter_flag,
+                          filter_delimiter, task_func):
+    # For local tests test_args are added inside api.chromium.runtest.
+    args = self._args + api.chromium.c.runtests.test_args
+
+    tests_to_retry = self.tests_to_retry(api, suffix)
+    test_options = _test_options_for_running(self.test_options, suffix,
+                                             tests_to_retry)
+    args = _merge_args_and_test_options(self, self._args, test_options)
+
+    shards = self._shards
+
+    # We've run into issues in the past with command lines hitting a character
+    # limit on windows. Do a sanity check, and only pass this list if we failed
+    # less than 100 tests.
+    if tests_to_retry and len(tests_to_retry) < 100:
+      test_list = filter_delimiter.join(tests_to_retry)
+      args = _merge_arg(args, filter_flag, test_list)
+
+      shards = self.shards_to_retry_with(api, shards, len(tests_to_retry))
+
+    env = None
+    if self._isolate_coverage_data:
+      # Targets built with 'use_clang_coverage' will look at this environment
+      # variable to determine where to write the profile dumps. The %Nm syntax
+      # is understood by this instrumentation, see:
+      #   https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#id4
+      env = {
+          'LLVM_PROFILE_FILE':
+              '${ISOLATED_OUTDIR}/profraw/default-%8m.profraw',
+      }
+
+      if not self._merge:
+        self._merge = api.chromium_tests.m.clang_coverage.shard_merge(
+            self._step_name(suffix))
+
+    return task_func(
+        build_properties=api.chromium.build_properties,
+        cipd_packages=self._cipd_packages,
+        env=env,
+        extra_args=args,
+        ignore_task_failure=self._ignore_task_failure,
+        isolated_hash=isolated_hash,
+        merge=self._merge,
+        shards=shards,
+        title=self._step_name(suffix),
+        trigger_script=self._trigger_script,
+    )
 
   def get_task(self, suffix):
     return self._tasks.get(suffix)
@@ -1464,6 +1518,8 @@ class SwarmingGTestTest(SwarmingTest):
         waterfall_buildername=waterfall_buildername,
         set_up=set_up, tear_down=tear_down,
         override_isolate_target=override_isolate_target,
+        isolate_coverage_data=isolate_coverage_data,
+        merge=merge,
         optional_dimensions=optional_dimensions)
     self._args = args or []
     self._shards = shards
@@ -1471,9 +1527,7 @@ class SwarmingGTestTest(SwarmingTest):
     self._override_compile_targets = override_compile_targets
     self._cipd_packages = cipd_packages
     self._gtest_results = {}
-    self._merge = merge
     self._trigger_script = trigger_script
-    self._isolate_coverage_data = isolate_coverage_data
 
   @Test.test_options.setter
   def test_options(self, value):
@@ -1489,45 +1543,14 @@ class SwarmingGTestTest(SwarmingTest):
     return [self.target_name]
 
   def create_task(self, api, suffix, isolated_hash):
-    # For local tests test_args are added inside api.chromium.runtest.
-    args = self._args + api.chromium.c.runtests.test_args
+    def _create_swarming_task(*args, **kwargs):
+      kwargs['test_launcher_summary_output'] = (
+          api.test_utils.gtest_results(add_json_log=False))
+      return api.swarming.gtest_task(*args, **kwargs)
 
-    tests_to_retry = self.tests_to_retry(api, suffix)
-    test_options = _test_options_for_running(self.test_options, suffix,
-                                             tests_to_retry)
-    args = _merge_args_and_test_options(self, args, test_options)
-
-    shards = self._shards
-    if tests_to_retry:
-      args = _merge_arg(args, '--gtest_filter', ':'.join(tests_to_retry))
-
-      shards = self.shards_to_retry_with(api, shards, len(tests_to_retry))
-    args.extend(api.chromium_tests.swarming_extra_args)
-
-    env = None
-    if self._isolate_coverage_data:
-      # Targets built with 'use_clang_coverage' will look at this environment
-      # variable to determine where to write the profile dumps. The %Nm syntax
-      # is understood by this instrumentation, see:
-      #   https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#id4
-      env = {
-          'LLVM_PROFILE_FILE':
-              '${ISOLATED_OUTDIR}/profraw/default-%8m.profraw',
-      }
-
-      if not self._merge:
-        self._merge = api.chromium_tests.m.clang_coverage.shard_merge(
-            self._step_name(suffix))
-
-    return api.swarming.gtest_task(
-        title=self._step_name(suffix),
-        isolated_hash=isolated_hash,
-        shards=shards,
-        test_launcher_summary_output=api.test_utils.gtest_results(
-            add_json_log=False),
-        cipd_packages=self._cipd_packages, extra_args=args,
-        merge=self._merge, trigger_script=self._trigger_script,
-        build_properties=api.chromium.build_properties, env=env)
+    return self._create_task_common(
+        api, suffix, isolated_hash, '--gtest_filter', ':',
+        _create_swarming_task)
 
   def validate_task_results(self, api, step_result):
     if not hasattr(step_result, 'test_utils'):
@@ -1718,6 +1741,9 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
         waterfall_buildername=waterfall_buildername,
         set_up=set_up, tear_down=tear_down,
+        isolate_coverage_data=isolate_coverage_data,
+        merge=merge,
+        ignore_task_failure=ignore_task_failure,
         optional_dimensions=optional_dimensions)
     self._args = args or []
     self._shards = shards
@@ -1727,15 +1753,12 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._results_url = results_url
     self._perf_dashboard_id = perf_dashboard_id
     self._isolated_script_results = {}
-    self._merge = merge
     self._trigger_script = trigger_script
-    self._ignore_task_failure = ignore_task_failure
     self.results_handler = results_handler or JSONResultsHandler(
         ignore_task_failure=ignore_task_failure)
     self._test_results = {}
     self._idempotent = idempotent
     self._cipd_packages = cipd_packages
-    self._isolate_coverage_data = isolate_coverage_data
 
   @property
   def target_name(self):
@@ -1755,48 +1778,17 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._test_options = value
 
   def create_task(self, api, suffix, isolated_hash):
-    tests_to_retry = self.tests_to_retry(api, suffix)
-    test_options = _test_options_for_running(self.test_options, suffix,
-                                             tests_to_retry)
-    args = _merge_args_and_test_options(self, self._args, test_options)
+    def _create_swarming_task(*args, **kwargs):
+      # For the time being, we assume all isolated_script_test are not
+      # idempotent TODO(crbug.com/549140): remove the self._idempotent
+      # parameter once Telemetry tests are idempotent, since that will make all
+      # isolated_script_tests idempotent.
+      kwargs['idempotent'] = self._idempotent
+      return api.swarming.isolated_script_task(*args, **kwargs)
 
-    shards = self._shards
-
-    # We've run into issues in the past with command lines hitting a character
-    # limit on windows. Do a sanity check, and only pass this list if we failed
-    # less than 100 tests.
-    if tests_to_retry and len(tests_to_retry) < 100:
-      test_list = "::".join(tests_to_retry)
-      args.extend(['--isolated-script-test-filter', test_list])
-
-      shards = self.shards_to_retry_with(api, shards, len(tests_to_retry))
-
-    env = None
-    if self._isolate_coverage_data:
-      # Targets built with 'use_clang_coverage' will look at this environment
-      # variable to determine where to write the profile dumps. The %Nm syntax
-      # is understood by this instrumentation, see:
-      #   https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#id4
-      env = {
-          'LLVM_PROFILE_FILE':
-              '${ISOLATED_OUTDIR}/profraw/default-%8m.profraw',
-      }
-
-      if not self._merge:
-        self._merge = api.chromium_tests.m.clang_coverage.shard_merge(
-            self._step_name(suffix))
-
-    # For the time being, we assume all isolated_script_test are not idempotent
-    # TODO(crbug.com/549140): remove the self._idempotent parameter once
-    # Telemetry tests are idempotent, since that will make all
-    # isolated_script_tests idempotent.
-    return api.swarming.isolated_script_task(
-        title=self._step_name(suffix),
-        ignore_task_failure=self._ignore_task_failure,
-        isolated_hash=isolated_hash, shards=shards, idempotent=self._idempotent,
-        merge=self._merge, trigger_script=self._trigger_script,
-        build_properties=api.chromium.build_properties,
-        cipd_packages=self._cipd_packages, extra_args=args, env=env)
+    return self._create_task_common(
+        api, suffix, isolated_hash, '--isolated-script-test-filter', '::',
+        _create_swarming_task)
 
   def pass_fail_counts(self, _, suffix):
     if self._test_results.get(suffix):

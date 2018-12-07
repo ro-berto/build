@@ -1878,8 +1878,7 @@
       "--",
       "--gtest_repeat=10",
       "--test-launcher-retry-limit=0",
-      "--isolated-script-test-filter",
-      "test1.Test1::test2.Test2",
+      "--isolated-script-test-filter=test1.Test1::test2.Test2",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
@@ -2882,8 +2881,7 @@
       "--",
       "--gtest_repeat=10",
       "--test-launcher-retry-limit=0",
-      "--isolated-script-test-filter",
-      "test1.Test1::test2.Test2",
+      "--isolated-script-test-filter=test1.Test1::test2.Test2",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
