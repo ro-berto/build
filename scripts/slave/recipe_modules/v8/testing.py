@@ -497,7 +497,7 @@ class V8SwarmingTest(V8Test):
 
     # Arguments for actual 'collect' command.
     args.append('--')
-    args.extend(self.api.swarming.get_collect_cmd_args(task))
+    args.extend(self.api.swarming.get_collect_cmd_args_for_python(task))
 
     return self.api.build.python(
         name=self.test['name'] + self.test_step_config.step_name_suffix,

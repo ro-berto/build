@@ -1333,6 +1333,19 @@ class SwarmingApi(recipe_api.RecipeApi):
       args.extend(['--auth-service-account-json', self.service_account_json])
     return args
 
+  # TODO(tikuta): This is for recipe_modules/v8/testing.py.
+  # Remove after switch (crbug.com/894045).
+  def get_collect_cmd_args_for_python(self, task):
+    """SwarmingTask -> argument list for 'swarming.py' command."""
+    args = [
+      'collect',
+      '--swarming', self.swarming_server,
+      '--decorate',
+      '--print-status-updates',
+    ]
+    args.extend(('--json', self.m.json.input(task.trigger_output)))
+    return args
+
   def _gen_trigger_step_test_data(self, task):
     """Generates an expected value of --dump-json in 'trigger' step.
 

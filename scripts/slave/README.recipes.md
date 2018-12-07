@@ -3111,6 +3111,10 @@ This value can be changed per individual task.
 
 SwarmingTask -> argument list for 'swarming.py' command.
 
+&mdash; **def [get\_collect\_cmd\_args\_for\_python](/scripts/slave/recipe_modules/swarming/api.py#1338)(self, task):**
+
+SwarmingTask -> argument list for 'swarming.py' command.
+
 &mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1234)(self, prefix, task):**
 
 SwarmingTask -> name of a step of a waterfall.
