@@ -410,7 +410,7 @@ class AndroidApi(recipe_api.RecipeApi):
     return [s for s in self.devices if s not in blacklisted_devices]
 
   def device_status_check(self):
-    self.device_recovery()
+    self.device_recovery(venv=True)
     return self.device_status()
 
   def host_info(self, args=None, **kwargs):
@@ -473,7 +473,11 @@ class AndroidApi(recipe_api.RecipeApi):
       f.result.presentation.status = self.m.step.EXCEPTION
 
   # TODO(jbudorick): Remove restart_usb once it's unused.
-  def device_recovery(self, restart_usb=False, **kwargs):
+  # TODO(perezju): Remove venv once venv=True becomes the default.
+  def device_recovery(self, restart_usb=False, venv=False, **kwargs):
+    script = self.m.path['checkout'].join(
+        'third_party', 'catapult', 'devil', 'devil', 'android', 'tools',
+        'device_recovery.py')
     args = [
         '--blacklist-file', self.blacklist_file,
         '--known-devices-file', self.known_devices_file,
@@ -483,13 +487,12 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.c.restart_usb or restart_usb:
       args += ['--enable-usb-reset']
     with self.m.context(env=self.m.chromium.get_env()):
-      self.m.step(
-          'device_recovery',
-          [self.m.path['checkout'].join('third_party', 'catapult', 'devil',
-                                        'devil', 'android', 'tools',
-                                        'device_recovery.py')] + args,
-          infra_step=True,
-          **kwargs)
+      if not venv:
+        self.m.step('device_recovery', [script] + args,
+                    infra_step=True, **kwargs)
+      else:
+        self.m.python('device_recovery', script, args,
+                      infra_step=True, venv=True, **kwargs)
 
   def device_status(self, **kwargs):
     buildbot_file = '/home/chrome-bot/.adb_device_info'
@@ -1229,7 +1232,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                             '*.log')],
     )
 
-  def common_tests_setup_steps(self, perf_setup=False, **provision_kwargs):
+  def common_tests_setup_steps(self, venv=False, perf_setup=False, **provision_kwargs):
     if self.c.use_devil_adb:
       self.use_devil_adb()
     self.create_adb_symlink()
@@ -1238,7 +1241,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.authorize_adb_devices()
     # TODO(jbudorick): Restart USB only on perf bots while we
     # figure out the fate of the usb reset in general.
-    self.device_recovery(restart_usb=perf_setup)
+    self.device_recovery(venv=venv, restart_usb=perf_setup)
     if perf_setup:
       kwargs = {
           'min_battery_level': 95,
