@@ -534,8 +534,10 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.client.v8.fyi\", \"builder\": \"V8-Blink Linux 64\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"V8-Blink Linux 64\", \"project\": \"v8\"}",
       "--buildbot-buildername",
       "V8-Blink Linux 64",
       "--buildbot-mastername",
@@ -604,7 +606,7 @@
       "--master-name",
       "client.v8.fyi",
       "--build-number",
-      "571",
+      "0",
       "--builder-name",
       "V8-Blink Linux 64",
       "--step-name",
@@ -641,11 +643,13 @@
       "--builder-name",
       "V8-Blink Linux 64",
       "--build-number",
-      "571",
+      "0",
       "--test-type",
       "webkit_layout_tests (with patch)",
       "--chrome-revision",
       "43426",
+      "--build-id",
+      "8945511751514863184",
       "--test-results-server",
       "test-results.appspot.com"
     ],
@@ -667,7 +671,7 @@
       "--build-dir",
       "[BUILDER_CACHE]/V8_Blink_Linux_64/src/out",
       "--build-number",
-      "571",
+      "0",
       "--builder-name",
       "V8-Blink Linux 64",
       "--gs-bucket",
@@ -683,8 +687,8 @@
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
     "name": "archive results for webkit_layout_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/571/webkit_layout_tests (with patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/571/webkit_layout_tests (with patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/0/webkit_layout_tests (with patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/0/webkit_layout_tests (with patch)/layout-test-results.zip@@@"
     ]
   },
   {
@@ -703,7 +707,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+      "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--revision",
+      "src/v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
     "env_prefixes": {
@@ -718,7 +724,8 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -1135,8 +1142,10 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.client.v8.fyi\", \"builder\": \"V8-Blink Linux 64\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"V8-Blink Linux 64\", \"project\": \"v8\"}",
       "--buildbot-buildername",
       "V8-Blink Linux 64",
       "--buildbot-mastername",
@@ -1205,7 +1214,7 @@
       "--master-name",
       "client.v8.fyi",
       "--build-number",
-      "571",
+      "0",
       "--builder-name",
       "V8-Blink Linux 64",
       "--step-name",
@@ -1244,11 +1253,13 @@
       "--builder-name",
       "V8-Blink Linux 64",
       "--build-number",
-      "571",
+      "0",
       "--test-type",
       "webkit_layout_tests (without patch)",
       "--chrome-revision",
       "43426",
+      "--build-id",
+      "8945511751514863184",
       "--test-results-server",
       "test-results.appspot.com"
     ],
@@ -1270,7 +1281,7 @@
       "--build-dir",
       "[BUILDER_CACHE]/V8_Blink_Linux_64/src/out",
       "--build-number",
-      "571",
+      "0",
       "--builder-name",
       "V8-Blink Linux 64",
       "--gs-bucket",
@@ -1286,8 +1297,8 @@
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
     "name": "archive results for webkit_layout_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/571/webkit_layout_tests (without patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/571/webkit_layout_tests (without patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/0/webkit_layout_tests (without patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/0/webkit_layout_tests (without patch)/layout-test-results.zip@@@"
     ]
   },
   {
@@ -1303,7 +1314,7 @@
       "--retry-summary-json",
       "{\"failures\": [\"bad/totally-bad-probably.html\", \"tricky/totally-maybe-not-awesome.html\"], \"ignored\": []}",
       "--build-number",
-      "571",
+      "0",
       "--builder-name",
       "V8-Blink Linux 64",
       "--gs-bucket",

@@ -534,8 +534,10 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.client.v8.fyi\", \"builder\": \"V8-Blink Linux 64\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"V8-Blink Linux 64\", \"project\": \"v8\"}",
       "--buildbot-buildername",
       "V8-Blink Linux 64",
       "--buildbot-mastername",
@@ -604,7 +606,7 @@
       "--master-name",
       "client.v8.fyi",
       "--build-number",
-      "571",
+      "0",
       "--builder-name",
       "V8-Blink Linux 64",
       "--step-name",
@@ -641,11 +643,13 @@
       "--builder-name",
       "V8-Blink Linux 64",
       "--build-number",
-      "571",
+      "0",
       "--test-type",
       "webkit_layout_tests (with patch)",
       "--chrome-revision",
       "43426",
+      "--build-id",
+      "8945511751514863184",
       "--test-results-server",
       "test-results.appspot.com"
     ],
@@ -667,7 +671,7 @@
       "--build-dir",
       "[BUILDER_CACHE]/V8_Blink_Linux_64/src/out",
       "--build-number",
-      "571",
+      "0",
       "--builder-name",
       "V8-Blink Linux 64",
       "--gs-bucket",
@@ -683,8 +687,8 @@
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
     "name": "archive results for webkit_layout_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/571/webkit_layout_tests (with patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/571/webkit_layout_tests (with patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/0/webkit_layout_tests (with patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/0/webkit_layout_tests (with patch)/layout-test-results.zip@@@"
     ]
   },
   {
@@ -703,7 +707,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+      "src@f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--revision",
+      "src/v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
     "env_prefixes": {
@@ -718,7 +724,8 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/v8\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -1135,8 +1142,10 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.client.v8.fyi\", \"builder\": \"V8-Blink Linux 64\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"V8-Blink Linux 64\", \"project\": \"v8\"}",
       "--buildbot-buildername",
       "V8-Blink Linux 64",
       "--buildbot-mastername",
@@ -1205,7 +1214,7 @@
       "--master-name",
       "client.v8.fyi",
       "--build-number",
-      "571",
+      "0",
       "--builder-name",
       "V8-Blink Linux 64",
       "--step-name",
@@ -1244,11 +1253,13 @@
       "--builder-name",
       "V8-Blink Linux 64",
       "--build-number",
-      "571",
+      "0",
       "--test-type",
       "webkit_layout_tests (without patch)",
       "--chrome-revision",
       "43426",
+      "--build-id",
+      "8945511751514863184",
       "--test-results-server",
       "test-results.appspot.com"
     ],
@@ -1270,7 +1281,7 @@
       "--build-dir",
       "[BUILDER_CACHE]/V8_Blink_Linux_64/src/out",
       "--build-number",
-      "571",
+      "0",
       "--builder-name",
       "V8-Blink Linux 64",
       "--gs-bucket",
@@ -1286,8 +1297,8 @@
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
     "name": "archive results for webkit_layout_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/571/webkit_layout_tests (without patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/571/webkit_layout_tests (without patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/0/webkit_layout_tests (without patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/0/webkit_layout_tests (without patch)/layout-test-results.zip@@@"
     ]
   },
   {
@@ -1303,7 +1314,7 @@
       "--retry-summary-json",
       "{\"failures\": [\"bad/failing0.html\", \"bad/failing1.html\", \"bad/failing10.html\", \"bad/failing100.html\", \"bad/failing101.html\", \"bad/failing102.html\", \"bad/failing103.html\", \"bad/failing104.html\", \"bad/failing105.html\", \"bad/failing106.html\", \"bad/failing107.html\", \"bad/failing108.html\", \"bad/failing109.html\", \"bad/failing11.html\", \"bad/failing110.html\", \"bad/failing111.html\", \"bad/failing112.html\", \"bad/failing113.html\", \"bad/failing114.html\", \"bad/failing115.html\", \"bad/failing116.html\", \"bad/failing117.html\", \"bad/failing118.html\", \"bad/failing119.html\", \"bad/failing12.html\", \"bad/failing120.html\", \"bad/failing121.html\", \"bad/failing122.html\", \"bad/failing123.html\", \"bad/failing124.html\", \"bad/failing13.html\", \"bad/failing14.html\", \"bad/failing15.html\", \"bad/failing16.html\", \"bad/failing17.html\", \"bad/failing18.html\", \"bad/failing19.html\", \"bad/failing2.html\", \"bad/failing20.html\", \"bad/failing21.html\", \"bad/failing22.html\", \"bad/failing23.html\", \"bad/failing24.html\", \"bad/failing25.html\", \"bad/failing26.html\", \"bad/failing27.html\", \"bad/failing28.html\", \"bad/failing29.html\", \"bad/failing3.html\", \"bad/failing30.html\", \"bad/failing31.html\", \"bad/failing32.html\", \"bad/failing33.html\", \"bad/failing34.html\", \"bad/failing35.html\", \"bad/failing36.html\", \"bad/failing37.html\", \"bad/failing38.html\", \"bad/failing39.html\", \"bad/failing4.html\", \"bad/failing40.html\", \"bad/failing41.html\", \"bad/failing42.html\", \"bad/failing43.html\", \"bad/failing44.html\", \"bad/failing45.html\", \"bad/failing46.html\", \"bad/failing47.html\", \"bad/failing48.html\", \"bad/failing49.html\", \"bad/failing5.html\", \"bad/failing50.html\", \"bad/failing51.html\", \"bad/failing52.html\", \"bad/failing53.html\", \"bad/failing54.html\", \"bad/failing55.html\", \"bad/failing56.html\", \"bad/failing57.html\", \"bad/failing58.html\", \"bad/failing59.html\", \"bad/failing6.html\", \"bad/failing60.html\", \"bad/failing61.html\", \"bad/failing62.html\", \"bad/failing63.html\", \"bad/failing64.html\", \"bad/failing65.html\", \"bad/failing66.html\", \"bad/failing67.html\", \"bad/failing68.html\", \"bad/failing69.html\", \"bad/failing7.html\", \"bad/failing70.html\", \"bad/failing71.html\", \"bad/failing72.html\", \"bad/failing73.html\", \"bad/failing74.html\", \"bad/failing75.html\", \"bad/failing76.html\", \"bad/failing77.html\", \"bad/failing78.html\", \"bad/failing79.html\", \"bad/failing8.html\", \"bad/failing80.html\", \"bad/failing81.html\", \"bad/failing82.html\", \"bad/failing83.html\", \"bad/failing84.html\", \"bad/failing85.html\", \"bad/failing86.html\", \"bad/failing87.html\", \"bad/failing88.html\", \"bad/failing89.html\", \"bad/failing9.html\", \"bad/failing90.html\", \"bad/failing91.html\", \"bad/failing92.html\", \"bad/failing93.html\", \"bad/failing94.html\", \"bad/failing95.html\", \"bad/failing96.html\", \"bad/failing97.html\", \"bad/failing98.html\", \"bad/failing99.html\", \"bad/totally-bad-probably.html\", \"tricky/totally-maybe-not-awesome.html\"], \"ignored\": []}",
       "--build-number",
-      "571",
+      "0",
       "--builder-name",
       "V8-Blink Linux 64",
       "--gs-bucket",

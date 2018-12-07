@@ -35,6 +35,7 @@ DEPS = [
   'build/test_utils',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -230,7 +231,12 @@ def GenTests(api):
       api.properties.generic(mastername=mastername,
                              buildername=buildername,
                              revision='a' * 40,
-                             path_config='kitchen')
+                             path_config='kitchen') +
+      api.buildbucket.ci_build(
+          project='v8',
+          git_repo='https://chromium.googlesource.com/v8/v8',
+          builder=buildername,
+          revision='a' * 40)
     )
 
   for mastername, master_config in BUILDERS.iteritems():

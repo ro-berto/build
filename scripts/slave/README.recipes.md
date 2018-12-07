@@ -4213,7 +4213,7 @@ Checks that properties get to recipes from annotated_run properly
 &mdash; **def [RunSteps](/scripts/slave/recipes/bisection/desktop_bisect_staging.py#21)(api):**
 ### *recipes* / [blink\_downstream](/scripts/slave/recipes/blink_downstream.py)
 
-[DEPS](/scripts/slave/recipes/blink_downstream.py#30): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipes/blink_downstream.py#30): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 This recipe can be used by components like v8 to verify blink tests with a
 low false positive rate. Similar to a trybot, this recipe compares test
@@ -4236,11 +4236,11 @@ Summary of the recipe flow:
 Revision Y will be the revision property as provided by buildbot or HEAD (i.e.
 in a forced build with no revision provided).
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/blink_downstream.py#146)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/blink_downstream.py#147)(api):**
 
-&mdash; **def [V8Builder](/scripts/slave/recipes/blink_downstream.py#45)(config, bits, platform):**
+&mdash; **def [V8Builder](/scripts/slave/recipes/blink_downstream.py#46)(config, bits, platform):**
 
-&mdash; **def [determine\_new\_failures](/scripts/slave/recipes/blink_downstream.py#109)(caller_api, tests, deapply_patch_fn):**
+&mdash; **def [determine\_new\_failures](/scripts/slave/recipes/blink_downstream.py#110)(caller_api, tests, deapply_patch_fn):**
 
 Utility function for running steps with a patch applied, and retrying
 failing steps without the patch. Failures from the run without the patch are
@@ -4255,7 +4255,7 @@ Args:
   deapply_patch_fn - function that takes a list of failing tests
                      and undoes any effect of the previously applied patch
 
-&mdash; **def [determine\_new\_future\_failures](/scripts/slave/recipes/blink_downstream.py#74)(caller_api, extra_args):**
+&mdash; **def [determine\_new\_future\_failures](/scripts/slave/recipes/blink_downstream.py#75)(caller_api, extra_args):**
 ### *recipes* / [boringssl](/scripts/slave/recipes/boringssl.py)
 
 [DEPS](/scripts/slave/recipes/boringssl.py#7): [chromium](#recipe_modules-chromium), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
