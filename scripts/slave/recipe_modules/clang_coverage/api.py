@@ -452,7 +452,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         'Finding merging errors',
         self.resource('load_merge_errors.py'),
         args=[
-            '--root-path', self.profdata_dir()
+            '--root-dir', self.profdata_dir()
         ],
         step_test_data=lambda: self.m.json.test_api.output_stream({}),
         stdout=self.m.json.output())

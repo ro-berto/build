@@ -72,6 +72,9 @@ def GenTests(api):
           post_process.MustRun, 'generate metadata for 3 targets')
       + api.post_process(
           post_process.MustRun, 'gsutil upload metadata')
+      + api.post_process(
+          post_process.StepCommandContains, 'Finding merging errors',
+          ['--root-dir'])
       + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
   )
