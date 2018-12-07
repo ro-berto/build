@@ -135,36 +135,6 @@ SPEC = {
       },
     },
 
-    'NDK Next x64 Builder': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android', 'ndk_next'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'builder',
-      'android_config': 'x64_builder_mb',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
-    'NDK Next x86 Builder': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android', 'ndk_next'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Debug',
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'builder',
-      'android_config': 'x86_builder_mb',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
-
     'Nougat Phone Tester': {
       'chromium_config': 'android',
       'chromium_apply_config': [
@@ -187,44 +157,5 @@ SPEC = {
       },
     },
 
-    'x64 Device Tester': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'builder_tester',
-      'android_config': 'x64_builder_mb',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-      # Workaround so that recipes doesn't add random build targets to our
-      # compile line. We want to build everything.
-      'add_tests_as_compile_targets': False,
-      'compile_targets': [
-        'all',
-      ],
-    },
-
-    'x86 Cloud Tester': {
-      'chromium_config': 'android',
-      'gclient_config': 'chromium',
-      'gclient_apply_config': ['android'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 32,
-        'TARGET_PLATFORM': 'android',
-      },
-      'bot_type': 'builder_tester',
-      'android_config': 'x86_builder_mb',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
   },
 }

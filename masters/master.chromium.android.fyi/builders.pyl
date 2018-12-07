@@ -52,41 +52,11 @@
       "slave_pools": ["ndk_next_builders"],
       "category": "3NDKBuilders",
     },
-    "NDK Next x64 Builder": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["ndk_next_builders"],
-      "category": "3NDKBuilders",
-    },
-    "NDK Next x86 Builder": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["ndk_next_builders"],
-      "category": "3NDKBuilders",
-    },
     "Nougat Phone Tester": {
       "recipe": "chromium",
       "use_remote_run": True,
       "scheduler": None,
       "slave_pools": ["nougat_phone"],
-      "category": "2Testers",
-      "mergeRequests": True,
-    },
-    "x64 Device Tester": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["x64_ccompute_launcher"],
-      "category": "2Testers",
-      "mergeRequests": True,
-    },
-    "x86 Cloud Tester": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["cloud_ccompute_launcher"],
       "category": "2Testers",
       "mergeRequests": True,
     },
@@ -131,8 +101,6 @@
         "bits": "64",
       },
       "slaves": [
-        "slave174-c1",
-        "slave191-c1",
         "slave192-c1",
         "slave193-c1",
         "slave194-c1",
@@ -146,26 +114,6 @@
       },
       "slaves": [
         "slave13-c1",
-      ],
-    },
-    "x64_ccompute_launcher": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": [
-        "slave175-c1",
-      ],
-    },
-    "cloud_ccompute_launcher": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": [
-        "slave51-c1",
       ],
     },
   }
