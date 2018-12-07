@@ -109,11 +109,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.android',
         'buildername': 'Android arm64 Builder (dbg)',
       }, analyze_mode='compile'),
-      'android_blink_rel': simple_bot({
-        'mastername': 'chromium.webkit',
-        'buildername': 'Android Builder',
-        'tester': 'WebKit Android (Nexus4)',
-      }),
       'android_cfi_rel_ng': simple_bot({
         'mastername': 'chromium.memory',
         'buildername': 'Android CFI',
