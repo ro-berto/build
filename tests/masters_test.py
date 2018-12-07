@@ -227,8 +227,6 @@ def main(argv):
       'master.client.art': 'ART',
       'master.client.dart': 'Dart',
       'master.client.flutter': 'ClientFlutter',
-      'master.client.nacl': 'NativeClient',
-      'master.client.nacl.toolchain': 'NativeClientToolchain',
       'master.client.wasm.llvm': 'WasmLlvm',
       'master.client.webrtc.perf': 'WebRTCPerf',
       'master.tryserver.chromium.android': 'TryserverChromiumAndroid',
@@ -236,7 +234,6 @@ def main(argv):
       'master.tryserver.chromium.win': 'TryServerChromiumWin',
       'master.tryserver.chromium.perf': 'ChromiumPerfTryServer',
       'master.tryserver.client.catapult': 'CatapultTryserver',
-      'master.tryserver.nacl': 'NativeClientTryServer',
   }
   all_masters = {base_dir: public_masters}
   if os.path.exists(build_internal):
