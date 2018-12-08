@@ -19,6 +19,7 @@ run the cros_flash recipe and run on DUT swarming bots.
 """
 
 import base64
+import math
 import re
 
 from recipe_engine import post_process
@@ -69,6 +70,10 @@ PROPERTIES = {
   'bb_host': Property(
       kind=str,
       help='Buildbucket host to use when triggering flashing jobs.',
+      default=None),
+  'random_seed': Property(
+      kind=int,
+      help='Random seed to set when selected a subset of bots to flash.',
       default=None)
 }
 
@@ -197,11 +202,19 @@ def trigger_flash(api, bot, pool, gs_image_path):
   return build_id
 
 
-def RunSteps(api, swarming_server, swarming_pool, device_type, bb_host):
+def RunSteps(api, swarming_server, swarming_pool, device_type, bb_host,
+             random_seed):
+  # Recipe-runtime import of random to avoid "Non-whitelisted" recipe errors.
+  # TODO(crbug.com/913124): Remove this.
+  import random
+
   api.swarming_client.checkout(revision='master')
 
   if bb_host:
     api.buildbucket.set_buildbucket_host(bb_host)
+
+  if random_seed:
+    random.seed(random_seed)
 
   # Curl the current CHROMEOS_LKGM pin. Don't bother with a full chromium
   # checkout since all we need is that one file.
@@ -261,7 +274,10 @@ def RunSteps(api, swarming_server, swarming_pool, device_type, bb_host):
   # continue to run.
   num_available_bots = len(up_to_date_bots) + len(out_of_date_bots)
   max_num_to_flash = max(num_available_bots / 3, 10)
-  bots_to_flash = out_of_date_bots[0:max_num_to_flash]
+  # Swarming's api returns bots sorted alphabetically. We don't want to
+  # always flash the bots in the same order, so make a random selection.
+  bots_to_flash = random.sample(
+      out_of_date_bots, min(max_num_to_flash, len(out_of_date_bots)))
   flashing_requests = set()
   with api.step.nest('flash bots'):
     for bot in bots_to_flash:
@@ -294,11 +310,14 @@ def RunSteps(api, swarming_server, swarming_pool, device_type, bb_host):
       step_result.presentation.links['%s (failed)' % build['id']] = build['url']
       failed_jobs.append(build)
 
-  # Quit early if any of the flashing requests failed.
-  if failed_jobs:
+  # Quit early if more than half of the flashing requests failed. Some may fail
+  # transiently, so continue on in that case, and they'll be retried in
+  # subsequent runs.
+  max_allowed_failing = math.ceil(len(finished_builds) / 2.0)
+  if len(failed_jobs) >= max_allowed_failing:
     api.python.failing_step('failed %d flashing jobs' % len(failed_jobs),
-        'The following jobs failed:\n%s' % '\n'.join(
-            j['url'] for j in failed_jobs))
+        'Max allowed failures of %d was exceeded. These failures are:\n%s' % (
+            max_allowed_failing, '\n'.join(j['url'] for j in failed_jobs)))
 
   # Wait for all the bots that were flashed to come back up and report healthy.
   with api.step.nest('wait for bots to become available again'):
@@ -389,7 +408,8 @@ def GenTests(api):
         swarming_server='some-swarming-server',
         swarming_pool='some-swarming-pool',
         device_type='some-device-type',
-        bb_host='some-buildbucket-server')
+        bb_host='some-buildbucket-server',
+        random_seed=12345)
     )
     if include_lkgm_steps:
       test += (

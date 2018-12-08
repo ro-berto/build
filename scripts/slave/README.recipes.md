@@ -4995,7 +4995,7 @@ flashing the DUT. The basic steps of this recipe are:
 &mdash; **def [RunSteps](/scripts/slave/recipes/cros_flash.py#50)(api):**
 ### *recipes* / [cros\_flash\_scheduler](/scripts/slave/recipes/cros_flash_scheduler.py)
 
-[DEPS](/scripts/slave/recipes/cros_flash_scheduler.py#27): [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
+[DEPS](/scripts/slave/recipes/cros_flash_scheduler.py#29): [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
 
 This recipe is used to keep Chrome's pools of CrOS DUTs up to date.
 
@@ -5010,15 +5010,15 @@ This recipe is intended to run several times during MTV's off-peak hours. Its
 builder should be backed by a single thin Ubuntu VM, while the tasks it launches
 run the cros_flash recipe and run on DUT swarming bots.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/cros_flash_scheduler.py#200)(api, swarming_server, swarming_pool, device_type, bb_host):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/cros_flash_scheduler.py#206)(api, swarming_server, swarming_pool, device_type, bb_host, random_seed):**
 
-&mdash; **def [get\_bots\_in\_pool](/scripts/slave/recipes/cros_flash_scheduler.py#76)(api, swarming_server, pool, device_type):**
+&mdash; **def [get\_bots\_in\_pool](/scripts/slave/recipes/cros_flash_scheduler.py#82)(api, swarming_server, pool, device_type):**
 
 Returns the list of bots that belong to the given pool.
 
 This uses swarming.py's bot/list query, and returns the resulting bots.
 
-&mdash; **def [get\_closest\_available\_version](/scripts/slave/recipes/cros_flash_scheduler.py#131)(api, board, lkgm_base):**
+&mdash; **def [get\_closest\_available\_version](/scripts/slave/recipes/cros_flash_scheduler.py#137)(api, board, lkgm_base):**
 
 Returns the GS path of the latest image for the given board and lkgm.
 
@@ -5032,7 +5032,7 @@ to the board's directory in the GS image bucket, which contains the images
 built for that board at that version.
 (eg: gs://chromeos-image-archive/kevin-full/R72-11244.0.0-rc2/)
 
-&mdash; **def [trigger\_flash](/scripts/slave/recipes/cros_flash_scheduler.py#170)(api, bot, pool, gs_image_path):**
+&mdash; **def [trigger\_flash](/scripts/slave/recipes/cros_flash_scheduler.py#176)(api, bot, pool, gs_image_path):**
 ### *recipes* / [crrev:examples/full](/scripts/slave/recipe_modules/crrev/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/crrev/examples/full.py#9): [crrev](#recipe_modules-crrev), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
