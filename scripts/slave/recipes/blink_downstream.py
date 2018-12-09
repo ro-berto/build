@@ -146,7 +146,7 @@ def determine_new_failures(caller_api, tests, deapply_patch_fn):
 
 def RunSteps(api):
   mastername = api.properties.get('mastername')
-  buildername = api.properties.get('buildername')
+  buildername = api.buildbucket.builder_name
   master_dict = BUILDERS.get(mastername, {})
   bot_config = master_dict.get('builders', {}).get(buildername)
 
@@ -161,7 +161,7 @@ def RunSteps(api):
   api.chromium_tests.set_config('chromium')
 
   # Sync component to current component revision.
-  component_revision = api.properties.get('revision') or 'HEAD'
+  component_revision = api.buildbucket.gitiles_commit.id or 'HEAD'
   api.gclient.c.revisions[bot_config['component']['path']] = (
       bot_config['component']['revision'] % component_revision)
 
@@ -228,10 +228,7 @@ def GenTests(api):
 
   def properties(mastername, buildername):
     return (
-      api.properties.generic(mastername=mastername,
-                             buildername=buildername,
-                             revision='a' * 40,
-                             path_config='kitchen') +
+      api.properties.generic(mastername=mastername, path_config='kitchen') +
       api.buildbucket.ci_build(
           project='v8',
           git_repo='https://chromium.googlesource.com/v8/v8',
