@@ -4,6 +4,7 @@
 
 import functools
 import os
+import re
 import sys
 
 from recipe_engine.types import freeze
@@ -180,8 +181,14 @@ def generate_tests(api, phase, revision, revision_number, bot):
       tests.append(SwarmingPerfTest(test, **extra_args))
 
   if test_suite == 'android_perf_swarming':
-    for test, extra_args in sorted(ANDROID_PERF_TESTS.items()):
-      tests.append(SwarmingAndroidPerfTest(test, **extra_args))
+    def add_test(name):
+      tests.append(SwarmingAndroidPerfTest(name, **ANDROID_PERF_TESTS[name]))
+
+    add_test('low_bandwidth_audio_perf_test')
+    # Skip video_quality_loopback_test on Android K bot (not supported).
+    if not re.search(r'Android.+\bK\b', bot.builder):
+      add_test('video_quality_loopback_test')
+    add_test('webrtc_perf_tests')
 
   if test_suite == 'android_perf':
     perf_id = bot.config['perf_id']
