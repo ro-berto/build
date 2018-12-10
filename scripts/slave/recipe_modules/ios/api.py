@@ -71,6 +71,7 @@ class iOSApi(recipe_api.RecipeApi):
     self._include_cache = {}
     self.compilation_targets = None
     self._checkout_dir = None
+    self._swarming_service_account = self.SWARMING_SERVICE_ACCOUNT
     self._xcode_build_version = None
 
   @property
@@ -99,6 +100,14 @@ class iOSApi(recipe_api.RecipeApi):
     if 'target_cpu="x64"' in self.__config['gn_args']:
       return 'simulator'
     raise self.m.step.StepFailure('Missing required gn_arg: target_cpu')
+
+  @property
+  def swarming_service_account(self):
+    return self._swarming_service_account
+
+  @swarming_service_account.setter
+  def swarming_service_account(self, val):
+    self._swarming_service_account = val
 
   @property
   def use_goma(self):
@@ -884,7 +893,7 @@ class iOSApi(recipe_api.RecipeApi):
         task['isolated hash'],
         task_output_dir=task['tmp_dir'],
         trigger_script=trigger_script,
-        service_account=self.SWARMING_SERVICE_ACCOUNT,
+        service_account=self.swarming_service_account,
         cipd_packages=cipd_packages,
       )
       swarming_task.dimensions = {
