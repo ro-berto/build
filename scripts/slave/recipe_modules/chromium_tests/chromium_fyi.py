@@ -1030,6 +1030,8 @@ SPEC['builders'].update([
     stock_config('Jumbo Win x64'),
     stock_config('VR Linux'),
     stock_config('Linux Viz'),
+    stock_config('linux-gtest-hackathon-dbg',
+                 gclient_config='chromium_gtest_hackathon'),
     stock_config('linux-annotator-rel'),
     stock_config('linux-blink-animation-use-time-delta', config='Debug'),
     stock_config('linux-blink-gen-property-trees', config='Debug'),

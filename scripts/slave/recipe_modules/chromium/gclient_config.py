@@ -295,3 +295,9 @@ def arm64(c):
 @CONFIG_CTX()
 def use_clang_coverage(c):
   c.solutions[0].custom_vars['checkout_clang_coverage_tools'] = 'True'
+
+# TODO(ericale): Remove once hackathon is over
+@CONFIG_CTX(includes=['chromium_bare'])
+def chromium_gtest_hackathon(c): # pragma: no cover
+  s = c.solutions[0]
+  s.revision = 'origin/experimental/gtest-hackathon'
