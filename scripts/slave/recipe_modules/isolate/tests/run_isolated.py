@@ -9,6 +9,8 @@ DEPS = [
 
 def RunSteps(api):
   api.isolate.run_isolated('run_isolated', 'isolate_hash', ['some', 'args'])
+  api.isolate.run_isolated('run_isolated', 'isolate_hash', ['some', 'args'],
+                           env={'VAR': 'value'})
 
 
 def GenTests(api):

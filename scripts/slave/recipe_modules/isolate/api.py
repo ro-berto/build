@@ -267,6 +267,9 @@ class IsolateApi(recipe_api.RecipeApi):
         '-I', self.isolate_server,
         '--verbose',
     ]
+    if 'env' in kwargs and isinstance(kwargs['env'], dict):
+      for k, v in sorted(kwargs.pop('env').iteritems()):
+        cmd.extend(['--env', '%s=%s' % (k, v)])
     if args:
       cmd.append('--')
       cmd.extend(args)

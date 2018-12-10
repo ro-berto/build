@@ -16,6 +16,24 @@
     "name": "run_isolated"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "None/tools/swarming_client/run_isolated.py",
+      "--isolated",
+      "isolate_hash",
+      "-I",
+      "https://isolateserver.appspot.com",
+      "--verbose",
+      "--env",
+      "VAR=value",
+      "--",
+      "some",
+      "args"
+    ],
+    "name": "run_isolated (2)"
+  },
+  {
     "jsonResult": null,
     "name": "$result"
   }
