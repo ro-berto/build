@@ -300,4 +300,5 @@ def use_clang_coverage(c):
 @CONFIG_CTX(includes=['chromium_bare'])
 def chromium_gtest_hackathon(c): # pragma: no cover
   s = c.solutions[0]
-  s.revision = 'origin/experimental/gtest-hackathon'
+  s.revision = (
+      'refs/experimental/gtest-hackathon:refs/experimental/gtest-hackathon')

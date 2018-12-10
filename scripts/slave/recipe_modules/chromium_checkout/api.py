@@ -89,6 +89,10 @@ class ChromiumCheckoutApi(recipe_api.RecipeApi):
 
     self._working_dir = self.get_checkout_dir(bot_config)
 
+    # TODO(martiniss): Remove by December 17 2018
+    if bot_config.get('refs_to_checkout'): # pragma: no cover
+      kwargs['refs'] = list(bot_config.get('refs_to_checkout'))
+
     # Bot Update re-uses the gclient configs.
     with self.m.context(cwd=self._working_dir):
       update_step = self.m.bot_update.ensure_checkout(
