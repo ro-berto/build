@@ -126,8 +126,9 @@ class CronetApi(recipe_api.RecipeApi):
               perf_id=perf_id)
 
 
+  # TODO(perezju): Remove venv option once also removed from callers.
   def run_tests(
-      self, unit_tests=None,
+      self, venv=False, unit_tests=None,
       instrumentation_tests=INSTRUMENTATION_TESTS):
 
     if unit_tests is None:
@@ -139,7 +140,7 @@ class CronetApi(recipe_api.RecipeApi):
         unit_tests = self.UNIT_TESTS_M65_AND_BELOW
 
     droid = self.m.chromium_android
-    droid.common_tests_setup_steps()
+    droid.common_tests_setup_steps(venv=venv)
     with self.m.step.defer_results():
       for suite in unit_tests:
         droid.run_test_suite(suite, shard_timeout=180)

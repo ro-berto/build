@@ -1720,9 +1720,9 @@ Common steps for recipes that sync/build Cronet sources.
 
 &mdash; **def [init\_and\_sync](/scripts/slave/recipe_modules/cronet/api.py#46)(self, recipe_config, kwargs, chromium_apply_config=None):**
 
-&mdash; **def [run\_perf\_tests](/scripts/slave/recipe_modules/cronet/api.py#156)(self, perf_id):**
+&mdash; **def [run\_perf\_tests](/scripts/slave/recipe_modules/cronet/api.py#157)(self, perf_id):**
 
-&mdash; **def [run\_tests](/scripts/slave/recipe_modules/cronet/api.py#129)(self, unit_tests=None, instrumentation_tests=INSTRUMENTATION_TESTS):**
+&mdash; **def [run\_tests](/scripts/slave/recipe_modules/cronet/api.py#130)(self, venv=False, unit_tests=None, instrumentation_tests=INSTRUMENTATION_TESTS):**
 
 &mdash; **def [sizes](/scripts/slave/recipe_modules/cronet/api.py#117)(self, perf_id):**
 

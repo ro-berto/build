@@ -15,7 +15,7 @@ DEPS = [
 def RunSteps(api):
   api.chromium.set_config('main_builder')
   api.chromium_android.set_config('main_builder')
-  api.cronet.run_tests()
+  api.cronet.run_tests(venv=True)
 
 
 def GenTests(api):
