@@ -61,24 +61,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('chromeos_with_codecs') +
-      api.properties(chromium_apply_config=['chromeos_with_codecs']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('chromeos') +
-      api.properties(chromium_apply_config=['chromeos']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('ozone') +
-      api.properties(chromium_apply_config=['ozone']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
       api.test('analysis') +
       api.properties(chromium_apply_config=['analysis']) +
       api.post_process(post_process.DropExpectation)
@@ -177,12 +159,6 @@ def GenTests(api):
   yield (
       api.test('chromium_tsan2') +
       api.properties(chromium_config='chromium_tsan2') +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('chromium_chromiumos_asan') +
-      api.properties(chromium_config='chromium_chromiumos_asan') +
       api.post_process(post_process.DropExpectation)
   )
 

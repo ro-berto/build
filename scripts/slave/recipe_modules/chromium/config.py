@@ -363,22 +363,6 @@ def fastbuild(c, invert=False):
   c.gn_args.append('symbol_level=%d' % (1 if invert else 2))
 
 @config_ctx()
-def chromeos_with_codecs(c):
-  del c
-
-@config_ctx()
-def chromiumos(c):
-  del c
-
-@config_ctx(includes=['chromiumos'])
-def chromeos(c):
-  del c
-
-@config_ctx()
-def ozone(c):
-  del c
-
-@config_ctx()
 def clobber(c):
   c.clobber_before_runhooks = True
 
@@ -447,11 +431,12 @@ def trybot_flavor(c):
 def clang_tot(c):
   c.env.LLVM_FORCE_HEAD_REVISION = 'YES'
 
+#### 'Full' configurations
+
 @config_ctx(includes=['ninja', 'clang', 'asan'])
 def win_asan(_):
   pass
 
-#### 'Full' configurations
 @config_ctx(includes=['ninja', 'default_compiler'])
 def chromium_no_goma(c):
   c.compile_py.default_targets = ['all']
@@ -536,8 +521,9 @@ def chromium_win_asan(c):
   c.runtests.run_asan_test = True
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
-def chromium_asan(_):
-  pass
+def chromium_asan(c): # pragma: no cover
+  # Used by some bots in chromium_tests/chromium_fuzz.py.
+  del c
 
 @config_ctx(includes=['ninja', 'clang', 'goma', 'msan'])
 def chromium_msan(c):
@@ -547,20 +533,12 @@ def chromium_msan(c):
 def chromium_tsan2(c):
   c.compile_py.default_targets = ['all']
 
-@config_ctx(includes=['ninja', 'default_compiler', 'goma', 'chromeos'])
+@config_ctx(includes=['ninja', 'default_compiler', 'goma'])
 def chromium_chromeos(c):  # pragma: no cover
   c.compile_py.default_targets = ['all']
 
-@config_ctx(includes=['chromium_asan', 'chromiumos'])
-def chromium_chromiumos_asan(_):
-  pass
-
-@config_ctx(includes=['ninja', 'clang', 'goma', 'chromeos'])
+@config_ctx(includes=['ninja', 'clang', 'goma'])
 def chromium_chromeos_clang(c):  # pragma: no cover
-  c.compile_py.default_targets = ['all']
-
-@config_ctx(includes=['chromium_chromeos', 'ozone'])
-def chromium_chromeos_ozone(c):  # pragma: no cover
   c.compile_py.default_targets = ['all']
 
 @config_ctx(includes=['ninja', 'clang', 'goma'])

@@ -116,8 +116,7 @@ SPEC = {
     },
     'ASAN Release Media': {
       'chromium_config': 'chromium_asan',
-      'chromium_apply_config': ['mb', 'clobber',
-                                'chromeos_with_codecs'],
+      'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -151,8 +150,7 @@ SPEC = {
     },
     'ChromiumOS ASAN Release': {
       'chromium_config': 'chromium_asan',
-      'chromium_apply_config': ['mb', 'clobber',
-                                'chromiumos'],
+      'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chromeos'],
       'chromium_config_kwargs': {
@@ -209,8 +207,7 @@ SPEC = {
     },
     'ASan Release Media (32-bit x86 with V8-ARM)': {
       'chromium_config': 'chromium_asan',
-      'chromium_apply_config': ['mb', 'clobber',
-                                'chromeos_with_codecs'],
+      'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',

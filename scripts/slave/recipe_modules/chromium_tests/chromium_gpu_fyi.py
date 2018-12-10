@@ -421,7 +421,6 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'ozone',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
@@ -644,7 +643,11 @@ SPEC = {
           'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
-      'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree', 'dawn_top_of_tree'],
+      'gclient_apply_config': [
+          'chrome_internal',
+          'angle_top_of_tree',
+          'dawn_top_of_tree',
+      ],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -1306,7 +1309,6 @@ SPEC = {
       'chromium_apply_config': [
         'mb',
         'ninja_confirm_noop',
-        'ozone',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {

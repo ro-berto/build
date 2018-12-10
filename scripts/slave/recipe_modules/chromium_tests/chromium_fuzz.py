@@ -116,8 +116,7 @@ SPEC = {
     },
     'ASAN Release Media': {
       'chromium_config': 'chromium_asan',
-      'chromium_apply_config': ['mb', 'clobber',
-                                'chromeos_with_codecs'],
+      'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -133,6 +132,7 @@ SPEC = {
       'testing': { 'platform': 'linux' },
     },
     'ASAN Debug': {
+      # Maybe remove the 'chromium_asan' config if this builder is removed.
       'chromium_config': 'chromium_asan',
       'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
@@ -150,9 +150,9 @@ SPEC = {
       'testing': { 'platform': 'linux' },
     },
     'ChromiumOS ASAN Release': {
+      # Maybe remove the 'chromium_asan' config if this builder is removed.
       'chromium_config': 'chromium_asan',
-      'chromium_apply_config': ['mb', 'clobber',
-                                'chromiumos'],
+      'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chromeos'],
       'chromium_config_kwargs': {
@@ -172,6 +172,7 @@ SPEC = {
     # The build process is described at
     # https://sites.google.com/a/chromium.org/dev/developers/testing/addresssanitizer#TOC-Building-with-v8_target_arch-arm
     'ASan Debug (32-bit x86 with V8-ARM)': {
+      # Maybe remove the 'chromium_asan' config if this builder is removed.
       'chromium_config': 'chromium_asan',
       'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
@@ -209,8 +210,7 @@ SPEC = {
     },
     'ASan Release Media (32-bit x86 with V8-ARM)': {
       'chromium_config': 'chromium_asan',
-      'chromium_apply_config': ['mb', 'clobber',
-                                'chromeos_with_codecs'],
+      'chromium_apply_config': ['mb', 'clobber'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',

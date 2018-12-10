@@ -12,7 +12,7 @@ SPEC = {
       # TODO(mmoss): These should all use 'chromium_official_internal', once
       # that's fixed to set the correct mb_config.pyl path.
       'chromium_config': 'chromium_official',
-      'chromium_apply_config': ['mb', 'chromeos'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'chromeos'],
       'chromium_config_kwargs': {

@@ -175,7 +175,7 @@ SPEC = {
       'testing': {'platform': 'mac'},
     },
     'Linux Chromium OS ASan LSan Builder': {
-      'chromium_config': 'chromium_chromiumos_asan',
+      'chromium_config': 'chromium_asan',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chromeos'],
       'chromium_config_kwargs': {
@@ -187,7 +187,7 @@ SPEC = {
       'testing': {'platform': 'linux'},
     },
     'Linux Chromium OS ASan LSan Tests (1)': {
-      'chromium_config': 'chromium_chromiumos_asan',
+      'chromium_config': 'chromium_asan',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chromeos'],
       'chromium_config_kwargs': {

@@ -603,7 +603,7 @@ SPEC = {
 
     'Headless Linux (dbg)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ozone'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -841,7 +841,7 @@ SPEC = {
     },
     'Mojo ChromiumOS': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['chromeos', 'mb'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chromeos'],
       'chromium_config_kwargs': {
@@ -913,7 +913,7 @@ SPEC = {
     'chromeos-amd64-generic-rel-vm-tests': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'chromeos', 'mb', 'ninja_confirm_noop',
+        'mb', 'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chromeos_amd64_generic'],
@@ -934,7 +934,7 @@ SPEC = {
     'chromeos-kevin-rel-hw-tests': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'chromeos', 'mb', 'ninja_confirm_noop',
+        'mb', 'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chromeos_kevin'],
