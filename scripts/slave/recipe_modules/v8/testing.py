@@ -538,6 +538,7 @@ class V8SwarmingTest(V8Test):
         isolated_hash=self._get_isolated_hash(self.test),
         shards=shards,
         raw_cmd=[command] + extra_args,
+        use_python_client=True,
     )
     self.task.collect_step = lambda task, **kw: (
         self._v8_collect_step(task, coverage_context, **kw))
@@ -603,6 +604,7 @@ class V8GenericSwarmingTest(BaseTest):
         isolated_hash=self._get_isolated_hash(self.test),
         task_output_dir=self.task_output_dir,
         raw_cmd=self.command,
+        use_python_client=True,
     )
 
     _trigger_swarming_task(self.api, self.task, self.test_step_config)

@@ -387,6 +387,9 @@
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
       "[]",
+      "--use-python-client",
+      "--summary-json-file",
+      "/path/to/tmp/json",
       "--",
       "python",
       "-u",
@@ -397,9 +400,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"GCMole ia32/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"GCMole ia32/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
-      "--task-summary-json",
-      "/path/to/tmp/json"
+      "{\"base_task_name\": \"GCMole ia32/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"GCMole ia32/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
     ],
     "name": "GCMole ia32",
     "~followup_annotations": [
@@ -457,6 +458,9 @@
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
       "[]",
+      "--use-python-client",
+      "--summary-json-file",
+      "/path/to/tmp/json",
       "--",
       "python",
       "-u",
@@ -467,9 +471,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"GCMole x64/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"GCMole x64/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
-      "--task-summary-json",
-      "/path/to/tmp/json"
+      "{\"base_task_name\": \"GCMole x64/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"GCMole x64/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}"
     ],
     "name": "GCMole x64",
     "~followup_annotations": [
@@ -527,6 +529,9 @@
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
       "[]",
+      "--use-python-client",
+      "--summary-json-file",
+      "/path/to/tmp/json",
       "--",
       "python",
       "-u",
@@ -537,9 +542,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"GCMole arm/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"GCMole arm/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}",
-      "--task-summary-json",
-      "/path/to/tmp/json"
+      "{\"base_task_name\": \"GCMole arm/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"GCMole arm/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}"
     ],
     "name": "GCMole arm",
     "~followup_annotations": [
@@ -597,6 +600,9 @@
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
       "[]",
+      "--use-python-client",
+      "--summary-json-file",
+      "/path/to/tmp/json",
       "--",
       "python",
       "-u",
@@ -607,9 +613,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"GCMole arm64/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"GCMole arm64/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}}}",
-      "--task-summary-json",
-      "/path/to/tmp/json"
+      "{\"base_task_name\": \"GCMole arm64/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"GCMole arm64/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}}}"
     ],
     "name": "GCMole arm64",
     "~followup_annotations": [
