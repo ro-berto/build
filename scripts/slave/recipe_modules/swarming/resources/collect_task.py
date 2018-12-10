@@ -33,8 +33,7 @@ def run_command_with_output(argv, stdoutfile, env=None, cwd=None):
 
 def collect_task(
     collect_cmd, merge_script, merge_script_stdout_file,
-    build_properties, merge_arguments, task_output_dir, output_json,
-    summary_json_file, use_python_client):
+    build_properties, merge_arguments, task_output_dir, output_json):
   """Collect and merge the results of a task.
 
   This is a relatively thin wrapper script around a `swarming.py collect`
@@ -72,9 +71,6 @@ def collect_task(
       and may optionally contain a top level "links" field that may contain a
       dict mapping link text to URLs, for a set of links that will be included
       in the buildbot output.
-    summary_json_file: This is to specify summary json file. Used for go client
-      that does not generate summary.json under task_output_dir by default.
-    use_python_client: Whether using python client or not.
   Returns:
     The exit code of collect_cmd or merge_cmd.
   """
@@ -90,16 +86,7 @@ def collect_task(
 
     logging.warn('task_output_dir existing content: %r', existing_contents)
 
-  if use_python_client:
-    collect_cmd.extend([
-      '--task-output-dir', task_output_dir,
-      '--task-summary-json', summary_json_file
-    ])
-  else:
-    collect_cmd.extend([
-      '-output-dir', task_output_dir,
-      '-task-summary-json', summary_json_file
-    ])
+  collect_cmd.extend(['--task-output-dir', task_output_dir])
 
   logging.info('collect_cmd: %s', ' '.join(collect_cmd))
   collect_result = subprocess.call(collect_cmd)
@@ -153,6 +140,8 @@ def collect_task(
 
   logging.debug('Found shard_json_files: %r', shard_json_files)
 
+  summary_json_file = os.path.join(task_output_dir, 'summary.json')
+
   merge_result = 0
 
   merge_cmd = [sys.executable, merge_script]
@@ -183,7 +172,6 @@ def collect_task(
 
 
 def main():
-  logging.getLogger().setLevel(logging.INFO)
   parser = argparse.ArgumentParser()
   parser.add_argument('--build-properties')
   parser.add_argument('--merge-additional-args')
@@ -192,11 +180,6 @@ def main():
   parser.add_argument('--task-output-dir', required=True)
   parser.add_argument('-o', '--output-json', required=True)
   parser.add_argument('--verbose', action='store_true')
-  parser.add_argument('--summary-json-file', required=True)
-
-  # TODO(tikuta): This is for v8/testing.py. Remove this after luci-go switch.
-  parser.add_argument('--use-python-client', action='store_true')
-
   parser.add_argument('collect_cmd', nargs='+')
 
   args = parser.parse_args()
@@ -208,8 +191,7 @@ def main():
       args.collect_cmd,
       args.merge_script, args.merge_script_stdout_file,
       args.build_properties, args.merge_additional_args,
-      args.task_output_dir, args.output_json, args.summary_json_file,
-      args.use_python_client)
+      args.task_output_dir, args.output_json)
 
 
 if __name__ == '__main__':

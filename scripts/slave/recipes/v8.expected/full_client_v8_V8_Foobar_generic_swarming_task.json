@@ -118,9 +118,6 @@
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
       "[]",
-      "--use-python-client",
-      "--summary-json-file",
-      "/path/to/tmp/json",
       "--",
       "python",
       "-u",
@@ -131,7 +128,9 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Fuzz/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Fuzz/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "{\"base_task_name\": \"Fuzz/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Fuzz/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "--task-summary-json",
+      "/path/to/tmp/json"
     ],
     "name": "Fuzz",
     "~followup_annotations": [

@@ -3058,11 +3058,11 @@ tasks run for a day to calculate the cost of a type of type (CQ, ASAN, etc).
 
 Tags can be added per individual task.
 
-&mdash; **def [check\_client\_version](/scripts/slave/recipe_modules/swarming/api.py#631)(self, step_test_data=None):**
+&mdash; **def [check\_client\_version](/scripts/slave/recipe_modules/swarming/api.py#627)(self, step_test_data=None):**
 
 Yields steps to verify compatibility with swarming_client version.
 
-&mdash; **def [collect\_task](/scripts/slave/recipe_modules/swarming/api.py#822)(self, task, \*\*kwargs):**
+&mdash; **def [collect\_task](/scripts/slave/recipe_modules/swarming/api.py#818)(self, task, \*\*kwargs):**
 
 Waits for a single triggered task to finish.
 
@@ -3108,11 +3108,15 @@ This value can be changed per individual task.
 
 &emsp; **@default_user.setter**<br>&mdash; **def [default\_user](/scripts/slave/recipe_modules/swarming/api.py#318)(self, value):**
 
-&mdash; **def [get\_collect\_cmd\_args\_for\_python](/scripts/slave/recipe_modules/swarming/api.py#1364)(self, task):**
+&mdash; **def [get\_collect\_cmd\_args](/scripts/slave/recipe_modules/swarming/api.py#1321)(self, task):**
 
 SwarmingTask -> argument list for 'swarming.py' command.
 
-&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1253)(self, prefix, task):**
+&mdash; **def [get\_collect\_cmd\_args\_for\_python](/scripts/slave/recipe_modules/swarming/api.py#1338)(self, task):**
+
+SwarmingTask -> argument list for 'swarming.py' command.
+
+&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/swarming/api.py#1234)(self, prefix, task):**
 
 SwarmingTask -> name of a step of a waterfall.
 
@@ -3125,7 +3129,7 @@ Args:
 Returns:
   '[<prefix>] <task title> on <OS>'
 
-&mdash; **def [gtest\_task](/scripts/slave/recipe_modules/swarming/api.py#550)(self, title, isolated_hash, test_launcher_summary_output=None, extra_args=None, cipd_packages=None, merge=None, \*\*kwargs):**
+&mdash; **def [gtest\_task](/scripts/slave/recipe_modules/swarming/api.py#546)(self, title, isolated_hash, test_launcher_summary_output=None, extra_args=None, cipd_packages=None, merge=None, \*\*kwargs):**
 
 Returns a new SwarmingTask instance to run an isolated gtest on Swarming.
 
@@ -3138,7 +3142,7 @@ For meaning of the rest of the arguments see 'task' method.
 
 &mdash; **def [initialize](/scripts/slave/recipe_modules/swarming/api.py#195)(self):**
 
-&mdash; **def [isolated\_script\_task](/scripts/slave/recipe_modules/swarming/api.py#596)(self, title, isolated_hash, extra_args=None, idempotent=False, merge=None, \*\*kwargs):**
+&mdash; **def [isolated\_script\_task](/scripts/slave/recipe_modules/swarming/api.py#592)(self, title, isolated_hash, extra_args=None, idempotent=False, merge=None, \*\*kwargs):**
 
 Returns a new SwarmingTask to run an isolated script test on Swarming.
 
@@ -3163,7 +3167,7 @@ Recipes are free to use other OS dimension if there's a need for it. For
 example WinXP try bot recipe may explicitly specify 'Windows-XP-SP3'
 dimension.
 
-&mdash; **def [report\_stats](/scripts/slave/recipe_modules/swarming/api.py#850)(self):**
+&mdash; **def [report\_stats](/scripts/slave/recipe_modules/swarming/api.py#846)(self):**
 
 Report statistics on all tasks ran so far.
 
@@ -3185,7 +3189,7 @@ Service account json to use for swarming.
 
 Changes URL of Swarming server to use.
 
-&mdash; **def [task](/scripts/slave/recipe_modules/swarming/api.py#425)(self, title, isolated_hash, ignore_task_failure=False, shards=1, task_output_dir=None, extra_args=None, idempotent=None, cipd_packages=None, build_properties=None, merge=None, trigger_script=None, named_caches=None, service_account=None, raw_cmd=None, env_prefixes=None, env=None, optional_dimensions=None, use_python_client=False):**
+&mdash; **def [task](/scripts/slave/recipe_modules/swarming/api.py#425)(self, title, isolated_hash, ignore_task_failure=False, shards=1, task_output_dir=None, extra_args=None, idempotent=None, cipd_packages=None, build_properties=None, merge=None, trigger_script=None, named_caches=None, service_account=None, raw_cmd=None, env_prefixes=None, env=None, optional_dimensions=None):**
 
 Returns a new SwarmingTask instance to run an isolated executable on
 Swarming.
@@ -3259,10 +3263,8 @@ Args:
       dimensions that specify on what Swarming slaves tasks can run.  These
       are similar to what is specified in dimensions but will create
       additional 'fallback' task slice(s) with the optional dimensions.
-  * use_python_client: a boolean representing whether using python client or
-      not.
 
-&mdash; **def [trigger\_task](/scripts/slave/recipe_modules/swarming/api.py#636)(self, task, \*\*kwargs):**
+&mdash; **def [trigger\_task](/scripts/slave/recipe_modules/swarming/api.py#632)(self, task, \*\*kwargs):**
 
 Triggers one task.
 
@@ -3281,7 +3283,7 @@ Args:
 
 Enables or disables verbose output in swarming scripts.
 
-&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/swarming/api.py#1155)(self, task_sets, suffix=None, attempts=0):**
+&mdash; **def [wait\_for\_finished\_task\_set](/scripts/slave/recipe_modules/swarming/api.py#1136)(self, task_sets, suffix=None, attempts=0):**
 
 Waits for a finished set of tasks.
 

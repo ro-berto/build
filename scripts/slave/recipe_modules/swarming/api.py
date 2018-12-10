@@ -426,8 +426,7 @@ class SwarmingApi(recipe_api.RecipeApi):
            task_output_dir=None, extra_args=None, idempotent=None,
            cipd_packages=None, build_properties=None, merge=None,
            trigger_script=None, named_caches=None, service_account=None,
-           raw_cmd=None, env_prefixes=None, env=None, optional_dimensions=None,
-           use_python_client=False):
+           raw_cmd=None, env_prefixes=None, env=None, optional_dimensions=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -500,8 +499,6 @@ class SwarmingApi(recipe_api.RecipeApi):
           dimensions that specify on what Swarming slaves tasks can run.  These
           are similar to what is specified in dimensions but will create
           additional 'fallback' task slice(s) with the optional dimensions.
-      * use_python_client: a boolean representing whether using python client or
-          not.
     """
     if idempotent is None:
       idempotent = self.default_idempotent
@@ -544,7 +541,6 @@ class SwarmingApi(recipe_api.RecipeApi):
         raw_cmd=raw_cmd,
         env_prefixes=env_prefixes,
         optional_dimensions=optional_dimensions,
-        use_python_client=use_python_client,
     )
 
   def gtest_task(self, title, isolated_hash, test_launcher_summary_output=None,
@@ -949,32 +945,17 @@ class SwarmingApi(recipe_api.RecipeApi):
           '--build-properties', self.m.json.dumps(properties),
       ])
 
-    # Arguments for the actual 'collect' command.
-
-    if task.use_python_client:
-      task_args.append('--use-python-client')
-      collect_cmd = [
-        'python',
-        '-u',
-        self.m.swarming_client.path.join('swarming.py'),
-      ]
-    else:
-      # TODO(tikuta): This line assumes the recipe is working with
-      # Chromium checkout.
-      collect_cmd = [
-        self.m.path['checkout'].join('tools', 'luci-go', 'swarming'),
-      ]
-
-    # go's client does not generate summary file under output dir.
-    # Need to tell the location of summary file to collect_task.py.
-    task_args.extend(['--summary-json-file', self.summary()])
-
-    if task.use_python_client:
-      collect_cmd.extend(self.get_collect_cmd_args_for_python(task))
-    else:
-      collect_cmd.extend(self._get_collect_cmd_args(task))
-
     task_args.append('--')
+    # Arguments for the actual 'collect' command.
+    collect_cmd = [
+      'python',
+      '-u',
+      self.m.swarming_client.path.join('swarming.py'),
+    ]
+    collect_cmd.extend(self.get_collect_cmd_args(task))
+    collect_cmd.extend([
+      '--task-summary-json', self.summary(),
+    ])
 
     task_args.extend(collect_cmd)
 
@@ -1337,26 +1318,19 @@ class SwarmingApi(recipe_api.RecipeApi):
       raise recipe_api.StepFailure(
           '\n'.join(template % f for f in infra_failures), result=step_result)
 
-  def _get_collect_cmd_args(self, task):
-    """
-    SwarmingTask -> argument list for go swarming command.
-    """
+  def get_collect_cmd_args(self, task):
+    """SwarmingTask -> argument list for 'swarming.py' command."""
     args = [
       'collect',
-      '-server', self.swarming_server,
-
-      # TODO(tikuta): Tuning this if necessary.
-      '-worker', 100,
-
-      '-task-summary-python',
-      '-task-output-stdout', 'json',
+      '--swarming', self.swarming_server,
+      '--decorate',
+      '--print-status-updates',
     ]
-
     if self.verbose:
-      args.append('-verbose')
-    args.extend(('-requests-json', self.m.json.input(task.trigger_output)))
+      args.append('--verbose')
+    args.extend(('--json', self.m.json.input(task.trigger_output)))
     if self.service_account_json:
-      args.extend(['-service-account-json', self.service_account_json])
+      args.extend(['--auth-service-account-json', self.service_account_json])
     return args
 
   # TODO(tikuta): This is for recipe_modules/v8/testing.py.
@@ -1369,7 +1343,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       '--decorate',
       '--print-status-updates',
     ]
-    args.extend(('--json', self.m.json.input(task.trigger_output_python)))
+    args.extend(('--json', self.m.json.input(task.trigger_output)))
     return args
 
   def _gen_trigger_step_test_data(self, task):
@@ -1407,8 +1381,7 @@ class SwarmingTask(object):
                extra_args, collect_step, task_output_dir, cipd_packages=None,
                build_properties=None, merge=None, trigger_script=None,
                named_caches=None, service_account=None, raw_cmd=None,
-               env_prefixes=None, optional_dimensions=None,
-               use_python_client=False):
+               env_prefixes=None, optional_dimensions=None):
     """Configuration of a swarming task.
 
     Args:
@@ -1497,8 +1470,6 @@ class SwarmingTask(object):
           dimensions that specify on what Swarming slaves tasks can run.  These
           are similar to what is specified in dimensions but will create
           additional 'fallback' task slice(s) with the optional dimensions.
-      * use_python_client: a boolean representing whether using python client or
-          not.
     """
 
     self._trigger_output = None
@@ -1535,7 +1506,6 @@ class SwarmingTask(object):
     else:
       self.optional_dimensions = None
     self.wait_for_capacity = False
-    self.use_python_client = use_python_client
 
   @property
   def task_name(self):
@@ -1552,19 +1522,6 @@ class SwarmingTask(object):
 
   @property
   def trigger_output(self):
-    """JSON results of 'trigger' step or None if not triggered."""
-    # JSON results of 'trigger' step converted for luci-go client.
-    # This is used for isolated script tasks.
-    tasks = sorted(self._trigger_output['tasks'].values(),
-                   key=lambda x: x['shard_index'])
-    return {
-      'tasks': [{'task_id': task['task_id']} for task in tasks],
-    }
-
-  # TODO(tikuta): This is for recipe_modules/v8/testing.py.
-  # Remove after switch (crbug.com/894045).
-  @property
-  def trigger_output_python(self):
     """JSON results of 'trigger' step or None if not triggered."""
     return self._trigger_output
 
