@@ -1807,7 +1807,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       # parameter once Telemetry tests are idempotent, since that will make all
       # isolated_script_tests idempotent.
       kwargs['idempotent'] = self._idempotent
-      return api.swarming.isolated_script_task(*args, **kwargs)
+      return api.swarming.isolated_script_task(*args, use_go_client=True,
+                                               **kwargs)
 
     return self._create_task_common(
         api, suffix, isolated_hash, '--isolated-script-test-filter', '::',
