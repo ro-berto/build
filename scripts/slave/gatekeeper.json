@@ -33,13 +33,13 @@
     "https://build.chromium.org/p/chromium.android": [
       {
         "categories": [
-          "chromium_android"
+          "chromium_android",
+          "experimental_tests"
         ],
         "builders": {
           "Android ASAN (dbg)": {
             "categories": [
-              "chromium_tree_closer",
-              "experimental_tests"
+              "chromium_tree_closer"
             ]
           },
           "Android Cronet ARM64 Builder": {
@@ -140,44 +140,37 @@
           },
           "Android arm Builder (dbg)": {
             "categories": [
-              "chromium_tree_closer",
-              "experimental_tests"
+              "chromium_tree_closer"
             ]
           },
           "Android arm64 Builder (dbg)": {
             "categories": [
-              "chromium_tree_closer",
-              "experimental_tests"
+              "chromium_tree_closer"
             ]
           },
           "Cast Android (dbg)": {
             "categories": [
-              "chromium_tree_closer",
-              "experimental_tests"
+              "chromium_tree_closer"
             ]
           },
           "KitKat Phone Tester (rel)": {
             "categories": [
-              "chromium_tree_closer",
-              "experimental_tests"
+              "chromium_tree_closer"
             ]
           },
           "Marshmallow Phone Tester (rel)": {
             "categories": [
-              "chromium_tree_closer",
-              "experimental_tests"
+              "chromium_tree_closer"
             ]
           },
           "android-kitkat-arm-rel": {
             "categories": [
-              "chromium_tree_closer",
-              "experimental_tests"
+              "chromium_tree_closer"
             ]
           },
           "android-marshmallow-arm64-rel": {
             "categories": [
-              "chromium_tree_closer",
-              "experimental_tests"
+              "chromium_tree_closer"
             ]
           },
           "*": {}
