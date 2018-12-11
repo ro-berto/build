@@ -293,6 +293,14 @@ def goma_rbe_staging(c):
   c.compile_py.use_autoninja = True
 
 @config_ctx()
+def goma_rbe_prod(c):
+  c.compile_py.goma_failfast = True
+  c.env.GOMA_SETTINGS_SERVER = (
+      'https://cxx-compiler-service.appspot.com/settings')
+  c.env.GOMA_USE_CASE = 'rbe-prod'
+  c.compile_py.use_autoninja = True
+
+@config_ctx()
 def goma_hermetic_fallback(c):
   c.compile_py.goma_hermetic = 'fallback'
 
