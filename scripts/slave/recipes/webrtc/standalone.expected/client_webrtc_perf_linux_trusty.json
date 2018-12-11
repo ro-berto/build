@@ -1045,7 +1045,7 @@
       "--results-url",
       "https://chromeperf.appspot.com",
       "--got-webrtc-revision",
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--output-json-dashboard-url",
       "/path/to/tmp/json"
     ],
@@ -1237,7 +1237,7 @@
       "--results-url",
       "https://chromeperf.appspot.com",
       "--got-webrtc-revision",
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--output-json-dashboard-url",
       "/path/to/tmp/json"
     ],
@@ -1429,7 +1429,7 @@
       "--results-url",
       "https://chromeperf.appspot.com",
       "--got-webrtc-revision",
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--output-json-dashboard-url",
       "/path/to/tmp/json"
     ],
