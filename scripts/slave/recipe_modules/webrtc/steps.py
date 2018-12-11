@@ -290,8 +290,11 @@ def _UploadToPerfDashboard(name, api, task_output_dir):
       }
     }
   else:  # pragma: no cover
-    perf_results = api.json.loads(
-        task_output_dir[api.path.join('0', 'perftest-output.json')])
+    # Pick up a directory.
+    for filepath in task_output_dir:
+      if filepath.endswith('perftest-output.json'):
+        perf_results = api.json.loads(task_output_dir[filepath])
+        break
 
   perf_results['benchmark_name'] = name
 
