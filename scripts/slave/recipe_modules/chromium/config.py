@@ -285,7 +285,7 @@ def goma_gce(c):
   c.env.GOMA_USE_CASE = 'prod-staging'
 
 @config_ctx()
-def goma_rbe(c):
+def goma_rbe_staging(c):
   c.compile_py.goma_failfast = True
   c.env.GOMA_SETTINGS_SERVER = (
       'https://cxx-compiler-service.appspot.com/settings')

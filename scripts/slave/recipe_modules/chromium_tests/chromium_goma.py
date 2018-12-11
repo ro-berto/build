@@ -86,7 +86,7 @@ SPEC = {
    },
    'Chromium Linux Goma RBE Staging (clobber)': {
      'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_rbe', 'clobber', 'mb'],
+     'chromium_apply_config': ['goma_rbe_staging', 'clobber', 'mb'],
      'gclient_config': 'chromium',
      'chromium_config_kwargs': {
        'BUILD_CONFIG': 'Release',
@@ -99,7 +99,7 @@ SPEC = {
    },
    'Chromium Linux Goma RBE Staging': {
      'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_rbe', 'mb'],
+     'chromium_apply_config': ['goma_rbe_staging', 'mb'],
      'gclient_config': 'chromium',
      'chromium_config_kwargs': {
        'BUILD_CONFIG': 'Release',
@@ -112,7 +112,7 @@ SPEC = {
    },
    'Chromium Linux Goma RBE Staging (dbg) (clobber)': {
      'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_rbe', 'clobber', 'mb'],
+     'chromium_apply_config': ['goma_rbe_staging', 'clobber', 'mb'],
      'gclient_config': 'chromium',
      'chromium_config_kwargs': {
        'BUILD_CONFIG': 'Debug',
@@ -125,7 +125,7 @@ SPEC = {
    },
    'Chromium Linux Goma RBE Staging (dbg)': {
      'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_rbe', 'mb'],
+     'chromium_apply_config': ['goma_rbe_staging', 'mb'],
      'gclient_config': 'chromium',
      'chromium_config_kwargs': {
        'BUILD_CONFIG': 'Debug',
@@ -138,7 +138,7 @@ SPEC = {
    },
    'Chromium Mac Goma RBE Staging (clobber)': {
      'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_rbe', 'clobber', 'mb'],
+     'chromium_apply_config': ['goma_rbe_staging', 'clobber', 'mb'],
      'gclient_config': 'chromium',
      'chromium_config_kwargs': {
        'BUILD_CONFIG': 'Release',
@@ -151,7 +151,7 @@ SPEC = {
    },
    'Chromium Android ARM 32-bit Goma RBE Staging': {
      'chromium_config': 'android',
-     'chromium_apply_config': ['goma_rbe'],
+     'chromium_apply_config': ['goma_rbe_staging'],
      'gclient_config': 'chromium',
      'gclient_apply_config': ['android'],
      'chromium_config_kwargs': {
