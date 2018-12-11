@@ -77,12 +77,22 @@ def fetch_diff(host, project, change, patchset):
         'Patchset %d is not found in the change descriptions returned by '
         'requesting %s.' % (patchset, url_to_get_reivisions))
 
-  # Uses the Get Patch API to get the diff.
+  # In order to get the diff, the most straightforward solution is to use the
+  # Get Patch REST API:
   # https://gerrit-review.googlesource.com/Documentation/rest-api-changes.html#get-patch.
-  template_to_get_patch = 'https://%s/changes/%s~%d/revisions/%s/patch'
-  url_to_get_patch = template_to_get_patch % (host, project_quoted, change,
-                                              patchset_revision)
-  response = _retry_urlopen(url_to_get_patch)
+  # However, one issue with this API is that it always fails to capture the diff
+  # of file renaming, and the returned diff "incorrectly" contains two sections,
+  # where the first section deletes all lines of the original file, and another
+  # section adds all lines of the renamed file.
+  #
+  # To work the above mentioned issue around, this method fetches diff from
+  # gitile, for example:
+  # https://chromium.googlesource.com/chromium/src/+/aa006552353f43fbec1ef328269196cbf067c66f
+  template_to_get_diff = 'https://%s/%s/+/%s%%5E%%21?format=text'
+  gitile_host = host.replace('-review', '')
+  url_to_get_diff = template_to_get_diff % (gitile_host, project_quoted,
+                                            patchset_revision)
+  response = _retry_urlopen(url_to_get_diff)
   diff = base64.b64decode(response.read())
   return diff
 
