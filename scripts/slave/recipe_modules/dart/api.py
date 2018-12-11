@@ -856,6 +856,8 @@ class DartApi(recipe_api.RecipeApi):
                  '--write-debug-log',
                  '--write-results',
                  '--write-logs']
+    if self._report_new_results():
+      test_args.append("--clean-exit")
     template = self._get_specific_argument(args, ['-n'])
     if template is not None:
       for term in ['runtime', 'system', 'mode', 'arch']:
@@ -902,11 +904,9 @@ class DartApi(recipe_api.RecipeApi):
       args = args + step['tests']
 
     with self.m.step.defer_results():
-      ignore_failure = self._report_new_results()
       self.run_script(step_name, TEST_PY_PATH, args, isolate_hash, shards,
                       local_shard, environment, tasks,
-                      cipd_packages=cipd_packages,
-                      ignore_failure=ignore_failure)
+                      cipd_packages=cipd_packages)
       results = StepResults(step_name, self.m, environment['commit'])
       results.args = args
       results.environment = environment
