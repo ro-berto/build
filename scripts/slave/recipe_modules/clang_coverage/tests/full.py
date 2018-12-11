@@ -40,10 +40,9 @@ def RunSteps(api):
                 '[run_isolated_out_hack]%s[/run_isolated_out_hack]))' %
                 '{"hash":"abc", "storage":"url"}')))
   api.clang_coverage.process_coverage_data([
-      api.chromium_tests.steps.SwarmingGTestTest('base_unittests')])
-  api.clang_coverage.process_coverage_data([
-      api.chromium_tests.steps.SwarmingIsolatedScriptTest(
-          'webkit_layout_tests')])
+      api.chromium_tests.steps.SwarmingGTestTest('base_unittests'),
+      api.chromium_tests.steps.SwarmingIsolatedScriptTest('webkit_layout_tests')
+    ])
 
   # Exercise these properties to provide coverage only.
   _ = api.clang_coverage.using_coverage
