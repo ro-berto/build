@@ -691,6 +691,12 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
+      "--blacklist",
+      "\"*.pyc\"",
+      "--blacklist",
+      "\"*.swp\"",
+      "--blacklist",
+      "\".git\"",
       "[START_DIR]/src/out/Release/telemetry_gpu_unittests.isolated.gen.json"
     ],
     "env": {

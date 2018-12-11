@@ -1128,6 +1128,12 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
+      "--blacklist",
+      "\"*.pyc\"",
+      "--blacklist",
+      "\"*.swp\"",
+      "--blacklist",
+      "\".git\"",
       "[BUILDER_CACHE]/mac/src/out/Release/gl_tests.isolated.gen.json"
     ],
     "name": "test gfedcba.isolate tests",

@@ -557,6 +557,12 @@
       "https://isolateserver.appspot.com",
       "--eventlog-endpoint",
       "prod",
+      "--blacklist",
+      "\"*.pyc\"",
+      "--blacklist",
+      "\"*.swp\"",
+      "--blacklist",
+      "\".git\"",
       "[BUILDER_CACHE]/Linux_Trusty/src/out/Release/isac_fix_test.isolated.gen.json",
       "[BUILDER_CACHE]/Linux_Trusty/src/out/Release/low_bandwidth_audio_perf_test.isolated.gen.json",
       "[BUILDER_CACHE]/Linux_Trusty/src/out/Release/webrtc_perf_tests.isolated.gen.json"

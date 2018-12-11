@@ -34,6 +34,12 @@
       "--eventlog-endpoint",
       "prod",
       "--verbose",
+      "--blacklist",
+      "\"*.pyc\"",
+      "--blacklist",
+      "\"*.swp\"",
+      "--blacklist",
+      "\".git\"",
       "[BUILDER_CACHE]/v8/out/Release/mjsunit.isolated.gen.json"
     ],
     "name": "build.isolate tests",
