@@ -294,7 +294,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
 
     expected_compressed_files = [{
         'path':
-            'dir/file.cc',
+            '//dir/file.cc',
         'lines': [{
             'count': 3,
             'last': 11,
@@ -533,6 +533,8 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             'files': [{
                 'name':
                     'file1.cc',
+                'path':
+                    '//dir1/file1.cc',
                 'summaries': [{
                     'covered': 0,
                     'total': 1,
@@ -568,6 +570,8 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             'files': [{
                 'name':
                     'file2.cc',
+                'path':
+                    '//dir2/file2.cc',
                 'summaries': [{
                     'covered': 1,
                     'total': 1,
@@ -605,7 +609,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     expected_compressed_files = [
         {
             'path':
-                'dir1/file1.cc',
+                '//dir1/file1.cc',
             'lines': [{
                 'count': 0,
                 'last': 5,
@@ -622,7 +626,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             }]
         },
         {
-            'path': 'dir2/file2.cc',
+            'path': '//dir2/file2.cc',
             'lines': [{
                 'count': 1,
                 'last': 1,

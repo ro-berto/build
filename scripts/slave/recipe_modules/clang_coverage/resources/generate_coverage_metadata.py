@@ -439,6 +439,7 @@ def _add_file_to_directory_summary(directory_summaries, src_path, file_data):
 
   directory_summaries[directory]['files'].append({
       'name': filename,
+      'path': src_file,
       'summaries': _convert_file_summary(summary),
   })
 
@@ -600,6 +601,10 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
 
       if component_mapping:
         _add_file_to_directory_summary(directory_summaries, src_path, file_data)
+
+      file_path = record['path']
+      if not file_path.startswith('//'):
+        record['path'] = '//' + file_path  # Prefix the file path with '//'.
 
   component_summaries = {}
   if component_mapping:
