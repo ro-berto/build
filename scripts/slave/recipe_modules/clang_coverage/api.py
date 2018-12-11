@@ -21,6 +21,12 @@ _GERRIT_DIFF_FILE_NAME = 'gerrit_diff.txt'
 # Name of the file to store the diff mapping from local to Gerrit.
 _LOCAL_TO_GERRIT_DIFF_MAPPING_FILE_NAME = 'local_to_gerrit_diff_mapping.json'
 
+# Set of valid extensions for source files that use Clang.
+_EXTENTIONS_OF_SOURCE_FILES_SUPPORTED_BY_CLANG = set([
+    '.mm', '.S', '.c', '.hh', '.cxx', '.hpp', '.cc', '.cpp', '.ipp', '.h', '.m',
+    '.hxx'
+])
+
 
 class ClangCoverageApi(recipe_api.RecipeApi):
   """This module contains apis to interact with llvm-cov and llvm-profdata."""
@@ -38,8 +44,10 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     self._src_and_report_dir = None
     # Maps step names to subdirectories of the above.
     self._profdata_dirs = {}
-    # When set, subset of files to include in the coverage report.
-    self._affected_files = None
+    # When set, subset of source files to include in the coverage report.
+    self._affected_source_files = None
+    # When set, indicates that current context is per-cl coverage for try jobs.
+    self._is_per_cl_coverage = False
 
   @staticmethod
   def _dir_name_for_step(step_name):
@@ -148,6 +156,28 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         binaries.append(self.m.chromium.output_dir.join('content_shell'))
     return list(set(binaries))
 
+  def _filter_source_file(self, file_paths):
+    """Fitlers source files with valid extensions.
+
+    Set of valid extensions is defined in:
+      _EXTENTIONS_OF_SOURCE_FILES_SUPPORTED_BY_CLANG.
+
+    Args:
+      file_paths: A list of file paths relative to the checkout path.
+
+    Returns:
+      A sub-list of the input with valid extensions.
+    """
+    source_files = []
+    for file_path in file_paths:
+      if any([
+          file_path.endswith(extension)
+          for extension in _EXTENTIONS_OF_SOURCE_FILES_SUPPORTED_BY_CLANG
+      ]):
+        source_files.append(file_path)
+
+    return source_files
+
   def instrument(self, affected_files):
     """Saves source paths to generate coverage instrumentation for to a file.
 
@@ -155,10 +185,12 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       affected_files (list of str): paths to the files we want to instrument,
           relative to the checkout path.
     """
+    self._is_per_cl_coverage = True
+
     self.m.file.ensure_directory(
         'create .clang-coverage',
         self.m.path['checkout'].join('.clang-coverage'))
-    self._affected_files = affected_files
+    self._affected_source_files = self._filter_source_file(affected_files)
     return self.m.python(
         'save paths of affected files',
         self.resource('write_paths_to_instrument.py'),
@@ -170,7 +202,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
             self.m.path['checkout'],
             '--build-path',
             self.m.chromium.c.build_dir.join(self.m.chromium.c.build_config_fs),
-        ] + affected_files,
+        ] + self._affected_source_files,
         stdout=self.m.raw_io.output_text(add_output_log=True))
 
   def process_coverage_data(self, tests):
@@ -181,6 +213,11 @@ class ClangCoverageApi(recipe_api.RecipeApi):
           whose binaries we are to create a coverage report for.
     """
     if not self._profdata_dirs:  # pragma: no cover.
+      return
+
+    if self._is_per_cl_coverage and not self._affected_source_files:
+      self.m.python.succeeding_step(
+          'skip collecting coverage data because no source file is changed', '')
       return
 
     out_file = self.profdata_dir().join('merged.profdata')
@@ -242,10 +279,11 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         '--llvm-cov', self.cov_executable, '--binaries'
     ]
     args.extend(binaries)
-    if self._affected_files:
+    if self._is_per_cl_coverage:
       args.append('--sources')
-      args.extend(
-          [self.m.path['checkout'].join(s) for s in self._affected_files])
+      args.extend([
+          self.m.path['checkout'].join(s) for s in self._affected_source_files
+      ])
 
     self.m.python(
         'generate html report for %d targets' % len(self._profdata_dirs),
@@ -311,7 +349,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
   def _generate_metadata(self, binaries, profdata_path):
     """Generates the coverage info in metadata format."""
     llvm_cov = self.cov_executable
-    if not self._affected_files:
+    if not self._is_per_cl_coverage:
       # Download the version with multi-thread support.
       # Assume that this is running on Linux.
       temp_dir = self.m.path.mkdtemp()
@@ -334,17 +372,19 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         '--binaries',
     ]
     args.extend(binaries)
-    if self._affected_files:
+    if self._is_per_cl_coverage:
       args.append('--sources')
-      args.extend(
-          [self.m.path['checkout'].join(s) for s in self._affected_files])
+      args.extend([
+          self.m.path['checkout'].join(s) for s in self._affected_source_files
+      ])
 
       # In order to correctly display the (un)covered line numbers on Gerrit.
       # Per-cl metadata's line numbers need to be rebased because the base
       # revision of the change in this build is different from the one on Gerrit.
       self._generate_and_save_local_git_diff()
       self._fetch_and_save_gerrit_git_diff()
-      self._generate_diff_mapping_from_local_to_gerrit()
+      self._generate_diff_mapping_from_local_to_gerrit(
+          self._affected_source_files)
       args.extend([
           '--diff-mapping-path',
           self.metadata_dir.join(_LOCAL_TO_GERRIT_DIFF_MAPPING_FILE_NAME)
@@ -428,8 +468,12 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         step_test_data=lambda: self.m.raw_io.test_api.stream_output(test_output)
     )
 
-  def _generate_diff_mapping_from_local_to_gerrit(self):
+  def _generate_diff_mapping_from_local_to_gerrit(self, source_files):
     """Generates the diff mapping from local to Gerrit.
+
+    Args:
+      source_files: List of source files to generate diff mapping for, the paths
+                    are relative to the checkout path.
 
     So that the coverage data produced locally by the builder can be correctly
     displayed on Gerrit.
@@ -445,21 +489,18 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         args=[
             '--local-diff-file', local_diff_file, '--gerrit-diff-file',
             gerrit_diff_file, '--output-file', local_to_gerrit_diff_mapping_file
-        ],
+        ] + source_files,
         stdout=self.m.json.output())
 
   def _surface_merging_errors(self):
     step_result = self.m.python(
         'Finding merging errors',
         self.resource('load_merge_errors.py'),
-        args=[
-            '--root-dir', self.profdata_dir()
-        ],
+        args=['--root-dir', self.profdata_dir()],
         step_test_data=lambda: self.m.json.test_api.output_stream({}),
         stdout=self.m.json.output())
     if step_result.stdout:
-      step_result.step_text = (
-          'FAILURES MERGING: %r' % step_result.stdout)
+      step_result.step_text = ('FAILURES MERGING: %r' % step_result.stdout)
       step_result.presentation.status = self.m.step.FAILURE
       step_result.presentation.properties['bad_coverage_profile_steps'] = len(
           step_result.stdout)
@@ -474,22 +515,29 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     output_isolated = _find_isolated_json(local_run_isolate_step.stdout)
     profraw_dir = self.m.path.mkdtemp()
     if output_isolated:
-      self.m.python('retrieve raw profiles for %s' % step_name,
-                    self.m.swarming_client.path.join('isolateserver.py'),
-                    args=[
-                        'download',
-                        '-I%s' % output_isolated['storage'],
-                        '-s%s' % output_isolated['hash'],
-                        '--target=%s' % profraw_dir])
+      self.m.python(
+          'retrieve raw profiles for %s' % step_name,
+          self.m.swarming_client.path.join('isolateserver.py'),
+          args=[
+              'download',
+              '-I%s' % output_isolated['storage'],
+              '-s%s' % output_isolated['hash'],
+              '--target=%s' % profraw_dir
+          ])
       self.m.python(
           'index raw profiles for %s' % step_name,
           self.raw_profile_merge_script,
           args=[
-            '--profdata-dir', self.profdata_dir(step_name),
-            '--task-output-dir', profraw_dir,
-            '--llvm-profdata', self.profdata_executable,
-            '--output-json', self.profdata_dir(step_name).join('output.json'),
+              '--profdata-dir',
+              self.profdata_dir(step_name),
+              '--task-output-dir',
+              profraw_dir,
+              '--llvm-profdata',
+              self.profdata_executable,
+              '--output-json',
+              self.profdata_dir(step_name).join('output.json'),
           ])
+
 
 def _find_isolated_json(stdout):
   isolated_re = re.compile(

@@ -24,10 +24,7 @@ def RunSteps(api):
       builders=None)
   api.chromium_tests.configure_build(bot_config_object)
   if 'tryserver' in mastername:
-    api.clang_coverage.instrument([
-        'some/path/to/file.cc',
-        'some/other/path/to/file.cc',
-    ])
+    api.clang_coverage.instrument(api.properties['files_to_instrument'])
 
   for i in range(3):
     step = 'step %d' % i
@@ -50,6 +47,7 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  # yapf: disable
   yield (
       api.test('basic')
       + api.properties.generic(
@@ -92,6 +90,11 @@ def GenTests(api):
           mastername='tryserver.chromium.linux',
           buildername='linux-coverage-rel',
           buildnumber=54)
+      + api.properties(
+          files_to_instrument=[
+            'some/path/to/file.cc',
+            'some/other/path/to/file.cc',
+          ])
       + api.buildbucket.try_build(
           project='chromium/src', builder='linux-coverage-rel')
       + api.post_process(
@@ -164,5 +167,23 @@ def GenTests(api):
       + api.override_step_data('dummy test', stdout=api.raw_io.output(
           'no isolate'))
       + api.post_process(post_process.StatusSuccess)
+      + api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('skip collecting coverage data')
+      + api.properties.generic(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-coverage-rel',
+          buildnumber=54)
+      + api.properties(
+          files_to_instrument=[
+            'some/path/to/non_source_file.txt'
+          ])
+      + api.buildbucket.try_build(
+          project='chromium/src', builder='linux-coverage-rel')
+      + api.post_process(
+          post_process.MustRun,
+          'skip collecting coverage data because no source file is changed')
       + api.post_process(post_process.DropExpectation)
   )

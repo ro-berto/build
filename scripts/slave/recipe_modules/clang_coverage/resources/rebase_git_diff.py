@@ -126,12 +126,14 @@ def _parse_added_lines_from_git_diff(diff):
   return file_to_added_lines
 
 
-def generate_diff_mapping(local_diff, gerrit_diff):
+def generate_diff_mapping(local_diff, gerrit_diff, sources):
   """Generates a mapping of added files between two diffs.
 
   Args:
     local_diff: Diff produced by running 'git diff' locally.
     gerrit_diff: Diff fetched from Gerrit.
+    sources: A list of source files to get diff mapping for, the paths are
+             relative to the checkout.
 
   Returns:
     A map whose key is a file name that is relative to the source root, and the
@@ -143,6 +145,11 @@ def generate_diff_mapping(local_diff, gerrit_diff):
 
   file_to_line_num_mapping = {}
   for file_name in local_file_to_added_lines:
+    # |sources| uses platform specific separators, while in the diff
+    # produced by git, the paths always use /.
+    if file_name.replace('/', os.path.sep) not in sources:
+      continue
+
     if file_name not in gerrit_file_to_added_lines:
       raise RuntimeError(
           'Diff mismatch. File name: "%s" is present in local diff, but not '
@@ -203,6 +210,11 @@ def _parse_args():
       'that maps from local diff\'s line number to Gerrit diff\'s line number '
       'as well as the line itself.')
 
+  arg_parser.add_argument(
+      'sources',
+      nargs='*',
+      help='Paths of source files to get diff mapping for, the paths are '
+      'relative to the checkout path, with platform-specific path separator.')
   return arg_parser.parse_args()
 
 
@@ -223,7 +235,8 @@ def main():
   with open(args.gerrit_diff_file) as f:
     gerrit_diff = [line.rstrip() for line in f]
 
-  file_to_line_num_mapping = generate_diff_mapping(local_diff, gerrit_diff)
+  file_to_line_num_mapping = generate_diff_mapping(local_diff, gerrit_diff,
+                                                   args.sources or [])
   json_mapping = json.dumps(file_to_line_num_mapping)
   with open(args.output_file, 'w') as f:
     f.write(json_mapping)

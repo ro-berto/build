@@ -49,7 +49,7 @@ class RebaseGitDiffTest(unittest.TestCase):
     }
 
     mapping = rebase_git_diff.generate_diff_mapping(
-        local_diff.split('\n'), gerrit_diff.split('\n'))
+        local_diff.split('\n'), gerrit_diff.split('\n'), ['path/test.txt'])
     self.assertEqual(expected_mapping, mapping)
 
   def test_one_file_multiple_sections(self):
@@ -90,7 +90,7 @@ class RebaseGitDiffTest(unittest.TestCase):
     }
 
     mapping = rebase_git_diff.generate_diff_mapping(
-        local_diff.split('\n'), gerrit_diff.split('\n'))
+        local_diff.split('\n'), gerrit_diff.split('\n'), ['path/test.txt'])
     self.assertEqual(expected_mapping, mapping)
 
   def test_multiple_files_multiple_sections(self):
@@ -153,7 +153,8 @@ class RebaseGitDiffTest(unittest.TestCase):
     }
 
     mapping = rebase_git_diff.generate_diff_mapping(
-        local_diff.split('\n'), gerrit_diff.split('\n'))
+        local_diff.split('\n'), gerrit_diff.split('\n'),
+        ['path/test1.txt', 'path/test2.txt'])
 
     self.assertEqual(expected_mapping, mapping)
 
@@ -195,7 +196,58 @@ class RebaseGitDiffTest(unittest.TestCase):
     }
 
     mapping = rebase_git_diff.generate_diff_mapping(
-        local_diff.split('\n'), gerrit_diff.split('\n'))
+        local_diff.split('\n'), gerrit_diff.split('\n'), ['path/test.txt'])
+    self.assertEqual(expected_mapping, mapping)
+
+  # This test tests the behaviors of the sources arguments to specify list of
+  # files to get diff mapping for.
+  def test_filter_source_files(self):
+    gerrit_diff = ('diff --git a/path/test1.txt b/path/test1.txt\n'
+                   'index 0719398930..4a2b716881 100644\n'
+                   '--- a/path/test1.txt\n'
+                   '+++ b/path/test1.txt\n'
+                   '@@ -10,2 +10,3 @@\n'
+                   ' Line 10\n'
+                   '-Line 11\n'
+                   '+A different line 11\n'
+                   '+A newly added line 12\n'
+                   'diff --git a/path/test2.txt b/path/test2.txt\n'
+                   'index 0719398930..4a2b716881 100644\n'
+                   '--- a/path/test2.txt\n'
+                   '+++ b/path/test2.txt\n'
+                   '@@ -20,1 +21,1 @@\n'
+                   '-Line 20\n'
+                   '+A different line 20\n')
+
+    # The difference between |local_diff| and |gerrit_diff| is that some other
+    # CL added 5 lines before Line 10 in both files.
+    local_diff = ('diff --git a/path/test1.txt b/path/test1.txt\n'
+                  'index 0719398930..4a2b716881 100644\n'
+                  '--- a/path/test1.txt\n'
+                  '+++ b/path/test1.txt\n'
+                  '@@ -15,2 +15,3 @@\n'
+                  ' Line 10\n'
+                  '-Line 11\n'
+                  '+A different line 11\n'
+                  '+A newly added line 12\n'
+                  'diff --git a/path/test2.txt b/path/test2.txt\n'
+                  'index 0719398930..4a2b716881 100644\n'
+                  '--- a/path/test2.txt\n'
+                  '+++ b/path/test2.txt\n'
+                  '@@ -25,1 +26,1 @@\n'
+                  '-Line 20\n'
+                  '+A different line 20\n')
+
+    expected_mapping = {
+        'path/test1.txt': {
+            16: (11, 'A different line 11'),
+            17: (12, 'A newly added line 12')
+        }
+    }
+
+    mapping = rebase_git_diff.generate_diff_mapping(
+        local_diff.split('\n'), gerrit_diff.split('\n'), ['path/test1.txt'])
+
     self.assertEqual(expected_mapping, mapping)
 
 
