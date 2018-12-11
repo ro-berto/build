@@ -375,6 +375,7 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
     # to GN.
     common_kwargs['override_compile_targets'] = test.get(
         'override_compile_targets', None)
+    common_kwargs['isolate_coverage_data'] = test.get('isolate_coverage_data')
 
     # TODO(tansell): Remove this once custom handling of results is no longer
     # needed.
@@ -406,7 +407,6 @@ def generate_isolated_script(api, chromium_tests_api, mastername, buildername,
     kwargs['waterfall_buildername'] = buildername
     kwargs['waterfall_mastername'] = mastername
     kwargs['idempotent'] = swarming_spec.get('idempotent', True)
-    kwargs['isolate_coverage_data'] = spec.get('isolate_coverage_data')
 
     return steps.SwarmingIsolatedScriptTest(**kwargs)
 

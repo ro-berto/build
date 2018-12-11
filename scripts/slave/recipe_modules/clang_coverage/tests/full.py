@@ -11,6 +11,8 @@ DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/properties',
+    'recipe_engine/raw_io',
+    'recipe_engine/step',
 ]
 
 
@@ -31,6 +33,12 @@ def RunSteps(api):
     step = 'step %d' % i
     api.clang_coverage.profdata_dir(step)
     api.clang_coverage.shard_merge(step)
+    api.clang_coverage.get_local_isolated_coverage(
+        step, api.step(
+            'dummy test', [], stdout=api.raw_io.output(),
+            step_test_data=lambda: api.raw_io.test_api.stream_output(
+                '[run_isolated_out_hack]%s[/run_isolated_out_hack]))' %
+                '{"hash":"abc", "storage":"url"}')))
   api.clang_coverage.process_coverage_data([
       api.chromium_tests.steps.SwarmingGTestTest('base_unittests')])
   api.clang_coverage.process_coverage_data([
@@ -121,6 +129,41 @@ def GenTests(api):
           buildnumber=54)
       + api.override_step_data(
           'Finding merging errors', stdout=api.json.output(['some_step']))
+      + api.post_process(post_process.StatusSuccess)
+      + api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('bad_local_run')
+      + api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='linux-code-coverage',
+          buildnumber=54)
+      + api.post_process(
+          post_process.MustRunRE, 'ensure profdata dir for .*', 3, 3)
+      + api.post_process(
+          post_process.MustRun, 'merge profile data for 3 targets')
+      + api.post_process(
+          post_process.MustRun, 'generate html report for 3 targets')
+      + api.post_process(
+          post_process.MustRun, 'copy source and html report files')
+      + api.post_process(
+          post_process.MustRun, 'gsutil upload source and html report files')
+      + api.post_process(
+          post_process.DoesNotRun, 'generate git diff locally')
+      + api.post_process(
+          post_process.DoesNotRun, 'fetch git diff from Gerrit')
+      + api.post_process(
+          post_process.DoesNotRun, 'generate diff mapping from local to Gerrit')
+      + api.post_process(
+          post_process.MustRun,
+          'Run component extraction script to generate mapping')
+      + api.post_process(
+          post_process.MustRun, 'generate metadata for 3 targets')
+      + api.post_process(
+          post_process.MustRun, 'gsutil upload metadata')
+      + api.override_step_data('dummy test', stdout=api.raw_io.output(
+          'no isolate'))
       + api.post_process(post_process.StatusSuccess)
       + api.post_process(post_process.DropExpectation)
   )

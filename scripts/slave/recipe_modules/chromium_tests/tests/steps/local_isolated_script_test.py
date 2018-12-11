@@ -7,6 +7,7 @@ DEPS = [
     'isolate',
     'recipe_engine/json',
     'recipe_engine/properties',
+    'recipe_engine/raw_io',
     'recipe_engine/step',
     'test_utils',
 ]
@@ -17,9 +18,12 @@ from recipe_engine import post_process
 def RunSteps(api):
   test_name = api.properties.get('test_name') or 'base_unittests'
 
+  isolate_coverage_data = api.properties.get('isolate_coverage_data', False)
+
   test = api.chromium_tests.steps.LocalIsolatedScriptTest(
       test_name,
-      override_compile_targets=api.properties.get('override_compile_targets'))
+      override_compile_targets=api.properties.get('override_compile_targets'),
+      isolate_coverage_data=isolate_coverage_data)
 
   assert not test.is_gtest and not test.runs_on_swarming
 
@@ -59,6 +63,13 @@ def GenTests(api):
       expected_log = '@@@STEP_LOG_LINE@details@%s: %r@@@' % (key, value)
       check(expected_log in followup_annotations)
     return step_odict
+
+  def verify_isolate_flag(check, step_odict):
+    step = step_odict[
+        'base_unittests']
+    check(
+        'LLVM_PROFILE_FILE=${ISOLATED_OUTDIR}/profraw/default-%1m.profraw'
+        in step['cmd'])
 
   yield (
       api.test('basic') +
@@ -112,4 +123,14 @@ def GenTests(api):
           test_filter=['test1', 'test2'],
           repeat_count=20,
           test_name='webkit_layout_tests')
+  )
+  yield (
+      api.test('isolate_coverage_data') +
+      api.properties(
+          isolate_coverage_data=True,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.post_process(verify_isolate_flag) +
+      api.post_process(post_process.DropExpectation)
   )

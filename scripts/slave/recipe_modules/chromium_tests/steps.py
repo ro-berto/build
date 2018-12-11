@@ -1599,7 +1599,7 @@ class SwarmingGTestTest(SwarmingTest):
 class LocalIsolatedScriptTest(Test):
   def __init__(self, name, args=None, target_name=None,
                override_compile_targets=None, results_handler=None,
-               set_up=None, tear_down=None,
+               set_up=None, tear_down=None, isolate_coverage_data=None,
                **runtest_kwargs):
     """Constructs an instance of LocalIsolatedScriptTest.
 
@@ -1636,6 +1636,7 @@ class LocalIsolatedScriptTest(Test):
     self._tear_down = tear_down
     self.results_handler = results_handler or JSONResultsHandler()
     self._test_results = {}
+    self._isolate_coverage_data = isolate_coverage_data
 
   @property
   def set_up(self):
@@ -1690,12 +1691,30 @@ class LocalIsolatedScriptTest(Test):
     step_test_data = lambda: api.json.test_api.output(
         {'valid': True, 'failures': []})
 
+    kwargs = {}
+    if self._isolate_coverage_data:
+      kwargs.update({
+          # Targets built with 'use_clang_coverage' will look at this
+          # environment variable to determine where to write the profile dumps.
+          # The %Nm syntax # is understood by this instrumentation, see:
+          #   https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#id4
+          # We use one profile only as this is meant for short, single-process
+          # tests. Anything longer or more complex should be running on swarming
+          # instead of locally.
+          'env': {
+              'LLVM_PROFILE_FILE':
+                  '${ISOLATED_OUTDIR}/profraw/default-%1m.profraw', },
+          # The results of the script will be isolated, and the .isolate will be
+          # dumped to stdout.
+          'stdout': api.raw_io.output(),
+      })
+
     try:
       api.isolate.run_isolated(
           self.name,
           api.isolate.isolated_tests[self.target_name],
           args,
-          step_test_data=step_test_data)
+          step_test_data=step_test_data, **kwargs)
     finally:
       # TODO(kbr, nedn): the logic of processing the output here is very similar
       # to that of SwarmingIsolatedScriptTest. They probably should be shared
@@ -1709,6 +1728,10 @@ class LocalIsolatedScriptTest(Test):
       self._test_results[suffix] = test_results
 
       self.results_handler.render_results(api, results, presentation)
+
+      if self._isolate_coverage_data:
+        api.chromium_tests.m.clang_coverage.get_local_isolated_coverage(
+            self.name, step_result)
 
       if valid:
         self._test_runs[suffix] = test_results.canonical_result_format()
@@ -1850,6 +1873,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
   def _output_perf_results_if_present(self, api, step_result):
     # webrtc overrides this method in recipe_modules/webrtc/steps.py
     pass
+
 
 class PythonBasedTest(Test):
   def __init__(self, name, **kwargs):
