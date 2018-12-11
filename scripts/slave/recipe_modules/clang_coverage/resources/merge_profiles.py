@@ -9,6 +9,7 @@ passed by swarming api.
 """
 
 import argparse
+import logging
 import os
 import sys
 
