@@ -457,6 +457,21 @@ def _aggregate_dirs_and_components(directory_summaries, component_mapping):
   Returns:
     A dict mapping components to component coverage summaries.
   """
+  def _ancestor_in_mapping_as_same_component(path, component, mapping):
+    """Returns true if any of the ancestors of path map to the same component.
+
+    Args:
+      path(str): A path to a dir, like //thid_party/blink/common
+      component(str): A component.
+      mapping(mapping): collection to check if ancestors (e.g.
+          //third_party/blink and //third_party) map to the same component.
+    """
+    while len(path) > 2:  # Stop at '//'
+      path = '/'.join(path.split('/')[:-1])
+      if path in mapping and mapping[path] == component:
+        return True
+    return False
+
   component_summaries = {}  # Result.
   dirs_to_component = {}
   # sort lexicographically, parents should come before the children.
@@ -480,9 +495,10 @@ def _aggregate_dirs_and_components(directory_summaries, component_mapping):
     component = None
     if directory != '//':
       component = component_mapping.get(directory[len('//'):])
-    # Do not add to summary if immediate parent is already considered. To reduce
-    # double counting.
-    if component and parent not in dirs_to_component:
+    # Do not add to summary if any ancestor is already considered. To avoid
+    # double-counting.
+    if component and not _ancestor_in_mapping_as_same_component(
+        directory, component, dirs_to_component):
       dirs_to_component[directory] = component
       if component not in component_summaries:
         component_summaries[component] = {

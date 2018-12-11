@@ -80,10 +80,17 @@ class AggregateComponentsTest(unittest.TestCase):
             'segments': [[1, 2, 3, True, True]],
             'summary': self.make_summary(6),
             'filename': '/b/src/file_in_root.cc',
+        },
+        {
+            # Ignored in this test.
+            'segments': [[1, 2, 3, True, True]],
+            'summary': self.make_summary(6),
+            'filename': '/b/src/path/still/parent/count_once.cc',
         }
     ]
     mapping = {
         'path': 'parent>component',
+        'path/still/parent': 'parent>component',
         'path/to': 'child>component',
         'path/to/nested': 'grandchild>component'
     }
