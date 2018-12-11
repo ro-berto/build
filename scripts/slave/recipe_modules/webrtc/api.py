@@ -397,13 +397,11 @@ class WebRTCApi(recipe_api.RecipeApi):
     if triggered_bots:
       if self.c.enable_swarming:
         properties['swarm_hashes'] = self.m.isolate.isolated_tests
-      self.m.buildbucket.put([{
-        'bucket': bucketname,
-        'parameters': {
-          'builder_name': buildername,
-          'properties': properties,
-        },
-      } for bucketname, buildername in triggered_bots])
+
+      self.m.scheduler.emit_trigger(
+          self.m.scheduler.BuildbucketTrigger(properties=properties),
+          project='webrtc',
+          jobs=[buildername for _, buildername in triggered_bots])
 
   def package_build(self):
     upload_url = self.m.archive.legacy_upload_url(
