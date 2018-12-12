@@ -5022,7 +5022,7 @@ This recipe is intended to run several times during MTV's off-peak hours. Its
 builder should be backed by a single thin Ubuntu VM, while the tasks it launches
 run the cros_flash recipe and run on DUT swarming bots.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/cros_flash_scheduler.py#205)(api, swarming_server, swarming_pool, device_type, bb_host, random_seed):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/cros_flash_scheduler.py#209)(api, swarming_server, swarming_pool, device_type, bb_host, random_seed):**
 
 &mdash; **def [get\_bots\_in\_pool](/scripts/slave/recipes/cros_flash_scheduler.py#81)(api, swarming_server, pool, device_type):**
 
@@ -5044,7 +5044,11 @@ to the board's directory in the GS image bucket, which contains the images
 built for that board at that version.
 (eg: gs://chromeos-image-archive/kevin-full/R72-11244.0.0-rc2/)
 
-&mdash; **def [trigger\_flash](/scripts/slave/recipes/cros_flash_scheduler.py#175)(api, bot, pool, gs_image_path):**
+Returns tuple of:
+  The 5-digit manifest for the latest image.
+  GS path fot the latest image.
+
+&mdash; **def [trigger\_flash](/scripts/slave/recipes/cros_flash_scheduler.py#179)(api, bot, pool, gs_image_path):**
 ### *recipes* / [crrev:examples/full](/scripts/slave/recipe_modules/crrev/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/crrev/examples/full.py#9): [crrev](#recipe_modules-crrev), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]

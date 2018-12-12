@@ -145,6 +145,10 @@ def get_closest_available_version(api, board, lkgm_base):
   to the board's directory in the GS image bucket, which contains the images
   built for that board at that version.
   (eg: gs://chromeos-image-archive/kevin-full/R72-11244.0.0-rc2/)
+
+  Returns tuple of:
+    The 5-digit manifest for the latest image.
+    GS path for the latest image.
   """
   # Append '-full' to every board, which indicates we want public versions
   # of the board's images.
@@ -166,10 +170,10 @@ def get_closest_available_version(api, board, lkgm_base):
             full_version_file_path, name='cat LATEST-%d' % candidate_version,
             use_retry_wrapper=should_retry, stdout=api.raw_io.output(),
             infra_step=False)
-        return gs_path_prefix + result.stdout.strip()
+        return str(candidate_version), gs_path_prefix + result.stdout.strip()
       except api.step.StepFailure:
         pass  # Gracefully skip 404s.
-  return None
+  return None, None
 
 
 def trigger_flash(api, bot, pool, gs_image_path):
@@ -229,10 +233,11 @@ def RunSteps(api, swarming_server, swarming_pool, device_type, bb_host,
   lkgm_base = lkgm.split('.')[0]
 
   # Fetch the full path in GS for the board at the current lkgm.
-  latest_version = get_closest_available_version(api, device_type, lkgm_base)
-  if not latest_version:
+  latest_version_base, latest_version_gs_path = get_closest_available_version(
+      api, device_type, lkgm_base)
+  if not latest_version_gs_path:
     api.python.failing_step('no available image at %s' % lkgm, '')
-  gs_image_path = latest_version + '/chromiumos_test_image.tar.xz'
+  gs_image_path = latest_version_gs_path + '/chromiumos_test_image.tar.xz'
   # Do a quick GS ls to ensure the image path exists.
   api.gsutil.list(gs_image_path, name='ls ' + gs_image_path)
 
@@ -249,7 +254,7 @@ def RunSteps(api, swarming_server, swarming_pool, device_type, bb_host,
     if bot.is_unhealthy:
       unhealthy_bots.append(bot)
       continue
-    if bot.os != lkgm_base:
+    if bot.os != latest_version_base:
       out_of_date_bots.append(bot)
     else:
       up_to_date_bots.append(bot)
@@ -325,14 +330,16 @@ def RunSteps(api, swarming_server, swarming_pool, device_type, bb_host,
     for i in xrange(10):
       for b in bots_to_flash:
         b.update_status(api)
-      if any(b.is_unhealthy or b.os != lkgm_base for b in bots_to_flash):
+      if any(b.is_unhealthy or b.os != latest_version_base
+                 for b in bots_to_flash):
         api.python.inline('1 min sleep #%d' % i, 'import time; time.sleep(60)')
       else:
         break
 
   # Fail the recipe if any bot wasn't safely flashed.
   unhealthy_bots = [ b.id for b in bots_to_flash if b.is_unhealthy ]
-  out_of_date_bots = [ b.id for b in bots_to_flash if b.os != lkgm_base ]
+  out_of_date_bots = [
+      b.id for b in bots_to_flash if b.os != latest_version_base ]
   if unhealthy_bots or out_of_date_bots:
     api.python.failing_step(
         '%d bots failed the flash' % len(unhealthy_bots + out_of_date_bots),
