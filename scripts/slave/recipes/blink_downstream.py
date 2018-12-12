@@ -193,7 +193,8 @@ def RunSteps(api):
       # Update without changing got_revision. The first sync is the revision
       # that is tested. The second is just for comparison. Setting got_revision
       # again confuses the waterfall's console view.
-      api.bot_update.ensure_checkout(update_presentation=False)
+      api.bot_update.ensure_checkout(
+          ignore_input_commit=True, update_presentation=False)
 
       api.chromium_tests.run_mb_and_compile(
           ['blink_tests'], [],
