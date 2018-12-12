@@ -30,6 +30,7 @@
       "retry",
       "fetch",
       "origin",
+      "master",
       "--recurse-submodules",
       "--progress",
       "--tags"
@@ -46,7 +47,7 @@
       "git",
       "checkout",
       "-f",
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "FETCH_HEAD"
     ],
     "cwd": "[START_DIR]/flutter",
     "infra_step": true,

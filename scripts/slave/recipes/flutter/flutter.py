@@ -12,6 +12,7 @@ DEPS = [
     'depot_tools/depot_tools',
     'depot_tools/osx_sdk',
     'depot_tools/windows_sdk',
+    'recipe_engine/buildbucket',
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/json',
@@ -27,7 +28,7 @@ DEPS = [
 ]
 
 BUCKET_NAME = 'flutter_infra'
-PACKAGED_BRANCH_RE = re.compile(r'(dev|beta|stable)$')
+PACKAGED_REF_RE = re.compile(r'^refs/heads/(dev|beta|stable)$')
 
 
 @contextmanager
@@ -177,7 +178,7 @@ def UploadFlutterCoverage(api):
          '--coverage-path=%s' % coverage_path])
 
 
-def CreateAndUploadFlutterPackage(api, git_hash):
+def CreateAndUploadFlutterPackage(api, git_hash, branch):
   """Prepares, builds, and uploads an all-inclusive archive package."""
   # For creating the packages, we need to have the master branch version of the
   # script, but we need to know what the revision in git_hash is first. So, we
@@ -205,7 +206,7 @@ def CreateAndUploadFlutterPackage(api, git_hash):
         prepare_script,
         '--temp_dir=%s' % work_dir,
         '--revision=%s' % git_hash,
-        '--branch=%s' % api.properties['branch'],
+        '--branch=%s' % branch,
         '--publish'
     ])
 
@@ -215,9 +216,10 @@ def RunSteps(api):
   if 'clobber' in api.properties:
     api.file.rmcontents('everything', api.path['start_dir'])
 
+  git_ref = api.buildbucket.gitiles_commit.ref
   git_hash = api.git.checkout(
       'https://chromium.googlesource.com/external/github.com/flutter/flutter',
-      ref=api.properties.get('revision'),
+      ref=git_ref,
       recursive=True,
       set_got_revision=True,
       tags=True)
@@ -256,12 +258,14 @@ def RunSteps(api):
   flutter_executable = 'flutter' if not api.platform.is_win else 'flutter.bat'
   dart_executable = 'dart' if not api.platform.is_win else 'dart.exe'
 
-  branch = api.properties.get('branch')
   with api.context(env=env):
-    if branch and PACKAGED_BRANCH_RE.match(branch):
-      CreateAndUploadFlutterPackage(api, git_hash)
-      # Nothing left to do on a packaging branch.
-      return
+    if git_ref:
+      match = PACKAGED_REF_RE.match(git_ref)
+      if match:
+        branch = match.group(1)
+        CreateAndUploadFlutterPackage(api, git_hash, branch)
+        # Nothing left to do on a packaging branch.
+        return
 
   # The context adds dart-sdk tools to PATH and sets PUB_CACHE.
   with api.context(env=env, cwd=checkout):
@@ -295,9 +299,11 @@ def RunSteps(api):
 def GenTests(api):
   for platform in ('mac', 'linux', 'win'):
     for branch in ('master', 'dev', 'beta', 'stable'):
+      git_ref = 'refs/heads/' + branch
       test = (
           api.test('%s_%s' % (platform, branch)) + api.platform(platform, 64) +
-          api.properties(clobber='', branch=branch) +
+          api.buildbucket.ci_build(git_ref=git_ref, revision=None) +
+          api.properties(clobber='') +
           api.runtime(is_luci=True, is_experimental=False))
       if platform == 'mac' and branch == 'master':
         test += (
@@ -317,7 +323,7 @@ def GenTests(api):
          api.runtime(is_luci=False, is_experimental=True))
 
   yield (api.test('mac_cannot_find_xcode') + api.platform('mac', 64) +
-         api.properties(revision='a' * 40) + api.properties(clobber='') +
+         api.properties(clobber='') +
          api.step_data('set_xcode_version', api.json.output({
              'matches': {}
          })))
