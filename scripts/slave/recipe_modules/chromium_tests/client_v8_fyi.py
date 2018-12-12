@@ -18,7 +18,7 @@ SPEC = {
         'chromium_lkgr',
         'show_v8_revision',
       ],
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -38,7 +38,7 @@ SPEC = {
         'chromium_lkgr',
         'show_v8_revision',
       ],
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -131,7 +131,7 @@ SPEC = {
         'chromium_lkgr',
         'show_v8_revision',
       ],
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
         'TARGET_BITS': 64,
@@ -197,6 +197,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
@@ -221,6 +222,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
@@ -245,6 +247,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
@@ -269,6 +272,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
@@ -292,6 +296,7 @@ SPEC = {
     'Android V8 FYI Release (Nexus 5X)': {
       'chromium_config': 'android',
       'chromium_apply_config': [
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': [

@@ -13,6 +13,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
@@ -31,6 +32,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
@@ -49,6 +51,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
@@ -72,6 +75,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -89,6 +93,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -106,6 +111,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -123,6 +129,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -140,6 +147,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -157,6 +165,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -174,6 +183,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -191,6 +201,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -208,6 +219,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -225,6 +237,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -242,6 +255,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -259,6 +273,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
@@ -277,6 +292,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
@@ -295,6 +311,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
@@ -318,6 +335,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -335,6 +353,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -356,6 +375,7 @@ SPEC = {
       'chromium_config': 'chromium_win_clang',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
@@ -381,6 +401,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
@@ -399,6 +420,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
@@ -416,6 +438,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
@@ -434,6 +457,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
@@ -457,6 +481,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -474,6 +499,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -489,7 +515,7 @@ SPEC = {
     },
     'Linux FYI Debug (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -506,6 +532,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -523,6 +550,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -540,6 +568,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -555,7 +584,8 @@ SPEC = {
     },
     'Linux FYI GPU TSAN Release': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb',
+                                'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal',
                                'angle_top_of_tree', 'dawn_top_of_tree'],
@@ -573,6 +603,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -590,6 +621,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
@@ -608,6 +640,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': [
@@ -628,6 +661,7 @@ SPEC = {
     'GPU FYI Mac dEQP Builder': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree'],
@@ -651,6 +685,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -668,6 +703,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -685,6 +721,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -702,6 +739,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -719,6 +757,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -736,6 +775,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -753,6 +793,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -770,6 +811,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -787,6 +829,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -804,6 +847,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -819,7 +863,8 @@ SPEC = {
     },
     'Mac FYI GPU ASAN Release': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb',
+                                'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
                                'dawn_top_of_tree'],
@@ -834,7 +879,9 @@ SPEC = {
     },
     'Mac FYI dEQP Release AMD': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': [],
+      'chromium_apply_config': [
+          'ninja_confirm_noop'
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
                                'dawn_top_of_tree'],
@@ -851,7 +898,9 @@ SPEC = {
     },
     'Mac FYI dEQP Release Intel': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': [],
+      'chromium_apply_config': [
+          'ninja_confirm_noop',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'angle_top_of_tree',
                                'dawn_top_of_tree'],
@@ -870,6 +919,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -887,6 +937,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -904,6 +955,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1225,6 +1277,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1238,7 +1291,7 @@ SPEC = {
     },
     'Fake Linux Release (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -1255,6 +1308,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1277,6 +1331,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1293,6 +1348,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1309,6 +1365,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1325,6 +1382,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1341,6 +1399,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1357,6 +1416,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1373,6 +1433,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1416,6 +1477,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1432,6 +1494,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1448,6 +1511,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1464,6 +1528,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1480,6 +1545,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
           'mb',
+          'ninja_confirm_noop'
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1496,6 +1562,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1512,6 +1579,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1533,6 +1601,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1549,6 +1618,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -1565,6 +1635,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
+        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {

@@ -461,7 +461,7 @@ def stock_cronet_config(name, config='Release', **kwargs):
   return stock_config(
       name,
       config=config,
-      chromium_apply_config=['cronet_builder'],
+      chromium_apply_config=['cronet_builder', 'ninja_confirm_noop'],
       chromium_tests_apply_config=['staging'],
       **kwargs)
 

@@ -11,6 +11,7 @@ def config(name,
            android_config=None,
            build_config='Release',
            chromium_config='clang_tot_linux',
+           ninja_confirm_noop=True,
            target_arch='intel',
            target_bits=64):
   cfg = {
@@ -45,6 +46,9 @@ def config(name,
       cfg['android_config'] = android_config
       cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
       cfg['gclient_apply_config'] = ['android']
+
+  if ninja_confirm_noop:
+      cfg['chromium_apply_config'].append('ninja_confirm_noop')
 
   return name, cfg
 
@@ -551,24 +555,28 @@ SPEC['builders'].update([
     config('ToTAndroid',
            android_config='clang_tot_release_builder',
            chromium_config='clang_tot_android',
+           ninja_confirm_noop=False,
            target_arch='arm',
            target_bits=32),
 
     config('ToTAndroid64',
            android_config='clang_tot_release_builder',
            chromium_config='clang_tot_android',
+           ninja_confirm_noop=False,
            target_arch='arm',
            target_bits=64),
 
     config('ToTAndroidCFI',
            android_config='clang_tot_release_builder',
            chromium_config='clang_tot_android',
+           ninja_confirm_noop=False,
            target_arch='arm',
            target_bits=32),
 
     config('ToTAndroidOfficial',
            android_config='clang_tot_release_builder',
            chromium_config='clang_tot_android',
+           ninja_confirm_noop=False,
            target_arch='arm',
            target_bits=32),
 
