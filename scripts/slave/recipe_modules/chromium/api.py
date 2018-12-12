@@ -209,8 +209,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     return (buildername, bot_config)
 
-  def _run_ninja(self, ninja_command, name=None, ninja_env=None,
-                 ninja_confirm_noop=False, **kwargs):
+  def _run_ninja(self, ninja_command, name=None, ninja_env=None, **kwargs):
     """
     Run ninja with given command and env.
 
@@ -220,7 +219,6 @@ class ChromiumApi(recipe_api.RecipeApi):
                      (e.g. ['ninja', '-C', 'out/Release'])
       name: Name of compile step.
       ninja_env: Environment for ninja.
-      ninja_confirm_noop (bool):
         If this is True, check that ninja does nothing in second build.
 
     Raises:
@@ -288,22 +286,18 @@ class ChromiumApi(recipe_api.RecipeApi):
     step_result.presentation.step_text = (
         "This should have been a no-op, but it wasn't.")
 
-    if ninja_confirm_noop:
-      step_result.presentation.status = self.m.step.FAILURE
-      raise self.m.step.StepFailure(
-          """Failing build because ninja reported work to do.
-          This means that after completing a compile, another was run and
-          it resulted in still having work to do (that is, a no-op build
-          wasn't a no-op). Consult the first "ninja explain:" line for a
-          likely culprit.""")
-
-    step_result.presentation.status = self.m.step.WARNING
+    step_result.presentation.status = self.m.step.FAILURE
+    raise self.m.step.StepFailure(
+        """Failing build because ninja reported work to do.
+        This means that after completing a compile, another was run and
+        it resulted in still having work to do (that is, a no-op build
+        wasn't a no-op). Consult the first "ninja explain:" line for a
+        likely culprit.""")
 
 
   def _run_ninja_with_goma(self, ninja_command, ninja_env, name=None,
                            ninja_log_outdir=None, ninja_log_compiler=None,
-                           goma_env=None,
-                           ninja_confirm_noop=False, **kwargs):
+                           goma_env=None, **kwargs):
     """
     Run ninja with goma.
     This function start goma, call _run_ninja and stop goma using goma module.
@@ -317,8 +311,6 @@ class ChromiumApi(recipe_api.RecipeApi):
       ninja_log_outdir: Directory of ninja log. (e.g. "out/Release")
       ninja_log_compiler: Compiler used in ninja. (e.g. "clang")
       goma_env: Environment controlling goma behavior.
-      ninja_confirm_noop (bool):
-        If this is True, check that ninja does nothing in second build.
 
     Raises:
       StepFailure or InfraFailure if it fails to build or
@@ -334,8 +326,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         # Do not allow goma to invoke local compiler.
         ninja_env['GOMA_USE_LOCAL'] = 'false'
 
-      self._run_ninja(ninja_command, name, ninja_env,
-                      ninja_confirm_noop, **kwargs)
+      self._run_ninja(ninja_command, name, ninja_env, **kwargs)
       build_exit_status = 0
     except self.m.step.StepFailure as e:
       build_exit_status = e.retcode
@@ -493,7 +484,6 @@ class ChromiumApi(recipe_api.RecipeApi):
                 ninja_command=command,
                 name=name or 'compile',
                 ninja_env=ninja_env,
-                ninja_confirm_noop=self.c.compile_py.ninja_confirm_noop,
                 **kwargs)
         compile_exit_status = 0
       except self.m.step.StepFailure as e:
@@ -527,7 +517,6 @@ class ChromiumApi(recipe_api.RecipeApi):
               goma_env=goma_env,
               ninja_log_outdir=target_output_dir,
               ninja_log_compiler=self.c.compile_py.compiler or 'goma',
-              ninja_confirm_noop=self.c.compile_py.ninja_confirm_noop,
               **kwargs)
     except self.m.step.StepFailure as e:
       # Handle failures caused by goma.

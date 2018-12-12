@@ -11,7 +11,7 @@ SPEC = {
   'builders': {
     'fuchsia-arm64-cast': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['fuchsia'],
       'chromium_config_kwargs': {
@@ -27,7 +27,7 @@ SPEC = {
     },
     'fuchsia-x64-cast': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['fuchsia'],
       'chromium_config_kwargs': {
@@ -45,7 +45,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -65,7 +64,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
         'goma_rbe_staging',
       ],
       'gclient_config': 'chromium',
@@ -84,7 +82,6 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_apply_config': [
           'mb',
-          'ninja_confirm_noop',
       ],
       'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -111,7 +108,7 @@ SPEC = {
     },
     'linux-xenial-rel': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -127,7 +124,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
 
         # This is specified because 'linux_chromium_rel_ng' builder
         # is one of the slowest builder in CQ (crbug.com/804251).
@@ -151,7 +147,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
         'goma_high_parallel',
       ],
       'gclient_config': 'chromium',
@@ -169,7 +164,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -184,7 +178,7 @@ SPEC = {
     },
     'Linux Tests (dbg)(1)(32)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -201,7 +195,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -216,7 +209,7 @@ SPEC = {
     },
     'Linux Tests (dbg)(1)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -231,7 +224,7 @@ SPEC = {
 
     'Cast Audio Linux': {
       'chromium_config': 'chromium_clang',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -243,7 +236,7 @@ SPEC = {
     },
     'Cast Linux': {
       'chromium_config': 'chromium_clang',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -256,7 +249,7 @@ SPEC = {
 
     'Fuchsia ARM64 Cast Audio': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['fuchsia'],
       'chromium_config_kwargs': {
@@ -272,7 +265,7 @@ SPEC = {
     },
     'Fuchsia ARM64': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['fuchsia'],
       'chromium_config_kwargs': {
@@ -288,7 +281,7 @@ SPEC = {
     },
     'Fuchsia x64 Cast Audio': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['fuchsia'],
       'chromium_config_kwargs': {
@@ -304,7 +297,7 @@ SPEC = {
     },
     'Fuchsia x64': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['fuchsia'],
       'chromium_config_kwargs': {
@@ -323,7 +316,6 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_apply_config': [
           'mb',
-          'ninja_confirm_noop',
         ],
       'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',

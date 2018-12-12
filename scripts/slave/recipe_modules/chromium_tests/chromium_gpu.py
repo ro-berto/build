@@ -15,7 +15,6 @@ SPEC = {
         'goma_high_parallel',
         'goma_enable_global_file_stat_cache',
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -32,7 +31,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -50,7 +48,6 @@ SPEC = {
         'goma_high_parallel',
         'goma_enable_global_file_stat_cache',
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -67,7 +64,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -84,7 +80,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
         'goma_high_parallel',
       ],
       'gclient_config': 'chromium',
@@ -105,7 +100,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -121,7 +115,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
         'goma_high_parallel',
       ],
       'gclient_config': 'chromium',
@@ -137,7 +130,7 @@ SPEC = {
     },
     'Linux Debug (NVIDIA)': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
@@ -153,7 +146,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -170,7 +162,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -186,7 +177,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -203,7 +193,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -220,7 +209,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -237,7 +225,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {

@@ -17,7 +17,6 @@ SPEC['builders'] = {
       'goma_high_parallel',
       'goma_enable_global_file_stat_cache',
       'mb',
-      'ninja_confirm_noop',
     ],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
@@ -36,7 +35,6 @@ SPEC['builders'] = {
       'goma_high_parallel',
       'goma_enable_global_file_stat_cache',
       'mb',
-      'ninja_confirm_noop',
     ],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
@@ -55,7 +53,6 @@ SPEC['builders'] = {
     'chromium_config': 'chromium',
     'chromium_apply_config': [
       'mb',
-      'ninja_confirm_noop',
     ],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {
@@ -72,7 +69,6 @@ SPEC['builders'] = {
     'chromium_config': 'chromium',
     'chromium_apply_config': [
       'mb',
-      'ninja_confirm_noop',
     ],
     'gclient_config': 'chromium',
     'chromium_config_kwargs': {

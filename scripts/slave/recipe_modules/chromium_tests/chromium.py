@@ -11,7 +11,6 @@ SPEC = {
       'chromium_apply_config': [
         'clobber',
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -28,7 +27,6 @@ SPEC = {
       'chromium_apply_config': [
         'clobber',
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -49,7 +47,6 @@ SPEC = {
       'chromium_apply_config': [
         'clobber',
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -66,7 +63,6 @@ SPEC = {
       'chromium_apply_config': [
         'clobber',
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -87,7 +83,6 @@ SPEC = {
       'chromium_apply_config': [
         'clobber',
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -104,7 +99,6 @@ SPEC = {
       'chromium_apply_config': [
         'clobber',
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -125,7 +119,6 @@ SPEC = {
       'chromium_apply_config': [
         'clobber',
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -142,7 +135,6 @@ SPEC = {
       'chromium_apply_config': [
         'clobber',
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
