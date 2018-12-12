@@ -904,9 +904,15 @@ class DartApi(recipe_api.RecipeApi):
       args = args + step['tests']
 
     with self.m.step.defer_results():
+      # TODO(https://github.com/dart-lang/sdk/issues/34158): The Firefox
+      # processes are not exiting properly, causing the step to fail at the end,
+      # despite the results having been written out. Temporarily ignore failures
+      # on firefox.
+      firefox_bug = 'firefox' in self.m.buildbucket.builder_name
       self.run_script(step_name, TEST_PY_PATH, args, isolate_hash, shards,
                       local_shard, environment, tasks,
-                      cipd_packages=cipd_packages)
+                      cipd_packages=cipd_packages,
+                      ignore_failure=firefox_bug)
       results = StepResults(step_name, self.m, environment['commit'])
       results.args = args
       results.environment = environment
