@@ -1525,6 +1525,10 @@ class SwarmingTask(object):
     """JSON results of 'trigger' step or None if not triggered."""
     return self._trigger_output
 
+  def get_task_shard_output_dirs(self):
+    """Return the directory of each task shard outputs."""
+    return [str(i) for i in range(self.shards)]
+
   def get_shard_view_url(self, index):
     """Returns URL of HTML page with shard details or None if not available.
 

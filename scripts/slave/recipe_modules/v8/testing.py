@@ -678,7 +678,8 @@ class V8Fuzzer(V8GenericSwarmingTest):
       super(V8Fuzzer, self).run(**kwargs)
     except self.api.step.StepFailure as e:
       self.api.gsutil.upload(
-          self.output_dir.join('0', self.archive),
+          self.output_dir.join(self.task.get_task_shard_output_dirs()[0],
+                               self.archive),
           'chromium-v8',
           self.api.path.join('fuzzer-archives', self.archive),
       )

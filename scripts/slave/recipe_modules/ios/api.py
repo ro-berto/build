@@ -1070,8 +1070,10 @@ class iOSApi(recipe_api.RecipeApi):
         infra_failure = True
 
       # Add any iOS test runner results to the display.
-      test_summary = self.m.path.join(
-        task['task'].task_output_dir, '0', 'summary.json')
+      shard_output_dir = self.m.path.join(
+        task['task'].task_output_dir,
+        task['task'].get_task_shard_output_dirs()[0])
+      test_summary = self.m.path.join(shard_output_dir, 'summary.json')
       if self.m.path.exists(test_summary): # pragma: no cover
         with open(test_summary) as f:
           test_summary_json = self.m.json.loads(f.read())
@@ -1086,8 +1088,7 @@ class iOSApi(recipe_api.RecipeApi):
 
       # Upload test results JSON to the flakiness dashboard.
       if self.m.bot_update.last_returned_properties and upload_test_results:
-        test_results = self.m.path.join(
-          task['task'].task_output_dir, '0', 'full_results.json')
+        test_results = self.m.path.join(shard_output_dir, 'full_results.json')
         test_type = task['step name']
         if self.m.path.exists(test_results):
           self.m.test_results.upload(
@@ -1101,8 +1102,8 @@ class iOSApi(recipe_api.RecipeApi):
           )
 
       # Upload performance data result to the perf dashboard.
-      perf_results = self.m.path.join(task['task'].task_output_dir,
-                                      '0', 'Documents', 'perf_result.json')
+      perf_results = self.m.path.join(
+        shard_output_dir, 'Documents', 'perf_result.json')
       if self.m.path.exists(perf_results):
         data = self.get_perftest_data(perf_results)
         if 'Perf Data' in data:
