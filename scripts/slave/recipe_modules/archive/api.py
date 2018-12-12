@@ -321,7 +321,6 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     properties = (
       ('mastername', '--master-name'),
-      ('buildnumber', '--build-number'),
       ('parent_builddir', '--parent-build-dir'),
       ('parentname', '--parent-builder-name'),
       ('parentslavename', '--parent-slave-name'),
@@ -332,6 +331,8 @@ class ArchiveApi(recipe_api.RecipeApi):
     for property_name, switch_name in properties:
       if self.m.properties.get(property_name):
         args.extend([switch_name, self.m.properties[property_name]])
+
+    args.extend(['--build-number', self.m.buildbucket.build.number])
 
     # TODO(phajdan.jr): Always halt on missing build.
     if self.m.properties.get('halt_on_missing_build'):  # pragma: no cover

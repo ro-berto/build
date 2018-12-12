@@ -29,6 +29,7 @@ def GenTests(api):
       api.test('build_archive_url') +
       api.properties(
           parent_buildername='example_buildername',
+          parentname='example_buildername',
           buildnumber=123,
           build_archive_url='https://example/url')
   )

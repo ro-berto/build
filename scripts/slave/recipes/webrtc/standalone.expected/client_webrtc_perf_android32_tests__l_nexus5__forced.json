@@ -229,7 +229,7 @@
       "--master-name",
       "client.webrtc.perf",
       "--build-number",
-      "1337"
+      "0"
     ],
     "infra_step": true,
     "name": "extract build"

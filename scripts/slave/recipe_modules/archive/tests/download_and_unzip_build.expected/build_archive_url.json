@@ -19,6 +19,8 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "--build-archive-url",
       "https://example/url",
+      "--parent-builder-name",
+      "example_buildername",
       "--build-number",
       "123"
     ],

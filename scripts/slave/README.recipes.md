@@ -411,7 +411,7 @@ Args:
 Returns a step invoking extract_build.py to download and unzip
 a Chromium build.
 
-&mdash; **def [legacy\_download\_url](/scripts/slave/recipe_modules/archive/api.py#411)(self, gs_bucket_name, extra_url_components=None):**
+&mdash; **def [legacy\_download\_url](/scripts/slave/recipe_modules/archive/api.py#412)(self, gs_bucket_name, extra_url_components=None):**
 
 Returns a url suitable for downloading a Chromium build from
 Google Storage.
@@ -422,11 +422,11 @@ trailing '/' which is inserted in the middle of the URL.
 The builder_name, or parent_buildername, is always automatically
 inserted into the URL.
 
-&mdash; **def [legacy\_platform\_name](/scripts/slave/recipe_modules/archive/api.py#350)(self):**
+&mdash; **def [legacy\_platform\_name](/scripts/slave/recipe_modules/archive/api.py#351)(self):**
 
 Replicates the behavior of PlatformName() in chromium_utils.py.
 
-&mdash; **def [legacy\_upload\_url](/scripts/slave/recipe_modules/archive/api.py#400)(self, gs_bucket_name, extra_url_components=None):**
+&mdash; **def [legacy\_upload\_url](/scripts/slave/recipe_modules/archive/api.py#401)(self, gs_bucket_name, extra_url_components=None):**
 
 Returns a url suitable for uploading a Chromium build to Google
 Storage.

@@ -368,7 +368,9 @@
       "--build_revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--master-name",
-      "chromium.linux"
+      "chromium.linux",
+      "--build-number",
+      "0"
     ],
     "env": {
       "CHROME_HEADLESS": "1"

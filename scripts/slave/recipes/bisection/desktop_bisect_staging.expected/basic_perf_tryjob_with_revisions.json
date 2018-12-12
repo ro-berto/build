@@ -561,7 +561,7 @@
       "--master-name",
       "tryserver.chromium.perf",
       "--build-number",
-      "571"
+      "0"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "infra_step": true,
@@ -1029,7 +1029,7 @@
       "--master-name",
       "tryserver.chromium.perf",
       "--build-number",
-      "571"
+      "0"
     ],
     "cwd": "[BUILDER_CACHE]/linux_perf_bisect",
     "infra_step": true,
