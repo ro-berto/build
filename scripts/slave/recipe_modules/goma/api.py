@@ -296,7 +296,6 @@ class GomaApi(recipe_api.RecipeApi):
       # finished. b/80404226
       if self._client_type == 'latest':
         self._goma_ctl_env['GOMA_DONT_KILL_SUBPROCESS'] = False
-        self._goma_ctl_env['GOMA_DONT_KILL_COMMANDS'] = ''
 
       goma_ctl_start_env = self._goma_ctl_env.copy()
 
