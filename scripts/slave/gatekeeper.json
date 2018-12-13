@@ -893,6 +893,13 @@
             ],
             "forgiving_optional": ["*"]
           },
+          "Mojo Android": {
+            "tree_notify": [
+              "network-service-sheriffs@chromium.org"
+            ],
+            "forgive_all": "true",
+            "forgiving_optional": ["*"]
+          },
           "Mojo Linux": {
             "tree_notify": [
               "network-service-sheriffs@chromium.org"
