@@ -81,13 +81,22 @@ def _to_compressed_format(line_data, block_data):
   # Aggregate contiguous blocks of lines with the exact same hit count.
   last_index = 0
   for i in xrange(1, len(line_data) + 1):
-    if (i >= len(line_data) or line_data[i][1] != line_data[last_index][1]):
-      lines.append({
-          'first': line_data[last_index][0],
-          'last': line_data[i - 1][0],
-          'count': line_data[last_index][1],
-      })
-      last_index = i
+    is_continous_line = (
+        i < len(line_data) and line_data[i][0] == line_data[i - 1][0] + 1)
+    has_same_count = (
+        i < len(line_data) and line_data[i][1] == line_data[i - 1][1])
+
+    # Merge two lines iff they have continous line number and exactly the same
+    # count. For example: (101, 10) and (102, 10).
+    if (is_continous_line and has_same_count):
+      continue
+
+    lines.append({
+        'first': line_data[last_index][0],
+        'last': line_data[i - 1][0],
+        'count': line_data[last_index][1],
+    })
+    last_index = i
 
   uncovered_blocks = []
   for line_number in sorted(block_data.keys()):
@@ -457,6 +466,7 @@ def _aggregate_dirs_and_components(directory_summaries, component_mapping):
   Returns:
     A dict mapping components to component coverage summaries.
   """
+
   def _ancestor_in_mapping_as_same_component(path, component, mapping):
     """Returns true if any of the ancestors of path map to the same component.
 

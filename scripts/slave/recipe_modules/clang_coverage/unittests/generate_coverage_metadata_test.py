@@ -119,6 +119,48 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     record = generator._to_compressed_file_record(src_path, file_coverage_data)
     self.assertDictEqual(expected_record, record)
 
+  # This test tests that for *uncontinous* regions, even if their lines are
+  # executed the same number of times, when converted to compressed format,
+  # lines in different regions shouldn't be merged together.
+  def test_to_compressed_file_record_for_uncontinous_lines(self):
+    src_path = '/path/to/chromium/src'
+    file_coverage_data = {
+        'segments': [
+            [102, 35, 4, True, True],
+            [104, 4, 0, False, False],
+            [107, 35, 4, True, True],
+            [109, 4, 0, False, False],
+        ],
+        'summary': {
+            'lines': {
+                'count': 6,
+            }
+        },
+        'filename':
+            '/path/to/chromium/src/base/base.cc',
+    }
+    expected_record = {
+        'path':
+            'base/base.cc',
+        'total_lines':
+            6,
+        'lines': [
+            {
+                'first': 102,
+                'last': 104,
+                'count': 4,
+            },
+            {
+                'first': 107,
+                'last': 109,
+                'count': 4,
+            },
+        ]
+    }
+    self.maxDiff = None
+    record = generator._to_compressed_file_record(src_path, file_coverage_data)
+    self.assertDictEqual(expected_record, record)
+
   def test_rebase_line_and_block_data(self):
     line_data = [(1, 3), (2, 3), (3, 3), (5, 0)]
     block_data = {5: [[2, 10]]}
