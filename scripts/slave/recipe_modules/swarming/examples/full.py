@@ -34,12 +34,13 @@ PROPERTIES = {
   'named_caches': Property(default=None),
   'service_account': Property(default=None),
   'wait_for_tasks': Property(default=None),
+  'use_go_client': Property(default=False),
 }
 
 def RunSteps(api, platforms, show_outputs_ref_in_collect_step,
              show_shards_in_collect_step, gtest_task, isolated_script_task,
              merge, trigger_script, named_caches, service_account,
-             wait_for_tasks):
+             wait_for_tasks, use_go_client):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
@@ -66,6 +67,9 @@ def RunSteps(api, platforms, show_outputs_ref_in_collect_step,
   api.swarming.show_shards_in_collect_step = show_shards_in_collect_step
   api.swarming.show_outputs_ref_in_collect_step = (
       show_outputs_ref_in_collect_step)
+
+  if use_go_client:
+    api.swarming.use_go_client = use_go_client
 
   try:
     # Testing ReadOnlyDict.__setattr__() coverage.
@@ -135,6 +139,7 @@ def RunSteps(api, platforms, show_outputs_ref_in_collect_step,
   # Launch all tasks.
   for task in tasks:
     step_result = api.swarming.trigger_task(task)
+    assert len(task.get_task_shard_output_dirs()) == task.shards
     assert step_result.swarming_task in tasks
 
   # Recipe can do something useful here locally while tasks are
@@ -389,6 +394,22 @@ def GenTests(api):
           'hello_world on Windows-7-SP1',
           api.raw_io.output_dir({'summary.json': json.dumps(data)})) +
       api.properties(isolated_script_task=True))
+
+  data['shards'][0]['state'] = 'COMPLETED'
+  data['shards'][0]['exit_code'] = '1'
+  yield (
+      api.test('isolated_script_non_zero_exit_status') +
+      api.step_data(
+          'archive for win',
+          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
+      api.step_data(
+          'hello_world on Windows-7-SP1',
+          api.raw_io.output_dir({'summary.json': json.dumps(data)}) +
+          api.swarming.summary(data)) +
+      api.properties(isolated_script_task=True, use_go_client=True))
+
+  data['shards'][0]['state'] = 'TIMED_OUT'
+  del data['shards'][0]['exit_code']
 
   big_output_dir = {'summary.json': json.dumps(data)}
   for i, shard_data in enumerate(

@@ -33,7 +33,7 @@ MASTER_SWARMING_PRIORITIES.update({
 
 class ChromiumSwarmingApi(recipe_api.RecipeApi):
   def configure_swarming(self, project_name, precommit, mastername=None,
-                         default_priority=None):
+                         default_priority=None, use_go_client=False):
     """Configures default swarming dimensions and tags.
 
     Uses the 'chromium' global config to determine target platform defaults,
@@ -48,6 +48,7 @@ class ChromiumSwarmingApi(recipe_api.RecipeApi):
           default priority of swarming tasks.
       default_priority: optional default_priority to use. Will override the
           priority name inherited from the mastername (or the global default).
+      use_go_client: optional, use go client for swarming if set.
     """
 
     # Set platform-specific default dims.
@@ -95,3 +96,7 @@ class ChromiumSwarmingApi(recipe_api.RecipeApi):
       self.m.swarming.default_priority = 40
     if self.m.runtime.is_luci:
       self.m.swarming.add_default_tag('purpose:luci')
+
+    # TODO(tikuta): Remove this (crbug.com/894045).
+    if use_go_client:
+      self.m.swarming.use_go_client = True

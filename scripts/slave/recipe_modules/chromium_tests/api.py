@@ -1166,7 +1166,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     self.m.chromium_swarming.configure_swarming(
         'chromium', precommit=False, mastername=mastername,
-        default_priority=bot_config.get('swarming_default_priority'))
+        default_priority=bot_config.get('swarming_default_priority'),
+        use_go_client=bot_config.get('use_go_client', False))
     test_runner = self.create_test_runner(
         tests, serialize_tests=bot_config.get('serialize_tests'))
     with self.wrap_chromium_tests(bot_config, tests):
@@ -1243,7 +1244,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     # Applies build/test configurations from bot_config_object.
     self.configure_build(bot_config_object, override_bot_type='builder_tester')
 
-    self.m.chromium_swarming.configure_swarming('chromium', precommit=True)
+    self.m.chromium_swarming.configure_swarming(
+      'chromium', precommit=True,
+      use_go_client=trybot_config.get('use_go_client', False))
 
     self.m.chromium.apply_config('trybot_flavor')
 

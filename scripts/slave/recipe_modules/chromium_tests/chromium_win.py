@@ -124,6 +124,8 @@ SPEC = {
       'testing': {
         'platform': 'win',
       },
+      # TODO(tikuta): remove this after switch (crbug.com/894045).
+      'use_go_client': True,
     },
     'Win x64 Builder': {
       'chromium_config': 'chromium',

@@ -821,6 +821,9 @@ TRYBOTS = freeze({
             'tester': 'Win10 Release (NVIDIA)',
           },
         ],
+
+        # TODO(tikuta): remove this after switch (crbug.com/894045).
+        'use_go_client': True,
       },
       'win7_chromium_rel_loc_exp': simple_bot({
         'mastername': 'chromium.fyi',
