@@ -436,6 +436,8 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--blacklist-file",
       "[BUILDER_CACHE]/android_nexus6_perf_bisect/src/out/bad_devices.json",

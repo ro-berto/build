@@ -564,6 +564,8 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
       "[CACHE]/builder/src/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--blacklist-file",
       "[CACHE]/builder/src/out/bad_devices.json",

@@ -72,6 +72,8 @@
   },
   {
     "cmd": [
+      "vpython",
+      "-u",
       "None/third_party/catapult/devil/devil/android/tools/device_recovery.py",
       "--blacklist-file",
       "None/out/bad_devices.json",

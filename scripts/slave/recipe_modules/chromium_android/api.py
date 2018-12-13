@@ -410,7 +410,7 @@ class AndroidApi(recipe_api.RecipeApi):
     return [s for s in self.devices if s not in blacklisted_devices]
 
   def device_status_check(self):
-    self.device_recovery(venv=True)
+    self.device_recovery()
     return self.device_status()
 
   def host_info(self, args=None, **kwargs):
@@ -473,8 +473,9 @@ class AndroidApi(recipe_api.RecipeApi):
       f.result.presentation.status = self.m.step.EXCEPTION
 
   # TODO(jbudorick): Remove restart_usb once it's unused.
-  # TODO(perezju): Remove venv once venv=True becomes the default.
-  def device_recovery(self, restart_usb=False, venv=False, **kwargs):
+  # TODO(perezju): Remove venv option once also removed from callers.
+  def device_recovery(self, restart_usb=False, venv=True, **kwargs):
+    assert venv, 'Callers should now be using venv=True.'
     script = self.m.path['checkout'].join(
         'third_party', 'catapult', 'devil', 'devil', 'android', 'tools',
         'device_recovery.py')
@@ -487,12 +488,8 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.c.restart_usb or restart_usb:
       args += ['--enable-usb-reset']
     with self.m.context(env=self.m.chromium.get_env()):
-      if not venv:
-        self.m.step('device_recovery', [script] + args,
-                    infra_step=True, **kwargs)
-      else:
-        self.m.python('device_recovery', script, args,
-                      infra_step=True, venv=True, **kwargs)
+      self.m.python('device_recovery', script, args,
+                    infra_step=True, venv=True, **kwargs)
 
   def device_status(self, **kwargs):
     buildbot_file = '/home/chrome-bot/.adb_device_info'
@@ -1232,7 +1229,8 @@ class AndroidApi(recipe_api.RecipeApi):
                                             '*.log')],
     )
 
-  def common_tests_setup_steps(self, venv=False, perf_setup=False, **provision_kwargs):
+  # TODO(perezju): Remove venv option once also removed from callers.
+  def common_tests_setup_steps(self, venv=True, perf_setup=False, **provision_kwargs):
     if self.c.use_devil_adb:
       self.use_devil_adb()
     self.create_adb_symlink()
