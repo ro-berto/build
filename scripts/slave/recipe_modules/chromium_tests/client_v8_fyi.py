@@ -268,7 +268,7 @@ SPEC = {
       'set_component_rev': {'name': 'src/v8', 'rev_str': '%s'},
       'serialize_tests': True,
     },
-    'Linux V8 FYI Release - concurrent marking (NVIDIA)': {
+    'Linux V8 FYI Release - pointer compression (NVIDIA)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
