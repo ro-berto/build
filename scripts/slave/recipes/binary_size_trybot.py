@@ -24,6 +24,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/step',
+  'recipe_engine/tempfile',
   'recipe_engine/time',
 ]
 
@@ -89,60 +90,61 @@ def RunSteps(api):
       return
 
     api.chromium.ensure_goma()
-    with_results_dir = _BuildAndMeasure(api, True)
+    with api.tempfile.temp_dir('binary-size-trybot') as staging_dir:
+      with_results_dir = _BuildAndMeasure(api, True, staging_dir)
 
-    with api.context(cwd=api.chromium_checkout.working_dir):
-      api.bot_update.deapply_patch(bot_update_step)
+      with api.context(cwd=api.chromium_checkout.working_dir):
+        api.bot_update.deapply_patch(bot_update_step)
 
-    with api.context(cwd=api.path['checkout']):
-      suffix = ' (without patch)'
-      try:
-        api.chromium.runhooks(name='runhooks' + suffix)
-        without_results_dir = _BuildAndMeasure(api, False)
-      except api.step.StepFailure:
-        api.python.succeeding_step(_PATCH_FIXED_BUILD_STEP_NAME, '')
-        return
+      with api.context(cwd=api.path['checkout']):
+        suffix = ' (without patch)'
+        try:
+          api.chromium.runhooks(name='runhooks' + suffix)
+          without_results_dir = _BuildAndMeasure(api, False, staging_dir)
+        except api.step.StepFailure:
+          api.python.succeeding_step(_PATCH_FIXED_BUILD_STEP_NAME, '')
+          return
 
-    # Re-apply patch so that the diff scripts can be tested via tryjobs.
-    # We could build without-patch first to avoid having to apply the patch
-    # twice, but it's nicer to fail fast when the patch does not compile.
-    suffix = ' (with patch again)'
-    with api.context(cwd=checkout_dir):
-      bot_update_step = api.bot_update.ensure_checkout(suffix=suffix,
-                                                       patch=True)
-    api.chromium.runhooks(name='runhooks' + suffix)
+      # Re-apply patch so that the diff scripts can be tested via tryjobs.
+      # We could build without-patch first to avoid having to apply the patch
+      # twice, but it's nicer to fail fast when the patch does not compile.
+      suffix = ' (with patch again)'
+      with api.context(cwd=checkout_dir):
+        bot_update_step = api.bot_update.ensure_checkout(suffix=suffix,
+                                                         patch=True)
+      api.chromium.runhooks(name='runhooks' + suffix)
 
-    with api.context(cwd=api.path['checkout']):
-      output_dir = api.chromium.output_dir
-      resource_sizes_diff_path = output_dir.join('resource_sizes_diff.txt')
-      dex_method_count_diff_path = output_dir.join('dex_method_counts_diff.txt')
-      supersize_diff_path = output_dir.join('supersize_diff.txt')
-      ndjson_path = output_dir.join('report.ndjson')
-      results_path = output_dir.join('results.json')
+      with api.context(cwd=api.path['checkout']):
+        resource_sizes_diff_path = staging_dir.join('resource_sizes_diff.txt')
+        dex_method_count_diff_path = staging_dir.join(
+            'dex_method_counts_diff.txt')
+        supersize_diff_path = staging_dir.join('supersize_diff.txt')
+        ndjson_path = staging_dir.join('report.ndjson')
+        results_path = staging_dir.join('results.json')
 
-      _CreateDiffs(api, author, without_results_dir, with_results_dir,
-                   resource_sizes_diff_path, supersize_diff_path,
-                   dex_method_count_diff_path, ndjson_path, results_path)
+        _CreateDiffs(api, author, without_results_dir, with_results_dir,
+                     resource_sizes_diff_path, supersize_diff_path,
+                     dex_method_count_diff_path, ndjson_path, results_path)
 
-      _UploadNdJson(api, ndjson_path)
+        _UploadNdJson(api, ndjson_path)
 
-      _DisplayDiffResults(api, 'Resource Sizes', resource_sizes_diff_path,
-                          '(Look here for high-level metrics)')
-      _DisplayDiffResults(api, 'Supersize', supersize_diff_path,
-                          '(Look here for detailed breakdown)')
-      _DisplayDiffResults(api, 'Dex Method Count', dex_method_count_diff_path,
-                          '(Look here for added/removed Java methods)')
+        _DisplayDiffResults(api, 'Resource Sizes', resource_sizes_diff_path,
+                            '(Look here for high-level metrics)')
+        _DisplayDiffResults(api, 'Supersize', supersize_diff_path,
+                            '(Look here for detailed breakdown)')
+        _DisplayDiffResults(api, 'Dex Method Count', dex_method_count_diff_path,
+                            '(Look here for added/removed Java methods)')
 
-      _CheckForUndocumentedIncrease(api, results_path)
+        _CheckForUndocumentedIncrease(api, results_path)
 
 
-def _BuildAndMeasure(api, with_patch):
+def _BuildAndMeasure(api, with_patch, staging_dir):
   suffix = ' (with patch)' if with_patch else ' (without patch)'
   results_basename = 'with_patch' if with_patch else 'without_patch'
 
   api.chromium_tests.run_mb_and_compile(_COMPILE_TARGETS, None, suffix)
 
-  results_dir = api.chromium.output_dir.join(results_basename)
+  results_dir = staging_dir.join(results_basename)
   api.file.ensure_directory('mkdir ' + results_basename, results_dir)
 
   apk_path = api.chromium_android.apk_path(_APK_NAME)
