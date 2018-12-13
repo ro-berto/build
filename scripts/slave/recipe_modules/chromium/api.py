@@ -297,8 +297,10 @@ class ChromiumApi(recipe_api.RecipeApi):
           wasn't a no-op). Consult the first "ninja explain:" line for a
           likely culprit.""")
 
-    step_result.presentation.status = self.m.step.WARNING
-
+    # This is appeared in Output property.
+    # https://chromium.googlesource.com/infra/luci/luci-go/+/master/buildbucket/proto/build.proto
+    # Used to detect incorrect build rule (crbug.com/914264).
+    step_result.presentation.properties['confirm no-op failure'] = True
 
   def _run_ninja_with_goma(self, ninja_command, ninja_env, name=None,
                            ninja_log_outdir=None, ninja_log_compiler=None,
