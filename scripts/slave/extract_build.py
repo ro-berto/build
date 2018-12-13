@@ -145,9 +145,7 @@ def real_main(options):
     # If the url is valid, we download the file.
     if not failure:
       if not handler.download():
-        if options.halt_on_missing_build:
-          return slave_utils.ERROR_EXIT_CODE
-        failure = True
+        return slave_utils.ERROR_EXIT_CODE
 
     # If the versioned url failed, we try to get the latest build.
     if failure:
@@ -224,10 +222,6 @@ def main():
                            help='Base url where to find the build to extract')
   option_parser.add_option('--build-archive-url',
                            help='Exact url where to find the build to extract')
-  # TODO(cmp): Remove --halt-on-missing-build when the buildbots are upgraded
-  #            to not use this argument.
-  option_parser.add_option('--halt-on-missing-build', action='store_true',
-                           help='whether to halt on a missing build')
   option_parser.add_option('--build_revision',
                            help='Revision of the build that is being '
                                 'archived. Overrides the revision found on '
@@ -264,9 +258,6 @@ def main():
         'parent_buildnumber')
   if not options.build_url:
     options.build_url = options.factory_properties.get('build_url')
-  if not options.halt_on_missing_build:
-    options.halt_on_missing_build = options.factory_properties.get(
-        'halt_on_missing_build')
   if not options.target:
     options.target = options.factory_properties.get('target', 'Release')
   if not options.revision_dir:

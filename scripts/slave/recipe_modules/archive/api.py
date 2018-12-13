@@ -334,10 +334,6 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     args.extend(['--build-number', self.m.buildbucket.build.number])
 
-    # TODO(phajdan.jr): Always halt on missing build.
-    if self.m.properties.get('halt_on_missing_build'):  # pragma: no cover
-      args.append('--halt-on-missing-build')
-
     self.m.build.python(
       step_name,
       self.package_repo_resource('scripts', 'slave', 'extract_build.py'),
