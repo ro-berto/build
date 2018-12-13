@@ -593,6 +593,8 @@ SPEC['builders'].update([
 
     config('ToTLinuxMSan'),
 
+    config('ToTLinuxTSan'),
+
     config('ToTLinuxThinLTO'),
 
     config('ToTLinuxUBSanVptr',
