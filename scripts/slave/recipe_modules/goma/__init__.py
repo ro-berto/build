@@ -28,7 +28,8 @@ PROPERTIES = {
     param_name='properties',
     kind=ConfigGroup(
       # How many jobs to run in parallel.
-      jobs=Single(int),
+      # Allow floats because of crbug.com/914996.
+      jobs=Single((int, float)),
       # Whether or not to turn on debug mode.
       debug=Single(bool),
       # Whether or not we're running locally and should pick the local client

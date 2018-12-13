@@ -42,6 +42,7 @@ class GomaApi(recipe_api.RecipeApi):
 
     self._goma_ctl_env = {}
     self._jobs = properties.get('jobs', None)
+    self._jobs = int(self._jobs) if self._jobs is not None else None
     self._debug = properties.get('debug', False)
     self._recommended_jobs = None
     self._jsonstatus = None
