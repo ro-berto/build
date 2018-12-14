@@ -895,7 +895,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "isolate tests",
+    "name": "isolate tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"gl_tests\": \"[dummy hash for gl_tests]\"@@@",
@@ -1759,7 +1759,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "isolate tests (2)",
+    "name": "isolate tests (without patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",
@@ -2667,7 +2667,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "isolate tests (3)",
+    "name": "isolate tests (retry with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",

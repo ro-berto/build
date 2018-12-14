@@ -907,7 +907,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "isolate tests",
+    "name": "isolate tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"telemetry_gpu_unittests\": \"[dummy hash for telemetry_gpu_unittests]\"@@@",

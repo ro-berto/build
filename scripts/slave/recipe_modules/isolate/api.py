@@ -4,6 +4,7 @@
 
 import itertools
 import sys
+
 from recipe_engine import recipe_api
 
 
@@ -112,7 +113,7 @@ class IsolateApi(recipe_api.RecipeApi):
 
   def isolate_tests(self, build_dir, targets=None, verbose=False,
                     swarm_hashes_property_name='swarm_hashes',
-                    step_name=None, **kwargs):
+                    step_name=None,  suffix='', **kwargs):
     """Archives prepared tests in |build_dir| to isolate server.
 
     src/tools/mb/mb.py is invoked to produce *.isolated.gen.json files that
@@ -132,10 +133,11 @@ class IsolateApi(recipe_api.RecipeApi):
             property (also accessible as 'isolated_tests' property). If this
             needs to be run more than once per recipe run, make sure to pass
             different propery names for each invocation.
+        suffix: suffix of isolate_tests step.
+            e.g. ' (with patch)', ' (without patch)'.
     """
     # TODO(tansell): Make all steps in this function nested under one overall
     # 'isolate tests' master step.
-
 
     # TODO(vadimsh): Always require |targets| to be passed explicitly. Currently
     # chromium_trybot, blink_trybot and swarming/canary recipes rely on targets
@@ -182,7 +184,7 @@ class IsolateApi(recipe_api.RecipeApi):
       for target in archive_targets:
         isolate_steps.append(
             self.m.python(
-                'isolate %s' % target,
+                'isolate %s%s' % (target, suffix),
                 self.resource('isolate.py'),
                 args + [
                     '--isolate', build_dir.join('%s.isolate' % target),
@@ -211,7 +213,7 @@ class IsolateApi(recipe_api.RecipeApi):
 
         isolate_steps.append(
             self.m.python(
-                step_name or 'isolate tests', self.resource('isolate.py'), args,
+                step_name or ('isolate tests%s' % suffix), self.resource('isolate.py'), args,
                 step_test_data=lambda: self.test_api.output_json(batch_targets),
                 **kwargs))
 

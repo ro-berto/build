@@ -898,7 +898,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "isolate tests",
+    "name": "isolate tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"gl_tests\": \"[dummy hash for gl_tests]\"@@@",

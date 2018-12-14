@@ -1430,7 +1430,7 @@ Adds builders to our builder map
 
 &emsp; **@property**<br>&mdash; **def [all\_generators](/scripts/slave/recipe_modules/chromium_tests/api.py#57)(self):**
 
-&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#513)(self, mastername, buildername, update_step, bot_db):**
+&mdash; **def [archive\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#514)(self, mastername, buildername, update_step, bot_db):**
 
 Archive the build if the bot is configured to do so.
 
@@ -1485,19 +1485,19 @@ Args
 Returns:
   A function that can be passed to setup_chromium_tests or run directly.
 
-&mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#759)(self, bot_update_step):**
+&mdash; **def [deapply\_patch](/scripts/slave/recipe_modules/chromium_tests/api.py#760)(self, bot_update_step):**
 
-&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#634)(self, mastername, buildername, update_step, bot_db, build_archive_url=None, build_revision=None, override_bot_type=None, read_gn_args=True):**
+&mdash; **def [download\_and\_unzip\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#635)(self, mastername, buildername, update_step, bot_db, build_archive_url=None, build_revision=None, override_bot_type=None, read_gn_args=True):**
 
 &mdash; **def [generate\_tests\_from\_source\_side\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#260)(self, source_side_spec, builder_dict, buildername, mastername, swarming_dimensions, scripts_compile_targets, bot_update_step):**
 
 &mdash; **def [generate\_tests\_from\_test\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#276)(self, \*args):**
 
-&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#985)(self, bot_config=None):**
+&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#987)(self, bot_config=None):**
 
 &mdash; **def [get\_compile\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#336)(self, bot_config, bot_db, tests):**
 
-&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1019)(self, bot_config=None):**
+&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1021)(self, bot_config=None):**
 
 This gets the combined compile_targets information from the
 //testing/scripts/get_compile_targets.py script.
@@ -1534,9 +1534,9 @@ are committed.
 
 &mdash; **def [log](/scripts/slave/recipe_modules/chromium_tests/api.py#79)(self, message):**
 
-&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1051)(self, mb_config_path=None, builders=None):**
+&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1053)(self, mb_config_path=None, builders=None):**
 
-&mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#455)(self, mastername, buildername, update_step, bot_db):**
+&mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#456)(self, mastername, buildername, update_step, bot_db):**
 
 Zip and upload the build to google storage.
 
@@ -1554,7 +1554,7 @@ Note that:
 
 &mdash; **def [read\_source\_side\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#279)(self, source_side_spec_file):**
 
-&mdash; **def [run\_mb\_and\_compile](/scripts/slave/recipe_modules/chromium_tests/api.py#612)(self, compile_targets, isolated_targets, name_suffix, mb_mastername=None, mb_buildername=None, mb_config_path=None, android_version_code=None, android_version_name=None):**
+&mdash; **def [run\_mb\_and\_compile](/scripts/slave/recipe_modules/chromium_tests/api.py#613)(self, compile_targets, isolated_targets, name_suffix, mb_mastername=None, mb_buildername=None, mb_config_path=None, android_version_code=None, android_version_name=None):**
 
 &mdash; **def [runhooks](/scripts/slave/recipe_modules/chromium_tests/api.py#222)(self, update_step):**
 
@@ -1575,13 +1575,13 @@ Usage is generally discouraged.
 
 &emsp; **@property**<br>&mdash; **def [swarming\_extra\_args](/scripts/slave/recipe_modules/chromium_tests/api.py#72)(self):**
 
-&mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#544)(self, mastername, buildername, update_step, bot_db, additional_properties=None):**
+&mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#545)(self, mastername, buildername, update_step, bot_db, additional_properties=None):**
 
-&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1176)(self, builders=None, trybots=None):**
+&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1178)(self, builders=None, trybots=None):**
 
 &emsp; **@property**<br>&mdash; **def [trybots](/scripts/slave/recipe_modules/chromium_tests/api.py#68)(self):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [wrap\_chromium\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#693)(self, bot_config, tests=None):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [wrap\_chromium\_tests](/scripts/slave/recipe_modules/chromium_tests/api.py#694)(self, bot_config, tests=None):**
 ### *recipe_modules* / [clang\_coverage](/scripts/slave/recipe_modules/clang_coverage)
 
 [DEPS](/scripts/slave/recipe_modules/clang_coverage/__init__.py#5): [chromium](#recipe_modules-chromium), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -2566,22 +2566,22 @@ Args:
 
 [DEPS](/scripts/slave/recipe_modules/isolate/__init__.py#5): [chromium](#recipe_modules-chromium), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
 
-#### **class [IsolateApi](/scripts/slave/recipe_modules/isolate/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [IsolateApi](/scripts/slave/recipe_modules/isolate/api.py#11)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 APIs for interacting with isolates.
 
-&mdash; **def [clean\_isolated\_files](/scripts/slave/recipe_modules/isolate/api.py#39)(self, build_dir):**
+&mdash; **def [clean\_isolated\_files](/scripts/slave/recipe_modules/isolate/api.py#40)(self, build_dir):**
 
 Cleans out all *.isolated files from the build directory in
 preparation for the compile. Needed in order to ensure isolates
 are rebuilt properly because their dependencies are currently not
 completely described to gyp.
 
-&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#294)(self, first_dir, second_dir):**
+&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#296)(self, first_dir, second_dir):**
 
 Compare the artifacts from 2 builds.
 
-&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#316)(self, isolate_hashes, step_name=None, \*\*kwargs):**
+&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#318)(self, isolate_hashes, step_name=None, \*\*kwargs):**
 
 Creates and uploads a new isolate composing multiple existing isolates.
 
@@ -2595,7 +2595,7 @@ Args:
 Returns:
   Hash of the uploaded composite isolate.
 
-&mdash; **def [find\_isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#53)(self, build_dir, targets=None, \*\*kwargs):**
+&mdash; **def [find\_isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#54)(self, build_dir, targets=None, \*\*kwargs):**
 
 Returns a step which finds all *.isolated files in a build directory.
 
@@ -2610,11 +2610,11 @@ If |targets| is None, the step will use all *.isolated files it finds.
 Otherwise, it will verify that all |targets| are found and will use only
 them. If some expected targets are missing, will abort the build.
 
-&emsp; **@isolate_server.setter**<br>&mdash; **def [isolate\_server](/scripts/slave/recipe_modules/isolate/api.py#24)(self, value):**
+&emsp; **@isolate_server.setter**<br>&mdash; **def [isolate\_server](/scripts/slave/recipe_modules/isolate/api.py#25)(self, value):**
 
 Changes URL of Isolate server to use.
 
-&mdash; **def [isolate\_tests](/scripts/slave/recipe_modules/isolate/api.py#113)(self, build_dir, targets=None, verbose=False, swarm_hashes_property_name='swarm_hashes', step_name=None, \*\*kwargs):**
+&mdash; **def [isolate\_tests](/scripts/slave/recipe_modules/isolate/api.py#114)(self, build_dir, targets=None, verbose=False, swarm_hashes_property_name='swarm_hashes', step_name=None, suffix='', \*\*kwargs):**
 
 Archives prepared tests in |build_dir| to isolate server.
 
@@ -2635,19 +2635,21 @@ Args:
         property (also accessible as 'isolated_tests' property). If this
         needs to be run more than once per recipe run, make sure to pass
         different propery names for each invocation.
+    suffix: suffix of isolate_tests step.
+        e.g. ' (with patch)', ' (without patch)'.
 
-&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#257)(self):**
+&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#259)(self):**
 
 The dictionary of 'target name -> isolated hash' for this run.
 
 These come either from the incoming swarm_hashes build property,
 or from calling find_isolated_tests, above, at some point during the run.
 
-&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#279)(self, name, isolate_hash, args=None, \*\*kwargs):**
+&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#281)(self, name, isolate_hash, args=None, \*\*kwargs):**
 
 Runs an isolated test.
 
-&emsp; **@service_account_json.setter**<br>&mdash; **def [service\_account\_json](/scripts/slave/recipe_modules/isolate/api.py#34)(self, value):**
+&emsp; **@service_account_json.setter**<br>&mdash; **def [service\_account\_json](/scripts/slave/recipe_modules/isolate/api.py#35)(self, value):**
 
 Service account json to use.
 ### *recipe_modules* / [legion](/scripts/slave/recipe_modules/legion)

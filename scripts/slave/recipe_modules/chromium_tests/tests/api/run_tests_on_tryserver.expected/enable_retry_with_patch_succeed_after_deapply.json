@@ -1096,7 +1096,7 @@
       "[START_DIR]/src/out/Release/dummy_target_1.isolated.gen.json",
       "[START_DIR]/src/out/Release/dummy_target_2.isolated.gen.json"
     ],
-    "name": "isolate tests",
+    "name": "isolate tests (without patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"dummy_target_1\": \"[dummy hash for dummy_target_1]\", @@@",

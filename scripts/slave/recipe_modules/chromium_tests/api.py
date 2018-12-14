@@ -402,11 +402,11 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if isolated_targets:
         self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
 
-      try:
-        name_suffix = ''
-        if self.m.tryserver.is_tryserver:
-          name_suffix=' (with patch)'
+      name_suffix = ''
+      if self.m.tryserver.is_tryserver:
+        name_suffix=' (with patch)'
 
+      try:
         android_version_name, android_version_code = (
             self._get_android_version_details(bot_config, log_details=True))
 
@@ -437,6 +437,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         # and the isolation is a separate step.
         self.m.isolate.isolate_tests(
             self.m.chromium.output_dir,
+            suffix=name_suffix,
             targets=list(set(isolated_targets)),
             verbose=True,
             swarm_hashes_property_name=swarm_hashes_property_name)
@@ -801,6 +802,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
               revision_cp, suffix.replace(' ', '_'))
         self.m.isolate.isolate_tests(
             self.m.chromium.output_dir,
+            suffix=' (%s)' % suffix,
             swarm_hashes_property_name=swarm_hashes_property_name,
             verbose=True)
 

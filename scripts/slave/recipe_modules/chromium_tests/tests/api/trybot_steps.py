@@ -192,7 +192,7 @@ def GenTests(api):
     ) +
     api.filter.suppress_analyze() +
     api.post_process(
-        post_process.MustRun, 'isolate tests') +
+        post_process.MustRun, 'isolate tests (with patch)') +
     api.post_process(post_process.DropExpectation)
   )
   for i in range(1, 20):
@@ -222,7 +222,7 @@ def GenTests(api):
       ) +
       api.filter.suppress_analyze() +
       api.post_process(
-          post_process.MustRun, 'isolate tests') +
+          post_process.MustRun, 'isolate tests (with patch)') +
       api.post_process(
           post_process.DoesNotRun, 'isolate base_unittests') +
       api.post_process(post_process.DropExpectation)
