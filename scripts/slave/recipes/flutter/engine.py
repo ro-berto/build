@@ -336,6 +336,10 @@ def BuildMac(api):
   RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
   RunGN(api, '--runtime-mode', 'release', '--android')
   RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
+  RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic')
+  RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic', '--android-cpu=arm64')
+  RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic')
+  RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic', '--android-cpu=arm64')
   RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
 
   Build(api, 'host_debug_unopt')
@@ -347,6 +351,10 @@ def BuildMac(api):
   Build(api, 'android_profile_arm64', 'flutter/lib/snapshot')
   Build(api, 'android_release', 'flutter/lib/snapshot')
   Build(api, 'android_release_arm64', 'flutter/lib/snapshot')
+  Build(api, 'android_dynamic_profile', 'flutter/lib/snapshot')
+  Build(api, 'android_dynamic_profile_arm64', 'flutter/lib/snapshot')
+  Build(api, 'android_dynamic_release', 'flutter/lib/snapshot')
+  Build(api, 'android_dynamic_release_arm64', 'flutter/lib/snapshot')
   Build(api, 'android_release_vulkan')
 
   host_debug_path = api.path['start_dir'].join('src', 'out', 'host_debug')
@@ -374,17 +382,30 @@ def BuildMac(api):
   UploadArtifacts(api, "android-arm-profile" , [
     'out/android_profile/clang_x86/gen_snapshot',
   ], archive_name='darwin-x64.zip')
-
   UploadArtifacts(api, "android-arm64-profile" , [
     'out/android_profile_arm64/clang_x64/gen_snapshot',
   ], archive_name='darwin-x64.zip')
-
   UploadArtifacts(api, "android-arm-release" , [
     'out/android_release/clang_x86/gen_snapshot',
   ], archive_name='darwin-x64.zip')
-
   UploadArtifacts(api, "android-arm64-release" , [
     'out/android_release_arm64/clang_x64/gen_snapshot',
+  ], archive_name='darwin-x64.zip')
+
+  # These gen_snapshot binaries are identical to their non-dynamic versions
+  # above, but we duplicate them here for the sake of simpler framework code
+  # and easier maintenance of artifacts tree.
+  UploadArtifacts(api, "android-arm-dynamic-profile" , [
+    'out/android_dynamic_profile/clang_x86/gen_snapshot',
+  ], archive_name='darwin-x64.zip')
+  UploadArtifacts(api, "android-arm64-dynamic-profile" , [
+    'out/android_dynamic_profile_arm64/clang_x64/gen_snapshot',
+  ], archive_name='darwin-x64.zip')
+  UploadArtifacts(api, "android-arm-dynamic-release" , [
+    'out/android_dynamic_release/clang_x86/gen_snapshot',
+  ], archive_name='darwin-x64.zip')
+  UploadArtifacts(api, "android-arm64-dynamic-release" , [
+    'out/android_dynamic_release_arm64/clang_x64/gen_snapshot',
   ], archive_name='darwin-x64.zip')
 
   UploadDartSdk(api, archive_name='dart-sdk-darwin-x64.zip')
@@ -492,6 +513,10 @@ def BuildWindows(api):
   RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
   RunGN(api, '--runtime-mode', 'release', '--android')
   RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
+  RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic')
+  RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic', '--android-cpu=arm64')
+  RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic')
+  RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic', '--android-cpu=arm64')
 
   Build(api, 'host_debug_unopt')
   Build(api, 'host_debug')
@@ -500,6 +525,10 @@ def BuildWindows(api):
   Build(api, 'android_profile_arm64', 'gen_snapshot')
   Build(api, 'android_release', 'gen_snapshot')
   Build(api, 'android_release_arm64', 'gen_snapshot')
+  Build(api, 'android_dynamic_profile', 'gen_snapshot')
+  Build(api, 'android_dynamic_profile_arm64', 'gen_snapshot')
+  Build(api, 'android_dynamic_release', 'gen_snapshot')
+  Build(api, 'android_dynamic_release_arm64', 'gen_snapshot')
 
   RunHostTests(api, 'out\\host_debug', '.exe')
 
@@ -526,17 +555,30 @@ def BuildWindows(api):
   UploadArtifacts(api, "android-arm-profile" , [
     'out/android_profile/gen_snapshot.exe',
   ], archive_name='windows-x64.zip')
-
   UploadArtifacts(api, "android-arm64-profile" , [
     'out/android_profile_arm64/gen_snapshot.exe',
   ], archive_name='windows-x64.zip')
-
   UploadArtifacts(api, "android-arm-release" , [
     'out/android_release/gen_snapshot.exe',
   ], archive_name='windows-x64.zip')
-
   UploadArtifacts(api, "android-arm64-release" , [
     'out/android_release_arm64/gen_snapshot.exe',
+  ], archive_name='windows-x64.zip')
+
+  # These gen_snapshot binaries are identical to their non-dynamic versions
+  # above, but we duplicate them here for the sake of simpler framework code
+  # and easier maintenance of artifacts tree.
+  UploadArtifacts(api, "android-arm-dynamic-profile" , [
+    'out/android_dynamic_profile/gen_snapshot.exe',
+  ], archive_name='windows-x64.zip')
+  UploadArtifacts(api, "android-arm64-dynamic-profile" , [
+    'out/android_dynamic_profile_arm64/gen_snapshot.exe',
+  ], archive_name='windows-x64.zip')
+  UploadArtifacts(api, "android-arm-dynamic-release" , [
+    'out/android_dynamic_release/gen_snapshot.exe',
+  ], archive_name='windows-x64.zip')
+  UploadArtifacts(api, "android-arm64-dynamic-release" , [
+    'out/android_dynamic_release_arm64/gen_snapshot.exe',
   ], archive_name='windows-x64.zip')
 
   UploadDartSdk(api, archive_name='dart-sdk-windows-x64.zip')

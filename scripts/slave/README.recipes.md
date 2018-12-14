@@ -5282,9 +5282,9 @@ world-readable cloud location.
 
 &mdash; **def [Build](/scripts/slave/recipes/flutter/engine.py#33)(api, config, \*targets, \*\*kwargs):**
 
-&mdash; **def [BuildIOS](/scripts/slave/recipes/flutter/engine.py#459)(api):**
+&mdash; **def [BuildIOS](/scripts/slave/recipes/flutter/engine.py#480)(api):**
 
-&mdash; **def [BuildJavadoc](/scripts/slave/recipes/flutter/engine.py#545)(api):**
+&mdash; **def [BuildJavadoc](/scripts/slave/recipes/flutter/engine.py#587)(api):**
 
 &mdash; **def [BuildLinux](/scripts/slave/recipes/flutter/engine.py#257)(api):**
 
@@ -5292,19 +5292,19 @@ world-readable cloud location.
 
 &mdash; **def [BuildMac](/scripts/slave/recipes/flutter/engine.py#331)(api):**
 
-&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#561)(api):**
+&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#603)(api):**
 
 Builds documentation for the Objective-C variant of engine.
 
-&mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#487)(api):**
+&mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#508)(api):**
 
-&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#577)(api):**
+&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#619)(api):**
 
 &mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/engine.py#28)(api, path):**
 
 &emsp; **@contextlib.contextmanager**<br>&mdash; **def [MakeTempDir](/scripts/slave/recipes/flutter/engine.py#139)(api, label):**
 
-&mdash; **def [PackageIOSVariant](/scripts/slave/recipes/flutter/engine.py#393)(api, label, arm64_out, armv7_out, sim_out, bucket_name):**
+&mdash; **def [PackageIOSVariant](/scripts/slave/recipes/flutter/engine.py#414)(api, label, arm64_out, armv7_out, sim_out, bucket_name):**
 
 &mdash; **def [RunFindXcode](/scripts/slave/recipes/flutter/engine.py#310)(api, ios_tools_path, target_version):**
 
@@ -5314,7 +5314,7 @@ Locates and switches to a version of Xcode matching target_version.
 
 &mdash; **def [RunHostTests](/scripts/slave/recipes/flutter/engine.py#44)(api, out_dir, exe_extension=''):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#594)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#636)(api):**
 
 &mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/engine.py#323)(api):**
 
