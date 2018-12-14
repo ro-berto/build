@@ -918,6 +918,7 @@ def GenTests(api):
         'is_debug=true',
         'target_cpu="x86"',
       ],
+      'retries': '0',
       'xcode parallelization': False,
       'tests': [
         {

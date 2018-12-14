@@ -771,7 +771,7 @@ class iOSApi(recipe_api.RecipeApi):
         "test_cases": <(test_cases), \
         "restart": <(restart)}',
       '--out-dir', '${ISOLATED_OUTDIR}',
-      '--retries', '3',
+      '--retries', self.__config.get('retries', '3'),
       '--shards', '<(shards)',
       '--<(xcode_arg_name)', '<(xcode_version)',
       '--mac-toolchain-cmd', '%s/mac_toolchain' % self.MAC_TOOLCHAIN_ROOT,
