@@ -888,11 +888,11 @@
       "prod",
       "--verbose",
       "--blacklist",
-      "\"*.pyc\"",
+      "*.pyc",
       "--blacklist",
-      "\"*.swp\"",
+      "*.swp",
       "--blacklist",
-      "\".git\"",
+      ".git",
       "[BUILDER_CACHE]/linux/src/out/Release/gl_tests.isolated.gen.json"
     ],
     "env": {

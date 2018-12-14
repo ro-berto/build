@@ -99,10 +99,14 @@ class IsolateApi(recipe_api.RecipeApi):
 
   def _blacklist_args_for_isolate(self):
     # Files that match these regexes should never be included in the isolate.
+    # Note: The Python isolate implementation expects a regex for --blacklist,
+    # but the Go version wants a glob (which is matched both against a file's
+    # full path and its basename, and if either matches, the file is ignored).
+    # We use the Go version (through a Python wrapper), so use glob patterns.
     blacklist = ['*.pyc', '*.swp', '.git']
     args = []
     for el in blacklist:
-      args.extend(('--blacklist', '"' + el + '"'))
+      args.extend(('--blacklist', el))
     return args
 
 

@@ -692,11 +692,11 @@
       "prod",
       "--verbose",
       "--blacklist",
-      "\"*.pyc\"",
+      "*.pyc",
       "--blacklist",
-      "\"*.swp\"",
+      "*.swp",
       "--blacklist",
-      "\".git\"",
+      ".git",
       "[START_DIR]/src/out/Release/telemetry_gpu_unittests.isolated.gen.json"
     ],
     "env": {

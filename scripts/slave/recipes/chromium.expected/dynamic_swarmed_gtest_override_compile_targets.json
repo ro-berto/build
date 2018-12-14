@@ -694,11 +694,11 @@
       "prod",
       "--verbose",
       "--blacklist",
-      "\"*.pyc\"",
+      "*.pyc",
       "--blacklist",
-      "\"*.swp\"",
+      "*.swp",
       "--blacklist",
-      "\".git\"",
+      ".git",
       "[START_DIR]/src/out/Release/tab_capture_end2end_tests.isolated.gen.json"
     ],
     "env": {
