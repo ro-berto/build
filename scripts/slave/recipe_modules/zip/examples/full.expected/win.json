@@ -2,14 +2,14 @@
   {
     "cmd": [
       "touch",
-      "[TMP_BASE]\\zip-example_tmp_1\\a"
+      "[CLEANUP]\\zip-example_tmp_1\\a"
     ],
     "name": "touch a"
   },
   {
     "cmd": [
       "touch",
-      "[TMP_BASE]\\zip-example_tmp_1\\b"
+      "[CLEANUP]\\zip-example_tmp_1\\b"
     ],
     "name": "touch b"
   },
@@ -23,7 +23,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[TMP_BASE]\\zip-example_tmp_1\\sub\\dir"
+      "[CLEANUP]\\zip-example_tmp_1\\sub\\dir"
     ],
     "infra_step": true,
     "name": "mkdirs"
@@ -31,7 +31,7 @@
   {
     "cmd": [
       "touch",
-      "[TMP_BASE]\\zip-example_tmp_1\\sub\\dir\\c"
+      "[CLEANUP]\\zip-example_tmp_1\\sub\\dir\\c"
     ],
     "name": "touch c"
   },
@@ -42,7 +42,7 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "name": "zipping",
-    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output.zip\", \"root\": \"[TMP_BASE]\\\\zip-example_tmp_1\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[CLEANUP]\\\\zip-example_tmp_1\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\zip-example_tmp_1\\\\output.zip\", \"root\": \"[CLEANUP]\\\\zip-example_tmp_1\"}"
   },
   {
     "cmd": [
@@ -51,12 +51,12 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "name": "zipping more",
-    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\a\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\b\", \"type\": \"file\"}, {\"path\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\sub\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\more.zip\", \"root\": \"[TMP_BASE]\\\\zip-example_tmp_1\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CLEANUP]\\\\zip-example_tmp_1\\\\a\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CLEANUP]\\\\zip-example_tmp_1\\\\b\", \"type\": \"file\"}, {\"path\": \"[CLEANUP]\\\\zip-example_tmp_1\\\\sub\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\zip-example_tmp_1\\\\more.zip\", \"root\": \"[CLEANUP]\\\\zip-example_tmp_1\"}"
   },
   {
     "cmd": [
       "echo",
-      "[TMP_BASE]\\zip-example_tmp_1\\more.zip"
+      "[CLEANUP]\\zip-example_tmp_1\\more.zip"
     ],
     "name": "report"
   },
@@ -67,13 +67,13 @@
       "RECIPE_MODULE[build::zip]\\resources\\unzip.py"
     ],
     "name": "unzipping",
-    "stdin": "{\"output\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output\", \"quiet\": true, \"zip_file\": \"[TMP_BASE]\\\\zip-example_tmp_1\\\\output.zip\"}"
+    "stdin": "{\"output\": \"[CLEANUP]\\\\zip-example_tmp_1\\\\output\", \"quiet\": true, \"zip_file\": \"[CLEANUP]\\\\zip-example_tmp_1\\\\output.zip\"}"
   },
   {
     "cmd": [
       "find"
     ],
-    "cwd": "[TMP_BASE]\\zip-example_tmp_1\\output",
+    "cwd": "[CLEANUP]\\zip-example_tmp_1\\output",
     "name": "listing"
   },
   {
@@ -84,7 +84,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]\\zip-example_tmp_1"
+      "[CLEANUP]\\zip-example_tmp_1"
     ],
     "infra_step": true,
     "name": "cleanup"

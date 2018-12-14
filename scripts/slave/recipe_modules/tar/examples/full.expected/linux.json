@@ -2,14 +2,14 @@
   {
     "cmd": [
       "touch",
-      "[TMP_BASE]/tar-example_tmp_1/a"
+      "[CLEANUP]/tar-example_tmp_1/a"
     ],
     "name": "touch a"
   },
   {
     "cmd": [
       "touch",
-      "[TMP_BASE]/tar-example_tmp_1/b"
+      "[CLEANUP]/tar-example_tmp_1/b"
     ],
     "name": "touch b"
   },
@@ -23,7 +23,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[TMP_BASE]/tar-example_tmp_1/sub/dir"
+      "[CLEANUP]/tar-example_tmp_1/sub/dir"
     ],
     "infra_step": true,
     "name": "mkdirs"
@@ -31,7 +31,7 @@
   {
     "cmd": [
       "touch",
-      "[TMP_BASE]/tar-example_tmp_1/sub/dir/c"
+      "[CLEANUP]/tar-example_tmp_1/sub/dir/c"
     ],
     "name": "touch c"
   },
@@ -42,7 +42,7 @@
       "RECIPE_MODULE[build::tar]/resources/tar.py"
     ],
     "name": "taring",
-    "stdin": "{\"compression\": \"None\", \"entries\": [{\"path\": \"[TMP_BASE]/tar-example_tmp_1\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/tar-example_tmp_1/output.tar\", \"root\": \"[TMP_BASE]/tar-example_tmp_1\"}"
+    "stdin": "{\"compression\": \"None\", \"entries\": [{\"path\": \"[CLEANUP]/tar-example_tmp_1\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]/tar-example_tmp_1/output.tar\", \"root\": \"[CLEANUP]/tar-example_tmp_1\"}"
   },
   {
     "cmd": [
@@ -51,12 +51,12 @@
       "RECIPE_MODULE[build::tar]/resources/tar.py"
     ],
     "name": "taring more",
-    "stdin": "{\"compression\": \"gz\", \"entries\": [{\"archive_name\": null, \"path\": \"[TMP_BASE]/tar-example_tmp_1/a\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[TMP_BASE]/tar-example_tmp_1/b\", \"type\": \"file\"}, {\"path\": \"[TMP_BASE]/tar-example_tmp_1/sub\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/tar-example_tmp_1/more.tar.gz\", \"root\": \"[TMP_BASE]/tar-example_tmp_1\"}"
+    "stdin": "{\"compression\": \"gz\", \"entries\": [{\"archive_name\": null, \"path\": \"[CLEANUP]/tar-example_tmp_1/a\", \"type\": \"file\"}, {\"archive_name\": null, \"path\": \"[CLEANUP]/tar-example_tmp_1/b\", \"type\": \"file\"}, {\"path\": \"[CLEANUP]/tar-example_tmp_1/sub\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]/tar-example_tmp_1/more.tar.gz\", \"root\": \"[CLEANUP]/tar-example_tmp_1\"}"
   },
   {
     "cmd": [
       "echo",
-      "[TMP_BASE]/tar-example_tmp_1/more.tar.gz"
+      "[CLEANUP]/tar-example_tmp_1/more.tar.gz"
     ],
     "name": "report"
   },
@@ -67,13 +67,13 @@
       "RECIPE_MODULE[build::tar]/resources/untar.py"
     ],
     "name": "untaring",
-    "stdin": "{\"output\": \"[TMP_BASE]/tar-example_tmp_1/output\", \"quiet\": true, \"tar_file\": \"[TMP_BASE]/tar-example_tmp_1/output.tar\"}"
+    "stdin": "{\"output\": \"[CLEANUP]/tar-example_tmp_1/output\", \"quiet\": true, \"tar_file\": \"[CLEANUP]/tar-example_tmp_1/output.tar\"}"
   },
   {
     "cmd": [
       "find"
     ],
-    "cwd": "[TMP_BASE]/tar-example_tmp_1/output",
+    "cwd": "[CLEANUP]/tar-example_tmp_1/output",
     "name": "listing"
   },
   {
@@ -84,7 +84,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/tar-example_tmp_1"
+      "[CLEANUP]/tar-example_tmp_1"
     ],
     "infra_step": true,
     "name": "cleanup"

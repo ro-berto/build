@@ -10,7 +10,7 @@
       "--emma-dir",
       "None/out/Debug/coverage/coverage_html",
       "--lines-for-coverage",
-      "[TMP_BASE]/coverage_tmp_1/file_changes.json"
+      "[CLEANUP]/coverage_tmp_1/file_changes.json"
     ],
     "cwd": "None",
     "name": "Incremental coverage report",

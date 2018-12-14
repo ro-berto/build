@@ -1746,7 +1746,7 @@
       "--output-format",
       "histograms",
       "--output-dir",
-      "[TMP_BASE]/perf_data_tmp_1"
+      "[CLEANUP]/perf_data_tmp_1"
     ],
     "name": "performance test"
   },
@@ -1774,7 +1774,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_perf_dashboard_results.py",
       "--results-file",
-      "[TMP_BASE]/perf_data_tmp_1/histograms.json",
+      "[CLEANUP]/perf_data_tmp_1/histograms.json",
       "--oauth-token-file",
       "\"extra.secret.token.should.not.be.logged\"",
       "--perf-id",

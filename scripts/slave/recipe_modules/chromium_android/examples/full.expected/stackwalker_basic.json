@@ -1158,7 +1158,7 @@
       "-u",
       "[START_DIR]/src/components/crash/content/tools/generate_breakpad_symbols.py",
       "--symbols-dir",
-      "[TMP_BASE]/symbols_tmp_1",
+      "[CLEANUP]/symbols_tmp_1",
       "--build-dir",
       "[START_DIR]/src/out/Release",
       "--binary",
@@ -1172,7 +1172,7 @@
       "-u",
       "[START_DIR]/src/components/crash/content/tools/generate_breakpad_symbols.py",
       "--symbols-dir",
-      "[TMP_BASE]/symbols_tmp_1",
+      "[CLEANUP]/symbols_tmp_1",
       "--build-dir",
       "[START_DIR]/src/out/Release",
       "--binary",
@@ -1190,7 +1190,7 @@
       "--stack-trace-path",
       "[START_DIR]/src/out/Release/full_log",
       "--symbols-path",
-      "[TMP_BASE]/symbols_tmp_1"
+      "[CLEANUP]/symbols_tmp_1"
     ],
     "name": "symbolized breakpad crashes"
   },
@@ -1202,10 +1202,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/symbols_tmp_1"
+      "[CLEANUP]/symbols_tmp_1"
     ],
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/symbols_tmp_1"
+    "name": "rmtree [CLEANUP]/symbols_tmp_1"
   },
   {
     "jsonResult": null,

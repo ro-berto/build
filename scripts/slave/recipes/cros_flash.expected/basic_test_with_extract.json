@@ -9,7 +9,7 @@
       "----",
       "cp",
       "gs://cros-image-bucket/some/image/path.tar.xz",
-      "[TMP_BASE]/cros_flash_tmp_1/chromiumos_image.tar.xz"
+      "[CLEANUP]/cros_flash_tmp_1/chromiumos_image.tar.xz"
     ],
     "infra_step": true,
     "name": "gsutil download image"
@@ -18,9 +18,9 @@
     "cmd": [
       "/bin/tar",
       "-xvf",
-      "[TMP_BASE]/cros_flash_tmp_1/chromiumos_image.tar.xz"
+      "[CLEANUP]/cros_flash_tmp_1/chromiumos_image.tar.xz"
     ],
-    "cwd": "[TMP_BASE]/cros_flash_tmp_1",
+    "cwd": "[CLEANUP]/cros_flash_tmp_1",
     "name": "extract image",
     "stdout": "/path/to/tmp/out"
   },
@@ -162,7 +162,7 @@
       "[CACHE]/builder/chromite/bin/cros",
       "flash",
       "variable_chromeos_device_hostname",
-      "[TMP_BASE]/cros_flash_tmp_1",
+      "[CLEANUP]/cros_flash_tmp_1",
       "--disable-rootfs-verification",
       "--force",
       "--debug"
@@ -183,10 +183,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/cros_flash_tmp_1"
+      "[CLEANUP]/cros_flash_tmp_1"
     ],
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/cros_flash_tmp_1"
+    "name": "rmtree [CLEANUP]/cros_flash_tmp_1"
   },
   {
     "cmd": [

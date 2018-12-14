@@ -69,7 +69,7 @@
       "run",
       "doc.go",
       "-out",
-      "[TMP_BASE]/boringssl-docs_tmp_1"
+      "[CLEANUP]/boringssl-docs_tmp_1"
     ],
     "cwd": "[START_DIR]/boringssl/util",
     "name": "generate"
@@ -86,7 +86,7 @@
       "cp",
       "-a",
       "public-read",
-      "[TMP_BASE]/boringssl-docs_tmp_1/**",
+      "[CLEANUP]/boringssl-docs_tmp_1/**",
       "gs://chromium-boringssl-docs/"
     ],
     "infra_step": true,

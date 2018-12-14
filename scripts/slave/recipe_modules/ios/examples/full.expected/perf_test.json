@@ -429,8 +429,8 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake test.app\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake test.app\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_arg_name\", \n    \"xcode-build-version\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"9abc\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"8.1\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
-      "[TMP_BASE]/isolate_tmp_1/0.isolated.gen.json"
+      "{\n  \"args\": [\n    \"--config-variable\", \n    \"OS\", \n    \"ios\", \n    \"--config-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake test.app\", \n    \"--config-variable\", \n    \"restart\", \n    \"false\", \n    \"--config-variable\", \n    \"shards\", \n    \"1\", \n    \"--config-variable\", \n    \"test_args\", \n    \"[]\", \n    \"--config-variable\", \n    \"test_cases\", \n    \"[]\", \n    \"--config-variable\", \n    \"xctest\", \n    \"false\", \n    \"--isolate\", \n    \"[START_DIR]/template.isolate\", \n    \"--isolated\", \n    \"[CLEANUP]/isolate_tmp_1/0.isolated\", \n    \"--path-variable\", \n    \"app_path\", \n    \"src/out/Debug-iphonesimulator/fake test.app\", \n    \"--config-variable\", \n    \"wpr_tools_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"replay_path\", \n    \"NO_PATH\", \n    \"--config-variable\", \n    \"xcode_arg_name\", \n    \"xcode-build-version\", \n    \"--config-variable\", \n    \"xcode_version\", \n    \"9abc\", \n    \"--config-variable\", \n    \"platform\", \n    \"fake device\", \n    \"--config-variable\", \n    \"version\", \n    \"8.1\"\n  ], \n  \"dir\": \"[START_DIR]\", \n  \"version\": 1\n}",
+      "[CLEANUP]/isolate_tmp_1/0.isolated.gen.json"
     ],
     "cwd": "[START_DIR]/src",
     "infra_step": true,
@@ -464,7 +464,7 @@
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--isolate\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[START_DIR]/template.isolate\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--isolated\", @@@",
-      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[TMP_BASE]/isolate_tmp_1/0.isolated\", @@@",
+      "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"[CLEANUP]/isolate_tmp_1/0.isolated\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"--path-variable\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"app_path\", @@@",
       "@@@STEP_LOG_LINE@0.isolated.gen.json@    \"src/out/Debug-iphonesimulator/fake test.app\", @@@",
@@ -513,7 +513,7 @@
       "\"*.swp\"",
       "--blacklist",
       "\".git\"",
-      "[TMP_BASE]/isolate_tmp_1/0.isolated.gen.json"
+      "[CLEANUP]/isolate_tmp_1/0.isolated.gen.json"
     ],
     "cwd": "[START_DIR]/src",
     "name": "isolate.isolate tests",
@@ -653,7 +653,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/0_tmp_2",
+      "[CLEANUP]/0_tmp_2",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",

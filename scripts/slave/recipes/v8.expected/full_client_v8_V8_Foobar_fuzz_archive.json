@@ -111,7 +111,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/swarming_output_tmp_1",
+      "[CLEANUP]/swarming_output_tmp_1",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -179,7 +179,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/swarming_output_tmp_1/0/fuzz-results-deafbeefdeafbeefdeafbeefdeafbeefdeafbeef.tar.bz2",
+      "[CLEANUP]/swarming_output_tmp_1/0/fuzz-results-deafbeefdeafbeefdeafbeefdeafbeefdeafbeef.tar.bz2",
       "gs://chromium-v8/fuzzer-archives/fuzz-results-deafbeefdeafbeefdeafbeefdeafbeefdeafbeef.tar.bz2"
     ],
     "infra_step": true,

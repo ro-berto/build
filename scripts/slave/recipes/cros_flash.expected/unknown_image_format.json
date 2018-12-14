@@ -20,10 +20,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/cros_flash_tmp_1"
+      "[CLEANUP]/cros_flash_tmp_1"
     ],
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/cros_flash_tmp_1"
+    "name": "rmtree [CLEANUP]/cros_flash_tmp_1"
   },
   {
     "failure": {

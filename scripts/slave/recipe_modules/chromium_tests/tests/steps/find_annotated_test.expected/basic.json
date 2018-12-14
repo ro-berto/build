@@ -15,7 +15,7 @@
       "--apk-output-dir",
       "None/out/Release",
       "--json-output-dir",
-      "[TMP_BASE]/annotated_tests_json_tmp_1",
+      "[CLEANUP]/annotated_tests_json_tmp_1",
       "--timestamp-string",
       "20170425T203027",
       "-v",
@@ -38,7 +38,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/annotated_tests_json_tmp_1/20170425T203027-android-chrome.json",
+      "[CLEANUP]/annotated_tests_json_tmp_1/20170425T203027-android-chrome.json",
       "gs://chromium-annotated-tests/android"
     ],
     "infra_step": true,
@@ -55,10 +55,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/annotated_tests_json_tmp_1"
+      "[CLEANUP]/annotated_tests_json_tmp_1"
     ],
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/annotated_tests_json_tmp_1"
+    "name": "rmtree [CLEANUP]/annotated_tests_json_tmp_1"
   },
   {
     "jsonResult": null,

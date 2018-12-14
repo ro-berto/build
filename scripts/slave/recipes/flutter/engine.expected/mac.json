@@ -2458,7 +2458,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "Zip darwin-x64 artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"icudtl.dat\", \"path\": \"[START_DIR]/src/third_party/icu/flutter/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"flutter_tester\", \"path\": \"[START_DIR]/src/out/host_debug_unopt/flutter_tester\", \"type\": \"file\"}, {\"archive_name\": \"isolate_snapshot.bin\", \"path\": \"[START_DIR]/src/out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"vm_isolate_snapshot.bin\", \"path\": \"[START_DIR]/src/out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"frontend_server.dart.snapshot\", \"path\": \"[START_DIR]/src/out/host_debug_unopt/gen/frontend_server.dart.snapshot\", \"type\": \"file\"}, {\"archive_name\": \"product_isolate_snapshot.bin\", \"path\": \"[START_DIR]/src/out/host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"product_vm_isolate_snapshot.bin\", \"path\": \"[START_DIR]/src/out/host_dynamic_release/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_1/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"icudtl.dat\", \"path\": \"[START_DIR]/src/third_party/icu/flutter/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"flutter_tester\", \"path\": \"[START_DIR]/src/out/host_debug_unopt/flutter_tester\", \"type\": \"file\"}, {\"archive_name\": \"isolate_snapshot.bin\", \"path\": \"[START_DIR]/src/out/host_debug_unopt/gen/flutter/lib/snapshot/isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"vm_isolate_snapshot.bin\", \"path\": \"[START_DIR]/src/out/host_debug_unopt/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"frontend_server.dart.snapshot\", \"path\": \"[START_DIR]/src/out/host_debug_unopt/gen/frontend_server.dart.snapshot\", \"type\": \"file\"}, {\"archive_name\": \"product_isolate_snapshot.bin\", \"path\": \"[START_DIR]/src/out/host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"product_vm_isolate_snapshot.bin\", \"path\": \"[START_DIR]/src/out/host_dynamic_release/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_1/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -2469,7 +2469,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_1/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_1/artifacts.zip",
       "gs://flutter_infra/flutter/None/darwin-x64/artifacts.zip"
     ],
     "env": {
@@ -2490,7 +2490,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_1"
+      "[CLEANUP]/tmp_tmp_1"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2510,7 +2510,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "Zip darwin-x64 FlutterEmbedder.framework.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"FlutterEmbedder.framework.zip\", \"path\": \"[START_DIR]/src/out/host_debug/FlutterEmbedder.framework.zip\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_2/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"FlutterEmbedder.framework.zip\", \"path\": \"[START_DIR]/src/out/host_debug/FlutterEmbedder.framework.zip\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_2/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -2521,7 +2521,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_2/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_2/artifacts.zip",
       "gs://flutter_infra/flutter/None/darwin-x64/FlutterEmbedder.framework.zip"
     ],
     "env": {
@@ -2542,7 +2542,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_2"
+      "[CLEANUP]/tmp_tmp_2"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2562,7 +2562,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-arm-profile darwin-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_profile/clang_x86/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_3/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_profile/clang_x86/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_3/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -2573,7 +2573,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_3/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_3/artifacts.zip",
       "gs://flutter_infra/flutter/None/android-arm-profile/darwin-x64.zip"
     ],
     "env": {
@@ -2594,7 +2594,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_3"
+      "[CLEANUP]/tmp_tmp_3"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2614,7 +2614,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-arm64-profile darwin-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_profile_arm64/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_4/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_profile_arm64/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_4/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -2625,7 +2625,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_4/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_4/artifacts.zip",
       "gs://flutter_infra/flutter/None/android-arm64-profile/darwin-x64.zip"
     ],
     "env": {
@@ -2646,7 +2646,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_4"
+      "[CLEANUP]/tmp_tmp_4"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2666,7 +2666,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-arm-release darwin-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_release/clang_x86/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_5/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_release/clang_x86/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_5/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -2677,7 +2677,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_5/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_5/artifacts.zip",
       "gs://flutter_infra/flutter/None/android-arm-release/darwin-x64.zip"
     ],
     "env": {
@@ -2698,7 +2698,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_5"
+      "[CLEANUP]/tmp_tmp_5"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2718,7 +2718,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "Zip android-arm64-release darwin-x64.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_release_arm64/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_6/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/android_release_arm64/clang_x64/gen_snapshot\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_6/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -2729,7 +2729,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_6/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_6/artifacts.zip",
       "gs://flutter_infra/flutter/None/android-arm64-release/darwin-x64.zip"
     ],
     "env": {
@@ -2750,7 +2750,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_6"
+      "[CLEANUP]/tmp_tmp_6"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -2770,7 +2770,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "Zip dart-sdk",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/src/out/host_debug/dart-sdk\", \"type\": \"dir\"}], \"output\": \"[TMP_BASE]/tmp_tmp_7/dart-sdk-darwin-x64.zip\", \"root\": \"[START_DIR]/src/out/host_debug\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/src/out/host_debug/dart-sdk\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]/tmp_tmp_7/dart-sdk-darwin-x64.zip\", \"root\": \"[START_DIR]/src/out/host_debug\"}"
   },
   {
     "cmd": [
@@ -2781,7 +2781,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_7/dart-sdk-darwin-x64.zip",
+      "[CLEANUP]/tmp_tmp_7/dart-sdk-darwin-x64.zip",
       "gs://flutter_infra/flutter/None/dart-sdk-darwin-x64.zip"
     ],
     "env": {
@@ -2802,7 +2802,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_7"
+      "[CLEANUP]/tmp_tmp_7"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4810,7 +4810,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "Zip ios artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"snapshot.dart\", \"path\": \"[START_DIR]/src/flutter/lib/snapshot/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/debug/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/debug/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_8/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"snapshot.dart\", \"path\": \"[START_DIR]/src/flutter/lib/snapshot/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/debug/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/debug/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_8/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -4821,7 +4821,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_8/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_8/artifacts.zip",
       "gs://flutter_infra/flutter/None/ios/artifacts.zip"
     ],
     "env": {
@@ -4842,7 +4842,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_8"
+      "[CLEANUP]/tmp_tmp_8"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -4911,7 +4911,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "Zip ios-profile artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"snapshot.dart\", \"path\": \"[START_DIR]/src/flutter/lib/snapshot/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/profile/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/profile/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_9/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"snapshot.dart\", \"path\": \"[START_DIR]/src/flutter/lib/snapshot/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/profile/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/profile/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_9/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -4922,7 +4922,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_9/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_9/artifacts.zip",
       "gs://flutter_infra/flutter/None/ios-profile/artifacts.zip"
     ],
     "env": {
@@ -4943,7 +4943,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_9"
+      "[CLEANUP]/tmp_tmp_9"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5014,7 +5014,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "Zip ios-release artifacts.zip",
-    "stdin": "{\"entries\": [{\"archive_name\": \"snapshot.dart\", \"path\": \"[START_DIR]/src/flutter/lib/snapshot/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/release/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/release/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[TMP_BASE]/tmp_tmp_10/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": \"snapshot.dart\", \"path\": \"[START_DIR]/src/flutter/lib/snapshot/snapshot.dart\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.podspec\", \"path\": \"[START_DIR]/src/flutter/shell/platform/darwin/ios/framework/Flutter.podspec\", \"type\": \"file\"}, {\"archive_name\": \"gen_snapshot\", \"path\": \"[START_DIR]/src/out/release/gen_snapshot\", \"type\": \"file\"}, {\"archive_name\": \"Flutter.framework.zip\", \"path\": \"[START_DIR]/src/out/release/Flutter.framework.zip\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/tmp_tmp_10/artifacts.zip\", \"root\": \"[START_DIR]/src\"}"
   },
   {
     "cmd": [
@@ -5025,7 +5025,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/tmp_tmp_10/artifacts.zip",
+      "[CLEANUP]/tmp_tmp_10/artifacts.zip",
       "gs://flutter_infra/flutter/None/ios-release/artifacts.zip"
     ],
     "env": {
@@ -5046,7 +5046,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_10"
+      "[CLEANUP]/tmp_tmp_10"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -5093,7 +5093,7 @@
   {
     "cmd": [
       "[START_DIR]/src/flutter/tools/gen_objcdoc.sh",
-      "[TMP_BASE]/tmp_tmp_11"
+      "[CLEANUP]/tmp_tmp_11"
     ],
     "cwd": "[START_DIR]/src/flutter",
     "env": {
@@ -5113,7 +5113,7 @@
       "PATH": "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin:<PATH>"
     },
     "name": "archive obj-c doc",
-    "stdin": "{\"entries\": [{\"path\": \"[TMP_BASE]/tmp_tmp_11\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/src/out/ios-objcdoc.zip\", \"root\": \"[TMP_BASE]/tmp_tmp_11\"}"
+    "stdin": "{\"entries\": [{\"path\": \"[CLEANUP]/tmp_tmp_11\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/src/out/ios-objcdoc.zip\", \"root\": \"[CLEANUP]/tmp_tmp_11\"}"
   },
   {
     "cmd": [
@@ -5123,7 +5123,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/tmp_tmp_11"
+      "[CLEANUP]/tmp_tmp_11"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client",

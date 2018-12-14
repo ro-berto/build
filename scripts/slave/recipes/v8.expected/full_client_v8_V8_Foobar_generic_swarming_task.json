@@ -111,7 +111,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/swarming_output_tmp_1",
+      "[CLEANUP]/swarming_output_tmp_1",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",

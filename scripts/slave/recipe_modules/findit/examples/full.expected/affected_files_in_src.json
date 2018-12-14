@@ -7,7 +7,7 @@
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--name-only"
     ],
-    "cwd": "[TMP_BASE]/fake_checkout_tmp_1",
+    "cwd": "[CLEANUP]/fake_checkout_tmp_1",
     "infra_step": true,
     "name": "git diff to analyze commit",
     "stdout": "/path/to/tmp/",

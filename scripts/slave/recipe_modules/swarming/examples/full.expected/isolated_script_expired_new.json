@@ -108,7 +108,7 @@
       "--isolate",
       "[START_DIR]/swarming.client/example/payload/hello_world.isolate",
       "--isolated",
-      "[TMP_BASE]/hello_isolated_world_tmp_1/hello_world.isolated",
+      "[CLEANUP]/hello_isolated_world_tmp_1/hello_world.isolated",
       "--isolate-server",
       "https://isolateserver-dev.appspot.com",
       "--config-variable",
@@ -244,7 +244,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/hello_isolated_world_tmp_1/task_output_dir",
+      "[CLEANUP]/hello_isolated_world_tmp_1/task_output_dir",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/standard_isolated_script_merge.py",
       "--merge-script-stdout-file",
@@ -363,7 +363,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/hello_isolated_world_tmp_1"
+      "[CLEANUP]/hello_isolated_world_tmp_1"
     ],
     "infra_step": true,
     "name": "remove temp dir"

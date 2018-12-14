@@ -936,7 +936,7 @@
       "0",
       "--collect-chartjson-data",
       "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
+      "[CLEANUP]/test_runner_trace_tmp_1/test_trace.json",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -952,7 +952,7 @@
       "python",
       "-u",
       "[START_DIR]/src/third_party/catapult/tracing/bin/trace2html",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
+      "[CLEANUP]/test_runner_trace_tmp_1/test_trace.json",
       "--output",
       "/path/to/tmp/"
     ],
@@ -984,10 +984,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/test_runner_trace_tmp_1"
+      "[CLEANUP]/test_runner_trace_tmp_1"
     ],
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/test_runner_trace_tmp_1"
+    "name": "rmtree [CLEANUP]/test_runner_trace_tmp_1"
   },
   {
     "cmd": [

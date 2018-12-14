@@ -177,7 +177,7 @@
       "--url",
       "gs://chromedriver-data/prebuilts",
       "--dst",
-      "[TMP_BASE]/prebuilt_tmp_1",
+      "[CLEANUP]/prebuilt_tmp_1",
       "--partial-name",
       "gs://chromedriver-data/prebuilts/r"
     ],
@@ -194,14 +194,14 @@
       "--json-output",
       "/path/to/tmp/json",
       "listdir",
-      "[TMP_BASE]/prebuilt_tmp_1"
+      "[CLEANUP]/prebuilt_tmp_1"
     ],
     "infra_step": true,
     "name": "Download Prebuilts.get prebuilt filename",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@listdir@[TMP_BASE]/prebuilt_tmp_1/rNone.zip@@@",
+      "@@@STEP_LOG_LINE@listdir@[CLEANUP]/prebuilt_tmp_1/rNone.zip@@@",
       "@@@STEP_LOG_END@listdir@@@"
     ]
   },
@@ -213,10 +213,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/prebuilt_tmp_1"
+      "[CLEANUP]/prebuilt_tmp_1"
     ],
     "infra_step": true,
-    "name": "Download Prebuilts.rmtree [TMP_BASE]/prebuilt_tmp_1",
+    "name": "Download Prebuilts.rmtree [CLEANUP]/prebuilt_tmp_1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -226,7 +226,7 @@
       "failure": {
         "step": ""
       },
-      "humanReason": "Unexpected prebuilt filename: [TMP_BASE]/prebuilt_tmp_1/rNone.zip"
+      "humanReason": "Unexpected prebuilt filename: [CLEANUP]/prebuilt_tmp_1/rNone.zip"
     },
     "name": "$result"
   }

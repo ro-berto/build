@@ -412,7 +412,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_1/task_output_dir_0",
+      "[CLEANUP]/v8-flake-bisect-_tmp_1/task_output_dir_0",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -483,7 +483,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_1/task_output_dir_1",
+      "[CLEANUP]/v8-flake-bisect-_tmp_1/task_output_dir_1",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -551,10 +551,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_1"
+      "[CLEANUP]/v8-flake-bisect-_tmp_1"
     ],
     "infra_step": true,
-    "name": "calibration attempt 1.rmtree [TMP_BASE]/v8-flake-bisect-_tmp_1",
+    "name": "calibration attempt 1.rmtree [CLEANUP]/v8-flake-bisect-_tmp_1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1001,7 +1001,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_2/task_output_dir_0",
+      "[CLEANUP]/v8-flake-bisect-_tmp_2/task_output_dir_0",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -1074,7 +1074,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_2/task_output_dir_1",
+      "[CLEANUP]/v8-flake-bisect-_tmp_2/task_output_dir_1",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -1147,7 +1147,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_2/task_output_dir_2",
+      "[CLEANUP]/v8-flake-bisect-_tmp_2/task_output_dir_2",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -1215,10 +1215,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_2"
+      "[CLEANUP]/v8-flake-bisect-_tmp_2"
     ],
     "infra_step": true,
-    "name": "calibration attempt 2.rmtree [TMP_BASE]/v8-flake-bisect-_tmp_2",
+    "name": "calibration attempt 2.rmtree [CLEANUP]/v8-flake-bisect-_tmp_2",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1706,7 +1706,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_3/task_output_dir_0",
+      "[CLEANUP]/v8-flake-bisect-_tmp_3/task_output_dir_0",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -1779,7 +1779,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_3/task_output_dir_1",
+      "[CLEANUP]/v8-flake-bisect-_tmp_3/task_output_dir_1",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -1850,7 +1850,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_3/task_output_dir_2",
+      "[CLEANUP]/v8-flake-bisect-_tmp_3/task_output_dir_2",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -1921,7 +1921,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_3/task_output_dir_3",
+      "[CLEANUP]/v8-flake-bisect-_tmp_3/task_output_dir_3",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -1987,10 +1987,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_3"
+      "[CLEANUP]/v8-flake-bisect-_tmp_3"
     ],
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/v8-flake-bisect-_tmp_3"
+    "name": "rmtree [CLEANUP]/v8-flake-bisect-_tmp_3"
   },
   {
     "cmd": [
@@ -2523,7 +2523,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_4/task_output_dir_0",
+      "[CLEANUP]/v8-flake-bisect-_tmp_4/task_output_dir_0",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -2594,7 +2594,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_4/task_output_dir_1",
+      "[CLEANUP]/v8-flake-bisect-_tmp_4/task_output_dir_1",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -2665,7 +2665,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_4/task_output_dir_2",
+      "[CLEANUP]/v8-flake-bisect-_tmp_4/task_output_dir_2",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -2736,7 +2736,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_4/task_output_dir_3",
+      "[CLEANUP]/v8-flake-bisect-_tmp_4/task_output_dir_3",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -2802,10 +2802,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_4"
+      "[CLEANUP]/v8-flake-bisect-_tmp_4"
     ],
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/v8-flake-bisect-_tmp_4"
+    "name": "rmtree [CLEANUP]/v8-flake-bisect-_tmp_4"
   },
   {
     "cmd": [],
@@ -3297,7 +3297,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_5/task_output_dir_0",
+      "[CLEANUP]/v8-flake-bisect-_tmp_5/task_output_dir_0",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -3370,7 +3370,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_5/task_output_dir_1",
+      "[CLEANUP]/v8-flake-bisect-_tmp_5/task_output_dir_1",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -3441,7 +3441,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_5/task_output_dir_2",
+      "[CLEANUP]/v8-flake-bisect-_tmp_5/task_output_dir_2",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -3512,7 +3512,7 @@
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_5/task_output_dir_3",
+      "[CLEANUP]/v8-flake-bisect-_tmp_5/task_output_dir_3",
       "--merge-script",
       "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
       "--merge-script-stdout-file",
@@ -3578,10 +3578,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/v8-flake-bisect-_tmp_5"
+      "[CLEANUP]/v8-flake-bisect-_tmp_5"
     ],
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/v8-flake-bisect-_tmp_5"
+    "name": "rmtree [CLEANUP]/v8-flake-bisect-_tmp_5"
   },
   {
     "cmd": [],

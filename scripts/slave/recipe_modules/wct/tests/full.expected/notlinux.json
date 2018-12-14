@@ -2,7 +2,7 @@
   {
     "cmd": [
       "touch",
-      "[TMP_BASE]\\wct-test_tmp_1\\package.json"
+      "[CLEANUP]\\wct-test_tmp_1\\package.json"
     ],
     "name": "package.json"
   },

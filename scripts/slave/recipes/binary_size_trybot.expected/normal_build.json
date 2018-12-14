@@ -836,7 +836,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/with_patch"
+      "[CLEANUP]/binary-size-trybot_tmp_1/with_patch"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -852,7 +852,7 @@
       "[BUILDER_CACHE]/android_binary_size/src/out/Release/apks/MonochromePublic.apk",
       "--chartjson",
       "--output-dir",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/with_patch",
+      "[CLEANUP]/binary-size-trybot_tmp_1/with_patch",
       "--chromium-output-directory",
       "[BUILDER_CACHE]/android_binary_size/src/out/Release"
     ],
@@ -866,7 +866,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/with_patch/results-chart.json",
+      "[CLEANUP]/binary-size-trybot_tmp_1/with_patch/results-chart.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -894,7 +894,7 @@
     "cmd": [
       "[BUILDER_CACHE]/android_binary_size/src/tools/binary_size/supersize",
       "archive",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/with_patch/MonochromePublic.apk.size",
+      "[CLEANUP]/binary-size-trybot_tmp_1/with_patch/MonochromePublic.apk.size",
       "--apk-file",
       "[BUILDER_CACHE]/android_binary_size/src/out/Release/apks/MonochromePublic.apk",
       "-v"
@@ -1437,7 +1437,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/without_patch"
+      "[CLEANUP]/binary-size-trybot_tmp_1/without_patch"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
     "env": {
@@ -1454,7 +1454,7 @@
       "[BUILDER_CACHE]/android_binary_size/src/out/Release/apks/MonochromePublic.apk",
       "--chartjson",
       "--output-dir",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/without_patch",
+      "[CLEANUP]/binary-size-trybot_tmp_1/without_patch",
       "--chromium-output-directory",
       "[BUILDER_CACHE]/android_binary_size/src/out/Release"
     ],
@@ -1469,7 +1469,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/without_patch/results-chart.json",
+      "[CLEANUP]/binary-size-trybot_tmp_1/without_patch/results-chart.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
@@ -1499,7 +1499,7 @@
     "cmd": [
       "[BUILDER_CACHE]/android_binary_size/src/tools/binary_size/supersize",
       "archive",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/without_patch/MonochromePublic.apk.size",
+      "[CLEANUP]/binary-size-trybot_tmp_1/without_patch/MonochromePublic.apk.size",
       "--apk-file",
       "[BUILDER_CACHE]/android_binary_size/src/out/Release/apks/MonochromePublic.apk",
       "-v"
@@ -1708,19 +1708,19 @@
       "--apk-name",
       "MonochromePublic.apk",
       "--before-dir",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/without_patch",
+      "[CLEANUP]/binary-size-trybot_tmp_1/without_patch",
       "--after-dir",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/with_patch",
+      "[CLEANUP]/binary-size-trybot_tmp_1/with_patch",
       "--resource-sizes-diff-path",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/resource_sizes_diff.txt",
+      "[CLEANUP]/binary-size-trybot_tmp_1/resource_sizes_diff.txt",
       "--supersize-diff-path",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/supersize_diff.txt",
+      "[CLEANUP]/binary-size-trybot_tmp_1/supersize_diff.txt",
       "--dex-method-count-diff-path",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/dex_method_counts_diff.txt",
+      "[CLEANUP]/binary-size-trybot_tmp_1/dex_method_counts_diff.txt",
       "--ndjson-path",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/report.ndjson",
+      "[CLEANUP]/binary-size-trybot_tmp_1/report.ndjson",
       "--results-path",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/results.json"
+      "[CLEANUP]/binary-size-trybot_tmp_1/results.json"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
     "env": {
@@ -1737,7 +1737,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/report.ndjson",
+      "[CLEANUP]/binary-size-trybot_tmp_1/report.ndjson",
       "gs://chromium-binary-size-trybot-results/android_binary_size/2016/02/02/200.ndjson"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
@@ -1759,7 +1759,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/resource_sizes_diff.txt",
+      "[CLEANUP]/binary-size-trybot_tmp_1/resource_sizes_diff.txt",
       "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
@@ -1782,7 +1782,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/supersize_diff.txt",
+      "[CLEANUP]/binary-size-trybot_tmp_1/supersize_diff.txt",
       "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
@@ -1805,7 +1805,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/dex_method_counts_diff.txt",
+      "[CLEANUP]/binary-size-trybot_tmp_1/dex_method_counts_diff.txt",
       "/path/to/tmp/"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
@@ -1825,7 +1825,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[TMP_BASE]/binary-size-trybot_tmp_1/results.json",
+      "[CLEANUP]/binary-size-trybot_tmp_1/results.json",
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
@@ -1853,13 +1853,13 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/binary-size-trybot_tmp_1"
+      "[CLEANUP]/binary-size-trybot_tmp_1"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/binary-size-trybot_tmp_1"
+    "name": "rmtree [CLEANUP]/binary-size-trybot_tmp_1"
   },
   {
     "jsonResult": null,

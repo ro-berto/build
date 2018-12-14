@@ -27,7 +27,7 @@
       "[BUILDER_CACHE]/v8/tools/sanitizers/sancov_formatter.py",
       "all",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json"
+      "[CLEANUP]/coverage_output_tmp_1/data.json"
     ],
     "name": "Initialize coverage data"
   },
@@ -38,11 +38,11 @@
       "[BUILDER_CACHE]/v8/tools/sanitizers/sancov_formatter.py",
       "merge",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[CLEANUP]/coverage_output_tmp_1/data.json",
       "--json-output",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[CLEANUP]/coverage_output_tmp_1/data.json",
       "--coverage-dir",
-      "[TMP_BASE]/coverage_output_tmp_1"
+      "[CLEANUP]/coverage_output_tmp_1"
     ],
     "name": "Merge coverage data"
   },
@@ -53,9 +53,9 @@
       "[BUILDER_CACHE]/v8/tools/sanitizers/sancov_formatter.py",
       "split",
       "--json-input",
-      "[TMP_BASE]/coverage_output_tmp_1/data.json",
+      "[CLEANUP]/coverage_output_tmp_1/data.json",
       "--output-dir",
-      "[TMP_BASE]/coverage_data_tmp_2"
+      "[CLEANUP]/coverage_data_tmp_2"
     ],
     "name": "Split coverage data"
   },
@@ -72,7 +72,7 @@
       "-a",
       "public-read",
       "-R",
-      "[TMP_BASE]/coverage_data_tmp_2/*",
+      "[CLEANUP]/coverage_data_tmp_2/*",
       "gs://chromium-v8/tryserver/sanitizer_coverage/gerrit/456789/12/linux64/"
     ],
     "infra_step": true,

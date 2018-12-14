@@ -936,7 +936,7 @@
       "--collect-chartjson-data",
       "--write-buildbot-json",
       "--trace-output",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
+      "[CLEANUP]/test_runner_trace_tmp_1/test_trace.json",
       "--adb-path",
       "[START_DIR]/src/third_party/android_tools/sdk/platform-tools/adb"
     ],
@@ -952,7 +952,7 @@
       "python",
       "-u",
       "[START_DIR]/src/third_party/catapult/tracing/bin/trace2html",
-      "[TMP_BASE]/test_runner_trace_tmp_1/test_trace.json",
+      "[CLEANUP]/test_runner_trace_tmp_1/test_trace.json",
       "--output",
       "/path/to/tmp/"
     ],
@@ -984,10 +984,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[TMP_BASE]/test_runner_trace_tmp_1"
+      "[CLEANUP]/test_runner_trace_tmp_1"
     ],
     "infra_step": true,
-    "name": "rmtree [TMP_BASE]/test_runner_trace_tmp_1"
+    "name": "rmtree [CLEANUP]/test_runner_trace_tmp_1"
   },
   {
     "cmd": [
@@ -1126,7 +1126,7 @@
       "--blacklist-file",
       "[START_DIR]/src/out/bad_devices.json",
       "--get-output-dir-archive",
-      "[TMP_BASE]/perf_archives_tmp_2/output_dir.zip"
+      "[CLEANUP]/perf_archives_tmp_2/output_dir.zip"
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
@@ -1150,7 +1150,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "[TMP_BASE]/perf_archives_tmp_2/output_dir.zip",
+      "[CLEANUP]/perf_archives_tmp_2/output_dir.zip",
       "gs://my-bucket/upload_archives_to_bucket/perf_test.foo/20150928T110712_build_571.zip"
     ],
     "infra_step": true,
