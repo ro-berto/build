@@ -77,7 +77,7 @@ class TestStepConfig(object):
     """
     return TestStepConfig(
         name=packed[0],
-        shards=packed[1],
+        shards=int(packed[1]),
         variants=V8Variant.unpack(packed[2]) if packed[2] else None,
         suffix=packed[3],
         test_args=packed[4],
@@ -93,7 +93,7 @@ class TestStepConfig(object):
         name=spec['name'],
         swarming_dimensions=spec.get('swarming_dimensions'),
         swarming_task_attrs=spec.get('swarming_task_attrs'),
-        shards=spec.get('shards', 1),
+        shards=int(spec.get('shards', 1)),
         suffix=spec.get('suffix', ''),
         test_args=spec.get('test_args'),
         variants=V8Variant(variant) if variant else None,
