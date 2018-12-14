@@ -25,7 +25,7 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'main_builder_mb',
-      'bot_type': 'builder_tester',
+      'bot_type': 'builder',
       'testing': {
         'platform': 'linux',
       },
@@ -44,7 +44,7 @@ SPEC = {
         'TARGET_PLATFORM': 'android',
       },
       'android_config': 'main_builder_mb',
-      'bot_type': 'builder_tester',
+      'bot_type': 'builder',
       'testing': {
         'platform': 'linux',
       },
