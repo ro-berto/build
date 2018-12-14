@@ -4028,33 +4028,33 @@ WCTApi provides support for running Web Component Tests
 
 &emsp; **@property**<br>&mdash; **def [bucketname](/scripts/slave/recipe_modules/webrtc/api.py#139)(self):**
 
-&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#416)(self):**
+&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#417)(self):**
 
 &emsp; **@property**<br>&mdash; **def [buildername](/scripts/slave/recipe_modules/webrtc/api.py#146)(self):**
 
-&mdash; **def [check\_swarming\_version](/scripts/slave/recipe_modules/webrtc/api.py#290)(self):**
+&mdash; **def [check\_swarming\_version](/scripts/slave/recipe_modules/webrtc/api.py#291)(self):**
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#235)(self, \*\*kwargs):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#236)(self, \*\*kwargs):**
 
-&mdash; **def [clean\_test\_output](/scripts/slave/recipe_modules/webrtc/api.py#506)(self):**
+&mdash; **def [clean\_test\_output](/scripts/slave/recipe_modules/webrtc/api.py#507)(self):**
 
 Remove all test output in out/, since we have tests leaking files.
 
-&mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#499)(self):**
+&mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#500)(self):**
 
-&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#315)(self, phase=None):**
+&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#316)(self, phase=None):**
 
 &mdash; **def [configure\_isolate](/scripts/slave/recipe_modules/webrtc/api.py#186)(self, phase=None):**
 
 &mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/webrtc/api.py#198)(self):**
 
-&mdash; **def [download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#262)(self):**
+&mdash; **def [download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#263)(self):**
 
-&mdash; **def [download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#270)(self):**
+&mdash; **def [download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#271)(self):**
 
-&mdash; **def [extract\_build](/scripts/slave/recipe_modules/webrtc/api.py#473)(self):**
+&mdash; **def [extract\_build](/scripts/slave/recipe_modules/webrtc/api.py#474)(self):**
 
-&mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#332)(self, files=None, base_dir=None):**
+&mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#333)(self, files=None, base_dir=None):**
 
 &mdash; **def [get\_bot](/scripts/slave/recipe_modules/webrtc/api.py#150)(self, bucketname, buildername):**
 
@@ -4062,17 +4062,17 @@ Remove all test output in out/, since we have tests leaking files.
 
 &emsp; **@property**<br>&mdash; **def [mastername](/scripts/slave/recipe_modules/webrtc/api.py#157)(self):**
 
-&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#382)(self):**
+&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#383)(self):**
 
-&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#457)(self):**
+&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#458)(self):**
 
-&mdash; **def [package\_build](/scripts/slave/recipe_modules/webrtc/api.py#406)(self):**
+&mdash; **def [package\_build](/scripts/slave/recipe_modules/webrtc/api.py#407)(self):**
 
 &mdash; **def [related\_bots](/scripts/slave/recipe_modules/webrtc/api.py#161)(self):**
 
-&mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#299)(self, phase=None):**
+&mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#300)(self, phase=None):**
 
-&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#348)(self, phase=None):**
+&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#349)(self, phase=None):**
 
 Add a suite of test steps.
 
