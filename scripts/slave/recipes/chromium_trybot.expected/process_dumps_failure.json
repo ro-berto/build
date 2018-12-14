@@ -874,7 +874,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run"
+    "name": "test_pre_run (with patch)"
   },
   {
     "cmd": [

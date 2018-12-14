@@ -862,7 +862,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run"
+    "name": "test_pre_run (with patch)"
   },
   {
     "allow_subannotations": true,
@@ -1463,7 +1463,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run (2)"
+    "name": "test_pre_run (without patch)"
   },
   {
     "allow_subannotations": true,
@@ -2137,7 +2137,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run (3)"
+    "name": "test_pre_run (retry with patch)"
   },
   {
     "allow_subannotations": true,

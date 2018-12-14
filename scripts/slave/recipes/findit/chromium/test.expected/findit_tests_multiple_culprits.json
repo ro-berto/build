@@ -1157,7 +1157,7 @@
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
-    "name": "test r4.test_pre_run",
+    "name": "test r4.test_pre_run (r4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1255,7 +1255,7 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r4.test_pre_run.[trigger] gl_tests (r4)",
+    "name": "test r4.test_pre_run (r4).[trigger] gl_tests (r4)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac-10.13'@@@",
@@ -2197,7 +2197,7 @@
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
-    "name": "test r5.test_pre_run",
+    "name": "test r5.test_pre_run (r5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2295,7 +2295,7 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r5.test_pre_run.[trigger] gl_tests (r5)",
+    "name": "test r5.test_pre_run (r5).[trigger] gl_tests (r5)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac-10.13'@@@",
@@ -3237,7 +3237,7 @@
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
-    "name": "test r6.test_pre_run",
+    "name": "test r6.test_pre_run (r6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -3335,7 +3335,7 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r6.test_pre_run.[trigger] gl_tests (r6)",
+    "name": "test r6.test_pre_run (r6).[trigger] gl_tests (r6)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac-10.13'@@@",
@@ -4277,7 +4277,7 @@
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
-    "name": "test r2.test_pre_run",
+    "name": "test r2.test_pre_run (r2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -4375,7 +4375,7 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r2.test_pre_run.[trigger] gl_tests (r2)",
+    "name": "test r2.test_pre_run (r2).[trigger] gl_tests (r2)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac-10.13'@@@",
@@ -5313,7 +5313,7 @@
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
-    "name": "test r3.test_pre_run",
+    "name": "test r3.test_pre_run (r3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -5411,7 +5411,7 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r3.test_pre_run.[trigger] gl_tests (r3)",
+    "name": "test r3.test_pre_run (r3).[trigger] gl_tests (r3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac-10.13'@@@",

@@ -924,7 +924,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run"
+    "name": "test_pre_run (with patch)"
   },
   {
     "cmd": [
@@ -1021,7 +1021,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "test_pre_run.[trigger] gl_tests (with patch)",
+    "name": "test_pre_run (with patch).[trigger] gl_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",

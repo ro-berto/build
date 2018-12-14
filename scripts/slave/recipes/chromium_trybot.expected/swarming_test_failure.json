@@ -921,7 +921,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run"
+    "name": "test_pre_run (with patch)"
   },
   {
     "cmd": [
@@ -1018,7 +1018,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "test_pre_run.[trigger] gl_tests (with patch)",
+    "name": "test_pre_run (with patch).[trigger] gl_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -1775,7 +1775,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run (2)"
+    "name": "test_pre_run (without patch)"
   },
   {
     "cmd": [
@@ -1876,7 +1876,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "test_pre_run.[trigger] gl_tests (without patch)",
+    "name": "test_pre_run (without patch).[trigger] gl_tests (without patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -2683,7 +2683,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run (3)"
+    "name": "test_pre_run (retry with patch)"
   },
   {
     "cmd": [
@@ -2784,7 +2784,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "test_pre_run.[trigger] gl_tests (retry with patch)",
+    "name": "test_pre_run (retry with patch).[trigger] gl_tests (retry with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",

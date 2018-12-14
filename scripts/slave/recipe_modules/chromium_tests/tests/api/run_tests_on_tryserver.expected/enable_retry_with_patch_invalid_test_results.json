@@ -94,6 +94,10 @@
     "stdout": "/path/to/tmp/"
   },
   {
+    "cmd": [],
+    "name": "test_pre_run (retry with patch)"
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -174,7 +178,7 @@
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "infra_step": true,
-    "name": "test_pre_run.[trigger] base_unittests (retry with patch)",
+    "name": "test_pre_run (retry with patch).[trigger] base_unittests (retry with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",

@@ -243,7 +243,8 @@ def GenTests(api):
           api.test_utils.canned_gtest_output(passing=False)) +
       api.post_process(
           post_process.StepCommandContains,
-          'test_pre_run.[trigger] base_unittests (without patch)',
+          'test_pre_run (without patch)' +
+          '.[trigger] base_unittests (without patch)',
           ['--shards', '3']) +
       api.post_process(post_process.DropExpectation)
   )
@@ -291,8 +292,10 @@ def GenTests(api):
           'base_unittests (retry with patch)',
           api.swarming.canned_summary_output() +
           api.test_utils.canned_gtest_output(passing=True)) +
-      api.post_process(post_process.MustRun,
-          'test_pre_run.[trigger] base_unittests (retry with patch)') +
+      api.post_process(
+          post_process.MustRun,
+          'test_pre_run (retry with patch)' +
+          '.[trigger] base_unittests (retry with patch)') +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -316,8 +319,10 @@ def GenTests(api):
           'base_unittests (retry with patch)',
           api.swarming.canned_summary_output() +
           api.test_utils.canned_gtest_output(passing=True)) +
-      api.post_process(post_process.MustRun,
-          'test_pre_run.[trigger] base_unittests (retry with patch)') +
+      api.post_process(
+          post_process.MustRun,
+          'test_pre_run (retry with patch)' +
+          '.[trigger] base_unittests (retry with patch)') +
       api.post_process(post_process.DropExpectation)
   )
 

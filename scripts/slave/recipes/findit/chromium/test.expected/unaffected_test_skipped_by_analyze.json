@@ -1158,7 +1158,7 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]\\win",
-    "name": "test r1.test_pre_run",
+    "name": "test r1.test_pre_run (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1253,7 +1253,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "infra_step": true,
-    "name": "test r1.test_pre_run.[trigger] affected_tests (r1)",
+    "name": "test r1.test_pre_run (r1).[trigger] affected_tests (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",

@@ -320,7 +320,7 @@
   },
   {
     "cmd": [],
-    "name": "test_pre_run"
+    "name": "test_pre_run (with patch)"
   },
   {
     "cmd": [
@@ -399,7 +399,7 @@
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "infra_step": true,
-    "name": "test_pre_run.[trigger] base_unittests (with patch)",
+    "name": "test_pre_run (with patch).[trigger] base_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -1124,7 +1124,7 @@
   },
   {
     "cmd": [],
-    "name": "test_pre_run (2)"
+    "name": "test_pre_run (retry with patch)"
   },
   {
     "cmd": [
@@ -1203,7 +1203,7 @@
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "infra_step": true,
-    "name": "test_pre_run.[trigger] base_unittests (retry with patch)",
+    "name": "test_pre_run (retry with patch).[trigger] base_unittests (retry with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",

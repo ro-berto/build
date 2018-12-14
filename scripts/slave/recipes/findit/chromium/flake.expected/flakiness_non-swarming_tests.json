@@ -1086,7 +1086,7 @@
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
-    "name": "test r0.test_pre_run",
+    "name": "test r0.test_pre_run (r0)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

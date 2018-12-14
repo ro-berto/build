@@ -922,7 +922,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run"
+    "name": "test_pre_run (with patch)"
   },
   {
     "cmd": [
@@ -1020,7 +1020,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "test_pre_run.[trigger] telemetry_gpu_unittests (with patch)",
+    "name": "test_pre_run (with patch).[trigger] telemetry_gpu_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -1766,7 +1766,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run (2)"
+    "name": "test_pre_run (without patch)"
   },
   {
     "cmd": [
@@ -1864,7 +1864,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "test_pre_run.[trigger] telemetry_gpu_unittests (without patch)",
+    "name": "test_pre_run (without patch).[trigger] telemetry_gpu_unittests (without patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
@@ -2709,7 +2709,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run (3)"
+    "name": "test_pre_run (retry with patch)"
   },
   {
     "cmd": [
@@ -2807,7 +2807,7 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "test_pre_run.[trigger] telemetry_gpu_unittests (retry with patch)",
+    "name": "test_pre_run (retry with patch).[trigger] telemetry_gpu_unittests (retry with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",

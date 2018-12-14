@@ -655,7 +655,7 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
-    "name": "test_pre_run"
+    "name": "test_pre_run (with patch)"
   },
   {
     "cmd": [
@@ -1294,7 +1294,7 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Mac",
-    "name": "test_pre_run (2)"
+    "name": "test_pre_run (without patch)"
   },
   {
     "cmd": [

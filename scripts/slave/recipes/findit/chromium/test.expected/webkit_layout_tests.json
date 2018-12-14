@@ -1154,7 +1154,7 @@
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
-    "name": "test r1.test_pre_run",
+    "name": "test r1.test_pre_run (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1253,7 +1253,7 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r1.test_pre_run.[trigger] webkit_layout_tests (r1)",
+    "name": "test r1.test_pre_run (r1).[trigger] webkit_layout_tests (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac-10.13'@@@",
@@ -2226,7 +2226,7 @@
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
-    "name": "test r0.test_pre_run",
+    "name": "test r0.test_pre_run (r0)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2325,7 +2325,7 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r0.test_pre_run.[trigger] webkit_layout_tests (r0)",
+    "name": "test r0.test_pre_run (r0).[trigger] webkit_layout_tests (r0)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac-10.13'@@@",

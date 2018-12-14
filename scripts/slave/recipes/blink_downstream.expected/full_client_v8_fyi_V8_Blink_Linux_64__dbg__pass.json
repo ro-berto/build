@@ -588,7 +588,7 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
-    "name": "test_pre_run"
+    "name": "test_pre_run (with patch)"
   },
   {
     "cmd": [

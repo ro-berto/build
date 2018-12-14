@@ -1051,7 +1051,7 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]\\win",
-    "name": "test r1.test_pre_run",
+    "name": "test r1.test_pre_run (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1146,7 +1146,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "infra_step": true,
-    "name": "test r1.test_pre_run.[trigger] gl_tests (r1)",
+    "name": "test r1.test_pre_run (r1).[trigger] gl_tests (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",
@@ -2036,7 +2036,7 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]\\win",
-    "name": "test r0.test_pre_run",
+    "name": "test r0.test_pre_run (r0)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -2131,7 +2131,7 @@
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "infra_step": true,
-    "name": "test r0.test_pre_run.[trigger] gl_tests (r0)",
+    "name": "test r0.test_pre_run (r0).[trigger] gl_tests (r0)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'@@@",

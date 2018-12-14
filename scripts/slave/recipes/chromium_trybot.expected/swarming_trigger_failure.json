@@ -921,7 +921,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run"
+    "name": "test_pre_run (with patch)"
   },
   {
     "cmd": [
@@ -933,7 +933,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run.[error] base_unittests (with patch)",
+    "name": "test_pre_run (with patch).[error] base_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
@@ -1568,7 +1568,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run (2)"
+    "name": "test_pre_run (without patch)"
   },
   {
     "cmd": [
@@ -1580,7 +1580,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run.[error] base_unittests (without patch)",
+    "name": "test_pre_run (without patch).[error] base_unittests (without patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",
@@ -2269,7 +2269,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run (3)"
+    "name": "test_pre_run (retry with patch)"
   },
   {
     "cmd": [
@@ -2281,7 +2281,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_pre_run.[error] base_unittests (retry with patch)",
+    "name": "test_pre_run (retry with patch).[error] base_unittests (retry with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "step returned non-zero exit code: 1",

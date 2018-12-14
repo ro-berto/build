@@ -1019,7 +1019,7 @@
   {
     "cmd": [],
     "cwd": "[BUILDER_CACHE]/linux",
-    "name": "test r1.test_pre_run",
+    "name": "test r1.test_pre_run (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1114,7 +1114,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "infra_step": true,
-    "name": "test r1.test_pre_run.[trigger] services_unittests (r1)",
+    "name": "test r1.test_pre_run (r1).[trigger] services_unittests (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",

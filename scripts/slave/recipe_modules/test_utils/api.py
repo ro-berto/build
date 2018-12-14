@@ -180,7 +180,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
         local_tests.append(test)
 
     groups = [LocalGroup(local_tests), SwarmingGroup(swarming_tests)]
-    with self.m.step.nest('test_pre_run'):
+
+    nest_name = 'test_pre_run (%s)' % suffix if suffix else 'test_pre_run'
+
+    with self.m.step.nest(nest_name):
       for group in groups:
         group.pre_run(caller_api, suffix)
 
@@ -557,4 +560,3 @@ class SwarmingGroup(TestGroup):
         self._run_func(test, test.run, caller_api, suffix, True)
 
     return self._failed_tests
-
