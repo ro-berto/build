@@ -307,11 +307,8 @@ def _UploadToPerfDashboard(name, api, task_output_dir):
       '--output-json-file', api.json.output(),
       '--results-file', api.json.input(perf_results),
       '--results-url', DASHBOARD_UPLOAD_URL,
+      '--got-webrtc-revision', api.webrtc.revision,
   ]
-  if 'git_revision' in api.properties:
-    # This is the WebRTC hash we built at.
-    revision = api.properties['git_revision']
-    args.extend(['--got-webrtc-revision', revision])
 
   if api.runtime.is_luci:
     args.append('--is-luci-builder')

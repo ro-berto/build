@@ -64,8 +64,8 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
           parent_buildername=bot_config['parent_buildername'])
     if revision:
       test += self.m.properties(revision=revision,
-                                git_revision='a' * 40 + revision,
-                                got_revision_cp=revision)
+                                got_revision='a' * 40,
+                                got_revision_cp='refs/heads/master@{#1337}')
     if bot_type == 'tester':
       parent_rev = parent_got_revision or revision
       test += self.m.properties(parent_got_revision=parent_rev)

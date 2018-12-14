@@ -1117,7 +1117,7 @@
       "--results-url",
       "https://chromeperf.appspot.com",
       "--got-webrtc-revision",
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--output-json-dashboard-url",
       "/path/to/tmp/json"
     ],
@@ -1310,7 +1310,7 @@
       "--results-url",
       "https://chromeperf.appspot.com",
       "--got-webrtc-revision",
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--output-json-dashboard-url",
       "/path/to/tmp/json"
     ],
@@ -1503,7 +1503,7 @@
       "--results-url",
       "https://chromeperf.appspot.com",
       "--got-webrtc-revision",
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--output-json-dashboard-url",
       "/path/to/tmp/json"
     ],
