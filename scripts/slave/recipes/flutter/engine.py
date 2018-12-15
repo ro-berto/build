@@ -138,8 +138,8 @@ def UploadDartSdk(api, archive_name):
 # TODO(eseidel): Would be nice to have this on api.path or api.file.
 @contextlib.contextmanager
 def MakeTempDir(api, label):
+  temp_dir = api.path.mkdtemp('tmp')
   try:
-    temp_dir = api.path.mkdtemp('tmp')
     yield temp_dir
   finally:
     api.file.rmtree('temp dir for %s' % label, temp_dir)
