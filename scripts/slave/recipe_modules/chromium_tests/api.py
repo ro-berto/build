@@ -367,7 +367,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
   def compile_specific_targets(
       self, bot_config, update_step, bot_db,
       compile_targets, tests_including_triggered,
-      mb_mastername=None, mb_buildername=None, mb_config_path=None,
+      mb_mastername=None, mb_buildername=None,
+      mb_phase=None, mb_config_path=None,
       override_bot_type=None):
     """Runs compile and related steps for given builder.
 
@@ -414,6 +415,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                 name_suffix=name_suffix,
                                 mb_mastername=mb_mastername,
                                 mb_buildername=mb_buildername,
+                                mb_phase=mb_phase,
                                 mb_config_path=mb_config_path,
                                 android_version_code=android_version_code,
                                 android_version_name=android_version_name)
@@ -611,7 +613,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
           step_name='trigger')
 
   def run_mb_and_compile(self, compile_targets, isolated_targets, name_suffix,
-                         mb_mastername=None, mb_buildername=None,
+                         mb_mastername=None, mb_buildername=None, mb_phase=None,
                          mb_config_path=None, android_version_code=None,
                          android_version_name=None):
     use_goma_module=False
@@ -620,6 +622,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       mb_buildername = mb_buildername or self.m.buildbucket.builder_name
       use_goma = self._use_goma()
       self.m.chromium.mb_gen(mb_mastername, mb_buildername,
+                             phase=mb_phase,
                              mb_config_path=mb_config_path,
                              use_goma=use_goma,
                              isolated_targets=isolated_targets,
