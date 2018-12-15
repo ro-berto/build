@@ -92,13 +92,12 @@ def GenTests(api):
     )
 
   def base_unittests_additional_compile_target():
-    return api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    return api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'gtest_tests': ['base_unittests'],
             },
-        })
+        }
     )
 
   # Regression test for http://crbug.com/453471#c16
@@ -142,9 +141,8 @@ def GenTests(api):
     api.test('script_test_with_overridden_compile_targets') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'scripts': [
                     {
@@ -154,7 +152,7 @@ def GenTests(api):
                     }
                 ],
             }
-        })
+        }
     )
   )
 
@@ -162,9 +160,8 @@ def GenTests(api):
     api.test('dynamic_isolated_script_test_on_trybot_passing') +
     props(extra_swarmed_tests=['telemetry_gpu_unittests']) +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -174,7 +171,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     suppress_analyze() +
     api.override_step_data(
@@ -190,9 +187,8 @@ def GenTests(api):
     api.test('dynamic_isolated_script_test_on_trybot_failing') +
     props(extra_swarmed_tests=['telemetry_gpu_unittests']) +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -202,7 +198,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     suppress_analyze() +
     api.override_step_data(
@@ -227,9 +223,8 @@ def GenTests(api):
     api.test('dynamic_isolated_script_test_with_args_on_trybot') +
     props(extra_swarmed_tests=['telemetry_gpu_unittests']) +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -248,7 +243,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     suppress_analyze() +
     api.override_step_data(
@@ -265,9 +260,8 @@ def GenTests(api):
         'dynamic_swarmed_isolated_script_test_failure_no_result_json') +
     props(extra_swarmed_tests=['telemetry_gpu_unittests']) +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -277,7 +271,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     suppress_analyze() +
     api.override_step_data(
@@ -291,9 +285,8 @@ def GenTests(api):
     api.test('swarming_test_with_priority_expiration_and_timeout') +
     props(extra_swarmed_tests=['gl_tests']) +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'gtest_tests': [
                     {
@@ -307,7 +300,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     suppress_analyze()
   )
@@ -316,9 +309,8 @@ def GenTests(api):
     api.test('swarming_trigger_failure') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'gtest_tests': [
                     {
@@ -327,7 +319,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     suppress_analyze()
   )
@@ -336,9 +328,8 @@ def GenTests(api):
     api.test('swarming_test_failure') +
     props(extra_swarmed_tests=['gl_tests']) +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'gtest_tests': [
                     {
@@ -347,7 +338,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     suppress_analyze() +
     api.override_step_data(
@@ -360,9 +351,8 @@ def GenTests(api):
     api.test('swarming_test_failure_no_patch_deapplication') +
     props(extra_swarmed_tests=['gl_tests']) +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'gtest_tests': [
                     {
@@ -371,7 +361,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     suppress_analyze() +
     api.override_step_data(
@@ -389,13 +379,12 @@ def GenTests(api):
     api.test('compile_failure_without_patch_deapply_fn') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
               'gtest_tests': ['base_unittests'],
             },
-        })
+        }
     ) +
     suppress_analyze() +
     api.override_step_data('base_unittests (with patch)',
@@ -407,13 +396,12 @@ def GenTests(api):
     api.test('compile_failure_infra') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
               'gtest_tests': ['base_unittests'],
             },
-        })
+        }
     ) +
     suppress_analyze() +
     api.override_step_data(
@@ -474,13 +462,12 @@ def GenTests(api):
     props(mastername='tryserver.v8',
           builder='v8_linux_chromium_gn_rel') +
     api.properties(revision='a' * 40) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'V8 Linux GN': {
                 'additional_compile_targets': ['base_unittests'],
             },
-        })
+        }
     ) +
     suppress_analyze() +
     api.step_data('compile (with patch)', retcode=1)
@@ -535,17 +522,14 @@ def GenTests(api):
     api.test('no_compile_because_of_analyze') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)', api.json.output({}))
-  )
+    api.chromium_tests.read_source_side_spec('chromium.linux', {}))
 
   # This should result in a compile.
   yield (
     api.test('compile_because_of_analyze_matching_exclusion') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)', api.json.output({})) +
+    api.chromium_tests.read_source_side_spec('chromium.linux', {}) +
     suppress_analyze()
   )
 
@@ -554,8 +538,7 @@ def GenTests(api):
     api.test('compile_because_of_analyze') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)', api.json.output({})) +
+    api.chromium_tests.read_source_side_spec('chromium.linux', {}) +
     api.override_step_data(
       'analyze',
       api.json.output({'status': 'Found dependency',
@@ -605,13 +588,12 @@ def GenTests(api):
       'compile_because_of_analyze_with_filtered_compile_targets_exclude_all') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'gtest_tests': ['base_unittests'],
             },
-        })
+        }
     ) +
     api.override_step_data(
       'analyze',
@@ -627,13 +609,12 @@ def GenTests(api):
       'analyze_finds_invalid_target') +
     props() +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'gtest_tests': ['base_unittests'],
             },
-        })
+        }
     ) +
     api.override_step_data(
       'analyze',
@@ -714,9 +695,8 @@ def GenTests(api):
   swarmed_webkit_tests = (
     props(extra_swarmed_tests=['webkit_layout_tests']) +
     api.platform.name('linux') +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -727,7 +707,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     suppress_analyze()
   )

@@ -56,3 +56,34 @@ class ChromiumTestsApi(recipe_test_api.RecipeTestApi):
     return bdb_module.BotConfig(
         {mastername: {'builders': {buildername: builder_dict}}},
         [{'mastername': mastername, 'buildername': buildername}])
+
+  def read_source_side_spec(self, mastername, contents, step_prefix=None,
+                            step_suffix=None, path_base=None):
+    """Adds step data overrides for when a test reads source side test specs.
+
+    Args:
+      * mastername: The mastername the test is using (ex. 'chromium.win').
+      * contents: The contents of the source side spec file.
+      * step_prefix: Any prefix to add to the step name. Useful if using step
+        nesting.
+      * step_suffix: Any suffix to append to the step name. Useful if the step
+        runs twice.
+      * path_base: The path where the spec files live. If not set, defaults to
+        self.m.path['checkout'].join('testing', 'buildbot')
+
+    Returns:
+      A recipe test object.
+    """
+    # Used to be called test specs, name has stuck around for now.
+    filename = '%s.json' % mastername
+
+    if not path_base:
+      path_base = self.m.path['checkout'].join('testing', 'buildbot')
+
+    return (
+        self.override_step_data(
+            '%sread test spec (%s)%s' % (
+                step_prefix or '', filename, step_suffix or ''),
+            self.m.json.output(contents))
+    )
+

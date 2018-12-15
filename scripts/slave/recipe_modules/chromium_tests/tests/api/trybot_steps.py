@@ -68,13 +68,12 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
           buildername='linux_chromium_rel_ng') +
-      api.override_step_data(
-          'read test spec (chromium.linux.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.linux', {
               'Linux Tests': {
                   'gtest_tests': ['base_unittests'],
               },
-          })
+          }
       ) +
       api.filter.suppress_analyze()
   )
@@ -86,13 +85,12 @@ def GenTests(api):
           buildername='staging-chromium-rel',
           builders=_TEST_BUILDERS,
           trybots=_TEST_TRYBOTS) +
-      api.override_step_data(
-          'read test spec (chromium.test.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.test', {
               'staging-chromium-test-rel': {
                   'gtest_tests': ['staging_base_unittests'],
               },
-          })
+          }
       ) +
       api.filter.suppress_analyze() +
       api.post_process(post_process.MustRun,
@@ -149,13 +147,12 @@ def GenTests(api):
           mastername='tryserver.chromium.unmirrored',
           buildername='unmirrored-chromium-rel',
           builders=_TEST_BUILDERS) +
-      api.override_step_data(
-          'read test spec (tryserver.chromium.unmirrored.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'tryserver.chromium.unmirrored', {
               'unmirrored-chromium-rel': {
                   'gtest_tests': ['bogus_unittests'],
               },
-          })
+          }
       ) +
       api.filter.suppress_analyze() +
       api.post_process(post_process.MustRun, 'bogus_unittests (with patch)') +
@@ -175,9 +172,8 @@ def GenTests(api):
         swarm_hashes = {
           'base_unittests':
           '[dummy hash for base_unittests]'}) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'gtest_tests': [
                     {
@@ -188,7 +184,7 @@ def GenTests(api):
                     }
                 ],
             },
-        })
+        }
     ) +
     api.filter.suppress_analyze() +
     api.post_process(
@@ -205,9 +201,8 @@ def GenTests(api):
           swarm_hashes = {
             'base_unittests':
             '[dummy hash for base_unittests]'}) +
-      api.override_step_data(
-          'read test spec (chromium.linux.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.linux', {
               'Linux Tests': {
                   'gtest_tests': [
                       {
@@ -218,7 +213,7 @@ def GenTests(api):
                       }
                   ],
               },
-          })
+          }
       ) +
       api.filter.suppress_analyze() +
       api.post_process(

@@ -75,9 +75,8 @@ def GenTests(api):
     api.test('dynamic_gtest') +
     props() +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
               'gtest_tests': [
                 'base_unittests',
@@ -89,7 +88,7 @@ def GenTests(api):
                 },
               ],
             },
-        })
+        }
     )
   )
 
@@ -98,16 +97,15 @@ def GenTests(api):
     props(builder='Linux Builder',
           parent_buildername=None) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'gtest_tests': [
                     {'test': 'browser_tests',
                      'swarming': {'can_use_on_swarming_builders': True}},
                 ],
             },
-        })
+        }
     )
   )
 
@@ -123,9 +121,8 @@ def GenTests(api):
               'browser_tests': 'ffffffffffffffffffffffffffffff',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.gpu.fyi.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.gpu.fyi', {
             'Linux FYI Release (NVIDIA)': {
                 'gtest_tests': [
                     {
@@ -154,7 +151,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     # Make one of the tests fail to improve code coverage.
     api.override_step_data('base_unittests on NVIDIA GPU on Linux',
@@ -171,9 +168,8 @@ def GenTests(api):
               'gl_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('mac', 64) +
-    api.override_step_data(
-        'read test spec (chromium.mac.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.mac', {
             'Mac10.13 Tests': {
                 'gtest_tests': [
                     {
@@ -195,7 +191,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -207,9 +203,8 @@ def GenTests(api):
               'tab_capture_end2end_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'gtest_tests': [
                     {
@@ -223,7 +218,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -232,9 +227,8 @@ def GenTests(api):
     props(builder='Linux Builder',
           parent_buildername=None) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -243,7 +237,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -253,9 +247,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -273,7 +266,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -283,9 +276,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -294,7 +286,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) + api.override_step_data('telemetry_gpu_unittests',
             api.test_utils.canned_isolated_script_output(
                 passing=False, is_win=False, swarming=False,
@@ -309,9 +301,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -320,7 +311,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) + api.override_step_data('telemetry_gpu_unittests',
             api.test_utils.canned_isolated_script_output(
                 passing=True, is_win=False, swarming=False,
@@ -335,9 +326,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -346,7 +336,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) + api.override_step_data('telemetry_gpu_unittests',
             api.test_utils.canned_isolated_script_output(
                 passing=True, is_win=False, swarming=False,
@@ -361,9 +351,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -372,7 +361,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) + api.override_step_data('telemetry_gpu_unittests',
             api.test_utils.canned_isolated_script_output(
                 passing=True, is_win=False, swarming=False,
@@ -387,9 +376,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -399,7 +387,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) + api.override_step_data('telemetry_gpu_unittests',
             api.test_utils.canned_isolated_script_output(
                 passing=False, is_win=False, swarming=False,
@@ -414,9 +402,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -425,7 +412,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data('telemetry_gpu_unittests',
         api.test_utils.canned_isolated_script_output(
@@ -440,9 +427,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -451,7 +437,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data('telemetry_gpu_unittests',
                            api.json.output(None),
@@ -463,9 +449,8 @@ def GenTests(api):
     props(builder='Linux Builder',
           parent_buildername=None) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -478,7 +463,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -487,9 +472,8 @@ def GenTests(api):
     props(builder='Linux Builder',
           parent_buildername=None) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -499,7 +483,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -509,9 +493,8 @@ def GenTests(api):
     props(builder='Linux Builder',
           parent_buildername=None) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -525,7 +508,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -535,9 +518,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -547,7 +529,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -560,9 +542,8 @@ def GenTests(api):
               'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -575,7 +556,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests',
@@ -593,9 +574,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -608,7 +588,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests',
@@ -626,9 +606,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -641,7 +620,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data('telemetry_gpu_unittests',
         api.json.output({'version': 2}),
@@ -654,9 +633,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -669,7 +647,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests',
@@ -686,9 +664,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -701,7 +678,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data(
       'telemetry_gpu_unittests',
@@ -719,9 +696,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -734,7 +710,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data(
       'telemetry_gpu_unittests',
@@ -753,9 +729,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -768,7 +743,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data(
       'telemetry_gpu_unittests',
@@ -787,9 +762,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -802,7 +776,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests',
@@ -822,9 +796,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -837,7 +810,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data(
       'telemetry_gpu_unittests',
@@ -859,9 +832,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -874,7 +846,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data(
       'telemetry_gpu_unittests',
@@ -892,9 +864,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -912,7 +883,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -925,9 +896,8 @@ def GenTests(api):
               'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('mac', 64) +
-    api.override_step_data(
-        'read test spec (chromium.mac.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.mac', {
             'Mac10.13 Tests': {
                 'isolated_scripts': [
                     {
@@ -950,7 +920,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -963,9 +933,8 @@ def GenTests(api):
               'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('win', 64) +
-    api.override_step_data(
-        'read test spec (chromium.win.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.win', {
             'Win7 Tests (1)': {
                 'isolated_scripts': [
                     {
@@ -992,7 +961,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -1005,9 +974,8 @@ def GenTests(api):
               'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('win', 64) +
-    api.override_step_data(
-        'read test spec (chromium.win.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.win', {
             'Win7 Tests (1)': {
                 'isolated_scripts': [
                     {
@@ -1024,7 +992,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -1034,9 +1002,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -1046,7 +1013,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests',
@@ -1063,9 +1030,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -1075,7 +1041,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests',
@@ -1093,9 +1059,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -1105,7 +1070,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests',
@@ -1124,9 +1089,8 @@ def GenTests(api):
         'telemetry_gpu_unittests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -1136,7 +1100,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests',
@@ -1149,9 +1113,8 @@ def GenTests(api):
     api.test('dynamic_instrumentation_test') +
     props(mastername='chromium.android',
           builder='android-kitkat-arm-rel') +
-    api.override_step_data(
-        'read test spec (chromium.android.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.android', {
             'android-kitkat-arm-rel': {
                 'instrumentation_tests': [
                     {
@@ -1165,7 +1128,7 @@ def GenTests(api):
                     }
                 ],
             },
-        })
+        }
     )
   )
 
@@ -1173,9 +1136,8 @@ def GenTests(api):
     api.test('dynamic_instrumentation_test_custom_name') +
     props(mastername='chromium.android',
           builder='android-kitkat-arm-rel') +
-    api.override_step_data(
-        'read test spec (chromium.android.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.android', {
             'android-kitkat-arm-rel': {
                 'instrumentation_tests': [
                     {
@@ -1190,7 +1152,7 @@ def GenTests(api):
                     }
                 ],
             },
-        })
+        }
     ) +
     api.post_process(post_process.MustRun, 'custom_test_name') +
     api.post_process(post_process.DoesNotRun, 'default_test_name')
@@ -1200,9 +1162,8 @@ def GenTests(api):
     api.test('dynamic_instrumentation_nodefault_build') +
     props(mastername='chromium.android',
           builder='android-kitkat-arm-rel') +
-    api.override_step_data(
-        'read test spec (chromium.android.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.android', {
             'android-kitkat-arm-rel': {
                 'instrumentation_tests': [
                     {
@@ -1210,7 +1171,7 @@ def GenTests(api):
                     }
                 ],
             },
-        })
+        }
     )
   )
 
@@ -1218,9 +1179,8 @@ def GenTests(api):
     api.test('dynamic_instrumentation_nodefault_test') +
     props(mastername='chromium.android',
           builder='android-kitkat-arm-rel') +
-    api.override_step_data(
-        'read test spec (chromium.android.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.android', {
             'android-kitkat-arm-rel': {
                 'instrumentation_tests': [
                     {
@@ -1228,7 +1188,7 @@ def GenTests(api):
                     }
                 ],
             },
-        })
+        }
     )
   )
 
@@ -1236,9 +1196,8 @@ def GenTests(api):
     api.test('dynamic_junit_test') +
     props(mastername='chromium.android',
           builder='android-kitkat-arm-rel') +
-    api.override_step_data(
-        'read test spec (chromium.android.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.android', {
             'android-kitkat-arm-rel': {
                 'junit_tests': [
                     {
@@ -1246,7 +1205,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -1255,9 +1214,8 @@ def GenTests(api):
     props(builder='Linux Builder',
           parent_buildername=None) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'gtest_tests': [
                     'base_unittests',
@@ -1268,7 +1226,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -1278,9 +1236,8 @@ def GenTests(api):
           builder='Win7 Tests (1)',
           parent_buildername='Win Builder') +
     api.platform('win', 64) +
-    api.override_step_data(
-        'read test spec (chromium.win.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.win', {
             'Win7 Tests (1)': {
                 'gtest_tests': [
                     'aura_unittests',
@@ -1291,7 +1248,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -1300,9 +1257,8 @@ def GenTests(api):
     props(mastername='chromium.android',
           builder='Lollipop Phone Tester',
           parent_buildername='Android arm Builder (dbg)') +
-    api.override_step_data(
-        'read test spec (chromium.android.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.android', {
             'Lollipop Phone Tester': {
                 'gtest_tests': [
                     {
@@ -1310,7 +1266,7 @@ def GenTests(api):
                     }
                 ],
             },
-        }))
+        })
   )
 
   yield (
@@ -1318,9 +1274,8 @@ def GenTests(api):
     props(mastername='chromium.fyi',
           builder='Fuchsia') +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.fyi.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.fyi', {
             'Fuchsia': {
                 'gtest_tests': [
                     {
@@ -1328,7 +1283,7 @@ def GenTests(api):
                     }
                 ],
             },
-        }))
+        })
   )
 
   # Tests switching on asan and swiching off lsan for sandbox tester.
@@ -1338,15 +1293,14 @@ def GenTests(api):
           builder='Linux ASan Tests (sandboxed)',
           parent_buildername='Linux ASan LSan Builder') +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.memory.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.memory', {
             'Linux ASan Tests (sandboxed)': {
                 'gtest_tests': [
                     'browser_tests',
                 ],
             },
-        })
+        }
     )
   )
 
@@ -1360,15 +1314,14 @@ def GenTests(api):
     api.platform('linux', 64) +
     # The builder should build 'browser_tests', because there exists a child
     # tester that uses that test.
-    api.override_step_data(
-        'read test spec (chromium.memory.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.memory', {
             'Linux ASan Tests (sandboxed)': {
                 'gtest_tests': [
                     'browser_tests',
                 ],
             },
-        })
+        }
     )
   )
 
@@ -1379,15 +1332,14 @@ def GenTests(api):
           builder='Mac ASan 64 Tests (1)',
           parent_buildername='Mac ASan 64 Builder') +
     api.platform('mac', 64) +
-    api.override_step_data(
-        'read test spec (chromium.memory.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.memory', {
             'Mac ASan 64 Tests (1)': {
                 'gtest_tests': [
                     'browser_tests',
                 ],
             },
-        })
+        }
     )
   )
 
@@ -1397,14 +1349,13 @@ def GenTests(api):
           builder='Linux TSan Tests',
           parent_buildername='Linux TSan Builder') +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.memory.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.memory', {
             'Linux TSan Tests': {
                 'compile_targets': ['base_unittests'],
                 'gtest_tests': ['base_unittests'],
             },
-        })
+        }
     )
   )
 
@@ -1414,14 +1365,13 @@ def GenTests(api):
           builder='Linux MSan Tests',
           parent_buildername='Linux MSan Builder') +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.memory.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.memory', {
             'Linux MSan Tests': {
                 'compile_targets': ['base_unittests'],
                 'gtest_tests': ['base_unittests'],
             },
-        })
+        }
     )
   )
 
@@ -1429,9 +1379,8 @@ def GenTests(api):
     api.test('buildnumber_zero') +
     props(buildnumber=0) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'gtest_tests': [
                     'base_unittests',
@@ -1442,7 +1391,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -1450,9 +1399,8 @@ def GenTests(api):
     api.test('one_failure_keeps_going_dynamic_tests') +
     props() +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'gtest_tests': [
                     'base_unittests',
@@ -1463,7 +1411,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.override_step_data('base_unittests', retcode=1)
   )
@@ -1472,9 +1420,8 @@ def GenTests(api):
     api.test('dynamic_script_test_with_args') +
     props() +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'scripts': [
                     {
@@ -1484,7 +1431,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -1492,9 +1439,8 @@ def GenTests(api):
     api.test('dynamic_script_test_failure') +
     props() +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'scripts': [
                     {
@@ -1503,7 +1449,7 @@ def GenTests(api):
                     }
                 ]
             }
-        })
+        }
     ) +
     api.override_step_data('test_script_with_broken_tests',
                            api.json.output({
@@ -1540,6 +1486,7 @@ def GenTests(api):
     api.override_step_data('ensure_goma.ensure_installed', retcode=1)
   )
 
+
   json_results = {
     'interrupted': False,
     'version': 3,
@@ -1550,15 +1497,15 @@ def GenTests(api):
     'links': {'custom_link': 'http://example.com'}
   }
 
+
   yield (
     api.test('gtest_custom_merge_script') +
     props(swarm_hashes={
         'browser_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'gtest_tests': [
                     {
@@ -1570,7 +1517,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.post_process(post_process.Filter('browser_tests'))
   )
@@ -1581,9 +1528,8 @@ def GenTests(api):
         'browser_tests': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'gtest_tests': [
                     {
@@ -1596,7 +1542,6 @@ def GenTests(api):
                 ],
             },
         })
-    )
   )
 
   yield (
@@ -1606,9 +1551,8 @@ def GenTests(api):
     }) +
     api.platform('linux', 64) +
     api.step_data('fake_test', api.json.output(json_results)) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -1623,7 +1567,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.post_process(post_process.Filter('fake_test'))
   )
@@ -1634,9 +1578,8 @@ def GenTests(api):
         'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -1651,7 +1594,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )
 
@@ -1662,9 +1605,8 @@ def GenTests(api):
     }) +
     api.platform('linux', 64) +
     api.step_data('fake_test', api.json.output(json_results)) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -1682,7 +1624,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.post_process(post_process.Filter('fake_test'))
   )
@@ -1694,9 +1636,8 @@ def GenTests(api):
     }) +
     api.platform('linux', 64) +
     api.step_data('fake_test', api.json.output(json_results)) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -1709,7 +1650,7 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     ) +
     api.post_process(post_process.Filter('fake_test'))
   )
@@ -1720,9 +1661,8 @@ def GenTests(api):
         'fake_test': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     }) +
     api.platform('linux', 64) +
-    api.override_step_data(
-        'read test spec (chromium.linux.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
@@ -1732,6 +1672,6 @@ def GenTests(api):
                     },
                 ],
             },
-        })
+        }
     )
   )

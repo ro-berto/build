@@ -367,9 +367,8 @@ def GenTests(api):
       api.test('nonexistent_test_step_skipped') +
       props({'newly_added_tests': ['Test.One', 'Test.Two', 'Test.Three']},
             'win', 'Win7 Tests (1)') +
-      api.override_step_data(
-          'test r1.read test spec (chromium.win.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.win', {
               'Win7 Tests (1)': {
                   'gtest_tests': [
                       {
@@ -378,17 +377,15 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      )
+          }, step_prefix='test r1.')
   )
 
   yield (
       api.test('unaffected_test_skipped_by_analyze') +
       props({'affected_tests': ['Test.One'], 'unaffected_tests': ['Test.Two']},
             'win', 'Win7 Tests (1)', use_analyze=True) +
-      api.override_step_data(
-          'test r1.read test spec (chromium.win.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.win', {
               'Win7 Tests (1)': {
                   'gtest_tests': [
                       {
@@ -401,8 +398,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r1.') +
       api.override_step_data(
           'test r1.analyze',
           api.json.output({
@@ -422,9 +418,8 @@ def GenTests(api):
       api.test('test_without_targets_not_skipped') +
       props({'unaffected_tests': ['Test.One'], 'checkperms': []},
             'win', 'Win7 Tests (1)', use_analyze=True) +
-      api.override_step_data(
-          'test r1.read test spec (chromium.win.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.win', {
               'Win7 Tests (1)': {
                   'gtest_tests': [
                       {
@@ -439,8 +434,7 @@ def GenTests(api):
                       },
                   ]
               },
-          })
-      ) +
+          }, step_prefix='test r1.') +
       api.override_step_data(
           'test r1.analyze',
           api.json.output({
@@ -455,9 +449,8 @@ def GenTests(api):
       api.test('all_test_failed') +
       props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
             'win', 'Win7 Tests (1)', test_on_good_revision=False) +
-      api.override_step_data(
-          'test r1.read test spec (chromium.win.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.win', {
               'Win7 Tests (1)': {
                   'gtest_tests': [
                       {
@@ -466,8 +459,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r1.') +
       api.override_step_data(
           'test r1.gl_tests (r1)',
           api.swarming.canned_summary_output(failure=True) +
@@ -480,9 +472,8 @@ def GenTests(api):
       api.test('all_test_passed') +
       props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
             'win', 'Win7 Tests (1)') +
-      api.override_step_data(
-          'test r1.read test spec (chromium.win.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.win', {
               'Win7 Tests (1)': {
                   'gtest_tests': [
                       {
@@ -491,8 +482,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r1.') +
       api.override_step_data(
           'test r1.gl_tests (r1)',
           api.swarming.canned_summary_output() +
@@ -505,9 +495,8 @@ def GenTests(api):
       api.test('only_one_test_passed') +
       props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
             'win', 'Win7 Tests (1)') +
-      api.override_step_data(
-        'test r0.read test spec (chromium.win.json)',
-        api.json.output({
+      api.chromium_tests.read_source_side_spec(
+        'chromium.win', {
           'Win7 Tests (1)': {
             'gtest_tests': [
               {
@@ -516,17 +505,15 @@ def GenTests(api):
               },
             ],
           },
-        })
-      ) +
+        }, step_prefix='test r0.') +
       api.override_step_data(
         'test r0.gl_tests (r0)',
         api.swarming.canned_summary_output(failure=True) +
         api.test_utils.simulated_gtest_output(
           passed_test_names=['Test.One', 'Test.Two'])
       ) +
-      api.override_step_data(
-          'test r1.read test spec (chromium.win.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.win', {
               'Win7 Tests (1)': {
                   'gtest_tests': [
                       {
@@ -535,8 +522,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r1.') +
       api.override_step_data(
           'test r1.gl_tests (r1)',
           api.swarming.canned_summary_output(failure=True) +
@@ -549,9 +535,8 @@ def GenTests(api):
   yield (
       api.test('compile_skipped') +
       props({'checkperms': []}, 'win', 'Win7 Tests (1)') +
-      api.override_step_data(
-          'test r1.read test spec (chromium.win.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.win', {
               'Win7 Tests (1)': {
                   'scripts': [
                       {
@@ -560,17 +545,15 @@ def GenTests(api):
                       },
                   ]
               },
-          })
-      )
+          }, step_prefix='test r1.')
   )
 
   yield (
       api.test('none_swarming_tests') +
       props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
             'win', 'Win7 Tests (1)', test_on_good_revision=False) +
-      api.override_step_data(
-          'test r1.read test spec (chromium.win.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.win', {
               'Win7 Tests (1)': {
                   'gtest_tests': [
                       {
@@ -579,8 +562,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r1.') +
       api.override_step_data(
           'test r1.gl_tests (r1)',
           api.swarming.canned_summary_output(failure=True) +
@@ -593,9 +575,8 @@ def GenTests(api):
   yield (
       api.test('swarming_tests') +
       props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
-      api.override_step_data(
-          'test r1.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -604,8 +585,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r1.') +
       api.override_step_data(
           'test r1.gl_tests (r1)',
           api.swarming.canned_summary_output() +
@@ -618,9 +598,8 @@ def GenTests(api):
       props(
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6', suspected_revisions=['r3']) +
-      api.override_step_data(
-          'test r2.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -629,11 +608,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r3.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r2.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -642,8 +619,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r3.') +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -665,9 +641,8 @@ def GenTests(api):
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r3', 'r6']) +
-      api.override_step_data(
-          'test r2.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -676,11 +651,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r3.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r2.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -689,11 +662,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r5.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r3.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -702,11 +673,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r6.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r5.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -715,8 +684,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r6.') +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -748,9 +716,8 @@ def GenTests(api):
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r6'], test_on_good_revision=False) +
-      api.override_step_data(
-          'test r1.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -759,11 +726,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r5.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r1.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -772,11 +737,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r6.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r5.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -785,8 +748,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r6.') +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -814,9 +776,8 @@ def GenTests(api):
           'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r3', 'r6']) +
-      api.override_step_data(
-          'test r2.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -829,11 +790,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r3.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r2.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -846,11 +805,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r5.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r3.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -863,11 +820,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r6.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r5.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -880,8 +835,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r6.') +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -920,9 +874,8 @@ def GenTests(api):
           'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r3', 'r5']) +
-      api.override_step_data(
-          'test r2.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -931,11 +884,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r3.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r2.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -944,11 +895,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r4.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r3.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -957,10 +906,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r5.read test spec (chromium.mac.json)', api.json.output({
+          }, step_prefix='test r4.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -969,11 +917,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r6.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r5.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -982,8 +928,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r6.') +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -1023,9 +968,8 @@ def GenTests(api):
           'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r3', 'r4']) +
-      api.override_step_data(
-          'test r2.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -1034,11 +978,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r3.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r2.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -1047,11 +989,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r4.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r3.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -1060,8 +1000,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r4.') +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -1085,9 +1024,8 @@ def GenTests(api):
   yield (
       api.test('record_infra_failure') +
       props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
-      api.override_step_data(
-          'test r1.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -1096,8 +1034,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r1.') +
       api.override_step_data(
           'test r1.preprocess_for_goma.start_goma', retcode=1) +
       api.step_data(
@@ -1126,9 +1063,8 @@ def GenTests(api):
                   'gl_tests': ['Test.One']
               }
           }}) +
-      api.override_step_data(
-          'test r2.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -1137,11 +1073,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r3.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r2.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -1150,11 +1084,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r4.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r3.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -1163,8 +1095,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r4.') +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -1197,9 +1128,8 @@ def GenTests(api):
                   'gl_tests': ['Test.One']
               }
           }}) +
-      api.override_step_data(
-          'test r2.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -1208,11 +1138,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r3.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r2.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -1221,11 +1149,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r4.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r3.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -1234,8 +1160,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r4.') +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -1261,9 +1186,8 @@ def GenTests(api):
       props(
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', use_analyze=True,
            good_revision='r0', bad_revision='r6', suspected_revisions=['r3']) +
-      api.override_step_data(
-          'test r2.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -1272,11 +1196,9 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
-      api.override_step_data(
-          'test r3.read test spec (chromium.mac.json)',
-          api.json.output({
+          }, step_prefix='test r2.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -1285,8 +1207,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r3.') +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -1306,9 +1227,8 @@ def GenTests(api):
       api.test('flaky_tests') +
       props({'gl_tests': ['Test.One', 'Test.Two', 'Test.Three']},
             'win', 'Win7 Tests (1)') +
-      api.override_step_data(
-        'test r0.read test spec (chromium.win.json)',
-        api.json.output({
+      api.chromium_tests.read_source_side_spec(
+        'chromium.win', {
           'Win7 Tests (1)': {
             'gtest_tests': [
               {
@@ -1317,8 +1237,7 @@ def GenTests(api):
               },
             ],
           },
-        })
-      ) +
+        }, step_prefix='test r0.') +
       api.override_step_data(
         'test r0.gl_tests (r0)',
         api.swarming.canned_summary_output(failure=True) +
@@ -1326,9 +1245,8 @@ def GenTests(api):
               failed_test_names=['Test.One'],
               passed_test_names=['Test.Two'])
       ) +
-      api.override_step_data(
-          'test r1.read test spec (chromium.win.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.win', {
               'Win7 Tests (1)': {
                   'gtest_tests': [
                       {
@@ -1337,8 +1255,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r1.') +
       api.override_step_data(
           'test r1.gl_tests (r1)',
           api.swarming.canned_summary_output(failure=True) +
@@ -1353,9 +1270,8 @@ def GenTests(api):
           {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='1234567890abcdefg', bad_revision='gfedcba0987654321',
            test_on_good_revision=False) +
-      api.override_step_data(
-          'test gfedcba.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -1364,8 +1280,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test gfedcba.') +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output('gfedcba0987654321')) +
@@ -1383,9 +1298,8 @@ def GenTests(api):
           'mac', 'Mac10.13 Tests', use_analyze=False,
            good_revision='r0', bad_revision='r6',
            suspected_revisions=['r4']) +
-      api.override_step_data(
-        'test r3.read test spec (chromium.mac.json)',
-        api.json.output({
+      api.chromium_tests.read_source_side_spec(
+        'chromium.mac', {
           'Mac10.13 Tests': {
             'gtest_tests': [
               {
@@ -1394,11 +1308,9 @@ def GenTests(api):
               },
             ],
           },
-        })
-      ) +
-      api.override_step_data(
-          'test r4.read test spec (chromium.mac.json)',
-          api.json.output({
+        }, step_prefix='test r3.') +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -1407,8 +1319,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r4.') +
       api.override_step_data(
           'git commits in range',
           api.raw_io.stream_output(
@@ -1431,9 +1342,8 @@ def GenTests(api):
       props({'webkit_layout_tests': [
                 'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js']},
             'mac', 'Mac10.13 Tests') +
-      api.override_step_data(
-          'test r0.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'isolated_scripts': [
                     {
@@ -1446,8 +1356,7 @@ def GenTests(api):
                     },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r0.') +
       api.override_step_data(
         'test r0.webkit_layout_tests (r0)',
         api.swarming.canned_summary_output(failure=True) +
@@ -1456,9 +1365,8 @@ def GenTests(api):
               passed_test_names=['fast/Test/Two.html']),
               path_delimiter='/'
       ) +
-      api.override_step_data(
-          'test r1.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'isolated_scripts': [
                     {
@@ -1471,8 +1379,7 @@ def GenTests(api):
                     },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r1.') +
       api.override_step_data(
           'test r1.webkit_layout_tests (r1)',
           api.swarming.canned_summary_output(failure=True) +
@@ -1485,9 +1392,8 @@ def GenTests(api):
   yield (
       api.test('builder_as_tester') +
       props({'services_unittests': ['Test.One']}, 'linux', 'linux-ozone-rel') +
-      api.override_step_data(
-          'test r1.read test spec (chromium.linux.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.linux', {
               'linux-ozone-rel': {
                   'gtest_tests': [
                       {
@@ -1496,8 +1402,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r1.') +
       api.override_step_data(
           'test r1.services_unittests (r1)',
           api.swarming.canned_summary_output() +
@@ -1508,9 +1413,8 @@ def GenTests(api):
   yield (
       api.test('gtest_task_failed') +
       props({'services_unittests': ['Test.One']}, 'linux', 'linux-ozone-rel') +
-      api.override_step_data(
-          'test r1.read test spec (chromium.linux.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.linux', {
               'linux-ozone-rel': {
                   'gtest_tests': [
                       {
@@ -1519,8 +1423,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r1.') +
       api.override_step_data(
           'test r1.services_unittests (r1)',
           api.swarming.canned_summary_output() +
@@ -1543,9 +1446,8 @@ def GenTests(api):
       props({'webkit_layout_tests': [
                 'fast/Test/One.html', 'fast/Test/Two.html', 'dummy/Three.js']},
             'mac', 'Mac10.13 Tests') +
-      api.override_step_data(
-          'test r1.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'isolated_scripts': [
                     {
@@ -1558,8 +1460,7 @@ def GenTests(api):
                     },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r1.') +
       api.override_step_data(
           'test r1.webkit_layout_tests (r1)',
           api.swarming.canned_summary_output(failure=True) +

@@ -33,9 +33,8 @@ def GenTests(api):
     api.test('basic') +
     api.properties.generic(mastername='tryserver.chromium.perf',
                            buildername='Android Compile Perf') +
-    api.override_step_data(
-        'read test spec (chromium.perf.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.perf', {
             'Android One Perf': {
                 'isolated_scripts': [
                     {
@@ -45,5 +44,4 @@ def GenTests(api):
                 ],
             },
         })
-    )
   )

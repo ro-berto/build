@@ -120,9 +120,8 @@ def GenTests(api):
         bot_id='TestSlave',
         buildnumber=123,
         path_config='kitchen') +
-        api.override_step_data(
-            'read test spec (chromium.swarm.json)',
-             api.json.output({
+        api.chromium_tests.read_source_side_spec(
+            'chromium.swarm', {
                'ChromeOS Swarm': {
                  'gtest_tests': [
                      {
@@ -140,8 +139,7 @@ def GenTests(api):
                      },
                   ],
                },
-            })
-        ) +
+            }) +
         api.override_step_data(
             'find isolated tests',
             api.json.output({
@@ -160,9 +158,8 @@ def GenTests(api):
         bot_id='TestSlave',
         buildnumber=123,
         path_config='kitchen') +
-    api.override_step_data(
-        'read test spec (chromium.swarm.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.swarm', {
             'Linux Swarm': {
                 'gtest_tests': [
                     {
@@ -174,9 +171,7 @@ def GenTests(api):
                     },
                 ],
             },
-        }
-      )
-    ) +
+        }) +
     api.override_step_data(
         'find isolated tests',
         api.json.output({
@@ -202,9 +197,8 @@ def GenTests(api):
         buildnumber=123,
         path_config='kitchen') +
     api.platform('win', 64) +
-    api.override_step_data(
-        'read test spec (chromium.swarm.json)',
-        api.json.output({
+    api.chromium_tests.read_source_side_spec(
+        'chromium.swarm', {
             'Windows Swarm': {
                 'gtest_tests': [
                     {
@@ -216,9 +210,7 @@ def GenTests(api):
                     },
                 ],
             },
-        }
-      )
-    ) +
+        }) +
     api.override_step_data(
         'find isolated tests',
         api.json.output({

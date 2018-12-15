@@ -143,9 +143,8 @@ def GenTests(api):
   yield (
       api.test('flakiness_isolate_only') +
       props({'browser_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', skip_tests=True) +
-      api.override_step_data(
-          'test r0.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -156,15 +155,13 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      )
+          }, step_prefix='test r0.')
   )
   yield (
       api.test('flakiness_swarming_tests') +
       props({'browser_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
-      api.override_step_data(
-          'test r0.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -175,8 +172,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r0.') +
       api.override_step_data(
           'test r0.browser_tests (r0)',
           api.swarming.canned_summary_output() +
@@ -186,9 +182,8 @@ def GenTests(api):
   yield (
       api.test('flakiness_non-swarming_tests') +
       props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
-      api.override_step_data(
-          'test r0.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -197,8 +192,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r0.') +
       api.override_step_data(
           'test r0.gl_tests (r0)',
           api.swarming.canned_summary_output() +
@@ -217,9 +211,8 @@ def GenTests(api):
                   'gl_tests': ['Test.One']
               }
           }}) +
-      api.override_step_data(
-          'test r0.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -228,8 +221,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r0.') +
       api.override_step_data(
           'test r0.gl_tests (r0)',
           api.swarming.canned_summary_output() +
@@ -239,9 +231,8 @@ def GenTests(api):
   yield (
       api.test('record_infra_failure') +
       props({'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests') +
-      api.override_step_data(
-          'test r0.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'gtest_tests': [
                       {
@@ -250,8 +241,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r0.') +
       api.override_step_data(
           'test r0.preprocess_for_goma.start_goma', retcode=1) +
       api.step_data(
@@ -271,9 +261,8 @@ def GenTests(api):
       api.test('flakiness_webkit_layout_tests') +
       props({'webkit_layout_tests': ['fast/dummy/test.html']},
             'mac', 'Mac10.13 Tests') +
-      api.override_step_data(
-          'test r0.read test spec (chromium.mac.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.mac', {
               'Mac10.13 Tests': {
                   'isolated_scripts': [
                     {
@@ -286,8 +275,7 @@ def GenTests(api):
                     },
                   ],
               },
-          })
-      ) +
+          }, step_prefix='test r0.') +
       api.override_step_data(
           'test r0.webkit_layout_tests (r0)',
           api.swarming.canned_summary_output() +

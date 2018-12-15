@@ -401,15 +401,14 @@ def GenTests(api):
         stdout=api.raw_io.output_text(json.dumps(buildbucket_output)))
 
   def base_unittests_additional_compile_target():
-    return api.override_step_data(
-        'test r1.read test spec (chromium.linux.json)',
-        api.json.output({
+    return api.chromium_tests.read_source_side_spec(
+        'chromium.linux', {
             'Linux Builder': {
                 'additional_compile_targets': [
                     'base_unittests',
                 ],
             }
-        }))
+        }, step_prefix='test r1.')
 
   yield (
       api.test('compile_specified_targets') +
@@ -454,14 +453,14 @@ def GenTests(api):
           'additional_build_parameters': {
               'compile_targets': None
       }}) +
-      api.override_step_data('test r1.read test spec (chromium.linux.json)',
-                             api.json.output({
-                                 'Linux Builder': {
-                                     'additional_compile_targets': [
-                                         'base_unittests',
-                                     ],
-                                 }
-                             }))
+      api.chromium_tests.read_source_side_spec(
+          'chromium.linux', {
+              'Linux Builder': {
+                  'additional_compile_targets': [
+                      'base_unittests',
+                  ],
+              }
+         }, step_prefix='test r1.')
   )
 
   yield (
@@ -691,15 +690,15 @@ def GenTests(api):
         'git commits in range',
         api.raw_io.stream_output(
           '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
-      api.override_step_data('test r2.read test spec (chromium.linux.json)',
-                             api.json.output({
-                                 'Linux Builder': {
-                                     'additional_compile_targets': [
-                                         'a', 'a_run',
-                                         'b', 'b_run',
-                                     ],
-                                 }
-                             })) +
+      api.chromium_tests.read_source_side_spec(
+          'chromium.linux', {
+               'Linux Builder': {
+                   'additional_compile_targets': [
+                       'a', 'a_run',
+                       'b', 'b_run',
+                   ],
+               }
+           }, step_prefix='test r2.') +
       api.override_step_data(
           'test r2.analyze',
           api.json.output({

@@ -242,13 +242,12 @@ def GenTests(api):
           mastername='chromium.linux',
           buildername='Linux Tests',
           parent_buildername='Linux Builder') +
-      api.override_step_data(
-          'read test spec (chromium.linux.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.linux',{
               'Linux Tests': {
                   'gtest_tests': ['base_unittests'],
               },
-          })
+          }
       )
   )
 
@@ -284,9 +283,8 @@ def GenTests(api):
           custom_builders=True,
           mastername='chromium.example') +
       api.runtime(is_luci=True, is_experimental=False) +
-      api.override_step_data(
-          'read test spec (chromium.example.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.example', {
               'Isolated Transfer Tester': {
                   'gtest_tests': [
                       {
@@ -298,7 +296,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
+          }
       ) +
       api.post_process(post_process.DoesNotRun, 'package build') +
       api.post_process(
@@ -321,9 +319,8 @@ def GenTests(api):
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
       api.runtime(is_luci=True, is_experimental=False) +
-      api.override_step_data(
-          'read test spec (chromium.example.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.example', {
               'Isolated Transfer Tester': {
                   'gtest_tests': [
                       {
@@ -335,7 +332,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
+          }
       ) +
       api.override_step_data(
           'find isolated tests',
@@ -355,9 +352,8 @@ def GenTests(api):
           custom_builders=True,
           mastername='chromium.example') +
       api.runtime(is_luci=True, is_experimental=False) +
-      api.override_step_data(
-          'read test spec (chromium.example.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.example', {
               'Isolated Transfer: mixed builder, isolated tester (builder)': {
                   'scripts': [
                       {
@@ -377,7 +373,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
+          }
       ) +
       api.post_process(post_process.DoesNotRun, 'package build') +
       api.post_process(
@@ -406,9 +402,8 @@ def GenTests(api):
           custom_builders=True,
           mastername='chromium.example') +
       api.runtime(is_luci=False, is_experimental=False) +
-      api.override_step_data(
-          'read test spec (chromium.example.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.example', {
               'Isolated Transfer Tester': {
                   'gtest_tests': [
                       {
@@ -420,7 +415,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
+          }
       ) +
       api.post_process(post_process.MustRun, 'package build') +
       api.post_process(
@@ -443,9 +438,8 @@ def GenTests(api):
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
       api.runtime(is_luci=False, is_experimental=False) +
-      api.override_step_data(
-          'read test spec (chromium.example.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.example', {
               'Isolated Transfer Tester': {
                   'gtest_tests': [
                       {
@@ -457,7 +451,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
+          }
       ) +
       api.override_step_data(
           'find isolated tests',
@@ -475,9 +469,8 @@ def GenTests(api):
           buildnumber=123,
           custom_builders=True,
           mastername='chromium.example') +
-      api.override_step_data(
-          'read test spec (chromium.example.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.example', {
               'Packaged Transfer Tester': {
                   'gtest_tests': [
                       {
@@ -489,7 +482,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
+          }
       ) +
       api.post_process(post_process.MustRun, 'package build') +
       api.post_process(post_process.DropExpectation)
@@ -503,9 +496,8 @@ def GenTests(api):
           buildnumber=123,
           custom_builders=True,
           mastername='chromium.example') +
-      api.override_step_data(
-          'read test spec (chromium.example.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.example', {
               'Packaged Transfer Tester': {
                   'gtest_tests': [
                       {
@@ -517,7 +509,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
+          }
       ) +
       api.post_process(post_process.MustRun, 'package build') +
       api.post_process(post_process.DropExpectation)
@@ -535,9 +527,8 @@ def GenTests(api):
           swarm_hashes={
               'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
-      api.override_step_data(
-          'read test spec (chromium.example.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.example', {
               'Packaged Transfer Tester': {
                   'gtest_tests': [
                       {
@@ -549,7 +540,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
+          }
       ) +
       api.post_process(post_process.MustRun, 'extract build') +
       api.post_process(post_process.DropExpectation)
@@ -564,9 +555,8 @@ def GenTests(api):
           custom_builders=True,
           mastername='chromium.example') +
       api.runtime(is_luci=True, is_experimental=False) +
-      api.override_step_data(
-          'read test spec (chromium.example.json)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.example', {
               'Multiple Triggers: Mixed': {
                   'gtest_tests': [
                       {
@@ -594,7 +584,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
+          }
       ) +
       api.post_process(post_process.MustRun, 'package build') +
       api.post_process(

@@ -214,9 +214,8 @@ def GenTests(api):
   yield (
       api.test('no_matching_isolated_target') +
       props(['browser_tests'], 'findit_builder_tester') +
-      api.override_step_data(
-          'read test spec (chromium.findit.json) (2)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.findit', {
               'findit_tester': {
                   'gtest_tests': [
                       {
@@ -227,17 +226,15 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_suffix=' (2)') +
       api.post_process(verify_report, None) +
       api.post_process(post_process.DropExpectation)
   )
   yield (
       api.test('match_exactly_one_test_target') +
       props(['browser_tests'], 'findit_tester') +
-      api.override_step_data(
-          'read test spec (chromium.findit.json) (2)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.findit', {
               'findit_tester': {
                   'gtest_tests': [
                       {
@@ -248,8 +245,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_suffix=' (2)') +
       api.post_process(verify_report,
                        {'browser_tests': '[dummy hash for browser_tests]'}) +
       api.post_process(post_process.DropExpectation)
@@ -257,9 +253,8 @@ def GenTests(api):
   yield (
       api.test('match_more_than_one_test_target') +
       props(['browser_tests'], 'findit_tester') +
-      api.override_step_data(
-          'read test spec (chromium.findit.json) (2)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.findit', {
               'findit_tester': {
                   'gtest_tests': [
                       {
@@ -284,8 +279,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_suffix=' (2)') +
       api.post_process(verify_report,
                        {'browser_tests': '[dummy hash for browser_tests]'}) +
       api.post_process(post_process.DropExpectation)
@@ -293,9 +287,8 @@ def GenTests(api):
   yield (
       api.test('failed_to_compile') +
       props(['browser_tests'], 'findit_tester') +
-      api.override_step_data(
-          'read test spec (chromium.findit.json) (2)',
-          api.json.output({
+      api.chromium_tests.read_source_side_spec(
+          'chromium.findit', {
               'findit_tester': {
                   'gtest_tests': [
                       {
@@ -306,8 +299,7 @@ def GenTests(api):
                       },
                   ],
               },
-          })
-      ) +
+          }, step_suffix=' (2)') +
       api.override_step_data(
           'preprocess_for_goma.start_goma', retcode=1) +
       api.step_data(
