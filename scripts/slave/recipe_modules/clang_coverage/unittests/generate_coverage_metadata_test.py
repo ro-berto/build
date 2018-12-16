@@ -18,63 +18,79 @@ import generate_coverage_metadata as generator
 
 class GenerateCoverageMetadataTest(unittest.TestCase):
 
-  def test_extract_coverage_info_odd_segments(self):
+  # This test uses the following code:
+  # 1|      1|int main() {
+  # 2|      1|  if ((2 > 1) || (3 > 2)) {
+  # 3|      1|    return 0;
+  # 4|      1|  }
+  # 5|      0|
+  # 6|      0|  return 1;
+  # 7|      0|}
+  #
+  # Where the first column is the line number and the second column is the
+  # expected number of times the line is executed.
+  def test_parse_exported_coverage_json(self):
     segments = [
-        [1, 2, 3, True, True],
-        [3, 10, 0, False, False],
-        [4, 5, 0, False, False],
-        [5, 2, 2, True, True],
-        [6, 10, 0, False, False],
+        [1, 12, 1, True, True],
+        [2, 7, 1, True, True],
+        [2, 14, 1, True, False],
+        [2, 18, 0, True, True],
+        [2, 25, 1, True, False],
+        [2, 27, 1, True, True],
+        [4, 4, 0, True, False],
+        [6, 3, 0, True, True],
+        [7, 2, 0, False, False],
     ]
-    expected_line_data = dict([(1, 3), (2, 3), (3, 3), (5, 2), (6, 2)])
+
+    expected_line_data = dict([(1, 1), (2, 1), (3, 1), (4, 1), (5, 0), (6, 0),
+                               (7, 0)])
+    expected_block_data = {2: [[18, 24]]}
+    line_data, block_data = generator._extract_coverage_info(segments)
+    self.assertDictEqual(expected_line_data, line_data)
+    self.assertDictEqual(expected_block_data, block_data)
+
+  # This test uses the following code:
+  # 1|      1|int main() { return 0; }
+  #
+  # Where the first column is the line number and the second column is the
+  # expected number of times the line is executed.
+  def test_parse_exported_coverage_json_one_line(self):
+    segments = [[1, 12, 1, True, True], [1, 25, 0, False, False]]
+
+    expected_line_data = dict([(1, 1)])
     expected_block_data = {}
     line_data, block_data = generator._extract_coverage_info(segments)
     self.assertDictEqual(expected_line_data, line_data)
     self.assertDictEqual(expected_block_data, block_data)
 
-  def test_extract_coverage_info_even_segments(self):
-    segments = [
-        [1, 2, 3, True, True],
-        [3, 10, 0, False, False],
-        [5, 2, 0, True, True],
-        [5, 10, 0, False, False],
-    ]
-    expected_line_data = dict([(1, 3), (2, 3), (3, 3), (5, 0)])
-    uncovered_blocks_line_5 = [[2, 10]]
-    line_data, block_data = generator._extract_coverage_info(segments)
-    self.assertDictEqual(expected_line_data, line_data)
-    self.assertEqual(1, len(block_data))
-    self.assertListEqual(uncovered_blocks_line_5, block_data.get(5))
-
-  def test_extract_coverage_info_overlapped_regions(self):
-    segments = [
-        [1, 2, 3, True, True],
-        [3, 2, 1, True, True],
-        [3, 10, 0, False, False],
-        [5, 10, 0, False, False],
-    ]
-    expected_line_data = dict([(1, 3), (2, 3), (3, 1), (4, 3), (5, 3)])
-    expected_block_data = {}
-    line_data, block_data = generator._extract_coverage_info(segments)
-    self.assertDictEqual(expected_line_data, line_data)
-    self.assertDictEqual(expected_block_data, block_data)
-
+  # This test uses the following code:
+  # 1|      1|int main() {
+  # 2|      1|  if ((2 > 1) || (3 > 2)) {
+  # 3|      1|    return 0;
+  # 4|      1|  }
+  # 5|      0|
+  # 6|      0|  return 1;
+  # 7|      0|}
+  #
+  # Where the first column is the line number and the second column is the
+  # expected number of times the line is executed.
   def test_to_compressed_file_record(self):
     src_path = '/path/to/chromium/src'
     file_coverage_data = {
         'segments': [
-            [1, 2, 3, True, True],
-            [3, 2, 1, True, True],
-            [3, 10, 0, False, False],
-            [3, 12, 0, True, True],
-            [3, 18, 0, False, False],
-            [5, 10, 0, False, False],
-            [6, 2, 0, True, True],
+            [1, 12, 1, True, True],
+            [2, 7, 1, True, True],
+            [2, 14, 1, True, False],
+            [2, 18, 0, True, True],
+            [2, 25, 1, True, False],
+            [2, 27, 1, True, True],
+            [4, 4, 0, True, False],
+            [6, 3, 0, True, True],
             [7, 2, 0, False, False],
         ],
         'summary': {
             'lines': {
-                'count': 8,
+                'count': 7,
             }
         },
         'filename':
@@ -84,34 +100,24 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         'path':
             'base/base.cc',
         'total_lines':
-            8,
+            7,
         'lines': [
             {
                 'first': 1,
-                'last': 2,
-                'count': 3,
-            },
-            {
-                'first': 3,
-                'last': 3,
+                'last': 4,
                 'count': 1,
             },
             {
-                'first': 4,
-                'last': 5,
-                'count': 3,
-            },
-            {
-                'first': 6,
+                'first': 5,
                 'last': 7,
                 'count': 0,
             },
         ],
         'uncovered_blocks': [{
-            'line': 3,
+            'line': 2,
             'ranges': [{
-                'first': 12,
-                'last': 18,
+                'first': 18,
+                'last': 24,
             }]
         }],
     }
@@ -119,9 +125,10 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     record = generator._to_compressed_file_record(src_path, file_coverage_data)
     self.assertDictEqual(expected_record, record)
 
-  # This test tests that for *uncontinous* regions, even if their lines are
-  # executed the same number of times, when converted to compressed format,
-  # lines in different regions shouldn't be merged together.
+  # This test uses made-up segments, and the intention is to test that for
+  # *uncontinous* regions, even if their lines are executed the same number of
+  # times, when converted to compressed format, lines in different regions
+  # shouldn't be merged together.
   def test_to_compressed_file_record_for_uncontinous_lines(self):
     src_path = '/path/to/chromium/src'
     file_coverage_data = {
@@ -161,34 +168,61 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     record = generator._to_compressed_file_record(src_path, file_coverage_data)
     self.assertDictEqual(expected_record, record)
 
+  # This test uses the following code:
+  # 1|      1|int main() {
+  # 2|      1|  if ((2 > 1) || (3 > 2)) {
+  # 3|      1|    return 0;
+  # 4|      1|  }
+  # 5|      0|
+  # 6|      0|  return 1;
+  # 7|      0|}
+  #
+  # Where the first column is the line number and the second column is the
+  # expected number of times the line is executed.
   def test_rebase_line_and_block_data(self):
-    line_data = [(1, 3), (2, 3), (3, 3), (5, 0)]
-    block_data = {5: [[2, 10]]}
+    line_data = [(1, 1), (2, 1), (3, 1), (4, 1), (5, 0), (6, 0), (7, 0)]
+    block_data = {2: [[18, 24]]}
     file_name = 'base/base.cc'
-    diff_mapping = {'base/base.cc': {'5': [16, 'A line added by the patch.']}}
+    diff_mapping = {'base/base.cc': {'2': [16, 'A line added by the patch.']}}
 
     rebased_line_data, rebased_block_data = (
         generator._rebase_line_and_block_data(line_data, block_data,
                                               diff_mapping[file_name]))
 
-    expected_line_data = [(16, 0)]
-    expected_block_data = {16: [[2, 10]]}
+    expected_line_data = [(16, 1)]
+    expected_block_data = {16: [[18, 24]]}
     self.maxDiff = None
     self.assertListEqual(expected_line_data, rebased_line_data)
     self.assertDictEqual(expected_block_data, rebased_block_data)
 
+  # This test uses the following code:
+  # 1|      1|int main() {
+  # 2|      1|  if ((2 > 1) || (3 > 2)) {
+  # 3|      1|    return 0;
+  # 4|      1|  }
+  # 5|      0|
+  # 6|      0|  return 1;
+  # 7|      0|}
+  #
+  # Where the first column is the line number and the second column is the
+  # expected number of times the line is executed.
   def test_to_compressed_file_record_with_diff_mapping(self):
     src_path = '/path/to/chromium/src'
     file_coverage_data = {
         'segments': [
-            [1, 2, 3, True, True],
-            [3, 10, 0, False, False],
-            [5, 2, 0, True, True],
-            [5, 10, 0, False, False],
+            [1, 12, 1, True, True],
+            [2, 7, 1, True, True],
+            [2, 14, 1, True, False],
+            [2, 18, 0, True, True],
+            [2, 25, 1, True, False],
+            [2, 27, 1, True, True],
+            [4, 4, 0, True, False],
+            [6, 3, 0, True, True],
+            [7, 2, 0, False, False],
         ],
         'summary': {
             'lines': {
-                'count': 5,
+                'count': 7,
             }
         },
         'filename':
@@ -209,12 +243,12 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         'path':
             'base/base.cc',
         'total_lines':
-            5,
+            7,
         'lines': [
             {
                 'first': 10,
                 'last': 11,
-                'count': 3,
+                'count': 1,
             },
             {
                 'first': 16,
@@ -223,10 +257,10 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             },
         ],
         'uncovered_blocks': [{
-            'line': 16,
+            'line': 10,
             'ranges': [{
-                'first': 2,
-                'last': 10,
+                'first': 18,
+                'last': 24,
             }]
         }],
     }
@@ -282,32 +316,43 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
     self.assertListEqual(expected_args, args)
     self.assertIsNone(shard_dir)
 
+  # This test uses the following code:
+  # 1|      1|int main() {
+  # 2|      1|  if ((2 > 1) || (3 > 2)) {
+  # 3|      1|    return 0;
+  # 4|      1|  }
+  # 5|      0|
+  # 6|      0|  return 1;
+  # 7|      0|}
+  #
+  # Where the first column is the line number and the second column is the
+  # expected number of times the line is executed.
   @mock.patch.object(generator, '_get_coverage_data_in_json')
   def test_generate_metadata_for_per_cl_coverage(self, mock_get_coverage_data):
     mock_get_coverage_data.return_value = {
         'data': [{
             'files': [{
-                'segments': [
-                    [1, 2, 3, True, True],
-                    [3, 10, 0, False, False],
-                    [5, 2, 0, True, True],
-                    [5, 10, 0, False, False],
-                ],
+                'segments': [[1, 12, 1, True, True], [2, 7, 1, True, True],
+                             [2, 14, 1, True, False], [2, 18, 0, True, True],
+                             [2, 25, 1, True, False], [2, 27, 1, True, True],
+                             [4, 4, 0, True, False], [6, 3, 0, True, True],
+                             [7, 2, 0, False, False]],
                 'summary': {
-                    'lines': {
-                        'count': 5,
-                        'covered': 3,
-                        'percent': 60,
-                    },
                     'functions': {
-                        'count': 2,
-                        'covered': 2,
-                        'percent': 100,
+                        'count': 1,
+                        'covered': 1,
+                        'percent': 100
+                    },
+                    'lines': {
+                        'count': 7,
+                        'covered': 4,
+                        'percent': 57
                     },
                     'regions': {
-                        'count': 4,
-                        'covered': 3,
-                        'percent': 75,
+                        'count': 6,
+                        'covered': 4,
+                        'notcovered': 2,
+                        'percent': 67
                     },
                 },
                 'filename':
@@ -338,7 +383,7 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         'path':
             '//dir/file.cc',
         'lines': [{
-            'count': 3,
+            'count': 1,
             'last': 11,
             'first': 10
         }, {
@@ -347,18 +392,33 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             'first': 16
         }],
         'total_lines':
-            5,
+            7,
         'uncovered_blocks': [{
             'ranges': [{
-                'last': 10,
-                'first': 2
+                'last': 24,
+                'first': 18
             }],
-            'line': 16
+            'line': 10
         }]
     }]
     self.maxDiff = None
     self.assertListEqual(expected_compressed_files, compressed_data['files'])
 
+  # This test uses the following code:
+  # /path/to/src/dir1/file1.cc
+  # 1|      1|int main() {
+  # 2|      1|  if ((2 > 1) || (3 > 2)) {
+  # 3|      1|    return 0;
+  # 4|      1|  }
+  # 5|      0|
+  # 6|      0|  return 1;
+  # 7|      0|}
+  #
+  # /path/to/src/dir2/file2.cc
+  # 1|      1|int main() { return 0; }
+  #
+  # Where the first column is the line number and the second column is the
+  # expected number of times the line is executed.
   @mock.patch.object(generator, '_get_coverage_data_in_json')
   def test_generate_metadata_for_full_repo_coverage(self,
                                                     mock_get_coverage_data):
@@ -368,34 +428,40 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             'files': [
                 {
                     'segments': [
-                        [5, 2, 0, True, True],
-                        [5, 10, 0, False, False],
+                        [1, 12, 1, True, True],
+                        [2, 7, 1, True, True],
+                        [2, 14, 1, True, False],
+                        [2, 18, 0, True, True],
+                        [2, 25, 1, True, False],
+                        [2, 27, 1, True, True],
+                        [4, 4, 0, True, False],
+                        [6, 3, 0, True, True],
+                        [7, 2, 0, False, False],
                     ],
                     'summary': {
-                        'lines': {
-                            'count': 1,
-                            'covered': 0,
-                            'percent': 0,
-                        },
                         'functions': {
                             'count': 1,
-                            'covered': 0,
-                            'percent': 0,
+                            'covered': 1,
+                            'percent': 100
+                        },
+                        'lines': {
+                            'count': 7,
+                            'covered': 4,
+                            'percent': 57
                         },
                         'regions': {
-                            'count': 1,
-                            'covered': 0,
-                            'percent': 0,
+                            'count': 6,
+                            'covered': 4,
+                            'notcovered': 2,
+                            'percent': 67
                         },
                     },
                     'filename':
                         '/path/to/src/dir1/file1.cc',
                 },
                 {
-                    'segments': [
-                        [1, 1, 1, True, True],
-                        [1, 6, 0, False, False],
-                    ],
+                    'segments': [[1, 12, 1, True, True],
+                                 [1, 25, 0, False, False]],
                     'summary': {
                         'lines': {
                             'count': 1,
@@ -440,16 +506,16 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 'name':
                     'dir1/',
                 'summaries': [{
-                    'covered': 0,
-                    'total': 1,
+                    'covered': 4,
+                    'total': 6,
                     'name': 'region'
                 }, {
-                    'covered': 0,
+                    'covered': 1,
                     'total': 1,
                     'name': 'function'
                 }, {
-                    'covered': 0,
-                    'total': 1,
+                    'covered': 4,
+                    'total': 7,
                     'name': 'line'
                 }]
             },
@@ -476,16 +542,16 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
         'path':
             'Test>Component',
         'summaries': [{
-            'covered': 1,
-            'total': 2,
+            'covered': 5,
+            'total': 7,
             'name': 'region'
         }, {
-            'covered': 1,
+            'covered': 2,
             'total': 2,
             'name': 'function'
         }, {
-            'covered': 1,
-            'total': 2,
+            'covered': 5,
+            'total': 8,
             'name': 'line'
         }]
     }]
@@ -495,16 +561,16 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                          compressed_data['components'])
 
     expected_compressed_summaries = [{
-        'covered': 1,
-        'total': 2,
+        'covered': 5,
+        'total': 7,
         'name': 'region'
     }, {
-        'covered': 1,
+        'covered': 2,
         'total': 2,
         'name': 'function'
     }, {
-        'covered': 1,
-        'total': 2,
+        'covered': 5,
+        'total': 8,
         'name': 'line'
     }]
 
@@ -520,16 +586,16 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                     'name':
                         'dir1/',
                     'summaries': [{
-                        'covered': 0,
-                        'total': 1,
+                        'covered': 4,
+                        'total': 6,
                         'name': 'region'
                     }, {
-                        'covered': 0,
+                        'covered': 1,
                         'total': 1,
                         'name': 'function'
                     }, {
-                        'covered': 0,
-                        'total': 1,
+                        'covered': 4,
+                        'total': 7,
                         'name': 'line'
                     }]
                 },
@@ -555,16 +621,16 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             ],
             'files': [],
             'summaries': [{
-                'covered': 1,
-                'total': 2,
+                'covered': 5,
+                'total': 7,
                 'name': 'region'
             }, {
-                'covered': 1,
+                'covered': 2,
                 'total': 2,
                 'name': 'function'
             }, {
-                'covered': 1,
-                'total': 2,
+                'covered': 5,
+                'total': 8,
                 'name': 'line'
             }],
             'path':
@@ -578,30 +644,30 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 'path':
                     '//dir1/file1.cc',
                 'summaries': [{
-                    'covered': 0,
-                    'total': 1,
+                    'covered': 4,
+                    'total': 6,
                     'name': 'region'
                 }, {
-                    'covered': 0,
+                    'covered': 1,
                     'total': 1,
                     'name': 'function'
                 }, {
-                    'covered': 0,
-                    'total': 1,
+                    'covered': 4,
+                    'total': 7,
                     'name': 'line'
                 }]
             }],
             'summaries': [{
-                'covered': 0,
-                'total': 1,
+                'covered': 4,
+                'total': 6,
                 'name': 'region'
             }, {
-                'covered': 0,
+                'covered': 1,
                 'total': 1,
                 'name': 'function'
             }, {
-                'covered': 0,
-                'total': 1,
+                'covered': 4,
+                'total': 7,
                 'name': 'line'
             }],
             'path':
@@ -653,18 +719,22 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
             'path':
                 '//dir1/file1.cc',
             'lines': [{
+                'count': 1,
+                'last': 4,
+                'first': 1,
+            }, {
                 'count': 0,
-                'last': 5,
-                'first': 5
+                'last': 7,
+                'first': 5,
             }],
             'total_lines':
-                1,
+                7,
             'uncovered_blocks': [{
                 'ranges': [{
-                    'last': 10,
-                    'first': 2
+                    'last': 24,
+                    'first': 18,
                 }],
-                'line': 5
+                'line': 2
             }]
         },
         {

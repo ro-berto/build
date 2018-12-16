@@ -31,48 +31,92 @@ def _extract_coverage_info(segments):
         sub-line blocks where the code is not covered. A block is represented by
         two integers [start_column, end_column].
   """
-  # Maps a line number to its hit count.
+
+  def _get_line_num(segment):
+    """Returns line number."""
+    return segment[0]
+
+  def _get_col_num(segment):
+    """Returns column number."""
+    return segment[1]
+
+  def _get_count(segment):
+    """Returns number of times this segment is executed."""
+    return segment[2]
+
+  def _has_count(segment):
+    """Returns True if this segment was instrumented and *not* skipped."""
+    return segment[3]
+
+  def _is_region_entry(segment):
+    """Retruns True if segment enters a new region."""
+    return segment[4]
+
   line_data = {}
   # Maps a line number to its uncovered sub-line blocks.
   # line# --> list([start_column, end_column])
   block_data = collections.defaultdict(list)
 
-  stack = []
-  for segment in segments:
-    if segment[4]:  # Start of a region.
-      stack.append(segment)
+  # The most recent segment that starts from a previous line.
+  wrap_segment = None
+
+  current_line_num = 0
+  current_line_segments = []
+  next_segment_index = 0
+
+  while current_line_num <= _get_line_num(segments[-1]):
+    # Calculate the execution count for each line. Follow the logic in llvm-cov:
+    # https://github.com/llvm-mirror/llvm/blob/3b35e17b21e388832d7b560a06a4f9eeaeb35330/lib/ProfileData/Coverage/CoverageMapping.cpp#L686
+    current_line_num += 1
+    if current_line_segments:
+      wrap_segment = current_line_segments[-1]
+
+    current_line_segments = []
+    while (next_segment_index < len(segments) and
+           _get_line_num(segments[next_segment_index]) == current_line_num):
+      current_line_segments.append(segments[next_segment_index])
+      next_segment_index += 1
+
+    def _is_start_of_region(segment):
+      return _has_count(segment) and _is_region_entry(segment)
+
+    line_starts_new_region = any(
+        [_is_start_of_region(segment) for segment in current_line_segments])
+    is_coverable = ((wrap_segment and _has_count(wrap_segment)) or
+                    line_starts_new_region)
+    if not is_coverable:
       continue
 
-    # End of a region.
-    if len(stack) == 0:
-      # TODO(crbug.com/902397): some region doesn't have a beginning segment.
+    execution_count = 0
+    if wrap_segment:
+      execution_count = _get_count(wrap_segment)
+
+    for segment in current_line_segments:
+      if _is_start_of_region(segment):
+        execution_count = max(execution_count, _get_count(segment))
+
+    line_data[current_line_num] = execution_count
+
+    # Calculate the uncovered blocks within the current line. Follow the logic
+    # in llvm-cov:
+    # https://github.com/llvm-mirror/llvm/blob/993ef0ca960f8ffd107c33bfbf1fd603bcf5c66c/tools/llvm-cov/SourceCoverageViewText.cpp#L114
+    if execution_count == 0:
+      # Skips calculating uncovered blocks if the whole line is not covered.
       continue
 
-    start = stack.pop()
+    col_start = 1
+    is_block_not_covered = (
+        wrap_segment and _has_count(wrap_segment) and
+        _get_count(wrap_segment) == 0)
+    for segment in current_line_segments:
+      col_end = _get_col_num(segment)
+      if is_block_not_covered:
+        block_data[_get_line_num(segment)].append([col_start, col_end - 1])
 
-    # Check whether it is an uncovered sub-line block.
-    if start[0] == segment[0] and start[2] == 0:
-      block_data[start[0]].append([start[1], segment[1]])
+      is_block_not_covered = (_has_count(segment) and _get_count(segment) == 0)
+      col_start = col_end
 
-    # Set line counts for all lines in the region from start[0] to segment[0].
-    i = start[0]
-    while i <= segment[0]:
-      # If the line already exists, it means that an inner region includes the
-      # line, and coverage info of inner region should be the true coverage for
-      # the line.
-      if i not in line_data:
-        # If the line is uncoverable or uninstrumented, or skipped (a function
-        # in a header file that is not used in all source files), we record it
-        # as negative value -1; otherwise, we record the actual execution count
-        # (either 0 or a positive value).
-        if start[3]:
-          line_data[i] = start[2]
-        else:
-          line_data[i] = -1
-      i += 1
-
-  #assert len(stack) == 0, "Some regions still open!"
-  return line_data, block_data,
+  return line_data, block_data
 
 
 def _to_compressed_format(line_data, block_data):
