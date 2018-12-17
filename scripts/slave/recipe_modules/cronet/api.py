@@ -128,7 +128,7 @@ class CronetApi(recipe_api.RecipeApi):
 
   # TODO(perezju): Remove venv option once also removed from callers.
   def run_tests(
-      self, venv=False, unit_tests=None,
+      self, venv=True, unit_tests=None,
       instrumentation_tests=INSTRUMENTATION_TESTS):
 
     if unit_tests is None:
