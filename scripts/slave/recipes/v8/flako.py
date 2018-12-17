@@ -20,10 +20,12 @@ See PROPERTIES for documentation on the recipe's interface.
 
 import re
 
+from recipe_engine.config import Single
 from recipe_engine.post_process import (
     DoesNotRun, DropExpectation, Filter, MustRun)
 from recipe_engine.post_process import ResultReasonRE
 from recipe_engine.recipe_api import Property
+
 
 
 DEPS = [
@@ -50,14 +52,14 @@ PROPERTIES = {
   # Extra arguments to V8's run-tests.py script.
   'extra_args': Property(default=None, kind=list),
   # Number of commits, backwards bisection will initially leap over.
-  'initial_commit_offset': Property(default=1, kind=int),
+  'initial_commit_offset': Property(default=1, kind=Single((int, float))),
   # Name of the isolated file (e.g. bot_default, mjsunit).
   'isolated_name': Property(kind=str),
   # Initial number of swarming shards.
-  'num_shards': Property(default=2, kind=int),
+  'num_shards': Property(default=2, kind=Single((int, float))),
   # Initial number of test repetitions (passed to --random-seed-stress-count
   # option).
-  'repetitions': Property(default=5000, kind=int),
+  'repetitions': Property(default=5000, kind=Single((int, float))),
   # Switch to only attempt to reproduce with given revision. Skips bisection.
   'repro_only': Property(default=False, kind=bool),
   # Swarming dimensions classifying the type of bot the tests should run on.
@@ -67,11 +69,11 @@ PROPERTIES = {
   'test_name': Property(kind=str),
   # Timeout parameter passed to run-tests.py. Keep small when bisecting
   # fast-running tests that occasionally hang.
-  'timeout_sec': Property(default=60, kind=int),
+  'timeout_sec': Property(default=60, kind=Single((int, float))),
   # Initial total timeout for one entire bisect step. During calibration, this
   # time might be increased for more confidence. Set to 0 to disable and specify
   # the 'repetitions' property instead.
-  'total_timeout_sec': Property(default=120, kind=int),
+  'total_timeout_sec': Property(default=120, kind=Single((int, float))),
   # Revision known to be bad, where backwards bisection will start.
   'to_revision': Property(kind=str),
   # Name of the testing variant passed to run-tests.py.
@@ -510,6 +512,13 @@ def RunSteps(api, bisect_mastername, bisect_buildername, build_config,
              extra_args, initial_commit_offset, isolated_name, num_shards,
              repetitions, repro_only, swarming_dimensions, test_name,
              timeout_sec, total_timeout_sec, to_revision, variant):
+  # Convert floats to ints.
+  initial_commit_offset = int(initial_commit_offset)
+  num_shards = int(num_shards)
+  repetitions = int(repetitions)
+  timeout_sec = int(timeout_sec)
+  total_timeout_sec = int(total_timeout_sec)
+
   # Set up swarming client.
   setup_swarming(api, swarming_dimensions)
 

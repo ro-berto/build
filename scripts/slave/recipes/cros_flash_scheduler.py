@@ -23,6 +23,7 @@ import math
 import re
 
 from recipe_engine import post_process
+from recipe_engine.config import Single
 from recipe_engine.recipe_api import Property
 
 DEPS = [
@@ -72,7 +73,7 @@ PROPERTIES = {
       help='Buildbucket host to use when triggering flashing jobs.',
       default=None),
   'random_seed': Property(
-      kind=int,
+      kind=Single((int, float)),
       help='Random seed to set when selected a subset of bots to flash.',
       default=None)
 }
@@ -218,7 +219,7 @@ def RunSteps(api, swarming_server, swarming_pool, device_type, bb_host,
     api.buildbucket.set_buildbucket_host(bb_host)
 
   if random_seed:
-    random.seed(random_seed)
+    random.seed(int(random_seed))
 
   # Curl the current CHROMEOS_LKGM pin. Don't bother with a full chromium
   # checkout since all we need is that one file.

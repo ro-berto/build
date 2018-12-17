@@ -3466,7 +3466,7 @@ Returns:
   The step result.
 ### *recipe_modules* / [test\_utils](/scripts/slave/recipe_modules/test_utils)
 
-[DEPS](/scripts/slave/recipe_modules/test_utils/__init__.py#3): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [traceback](#recipe_modules-traceback), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/test_utils/__init__.py#4): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [traceback](#recipe_modules-traceback), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 #### **class [TestUtilsApi](/scripts/slave/recipe_modules/test_utils/api.py#28)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
@@ -5010,7 +5010,7 @@ flashing the DUT. The basic steps of this recipe are:
 &mdash; **def [RunSteps](/scripts/slave/recipes/cros_flash.py#50)(api):**
 ### *recipes* / [cros\_flash\_scheduler](/scripts/slave/recipes/cros_flash_scheduler.py)
 
-[DEPS](/scripts/slave/recipes/cros_flash_scheduler.py#28): [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
+[DEPS](/scripts/slave/recipes/cros_flash_scheduler.py#29): [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
 
 This recipe is used to keep Chrome's pools of CrOS DUTs up to date.
 
@@ -5025,15 +5025,15 @@ This recipe is intended to run several times during MTV's off-peak hours. Its
 builder should be backed by a single thin Ubuntu VM, while the tasks it launches
 run the cros_flash recipe and run on DUT swarming bots.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/cros_flash_scheduler.py#209)(api, swarming_server, swarming_pool, device_type, bb_host, random_seed):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/cros_flash_scheduler.py#210)(api, swarming_server, swarming_pool, device_type, bb_host, random_seed):**
 
-&mdash; **def [get\_bots\_in\_pool](/scripts/slave/recipes/cros_flash_scheduler.py#81)(api, swarming_server, pool, device_type):**
+&mdash; **def [get\_bots\_in\_pool](/scripts/slave/recipes/cros_flash_scheduler.py#82)(api, swarming_server, pool, device_type):**
 
 Returns the list of bots that belong to the given pool.
 
 This uses swarming.py's bot/list query, and returns the resulting bots.
 
-&mdash; **def [get\_closest\_available\_version](/scripts/slave/recipes/cros_flash_scheduler.py#136)(api, board, lkgm_base):**
+&mdash; **def [get\_closest\_available\_version](/scripts/slave/recipes/cros_flash_scheduler.py#137)(api, board, lkgm_base):**
 
 Returns the GS path of the latest image for the given board and lkgm.
 
@@ -5051,7 +5051,7 @@ Returns tuple of:
   The 5-digit manifest for the latest image.
   GS path for the latest image.
 
-&mdash; **def [trigger\_flash](/scripts/slave/recipes/cros_flash_scheduler.py#179)(api, bot, pool, gs_image_path):**
+&mdash; **def [trigger\_flash](/scripts/slave/recipes/cros_flash_scheduler.py#180)(api, bot, pool, gs_image_path):**
 ### *recipes* / [crrev:examples/full](/scripts/slave/recipe_modules/crrev/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/crrev/examples/full.py#9): [crrev](#recipe_modules-crrev), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5853,7 +5853,7 @@ Ensures a clean state of the git checkout.
 &mdash; **def [UpdateRef](/scripts/slave/recipes/v8/auto_tag.py#224)(api, repo, head, lkgr_ref):**
 ### *recipes* / [v8/flako](/scripts/slave/recipes/v8/flako.py)
 
-[DEPS](/scripts/slave/recipes/v8/flako.py#29): [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
+[DEPS](/scripts/slave/recipes/v8/flako.py#31): [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
 
 Recipe to bisect flaky tests in V8.
 
@@ -5870,9 +5870,9 @@ which has offset 0.
 
 See PROPERTIES for documentation on the recipe's interface.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/flako.py#509)(api, bisect_mastername, bisect_buildername, build_config, extra_args, initial_commit_offset, isolated_name, num_shards, repetitions, repro_only, swarming_dimensions, test_name, timeout_sec, total_timeout_sec, to_revision, variant):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/flako.py#511)(api, bisect_mastername, bisect_buildername, build_config, extra_args, initial_commit_offset, isolated_name, num_shards, repetitions, repro_only, swarming_dimensions, test_name, timeout_sec, total_timeout_sec, to_revision, variant):**
 
-&mdash; **def [bisect](/scripts/slave/recipes/v8/flako.py#410)(api, depot, initial_commit_offset, is_bad_func, offset):**
+&mdash; **def [bisect](/scripts/slave/recipes/v8/flako.py#412)(api, depot, initial_commit_offset, is_bad_func, offset):**
 
 Exercises the bisection control flow.
 
@@ -5885,7 +5885,7 @@ Args:
       bad.
   offset: Offset at which to start bisection.
 
-&mdash; **def [setup\_swarming](/scripts/slave/recipes/v8/flako.py#493)(api, swarming_dimensions):**
+&mdash; **def [setup\_swarming](/scripts/slave/recipes/v8/flako.py#495)(api, swarming_dimensions):**
 ### *recipes* / [v8/node\_integration](/scripts/slave/recipes/v8/node_integration.py)
 
 [DEPS](/scripts/slave/recipes/v8/node_integration.py#13): [chromium](#recipe_modules-chromium), [goma](#recipe_modules-goma), [trigger](#recipe_modules-trigger), [v8](#recipe_modules-v8), [zip](#recipe_modules-zip), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]

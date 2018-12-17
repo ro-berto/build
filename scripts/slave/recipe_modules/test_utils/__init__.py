@@ -1,3 +1,4 @@
+from recipe_engine.config import Single
 from recipe_engine.recipe_api import Property
 
 DEPS = [
@@ -14,8 +15,13 @@ DEPS = [
   'recipe_engine/step',
 ]
 
+
+
 PROPERTIES = {
-  'max_reported_gtest_failures': Property(default=30, kind=int),
+  'max_reported_gtest_failures': Property(
+      default=30,
+      kind=Single((int, float)),
+  ),
 }
 
 # TODO(phajdan.jr): provide coverage (http://crbug.com/693058).

@@ -53,7 +53,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
   def __init__(self, max_reported_gtest_failures, *args, **kwargs):
     super(TestUtilsApi, self).__init__(*args, **kwargs)
-    self._max_reported_gtest_failures = max_reported_gtest_failures
+    self._max_reported_gtest_failures = int(max_reported_gtest_failures)
 
   @staticmethod
   def limit_failures(failures, limit):
