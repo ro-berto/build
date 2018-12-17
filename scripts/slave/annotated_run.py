@@ -63,6 +63,8 @@ _REMOTE_RUN_PASSTHROUGH = {
   ],
 
   'client.flutter': '*',
+  'client.chromeoffice': '*',
+  'client.chromeoffice.try': '*',
 }
 
 
