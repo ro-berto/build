@@ -16,7 +16,6 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/runtime',
-  'wct',
 ]
 
 from recipe_engine.recipe_api import Property
@@ -33,7 +32,7 @@ def _CheckoutSteps(api):
   api.gclient.runhooks()
 
 
-def _RemoteSteps(api, app_engine_sdk_path, platform, wct_path=None):
+def _RemoteSteps(api, app_engine_sdk_path, platform):
   """Runs the build steps specified in catapult_build/build_steps.py.
 
   Steps are specified in catapult repo in order to avoid multi-sided patches
@@ -53,8 +52,6 @@ def _RemoteSteps(api, app_engine_sdk_path, platform, wct_path=None):
       '--app-engine-sdk-pythonpath', app_engine_sdk_path,
       '--platform', platform or api.platform.name,
   ]
-  if wct_path:
-    args.extend(['--wct-path', wct_path])
   return api.generator_script(*args)
 
 
@@ -67,12 +64,8 @@ def RunSteps(api, platform):
   api.gae_sdk.fetch(api.gae_sdk.PLAT_PYTHON, sdk_path)
   app_engine_sdk_path = api.path.pathsep.join([
       '%(PYTHONPATH)s', str(sdk_path)])
-  if api.platform.is_linux and api.runtime.is_luci:
-    wct_path = api.wct.install().join('wct')
-  else:
-    wct_path = None
   with api.osx_sdk('mac'):
-    _RemoteSteps(api, app_engine_sdk_path, platform, wct_path)
+    _RemoteSteps(api, app_engine_sdk_path, platform)
 
 
 def GenTests(api):
