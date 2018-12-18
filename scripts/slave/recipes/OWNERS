@@ -28,7 +28,6 @@ per-file chromium_trybot.py=martiniss@chromium.org
 per-file chromium_trybot.py=sergeyberezin@chromium.org
 per-file chromium_trybot.py=sergiyb@chromium.org
 per-file cronet.py=file:cronet.expected/OWNERS
-per-file cros_flash*=bpastene@chromium.org
 per-file ct_top1k_perf.py=rmistry@chromium.org
 per-file goma_client.py=shinyak@chromium.org
 per-file goma_client.py=tikuta@chromium.org
