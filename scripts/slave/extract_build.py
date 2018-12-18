@@ -254,8 +254,8 @@ def main():
   if not options.parent_slave_name:
     options.parent_slave_name = options.build_properties.get('parentslavename')
   if not options.parent_build_number:
-    options.parent_build_number = options.build_properties.get(
-        'parent_buildnumber')
+    options.parent_build_number = int_if_given(options.build_properties.get(
+        'parent_buildnumber'))
   if not options.build_url:
     options.build_url = options.factory_properties.get('build_url')
   if not options.target:
@@ -266,6 +266,12 @@ def main():
                      or options.src_dir)
 
   return real_main(options)
+
+
+def int_if_given(value):
+  if value is None:
+    return None
+  return int(value)
 
 
 if '__main__' == __name__:

@@ -22,7 +22,11 @@ def RunSteps(api):
 def GenTests(api):
   yield (
       api.test('basic') +
-      api.properties(parent_buildername='example_buildername', buildnumber=123)
+      api.properties(
+          parent_buildername='example_buildername',
+          parent_buildnumber=1.0,
+          buildnumber=123,
+      )
   )
 
   yield (

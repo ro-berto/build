@@ -324,7 +324,6 @@ class ArchiveApi(recipe_api.RecipeApi):
       ('parent_builddir', '--parent-build-dir'),
       ('parentname', '--parent-builder-name'),
       ('parentslavename', '--parent-slave-name'),
-      ('parent_buildnumber', '--parent-build-number'),
       ('webkit_dir', '--webkit-dir'),
       ('revision_dir', '--revision-dir'),
     )
@@ -332,6 +331,11 @@ class ArchiveApi(recipe_api.RecipeApi):
       if self.m.properties.get(property_name):
         args.extend([switch_name, self.m.properties[property_name]])
 
+    if self.m.properties.get('parent_buildnumber'):
+      args.extend([
+          '--parent-build-number',
+          int(self.m.properties.get('parent_buildnumber')),
+      ])
     args.extend(['--build-number', self.m.buildbucket.build.number])
 
     self.m.build.python(

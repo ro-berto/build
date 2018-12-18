@@ -87,7 +87,7 @@ def _AnnotatedStepsSteps(api, got_revision):
         'BUILDBOT_TRIGGERED_BY_BUILDERNAME':
           api.properties['parent_buildername'],
         'BUILDBOT_TRIGGERED_BY_BUILDNUMBER':
-          api.properties['parent_buildnumber'],
+          int(api.properties['parent_buildnumber']),
         'BUILDBOT_TRIGGERED_BY_SLAVENAME':
           api.properties['parent_slavename'],
     })

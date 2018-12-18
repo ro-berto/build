@@ -21,6 +21,8 @@
       "gs://bucket_name/example_buildername/full-build-linux.zip",
       "--build_revision",
       "example_sha",
+      "--parent-build-number",
+      "1",
       "--build-number",
       "123"
     ],
