@@ -39,6 +39,28 @@ BUILDERS = freeze({
         'upload_bucket': 'chromium-browser-libfuzzer',
         'upload_directory': 'chromeos-asan',
       },
+      'Libfuzzer Upload Linux32 ASan': {
+        'chromium_config': 'chromium_clang',
+        'chromium_apply_config': [ 'clobber' ],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 32,
+        },
+        'upload_bucket': 'chromium-browser-libfuzzer',
+        'upload_directory': 'asan',
+      },
+      'Libfuzzer Upload Linux32 ASan Debug': {
+        'chromium_config': 'chromium_clang',
+        'chromium_apply_config': [ 'clobber' ],
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'linux',
+          'TARGET_BITS': 32,
+        },
+        'upload_bucket': 'chromium-browser-libfuzzer',
+        'upload_directory': 'asan',
+      },
       'Libfuzzer Upload Linux ASan': {
         'chromium_config': 'chromium_clang',
         'chromium_apply_config': [ 'clobber' ],
@@ -223,13 +245,20 @@ def RunSteps(api):
   api.step.active_result.presentation.logs['targets'] = targets
   api.chromium.compile(targets=targets, use_goma_module=True)
 
+  # Make sure 32 bit archives are distinguished from 64 bit ones.
+  kwargs = {}
+  if api.chromium.c.TARGET_BITS == 32:
+    kwargs['use_legacy'] = False
+    kwargs['bitness'] = 32
+
   api.archive.clusterfuzz_archive(
       build_dir=api.chromium.output_dir,
       update_properties=checkout_results.json.output['properties'],
       gs_bucket=bot_config['upload_bucket'],
       archive_prefix=bot_config.get('archive_prefix', 'libfuzzer'),
       archive_subdir_suffix=bot_config['upload_directory'],
-      gs_acl='public-read')
+      gs_acl='public-read',
+      **kwargs)
 
 def GenTests(api):
   for test in api.chromium.gen_tests_for_builders(BUILDERS):
