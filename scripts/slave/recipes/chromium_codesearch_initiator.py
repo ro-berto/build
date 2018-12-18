@@ -63,13 +63,13 @@ def RunSteps(api):
   try:
     time_since_epoch = datetime.strptime(
         formatted_time, GERRIT_DATETIME_FORMAT) - datetime(1970, 1, 1)
-    unix_timestamp = int(time_since_epoch.total_seconds())
+    unix_timestamp = time_since_epoch.total_seconds()
   except ValueError as e:
     api.step.active_result.presentation.step_text = str(e)
     api.step.active_result.presentation.status = api.step.WARNING
     # If we failed to extract the time, use the current time as an
     # approximation.
-    unix_timestamp = int(api.time.time())
+    unix_timestamp = api.time.time()
 
   commit_hash = master_ref_json.get('commit', 'HEAD')
 

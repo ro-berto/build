@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from recipe_engine import config
 from recipe_engine.recipe_api import Property
 from recipe_engine.types import freeze
 
@@ -126,7 +127,7 @@ PROPERTIES = {
         help='The revision to checkout and build.',
         default=None),
     'root_solution_revision_timestamp': Property(
-        kind=int,
+        kind=config.Single((int, float)),
         help='The commit timestamp of the revision to checkout and build, in '
              'seconds since the UNIX epoch.',
         default=None),
@@ -203,7 +204,7 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
 
   # Create the kythe index pack and upload it to google storage.
   api.codesearch.create_and_upload_kythe_index_pack(
-      commit_timestamp=root_solution_revision_timestamp or int(api.time.time()))
+      commit_timestamp=int(root_solution_revision_timestamp or api.time.time()))
 
   # Check out the generated files repo and sync the generated files
   # into this checkout. This may fail due to other builders pushing to the
