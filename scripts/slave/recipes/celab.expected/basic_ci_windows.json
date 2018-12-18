@@ -174,18 +174,27 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::zip]\\resources\\zip.py"
+    ],
+    "name": "zip archive",
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\go\\\\src\\\\chromium.googlesource.com\\\\enterprise\\\\cel\\\\out\\\\windows_amd64\\\\bin\", \"type\": \"dir\"}], \"output\": \"[START_DIR]\\\\cel.zip\", \"root\": \"[START_DIR]\\\\go\\\\src\\\\chromium.googlesource.com\\\\enterprise\\\\cel\\\\out\\\\windows_amd64\\\\bin\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
       "--",
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "[START_DIR]\\go\\src\\chromium.googlesource.com\\enterprise\\cel\\out\\windows_amd64\\bin\\**",
-      "gs://celab/builder/2012/05/14/8945511751514863184"
+      "[START_DIR]\\cel.zip",
+      "gs://celab/builder/2012/05/14/8945511751514863184/cel.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload CELab binaries",
     "~followup_annotations": [
-      "@@@STEP_LINK@CELab binaries@https://console.cloud.google.com/storage/celab/builder/2012/05/14/8945511751514863184@@@"
+      "@@@STEP_LINK@CELab binaries@https://storage.cloud.google.com/celab/builder/2012/05/14/8945511751514863184/cel.zip@@@"
     ]
   },
   {

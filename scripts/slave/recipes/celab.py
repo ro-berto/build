@@ -14,6 +14,7 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/python',
   'recipe_engine/time',
+  'zip',
 ]
 
 from recipe_engine.recipe_api import Property
@@ -65,19 +66,23 @@ def RunSteps(api):
 
   # Upload binaries for CI builds
   if api.buildbucket.build.builder.bucket == 'ci':
+    output_dir = _get_bin_directory(api, checkout)
+    zip_out = api.path['start_dir'].join('cel.zip')
+    pkg = api.zip.make_package(output_dir, zip_out)
+    pkg.add_directory(output_dir)
+    pkg.zip('zip archive')
+
     today = api.time.utcnow().date()
-    gs_dest = '%s/%s/%s' % (
+    gs_dest = '%s/%s/%s/cel.zip' % (
       api.buildbucket.builder_name,
       today.strftime('%Y/%m/%d'),
       api.buildbucket.build.id)
-    result = api.gsutil.upload(
-      source=_get_bin_directory(api, checkout).join('**'),
+    api.gsutil.upload(
+      source=zip_out,
       bucket='celab',
       dest=gs_dest,
       name='upload CELab binaries',
-      link_name=None)
-    link = 'https://console.cloud.google.com/storage/celab/%s' % gs_dest
-    result.presentation.links['CELab binaries'] = link
+      link_name='CELab binaries')
 
 
 def GenTests(api):
