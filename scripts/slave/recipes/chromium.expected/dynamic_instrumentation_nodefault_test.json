@@ -703,6 +703,47 @@
     ]
   },
   {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/zip_build.py",
+      "--target",
+      "Release",
+      "--gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--staging-dir",
+      "[CACHE]/chrome_staging",
+      "--src-dir",
+      "[START_DIR]/src",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "--build-url",
+      "gs://chromium-android-archive/chromium.android/android-kitkat-arm-rel",
+      "--build_revision",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"android-kitkat-arm-rel\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"android-kitkat-arm-rel\", \"buildnumber\": 571, \"mastername\": \"chromium.android\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "package build",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@why is this running?@This builder is doing the full package transfer because:@@@",
+      "@@@STEP_LOG_LINE@why is this running?@ - it's still running on buildbot :(@@@",
+      "@@@STEP_LOG_END@why is this running?@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",

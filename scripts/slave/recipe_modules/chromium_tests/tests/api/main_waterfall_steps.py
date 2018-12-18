@@ -30,9 +30,7 @@ CUSTOM_BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'chromium_tests_apply_config': ['staging'],
         'gclient_config': 'chromium',
-        'test_results_config': 'staging_server',
         'testing': {
           'platform': 'linux',
         },
@@ -45,10 +43,8 @@ CUSTOM_BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'chromium_tests_apply_config': ['staging'],
         'gclient_config': 'chromium',
         'parent_buildername': 'Isolated Transfer Builder',
-        'test_results_config': 'staging_server',
         'testing': {
           'platform': 'linux',
         },
@@ -62,9 +58,7 @@ CUSTOM_BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'chromium_tests_apply_config': ['staging'],
         'gclient_config': 'chromium',
-        'test_results_config': 'staging_server',
         'testing': {
           'platform': 'linux',
         },
@@ -77,15 +71,45 @@ CUSTOM_BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
-        'chromium_tests_apply_config': ['staging'],
         'gclient_config': 'chromium',
         'parent_buildername':
           'Isolated Transfer: mixed builder, isolated tester (builder)',
-        'test_results_config': 'staging_server',
         'testing': {
           'platform': 'linux',
         },
       },
+
+      'Isolated Transfer: mixed BT, isolated tester (BT)': {
+        'android_config': 'main_builder_mb',
+        'bot_type': 'builder_tester',
+        'chromium_config': 'android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+          'TARGET_PLATFORM': 'android',
+        },
+        'gclient_config': 'chromium',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Isolated Transfer: mixed BT, isolated tester (tester)': {
+        'android_config': 'main_builder_mb',
+        'bot_type': 'tester',
+        'chromium_config': 'android',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+          'TARGET_PLATFORM': 'android',
+        },
+        'gclient_config': 'chromium',
+        'parent_buildername':
+          'Isolated Transfer: mixed BT, isolated tester (BT)',
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+
 
       'Packaged Transfer Builder': {
         'bot_type': 'builder',
@@ -458,6 +482,47 @@ def GenTests(api):
           api.json.output({})
       ) +
       api.post_process(post_process.MustRun, 'extract build') +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('isolated_transfer__mixed_bt_isolated_tester') +
+      api.properties(
+          bot_id='isolated_transfer_builder_tester_id',
+          buildername=(
+              'Isolated Transfer: mixed BT, isolated tester (BT)'),
+          buildnumber=123,
+          custom_builders=True,
+          mastername='chromium.example') +
+      api.runtime(is_luci=True, is_experimental=False) +
+      api.override_step_data(
+          'read test spec (chromium.example.json)',
+          api.json.output({
+              'Isolated Transfer: mixed BT, isolated tester (BT)': {
+                  'junit_tests': [
+                      {
+                          'test': 'base_junit_tests',
+                      },
+                  ],
+              },
+              'Isolated Transfer: mixed BT, isolated tester (tester)': {
+                  'gtest_tests': [
+                      {
+                          'args': ['--sample-argument'],
+                          'swarming': {
+                              'can_use_on_swarming_builders': True,
+                          },
+                          'test': 'base_unittests',
+                      },
+                  ],
+              },
+          })
+      ) +
+      api.post_process(post_process.DoesNotRun, 'package build') +
+      api.post_process(
+          TriggersBuilderWithProperties,
+          builder='Isolated Transfer: mixed BT, isolated tester (tester)',
+          properties=['swarm_hashes']) +
       api.post_process(post_process.DropExpectation)
   )
 

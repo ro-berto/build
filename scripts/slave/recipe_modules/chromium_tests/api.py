@@ -471,8 +471,9 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     bot_config = bot_db.get_bot_config(mastername, buildername)
 
     bot_type = bot_config.get('bot_type')
-    assert bot_type == 'builder', (
-        'package_build for %s:%s, which is a %s. '
+    assert bot_type in ('builder', 'builder_tester'), (
+        'Called package_build for %s:%s, which is a "%s". '
+        'package_build only supports "builder" and "builder_tester". '
         'This is a bug in your recipe.' % (mastername, buildername, bot_type))
 
     if not bot_config.get('cf_archive_build'):
@@ -1141,7 +1142,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     if isolate_transfer:
       additional_trigger_properties['swarm_hashes'] = (
           self.m.isolate.isolated_tests)
-    if package_transfer and bot_type == 'builder':
+    if package_transfer and bot_type in ('builder', 'builder_tester'):
       package_step = self.package_build(
           mastername, buildername, update_step, bot_db)
       package_step.presentation.logs['why is this running?'] = (
