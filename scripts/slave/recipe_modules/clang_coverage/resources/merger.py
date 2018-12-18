@@ -8,11 +8,14 @@ import logging
 import os
 import subprocess
 
+logging.basicConfig(
+    format='[%(asctime)s %(levelname)s] %(message)s', level=logging.DEBUG)
+
 
 def _call_profdata_tool(profile_input_file_paths,
                         profile_output_file_path,
                         profdata_tool_path,
-                        retries=2):
+                        retries=3):
   """Calls the llvm-profdata tool.
 
   Args:
@@ -28,7 +31,7 @@ def _call_profdata_tool(profile_input_file_paths,
   Raises:
     CalledProcessError: An error occurred merging profiles.
   """
-  logging.debug('Merging profiles.')
+  logging.info('Merging profiles.')
 
   try:
     subprocess_cmd = [
@@ -37,28 +40,40 @@ def _call_profdata_tool(profile_input_file_paths,
     ]
     subprocess_cmd.extend(profile_input_file_paths)
 
-    output = subprocess.check_output(subprocess_cmd)
-    logging.debug('Merge output: %s', output)
+    # Redirecting stderr is required because when error happens, llvm-profdata
+    # writes the error output to stderr and our error handling logic relies on
+    # that output.
+    output = subprocess.check_output(subprocess_cmd, stderr=subprocess.STDOUT)
+    logging.info('Merge succeeded with output: %s', output)
   except subprocess.CalledProcessError as error:
     if len(profile_input_file_paths) > 1 and retries >= 0:
+      logging.warning('Merge failed with error output: %s', error.output)
+
       # The output of the llvm-profdata command will include the path of
       # malformed files, such as
       # `error: /.../default.profraw: Malformed instrumentation profile data`
-      valid_profiles = [
-          f for f in profile_input_file_paths if f not in error.output
+      invalid_profiles = [
+          f for f in profile_input_file_paths if f in error.output
       ]
-      invalid_profiles = list(
-          set(profile_input_file_paths) - set(valid_profiles))
-      if invalid_profiles and len(valid_profiles):
-        # If some, but not all files are mentioned in the error output, try
-        # again excluding those files.
+
+      if not invalid_profiles:
+        logging.info(
+            'Merge failed, but wasn\'t able to figure out the culprit invalid '
+            'profiles from the output, so skip retry and bail out.')
+        raise error
+
+      valid_profiles = list(
+          set(profile_input_file_paths) - set(invalid_profiles))
+      if valid_profiles:
         logging.warning(
-            '%r files removed as they were mentioned in the merge '
-            'error output. Trying with %d files', invalid_profiles,
-            len(valid_profiles))
+            'Following invalid profiles are removed as they were mentioned in '
+            'the merge error output: %r', invalid_profiles)
+        logging.info('Retry merging with the remaining profiles: %r',
+                     valid_profiles)
         return invalid_profiles + _call_profdata_tool(
             valid_profiles, profile_output_file_path, profdata_tool_path,
             retries - 1)
+
     logging.error('Failed to merge profiles, return code (%d), output: %s' %
                   (error.returncode, error.output))
     raise error
@@ -93,7 +108,6 @@ def merge_profiles(input_dir, output_file, input_extension, profdata_tool_path):
     succeed.
   """
   profile_input_file_paths = _get_profile_paths(input_dir, input_extension)
-
   invalid_profiles = _call_profdata_tool(
       profile_input_file_paths=profile_input_file_paths,
       profile_output_file_path=output_file,
