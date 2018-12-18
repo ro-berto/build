@@ -60,6 +60,12 @@ import sys
 # For example: '+++ b/start_from_source_root/path/test.cc'
 _NEW_FILE_PREFIX = '+++ b/'
 
+# Identifies a deleted file.
+# For example:
+# '--- a/base/files/file_util_unittest.cc'
+# '+++ /dev/null'
+_DELETED_FILE_PREFIX = '+++ /dev/null'
+
 # Identifies diff section header, which has the following format:
 # @@ -{old_start_line},{old_length} +{new_start_line},{new_length} @@
 # For example: '@@ -2,8 +2,8 @@'
@@ -71,7 +77,7 @@ _DIFF_RANGE_HEADER_REGEX = re.compile(r'^@@ \-(\d+),?(\d+)? \+(\d+),?(\d+)? @@')
 _DIFF_ADDED_LINE_PREFIX = '+'
 
 
-def _parse_added_lines_from_git_diff(diff):
+def parse_added_lines_from_git_diff(diff):
   """Parses the 'git diff' output and returns the line number of added lines.
 
   Note that this method *only* cares about the added lines.
@@ -91,11 +97,22 @@ def _parse_added_lines_from_git_diff(diff):
   current_offset = None
 
   for line in diff:
+    # E.g. '+++ dev/null'
+    if line.startswith(_DELETED_FILE_PREFIX):
+      current_file = None
+      current_base_line_num = None
+      current_offset = None
+      continue
+
     # E.g. '+++ b/test_file.txt'
     if line.startswith(_NEW_FILE_PREFIX):
       current_file = line[len(_NEW_FILE_PREFIX):]
       current_base_line_num = None
       current_offset = None
+      continue
+
+    if current_file is None:
+      # If a file is deleted, there should be no added lines in the diff ranges.
       continue
 
     # E.g. '@@ -1,3 +1,3 @@''
@@ -140,8 +157,8 @@ def generate_diff_mapping(local_diff, gerrit_diff, sources):
     corresponding value is another map that maps from local diff's line number
     to Gerrit diff's line number as well as the line itself.
   """
-  local_file_to_added_lines = _parse_added_lines_from_git_diff(local_diff)
-  gerrit_file_to_added_lines = _parse_added_lines_from_git_diff(gerrit_diff)
+  local_file_to_added_lines = parse_added_lines_from_git_diff(local_diff)
+  gerrit_file_to_added_lines = parse_added_lines_from_git_diff(gerrit_diff)
 
   file_to_line_num_mapping = {}
   for file_name in local_file_to_added_lines:
@@ -157,10 +174,12 @@ def generate_diff_mapping(local_diff, gerrit_diff, sources):
 
     local_added_lines = local_file_to_added_lines[file_name]
     gerrit_added_lines = gerrit_file_to_added_lines[file_name]
+
     if len(local_added_lines) != len(gerrit_added_lines):
       raise RuntimeError(
-          'Diff mismatch. Local diff has %d added lines, but Gerrit diff has '
-          '%d.' % (len(local_added_lines), len(gerrit_added_lines)))
+          'Diff mismatch for file %s. Local diff has %d added lines, but '
+          'Gerrit diff has %d.' % (file_name, len(local_added_lines),
+                                   len(gerrit_added_lines)))
 
     line_num_mapping = {}
     for i in range(len(local_added_lines)):
@@ -168,9 +187,10 @@ def generate_diff_mapping(local_diff, gerrit_diff, sources):
       gerrit_line, gerrit_line_num = gerrit_added_lines[i]
       if local_line != gerrit_line:
         raise RuntimeError(
-            'Diff mistmatch. Local diff added "%s" on line %d, but Gerrit diff '
-            'has "%s" on line %d.' % (local_line, local_line_num, gerrit_line,
-                                      gerrit_line_num))
+            'Diff mistmatch for file %s. Local diff added "%s" on line %d, but '
+            'Gerrit diff has "%s" on line %d.' % (file_name, local_line,
+                                                  local_line_num, gerrit_line,
+                                                  gerrit_line_num))
 
       # The line itself is not absoluately necessary, but is is kept for
       # debugging purpose.

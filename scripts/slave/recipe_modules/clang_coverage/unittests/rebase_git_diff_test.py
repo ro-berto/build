@@ -250,6 +250,68 @@ class RebaseGitDiffTest(unittest.TestCase):
 
     self.assertEqual(expected_mapping, mapping)
 
+  def test_parse_diff_of_a_deleted_file(self):
+    diff = ('diff --git a/test.txt b/test.txt\n'
+            'deleted file mode 100644\n'
+            'index f50d3335aaab..000000000000\n'
+            '--- a/test.txt\n'
+            '+++ /dev/null\n'
+            '@@ -1,3 +0,0 @@\n'
+            '-Line one\n'
+            '-Line two\n'
+            '-Line three\n')
+
+    file_to_added_lines = rebase_git_diff.parse_added_lines_from_git_diff(
+        diff.split('\n'))
+    self.assertDictEqual({}, file_to_added_lines)
+
+  def test_parse_diff_of_an_added_file(self):
+    diff = ('diff --git a/test.txt b/test.txt\n'
+            'new file mode 100644\n'
+            'index 000000000000..802f69c87dc5\n'
+            '--- /dev/null\n'
+            '+++ b/test.txt\n'
+            '@@ -0,0 +1,3 @@\n'
+            '+Line one\n'
+            '+Line two\n'
+            '+Line three\n')
+
+    file_to_added_lines = rebase_git_diff.parse_added_lines_from_git_diff(
+        diff.split('\n'))
+    expected_file_to_added_lines = {
+        'test.txt': [('Line one', 1), ('Line two', 2), ('Line three', 3)]
+    }
+    self.assertDictEqual(expected_file_to_added_lines, file_to_added_lines)
+
+  def test_parse_diff_of_renaming_without_content_change(self):
+    diff = ('diff --git a/test.txt b/renamed_test.txt\n'
+            'similarity index 100%\n'
+            'rename from test.txt\n'
+            'rename to renamed_test.txt\n')
+
+    file_to_added_lines = rebase_git_diff.parse_added_lines_from_git_diff(
+        diff.split('\n'))
+    self.assertDictEqual({}, file_to_added_lines)
+
+  def test_parse_diff_of_renaming_with_content_change(self):
+    diff = ('diff --git a/test.txt b/renamed_test.txt\n'
+            'similarity index 66%\n'
+            'rename from test.txt\n'
+            'rename to renamed_test.txt\n'
+            'index 802f69c87dc5..4c8406c71637 100644\n'
+            '--- a/test.txt\n'
+            '+++ b/renamed_test.txt\n'
+            '@@ -1,3 +1,3 @@\n'
+            '-Line one\n'
+            ' Line two\n'
+            ' Line three\n'
+            '+Line four\n')
+
+    file_to_added_lines = rebase_git_diff.parse_added_lines_from_git_diff(
+        diff.split('\n'))
+    expected_file_to_added_lines = {'renamed_test.txt': [('Line four', 3)]}
+    self.assertDictEqual(expected_file_to_added_lines, file_to_added_lines)
+
 
 if __name__ == '__main__':
   unittest.main()
