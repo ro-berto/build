@@ -656,14 +656,17 @@ class iOSApi(recipe_api.RecipeApi):
       '--config-variable', 'test_cases', self.m.json.dumps(test_cases or []),
       '--config-variable', 'xctest', (
         'true' if test.get('xctest') else 'false'),
+      '--config-variable', 'use_trusted_cert', (
+        'true' if test.get('use trusted cert') else 'false'),
       '--isolate', isolate_template,
       '--isolated', tmp_dir.join('%s.isolated' % test_id),
       '--path-variable', 'app_path', app_path,
     ]
 
+    use_wpr_tools = test.get('use trusted cert') or test.get('replay package name')
     args.extend([
       '--config-variable', 'wpr_tools_path', (
-          self.WPR_TOOLS_ROOT if test.get('replay package name') else 'NO_PATH'),
+          self.WPR_TOOLS_ROOT if use_wpr_tools else 'NO_PATH'),
     ])
 
     args.extend([
@@ -877,12 +880,14 @@ class iOSApi(recipe_api.RecipeApi):
 
       replay_package_name = task['test'].get('replay package name')
       replay_package_version = task['test'].get('replay package version')
-      if replay_package_name and replay_package_version:
+      use_trusted_cert = task['test'].get('use trusted cert')
+      if use_trusted_cert or (replay_package_name and replay_package_version):
         cipd_packages.append((
             self.WPR_TOOLS_ROOT,
             self.WPR_TOOLS_PACKAGE,
             self.WPR_TOOLS_VERSION,
         ))
+      if replay_package_name and replay_package_version:
         cipd_packages.append((
             self.WPR_REPLAY_DATA_ROOT,
             replay_package_name,
