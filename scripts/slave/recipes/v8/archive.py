@@ -8,6 +8,7 @@ Recipe for archiving officially tagged v8 builds.
 
 import re
 
+from recipe_engine.config import Single
 from recipe_engine.post_process import (
     DoesNotRun, DropExpectation, Filter, MustRun)
 from recipe_engine.recipe_api import Property
@@ -37,7 +38,7 @@ PROPERTIES = {
   # One of intel|arm|mips.
   'target_arch': Property(default=None, kind=str),
   # One of 32|64.
-  'target_bits': Property(default=None, kind=int),
+  'target_bits': Property(default=None, kind=Single((int, float))),
   # One of android|fuchsia|linux|mac|win.
   'target_platform': Property(default=None, kind=str),
 }
@@ -139,6 +140,8 @@ def make_archive(api, ref, version, archive_type, step_suffix='',
 
 
 def RunSteps(api, build_config, target_arch, target_bits, target_platform):
+  target_bits = int(target_bits)
+
   with api.step.nest('initialization'):
     # Ensure a proper branch is specified.
     ref = api.buildbucket.gitiles_commit.ref
