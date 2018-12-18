@@ -1048,6 +1048,15 @@ class SwarmingApi(recipe_api.RecipeApi):
           step_result.presentation.logs['no_results_exc'] = [
             str(e), '\n', self.m.traceback.format_exc()]
 
+  def _check_for_missing_shard(self, merged_results_json, active_step, task):
+    if merged_results_json:
+      missing_shards = merged_results_json.get('missing_shards') or []
+      if missing_shards:
+        active_step.presentation.status = self.m.step.EXCEPTION
+        for index in missing_shards:
+          active_step.presentation.links['missing shard #%d' % index] = \
+              task.get_shard_view_url(index)
+
   def _gtest_collect_step(self, merged_test_output, task, **kwargs):
     """Produces a step that collects and processes a result of google-test task.
     """
@@ -1082,13 +1091,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
       gtest_results = self.m.test_utils.present_gtest_failures(step_result)
       if gtest_results and gtest_results.valid:
-        p = step_result.presentation
-        missing_shards = gtest_results.raw.get('missing_shards') or []
-        if missing_shards:
-          step_result.presentation.status = self.m.step.EXCEPTION
-          for index in missing_shards:
-            p.links['missing shard #%d' % index] = \
-                task.get_shard_view_url(index)
+        self._check_for_missing_shard(gtest_results.raw, step_result, task)
 
         swarming_summary = step_result.swarming.summary
 
@@ -1102,6 +1105,8 @@ class SwarmingApi(recipe_api.RecipeApi):
           outputs_ref = shard.get('outputs_ref')
           if outputs_ref:
             link_name = 'shard #%d isolated out' % index
+
+            p = step_result.presentation
             p.links[link_name] = '%s/browse?namespace=%s&hash=%s' % (
               outputs_ref['isolatedserver'], outputs_ref['namespace'],
               outputs_ref['isolated'])
@@ -1247,6 +1252,8 @@ class SwarmingApi(recipe_api.RecipeApi):
               outdir_json.splitlines())
 
           step_result.isolated_script_results = step_result.json.output
+          self._check_for_missing_shard(
+              step_result.isolated_script_results, step_result, task)
 
           # Obtain perftest results if present
           perftest_results, is_histogramset = \
