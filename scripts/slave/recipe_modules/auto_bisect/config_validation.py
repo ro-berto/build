@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import copy
 import re
 
 # Note: this module is tested by a unit test config_validation_test.py,
@@ -26,6 +27,22 @@ _BISECT_CONFIG_SCHEMA = {
     'recipe_tester_name': {'type': 'string'},
     'try_job_id': {'type': 'integer'},
 }
+
+
+def from_properties(bisect_config_dict):
+  """Converts bisect config from a dict property value.
+
+  Properties do not necessarily distinguish integers and floats, e.g.
+  0 may turn into 0.0. This function fixes integer values.
+
+  Does not validate the config.
+  """
+  bisect_config_dict = copy.deepcopy(bisect_config_dict)
+  for p, schema in _BISECT_CONFIG_SCHEMA.iteritems():
+    v = bisect_config_dict.get(p)
+    if schema['type'] == 'integer' and isinstance(v, float):
+      bisect_config_dict[p] = int(v)
+  return bisect_config_dict
 
 
 class ValidationFail(Exception):

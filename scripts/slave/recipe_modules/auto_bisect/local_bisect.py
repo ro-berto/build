@@ -2,11 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import base64
-import collections
-import json
-
 from . import bisect_exceptions
+from . import config_validation
 
 def perform_bisect(api, **flags):
   # Try catch all the exceptions thrown in bisection so that recipe can
@@ -52,7 +49,8 @@ def perform_bisect(api, **flags):
     raise
 
 def _perform_single_bisect(api, bisect_attempts, **flags):
-  bisect_config = dict(api.m.properties.get('bisect_config'))
+  bisect_config = config_validation.from_properties(
+      dict(api.m.properties.get('bisect_config')))
   if bisect_attempts: # pragma: no cover
     bisect_config['good_revision'] = bisect_attempts[-1].lkgr.commit_hash
     bisect_config['bad_revision'] = bisect_attempts[-1].fkbr.commit_hash

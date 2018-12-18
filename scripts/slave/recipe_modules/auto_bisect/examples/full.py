@@ -163,7 +163,7 @@ def GenTests(api):
               'good_revision': '314015',
               'bad_revision': '314017',
               'metric': 'mean_input_event_latency/mean_input_event_latency',
-              'bug_id': '-1',
+              'bug_id': 123.0,
               'gs_bucket': 'chrome-perf',
               'dummy_tests': 'True',
               'dummy_job_names': 'True',
