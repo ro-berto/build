@@ -75,18 +75,24 @@ class MergeProfilesTest(unittest.TestCase):
             mock_merge.call_args,
             mock.call(input_dir, output_file, '.profdata', 'llvm-profdata'))
 
-  def test_merge_profraw(self):
+  @mock.patch.object(merger, '_validate_and_convert_profraws')
+  def test_merge_profraw(self, mock_validate_and_convert_profraws):
     mock_input_dir_walk = [
         ('/b/some/path', ['0', '1', '2', '3'], ['summary.json']),
         ('/b/some/path/0', [],
          ['output.json', 'default-1.profraw', 'default-2.profraw']),
         ('/b/some/path/1', [],
          ['output.json', 'default-1.profraw', 'default-2.profraw']),
-        ('/b/some/path/2', [],
-         ['output.json', 'default-1.profraw', 'default-2.profraw']),
-        ('/b/some/path/3', [],
-         ['output.json', 'default-1.profraw', 'default-2.profraw']),
     ]
+
+    mock_validate_and_convert_profraws.return_value = [
+        '/b/some/path/0/default-1.profdata',
+        '/b/some/path/1/default-2.profdata',
+    ], [
+        '/b/some/path/0/default-2.profraw',
+        '/b/some/path/1/default-1.profraw',
+    ]
+
     with mock.patch.object(os, 'walk') as mock_walk:
       with mock.patch.object(os, 'remove'):
         mock_walk.return_value = mock_input_dir_walk
@@ -96,21 +102,21 @@ class MergeProfilesTest(unittest.TestCase):
           self.assertEqual(
               mock.call(
                   [
-                      'llvm-profdata', 'merge', '-o',
-                      'output/dir/default.profdata', '-sparse=true',
-                      '/b/some/path/0/default-1.profraw',
-                      '/b/some/path/0/default-2.profraw',
-                      '/b/some/path/1/default-1.profraw',
-                      '/b/some/path/1/default-2.profraw',
-                      '/b/some/path/2/default-1.profraw',
-                      '/b/some/path/2/default-2.profraw',
-                      '/b/some/path/3/default-1.profraw',
-                      '/b/some/path/3/default-2.profraw'
+                      'llvm-profdata',
+                      'merge',
+                      '-o',
+                      'output/dir/default.profdata',
+                      '-sparse=true',
+                      '/b/some/path/0/default-1.profdata',
+                      '/b/some/path/1/default-2.profdata',
                   ],
                   stderr=-2,
               ), mock_exec_cmd.call_args)
 
-  def test_merge_profdata(self):
+    self.assertTrue(mock_validate_and_convert_profraws.called)
+
+  @mock.patch.object(merger, '_validate_and_convert_profraws')
+  def test_merge_profdata(self, mock_validate_and_convert_profraws):
     mock_input_dir_walk = [
         ('/b/some/path', ['base_unittests', 'url_unittests'], ['summary.json']),
         ('/b/some/path/base_unittests', [], ['output.json',
@@ -137,20 +143,23 @@ class MergeProfilesTest(unittest.TestCase):
                   stderr=-2,
               ), mock_exec_cmd.call_args)
 
-  def test_retry_merge_failures(self):
+    # The mock method should only apply when merging .profraw files.
+    self.assertFalse(mock_validate_and_convert_profraws.called)
+
+  def test_retry_profdata_merge_failures(self):
     mock_input_dir_walk = [
         ('/b/some/path', ['0', '1'], ['summary.json']),
         ('/b/some/path/0', [],
-         ['output.json', 'default-1.profraw', 'default-2.profraw']),
+         ['output.json', 'default-1.profdata', 'default-2.profdata']),
         ('/b/some/path/1', [],
-         ['output.json', 'default-1.profraw', 'default-2.profraw']),
+         ['output.json', 'default-1.profdata', 'default-2.profdata']),
     ]
     with mock.patch.object(os, 'walk') as mock_walk:
       with mock.patch.object(os, 'remove'):
         mock_walk.return_value = mock_input_dir_walk
         with mock.patch.object(subprocess, 'check_output') as mock_exec_cmd:
           invalid_profiles_msg = (
-              'error: /b/some/path/0/default-1.profraw: Malformed '
+              'error: /b/some/path/0/default-1.profdata: Malformed '
               'instrumentation profile data.')
 
           # Failed on the first merge, but succeed on the second attempt.
@@ -161,11 +170,11 @@ class MergeProfilesTest(unittest.TestCase):
           ]
 
           merger.merge_profiles('/b/some/path', 'output/dir/default.profdata',
-                                '.profraw', 'llvm-profdata')
+                                '.profdata', 'llvm-profdata')
 
           self.assertEqual(2, mock_exec_cmd.call_count)
 
-          # Note that in the second call, /b/some/path/0/default-1.profraw is
+          # Note that in the second call, /b/some/path/0/default-1.profdata is
           # excluded!
           self.assertEqual(
               mock.call(
@@ -175,9 +184,9 @@ class MergeProfilesTest(unittest.TestCase):
                       '-o',
                       'output/dir/default.profdata',
                       '-sparse=true',
-                      '/b/some/path/0/default-2.profraw',
-                      '/b/some/path/1/default-1.profraw',
-                      '/b/some/path/1/default-2.profraw',
+                      '/b/some/path/0/default-2.profdata',
+                      '/b/some/path/1/default-1.profdata',
+                      '/b/some/path/1/default-2.profdata',
                   ],
                   stderr=-2,
               ), mock_exec_cmd.call_args)

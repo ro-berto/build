@@ -5,6 +5,7 @@
 
 import json
 import logging
+import multiprocessing
 import os
 import subprocess
 
@@ -44,10 +45,10 @@ def _call_profdata_tool(profile_input_file_paths,
     # writes the error output to stderr and our error handling logic relies on
     # that output.
     output = subprocess.check_output(subprocess_cmd, stderr=subprocess.STDOUT)
-    logging.info('Merge succeeded with output: %s', output)
+    logging.info('Merge succeeded with output: %r', output)
   except subprocess.CalledProcessError as error:
     if len(profile_input_file_paths) > 1 and retries >= 0:
-      logging.warning('Merge failed with error output: %s', error.output)
+      logging.warning('Merge failed with error output: %r', error.output)
 
       # The output of the llvm-profdata command will include the path of
       # malformed files, such as
@@ -74,11 +75,11 @@ def _call_profdata_tool(profile_input_file_paths,
             valid_profiles, profile_output_file_path, profdata_tool_path,
             retries - 1)
 
-    logging.error('Failed to merge profiles, return code (%d), output: %s' %
+    logging.error('Failed to merge profiles, return code (%d), output: %r' %
                   (error.returncode, error.output))
     raise error
 
-  logging.info('Profile data is created as: "%s".', profile_output_file_path)
+  logging.info('Profile data is created as: "%r".', profile_output_file_path)
   return []
 
 
@@ -92,6 +93,74 @@ def _get_profile_paths(input_dir, input_extension):
         if fn.endswith(input_extension)
     ])
   return paths
+
+
+def _validate_and_convert_profraws(profraw_files, profdata_tool_path):
+  """Validates and converts profraws to profdatas.
+
+  For each given .profraw file in the input, this method first validates it by
+  trying to convert it to an indexed .profdata file, and if the validation and
+  conversion succeeds, the generated .profdata file will be included in the
+  output, otherwise, won't.
+
+  This method is mainly used to filter out invalid profraw files.
+
+  Args:
+    profraw_files: A list of .profraw paths.
+    profdata_tool_path: The path to the llvm-profdata executable.
+
+  Returns:
+    A tulple:
+      A list of converted .profdata files of *valid* profraw files.
+      A list of *invalid* profraw files.
+  """
+  logging.info('Validating and converting .profraw files.')
+
+  for profraw_file in profraw_files:
+    if not profraw_file.endswith('.profraw'):
+      raise RuntimeError('%r is expected to be a .profraw file.' % profraw_file)
+
+  cpu_count = multiprocessing.cpu_count()
+  counts = max(10, cpu_count - 5)  # Use 10+ processes, but leave 5 cpu cores.
+  pool = multiprocessing.Pool(counts)
+  output_profdata_files = multiprocessing.Manager().list()
+  invalid_profraw_files = multiprocessing.Manager().list()
+
+  for profraw_file in profraw_files:
+    pool.apply_async(_validate_and_convert_profraw,
+                     (profraw_file, output_profdata_files,
+                      invalid_profraw_files, profdata_tool_path))
+
+  pool.close()
+  pool.join()
+
+  # Remove inputs, as they won't be needed and they can be pretty large.
+  for input_file in profraw_files:
+    os.remove(input_file)
+
+  return list(output_profdata_files), list(invalid_profraw_files)
+
+
+def _validate_and_convert_profraw(profraw_file, output_profdata_files,
+                                  invalid_profraw_files, profdata_tool_path):
+  output_profdata_file = profraw_file.replace('.profraw', '.profdata')
+  subprocess_cmd = [
+      profdata_tool_path, 'merge', '-o', output_profdata_file, '-sparse=true',
+      profraw_file
+  ]
+
+  try:
+    # Redirecting stderr is required because when error happens, llvm-profdata
+    # writes the error output to stderr and our error handling logic relies on
+    # that output.
+    output = subprocess.check_output(subprocess_cmd, stderr=subprocess.STDOUT)
+    logging.info('Validating and converting %r to %r succeeded with output: %r',
+                 profraw_file, output_profdata_file, output)
+    output_profdata_files.append(output_profdata_file)
+  except subprocess.CalledProcessError as error:
+    logging.warning('Validating and converting %r to %r failed with output: %r',
+                    profraw_file, output_profdata_file, error.output)
+    invalid_profraw_files.append(profraw_file)
 
 
 def merge_profiles(input_dir, output_file, input_extension, profdata_tool_path):
@@ -108,7 +177,18 @@ def merge_profiles(input_dir, output_file, input_extension, profdata_tool_path):
     succeed.
   """
   profile_input_file_paths = _get_profile_paths(input_dir, input_extension)
-  invalid_profiles = _call_profdata_tool(
+  invalid_profraw_files = []
+  if input_extension == '.profraw':
+    profile_input_file_paths, invalid_profraw_files = (
+        _validate_and_convert_profraws(profile_input_file_paths,
+                                       profdata_tool_path))
+    logging.info('List of converted .profdata files: %r',
+                 profile_input_file_paths)
+    logging.info((
+        'List of invalid .profraw files that failed to validate and convert: %r'
+    ), invalid_profraw_files)
+
+  invalid_profdata_files = _call_profdata_tool(
       profile_input_file_paths=profile_input_file_paths,
       profile_output_file_path=output_file,
       profdata_tool_path=profdata_tool_path)
@@ -117,4 +197,4 @@ def merge_profiles(input_dir, output_file, input_extension, profdata_tool_path):
   for input_file in profile_input_file_paths:
     os.remove(input_file)
 
-  return invalid_profiles
+  return invalid_profraw_files + invalid_profdata_files
