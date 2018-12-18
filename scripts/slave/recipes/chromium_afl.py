@@ -35,22 +35,6 @@ BUILDERS = freeze({
       },
     },
   },
-  # TODO(crbug.com/903591): Remove the fyi config.
-  'chromium.fyi': {
-    'builders': {
-      'Afl Upload Linux ASan': {
-        'chromium_config': 'chromium_clang',
-        'chromium_apply_config': [ 'clobber' ],
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'linux',
-          'TARGET_BITS': 64,
-        },
-        'upload_bucket': 'chromium-browser-afl',
-        'upload_directory': 'asan',
-      },
-    },
-  },
 })
 
 
