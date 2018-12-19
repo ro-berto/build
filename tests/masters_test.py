@@ -219,7 +219,6 @@ def main(argv):
       'master.chromium.chrome': 'ChromiumChrome',
       'master.chromium.chromedriver': 'ChromiumChromeDriver',
       'master.chromium.clang': 'ChromiumClang',
-      'master.chromium.fyi': 'ChromiumFYI',
       'master.chromium.gatekeeper': 'Gatekeeper',
       'master.chromium.infra.cron': 'InfraCron',
       'master.chromium.perf': 'ChromiumPerf',
