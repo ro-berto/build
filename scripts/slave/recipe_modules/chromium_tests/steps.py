@@ -1487,6 +1487,11 @@ class SwarmingTest(Test):
           'pass_fail_counts': pass_fail_counts
       }
 
+      if step_result.retcode == 0 and not valid:
+        # This failure won't be caught automatically. Need to manually
+        # raise it as a step failure.
+        raise api.step.StepFailure(api.test_utils.INVALID_RESULTS_MAGIC)
+
   @property
   def uses_isolate(self):
     return True
@@ -1826,6 +1831,10 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       return False, None, 0, None
 
     results = getattr(step_result, 'isolated_script_results', None) or {}
+
+    global_tags = results.get('global_tags', [])
+    if 'UNRELIABLE_RESULTS' in global_tags:
+      return False, None, 0, None
 
     valid, failures, total_tests_ran, pass_fail_counts = (
         self.results_handler.validate_results(api, results))

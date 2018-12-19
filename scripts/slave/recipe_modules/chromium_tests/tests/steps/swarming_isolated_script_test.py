@@ -776,3 +776,27 @@ def GenTests(api):
       api.post_process(verify_log_fields, {'pass_fail_counts': {}}) +
       api.post_process(post_process.DropExpectation)
   )
+
+  yield (
+      api.test('unreliable_results') +
+      api.properties.generic(
+          mastername='chromium.linux',
+          buildername='Linux Tests') +
+      api.properties(
+          buildnumber=123,
+          swarm_hashes={
+            'webkit_layout_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+          git_revision='test_sha',
+          version='test-version',
+          got_revision_cp=123456,
+          test_filter=['test1', 'test2'],
+          repeat_count=20) +
+      api.override_step_data(
+          'webkit_layout_tests on Intel GPU on Linux (with patch)',
+          api.swarming.canned_summary_output(2) +
+          api.test_utils.m.json.output(
+              {'global_tags': ['UNRELIABLE_RESULTS']}, 0)) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )
