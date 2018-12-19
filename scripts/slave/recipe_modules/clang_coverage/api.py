@@ -533,28 +533,29 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     output_isolated = _find_isolated_json(local_run_isolate_step.stdout)
     profraw_dir = self.m.path.mkdtemp()
     if output_isolated:
-      self.m.python(
-          'retrieve raw profiles for %s' % step_name,
-          self.m.swarming_client.path.join('isolateserver.py'),
-          args=[
-              'download',
-              '-I%s' % output_isolated['storage'],
-              '-s%s' % output_isolated['hash'],
-              '--target=%s' % profraw_dir
-          ])
-      self.m.python(
-          'index raw profiles for %s' % step_name,
-          self.raw_profile_merge_script,
-          args=[
-              '--profdata-dir',
-              self.profdata_dir(step_name),
-              '--task-output-dir',
-              profraw_dir,
-              '--llvm-profdata',
-              self.profdata_executable,
-              '--output-json',
-              self.profdata_dir(step_name).join('output.json'),
-          ])
+      with self.m.step.nest('generate coverage profdata for %s' % step_name):
+        self.m.python(
+            'retrieve raw profiles for %s' % step_name,
+            self.m.swarming_client.path.join('isolateserver.py'),
+            args=[
+                'download',
+                '-I%s' % output_isolated['storage'],
+                '-s%s' % output_isolated['hash'],
+                '--target=%s' % profraw_dir
+            ])
+        self.m.python(
+            'index raw profiles for %s' % step_name,
+            self.raw_profile_merge_script,
+            args=[
+                '--profdata-dir',
+                self.profdata_dir(step_name),
+                '--task-output-dir',
+                profraw_dir,
+                '--llvm-profdata',
+                self.profdata_executable,
+                '--output-json',
+                self.profdata_dir(step_name).join('output.json'),
+            ])
 
 
 def _find_isolated_json(stdout):
