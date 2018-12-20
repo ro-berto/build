@@ -49,7 +49,7 @@ BOT_CONFIGS = {
       'test/mozilla/data',
       'test/simdjs/data',
       'test/test262/data',
-      'test/wasm-js',
+      'test/wasm-js/data',
       'testing/gtest',
       'third_party/WebKit/Source/platform/inspector_protocol',
       'third_party/blink/renderer/platform/inspector_protocol',
