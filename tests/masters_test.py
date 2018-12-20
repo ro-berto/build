@@ -222,7 +222,6 @@ def main(argv):
       'master.chromium.gatekeeper': 'Gatekeeper',
       'master.chromium.infra.cron': 'InfraCron',
       'master.chromium.perf': 'ChromiumPerf',
-      'master.chromium.webkit': 'ChromiumWebkit',
       'master.client.art': 'ART',
       'master.client.dart': 'Dart',
       'master.client.flutter': 'ClientFlutter',
