@@ -249,7 +249,7 @@ def GenTests(api):
            commit_loop_test_data=True):
     test_data = (
         api.test(name) +
-        api.properties.generic(mastername='client.v8.fyi',
+        api.properties.generic(mastername='client.v8.branches',
                                path_config='kitchen') +
         api.buildbucket.ci_build(
           project='v8',
@@ -346,7 +346,7 @@ def GenTests(api):
   # The bot was triggered without specifying a branch.
   yield (
       api.test('missing_branch') +
-      api.properties.generic(mastername='client.v8.fyi',
+      api.properties.generic(mastername='client.v8.branches',
                              path_config='kitchen') +
       api.buildbucket.ci_build(
         project='v8',

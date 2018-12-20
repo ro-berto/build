@@ -280,8 +280,7 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
   def template(testname, buildername):
     return (
         api.test(testname) +
-        api.properties.generic(mastername='client.v8.fyi',
-                               path_config='kitchen') +
+        api.properties.generic(path_config='kitchen') +
         api.buildbucket.ci_build(
             project='v8',
             git_repo='https://chromium.googlesource.com/v8/v8',
@@ -328,8 +327,7 @@ v8/tools/swarming_client: https://chromium.googlesource.com/external/swarming.cl
 
   yield (
       api.test('stale_roll') +
-      api.properties.generic(mastername='client.v8.fyi',
-                             path_config='kitchen') +
+      api.properties.generic(path_config='kitchen') +
       api.buildbucket.ci_build(
         project='v8',
         git_repo='https://chromium.googlesource.com/v8/v8',
