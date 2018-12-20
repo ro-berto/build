@@ -387,17 +387,6 @@ class AndroidApi(recipe_api.RecipeApi):
       return self.m.build.python(
           'authorize_adb_devices', script, args, infra_step=True)
 
-  def detect_and_setup_devices(
-      self, skip_wipe=False, disable_location=False,
-      min_battery_level=None, disable_network=False, disable_java_debug=False,
-      reboot_timeout=None, max_battery_temp=None): # pragma: no cover
-    # TODO(jbudorick): Remove this once internal clients no longer use it.
-    return self.common_tests_setup_steps(
-        skip_wipe=skip_wipe, disable_location=disable_location,
-        min_battery_level=min_battery_level, disable_network=disable_network,
-        disable_java_debug=disable_java_debug, reboot_timeout=reboot_timeout,
-        max_battery_temp=max_battery_temp)
-
   @property
   def blacklist_file(self):
     return self.out_path.join('bad_devices.json')
@@ -473,9 +462,7 @@ class AndroidApi(recipe_api.RecipeApi):
       f.result.presentation.status = self.m.step.EXCEPTION
 
   # TODO(jbudorick): Remove restart_usb once it's unused.
-  # TODO(perezju): Remove venv option once also removed from callers.
-  def device_recovery(self, restart_usb=False, venv=True, **kwargs):
-    assert venv, 'Callers should now be using venv=True.'
+  def device_recovery(self, restart_usb=False, **kwargs):
     script = self.m.path['checkout'].join(
         'third_party', 'catapult', 'devil', 'devil', 'android', 'tools',
         'device_recovery.py')
@@ -1229,8 +1216,7 @@ class AndroidApi(recipe_api.RecipeApi):
                                             '*.log')],
     )
 
-  # TODO(perezju): Remove venv option once also removed from callers.
-  def common_tests_setup_steps(self, venv=True, perf_setup=False, **provision_kwargs):
+  def common_tests_setup_steps(self, perf_setup=False, **provision_kwargs):
     if self.c.use_devil_adb:
       self.use_devil_adb()
     self.create_adb_symlink()
@@ -1239,7 +1225,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.authorize_adb_devices()
     # TODO(jbudorick): Restart USB only on perf bots while we
     # figure out the fate of the usb reset in general.
-    self.device_recovery(venv=venv, restart_usb=perf_setup)
+    self.device_recovery(restart_usb=perf_setup)
     if perf_setup:
       kwargs = {
           'min_battery_level': 95,
