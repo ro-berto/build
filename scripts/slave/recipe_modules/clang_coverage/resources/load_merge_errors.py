@@ -9,30 +9,44 @@ import json
 import os
 import sys
 
+_INVALID_PROFILE_FILENAME = 'invalid_profiles.json'
+
 
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--root-dir', required=True, help='directory to traverse')
   params = parser.parse_args()
+
   # Record the names of the steps for which we had to exclude some profiles from
   # the merge due to corruption or malformedness.
-  steps_with_merge_errors = []
+  steps_with_failed_profiles = {}
+  num_failed_profiles = 0
   for path, _dirs, files in os.walk(params.root_dir):
-    if 'invalid_profiles.json' in files:
-      try:
-        with open(os.path.join(path, 'invalid_profiles.json')) as f:
-          invalid_profiles = json.load(f)
-          if invalid_profiles:
-            # Note that the directory name is a modified version of the step
-            # name.
-            # We could pass the step name to the merge script, but seems this
-            # should be enough for manual debugging.
-            steps_with_merge_errors.append(os.path.basename(path))
-      except ValueError:
-        steps_with_merge_errors.append(
-            os.path.basename(path) + '- BAD JSON FORMAT')
-  json.dump(steps_with_merge_errors, sys.stdout)
+    if _INVALID_PROFILE_FILENAME not in files:
+      continue
+
+    # Note that the directory name is a modified version of the step
+    # name.
+    # We could pass the step name to the merge script, but seems this
+    # should be enough for manual debugging.
+    step_name = os.path.basename(path)
+    try:
+      with open(os.path.join(path, _INVALID_PROFILE_FILENAME)) as f:
+        invalid_profiles = json.load(f)
+        if invalid_profiles:
+          steps_with_failed_profiles[step_name] = invalid_profiles
+          num_failed_profiles += len(invalid_profiles)
+    except ValueError:
+      steps_with_failed_profiles[step_name] = '- BAD JSON FORMAT'
+
+  result = {
+      'total': num_failed_profiles,
+      'failed profiles': steps_with_failed_profiles
+  }
+  json.dump(result, sys.stdout)
+
+  return 1 if num_failed_profiles else 0
 
 
 if __name__ == '__main__':
-  main()
+  sys.exit(main())
