@@ -984,7 +984,7 @@
       "failure": {
         "step": "Aggregate step failure."
       },
-      "humanReason": "1 out of 11 aggregated steps failed. Failures: Step('android_webview_unittests') failed with return_code 2"
+      "humanReason": "1 out of 11 aggregated steps failed: Step('android_webview_unittests') failed with return_code 2"
     },
     "name": "$result"
   }

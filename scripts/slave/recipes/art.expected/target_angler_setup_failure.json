@@ -1605,7 +1605,7 @@
       "failure": {
         "step": "Aggregate step failure."
       },
-      "humanReason": "1 out of 53 aggregated steps failed. Failures: Step('setup device') failed with return_code 1"
+      "humanReason": "1 out of 53 aggregated steps failed: Step('setup device') failed with return_code 1"
     },
     "name": "$result"
   }

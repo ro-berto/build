@@ -5608,7 +5608,7 @@
       "failure": {
         "step": "Aggregate step failure."
       },
-      "humanReason": "1 out of 51 aggregated steps failed. Failures: Step('rtc_unittests') failed with return_code 1"
+      "humanReason": "1 out of 51 aggregated steps failed: Step('rtc_unittests') failed with return_code 1"
     },
     "name": "$result"
   }
