@@ -3,7 +3,8 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8/tools/v8_presubmit.py"
+      "[BUILDER_CACHE]/v8/tools/v8_presubmit.py",
+      "--no-linter-cache"
     ],
     "cwd": "[BUILDER_CACHE]/v8",
     "env_prefixes": {

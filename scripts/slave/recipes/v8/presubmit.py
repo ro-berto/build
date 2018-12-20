@@ -31,6 +31,7 @@ def RunSteps(api):
     api.python(
       'Presubmit',
       api.path['checkout'].join('tools', 'v8_presubmit.py'),
+      ['--no-linter-cache'],
     )
 
 
