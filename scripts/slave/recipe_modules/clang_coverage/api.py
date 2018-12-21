@@ -511,17 +511,23 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         stdout=self.m.json.output())
 
   def _surface_merging_errors(self):
+    test_data = {
+        "failed profiles": {
+            "browser_tests": ["/tmp/1/default-123.profraw"]
+        },
+        "total": 1
+    }
     step_result = self.m.python(
         'Finding merging errors',
         self.resource('load_merge_errors.py'),
         args=['--root-dir', self.profdata_dir()],
-        step_test_data=lambda: self.m.json.test_api.output_stream({}),
+        step_test_data=lambda: self.m.json.test_api.output_stream(test_data),
         stdout=self.m.json.output())
+
     if step_result.stdout:
-      step_result.step_text = ('FAILURES MERGING: %r' % step_result.stdout)
       step_result.presentation.status = self.m.step.FAILURE
-      step_result.presentation.properties['bad_coverage_profile_steps'] = len(
-          step_result.stdout)
+      step_result.presentation.properties[
+          'bad_coverage_profiles'] = step_result.stdout
 
   def get_local_isolated_coverage(self, step_name, local_run_isolate_step):
     """Collect coverage data from local isolated run.
