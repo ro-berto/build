@@ -159,6 +159,18 @@ BUILDERS = freeze({
           'gpu': None,
         }
       },
+      'Win32 Builder (Clang)': {
+        'recipe_config': 'webrtc_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'win'},
+        'triggers': [
+          'luci.webrtc.perf/Perf Win7',
+        ],
+      },
       'Win64 Debug (Clang)': {
         'recipe_config': 'webrtc_clang',
         'chromium_config_kwargs': {
@@ -233,6 +245,18 @@ BUILDERS = freeze({
           'os': 'Mac',
           'gpu': None,
         }
+      },
+      'Mac64 Builder': {
+        'recipe_config': 'webrtc',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'testing': {'platform': 'mac'},
+        'triggers': [
+          'luci.webrtc.perf/Perf Mac 10.11',
+        ],
       },
       'Mac Asan': {
         'recipe_config': 'webrtc_clang',
@@ -342,6 +366,9 @@ BUILDERS = freeze({
         'testing': {'platform': 'linux'},
         'binary_size_files': [
           'obj/libwebrtc.a'
+        ],
+        'triggers': [
+          'luci.webrtc.perf/Perf Linux Trusty',
         ],
       },
       'Linux64 Debug (ARM)': {
@@ -549,7 +576,6 @@ BUILDERS = freeze({
           'luci.webrtc.perf/Perf Android32 (L Nexus7.2)',
           'luci.webrtc.perf/Perf Android32 (N Nexus6)',
         ],
-
       },
       'Android64 (M Nexus5X)(dbg)': {
         'recipe_config': 'webrtc_android',
@@ -716,7 +742,8 @@ BUILDERS = freeze({
           'TARGET_BITS': 32,
         },
         'perf_id': 'webrtc-win-large-tests',
-        'bot_type': 'builder_tester',
+        'bot_type': 'tester',
+        'parent_buildername': 'Win32 Builder (Clang)',
         'testing': {'platform': 'win'},
         'enable_swarming': True,
         'swarming_dimensions': {
@@ -733,7 +760,8 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'perf_id': 'webrtc-mac-large-tests',
-        'bot_type': 'builder_tester',
+        'bot_type': 'tester',
+        'parent_buildername': 'Mac64 Builder',
         'testing': {'platform': 'mac'},
         'enable_swarming': True,
         'swarming_dimensions': {
@@ -750,7 +778,8 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'perf_id': 'webrtc-linux-large-tests',
-        'bot_type': 'builder_tester',
+        'bot_type': 'tester',
+        'parent_buildername': 'Linux64 Builder',
         'testing': {'platform': 'linux'},
         'enable_swarming': True,
         'swarming_dimensions': {

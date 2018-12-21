@@ -3,7 +3,21 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\kill_processes.py"
+    ],
+    "infra_step": true,
+    "name": "taskkill"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'https://webrtc.googlesource.com/src'}]",
       "--revision_mapping_file",
@@ -11,13 +25,13 @@
       "--git-cache-dir",
       "[GIT_CACHE]",
       "--cleanup-dir",
-      "[CLEANUP]/bot_update",
+      "[CLEANUP]\\bot_update",
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
       "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
-    "cwd": "[CACHE]/builder",
+    "cwd": "[CACHE]\\builder",
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -67,8 +81,8 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[CACHE]/builder/src/out"
+      "RECIPE_MODULE[build::webrtc]\\resources\\cleanup_files.py",
+      "[CACHE]\\builder\\src\\out"
     ],
     "infra_step": true,
     "name": "clean test output files"
@@ -79,16 +93,16 @@
   },
   {
     "cmd": [
-      "cipd",
+      "cipd.bat",
       "ensure",
       "-root",
-      "[GOMA_CACHE]/client",
+      "[GOMA_CACHE]\\client",
       "-ensure-file",
-      "infra_internal/goma/client/linux-amd64 release",
+      "infra_internal/goma/client/windows-amd64 release",
       "-json-output",
       "/path/to/tmp/json",
       "-service-account-json",
-      "/creds/service_accounts/service-account-goma-client.json"
+      "C:\\creds\\service_accounts\\service-account-goma-client.json"
     ],
     "infra_step": true,
     "name": "ensure_goma.ensure_installed",
@@ -98,7 +112,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/windows-amd64\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -109,13 +123,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "clang=1 gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -128,18 +142,18 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb.py",
       "lookup",
       "-m",
       "client.webrtc",
       "-b",
-      "Linux64 Builder",
+      "Win32 Builder (Clang)",
       "--config-file",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client"
+      "[GOMA_CACHE]\\client"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -154,19 +168,19 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb.py",
       "gen",
       "-m",
       "client.webrtc",
       "-b",
-      "Linux64 Builder",
+      "Win32 Builder (Clang)",
       "--config-file",
-      "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb_config.pyl",
       "--goma-dir",
-      "[GOMA_CACHE]/client",
-      "//out/Linux64_Builder"
+      "[GOMA_CACHE]\\client",
+      "//out/Win32_Builder_Clang"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -174,8 +188,35 @@
     "name": "generate_build_files"
   },
   {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\clang_revision.py",
+      "--src-dir",
+      "[CACHE]\\builder\\src",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "clang_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -185,15 +226,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/data/Linux64_Builder"
+      "[GOMA_CACHE]\\data\\Win32_Builder__Clang_"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -207,21 +248,21 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]/client/goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "restart"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/Linux64_Builder",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\Win32_Builder__Clang_",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
@@ -234,21 +275,21 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "RECIPE_MODULE[build::goma]\\resources\\cloudtail_utils.py",
       "start",
       "--cloudtail-path",
-      "cloudtail",
+      "cloudtail.exe",
       "--cloudtail-service-account-json",
-      "/creds/service_accounts/service-account-goma-cloudtail.json",
+      "C:\\creds\\service_accounts\\service-account-goma-cloudtail.json",
       "--pid-file",
-      "[TMP_BASE]/cloudtail.pid"
+      "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -262,21 +303,21 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "RECIPE_MODULE[build::chromium]\\resources\\ninja_wrapper.py",
       "--ninja_info_output",
       "/path/to/tmp/json",
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Linux64_Builder",
+      "[CACHE]\\builder\\src\\out\\Win32_Builder_Clang",
       "-j",
       "20"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -285,18 +326,18 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Linux64_Builder",
+      "[CACHE]\\builder\\src\\out\\Win32_Builder_Clang",
       "-j",
       "20",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -306,7 +347,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -316,19 +357,19 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]/client/goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "jsonstatus",
-      "[TMP_BASE]/goma_jsonstatus.json"
+      "[TMP_BASE]\\goma_jsonstatus.json"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
     "~followup_annotations": [
@@ -350,18 +391,18 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]/client/goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stat"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.goma_stat",
     "~followup_annotations": [
@@ -372,18 +413,18 @@
     "cmd": [
       "python",
       "-u",
-      "[GOMA_CACHE]/client/goma_ctl.py",
+      "[GOMA_CACHE]\\client\\goma_ctl.py",
       "stop"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
-      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
+      "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
+      "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
+      "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
     },
     "name": "postprocess_for_goma.stop_goma",
     "~followup_annotations": [
@@ -394,49 +435,49 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
-      "/creds/service_accounts/service-account-goma-bigquery.json",
+      "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
-      "[TMP_BASE]/goma_jsonstatus.json",
+      "[TMP_BASE]\\goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Linux64_Builder",
+      "[CACHE]\\builder\\src\\out\\Win32_Builder_Clang",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Linux64_Builder\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Win32_Builder_Clang\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
       "compile",
       "--ninja-log-compiler",
-      "goma",
+      "goma-clang",
       "--goma-stats-file",
-      "[TMP_BASE]/goma_stats",
+      "[TMP_BASE]\\goma_stats",
       "--goma-counterz-file",
-      "[TMP_BASE]/goma_counterz",
+      "[TMP_BASE]\\goma_counterz",
       "--goma-crash-report-id-file",
-      "[TMP_BASE]/crash_report_id",
+      "[TMP_BASE]\\crash_report_id",
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"Linux64 Builder\", \"project\": \"webrtc\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"Win32 Builder (Clang)\", \"project\": \"webrtc\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "Linux64 Builder",
+      "Win32 Builder (Clang)",
       "--buildbot-mastername",
       "client.webrtc",
       "--buildbot-slavename",
       "bot_id"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -456,17 +497,17 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_MODULE[build::goma]/resources/cloudtail_utils.py",
+      "RECIPE_MODULE[build::goma]\\resources\\cloudtail_utils.py",
       "stop",
       "--killed-pid-file",
-      "[TMP_BASE]/cloudtail.pid"
+      "[TMP_BASE]\\cloudtail.pid"
     ],
-    "cwd": "[CACHE]/builder/src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -474,28 +515,6 @@
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::webrtc]/resources/binary_sizes.py",
-      "--base-dir",
-      "[CACHE]/builder/src/out/Linux64_Builder",
-      "--output",
-      "/path/to/tmp/json",
-      "--",
-      "obj/libwebrtc.a"
-    ],
-    "infra_step": true,
-    "name": "get binary sizes",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"some_binary\": 123456@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@binary_sizes@{\"some_binary\": 123456}@@@"
     ]
   },
   {
@@ -508,7 +527,7 @@
     ],
     "infra_step": true,
     "name": "luci-scheduler.EmitTriggers",
-    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Linux Trusty\", \"project\": \"webrtc\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"parent_got_revision_cp\": \"refs/heads/master@{#170242}\", \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}, \"tags\": [\"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Linux64 Builder\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Linux64 Builder/1337\"}}], \"timestamp\": 1337000003000000}",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Win7\", \"project\": \"webrtc\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"parent_got_revision_cp\": \"refs/heads/master@{#170242}\", \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}, \"tags\": [\"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Win32 Builder (Clang)\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Win32 Builder (Clang)/1337\"}}], \"timestamp\": 1337000003000000}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@input {",
@@ -516,7 +535,7 @@
       "        {",
       "            \"jobs\": [",
       "                {",
-      "                    \"job\": \"Perf Linux Trusty\", ",
+      "                    \"job\": \"Perf Win7\", ",
       "                    \"project\": \"webrtc\"",
       "                }",
       "            ], ",
@@ -530,12 +549,12 @@
       "                    \"tags\": [",
       "                        \"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", ",
       "                        \"gitiles_ref:refs/heads/master\", ",
-      "                        \"parent_buildername:Linux64 Builder\", ",
+      "                        \"parent_buildername:Win32 Builder (Clang)\", ",
       "                        \"user_agent:recipe\"",
       "                    ]",
       "                }, ",
       "                \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", ",
-      "                \"title\": \"Linux64 Builder/1337\"",
+      "                \"title\": \"Win32 Builder (Clang)/1337\"",
       "            }",
       "        }",
       "    ], ",

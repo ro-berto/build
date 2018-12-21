@@ -84,7 +84,7 @@
       "-root",
       "[GOMA_CACHE]/client",
       "-ensure-file",
-      "infra_internal/goma/client/linux-amd64 release",
+      "infra_internal/goma/client/mac-amd64 release",
       "-json-output",
       "/path/to/tmp/json",
       "-service-account-json",
@@ -98,7 +98,36 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
-      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/linux-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/mac-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[START_DIR]",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-goma-client.json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-git_revision:796\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/mac_toolchain/${platform}\"@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -115,7 +144,9 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GYP_DEFINES": "clang=1 gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1",
+      "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
       "PATH": [
@@ -133,7 +164,7 @@
       "-m",
       "client.webrtc",
       "-b",
-      "Linux64 Builder",
+      "Mac64 Builder",
       "--config-file",
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
@@ -142,6 +173,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args",
@@ -159,19 +191,48 @@
       "-m",
       "client.webrtc",
       "-b",
-      "Linux64 Builder",
+      "Mac64 Builder",
       "--config-file",
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
-      "//out/Linux64_Builder"
+      "//out/Mac64_Builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "generate_build_files"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
+      "--src-dir",
+      "[CACHE]/builder/src",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "name": "clang_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [],
@@ -191,7 +252,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/data/Linux64_Builder"
+      "[GOMA_CACHE]/data/Mac64_Builder"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -213,9 +274,10 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/Linux64_Builder",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/Mac64_Builder",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -272,13 +334,14 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Linux64_Builder",
+      "[CACHE]/builder/src/out/Mac64_Builder",
       "-j",
       "20"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "compile"
@@ -289,7 +352,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[CACHE]/builder/src/out/Linux64_Builder",
+      "[CACHE]/builder/src/out/Mac64_Builder",
       "-j",
       "20",
       "-d",
@@ -299,6 +362,7 @@
     "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
     "name": "compile confirm no-op",
@@ -409,15 +473,15 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[CACHE]/builder/src/out/Linux64_Builder",
+      "[CACHE]/builder/src/out/Mac64_Builder",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Linux64_Builder\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Mac64_Builder\", \"-j\", 20]",
       "--build-exit-status",
       "0",
       "--build-step-name",
       "compile",
       "--ninja-log-compiler",
-      "goma",
+      "goma-clang",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
@@ -427,10 +491,10 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"Linux64 Builder\", \"project\": \"webrtc\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"Mac64 Builder\", \"project\": \"webrtc\"}",
       "--is-luci",
       "--buildbot-buildername",
-      "Linux64 Builder",
+      "Mac64 Builder",
       "--buildbot-mastername",
       "client.webrtc",
       "--buildbot-slavename",
@@ -478,28 +542,6 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::webrtc]/resources/binary_sizes.py",
-      "--base-dir",
-      "[CACHE]/builder/src/out/Linux64_Builder",
-      "--output",
-      "/path/to/tmp/json",
-      "--",
-      "obj/libwebrtc.a"
-    ],
-    "infra_step": true,
-    "name": "get binary sizes",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"some_binary\": 123456@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@binary_sizes@{\"some_binary\": 123456}@@@"
-    ]
-  },
-  {
-    "cmd": [
       "prpc",
       "call",
       "-format=json",
@@ -508,7 +550,7 @@
     ],
     "infra_step": true,
     "name": "luci-scheduler.EmitTriggers",
-    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Linux Trusty\", \"project\": \"webrtc\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"parent_got_revision_cp\": \"refs/heads/master@{#170242}\", \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}, \"tags\": [\"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Linux64 Builder\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Linux64 Builder/1337\"}}], \"timestamp\": 1337000003000000}",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Mac 10.11\", \"project\": \"webrtc\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"parent_got_revision_cp\": \"refs/heads/master@{#170242}\", \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}, \"tags\": [\"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Mac64 Builder\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Mac64 Builder/1337\"}}], \"timestamp\": 1337000003000000}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@input {",
@@ -516,7 +558,7 @@
       "        {",
       "            \"jobs\": [",
       "                {",
-      "                    \"job\": \"Perf Linux Trusty\", ",
+      "                    \"job\": \"Perf Mac 10.11\", ",
       "                    \"project\": \"webrtc\"",
       "                }",
       "            ], ",
@@ -530,12 +572,12 @@
       "                    \"tags\": [",
       "                        \"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", ",
       "                        \"gitiles_ref:refs/heads/master\", ",
-      "                        \"parent_buildername:Linux64 Builder\", ",
+      "                        \"parent_buildername:Mac64 Builder\", ",
       "                        \"user_agent:recipe\"",
       "                    ]",
       "                }, ",
       "                \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", ",
-      "                \"title\": \"Linux64 Builder/1337\"",
+      "                \"title\": \"Mac64 Builder/1337\"",
       "            }",
       "        }",
       "    ], ",
