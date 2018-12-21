@@ -67,11 +67,36 @@
     "cmd": [
       "python",
       "-u",
+      "[CACHE]/builder/src/tools_webrtc/download_tools.py",
+      "[CACHE]/builder/src/tools_webrtc/audio_quality"
+    ],
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "download audio quality tools"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
       "[CACHE]/builder/src/out"
     ],
     "infra_step": true,
     "name": "clean test output files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
+      "--build-dir",
+      "[CACHE]/builder/src/out/Release",
+      "--clean-isolated-files"
+    ],
+    "name": "clean isolated files"
   },
   {
     "cmd": [],
@@ -159,6 +184,19 @@
     "cmd": [
       "python",
       "-u",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
+      "--version"
+    ],
+    "name": "swarming.py --version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@0.8.6@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "lookup",
       "-m",
@@ -196,6 +234,8 @@
       "[CACHE]/builder/src/tools_webrtc/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
+      "--swarming-targets-file",
+      "isac_fix_test\nlow_bandwidth_audio_perf_test\nwebrtc_perf_tests\n",
       "//out/Mac64_Builder"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -204,7 +244,13 @@
       "FORCE_MAC_TOOLCHAIN": "1",
       "GOMA_USE_LOCAL": "false"
     },
-    "name": "generate_build_files"
+    "name": "generate_build_files",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@isac_fix_test@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@low_bandwidth_audio_perf_test@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@webrtc_perf_tests@@@",
+      "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
+    ]
   },
   {
     "allow_subannotations": true,
@@ -336,7 +382,11 @@
       "-C",
       "[CACHE]/builder/src/out/Mac64_Builder",
       "-j",
-      "20"
+      "20",
+      "default",
+      "isac_fix_test",
+      "low_bandwidth_audio_perf_test",
+      "webrtc_perf_tests"
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
@@ -355,6 +405,10 @@
       "[CACHE]/builder/src/out/Mac64_Builder",
       "-j",
       "20",
+      "default",
+      "isac_fix_test",
+      "low_bandwidth_audio_perf_test",
+      "webrtc_perf_tests",
       "-d",
       "explain",
       "-n"
@@ -475,7 +529,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Mac64_Builder",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Mac64_Builder\", \"-j\", 20]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Mac64_Builder\", \"-j\", 20, \"default\", \"isac_fix_test\", \"low_bandwidth_audio_perf_test\", \"webrtc_perf_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -542,6 +596,40 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]/resources/isolate.py",
+      "[CACHE]/builder/src/tools/swarming_client",
+      "batcharchive",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--eventlog-endpoint",
+      "prod",
+      "--blacklist",
+      "*.pyc",
+      "--blacklist",
+      "*.swp",
+      "--blacklist",
+      ".git",
+      "[CACHE]/builder/src/out/Mac64_Builder/isac_fix_test.isolated.gen.json",
+      "[CACHE]/builder/src/out/Mac64_Builder/low_bandwidth_audio_perf_test.isolated.gen.json",
+      "[CACHE]/builder/src/out/Mac64_Builder/webrtc_perf_tests.isolated.gen.json"
+    ],
+    "name": "isolate tests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"isac_fix_test\": \"[dummy hash for isac_fix_test]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"isac_fix_test\": \"[dummy hash for isac_fix_test]\", \"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"}@@@"
+    ]
+  },
+  {
+    "cmd": [
       "prpc",
       "call",
       "-format=json",
@@ -550,7 +638,7 @@
     ],
     "infra_step": true,
     "name": "luci-scheduler.EmitTriggers",
-    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Mac 10.11\", \"project\": \"webrtc\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"parent_got_revision_cp\": \"refs/heads/master@{#170242}\", \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"}, \"tags\": [\"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Mac64 Builder\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Mac64 Builder/1337\"}}], \"timestamp\": 1337000003000000}",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"Perf Mac 10.11\", \"project\": \"webrtc\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"parent_got_revision_cp\": \"refs/heads/master@{#170242}\", \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"swarm_hashes\": {\"isac_fix_test\": \"[dummy hash for isac_fix_test]\", \"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"}}, \"tags\": [\"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:Mac64 Builder\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"Mac64 Builder/1337\"}}], \"timestamp\": 1337000003000000}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_TEXT@input {",
@@ -567,7 +655,12 @@
       "                    \"properties\": {",
       "                        \"parent_got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", ",
       "                        \"parent_got_revision_cp\": \"refs/heads/master@{#170242}\", ",
-      "                        \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"",
+      "                        \"revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", ",
+      "                        \"swarm_hashes\": {",
+      "                            \"isac_fix_test\": \"[dummy hash for isac_fix_test]\", ",
+      "                            \"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test]\", ",
+      "                            \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"",
+      "                        }",
       "                    }, ",
       "                    \"tags\": [",
       "                        \"buildset:commit/gitiles/webrtc.googlesource.com/src/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", ",

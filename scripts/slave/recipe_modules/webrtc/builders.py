@@ -167,6 +167,7 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'win'},
+        'enable_swarming': True,
         'triggers': [
           'luci.webrtc.perf/Perf Win7',
         ],
@@ -254,6 +255,7 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
+        'enable_swarming': True,
         'triggers': [
           'luci.webrtc.perf/Perf Mac 10.11',
         ],
@@ -367,6 +369,7 @@ BUILDERS = freeze({
         'binary_size_files': [
           'obj/libwebrtc.a'
         ],
+        'enable_swarming': True,
         'triggers': [
           'luci.webrtc.perf/Perf Linux Trusty',
         ],
