@@ -2047,6 +2047,26 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
+      "",
+      "gs://dart-test-results/builders/current_flakiness/dart2js-win10-debug-x64-firefox-stable/flaky_current.json"
+    ],
+    "cwd": "[CACHE]\\builder\\sdk",
+    "infra_step": true,
+    "name": "upload new results.gsutil upload flaky_current.json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/current_flakiness/dart2js-win10-debug-x64-firefox-stable/flaky_current.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
       "LATEST/approved_results.json",
       "gs://dart-test-results/builders/dart2js-win10-debug-x64-firefox-stable/1357/approved_results.json"
     ],
