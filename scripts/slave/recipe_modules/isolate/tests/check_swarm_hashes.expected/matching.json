@@ -1,0 +1,10 @@
+[
+  {
+    "cmd": [],
+    "name": "check swarm_hashes"
+  },
+  {
+    "jsonResult": null,
+    "name": "$result"
+  }
+]

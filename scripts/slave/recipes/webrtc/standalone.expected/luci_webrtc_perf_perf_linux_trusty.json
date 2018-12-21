@@ -98,25 +98,8 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
-      "--build-dir",
-      "[CACHE]/builder/src/out/Release",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "name": "find isolated tests",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"isac_fix_test\": \"[dummy hash for isac_fix_test]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"isac_fix_test\": \"[dummy hash for isac_fix_test]\", \"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"}@@@"
-    ]
+    "cmd": [],
+    "name": "check swarm_hashes"
   },
   {
     "cmd": [

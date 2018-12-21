@@ -266,6 +266,7 @@
   * [ios:tests/swarming_service_acount](#recipes-ios_tests_swarming_service_acount)
   * [isolate:examples/compose](#recipes-isolate_examples_compose)
   * [isolate:examples/full](#recipes-isolate_examples_full)
+  * [isolate:tests/check_swarm_hashes](#recipes-isolate_tests_check_swarm_hashes)
   * [isolate:tests/clean_isolated_files](#recipes-isolate_tests_clean_isolated_files)
   * [isolate:tests/compare_build_artifacts](#recipes-isolate_tests_compare_build_artifacts)
   * [isolate:tests/isolate_tests](#recipes-isolate_tests_isolate_tests)
@@ -2564,6 +2565,17 @@ Args:
 
 APIs for interacting with isolates.
 
+&mdash; **def [check\_swarm\_hashes](/scripts/slave/recipe_modules/isolate/api.py#54)(self, targets):**
+
+Asserts that all the targets in the passed list are present as keys in
+the 'swarm_hashes' property.
+
+This is just an optional early check that all the isolated targets that are
+needed throughout the build are present. Without this step, the build would
+just fail later, on a 'trigger' step. But the main usefulness of this is
+that it automatically populates the 'swarm_hashes' property in testing
+context, so that it doesn't need to be manually specified through test_api.
+
 &mdash; **def [clean\_isolated\_files](/scripts/slave/recipe_modules/isolate/api.py#40)(self, build_dir):**
 
 Cleans out all *.isolated files from the build directory in
@@ -2571,11 +2583,11 @@ preparation for the compile. Needed in order to ensure isolates
 are rebuilt properly because their dependencies are currently not
 completely described to gyp.
 
-&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#296)(self, first_dir, second_dir):**
+&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#318)(self, first_dir, second_dir):**
 
 Compare the artifacts from 2 builds.
 
-&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#318)(self, isolate_hashes, step_name=None, \*\*kwargs):**
+&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#340)(self, isolate_hashes, step_name=None, \*\*kwargs):**
 
 Creates and uploads a new isolate composing multiple existing isolates.
 
@@ -2589,7 +2601,7 @@ Args:
 Returns:
   Hash of the uploaded composite isolate.
 
-&mdash; **def [find\_isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#54)(self, build_dir, targets=None, \*\*kwargs):**
+&mdash; **def [find\_isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#76)(self, build_dir, targets=None, \*\*kwargs):**
 
 Returns a step which finds all *.isolated files in a build directory.
 
@@ -2608,7 +2620,7 @@ them. If some expected targets are missing, will abort the build.
 
 Changes URL of Isolate server to use.
 
-&mdash; **def [isolate\_tests](/scripts/slave/recipe_modules/isolate/api.py#114)(self, build_dir, targets=None, verbose=False, swarm_hashes_property_name='swarm_hashes', step_name=None, suffix='', \*\*kwargs):**
+&mdash; **def [isolate\_tests](/scripts/slave/recipe_modules/isolate/api.py#136)(self, build_dir, targets=None, verbose=False, swarm_hashes_property_name='swarm_hashes', step_name=None, suffix='', \*\*kwargs):**
 
 Archives prepared tests in |build_dir| to isolate server.
 
@@ -2632,14 +2644,14 @@ Args:
     suffix: suffix of isolate_tests step.
         e.g. ' (with patch)', ' (without patch)'.
 
-&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#259)(self):**
+&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#281)(self):**
 
 The dictionary of 'target name -> isolated hash' for this run.
 
 These come either from the incoming swarm_hashes build property,
 or from calling find_isolated_tests, above, at some point during the run.
 
-&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#281)(self, name, isolate_hash, args=None, \*\*kwargs):**
+&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#303)(self, name, isolate_hash, args=None, \*\*kwargs):**
 
 Runs an isolated test.
 
@@ -4021,11 +4033,11 @@ Capture coverage data and upload a report.
 
 &mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#236)(self, \*\*kwargs):**
 
-&mdash; **def [clean\_test\_output](/scripts/slave/recipe_modules/webrtc/api.py#507)(self):**
+&mdash; **def [clean\_test\_output](/scripts/slave/recipe_modules/webrtc/api.py#506)(self):**
 
 Remove all test output in out/, since we have tests leaking files.
 
-&mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#500)(self):**
+&mdash; **def [cleanup](/scripts/slave/recipe_modules/webrtc/api.py#499)(self):**
 
 &mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#316)(self, phase=None):**
 
@@ -5398,6 +5410,11 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 [DEPS](/scripts/slave/recipe_modules/isolate/examples/full.py#7): [isolate](#recipe_modules-isolate), [swarming\_client](#recipe_modules-swarming_client), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/isolate/examples/full.py#22)(api):**
+### *recipes* / [isolate:tests/check\_swarm\_hashes](/scripts/slave/recipe_modules/isolate/tests/check_swarm_hashes.py)
+
+[DEPS](/scripts/slave/recipe_modules/isolate/tests/check_swarm_hashes.py#5): [isolate](#recipe_modules-isolate), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/isolate/tests/check_swarm_hashes.py#11)(api):**
 ### *recipes* / [isolate:tests/clean\_isolated\_files](/scripts/slave/recipe_modules/isolate/tests/clean_isolated_files.py)
 
 [DEPS](/scripts/slave/recipe_modules/isolate/tests/clean_isolated_files.py#5): [isolate](#recipe_modules-isolate), [recipe\_engine/path][recipe_engine/recipe_modules/path]

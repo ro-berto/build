@@ -473,8 +473,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def extract_build(self):
     if self.c.enable_swarming:
-      self.m.isolate.find_isolated_tests(self.m.chromium.output_dir,
-                                         targets=self._isolated_targets)
+      self.m.isolate.check_swarm_hashes(self._isolated_targets)
       return
 
     if not self.m.properties.get('parent_got_revision'):

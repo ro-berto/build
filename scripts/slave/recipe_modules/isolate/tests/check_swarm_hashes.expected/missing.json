@@ -1,0 +1,17 @@
+[
+  {
+    "cmd": [],
+    "name": "check swarm_hashes"
+  },
+  {
+    "failure": {
+      "exception": {
+        "traceback": [
+          "<omitted by recipe engine>"
+        ]
+      },
+      "humanReason": "Missing isolated target(s) other_target in swarm_hashes"
+    },
+    "name": "$result"
+  }
+]

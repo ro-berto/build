@@ -51,6 +51,28 @@ class IsolateApi(recipe_api.RecipeApi):
         '--clean-isolated-files'
       ])
 
+  def check_swarm_hashes(self, targets):
+    """Asserts that all the targets in the passed list are present as keys in
+    the 'swarm_hashes' property.
+
+    This is just an optional early check that all the isolated targets that are
+    needed throughout the build are present. Without this step, the build would
+    just fail later, on a 'trigger' step. But the main usefulness of this is
+    that it automatically populates the 'swarm_hashes' property in testing
+    context, so that it doesn't need to be manually specified through test_api.
+    """
+    with self.m.step.nest('check swarm_hashes'):
+      if self._test_data.enabled:
+        self._isolated_tests = {
+          target: '[dummy hash for %s]' % target for target in targets}
+
+      isolated_tests = self.isolated_tests
+      missing = [t for t in targets if not isolated_tests.get(t)]
+      if missing:
+        raise self.m.step.InfraFailure(
+          'Missing isolated target(s) %s in swarm_hashes' % ', '.join(missing))
+
+
   def find_isolated_tests(self, build_dir, targets=None, **kwargs):
     """Returns a step which finds all *.isolated files in a build directory.
 
