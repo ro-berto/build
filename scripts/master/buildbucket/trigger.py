@@ -42,8 +42,7 @@ class TriggeringService(object):
     return None
 
   def get_build_url(self, build_id):
-    return 'https://%s/b/%s' % (
-        client.get_default_buildbucket_hostname(self.active_master), build_id)
+    return 'https://%s/b/%s' % (client.BUILDBUCKET_HOSTNAME, build_id)
 
   @defer.inlineCallbacks
   def trigger(
