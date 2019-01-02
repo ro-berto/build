@@ -464,6 +464,7 @@ class iOSApi(recipe_api.RecipeApi):
             'trybot_analyze_config.json',
             additional_names=['chromium', 'ios'],
             mb_mastername=self.__config['mastername'],
+            build_output_dir='//out/%s' % build_sub_path,
           )
         )
 
