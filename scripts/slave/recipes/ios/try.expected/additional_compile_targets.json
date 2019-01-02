@@ -438,7 +438,7 @@
       "-b",
       "ios-simulator",
       "-v",
-      "//out/Debug-iphonesimulator",
+      "//out/None",
       "{\"additional_compile_targets\": [\"fake_target\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
