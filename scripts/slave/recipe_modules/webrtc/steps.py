@@ -398,9 +398,7 @@ class AndroidTest(SwarmingGTestTest):
 
 class SwarmingAndroidPerfTest(SwarmingTest):
   def __init__(self, test, args=None, add_adb_path=False, shards=1,
-               cipd_packages=None, **kwargs):
-    # There are **kwargs passed to this function such as "idempotent" that are
-    # not used. This should be fixed.
+               cipd_packages=None, idempotent=False, **kwargs):
     args = list(args or [])
     args.extend([
         '--isolated-script-test-perf-output',
@@ -412,10 +410,11 @@ class SwarmingAndroidPerfTest(SwarmingTest):
       ])
     self._args = args
     self._shards = shards
+    self._idempotent = idempotent
     if cipd_packages is None:
       cipd_packages = ANDROID_CIPD_PACKAGES
     self._cipd_packages = cipd_packages
-    super(SwarmingAndroidPerfTest, self).__init__(test)
+    super(SwarmingAndroidPerfTest, self).__init__(test, **kwargs)
 
   def create_task(self, api, suffix, isolated_hash):
     return api.swarming.task(
@@ -423,6 +422,7 @@ class SwarmingAndroidPerfTest(SwarmingTest):
         isolated_hash=isolated_hash,
         shards=self._shards,
         cipd_packages=self._cipd_packages,
+        idempotent=self._idempotent,
         extra_args=self._args,
         build_properties=api.chromium.build_properties)
 
