@@ -10,7 +10,15 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running tester 'Lollipop Phone Tester' on master 'chromium.android'@@@"
+      "@@@STEP_TEXT@<br/>running tester 'Lollipop Phone Tester' on master 'chromium.android'@@@",
+      "@@@STEP_LOG_LINE@bots.json@[@@@",
+      "@@@STEP_LOG_LINE@bots.json@  {@@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"bot_type\": \"tester\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"Lollipop Phone Tester\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.android\"@@@",
+      "@@@STEP_LOG_LINE@bots.json@  }@@@",
+      "@@@STEP_LOG_LINE@bots.json@]@@@",
+      "@@@STEP_LOG_END@bots.json@@@"
     ]
   },
   {

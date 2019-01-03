@@ -10,7 +10,15 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running builder/tester 'mac10.12-blink-rel-dummy' on master 'chromium.fyi'@@@"
+      "@@@STEP_TEXT@<br/>running builder/tester 'mac10.12-blink-rel-dummy' on master 'chromium.fyi'@@@",
+      "@@@STEP_LOG_LINE@bots.json@[@@@",
+      "@@@STEP_LOG_LINE@bots.json@  {@@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"bot_type\": \"builder/tester\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"mac10.12-blink-rel-dummy\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.fyi\"@@@",
+      "@@@STEP_LOG_LINE@bots.json@  }@@@",
+      "@@@STEP_LOG_LINE@bots.json@]@@@",
+      "@@@STEP_LOG_END@bots.json@@@"
     ]
   },
   {

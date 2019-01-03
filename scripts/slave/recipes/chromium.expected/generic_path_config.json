@@ -10,7 +10,15 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running builder 'Linux remote_run Builder' on master 'chromium.fyi'@@@"
+      "@@@STEP_TEXT@<br/>running builder 'Linux remote_run Builder' on master 'chromium.fyi'@@@",
+      "@@@STEP_LOG_LINE@bots.json@[@@@",
+      "@@@STEP_LOG_LINE@bots.json@  {@@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"bot_type\": \"builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"Linux remote_run Builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.fyi\"@@@",
+      "@@@STEP_LOG_LINE@bots.json@  }@@@",
+      "@@@STEP_LOG_LINE@bots.json@]@@@",
+      "@@@STEP_LOG_END@bots.json@@@"
     ]
   },
   {

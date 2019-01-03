@@ -10,7 +10,15 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running tester 'Mac10.13 Tests' on master 'chromium.mac'@@@"
+      "@@@STEP_TEXT@<br/>running tester 'Mac10.13 Tests' on master 'chromium.mac'@@@",
+      "@@@STEP_LOG_LINE@bots.json@[@@@",
+      "@@@STEP_LOG_LINE@bots.json@  {@@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"bot_type\": \"tester\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"Mac10.13 Tests\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.mac\"@@@",
+      "@@@STEP_LOG_LINE@bots.json@  }@@@",
+      "@@@STEP_LOG_LINE@bots.json@]@@@",
+      "@@@STEP_LOG_END@bots.json@@@"
     ]
   },
   {

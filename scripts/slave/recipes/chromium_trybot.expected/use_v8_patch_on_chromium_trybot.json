@@ -10,7 +10,24 @@
     },
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running tester 'Win7 Tests (1)' on master 'chromium.win' against builder 'Win Builder' on master 'chromium.win'<br/>running tester 'Win10 Release (NVIDIA)' on master 'chromium.gpu' against builder 'GPU Win Builder' on master 'chromium.gpu'@@@"
+      "@@@STEP_TEXT@<br/>running tester 'Win7 Tests (1)' on master 'chromium.win' against builder 'Win Builder' on master 'chromium.win'<br/>running tester 'Win10 Release (NVIDIA)' on master 'chromium.gpu' against builder 'GPU Win Builder' on master 'chromium.gpu'@@@",
+      "@@@STEP_LOG_LINE@bots.json@[@@@",
+      "@@@STEP_LOG_LINE@bots.json@  {@@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"bot_type\": \"tester\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"Win Builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.win\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"tester_buildername\": \"Win7 Tests (1)\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"tester_mastername\": \"chromium.win\"@@@",
+      "@@@STEP_LOG_LINE@bots.json@  }, @@@",
+      "@@@STEP_LOG_LINE@bots.json@  {@@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"bot_type\": \"tester\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"GPU Win Builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.gpu\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"tester_buildername\": \"Win10 Release (NVIDIA)\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"tester_mastername\": \"chromium.gpu\"@@@",
+      "@@@STEP_LOG_LINE@bots.json@  }@@@",
+      "@@@STEP_LOG_LINE@bots.json@]@@@",
+      "@@@STEP_LOG_END@bots.json@@@"
     ]
   },
   {

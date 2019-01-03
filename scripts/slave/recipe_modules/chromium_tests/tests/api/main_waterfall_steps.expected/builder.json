@@ -7,7 +7,15 @@
     ],
     "name": "report builders",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>running builder 'Linux Builder' on master 'chromium.linux'@@@"
+      "@@@STEP_TEXT@<br/>running builder 'Linux Builder' on master 'chromium.linux'@@@",
+      "@@@STEP_LOG_LINE@bots.json@[@@@",
+      "@@@STEP_LOG_LINE@bots.json@  {@@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"bot_type\": \"builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"buildername\": \"Linux Builder\", @@@",
+      "@@@STEP_LOG_LINE@bots.json@    \"mastername\": \"chromium.linux\"@@@",
+      "@@@STEP_LOG_LINE@bots.json@  }@@@",
+      "@@@STEP_LOG_LINE@bots.json@]@@@",
+      "@@@STEP_LOG_END@bots.json@@@"
     ]
   },
   {

@@ -1350,7 +1350,29 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
 
     lines = [''] + [present_bot(b) for b in bot_config.bot_ids]
-    self.m.python.succeeding_step('report builders', '<br/>'.join(lines))
+    result = self.m.python.succeeding_step(
+        'report builders', '<br/>'.join(lines))
+
+    def as_dict(bot_id):
+      if bot_id.tester:
+        return {
+            'mastername': bot_id.mastername,
+            'buildername': bot_id.buildername,
+            'tester_buildername': bot_id.tester,
+            'tester_mastername': bot_id.tester_mastername,
+            'bot_type': 'tester',
+        }
+      bot_type = bot_config.get_bot_type(bot_id)
+      if bot_type == 'builder_tester':
+        bot_type = 'builder/tester'
+      return {
+          'mastername': bot_id.mastername,
+          'buildername': bot_id.buildername,
+          'bot_type': bot_type,
+      }
+    bots_json = [as_dict(b) for b in bot_config.bot_ids]
+    result.presentation.logs['bots.json'] = self.m.json.dumps(
+        bots_json, indent=2).split('/n')
 
   def _all_compile_targets(self, tests):
     """Returns the compile_targets for all the Tests in |tests|."""
