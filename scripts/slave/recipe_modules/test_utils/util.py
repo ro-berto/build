@@ -1,3 +1,9 @@
+# Copyright 2018 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import collections
+
 def convert_trie_to_flat_paths(trie, prefix, sep):
   # Cloned from webkitpy.layout_tests.layout_package.json_results_generator
   # so that this code can stand alone.
@@ -244,6 +250,9 @@ class GTestResults(object):
 
     self.passes = set()
     self.failures = set()
+    # Stores raw results of each test. Used to display test results in build
+    # step logs.
+    self.raw_results = collections.defaultdict(list)
 
     if not jsonish:
       self.valid = False
@@ -275,6 +284,8 @@ class GTestResults(object):
             self.pass_fail_counts[test_fullname]['pass_count'] += 1
           elif cur_result['status'] != 'SKIPPED':
             self.pass_fail_counts[test_fullname]['fail_count'] += 1
+          self.raw_results[test_fullname].append(cur_result['status'])
+
           ascii_log = cur_result['output_snippet'].encode('ascii',
                                                           errors='replace')
           self.logs[test_fullname].extend(

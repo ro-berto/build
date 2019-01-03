@@ -139,7 +139,24 @@ class TestUtilsApi(recipe_api.RecipeApi):
       failures, text_failures = self.limit_failures(
           r.failures, self._max_reported_gtest_failures)
       for f in failures:
-        p.logs[f] = r.logs[f]
+        # FIXME: We could theoretically split up each run more. This would
+        # require some refactoring in util.py to store each individual run's
+        # logs, which we don't do currently.
+        log_name = '%s (status %s)' % (f, ','.join(set(r.raw_results[f])))
+        p.logs[log_name] = [
+            "Test '%s' completed with the following status(es): '%s'" % (
+                f, '\',\''.join(r.raw_results[f])),
+            '\n',
+            "Test '%s' had the following logs when run:\n" % f,
+            '\n',
+            '=' * 80 + '\n',
+            '\n',
+        ] + r.logs[f] + [
+            '\n',
+            '=' * 80,
+        ]
+
+
       p.step_text += self.format_step_text([
           ['failures:', text_failures],
       ])

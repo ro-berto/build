@@ -19,8 +19,16 @@
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>failures:<br/>Test.Two<br/>@@@",
-      "@@@STEP_LOG_LINE@Test.Two@:(@@@",
-      "@@@STEP_LOG_END@Test.Two@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@Test 'Test.Two' completed with the following status(es): 'FAILURE'@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@Test 'Test.Two' had the following logs when run:@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@================================================================================@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@:(@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@================================================================================@@@",
+      "@@@STEP_LOG_END@Test.Two (status FAILURE)@@@",
       "@@@STEP_FAILURE@@@"
     ]
   },
