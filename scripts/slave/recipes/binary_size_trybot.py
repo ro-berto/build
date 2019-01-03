@@ -42,11 +42,13 @@ _PATCH_FIXED_BUILD_STEP_NAME = (
 _FOOTER_PRESENT_STEP_NAME = (
     'Not measuring binary size because Binary-Size justification was provided.')
 _NDJSON_GS_BUCKET = 'chromium-binary-size-trybot-results'
-_HTML_REPORT_BASE_URL = (
-    'https://storage.googleapis.com/chrome-supersize/viewer.html?load_url='
+_ARCHIVED_URL_PREFIX = (
     'https://storage.googleapis.com/' + _NDJSON_GS_BUCKET + '/')
+_RESULT_JSON_STEP_NAME = 'Read diff results'
+_RESULTS_STEP_NAME = 'Trybot Results'
 
 _TEST_TIME = 1454371200
+_TEST_BUILDER = 'android_binary_size'
 _TEST_BUILDNUMBER = '200'
 _TEST_TIME_FMT = '2016/02/02'
 
@@ -115,27 +117,11 @@ def RunSteps(api):
       api.chromium.runhooks(name='runhooks' + suffix)
 
       with api.context(cwd=api.path['checkout']):
-        resource_sizes_diff_path = staging_dir.join('resource_sizes_diff.txt')
-        dex_method_count_diff_path = staging_dir.join(
-            'dex_method_counts_diff.txt')
-        supersize_diff_path = staging_dir.join('supersize_diff.txt')
-        ndjson_path = staging_dir.join('report.ndjson')
         results_path = staging_dir.join('results.json')
 
         _CreateDiffs(api, author, without_results_dir, with_results_dir,
-                     resource_sizes_diff_path, supersize_diff_path,
-                     dex_method_count_diff_path, ndjson_path, results_path)
-
-        _UploadNdJson(api, ndjson_path)
-
-        _DisplayDiffResults(api, 'Resource Sizes', resource_sizes_diff_path,
-                            '(Look here for high-level metrics)')
-        _DisplayDiffResults(api, 'Supersize', supersize_diff_path,
-                            '(Look here for detailed breakdown)')
-        _DisplayDiffResults(api, 'Dex Method Count', dex_method_count_diff_path,
-                            '(Look here for added/removed Java methods)')
-
-        _CheckForUndocumentedIncrease(api, results_path)
+                     results_path, staging_dir)
+        _CheckForUndocumentedIncrease(api, results_path, staging_dir)
 
 
 def _BuildAndMeasure(api, with_patch, staging_dir):
@@ -168,74 +154,83 @@ def _BuildAndMeasure(api, with_patch, staging_dir):
   return results_dir
 
 
-def _CheckForUndocumentedIncrease(api, results_path):
+def _CheckForUndocumentedIncrease(api, results_path, staging_dir):
   step_result = api.json.read(
-      'Check for undocumented increase', results_path,
+      _RESULT_JSON_STEP_NAME, results_path,
       step_test_data=lambda: api.json.test_api.output({
-          'details': 'Binary size checks passed.',
-          'normalized_apk_size': 1024,
-          'status_code': 0,
-      }))
+        'status_code': 0,
+        'summary': '\n!summary!',
+        'archive_filenames': [ 'result.ndjson' ],
+        'links': [
+            {
+                'name': 'Resource Sizes Diff (high-level metrics)',
+                'lines': ['!resource_sizes!'],
+            }, {
+                'name': 'SuperSize Text Diff',
+                'lines': [u'!supersize text with \u0394!'],
+            }, {
+                'name': 'Dex Method Diff',
+                'lines': ['!dex_methods!'],
+            }, {
+                'name': 'Supersize HTML Diff',
+                'url': 'https://foo.com/{{result.ndjson}}',
+            },
+        ],
+    }))
   result_json = step_result.json.output
-  presentation = step_result.presentation
+  # Upload files (.ndjson) to storage bucket.
+  filename_map = {}
+  for filename in result_json['archive_filenames']:
+    filename_map[filename] = _ArchiveArtifact(api, staging_dir, filename)
 
-  try:
-    presentation.logs['Size delta summary'] = (
-        result_json['details'].splitlines())
-    presentation.step_text = 'Normalized apk size delta: {} bytes'.format(
-        result_json['normalized_apk_size'])
-    if result_json['status_code'] != 0:
-      presentation.status = api.step.FAILURE
-      raise api.step.StepFailure('Undocumented size increase detected')
-  except KeyError:
-    presentation.status = api.step.FAILURE
-    raise api.step.StepFailure('Malformed results JSON detected')
+  step_result = api.python.succeeding_step(
+      _RESULTS_STEP_NAME, result_json['summary'])
+  for link in result_json['links']:
+    if 'lines' in link:
+      step_result.presentation.logs[link['name']] = link['lines']
+    else:
+      url = link['url']
+      for filename, archived_url in filename_map.iteritems():
+        url = url.replace('{{' + filename + '}}', archived_url)
+      step_result.presentation.links[link['name']] = url
+
+  if result_json['status_code'] != 0:
+    step_result.presentation.status = api.step.FAILURE
+    raise api.step.StepFailure('Undocumented size increase detected')
 
 
-def _CreateDiffs(api, author, before_dir, after_dir, resource_sizes_diff_path,
-                 supersize_diff_path, dex_method_count_diff_path,
-                 ndjson_path, results_path):
+def _CreateDiffs(api, author, before_dir, after_dir, results_path, staging_dir):
   checker_script = api.path['checkout'].join(
       'tools', 'binary_size', 'trybot_commit_size_checker.py')
 
   api.python('Generate diffs', checker_script, [
-      '--author', author,
-      '--apk-name', _APK_NAME,
-      '--before-dir', before_dir,
-      '--after-dir', after_dir,
-      '--resource-sizes-diff-path', resource_sizes_diff_path,
-      '--supersize-diff-path', supersize_diff_path,
-      '--dex-method-count-diff-path', dex_method_count_diff_path,
-      '--ndjson-path', ndjson_path,
-      "--results-path", results_path
+      '--author',
+      author,
+      '--apk-name',
+      _APK_NAME,
+      '--before-dir',
+      before_dir,
+      '--after-dir',
+      after_dir,
+      '--results-path',
+      results_path,
+      '--staging-dir',
+      staging_dir,
   ])
 
 
-def _DisplayDiffResults(api, name, path, description):
-  diff_text = api.file.read_text('Show {} Diff'.format(name), path,
-                                 test_data='Test output data')
-  read_step_result = api.step.active_result
-  read_step_result.presentation.step_text = description
-  read_step_result.presentation.logs['>>> View {} Diff <<<'.format(name)] = (
-      diff_text.splitlines())
-
-
-def _UploadNdJson(api, ndjson_path):
+def _ArchiveArtifact(api, staging_dir, filename):
   today = api.time.utcnow().date()
-  gs_dest = '{}/{}/{}.ndjson'.format(
-      api.buildbucket.builder_name,
-      today.strftime('%Y/%m/%d'),
-      api.buildbucket.build.number)
-  upload_result = api.gsutil.upload(
-      source=ndjson_path,
+  gs_dest = '{}/{}/{}/{}'.format(api.buildbucket.builder_name,
+                                 today.strftime('%Y/%m/%d'),
+                                 api.buildbucket.build.number, filename)
+  api.gsutil.upload(
+      source=staging_dir.join(filename),
       bucket=_NDJSON_GS_BUCKET,
       dest=gs_dest,
-      name='upload Supersize HTML report',
-      link_name='Supersize HTML Report',
+      name='archive ' + filename,
       unauthenticated_url=True)
-  report_link_text = '>>> View Supersize HTML Report <<<'
-  upload_result.presentation.links[report_link_text] = (
-      _HTML_REPORT_BASE_URL + gs_dest)
+  return _ARCHIVED_URL_PREFIX + gs_dest
 
 
 def GenTests(api):
@@ -254,27 +249,21 @@ def GenTests(api):
     footer_json = {}
     if size_footer:
       footer_json['Binary-Size'] = ['Totally worth it.']
-    return (
-        api.test(name) +
-        api.properties.tryserver(
-            build_config='Release',
-            mastername='tryserver.chromium.android',
-            buildername='android_binary_size',
-            buildnumber=_TEST_BUILDNUMBER,
-            patch_set=1,
-            **kwargs) +
-        api.platform('linux', 64) +
-        api.override_step_data(
+    return (api.test(name) + api.properties.tryserver(
+        build_config='Release',
+        mastername='tryserver.chromium.android',
+        buildername=_TEST_BUILDER,
+        buildnumber=_TEST_BUILDNUMBER,
+        patch_set=1,
+        **kwargs) + api.platform('linux', 64) + api.override_step_data(
             'gerrit changes',
             api.json.output([{
                 'revisions': {
                     kwargs['revision']: revision_info
                 }
-            }])) +
-        api.override_step_data('parse description',
-                               api.json.output(footer_json)) +
-        api.time.seed(_TEST_TIME)
-    )
+            }])) + api.override_step_data('parse description',
+                                          api.json.output(footer_json)) +
+            api.time.seed(_TEST_TIME))
 
 
   def override_analyze(no_changes=False):
@@ -310,29 +299,17 @@ def GenTests(api):
       override_analyze() +
       api.post_process(
           post_process.AnnotationContains,
-          'gsutil upload Supersize HTML report',
-          ['{}android_binary_size/{}/{}.ndjson'.format(
-              _HTML_REPORT_BASE_URL, _TEST_TIME_FMT, _TEST_BUILDNUMBER)])
+          _RESULTS_STEP_NAME,
+          ['https://foo.com/{}{}/{}/{}/result.ndjson'.format(
+               _ARCHIVED_URL_PREFIX, _TEST_BUILDER, _TEST_TIME_FMT,
+               _TEST_BUILDNUMBER)])
   )
-  yield (
-      props('unexpected_increase') +
-      override_analyze() +
-      api.override_step_data(
-          'Check for undocumented increase',
-          api.json.output({
-            'details': 'Failed',
-            'normalized_apk_size': 1024 * 17,
-            'status_code': 1
-          }))
-  )
-  yield(
-      props('malformed_results_json') +
-      override_analyze() +
-      api.override_step_data(
-          'Check for undocumented increase',
-          api.json.output({
-            'details': 'Failed',
-            'normalized_apk_size': 1024 * 17,
-            'error_code': 1
-          }))
-  )
+  yield (props('unexpected_increase') + override_analyze() +
+         api.override_step_data(
+             _RESULT_JSON_STEP_NAME,
+             api.json.output({
+                 'status_code': 1,
+                 'summary': '\n!summary!',
+                 'archive_filenames': [],
+                 'links': [],
+             })))

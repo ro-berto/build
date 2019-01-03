@@ -1711,114 +1711,16 @@
       "[CLEANUP]/binary-size-trybot_tmp_1/without_patch",
       "--after-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1/with_patch",
-      "--resource-sizes-diff-path",
-      "[CLEANUP]/binary-size-trybot_tmp_1/resource_sizes_diff.txt",
-      "--supersize-diff-path",
-      "[CLEANUP]/binary-size-trybot_tmp_1/supersize_diff.txt",
-      "--dex-method-count-diff-path",
-      "[CLEANUP]/binary-size-trybot_tmp_1/dex_method_counts_diff.txt",
-      "--ndjson-path",
-      "[CLEANUP]/binary-size-trybot_tmp_1/report.ndjson",
       "--results-path",
-      "[CLEANUP]/binary-size-trybot_tmp_1/results.json"
+      "[CLEANUP]/binary-size-trybot_tmp_1/results.json",
+      "--staging-dir",
+      "[CLEANUP]/binary-size-trybot_tmp_1"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
     "name": "Generate diffs"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "[CLEANUP]/binary-size-trybot_tmp_1/report.ndjson",
-      "gs://chromium-binary-size-trybot-results/android_binary_size/2016/02/02/200.ndjson"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_binary_size/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "gsutil upload Supersize HTML report",
-    "~followup_annotations": [
-      "@@@STEP_LINK@Supersize HTML Report@https://storage.googleapis.com/chromium-binary-size-trybot-results/android_binary_size/2016/02/02/200.ndjson@@@",
-      "@@@STEP_LINK@>>> View Supersize HTML Report <<<@https://storage.googleapis.com/chrome-supersize/viewer.html?load_url=https://storage.googleapis.com/chromium-binary-size-trybot-results/android_binary_size/2016/02/02/200.ndjson@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CLEANUP]/binary-size-trybot_tmp_1/resource_sizes_diff.txt",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_binary_size/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "Show Resource Sizes Diff",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@(Look here for high-level metrics)@@@",
-      "@@@STEP_LOG_LINE@>>> View Resource Sizes Diff <<<@Test output data@@@",
-      "@@@STEP_LOG_END@>>> View Resource Sizes Diff <<<@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CLEANUP]/binary-size-trybot_tmp_1/supersize_diff.txt",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_binary_size/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "Show Supersize Diff",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@(Look here for detailed breakdown)@@@",
-      "@@@STEP_LOG_LINE@>>> View Supersize Diff <<<@Test output data@@@",
-      "@@@STEP_LOG_END@>>> View Supersize Diff <<<@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "[CLEANUP]/binary-size-trybot_tmp_1/dex_method_counts_diff.txt",
-      "/path/to/tmp/"
-    ],
-    "cwd": "[BUILDER_CACHE]/android_binary_size/src",
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "Show Dex Method Count Diff",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@(Look here for added/removed Java methods)@@@",
-      "@@@STEP_LOG_LINE@>>> View Dex Method Count Diff <<<@Test output data@@@",
-      "@@@STEP_LOG_END@>>> View Dex Method Count Diff <<<@@@"
-    ]
   },
   {
     "cmd": [
@@ -1832,17 +1734,85 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "Check for undocumented increase",
+    "name": "Read diff results",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Normalized apk size delta: 1024 bytes@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"details\": \"Binary size checks passed.\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"normalized_apk_size\": 1024, @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"archive_filenames\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"result.ndjson\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"links\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"lines\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"!resource_sizes!\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Resource Sizes Diff (high-level metrics)\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"lines\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"!supersize text with \\u0394!\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"SuperSize Text Diff\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"lines\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"!dex_methods!\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      ], @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Dex Method Diff\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"name\": \"Supersize HTML Diff\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"url\": \"https://foo.com/{{result.ndjson}}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"status_code\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"summary\": \"\\n!summary!\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@Size delta summary@Binary size checks passed.@@@",
-      "@@@STEP_LOG_END@Size delta summary@@@"
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]/binary-size-trybot_tmp_1/result.ndjson",
+      "gs://chromium-binary-size-trybot-results/android_binary_size/2016/02/02/200/result.ndjson"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_binary_size/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "infra_step": true,
+    "name": "gsutil archive result.ndjson",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.googleapis.com/chromium-binary-size-trybot-results/android_binary_size/2016/02/02/200/result.ndjson@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "cwd": "[BUILDER_CACHE]/android_binary_size/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "Trybot Results",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@",
+      "!summary!@@@",
+      "@@@STEP_LOG_LINE@Resource Sizes Diff (high-level metrics)@!resource_sizes!@@@",
+      "@@@STEP_LOG_END@Resource Sizes Diff (high-level metrics)@@@",
+      "@@@STEP_LOG_LINE@SuperSize Text Diff@!supersize text with \u0394!@@@",
+      "@@@STEP_LOG_END@SuperSize Text Diff@@@",
+      "@@@STEP_LOG_LINE@Dex Method Diff@!dex_methods!@@@",
+      "@@@STEP_LOG_END@Dex Method Diff@@@",
+      "@@@STEP_LINK@Supersize HTML Diff@https://foo.com/https://storage.googleapis.com/chromium-binary-size-trybot-results/android_binary_size/2016/02/02/200/result.ndjson@@@"
     ]
   },
   {
