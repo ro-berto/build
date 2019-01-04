@@ -247,7 +247,8 @@ def RunSteps(api):
     bot_utils = api.path['checkout'].join('util', 'bot')
     go_env = bot_utils.join('go', 'env.py')
     adb_path = bot_utils.join('android_tools', 'sdk', 'platform-tools', 'adb')
-    sde_path = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform))
+    sde_path = bot_utils.join('sde-' + _GetHostToolSuffix(api.platform),
+                              'sde' + _GetHostExeSuffix(api.platform))
     build_dir = api.path['checkout'].join('build')
     runner_dir = api.path['checkout'].join('ssl', 'test', 'runner')
 
@@ -302,7 +303,7 @@ def RunSteps(api):
       with api.context(cwd=api.path['checkout'], env=env):
         all_tests_args = []
         if _HasToken(buildername, 'sde'):
-          all_tests_args += ['-sde', '-sde-path', sde_path.join('sde')]
+          all_tests_args += ['-sde', '-sde-path', sde_path]
         if _HasToken(buildername, 'android'):
           api.python('unit tests', go_env, [
               'go', 'run',
@@ -433,6 +434,8 @@ def GenTests(api):
     ('linux_sde', api.platform('linux', 64)),
     ('linux32_sde', api.platform('linux', 64)),
     ('linux_clang_rel_tsan', api.platform('linux', 64)),
+    ('win32_sde', api.platform('win', 64)),
+    ('win64_sde', api.platform('win', 64)),
   ]
   for (buildername, host_platform) in unit_test_only_tests:
     yield (
