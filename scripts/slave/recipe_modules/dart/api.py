@@ -377,7 +377,8 @@ class DartApi(recipe_api.RecipeApi):
     self._upload_result(builder, build_number, 'logs.json', logs_str)
     self._upload_result(builder, build_number, 'results.json', results_str)
     self._upload_result(builder, build_number, 'flaky.json', flaky_json_str)
-    self._upload_result('current_flakiness', builder, 'flaky_current.json', flaky_json_str)
+    self._upload_result('current_flakiness', 'single_directory',
+                        'flaky_current_%s.json' % builder, flaky_json_str)
     self.m.gsutil.upload(
       'LATEST/approved_results.json',
       'dart-test-results',

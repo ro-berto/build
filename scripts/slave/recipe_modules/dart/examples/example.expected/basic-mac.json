@@ -2386,14 +2386,14 @@
       "----",
       "cp",
       "",
-      "gs://dart-test-results/builders/current_flakiness/dart2js-mac-debug-x64-chrome/flaky_current.json"
+      "gs://dart-test-results/builders/current_flakiness/single_directory/flaky_current_dart2js-mac-debug-x64-chrome.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "infra_step": true,
-    "name": "upload new results.gsutil upload flaky_current.json",
+    "name": "upload new results.gsutil upload flaky_current_dart2js-mac-debug-x64-chrome.json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/current_flakiness/dart2js-mac-debug-x64-chrome/flaky_current.json@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/current_flakiness/single_directory/flaky_current_dart2js-mac-debug-x64-chrome.json@@@"
     ]
   },
   {
