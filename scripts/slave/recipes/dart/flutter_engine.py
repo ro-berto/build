@@ -221,7 +221,8 @@ def RunSteps(api):
   try:
     BuildAndTest(api, start_dir, checkout_dir)
   finally:
-    KillTasks(api, checkout_dir, ok_ret={0})
+    # TODO(aam): Go back to `ok_ret={0}` once dartbug.com/35549 is fixed
+    KillTasks(api, checkout_dir, ok_ret='any')
 
 def BuildAndTest(api, start_dir, checkout_dir):
   run_env = {
