@@ -133,7 +133,8 @@
       "--root=[CACHE]/builder/angle",
       "gen",
       "//out/release",
-      "--args=is_debug=false is_component_build=false use_goma=true goma_dir=\"[CACHE]/goma/client\""
+      "--args=is_debug=false is_component_build=false use_goma=true goma_dir=\"[CACHE]/goma/client\"",
+      "--check"
     ],
     "cwd": "[CACHE]/builder/angle",
     "name": "gn gen"

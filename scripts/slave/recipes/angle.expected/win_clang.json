@@ -148,7 +148,8 @@
       "--root=[CACHE]\\builder\\angle",
       "gen",
       "//out/release_clang",
-      "--args=is_debug=false is_component_build=false use_goma=true goma_dir=\"[CACHE]\\goma\\client\" is_clang=true"
+      "--args=is_debug=false is_component_build=false use_goma=true goma_dir=\"[CACHE]\\goma\\client\" is_clang=true",
+      "--check"
     ],
     "cwd": "[CACHE]\\builder\\angle",
     "env": {

@@ -77,7 +77,7 @@ def _GNGenBuilds(api, target_cpu, debug, clang, out_dir):
   with api.context(cwd=checkout):
     api.python('gn gen', gn_cmd,
                ['--root=' + str(checkout), 'gen', '//out/' + out_dir,
-                '--args=' + ' '.join(args)])
+                '--args=' + ' '.join(args), '--check'])
 
 
 def _GetCompilerName(api, clang):
