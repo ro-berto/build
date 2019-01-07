@@ -1239,6 +1239,12 @@ class SwarmingTest(Test):
       elif 'Android' == dimensions.get('os') and dimensions.get('device_type'):
         self._extra_suffix = self._get_android_suffix(dimensions)
 
+  def _dispatches_to_windows(self):
+    if self._dimensions:
+      os = self._dimensions.get('os', '')
+      return os.startswith('Windows')
+    return False
+
   @staticmethod
   def _get_gpu_suffix(dimensions):
     gpu_vendor_id = dimensions.get('gpu', '').split(':')[0].lower()
@@ -1350,14 +1356,21 @@ class SwarmingTest(Test):
 
     shards = self._shards
 
-    # We've run into issues in the past with command lines hitting a character
-    # limit on windows. Do a sanity check, and only pass this list if we failed
-    # less than 100 tests.
-    if tests_to_retry and len(tests_to_retry) < 100:
-      test_list = filter_delimiter.join(tests_to_retry)
-      args = _merge_arg(args, filter_flag, test_list)
+    if tests_to_retry:
+      # The filter list is eventually passed to the binary over the command line.
+      # On Windows, the command line max char limit is 8191 characters. On other
+      # OSes, the max char limit is over 100,000 characters. We avoid sending the
+      # filter list if we're close to the limit -- this causes all tests to be
+      # run.
+      char_limit = 7000 if self._dispatches_to_windows() else 90000
+      expected_filter_length = (sum(len(x) for x in tests_to_retry) +
+          len(tests_to_retry) * len(filter_delimiter))
 
-      shards = self.shards_to_retry_with(api, shards, len(tests_to_retry))
+      if expected_filter_length < char_limit:
+        test_list = filter_delimiter.join(tests_to_retry)
+        args = _merge_arg(args, filter_flag, test_list)
+
+        shards = self.shards_to_retry_with(api, shards, len(tests_to_retry))
 
     env = None
     if self._isolate_coverage_data:
