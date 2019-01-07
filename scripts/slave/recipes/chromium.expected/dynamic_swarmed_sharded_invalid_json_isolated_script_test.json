@@ -586,7 +586,7 @@
       "-server",
       "https://chromium-swarm.appspot.com",
       "-worker",
-      "100",
+      "50",
       "-task-summary-python",
       "-task-output-stdout",
       "json",
