@@ -7,7 +7,7 @@ import re
 
 from recipe_engine import recipe_api
 
-_BUCKET_NAME = 'cr-coverage-profile-data'
+_BUCKET_NAME = 'code-coverage-data'
 
 # Name of the file to store the component map.
 _COMPONENT_MAPPING_FILE_NAME = 'component_mapping_path.json'
@@ -253,7 +253,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         multithreaded=True,
         name='upload source and html report files')
     upload_step.presentation.links['html report'] = (
-        'https://storage.googleapis.com/%s/%s/index.html' %
+        'https://storage.cloud.google.com/%s/%s/index.html' %
         (_BUCKET_NAME, source_and_report_gs_path))
     upload_step.presentation.properties[
         'coverage_source_and_report_gs_path'] = source_and_report_gs_path
@@ -281,7 +281,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
         link_name=None,
         name='upload merged.profdata')
     upload_step.presentation.links['merged.profdata'] = (
-        'https://storage.googleapis.com/%s/%s' % (_BUCKET_NAME, gs_path))
+        'https://storage.cloud.google.com/%s/%s' % (
+            _BUCKET_NAME, gs_path))
     upload_step.presentation.properties['merged_profdata_gs_path'] = gs_path
 
     return merged_profdata
@@ -429,7 +430,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
           multithreaded=True,
           name='upload metadata')
       upload_step.presentation.links['metadata report'] = (
-          'https://storage.googleapis.com/%s/%s/index.html' % (_BUCKET_NAME,
+          'https://storage.cloud.google.com/%s/%s/index.html' % (_BUCKET_NAME,
                                                                gs_path))
       upload_step.presentation.properties['coverage_metadata_gs_path'] = gs_path
       upload_step.presentation.properties['coverage_gs_bucket'] = _BUCKET_NAME

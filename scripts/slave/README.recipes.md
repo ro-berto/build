@@ -1589,7 +1589,7 @@ This module contains apis to interact with llvm-cov and llvm-profdata.
 
 Returns the path to the llvm-cov executable.
 
-&mdash; **def [get\_local\_isolated\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#532)(self, step_name, local_run_isolate_step):**
+&mdash; **def [get\_local\_isolated\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#533)(self, step_name, local_run_isolate_step):**
 
 Collect coverage data from local isolated run.
 
@@ -1642,7 +1642,7 @@ upon completion of the shards.
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/clang_coverage/api.py#311)(self, step_name):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/clang_coverage/api.py#312)(self, step_name):**
 
 Returns a merge object understood by the swarming module.
 
