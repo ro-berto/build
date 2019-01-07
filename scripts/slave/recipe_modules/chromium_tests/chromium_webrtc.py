@@ -57,6 +57,18 @@ SPEC = {
       'gclient_config': 'chromium_webrtc',
       'testing': { 'platform': 'linux'}
     },
+    'WebRTC Chromium Linux Builder (RBE)': {
+      'bot_type': 'builder',
+      'chromium_apply_config': ['dcheck', 'goma_rbe_prod', 'mb'],
+      'chromium_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64
+      },
+      'gclient_apply_config': [],
+      'gclient_config': 'chromium_webrtc',
+      'testing': { 'platform': 'linux'}
+    },
     'WebRTC Chromium Linux Tester': {
       'bot_type': 'tester',
       'chromium_apply_config': ['dcheck', 'mb'],

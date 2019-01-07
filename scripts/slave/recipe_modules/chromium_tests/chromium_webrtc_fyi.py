@@ -136,9 +136,45 @@ SPEC = {
         'platform': 'linux'
       }
     },
+    'WebRTC Chromium FYI Linux Builder (RBE)': {
+      'bot_type': 'builder',
+      'chromium_apply_config': ['dcheck', 'goma_rbe_prod', 'mb'],
+      'chromium_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64
+      },
+      'gclient_apply_config': [],
+      'gclient_config': 'chromium_webrtc_tot',
+      'set_component_rev': {
+        'name': 'src/third_party/webrtc',
+        'rev_str': '%s'
+      },
+      'testing': {
+        'platform': 'linux'
+      }
+    },
     'WebRTC Chromium FYI Linux Builder (dbg)': {
       'bot_type': 'builder_tester',
       'chromium_apply_config': ['dcheck', 'mb'],
+      'chromium_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64
+      },
+      'gclient_apply_config': [],
+      'gclient_config': 'chromium_webrtc_tot',
+      'set_component_rev': {
+        'name': 'src/third_party/webrtc',
+        'rev_str': '%s'
+      },
+      'testing': {
+        'platform': 'linux'
+      }
+    },
+    'WebRTC Chromium FYI Linux Builder (dbg) (RBE)': {
+      'bot_type': 'builder_tester',
+      'chromium_apply_config': ['dcheck', 'goma_rbe_prod', 'mb'],
       'chromium_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Debug',
