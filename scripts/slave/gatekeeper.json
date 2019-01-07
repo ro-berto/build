@@ -173,6 +173,24 @@
               "chromium_tree_closer"
             ]
           },
+          "Deterministic Android (dbg)": {
+            "categories": [
+              "chromium_tree_closer",
+              "experimental_tests"
+            ],
+            "tree_notify": [
+              "agrieve@chromium.org"
+            ]
+          },
+          "Deterministic Android": {
+            "categories": [
+              "chromium_tree_closer",
+              "experimental_tests"
+            ],
+            "tree_notify": [
+              "agrieve@chromium.org"
+            ]
+          },
           "*": {}
         },
         "excluded_builders": [
