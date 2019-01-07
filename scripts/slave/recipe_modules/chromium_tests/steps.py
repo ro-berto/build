@@ -1321,6 +1321,10 @@ class SwarmingTest(Test):
   def runs_on_swarming(self):
     return True
 
+  @property
+  def shards(self):
+    return 1  # pragma: no cover
+
   def create_task(self, api, suffix, isolated_hash):
     """Creates a swarming task. Must be overridden in subclasses.
 
@@ -1541,6 +1545,10 @@ class SwarmingGTestTest(SwarmingTest):
   @property
   def is_gtest(self):
     return True
+
+  @property
+  def shards(self):
+    return self._shards
 
   def compile_targets(self, api):
     if self._override_compile_targets:
@@ -1804,6 +1812,10 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
   @Test.test_options.setter
   def test_options(self, value):
     self._test_options = value
+
+  @property
+  def shards(self):
+    return self._shards
 
   def create_task(self, api, suffix, isolated_hash):
     def _create_swarming_task(*args, **kwargs):

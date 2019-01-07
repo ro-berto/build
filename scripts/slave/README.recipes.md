@@ -3492,9 +3492,9 @@ Finally, we roll the checkout and reapply the patch, and then rerun the
 failing tests. This helps confirm whether the failures were flakes or
 deterministic errors.
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#436)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#440)(self, data):**
 
-&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#439)(self, data):**
+&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#443)(self, data):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#84)(data):**
 
@@ -3509,7 +3509,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#456)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#460)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3576,7 +3576,7 @@ Args:
 Returns:
   The list of failed tests.
 
-&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#213)(self, caller_api, tests):**
+&mdash; **def [run\_tests\_with\_patch](/scripts/slave/recipe_modules/test_utils/api.py#217)(self, caller_api, tests):**
 
 Run tests and returns failures.
 
@@ -3587,11 +3587,11 @@ Args:
 Returns: A list of test suites that either have invalid results or failing
 tests.
 
-&mdash; **def [summarize\_failing\_test\_with\_no\_retries](/scripts/slave/recipe_modules/test_utils/api.py#402)(self, caller_api, test):**
+&mdash; **def [summarize\_failing\_test\_with\_no\_retries](/scripts/slave/recipe_modules/test_utils/api.py#406)(self, caller_api, test):**
 
 Summarizes a failing test that is not going to be retried.
 
-&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#311)(self, caller_api, test, failure_is_fatal):**
+&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#315)(self, caller_api, test, failure_is_fatal):**
 
 Summarizes test results after a CL has been retried with patch deapplied.
 
@@ -3609,7 +3609,7 @@ Returns:
   suggests that the error is due to an issue with top of tree, and should
   not cause the CL to fail.
 
-&mdash; **def [summarize\_test\_with\_patch\_reapplied](/scripts/slave/recipe_modules/test_utils/api.py#358)(self, caller_api, test):**
+&mdash; **def [summarize\_test\_with\_patch\_reapplied](/scripts/slave/recipe_modules/test_utils/api.py#362)(self, caller_api, test):**
 
 Summarizes test results after a CL has been retried with patch reapplied.
 
@@ -3618,7 +3618,7 @@ Returns:
   there are tests that failed in 'with patch' and 'retry with patch', but
   not in 'without patch'.
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#446)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#450)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 
