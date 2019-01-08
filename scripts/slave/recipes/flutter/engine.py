@@ -458,7 +458,6 @@ def PackageIOSVariant(api, label, arm64_out, armv7_out, sim_out, bucket_name):
 
   # Upload the artifacts to cloud storage.
   artifacts = [
-    'flutter/lib/snapshot/snapshot.dart',
     'flutter/shell/platform/darwin/ios/framework/Flutter.podspec',
     'out/%s/gen_snapshot' % label,
     'out/%s/Flutter.framework.zip' % label,
