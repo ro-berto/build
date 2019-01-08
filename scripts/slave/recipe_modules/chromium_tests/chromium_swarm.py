@@ -38,25 +38,6 @@ SPEC = {
       },
       'bot_type': 'builder_tester',
     },
-    'ChromeOS Swarm': {
-      'chromium_config': 'chromium',
-      'chromium_apply_config': [
-        'mb', 'ninja_confirm_noop',
-      ],
-      'gclient_config': 'chromium',
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_ARCH': 'arm',
-        'TARGET_BITS': 64,
-        # TODO(bpastene): Change this to kevin when full builds are available.
-        'TARGET_CROS_BOARD': 'arm-generic',
-        'TARGET_PLATFORM': 'chromeos',
-      },
-      'bot_type': 'builder_tester',
-      'testing': {
-        'platform': 'linux',
-      },
-    },
     'Linux Swarm': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['mb'],

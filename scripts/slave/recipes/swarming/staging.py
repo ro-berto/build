@@ -112,42 +112,6 @@ def GenTests(api):
         path_config='kitchen')
   )
 
-  yield (
-    api.test('cros') +
-    api.properties(
-        buildername='ChromeOS Swarm',
-        mastername='chromium.swarm',
-        bot_id='TestSlave',
-        buildnumber=123,
-        path_config='kitchen') +
-        api.chromium_tests.read_source_side_spec(
-            'chromium.swarm', {
-               'ChromeOS Swarm': {
-                 'gtest_tests': [
-                     {
-                       'test': 'browser_tests',
-                       'swarming': {
-                         'can_use_on_swarming_builders': True,
-                         'dimension_sets': [
-                           {
-                             'device_type': 'kevin-signed-mpkeys',
-                             'os': 'ChromeOS',
-                             'pool': 'ChromeOS',
-                           }
-                         ],
-                       }
-                     },
-                  ],
-               },
-            }) +
-        api.override_step_data(
-            'find isolated tests',
-            api.json.output({
-                'browser_tests': 'deadbeef',
-            })
-        )
-  )
-
   # One 'collect' fails due to a missing shard and failing test, should not
   # prevent the second 'collect' from running.
   yield (
