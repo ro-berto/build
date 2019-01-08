@@ -57,9 +57,8 @@ def RunHostTests(api, out_dir, exe_extension=''):
       [directory.join('runtime_unittests' + exe_extension)])
     api.step('Test Shell',
       [directory.join('shell_unittests' + exe_extension)])
-    # TODO(goderbauer): Re-enable when https://dart-review.googlesource.com/c/sdk/+/81381 lands in engine
-    # api.step('Test Embedder API',
-    #   [directory.join('embedder_unittests' + exe_extension)])
+    api.step('Test Embedder API',
+      [directory.join('embedder_unittests' + exe_extension)])
 
     if api.platform.is_mac:
       api.step('Test Flutter Channels',
