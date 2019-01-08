@@ -346,6 +346,13 @@ class Runner(object):
           task_output_dir=path.join('task_output_dir_%d' % shard),
           raw_cmd=self.command.raw_cmd(self.multiplier, offset),
       )
+
+      # Override cpu and gpu defaults for Android as such devices don't have
+      # these dimensions.
+      if task.dimensions['os'] == 'Android':
+        task.dimensions.pop('cpu')
+        task.dimensions.pop('gpu')
+
       self.api.swarming.trigger_task(task)
       return task
 
@@ -731,6 +738,25 @@ def GenTests(api):
       api.properties(repro_only=True) +
       isolated_lookup(0, True) +
       api.post_process(ResultReasonRE, 'Could not reproduce flake.') +
+      api.post_process(DropExpectation)
+  )
+
+  # Simulate running tasks on Android and verify correct dimensions.
+  def check_dimensions(check, steps):
+    step = ('calibration attempt 1.check mjsunit/foobar at #0.'
+            '[trigger] check mjsunit/foobar at #0 - shard 0 on Android')
+    if check(step in steps):
+      check(all(arg != 'cpu' for arg in steps[step]['cmd']))
+      check(all(arg != 'gpu' for arg in steps[step]['cmd']))
+  yield (
+      test('android_dimensions') +
+      api.properties(
+          repro_only=True,
+          swarming_dimensions=[
+            'os:Android', 'cpu:x86-64', 'device_os:MMB29Q',
+            'device_type:bullhead', 'pool:Chrome']) +
+      isolated_lookup(0, True) +
+      api.post_process(check_dimensions) +
       api.post_process(DropExpectation)
   )
 
