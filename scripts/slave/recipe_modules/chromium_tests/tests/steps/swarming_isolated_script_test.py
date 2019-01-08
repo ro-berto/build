@@ -43,7 +43,7 @@ def RunSteps(api):
   api.chromium_tests.prepare_checkout(bot_config_object)
 
   test_repeat_count = api.properties.get('repeat_count')
-  test_name = 'webkit_layout_tests' if test_repeat_count else 'base_unittests'
+  test_name = 'blink_web_tests' if test_repeat_count else 'base_unittests'
   isolate_coverage_data = api.properties.get('isolate_coverage_data', False)
   test = api.chromium_tests.steps.SwarmingIsolatedScriptTest(
       test_name,
@@ -270,7 +270,7 @@ def GenTests(api):
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'webkit_layout_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+            'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
@@ -278,7 +278,7 @@ def GenTests(api):
           test_filter=['test1', 'test2'],
           repeat_count=20) +
       api.override_step_data(
-          'webkit_layout_tests on Intel GPU on Linux (with patch)',
+          'blink_web_tests on Intel GPU on Linux (with patch)',
           api.swarming.canned_summary_output(failure=True)
           + api.test_utils.canned_isolated_script_output(
               passing=False, swarming=True, benchmark_enabled=True,
@@ -341,7 +341,7 @@ def GenTests(api):
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'webkit_layout_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+            'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
@@ -763,7 +763,7 @@ def GenTests(api):
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'webkit_layout_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+            'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
@@ -771,7 +771,7 @@ def GenTests(api):
           test_filter=['test1', 'test2'],
           repeat_count=20) +
       api.override_step_data(
-          'webkit_layout_tests on Intel GPU on Linux (with patch)',
+          'blink_web_tests on Intel GPU on Linux (with patch)',
           api.swarming.canned_summary_output(2) +
           api.test_utils.m.json.output(None, 255)) +
       api.post_process(verify_log_fields, {'pass_fail_counts': {}}) +
@@ -786,7 +786,7 @@ def GenTests(api):
       api.properties(
           buildnumber=123,
           swarm_hashes={
-            'webkit_layout_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+            'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           git_revision='test_sha',
           version='test-version',
@@ -794,7 +794,7 @@ def GenTests(api):
           test_filter=['test1', 'test2'],
           repeat_count=20) +
       api.override_step_data(
-          'webkit_layout_tests on Intel GPU on Linux (with patch)',
+          'blink_web_tests on Intel GPU on Linux (with patch)',
           api.swarming.canned_summary_output(2) +
           api.test_utils.m.json.output(
               {'global_tags': ['UNRELIABLE_RESULTS']}, 0)) +

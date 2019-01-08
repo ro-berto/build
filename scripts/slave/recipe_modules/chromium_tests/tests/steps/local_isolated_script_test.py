@@ -118,11 +118,11 @@ def GenTests(api):
       api.test('customized_test_options') +
       api.properties(
           swarm_hashes={
-            'webkit_layout_tests': 'ffffffffffffffffffffffffffffffffffffffff',
+            'blink_web_tests': 'ffffffffffffffffffffffffffffffffffffffff',
           },
           test_filter=['test1', 'test2'],
           repeat_count=20,
-          test_name='webkit_layout_tests')
+          test_name='blink_web_tests')
   )
   yield (
       api.test('isolate_coverage_data') +

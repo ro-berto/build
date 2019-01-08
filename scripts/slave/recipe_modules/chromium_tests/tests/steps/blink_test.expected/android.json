@@ -19,7 +19,7 @@
       "--builder-name",
       "test_buildername",
       "--step-name",
-      "webkit_layout_tests (with patch)",
+      "blink_web_tests (with patch)",
       "--no-show-results",
       "--clobber-old-results",
       "--exit-after-n-failures",
@@ -33,7 +33,7 @@
       "android",
       "--js-flags=--future"
     ],
-    "name": "webkit_layout_tests (with patch)",
+    "name": "blink_web_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total tests: 5<br/>* Passed: 4 (4 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@"
     ]
@@ -52,13 +52,13 @@
       "--build-number",
       "123",
       "--test-type",
-      "webkit_layout_tests (with patch)",
+      "blink_web_tests (with patch)",
       "--chrome-revision",
       "0",
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "name": "Upload to test-results [webkit_layout_tests (with patch)]"
+    "name": "Upload to test-results [blink_web_tests (with patch)]"
   },
   {
     "cmd": [
@@ -84,14 +84,14 @@
       "[CACHE]/chrome_staging",
       "--store-latest",
       "--step-name",
-      "webkit_layout_tests (with patch)",
+      "blink_web_tests (with patch)",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
-    "name": "archive results for webkit_layout_tests (with patch)",
+    "name": "archive results for blink_web_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test_buildername/123/webkit_layout_tests (with patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test_buildername/123/webkit_layout_tests (with patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test_buildername/123/blink_web_tests (with patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test_buildername/123/blink_web_tests (with patch)/layout-test-results.zip@@@"
     ]
   },
   {
@@ -124,7 +124,7 @@
       "--builder-name",
       "test_buildername",
       "--step-name",
-      "webkit_layout_tests (without patch)",
+      "blink_web_tests (without patch)",
       "--no-show-results",
       "--clobber-old-results",
       "--exit-after-n-failures",
@@ -138,7 +138,7 @@
       "android",
       "--js-flags=--future"
     ],
-    "name": "webkit_layout_tests (without patch)",
+    "name": "blink_web_tests (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total tests: 5<br/>* Passed: 4 (4 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@"
     ]
@@ -157,13 +157,13 @@
       "--build-number",
       "123",
       "--test-type",
-      "webkit_layout_tests (without patch)",
+      "blink_web_tests (without patch)",
       "--chrome-revision",
       "0",
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "name": "Upload to test-results [webkit_layout_tests (without patch)]"
+    "name": "Upload to test-results [blink_web_tests (without patch)]"
   },
   {
     "cmd": [
@@ -189,14 +189,14 @@
       "[CACHE]/chrome_staging",
       "--store-latest",
       "--step-name",
-      "webkit_layout_tests (without patch)",
+      "blink_web_tests (without patch)",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
-    "name": "archive results for webkit_layout_tests (without patch)",
+    "name": "archive results for blink_web_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test_buildername/123/webkit_layout_tests (without patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test_buildername/123/webkit_layout_tests (without patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test_buildername/123/blink_web_tests (without patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test_buildername/123/blink_web_tests (without patch)/layout-test-results.zip@@@"
     ]
   },
   {

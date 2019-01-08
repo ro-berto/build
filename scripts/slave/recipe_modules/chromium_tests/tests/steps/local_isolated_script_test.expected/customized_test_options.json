@@ -17,7 +17,7 @@
       "--isolated-script-test-output",
       "/path/to/tmp/json"
     ],
-    "name": "webkit_layout_tests",
+    "name": "blink_web_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total tests: n/a<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -31,8 +31,8 @@
     "cmd": [],
     "name": "details",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@details@compile_targets: ['webkit_layout_tests']@@@",
-      "@@@STEP_LOG_LINE@details@isolate_target: 'webkit_layout_tests'@@@",
+      "@@@STEP_LOG_LINE@details@compile_targets: ['blink_web_tests']@@@",
+      "@@@STEP_LOG_LINE@details@isolate_target: 'blink_web_tests'@@@",
       "@@@STEP_LOG_LINE@details@uses_local_devices: False@@@",
       "@@@STEP_LOG_LINE@details@uses_isolate: True@@@",
       "@@@STEP_LOG_END@details@@@"

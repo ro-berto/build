@@ -13,13 +13,13 @@
       "--build-number",
       "1",
       "--test-type",
-      "webkit_layout_tests on Intel GPU on Mac",
+      "blink_web_tests on Intel GPU on Mac",
       "--chrome-revision",
       "170242",
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "name": "Upload to test-results [webkit_layout_tests on Intel GPU on Mac]"
+    "name": "Upload to test-results [blink_web_tests on Intel GPU on Mac]"
   },
   {
     "cmd": [
@@ -45,14 +45,14 @@
       "[CACHE]/chrome_staging",
       "--store-latest",
       "--step-name",
-      "webkit_layout_tests",
+      "blink_web_tests",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
-    "name": "archive results for webkit_layout_tests",
+    "name": "archive results for blink_web_tests",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test_buildername/1/webkit_layout_tests/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test_buildername/1/webkit_layout_tests/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/test_buildername/1/blink_web_tests/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/test_buildername/1/blink_web_tests/layout-test-results.zip@@@"
     ]
   },
   {

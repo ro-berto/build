@@ -87,7 +87,9 @@ def _merge_args_and_test_options(test, args, options):
 
   if not (isinstance(test, (SwarmingGTestTest, LocalGTestTest)) or (isinstance(
               test, (SwarmingIsolatedScriptTest, LocalIsolatedScriptTest)) and
-              'webkit_layout_tests' in test.target_name)):
+              ('webkit_layout_tests' in test.target_name or
+               # TODO(crbug.com/914213): Remove webkit_layout_tests reference.
+               'blink_web_tests' in test.target_name))):
     # The args that are being merged by this function are only supported
     # by gtest and webkit_layout_tests.
     return args
@@ -2219,7 +2221,7 @@ class BlinkTest(Test):
   # TODO(dpranke): This should be converted to a PythonBasedTest, although it
   # will need custom behavior because we archive the results as well.
   def __init__(self, extra_args=None):
-    super(BlinkTest, self).__init__('webkit_layout_tests')
+    super(BlinkTest, self).__init__('blink_web_tests')
     self._extra_args = extra_args
     self.results_handler = LayoutTestResultsHandler()
 

@@ -258,16 +258,16 @@ def GenTests(api):
               }))
   )
   yield (
-      api.test('flakiness_webkit_layout_tests') +
-      props({'webkit_layout_tests': ['fast/dummy/test.html']},
+      api.test('flakiness_blink_web_tests') +
+      props({'blink_web_tests': ['fast/dummy/test.html']},
             'mac', 'Mac10.13 Tests') +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
                   'isolated_scripts': [
                     {
-                      'isolate_name': 'webkit_layout_tests',
-                      'name': 'webkit_layout_tests',
+                      'isolate_name': 'blink_web_tests',
+                      'name': 'blink_web_tests',
                       'swarming': {
                         'can_use_on_swarming_builders': True,
                         'shards': 1,
@@ -277,7 +277,7 @@ def GenTests(api):
               },
           }, step_prefix='test r0.') +
       api.override_step_data(
-          'test r0.webkit_layout_tests (r0)',
+          'test r0.blink_web_tests (r0)',
           api.swarming.canned_summary_output() +
           api.test_utils.simulated_isolated_script_output(
               flaky_test_names=['fast/dummy/test.html'], path_delimiter='/'))

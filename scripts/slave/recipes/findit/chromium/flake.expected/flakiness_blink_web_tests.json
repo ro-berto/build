@@ -668,8 +668,8 @@
       "@@@STEP_LOG_LINE@json.output@  \"Mac10.13 Tests\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"isolated_scripts\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"webkit_layout_tests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"webkit_layout_tests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"blink_web_tests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"blink_web_tests\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@          \"shards\": 1@@@",
@@ -738,7 +738,7 @@
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
-      "webkit_layout_tests\n",
+      "blink_web_tests\n",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
@@ -750,7 +750,7 @@
     "name": "test r0.generate_build_files",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@webkit_layout_tests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@blink_web_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
@@ -889,7 +889,7 @@
       "[BUILDER_CACHE]/mac/src/out/Release",
       "-j",
       "20",
-      "webkit_layout_tests"
+      "blink_web_tests"
     ],
     "cwd": "[BUILDER_CACHE]/mac/src",
     "env": {
@@ -911,7 +911,7 @@
       "[BUILDER_CACHE]/mac/src/out/Release",
       "-j",
       "20",
-      "webkit_layout_tests",
+      "blink_web_tests",
       "-d",
       "explain",
       "-n"
@@ -1038,7 +1038,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/mac/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/mac/src/out/Release\", \"-j\", 20, \"webkit_layout_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/mac/src/out/Release\", \"-j\", 20, \"blink_web_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1120,16 +1120,16 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]/mac/src/out/Release/webkit_layout_tests.isolated.gen.json"
+      "[BUILDER_CACHE]/mac/src/out/Release/blink_web_tests.isolated.gen.json"
     ],
     "name": "test r0.isolate tests",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"webkit_layout_tests\": \"[dummy hash for webkit_layout_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"blink_web_tests\": \"[dummy hash for blink_web_tests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}_without_patch@{\"webkit_layout_tests\": \"[dummy hash for webkit_layout_tests]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}_without_patch@{\"blink_web_tests\": \"[dummy hash for blink_web_tests]\"}@@@"
     ]
   },
   {
@@ -1158,7 +1158,7 @@
       "--shards",
       "1",
       "--task-name",
-      "webkit_layout_tests (r0)/Mac-10.13/[dummy has/mac_chromium_variable/1",
+      "blink_web_tests (r0)/Mac-10.13/[dummy has/mac_chromium_variable/1",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1189,11 +1189,11 @@
       "--tag",
       "buildnumber:1",
       "--tag",
-      "data:[dummy hash for webkit_layout_tests]",
+      "data:[dummy hash for blink_web_tests]",
       "--tag",
       "master:tryserver.chromium.mac",
       "--tag",
-      "name:webkit_layout_tests",
+      "name:blink_web_tests",
       "--tag",
       "project:chromium",
       "--tag",
@@ -1203,7 +1203,7 @@
       "--tag",
       "slavename:build1-a1",
       "--tag",
-      "stepname:webkit_layout_tests (r0)",
+      "stepname:blink_web_tests (r0)",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -1223,7 +1223,7 @@
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
       "--isolated",
-      "[dummy hash for webkit_layout_tests]",
+      "[dummy hash for blink_web_tests]",
       "--",
       "--gtest_filter=fast/dummy/test.html",
       "--gtest_repeat=100",
@@ -1237,14 +1237,14 @@
       "FORCE_MAC_TOOLCHAIN": "1"
     },
     "infra_step": true,
-    "name": "test r0.test_pre_run (r0).[trigger] webkit_layout_tests (r0)",
+    "name": "test r0.test_pre_run (r0).[trigger] blink_web_tests (r0)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac-10.13'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webkit_layout_tests (r0)/Mac-10.13/[dummy has/mac_chromium_variable/1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"blink_web_tests (r0)/Mac-10.13/[dummy has/mac_chromium_variable/1\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"webkit_layout_tests (r0)/Mac-10.13/[dummy has/mac_chromium_variable/1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blink_web_tests (r0)/Mac-10.13/[dummy has/mac_chromium_variable/1\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1276,7 +1276,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"bot_id\": \"build1-a1\", \"buildername\": \"mac_chromium_variable\", \"buildnumber\": 1, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"tryserver.chromium.mac\", \"path_config\": \"kitchen\", \"recipe\": \"findit/chromium/flake\", \"skip_tests\": false, \"target_mastername\": \"chromium.mac\", \"target_testername\": \"Mac10.13 Tests\", \"test_revision\": \"r0\", \"tests\": {\"webkit_layout_tests\": [\"fast/dummy/test.html\"]}}",
+      "{\"bot_id\": \"build1-a1\", \"buildername\": \"mac_chromium_variable\", \"buildnumber\": 1, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"tryserver.chromium.mac\", \"path_config\": \"kitchen\", \"recipe\": \"findit/chromium/flake\", \"skip_tests\": false, \"target_mastername\": \"chromium.mac\", \"target_testername\": \"Mac10.13 Tests\", \"test_revision\": \"r0\", \"tests\": {\"blink_web_tests\": [\"fast/dummy/test.html\"]}}",
       "--",
       "python",
       "-u",
@@ -1287,14 +1287,14 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"webkit_layout_tests (r0)/Mac-10.13/[dummy has/mac_chromium_variable/1\", \"tasks\": {\"webkit_layout_tests (r0)/Mac-10.13/[dummy has/mac_chromium_variable/1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"blink_web_tests (r0)/Mac-10.13/[dummy has/mac_chromium_variable/1\", \"tasks\": {\"blink_web_tests (r0)/Mac-10.13/[dummy has/mac_chromium_variable/1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
-    "name": "test r0.webkit_layout_tests (r0)",
+    "name": "test r0.blink_web_tests (r0)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Mac-10.13'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 1<br/>* Passed: 0 (0 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 0 (0 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -1347,15 +1347,15 @@
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"webkit_layout_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"blink_web_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"none\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Mac-10.13\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"webkit_layout_tests (r0)\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"webkit_layout_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"blink_web_tests (r0)\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"blink_web_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
@@ -1382,7 +1382,7 @@
       "--build-number",
       "1",
       "--test-type",
-      "webkit_layout_tests (r0)",
+      "blink_web_tests (r0)",
       "--chrome-revision",
       "170242",
       "--test-results-server",
@@ -1392,7 +1392,7 @@
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
-    "name": "test r0.Upload to test-results [webkit_layout_tests (r0)]",
+    "name": "test r0.Upload to test-results [blink_web_tests (r0)]",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
@@ -1410,7 +1410,7 @@
       "@@@STEP_LOG_LINE@report@  \"previously_cached_revision\": null, @@@",
       "@@@STEP_LOG_LINE@report@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@report@    \"r0\": {@@@",
-      "@@@STEP_LOG_LINE@report@      \"webkit_layout_tests\": {@@@",
+      "@@@STEP_LOG_LINE@report@      \"blink_web_tests\": {@@@",
       "@@@STEP_LOG_LINE@report@        \"status\": \"passed\", @@@",
       "@@@STEP_LOG_LINE@report@        \"valid\": true, @@@",
       "@@@STEP_LOG_LINE@report@        \"step_metadata\": {@@@",
@@ -1421,14 +1421,14 @@
       "@@@STEP_LOG_LINE@report@            \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@report@          }, @@@",
       "@@@STEP_LOG_LINE@report@          \"waterfall_buildername\": \"Mac10.13 Tests\", @@@",
-      "@@@STEP_LOG_LINE@report@          \"full_step_name\": \"webkit_layout_tests (r0)\", @@@",
+      "@@@STEP_LOG_LINE@report@          \"full_step_name\": \"blink_web_tests (r0)\", @@@",
       "@@@STEP_LOG_LINE@report@          \"waterfall_mastername\": \"chromium.mac\", @@@",
       "@@@STEP_LOG_LINE@report@          \"patched\": false, @@@",
-      "@@@STEP_LOG_LINE@report@          \"canonical_step_name\": \"webkit_layout_tests\", @@@",
+      "@@@STEP_LOG_LINE@report@          \"canonical_step_name\": \"blink_web_tests\", @@@",
       "@@@STEP_LOG_LINE@report@          \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@report@            \"10000\"@@@",
       "@@@STEP_LOG_LINE@report@          ], @@@",
-      "@@@STEP_LOG_LINE@report@          \"isolate_target_name\": \"webkit_layout_tests\"@@@",
+      "@@@STEP_LOG_LINE@report@          \"isolate_target_name\": \"blink_web_tests\"@@@",
       "@@@STEP_LOG_LINE@report@        }, @@@",
       "@@@STEP_LOG_LINE@report@        \"pass_fail_counts\": {@@@",
       "@@@STEP_LOG_LINE@report@          \"fast/dummy/test.html\": {@@@",
@@ -1440,7 +1440,7 @@
       "@@@STEP_LOG_LINE@report@    }@@@",
       "@@@STEP_LOG_LINE@report@  }, @@@",
       "@@@STEP_LOG_LINE@report@  \"isolated_tests\": {@@@",
-      "@@@STEP_LOG_LINE@report@    \"webkit_layout_tests\": \"[dummy hash for webkit_layout_tests]\"@@@",
+      "@@@STEP_LOG_LINE@report@    \"blink_web_tests\": \"[dummy hash for blink_web_tests]\"@@@",
       "@@@STEP_LOG_LINE@report@  }, @@@",
       "@@@STEP_LOG_LINE@report@  \"previously_checked_out_revision\": null, @@@",
       "@@@STEP_LOG_LINE@report@  \"metadata\": {}@@@",

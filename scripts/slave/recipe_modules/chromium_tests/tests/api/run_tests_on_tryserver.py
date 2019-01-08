@@ -174,18 +174,18 @@ def GenTests(api):
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
       api.override_step_data(
-          'webkit_layout_tests (with patch)',
+          'blink_web_tests (with patch)',
           api.test_utils.canned_test_output(passing=False)) +
       api.override_step_data(
-          'webkit_layout_tests (without patch)',
+          'blink_web_tests (without patch)',
           api.test_utils.canned_test_output(passing=True)) +
       api.override_step_data(
-          'webkit_layout_tests (retry with patch)',
+          'blink_web_tests (retry with patch)',
           api.test_utils.canned_test_output(passing=False)) +
       api.post_process(post_process.MustRun,
-          'webkit_layout_tests (retry with patch summary)') +
+          'blink_web_tests (retry with patch summary)') +
       api.post_process(post_process.AnnotationContains,
-          'webkit_layout_tests (retry with patch summary)', ['STEP_FAILURE']) +
+          'blink_web_tests (retry with patch summary)', ['STEP_FAILURE']) +
       api.post_process(post_process.DropExpectation)
   )
 

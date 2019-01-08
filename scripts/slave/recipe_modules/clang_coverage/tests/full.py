@@ -39,7 +39,7 @@ def RunSteps(api):
   api.clang_coverage.process_coverage_data([
       api.chromium_tests.steps.SwarmingGTestTest('base_unittests'),
       api.chromium_tests.steps.LocalIsolatedScriptTest('abc_fuzzer'),
-      api.chromium_tests.steps.SwarmingIsolatedScriptTest('webkit_layout_tests')
+      api.chromium_tests.steps.SwarmingIsolatedScriptTest('blink_web_tests')
     ])
 
   # Exercise these properties to provide coverage only.

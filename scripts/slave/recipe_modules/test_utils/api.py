@@ -283,7 +283,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       'new_failures': sorted(new_failures),
     })
 
-    if test.name == 'webkit_layout_tests':
+    # TODO(crbug.com/914213): Remove webkit_layout_tests reference.
+    if test.name == 'webkit_layout_tests' or test.name == 'blink_web_tests':
       dest_file = '%s.json' % suffix.replace(' ', '_')
       self._archive_retry_summary({
           'failures': sorted(new_failures),

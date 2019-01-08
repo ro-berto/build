@@ -610,7 +610,7 @@
       "--builder-name",
       "V8-Blink Linux 64 - future",
       "--step-name",
-      "webkit_layout_tests (with patch)",
+      "blink_web_tests (with patch)",
       "--no-show-results",
       "--clobber-old-results",
       "--exit-after-n-failures",
@@ -628,7 +628,7 @@
       "--js-flags=--future"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
-    "name": "webkit_layout_tests (with patch)",
+    "name": "blink_web_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total tests: 6<br/>* Passed: 5 (5 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@"
     ]
@@ -647,7 +647,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "webkit_layout_tests (with patch)",
+      "blink_web_tests (with patch)",
       "--chrome-revision",
       "43426",
       "--build-id",
@@ -656,7 +656,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
-    "name": "Upload to test-results [webkit_layout_tests (with patch)]"
+    "name": "Upload to test-results [blink_web_tests (with patch)]"
   },
   {
     "cmd": [
@@ -682,15 +682,15 @@
       "[CACHE]/chrome_staging",
       "--store-latest",
       "--step-name",
-      "webkit_layout_tests (with patch)",
+      "blink_web_tests (with patch)",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64___future",
-    "name": "archive results for webkit_layout_tests (with patch)",
+    "name": "archive results for blink_web_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64_-_future/0/webkit_layout_tests (with patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64_-_future/0/webkit_layout_tests (with patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64_-_future/0/blink_web_tests (with patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64_-_future/0/blink_web_tests (with patch)/layout-test-results.zip@@@"
     ]
   },
   {

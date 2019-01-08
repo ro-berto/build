@@ -152,7 +152,9 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     for t in tests:
       if t.is_gtest and t.runs_on_swarming:
         binaries.append(self.m.chromium.output_dir.join(t.isolate_target))
-      elif 'webkit_layout_tests' in t.isolate_target:
+      # TODO(crbug.com/914213): Remove webkit_layout_tests reference.
+      elif 'webkit_layout_tests' in t.isolate_target or (
+          'blink_web_tests' in t.isolate_target):
         binaries.append(self.m.chromium.output_dir.join('content_shell'))
       elif t.isolate_target.endswith('_fuzzer'):
         binaries.append(self.m.chromium.output_dir.join(t.isolate_target))

@@ -610,7 +610,7 @@
       "--builder-name",
       "V8-Blink Linux 64",
       "--step-name",
-      "webkit_layout_tests (with patch)",
+      "blink_web_tests (with patch)",
       "--no-show-results",
       "--clobber-old-results",
       "--exit-after-n-failures",
@@ -624,7 +624,7 @@
       "[BUILDER_CACHE]/V8_Blink_Linux_64/src/v8/tools/blink_tests/TestExpectations"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
-    "name": "webkit_layout_tests (with patch)",
+    "name": "blink_web_tests (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 101",
       "@@@STEP_TEXT@<br/>Total tests: 131<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 127 (0 expected, >>>127 unexpected<<<)<br/>* Flaky: 3 (0 expected, >>>3 unexpected<<<)<br/><br/>Unexpected Failures:<br/>* bad/failing0.html<br/>* bad/failing1.html<br/>* bad/failing10.html<br/>* bad/failing100.html<br/>* bad/failing101.html<br/>* bad/failing102.html<br/>* bad/failing103.html<br/>* bad/failing104.html<br/>* bad/failing105.html<br/>* bad/failing106.html<br/>* bad/failing107.html<br/>* bad/failing108.html<br/>* bad/failing109.html<br/>* bad/failing11.html<br/>* bad/failing110.html<br/>* bad/failing111.html<br/>* bad/failing112.html<br/>* bad/failing113.html<br/>* bad/failing114.html<br/>* bad/failing115.html<br/>* bad/failing116.html<br/>* bad/failing117.html<br/>* bad/failing118.html<br/>* bad/failing119.html<br/>* bad/failing12.html<br/>* bad/failing120.html<br/>* bad/failing121.html<br/>* bad/failing122.html<br/>* bad/failing123.html<br/>* bad/failing124.html<br/>* ... 97 more (127 total) ...<br/><br/>Unexpected Flakes:<br/>* flake/slow.html<br/>* flake/timeout-then-crash.html<br/>* flake/totally-flakey.html<br/>@@@",
@@ -645,7 +645,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "webkit_layout_tests (with patch)",
+      "blink_web_tests (with patch)",
       "--chrome-revision",
       "43426",
       "--build-id",
@@ -654,7 +654,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
-    "name": "Upload to test-results [webkit_layout_tests (with patch)]"
+    "name": "Upload to test-results [blink_web_tests (with patch)]"
   },
   {
     "cmd": [
@@ -680,15 +680,15 @@
       "[CACHE]/chrome_staging",
       "--store-latest",
       "--step-name",
-      "webkit_layout_tests (with patch)",
+      "blink_web_tests (with patch)",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
-    "name": "archive results for webkit_layout_tests (with patch)",
+    "name": "archive results for blink_web_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/0/webkit_layout_tests (with patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/0/webkit_layout_tests (with patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/0/blink_web_tests (with patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/0/blink_web_tests (with patch)/layout-test-results.zip@@@"
     ]
   },
   {
@@ -1215,7 +1215,7 @@
       "--builder-name",
       "V8-Blink Linux 64",
       "--step-name",
-      "webkit_layout_tests (without patch)",
+      "blink_web_tests (without patch)",
       "--no-show-results",
       "--clobber-old-results",
       "--exit-after-n-failures",
@@ -1233,7 +1233,7 @@
       "always"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
-    "name": "webkit_layout_tests (without patch)",
+    "name": "blink_web_tests (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Total tests: 5<br/>* Passed: 4 (4 expected, 0 unexpected)<br/>* Skipped: 0 (0 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 0 (0 expected, 0 unexpected)<br/>@@@"
     ]
@@ -1252,7 +1252,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "webkit_layout_tests (without patch)",
+      "blink_web_tests (without patch)",
       "--chrome-revision",
       "43426",
       "--build-id",
@@ -1261,7 +1261,7 @@
       "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
-    "name": "Upload to test-results [webkit_layout_tests (without patch)]"
+    "name": "Upload to test-results [blink_web_tests (without patch)]"
   },
   {
     "cmd": [
@@ -1287,15 +1287,15 @@
       "[CACHE]/chrome_staging",
       "--store-latest",
       "--step-name",
-      "webkit_layout_tests (without patch)",
+      "blink_web_tests (without patch)",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
-    "name": "archive results for webkit_layout_tests (without patch)",
+    "name": "archive results for blink_web_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/0/webkit_layout_tests (without patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/0/webkit_layout_tests (without patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/0/blink_web_tests (without patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64/0/blink_web_tests (without patch)/layout-test-results.zip@@@"
     ]
   },
   {
@@ -1331,7 +1331,7 @@
       "import sys; sys.exit(1)"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
-    "name": "webkit_layout_tests (retry summary)",
+    "name": "blink_web_tests (retry summary)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>Failed with patch, succeeded without patch:<br/>bad/failing78.html<br/>bad/failing46.html<br/>bad/failing101.html<br/>bad/totally-bad-probably.html<br/>bad/failing70.html<br/>bad/failing17.html<br/>bad/failing82.html<br/>bad/failing120.html<br/>bad/failing73.html<br/>bad/failing112.html<br/>bad/failing114.html<br/>bad/failing99.html<br/>bad/failing121.html<br/>bad/failing108.html<br/>bad/failing76.html<br/>bad/failing50.html<br/>bad/failing23.html<br/>bad/failing104.html<br/>bad/failing93.html<br/>bad/failing67.html<br/>bad/failing124.html<br/>bad/failing53.html<br/>bad/failing69.html<br/>bad/failing117.html<br/>bad/failing34.html<br/>bad/failing51.html<br/>bad/failing80.html<br/>bad/failing20.html<br/>bad/failing107.html<br/>bad/failing56.html<br/>bad/failing68.html<br/>bad/failing71.html<br/>bad/failing77.html<br/>bad/failing39.html<br/>bad/failing92.html<br/>bad/failing90.html<br/>bad/failing89.html<br/>bad/failing122.html<br/>bad/failing105.html<br/>tricky/totally-maybe-not-awesome.html<br/>bad/failing36.html<br/>bad/failing44.html<br/>bad/failing21.html<br/>bad/failing85.html<br/>bad/failing42.html<br/>bad/failing55.html<br/>bad/failing9.html<br/>bad/failing15.html<br/>bad/failing65.html<br/>bad/failing118.html<br/>bad/failing95.html<br/>bad/failing45.html<br/>bad/failing66.html<br/>bad/failing26.html<br/>bad/failing35.html<br/>bad/failing74.html<br/>bad/failing109.html<br/>bad/failing97.html<br/>bad/failing58.html<br/>bad/failing37.html<br/>bad/failing11.html<br/>bad/failing111.html<br/>bad/failing86.html<br/>bad/failing30.html<br/>bad/failing54.html<br/>bad/failing38.html<br/>bad/failing13.html<br/>bad/failing63.html<br/>bad/failing116.html<br/>bad/failing41.html<br/>bad/failing18.html<br/>bad/failing84.html<br/>bad/failing2.html<br/>bad/failing28.html<br/>bad/failing33.html<br/>bad/failing106.html<br/>bad/failing48.html<br/>bad/failing0.html<br/>bad/failing4.html<br/>bad/failing64.html<br/>bad/failing47.html<br/>bad/failing27.html<br/>bad/failing25.html<br/>bad/failing8.html<br/>bad/failing100.html<br/>bad/failing102.html<br/>bad/failing123.html<br/>bad/failing88.html<br/>bad/failing61.html<br/>bad/failing79.html<br/>bad/failing43.html<br/>bad/failing57.html<br/>bad/failing16.html<br/>bad/failing96.html<br/>bad/failing94.html<br/>bad/failing119.html<br/>bad/failing113.html<br/>bad/failing72.html<br/>bad/failing1.html<br/>bad/failing103.html<br/>bad/failing110.html<br/>bad/failing32.html<br/>bad/failing12.html<br/>bad/failing10.html<br/>bad/failing40.html<br/>bad/failing5.html<br/>bad/failing75.html<br/>bad/failing98.html<br/>bad/failing115.html<br/>bad/failing49.html<br/>bad/failing6.html<br/>bad/failing19.html<br/>bad/failing87.html<br/>bad/failing59.html<br/>bad/failing22.html<br/>bad/failing24.html<br/>bad/failing3.html<br/>bad/failing91.html<br/>bad/failing60.html<br/>bad/failing81.html<br/>bad/failing83.html<br/>bad/failing62.html<br/>bad/failing52.html<br/>bad/failing29.html<br/>bad/failing31.html<br/>bad/failing7.html<br/>bad/failing14.html<br/>@@@",
@@ -1343,7 +1343,7 @@
       "failure": {
         "step": "Aggregate step failure."
       },
-      "humanReason": "1 out of 1 aggregated steps failed: Step('webkit_layout_tests (retry summary)') failed with return_code 1"
+      "humanReason": "1 out of 1 aggregated steps failed: Step('blink_web_tests (retry summary)') failed with return_code 1"
     },
     "name": "$result"
   }

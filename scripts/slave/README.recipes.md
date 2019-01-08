@@ -1589,7 +1589,7 @@ This module contains apis to interact with llvm-cov and llvm-profdata.
 
 Returns the path to the llvm-cov executable.
 
-&mdash; **def [get\_local\_isolated\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#533)(self, step_name, local_run_isolate_step):**
+&mdash; **def [get\_local\_isolated\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#535)(self, step_name, local_run_isolate_step):**
 
 Collect coverage data from local isolated run.
 
@@ -1598,7 +1598,7 @@ this api finds the output isolate from the stdout of the step that ran the
 isolated test locally, downloads it and merges the raw profile(s) into a
 single profdata.
 
-&mdash; **def [instrument](/scripts/slave/recipe_modules/clang_coverage/api.py#183)(self, affected_files):**
+&mdash; **def [instrument](/scripts/slave/recipe_modules/clang_coverage/api.py#185)(self, affected_files):**
 
 Saves source paths to generate coverage instrumentation for to a file.
 
@@ -1610,7 +1610,7 @@ Args:
 
 A temporary directory for the metadata. Created on first access.
 
-&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/clang_coverage/api.py#210)(self, tests):**
+&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/clang_coverage/api.py#212)(self, tests):**
 
 Processes the coverage data for html report or metadata.
 
@@ -1642,7 +1642,7 @@ upon completion of the shards.
 
 A temporary directory to save a report to. Created on first access.
 
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/clang_coverage/api.py#312)(self, step_name):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/clang_coverage/api.py#314)(self, step_name):**
 
 Returns a merge object understood by the swarming module.
 
@@ -3462,7 +3462,7 @@ Args:
   results_file: Path to file containing result json. Supported format are:
     ttest format & full json results format (
     http://www.chromium.org/developers/the-json-test-results-format).
-  test_type: Test type string, e.g. webkit_layout_tests.
+  test_type: Test type string, e.g. blink_web_tests.
   test_results_server: Server where results should be uploaded.
   downgrade_error_to_warning: If True, treat a failure to upload as a
       warning.
@@ -3492,9 +3492,9 @@ Finally, we roll the checkout and reapply the patch, and then rerun the
 failing tests. This helps confirm whether the failures were flakes or
 deterministic errors.
 
-&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#440)(self, data):**
+&mdash; **def [create\_results\_from\_json](/scripts/slave/recipe_modules/test_utils/api.py#441)(self, data):**
 
-&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#443)(self, data):**
+&mdash; **def [create\_results\_from\_json\_if\_needed](/scripts/slave/recipe_modules/test_utils/api.py#444)(self, data):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [format\_step\_text](/scripts/slave/recipe_modules/test_utils/api.py#84)(data):**
 
@@ -3509,7 +3509,7 @@ Args:
        and the second one is an iterable of content lines; if there are
        no contents, the whole section is not displayed
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#460)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [gtest\_results](/scripts/slave/recipe_modules/test_utils/api.py#461)(self, add_json_log=True):**
 
 A placeholder which will expand to
 '--test-launcher-summary-output=/tmp/file'.
@@ -3587,11 +3587,11 @@ Args:
 Returns: A list of test suites that either have invalid results or failing
 tests.
 
-&mdash; **def [summarize\_failing\_test\_with\_no\_retries](/scripts/slave/recipe_modules/test_utils/api.py#406)(self, caller_api, test):**
+&mdash; **def [summarize\_failing\_test\_with\_no\_retries](/scripts/slave/recipe_modules/test_utils/api.py#407)(self, caller_api, test):**
 
 Summarizes a failing test that is not going to be retried.
 
-&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#315)(self, caller_api, test, failure_is_fatal):**
+&mdash; **def [summarize\_test\_with\_patch\_deapplied](/scripts/slave/recipe_modules/test_utils/api.py#316)(self, caller_api, test, failure_is_fatal):**
 
 Summarizes test results after a CL has been retried with patch deapplied.
 
@@ -3609,7 +3609,7 @@ Returns:
   suggests that the error is due to an issue with top of tree, and should
   not cause the CL to fail.
 
-&mdash; **def [summarize\_test\_with\_patch\_reapplied](/scripts/slave/recipe_modules/test_utils/api.py#362)(self, caller_api, test):**
+&mdash; **def [summarize\_test\_with\_patch\_reapplied](/scripts/slave/recipe_modules/test_utils/api.py#363)(self, caller_api, test):**
 
 Summarizes test results after a CL has been retried with patch reapplied.
 
@@ -3618,7 +3618,7 @@ Returns:
   there are tests that failed in 'with patch' and 'retry with patch', but
   not in 'without patch'.
 
-&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#450)(self, add_json_log=True):**
+&emsp; **@[returns\_placeholder][recipe_engine/wkt/returns_placeholder]**<br>&mdash; **def [test\_results](/scripts/slave/recipe_modules/test_utils/api.py#451)(self, add_json_log=True):**
 
 A placeholder which will expand to '/tmp/file'.
 

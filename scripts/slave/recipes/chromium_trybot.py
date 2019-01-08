@@ -693,15 +693,15 @@ def GenTests(api):
   )
 
   swarmed_webkit_tests = (
-    props(extra_swarmed_tests=['webkit_layout_tests']) +
+    props(extra_swarmed_tests=['blink_web_tests']) +
     api.platform.name('linux') +
     api.chromium_tests.read_source_side_spec(
         'chromium.linux', {
             'Linux Tests': {
                 'isolated_scripts': [
                     {
-                      'isolate_name': 'webkit_layout_tests',
-                      'name': 'webkit_layout_tests',
+                      'isolate_name': 'blink_web_tests',
+                      'name': 'blink_web_tests',
                       'swarming': {'can_use_on_swarming_builders': True},
                       'results_handler': 'layout tests',
                     },
@@ -720,7 +720,7 @@ def GenTests(api):
   yield (
     api.test('swarmed_webkit_tests_unexpected_error') +
     swarmed_webkit_tests +
-    api.override_step_data('webkit_layout_tests (with patch)',
+    api.override_step_data('blink_web_tests (with patch)',
         api.test_utils.canned_isolated_script_output(
             passing=True, swarming=True,
             isolated_script_passing=False,
@@ -736,7 +736,7 @@ def GenTests(api):
   yield (
     api.test('swarmed_webkit_tests_interrupted') +
     swarmed_webkit_tests +
-    api.override_step_data('webkit_layout_tests (with patch)',
+    api.override_step_data('blink_web_tests (with patch)',
         api.test_utils.canned_isolated_script_output(
             passing=True, swarming=True,
             isolated_script_passing=False,
@@ -751,13 +751,13 @@ def GenTests(api):
   yield (
     api.test('swarmed_layout_tests_too_many_failures_for_retcode') +
     swarmed_webkit_tests +
-    api.override_step_data('webkit_layout_tests (with patch)',
+    api.override_step_data('blink_web_tests (with patch)',
         api.test_utils.canned_isolated_script_output(
             passing=True, swarming=True,
             isolated_script_passing=False,
             isolated_script_retcode=125) +
         api.swarming.canned_summary_output(failure=True)) +
-    api.override_step_data('webkit_layout_tests (without patch)',
+    api.override_step_data('blink_web_tests (without patch)',
         api.test_utils.canned_isolated_script_output(
             passing=True,
             isolated_script_passing=True) +

@@ -391,8 +391,8 @@
       "@@@STEP_LOG_LINE@json.output@  \"Linux Tests\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"isolated_scripts\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"webkit_layout_tests\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"name\": \"webkit_layout_tests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"isolate_name\": \"blink_web_tests\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"name\": \"blink_web_tests\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"results_handler\": \"layout tests\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"swarming\": {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"can_use_on_swarming_builders\": true@@@",
@@ -467,7 +467,7 @@
       "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"webkit_layout_tests\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"blink_web_tests\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -501,16 +501,16 @@
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"webkit_layout_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_web_tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"webkit_layout_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_web_tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"webkit_layout_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_web_tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"webkit_layout_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"blink_web_tests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
@@ -571,7 +571,7 @@
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
-      "webkit_layout_tests\n",
+      "blink_web_tests\n",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
@@ -581,7 +581,7 @@
     },
     "name": "generate_build_files (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@webkit_layout_tests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@blink_web_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
@@ -687,7 +687,7 @@
       "[BUILDER_CACHE]/linux/src/out/Release",
       "-j",
       "60",
-      "webkit_layout_tests"
+      "blink_web_tests"
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
@@ -705,7 +705,7 @@
       "[BUILDER_CACHE]/linux/src/out/Release",
       "-j",
       "60",
-      "webkit_layout_tests",
+      "blink_web_tests",
       "-d",
       "explain",
       "-n"
@@ -825,7 +825,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/linux/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/linux/src/out/Release\", \"-j\", 60, \"webkit_layout_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/linux/src/out/Release\", \"-j\", 60, \"blink_web_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -909,7 +909,7 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]/linux/src/out/Release/webkit_layout_tests.isolated.gen.json"
+      "[BUILDER_CACHE]/linux/src/out/Release/blink_web_tests.isolated.gen.json"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -917,10 +917,10 @@
     "name": "isolate tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"webkit_layout_tests\": \"[dummy hash for webkit_layout_tests]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"blink_web_tests\": \"[dummy hash for blink_web_tests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}_with_patch@{\"webkit_layout_tests\": \"[dummy hash for webkit_layout_tests]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}_with_patch@{\"blink_web_tests\": \"[dummy hash for blink_web_tests]\"}@@@"
     ]
   },
   {
@@ -957,7 +957,7 @@
       "--shards",
       "1",
       "--task-name",
-      "webkit_layout_tests (with patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571",
+      "blink_web_tests (with patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -988,13 +988,13 @@
       "--tag",
       "buildnumber:571",
       "--tag",
-      "data:[dummy hash for webkit_layout_tests]",
+      "data:[dummy hash for blink_web_tests]",
       "--tag",
       "gerrit:https://chromium-review.googlesource.com/c/123456/7",
       "--tag",
       "master:tryserver.chromium.linux",
       "--tag",
-      "name:webkit_layout_tests",
+      "name:blink_web_tests",
       "--tag",
       "patch_project:chromium/src",
       "--tag",
@@ -1008,7 +1008,7 @@
       "--tag",
       "spec_name:chromium.try:linux_chromium_rel_ng",
       "--tag",
-      "stepname:webkit_layout_tests (with patch)",
+      "stepname:blink_web_tests (with patch)",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -1028,7 +1028,7 @@
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
       "--isolated",
-      "[dummy hash for webkit_layout_tests]",
+      "[dummy hash for blink_web_tests]",
       "--",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
@@ -1038,14 +1038,14 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "test_pre_run (with patch).[trigger] webkit_layout_tests (with patch)",
+    "name": "test_pre_run (with patch).[trigger] blink_web_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webkit_layout_tests (with patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"blink_web_tests (with patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"webkit_layout_tests (with patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blink_web_tests (with patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1077,7 +1077,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"tryserver.chromium.linux\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_trybot\", \"revision\": null, \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"webkit_layout_tests\": \"[dummy hash for webkit_layout_tests]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"tryserver.chromium.linux\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_trybot\", \"revision\": null, \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"blink_web_tests\": \"[dummy hash for blink_web_tests]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--use-go-client",
       "--summary-json-file",
       "/path/to/tmp/json",
@@ -1098,7 +1098,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "webkit_layout_tests (with patch)",
+    "name": "blink_web_tests (with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>0 passed, 2 failed (2 total)<br/><br/>Unexpected Failures:<br/>* test1.Test1<br/>* test2.Test2<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -1148,15 +1148,15 @@
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"webkit_layout_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"blink_web_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"none\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"webkit_layout_tests (with patch)\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"webkit_layout_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"blink_web_tests (with patch)\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"blink_web_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": true, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\"@@@",
@@ -1193,7 +1193,7 @@
       "--staging-dir",
       "[CACHE]/chrome_staging",
       "--step-name",
-      "webkit_layout_tests (with patch)",
+      "blink_web_tests (with patch)",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
@@ -1201,10 +1201,10 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "archive results for webkit_layout_tests (with patch)",
+    "name": "archive results for blink_web_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/0/webkit_layout_tests (with patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/0/webkit_layout_tests (with patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/0/blink_web_tests (with patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/0/blink_web_tests (with patch)/layout-test-results.zip@@@"
     ]
   },
   {
@@ -1433,7 +1433,7 @@
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
-      "webkit_layout_tests\n",
+      "blink_web_tests\n",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
@@ -1443,7 +1443,7 @@
     },
     "name": "generate_build_files (without patch)",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@webkit_layout_tests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@blink_web_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
@@ -1549,7 +1549,7 @@
       "[BUILDER_CACHE]/linux/src/out/Release",
       "-j",
       "60",
-      "webkit_layout_tests"
+      "blink_web_tests"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -1567,7 +1567,7 @@
       "[BUILDER_CACHE]/linux/src/out/Release",
       "-j",
       "60",
-      "webkit_layout_tests",
+      "blink_web_tests",
       "-d",
       "explain",
       "-n"
@@ -1687,7 +1687,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/linux/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/linux/src/out/Release\", \"-j\", 60, \"webkit_layout_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/linux/src/out/Release\", \"-j\", 60, \"blink_web_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1835,7 +1835,7 @@
       "--shards",
       "1",
       "--task-name",
-      "webkit_layout_tests (without patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571",
+      "blink_web_tests (without patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1866,13 +1866,13 @@
       "--tag",
       "buildnumber:571",
       "--tag",
-      "data:[dummy hash for webkit_layout_tests]",
+      "data:[dummy hash for blink_web_tests]",
       "--tag",
       "gerrit:https://chromium-review.googlesource.com/c/123456/7",
       "--tag",
       "master:tryserver.chromium.linux",
       "--tag",
-      "name:webkit_layout_tests",
+      "name:blink_web_tests",
       "--tag",
       "patch_project:chromium/src",
       "--tag",
@@ -1886,7 +1886,7 @@
       "--tag",
       "spec_name:chromium.try:linux_chromium_rel_ng",
       "--tag",
-      "stepname:webkit_layout_tests (without patch)",
+      "stepname:blink_web_tests (without patch)",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -1906,7 +1906,7 @@
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
       "--isolated",
-      "[dummy hash for webkit_layout_tests]",
+      "[dummy hash for blink_web_tests]",
       "--",
       "--gtest_repeat=10",
       "--test-launcher-retry-limit=0",
@@ -1919,14 +1919,14 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "test_pre_run (without patch).[trigger] webkit_layout_tests (without patch)",
+    "name": "test_pre_run (without patch).[trigger] blink_web_tests (without patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webkit_layout_tests (without patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"blink_web_tests (without patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"webkit_layout_tests (without patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blink_web_tests (without patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
@@ -1958,7 +1958,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"tryserver.chromium.linux\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_trybot\", \"revision\": null, \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"webkit_layout_tests\": \"[dummy hash for webkit_layout_tests]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"tryserver.chromium.linux\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_trybot\", \"revision\": null, \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"blink_web_tests\": \"[dummy hash for blink_web_tests]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--use-go-client",
       "--summary-json-file",
       "/path/to/tmp/json",
@@ -1979,7 +1979,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "webkit_layout_tests (without patch)",
+    "name": "blink_web_tests (without patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>2 passed, 0 failed (2 total)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -2026,15 +2026,15 @@
       "@@@STEP_LOG_LINE@outdir_json@{}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"webkit_layout_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"blink_web_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"none\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"webkit_layout_tests (without patch)\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"webkit_layout_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"blink_web_tests (without patch)\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"blink_web_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"110000\"@@@",
@@ -2070,7 +2070,7 @@
       "--staging-dir",
       "[CACHE]/chrome_staging",
       "--step-name",
-      "webkit_layout_tests (without patch)",
+      "blink_web_tests (without patch)",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
@@ -2078,10 +2078,10 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "archive results for webkit_layout_tests (without patch)",
+    "name": "archive results for blink_web_tests (without patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/0/webkit_layout_tests (without patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/0/webkit_layout_tests (without patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/0/blink_web_tests (without patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/0/blink_web_tests (without patch)/layout-test-results.zip@@@"
     ]
   },
   {
@@ -2123,7 +2123,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "webkit_layout_tests (retry summary)",
+    "name": "blink_web_tests (retry summary)",
     "~followup_annotations": [
       "@@@STEP_TEXT@<br/>Failed with patch, succeeded without patch:<br/>test2.Test2<br/>test1.Test1<br/>@@@",
       "@@@STEP_FAILURE@@@",
@@ -2393,7 +2393,7 @@
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
-      "webkit_layout_tests\n",
+      "blink_web_tests\n",
       "//out/Release"
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
@@ -2403,7 +2403,7 @@
     },
     "name": "generate_build_files (retry with patch)",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@webkit_layout_tests@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@blink_web_tests@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
@@ -2509,7 +2509,7 @@
       "[BUILDER_CACHE]/linux/src/out/Release",
       "-j",
       "60",
-      "webkit_layout_tests"
+      "blink_web_tests"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -2527,7 +2527,7 @@
       "[BUILDER_CACHE]/linux/src/out/Release",
       "-j",
       "60",
-      "webkit_layout_tests",
+      "blink_web_tests",
       "-d",
       "explain",
       "-n"
@@ -2647,7 +2647,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/linux/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/linux/src/out/Release\", \"-j\", 60, \"webkit_layout_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/linux/src/out/Release\", \"-j\", 60, \"blink_web_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -2795,7 +2795,7 @@
       "--shards",
       "1",
       "--task-name",
-      "webkit_layout_tests (retry with patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571",
+      "blink_web_tests (retry with patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -2826,13 +2826,13 @@
       "--tag",
       "buildnumber:571",
       "--tag",
-      "data:[dummy hash for webkit_layout_tests]",
+      "data:[dummy hash for blink_web_tests]",
       "--tag",
       "gerrit:https://chromium-review.googlesource.com/c/123456/7",
       "--tag",
       "master:tryserver.chromium.linux",
       "--tag",
-      "name:webkit_layout_tests",
+      "name:blink_web_tests",
       "--tag",
       "patch_project:chromium/src",
       "--tag",
@@ -2846,7 +2846,7 @@
       "--tag",
       "spec_name:chromium.try:linux_chromium_rel_ng",
       "--tag",
-      "stepname:webkit_layout_tests (retry with patch)",
+      "stepname:blink_web_tests (retry with patch)",
       "--idempotent",
       "--cipd-package",
       ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
@@ -2866,7 +2866,7 @@
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
       "--isolated",
-      "[dummy hash for webkit_layout_tests]",
+      "[dummy hash for blink_web_tests]",
       "--",
       "--gtest_repeat=10",
       "--test-launcher-retry-limit=0",
@@ -2879,14 +2879,14 @@
       "CHROME_HEADLESS": "1"
     },
     "infra_step": true,
-    "name": "test_pre_run (retry with patch).[trigger] webkit_layout_tests (retry with patch)",
+    "name": "test_pre_run (retry with patch).[trigger] blink_web_tests (retry with patch)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"webkit_layout_tests (retry with patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"blink_web_tests (retry with patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"webkit_layout_tests (retry with patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"blink_web_tests (retry with patch)/Ubuntu-14.04/[dummy has/linux_chromium_rel_ng/571\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"120000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"@@@",
@@ -2918,7 +2918,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"tryserver.chromium.linux\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_trybot\", \"revision\": null, \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"webkit_layout_tests\": \"[dummy hash for webkit_layout_tests]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"tryserver.chromium.linux\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_trybot\", \"revision\": null, \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"blink_web_tests\": \"[dummy hash for blink_web_tests]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--use-go-client",
       "--summary-json-file",
       "/path/to/tmp/json",
@@ -2939,7 +2939,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "webkit_layout_tests (retry with patch)",
+    "name": "blink_web_tests (retry with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
@@ -3010,15 +3010,15 @@
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"webkit_layout_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"blink_web_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"cpu\": \"x86-64\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"gpu\": \"none\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"os\": \"Ubuntu-14.04\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"webkit_layout_tests (retry with patch)\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"webkit_layout_tests\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"blink_web_tests (retry with patch)\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"blink_web_tests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": true, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"120000\"@@@",
@@ -3045,7 +3045,7 @@
       "--build-number",
       "0",
       "--test-type",
-      "webkit_layout_tests (retry with patch)",
+      "blink_web_tests (retry with patch)",
       "--chrome-revision",
       "170242",
       "--build-id",
@@ -3057,7 +3057,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "Upload to test-results [webkit_layout_tests (retry with patch)]"
+    "name": "Upload to test-results [blink_web_tests (retry with patch)]"
   },
   {
     "cmd": [
@@ -3082,7 +3082,7 @@
       "--staging-dir",
       "[CACHE]/chrome_staging",
       "--step-name",
-      "webkit_layout_tests (retry with patch)",
+      "blink_web_tests (retry with patch)",
       "--slave-utils-gsutil-py-path",
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
     ],
@@ -3090,10 +3090,10 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "archive results for webkit_layout_tests (retry with patch)",
+    "name": "archive results for blink_web_tests (retry with patch)",
     "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/0/webkit_layout_tests (retry with patch)/layout-test-results/results.html@@@",
-      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/0/webkit_layout_tests (retry with patch)/layout-test-results.zip@@@"
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/0/blink_web_tests (retry with patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/linux_chromium_rel_ng/0/blink_web_tests (retry with patch)/layout-test-results.zip@@@"
     ]
   },
   {
@@ -3135,7 +3135,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "webkit_layout_tests (retry with patch summary)"
+    "name": "blink_web_tests (retry with patch summary)"
   },
   {
     "cmd": [

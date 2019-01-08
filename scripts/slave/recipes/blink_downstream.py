@@ -224,8 +224,8 @@ def _sanitize_nonalpha(text):
 
 def GenTests(api):
   canned_test = api.test_utils.canned_test_output
-  with_patch = 'webkit_layout_tests (with patch)'
-  without_patch = 'webkit_layout_tests (without patch)'
+  with_patch = 'blink_web_tests (with patch)'
+  without_patch = 'blink_web_tests (without patch)'
 
   def properties(mastername, buildername):
     return (
@@ -277,7 +277,7 @@ def GenTests(api):
   # lists of failing tests.
   # 255 == test_run_results.UNEXPECTED_ERROR_EXIT_STATUS in run_web_tests.py.
   yield (
-    api.test('webkit_layout_tests_unexpected_error') +
+    api.test('blink_web_tests_unexpected_error') +
     properties('client.v8.fyi', 'V8-Blink Linux 64') +
     api.override_step_data(with_patch, canned_test(passing=False, retcode=255))
   )
@@ -288,7 +288,7 @@ def GenTests(api):
   # we shouldn't try to compare the lists of failing tests.
   # 130 == test_run_results.INTERRUPTED_EXIT_STATUS in run_web_tests.py.
   yield (
-    api.test('webkit_layout_tests_interrupted') +
+    api.test('blink_web_tests_interrupted') +
     properties('client.v8.fyi', 'V8-Blink Linux 64') +
     api.override_step_data(with_patch, canned_test(passing=False, retcode=130))
   )

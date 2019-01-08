@@ -298,10 +298,10 @@ def GenTests(api):
   )
 
   yield (
-      api.test('webkit_layout_tests_with_suffixes') +
+      api.test('blink_web_tests_with_suffixes') +
       api.properties(
           single_spec={
-              'name': 'webkit_layout_tests',
+              'name': 'blink_web_tests',
               'isolate_name': 'webkit_tests',
               'results_handler': 'layout tests',
               'swarming': {
@@ -321,8 +321,8 @@ def GenTests(api):
       ) + api.post_process(post_process.Filter(
           # Ensure that we still pass the full step name to the test result
           # upload, but we pass a simplified step name to 'archive results'.
-          'Upload to test-results [webkit_layout_tests on Intel GPU on Mac]',
-          'archive results for webkit_layout_tests', '$result'))
+          'Upload to test-results [blink_web_tests on Intel GPU on Mac]',
+          'archive results for blink_web_tests', '$result'))
   )
 
   yield (
