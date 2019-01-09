@@ -13,6 +13,10 @@ DEPS = [
 def RunSteps(api):
   # Code coverage for these methods.
   api.step('client path', [])
+
+  with api.swarming_client.on_path():
+    api.step('on path', [])
+
   api.step.active_result.step_text = api.swarming_client.path
 
   try:

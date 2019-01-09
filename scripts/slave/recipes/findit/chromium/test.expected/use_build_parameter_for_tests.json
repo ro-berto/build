@@ -1296,6 +1296,49 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/mac",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "name": "test r2.ensure swarming",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/swarming_client",
+      "-ensure-file",
+      "infra/tools/luci/swarming/${platform} git_revision:25958d48e89e980e2a97daeddc977fb5e2e1fb8c",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[BUILDER_CACHE]/mac",
+    "env": {
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "infra_step": true,
+    "name": "test r2.ensure swarming.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:259\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/swarming/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -1334,6 +1377,11 @@
     ],
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
     },
     "name": "test r2.gl_tests (r2)",
     "~followup_annotations": [
@@ -2375,6 +2423,11 @@
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "test r3.gl_tests (r3)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3414,6 +3467,11 @@
     ],
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
     },
     "name": "test r4.gl_tests (r4)",
     "~followup_annotations": [

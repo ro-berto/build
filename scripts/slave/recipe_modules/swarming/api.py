@@ -964,10 +964,9 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     if task.use_go_client:
       task_args.append('--use-go-client')
-      # TODO(tikuta): This line assumes the recipe is working with
-      # Chromium checkout.
+
       collect_cmd = [
-        self.m.path['checkout'].join('tools', 'luci-go', 'swarming'),
+        'swarming',
       ]
       # go's client does not generate summary file under output dir.
       # Need to tell the location of summary file to collect_task.py.
@@ -1008,14 +1007,15 @@ class SwarmingApi(recipe_api.RecipeApi):
         'Successfully merged all data'))
 
     try:
-      with self.m.context(cwd=self.m.path['start_dir']):
-        return self.m.build.python(
-            name=name or self.get_step_name('', task),
-            script=self.resource('collect_task.py'),
-            args=task_args,
-            ok_ret=allowed_return_codes,
-            step_test_data=lambda: step_test_data,
-            **kwargs)
+      with self.m.swarming_client.on_path():
+        with self.m.context(cwd=self.m.path['start_dir']):
+          return self.m.build.python(
+              name=name or self.get_step_name('', task),
+              script=self.resource('collect_task.py'),
+              args=task_args,
+              ok_ret=allowed_return_codes,
+              step_test_data=lambda: step_test_data,
+              **kwargs)
     finally:
       step_result = None
       try:

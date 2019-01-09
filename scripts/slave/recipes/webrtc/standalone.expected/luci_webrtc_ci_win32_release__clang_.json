@@ -2710,6 +2710,40 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[CACHE]\\builder",
+    "name": "ensure swarming"
+  },
+  {
+    "cmd": [
+      "cipd.bat",
+      "ensure",
+      "-root",
+      "[CACHE]\\swarming_client",
+      "-ensure-file",
+      "infra/tools/luci/swarming/${platform} git_revision:25958d48e89e980e2a97daeddc977fb5e2e1fb8c",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "infra_step": true,
+    "name": "ensure swarming.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:259\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/swarming/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -2733,7 +2767,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -2746,6 +2780,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"10000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "audio_decoder_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -2887,7 +2926,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -2900,6 +2939,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"110000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "common_audio_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -3041,7 +3085,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -3054,6 +3098,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"120000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "common_video_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -3195,7 +3244,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -3208,6 +3257,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"130000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "low_bandwidth_audio_test",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -3349,7 +3403,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -3362,6 +3416,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"140000\"}, {\"task_id\": \"140100\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "modules_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -3528,7 +3587,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -3541,6 +3600,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"160000\"}, {\"task_id\": \"160100\"}, {\"task_id\": \"160200\"}, {\"task_id\": \"160300\"}, {\"task_id\": \"160400\"}, {\"task_id\": \"160500\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "modules_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -3807,7 +3871,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -3820,6 +3884,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1120000\"}, {\"task_id\": \"1120100\"}, {\"task_id\": \"1120200\"}, {\"task_id\": \"1120300\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "peerconnection_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -4036,7 +4105,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -4049,6 +4118,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1160000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "rtc_media_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -4190,7 +4264,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -4203,6 +4277,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1170000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "rtc_pc_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -4344,7 +4423,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -4357,6 +4436,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1180000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "rtc_stats_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -4498,7 +4582,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -4511,6 +4595,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1190000\"}, {\"task_id\": \"1190100\"}, {\"task_id\": \"1190200\"}, {\"task_id\": \"1190300\"}, {\"task_id\": \"1190400\"}, {\"task_id\": \"1190500\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "rtc_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -4777,7 +4866,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -4790,6 +4879,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1250000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "slow_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -4931,7 +5025,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -4944,6 +5038,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1260000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "system_wrappers_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -5085,7 +5184,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -5098,6 +5197,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1270000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "test_support_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -5239,7 +5343,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -5252,6 +5356,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1280000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "tools_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -5393,7 +5502,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -5406,6 +5515,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1290000\"}, {\"task_id\": \"1290100\"}, {\"task_id\": \"1290200\"}, {\"task_id\": \"1290300\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "video_engine_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -5622,7 +5736,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -5635,6 +5749,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1330000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "webrtc_nonparallel_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -5776,7 +5895,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -5789,6 +5908,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1340000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "video_capture_tests on Windows",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",

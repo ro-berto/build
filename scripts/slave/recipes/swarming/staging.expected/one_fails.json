@@ -825,6 +825,40 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]/Linux_Swarm",
+    "name": "ensure swarming"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/swarming_client",
+      "-ensure-file",
+      "infra/tools/luci/swarming/${platform} git_revision:25958d48e89e980e2a97daeddc977fb5e2e1fb8c",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[BUILDER_CACHE]/Linux_Swarm",
+    "infra_step": true,
+    "name": "ensure swarming.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:259\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/swarming/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -862,6 +896,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "browser_tests on Ubuntu",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",

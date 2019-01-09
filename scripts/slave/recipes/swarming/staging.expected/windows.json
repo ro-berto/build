@@ -839,6 +839,40 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[BUILDER_CACHE]\\Windows_Swarm",
+    "name": "ensure swarming"
+  },
+  {
+    "cmd": [
+      "cipd.bat",
+      "ensure",
+      "-root",
+      "[CACHE]\\swarming_client",
+      "-ensure-file",
+      "infra/tools/luci/swarming/${platform} git_revision:25958d48e89e980e2a97daeddc977fb5e2e1fb8c",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[BUILDER_CACHE]\\Windows_Swarm",
+    "infra_step": true,
+    "name": "ensure swarming.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:259\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/swarming/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -876,6 +910,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "browser_tests on Windows-10",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-10'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)@@@",

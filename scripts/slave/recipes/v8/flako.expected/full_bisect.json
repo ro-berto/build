@@ -400,6 +400,41 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "calibration attempt 1.check mjsunit/foobar at #1.ensure swarming",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/swarming_client",
+      "-ensure-file",
+      "infra/tools/luci/swarming/${platform} git_revision:25958d48e89e980e2a97daeddc977fb5e2e1fb8c",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "calibration attempt 1.check mjsunit/foobar at #1.ensure swarming.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@3@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:259\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/swarming/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -433,6 +468,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "calibration attempt 1.check mjsunit/foobar at #1.check mjsunit/foobar at #1 - shard 0",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -504,6 +544,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "calibration attempt 1.check mjsunit/foobar at #1.check mjsunit/foobar at #1 - shard 1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1022,6 +1067,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "calibration attempt 2.check mjsunit/foobar at #1.check mjsunit/foobar at #1 - shard 0",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1095,6 +1145,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "calibration attempt 2.check mjsunit/foobar at #1.check mjsunit/foobar at #1 - shard 1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1168,6 +1223,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "calibration attempt 2.check mjsunit/foobar at #1.check mjsunit/foobar at #1 - shard 2",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@2@@@",
@@ -1727,6 +1787,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "check mjsunit/foobar at #2.check mjsunit/foobar at #2 - shard 0",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1800,6 +1865,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "check mjsunit/foobar at #2.check mjsunit/foobar at #2 - shard 1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1871,6 +1941,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "check mjsunit/foobar at #2.check mjsunit/foobar at #2 - shard 2",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -1942,6 +2017,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "check mjsunit/foobar at #2.check mjsunit/foobar at #2 - shard 3",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2544,6 +2624,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "check mjsunit/foobar at #5.check mjsunit/foobar at #5 - shard 0",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2615,6 +2700,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "check mjsunit/foobar at #5.check mjsunit/foobar at #5 - shard 1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2686,6 +2776,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "check mjsunit/foobar at #5.check mjsunit/foobar at #5 - shard 2",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -2757,6 +2852,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "check mjsunit/foobar at #5.check mjsunit/foobar at #5 - shard 3",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3318,6 +3418,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "check mjsunit/foobar at #3.check mjsunit/foobar at #3 - shard 0",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3391,6 +3496,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "check mjsunit/foobar at #3.check mjsunit/foobar at #3 - shard 1",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3462,6 +3572,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "check mjsunit/foobar at #3.check mjsunit/foobar at #3 - shard 2",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -3533,6 +3648,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "check mjsunit/foobar at #3.check mjsunit/foobar at #3 - shard 3",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",

@@ -3324,9 +3324,9 @@ Returns:
 Uses the 'get_states' endpoint on the swarming server.
 ### *recipe_modules* / [swarming\_client](/scripts/slave/recipe_modules/swarming_client)
 
-[DEPS](/scripts/slave/recipe_modules/swarming_client/__init__.py#5): [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipe_modules/swarming_client/__init__.py#5): [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/swarming][recipe_engine/recipe_modules/swarming]
 
-#### **class [SwarmingClientApi](/scripts/slave/recipe_modules/swarming_client/api.py#8)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [SwarmingClientApi](/scripts/slave/recipe_modules/swarming_client/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 Code that both isolate and swarming recipe modules depend on.
 
@@ -3335,7 +3335,7 @@ Both swarming and isolate scripts live in a single repository called
 existing swarming client checkout, fetching a new one, getting version of
 a swarming script, etc.
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/swarming_client/api.py#22)(self, revision=None, curl_trace_file=None, can_fail_build=True):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/swarming_client/api.py#24)(self, revision=None, curl_trace_file=None, can_fail_build=True):**
 
 Returns a step to checkout swarming client into a separate directory.
 
@@ -3350,27 +3350,32 @@ to checking out the entire workspace, that would cause dramatic increases
 in cycle time if a misconfiguration were made and it were no longer possible
 for the bot to check out swarming_client separately.
 
-&mdash; **def [ensure\_script\_version](/scripts/slave/recipe_modules/swarming_client/api.py#110)(self, script, min_version, step_test_data=None):**
+&mdash; **def [ensure\_script\_version](/scripts/slave/recipe_modules/swarming_client/api.py#112)(self, script, min_version, step_test_data=None):**
 
 Yields steps to ensure a script version is not older than |min_version|.
 
 Will abort recipe execution if it is.
 
-&mdash; **def [get\_script\_version](/scripts/slave/recipe_modules/swarming_client/api.py#101)(self, script):**
+&mdash; **def [get\_script\_version](/scripts/slave/recipe_modules/swarming_client/api.py#103)(self, script):**
 
 Returns a version of some swarming script as a tuple (Major, Minor, Rev).
 
 It should have been queried by 'query_script_version' step before. Raises
 AssertionError if it wasn't.
 
-&emsp; **@property**<br>&mdash; **def [path](/scripts/slave/recipe_modules/swarming_client/api.py#53)(self):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [on\_path](/scripts/slave/recipe_modules/swarming_client/api.py#129)(self):**
+
+This is wrapper for recipe_engine/swarming.on_path, this should only be
+used from swarming module.
+
+&emsp; **@property**<br>&mdash; **def [path](/scripts/slave/recipe_modules/swarming_client/api.py#55)(self):**
 
 Returns path to a swarming client checkout.
 
 It's subdirectory of Chromium src/ checkout or a separate directory if
 'checkout_swarming_client' step was used.
 
-&mdash; **def [query\_script\_version](/scripts/slave/recipe_modules/swarming_client/api.py#67)(self, script, step_test_data=None):**
+&mdash; **def [query\_script\_version](/scripts/slave/recipe_modules/swarming_client/api.py#69)(self, script, step_test_data=None):**
 
 Yields a step to query a swarming script for its version.
 
@@ -5930,6 +5935,7 @@ The changes are:
 [recipe_engine/recipe_modules/scheduler]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/7d75cc6e379d1603027cb39420541ceaa8fd6a2c/README.recipes.md#recipe_modules-scheduler
 [recipe_engine/recipe_modules/service_account]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/7d75cc6e379d1603027cb39420541ceaa8fd6a2c/README.recipes.md#recipe_modules-service_account
 [recipe_engine/recipe_modules/step]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/7d75cc6e379d1603027cb39420541ceaa8fd6a2c/README.recipes.md#recipe_modules-step
+[recipe_engine/recipe_modules/swarming]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/7d75cc6e379d1603027cb39420541ceaa8fd6a2c/README.recipes.md#recipe_modules-swarming
 [recipe_engine/recipe_modules/tempfile]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/7d75cc6e379d1603027cb39420541ceaa8fd6a2c/README.recipes.md#recipe_modules-tempfile
 [recipe_engine/recipe_modules/time]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/7d75cc6e379d1603027cb39420541ceaa8fd6a2c/README.recipes.md#recipe_modules-time
 [recipe_engine/recipe_modules/url]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/7d75cc6e379d1603027cb39420541ceaa8fd6a2c/README.recipes.md#recipe_modules-url

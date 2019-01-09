@@ -620,6 +620,40 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[CACHE]\\builder",
+    "name": "ensure swarming"
+  },
+  {
+    "cmd": [
+      "cipd.bat",
+      "ensure",
+      "-root",
+      "[CACHE]\\swarming_client",
+      "-ensure-file",
+      "infra/tools/luci/swarming/${platform} git_revision:25958d48e89e980e2a97daeddc977fb5e2e1fb8c",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]\\builder",
+    "infra_step": true,
+    "name": "ensure swarming.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:259\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/swarming/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -643,7 +677,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -656,6 +690,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"10000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "bwe_simulations_tests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",
@@ -1657,7 +1696,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]\\builder\\src\\tools\\luci-go\\swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -1670,6 +1709,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"110000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\swarming_client"
+      ]
+    },
     "name": "peerconnection_unittests",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Windows-7-SP1'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>Total tests: 4<br/>* Passed: 1 (1 expected, 0 unexpected)<br/>* Skipped: 1 (1 expected, 0 unexpected)<br/>* Failed: 1 (1 expected, 0 unexpected)<br/>* Flaky: 1 (1 expected, 0 unexpected)<br/>@@@",

@@ -26,7 +26,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[START_DIR]/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -41,6 +41,11 @@
     ],
     "env": {
       "CHROME_HEADLESS": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
     },
     "name": "browser_tests",
     "~followup_annotations": [

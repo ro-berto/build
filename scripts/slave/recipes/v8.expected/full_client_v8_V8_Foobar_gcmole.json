@@ -368,6 +368,38 @@
     "name": "trigger tests.[trigger] GCMole arm64"
   },
   {
+    "cmd": [],
+    "name": "ensure swarming"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/swarming_client",
+      "-ensure-file",
+      "infra/tools/luci/swarming/${platform} git_revision:25958d48e89e980e2a97daeddc977fb5e2e1fb8c",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "ensure swarming.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:259\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/swarming/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -401,6 +433,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "GCMole ia32",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
@@ -471,6 +508,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "GCMole x64",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
@@ -541,6 +583,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "GCMole arm",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
@@ -611,6 +658,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "GCMole arm64",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",

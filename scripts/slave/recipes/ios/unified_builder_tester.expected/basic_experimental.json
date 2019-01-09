@@ -1065,6 +1065,40 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[CACHE]/builder/src",
+    "name": "ensure swarming"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/swarming_client",
+      "-ensure-file",
+      "infra/tools/luci/swarming/${platform} latest",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "infra_step": true,
+    "name": "ensure swarming.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/swarming/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
@@ -1098,6 +1132,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "fake tests 1 (fake device iOS 8.0)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
@@ -1169,6 +1208,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "fake tests 2 (fake device iOS 7.1)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
@@ -1240,6 +1284,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "fake_eg_test_host (fake device 3 iOS 9.3)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Mac'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",

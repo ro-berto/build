@@ -2454,6 +2454,40 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[CACHE]/builder",
+    "name": "ensure swarming"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/swarming_client",
+      "-ensure-file",
+      "infra/tools/luci/swarming/${platform} git_revision:25958d48e89e980e2a97daeddc977fb5e2e1fb8c",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "cwd": "[CACHE]/builder",
+    "infra_step": true,
+    "name": "ensure swarming.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:259\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/swarming/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -2478,7 +2512,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]/builder/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -2491,6 +2525,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"10000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "AppRTCMobile_test_apk on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
@@ -2596,7 +2635,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]/builder/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -2609,6 +2648,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"110000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "android_instrumentation_test_apk on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
@@ -2714,7 +2758,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]/builder/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -2727,6 +2771,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"120000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "audio_decoder_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
@@ -2832,7 +2881,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]/builder/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -2845,6 +2894,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"130000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "common_audio_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
@@ -2950,7 +3004,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]/builder/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -2963,6 +3017,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"140000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "common_video_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
@@ -3068,7 +3127,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]/builder/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -3081,6 +3140,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"150000\"}, {\"task_id\": \"150100\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "modules_tests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)@@@",
@@ -3210,7 +3274,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]/builder/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -3223,6 +3287,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"170000\"}, {\"task_id\": \"170100\"}, {\"task_id\": \"170200\"}, {\"task_id\": \"170300\"}, {\"task_id\": \"170400\"}, {\"task_id\": \"170500\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "modules_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)@@@",
@@ -3448,7 +3517,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]/builder/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -3461,6 +3530,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1130000\"}, {\"task_id\": \"1130100\"}, {\"task_id\": \"1130200\"}, {\"task_id\": \"1130300\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "peerconnection_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)@@@",
@@ -3638,7 +3712,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]/builder/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -3651,6 +3725,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1170000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "rtc_stats_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
@@ -3756,7 +3835,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]/builder/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -3769,6 +3848,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1180000\"}, {\"task_id\": \"1180100\"}, {\"task_id\": \"1180200\"}, {\"task_id\": \"1180300\"}, {\"task_id\": \"1180400\"}, {\"task_id\": \"1180500\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "rtc_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)@@@",
@@ -3994,7 +4078,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]/builder/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -4007,6 +4091,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1240000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "system_wrappers_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
@@ -4112,7 +4201,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]/builder/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -4125,6 +4214,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1250000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "test_support_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
@@ -4230,7 +4324,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]/builder/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -4243,6 +4337,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1260000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "tools_unittests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
@@ -4348,7 +4447,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]/builder/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -4361,6 +4460,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1270000\"}, {\"task_id\": \"1270100\"}, {\"task_id\": \"1270200\"}, {\"task_id\": \"1270300\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "video_engine_tests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)@@@",
@@ -4538,7 +4642,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[CACHE]/builder/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -4551,6 +4655,11 @@
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1310000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "webrtc_nonparallel_tests on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",

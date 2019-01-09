@@ -741,6 +741,46 @@
     ]
   },
   {
+    "cmd": [],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "name": "ensure swarming"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/swarming_client",
+      "-ensure-file",
+      "infra/tools/luci/swarming/${platform} git_revision:25958d48e89e980e2a97daeddc977fb5e2e1fb8c",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "infra_step": true,
+    "name": "ensure swarming.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:259\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/swarming/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -767,7 +807,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[START_DIR]/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -783,6 +823,11 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
     },
     "name": "gl_tests on NVIDIA GPU on Mac Retina",
     "~followup_annotations": [
@@ -893,7 +938,7 @@
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
-      "[START_DIR]/src/tools/luci-go/swarming",
+      "swarming",
       "collect",
       "-server",
       "https://chromium-swarm.appspot.com",
@@ -909,6 +954,11 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
     },
     "name": "gl_tests on Intel GPU on Mac on Mac-10.10",
     "~followup_annotations": [

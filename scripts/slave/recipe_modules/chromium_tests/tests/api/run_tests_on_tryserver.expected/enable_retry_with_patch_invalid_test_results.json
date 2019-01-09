@@ -266,6 +266,11 @@
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "name": "base_unittests (retry with patch)",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'@@@",
