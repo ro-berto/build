@@ -128,13 +128,13 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.path.exists(
-        api.path['cleanup'].join('0_0_tmp_2', '0'),
-        api.path['cleanup'].join('0_0_tmp_2', '0', 'full_results.json'),
-        api.path['cleanup'].join('0_1_tmp_3', '0'),
-        api.path['cleanup'].join('0_1_tmp_3', '0', 'full_results.json'),
-        api.path['cleanup'].join('1_tmp_5', '0'),
-        api.path['cleanup'].join('1_tmp_5', '0', 'full_results.json'),
-        api.path['cleanup'].join('1_tmp_5', '0', 'Documents',
+        api.path['cleanup'].join('0_1_tmp_3', '110000'),
+        api.path['cleanup'].join('0_1_tmp_3', '110000', 'full_results.json'),
+        api.path['cleanup'].join('0_2_tmp_4', '120000'),
+        api.path['cleanup'].join('0_2_tmp_4', '120000', 'full_results.json'),
+        api.path['cleanup'].join('1_tmp_5', '130000'),
+        api.path['cleanup'].join('1_tmp_5', '130000', 'full_results.json'),
+        api.path['cleanup'].join('1_tmp_5', '130000', 'Documents',
                                  'perf_result.json'),
     )
   )
@@ -347,7 +347,7 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
     + api.path.exists(
-        api.path['cleanup'].join('0_tmp_2', '0', 'Documents',
+        api.path['cleanup'].join('0_tmp_2', '10000', 'Documents',
                                  'perf_result.json'),
     )
   )
@@ -964,5 +964,3 @@ def GenTests(api):
         stdout=api.raw_io.output_text('1.2.3'),
     )
   )
-
-

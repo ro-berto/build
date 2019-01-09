@@ -591,6 +591,9 @@ class iOSApi(recipe_api.RecipeApi):
     self.m.swarming.show_shards_in_collect_step = True
     self.m.swarming_client.query_script_version('swarming.py')
 
+    # TODO(tikuta): Remove this after the switch (crbug.com/894045).
+    self.m.swarming.use_go_client = True
+
   @staticmethod
   def get_step_name(test):
     return str('%s (%s iOS %s)' % (
