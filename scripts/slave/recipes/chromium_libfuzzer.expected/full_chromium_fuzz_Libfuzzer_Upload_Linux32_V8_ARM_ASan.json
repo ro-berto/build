@@ -200,7 +200,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "rmtree",
-      "[START_DIR]/src/out/Debug"
+      "[START_DIR]/src/out/Release"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -236,7 +236,7 @@
       "-m",
       "chromium.fuzz",
       "-b",
-      "Libfuzzer Upload Linux32 ASan Debug",
+      "Libfuzzer Upload Linux32 V8-ARM ASan",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -262,12 +262,12 @@
       "-m",
       "chromium.fuzz",
       "-b",
-      "Libfuzzer Upload Linux32 ASan Debug",
+      "Libfuzzer Upload Linux32 V8-ARM ASan",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[CACHE]/goma/client",
-      "//out/Debug"
+      "//out/Release"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -286,7 +286,7 @@
       "--as=output",
       "--all",
       "--type=executable",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/Release",
       "//testing/libfuzzer:libfuzzer_main"
     ],
     "cwd": "[START_DIR]/src",
@@ -309,7 +309,7 @@
       "--as=output",
       "--all",
       "--type=executable",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/Release",
       "//testing/libfuzzer:no_clusterfuzz"
     ],
     "cwd": "[START_DIR]/src",
@@ -324,7 +324,6 @@
       "@@@STEP_LOG_END@all_fuzzers@@@",
       "@@@STEP_LOG_LINE@no_clusterfuzz@target1@@@",
       "@@@STEP_LOG_END@no_clusterfuzz@@@",
-      "@@@STEP_LOG_LINE@targets@target2@@@",
       "@@@STEP_LOG_LINE@targets@v8_target3@@@",
       "@@@STEP_LOG_END@targets@@@"
     ]
@@ -374,7 +373,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/Libfuzzer_Upload_Linux32_ASan_Debug"
+      "[CACHE]/goma/data/Libfuzzer_Upload_Linux32_V8_ARM_ASan"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -398,7 +397,7 @@
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_ALLOWED_NETWORK_ERROR_DURATION": "1800",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Libfuzzer_Upload_Linux32_ASan_Debug",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/Libfuzzer_Upload_Linux32_V8_ARM_ASan",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -455,10 +454,9 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/Release",
       "-j",
       "20",
-      "target2",
       "v8_target3"
     ],
     "cwd": "[START_DIR]/src",
@@ -474,10 +472,9 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/Release",
       "-j",
       "20",
-      "target2",
       "v8_target3",
       "-d",
       "explain",
@@ -596,9 +593,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Debug\", \"-j\", 20, \"target2\", \"v8_target3\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Release\", \"-j\", 20, \"v8_target3\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -614,9 +611,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"ci\", \"builder\": \"Libfuzzer Upload Linux32 ASan Debug\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"Libfuzzer Upload Linux32 V8-ARM ASan\", \"project\": \"chromium\"}",
       "--buildbot-buildername",
-      "Libfuzzer Upload Linux32 ASan Debug",
+      "Libfuzzer Upload Linux32 V8-ARM ASan",
       "--buildbot-mastername",
       "chromium.fuzz",
       "--buildbot-slavename",
@@ -683,7 +680,7 @@
       "-u",
       "RECIPE_MODULE[build::archive]/resources/filter_build_files.py",
       "--dir",
-      "[START_DIR]/src/out/Debug",
+      "[START_DIR]/src/out/Release",
       "--platform",
       "linux",
       "--output",
@@ -710,9 +707,9 @@
       "python",
       "RECIPE_MODULE[build::archive]/resources/zip_archive.py",
       "[CLEANUP]/chrome_staging",
-      "libfuzzer-linux32-debug-170242",
+      "libfuzzer-v8-arm-linux32-release-170242",
       "[\"file1\", \"file2\"]",
-      "[START_DIR]/src/out/Debug"
+      "[START_DIR]/src/out/Release"
     ],
     "infra_step": true,
     "name": "zipping"
@@ -732,13 +729,13 @@
       "cp",
       "-a",
       "public-read",
-      "[CLEANUP]/chrome_staging/libfuzzer-linux32-debug-170242.zip",
-      "gs://chromium-browser-libfuzzer/linux32-debug-asan/libfuzzer-linux32-debug-170242.zip"
+      "[CLEANUP]/chrome_staging/libfuzzer-v8-arm-linux32-release-170242.zip",
+      "gs://chromium-browser-libfuzzer/linux32-release-asan/libfuzzer-v8-arm-linux32-release-170242.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-libfuzzer/linux32-debug-asan/libfuzzer-linux32-debug-170242.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-libfuzzer/linux32-release-asan/libfuzzer-v8-arm-linux32-release-170242.zip@@@"
     ]
   },
   {
@@ -749,10 +746,10 @@
       "--json-output",
       "/path/to/tmp/json",
       "remove",
-      "[CLEANUP]/chrome_staging/libfuzzer-linux32-debug-170242.zip"
+      "[CLEANUP]/chrome_staging/libfuzzer-v8-arm-linux32-release-170242.zip"
     ],
     "infra_step": true,
-    "name": "libfuzzer-linux32-debug-170242.zip"
+    "name": "libfuzzer-v8-arm-linux32-release-170242.zip"
   },
   {
     "jsonResult": null,

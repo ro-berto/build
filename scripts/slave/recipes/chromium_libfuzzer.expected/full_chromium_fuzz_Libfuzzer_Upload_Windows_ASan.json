@@ -309,7 +309,7 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@raw_io.output_text[refs]@target1@@@",
       "@@@STEP_LOG_LINE@raw_io.output_text[refs]@target2@@@",
-      "@@@STEP_LOG_LINE@raw_io.output_text[refs]@target3@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text[refs]@v8_target3@@@",
       "@@@STEP_LOG_END@raw_io.output_text[refs]@@@"
     ]
   },
@@ -332,14 +332,14 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@raw_io.output_text[refs]@target1@@@",
       "@@@STEP_LOG_END@raw_io.output_text[refs]@@@",
+      "@@@STEP_LOG_LINE@all_fuzzers@v8_target3@@@",
       "@@@STEP_LOG_LINE@all_fuzzers@target2@@@",
-      "@@@STEP_LOG_LINE@all_fuzzers@target3@@@",
       "@@@STEP_LOG_LINE@all_fuzzers@target1@@@",
       "@@@STEP_LOG_END@all_fuzzers@@@",
       "@@@STEP_LOG_LINE@no_clusterfuzz@target1@@@",
       "@@@STEP_LOG_END@no_clusterfuzz@@@",
       "@@@STEP_LOG_LINE@targets@target2@@@",
-      "@@@STEP_LOG_LINE@targets@target3@@@",
+      "@@@STEP_LOG_LINE@targets@v8_target3@@@",
       "@@@STEP_LOG_END@targets@@@"
     ]
   },
@@ -473,7 +473,7 @@
       "-j",
       "20",
       "target2",
-      "target3"
+      "v8_target3"
     ],
     "cwd": "[START_DIR]\\src",
     "env": {
@@ -492,7 +492,7 @@
       "-j",
       "20",
       "target2",
-      "target3",
+      "v8_target3",
       "-d",
       "explain",
       "-n"
@@ -612,7 +612,7 @@
       "--ninja-log-outdir",
       "[START_DIR]\\src\\out\\Release_x64",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]\\\\src\\\\out\\\\Release_x64\", \"-j\", 20, \"target2\", \"target3\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]\\\\src\\\\out\\\\Release_x64\", \"-j\", 20, \"target2\", \"v8_target3\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
