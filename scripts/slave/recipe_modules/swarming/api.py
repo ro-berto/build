@@ -1366,7 +1366,8 @@ class SwarmingApi(recipe_api.RecipeApi):
 
     if task.use_go_client and exist_failure:
       step_result.presentation.status = self.m.step.FAILURE
-      raise recipe_api.StepFailure('There are failed tasks.')
+      raise recipe_api.StepFailure('There are failed tasks.',
+                                   result=step_result)
 
   def _get_collect_cmd_args(self, task):
     """

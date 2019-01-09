@@ -380,9 +380,9 @@
   {
     "failure": {
       "failure": {
-        "step": ""
+        "step": "There are failed tasks."
       },
-      "humanReason": "There are failed tasks."
+      "humanReason": "Step('There are failed tasks.') failed with return_code 0"
     },
     "name": "$result"
   }

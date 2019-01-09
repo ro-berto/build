@@ -3129,7 +3129,7 @@ This value can be changed per individual task.
 
 &emsp; **@default_user.setter**<br>&mdash; **def [default\_user](/scripts/slave/recipe_modules/swarming/api.py#332)(self, value):**
 
-&mdash; **def [get\_collect\_cmd\_args\_for\_python](/scripts/slave/recipe_modules/swarming/api.py#1396)(self, task):**
+&mdash; **def [get\_collect\_cmd\_args\_for\_python](/scripts/slave/recipe_modules/swarming/api.py#1397)(self, task):**
 
 SwarmingTask -> argument list for 'swarming.py' command.
 
@@ -5809,7 +5809,7 @@ which has offset 0.
 
 See PROPERTIES for documentation on the recipe's interface.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/flako.py#518)(api, bisect_mastername, bisect_buildername, build_config, extra_args, initial_commit_offset, isolated_name, num_shards, repetitions, repro_only, swarming_dimensions, test_name, timeout_sec, total_timeout_sec, to_revision, variant):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/flako.py#522)(api, bisect_mastername, bisect_buildername, build_config, extra_args, initial_commit_offset, isolated_name, num_shards, repetitions, repro_only, swarming_dimensions, test_name, timeout_sec, total_timeout_sec, to_revision, variant):**
 
 &mdash; **def [bisect](/scripts/slave/recipes/v8/flako.py#419)(api, depot, initial_commit_offset, is_bad_func, offset):**
 
