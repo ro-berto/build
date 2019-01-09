@@ -195,6 +195,8 @@ class SwarmingApi(recipe_api.RecipeApi):
     # triggers.
     self._task_test_data_id_offset = 0
 
+    self._task_output_stdout = 'json'
+
   def initialize(self):
     self.add_default_tag(
         'build_is_experimental:' + str(self.m.runtime.is_experimental).lower())
@@ -388,6 +390,16 @@ class SwarmingApi(recipe_api.RecipeApi):
   def default_priority(self, value):
     assert 1 <= value <= 255
     self._default_priority = value
+
+  @property
+  def task_output_stdout(self):
+    """Flag passed to swarming client with -task-output-stdout."""
+    return self._task_output_stdout
+
+  @task_output_stdout.setter
+  def task_output_stdout(self, value):
+    assert value in ('none', 'json', 'console', 'all')
+    self._task_output_stdout = value
 
   def add_default_tag(self, tag):
     """Adds a tag to the Swarming tasks triggered.
@@ -1381,7 +1393,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       '-worker', 50,
 
       '-task-summary-python',
-      '-task-output-stdout', 'json',
+      '-task-output-stdout', self.task_output_stdout,
 
       # This is necessary not to cause io timeout.
       '-verbose',

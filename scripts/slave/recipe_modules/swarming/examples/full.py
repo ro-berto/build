@@ -59,6 +59,7 @@ def RunSteps(api, platforms, show_outputs_ref_in_collect_step,
   api.swarming.default_user = 'joe'
   api.swarming.set_default_env('TESTING', '1')
   api.swarming.verbose = True
+  api.swarming.task_output_stdout = 'json'
   api.swarming.service_account_json = (
       '/creds/service_accounts/service-account-chromium-builder.json')
 

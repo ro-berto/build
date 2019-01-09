@@ -510,6 +510,7 @@ def setup_swarming(api, swarming_dimensions):
   api.swarming.add_default_tag('purpose:v8-flake-bisect')
   api.swarming.set_default_dimension('pool', 'Chrome')
   api.swarming.set_default_dimension('gpu', 'none')
+  api.swarming.task_output_stdout = 'all'
 
   # TODO(tikuta): Remove this after the switch (crbug.com/894045).
   api.swarming.use_go_client = True
