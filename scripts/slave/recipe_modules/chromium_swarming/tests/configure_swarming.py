@@ -19,8 +19,7 @@ def RunSteps(api):
   api.chromium_swarming.configure_swarming(
       'chromium',
       precommit=api.properties['precommit'],
-      default_priority=api.properties.get('default_priority'),
-      use_go_client=api.properties.get('use_go_client'))
+      default_priority=api.properties.get('default_priority'))
 
 
 def GenTests(api):
@@ -62,9 +61,4 @@ def GenTests(api):
       api.test('default_priority') +
       api.properties(precommit=False, default_priority=10) +
       api.runtime(is_luci=True, is_experimental=False) +
-      api.post_process(post_process.DropExpectation))
-
-  yield (
-      api.test('use_go_client') +
-      api.properties(precommit=False, use_go_client=True) +
       api.post_process(post_process.DropExpectation))

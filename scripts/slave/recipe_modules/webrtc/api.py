@@ -201,8 +201,7 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.chromium_swarming.configure_swarming(
           'webrtc',
           precommit=self.m.tryserver.is_tryserver,
-          mastername=self.mastername,
-          use_go_client=True)
+          mastername=self.mastername)
       self.m.swarming.set_default_dimension(
           'os',
           self.m.swarming.prefered_os_dimension(
