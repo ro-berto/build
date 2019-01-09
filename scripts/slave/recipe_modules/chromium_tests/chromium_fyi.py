@@ -157,20 +157,6 @@ SPEC = {
         'platform': 'mac',
       },
     },
-    'mac-views-rel': {
-      'chromium_config': 'chromium',
-      'gclient_config': 'chromium',
-      'chromium_apply_config': ['mb'],
-      'chromium_config_kwargs': {
-        'BUILD_CONFIG': 'Release',
-        'TARGET_BITS': 64,
-      },
-      'checkout_dir': 'mac',
-      'test_results_config': 'staging_server',
-      'testing': {
-        'platform': 'mac',
-      },
-    },
     'Chromium Mac 10.13': {
       'checkout_dir': 'mac',
       'chromium_config': 'chromium',
