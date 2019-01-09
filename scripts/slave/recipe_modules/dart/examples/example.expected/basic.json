@@ -84,9 +84,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "sdk@refs/heads/refs/head/master",
+      "sdk@refs/heads/master",
       "--refs",
-      "refs/heads/refs/head/master"
+      "refs/heads/master"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -107,7 +107,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"refs/heads/refs/head/master\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"refs/heads/master\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",

@@ -185,7 +185,7 @@ def RunSteps(api):
 
 def GenTests(api):
   yield (api.test('basic') + api.properties(
-      shards='2', shard_timeout='600', branch="refs/head/master",
+      shards='2', shard_timeout='600', branch="master",
       buildername='dart2js-linux-release-chrome-try',
       buildnumber='1357',
       revision='3456abcd78ef',
