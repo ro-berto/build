@@ -149,9 +149,35 @@ SPEC = {
        'platform': 'linux',
      },
    },
+   'Chromium Mac Goma RBE Staging': {
+     'chromium_config': 'chromium',
+     'chromium_apply_config': ['goma_rbe_staging', 'mb'],
+     'gclient_config': 'chromium',
+     'chromium_config_kwargs': {
+       'BUILD_CONFIG': 'Release',
+       'TARGET_BITS': 64,
+     },
+     'goma_staging': True,
+     'testing': {
+       'platform': 'mac',
+     },
+   },
    'Chromium Mac Goma RBE Staging (clobber)': {
      'chromium_config': 'chromium',
      'chromium_apply_config': ['goma_rbe_staging', 'clobber', 'mb'],
+     'gclient_config': 'chromium',
+     'chromium_config_kwargs': {
+       'BUILD_CONFIG': 'Release',
+       'TARGET_BITS': 64,
+     },
+     'goma_staging': True,
+     'testing': {
+       'platform': 'mac',
+     },
+   },
+   'Chromium Mac Goma RBE Staging (dbg)': {
+     'chromium_config': 'chromium',
+     'chromium_apply_config': ['goma_rbe_staging', 'mb'],
      'gclient_config': 'chromium',
      'chromium_config_kwargs': {
        'BUILD_CONFIG': 'Release',
