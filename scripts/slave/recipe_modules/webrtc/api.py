@@ -234,6 +234,11 @@ class WebRTCApi(recipe_api.RecipeApi):
         raise
 
   def checkout(self, **kwargs):
+    if (self.bot and self.bot.bot_type == 'tester' and
+        not self.m.properties.get('parent_got_revision')):
+      raise self.m.step.InfraFailure(
+         'Testers must not be started without providing revision information.')
+
     self._working_dir = self.m.chromium_checkout.get_checkout_dir({})
 
     is_chromium = self.m.tryserver.gerrit_change_repo_url == CHROMIUM_REPO
@@ -475,12 +480,6 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.c.enable_swarming:
       self.m.isolate.check_swarm_hashes(self._isolated_targets)
       return
-
-    if not self.m.properties.get('parent_got_revision'):
-      raise self.m.step.StepFailure(
-         'Testers cannot be forced without providing revision information. '
-         'Please select a previous build and click [Rebuild] or force a build '
-         'for a Builder instead (will trigger new runs for the testers).')
 
     # Ensure old build directory isn't being used by removing it.
     self.m.file.rmtree(
