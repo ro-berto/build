@@ -201,7 +201,9 @@ def RunSteps(api):
           name_suffix=' (without patch)',
       )
 
-    extra_args = []
+    # TODO(machenbach): Temporarily use higher timeout until builder migrates to
+    # swarming.
+    extra_args = ['--time-out-ms=12000']
     if bot_config.get('additional_expectations'):
       extra_args.extend([
         '--additional-expectations',
