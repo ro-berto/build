@@ -238,6 +238,18 @@ def setup_target(api,
   # The path to the chroot directory on the device where ART and its
   # dependencies are installed, in case of chroot-based testing.
   chroot_dir='/data/local/art-test-chroot'
+  # The path to the mounted Android Runtime APEX, which normally defaults to
+  # '/apex/com.android.runtime').
+  #
+  # The Runtime APEX is not (yet) supported by the ART Buildot setup (see
+  # b/121117762); however ICU code depends on `ANDROID_RUNTIME_ROOT` to find ICU
+  # .dat files. As a (temporary) workaround, we
+  # - make the ART Buildbot build script (art/tools/buildbot-build.sh) also
+  #   generate the ICU .dat files in `/system/etc/icu` on device (these files
+  #   are normally only put in the Runtime APEX on device);
+  # - set `ANDROID_RUNTIME_ROOT` to '/system' on the ART Buildbot (via
+  #   `ART_TEST_ANDROID_RUNTIME_ROOT`).
+  android_runtime_root_dir='/system'
 
   env = {'TARGET_BUILD_VARIANT': 'eng',
          'TARGET_BUILD_TYPE': 'release',
@@ -283,6 +295,7 @@ def setup_target(api,
       })
 
   env.update({ 'ART_TEST_CHROOT' : chroot_dir })
+  env.update({ 'ART_TEST_ANDROID_RUNTIME_ROOT' : android_runtime_root_dir })
 
   checkout(api)
   clobber(api)
