@@ -201,6 +201,21 @@ SPEC = {
        'platform': 'mac',
      },
    },
+   'Chromium Android ARM 32-bit Goma RBE ToT': {
+     'chromium_config': 'android',
+     'chromium_apply_config': ['goma_rbe_tot'],
+     'gclient_config': 'chromium',
+     'gclient_apply_config': ['android'],
+     'chromium_config_kwargs': {
+       'BUILD_CONFIG': 'Release',
+       'TARGET_BITS': 32,
+       'TARGET_PLATFORM': 'android',
+     },
+     'android_config': 'main_builder_mb',
+     'testing': {
+       'platform': 'linux',
+     },
+   },
    'Chromium Android ARM 32-bit Goma RBE Staging': {
      'chromium_config': 'android',
      'chromium_apply_config': ['goma_rbe_staging'],
@@ -213,6 +228,21 @@ SPEC = {
      },
      'android_config': 'main_builder_mb',
      'goma_staging': True,
+     'testing': {
+       'platform': 'linux',
+     },
+   },
+   'Chromium Android ARM 32-bit Goma RBE Prod': {
+     'chromium_config': 'android',
+     'chromium_apply_config': ['goma_rbe_prod'],
+     'gclient_config': 'chromium',
+     'gclient_apply_config': ['android'],
+     'chromium_config_kwargs': {
+       'BUILD_CONFIG': 'Release',
+       'TARGET_BITS': 32,
+       'TARGET_PLATFORM': 'android',
+     },
+     'android_config': 'main_builder_mb',
      'testing': {
        'platform': 'linux',
      },
