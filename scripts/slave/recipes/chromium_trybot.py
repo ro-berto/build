@@ -121,7 +121,16 @@ def GenTests(api):
     props(mastername='tryserver.chromium.win',
           builder='win7_chromium_rel_ng') +
     api.platform.name('win') +
+    api.chromium_tests.read_source_side_spec(
+        'chromium.win', {
+            'Win7 Tests (1)': {
+                'gtest_tests': ['base_unittests'],
+            },
+        }
+    ) +
     suppress_analyze() +
+    api.override_step_data('base_unittests (with patch)',
+                           canned_test(passing=True)) +
     api.override_step_data('process_dumps', retcode=1)
   )
 

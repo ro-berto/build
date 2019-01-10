@@ -404,7 +404,13 @@
     "name": "read test spec (chromium.win.json)",
     "~followup_annotations": [
       "@@@STEP_TEXT@path: [BUILDER_CACHE]\\win\\src\\testing\\buildbot\\chromium.win.json@@@",
-      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"Win7 Tests (1)\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"base_unittests\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
   },
@@ -471,7 +477,7 @@
       "[BUILDER_CACHE]\\win\\src\\tools\\mb\\mb_config.pyl",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"mini_installer_tests\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -505,16 +511,16 @@
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer_tests\"@@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"base_unittests\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
@@ -672,7 +678,7 @@
       "[BUILDER_CACHE]\\win\\src\\out\\Release",
       "-j",
       "60",
-      "mini_installer_tests"
+      "base_unittests"
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
@@ -690,7 +696,7 @@
       "[BUILDER_CACHE]\\win\\src\\out\\Release",
       "-j",
       "60",
-      "mini_installer_tests",
+      "base_unittests",
       "-d",
       "explain",
       "-n"
@@ -810,7 +816,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\win\\src\\out\\Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]\\\\win\\\\src\\\\out\\\\Release\", \"-j\", 60, \"mini_installer_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]\\\\win\\\\src\\\\out\\\\Release\", \"-j\", 60, \"base_unittests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -894,25 +900,66 @@
     "name": "test_pre_run (with patch)"
   },
   {
+    "allow_subannotations": true,
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\win\\src\\chrome\\test\\mini_installer\\test_installer.py",
-      "--build-dir",
-      "[BUILDER_CACHE]\\win\\src\\out",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py",
       "--target",
       "Release",
-      "--force-clean",
-      "--config",
-      "[BUILDER_CACHE]\\win\\src\\chrome\\test\\mini_installer\\config\\config.config",
-      "--write-full-results-to",
-      "/path/to/tmp/json"
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildername\": \"win7_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_trybot\", \"revision\": null, \"slavename\": \"TestSlavename\", \"swarm_hashes\": {}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildername\": \"win7_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_trybot\", \"revision\": null, \"slavename\": \"TestSlavename\", \"swarm_hashes\": {}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=base_unittests",
+      "--step-name=base_unittests (with patch)",
+      "--test-launcher-summary-output",
+      "/path/to/tmp/json",
+      "--builder-name=win7_chromium_rel_ng",
+      "--slave-name=test_bot",
+      "--build-number=0",
+      "base_unittests.exe"
+    ],
+    "cwd": "[BUILDER_CACHE]\\win",
+    "env": {
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "base_unittests (with patch)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::test_results]\\resources\\upload_test_results.py",
+      "--input-json",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}]}]}",
+      "--master-name",
+      "tryserver.chromium.win",
+      "--builder-name",
+      "win7_chromium_rel_ng",
+      "--build-number",
+      "0",
+      "--test-type",
+      "base_unittests",
+      "--chrome-revision",
+      "refs/heads/master@{#170242}",
+      "--build-id",
+      "8945511751514863184",
+      "--test-results-server",
+      "test-results.appspot.com"
     ],
     "cwd": "[BUILDER_CACHE]\\win",
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "test_installer (with patch)"
+    "name": "Upload to test-results [base_unittests]"
   },
   {
     "cmd": [

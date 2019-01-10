@@ -473,7 +473,7 @@
       "[BUILDER_CACHE]\\win\\src\\tools\\mb\\mb_config.pyl",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [], \"files\": [\"README.md\", \"foo/bar/baz.py\"], \"test_targets\": [\"mini_installer_tests\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"README.md\", \"foo/bar/baz.py\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -494,9 +494,7 @@
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [], @@@",
-      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"mini_installer_tests\"@@@",
-      "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
+      "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": []@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
       "@@@STEP_LOG_END@analyze_details@@@"
     ]

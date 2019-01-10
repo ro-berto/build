@@ -422,7 +422,6 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@why is this running?@This builder is doing the full package transfer because:@@@",
       "@@@STEP_LOG_LINE@why is this running?@ - it's still running on buildbot :(@@@",
-      "@@@STEP_LOG_LINE@why is this running?@ - test_installer doesn't use isolate@@@",
       "@@@STEP_LOG_END@why is this running?@@@"
     ]
   },
@@ -564,26 +563,6 @@
       "@@@STEP_LOG_END@json.output@@@",
       "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[START_DIR]\\src\\chrome\\test\\mini_installer\\test_installer.py",
-      "--build-dir",
-      "[START_DIR]\\src\\out",
-      "--target",
-      "Release",
-      "--force-clean",
-      "--config",
-      "[START_DIR]\\src\\chrome\\test\\mini_installer\\config\\config.config",
-      "--write-full-results-to",
-      "/path/to/tmp/json"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "name": "test_installer"
   },
   {
     "cmd": [],

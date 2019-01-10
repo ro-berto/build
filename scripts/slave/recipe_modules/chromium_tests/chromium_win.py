@@ -73,9 +73,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'tests': [
-        steps.MiniInstallerTest(),
-      ],
+      'tests': [],
       'parent_buildername': 'Win x64 Builder',
       'checkout_dir': 'win',
       'testing': {
@@ -116,9 +114,7 @@ SPEC = {
         'TARGET_BITS': 32,
       },
       'bot_type': 'tester',
-      'tests': [
-        steps.MiniInstallerTest(),
-      ],
+      'tests': [],
       'parent_buildername': 'Win Builder',
       'checkout_dir': 'win',
       'testing': {
@@ -148,9 +144,7 @@ SPEC = {
         'TARGET_BITS': 64,
       },
       'bot_type': 'tester',
-      'tests': [
-        steps.MiniInstallerTest(),
-      ],
+      'tests': [],
       'parent_buildername': 'Win x64 Builder',
       'checkout_dir': 'win',
       'testing': {
