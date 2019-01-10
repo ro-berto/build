@@ -69,6 +69,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       PATH = List(Path),
       LLVM_FORCE_HEAD_REVISION = Single(basestring, required=False),
       GOMA_STUBBY_PROXY_IP_ADDRESS = Single(basestring, required=False),
+      GOMA_RPC_EXTRA_PARAMS = Single(basestring, required=False),
       GOMA_SETTINGS_SERVER = Single(basestring, required=False),
       GOMA_USE_CASE = Single(basestring, required=False),
       GOMA_LOCAL_OUTPUT_CACHE_MAX_CACHE_AMOUNT_IN_MB = Single(int,
@@ -291,6 +292,17 @@ def goma_rbe_tot(c):
       'https://cxx-compiler-service.appspot.com/settings')
   c.env.GOMA_USE_CASE = 'rbe-tot'
   c.compile_py.use_autoninja = True
+
+@config_ctx()
+def goma_mixer_staging(c):
+  c.compile_py.goma_failfast = True
+  # TODO(ukai): use staging-goma.chromium.org http://crbug.com/777273
+  c.env.GOMA_STUBBY_PROXY_IP_ADDRESS = (
+      'mixer-staging1.endpoints.cxx-compiler-service.cloud.goog')
+  c.env.GOMA_RPC_EXTRA_PARAMS = '?staging'
+  c.compile_py.use_autoninja = True
+
+# TODO(ukai): add goma_mixer_prod
 
 @config_ctx()
 def goma_rbe_staging(c):

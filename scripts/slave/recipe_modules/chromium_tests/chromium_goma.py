@@ -112,7 +112,7 @@ SPEC = {
    },
    'Chromium Linux Goma RBE Staging': {
      'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_rbe_staging', 'mb'],
+     'chromium_apply_config': ['goma_mixer_staging', 'mb'],
      'gclient_config': 'chromium',
      'chromium_config_kwargs': {
        'BUILD_CONFIG': 'Release',
