@@ -310,25 +310,6 @@ TRYBOTS = freeze({
         'mastername': 'chromium.gpu.fyi',
         'buildername': 'GPU FYI Mac Builder (dbg)',
       }, analyze_mode='compile'),
-      'win_angle_rel_ng': {
-        'bot_ids': [
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Win Builder',
-            'tester': 'Win10 FYI Release (NVIDIA)',
-          },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Win Builder',
-            'tester': 'Win7 ANGLE Tryserver (AMD)',
-          },
-          {
-            'mastername': 'chromium.gpu.fyi',
-            'buildername': 'GPU FYI Win Builder',
-            'tester': 'Win10 FYI Release (Intel HD 630)',
-          },
-        ],
-      },
       'win-angle-rel': {
         'bot_ids': [
           {
