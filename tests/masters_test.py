@@ -225,7 +225,6 @@ def main(argv):
       'master.client.art': 'ART',
       'master.client.dart': 'Dart',
       'master.client.flutter': 'ClientFlutter',
-      'master.client.wasm.llvm': 'WasmLlvm',
       'master.client.webrtc.perf': 'WebRTCPerf',
       'master.tryserver.chromium.android': 'TryserverChromiumAndroid',
       'master.tryserver.chromium.mac': 'TryServerChromiumMac',

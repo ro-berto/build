@@ -5,11 +5,11 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/WebAssembly/waterfall.git'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'depot_tools', 'url': 'https://chromium.googlesource.com/chromium/tools/depot_tools.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/external/github.com/WebAssembly/waterfall.git'}, {'deps_file': '.DEPS.git', 'managed': True, 'name': 'depot_tools', 'url': 'https://chromium.googlesource.com/chromium/tools/depot_tools.git'}]",
       "--revision_mapping_file",
       "{\"got_revision\": \"depot_tools\", \"got_waterfall_revision\": \"src\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[GIT_CACHE]",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
@@ -17,7 +17,8 @@
       "--revision",
       "src@origin/master"
     ],
-    "env_prefixes": {
+    "cwd": "[BUILDER_CACHE]",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -85,7 +86,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma/client",
+      "[GOMA_CACHE]/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -122,7 +123,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/linux"
+      "[GOMA_CACHE]/data/linux"
     ],
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -134,12 +135,12 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -182,20 +183,20 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/src/build.py"
+      "[BUILDER_CACHE]/src/src/build.py"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[BUILDER_CACHE]/src",
     "env": {
       "BUILDBOT_BUILDERNAME": "linux",
       "BUILDBOT_BUILDNUMBER": "123456",
       "BUILDBOT_GOT_WATERFALL_REVISION": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "BUILDBOT_MASTERNAME": "client.wasm.llvm",
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "GOMA_DIR": "[CACHE]/goma/client"
+      "GOMA_DIR": "[GOMA_CACHE]/client"
     },
     "env_suffixes": {
       "PATH": [
-        "[START_DIR]/depot_tools"
+        "[BUILDER_CACHE]/depot_tools"
       ]
     },
     "name": "annotated steps"
@@ -208,13 +209,13 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -241,12 +242,12 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -262,12 +263,12 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/goma/client/goma_ctl.py",
+      "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -309,6 +310,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"ci\", \"builder\": \"linux\", \"project\": \"wasm\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "linux",
       "--buildbot-mastername",

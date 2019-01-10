@@ -19,11 +19,7 @@ DEPS = [
 def RunSteps(api):
   api.gclient.set_config('wasm_llvm')
   api.gclient.apply_config('depot_tools')
-  if api.runtime.is_luci:
-    checkout_root = api.path['builder_cache']
-  else:
-    # TODO(sergiyb): Remove this branch after migrating to LUCI.
-    checkout_root = api.path['start_dir']
+  checkout_root = api.path['builder_cache']
   with api.context(cwd=checkout_root):
     # We trigger builds on WASM infrastructure based on commits in llvm repository, which means
     # that the repository and revision properties are set to llvm repository URL and corresponding
@@ -66,6 +62,7 @@ def GenTests(api):
         api.test(name) +
         api.properties(
           mastername='client.wasm.llvm',
+          path_config='kitchen',
           **kwargs
         ) +
         api.buildbucket.ci_build(
@@ -73,7 +70,8 @@ def GenTests(api):
           bucket='ci',
           builder='linux',
           build_number=123456,
-        )
+        ) +
+        api.runtime(is_luci=True, is_experimental=False)
     )
 
   yield test('linux')
@@ -81,9 +79,4 @@ def GenTests(api):
   yield (
       test('linux_fail') +
       api.step_data('annotated steps', retcode=1)
-  )
-
-  yield (
-      test('luci', path_config='kitchen') +
-      api.runtime(is_luci=True, is_experimental=False)
   )
