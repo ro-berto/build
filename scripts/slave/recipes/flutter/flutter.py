@@ -241,7 +241,8 @@ def RunSteps(api):
   path_prefix = api.path.pathsep.join((path_prefix,
                                        api.path.join(
                                            str(api.path['start_dir']), '..',
-                                           '..', '..', 'scripts', 'slave')))
+                                           '..', '..', '..', 'scripts',
+                                           'slave')))
 
   # TODO(eseidel): This is named exactly '.pub-cache' as a hack around
   # a regexp in flutter_tools analyze.dart which is in turn a hack around:
