@@ -216,10 +216,10 @@
       "[dummy hash for low_bandwidth_audio_perf_test]",
       "--",
       "--android",
-      "--isolated-script-test-perf-output",
-      "${ISOLATED_OUTDIR}/perftest-output.json",
       "--adb-path",
-      "../../third_party/android_tools/sdk/platform-tools/adb"
+      "../../third_party/android_tools/sdk/platform-tools/adb",
+      "--isolated-script-test-perf-output",
+      "${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,
@@ -330,10 +330,10 @@
       "--isolated",
       "[dummy hash for video_quality_loopback_test]",
       "--",
-      "--isolated-script-test-perf-output",
-      "${ISOLATED_OUTDIR}/perftest-output.json",
       "--adb-path",
-      "../../third_party/android_tools/sdk/platform-tools/adb"
+      "../../third_party/android_tools/sdk/platform-tools/adb",
+      "--isolated-script-test-perf-output",
+      "${ISOLATED_OUTDIR}/perftest-output.json"
     ],
     "cwd": "[CACHE]/builder",
     "infra_step": true,

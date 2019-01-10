@@ -5,6 +5,7 @@
 # Exposes the builder and recipe configurations to GenTests in recipes.
 
 import base64
+import json
 
 from recipe_engine import recipe_test_api
 from . import builders as webrtc_builders
@@ -99,7 +100,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     return test
 
   def example_chartjson(self):
-    return {
+    return json.dumps({
       "format_version": "1.0",
       "charts": {
         "warm_times": {
@@ -125,4 +126,4 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
           }
         }
       }
-    }
+    })

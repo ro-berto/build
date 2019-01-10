@@ -3,12 +3,13 @@
 # found in the LICENSE file.
 
 import functools
+import json
 import os
 import re
 import sys
 
 from recipe_engine.types import freeze
-from recipe_engine.recipe_api import composite_step
+from recipe_engine import recipe_api
 
 THIS_DIR = os.path.dirname(__file__)
 sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
@@ -104,22 +105,14 @@ ANDROID_CIPD_PACKAGES = [
     )
 ]
 
-# Perf tests are not idempotent, because for almost all tests the binary will
-# not return the exact same perf result each time. We want to get those results
-# so the dashboard can properly determine the variance of the test.
 PERF_TESTS = freeze({
-    'isac_fix_test': {
-        'idempotent': False,
-    },
-    'low_bandwidth_audio_perf_test': {
-        'idempotent': False,
-    },
+    'isac_fix_test': {},
+    'low_bandwidth_audio_perf_test': {},
     'webrtc_perf_tests': {
         'args': [
             '--test-artifacts-dir', '${ISOLATED_OUTDIR}',
             '--save_worst_frame',
         ],
-        'idempotent': False,
     },
 })
 
@@ -128,18 +121,17 @@ ANDROID_PERF_TESTS = freeze({
         'args': [
             '--save_worst_frame',
         ],
-        'idempotent': False,
     },
     'low_bandwidth_audio_perf_test': {
-        'add_adb_path': True,
         'args': [
             '--android',
+            '--adb-path', ADB_PATH,
         ],
-        'idempotent': False,
     },
     'video_quality_loopback_test': {
-        'add_adb_path': True,
-        'idempotent': False,
+        'args': [
+            '--adb-path', ADB_PATH,
+        ],
     },
 })
 
@@ -152,11 +144,11 @@ def generate_tests(api, phase, revision, revision_number, bot):
 
   if test_suite in ('webrtc', 'webrtc_and_baremetal'):
     for test, extra_args in sorted(NORMAL_TESTS.items()):
-      tests.append(SwarmingWebRtcGtestTest(test, **extra_args))
+      tests.append(SwarmingIsolatedScriptTest(test, **extra_args))
 
   if test_suite == 'webrtc_and_baremetal':
     def add_test(name):
-      tests.append(SwarmingWebRtcGtestTest(
+      tests.append(SwarmingIsolatedScriptTest(
           name,
           dimensions=bot.config['baremetal_swarming_dimensions'],
           **BAREMETAL_TESTS[name]))
@@ -242,12 +234,12 @@ def generate_tests(api, phase, revision, revision_number, bot):
 
   if test_suite == 'more_configs':
     if 'bwe_test_logging' in phase:
-      tests.append(SwarmingWebRtcGtestTest(
+      tests.append(SwarmingIsolatedScriptTest(
           'bwe_simulations_tests',
           args=['--gtest_filter=VideoSendersTest/'
                 'BweSimulation.Choke1000kbps500kbps1000kbps/1']))
     if 'no_sctp' in phase:
-      tests.append(SwarmingWebRtcGtestTest('peerconnection_unittests'))
+      tests.append(SwarmingIsolatedScriptTest('peerconnection_unittests'))
 
   return tests
 
@@ -260,16 +252,24 @@ def _MergeFiles(output_dir, suffix):
   return result
 
 
-@composite_step
-def _UploadToPerfDashboard(name, api, task_output_dir):
-  if api.webrtc._test_data.enabled:
-    perf_results = api.webrtc.test_api.example_chartjson()
-  else:  # pragma: no cover
-    # Pick up a directory.
-    for filepath in task_output_dir:
-      if filepath.endswith('perftest-output.json'):
-        perf_results = api.json.loads(task_output_dir[filepath])
-        break
+def _UploadToPerfDashboard(name, api, step_result):
+  if api.webrtc._test_data.enabled and step_result.retcode == 0:
+    step_result.raw_io.output_dir = {
+      '0/perftest-output.json': api.webrtc.test_api.example_chartjson(),
+      'logcats': 'foo',
+    }
+  task_output_dir = step_result.raw_io.output_dir
+
+  perf_results = {}
+  for filepath in task_output_dir:
+    if filepath.endswith('perftest-output.json'):
+      perf_results = api.json.loads(task_output_dir[filepath])
+      break
+  else:
+    if step_result.retcode == 0: # pragma: no cover
+      raise step_result.InfraFailure(
+          'Cannot find JSON performance data for a test that succeeded.')
+    return
 
   perf_bot_group = 'WebRTCPerf'
   if api.runtime.is_experimental:
@@ -328,46 +328,24 @@ class AndroidTest(SwarmingGTestTest):
                                       cipd_packages=ANDROID_CIPD_PACKAGES,
                                       **kwargs)
 
-  def run(self, api, suffix):
-    try:
-      super(SwarmingGTestTest, self).run(api, suffix)
-    finally:
-      step_result = api.step.active_result
-      task_output_dir = api.step.active_result.raw_io.output_dir
-      logcats = _MergeFiles(task_output_dir, 'logcats')
-      step_result.presentation.logs['logcats'] = logcats.splitlines()
+  def validate_task_results(self, api, step_result):
+    valid = super(AndroidTest, self).validate_task_results(api, step_result)
 
-      if (hasattr(step_result, 'test_utils') and
-          hasattr(step_result.test_utils, 'gtest_results')):
-        gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
-        self._gtest_results[suffix] = gtest_results
-        # Only upload test results if we have gtest results.
-        if self._upload_test_results and gtest_results and gtest_results.raw:
-          parsed_gtest_data = gtest_results.raw
-          chrome_revision_cp = api.bot_update.last_returned_properties.get(
-              'got_revision_cp', 'x@{#0}')
-          chrome_revision = str(api.commit_position.parse_revision(
-              chrome_revision_cp))
-          source = api.json.input(parsed_gtest_data)
-          api.test_results.upload(
-              source,
-              chrome_revision=chrome_revision,
-              test_type=step_result.step['name'],
-              test_results_server='test-results.appspot.com')
+    task_output_dir = api.step.active_result.raw_io.output_dir
+    logcats = _MergeFiles(task_output_dir, 'logcats')
+    step_result.presentation.logs['logcats'] = logcats.splitlines()
+
+    return valid
 
 
 class SwarmingAndroidPerfTest(SwarmingTest):
-  def __init__(self, test, args=None, add_adb_path=False, shards=1,
-               cipd_packages=None, idempotent=False, **kwargs):
+  def __init__(self, test, args=None, shards=1, cipd_packages=None,
+               idempotent=False, **kwargs):
     args = list(args or [])
     args.extend([
         '--isolated-script-test-perf-output',
         '${ISOLATED_OUTDIR}/perftest-output.json',
     ])
-    if add_adb_path:
-      args.extend([
-          '--adb-path', ADB_PATH
-      ])
     self._args = args
     self._shards = shards
     self._idempotent = idempotent
@@ -387,38 +365,35 @@ class SwarmingAndroidPerfTest(SwarmingTest):
         build_properties=api.chromium.build_properties)
 
   def validate_task_results(self, api, step_result):
-    # There current exists no validation logic for the results generated by
+    task_output_dir = step_result.raw_io.output_dir
+    logcats = _MergeFiles(task_output_dir, 'logcats')
+    step_result.presentation.logs['logcats'] = logcats.splitlines()
+
+    _UploadToPerfDashboard(self.name, api, step_result)
+
+    # There currently exists no validation logic for the results generated by
     # swarming android perf tests. This should be fixed.
     return True, None, 0, None
-
-  def run(self, api, suffix):
-    try:
-      super(SwarmingAndroidPerfTest, self).run(api, suffix)
-    finally:
-      step_result = api.step.active_result
-      task_output_dir = api.step.active_result.raw_io.output_dir
-      logcats = _MergeFiles(task_output_dir, 'logcats')
-      step_result.presentation.logs['logcats'] = logcats.splitlines()
-
-    _UploadToPerfDashboard(self.name, api, task_output_dir)
 
   def compile_targets(self, api): # pragma: no cover
     return []
 
+
 class SwarmingPerfTest(SwarmingIsolatedScriptTest):
-  def _output_perf_results_if_present(self, api, step_result):
-    # We use our own custom upload mechanism.
-    # TODO(phoglund): investigate if we can move off our custom mechanism.
-    task_output_dir = step_result.raw_io.output_dir
-    _UploadToPerfDashboard(self.name, api, task_output_dir)
+  def __init__(self, *args, **kwargs):
+    # Perf tests are not idempotent, because for almost all tests the binary
+    # will not return the exact same perf result each time. We want to get those
+    # results so the dashboard can properly determine the variance of the test.
+    kwargs.setdefault('idempotent', False)
+    super(SwarmingPerfTest, self).__init__(*args, **kwargs)
 
+  def validate_task_results(self, api, step_result):
+    valid = super(SwarmingPerfTest, self).validate_task_results(
+        api, step_result)
 
-class SwarmingWebRtcGtestTest(SwarmingIsolatedScriptTest):
-  def _output_perf_results_if_present(self, api, step_result):
-    # TODO(phoglund): find out why our regular tests use
-    # SwarmingIsolatedScriptTest rather than SwarmingGTestTest. For now, stop
-    # it from trying to perf report, at least.
-    pass
+    _UploadToPerfDashboard(self.name, api, step_result)
+
+    return valid
 
 
 class PerfTest(Test):
@@ -497,7 +472,7 @@ class AndroidPerfTest(PerfTest):
       api.step.active_result.presentation.links['result_details'] = (
           details_link)
 
-  @composite_step
+  @recipe_api.composite_step
   def run(self, api, suffix):
     wrapper_script = api.chromium.output_dir.join('bin', 'run_%s' % self._name)
     self._test = wrapper_script
