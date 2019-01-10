@@ -656,6 +656,8 @@ class iOSApi(recipe_api.RecipeApi):
       '--config-variable', 'shards', self.m.json.dumps(test.get('shards') or 1),
       '--config-variable', 'test_args', self.m.json.dumps(
           test.get('test args') or []),
+      '--config-variable', 'xcode_parallelization', (
+          'true' if test.get('xcode parallelization') else 'false'),
       '--config-variable', 'test_cases', self.m.json.dumps(test_cases or []),
       '--config-variable', 'xctest', (
         'true' if test.get('xctest') else 'false'),
@@ -776,7 +778,8 @@ class iOSApi(recipe_api.RecipeApi):
       '{"test_args": <(test_args), \
         "xctest": <(xctest), \
         "test_cases": <(test_cases), \
-        "restart": <(restart)}',
+        "restart": <(restart), \
+        "xcode-parallelization": <(xcode_parallelization)}',
       '--out-dir', '${ISOLATED_OUTDIR}',
       '--retries', self.__config.get('retries', '3'),
       '--shards', '<(shards)',
@@ -786,8 +789,6 @@ class iOSApi(recipe_api.RecipeApi):
       '--wpr-tools-path', '<(wpr_tools_path)',
       '--replay-path', '<(replay_path)'
     ]
-    if self.__config.get('xcode parallelization', False):
-      cmd.append('--xcode-parallelization')
 
     files = [
       # .apps are directories. Need the trailing slash to isolate the
