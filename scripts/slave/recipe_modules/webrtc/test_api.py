@@ -98,3 +98,31 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
 
     return test
 
+  def example_chartjson(self):
+    return {
+      "format_version": "1.0",
+      "charts": {
+        "warm_times": {
+          "http://www.google.com/": {
+            "type": "list_of_scalar_values",
+            "values": [9, 9, 8, 9],
+            "units": "sec"
+          },
+        },
+        "html_size": {
+          "http://www.google.com/": {
+            "type": "scalar",
+            "value": 13579,
+            "units": "bytes"
+          }
+        },
+        "load_times": {
+          "http://www.google.com/": {
+            "type": "list_of_scalar_values",
+            "value": [4.2],
+            "std": 1.25,
+            "units": "sec"
+          }
+        }
+      }
+    }

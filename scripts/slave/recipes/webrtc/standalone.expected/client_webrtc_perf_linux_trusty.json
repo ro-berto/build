@@ -1087,20 +1087,18 @@
       "--output-json-file",
       "/path/to/tmp/json",
       "--results-file",
-      "{\"benchmark_name\": \"isac_fix_test\", \"charts\": {\"html_size\": {\"http://www.google.com/\": {\"type\": \"scalar\", \"units\": \"bytes\", \"value\": 13579}}, \"load_times\": {\"http://www.google.com/\": {\"std\": 1.25, \"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"value\": [4.2]}}, \"warm_times\": {\"http://www.google.com/\": {\"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"values\": [9, 9, 8, 9]}}}, \"format_version\": \"1.0\"}",
+      "{\"charts\": {\"html_size\": {\"http://www.google.com/\": {\"type\": \"scalar\", \"units\": \"bytes\", \"value\": 13579}}, \"load_times\": {\"http://www.google.com/\": {\"std\": 1.25, \"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"value\": [4.2]}}, \"warm_times\": {\"http://www.google.com/\": {\"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"values\": [9, 9, 8, 9]}}}, \"format_version\": \"1.0\"}",
       "--results-url",
       "https://chromeperf.appspot.com",
       "--got-webrtc-revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--output-json-dashboard-url",
-      "/path/to/tmp/json"
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Trusty",
+    "infra_step": true,
     "name": "isac_fix_test Dashboard Upload",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Results Dashboard@chromeperf.appspot.com@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -1285,20 +1283,18 @@
       "--output-json-file",
       "/path/to/tmp/json",
       "--results-file",
-      "{\"benchmark_name\": \"low_bandwidth_audio_perf_test\", \"charts\": {\"html_size\": {\"http://www.google.com/\": {\"type\": \"scalar\", \"units\": \"bytes\", \"value\": 13579}}, \"load_times\": {\"http://www.google.com/\": {\"std\": 1.25, \"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"value\": [4.2]}}, \"warm_times\": {\"http://www.google.com/\": {\"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"values\": [9, 9, 8, 9]}}}, \"format_version\": \"1.0\"}",
+      "{\"charts\": {\"html_size\": {\"http://www.google.com/\": {\"type\": \"scalar\", \"units\": \"bytes\", \"value\": 13579}}, \"load_times\": {\"http://www.google.com/\": {\"std\": 1.25, \"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"value\": [4.2]}}, \"warm_times\": {\"http://www.google.com/\": {\"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"values\": [9, 9, 8, 9]}}}, \"format_version\": \"1.0\"}",
       "--results-url",
       "https://chromeperf.appspot.com",
       "--got-webrtc-revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--output-json-dashboard-url",
-      "/path/to/tmp/json"
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Trusty",
+    "infra_step": true,
     "name": "low_bandwidth_audio_perf_test Dashboard Upload",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Results Dashboard@chromeperf.appspot.com@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -1483,20 +1479,18 @@
       "--output-json-file",
       "/path/to/tmp/json",
       "--results-file",
-      "{\"benchmark_name\": \"webrtc_perf_tests\", \"charts\": {\"html_size\": {\"http://www.google.com/\": {\"type\": \"scalar\", \"units\": \"bytes\", \"value\": 13579}}, \"load_times\": {\"http://www.google.com/\": {\"std\": 1.25, \"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"value\": [4.2]}}, \"warm_times\": {\"http://www.google.com/\": {\"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"values\": [9, 9, 8, 9]}}}, \"format_version\": \"1.0\"}",
+      "{\"charts\": {\"html_size\": {\"http://www.google.com/\": {\"type\": \"scalar\", \"units\": \"bytes\", \"value\": 13579}}, \"load_times\": {\"http://www.google.com/\": {\"std\": 1.25, \"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"value\": [4.2]}}, \"warm_times\": {\"http://www.google.com/\": {\"type\": \"list_of_scalar_values\", \"units\": \"sec\", \"values\": [9, 9, 8, 9]}}}, \"format_version\": \"1.0\"}",
       "--results-url",
       "https://chromeperf.appspot.com",
       "--got-webrtc-revision",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--output-json-dashboard-url",
-      "/path/to/tmp/json"
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
     ],
     "cwd": "[BUILDER_CACHE]/Linux_Trusty",
+    "infra_step": true,
     "name": "webrtc_perf_tests Dashboard Upload",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{}@@@",
-      "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LINK@Results Dashboard@chromeperf.appspot.com@@@"
+      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {

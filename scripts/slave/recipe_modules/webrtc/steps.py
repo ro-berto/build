@@ -263,33 +263,7 @@ def _MergeFiles(output_dir, suffix):
 @composite_step
 def _UploadToPerfDashboard(name, api, task_output_dir):
   if api.webrtc._test_data.enabled:
-    perf_results = {
-      "format_version": "1.0",
-      "charts": {
-        "warm_times": {
-          "http://www.google.com/": {
-            "type": "list_of_scalar_values",
-            "values": [9, 9, 8, 9],
-            "units": "sec"
-          },
-        },
-        "html_size": {
-          "http://www.google.com/": {
-            "type": "scalar",
-            "value": 13579,
-            "units": "bytes"
-          }
-        },
-        "load_times": {
-          "http://www.google.com/": {
-            "type": "list_of_scalar_values",
-            "value": [4.2],
-            "std": 1.25,
-            "units": "sec"
-          }
-        }
-      }
-    }
+    perf_results = api.webrtc.test_api.example_chartjson()
   else:  # pragma: no cover
     # Pick up a directory.
     for filepath in task_output_dir:
@@ -297,7 +271,6 @@ def _UploadToPerfDashboard(name, api, task_output_dir):
         perf_results = api.json.loads(task_output_dir[filepath])
         break
 
-  perf_results['benchmark_name'] = name
 
   args = [
       '--build-dir', api.path['checkout'].join('out'),
@@ -318,21 +291,13 @@ def _UploadToPerfDashboard(name, api, task_output_dir):
       perf_bot_group = 'Experimental' + perf_bot_group
     args.extend(['--perf-dashboard-machine-group', perf_bot_group])
 
-  args.append('--output-json-dashboard-url')
-  args.append(api.json.output(add_json_log=False, name='dashboard_url'))
-
-  step_result = api.build.python(
+  api.build.python(
       '%s Dashboard Upload' % name,
       api.chromium.package_repo_resource(
           'scripts', 'slave', 'upload_perf_dashboard_results.py'),
       args,
-      step_test_data=(
-          lambda: api.json.test_api.output('chromeperf.appspot.com',
-                                           name='dashboard_url') +
-          api.json.test_api.output({})))
-
-  step_result.presentation.links['Results Dashboard'] = (
-      step_result.json.outputs.get('dashboard_url', ''))
+      step_test_data=lambda: api.json.test_api.output({}),
+      infra_step=True)
 
 
 # TODO(kjellander): Continue refactoring an integrate the classes in the
@@ -539,8 +504,7 @@ class AndroidPerfTest(PerfTest):
 
   @composite_step
   def run(self, api, suffix):
-    wrapper_script = api.chromium.output_dir.join('bin',
-                                                    'run_%s' % self._name)
+    wrapper_script = api.chromium.output_dir.join('bin', 'run_%s' % self._name)
     self._test = wrapper_script
     if self._should_upload_test_artifacts:
       self._prepare_test_artifacts_upload(api)
