@@ -1018,7 +1018,6 @@ SPEC['builders'].update([
     stock_config('Linux Viz'),
     stock_config('linux-annotator-rel'),
     stock_config('linux-blink-animation-use-time-delta', config='Debug'),
-    stock_config('linux-blink-gen-property-trees', config='Debug'),
     stock_config('linux-blink-heap-incremental-marking', config='Debug'),
     stock_config('linux-blink-heap-unified-gc',
                  config='Debug',
