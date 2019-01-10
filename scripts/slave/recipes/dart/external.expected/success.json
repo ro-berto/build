@@ -1,0 +1,13 @@
+[
+  {
+    "cmd": [],
+    "name": "process properties",
+    "~followup_annotations": [
+      "@@@STEP_LINK@results@https://www.example.com@@@"
+    ]
+  },
+  {
+    "jsonResult": null,
+    "name": "$result"
+  }
+]

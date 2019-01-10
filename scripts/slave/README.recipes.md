@@ -214,6 +214,7 @@
   * [dart/chocolatey](#recipes-dart_chocolatey)
   * [dart/dart](#recipes-dart_dart)
   * [dart/docker](#recipes-dart_docker)
+  * [dart/external](#recipes-dart_external)
   * [dart/flutter_engine](#recipes-dart_flutter_engine)
   * [dart/forward_branch](#recipes-dart_forward_branch)
   * [dart/misc](#recipes-dart_misc)
@@ -5006,6 +5007,11 @@ Generates the sequence of steps that will be run by the slave.
 [DEPS](/scripts/slave/recipes/dart/docker.py#7): [dart](#recipe_modules-dart), [zip](#recipe_modules-zip), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/docker.py#20)(api):**
+### *recipes* / [dart/external](/scripts/slave/recipes/dart/external.py)
+
+[DEPS](/scripts/slave/recipes/dart/external.py#7): [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/external.py#12)(api):**
 ### *recipes* / [dart/flutter\_engine](/scripts/slave/recipes/dart/flutter_engine.py)
 
 [DEPS](/scripts/slave/recipes/dart/flutter_engine.py#5): [goma](#recipe_modules-goma), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
