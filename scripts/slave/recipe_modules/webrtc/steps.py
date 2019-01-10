@@ -271,30 +271,25 @@ def _UploadToPerfDashboard(name, api, task_output_dir):
         perf_results = api.json.loads(task_output_dir[filepath])
         break
 
+  perf_bot_group = 'WebRTCPerf'
+  if api.runtime.is_experimental:
+    perf_bot_group = 'Experimental' + perf_bot_group
 
   args = [
-      '--build-dir', api.path['checkout'].join('out'),
-      '--buildername', api.buildbucket.builder_name,
-      '--buildnumber', api.buildbucket.build.number,
+      '--build-url', api.webrtc.build_url,
       '--name', name,
       '--perf-id', api.webrtc.c.PERF_ID,
       '--output-json-file', api.json.output(),
       '--results-file', api.json.input(perf_results),
       '--results-url', DASHBOARD_UPLOAD_URL,
+      '--commit-position', api.webrtc.revision_number,
       '--got-webrtc-revision', api.webrtc.revision,
+      '--perf-dashboard-machine-group', perf_bot_group,
   ]
-
-  if api.runtime.is_luci:
-    args.append('--is-luci-builder')
-    perf_bot_group = 'WebRTCPerf'
-    if api.runtime.is_experimental:
-      perf_bot_group = 'Experimental' + perf_bot_group
-    args.extend(['--perf-dashboard-machine-group', perf_bot_group])
 
   api.build.python(
       '%s Dashboard Upload' % name,
-      api.chromium.package_repo_resource(
-          'scripts', 'slave', 'upload_perf_dashboard_results.py'),
+      api.webrtc.resource('upload_perf_dashboard_results.py'),
       args,
       step_test_data=lambda: api.json.test_api.output({}),
       infra_step=True)

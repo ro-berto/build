@@ -4,6 +4,7 @@
 
 import os
 import sys
+import urllib
 
 from recipe_engine import recipe_api
 
@@ -146,6 +147,18 @@ class WebRTCApi(recipe_api.RecipeApi):
   @property
   def buildername(self):
     return self.m.buildbucket.builder_name
+
+  @property
+  def build_url(self):
+    if self.m.runtime.is_luci:
+      base = 'https://ci.chromium.org/p/%s/builders/' % (
+          urllib.quote(self.m.buildbucket.build.builder.project))
+    else:
+      base = 'https://ci.chromium.org/buildbot/'
+    return base + '%s/%s/%s' % (
+        urllib.quote(self.bucketname),
+        urllib.quote(self.buildername),
+        urllib.quote(str(self.m.buildbucket.build.number)))
 
   def get_bot(self, bucketname, buildername):
     return Bot(self._builders, self._recipe_configs, bucketname, buildername)
