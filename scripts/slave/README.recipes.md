@@ -2215,7 +2215,7 @@ Args:
 Returns:
   The content of the args.gn file.
 
-&mdash; **def [ls](/scripts/slave/recipe_modules/gn/api.py#175)(self, build_dir, inputs, output_type=None, output_format='label', step_name='list gn targets'):**
+&mdash; **def [ls](/scripts/slave/recipe_modules/gn/api.py#176)(self, build_dir, inputs, output_type=None, output_format='label', step_name='list gn targets'):**
 
 List targets for a given set of inputs.
 
@@ -2278,7 +2278,7 @@ Args:
 Returns:
   The reformatted args.gn content as a single string.
 
-&mdash; **def [refs](/scripts/slave/recipe_modules/gn/api.py#139)(self, build_dir, inputs, all_deps=True, output_type=None, output_format='label', step_name='calculate gn refs'):**
+&mdash; **def [refs](/scripts/slave/recipe_modules/gn/api.py#139)(self, build_dir, inputs, all_deps=True, output_type=None, output_format='label', step_name='calculate gn refs', \*\*kwargs):**
 
 Find reverse dependencies for a given set of inputs.
 
@@ -2295,6 +2295,7 @@ Args:
   output_format: How to display targets. See GN docs for valid options.
     Default is "label".
   step_name: Optional recipe step name to give to the "gn refs" command.
+  kwargs: Other arguments passed to the underlying python step.
 Returns:
   The set of dependencies found.
 ### *recipe_modules* / [goma](/scripts/slave/recipe_modules/goma)

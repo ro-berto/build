@@ -287,14 +287,12 @@
       "--all",
       "--type=executable",
       "[START_DIR]/src/out/Debug",
-      "//testing/libfuzzer:libfuzzer_main"
+      "//v8:fuzzer_support"
     ],
     "cwd": "[START_DIR]/src",
-    "name": "calculate all_fuzzers",
+    "name": "calculate v8_fuzzers",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@raw_io.output_text[refs]@target1@@@",
-      "@@@STEP_LOG_LINE@raw_io.output_text[refs]@target2@@@",
       "@@@STEP_LOG_LINE@raw_io.output_text[refs]@v8_target3@@@",
       "@@@STEP_LOG_END@raw_io.output_text[refs]@@@"
     ]
@@ -319,8 +317,6 @@
       "@@@STEP_LOG_LINE@raw_io.output_text[refs]@target1@@@",
       "@@@STEP_LOG_END@raw_io.output_text[refs]@@@",
       "@@@STEP_LOG_LINE@all_fuzzers@v8_target3@@@",
-      "@@@STEP_LOG_LINE@all_fuzzers@target2@@@",
-      "@@@STEP_LOG_LINE@all_fuzzers@target1@@@",
       "@@@STEP_LOG_END@all_fuzzers@@@",
       "@@@STEP_LOG_LINE@no_clusterfuzz@target1@@@",
       "@@@STEP_LOG_END@no_clusterfuzz@@@",

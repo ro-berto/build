@@ -346,6 +346,9 @@
     "name": "calculate all_fuzzers",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@raw_io.output_text[refs]@target1@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text[refs]@target2@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text[refs]@v8_target3@@@",
       "@@@STEP_LOG_END@raw_io.output_text[refs]@@@"
     ]
   },
@@ -369,9 +372,16 @@
     "name": "calculate no_clusterfuzz",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_LOG_LINE@raw_io.output_text[refs]@target1@@@",
       "@@@STEP_LOG_END@raw_io.output_text[refs]@@@",
+      "@@@STEP_LOG_LINE@all_fuzzers@v8_target3@@@",
+      "@@@STEP_LOG_LINE@all_fuzzers@target2@@@",
+      "@@@STEP_LOG_LINE@all_fuzzers@target1@@@",
       "@@@STEP_LOG_END@all_fuzzers@@@",
+      "@@@STEP_LOG_LINE@no_clusterfuzz@target1@@@",
       "@@@STEP_LOG_END@no_clusterfuzz@@@",
+      "@@@STEP_LOG_LINE@targets@target2@@@",
+      "@@@STEP_LOG_LINE@targets@v8_target3@@@",
       "@@@STEP_LOG_END@targets@@@"
     ]
   },
@@ -506,7 +516,8 @@
       "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release",
       "-j",
       "20",
-      "all"
+      "target2",
+      "v8_target3"
     ],
     "cwd": "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src",
     "env": {
@@ -525,7 +536,8 @@
       "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release",
       "-j",
       "20",
-      "all",
+      "target2",
+      "v8_target3",
       "-d",
       "explain",
       "-n"
@@ -646,7 +658,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release\", \"-j\", 20, \"all\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/Libfuzzer_Upload_Mac_ASan/src/out/Release\", \"-j\", 20, \"target2\", \"v8_target3\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

@@ -129,15 +129,15 @@ class GnApi(recipe_api.RecipeApi):
                       location=location, max_text_lines=max_text_lines)
     return args
 
-  def _gn_cmd(self, name, cmd, gn_path=None, log_name='gn output'):
+  def _gn_cmd(self, name, cmd, gn_path=None, log_name='gn output', **kwargs):
     if not gn_path:
       gn_path = self.m.depot_tools.gn_py_path
     return self.m.python(
         name, gn_path, cmd, stdout=self.m.raw_io.output_text(name=log_name,
-            add_output_log=True))
+            add_output_log=True), **kwargs)
 
   def refs(self, build_dir, inputs, all_deps=True, output_type=None,
-           output_format='label', step_name='calculate gn refs'):
+           output_format='label', step_name='calculate gn refs', **kwargs):
     """Find reverse dependencies for a given set of inputs.
 
     See https://gn.googlesource.com/gn/+/master/docs/reference.md#refs for
@@ -153,6 +153,7 @@ class GnApi(recipe_api.RecipeApi):
       output_format: How to display targets. See GN docs for valid options.
         Default is "label".
       step_name: Optional recipe step name to give to the "gn refs" command.
+      kwargs: Other arguments passed to the underlying python step.
     Returns:
       The set of dependencies found.
     """
@@ -169,7 +170,7 @@ class GnApi(recipe_api.RecipeApi):
       cmd += ['--type=%s' % output_type]
     cmd.append(build_dir)
     cmd.extend(inputs)
-    step_result = self._gn_cmd(step_name, cmd, log_name='refs')
+    step_result = self._gn_cmd(step_name, cmd, log_name='refs', **kwargs)
     return set(step_result.stdout.splitlines())
 
   def ls(self, build_dir, inputs, output_type=None, output_format='label',
