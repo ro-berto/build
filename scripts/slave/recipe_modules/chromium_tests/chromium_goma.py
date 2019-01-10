@@ -149,6 +149,19 @@ SPEC = {
        'platform': 'linux',
      },
    },
+   'Chromium Linux Goma RBE Prod': {
+     'chromium_config': 'chromium',
+     'chromium_apply_config': ['goma_rbe_prod', 'mb'],
+     'gclient_config': 'chromium',
+     'chromium_config_kwargs': {
+       'BUILD_CONFIG': 'Release',
+       'TARGET_BITS': 64,
+     },
+     'goma_staging': True,
+     'testing': {
+       'platform': 'linux',
+     },
+   },
    'Chromium Mac Goma RBE Staging': {
      'chromium_config': 'chromium',
      'chromium_apply_config': ['goma_rbe_staging', 'mb'],
@@ -199,19 +212,6 @@ SPEC = {
        'TARGET_PLATFORM': 'android',
      },
      'android_config': 'main_builder_mb',
-     'goma_staging': True,
-     'testing': {
-       'platform': 'linux',
-     },
-   },
-   'Chromium Linux Goma RBE Prod': {
-     'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_rbe_prod', 'mb'],
-     'gclient_config': 'chromium',
-     'chromium_config_kwargs': {
-       'BUILD_CONFIG': 'Release',
-       'TARGET_BITS': 64,
-     },
      'goma_staging': True,
      'testing': {
        'platform': 'linux',
