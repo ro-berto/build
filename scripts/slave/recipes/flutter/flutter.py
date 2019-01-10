@@ -238,11 +238,8 @@ def RunSteps(api):
                                                        '7-Zip-A', 'x64')))
 
   # To get gsutil into the PATH for use by the packaging script.
-  path_prefix = api.path.pathsep.join((path_prefix,
-                                       api.path.join(
-                                           str(api.path['start_dir']), '..',
-                                           '..', '..', '..', 'scripts',
-                                           'slave')))
+  gsutil_path = str(api.package_repo_resource('scripts', 'slave'))
+  path_prefix = api.path.pathsep.join((path_prefix, gsutil_path))
 
   # TODO(eseidel): This is named exactly '.pub-cache' as a hack around
   # a regexp in flutter_tools analyze.dart which is in turn a hack around:
