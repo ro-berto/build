@@ -62,12 +62,6 @@ def GenTests(api):
       + api.post_process(
           post_process.MustRun, 'gsutil upload merged.profdata')
       + api.post_process(
-          post_process.MustRun, 'generate html report for 3 targets')
-      + api.post_process(
-          post_process.MustRun, 'copy source and html report files')
-      + api.post_process(
-          post_process.MustRun, 'gsutil upload source and html report files')
-      + api.post_process(
           post_process.DoesNotRun, 'generate git diff locally')
       + api.post_process(
           post_process.DoesNotRun, 'fetch git diff from Gerrit')
@@ -109,12 +103,6 @@ def GenTests(api):
       + api.post_process(
           post_process.MustRun, 'gsutil upload merged.profdata')
       + api.post_process(
-          post_process.MustRun, 'generate html report for 3 targets')
-      + api.post_process(
-          post_process.MustRun, 'copy source and html report files')
-      + api.post_process(
-          post_process.MustRun, 'gsutil upload source and html report files')
-      + api.post_process(
           post_process.MustRun, 'generate git diff locally')
       + api.post_process(
           post_process.MustRun, 'fetch git diff from Gerrit')
@@ -150,12 +138,6 @@ def GenTests(api):
           post_process.MustRunRE, 'ensure profdata dir for .*', 3, 3)
       + api.post_process(
           post_process.MustRun, 'merge profile data for 3 targets')
-      + api.post_process(
-          post_process.MustRun, 'generate html report for 3 targets')
-      + api.post_process(
-          post_process.MustRun, 'copy source and html report files')
-      + api.post_process(
-          post_process.MustRun, 'gsutil upload source and html report files')
       + api.post_process(
           post_process.DoesNotRun, 'generate git diff locally')
       + api.post_process(

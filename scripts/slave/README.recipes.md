@@ -1588,7 +1588,7 @@ This module contains apis to interact with llvm-cov and llvm-profdata.
 
 Returns the path to the llvm-cov executable.
 
-&mdash; **def [get\_local\_isolated\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#535)(self, step_name, local_run_isolate_step):**
+&mdash; **def [get\_local\_isolated\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#467)(self, step_name, local_run_isolate_step):**
 
 Collect coverage data from local isolated run.
 
@@ -1597,7 +1597,7 @@ this api finds the output isolate from the stdout of the step that ran the
 isolated test locally, downloads it and merges the raw profile(s) into a
 single profdata.
 
-&mdash; **def [instrument](/scripts/slave/recipe_modules/clang_coverage/api.py#185)(self, affected_files):**
+&mdash; **def [instrument](/scripts/slave/recipe_modules/clang_coverage/api.py#171)(self, affected_files):**
 
 Saves source paths to generate coverage instrumentation for to a file.
 
@@ -1605,11 +1605,11 @@ Args:
   affected_files (list of str): paths to the files we want to instrument,
       relative to the checkout path.
 
-&emsp; **@property**<br>&mdash; **def [metadata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#97)(self):**
+&emsp; **@property**<br>&mdash; **def [metadata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#90)(self):**
 
 A temporary directory for the metadata. Created on first access.
 
-&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/clang_coverage/api.py#212)(self, tests):**
+&mdash; **def [process\_coverage\_data](/scripts/slave/recipe_modules/clang_coverage/api.py#198)(self, tests):**
 
 Processes the coverage data for html report or metadata.
 
@@ -1617,7 +1617,7 @@ Args:
   tests (list of self.m.chromium_tests.stepsl.Test): A list of test objects
       whose binaries we are to create a coverage report for.
 
-&mdash; **def [profdata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#111)(self, step_name=None):**
+&mdash; **def [profdata\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#97)(self, step_name=None):**
 
 Ensures a directory exists for writing the step-level merged profdata.
 
@@ -1637,21 +1637,13 @@ Returns the location of a script that merges raw profiles from shards.
 This is intended to be passed to the swarming recipe module to be called
 upon completion of the shards.
 
-&emsp; **@property**<br>&mdash; **def [report\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#90)(self):**
-
-A temporary directory to save a report to. Created on first access.
-
-&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/clang_coverage/api.py#314)(self, step_name):**
+&mdash; **def [shard\_merge](/scripts/slave/recipe_modules/clang_coverage/api.py#246)(self, step_name):**
 
 Returns a merge object understood by the swarming module.
 
 See the docstring for the `merge` parameter of api.swarming.task.
 
-&emsp; **@property**<br>&mdash; **def [src\_and\_report\_dir](/scripts/slave/recipe_modules/clang_coverage/api.py#104)(self):**
-
-A temporary directory to copy source and html report report to.
-
-&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#135)(self):**
+&emsp; **@property**<br>&mdash; **def [using\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#121)(self):**
 
 Checks if the current build is running coverage-instrumented targets.
 ### *recipe_modules* / [codesearch](/scripts/slave/recipe_modules/codesearch)
