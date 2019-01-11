@@ -3,6 +3,7 @@
     "cmd": [],
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_RPC_EXTRA_PARAMS": "?staging",
       "GOMA_STUBBY_PROXY_IP_ADDRESS": "mixer-staging1.endpoints.cxx-compiler-service.cloud.goog"
     },
     "name": "test"

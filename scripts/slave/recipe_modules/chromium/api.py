@@ -117,6 +117,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     if self.c.env.GOMA_STUBBY_PROXY_IP_ADDRESS:
       ret['GOMA_STUBBY_PROXY_IP_ADDRESS'] = \
         self.c.env.GOMA_STUBBY_PROXY_IP_ADDRESS
+    if self.c.env.GOMA_RPC_EXTRA_PARAMS:
+      ret['GOMA_RPC_EXTRA_PARAMS'] = self.c.env.GOMA_RPC_EXTRA_PARAMS
     if self.c.env.GOMA_SETTINGS_SERVER:
       ret['GOMA_SETTINGS_SERVER'] = \
         self.c.env.GOMA_SETTINGS_SERVER
