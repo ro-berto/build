@@ -14,6 +14,11 @@ import tempfile
 import time
 
 
+# Did some testing, and it looks like the swarming server starts 400-ing when
+# you request a URL which has about 320 task ids in it. Stay a bit under that to
+# be safe.
+TASK_BATCH_SIZE = 300
+
 class TasksToCollect(object):
   @classmethod
   def read_from_file(cls, filename):
@@ -50,14 +55,21 @@ class TasksToCollect(object):
     return finished
 
   @property
-  def swarming_query_url(self):
+  def task_batches(self):
+    tasks = self.unfinished_tasks
+    return [
+        tasks[idx:idx+TASK_BATCH_SIZE]
+        for idx in xrange(0, len(tasks), TASK_BATCH_SIZE)
+    ]
+
+  def swarming_query_url(self, task_batch):
     """The swarming URL needed to collect task states."""
     return 'tasks/get_states?' + '&'.join(
-        'task_id=%s' % task for task in self.unfinished_tasks)
+        'task_id=%s' % task for task in task_batch)
 
-  def process_result(self, result):
+  def process_result(self, result, num_tasks):
     """Handles the result of getting swarming task task_sets."""
-    assert len(result['states']) == len(self.unfinished_tasks)
+    assert len(result['states']) == num_tasks
 
     for task_id, state in zip(self.unfinished_tasks, result['states']):
       if state not in ('PENDING', 'RUNNING'):
@@ -107,30 +119,31 @@ def real_main(tasks, attempts, swarming_py_path, swarming_server,
 
   try:
     while True:
-      url = tasks.swarming_query_url
+      for task_batch in tasks.task_batches:
+        url = tasks.swarming_query_url(task_batch)
 
-      cmd = [
-          sys.executable,
-          swarming_py_path,
-          'query',
-          '-S', swarming_server,
-          '--json=%s' % tmpfile
-      ]
-      if auth_service_account_json:
-        cmd.extend([
-            '--auth-service-account-json', auth_service_account_json])
+        cmd = [
+            sys.executable,
+            swarming_py_path,
+            'query',
+            '-S', swarming_server,
+            '--json=%s' % tmpfile
+        ]
+        if auth_service_account_json:
+          cmd.extend([
+              '--auth-service-account-json', auth_service_account_json])
 
-      cmd.append(url)
+        cmd.append(url)
 
-      logging.info('get_states cmd: %s', ' '.join(cmd))
-      get_states_result = subprocess.call(cmd)
-      if get_states_result != 0:
-        logging.warn(
-            'get_states cmd had non-zero return code: %s', get_states_result)
-        return 1, None
+        logging.info('get_states cmd: %s', ' '.join(cmd))
+        get_states_result = subprocess.call(cmd)
+        if get_states_result != 0:
+          logging.warn(
+              'get_states cmd had non-zero return code: %s', get_states_result)
+          return 1, None
 
-      with open(tmpfile) as f:
-        tasks.process_result(json.load(f))
+        with open(tmpfile) as f:
+          tasks.process_result(json.load(f), len(task_batch))
 
       if tasks.finished_task_sets:
         break

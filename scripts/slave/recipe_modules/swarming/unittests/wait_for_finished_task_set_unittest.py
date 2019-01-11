@@ -26,12 +26,12 @@ import wait_for_finished_task_set
 class TasksToCollectTest(unittest.TestCase):
   def test_swarming_url(self):
     tasks = wait_for_finished_task_set.TasksToCollect([[]])
-    self.assertEquals(tasks.swarming_query_url, 'tasks/get_states?')
+    self.assertEquals(tasks.swarming_query_url([]), 'tasks/get_states?')
     # Directly assign to the attribute to bypass the property calculation.
     # Add an unsorted array to make sure the url itself gets sorted.
     tasks = wait_for_finished_task_set.TasksToCollect([['b', 'a', 'c']])
     self.assertEquals(
-        tasks.swarming_query_url,
+        tasks.swarming_query_url(['a', 'b', 'c']),
         'tasks/get_states?task_id=a&task_id=b&task_id=c')
 
   def test_empty(self):
@@ -46,15 +46,26 @@ class TasksToCollectTest(unittest.TestCase):
 
     tasks.process_result({
         'states': ['PENDING', 'PENDING', 'COMPLETED']
-    })
+    }, 3)
     self.assertEquals(tasks.unfinished_tasks, ['a', 'b'])
     self.assertEquals(tasks.finished_task_sets, [])
 
     tasks.process_result({
         'states': ['COMPLETED', 'COMPLETED']
-    })
+    }, 2)
     self.assertEquals(tasks.unfinished_tasks, [])
     self.assertEquals(tasks.finished_task_sets, [['a', 'b', 'c']])
+
+  def test_many_tasks(self):
+    with mock.patch('wait_for_finished_task_set.TASK_BATCH_SIZE', 4):
+      tasks = wait_for_finished_task_set.TasksToCollect([[
+          str(i) + 'task' for i in range(11)]])
+      self.assertEquals(
+          tasks.task_batches,
+          # 10task is in the first list because the list of tasks is sorted.
+          [['0task', '10task', '1task', '2task'],
+           ['3task', '4task', '5task', '6task'],
+           ['7task', '8task', '9task']])
 
   def test_multiple_sets(self):
     tasks = wait_for_finished_task_set.TasksToCollect([
@@ -75,7 +86,7 @@ class TasksToCollectTest(unittest.TestCase):
             # Set 3
             'PENDING', 'RUNNING'
         ]
-    })
+    }, 6)
     self.assertEquals(tasks.unfinished_tasks, ['a', 'c', 'e', 'f'])
     self.assertEquals(tasks.finished_task_sets, [['d']])
 
@@ -86,7 +97,7 @@ class TasksToCollectTest(unittest.TestCase):
             # Set 2
             'COMPLETED', 'COMPLETED',
         ]
-    })
+    }, 4)
     self.assertEquals(tasks.unfinished_tasks, ['a'])
     self.assertEquals(tasks.finished_task_sets, [['d'], ['e', 'f']])
 
@@ -94,7 +105,7 @@ class TasksToCollectTest(unittest.TestCase):
         'states': [
             'COMPLETED'
         ]
-    })
+    }, 1)
     self.assertEquals(tasks.unfinished_tasks, [])
     self.assertEquals(tasks.finished_task_sets, [
         ['a', 'b', 'c'], ['d'], ['e', 'f']])
@@ -122,7 +133,8 @@ class WaitForFinishedTaskSetTest(unittest.TestCase):
         os.unlink(fname)
 
   @mock.patch('wait_for_finished_task_set.subprocess.call')
-  def test_integration(self, call_mock):
+  @mock.patch('wait_for_finished_task_set.time.sleep')
+  def test_integration(self, sleep_mock, call_mock):
     m = mock.mock_open(read_data=json.dumps({
         'states': ['COMPLETED', 'COMPLETED']
     }))
@@ -138,6 +150,10 @@ class WaitForFinishedTaskSetTest(unittest.TestCase):
           'sets': [['a', 'b']]
       })
 
+    # Shouldn't ever be called, just here so that if it gets called accidentally
+    # the tests don't take forever.
+    sleep_mock.assert_not_called()
+
   @mock.patch('wait_for_finished_task_set.time.sleep')
   @mock.patch('wait_for_finished_task_set.subprocess.call')
   def test_integration_sleep(self, call_mock, sleep_mock):
@@ -151,7 +167,7 @@ class WaitForFinishedTaskSetTest(unittest.TestCase):
       ])
       tasks.process_result = mock.MagicMock()
       num_calls = [0]
-      def side_effect(_):
+      def side_effect(_, __):
         if num_calls[0] > 8:
           tasks.finished_tasks.add('a')
           tasks.finished_tasks.add('b')
