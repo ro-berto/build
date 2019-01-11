@@ -37,24 +37,6 @@ BUILDER_DIR = os.path.dirname(BUILD_DIR)
 B_DIR = os.path.dirname(os.path.dirname(os.path.dirname(BUILDER_DIR)))
 
 
-# ENGINE_FLAGS is a mapping of master name to a engine flags. This can be used
-# to test new recipe engine flags on a select few masters.
-_ENGINE_FLAGS = {
-  # None is the default set of engine flags, and is used if nothing else
-  # matches. It MUST be defined.
-  None: {
-    'use_result_proto': True,
-  },
-
-  'chromium.fyi': {
-    'use_result_proto': True,
-  },
-}
-
-
-def _get_engine_flags(mastername):
-  return  _ENGINE_FLAGS.get(mastername, _ENGINE_FLAGS[None])
-
 # List of bots that automatically get run through "remote_run".
 _REMOTE_RUN_PASSTHROUGH_ALL = '*'
 _REMOTE_RUN_PASSTHROUGH = {
@@ -326,17 +308,9 @@ def _exec_recipe(rt, opts, stream, basedir, tdir, properties):
   with open(props_file, 'w') as fh:
     json.dump(properties, fh)
 
-  engine_flags = _get_engine_flags(properties.get('mastername'))
   recipe_result_path = os.path.join(tdir, 'recipe_result.json')
 
   engine_args = []
-  if engine_flags:
-    engine_flags_path = os.path.join(tdir, 'op_args.json')
-    with open(engine_flags_path, 'w') as f:
-      json.dump({
-          'engine_flags': engine_flags
-      }, f)
-    engine_args = ['--operational-args-path', engine_flags_path]
 
   recipe_cmd = [
       remote_run.find_python(), '-u', recipe_runner,
