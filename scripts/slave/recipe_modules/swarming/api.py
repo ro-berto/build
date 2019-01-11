@@ -992,7 +992,7 @@ class SwarmingApi(recipe_api.RecipeApi):
 
 
     if task.use_go_client:
-      collect_cmd.extend(self._get_collect_cmd_args(task))
+      collect_cmd.extend(self.get_collect_cmd_args(task))
     else:
       collect_cmd.extend(self.get_collect_cmd_args_for_python(task))
       collect_cmd.extend([
@@ -1381,7 +1381,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       raise recipe_api.StepFailure('There are failed tasks.',
                                    result=step_result)
 
-  def _get_collect_cmd_args(self, task):
+  def get_collect_cmd_args(self, task):
     """
     SwarmingTask -> argument list for go swarming command.
     """

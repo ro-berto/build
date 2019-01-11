@@ -223,6 +223,38 @@
     "name": "trigger tests.[trigger] Test262"
   },
   {
+    "cmd": [],
+    "name": "ensure swarming"
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/swarming_client",
+      "-ensure-file",
+      "infra/tools/luci/swarming/${platform} git_revision:25958d48e89e980e2a97daeddc977fb5e2e1fb8c",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "ensure swarming.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:259\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/swarming/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -233,21 +265,28 @@
       "--",
       "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
-      "--swarming-client-dir",
-      "[START_DIR]/swarming.client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
       "collect",
-      "--swarming",
+      "-server",
       "https://chromium-swarm.appspot.com",
-      "--decorate",
-      "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Check/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"10000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "infra_step": true,
     "name": "Check",
     "~followup_annotations": [
@@ -326,21 +365,28 @@
       "--",
       "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
-      "--swarming-client-dir",
-      "[START_DIR]/swarming.client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
       "collect",
-      "--swarming",
+      "-server",
       "https://chromium-swarm.appspot.com",
-      "--decorate",
-      "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Test262/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Test262/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}"
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"110000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "infra_step": true,
     "name": "Test262",
     "~followup_annotations": [
@@ -623,21 +669,28 @@
       "--",
       "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
-      "--swarming-client-dir",
-      "[START_DIR]/swarming.client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
       "collect",
-      "--swarming",
+      "-server",
       "https://chromium-swarm.appspot.com",
-      "--decorate",
-      "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Retry/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Retry/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}"
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"120000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "infra_step": true,
     "name": "Bisect a0.Retry",
     "~followup_annotations": [
@@ -828,21 +881,28 @@
       "--",
       "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
-      "--swarming-client-dir",
-      "[START_DIR]/swarming.client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
       "collect",
-      "--swarming",
+      "-server",
       "https://chromium-swarm.appspot.com",
-      "--decorate",
-      "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Retry/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Retry/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"130000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/130000\"}}}"
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"130000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "infra_step": true,
     "name": "Bisect a1.Retry",
     "~followup_annotations": [

@@ -117,21 +117,28 @@
       "--",
       "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
-      "--swarming-client-dir",
-      "[BUILDER_CACHE]/v8/tools/swarming_client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
       "collect",
-      "--swarming",
+      "-server",
       "https://chromium-swarm.appspot.com",
-      "--decorate",
-      "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Check/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Check/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}"
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"10000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "infra_step": true,
     "name": "Check",
     "~followup_annotations": [

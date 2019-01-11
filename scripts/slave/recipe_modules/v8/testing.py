@@ -490,23 +490,23 @@ class V8SwarmingTest(V8Test):
 
     # Shim script's own arguments.
     args = [
-      '--swarming-client-dir', self.api.swarming_client.path,
       '--temp-root-dir', self.api.path['tmp_base'],
       '--merged-test-output', json_output,
     ] + coverage_context.get_swarming_collect_args()
 
     # Arguments for actual 'collect' command.
     args.append('--')
-    args.extend(self.api.swarming.get_collect_cmd_args_for_python(task))
+    args.extend(self.api.swarming.get_collect_cmd_args(task))
 
-    return self.api.build.python(
-        name=self.test['name'] + self.test_step_config.step_name_suffix,
-        script=self.api.v8.resource('collect_v8_task.py'),
-        args=args,
-        allow_subannotations=True,
-        infra_step=True,
-        step_test_data=kwargs.pop('step_test_data', None),
-        **kwargs)
+    with self.api.swarming_client.on_path():
+      return self.api.build.python(
+          name=self.test['name'] + self.test_step_config.step_name_suffix,
+          script=self.api.v8.resource('collect_v8_task.py'),
+          args=args,
+          allow_subannotations=True,
+          infra_step=True,
+          step_test_data=kwargs.pop('step_test_data', None),
+          **kwargs)
 
   def pre_run(self, test=None, coverage_context=NULL_COVERAGE, **kwargs):
     # Set up arguments for test runner.

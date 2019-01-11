@@ -62,7 +62,7 @@ def merge_shard_results(
   missing_shards = []
   for index, result in enumerate(summary['shards']):
     if result is not None:
-      json_data = load_shard_json(output_dir, index)
+      json_data = load_shard_json(output_dir, result['task_id'])
       if json_data:
         # On continuous bots, the test driver outputs exactly one item in the
         # test results list for one architecture.
@@ -98,11 +98,11 @@ def merge_shard_results(
 
   # Merge coverage data if specified.
   if coverage_dir:
-    for index, _ in enumerate(summary['shards']):
+    for index, result in enumerate(summary['shards']):
       exit_code = subprocess.call([
         sys.executable, '-u', sancov_merger,
         '--coverage-dir', coverage_dir,
-        '--swarming-output-dir', os.path.join(output_dir, str(index))])
+        '--swarming-output-dir', os.path.join(output_dir, result['task_id'])])
       if exit_code:
         emit_warning('error when merging coverage data of shard %d' % index)
 
@@ -115,10 +115,10 @@ def merge_shard_results(
   }]
 
 
-def load_shard_json(output_dir, index):
+def load_shard_json(output_dir, task_id):
   """Reads JSON output of a single shard."""
   # 'output.json' is set in v8/testing.py, V8SwarmingTest.
-  path = os.path.join(output_dir, str(index), 'output.json')
+  path = os.path.join(output_dir, task_id, 'output.json')
   try:
     with open(path) as f:
       return json.load(f)
@@ -137,7 +137,6 @@ def main(args):
 
   # Parse shim's own options.
   parser = optparse.OptionParser()
-  parser.add_option('--swarming-client-dir')
   parser.add_option('--temp-root-dir', default=tempfile.gettempdir())
   parser.add_option('--merged-test-output')
   parser.add_option('--coverage-dir')
@@ -147,8 +146,6 @@ def main(args):
   # Validate options.
   if extra_args:
     parser.error('Unexpected command line arguments')
-  if not options.swarming_client_dir:
-    parser.error('--swarming-client-dir is required')
   if options.coverage_dir and not options.sancov_merger:
     parser.error('--sancov-merger is required for merging coverage data')
 
@@ -158,13 +155,15 @@ def main(args):
 
   # Start building the command line for swarming.py.
   args = [
-    sys.executable,
-    '-u',
-    os.path.join(options.swarming_client_dir, 'swarming.py'),
+    'swarming',
   ]
 
   args.extend(swarming_args)
-  args.extend(['--task-output-dir', task_output_dir])
+  args.extend([
+    '-output-dir', task_output_dir,
+    '-task-summary-json',
+    os.path.join(task_output_dir, 'summary.json'),
+  ])
 
   exit_code = 1
   try:

@@ -226,21 +226,28 @@
       "--",
       "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
-      "--swarming-client-dir",
-      "[START_DIR]/swarming.client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
       "collect",
-      "--swarming",
+      "-server",
       "https://chromium-swarm.appspot.com",
-      "--decorate",
-      "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Mjsunit - sweet/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Mjsunit - sweet/Ubuntu-14.04/[dummy has/V8 Foobar/571:2:0\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}, \"Mjsunit - sweet/Ubuntu-14.04/[dummy has/V8 Foobar/571:2:1\": {\"shard_index\": 1, \"task_id\": \"10100\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10100\"}}}"
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"10000\"}, {\"task_id\": \"10100\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "infra_step": true,
     "name": "Mjsunit - sweet",
     "~followup_annotations": [
@@ -271,21 +278,28 @@
       "--",
       "python",
       "RECIPE_MODULE[build::v8]/resources/collect_v8_task.py",
-      "--swarming-client-dir",
-      "[START_DIR]/swarming.client",
       "--temp-root-dir",
       "[TMP_BASE]",
       "--merged-test-output",
       "/path/to/tmp/json",
       "--",
       "collect",
-      "--swarming",
+      "-server",
       "https://chromium-swarm.appspot.com",
-      "--decorate",
-      "--print-status-updates",
-      "--json",
-      "{\"base_task_name\": \"Mjsunit - everything/Ubuntu-14.04/[dummy has/V8 Foobar/571\", \"tasks\": {\"Mjsunit - everything/Ubuntu-14.04/[dummy has/V8 Foobar/571\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}"
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"120000\"}]}"
     ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
     "infra_step": true,
     "name": "Mjsunit - everything",
     "~followup_annotations": [
