@@ -14,7 +14,6 @@ SPEC = {
        'BUILD_CONFIG': 'Release',
        'TARGET_BITS': 64,
      },
-     'goma_staging': True,
      'testing': {
        'platform': 'linux',
      },
@@ -27,7 +26,6 @@ SPEC = {
        'BUILD_CONFIG': 'Release',
        'TARGET_BITS': 64,
      },
-     'goma_staging': True,
      'testing': {
        'platform': 'mac',
      },
@@ -40,7 +38,6 @@ SPEC = {
        'BUILD_CONFIG': 'Release',
        'TARGET_BITS': 64,
      },
-     'goma_staging': True,
      'testing': {
        'platform': 'win',
      },
@@ -53,7 +50,6 @@ SPEC = {
        'BUILD_CONFIG': 'Release',
        'TARGET_BITS': 64,
      },
-     'goma_staging': True,
      'testing': {
        'platform': 'linux',
      },
@@ -66,7 +62,6 @@ SPEC = {
        'BUILD_CONFIG': 'Release',
        'TARGET_BITS': 64,
      },
-     'goma_staging': True,
      'testing': {
        'platform': 'mac',
      },
@@ -79,7 +74,6 @@ SPEC = {
        'BUILD_CONFIG': 'Release',
        'TARGET_BITS': 64,
      },
-     'goma_staging': True,
      'testing': {
        'platform': 'win',
      },
@@ -92,7 +86,6 @@ SPEC = {
        'BUILD_CONFIG': 'Release',
        'TARGET_BITS': 64,
      },
-     'goma_staging': True,
      'testing': {
        'platform': 'linux',
      },
@@ -105,7 +98,6 @@ SPEC = {
        'BUILD_CONFIG': 'Release',
        'TARGET_BITS': 64,
      },
-     'goma_staging': True,
      'testing': {
        'platform': 'linux',
      },
@@ -118,7 +110,6 @@ SPEC = {
        'BUILD_CONFIG': 'Release',
        'TARGET_BITS': 64,
      },
-     'goma_staging': True,
      'testing': {
        'platform': 'linux',
      },
@@ -131,7 +122,6 @@ SPEC = {
        'BUILD_CONFIG': 'Debug',
        'TARGET_BITS': 64,
      },
-     'goma_staging': True,
      'testing': {
        'platform': 'linux',
      },
@@ -144,7 +134,6 @@ SPEC = {
        'BUILD_CONFIG': 'Debug',
        'TARGET_BITS': 64,
      },
-     'goma_staging': True,
      'testing': {
        'platform': 'linux',
      },
@@ -157,7 +146,6 @@ SPEC = {
        'BUILD_CONFIG': 'Release',
        'TARGET_BITS': 64,
      },
-     'goma_staging': True,
      'testing': {
        'platform': 'linux',
      },
@@ -170,7 +158,6 @@ SPEC = {
        'BUILD_CONFIG': 'Release',
        'TARGET_BITS': 64,
      },
-     'goma_staging': True,
      'testing': {
        'platform': 'mac',
      },
@@ -183,7 +170,6 @@ SPEC = {
        'BUILD_CONFIG': 'Release',
        'TARGET_BITS': 64,
      },
-     'goma_staging': True,
      'testing': {
        'platform': 'mac',
      },
@@ -196,7 +182,6 @@ SPEC = {
        'BUILD_CONFIG': 'Release',
        'TARGET_BITS': 64,
      },
-     'goma_staging': True,
      'testing': {
        'platform': 'mac',
      },
@@ -227,7 +212,6 @@ SPEC = {
        'TARGET_PLATFORM': 'android',
      },
      'android_config': 'main_builder_mb',
-     'goma_staging': True,
      'testing': {
        'platform': 'linux',
      },
