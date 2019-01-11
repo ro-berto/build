@@ -41,8 +41,18 @@ DEFAULT_BUILDERS = [
 
 
 # CL to use when testing a recipe which touches chromium source.
-CHROMIUM_SRC_TEST_CL = (
-    'https://chromium-review.googlesource.com/c/chromium/src/+/1286761')
+CHROMIUM_SRC_TEST_CLS = {
+  # This slow CL touches `DEPS` which causes analyze to compile and test all
+  # targets.
+  'slow': 'https://chromium-review.googlesource.com/c/chromium/src/+/1286761',
+  # This fast CL touches `chrome/test/base/interactive_test_utils.cc`, resulting
+  # in just interactive_ui_tests being built and run. This is a relatively fast,
+  # but still swarmed w/ multiple shards, test suite. This fast verification is
+  # used for "upstream-only-changes" on the assumption that no upstream code
+  # would (should) have variable effects based on WHICH test suite is executed,
+  # so we just need to pick SOME test suite.
+  'fast': 'https://chromium-review.googlesource.com/c/chromium/src/+/1406154',
+}
 
 
 def _checkout_project(api, workdir, gclient_config, patch):
@@ -54,7 +64,12 @@ def _checkout_project(api, workdir, gclient_config, patch):
         patch=patch, gclient_config=gclient_config)
 
 
-def should_trigger_recipe(api, recipe, repo_path, recipes_py_path):
+def trigger_cl(api, recipe, repo_path, recipes_py_path):
+  """Calculates the chromium testing CL for the current CL.
+
+  Returns None if we shouldn't trigger anything.
+  Returns a key in the CHROMIUM_SRC_TEST_CLS dictionary.
+  """
   recipes_cfg_path = repo_path.join('infra', 'config', 'recipes.cfg')
 
   affected_files = api.tryserver.get_files_affected_by_patch(repo_path)
@@ -81,7 +96,13 @@ def should_trigger_recipe(api, recipe, repo_path, recipes_py_path):
         'analyze reported that the recipe \'%s\' was invalid. Something may'
         ' be wrong with the swarming task this is based on.' % recipe)
 
-  return recipe in roll_step.json.output['recipes']
+  if recipe in roll_step.json.output['recipes']:
+    return 'slow'
+
+  if str(repo_path.join('infra', 'config', 'recipes.cfg')) in affected_files:
+    return 'fast'
+
+  return None
 
 
 # TODO(martiniss): make this work if repo_name != 'build'
@@ -121,18 +142,22 @@ def RunSteps(api, repo_name):
       # recipe lives in. For now we assume the recipe lives in the repo the CL
       # lives in.
       recipe = job_slice['userland']['recipe_name']
-      if not should_trigger_recipe(
+      cl = trigger_cl(
           api, recipe, cl_workdir.join(repo_name),
-          recipes_dir.join('recipes.py')):
+          recipes_dir.join('recipes.py'))
+      if not cl:
         result = api.python.succeeding_step(
             'not running a tryjob for %s' % recipe,
             '`recipes.py analyze` indicates this recipe is not affected by the'
-            ' files changed by the CL.')
+            ' files changed by the CL, and the CL does not affect recipes.cfg')
         continue
 
       # FIXME: We should check if the recipe we're testing tests patches to
       # chromium/src. For now just assume this works.
-      ir = ir.then('edit-cr-cl', CHROMIUM_SRC_TEST_CL)
+      ir = ir.then('edit-cr-cl', CHROMIUM_SRC_TEST_CLS[cl])
+      preso = api.step.active_result.presentation
+      preso.step_text += 'Using %s testing CL' % cl
+      preso.links['Test CL'] = CHROMIUM_SRC_TEST_CLS[cl]
 
       result = (ir.
                 then('edit-recipe-bundle').
@@ -228,6 +253,72 @@ def GenTests(api):
       api.override_step_data(
           'parse description', api.json.output({})) +
       api.post_process(Filter('exiting'))
+  )
+
+  yield (
+      api.test('recipe_roller') +
+      api.properties.tryserver(repo_name='build') +
+      api.step_data('led launch',
+                    stdout=api.json.output({
+                      'swarming':{
+                          'host_name': 'chromium-swarm.appspot.com',
+                          'task_id': 'beeeeeeeee5',
+                      }
+                    })) +
+      api.step_data('led get-builder',
+                    stdout=api.json.output({
+                      'job_slices': [{
+                        'userland': {
+                            'recipe_name': 'foo_recipe',
+                        },
+                      }],
+                    })) +
+      api.override_step_data('git diff to analyze patch',
+                             stdout=api.raw_io.output('\n'.join([
+                               'random/file.py',
+                               'infra/config/recipes.cfg',
+                             ]))) +
+      api.step_data('analyze foo_recipe',
+                    api.json.output({'recipes': []})) +
+      api.override_step_data(
+        'gerrit changes', api.json.output(
+          [{'revisions': {1: {'_number': 12, 'commit': {
+            'message': 'nothing important'}}}}])) +
+      api.override_step_data(
+          'parse description', api.json.output({}))
+  )
+
+  yield (
+      api.test('manual_roll_with_changes') +
+      api.properties.tryserver(repo_name='build') +
+      api.step_data('led launch',
+                    stdout=api.json.output({
+                      'swarming':{
+                          'host_name': 'chromium-swarm.appspot.com',
+                          'task_id': 'beeeeeeeee5',
+                      }
+                    })) +
+      api.step_data('led get-builder',
+                    stdout=api.json.output({
+                      'job_slices': [{
+                        'userland': {
+                            'recipe_name': 'foo_recipe',
+                        },
+                      }],
+                    })) +
+      api.override_step_data('git diff to analyze patch',
+                             stdout=api.raw_io.output('\n'.join([
+                               'random/file.py',
+                               'infra/config/recipes.cfg',
+                             ]))) +
+      api.step_data('analyze foo_recipe',
+                    api.json.output({'recipes': ['foo_recipe']})) +
+      api.override_step_data(
+        'gerrit changes', api.json.output(
+          [{'revisions': {1: {'_number': 12, 'commit': {
+            'message': 'nothing important'}}}}])) +
+      api.override_step_data(
+          'parse description', api.json.output({}))
   )
 
   yield (

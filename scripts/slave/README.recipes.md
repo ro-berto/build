@@ -5453,9 +5453,14 @@ Repeatedly fails as a way to ensure the gatekeeper is alive and well.
 
 Tests a recipe CL by running a chromium builder.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/led_recipes_tester.py#88)(api, repo_name):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/led_recipes_tester.py#101)(api, repo_name):**
 
-&mdash; **def [should\_trigger\_recipe](/scripts/slave/recipes/led_recipes_tester.py#57)(api, recipe, repo_path, recipes_py_path):**
+&mdash; **def [trigger\_cl](/scripts/slave/recipes/led_recipes_tester.py#59)(api, recipe, repo_path, recipes_py_path):**
+
+Calculates the chromium testing CL for the current CL.
+
+Returns None if we shouldn't trigger anything.
+      Returns a key in the CHROMIUM_SRC_TEST_CLS dictionary.
 ### *recipes* / [legion/legion](/scripts/slave/recipes/legion/legion.py)
 
 [DEPS](/scripts/slave/recipes/legion/legion.py#9): [isolate](#recipe_modules-isolate), [legion](#recipe_modules-legion), [swarming](#recipe_modules-swarming), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
