@@ -296,9 +296,7 @@ def goma_rbe_tot(c):
 @config_ctx()
 def goma_mixer_staging(c):
   c.compile_py.goma_failfast = True
-  # TODO(ukai): use staging-goma.chromium.org http://crbug.com/777273
-  c.env.GOMA_STUBBY_PROXY_IP_ADDRESS = (
-      'mixer-staging1.endpoints.cxx-compiler-service.cloud.goog')
+  c.env.GOMA_STUBBY_PROXY_IP_ADDRESS = 'staging-goma.chromium.org'
   c.env.GOMA_RPC_EXTRA_PARAMS = '?staging'
   c.compile_py.use_autoninja = True
 
