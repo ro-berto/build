@@ -169,6 +169,7 @@ class RemoteRunExecTest(unittest.TestCase):
 
     self.recipe_remote_args = [
         sys.executable, self._bp('.remote_run_cipd', 'recipes.py'),
+        '--operational-args-path', self._tp('engine_flags.json'),
         '--verbose', 'remote',
         '--repository', self.opts.repository,
         '--workdir', self._tp('rw'),
@@ -190,6 +191,7 @@ class RemoteRunExecTest(unittest.TestCase):
     ]
 
     self.recipe_args = [
+        '--operational-args-path', self._tp('engine_flags.json'),
         '--verbose', 'run',
         '--properties-file', self._tp('remote_run_properties.json'),
         '--workdir', self._tp('w'),
