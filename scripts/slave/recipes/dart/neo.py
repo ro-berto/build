@@ -29,7 +29,7 @@ TEST_MATRIX = {
   "builder_configurations": [
     {
       "builders": [
-        "dart2js-win10-debug-x64-firefox",
+        "dart2js-win-debug-x64-firefox",
         "analyzer-linux-release-none"
       ],
       "meta": {},
@@ -146,9 +146,9 @@ def GenTests(api):
         clobber='true')
    )
    yield (
-      api.test('builders/dart2js-win10-debug-x64-firefox-try') +
+      api.test('builders/dart2js-win-debug-x64-firefox-try') +
       api.properties.generic(
-        buildername='dart2js-win10-debug-x64-firefox-try',
+        buildername='dart2js-win-debug-x64-firefox-try',
         revision='3456abcd78ef',
         new_workflow_enabled='true')
    )

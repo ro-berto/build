@@ -21,16 +21,12 @@ TEST_PY_PATH = 'tools/test.py'
 CHROME_PATH_ARGUMENT = {
   'linux': '--chrome=browsers/chrome/google-chrome',
   'mac': '--chrome=browsers/Google Chrome.app/Contents/MacOS/Google Chrome',
-  'win7': '--chrome=browsers\\Chrome\\Application\\chrome.exe',
-  'win10': '--chrome=browsers\\Chrome\\Application\\chrome.exe',
   'win': '--chrome=browsers\\Chrome\\Application\\chrome.exe'
 }
 
 FIREFOX_PATH_ARGUMENT = {
   'linux': '--firefox=browsers/firefox/firefox',
   'mac': '--firefox=browsers/Firefox.app/Contents/MacOS/firefox',
-  'win7': '--firefox=browsers\\firefox\\firefox.exe',
-  'win10': '--firefox=browsers\\firefox\\firefox.exe',
   'win': '--firefox=browsers\\firefox\\firefox.exe'
 }
 
@@ -198,12 +194,16 @@ class DartApi(recipe_api.RecipeApi):
                                    '--output_directory=${ISOLATED_OUTDIR}'],
                                   ignore_task_failure=ignore_failure)
       os_names = {
-        'win': 'Windows',
+        'android': 'Android',
         'linux': 'Linux',
-        'mac': 'Mac'
+        'mac': 'Mac',
+        'win': 'Windows',
       }
       task.dimensions['os'] = os_names.get(os, os)
-      task.dimensions['cpu'] = cpu
+      if not cpu:
+        task.dimensions.pop('cpu', None)
+      else:
+        task.dimensions['cpu'] = cpu
       task.dimensions['pool'] = pool
       task.dimensions.pop('gpu', None)
       if 'shard_timeout' in self.m.properties:
@@ -611,7 +611,7 @@ class DartApi(recipe_api.RecipeApi):
     builder_fragments = builder_name.split('-')
     system = self._get_option(
       builder_fragments,
-      ['linux', 'mac', 'win7', 'win8', 'win10', 'win'],
+      ['android', 'linux', 'mac', 'win'],
       'linux')
     mode = self._get_option(
       builder_fragments,
@@ -679,7 +679,8 @@ class DartApi(recipe_api.RecipeApi):
 
         isolate_hash = None
         shards = step.get('shards', 0)
-        local_shard = shards > 1 and index == len(config['steps']) - 1
+        local_shard = (shards > 1 and index == len(config['steps']) - 1
+            and not environment['system'] == 'android')
         if 'fileset' in step:
           # We build isolates here, every time we see fileset, to wait for the
           # building of Dart, which may be included in the fileset.
@@ -875,8 +876,6 @@ class DartApi(recipe_api.RecipeApi):
           args, ['-r', '--runtime']):
         test_args = test_args + ['-r%s' % environment['runtime']]
     args = test_args + args
-    if environment['system'] in ['win7', 'win8', 'win10']:
-      args = args + ['--builder-tag=%s' % environment['system']]
     if environment['copy-coredumps']:
       args = args + ['--copy-coredumps']
     # The --chrome flag is added here if the runtime for the bot is
@@ -967,6 +966,8 @@ class DartApi(recipe_api.RecipeApi):
     if isolate_hash:
       with self.m.step.nest('trigger shards for %s' % step_name):
         cpu = 'arm64' if environment['arch'] == 'arm64' else 'x86-64'
+        # Android bots don't have a "cpu" dimension
+        cpu = None if environment['system'] == 'android' else cpu
         tasks.append({
             'shards': self.shard(step_name, isolate_hash,
                                   xvfb_cmd + [script] + args,
@@ -974,7 +975,8 @@ class DartApi(recipe_api.RecipeApi):
                                   last_shard_is_local=local_shard,
                                   cipd_packages=cipd_packages,
                                   ignore_failure=ignore_failure,
-                                  cpu=cpu),
+                                  cpu=cpu,
+                                  os=environment['system']),
             'args': args,
             'environment': environment,
             'step_name': step_name})

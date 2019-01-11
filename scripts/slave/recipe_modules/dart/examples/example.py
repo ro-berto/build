@@ -73,7 +73,7 @@ TEST_MATRIX = {
   "builder_configurations": [
     {
       "builders": [
-        "dart2js-win10-debug-x64-firefox",
+        "dart2js-win-debug-x64-firefox",
         "dart2js-mac-debug-x64-chrome",
         "analyzer-none-linux-release",
         "vm-kernel-win-release-x64",
@@ -146,6 +146,17 @@ TEST_MATRIX = {
         "name": "Test-step custom",
         "script": "out/custom_thing",
         "arguments": ["foo", "--bar", "--buildername"]
+      }]
+    },
+    {
+      "builders": [
+        "example-android"
+      ],
+      "meta": {},
+      "steps": [{
+        "name": "Test on android device",
+        "shards": 2,
+        "fileset": "fileset1"
       }]
     }
   ]
@@ -250,7 +261,7 @@ def GenTests(api):
 
   yield (api.test('basic-win-stable') +
       api.platform('win', 64) +
-      api.properties(buildername='dart2js-win10-debug-x64-firefox-stable',
+      api.properties(buildername='dart2js-win-debug-x64-firefox-stable',
                      buildnumber='1357',
                      revision='3456abcd78ef') +
       api.step_data('upload testing fileset fileset1',
@@ -259,7 +270,7 @@ def GenTests(api):
                     stdout=api.json.output(TRIGGER_RESULT)))
 
   yield (api.test('basic-win') + api.platform('win', 64) + api.properties(
-      buildername='dart2js-win10-debug-x64-firefox',
+      buildername='dart2js-win-debug-x64-firefox',
       buildnumber='1357',
       revision='a' * 40,
       parent_fileset='isolate_hash_123',
@@ -282,3 +293,8 @@ def GenTests(api):
 
   yield (api.test('example-mac') + api.platform('mac', 64) + api.properties(
       buildername='example-mac'))
+
+  yield (api.test('example-android') + api.platform('linux', 64) + api.properties(
+      buildername='example-android')
+      + api.step_data('upload testing fileset fileset1',
+          stdout=api.raw_io.output('test isolate hash')))
