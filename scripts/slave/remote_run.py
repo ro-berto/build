@@ -622,19 +622,7 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
   cipd_bootstrap_v2.install_cipd_packages(cipd_path,
       cipd.CipdPackage(_RECIPES_PY_CIPD_PACKAGE, pins.recipes))
 
-  engine_flags = {
-    'use_result_proto': True,
-  }
-
   engine_args = []
-  if engine_flags:
-    engine_flags_path = os.path.join(tempdir, 'engine_flags.json')
-    with open(engine_flags_path, 'w') as f:
-      json.dump({
-          'engine_flags': engine_flags
-      }, f)
-
-    engine_args = ['--operational-args-path', engine_flags_path]
 
   recipe_result_path = os.path.join(tempdir, 'recipe_result.json')
   recipe_cmd = [

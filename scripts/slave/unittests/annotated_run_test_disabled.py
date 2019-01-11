@@ -99,7 +99,6 @@ class AnnotatedRunExecTest(unittest.TestCase):
         mock.patch('slave.annotated_run._run_command'),
         mock.patch('slave.annotated_run._build_dir'),
         mock.patch('slave.annotated_run._builder_dir'),
-        mock.patch('slave.annotated_run._get_engine_flags'),
         mock.patch('os.path.exists'),
         ))
 
@@ -134,9 +133,6 @@ class AnnotatedRunExecTest(unittest.TestCase):
 
     # Use public recipes.py path.
     os.path.exists.return_value = False
-
-    # Swap out testing _ENGINE_FLAGS.
-    annotated_run._get_engine_flags.return_value = {}
 
   def tearDown(self):
     os.environ = self._orig_env
@@ -299,9 +295,6 @@ class AnnotatedRunExecTest(unittest.TestCase):
   @mock.patch('slave.logdog_bootstrap.bootstrap')
   def test_exec_with_result_proto(self, bootstrap):
     bootstrap.side_effect = logdog_bootstrap.NotBootstrapped()
-    annotated_run._get_engine_flags.return_value = {
-        'use_result_proto': True,
-    }
     annotated_run._run_command.return_value = (13, '')
     self._writeRecipeResult({})
 
@@ -313,9 +306,6 @@ class AnnotatedRunExecTest(unittest.TestCase):
   @mock.patch('slave.logdog_bootstrap.bootstrap')
   def test_exec_with_result_proto_fail(self, bootstrap):
     bootstrap.side_effect = logdog_bootstrap.NotBootstrapped()
-    annotated_run._get_engine_flags.return_value = {
-        'use_result_proto': True,
-    }
     annotated_run._run_command.return_value = (13, '')
     self._writeRecipeResult({
         'failure': {},
@@ -329,9 +319,6 @@ class AnnotatedRunExecTest(unittest.TestCase):
   @mock.patch('slave.logdog_bootstrap.bootstrap')
   def test_exec_with_result_proto_step_fail(self, bootstrap):
     bootstrap.side_effect = logdog_bootstrap.NotBootstrapped()
-    annotated_run._get_engine_flags.return_value = {
-        'use_result_proto': True,
-    }
     annotated_run._run_command.return_value = (13, '')
     self._writeRecipeResult({
         'failure': {
