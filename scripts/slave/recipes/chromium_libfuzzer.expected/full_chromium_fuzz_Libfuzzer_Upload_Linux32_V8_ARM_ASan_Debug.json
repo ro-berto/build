@@ -287,6 +287,29 @@
       "--all",
       "--type=executable",
       "[START_DIR]/src/out/Debug",
+      "//testing/libfuzzer:libfuzzer_main"
+    ],
+    "cwd": "[START_DIR]/src",
+    "name": "calculate all_fuzzers",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@raw_io.output_text[refs]@target1@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text[refs]@target2@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text[refs]@v8_target3@@@",
+      "@@@STEP_LOG_END@raw_io.output_text[refs]@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
+      "refs",
+      "-q",
+      "--as=output",
+      "--all",
+      "--type=executable",
+      "[START_DIR]/src/out/Debug",
       "//v8:fuzzer_support"
     ],
     "cwd": "[START_DIR]/src",
