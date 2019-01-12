@@ -196,10 +196,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
       else:
         local_tests.append(test)
 
-    # Trigger tests having large number of shards earlier to utilize swarming's
-    # scalability.
-    swarming_tests.sort(key=lambda t: -t.shards)
-
     groups = [LocalGroup(local_tests), SwarmingGroup(swarming_tests)]
 
     nest_name = 'test_pre_run (%s)' % suffix if suffix else 'test_pre_run'
