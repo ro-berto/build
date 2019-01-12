@@ -425,6 +425,8 @@
       "tryserver.chromium.linux",
       "-b",
       "linux-libfuzzer-asan-rel",
+      "--config-file",
+      "[START_DIR]/src/tools/mb/mb_config.pyl",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [\"//foo/bar:target2\", \"//foo/bar:target3\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",

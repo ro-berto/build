@@ -184,7 +184,10 @@ class FilterApi(recipe_api.RecipeApi):
     if cros_board:
       kwargs['wrapper'] = self.m.chromium.get_cros_chrome_sdk_wrapper()
       cwd = self.m.context.cwd or self.m.path['checkout']
-      optional_system_python = self.m.chromite.with_system_python()
+      # api.chromium's mb logic already sets up chromite's system python
+      # if necessary.
+      if not use_mb:
+        optional_system_python = self.m.chromite.with_system_python()
     elif not use_mb:
       env.update(self.m.chromium.c.gyp_env.as_jsonish())
     env['GOMA_SERVICE_ACCOUNT_JSON_FILE'] = \
@@ -195,26 +198,9 @@ class FilterApi(recipe_api.RecipeApi):
         if use_mb:
           mb_mastername = mb_mastername or self.m.properties['mastername']
           mb_buildername = mb_buildername or self.m.properties['buildername']
-          mb_arguments = [
-              'analyze',
-              '-m', mb_mastername,
-              '-b', mb_buildername,
-          ]
-          if mb_config_path:
-            mb_arguments += ['-f', mb_config_path]
-          mb_arguments += [
-              '-v',
-              build_output_dir,
-              self.m.json.input(analyze_input),
-              self.m.json.output()
-          ]
-          step_result = self.m.python(
-              'analyze',
-              self.m.path['checkout'].join('tools', 'mb', 'mb.py'),
-              args=mb_arguments,
-              step_test_data=lambda: self.m.json.test_api.output(
-                test_output),
-              **kwargs)
+          step_result = self.m.chromium.mb_analyze(
+              mb_mastername, mb_buildername, analyze_input,
+              mb_config_path=mb_config_path)
         else:
           step_result = self.m.python(
               'analyze',

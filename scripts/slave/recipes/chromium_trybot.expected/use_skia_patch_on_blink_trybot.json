@@ -456,13 +456,14 @@
       "tryserver.blink",
       "-b",
       "mac10.12_blink_rel",
-      "-f",
+      "--config-file",
       "[BUILDER_CACHE]/mac10_12_blink_rel/src/tools/mb/mb_config.pyl",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]/mac10_12_blink_rel/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",

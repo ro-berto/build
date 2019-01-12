@@ -469,13 +469,14 @@
       "tryserver.chromium.win",
       "-b",
       "old_chromium_rel_ng",
-      "-f",
+      "--config-file",
       "[BUILDER_CACHE]\\win\\src\\tools\\mb\\mb_config.pyl",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"README.md\", \"foo/bar/baz.py\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"

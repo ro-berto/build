@@ -473,13 +473,14 @@
       "tryserver.chromium.win",
       "-b",
       "win7_chromium_rel_ng",
-      "-f",
+      "--config-file",
       "[BUILDER_CACHE]\\win\\src\\tools\\mb\\mb_config.pyl",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"

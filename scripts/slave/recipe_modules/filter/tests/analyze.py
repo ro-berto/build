@@ -16,8 +16,11 @@ def RunSteps(api):
   api.chromium.set_config(
     'chromium_chromeos',
     TARGET_PLATFORM='chromeos',
-    TARGET_CROS_BOARD='x86=generic')
-  api.chromium.apply_config('mb')
+    TARGET_CROS_BOARD='x86-generic')
+  if api.properties.get('gn', False):
+    api.chromium.apply_config('gn')
+  else:
+    api.chromium.apply_config('mb')
 
   api.filter.analyze(
       ['file1', 'file2'],
@@ -38,20 +41,6 @@ def GenTests(api):
           config='cros')
   )
 
-  def command_line_contains(check, step_odict, step_name, argument_sequence):
-    def subsequence(containing, contained):
-      for i in xrange(len(containing) - len(contained)):
-        if containing[i:i+len(contained)] == contained:
-          return True
-      return False  # pragma: no cover
-
-    check('No step named "%s"' % step_name,
-          step_name in step_odict)
-    check('Command line for step "%s" did not contain "%s"' % (
-              step_name, ' '.join(argument_sequence)),
-          subsequence(step_odict[step_name]['cmd'], argument_sequence))
-    return step_odict
-
   yield (
       api.test('custom_mb_config_path') +
       api.properties(
@@ -59,9 +48,23 @@ def GenTests(api):
           buildername='test_buildername',
           mb_config_path='path/to/custom_mb_config.pyl',
           config='cros') +
-      api.post_process(command_line_contains,
-                       step_name='analyze',
-                       argument_sequence=[
-                           '-f', 'path/to/custom_mb_config.pyl']) +
+      api.post_process(
+          post_process.StepCommandContains,
+          'analyze',
+          ['--config-file', 'path/to/custom_mb_config.pyl']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('cros_no_mb') +
+      api.properties(
+          mastername='test_mastername',
+          buildername='test_buildername',
+          config='cros',
+          gn=True) +
+      api.post_process(
+          post_process.MustRun,
+          'system_python') +
+      api.post_process(post_process.StatusSuccess) +
       api.post_process(post_process.DropExpectation)
   )

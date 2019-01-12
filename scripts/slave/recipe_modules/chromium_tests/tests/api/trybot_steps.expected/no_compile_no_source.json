@@ -46,6 +46,7 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
+    "cwd": "[CACHE]/builder",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -72,13 +73,13 @@
       "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
-      "cache_dir = '[CACHE]/git'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
       "--patch_root",
       "src",
       "--revision_mapping_file",
       "{\"got_angle_revision\": \"src/third_party/angle\", \"got_buildtools_revision\": \"src/buildtools\", \"got_dawn_revision\": \"src/third_party/dawn\", \"got_nacl_revision\": \"src/native_client\", \"got_revision\": \"src\", \"got_swarming_client_revision\": \"src/tools/swarming_client\", \"got_v8_revision\": \"src/v8\", \"got_webrtc_revision\": \"src/third_party/webrtc\"}",
       "--git-cache-dir",
-      "[CACHE]/git",
+      "[GIT_CACHE]",
       "--cleanup-dir",
       "[CLEANUP]/bot_update",
       "--output_json",
@@ -88,7 +89,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -240,7 +242,7 @@
       "cipd",
       "ensure",
       "-root",
-      "[CACHE]/goma/client",
+      "[GOMA_CACHE]/client",
       "-ensure-file",
       "infra_internal/goma/client/linux-amd64 release",
       "-json-output",
@@ -267,7 +269,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -283,10 +285,10 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
-      "GYP_DEFINES": "gomadir='[CACHE]/goma/client' target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
     },
     "env_suffixes": {
       "PATH": [
@@ -299,14 +301,14 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/testing/scripts/get_compile_targets.py",
+      "[CACHE]/builder/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"test_bot\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
@@ -321,12 +323,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/testing/buildbot/chromium.gpu.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.gpu.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.gpu.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.gpu.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.gpu.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -336,12 +338,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/testing/buildbot/chromium.linux.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.linux.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [START_DIR]/src/testing/buildbot/chromium.linux.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.linux.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -355,7 +357,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "infra_step": true,
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
@@ -370,7 +372,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[START_DIR]/src/testing/buildbot/trybot_analyze_config.json",
+      "[CACHE]/builder/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
     "name": "read filter exclusion spec",
@@ -394,20 +396,22 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "analyze",
       "-m",
       "tryserver.chromium.linux",
       "-b",
       "linux_chromium_rel_ng",
-      "-f",
-      "[START_DIR]/src/tools/mb/mb_config.pyl",
+      "--config-file",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"OWNERS\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "analyze",

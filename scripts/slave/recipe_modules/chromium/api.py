@@ -1112,6 +1112,49 @@ class ChromiumApi(recipe_api.RecipeApi):
                                re.DOTALL)
 
   @_with_chromium_layout
+  def mb_analyze(self, mastername, buildername, analyze_input,
+                 name=None, mb_path=None, mb_config_path=None,
+                 chromium_config=None, phase=None, **kwargs):
+    """Determine which targets need to be built and tested.
+
+    Args:
+      mastername: The name of the master for the build configuration to
+        analyze.
+      buildername: The name of the builder for the build configuration to
+        analyze.
+      analyze_input: a dict of the following form:
+        {
+          'files': ['affected/file1', 'affected/file2', ...],
+          'test_targets': ['test_target1', 'test_target2', ...],
+          'additional_compile_targets': ['target1', 'target2', ...],
+        }
+
+    Returns:
+      The StepResult from the analyze command.
+    """
+    name = name or 'analyze'
+    mb_args = ['-v']
+    mb_args.extend(self._mb_isolate_map_file_args())
+    mb_args.extend(self._mb_build_dir_args(None))
+    mb_args.extend([self.m.json.input(analyze_input), self.m.json.output()])
+    return self.run_mb_cmd(
+        name, 'analyze', mastername, buildername,
+        mb_path=mb_path,
+        mb_config_path=mb_config_path,
+        chromium_config=chromium_config,
+        phase=phase,
+        # Ignore goma for analysis.
+        use_goma=False,
+        additional_args=mb_args,
+        step_test_data=lambda: self.m.json.test_api.output(
+            {
+                'status': 'No dependency',
+                'compile_targets': [],
+                'test_targets': [],
+            }),
+        **kwargs)
+
+  @_with_chromium_layout
   def mb_lookup(self, mastername, buildername, name=None,
                 mb_path=None, mb_config_path=None,
                 chromium_config=None, phase=None, use_goma=True,
@@ -1120,10 +1163,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     """Lookup the GN args for the build.
 
     Args:
-      mastername: The name of the master for the build configuration to generate
-        build files for.
+      mastername: The name of the master for the build configuration to
+        look up.
       buildername: The name of the builder for the build configuration to
-        generate build files for.
+        look up.
       name: The name of the step. If not provided 'lookup GN args' will be used.
       mb_path: The path to the source directory containing the mb.py script. If
         not provided, the subdirectory tools/mb within the source tree will be

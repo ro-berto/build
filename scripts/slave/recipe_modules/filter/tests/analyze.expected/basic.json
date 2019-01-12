@@ -26,6 +26,11 @@
   },
   {
     "cmd": [],
+    "cwd": "None",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "name": "system_python"
   },
   {
@@ -40,6 +45,11 @@
       "0777",
       "[START_DIR]/python_bin"
     ],
+    "cwd": "None",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "infra_step": true,
     "name": "system_python.create_dir",
     "~followup_annotations": [
@@ -56,6 +66,11 @@
       "remove",
       "[START_DIR]/python_bin/python"
     ],
+    "cwd": "None",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "infra_step": true,
     "name": "system_python.remove_link",
     "~followup_annotations": [
@@ -72,6 +87,11 @@
       "remove",
       "[START_DIR]/python_bin/python2"
     ],
+    "cwd": "None",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "infra_step": true,
     "name": "system_python.remove_link (2)",
     "~followup_annotations": [
@@ -89,6 +109,11 @@
       "/usr/bin/python",
       "[START_DIR]/python_bin/python"
     ],
+    "cwd": "None",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "infra_step": true,
     "name": "system_python.create_link",
     "~followup_annotations": [
@@ -106,6 +131,11 @@
       "/usr/bin/python2",
       "[START_DIR]/python_bin/python2"
     ],
+    "cwd": "None",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
+    },
     "infra_step": true,
     "name": "system_python.create_link (2)",
     "~followup_annotations": [
@@ -117,7 +147,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/cros",
       "chrome-sdk",
       "--nogn-gen",
-      "--board=x86=generic",
+      "--board=x86-generic",
       "--nocolor",
       "--log-level=debug",
       "--cache-dir",
@@ -132,13 +162,16 @@
       "test_mastername",
       "-b",
       "test_buildername",
+      "--config-file",
+      "None/tools/mb/mb_config.pyl",
       "-v",
-      "//out/Release",
+      "//out_x86-generic/Release",
       "{\"additional_compile_targets\": [\"compile1\", \"compile2\"], \"files\": [\"file1\", \"file2\"], \"test_targets\": [\"test1\", \"test2\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "None",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "env_prefixes": {

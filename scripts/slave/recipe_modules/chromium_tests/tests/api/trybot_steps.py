@@ -12,6 +12,7 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
+    'recipe_engine/runtime',
     'swarming',
 ]
 
@@ -67,7 +68,9 @@ def GenTests(api):
       api.test('basic') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng') +
+          buildername='linux_chromium_rel_ng',
+          path_config='kitchen') +
+      api.runtime(is_experimental=False, is_luci=True) +
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
               'Linux Tests': {
@@ -84,7 +87,9 @@ def GenTests(api):
           mastername='tryserver.chromium.test',
           buildername='staging-chromium-rel',
           builders=_TEST_BUILDERS,
-          trybots=_TEST_TRYBOTS) +
+          trybots=_TEST_TRYBOTS,
+          path_config='kitchen') +
+      api.runtime(is_experimental=False, is_luci=True) +
       api.chromium_tests.read_source_side_spec(
           'chromium.test', {
               'staging-chromium-test-rel': {
@@ -102,14 +107,18 @@ def GenTests(api):
       api.test('analyze_compile_mode') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_clobber_rel_ng')
+          buildername='linux_chromium_clobber_rel_ng',
+          path_config='kitchen') +
+      api.runtime(is_experimental=False, is_luci=True)
   )
 
   yield (
       api.test('analyze_names') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='fuchsia_x64') +
+          buildername='fuchsia_x64',
+          path_config='kitchen') +
+      api.runtime(is_experimental=False, is_luci=True) +
       api.override_step_data(
           'read filter exclusion spec',
           api.json.output({
@@ -127,14 +136,18 @@ def GenTests(api):
       api.test('no_compile') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng')
+          buildername='linux_chromium_rel_ng',
+          path_config='kitchen') +
+      api.runtime(is_experimental=False, is_luci=True)
   )
 
   yield (
       api.test('no_compile_no_source') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng') +
+          buildername='linux_chromium_rel_ng',
+          path_config='kitchen') +
+      api.runtime(is_experimental=False, is_luci=True) +
       api.override_step_data(
           'git diff to analyze patch',
           api.raw_io.stream_output('OWNERS')
@@ -146,7 +159,9 @@ def GenTests(api):
       api.properties.tryserver(
           mastername='tryserver.chromium.unmirrored',
           buildername='unmirrored-chromium-rel',
-          builders=_TEST_BUILDERS) +
+          builders=_TEST_BUILDERS,
+          path_config='kitchen') +
+      api.runtime(is_experimental=False, is_luci=True) +
       api.chromium_tests.read_source_side_spec(
           'tryserver.chromium.unmirrored', {
               'unmirrored-chromium-rel': {
@@ -169,9 +184,12 @@ def GenTests(api):
         mastername='tryserver.chromium.linux',
         buildername='linux_chromium_rel_ng',
         buildnumber=1020, # 5% is (x % 100/5 == 0)
-        swarm_hashes = {
+        swarm_hashes={
           'base_unittests':
-          '[dummy hash for base_unittests]'}) +
+          '[dummy hash for base_unittests]'
+        },
+        path_config='kitchen') +
+    api.runtime(is_experimental=False, is_luci=True) +
     api.chromium_tests.read_source_side_spec(
         'chromium.linux', {
             'Linux Tests': {
@@ -198,9 +216,12 @@ def GenTests(api):
           mastername='tryserver.chromium.linux',
           buildername='linux_chromium_rel_ng',
           buildnumber=1020 + i,
-          swarm_hashes = {
+          swarm_hashes={
             'base_unittests':
-            '[dummy hash for base_unittests]'}) +
+            '[dummy hash for base_unittests]'
+          },
+          path_config='kitchen') +
+      api.runtime(is_experimental=False, is_luci=True) +
       api.chromium_tests.read_source_side_spec(
           'chromium.linux', {
               'Linux Tests': {

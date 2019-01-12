@@ -33,12 +33,16 @@
       "test_mastername",
       "-b",
       "test_buildername",
+      "--config-file",
+      "None/tools/mb/mb_config.pyl",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [\"compile1\", \"compile2\"], \"files\": [\"file1\", \"file2\"], \"test_targets\": [\"test1\", \"test2\"]}",
       "/path/to/tmp/json"
     ],
+    "cwd": "None",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
     "name": "analyze",
