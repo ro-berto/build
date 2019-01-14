@@ -779,7 +779,7 @@ class iOSApi(recipe_api.RecipeApi):
         "xctest": <(xctest), \
         "test_cases": <(test_cases), \
         "restart": <(restart), \
-        "xcode-parallelization": <(xcode_parallelization)}',
+        "xcode_parallelization": <(xcode_parallelization)}',
       '--out-dir', '${ISOLATED_OUTDIR}',
       '--retries', self.__config.get('retries', '3'),
       '--shards', '<(shards)',

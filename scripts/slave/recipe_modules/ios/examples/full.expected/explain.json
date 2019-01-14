@@ -372,7 +372,7 @@
       "--json-output",
       "/path/to/tmp/json",
       "copy",
-      "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', 'src/ios/build/bots/scripts/', 'src/out/Debug-iphonesimulator/iossim'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--args-json', '{\"test_args\": <(test_args),         \"xctest\": <(xctest),         \"test_cases\": <(test_cases),         \"restart\": <(restart),         \"xcode-parallelization\": <(xcode_parallelization)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--shards', '<(shards)', '--<(xcode_arg_name)', '<(xcode_version)', '--mac-toolchain-cmd', './mac_toolchain', '--xcode-path', 'Xcode.app', '--wpr-tools-path', '<(wpr_tools_path)', '--replay-path', '<(replay_path)', '--iossim', 'src/out/Debug-iphonesimulator/iossim', '--platform', '<(platform)', '--version', '<(version)']}}]]}",
+      "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', 'src/ios/build/bots/scripts/', 'src/out/Debug-iphonesimulator/iossim'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--args-json', '{\"test_args\": <(test_args),         \"xctest\": <(xctest),         \"test_cases\": <(test_cases),         \"restart\": <(restart),         \"xcode_parallelization\": <(xcode_parallelization)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--shards', '<(shards)', '--<(xcode_arg_name)', '<(xcode_version)', '--mac-toolchain-cmd', './mac_toolchain', '--xcode-path', 'Xcode.app', '--wpr-tools-path', '<(wpr_tools_path)', '--replay-path', '<(replay_path)', '--iossim', 'src/out/Debug-iphonesimulator/iossim', '--platform', '<(platform)', '--version', '<(version)']}}]]}",
       "[START_DIR]/template.isolate"
     ],
     "cwd": "[START_DIR]/src",
@@ -391,7 +391,7 @@
       "@@@STEP_LOG_LINE@template.isolate@            \"--app\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"<(app_path)\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--args-json\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"{\\\"test_args\\\": <(test_args),         \\\"xctest\\\": <(xctest),         \\\"test_cases\\\": <(test_cases),         \\\"restart\\\": <(restart),         \\\"xcode-parallelization\\\": <(xcode_parallelization)}\", @@@",
+      "@@@STEP_LOG_LINE@template.isolate@            \"{\\\"test_args\\\": <(test_args),         \\\"xctest\\\": <(xctest),         \\\"test_cases\\\": <(test_cases),         \\\"restart\\\": <(restart),         \\\"xcode_parallelization\\\": <(xcode_parallelization)}\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--out-dir\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"${ISOLATED_OUTDIR}\", @@@",
       "@@@STEP_LOG_LINE@template.isolate@            \"--retries\", @@@",
