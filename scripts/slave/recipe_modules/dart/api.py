@@ -8,7 +8,7 @@ import json, re
 
 BLACKLIST = (
     r'(^(out|xcodebuild)[/\\](Release|Debug|Product)\w*[/\\]' +
-    r'(clang_x64[/\\])?(generated_tests|obj)[/\\])' +
+    r'(clang_\w*[/\\])?(generated_tests|obj)[/\\])' +
     r'|(^tools[/\\]sdks)')
 # TODO(athom): move to third_party when swarming_client.path has a setter
 SWARMING_CLIENT_PATH = 'tools/swarming_client'
