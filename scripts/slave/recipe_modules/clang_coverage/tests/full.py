@@ -75,6 +75,10 @@ def GenTests(api):
       + api.post_process(
           post_process.MustRun, 'gsutil upload metadata')
       + api.post_process(
+          post_process.DoesNotRun, 'generate html report for 3 targets')
+      + api.post_process(
+          post_process.DoesNotRun, 'gsutil upload html report')
+      + api.post_process(
           post_process.StepCommandContains, 'Finding merging errors',
           ['--root-dir'])
       + api.post_process(post_process.StatusSuccess)
@@ -93,7 +97,7 @@ def GenTests(api):
             'some/other/path/to/file.cc',
           ])
       + api.buildbucket.try_build(
-          project='chromium/src', builder='linux-coverage-rel')
+          project='chromium', builder='linux-coverage-rel')
       + api.post_process(
           post_process.MustRun, 'save paths of affected files')
       + api.post_process(
@@ -102,6 +106,10 @@ def GenTests(api):
           post_process.MustRun, 'merge profile data for 3 targets')
       + api.post_process(
           post_process.MustRun, 'gsutil upload merged.profdata')
+      + api.post_process(
+          post_process.MustRun, 'generate html report for 3 targets')
+      + api.post_process(
+          post_process.MustRun, 'gsutil upload html report')
       + api.post_process(
           post_process.MustRun, 'generate git diff locally')
       + api.post_process(
