@@ -42,42 +42,6 @@ SPEC = {
        'platform': 'win',
      },
    },
-   'Chromium Linux Goma GCE Staging': {
-     'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_gce', 'clobber', 'mb'],
-     'gclient_config': 'chromium',
-     'chromium_config_kwargs': {
-       'BUILD_CONFIG': 'Release',
-       'TARGET_BITS': 64,
-     },
-     'testing': {
-       'platform': 'linux',
-     },
-   },
-   'Chromium Mac Goma GCE Staging': {
-     'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_gce', 'clobber', 'mb'],
-     'gclient_config': 'chromium',
-     'chromium_config_kwargs': {
-       'BUILD_CONFIG': 'Release',
-       'TARGET_BITS': 64,
-     },
-     'testing': {
-       'platform': 'mac',
-     },
-   },
-   'CrWinClangGomaGCEStaging': {
-     'chromium_config': 'chromium',
-     'chromium_apply_config': ['goma_gce', 'clobber', 'mb'],
-     'gclient_config': 'chromium',
-     'chromium_config_kwargs': {
-       'BUILD_CONFIG': 'Release',
-       'TARGET_BITS': 64,
-     },
-     'testing': {
-       'platform': 'win',
-     },
-   },
    'Chromium Linux Goma RBE ToT': {
      'chromium_config': 'chromium',
      'chromium_apply_config': ['goma_rbe_tot', 'mb'],

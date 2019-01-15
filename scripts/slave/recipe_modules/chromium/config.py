@@ -279,13 +279,6 @@ def goma_staging(c):
   c.compile_py.ninja_confirm_noop = True
 
 @config_ctx()
-def goma_gce(c):
-  c.compile_py.goma_failfast = True
-  c.env.GOMA_SETTINGS_SERVER = (
-      'https://cxx-compiler-service.appspot.com/settings')
-  c.env.GOMA_USE_CASE = 'prod-staging'
-
-@config_ctx()
 def goma_rbe_tot(c):
   c.compile_py.goma_failfast = True
   c.env.GOMA_SETTINGS_SERVER = (
