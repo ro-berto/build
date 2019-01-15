@@ -61,6 +61,7 @@ SPEC = {
     # This is not a real bot; it isn't actually present on the waterfall. It's
     # only here to be mirrored by a trybot which needs a special config
     # (goma_rbe_staging).
+    # TODO(ukai): use goma_mixer_staging instead.
     'linux-goma-rbe-staging-rel': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
