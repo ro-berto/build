@@ -288,7 +288,6 @@ def _remote_run_passthrough(opts, properties, stream):
     '--recipe', recipe,
     '--build-properties-gz', chromium_utils.b64_gz_json_encode(properties),
     '--canary',
-    '--kitchen', remote_run._CANARY_CIPD_PINS.kitchen,
   ]
   if opts.verbose > 0:
     cmd += ['--verbose']

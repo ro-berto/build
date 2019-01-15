@@ -490,11 +490,6 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
   # pins. This can be done by manually submitting a build to the waterfall.
   is_kitchen = (is_opt_in or 'remote_run_kitchen' in properties)
 
-  # Allow command-line "--kitchen" to override.
-  if args.kitchen:
-    pins = pins._replace(kitchen=args.kitchen)
-    is_kitchen = True
-
   # Augment our input properties...
   def set_property(key, value):
     properties[key] = value
@@ -655,8 +650,6 @@ def _main_impl(argv, stream):
       help='Refrain from cleaning up generated artifacts.')
   parser.add_argument('--canary', action='store_true',
       help='Force use of canary configuration.')
-  parser.add_argument('--kitchen', metavar='CIPD_VERSION',
-      help='Force use of Kitchen bootstrapping at this revision.')
   parser.add_argument('--verbose', action='store_true')
 
   group = parser.add_argument_group('LogDog Bootstrap')
