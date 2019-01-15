@@ -114,6 +114,42 @@ SPEC = {
        'platform': 'linux',
      },
    },
+   'Chromium Linux Goma RBE Prod (clobber)': {
+     'chromium_config': 'chromium',
+     'chromium_apply_config': ['goma_rbe_prod', 'clobber', 'mb'],
+     'gclient_config': 'chromium',
+     'chromium_config_kwargs': {
+       'BUILD_CONFIG': 'Release',
+       'TARGET_BITS': 64,
+     },
+     'testing': {
+       'platform': 'linux',
+     },
+   },
+   'Chromium Linux Goma RBE Prod (dbg)': {
+     'chromium_config': 'chromium',
+     'chromium_apply_config': ['goma_rbe_prod', 'mb'],
+     'gclient_config': 'chromium',
+     'chromium_config_kwargs': {
+       'BUILD_CONFIG': 'Debug',
+       'TARGET_BITS': 64,
+     },
+     'testing': {
+       'platform': 'linux',
+     },
+   },
+   'Chromium Linux Goma RBE Prod (dbg) (clobber)': {
+     'chromium_config': 'chromium',
+     'chromium_apply_config': ['goma_rbe_prod', 'clobber', 'mb'],
+     'gclient_config': 'chromium',
+     'chromium_config_kwargs': {
+       'BUILD_CONFIG': 'Debug',
+       'TARGET_BITS': 64,
+     },
+     'testing': {
+       'platform': 'linux',
+     },
+   },
    'Chromium Mac Goma RBE Staging': {
      'chromium_config': 'chromium',
      'chromium_apply_config': ['goma_mixer_staging', 'mb'],
