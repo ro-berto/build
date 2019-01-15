@@ -48,38 +48,6 @@ BUILDBOT_ROOT = os.path.abspath(os.path.dirname(BUILD_ROOT))
 
 LOGGER = logging.getLogger('remote_run')
 
-# KitchenConfig is a set of per-master Kitchen configuration properties.
-KitchenConfig = collections.namedtuple('KitchenConfig', (
-    # List of builders that are explicitly configured for Kitchen. If None,
-    # all builders on the master are configured for Kitchen.
-    'builders',
-    # If True, "builders" is interpreted as a blacklist instead of a whitelist,
-    # meaing that all builders *except* those explicitly named should use
-    # Kitchen.
-    'is_blacklist'))
-
-_ALL_BUILDERS = KitchenConfig(builders=None, is_blacklist=False)
-
-# This is a map of KitchenConfig to apply to master. Keys are master names,
-# values are KitchenConfig instances to apply to that master.
-_KITCHEN_CONFIG = {
-  'chromium.infra.cron': _ALL_BUILDERS,
-  'internal.infra': _ALL_BUILDERS,
-  'internal.official.tryserver': _ALL_BUILDERS,
-
-  ## Not whitelisted b/c of recipe roller, see: crbug.com/703352
-  #'internal.infra.cron': _ALL_BUILDERS,
-
-  'tryserver.chromium.linux': KitchenConfig(
-    builders=[
-      'linux_chromium_headless_rel',
-    ],
-    is_blacklist=False,
-  ),
-
-  'chromium.fyi': _ALL_BUILDERS,
-  'chromium.swarm': _ALL_BUILDERS,
-}
 
 # Masters that are running "canary" run.
 _CANARY_MASTERS = set((
@@ -164,17 +132,6 @@ def _try_cleanup(src, cleanup_dir):
 
 def _get_is_canary(mastername):
   return mastername in _CANARY_MASTERS
-
-
-def _get_is_kitchen(mastername, buildername):
-  kc = _KITCHEN_CONFIG.get(mastername)
-  if not kc:
-    return False
-  if kc.builders is None:
-    return True
-  if kc.is_blacklist:
-    return buildername not in kc.builders
-  return buildername in kc.builders
 
 
 def find_python():
@@ -531,8 +488,7 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
   #
   # If a property includes "remote_run_kitchen", we will explicitly use canary
   # pins. This can be done by manually submitting a build to the waterfall.
-  is_kitchen = (_get_is_kitchen(mastername, buildername) or is_opt_in or
-                'remote_run_kitchen' in properties)
+  is_kitchen = (is_opt_in or 'remote_run_kitchen' in properties)
 
   # Allow command-line "--kitchen" to override.
   if args.kitchen:
