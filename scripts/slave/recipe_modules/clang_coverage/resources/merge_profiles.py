@@ -50,6 +50,18 @@ def main():
               'w') as f:
       json.dump(invalid_profiles, f)
 
+  # TODO(crbug.com/921300) This script doesn't know how to merge test results,
+  # and the correct solution should be taking other merge script as inputs to
+  # perform the merge.
+  # However, to work around the issue that fuzzer test steps are red, following
+  # logic directly copy paste the output json if there is only one shard, and
+  # this strategy should work for test targets that only have one shard, such
+  # as fuzzer targets and simple gtests targets.
+  if len(params.jsons_to_merge) == 1:
+    with open(params.jsons_to_merge[0]) as f_read:
+      with open(params.output_json, 'w') as f_write:
+        f_write.write(f_read.read())
+
 
 if __name__ == '__main__':
   logging.basicConfig(
