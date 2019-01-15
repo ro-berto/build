@@ -507,6 +507,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"bwe_simulations_tests\": \"[dummy hash for bwe_simulations_tests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"bwe_simulations_tests\": \"[dummy hash for bwe_simulations_tests]\"}@@@"
     ]
   },
@@ -1561,6 +1562,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\"}@@@"
     ]
   },

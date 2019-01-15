@@ -186,6 +186,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"test2_exparchive\": \"[dummy hash for test2_exparchive]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver-dev.appspot.com\"@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"test1_exparchive\": \"[dummy hash for test1_exparchive]\", \"test2_exparchive\": \"[dummy hash for test2_exparchive]\"}@@@"
     ]
   },

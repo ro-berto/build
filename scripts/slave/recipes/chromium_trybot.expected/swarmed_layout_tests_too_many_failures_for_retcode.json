@@ -921,6 +921,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"blink_web_tests\": \"[dummy hash for blink_web_tests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}_with_patch@{\"blink_web_tests\": \"[dummy hash for blink_web_tests]\"}@@@"
     ]
   },
@@ -1855,6 +1856,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}_without_patch@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
     ]
   },
@@ -2820,6 +2822,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes_refs/heads/master(at){#170242}_retry_with_patch@{\"dummy_target_1\": \"[dummy hash for dummy_target_1]\", \"dummy_target_2\": \"[dummy hash for dummy_target_2]\"}@@@"
     ]
   },

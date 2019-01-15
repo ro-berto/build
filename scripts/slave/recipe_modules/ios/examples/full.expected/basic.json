@@ -1911,6 +1911,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"9\": \"[dummy hash for 9]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"0_0\": \"[dummy hash for 0_0]\", \"0_1\": \"[dummy hash for 0_1]\", \"0_2\": \"[dummy hash for 0_2]\", \"1\": \"[dummy hash for 1]\", \"10\": \"[dummy hash for 10]\", \"2\": \"[dummy hash for 2]\", \"3\": \"[dummy hash for 3]\", \"4\": \"[dummy hash for 4]\", \"5\": \"[dummy hash for 5]\", \"6\": \"[dummy hash for 6]\", \"7\": \"[dummy hash for 7]\", \"8\": \"[dummy hash for 8]\", \"9\": \"[dummy hash for 9]\"}@@@"
     ]
   },

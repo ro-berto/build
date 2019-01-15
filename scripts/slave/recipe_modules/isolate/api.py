@@ -152,9 +152,8 @@ class IsolateApi(recipe_api.RecipeApi):
         verbose (bool): Isolate command should be verbose in output.
         swarm_hashes_property_name (str): If set, assigns the dict
             {target name -> *.isolated file hash} to the named build
-            property (also accessible as 'isolated_tests' property). If this
-            needs to be run more than once per recipe run, make sure to pass
-            different propery names for each invocation.
+            property. If this needs to be run more than once per recipe run,
+            make sure to pass different propery names for each invocation.
         suffix: suffix of isolate_tests step.
             e.g. ' (with patch)', ' (without patch)'.
     """
@@ -262,6 +261,9 @@ class IsolateApi(recipe_api.RecipeApi):
 
       if swarm_hashes:
         self._isolated_tests = swarm_hashes
+
+      step_result.presentation.properties[
+          'isolate_server'] = self._isolate_server
 
       if swarm_hashes_property_name:
         step_result.presentation.properties[

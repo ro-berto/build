@@ -602,6 +602,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"isac_fix_test\": \"[dummy hash for isac_fix_test]\", \"low_bandwidth_audio_perf_test\": \"[dummy hash for low_bandwidth_audio_perf_test]\", \"webrtc_perf_tests\": \"[dummy hash for webrtc_perf_tests]\"}@@@"
     ]
   },

@@ -637,6 +637,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"AppRTCMobile_test_apk\": \"[dummy hash for AppRTCMobile_test_apk]\", \"android_instrumentation_test_apk\": \"[dummy hash for android_instrumentation_test_apk]\", \"audio_decoder_unittests\": \"[dummy hash for audio_decoder_unittests]\", \"common_audio_unittests\": \"[dummy hash for common_audio_unittests]\", \"common_video_unittests\": \"[dummy hash for common_video_unittests]\", \"modules_tests\": \"[dummy hash for modules_tests]\", \"modules_unittests\": \"[dummy hash for modules_unittests]\", \"peerconnection_unittests\": \"[dummy hash for peerconnection_unittests]\", \"rtc_stats_unittests\": \"[dummy hash for rtc_stats_unittests]\", \"rtc_unittests\": \"[dummy hash for rtc_unittests]\", \"system_wrappers_unittests\": \"[dummy hash for system_wrappers_unittests]\", \"test_support_unittests\": \"[dummy hash for test_support_unittests]\", \"tools_unittests\": \"[dummy hash for tools_unittests]\", \"video_engine_tests\": \"[dummy hash for video_engine_tests]\", \"webrtc_nonparallel_tests\": \"[dummy hash for webrtc_nonparallel_tests]\"}@@@"
     ]
   },

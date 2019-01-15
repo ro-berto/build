@@ -159,6 +159,7 @@
       "@@@STEP_LOG_LINE@failed to isolate@@@@",
       "@@@STEP_LOG_LINE@failed to isolate@See logs for more information.@@@",
       "@@@STEP_LOG_END@failed to isolate@@@",
+      "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver-dev.appspot.com\"@@@",
       "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"test1\": \"[dummy hash for test1]\"}@@@"
     ]
   },
