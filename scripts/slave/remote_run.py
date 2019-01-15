@@ -60,40 +60,20 @@ _CANARY_MASTERS = set((
   'chromium.swarm',
 ))
 
-# If the build is a CQ dry run, and the blamelist contains one of these
-# usernames, the build will automatically opt-in to Kitchen.
-_OPT_IN_USERS = set([
-      'user:%s@%s' % (ldap, domain) for ldap, domain in itertools.product(
-        (
-          # Chrome Infrastructure Team Members
-          'dnj', 'iannucci', 'hinoka', 'nodir', 'vadimsh', 'estaab', 'smut',
-        ),
-        ('chromium.org', 'google.com')
-      )
-])
-
 # The name of the recipe engine CIPD package.
 _RECIPES_PY_CIPD_PACKAGE = 'infra/recipes-py'
-# The name of the Kitchen CIPD package.
-_KITCHEN_CIPD_PACKAGE = 'infra/tools/luci/kitchen/${platform}'
 
 # _CIPD_PINS is a mapping of master name to pinned CIPD package version to use
 # for that master.
-#
-# If "kitchen" pin is empty, use the traditional "recipes.py" invocation path.
-# Otherwise, use Kitchen.
-# TODO(dnj): Remove this logic when Kitchen is always enabled.
-CipdPins = collections.namedtuple('CipdPins', ('recipes', 'kitchen'))
+CipdPins = collections.namedtuple('CipdPins', ('recipes',))
 
 # Stable CIPD pin set.
 _STABLE_CIPD_PINS = CipdPins(
-      recipes='git_revision:6eaacf24833ebd2565177157d368da33780fced9',
-      kitchen='git_revision:c9c1865b81113f02fd618259624170f59e2c832e')
+      recipes='git_revision:6eaacf24833ebd2565177157d368da33780fced9')
 
 # Canary CIPD pin set.
 _CANARY_CIPD_PINS = CipdPins(
-      recipes='git_revision:6eaacf24833ebd2565177157d368da33780fced9',
-      kitchen='git_revision:c9c1865b81113f02fd618259624170f59e2c832e')
+      recipes='git_revision:6eaacf24833ebd2565177157d368da33780fced9')
 
 
 def _ensure_directory(*path):
@@ -151,40 +131,6 @@ def find_python():
   return sys.executable
 
 
-def get_is_opt_in(properties):
-  """Returns True if properties describes an opt-in user.
-
-  Opt-in users are identified by examining the "buildbucket.build.created_by"
-  field of the BuildBucket property.
-
-  The BuildBucket property looks like:
-  "buildbucket": "{
-    \"build\": {
-      \"bucket\": \"master.tryserver.chromium.linux\",
-      \"created_by\": \"user:iannucci@chromium.org\",
-      \"created_ts\": \"1494616236661800\",
-      \"id\": \"8979775000984247248\",
-      \"lease_key\": \"2065395720\",
-      \"tags\": [
-        \"builder:linux_chromium_rel_ng\",
-        \"buildset:patch/rietveld/codereview.chromium.org/2852733003/1\",
-        \"master:tryserver.chromium.linux\",
-        \"user_agent:rietveld\"
-      ]
-    }
-  }\"
-  """
-  buildbucket_json = properties.get('buildbucket')
-  if not buildbucket_json:
-    return False
-
-  try:
-    buildbucket = json.loads(buildbucket_json)
-    return buildbucket.get('build', {}).get('created_by') in _OPT_IN_USERS
-  except Exception:
-    return False
-
-
 def all_cipd_manifests():
   """Generator which yields all CIPD ensure manifests (canary, staging, prod).
 
@@ -192,10 +138,8 @@ def all_cipd_manifests():
   """
   # All CIPD packages are in top-level platform config.
   for pins in (_STABLE_CIPD_PINS, _CANARY_CIPD_PINS):
-    # TODO(dnj): Remove me when everything runs on Kitchen.
     yield [
       cipd.CipdPackage(name=_RECIPES_PY_CIPD_PACKAGE, version=pins.recipes),
-      cipd.CipdPackage(name=_KITCHEN_CIPD_PACKAGE, version=pins.kitchen),
     ]
 
 
@@ -263,7 +207,7 @@ def _call(cmd, **kwargs):
 
 
 def _cleanup_old_layouts(buildbot_build_dir, cleanup_dir, cache_dir,
-                         properties=None, using_kitchen=None):
+                         properties=None):
   properties = properties or {}
 
   cleanup_paths = [
@@ -301,25 +245,12 @@ def _cleanup_old_layouts(buildbot_build_dir, cleanup_dir, cache_dir,
       # on optional cleanup.
       LOGGER.exception('Buildbot workdir cleanup failed: %s', buildbot_workdir)
 
-  # "using_kitchen" will be None if we're doing a high-level emergency cleanup.
-  # At this point, we don't know if we're using Kitchen, so we can't make any
-  # cleanup decisions based on that..
-  if using_kitchen is not None:
-    if using_kitchen:
-      # We want to delete the 'git_cache' cache directory, which was used by the
-      # legacy "remote" code path.
-      cleanup_paths.append(os.path.join(cache_dir, 'git_cache'))
+    # If we have a 'git' cache directory from a previous Kitchen run, we
+    # should delete that in favor of the 'git_cache' cache directory.
+    cleanup_paths.append(os.path.join(cache_dir, 'git'))
 
-      # We want to delete "<cache>/b", the legacy build cache directory. We will
-      # use "<cache>/builder" from the "generic" infra configuration setup.
-      cleanup_paths.append(os.path.join(cache_dir, 'b'))
-    else:
-      # If we have a 'git' cache directory from a previous Kitchen run, we
-      # should delete that in favor of the 'git_cache' cache directory.
-      cleanup_paths.append(os.path.join(cache_dir, 'git'))
-
-      # We want to delete "<cache>/builder" from the Kitchen run.
-      cleanup_paths.append(os.path.join(cache_dir, 'builder'))
+    # We want to delete "<cache>/builder" from the Kitchen run.
+    cleanup_paths.append(os.path.join(cache_dir, 'builder'))
 
   cleanup_paths = [p for p in cleanup_paths if os.path.exists(p)]
   if cleanup_paths:
@@ -330,133 +261,6 @@ def _cleanup_old_layouts(buildbot_build_dir, cleanup_dir, cache_dir,
     for path in cleanup_paths:
       LOGGER.info('Removing path from previous layout: %r', path)
       _try_cleanup(path, cleanup_dir)
-
-
-def _remote_run_with_kitchen(args, stream, is_canary, kitchen_version,
-                             properties, tempdir, basedir, cache_dir):
-  # Write our build properties to a JSON file.
-  properties_file = os.path.join(tempdir, 'remote_run_properties.json')
-  with open(properties_file, 'w') as f:
-    json.dump(properties, f)
-
-  # Create our directory structure.
-  recipe_temp_dir = _ensure_directory(tempdir, 't')
-
-  # Use CIPD to download Kitchen to a root within the temporary directory.
-  cipd_root = os.path.join(basedir, '.remote_run_cipd')
-  kitchen_pkg = cipd.CipdPackage(
-      name=_KITCHEN_CIPD_PACKAGE,
-      version=kitchen_version)
-
-  from slave import cipd_bootstrap_v2
-  cipd_bootstrap_v2.install_cipd_packages(cipd_root, kitchen_pkg)
-
-  kitchen_bin = os.path.join(cipd_root, 'kitchen' + infra_platform.exe_suffix())
-
-  kitchen_cmd = [
-      kitchen_bin,
-      '-log-level', ('debug' if LOGGER.isEnabledFor(logging.DEBUG) else 'info'),
-  ]
-
-  kitchen_result_path = os.path.join(tempdir, 'kitchen_result.json')
-  kitchen_cmd += [
-      'cook',
-      '-mode', 'buildbot',
-      '-output-result-json', kitchen_result_path,
-      '-properties-file', properties_file,
-      '-recipe', args.recipe or properties.get('recipe'),
-      '-repository', args.repository,
-      '-cache-dir', cache_dir,
-      '-temp-dir', recipe_temp_dir,
-      '-checkout-dir', os.path.join(tempdir, 'rw'),
-      '-workdir', os.path.join(tempdir, 'w'),
-  ]
-
-  # Master "remote_run" factory has been changed to pass "refs/heads/master" as
-  # a default instead of "origin/master". However, this is a master-side change,
-  # and requires a master restart. Rather than restarting all masters, we will
-  # just pretend the change took effect here.
-  #
-  # No "-revision" means "latest", which is the same as "origin/master"'s
-  # meaning.
-  #
-  # See: https://chromium-review.googlesource.com/c/446895/
-  # See: crbug.com/696704
-  #
-  # TODO(dnj,nodir): Delete this once we're confident that all masters have been
-  # restarted to take effect.
-  if args.revision and (args.revision != 'origin/master'):
-    kitchen_cmd += ['-revision', args.revision]
-
-  # Using LogDog?
-  try:
-    # Load bootstrap configuration (may raise NotBootstrapped).
-    cfg = logdog_bootstrap.get_config(args, properties)
-    annotation_url = logdog_bootstrap.get_annotation_url(cfg)
-
-    kitchen_cmd += [
-      '-logdog-only',
-      '-logdog-annotation-url', annotation_url,
-    ]
-    if cfg.service_account_path:
-      # Note: as of 2017-09-01 this system service account is used for
-      # logdog and events (via bigquery).
-      # This flag is not passed if logdog is not configured (rare case).
-      # This will cause a failure to send events, but it is not fatal and
-      # won't affect overall build result or kitchen exit code.
-      #
-      # If we ever add something else to kitchen that may cause a fatal error
-      # b/c of the absence of the system account, this code may need to be
-      # changed. We hope to get off of buildbot by that time.
-      kitchen_cmd += ['-luci-system-account-json', cfg.service_account_path]
-
-    # Add LogDog tags.
-    if cfg.tags:
-      for k, v in cfg.tags.iteritems():
-        param = k
-        if v is not None:
-          param += '=' + v
-        kitchen_cmd += ['-logdog-tag', param]
-
-    # (Debug) Use Kitchen output file if in debug mode.
-    if args.logdog_debug_out_file:
-      kitchen_cmd += ['-logdog-debug-out-file', args.logdog_debug_out_file]
-
-    logdog_bootstrap.annotate(cfg, stream)
-  except logdog_bootstrap.NotBootstrapped as e:
-    LOGGER.info('Not configured to use LogDog: %s', e)
-
-  # Remove PYTHNONPATH, since Kitchen will re-establish its own hermetic path.
-  kitchen_env = os.environ.copy()
-  kitchen_env.pop('PYTHONPATH', None)
-
-  # Invoke Kitchen, capture its return code.
-  return_code = _call(kitchen_cmd, env=kitchen_env)
-
-  # Try to open kitchen result file. Any failure will result in an exception
-  # and an infra failure.
-  with open(kitchen_result_path) as f:
-    kitchen_result = json.load(f)
-    if isinstance(kitchen_result, dict) and 'recipe_result' in kitchen_result:
-      recipe_result = kitchen_result['recipe_result']  # always a dict
-    else:
-      # Legacy mode: kitchen result is recipe result
-      # TODO(nodir): remove this code path
-
-      # On success, it may be JSON "null", so use an empty dict.
-      recipe_result = kitchen_result or {}
-
-  # If we failed, but aren't a step failure, we assume it was an
-  # exception.
-  f = recipe_result.get('failure', {})
-  if f.get('timeout') or f.get('step_data'):
-    # Return an infra failure for these failure types.
-    #
-    # The recipe engine used to return -1, which got interpreted as 255 by
-    # os.exit in python, since process exit codes are a single byte.
-    return_code = 255
-
-  return return_code
 
 
 def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
@@ -484,12 +288,6 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
                'remote_run_canary' in properties or args.canary)
   pins = _STABLE_CIPD_PINS if not is_canary else _CANARY_CIPD_PINS
 
-  # Determine if we're running Kitchen.
-  #
-  # If a property includes "remote_run_kitchen", we will explicitly use canary
-  # pins. This can be done by manually submitting a build to the waterfall.
-  is_kitchen = (is_opt_in or 'remote_run_kitchen' in properties)
-
   # Augment our input properties...
   def set_property(key, value):
     properties[key] = value
@@ -503,26 +301,19 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
         'buildbot/{mastername}/{buildername}/{buildnumber}'.format(
             **properties))
 
-  if not is_kitchen:
-    # path_config property defines what paths a build uses for checkout, git
-    # cache, goma cache, etc.
-    #
-    # TODO(dnj or phajdan): Rename "kitchen" path config to "remote_run_legacy".
-    # "kitchen" was never correct, and incorrectly implies that Kitchen is
-    # somehow involved int his path config.
-    properties['path_config'] = 'kitchen'
-    properties['bot_id'] = properties['slavename']
+  # path_config property defines what paths a build uses for checkout, git
+  # cache, goma cache, etc.
+  #
+  # TODO(dnj or phajdan): Rename "kitchen" path config to "remote_run_legacy".
+  # "kitchen" was never correct, and incorrectly implies that Kitchen is
+  # somehow involved int his path config.
+  properties['path_config'] = 'kitchen'
+  properties['bot_id'] = properties['slavename']
 
-    # Set our cleanup directory to be "build.dead" so that BuildBot manages it.
-    properties['$recipe_engine/path'] = {
-        'cleanup_dir': cleanup_dir,
-    }
-  else:
-    # If we're using Kitchen, our "path_config" must be empty or "kitchen".
-    path_config = properties.pop('path_config', None)
-    if path_config and path_config != 'kitchen':
-      raise ValueError("Users of 'remote_run.py' MUST specify either 'kitchen' "
-                       "or no 'path_config', not %r." % (path_config,))
+  # Set our cleanup directory to be "build.dead" so that BuildBot manages it.
+  properties['$recipe_engine/path'] = {
+      'cleanup_dir': cleanup_dir,
+  }
 
   set_recipe_runtime_properties(stream, args, properties)
 
@@ -535,34 +326,13 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
   prefix_paths = cipd_bootstrap_v2.high_level_ensure_cipd_client(
       basedir, mastername, track=track)
 
-  if not is_kitchen:
-    # kitchen sets this property itself, so only set this for non-kitchen runs.
-    properties['$recipe_engine/step'] = {'prefix_path': prefix_paths}
+  properties['$recipe_engine/step'] = {'prefix_path': prefix_paths}
   LOGGER.info('Using properties: %r', properties)
 
   # Cleanup data from old builds.
   _cleanup_old_layouts(
       buildbot_build_dir, cleanup_dir, cache_dir,
-      properties=properties, using_kitchen=is_kitchen)
-
-  # (Canary) Use Kitchen if configured.
-  # TODO(dnj): Make this the only path once we move to Kitchen.
-  if is_kitchen:
-    # We don't want to pay the cost of purging Kitchen's temporary directory as
-    # part of "remote_run" execution.
-    kitchen_tempdir = _ensure_directory(tempdir, 'k')
-    try:
-      return _remote_run_with_kitchen(
-          args, stream, is_canary, pins.kitchen, properties, tempdir, basedir,
-          cache_dir)
-    finally:
-      _try_cleanup(kitchen_tempdir, cleanup_dir)
-
-  ##
-  # Classic Remote Run
-  #
-  # TODO(dnj): Delete this in favor of Kitchen.
-  ##
+      properties=properties)
 
   properties_file = os.path.join(tempdir, 'remote_run_properties.json')
   with open(properties_file, 'w') as f:
