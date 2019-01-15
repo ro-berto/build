@@ -687,7 +687,6 @@
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
       "[]",
-      "--use-go-client",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",

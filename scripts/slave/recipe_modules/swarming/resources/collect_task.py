@@ -34,7 +34,7 @@ def run_command_with_output(argv, stdoutfile, env=None, cwd=None):
 def collect_task(
     collect_cmd, merge_script, merge_script_stdout_file,
     build_properties, merge_arguments, task_output_dir, output_json,
-    summary_json_file, use_go_client):
+    summary_json_file):
   """Collect and merge the results of a task.
 
   This is a relatively thin wrapper script around a `swarming.py collect`
@@ -74,7 +74,6 @@ def collect_task(
       in the buildbot output.
     summary_json_file: This is to specify summary json file. Used for go client
       that does not generate summary.json under task_output_dir by default.
-    use_go_client: Whether using python client or not.
   Returns:
     The exit code of collect_cmd or merge_cmd.
   """
@@ -90,16 +89,10 @@ def collect_task(
 
     logging.warn('task_output_dir existing content: %r', existing_contents)
 
-  if use_go_client:
-    collect_cmd.extend([
-      '-output-dir', task_output_dir,
-      '-task-summary-json', summary_json_file
-    ])
-  else:
-    collect_cmd.extend([
-      '--task-output-dir', task_output_dir,
-    ])
-    summary_json_file = os.path.join(task_output_dir, 'summary.json')
+  collect_cmd.extend([
+    '-output-dir', task_output_dir,
+    '-task-summary-json', summary_json_file
+  ])
 
   logging.info('collect_cmd: %s', ' '.join(collect_cmd))
   collect_result = subprocess.call(collect_cmd)
@@ -193,10 +186,6 @@ def main():
   parser.add_argument('--verbose', action='store_true')
   parser.add_argument('--summary-json-file')
 
-  # TODO(tikuta): This is for gradual migration.
-  # Remove this after luci-go switch (crbug.com/894045).
-  parser.add_argument('--use-go-client', action='store_true')
-
   parser.add_argument('collect_cmd', nargs='+')
 
   args = parser.parse_args()
@@ -208,8 +197,7 @@ def main():
       args.collect_cmd,
       args.merge_script, args.merge_script_stdout_file,
       args.build_properties, args.merge_additional_args,
-      args.task_output_dir, args.output_json, args.summary_json_file,
-      args.use_go_client)
+      args.task_output_dir, args.output_json, args.summary_json_file)
 
 
 if __name__ == '__main__':
