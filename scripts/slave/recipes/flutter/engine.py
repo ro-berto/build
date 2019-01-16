@@ -16,6 +16,7 @@ DEPS = [
   'recipe_engine/path',
   'recipe_engine/platform',
   'recipe_engine/properties',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'recipe_engine/python',
   'zip',
@@ -621,7 +622,10 @@ def GetCheckout(api):
   soln.url = \
       'https://chromium.googlesource.com/external/github.com/flutter/engine'
   if api.properties.get('branch'):
-    soln.revision = 'origin/' + api.properties['branch']
+    if api.runtime.is_luci:
+      soln.revision = api.properties['branch']
+    else:
+      soln.revision = 'origin/' + api.properties['branch']
   # TODO(eseidel): What does parent_got_revision_mapping do?  Do I care?
   src_cfg.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
   src_cfg.target_os = set(['android'])
@@ -630,11 +634,22 @@ def GetCheckout(api):
   api.bot_update.ensure_checkout()
   api.gclient.runhooks()
 
+# TODO(dnfield): remove when we cut over to LUCI.
+def SkipUpload(local_file, bucket, remote_file, **kwargs):
+  class Presentation(object):
+    links = {}
+  class Result(object):
+    presentation = Presentation()
+  return Result()
 
 def RunSteps(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
     api.file.rmcontents('everything', api.path['start_dir'])
+
+  # TODO(dnfield): Remove when we cut over to LUCI.
+  if api.runtime.is_luci:
+    api.gsutil.upload = SkipUpload
 
   GetCheckout(api)
 
@@ -672,12 +687,15 @@ def RunSteps(api):
 
 def GenTests(api):
   # A valid commit to flutter/engine, to make the gsutil urls look real.
-  for platform in ('mac', 'linux', 'win'):
-    test = (api.test(platform) + api.platform(platform, 64)
+  for platform in ('mac', 'linux', 'win', 'mac_luci', 'linux_luci', 'win_luci'):
+    platform_name = platform.replace('_luci', '')
+    test = (api.test(platform) + api.platform(platform_name, 64)
         + api.properties(mastername='client.flutter',
-              buildername='%s Engine' % platform.capitalize(),
+              buildername='%s Engine' % platform_name.capitalize(),
               bot_id='fake-m1', clobber=''))
-    if platform == 'mac':
+    if platform.endswith('luci'):
+      test += (api.runtime(is_luci=True, is_experimental=True))
+    if platform_name == 'mac':
       test += (
         api.step_data('set_xcode_version', api.json.output({
           'matches': {
@@ -701,4 +719,10 @@ def GenTests(api):
   yield (
     api.test('linux_on_alternate_branch') +
     api.properties(mastername='client.flutter', buildername='Linux Engine', bot_id='fake-m1', clobber='', branch='some_branch')
+  )
+
+  yield (
+    api.test('linux_on_master_luci') +
+    api.properties(mastername='client.flutter', buildername='Linux Engine', bot_id='fake-m1', clobber='', branch='refs/heads/master') +
+    api.runtime(is_luci=True, is_experimental=True)
   )
