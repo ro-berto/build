@@ -1216,12 +1216,13 @@ class SwarmingTest(Test):
                waterfall_mastername=None, waterfall_buildername=None,
                set_up=None, tear_down=None, optional_dimensions=None,
                isolate_coverage_data=None, merge=None,
-               ignore_task_failure=None,
+               ignore_task_failure=None, shards=1,
                **kwargs):
     super(SwarmingTest, self).__init__(
         name, target_name=target_name,
         waterfall_mastername=waterfall_mastername,
-        waterfall_buildername=waterfall_buildername, **kwargs)
+        waterfall_buildername=waterfall_buildername,
+        **kwargs)
     self._tasks = {}
     self._dimensions = dimensions
     self._optional_dimensions = optional_dimensions
@@ -1235,6 +1236,7 @@ class SwarmingTest(Test):
     self._tear_down = tear_down
     self._isolate_coverage_data = isolate_coverage_data
     self._ignore_task_failure = ignore_task_failure
+    self._shards = shards
     if dimensions and not extra_suffix:
       if dimensions.get('gpu'):
         self._extra_suffix = self._get_gpu_suffix(dimensions)
@@ -1328,6 +1330,10 @@ class SwarmingTest(Test):
   @property
   def runs_on_swarming(self):
     return True
+
+  @property
+  def shards(self):
+    return self._shards
 
   def create_task(self, api, suffix, isolated_hash):
     """Creates a swarming task. Must be overridden in subclasses.
@@ -1539,10 +1545,9 @@ class SwarmingGTestTest(SwarmingTest):
         set_up=set_up, tear_down=tear_down,
         override_isolate_target=override_isolate_target,
         isolate_coverage_data=isolate_coverage_data,
-        merge=merge,
+        merge=merge, shards=shards,
         optional_dimensions=optional_dimensions)
     self._args = args or []
-    self._shards = shards
     self._upload_test_results = upload_test_results
     self._override_compile_targets = override_compile_targets
     self._cipd_packages = cipd_packages
@@ -1785,11 +1790,10 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         waterfall_buildername=waterfall_buildername,
         set_up=set_up, tear_down=tear_down,
         isolate_coverage_data=isolate_coverage_data,
-        merge=merge,
+        merge=merge, shards=shards,
         ignore_task_failure=ignore_task_failure,
         optional_dimensions=optional_dimensions)
     self._args = args or []
-    self._shards = shards
     self._upload_test_results = upload_test_results
     self._override_compile_targets = override_compile_targets
     self._perf_id=perf_id

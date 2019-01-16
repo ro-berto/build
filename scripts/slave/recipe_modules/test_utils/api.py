@@ -162,7 +162,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       ])
     return r
 
-  def run_tests(self, caller_api, tests, suffix):
+  def run_tests(self, caller_api, tests, suffix, sort_by_shard=False):
     """
     Utility function for running a list of tests and returning the failed tests.
 
@@ -178,6 +178,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       tests - iterable of objects implementing the Test interface above
       suffix - custom suffix, e.g. "with patch", "without patch" indicating
                context of the test run
+      sort_by_shard - sort the order of triggering depends on the number ofshard.
     Returns:
       The list of failed tests.
 
@@ -195,6 +196,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
         swarming_tests.append(test)
       else:
         local_tests.append(test)
+
+    if sort_by_shard:
+      # Trigger tests having large number of shards earlier to utilize swarming's
+      # scalability.
+      swarming_tests.sort(key=lambda t: -t.shards)
 
     groups = [LocalGroup(local_tests), SwarmingGroup(swarming_tests)]
 
@@ -220,7 +226,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     Returns: A list of test suites that either have invalid results or failing
     tests.
     """
-    failing_tests = self.run_tests(caller_api, tests, 'with patch')
+    failing_tests = self.run_tests(caller_api, tests, 'with patch',
+                                   sort_by_shard=True)
     with self.m.step.defer_results():
       for t in tests:
         valid_results, failures = t.failures_or_invalid_results(

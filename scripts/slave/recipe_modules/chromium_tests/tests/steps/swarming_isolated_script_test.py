@@ -61,6 +61,7 @@ def RunSteps(api):
       isolate_coverage_data=isolate_coverage_data,
   )
   assert test.runs_on_swarming and not test.is_gtest
+  assert test.shards > 0
 
   if test_repeat_count:
       test.test_options = api.chromium_tests.steps.TestOptions(

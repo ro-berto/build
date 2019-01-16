@@ -922,7 +922,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         deferred_retry_results = []
         # Deapply the patch. Then rerun failing tests.
         self._deapply_patch_build_isolate(failing_tests, bot_update_step)
-        self.m.test_utils.run_tests(self.m, failing_tests, 'without patch')
+        self.m.test_utils.run_tests(self.m, failing_tests, 'without patch',
+                                    sort_by_shard=True)
 
         # Summarize results.
         with self.m.step.defer_results():
@@ -952,7 +953,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       self._reapply_patch_build_isolate(test_suites_to_retry_with_patch,
                                         bot_config)
       self.m.test_utils.run_tests(self.m, test_suites_to_retry_with_patch,
-                                  'retry with patch')
+                                  'retry with patch', sort_by_shard=True)
       with self.m.step.defer_results():
         for t in test_suites_to_retry_with_patch:
           self.m.test_utils.summarize_test_with_patch_reapplied(self.m, t)
