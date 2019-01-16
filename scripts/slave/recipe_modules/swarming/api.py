@@ -185,6 +185,9 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._swarming_server = 'https://chromium-swarm.appspot.com'
     self._verbose = False
 
+    # TODO(tikuta): Remove this after switch (crbug.com/894045).
+    self._use_go_client = False
+
     # Record all durations of shards for aggregation.
     self._shards_durations = []
 
@@ -232,6 +235,17 @@ class SwarmingApi(recipe_api.RecipeApi):
     """Enables or disables verbose output in swarming scripts."""
     assert isinstance(value, bool), value
     self._verbose = value
+
+  @property
+  def use_go_client(self):
+    """Whether to use swarming client."""
+    return self._use_go_client
+
+  @use_go_client.setter
+  def use_go_client(self, value):
+    """Whether to use swarming client."""
+    assert isinstance(value, bool), value
+    self._use_go_client = value
 
   @property
   def default_expiration(self):
@@ -553,6 +567,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         raw_cmd=raw_cmd,
         env_prefixes=env_prefixes,
         optional_dimensions=optional_dimensions,
+        use_go_client=self.use_go_client,
     )
 
   def gtest_task(self, title, isolated_hash, test_launcher_summary_output=None,
@@ -958,14 +973,31 @@ class SwarmingApi(recipe_api.RecipeApi):
       ])
 
     # Arguments for the actual 'collect' command.
-    collect_cmd = [
-      'swarming',
-    ]
-    # go's client does not generate summary file under output dir.
-    # Need to tell the location of summary file to collect_task.py.
-    task_args.extend(['--summary-json-file', self.summary()])
 
-    collect_cmd.extend(self.get_collect_cmd_args(task))
+    if task.use_go_client:
+      task_args.append('--use-go-client')
+
+      collect_cmd = [
+        'swarming',
+      ]
+      # go's client does not generate summary file under output dir.
+      # Need to tell the location of summary file to collect_task.py.
+      task_args.extend(['--summary-json-file', self.summary()])
+    else:
+      collect_cmd = [
+        'python',
+        '-u',
+        self.m.swarming_client.path.join('swarming.py'),
+      ]
+
+
+    if task.use_go_client:
+      collect_cmd.extend(self.get_collect_cmd_args(task))
+    else:
+      collect_cmd.extend(self.get_collect_cmd_args_for_python(task))
+      collect_cmd.extend([
+           '--task-summary-json', self.summary(),
+      ])
 
     task_args.append('--')
 
@@ -1344,7 +1376,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       raise recipe_api.StepFailure(
           '\n'.join(template % f for f in infra_failures), result=step_result)
 
-    if exist_failure:
+    if task.use_go_client and exist_failure:
       step_result.presentation.status = self.m.step.FAILURE
       raise recipe_api.StepFailure('There are failed tasks.',
                                    result=step_result)
@@ -1370,6 +1402,23 @@ class SwarmingApi(recipe_api.RecipeApi):
     args.extend(('-requests-json', self.m.json.input(task.trigger_output)))
     if self.service_account_json:
       args.extend(['-service-account-json', self.service_account_json])
+    return args
+
+  # TODO(tikuta): This is for recipe_modules/v8/testing.py.
+  # Remove after switch (crbug.com/894045).
+  def get_collect_cmd_args_for_python(self, task):
+    """SwarmingTask -> argument list for 'swarming.py' command."""
+    args = [
+      'collect',
+      '--swarming', self.swarming_server,
+      '--decorate',
+      '--print-status-updates',
+    ]
+    if self.verbose:
+      args.append('--verbose')
+    args.extend(('--json', self.m.json.input(task.trigger_output_python)))
+    if self.service_account_json:
+      args.extend(['--auth-service-account-json', self.service_account_json])
     return args
 
   def _gen_trigger_step_test_data(self, task):
@@ -1407,7 +1456,8 @@ class SwarmingTask(object):
                extra_args, collect_step, task_output_dir, cipd_packages=None,
                build_properties=None, merge=None, trigger_script=None,
                named_caches=None, service_account=None, raw_cmd=None,
-               env_prefixes=None, optional_dimensions=None):
+               env_prefixes=None, optional_dimensions=None,
+               use_go_client=False):
     """Configuration of a swarming task.
 
     Args:
@@ -1496,6 +1546,8 @@ class SwarmingTask(object):
           dimensions that specify on what Swarming slaves tasks can run.  These
           are similar to what is specified in dimensions but will create
           additional 'fallback' task slice(s) with the optional dimensions.
+      * use_go_client: a boolean representing whether using python client or
+          not.
     """
 
     self._trigger_output = None
@@ -1532,6 +1584,7 @@ class SwarmingTask(object):
     else:
       self.optional_dimensions = None
     self.wait_for_capacity = False
+    self.use_go_client = use_go_client
 
   @property
   def task_name(self):
@@ -1557,11 +1610,20 @@ class SwarmingTask(object):
       'tasks': [{'task_id': task['task_id']} for task in tasks],
     }
 
+  # TODO(tikuta): This is for recipe_modules/v8/testing.py.
+  # Remove after switch (crbug.com/894045).
+  @property
+  def trigger_output_python(self):
+    """JSON results of 'trigger' step or None if not triggered."""
+    return self._trigger_output
+
   def get_task_shard_output_dirs(self):
     """Return the directory of each task shard outputs."""
-    tasks = sorted(self._trigger_output['tasks'].values(),
-                   key=lambda x: x['shard_index'])
-    return [task['task_id'] for task in tasks]
+    if self.use_go_client:
+      tasks = sorted(self._trigger_output['tasks'].values(),
+                     key=lambda x: x['shard_index'])
+      return [task['task_id'] for task in tasks]
+    return [str(i) for i in range(self.shards)]
 
   def get_shard_view_url(self, index):
     """Returns URL of HTML page with shard details or None if not available.
