@@ -101,6 +101,10 @@ def RunSteps(api, binary_size_tracking, build_config, clobber,
     with api.step.nest('initialization'):
       api.swarming_client.checkout()
 
+      # This is to install golang swarming client via CIPD.
+      with api.swarming_client.on_path():
+        pass
+
       # Simulate a v8 update on slim swarming testers. The revision
       # property is mandatory. The commit position is required by gatekeeper.
       api.step.active_result.presentation.properties['got_revision'] = (
@@ -807,7 +811,7 @@ def GenTests(api):
       api.v8.test('client.v8', 'V8 Foobar - builder', 'non_luci',
                   build_config='Release',
                   triggers='V8 Foobar') +
-      api.runtime(is_luci=False, is_experimental=False) + 
+      api.runtime(is_luci=False, is_experimental=False) +
       api.post_process(Filter('trigger'))
   )
 
@@ -973,4 +977,3 @@ def GenTests(api):
     api.post_process(MustRun, 'initialization.taskkill') +
     api.post_process(DropExpectation)
   )
-
