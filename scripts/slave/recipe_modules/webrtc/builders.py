@@ -238,7 +238,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Mac-10.13',
+          'os': 'Mac-10.11',
           'cpu': 'x86-64',
         },
         'baremetal_swarming_dimensions': {
@@ -1478,7 +1478,7 @@ BUILDERS = freeze({
         'testing': {'platform': 'mac'},
         'enable_swarming': True,
         'swarming_dimensions': {
-          'os': 'Mac-10.13',
+          'os': 'Mac-10.11',
           'cpu': 'x86-64',
         },
         'baremetal_swarming_dimensions': {
