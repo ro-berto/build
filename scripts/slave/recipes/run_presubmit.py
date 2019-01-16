@@ -25,13 +25,16 @@ DEPS = [
 def _RunStepsInternal(api):
   repo_name = api.properties.get('repo_name')
 
+  # TODO(nodir): remove repo_name and repository_url properties.
+  # They are redundant with api.tryserver.gerrit_change_repo_url.
   gclient_config = None
   if repo_name:
     api.gclient.set_config(repo_name)
   else:
     gclient_config = api.gclient.make_config()
     solution = gclient_config.solutions.add()
-    solution.url = api.properties['repository_url']
+    solution.url = api.properties.get(
+        'repository_url', api.tryserver.gerrit_change_repo_url)
     solution.name = api.properties['solution_name']
     gclient_config.got_revision_mapping[solution.name] = 'got_revision'
 
