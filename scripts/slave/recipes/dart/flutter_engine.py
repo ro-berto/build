@@ -200,7 +200,7 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
     api.step('flutter analyze', ['dart', 'dev/bots/analyze.dart',
              '--dart-sdk', just_built_dart_sdk
              ], timeout=20*60) # 20 minutes
-    api.step('flutter test', test_cmd + test_args, timeout=90*60) # 90 minutes
+    api.step('flutter test', test_cmd + test_args, timeout=120*60) # 2 hours
 
 def RunSteps(api):
   if api.runtime.is_luci:
