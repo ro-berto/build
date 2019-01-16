@@ -247,6 +247,8 @@ class DartApi(recipe_api.RecipeApi):
           active_result = self.m.step.active_result
           # Every shard is only a single task in swarming
           bot_name = active_result.swarming.summary['shards'][0]['bot_id']
+          active_result.presentation.links['test stdout of shard #0'] = (
+            shard.get_shard_view_url(index=0))
           self._add_results_and_links(bot_name, results)
         if results.runs or results.results:
           self._add_to_all_results(all_results, results)
