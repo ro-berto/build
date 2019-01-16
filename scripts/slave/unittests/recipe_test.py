@@ -27,7 +27,7 @@ if len(sys.argv) > ALLOWED_ARGS+1:
 
 def recipes_py(*args):
   subprocess.check_call([
-      os.path.join(ROOT_DIR, 'recipes.py'), '--use-bootstrap'
+      os.path.join(ROOT_DIR, 'recipes.py'),
   ] + VERBOSE_ARG + list(args))
 
 recipes_py('test', 'run')
