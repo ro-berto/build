@@ -275,16 +275,13 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
   properties = copy.copy(args.factory_properties)
   properties.update(args.build_properties)
 
-  # Determine if this build is an opt-in build.
-  is_opt_in = get_is_opt_in(properties)
-
   # Determine our CIPD pins.
   #
   # If a property includes "remote_run_canary", we will explicitly use canary
   # pins. This can be done by manually submitting a build to the waterfall.
   mastername = properties.get('mastername')
   buildername = properties.get('buildername')
-  is_canary = (_get_is_canary(mastername) or is_opt_in or
+  is_canary = (_get_is_canary(mastername) or
                'remote_run_canary' in properties or args.canary)
   pins = _STABLE_CIPD_PINS if not is_canary else _CANARY_CIPD_PINS
 
@@ -322,7 +319,7 @@ def _exec_recipe(args, rt, stream, basedir, buildbot_build_dir, cleanup_dir,
   # Ensure that the CIPD client and base tooling is installed and available on
   # PATH.
   from slave import cipd_bootstrap_v2
-  track = cipd_bootstrap_v2.STAGING if is_opt_in else cipd_bootstrap_v2.PROD
+  track = cipd_bootstrap_v2.PROD
   prefix_paths = cipd_bootstrap_v2.high_level_ensure_cipd_client(
       basedir, mastername, track=track)
 

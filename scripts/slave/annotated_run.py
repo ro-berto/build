@@ -390,7 +390,6 @@ def main(argv):
     # If this is an opt-in run, or if this builder is configured for
     # passthrough, use "remote_run"!
     if (_is_remote_run_passthrough(properties) or
-        remote_run.get_is_opt_in(properties) or
         opts.remote_run_passthrough):
       return _remote_run_passthrough(opts, properties, stream)
 
