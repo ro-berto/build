@@ -2,7 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.post_process import Filter, DropExpectation, StatusSuccess
+from recipe_engine.post_process import (Filter, DoesNotRun, DropExpectation)
+from recipe_engine.post_process import (StatusSuccess, StatusFailure)
+from recipe_engine.post_process import (StepTextContains)
 
 DEPS = [
   'build',
@@ -381,7 +383,7 @@ def GenTests(api):
           'git diff to analyze patch',
           api.raw_io.stream_output('foo.cc\ntesting/buildbot/bar.json')) +
     api.post_process(StatusSuccess) +
-    api.post_process(Filter('gl_tests (retry with patch)'))
+    api.post_process(Filter('gl_tests (retry with patch)')) 
   )
 
   yield (
@@ -527,11 +529,15 @@ def GenTests(api):
     suppress_analyze()
   )
 
+  # Does not result in a compile
   yield (
     api.test('no_compile_because_of_analyze') +
     props() +
     api.platform.name('linux') +
-    api.chromium_tests.read_source_side_spec('chromium.linux', {}))
+    api.chromium_tests.read_source_side_spec('chromium.linux', {}) +
+    api.post_process(DoesNotRun, 'compile (with patch)') +
+    api.post_process(Filter('analyze'))
+  )
 
   # This should result in a compile.
   yield (
@@ -539,7 +545,9 @@ def GenTests(api):
     props() +
     api.platform.name('linux') +
     api.chromium_tests.read_source_side_spec('chromium.linux', {}) +
-    suppress_analyze()
+    suppress_analyze() + 
+    base_unittests_additional_compile_target() + 
+    api.post_process(Filter('analyze', 'analyze_matched_exclusion', 'compile (with patch)'))
   )
 
   # This should result in a compile.
@@ -551,21 +559,12 @@ def GenTests(api):
     api.override_step_data(
       'analyze',
       api.json.output({'status': 'Found dependency',
-                       'compile_targets': [],
-                       'test_targets': []}))
+                       'compile_targets': ['browser_tests'],
+                       'test_targets': []})) +
+    api.post_process(Filter('analyze', 'compile (with patch)'))
   )
 
-  yield (
-    api.test('compile_because_of_analyze_with_filtered_tests_no_builder') +
-    props() +
-    api.platform.name('linux') +
-    api.override_step_data(
-      'analyze',
-      api.json.output({'status': 'Found dependency',
-                       'compile_targets': ['browser_tests', 'base_unittests'],
-                       'test_targets': ['browser_tests', 'base_unittests']}))
-  )
-
+  # Tests compile_targets portion of analyze module with filtered tests
   yield (
     api.test('compile_because_of_analyze_with_filtered_tests') +
     props() +
@@ -574,10 +573,11 @@ def GenTests(api):
       'analyze',
       api.json.output({'status': 'Found dependency',
                        'compile_targets': ['browser_tests', 'base_unittests'],
-                       'test_targets': ['browser_tests', 'base_unittests']}))
+                       'test_targets': ['browser_tests', 'base_unittests']})) + 
+    api.post_process(Filter('analyze', 'compile (with patch)'))
   )
 
-  # Tests compile_target portion of analyze module.
+  # Tests compile_target portion of analyze module with filtered compile targets
   yield (
     api.test('compile_because_of_analyze_with_filtered_compile_targets') +
     props() +
@@ -587,7 +587,8 @@ def GenTests(api):
       api.json.output({'status': 'Found dependency',
                        'test_targets': ['browser_tests', 'base_unittests'],
                        'compile_targets': ['chrome', 'browser_tests',
-                                           'base_unittests']}))
+                                           'base_unittests']})) +
+    api.post_process(Filter('analyze', 'compile (with patch)'))
   )
 
   # Tests compile_targets portion of analyze with a bot that doesn't include the
@@ -608,7 +609,8 @@ def GenTests(api):
       'analyze',
       api.json.output({'status': 'Found dependency',
                        'test_targets': ['browser_tests', 'base_unittests'],
-                       'compile_targets': ['base_unittests']}))
+                       'compile_targets': ['base_unittests']})) + 
+    api.post_process(Filter('analyze', 'compile (with patch)'))
   )
 
   # Tests compile_targets portion of analyze with a bot that doesn't include the
@@ -627,7 +629,9 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'analyze',
-      api.json.output({'invalid_targets': ['invalid target', 'another one']}))
+      api.json.output({'invalid_targets': ['invalid target', 'another one']})) + 
+    api.post_process(Filter('analyze', '$result')) +
+    api.post_process(StatusFailure)
   )
 
   yield (
@@ -648,9 +652,7 @@ def GenTests(api):
     base_unittests_additional_compile_target() +
     api.step_data('compile (with patch)', retcode=1) +
     api.tryserver.gerrit_change_target_ref('refs/heads/experimental/feature') +
-    api.post_process(
-        Filter('gerrit fetch current CL info',
-               'bot_update'))
+    api.post_process(Filter('gerrit fetch current CL info','bot_update'))
   )
 
   yield (
@@ -697,8 +699,11 @@ def GenTests(api):
     api.override_step_data('analyze', api.chromium.analyze_builds_nothing) +
     api.override_step_data(
         'git diff to analyze patch',
-        api.raw_io.stream_output('README.md\nfoo/bar/baz.py')
-    )
+        api.raw_io.stream_output('README.md\nfoo/bar/baz.py')) + 
+    api.post_process(StepTextContains, 'analyze', ['No compile necessary']) +
+    api.post_process(DoesNotRun, 'compile (with patch)') +
+    api.post_process(Filter('analyze'))
+
   )
 
   swarmed_webkit_tests = (
