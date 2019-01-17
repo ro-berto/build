@@ -686,26 +686,6 @@ def GenTests(api):
     api.platform.name('win')
   )
 
-  # Tests that we run nothing if analyze said we didn't have to run anything
-  # and there were no source file changes.
-  yield (
-    api.test('analyze_runs_nothing_with_no_source_file_changes') +
-    props(
-      mastername='tryserver.chromium.win',
-      builder='old_chromium_rel_ng',
-      swarm_hashes={}
-    ) +
-    api.platform.name('win') +
-    api.override_step_data('analyze', api.chromium.analyze_builds_nothing) +
-    api.override_step_data(
-        'git diff to analyze patch',
-        api.raw_io.stream_output('README.md\nfoo/bar/baz.py')) + 
-    api.post_process(StepTextContains, 'analyze', ['No compile necessary']) +
-    api.post_process(DoesNotRun, 'compile (with patch)') +
-    api.post_process(Filter('analyze'))
-
-  )
-
   swarmed_webkit_tests = (
     props(extra_swarmed_tests=['blink_web_tests']) +
     api.platform.name('linux') +

@@ -783,20 +783,6 @@ TRYBOTS = freeze({
         'buildername': 'Win Builder (dbg)',
         'tester': 'Win7 Tests (dbg)(1)',
       }),
-      'old_chromium_rel_ng': {
-        'bot_ids': [
-          {
-            'mastername': 'chromium.win',
-            'buildername': 'Win Builder',
-            'tester': 'Win7 Tests (1)',
-          },
-          {
-            'mastername': 'chromium.gpu',
-            'buildername': 'GPU Win Builder',
-            'tester': 'Win10 Release (NVIDIA)',
-          },
-        ],
-      },
       'win7_chromium_rel_ng': {
         'bot_ids': [
           {
