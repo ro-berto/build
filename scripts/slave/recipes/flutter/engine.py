@@ -67,7 +67,7 @@ def RunHostTests(api, out_dir, exe_extension=''):
         [directory.join('flutter_channels_unittests' + exe_extension)])
 
 def RunGN(api, *args):
-  # flutter/tools/gn assumes access to depot_tools on path
+  # flutter/tools/gn assumes access to depot_tools on path for `ninja`.
   with api.depot_tools.on_path():
     checkout = api.path['start_dir'].join('src')
     gn_cmd = ['python', checkout.join('flutter/tools/gn'), '--goma']
@@ -624,10 +624,10 @@ def GetCheckout(api):
   soln.name = 'src/flutter'
   soln.url = \
       'https://chromium.googlesource.com/external/github.com/flutter/engine'
-  if api.properties.get('branch'):
-    if api.runtime.is_luci:
-      soln.revision = api.properties['branch']
-    else:
+  if api.runtime.is_luci:
+    soln.revision = api.properties.get('revision')
+  else:
+    if api.properties.get('branch'):
       soln.revision = 'origin/' + api.properties['branch']
   # TODO(eseidel): What does parent_got_revision_mapping do?  Do I care?
   src_cfg.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
@@ -661,13 +661,11 @@ def RunSteps(api):
 
   api.goma.ensure_goma()
 
-  env = {
-    'PATH': api.path.pathsep.join((str(dart_bin), '%(PATH)s')),
-    'GOMA_DIR': api.goma.goma_dir,
-  }
+  env = {'GOMA_DIR': api.goma.goma_dir}
+  env_prefixes = {'PATH': [dart_bin]}
 
   # The context adds dart to the path, only needed for the analyze step for now.
-  with api.context(env=env):
+  with api.context(env=env, env_prefixes=env_prefixes):
     if api.platform.is_linux:
       AnalyzeDartUI(api)
       BuildLinux(api)

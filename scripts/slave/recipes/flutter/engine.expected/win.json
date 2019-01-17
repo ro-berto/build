@@ -131,12 +131,12 @@
       "debug"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "name": "gn --runtime-mode debug"
@@ -151,12 +151,12 @@
       "--unoptimized"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "name": "gn --runtime-mode debug --unoptimized"
@@ -171,12 +171,12 @@
       "--dynamic"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "name": "gn --runtime-mode release --dynamic"
@@ -191,12 +191,12 @@
       "--android"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "name": "gn --runtime-mode profile --android"
@@ -212,12 +212,12 @@
       "--android-cpu=arm64"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "name": "gn --runtime-mode profile --android --android-cpu=arm64"
@@ -232,12 +232,12 @@
       "--android"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "name": "gn --runtime-mode release --android"
@@ -253,12 +253,12 @@
       "--android-cpu=arm64"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "name": "gn --runtime-mode release --android --android-cpu=arm64"
@@ -274,12 +274,12 @@
       "--dynamic"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "name": "gn --runtime-mode profile --android --dynamic"
@@ -296,12 +296,12 @@
       "--android-cpu=arm64"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "name": "gn --runtime-mode profile --android --dynamic --android-cpu=arm64"
@@ -317,12 +317,12 @@
       "--dynamic"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "name": "gn --runtime-mode release --android --dynamic"
@@ -339,12 +339,12 @@
       "--android-cpu=arm64"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
     },
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_PACKAGE_REPO[depot_tools]",
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
       ]
     },
     "name": "gn --runtime-mode release --android --dynamic --android-cpu=arm64"
@@ -352,8 +352,12 @@
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "preprocess_for_goma"
   },
@@ -370,8 +374,12 @@
       "[CACHE]\\goma\\data\\Win_Engine"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -394,8 +402,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
@@ -423,8 +435,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
@@ -441,16 +457,24 @@
       "[START_DIR]\\src\\out/host_debug_unopt"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "build host_debug_unopt"
   },
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma"
   },
@@ -470,8 +494,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_jsonstatus",
     "~followup_annotations": [
@@ -504,8 +532,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_stat",
     "~followup_annotations": [
@@ -527,8 +559,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.stop_goma",
     "~followup_annotations": [
@@ -573,8 +609,12 @@
       "fake-m1"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
@@ -601,8 +641,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
@@ -613,8 +657,12 @@
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "preprocess_for_goma (2)"
   },
@@ -631,8 +679,12 @@
       "[CACHE]\\goma\\data\\Win_Engine"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (2)",
@@ -655,8 +707,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (2)",
@@ -684,8 +740,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (2)",
@@ -702,16 +762,24 @@
       "[START_DIR]\\src\\out/host_debug"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "build host_debug"
   },
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma (2)"
   },
@@ -731,8 +799,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_jsonstatus (2)",
     "~followup_annotations": [
@@ -765,8 +837,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_stat (2)",
     "~followup_annotations": [
@@ -788,8 +864,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.stop_goma (2)",
     "~followup_annotations": [
@@ -834,8 +914,12 @@
       "fake-m1"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.upload_log (2)",
     "~followup_annotations": [
@@ -862,8 +946,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (2)",
@@ -874,8 +962,12 @@
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "preprocess_for_goma (3)"
   },
@@ -892,8 +984,12 @@
       "[CACHE]\\goma\\data\\Win_Engine"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (3)",
@@ -916,8 +1012,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (3)",
@@ -945,8 +1045,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (3)",
@@ -963,16 +1067,24 @@
       "[START_DIR]\\src\\out/host_dynamic_release"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "build host_dynamic_release"
   },
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma (3)"
   },
@@ -992,8 +1104,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_jsonstatus (3)",
     "~followup_annotations": [
@@ -1026,8 +1142,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_stat (3)",
     "~followup_annotations": [
@@ -1049,8 +1169,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.stop_goma (3)",
     "~followup_annotations": [
@@ -1095,8 +1219,12 @@
       "fake-m1"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.upload_log (3)",
     "~followup_annotations": [
@@ -1123,8 +1251,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (3)",
@@ -1135,8 +1267,12 @@
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "preprocess_for_goma (4)"
   },
@@ -1153,8 +1289,12 @@
       "[CACHE]\\goma\\data\\Win_Engine"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (4)",
@@ -1177,8 +1317,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (4)",
@@ -1206,8 +1350,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (4)",
@@ -1225,16 +1373,24 @@
       "gen_snapshot"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "build android_profile gen_snapshot"
   },
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma (4)"
   },
@@ -1254,8 +1410,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_jsonstatus (4)",
     "~followup_annotations": [
@@ -1288,8 +1448,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_stat (4)",
     "~followup_annotations": [
@@ -1311,8 +1475,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.stop_goma (4)",
     "~followup_annotations": [
@@ -1357,8 +1525,12 @@
       "fake-m1"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.upload_log (4)",
     "~followup_annotations": [
@@ -1385,8 +1557,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (4)",
@@ -1397,8 +1573,12 @@
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "preprocess_for_goma (5)"
   },
@@ -1415,8 +1595,12 @@
       "[CACHE]\\goma\\data\\Win_Engine"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (5)",
@@ -1439,8 +1623,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (5)",
@@ -1468,8 +1656,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (5)",
@@ -1487,16 +1679,24 @@
       "gen_snapshot"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "build android_profile_arm64 gen_snapshot"
   },
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma (5)"
   },
@@ -1516,8 +1716,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_jsonstatus (5)",
     "~followup_annotations": [
@@ -1550,8 +1754,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_stat (5)",
     "~followup_annotations": [
@@ -1573,8 +1781,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.stop_goma (5)",
     "~followup_annotations": [
@@ -1619,8 +1831,12 @@
       "fake-m1"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.upload_log (5)",
     "~followup_annotations": [
@@ -1647,8 +1863,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (5)",
@@ -1659,8 +1879,12 @@
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "preprocess_for_goma (6)"
   },
@@ -1677,8 +1901,12 @@
       "[CACHE]\\goma\\data\\Win_Engine"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (6)",
@@ -1701,8 +1929,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (6)",
@@ -1730,8 +1962,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (6)",
@@ -1749,16 +1985,24 @@
       "gen_snapshot"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "build android_release gen_snapshot"
   },
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma (6)"
   },
@@ -1778,8 +2022,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_jsonstatus (6)",
     "~followup_annotations": [
@@ -1812,8 +2060,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_stat (6)",
     "~followup_annotations": [
@@ -1835,8 +2087,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.stop_goma (6)",
     "~followup_annotations": [
@@ -1881,8 +2137,12 @@
       "fake-m1"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.upload_log (6)",
     "~followup_annotations": [
@@ -1909,8 +2169,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (6)",
@@ -1921,8 +2185,12 @@
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "preprocess_for_goma (7)"
   },
@@ -1939,8 +2207,12 @@
       "[CACHE]\\goma\\data\\Win_Engine"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (7)",
@@ -1963,8 +2235,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (7)",
@@ -1992,8 +2268,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (7)",
@@ -2011,16 +2291,24 @@
       "gen_snapshot"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "build android_release_arm64 gen_snapshot"
   },
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma (7)"
   },
@@ -2040,8 +2328,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_jsonstatus (7)",
     "~followup_annotations": [
@@ -2074,8 +2366,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_stat (7)",
     "~followup_annotations": [
@@ -2097,8 +2393,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.stop_goma (7)",
     "~followup_annotations": [
@@ -2143,8 +2443,12 @@
       "fake-m1"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.upload_log (7)",
     "~followup_annotations": [
@@ -2171,8 +2475,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (7)",
@@ -2183,8 +2491,12 @@
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "preprocess_for_goma (8)"
   },
@@ -2201,8 +2513,12 @@
       "[CACHE]\\goma\\data\\Win_Engine"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (8)",
@@ -2225,8 +2541,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (8)",
@@ -2254,8 +2574,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (8)",
@@ -2273,16 +2597,24 @@
       "gen_snapshot"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "build android_dynamic_profile gen_snapshot"
   },
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma (8)"
   },
@@ -2302,8 +2634,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_jsonstatus (8)",
     "~followup_annotations": [
@@ -2336,8 +2672,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_stat (8)",
     "~followup_annotations": [
@@ -2359,8 +2699,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.stop_goma (8)",
     "~followup_annotations": [
@@ -2405,8 +2749,12 @@
       "fake-m1"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.upload_log (8)",
     "~followup_annotations": [
@@ -2433,8 +2781,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (8)",
@@ -2445,8 +2797,12 @@
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "preprocess_for_goma (9)"
   },
@@ -2463,8 +2819,12 @@
       "[CACHE]\\goma\\data\\Win_Engine"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (9)",
@@ -2487,8 +2847,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (9)",
@@ -2516,8 +2880,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (9)",
@@ -2535,16 +2903,24 @@
       "gen_snapshot"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "build android_dynamic_profile_arm64 gen_snapshot"
   },
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma (9)"
   },
@@ -2564,8 +2940,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_jsonstatus (9)",
     "~followup_annotations": [
@@ -2598,8 +2978,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_stat (9)",
     "~followup_annotations": [
@@ -2621,8 +3005,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.stop_goma (9)",
     "~followup_annotations": [
@@ -2667,8 +3055,12 @@
       "fake-m1"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.upload_log (9)",
     "~followup_annotations": [
@@ -2695,8 +3087,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (9)",
@@ -2707,8 +3103,12 @@
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "preprocess_for_goma (10)"
   },
@@ -2725,8 +3125,12 @@
       "[CACHE]\\goma\\data\\Win_Engine"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (10)",
@@ -2749,8 +3153,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (10)",
@@ -2778,8 +3186,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (10)",
@@ -2797,16 +3209,24 @@
       "gen_snapshot"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "build android_dynamic_release gen_snapshot"
   },
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma (10)"
   },
@@ -2826,8 +3246,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_jsonstatus (10)",
     "~followup_annotations": [
@@ -2860,8 +3284,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_stat (10)",
     "~followup_annotations": [
@@ -2883,8 +3311,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.stop_goma (10)",
     "~followup_annotations": [
@@ -2929,8 +3361,12 @@
       "fake-m1"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.upload_log (10)",
     "~followup_annotations": [
@@ -2957,8 +3393,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (10)",
@@ -2969,8 +3409,12 @@
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "preprocess_for_goma (11)"
   },
@@ -2987,8 +3431,12 @@
       "[CACHE]\\goma\\data\\Win_Engine"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory (11)",
@@ -3011,8 +3459,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma (11)",
@@ -3040,8 +3492,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail (11)",
@@ -3059,16 +3515,24 @@
       "gen_snapshot"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "build android_dynamic_release_arm64 gen_snapshot"
   },
   {
     "cmd": [],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma (11)"
   },
@@ -3088,8 +3552,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_jsonstatus (11)",
     "~followup_annotations": [
@@ -3122,8 +3590,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.goma_stat (11)",
     "~followup_annotations": [
@@ -3145,8 +3617,12 @@
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
       "GOMA_HERMETIC": "error",
-      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.stop_goma (11)",
     "~followup_annotations": [
@@ -3191,8 +3667,12 @@
       "fake-m1"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "postprocess_for_goma.upload_log (11)",
     "~followup_annotations": [
@@ -3219,8 +3699,12 @@
       "[TMP_BASE]\\cloudtail.pid"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail (11)",
@@ -3234,8 +3718,12 @@
     ],
     "cwd": "[START_DIR]\\src\\out\\host_debug",
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Test Flow"
   },
@@ -3246,8 +3734,12 @@
     ],
     "cwd": "[START_DIR]\\src\\out\\host_debug",
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Test FML"
   },
@@ -3257,8 +3749,12 @@
     ],
     "cwd": "[START_DIR]\\src\\out\\host_debug",
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Test Synchronization"
   },
@@ -3268,8 +3764,12 @@
     ],
     "cwd": "[START_DIR]\\src\\out\\host_debug",
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Test Runtime"
   },
@@ -3279,8 +3779,12 @@
     ],
     "cwd": "[START_DIR]\\src\\out\\host_debug",
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Test Shell"
   },
@@ -3290,8 +3794,12 @@
     ],
     "cwd": "[START_DIR]\\src\\out\\host_debug",
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Test Embedder API"
   },
@@ -3302,8 +3810,12 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Zip windows-x64 artifacts.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"icudtl.dat\", \"path\": \"[START_DIR]\\\\src\\\\third_party/icu/flutter/icudtl.dat\", \"type\": \"file\"}, {\"archive_name\": \"flutter_tester.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_tester.exe\", \"type\": \"file\"}, {\"archive_name\": \"isolate_snapshot.bin\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/gen/flutter/lib/snapshot/isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"vm_isolate_snapshot.bin\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"frontend_server.dart.snapshot\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/gen/frontend_server.dart.snapshot\", \"type\": \"file\"}, {\"archive_name\": \"product_isolate_snapshot.bin\", \"path\": \"[START_DIR]\\\\src\\\\out/host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin\", \"type\": \"file\"}, {\"archive_name\": \"product_vm_isolate_snapshot.bin\", \"path\": \"[START_DIR]\\\\src\\\\out/host_dynamic_release/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_1\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
@@ -3321,8 +3833,12 @@
       "gs://flutter_infra/flutter/None/windows-x64/artifacts.zip"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "gsutil upload \"windows-x64/artifacts.zip\"",
@@ -3341,8 +3857,12 @@
       "[CLEANUP]\\tmp_tmp_1"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "temp dir for windows-x64 UploadArtifacts artifacts.zip"
@@ -3354,8 +3874,12 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Zip windows-x64 windows-x64-embedder.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"flutter_embedder.h\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_embedder.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_engine.dll\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_engine.dll\", \"type\": \"file\"}, {\"archive_name\": \"flutter_engine.dll.exp\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_engine.dll.exp\", \"type\": \"file\"}, {\"archive_name\": \"flutter_engine.dll.lib\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_engine.dll.lib\", \"type\": \"file\"}, {\"archive_name\": \"flutter_engine.dll.pdb\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_engine.dll.pdb\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_2\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
@@ -3373,8 +3897,12 @@
       "gs://flutter_infra/flutter/None/windows-x64/windows-x64-embedder.zip"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "gsutil upload \"windows-x64/windows-x64-embedder.zip\"",
@@ -3393,8 +3921,12 @@
       "[CLEANUP]\\tmp_tmp_2"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "temp dir for windows-x64 UploadArtifacts windows-x64-embedder.zip"
@@ -3406,8 +3938,12 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Zip android-arm-profile windows-x64.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_profile/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_3\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
@@ -3425,8 +3961,12 @@
       "gs://flutter_infra/flutter/None/android-arm-profile/windows-x64.zip"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "gsutil upload \"android-arm-profile/windows-x64.zip\"",
@@ -3445,8 +3985,12 @@
       "[CLEANUP]\\tmp_tmp_3"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "temp dir for android-arm-profile UploadArtifacts windows-x64.zip"
@@ -3458,8 +4002,12 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Zip android-arm64-profile windows-x64.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_profile_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_4\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
@@ -3477,8 +4025,12 @@
       "gs://flutter_infra/flutter/None/android-arm64-profile/windows-x64.zip"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "gsutil upload \"android-arm64-profile/windows-x64.zip\"",
@@ -3497,8 +4049,12 @@
       "[CLEANUP]\\tmp_tmp_4"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "temp dir for android-arm64-profile UploadArtifacts windows-x64.zip"
@@ -3510,8 +4066,12 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Zip android-arm-release windows-x64.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_release/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_5\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
@@ -3529,8 +4089,12 @@
       "gs://flutter_infra/flutter/None/android-arm-release/windows-x64.zip"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "gsutil upload \"android-arm-release/windows-x64.zip\"",
@@ -3549,8 +4113,12 @@
       "[CLEANUP]\\tmp_tmp_5"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "temp dir for android-arm-release UploadArtifacts windows-x64.zip"
@@ -3562,8 +4130,12 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Zip android-arm64-release windows-x64.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_release_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_6\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
@@ -3581,8 +4153,12 @@
       "gs://flutter_infra/flutter/None/android-arm64-release/windows-x64.zip"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "gsutil upload \"android-arm64-release/windows-x64.zip\"",
@@ -3601,8 +4177,12 @@
       "[CLEANUP]\\tmp_tmp_6"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "temp dir for android-arm64-release UploadArtifacts windows-x64.zip"
@@ -3614,8 +4194,12 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Zip android-arm-dynamic-profile windows-x64.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_dynamic_profile/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_7\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
@@ -3633,8 +4217,12 @@
       "gs://flutter_infra/flutter/None/android-arm-dynamic-profile/windows-x64.zip"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "gsutil upload \"android-arm-dynamic-profile/windows-x64.zip\"",
@@ -3653,8 +4241,12 @@
       "[CLEANUP]\\tmp_tmp_7"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "temp dir for android-arm-dynamic-profile UploadArtifacts windows-x64.zip"
@@ -3666,8 +4258,12 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Zip android-arm64-dynamic-profile windows-x64.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_dynamic_profile_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_8\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
@@ -3685,8 +4281,12 @@
       "gs://flutter_infra/flutter/None/android-arm64-dynamic-profile/windows-x64.zip"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "gsutil upload \"android-arm64-dynamic-profile/windows-x64.zip\"",
@@ -3705,8 +4305,12 @@
       "[CLEANUP]\\tmp_tmp_8"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "temp dir for android-arm64-dynamic-profile UploadArtifacts windows-x64.zip"
@@ -3718,8 +4322,12 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Zip android-arm-dynamic-release windows-x64.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_dynamic_release/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_9\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
@@ -3737,8 +4345,12 @@
       "gs://flutter_infra/flutter/None/android-arm-dynamic-release/windows-x64.zip"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "gsutil upload \"android-arm-dynamic-release/windows-x64.zip\"",
@@ -3757,8 +4369,12 @@
       "[CLEANUP]\\tmp_tmp_9"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "temp dir for android-arm-dynamic-release UploadArtifacts windows-x64.zip"
@@ -3770,8 +4386,12 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Zip android-arm64-dynamic-release windows-x64.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_dynamic_release_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_10\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
@@ -3789,8 +4409,12 @@
       "gs://flutter_infra/flutter/None/android-arm64-dynamic-release/windows-x64.zip"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "gsutil upload \"android-arm64-dynamic-release/windows-x64.zip\"",
@@ -3809,8 +4433,12 @@
       "[CLEANUP]\\tmp_tmp_10"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "temp dir for android-arm64-dynamic-release UploadArtifacts windows-x64.zip"
@@ -3822,8 +4450,12 @@
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "name": "Zip dart-sdk",
     "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug\\\\dart-sdk\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_11\\\\dart-sdk-windows-x64.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug\"}"
@@ -3841,8 +4473,12 @@
       "gs://flutter_infra/flutter/None/dart-sdk-windows-x64.zip"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "gsutil upload dart-sdk-windows-x64.zip",
@@ -3861,8 +4497,12 @@
       "[CLEANUP]\\tmp_tmp_11"
     ],
     "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client",
-      "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
     },
     "infra_step": true,
     "name": "temp dir for Upload Dart SDK"
