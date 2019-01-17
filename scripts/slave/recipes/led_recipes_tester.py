@@ -161,10 +161,12 @@ def RunSteps(api, repo_name):
 
       result = (ir.
                 then('edit-recipe-bundle').
-                # Force the job to be experimental, since we don't want it
-                # affecting production services.
-                then('edit', '-p', '$recipe_engine/runtime={'
-                     '"is_experimental":true, "is_luci": true}').
+                # We used to set `is_experimental` to true, but the chromium
+                # recipe currently uses that to deprioritize swarming tasks,
+                # which results in very slow runtimes for the led task. Because
+                # this recipe blocks the build.git CQ, we decided the tradeoff
+                # to run these edited recipes in production mode instead would
+                # be better.
                 then('launch')).result
 
       triggered_jobs[builder] = result['swarming']

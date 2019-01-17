@@ -386,22 +386,6 @@
   {
     "cmd": [
       "[CACHE]/led/led",
-      "edit",
-      "-p",
-      "$recipe_engine/runtime={\"is_experimental\":true, \"is_luci\": true}"
-    ],
-    "cwd": "[CACHE]/build/build",
-    "name": "led edit",
-    "stdout": "/path/to/tmp/json",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@json.output (invalid)@@@",
-      "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
-      "@@@STEP_LOG_END@json.output (exception)@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/led/led",
       "launch"
     ],
     "cwd": "[CACHE]/build/build",
