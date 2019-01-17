@@ -45,7 +45,7 @@ DEPS = [
 ]
 
 
-def V8Builder(config, bits, platform):
+def V8Builder(config, bits, platform, swarming_shards, swarming_priority=35):
   return {
     'gclient_apply_config': ['show_v8_revision'],
     'chromium_apply_config': [],
@@ -53,6 +53,8 @@ def V8Builder(config, bits, platform):
       'BUILD_CONFIG': config,
       'TARGET_BITS': bits,
     },
+    'swarming_shards': swarming_shards,
+    'swarming_priority': swarming_priority,
     'testing': {'platform': platform},
   }
 
@@ -60,11 +62,18 @@ def V8Builder(config, bits, platform):
 BUILDERS = freeze({
   'client.v8.fyi': {
     'builders': {
-      'V8-Blink Win': V8Builder('Release', 32, 'win'),
-      'V8-Blink Mac': V8Builder('Release', 64, 'mac'),
-      'V8-Blink Linux 64': V8Builder('Release', 64, 'linux'),
-      'V8-Blink Linux 64 - future': V8Builder('Release', 64, 'linux'),
-      'V8-Blink Linux 64 (dbg)': V8Builder('Debug', 64, 'linux'),
+      'V8-Blink Win':
+          V8Builder('Release', 32, 'win', swarming_shards=8),
+      'V8-Blink Mac':
+          V8Builder('Release', 64, 'mac', swarming_shards=8),
+      # Use CI-priority on this bot because it's blocking V8's lkgr.
+      'V8-Blink Linux 64':
+          V8Builder('Release', 64, 'linux', swarming_shards=6,
+                    swarming_priority=25),
+      'V8-Blink Linux 64 - future':
+          V8Builder('Release', 64, 'linux', swarming_shards=6),
+      'V8-Blink Linux 64 (dbg)':
+          V8Builder('Debug', 64, 'linux', swarming_shards=10),
     },
   },
 })
@@ -127,12 +136,12 @@ class DetermineFailuresTool(object):
     """
     raise NotImplementedError()  # pragma: no cover
 
-  def determine_new_failures(self):
+  def determine_new_failures(self, num_shards):
     test = self.api.chromium_tests.steps.SwarmingIsolatedScriptTest(
         name='webkit_layout_tests',
         args=self.test_args,
         target_name='webkit_layout_tests_exparchive',
-        shards=6,
+        shards=num_shards,
         merge={
           'args': ['--verbose'],
           'script': self.api.path['checkout'].join(
@@ -221,7 +230,7 @@ def RunSteps(api):
   api.chromium_tests.set_config('chromium')
 
   # Set up swarming.
-  api.swarming.default_priority = 25
+  api.swarming.default_priority = bot_config['swarming_priority']
   api.swarming.set_default_dimension('gpu', 'none')
   api.swarming.set_default_dimension('os', OS_MAPPING[api.platform.name])
   api.swarming.set_default_dimension('pool', 'Chrome')
@@ -257,7 +266,8 @@ def RunSteps(api):
     # chromium_tests.m instead of api to get correct recipe module
     # dependencies for using raw classes from chromium_tests.steps.
     new_failures_tool_cls(
-        api.chromium_tests.m, step_result).determine_new_failures()
+        api.chromium_tests.m, step_result).determine_new_failures(
+            num_shards=bot_config['swarming_shards'])
 
 
 def _sanitize_nonalpha(text):
