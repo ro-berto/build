@@ -51,10 +51,6 @@ def V8Builder(config, bits, platform):
       'BUILD_CONFIG': config,
       'TARGET_BITS': bits,
     },
-    'additional_expectations': [
-      'v8', 'tools', 'blink_tests', 'TestExpectations',
-    ],
-    'component': {'path': 'src/v8', 'revision': '%s'},
     'testing': {'platform': platform},
   }
 
@@ -72,77 +68,107 @@ BUILDERS = freeze({
 })
 
 
-def determine_new_future_failures(caller_api, extra_args):
-  tests = [
-    caller_api.chromium_tests.steps.BlinkTest(
-        extra_args=extra_args + [
-          '--additional-expectations',
-          caller_api.path['checkout'].join(
-              'v8', 'tools', 'blink_tests', 'TestExpectationsFuture'),
-          '--additional-driver-flag',
-          '--js-flags=--future',
-        ],
-    ),
-  ]
+class DetermineFailuresTool(object):
+  """Utility class allowing to run tests in two settings. Failing tests will be
+  compared to a baseline run. If also failing there, they will be ignored.
+  """
+  def __init__(self, api, bot_update_result):
+    self.api = api
+    self.bot_update_result = bot_update_result
 
-  # Since we don't implement 'retry with patch', we also set the flag on
-  # BlinkTest.
-  for test in tests:
+  @property
+  def test_args(self):
+    return [
+      '--num-retries=3',
+      '--additional-expectations',
+      str(self.api.path['checkout'].join(
+          'v8', 'tools', 'blink_tests', 'TestExpectations')),
+    ]
+
+  def set_baseline(self, failing_test):
+    """Expected to reset the testing environment into a baseline state after
+    test failures.
+
+    After tests have run and some have failed in the configured environment
+    (e.g. with patch), this method is expected to change the testing
+    environment to a baseline state to compare to (e.g. without patch).
+
+    Args:
+      failing_test: Blink test object representing the failing test of the first
+      run.
+    """
+    raise NotImplementedError()  # pragma: no cover
+
+  def determine_new_failures(self):
+    test = self.api.chromium_tests.steps.BlinkTest(extra_args=self.test_args)
+
+    # Since we don't implement 'retry with patch', we set the corresponding
+    # flag on the Test instances.
+    # TODO(machenbach): Maybe we should keep this activated to make the
+    # builders more reliable.
     test._should_retry_with_patch = False
 
-  failing_tests = caller_api.test_utils.run_tests_with_patch(caller_api, tests)
-  if not failing_tests:
-    return
+    failing_tests = self.api.test_utils.run_tests_with_patch(self.api, [test])
 
-  try:
-    # HACK(machenbach): Blink tests store state about failing tests. In order
-    # to rerun without future, we need to remove the extra args from the
+    if not failing_tests:
+      return
+
+    # We only run layout tests, so there's only one instance of tests.
+    assert len(failing_tests) == 1
+
+    try:
+      self.set_baseline(failing_tests[0])
+      self.api.test_utils.run_tests(self.api, failing_tests, 'without patch')
+    finally:
+      with self.api.step.defer_results():
+        self.api.test_utils.summarize_test_with_patch_deapplied(
+            self.api, failing_tests[0], failure_is_fatal=True)
+
+
+class DetermineFutureFailuresTool(DetermineFailuresTool):
+  """Utility class for running tests with V8's future staging flag passed, and
+  retrying failing tests without the flag.
+  """
+  @property
+  def test_args(self):
+    return super(DetermineFutureFailuresTool, self).test_args + [
+      '--additional-expectations',
+      str(self.api.path['checkout'].join(
+          'v8', 'tools', 'blink_tests', 'TestExpectationsFuture')),
+      '--additional-driver-flag',
+      '--js-flags=--future',
+    ]
+
+  def set_baseline(self, failing_test):
+    # HACK(machenbach): Blink test suite stores state about failing tests. In
+    # order to rerun without future, we need to remove the extra args from the
     # existing test object.
-    failing_tests[0]._extra_args = extra_args
-    caller_api.test_utils.run_tests(caller_api, failing_tests, 'without patch')
-  finally:
-    with caller_api.step.defer_results():
-      for t in failing_tests:
-        caller_api.test_utils.summarize_test_with_patch_deapplied(
-            caller_api, t, failure_is_fatal=True)
+    failing_test._extra_args = super(
+        DetermineFutureFailuresTool, self).test_args
 
 
-def determine_new_failures(caller_api, tests, deapply_patch_fn):
+class DetermineToTFailuresTool(DetermineFailuresTool):
+  """Utility class for running tests with a patch applied, and retrying
+  failing tests without the patch.
   """
-  Utility function for running steps with a patch applied, and retrying
-  failing steps without the patch. Failures from the run without the patch are
-  ignored.
+  def set_baseline(self, failing_test):
+    bot_update_json = self.bot_update_result.json.output
+    self.api.gclient.c.revisions['src'] = str(
+        bot_update_json['properties']['got_cr_revision'])
+    # Reset component revision to the pinned revision from chromium's DEPS
+    # for comparison.
+    del self.api.gclient.c.revisions['src/v8']
+    # Update without changing got_revision. The first sync is the revision
+    # that is tested. The second is just for comparison. Setting got_revision
+    # again confuses the waterfall's console view.
+    self.api.bot_update.ensure_checkout(
+        ignore_input_commit=True, update_presentation=False)
 
-  Args:
-    caller_api - caller's recipe API; this is needed because self.m here
-                 is different than in the caller (different recipe modules
-                 get injected depending on caller's DEPS vs. this module's
-                 DEPS)
-    tests - iterable of objects implementing the Test interface above
-    deapply_patch_fn - function that takes a list of failing tests
-                       and undoes any effect of the previously applied patch
-  """
-  # Convert iterable to list, since it is enumerated multiple times.
-  tests = list(tests)
+    self.api.chromium_tests.run_mb_and_compile(
+        ['blink_tests'], [],
+        name_suffix=' (without patch)',
+    )
 
-  # Since we don't implement 'retry with patch', we set the corresponding flag
-  # on the Test instances.
-  for test in tests:
-    test._should_retry_with_patch = False
-
-  failing_tests = caller_api.test_utils.run_tests_with_patch(caller_api, tests)
-  if not failing_tests:
-    return
-
-  try:
-    result = deapply_patch_fn(failing_tests)
-    caller_api.test_utils.run_tests(caller_api, failing_tests, 'without patch')
-    return result
-  finally:
-    with caller_api.step.defer_results():
-      for t in failing_tests:
-        caller_api.test_utils.summarize_test_with_patch_deapplied(
-            caller_api, t, failure_is_fatal=True)
 
 def RunSteps(api):
   mastername = api.properties.get('mastername')
@@ -162,8 +188,7 @@ def RunSteps(api):
 
   # Sync component to current component revision.
   component_revision = api.buildbucket.gitiles_commit.id or 'HEAD'
-  api.gclient.c.revisions[bot_config['component']['path']] = (
-      bot_config['component']['revision'] % component_revision)
+  api.gclient.c.revisions['src/v8'] = component_revision
 
   # Ensure we remember the chromium revision.
   api.gclient.c.got_revision_reverse_mapping['got_cr_revision'] = 'src'
@@ -183,41 +208,15 @@ def RunSteps(api):
         name_suffix=' (with patch)',
     )
 
-    def component_pinned_fn(_failing_steps):
-      bot_update_json = step_result.json.output
-      api.gclient.c.revisions['src'] = str(
-          bot_update_json['properties']['got_cr_revision'])
-      # Reset component revision to the pinned revision from chromium's DEPS
-      # for comparison.
-      del api.gclient.c.revisions[bot_config['component']['path']]
-      # Update without changing got_revision. The first sync is the revision
-      # that is tested. The second is just for comparison. Setting got_revision
-      # again confuses the waterfall's console view.
-      api.bot_update.ensure_checkout(
-          ignore_input_commit=True, update_presentation=False)
-
-      api.chromium_tests.run_mb_and_compile(
-          ['blink_tests'], [],
-          name_suffix=' (without patch)',
-      )
-
-    # TODO(machenbach): Temporarily use higher timeout until builder migrates to
-    # swarming.
-    extra_args = ['--time-out-ms=12000']
-    if bot_config.get('additional_expectations'):
-      extra_args.extend([
-        '--additional-expectations',
-        api.path['checkout'].join(*bot_config['additional_expectations']),
-      ])
-
-    tests = [
-      api.chromium_tests.steps.BlinkTest(extra_args=extra_args),
-    ]
-
+    new_failures_tool_cls = DetermineToTFailuresTool
     if 'future' in buildername:
-      determine_new_future_failures(api.chromium_tests.m, extra_args)
-    else:
-      determine_new_failures(api.chromium_tests.m, tests, component_pinned_fn)
+      new_failures_tool_cls = DetermineFutureFailuresTool
+
+    # Test with and without baseline to determine new failures. We use
+    # chromium_tests.m instead of api to get correct recipe module
+    # dependencies for using raw classes from chromium_tests.steps.
+    new_failures_tool_cls(
+        api.chromium_tests.m, step_result).determine_new_failures()
 
 
 def _sanitize_nonalpha(text):

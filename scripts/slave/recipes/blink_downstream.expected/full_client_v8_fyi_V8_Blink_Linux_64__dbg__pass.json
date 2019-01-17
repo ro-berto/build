@@ -620,7 +620,7 @@
       "--debug-rwt-logging",
       "--num-retries",
       "3",
-      "--time-out-ms=12000",
+      "--num-retries=3",
       "--additional-expectations",
       "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src/v8/tools/blink_tests/TestExpectations"
     ],
