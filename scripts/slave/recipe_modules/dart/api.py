@@ -530,7 +530,7 @@ class DartApi(recipe_api.RecipeApi):
       test_matrix_path,
       step_test_data=lambda: self.m.json.test_api.output(test_data))
     test_matrix = read_json.json.output
-    builder = self.m.properties["buildername"]
+    builder = str(self.m.buildbucket.builder_name)
     if builder.endswith(('-be', '-try', '-stable', 'dev')):
       builder = builder[0:builder.rfind('-')]
     isolate_hashes = {}
@@ -651,14 +651,12 @@ class DartApi(recipe_api.RecipeApi):
       environment['runtime'] = runtime
       if runtime == 'chrome' or runtime == 'firefox':
         self._download_browser(runtime, global_config[runtime])
-    channel = 'try'
-    if 'branch' in self.m.properties:
-      channels = {
-        "refs/heads/master": "be",
-        "refs/heads/stable": "stable",
-        "refs/heads/dev": "dev"
-      }
-      channel = channels.get(self.m.properties['branch'], 'try')
+    channels = {
+      "refs/heads/master": "be",
+      "refs/heads/stable": "stable",
+      "refs/heads/dev": "dev"
+    }
+    channel = channels.get(self.m.buildbucket.gitiles_commit.ref, 'try')
     build_py_path = 'tools/build.py'
     tasks = []
     all_results = {}
@@ -762,11 +760,6 @@ class DartApi(recipe_api.RecipeApi):
       all_results[step_name].merge(results)
 
 
-  def _copy_property(self, src, dest, key):
-    if key in src:
-      dest[key] = src[key]
-
-
   def _download_browser(self, runtime, version):
     # Download CIPD package
     #  dart/browsers/<runtime>/${platform} <version>
@@ -804,8 +797,7 @@ class DartApi(recipe_api.RecipeApi):
 
   def run_trigger(self, step_name, step, isolate_hash):
     trigger_props = {}
-    self._copy_property(self.m.properties, trigger_props, 'git_revision')
-    self._copy_property(self.m.properties, trigger_props, 'revision')
+    trigger_props['revision'] = self.m.buildbucket.gitiles_commit.id
     trigger_props['parent_buildername'] = self.m.buildbucket.builder_name
     trigger_props['parent_build_id'] = self.m.properties.get('build_id', '')
     if isolate_hash:

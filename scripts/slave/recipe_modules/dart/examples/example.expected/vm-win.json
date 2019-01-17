@@ -65,7 +65,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "sdk@HEAD"
+      "sdk@3456abce78ef"
     ],
     "cwd": "[CACHE]\\builder",
     "env": {
@@ -86,7 +86,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"3456abce78ef\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
@@ -401,8 +401,10 @@
       "[TMP_BASE]\\goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]\\crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"\", \"builder\": \"vm-kernel-win-release-x64\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"vm-kernel-win-release-x64\", \"project\": \"dart\"}",
       "--buildbot-buildername",
       "vm-kernel-win-release-x64"
     ],
@@ -755,7 +757,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
@@ -771,7 +773,7 @@
     "cmd": [],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
@@ -797,7 +799,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
@@ -822,7 +824,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_x64",
@@ -866,7 +868,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
@@ -896,7 +898,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
@@ -913,7 +915,7 @@
     "cmd": [],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
@@ -935,7 +937,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_x64",
@@ -977,7 +979,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_x64",
@@ -1008,7 +1010,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]\\goma\\data\\vm_kernel_win_release_x64",
@@ -1056,14 +1058,16 @@
       "[TMP_BASE]\\goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]\\crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"\", \"builder\": \"vm-kernel-win-release-x64\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"vm-kernel-win-release-x64\", \"project\": \"dart\"}",
       "--buildbot-buildername",
       "vm-kernel-win-release-x64"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
@@ -1099,7 +1103,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1",
       "GOMA_DIR": "[CACHE]\\goma\\client"
     },
@@ -1172,7 +1176,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1"
     },
     "env_prefixes": {
@@ -1202,7 +1206,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1"
     },
     "env_prefixes": {
@@ -1218,12 +1222,12 @@
       "put",
       "-host",
       "cr-buildbucket.appspot.com",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"vm-kernel-win-release-x64\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"3456abcd78ef\\\"}}\", \"tags\": [\"builder:foo-builder\", \"parent_buildername:vm-kernel-win-release-x64\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"vm-kernel-win-release-x64\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"3456abcd78ef\\\"}}\", \"tags\": [\"builder:bar-builder\", \"parent_buildername:vm-kernel-win-release-x64\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"vm-kernel-win-release-x64\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"3456abce78ef\\\"}}\", \"tags\": [\"builder:foo-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/3456abce78ef\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:vm-kernel-win-release-x64\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}",
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"vm-kernel-win-release-x64\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"3456abce78ef\\\"}}\", \"tags\": [\"builder:bar-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/3456abce78ef\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:vm-kernel-win-release-x64\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1"
     },
     "env_prefixes": {
@@ -1284,7 +1288,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1"
     },
     "env_prefixes": {
@@ -1298,7 +1302,7 @@
     "cmd": [],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1"
     },
     "env_prefixes": {
@@ -1323,7 +1327,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test-step 3_shard_1/Windows/test isola/vm-kernel-win-release-x64/1357",
+      "Test-step 3_shard_1/Windows/test isola",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1347,13 +1351,11 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:vm-kernel-win-release-x64",
-      "--tag",
-      "buildnumber:1357",
-      "--tag",
       "data:test isolate hash",
       "--tag",
       "name:Test-step",
+      "--tag",
+      "spec_name:dart.ci:vm-kernel-win-release-x64",
       "--tag",
       "stepname:Test-step 3_shard_1 on Windows",
       "--cipd-package",
@@ -1401,7 +1403,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1"
     },
     "env_prefixes": {
@@ -1415,9 +1417,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 3_shard_1/Windows/test isola/vm-kernel-win-release-x64/1357\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 3_shard_1/Windows/test isola\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test-step 3_shard_1/Windows/test isola/vm-kernel-win-release-x64/1357\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test-step 3_shard_1/Windows/test isola\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1453,7 +1455,7 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-try",
+      "BUILDBOT_BUILDERNAME": "vm-kernel-win-release-x64-be",
       "DART_USE_CRASHPAD": "1"
     },
     "env_prefixes": {
@@ -1525,7 +1527,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test-step 3_shard_1/Windows/test isola/vm-kernel-win-release-x64/1357\", \"tasks\": {\"Test-step 3_shard_1/Windows/test isola/vm-kernel-win-release-x64/1357\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"Test-step 3_shard_1/Windows/test isola\", \"tasks\": {\"Test-step 3_shard_1/Windows/test isola\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1994,7 +1996,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
-      "",
+      "3456abce78ef",
       "gs://dart-test-results/builders/vm-kernel-win-release-x64/1357/revision"
     ],
     "cwd": "[CACHE]\\builder\\sdk",

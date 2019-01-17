@@ -65,7 +65,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "sdk@HEAD"
+      "sdk@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -86,7 +86,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",

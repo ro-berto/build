@@ -213,7 +213,6 @@
   * [crrev:examples/full](#recipes-crrev_examples_full)
   * [custom_tabs_client](#recipes-custom_tabs_client)
   * [dart/chocolatey](#recipes-dart_chocolatey)
-  * [dart/dart](#recipes-dart_dart)
   * [dart/docker](#recipes-dart_docker)
   * [dart/external](#recipes-dart_external)
   * [dart/flutter_engine](#recipes-dart_flutter_engine)
@@ -1811,7 +1810,7 @@ Kills leftover tasks from previous runs or steps.
 
 Reads the debug log file
 
-&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#928)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=None, ignore_failure=False):**
+&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#920)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=None, ignore_failure=False):**
 
 Runs a specific script with current working directory to be checkout. If
 the runtime (passed in environment) is a browser, and the system is linux,
@@ -1829,7 +1828,7 @@ Args:
     to be downloaded
   * ignore_failure - Do not turn step red if this script fails.
 
-&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#842)(self, step_name, step, isolate_hash, shards, local_shard, environment, tasks, global_config, all_results):**
+&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#834)(self, step_name, step, isolate_hash, shards, local_shard, environment, tasks, global_config, all_results):**
 
 Runs test.py with default arguments, based on configuration from.
 Args:
@@ -1844,7 +1843,7 @@ Args:
   * global_config (dict) - The global section from test_matrix.json.
     Contains version tags for the pinned browsers Firefox and Chrome.
 
-&mdash; **def [run\_trigger](/scripts/slave/recipe_modules/dart/api.py#805)(self, step_name, step, isolate_hash):**
+&mdash; **def [run\_trigger](/scripts/slave/recipe_modules/dart/api.py#798)(self, step_name, step, isolate_hash):**
 
 &mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#169)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='dart.tests', num_shards=0, last_shard_is_local=False, cipd_packages=None, ignore_failure=False):**
 
@@ -5022,11 +5021,6 @@ Generates the sequence of steps that will be run by the slave.
 [DEPS](/scripts/slave/recipes/dart/chocolatey.py#7): [dart](#recipe_modules-dart), [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/chocolatey.py#25)(api):**
-### *recipes* / [dart/dart](/scripts/slave/recipes/dart/dart.py)
-
-[DEPS](/scripts/slave/recipes/dart/dart.py#7): [dart](#recipe_modules-dart), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
-
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/dart.py#20)(api):**
 ### *recipes* / [dart/docker](/scripts/slave/recipes/dart/docker.py)
 
 [DEPS](/scripts/slave/recipes/dart/docker.py#7): [dart](#recipe_modules-dart), [zip](#recipe_modules-zip), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5084,9 +5078,9 @@ Kills leftover tasks from previous runs or steps.
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/misc.py#16)(api):**
 ### *recipes* / [dart/neo](/scripts/slave/recipes/dart/neo.py)
 
-[DEPS](/scripts/slave/recipes/dart/neo.py#5): [dart](#recipe_modules-dart), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+[DEPS](/scripts/slave/recipes/dart/neo.py#5): [dart](#recipe_modules-dart), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/neo.py#78)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/neo.py#79)(api):**
 ### *recipes* / [dart/sdk\_builder](/scripts/slave/recipes/dart/sdk_builder.py)
 
 [DEPS](/scripts/slave/recipes/dart/sdk_builder.py#7): [trigger](#recipe_modules-trigger), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5106,9 +5100,9 @@ Kills leftover tasks from previous runs or steps.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/dart/examples/example.py#166)(api):**
 ### *recipes* / [dart:examples/example-checkout](/scripts/slave/recipe_modules/dart/examples/example-checkout.py)
 
-[DEPS](/scripts/slave/recipe_modules/dart/examples/example-checkout.py#7): [dart](#recipe_modules-dart), [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/dart/examples/example-checkout.py#7): [dart](#recipe_modules-dart), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/dart/examples/example-checkout.py#13)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/dart/examples/example-checkout.py#14)(api):**
 ### *recipes* / [dart:examples/example-get\_secret](/scripts/slave/recipe_modules/dart/examples/example-get_secret.py)
 
 [DEPS](/scripts/slave/recipe_modules/dart/examples/example-get_secret.py#7): [dart](#recipe_modules-dart), [recipe\_engine/platform][recipe_engine/recipe_modules/platform]

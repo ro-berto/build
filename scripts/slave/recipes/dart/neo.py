@@ -8,6 +8,7 @@ DEPS = [
   'depot_tools/depot_tools',
   'depot_tools/gclient',
   'depot_tools/osx_sdk',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/properties',
@@ -90,7 +91,7 @@ def _run_steps_impl(api):
     api.swarming_client.checkout('master')
     api.dart.download_parent_isolate()
   else:
-    builder_name = api.properties.get('buildername')
+    builder_name = api.buildbucket.builder_name
     builder_fragments = builder_name.split('-')
     channel = builder_fragments[-1]
     if channel not in ['be', 'dev', 'stable', 'integration', 'try']:
@@ -136,26 +137,34 @@ def _run_steps_impl(api):
 def GenTests(api):
    yield (
       api.test('builders/vm-linux-release-x64') +
-      api.properties.generic(
-        buildername='builders/vm-linux-release-x64')
+      api.buildbucket.ci_build(
+          builder='builders/vm-linux-release-x64',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart')
    )
    yield (
       api.test('builders/vm-linux-release-x64-try') +
-      api.properties.generic(
-        buildername='builders/vm-linux-release-x64-try',
-        clobber='true')
-   )
+      api.properties.generic(clobber='true') +
+      api.buildbucket.try_build(
+          builder='builders/vm-linux-release-x64-try',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart'))
    yield (
       api.test('builders/dart2js-win-debug-x64-firefox-try') +
-      api.properties.generic(
-        buildername='dart2js-win-debug-x64-firefox-try',
-        revision='3456abcd78ef',
-        new_workflow_enabled='true')
+      api.buildbucket.try_build(
+          revision='3456abcd78ef',
+          builder='dart2js-win-debug-x64-firefox-try',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart') +
+      api.properties.generic(new_workflow_enabled='true')
    )
    yield (
       api.test('builders/try-cl-builder') +
+      api.buildbucket.try_build(
+          builder='builders/vm-linux-release-x64-try',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart') +
       api.properties.generic(
-          buildername='builders/vm-linux-release-x64-try',
           try_build_args='  runtime,sdk',
           try_cmd_1='tools/test.py -rchrome',
           try_cmd_2='tools/test.py -mdebug',
@@ -163,8 +172,11 @@ def GenTests(api):
    )
    yield (
       api.test('builders/try-cl-builder-default-build') +
+      api.buildbucket.try_build(
+          builder='builders/vm-linux-release-x64-try',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart') +
       api.properties.generic(
-          buildername='builders/vm-linux-release-x64-try',
           try_cmd_1='xvfb tools/test.py  -mrelease',
           try_cmd_1_repeat='1',
           try_cmd_2='tools/test.py language_2/some_test',
@@ -172,8 +184,11 @@ def GenTests(api):
    )
    yield (
       api.test('builders/analyzer-triggered') +
+      api.buildbucket.ci_build(
+          builder='builders/analyzer-triggered',
+          git_repo='https://dart.googlesource.com/sdk',
+          project='dart') +
       api.properties.generic(
-        buildername='builders/analyzer-triggered',
         parent_fileset='isolate_123',
         parent_fileset_name='test_name')
    )

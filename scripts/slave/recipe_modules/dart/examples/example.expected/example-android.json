@@ -65,7 +65,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "sdk@HEAD"
+      "sdk@2d72510e447ab60a9728aeea2362d8be2cbd7789"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -86,7 +86,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"sdk\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
@@ -401,8 +401,10 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"\", \"builder\": \"example-android\", \"project\": \"\"}",
+      "{\"bucket\": \"ci\", \"builder\": \"example-android\", \"project\": \"dart\"}",
       "--buildbot-buildername",
       "example-android"
     ],
@@ -765,7 +767,7 @@
     "cmd": [],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "example-android-try"
+      "BUILDBOT_BUILDERNAME": "example-android-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -789,7 +791,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test on android device_shard_1/Android/test isola/example-android/-1",
+      "Test on android device_shard_1/Android/test isola",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -810,11 +812,11 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:example-android",
-      "--tag",
       "data:test isolate hash",
       "--tag",
       "name:Test",
+      "--tag",
+      "spec_name:dart.ci:example-android",
       "--tag",
       "stepname:Test on android device_shard_1 on Android",
       "--cipd-package",
@@ -855,7 +857,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "example-android-try"
+      "BUILDBOT_BUILDERNAME": "example-android-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -868,9 +870,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test on android device_shard_1/Android/test isola/example-android/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test on android device_shard_1/Android/test isola\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test on android device_shard_1/Android/test isola/example-android/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test on android device_shard_1/Android/test isola\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -896,7 +898,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test on android device_shard_2/Android/test isola/example-android/-1",
+      "Test on android device_shard_2/Android/test isola",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -917,11 +919,11 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "buildername:example-android",
-      "--tag",
       "data:test isolate hash",
       "--tag",
       "name:Test",
+      "--tag",
+      "spec_name:dart.ci:example-android",
       "--tag",
       "stepname:Test on android device_shard_2 on Android",
       "--cipd-package",
@@ -962,7 +964,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "example-android-try"
+      "BUILDBOT_BUILDERNAME": "example-android-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -975,9 +977,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test on android device_shard_2/Android/test isola/example-android/-1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test on android device_shard_2/Android/test isola\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test on android device_shard_2/Android/test isola/example-android/-1\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test on android device_shard_2/Android/test isola\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
@@ -1050,7 +1052,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test on android device_shard_1/Android/test isola/example-android/-1\", \"tasks\": {\"Test on android device_shard_1/Android/test isola/example-android/-1\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"Test on android device_shard_1/Android/test isola\", \"tasks\": {\"Test on android device_shard_1/Android/test isola\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1126,7 +1128,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test on android device_shard_2/Android/test isola/example-android/-1\", \"tasks\": {\"Test on android device_shard_2/Android/test isola/example-android/-1\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
+      "{\"base_task_name\": \"Test on android device_shard_2/Android/test isola\", \"tasks\": {\"Test on android device_shard_2/Android/test isola\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1499,7 +1501,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "",
+      "2d72510e447ab60a9728aeea2362d8be2cbd7789",
       "gs://dart-test-results/builders/example-android/0/revision"
     ],
     "cwd": "[CACHE]/builder/sdk",

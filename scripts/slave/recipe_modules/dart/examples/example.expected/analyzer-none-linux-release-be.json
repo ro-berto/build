@@ -757,7 +757,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try",
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -772,7 +772,7 @@
     "cmd": [],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try",
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -797,7 +797,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try",
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -821,7 +821,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try",
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/analyzer_none_linux_release_be",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -864,7 +864,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try",
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -893,7 +893,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try",
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -909,7 +909,7 @@
     "cmd": [],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try",
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -930,7 +930,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try",
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/analyzer_none_linux_release_be",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -971,7 +971,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try",
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/analyzer_none_linux_release_be",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1001,7 +1001,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try",
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[CACHE]/goma/data/analyzer_none_linux_release_be",
       "GOMA_DIR": "[CACHE]/goma/client",
@@ -1059,7 +1059,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try",
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1094,7 +1094,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try",
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be",
       "GOMA_DIR": "[CACHE]/goma/client"
     },
     "env_prefixes": {
@@ -1149,7 +1149,7 @@
     "cmd": [],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -1173,7 +1173,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test-step 1_shard_1/Linux/test isola/analyzer-none-linux-release-be/1357",
+      "Test-step 1_shard_1/Linux/test isola",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1196,10 +1196,6 @@
       ".swarming_module_cache/vpython",
       "--tag",
       "build_is_experimental:false",
-      "--tag",
-      "buildername:analyzer-none-linux-release-be",
-      "--tag",
-      "buildnumber:1357",
       "--tag",
       "data:test isolate hash",
       "--tag",
@@ -1252,7 +1248,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -1265,9 +1261,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 1_shard_1/Linux/test isola/analyzer-none-linux-release-be/1357\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 1_shard_1/Linux/test isola\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_1/Linux/test isola/analyzer-none-linux-release-be/1357\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_1/Linux/test isola\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1293,7 +1289,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test-step 1_shard_2/Linux/test isola/analyzer-none-linux-release-be/1357",
+      "Test-step 1_shard_2/Linux/test isola",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1316,10 +1312,6 @@
       ".swarming_module_cache/vpython",
       "--tag",
       "build_is_experimental:false",
-      "--tag",
-      "buildername:analyzer-none-linux-release-be",
-      "--tag",
-      "buildnumber:1357",
       "--tag",
       "data:test isolate hash",
       "--tag",
@@ -1372,7 +1364,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -1385,9 +1377,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 1_shard_2/Linux/test isola/analyzer-none-linux-release-be/1357\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 1_shard_2/Linux/test isola\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_2/Linux/test isola/analyzer-none-linux-release-be/1357\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_2/Linux/test isola\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
@@ -1419,7 +1411,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -1443,12 +1435,12 @@
       "put",
       "-host",
       "cr-buildbucket.appspot.com",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-none-linux-release-be\\\", \\\"revision\\\": \\\"3456abcd78ef\\\"}}\", \"tags\": [\"builder:foo-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/3456abce78ef\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:analyzer-none-linux-release-be\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-none-linux-release-be\\\", \\\"revision\\\": \\\"3456abcd78ef\\\"}}\", \"tags\": [\"builder:bar-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/3456abce78ef\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:analyzer-none-linux-release-be\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-none-linux-release-be\\\", \\\"revision\\\": \\\"3456abce78ef\\\"}}\", \"tags\": [\"builder:foo-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/3456abce78ef\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:analyzer-none-linux-release-be\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}",
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-none-linux-release-be\\\", \\\"revision\\\": \\\"3456abce78ef\\\"}}\", \"tags\": [\"builder:bar-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/3456abce78ef\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:analyzer-none-linux-release-be\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -1508,7 +1500,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -1544,7 +1536,7 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
-      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-try"
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be"
     },
     "env_prefixes": {
       "PATH": [
@@ -1615,7 +1607,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test-step 1_shard_1/Linux/test isola/analyzer-none-linux-release-be/1357\", \"tasks\": {\"Test-step 1_shard_1/Linux/test isola/analyzer-none-linux-release-be/1357\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"Test-step 1_shard_1/Linux/test isola\", \"tasks\": {\"Test-step 1_shard_1/Linux/test isola\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1698,7 +1690,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test-step 1_shard_2/Linux/test isola/analyzer-none-linux-release-be/1357\", \"tasks\": {\"Test-step 1_shard_2/Linux/test isola/analyzer-none-linux-release-be/1357\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
+      "{\"base_task_name\": \"Test-step 1_shard_2/Linux/test isola\", \"tasks\": {\"Test-step 1_shard_2/Linux/test isola\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
