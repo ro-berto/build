@@ -3,7 +3,8 @@
     "cmd": [],
     "name": "process properties",
     "~followup_annotations": [
-      "@@@STEP_LINK@results@https://www.example.com@@@"
+      "@@@STEP_LINK@results@https://www.example.com@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"3456abce78ef\"@@@"
     ]
   },
   {
