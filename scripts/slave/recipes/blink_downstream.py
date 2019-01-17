@@ -111,7 +111,7 @@ class DetermineFailuresTool(object):
       '--additional-expectations',
       str(self.api.path['checkout'].join(
           'v8', 'tools', 'blink_tests', 'TestExpectations')),
-    ]
+    ] + (['--debug'] if self.api.chromium.c.build_config_fs == 'Debug' else [])
 
   def set_baseline(self, failing_test):
     """Expected to reset the testing environment into a baseline state after

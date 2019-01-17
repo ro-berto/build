@@ -721,6 +721,7 @@
       "--num-retries=3",
       "--additional-expectations",
       "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src/v8/tools/blink_tests/TestExpectations",
+      "--debug",
       "--isolated-script-test-output=${ISOLATED_OUTDIR}/output.json",
       "--isolated-script-test-perf-output=${ISOLATED_OUTDIR}/perftest-output.json"
     ],
@@ -1542,6 +1543,7 @@
       "--num-retries=3",
       "--additional-expectations",
       "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src/v8/tools/blink_tests/TestExpectations",
+      "--debug",
       "--gtest_repeat=10",
       "--test-launcher-retry-limit=0",
       "--isolated-script-test-filter=test1.Test1::test2.Test2",
