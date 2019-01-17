@@ -134,6 +134,11 @@
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
     },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "gn --runtime-mode debug"
   },
   {
@@ -148,6 +153,11 @@
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gn --runtime-mode debug --unoptimized"
   },
@@ -164,6 +174,11 @@
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
     },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "gn --runtime-mode release --dynamic"
   },
   {
@@ -178,6 +193,11 @@
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gn --runtime-mode profile --android"
   },
@@ -195,6 +215,11 @@
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
     },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "gn --runtime-mode profile --android --android-cpu=arm64"
   },
   {
@@ -209,6 +234,11 @@
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gn --runtime-mode release --android"
   },
@@ -226,6 +256,11 @@
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
     },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "gn --runtime-mode release --android --android-cpu=arm64"
   },
   {
@@ -241,6 +276,11 @@
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gn --runtime-mode profile --android --dynamic"
   },
@@ -259,6 +299,11 @@
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
     },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
     "name": "gn --runtime-mode profile --android --dynamic --android-cpu=arm64"
   },
   {
@@ -274,6 +319,11 @@
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gn --runtime-mode release --android --dynamic"
   },
@@ -291,6 +341,11 @@
     "env": {
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "PATH": "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin;<PATH>"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "gn --runtime-mode release --android --dynamic --android-cpu=arm64"
   },
@@ -379,7 +434,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -640,7 +695,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -901,7 +956,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -1162,7 +1217,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -1424,7 +1479,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -1686,7 +1741,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -1948,7 +2003,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -2210,7 +2265,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -2472,7 +2527,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -2734,7 +2789,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -2996,7 +3051,7 @@
   },
   {
     "cmd": [
-      "ninja",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",

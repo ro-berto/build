@@ -7,6 +7,7 @@ import contextlib
 DEPS = [
   'build',
   'depot_tools/bot_update',
+  'depot_tools/depot_tools',
   'depot_tools/gclient',
   'depot_tools/gsutil',
   'goma',
@@ -35,7 +36,7 @@ def Build(api, config, *targets, **kwargs):
   checkout = api.path['start_dir'].join('src')
   build_dir = checkout.join('out/%s' % config)
   goma_jobs = kwargs['goma_jobs'] if 'goma_jobs' in kwargs else GOMA_JOBS
-  ninja_args = ['ninja', '-j', goma_jobs, '-C', build_dir]
+  ninja_args = [api.depot_tools.ninja_path, '-j', goma_jobs, '-C', build_dir]
   ninja_args.extend(targets)
   api.goma.build_with_goma(
     name='build %s' % ' '.join([config] + list(targets)),
@@ -66,10 +67,12 @@ def RunHostTests(api, out_dir, exe_extension=''):
         [directory.join('flutter_channels_unittests' + exe_extension)])
 
 def RunGN(api, *args):
-  checkout = api.path['start_dir'].join('src')
-  gn_cmd = ['python', checkout.join('flutter/tools/gn'), '--goma']
-  gn_cmd.extend(args)
-  api.step('gn %s' % ' '.join(args), gn_cmd)
+  # flutter/tools/gn assumes access to depot_tools on path
+  with api.depot_tools.on_path():
+    checkout = api.path['start_dir'].join('src')
+    gn_cmd = ['python', checkout.join('flutter/tools/gn'), '--goma']
+    gn_cmd.extend(args)
+    api.step('gn %s' % ' '.join(args), gn_cmd)
 
 
 # The relative_paths parameter is a list of strings and pairs of strings.
