@@ -32,6 +32,8 @@ DEPS = [
   'build/chromium',
   'build/chromium_checkout',
   'build/chromium_tests',
+  'build/isolate',
+  'build/swarming',
   'build/test_utils',
   'depot_tools/bot_update',
   'depot_tools/gclient',
@@ -68,6 +70,32 @@ BUILDERS = freeze({
 })
 
 
+OS_MAPPING = {
+  'linux': 'Ubuntu-14.04',
+  'win': 'Windows-7-SP1',
+  'mac': 'Mac-10.13',
+}
+
+
+def build(api, suffix):
+  """Compiles and isolates the checked-out code.
+
+  Args:
+    api: Recipe module api.
+    suffix: Step name suffix to disambiguate repeated calls.
+  """
+  api.chromium_tests.run_mb_and_compile(
+      ['blink_tests'], ['webkit_layout_tests_exparchive'],
+      name_suffix=suffix,
+  )
+
+  api.isolate.isolate_tests(
+          api.chromium.output_dir,
+          suffix=suffix,
+          targets=['webkit_layout_tests_exparchive'],
+          verbose=True)
+
+
 class DetermineFailuresTool(object):
   """Utility class allowing to run tests in two settings. Failing tests will be
   compared to a baseline run. If also failing there, they will be ignored.
@@ -100,7 +128,17 @@ class DetermineFailuresTool(object):
     raise NotImplementedError()  # pragma: no cover
 
   def determine_new_failures(self):
-    test = self.api.chromium_tests.steps.BlinkTest(extra_args=self.test_args)
+    test = self.api.chromium_tests.steps.SwarmingIsolatedScriptTest(
+        name='webkit_layout_tests',
+        args=self.test_args,
+        target_name='webkit_layout_tests_exparchive',
+        shards=6,
+        merge={
+          'args': ['--verbose'],
+          'script': self.api.path['checkout'].join(
+              'third_party', 'blink', 'tools', 'merge_web_test_results.py'),
+        },
+    )
 
     # Since we don't implement 'retry with patch', we set the corresponding
     # flag on the Test instances.
@@ -140,11 +178,10 @@ class DetermineFutureFailuresTool(DetermineFailuresTool):
     ]
 
   def set_baseline(self, failing_test):
-    # HACK(machenbach): Blink test suite stores state about failing tests. In
-    # order to rerun without future, we need to remove the extra args from the
-    # existing test object.
-    failing_test._extra_args = super(
-        DetermineFutureFailuresTool, self).test_args
+    # HACK(machenbach): SwarmingIsolatedScriptTest stores state about failing
+    # tests. In order to rerun without future, we need to remove the extra args
+    # from the existing test object.
+    failing_test._args = super(DetermineFutureFailuresTool, self).test_args
 
 
 class DetermineToTFailuresTool(DetermineFailuresTool):
@@ -164,10 +201,7 @@ class DetermineToTFailuresTool(DetermineFailuresTool):
     self.api.bot_update.ensure_checkout(
         ignore_input_commit=True, update_presentation=False)
 
-    self.api.chromium_tests.run_mb_and_compile(
-        ['blink_tests'], [],
-        name_suffix=' (without patch)',
-    )
+    build(self.api, ' (without patch)')
 
 
 def RunSteps(api):
@@ -186,6 +220,16 @@ def RunSteps(api):
     api.gclient.apply_config(c)
   api.chromium_tests.set_config('chromium')
 
+  # Set up swarming.
+  api.swarming.default_priority = 25
+  api.swarming.set_default_dimension('gpu', 'none')
+  api.swarming.set_default_dimension('os', OS_MAPPING[api.platform.name])
+  api.swarming.set_default_dimension('pool', 'Chrome')
+  api.swarming.add_default_tag('project:v8')
+  api.swarming.add_default_tag('purpose:CI')
+  api.swarming.add_default_tag('purpose:luci')
+  api.swarming.add_default_tag('purpose:post-commit')
+
   # Sync component to current component revision.
   component_revision = api.buildbucket.gitiles_commit.id or 'HEAD'
   api.gclient.c.revisions['src/v8'] = component_revision
@@ -203,10 +247,7 @@ def RunSteps(api):
     with api.context(cwd=api.path['checkout']):
       api.chromium.runhooks()
 
-    api.chromium_tests.run_mb_and_compile(
-        ['blink_tests'], [],
-        name_suffix=' (with patch)',
-    )
+    build(api, ' (with patch)')
 
     new_failures_tool_cls = DetermineToTFailuresTool
     if 'future' in buildername:
@@ -224,9 +265,9 @@ def _sanitize_nonalpha(text):
 
 
 def GenTests(api):
-  canned_test = api.test_utils.canned_test_output
-  with_patch = 'blink_web_tests (with patch)'
-  without_patch = 'blink_web_tests (without patch)'
+  canned_test = api.test_utils.canned_isolated_script_output
+  with_patch = 'webkit_layout_tests (with patch)'
+  without_patch = 'webkit_layout_tests (without patch)'
 
   def properties(mastername, buildername):
     return (
@@ -245,17 +286,18 @@ def GenTests(api):
       tests = []
       for (pass_first, suffix) in ((True, '_pass'), (False, '_fail')):
         test = (
-          properties(mastername, buildername) +
-          api.platform(
-              bot_config['testing']['platform'],
-              bot_config.get(
-                  'chromium_config_kwargs', {}).get('TARGET_BITS', 64)) +
-          api.test(test_name + suffix) +
-          api.override_step_data(with_patch, canned_test(passing=pass_first))
+            properties(mastername, buildername) +
+            api.platform(
+                bot_config['testing']['platform'],
+                bot_config.get(
+                    'chromium_config_kwargs', {}).get('TARGET_BITS', 64)) +
+            api.test(test_name + suffix) +
+            api.override_step_data(with_patch, canned_test(
+                passing=pass_first, isolated_script_passing=pass_first))
         )
         if not pass_first:
-          test += api.override_step_data(
-              without_patch, canned_test(passing=False, minimal=True))
+          test += api.override_step_data(without_patch, canned_test(
+              passing=False, isolated_script_passing=False))
         tests.append(test)
 
       for test in tests:
@@ -266,11 +308,11 @@ def GenTests(api):
   yield (
     api.test('minimal_pass_continues') +
     properties('client.v8.fyi', 'V8-Blink Linux 64') +
-    api.override_step_data(with_patch, canned_test(passing=False)) +
-    api.override_step_data(without_patch,
-                           canned_test(passing=True, minimal=True))
+    api.override_step_data(with_patch, canned_test(
+        passing=False, isolated_script_passing=False)) +
+    api.override_step_data(without_patch, canned_test(
+        passing=True, isolated_script_passing=True))
   )
-
 
   # This tests what happens if something goes horribly wrong in
   # run_web_tests.py and we return an internal error; the step should
@@ -280,7 +322,10 @@ def GenTests(api):
   yield (
     api.test('blink_web_tests_unexpected_error') +
     properties('client.v8.fyi', 'V8-Blink Linux 64') +
-    api.override_step_data(with_patch, canned_test(passing=False, retcode=255))
+    api.override_step_data(with_patch, canned_test(
+        passing=False,
+        isolated_script_passing=False,
+        isolated_script_retcode=255))
   )
 
   # TODO(dpranke): crbug.com/357866 . This tests what happens if we exceed the
@@ -291,19 +336,8 @@ def GenTests(api):
   yield (
     api.test('blink_web_tests_interrupted') +
     properties('client.v8.fyi', 'V8-Blink Linux 64') +
-    api.override_step_data(with_patch, canned_test(passing=False, retcode=130))
-  )
-
-  # This tests what happens if we don't trip the thresholds listed
-  # above, but fail more tests than we can safely fit in a return code.
-  # (this should be a soft failure and we can still retry w/o the patch
-  # and compare the lists of failing tests).
-  yield (
-    api.test('too_many_failures_for_retcode') +
-    properties('client.v8.fyi', 'V8-Blink Linux 64') +
-    api.override_step_data(with_patch,
-                           canned_test(passing=False,
-                                       num_additional_failures=125)) +
-    api.override_step_data(without_patch,
-                           canned_test(passing=True, minimal=True))
+    api.override_step_data(with_patch, canned_test(
+        passing=False,
+        isolated_script_passing=False,
+        isolated_script_retcode=130))
   )
