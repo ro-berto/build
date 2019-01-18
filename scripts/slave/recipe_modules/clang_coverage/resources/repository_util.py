@@ -7,6 +7,7 @@ It parses the DEPS file to look for dependency repositories, and runs "git log"
 to get the last changed revision of files.
 """
 
+import collections
 import multiprocessing
 import os
 import subprocess
@@ -94,10 +95,11 @@ def _RetrieveRevisionFromGit(args):
   assert checkout_dir.startswith('//')
   cwd = os.path.join(root_dir, checkout_dir[2:])
 
-  path = path[len(checkout_dir):]
+  path_in_dep_repo = path[len(checkout_dir):]
   try:
     git_output = subprocess.check_output(
-        ['git', 'log', '-n', '1', '--pretty=format:%H:%ct', path], cwd=cwd)
+        ['git', 'log', '-n', '1', '--pretty=format:%H:%ct', path_in_dep_repo],
+        cwd=cwd)
 
     lines = git_output.splitlines()
     assert len(lines) == 1, 'More than one line output.'
@@ -109,6 +111,29 @@ def _RetrieveRevisionFromGit(args):
   except (subprocess.CalledProcessError, AssertionError):
     print 'Failed to retrieve revision for %s: %r' % (checkout_dir, path)
     return None
+
+
+def _GetCommitedFilesForEachCheckout(root_dir, checkouts):
+  """Returns source absolute paths to all committed files in each checkout.
+
+  Args:
+    root_dir (str): Absolute path to the directory of the root checkout.
+    checkouts (list): A list of source absolute paths to checkout directories.
+
+  Returns:
+    A dict mapping from a checkout to the list of committed files.
+  """
+  all_files = collections.defaultdict(list)
+  for checkout in checkouts:
+    assert checkout.startswith('//')
+    checkout = checkout[2:]
+    checkout_dir = os.path.join(root_dir, checkout)
+    if not os.path.isdir(checkout_dir):
+      continue
+    git_output = subprocess.check_output(['git', 'ls-files'], cwd=checkout_dir)
+    for path in git_output.splitlines():
+      all_files[checkout].append(os.path.join(checkout, path))
+  return all_files
 
 
 def GetFileRevisions(root_dir, deps_file_path, file_paths):
@@ -126,15 +151,16 @@ def GetFileRevisions(root_dir, deps_file_path, file_paths):
     deps_file_content = f.read()
   checkouts = _GetOrderedCheckoutDirOfDependenciesFromDEPS(deps_file_content)
 
+  all_files = _GetCommitedFilesForEachCheckout(root_dir, checkouts)
+
   for path in file_paths:
     for checkout in checkouts:
-      if path.startswith(checkout):
+      if path.startswith(checkout) and path in all_files.get(checkout, []):
         file_data.append((root_dir, checkout, path))
         break
 
   # Leave 5 cpus for other system or infra processes.
-  pool = multiprocessing.Pool(
-      min(5, processes=multiprocessing.cpu_count() - 5))
+  pool = multiprocessing.Pool(processes=max(5, multiprocessing.cpu_count() - 5))
   future_results = pool.map(_RetrieveRevisionFromGit, file_data, 100)
   pool.close()
   pool.join()

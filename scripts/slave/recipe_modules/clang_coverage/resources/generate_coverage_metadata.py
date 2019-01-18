@@ -17,6 +17,8 @@ import sys
 import time
 import zlib
 
+import repository_util
+
 
 def _extract_coverage_info(segments):
   """Returns the line and sub-line block coverage info based on the segments.
@@ -660,6 +662,24 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
       'Generating & loading coverage metadata with "llvm-cov export" '
       'took %.0f minutes', minutes)
 
+  file_git_metadata = {}
+  if not diff_mapping:
+    logging.info('Retrieving file git metadata...')
+    start_time = time.time()
+    all_files = []
+    for datum in data['data']:
+      for file_data in datum['files']:
+        filename = file_data['filename']
+        src_file = os.path.relpath(filename, src_path)
+        if not src_file.startswith('//'):
+          src_file = '//' + src_file  # Prefix the file path with '//'.
+        all_files.append(src_file)
+    file_git_metadata = repository_util.GetFileRevisions(
+        src_path, 'DEPS', all_files)
+    minutes = (time.time() - start_time) / 60
+    logging.info('Retrieving git metadata for %d files took %.0f minutes',
+                 len(all_files), minutes)
+
   logging.info('Processing coverage data ...')
   start_time = time.time()
   compressed_files = []
@@ -674,7 +694,13 @@ def _generate_metadata(src_path, output_dir, profdata_path, llvm_cov_path,
 
       file_path = record['path']
       if not file_path.startswith('//'):
-        record['path'] = '//' + file_path  # Prefix the file path with '//'.
+        file_path = '//' + file_path  # Prefix the file path with '//'.
+        record['path'] = file_path
+
+      git_metadata = file_git_metadata.get(file_path)
+      if git_metadata:
+        record['revision'] = git_metadata[0]
+        record['timestamp'] = git_metadata[1]
 
   component_summaries = {}
   if component_mapping:

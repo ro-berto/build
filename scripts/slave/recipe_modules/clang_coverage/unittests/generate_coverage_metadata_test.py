@@ -419,10 +419,15 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
   #
   # Where the first column is the line number and the second column is the
   # expected number of times the line is executed.
+  @mock.patch.object(generator.repository_util, 'GetFileRevisions')
   @mock.patch.object(generator, '_get_coverage_data_in_json')
-  def test_generate_metadata_for_full_repo_coverage(self,
-                                                    mock_get_coverage_data):
+  def test_generate_metadata_for_full_repo_coverage(
+      self, mock_get_coverage_data, mock_GetFileRevisions):
     # Number of files should not exceed 1000; otherwise sharding will happen.
+    mock_GetFileRevisions.return_value = {
+        '//dir1/file1.cc': ('hash1', 1234),
+        '//dir2/file2.cc': ('hash2', 5678),
+    }
     mock_get_coverage_data.return_value = {
         'data': [{
             'files': [
@@ -735,7 +740,11 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                     'first': 18,
                 }],
                 'line': 2
-            }]
+            }],
+            'revision':
+                'hash1',
+            'timestamp':
+                1234,
         },
         {
             'path': '//dir2/file2.cc',
@@ -744,7 +753,9 @@ class GenerateCoverageMetadataTest(unittest.TestCase):
                 'last': 1,
                 'first': 1
             }],
-            'total_lines': 1
+            'total_lines': 1,
+            'revision': 'hash2',
+            'timestamp': 5678,
         },
     ]
 
