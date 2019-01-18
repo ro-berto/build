@@ -344,7 +344,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/linux/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"linux-rel\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -450,7 +450,7 @@
       "-m",
       "tryserver.chromium.linux",
       "-b",
-      "linux_chromium_rel_ng",
+      "linux-rel",
       "--config-file",
       "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
       "-v",

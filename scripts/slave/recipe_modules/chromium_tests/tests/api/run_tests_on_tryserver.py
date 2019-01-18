@@ -47,7 +47,7 @@ def GenTests(api):
       api.test('basic') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
@@ -63,7 +63,7 @@ def GenTests(api):
       api.test('enable_retry_with_patch_recipes') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
@@ -82,7 +82,7 @@ def GenTests(api):
       api.test('disable_retry_with_patch_and_deapply') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           disable_retry_with_patch=True,
           affected_files=['testing/buildbot/chromium.linux.json'],
           swarm_hashes={
@@ -104,7 +104,7 @@ def GenTests(api):
       api.test('disable_retry_with_patch_and_deapply_invalid_results') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           disable_retry_with_patch=True,
           affected_files=['testing/buildbot/chromium.linux.json'],
           swarm_hashes={
@@ -126,7 +126,7 @@ def GenTests(api):
       api.test('disable_retry_with_patch') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           disable_retry_with_patch=True,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -149,7 +149,7 @@ def GenTests(api):
       api.test('enable_retry_with_patch_succeed_after_deapply') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
@@ -168,7 +168,7 @@ def GenTests(api):
       api.test('retry_with_patch_failure') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           use_gtest=False,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -224,7 +224,7 @@ def GenTests(api):
       api.test('retry_with_patch_failure_many_shards') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           shards=20,
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -253,7 +253,7 @@ def GenTests(api):
       api.test('enable_retry_with_patch_invalid_test_results') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
@@ -276,7 +276,7 @@ def GenTests(api):
       api.test('enable_retry_with_patch_invalid_initial_test_results') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
@@ -303,7 +303,7 @@ def GenTests(api):
       api.test('enable_retry_with_patch_invalid_without_patch_results') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
@@ -346,7 +346,7 @@ def GenTests(api):
       api.test('retry_without_patch_any_failure') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
           }) +
@@ -375,7 +375,7 @@ def GenTests(api):
       api.test('disable_deapply_patch_affected_files') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           affected_files=['testing/buildbot/chromium.linux.json'],
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
@@ -390,7 +390,7 @@ def GenTests(api):
       api.test('nonzero_exit_code_no_gtest_output') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           affected_files=['testing/buildbot/chromium.linux.json'],
           swarm_hashes={
             'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',

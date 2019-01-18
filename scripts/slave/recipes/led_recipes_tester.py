@@ -36,7 +36,7 @@ BUILDER_FOOTER = 'Led-Recipes-Tester-Builder'
 
 
 DEFAULT_BUILDERS = [
-  'luci.chromium.try:linux_chromium_rel_ng',
+  'luci.chromium.try:linux-rel',
 ]
 
 

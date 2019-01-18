@@ -25,6 +25,6 @@ def GenTests(api):
       api.test('failure') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng') +
+          buildername='linux-rel') +
       api.override_step_data('gclient runhooks (with patch)', retcode=1)
   )

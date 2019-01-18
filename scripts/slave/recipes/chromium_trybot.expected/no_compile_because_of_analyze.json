@@ -8,7 +8,7 @@
       "-m",
       "tryserver.chromium.linux",
       "-b",
-      "linux_chromium_rel_ng",
+      "linux-rel",
       "--config-file",
       "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
       "-v",

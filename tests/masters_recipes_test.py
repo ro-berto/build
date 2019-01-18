@@ -131,6 +131,8 @@ FAKE_BUILDERS = {
         'win_chromium_dbg_ng',
         'win_optional_gpu_tests_rel',
         'win_chromium_x64_rel_ng',
+        # TODO(crbug.com/888810): Remove this entry once bot named is switched
+        # source side.
         'win7_chromium_rel_ng',
         'win10_chromium_x64_rel_ng',
         'win7_chromium_rel_loc_exp',
@@ -140,6 +142,7 @@ FAKE_BUILDERS = {
         # These are pure LUCI bots, no equivalent buildbot bot.
         'gpu_manual_try_win7_nvidia_rel',
         'win10_chromium_x64_dbg_ng',
+        'win7-rel',
         'win-annotator-rel',
         'win-asan',
         'win-jumbo-rel',
@@ -159,6 +162,7 @@ FAKE_BUILDERS = {
         'linux-blink-heap-verification-try',
         'linux-goma-rbe-staging-rel',
         'linux-gcc-rel',
+        'linux-rel',
         'linux-ozone-rel',
         'linux-xenial-rel',
         'linux_chromium_asan_rel_ng',
@@ -167,6 +171,8 @@ FAKE_BUILDERS = {
         'linux_chromium_compile_rel_ng',
         'linux_chromium_dbg_ng',
         'linux_chromium_headless_rel',
+        # TODO(crbug.com/888810): Remove this entry once bot named is switched
+        # source side.
         'linux_chromium_rel_ng',
         'linux_chromium_tsan_rel_ng',
         'linux_optional_gpu_tests_rel',
@@ -230,12 +236,15 @@ FAKE_BUILDERS = {
         'mac_chromium_compile_dbg_ng',
         'mac_chromium_compile_rel_ng',
         'mac_chromium_dbg_ng',
+        # TODO(crbug.com/888810): Remove this entry once bot named is switched
+        # source side.
         'mac_chromium_rel_ng',
         'mac_optional_gpu_tests_rel',
         'ios-simulator-cronet',
         'mac-views-rel',
         # These are pure LUCI bots, no equivalent buildbot bot.
         'mac-jumbo-rel',
+        'mac-rel',
         'WebKit Mac10.13 (retina)',  # copied from master.chromium.webkit
     ],
     'master.tryserver.blink': [

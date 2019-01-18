@@ -68,7 +68,7 @@ def GenTests(api):
       api.test('basic') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           path_config='kitchen') +
       api.runtime(is_experimental=False, is_luci=True) +
       api.chromium_tests.read_source_side_spec(
@@ -136,7 +136,7 @@ def GenTests(api):
       api.test('no_compile') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           path_config='kitchen') +
       api.runtime(is_experimental=False, is_luci=True)
   )
@@ -145,7 +145,7 @@ def GenTests(api):
       api.test('no_compile_no_source') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           path_config='kitchen') +
       api.runtime(is_experimental=False, is_luci=True) +
       api.override_step_data(
@@ -182,7 +182,7 @@ def GenTests(api):
     api.test('exparchive_5percent_experiment_enabled') +
     api.properties.tryserver(
         mastername='tryserver.chromium.linux',
-        buildername='linux_chromium_rel_ng',
+        buildername='linux-rel',
         buildnumber=1020, # 5% is (x % 100/5 == 0)
         swarm_hashes={
           'base_unittests':
@@ -214,7 +214,7 @@ def GenTests(api):
       api.test('exparchive_5percent_experiment_disabled_%i' % i) +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng',
+          buildername='linux-rel',
           buildnumber=1020 + i,
           swarm_hashes={
             'base_unittests':

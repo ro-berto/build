@@ -96,7 +96,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      # 5% of the linux_chromium_rel_ng builds will use exparchive instead of
+      # 5% of the linux-rel builds will use exparchive instead of
       # batcharchive to allow comparison of performance.
       'force_exparchive': 5,
       'checkout_dir': 'linux',

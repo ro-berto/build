@@ -251,7 +251,7 @@ Each waterfall builder is specified using a dict like this
 
 ``` python
 {
-  'name': 'mac_chromium_rel_ng'
+  'name': 'mac-rel'
   'factory': m_annotator.BaseFactory(
       'chromium',     # name of the recipe
       factory_properties=None,  # optional factory properties
@@ -271,7 +271,7 @@ Similarly, a tryserver builder is specified using `chromium_trybot` recipe (from
 
 ``` python
 {
-  'name': 'mac_chromium_rel_ng',
+  'name': 'mac-rel',
   'factory': m_annotator.BaseFactory('chromium_trybot'),
   # Share build directory [...] to save space.
   'slavebuilddir': 'mac'

@@ -430,7 +430,7 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'linux-blink-heap-verification',
       }),
-      # This trybot mirrors linux_chromium_rel_ng
+      # This trybot mirrors linux-rel
       'linux-dcheck-off-rel': {
         'bot_ids': [
           {
@@ -483,7 +483,23 @@ TRYBOTS = freeze({
         'buildername': 'Linux Builder (dbg)',
         'tester': 'Linux Tests (dbg)(1)',
       }),
+      # TODO(crbug.com/888810): Remove this entry once bot named is switched
+      # source side.
       'linux_chromium_rel_ng': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.linux',
+            'buildername': 'Linux Builder',
+            'tester': 'Linux Tests',
+          },
+          {
+            'mastername': 'chromium.gpu',
+            'buildername': 'GPU Linux Builder',
+            'tester': 'Linux Release (NVIDIA)',
+          },
+        ],
+      },
+      'linux-rel': {
         'bot_ids': [
           {
             'mastername': 'chromium.linux',
@@ -651,7 +667,28 @@ TRYBOTS = freeze({
         'buildername': 'Mac Builder (dbg)',
         'tester': 'Mac10.13 Tests (dbg)',
       }),
+      # TODO(crbug.com/888810): Remove this entry once bot named is switched
+      # source side.
       'mac_chromium_rel_ng': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.mac',
+            'buildername': 'Mac Builder',
+            'tester': 'Mac10.13 Tests',
+          },
+          {
+            'mastername': 'chromium.gpu',
+            'buildername': 'GPU Mac Builder',
+            'tester': 'Mac Release (Intel)',
+          },
+          {
+            'mastername': 'chromium.gpu',
+            'buildername': 'GPU Mac Builder',
+            'tester': 'Mac Retina Release (AMD)',
+          },
+        ],
+      },
+      'mac-rel': {
         'bot_ids': [
           {
             'mastername': 'chromium.mac',
@@ -783,7 +820,23 @@ TRYBOTS = freeze({
         'buildername': 'Win Builder (dbg)',
         'tester': 'Win7 Tests (dbg)(1)',
       }),
+      # TODO(crbug.com/888810): Remove this entry once bot named is switched
+      # source side.
       'win7_chromium_rel_ng': {
+        'bot_ids': [
+          {
+            'mastername': 'chromium.win',
+            'buildername': 'Win Builder',
+            'tester': 'Win7 Tests (1)',
+          },
+          {
+            'mastername': 'chromium.gpu',
+            'buildername': 'GPU Win Builder',
+            'tester': 'Win10 Release (NVIDIA)',
+          },
+        ],
+      },
+      'win7-rel': {
         'bot_ids': [
           {
             'mastername': 'chromium.win',

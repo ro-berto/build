@@ -361,7 +361,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]\\\\win\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"win7_chromium_rel_ng\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"win7-rel\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -472,7 +472,7 @@
       "-m",
       "tryserver.chromium.win",
       "-b",
-      "win7_chromium_rel_ng",
+      "win7-rel",
       "--config-file",
       "[BUILDER_CACHE]\\win\\src\\tools\\mb\\mb_config.pyl",
       "-v",
@@ -536,7 +536,7 @@
       "-m",
       "tryserver.chromium.win",
       "-b",
-      "win7_chromium_rel_ng",
+      "win7-rel",
       "--config-file",
       "[BUILDER_CACHE]\\win\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
@@ -562,7 +562,7 @@
       "-m",
       "tryserver.chromium.win",
       "-b",
-      "win7_chromium_rel_ng",
+      "win7-rel",
       "--config-file",
       "[BUILDER_CACHE]\\win\\src\\tools\\mb\\mb_config.pyl",
       "--goma-dir",
@@ -594,7 +594,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]\\data\\win7_chromium_rel_ng"
+      "[GOMA_CACHE]\\data\\win7_rel"
     ],
     "cwd": "[BUILDER_CACHE]\\win\\src",
     "env": {
@@ -617,7 +617,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]\\crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\win7_chromium_rel_ng",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]\\data\\win7_rel",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]\\goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]\\goma_stats",
@@ -833,9 +833,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"win7_chromium_rel_ng\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"try\", \"builder\": \"win7-rel\", \"project\": \"chromium\"}",
       "--buildbot-buildername",
-      "win7_chromium_rel_ng",
+      "win7-rel",
       "--buildbot-mastername",
       "tryserver.chromium.win",
       "--buildbot-slavename",
@@ -914,15 +914,15 @@
       "--target",
       "Release",
       "--factory-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildername\": \"win7_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_trybot\", \"revision\": null, \"slavename\": \"TestSlavename\", \"swarm_hashes\": {}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildername\": \"win7-rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_trybot\", \"revision\": null, \"slavename\": \"TestSlavename\", \"swarm_hashes\": {}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildername\": \"win7_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_trybot\", \"revision\": null, \"slavename\": \"TestSlavename\", \"swarm_hashes\": {}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"build_config\": \"Release\", \"buildername\": \"win7-rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.win\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"path_config\": \"kitchen\", \"recipe\": \"chromium_trybot\", \"revision\": null, \"slavename\": \"TestSlavename\", \"swarm_hashes\": {}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=gtest",
       "--test-type=base_unittests",
       "--step-name=base_unittests (with patch)",
       "--test-launcher-summary-output",
       "/path/to/tmp/json",
-      "--builder-name=win7_chromium_rel_ng",
+      "--builder-name=win7-rel",
       "--slave-name=test_bot",
       "--build-number=0",
       "base_unittests.exe"
@@ -944,7 +944,7 @@
       "--master-name",
       "tryserver.chromium.win",
       "--builder-name",
-      "win7_chromium_rel_ng",
+      "win7-rel",
       "--build-number",
       "0",
       "--test-type",

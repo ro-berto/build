@@ -292,7 +292,7 @@
     "cmd": [
       "[CACHE]/led/led",
       "get-builder",
-      "luci.chromium.try:linux_chromium_rel_ng"
+      "luci.chromium.try:linux-rel"
     ],
     "cwd": "[CACHE]/build/build",
     "name": "led get-builder",
@@ -478,7 +478,7 @@
       "--print-status-updates",
       "--task-output-stdout=none"
     ],
-    "name": "collect luci.chromium.try:linux_chromium_rel_ng task",
+    "name": "collect luci.chromium.try:linux-rel task",
     "~followup_annotations": [
       "@@@STEP_LINK@Swarming task@https://chromium-swarm.appspot.com/task?id=beeeeeeeee5@@@"
     ]

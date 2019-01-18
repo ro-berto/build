@@ -55,7 +55,7 @@ def GenTests(api):
   canned_test = api.test_utils.canned_gtest_output
 
   def props(config='Release', mastername='tryserver.chromium.linux',
-            builder='linux_chromium_rel_ng',
+            builder='linux-rel',
             swarm_hashes=None, extra_swarmed_tests=None,
             **kwargs):
     bb_kwargs = {
@@ -121,7 +121,7 @@ def GenTests(api):
   yield (
     api.test('process_dumps_failure') +
     props(mastername='tryserver.chromium.win',
-          builder='win7_chromium_rel_ng') +
+          builder='win7-rel') +
     api.platform.name('win') +
     api.chromium_tests.read_source_side_spec(
         'chromium.win', {
@@ -442,7 +442,7 @@ def GenTests(api):
 
   yield (
     api.test('runhooks_failure') +
-    props(builder='win7_chromium_rel_ng',
+    props(builder='win7-rel',
           mastername='tryserver.chromium.win') +
     api.platform.name('win') +
     api.step_data('gclient runhooks (with patch)', retcode=1) +
@@ -636,7 +636,7 @@ def GenTests(api):
 
   yield (
     api.test('use_v8_patch_on_chromium_trybot') +
-    props(builder='win7_chromium_rel_ng',
+    props(builder='win7-rel',
           mastername='tryserver.chromium.win',
           repository='https://chromium.googlesource.com/v8/v8',
           patch_repository_url='https://chromium.googlesource.com/v8/v8',
@@ -678,7 +678,7 @@ def GenTests(api):
 
   yield (
     api.test('use_skia_patch_on_chromium_trybot') +
-    props(builder='win7_chromium_rel_ng',
+    props(builder='win7-rel',
           mastername='tryserver.chromium.win',
           repository='https://skia.googlesource.com/skia',
           patch_repository_url='https://skia.googlesource.com/skia',

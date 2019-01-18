@@ -78,7 +78,7 @@ def GenTests(api):
       api.test('failure_tryserver') +
       api.properties.tryserver(
           mastername='tryserver.chromium.linux',
-          buildername='linux_chromium_rel_ng') +
+          buildername='linux-rel') +
       api.override_step_data('compile (with patch)', retcode=1)
   )
 

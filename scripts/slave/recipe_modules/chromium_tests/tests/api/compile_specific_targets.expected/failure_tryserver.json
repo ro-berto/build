@@ -280,7 +280,7 @@
       "--paths",
       "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"linux-rel\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
     "name": "get compile targets for scripts",
     "~followup_annotations": [
@@ -327,7 +327,7 @@
       "-m",
       "tryserver.chromium.linux",
       "-b",
-      "linux_chromium_rel_ng",
+      "linux-rel",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -353,7 +353,7 @@
       "-m",
       "tryserver.chromium.linux",
       "-b",
-      "linux_chromium_rel_ng",
+      "linux-rel",
       "--config-file",
       "[START_DIR]/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -385,7 +385,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data/linux_chromium_rel_ng"
+      "[CACHE]/goma/data/linux_rel"
     ],
     "cwd": "[START_DIR]/src",
     "env": {
@@ -408,7 +408,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_chromium_rel_ng",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/linux_rel",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -607,9 +607,9 @@
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
-      "{\"bucket\": \"master.tryserver.chromium.linux\", \"builder\": \"linux_chromium_rel_ng\", \"project\": \"\"}",
+      "{\"bucket\": \"master.tryserver.chromium.linux\", \"builder\": \"linux-rel\", \"project\": \"\"}",
       "--buildbot-buildername",
-      "linux_chromium_rel_ng",
+      "linux-rel",
       "--buildbot-mastername",
       "tryserver.chromium.linux",
       "--buildbot-slavename",

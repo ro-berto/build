@@ -590,7 +590,7 @@ class ConfigurationTest(unittest.TestCase):
         'id': '8979775000984247248',
         'lease_key': '2065395720',
         'tags': [
-          'builder:linux_chromium_rel_ng',
+          'builder:linux-rel',
           'buildset:patch/rietveld/codereview.chromium.org/2852733003/1',
           'master:tryserver.chromium.linux',
           'user_agent:rietveld'

@@ -130,7 +130,7 @@ SPEC = {
         'mb',
         'ninja_confirm_noop',
 
-        # This is specified because 'linux_chromium_rel_ng' builder
+        # This is specified because 'linux-rel' builder
         # is one of the slowest builder in CQ (crbug.com/804251).
         'goma_high_parallel',
       ],
@@ -143,7 +143,7 @@ SPEC = {
       'testing': {
         'platform': 'linux',
       },
-      # 5% of the linux_chromium_rel_ng builds will use exparchive instead of
+      # 5% of the linux-rel builds will use exparchive instead of
       # batcharchive to allow comparison of performance.
       'force_exparchive': 5,
       'checkout_dir': 'linux',

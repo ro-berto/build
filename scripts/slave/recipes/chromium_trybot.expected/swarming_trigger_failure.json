@@ -344,7 +344,7 @@
       "--paths",
       "{\"checkout\": \"[BUILDER_CACHE]/linux/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
-      "{\"bot_id\": \"test_bot\", \"buildername\": \"linux_chromium_rel_ng\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
+      "{\"bot_id\": \"test_bot\", \"buildername\": \"linux-rel\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.linux\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
@@ -460,7 +460,7 @@
       "-m",
       "tryserver.chromium.linux",
       "-b",
-      "linux_chromium_rel_ng",
+      "linux-rel",
       "--config-file",
       "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
       "-v",
@@ -538,7 +538,7 @@
       "-m",
       "tryserver.chromium.linux",
       "-b",
-      "linux_chromium_rel_ng",
+      "linux-rel",
       "--config-file",
       "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -564,7 +564,7 @@
       "-m",
       "tryserver.chromium.linux",
       "-b",
-      "linux_chromium_rel_ng",
+      "linux-rel",
       "--config-file",
       "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -602,7 +602,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/data/linux_chromium_rel_ng"
+      "[GOMA_CACHE]/data/linux_rel"
     ],
     "cwd": "[BUILDER_CACHE]/linux/src",
     "env": {
@@ -625,7 +625,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux_chromium_rel_ng",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux_rel",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -840,9 +840,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"linux_chromium_rel_ng\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"try\", \"builder\": \"linux-rel\", \"project\": \"chromium\"}",
       "--buildbot-buildername",
-      "linux_chromium_rel_ng",
+      "linux-rel",
       "--buildbot-mastername",
       "tryserver.chromium.linux",
       "--buildbot-slavename",
@@ -1170,7 +1170,7 @@
       "-m",
       "tryserver.chromium.linux",
       "-b",
-      "linux_chromium_rel_ng",
+      "linux-rel",
       "--config-file",
       "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -1196,7 +1196,7 @@
       "-m",
       "tryserver.chromium.linux",
       "-b",
-      "linux_chromium_rel_ng",
+      "linux-rel",
       "--config-file",
       "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -1234,7 +1234,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/data/linux_chromium_rel_ng"
+      "[GOMA_CACHE]/data/linux_rel"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -1257,7 +1257,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux_chromium_rel_ng",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux_rel",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -1472,9 +1472,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"linux_chromium_rel_ng\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"try\", \"builder\": \"linux-rel\", \"project\": \"chromium\"}",
       "--buildbot-buildername",
-      "linux_chromium_rel_ng",
+      "linux-rel",
       "--buildbot-mastername",
       "tryserver.chromium.linux",
       "--buildbot-slavename",
@@ -1872,7 +1872,7 @@
       "-m",
       "tryserver.chromium.linux",
       "-b",
-      "linux_chromium_rel_ng",
+      "linux-rel",
       "--config-file",
       "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -1898,7 +1898,7 @@
       "-m",
       "tryserver.chromium.linux",
       "-b",
-      "linux_chromium_rel_ng",
+      "linux-rel",
       "--config-file",
       "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
       "--goma-dir",
@@ -1936,7 +1936,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/data/linux_chromium_rel_ng"
+      "[GOMA_CACHE]/data/linux_rel"
     ],
     "cwd": "[BUILDER_CACHE]/linux",
     "env": {
@@ -1959,7 +1959,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux_chromium_rel_ng",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux_rel",
       "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
@@ -2174,9 +2174,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"linux_chromium_rel_ng\", \"project\": \"chromium\"}",
+      "{\"bucket\": \"try\", \"builder\": \"linux-rel\", \"project\": \"chromium\"}",
       "--buildbot-buildername",
-      "linux_chromium_rel_ng",
+      "linux-rel",
       "--buildbot-mastername",
       "tryserver.chromium.linux",
       "--buildbot-slavename",
