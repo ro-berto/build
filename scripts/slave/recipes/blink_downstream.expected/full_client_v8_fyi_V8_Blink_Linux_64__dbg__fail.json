@@ -940,6 +940,41 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_layout_test_results.py",
+      "--results-dir",
+      "[START_DIR]/layout-test-results",
+      "--build-dir",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src/out",
+      "--build-number",
+      "0",
+      "--builder-name",
+      "V8-Blink Linux 64 (dbg)",
+      "--gs-bucket",
+      "gs://chromium-layout-test-archives",
+      "--staging-dir",
+      "[CACHE]/chrome_staging",
+      "--store-latest",
+      "--step-name",
+      "webkit_layout_tests (with patch)",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
+    "name": "archive results for webkit_layout_tests (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64__dbg_/0/webkit_layout_tests (with patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64__dbg_/0/webkit_layout_tests (with patch)/layout-test-results.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
@@ -1697,6 +1732,41 @@
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
       "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_layout_test_results.py",
+      "--results-dir",
+      "[START_DIR]/layout-test-results",
+      "--build-dir",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src/out",
+      "--build-number",
+      "0",
+      "--builder-name",
+      "V8-Blink Linux 64 (dbg)",
+      "--gs-bucket",
+      "gs://chromium-layout-test-archives",
+      "--staging-dir",
+      "[CACHE]/chrome_staging",
+      "--store-latest",
+      "--step-name",
+      "webkit_layout_tests (without patch)",
+      "--slave-utils-gsutil-py-path",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+    ],
+    "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
+    "name": "archive results for webkit_layout_tests (without patch)",
+    "~followup_annotations": [
+      "@@@STEP_LINK@layout_test_results@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64__dbg_/0/webkit_layout_tests (without patch)/layout-test-results/results.html@@@",
+      "@@@STEP_LINK@(zip)@https://test-results.appspot.com/data/layout_results/V8-Blink_Linux_64__dbg_/0/webkit_layout_tests (without patch)/layout-test-results.zip@@@"
     ]
   },
   {

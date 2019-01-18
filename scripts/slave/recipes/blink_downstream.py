@@ -147,6 +147,7 @@ class DetermineFailuresTool(object):
           'script': self.api.path['checkout'].join(
               'third_party', 'blink', 'tools', 'merge_web_test_results.py'),
         },
+        results_handler=self.api.chromium_tests.steps.LayoutTestResultsHandler()
     )
 
     # Since we don't implement 'retry with patch', we set the corresponding
