@@ -123,16 +123,15 @@ def _GetCommitedFilesForEachCheckout(root_dir, checkouts):
   Returns:
     A dict mapping from a checkout to the list of committed files.
   """
-  all_files = collections.defaultdict(list)
+  all_files = collections.defaultdict(set)
   for checkout in checkouts:
     assert checkout.startswith('//')
-    checkout = checkout[2:]
-    checkout_dir = os.path.join(root_dir, checkout)
+    checkout_dir = os.path.join(root_dir, checkout[2:])
     if not os.path.isdir(checkout_dir):
       continue
     git_output = subprocess.check_output(['git', 'ls-files'], cwd=checkout_dir)
     for path in git_output.splitlines():
-      all_files[checkout].append(os.path.join(checkout, path))
+      all_files[checkout].add(os.path.join(checkout, path))
   return all_files
 
 
