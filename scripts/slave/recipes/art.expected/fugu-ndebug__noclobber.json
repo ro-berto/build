@@ -133,9 +133,7 @@
   },
   {
     "cmd": [
-      "make",
-      "-j1",
-      "test-art-target-gtest32"
+      "./art/tools/run-gtests.sh -j1"
     ],
     "env": {
       "ADB": "[START_DIR]/prebuilts/runtime/adb",

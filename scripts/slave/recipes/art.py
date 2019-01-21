@@ -341,8 +341,7 @@ def setup_target(api,
 
 
     with api.context(env=gtest_env):
-      api.step('test gtest', ['make', '-j%d' % (make_jobs),
-        'test-art-target-gtest%d' % bitness])
+      api.step('test gtest', ['./art/tools/run-gtests.sh -j%d' % (make_jobs)])
     test_logging(api, 'test gtest')
 
     optimizing_make_jobs = make_jobs
