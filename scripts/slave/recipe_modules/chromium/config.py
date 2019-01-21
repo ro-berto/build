@@ -296,14 +296,6 @@ def goma_mixer_staging(c):
 # TODO(ukai): add goma_mixer_prod
 
 @config_ctx()
-def goma_rbe_staging(c):
-  c.compile_py.goma_failfast = True
-  c.env.GOMA_SETTINGS_SERVER = (
-      'https://cxx-compiler-service.appspot.com/settings')
-  c.env.GOMA_USE_CASE = 'rbe-staging'
-  c.compile_py.use_autoninja = True
-
-@config_ctx()
 def goma_rbe_prod(c):
   c.compile_py.goma_failfast = True
   c.env.GOMA_SETTINGS_SERVER = (
