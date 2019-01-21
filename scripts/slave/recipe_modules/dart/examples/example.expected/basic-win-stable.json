@@ -2165,19 +2165,6 @@
     ]
   },
   {
-    "cmd": [
-      "[CACHE]\\builder\\sdk\\tools\\sdks\\dart-sdk\\bin\\dart.exe",
-      "tools/approve_results.dart",
-      "--automated-approver",
-      "-b",
-      "dart2js-win-debug-x64-firefox-stable",
-      "--successes-only",
-      "-y"
-    ],
-    "cwd": "[CACHE]\\builder\\sdk",
-    "name": "approve unapproved successes"
-  },
-  {
     "jsonResult": null,
     "name": "$result"
   }
