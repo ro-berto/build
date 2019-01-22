@@ -217,6 +217,7 @@
   * [dart/external](#recipes-dart_external)
   * [dart/flutter_engine](#recipes-dart_flutter_engine)
   * [dart/forward_branch](#recipes-dart_forward_branch)
+  * [dart/gclient](#recipes-dart_gclient)
   * [dart/misc](#recipes-dart_misc)
   * [dart/neo](#recipes-dart_neo)
   * [dart/sdk_builder](#recipes-dart_sdk_builder)
@@ -5071,6 +5072,11 @@ Kills leftover tasks from previous runs or steps.
 [DEPS](/scripts/slave/recipes/dart/forward_branch.py#8): [dart](#recipe_modules-dart), [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/forward_branch.py#19)(api):**
+### *recipes* / [dart/gclient](/scripts/slave/recipes/dart/gclient.py)
+
+[DEPS](/scripts/slave/recipes/dart/gclient.py#8): [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/gclient.py#21)(api):**
 ### *recipes* / [dart/misc](/scripts/slave/recipes/dart/misc.py)
 
 [DEPS](/scripts/slave/recipes/dart/misc.py#5): [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
