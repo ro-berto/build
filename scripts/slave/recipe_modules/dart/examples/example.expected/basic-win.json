@@ -2181,6 +2181,10 @@
       "LATEST/flaky.json",
       "-o",
       "/path/to/tmp/",
+      "--build-id",
+      "8945511751514863184",
+      "--commit",
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       ""
     ],
     "cwd": "[CACHE]\\builder\\sdk",
@@ -2320,6 +2324,29 @@
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "name": "find unapproved passing tests",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]\\builder\\sdk\\tools\\sdks\\dart-sdk\\bin\\dart.exe",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "",
+      "--human",
+      "--verbose",
+      "[CACHE]\\builder\\sdk\\LATEST\\results.json",
+      "",
+      "[CACHE]\\builder\\sdk\\LATEST\\approved_results.json",
+      "--logs",
+      "",
+      "--logs-only",
+      "--flaky"
+    ],
+    "cwd": "[CACHE]\\builder\\sdk",
+    "name": "find ignored flaky test failure logs",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"

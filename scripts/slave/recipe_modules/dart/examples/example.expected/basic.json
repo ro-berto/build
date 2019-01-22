@@ -1960,6 +1960,10 @@
       "LATEST/flaky.json",
       "-o",
       "/path/to/tmp/",
+      "--build-id",
+      "8945511751514863184",
+      "--commit",
+      "3456abce78ef",
       "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"3456abce78ef\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"3456abce78ef\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"3456abce78ef\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"3456abce78ef\",\"build_number\":1357,\"builder_name\":\"dart2js-linux-release-chrome-try\",\"bot_name\":\"None\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",

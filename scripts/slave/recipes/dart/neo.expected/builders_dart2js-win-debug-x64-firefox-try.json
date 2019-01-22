@@ -1031,6 +1031,10 @@
       "LATEST/flaky.json",
       "-o",
       "/path/to/tmp/",
+      "--build-id",
+      "8945511751514863184",
+      "--commit",
+      "3456abcd78ef",
       ""
     ],
     "cwd": "[CACHE]/builder/sdk",

@@ -1986,6 +1986,10 @@
       "LATEST/flaky.json",
       "-o",
       "/path/to/tmp/",
+      "--build-id",
+      "8945511751514863184",
+      "--commit",
+      "3456abce78ef",
       "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"3456abce78ef\",\"build_number\":1357,\"builder_name\":\"analyzer-none-linux-release-be\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"3456abce78ef\",\"build_number\":1357,\"builder_name\":\"analyzer-none-linux-release-be\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"3456abce78ef\",\"build_number\":1357,\"builder_name\":\"analyzer-none-linux-release-be\",\"bot_name\":\"trusty-dart-123\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"3456abce78ef\",\"build_number\":1357,\"builder_name\":\"analyzer-none-linux-release-be\",\"bot_name\":\"trusty-dart-123\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
@@ -2125,6 +2129,29 @@
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "find unapproved passing tests",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/bots/compare_results.dart",
+      "--flakiness-data",
+      "",
+      "--human",
+      "--verbose",
+      "[CACHE]/builder/sdk/LATEST/results.json",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"3456abce78ef\",\"build_number\":1357,\"builder_name\":\"analyzer-none-linux-release-be\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"3456abce78ef\",\"build_number\":1357,\"builder_name\":\"analyzer-none-linux-release-be\",\"bot_name\":\"vm30\"}\n{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"3456abce78ef\",\"build_number\":1357,\"builder_name\":\"analyzer-none-linux-release-be\",\"bot_name\":\"trusty-dart-123\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"3456abce78ef\",\"build_number\":1357,\"builder_name\":\"analyzer-none-linux-release-be\",\"bot_name\":\"trusty-dart-123\"}\n",
+      "[CACHE]/builder/sdk/LATEST/approved_results.json",
+      "--logs",
+      "{\"test\":\"log\"}\n{\"test\":\"log\"}\n",
+      "--logs-only",
+      "--flaky"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "find ignored flaky test failure logs",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"

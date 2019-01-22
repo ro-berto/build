@@ -360,6 +360,10 @@ class DartApi(recipe_api.RecipeApi):
             'LATEST/flaky.json',
             '-o',
             self.m.raw_io.output_text(name='flaky.json', add_output_log=True),
+            '--build-id',
+            self.m.buildbucket.build.id,
+            '--commit',
+            self.m.buildbucket.gitiles_commit.id,
             self.m.raw_io.input_text(results_str, name='results.json')],
             ok_ret='any' if self._report_new_results() else {0})
     return flaky_json.raw_io.output_texts.get('flaky.json')
@@ -486,6 +490,10 @@ class DartApi(recipe_api.RecipeApi):
       links["unapproved passing tests"] = self.m.step(
           'find unapproved passing tests',
           args + ["--unapproved", "--passing"],
+          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+      links["ignored flaky test failure logs"] = self.m.step(
+          'find ignored flaky test failure logs',
+          args + args_logs + ["--flaky"],
           stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
       judgement_args += ["--failing", "--unapproved"]
     with self.m.step.defer_results():
