@@ -47,6 +47,17 @@ SPEC = freeze({
       'gen_repo_branch': 'master',
       'corpus': 'chromium',
     },
+    'codesearch-gen-chromium-fuchsia': {
+      'compile_targets': [
+        'all',
+      ],
+      'platform': 'fuchsia',
+      # Mark Fuchsia kzip files as experimental until we know they work.
+      'experimental': True,
+      'sync_generated_files': False,
+      'gen_repo_branch': 'master',
+      'corpus': 'chromium-fuchsia',
+    },
     'codesearch-gen-chromium-chromiumos': {
       # TODO(emso): Get the below compile targets.
       # from the chromium_tests recipe module.
@@ -161,6 +172,8 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
     gclient_config.target_os = ['android']
   elif platform == 'chromeos':
     gclient_config.target_os = ['chromeos']
+  elif platform == 'fuchsia':
+    gclient_config.target_os = ['fuchsia']
   api.gclient.c = gclient_config
 
   checkout_dir = api.path['cache'].join('builder')
