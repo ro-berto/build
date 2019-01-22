@@ -132,6 +132,7 @@
       "--",
       "python",
       "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
+      "--verbose",
       "-o",
       "/path/to/tmp/json",
       "--task-output-dir",

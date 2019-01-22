@@ -200,9 +200,9 @@ def main():
   parser.add_argument('collect_cmd', nargs='+')
 
   args = parser.parse_args()
-  if args.verbose:
-    fmt = '%(asctime)s - %(name)s: [%(levelname)s] %(message)s'
-    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG, format=fmt)
+  log_level = logging.DEBUG if args.verbose else logging.WARNING
+  fmt = '%(asctime)s - %(name)s: [%(levelname)s] %(message)s'
+  logging.basicConfig(stream=sys.stdout, level=log_level, format=fmt)
 
   return collect_task(
       args.collect_cmd,

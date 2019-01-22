@@ -948,6 +948,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       task_output_dir = self.m.raw_io.output_dir(leak_to=task_output_dir)
 
     task_args = [
+      '--verbose',
       '-o', merged_test_output or self.m.json.output(),
       '--task-output-dir', task_output_dir,
     ]
