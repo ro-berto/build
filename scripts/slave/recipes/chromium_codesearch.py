@@ -56,7 +56,10 @@ SPEC = freeze({
       'experimental': True,
       'sync_generated_files': False,
       'gen_repo_branch': 'master',
-      'corpus': 'chromium-fuchsia',
+      # Generated files will end up in out/fuchsia-Debug/gen.
+      'gen_repo_out_dir': 'fuchsia-Debug',
+      'corpus': 'chromium',
+      'root': 'chromium-fuchsia',
     },
     'codesearch-gen-chromium-chromiumos': {
       # TODO(emso): Get the below compile targets.
