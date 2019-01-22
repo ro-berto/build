@@ -4593,7 +4593,7 @@ This recipe picks a commit at HEAD, and then triggers the other codesearch
 recipes with the chosen commit hash as a parameter. This ensures that codesearch
 index packs (used to generate xrefs) are all generated from the same revision.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch_initiator.py#55)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch_initiator.py#56)(api):**
 ### *recipes* / [chromium\_gsutil:examples/full](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py#5): [chromium\_gsutil](#recipe_modules-chromium_gsutil), [recipe\_engine/path][recipe_engine/recipe_modules/path]
