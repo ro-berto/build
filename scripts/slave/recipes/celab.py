@@ -31,6 +31,11 @@ def _get_bin_directory(api, checkout):
   return bin_dir
 
 
+def _get_ctl_binary_name(api):
+  suffix = '.exe' if api.platform.is_win else ''
+  return "cel_ctl" + suffix
+
+
 def RunSteps(api):
   # Checkout the CELab repo
   go_root = api.path['start_dir'].join('go')
@@ -64,12 +69,14 @@ def RunSteps(api):
     api.python('install deps', 'build.py', ['deps', '--install', '--verbose'])
     api.python('build', 'build.py', ['build', '--verbose'])
 
-  # Upload binaries for CI builds
+  # Upload binaries (cel_ctl and resources/*) for CI builds
   if api.buildbucket.build.builder.bucket == 'ci':
     output_dir = _get_bin_directory(api, checkout)
+    cel_ctl = _get_ctl_binary_name(api)
     zip_out = api.path['start_dir'].join('cel.zip')
     pkg = api.zip.make_package(output_dir, zip_out)
-    pkg.add_directory(output_dir)
+    pkg.add_file(output_dir.join(cel_ctl))
+    pkg.add_directory(output_dir.join('resources'))
     pkg.zip('zip archive')
 
     today = api.time.utcnow().date()

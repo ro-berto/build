@@ -177,7 +177,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "zip archive",
-    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/linux_amd64/bin\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/cel.zip\", \"root\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/linux_amd64/bin\"}"
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/linux_amd64/bin/cel_ctl\", \"type\": \"file\"}, {\"path\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/linux_amd64/bin/resources\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/cel.zip\", \"root\": \"[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel/out/linux_amd64/bin\"}"
   },
   {
     "cmd": [
