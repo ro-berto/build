@@ -55,16 +55,6 @@ def GenTests(api):
           'device type': 'fake device 0',
           'os': '11.0',
           'shard size': 2,
-          'dimensions': [
-            {
-              'os': 'Mac-10.12',
-              'pool': 'Chrome',
-            },
-            {
-              'os': 'Mac-10.13',
-              'pool': 'Chrome',
-            }
-          ],
         },
         {
           'app': 'fake test 1',

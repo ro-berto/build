@@ -626,7 +626,6 @@ class iOSApi(recipe_api.RecipeApi):
       step_name = '%s shard %s' % (step_name, shard_num)
     task = {
         'bot id': test.get('bot id'),
-        'dimensions': test.get('dimensions'),
         'isolated.gen': None,
         'isolated hash': None,
         'pool': test.get('pool'),
@@ -864,18 +863,6 @@ class iOSApi(recipe_api.RecipeApi):
 
       task['tmp_dir'] = self.m.path.mkdtemp(task['task_id'])
 
-      # TODO(huangml): Move all dimensions into configuration files.
-      trigger_script = None
-      if task.get('dimensions'):
-        trigger_script = {
-          'script': self.m.path['checkout'].join(
-            'testing', 'trigger_scripts', 'trigger_multiple_dimensions.py'),
-          'args': [
-            '--multiple-trigger-configs', self.m.json.dumps(task['dimensions']),
-            '--multiple-dimension-script-verbose', 'True',
-          ],
-        }
-
       cipd_packages = [(
           self.MAC_TOOLCHAIN_ROOT,
           self.MAC_TOOLCHAIN_PACKAGE,
@@ -902,7 +889,6 @@ class iOSApi(recipe_api.RecipeApi):
         task['step name'],
         task['isolated hash'],
         task_output_dir=task['tmp_dir'],
-        trigger_script=trigger_script,
         service_account=self.swarming_service_account,
         cipd_packages=cipd_packages,
       )
