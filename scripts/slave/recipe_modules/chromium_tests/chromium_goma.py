@@ -276,5 +276,19 @@ SPEC = {
        'platform': 'linux',
      },
    },
+   'Chromium Win Goma RBE ToT': {
+     'chromium_config': 'chromium',
+     'chromium_apply_config': [
+       'goma_rbe_tot', 'goma_arbitrary_toolchain_support', 'mb'
+     ],
+     'gclient_config': 'chromium',
+     'chromium_config_kwargs': {
+       'BUILD_CONFIG': 'Release',
+       'TARGET_BITS': 64,
+     },
+     'testing': {
+       'platform': 'win',
+     },
+   },
  },
 }
