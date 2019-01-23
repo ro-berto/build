@@ -25,6 +25,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/raw_io',
+    'recipe_engine/runtime',
     'recipe_engine/step',
 ]
 
@@ -387,7 +388,8 @@ def GenTests(api):
       properties['suspected_revisions'] = suspected_revisions
     if buildbucket:
       properties['buildbucket'] = buildbucket
-    return api.properties(**properties) + api.platform.name('linux')
+    return api.properties(**properties) + api.platform.name(
+        'linux') + api.runtime(True, False)
 
   def simulated_buildbucket_output(additional_build_parameters):
     buildbucket_output = {
@@ -569,7 +571,7 @@ def GenTests(api):
           'git commits in range',
           api.raw_io.stream_output(
               '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
-      api.path.exists(api.path['builder_cache'].join('linux','src')) +
+      api.path.exists(api.path['cache'].join('builder', 'src')) +
       api.override_step_data('record previously checked-out revision',
                              api.raw_io.output('')) +
       api.override_step_data('record previously cached revision',
@@ -616,7 +618,7 @@ def GenTests(api):
           'git commits in range',
           api.raw_io.stream_output(
               '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
-      api.path.exists(api.path['builder_cache'].join('linux','src')) +
+      api.path.exists(api.path['cache'].join('builder', 'src')) +
       api.override_step_data('record previously checked-out revision',
                              api.raw_io.output('SegmentationFault'),
                              retcode=255) +
@@ -643,7 +645,7 @@ def GenTests(api):
           'git commits in range',
           api.raw_io.stream_output(
               '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
-      api.path.exists(api.path['builder_cache'].join('linux','src')) +
+      api.path.exists(api.path['cache'].join('builder', 'src')) +
       api.override_step_data('record previously checked-out revision',
                              api.raw_io.output('SegmentationFault')) +
       api.override_step_data('record previously cached revision',
@@ -668,7 +670,7 @@ def GenTests(api):
           'git commits in range',
           api.raw_io.stream_output(
               '\n'.join('r%d' % i for i in reversed(range(1, 3))))) +
-      api.path.exists(api.path['builder_cache'].join('linux','src')) +
+      api.path.exists(api.path['cache'].join('builder', 'src')) +
       api.override_step_data(
           'test r2.analyze',
           api.json.output({

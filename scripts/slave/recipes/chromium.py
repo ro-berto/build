@@ -22,8 +22,8 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/step',
-  'recipe_engine/tempfile',
   'recipe_engine/runtime',
+  'recipe_engine/tempfile',
   'swarming',
   'test_results',
   'test_utils',
@@ -68,7 +68,10 @@ def GenTests(api):
     if parent_buildername:
       kwargs['parent_buildername'] = parent_buildername
     return api.properties.generic(**kwargs) + api.buildbucket.ci_build(
-        **bb_kwargs)
+        **bb_kwargs) + api.runtime(
+            # Assume all tests are using LUCI, and are not experimental.
+            # Exceptions should be very rare.
+            is_luci=True, is_experimental=False)
 
 
   yield (

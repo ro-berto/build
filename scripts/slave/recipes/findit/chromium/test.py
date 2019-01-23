@@ -33,6 +33,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/raw_io',
+    'recipe_engine/runtime',
     'recipe_engine/step',
     'swarming',
     'test_results',
@@ -333,7 +334,8 @@ def GenTests(api):
       properties['suspected_revisions'] = suspected_revisions
     if buildbucket:
       properties['buildbucket'] = buildbucket
-    return api.properties(**properties) + api.platform.name(platform_name)
+    return api.properties(**properties) + api.platform.name(
+        platform_name) + api.runtime(True, False)
 
   def verify_report_fields(check, step_odict, expected_report_fields):
     """Verifies fields in report are with expected values."""

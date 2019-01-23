@@ -18,10 +18,11 @@ DEPS = [
     'depot_tools/git',
     'depot_tools/gsutil',
     'recipe_engine/json',
-    'recipe_engine/raw_io',
     'recipe_engine/path',
     'recipe_engine/properties',
     'recipe_engine/python',
+    'recipe_engine/raw_io',
+    'recipe_engine/runtime',
     'recipe_engine/step',
 ]
 
@@ -135,11 +136,13 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  def props():
+    return api.properties.tryserver(
+        mastername='chromium.linux', buildername='Linux Builder') + api.runtime(
+            True, False)
   yield (
       api.test('no_change')
-      + api.properties.tryserver(
-          mastername='chromium.linux',
-          buildername='Linux Builder'))
+      + props())
 
   modified_map = copy.deepcopy(_SAMPLE_MAP)
   modified_map['dir-to-component']['media/mp3'] = 'ChromeWinamp>mp3'
@@ -148,9 +151,7 @@ def GenTests(api):
       + api.override_step_data(
           'Parse modified mapping',
           api.json.output(modified_map))
-      + api.properties.tryserver(
-          mastername='chromium.linux',
-          buildername='Linux Builder'))
+      + props())
 
   modified_map = copy.deepcopy(_SAMPLE_MAP)
   modified_map['dir-to-component']['media/mini/mici'] = 'Blink>WebMIDI'
@@ -159,9 +160,7 @@ def GenTests(api):
       + api.override_step_data(
           'Parse modified mapping with subdirs',
           api.json.output(modified_map))
-      + api.properties.tryserver(
-          mastername='chromium.linux',
-          buildername='Linux Builder'))
+      + props())
 
   modified_map = copy.deepcopy(_SAMPLE_MAP)
   del(modified_map['dir-to-component']['media/midi'])
@@ -170,9 +169,7 @@ def GenTests(api):
       + api.override_step_data(
           'Parse modified mapping',
           api.json.output(modified_map))
-      + api.properties.tryserver(
-          mastername='chromium.linux',
-          buildername='Linux Builder'))
+      + props())
 
   modified_map = copy.deepcopy(_SAMPLE_MAP)
   modified_map['dir-to-component']['media/midi'] = 'ChromeWinamp>midi'
@@ -181,9 +178,7 @@ def GenTests(api):
       + api.override_step_data(
           'Parse modified mapping',
           api.json.output(modified_map))
-      + api.properties.tryserver(
-          mastername='chromium.linux',
-          buildername='Linux Builder'))
+      + props())
 
   yield (
       api.test('script_error')
@@ -191,9 +186,7 @@ def GenTests(api):
           'Run component extraction script to generate mapping',
           retcode=1,
           stdout=api.raw_io.output_text('Dummy script error'))
-      + api.properties.tryserver(
-          mastername='chromium.linux',
-          buildername='Linux Builder'))
+      + props())
 
   modified_map = copy.deepcopy(_SAMPLE_MAP)
   modified_map['dir-to-component']['media/mp3'] = 'ChromeWinamp>mp3'
@@ -204,6 +197,4 @@ def GenTests(api):
       + api.override_step_data(
           'Parse modified mapping',
           api.json.output(modified_map))
-      + api.properties.tryserver(
-          mastername='chromium.linux',
-          buildername='Linux Builder'))
+      + props())

@@ -25,24 +25,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/v8_linux_chromium_gn_rel"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "makedirs checkout path"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
@@ -58,7 +40,7 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
@@ -104,11 +86,11 @@
       "--revision",
       "src/v8@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel",
+    "cwd": "[CACHE]/builder",
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -294,7 +276,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "env": {
@@ -313,7 +295,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1"
@@ -329,14 +311,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/testing/scripts/get_compile_targets.py",
+      "[CACHE]/builder/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"test_bot\", \"buildername\": \"v8_linux_chromium_gn_rel\", \"buildnumber\": 0, \"mastername\": \"tryserver.v8\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],
@@ -354,7 +336,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/testing/buildbot/chromium.linux.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.linux.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -362,7 +344,7 @@
     },
     "name": "read test spec (chromium.linux.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/testing/buildbot/chromium.linux.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.linux.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"V8 Linux GN\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"additional_compile_targets\": [@@@",
@@ -382,7 +364,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -400,7 +382,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/testing/buildbot/trybot_analyze_config.json",
+      "[CACHE]/builder/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -426,20 +408,20 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "analyze",
       "-m",
       "tryserver.v8",
       "-b",
       "v8_linux_chromium_gn_rel",
       "--config-file",
-      "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [\"base_unittests\", \"blink_tests\", \"extensions_browsertests\", \"gin_unittests\", \"net_unittests\", \"pdfium_test\", \"postmortem-metadata\", \"unit_tests\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -509,18 +491,18 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "tryserver.v8",
       "-b",
       "v8_linux_chromium_gn_rel",
       "--config-file",
-      "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -535,19 +517,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "tryserver.v8",
       "-b",
       "v8_linux_chromium_gn_rel",
       "--config-file",
-      "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -556,7 +538,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -574,7 +556,7 @@
       "0777",
       "[GOMA_CACHE]/data/v8_linux_chromium_gn_rel"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -591,7 +573,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -629,7 +611,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -653,7 +635,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "base_unittests",
@@ -665,7 +647,7 @@
       "postmortem-metadata",
       "unit_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"
@@ -696,7 +678,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -710,7 +692,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -743,7 +725,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -765,7 +747,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -799,9 +781,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src/out/Release\", \"-j\", 20, \"base_unittests\", \"blink_tests\", \"extensions_browsertests\", \"gin_unittests\", \"net_unittests\", \"pdfium_test\", \"postmortem-metadata\", \"unit_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 20, \"base_unittests\", \"blink_tests\", \"extensions_browsertests\", \"gin_unittests\", \"net_unittests\", \"pdfium_test\", \"postmortem-metadata\", \"unit_tests\"]",
       "--build-exit-status",
       "1",
       "--build-step-name",
@@ -818,6 +800,7 @@
       "8945511751514863184",
       "--builder-id-json",
       "{\"bucket\": \"try\", \"builder\": \"v8_linux_chromium_gn_rel\", \"project\": \"chromium\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "v8_linux_chromium_gn_rel",
       "--buildbot-mastername",
@@ -825,7 +808,7 @@
       "--buildbot-slavename",
       "test_bot"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -855,7 +838,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/v8_linux_chromium_gn_rel/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },

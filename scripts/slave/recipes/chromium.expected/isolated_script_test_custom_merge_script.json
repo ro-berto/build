@@ -15,7 +15,7 @@
       "--task-output-dir",
       "/path/to/tmp/",
       "--merge-script",
-      "[START_DIR]/src/fake_merge_script.py",
+      "[CACHE]/builder/src/fake_merge_script.py",
       "--merge-script-stdout-file",
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",

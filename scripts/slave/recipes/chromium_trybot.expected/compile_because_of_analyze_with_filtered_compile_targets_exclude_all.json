@@ -3,20 +3,20 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/linux/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "analyze",
       "-m",
       "tryserver.chromium.linux",
       "-b",
       "linux-rel",
       "--config-file",
-      "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"base_unittests\"]}",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/linux/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -69,13 +69,13 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/linux/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
-      "60",
+      "20",
       "base_unittests",
       "browser_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/linux/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_USE_LOCAL": "false"

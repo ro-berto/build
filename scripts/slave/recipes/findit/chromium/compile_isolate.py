@@ -37,6 +37,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/raw_io',
+    'recipe_engine/runtime',
     'recipe_engine/step',
     'swarming',
     'test_results',
@@ -190,7 +191,8 @@ def GenTests(api):
             }
         },
     }
-    return api.properties(**properties) + api.platform.name('linux')
+    return api.properties(**properties) + api.platform.name(
+        'linux') + api.runtime(True, False)
 
   def verify_report(check, step_odict, expected_isolated_tests):
     step = step_odict['report']

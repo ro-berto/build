@@ -3,21 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]\\win"
-    ],
-    "infra_step": true,
-    "name": "makedirs checkout path"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
@@ -27,21 +12,6 @@
     ],
     "infra_step": true,
     "name": "taskkill"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]\\win"
-    ],
-    "infra_step": true,
-    "name": "makedirs checkout path (2)"
   },
   {
     "cmd": [
@@ -61,8 +31,8 @@
       "--revision",
       "src@r1"
     ],
-    "cwd": "[BUILDER_CACHE]\\win",
-    "env_prefixes": {
+    "cwd": "[CACHE]\\builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -241,7 +211,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\win\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -257,7 +227,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\win\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1"
@@ -273,14 +243,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\win\\src\\testing\\scripts\\get_compile_targets.py",
+      "[CACHE]\\builder\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]\\\\win\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "{\"checkout\": \"[CACHE]\\\\builder\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"build1-a1\", \"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"build1-a1\", \"target_platform\": \"win\"}"
     ],
@@ -295,12 +265,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]\\win\\src\\testing\\buildbot\\chromium.win.json",
+      "[CACHE]\\builder\\src\\testing\\buildbot\\chromium.win.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.win.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\win\\src\\testing\\buildbot\\chromium.win.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]\\builder\\src\\testing\\buildbot\\chromium.win.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@SET_BUILD_PROPERTY@target_buildername@\"Win Builder\"@@@"
@@ -313,7 +283,7 @@
       "--format=%H",
       "r0..r1"
     ],
-    "cwd": "[BUILDER_CACHE]\\win\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "infra_step": true,
     "name": "git commits in range",
     "stdout": "/path/to/tmp/",
@@ -347,24 +317,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]\\win"
-    ],
-    "infra_step": true,
-    "name": "test r1.makedirs checkout path",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]\\resources\\bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
@@ -379,8 +331,8 @@
       "--revision",
       "src@r1"
     ],
-    "cwd": "[BUILDER_CACHE]\\win",
-    "env_prefixes": {
+    "cwd": "[CACHE]\\builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -566,7 +518,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\win\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1"
@@ -585,14 +537,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\win\\src\\testing\\scripts\\get_compile_targets.py",
+      "[CACHE]\\builder\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]\\\\win\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "{\"checkout\": \"[CACHE]\\\\builder\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"build1-a1\", \"buildername\": \"win_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"build1-a1\", \"target_platform\": \"win\"}"
     ],
@@ -608,13 +560,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]\\win\\src\\testing\\buildbot\\chromium.win.json",
+      "[CACHE]\\builder\\src\\testing\\buildbot\\chromium.win.json",
       "/path/to/tmp/json"
     ],
     "name": "test r1.read test spec (chromium.win.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\win\\src\\testing\\buildbot\\chromium.win.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]\\builder\\src\\testing\\buildbot\\chromium.win.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Win7 Tests (1)\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
@@ -632,7 +584,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]\\win",
+    "cwd": "[CACHE]\\builder",
     "name": "test r1.test_pre_run (r1)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -651,7 +603,7 @@
       "--target",
       "Release"
     ],
-    "cwd": "[BUILDER_CACHE]\\win",
+    "cwd": "[CACHE]\\builder",
     "infra_step": true,
     "name": "test r1.process_dumps",
     "~followup_annotations": [

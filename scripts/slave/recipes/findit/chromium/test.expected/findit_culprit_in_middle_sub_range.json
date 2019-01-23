@@ -3,36 +3,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/mac"
-    ],
-    "infra_step": true,
-    "name": "makedirs checkout path"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/mac"
-    ],
-    "infra_step": true,
-    "name": "makedirs checkout path (2)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
@@ -47,8 +17,8 @@
       "--revision",
       "src@r6"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -227,7 +197,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "--version"
     ],
     "name": "swarming.py --version",
@@ -272,12 +242,11 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1 gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1",
-      "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
@@ -291,14 +260,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/testing/scripts/get_compile_targets.py",
+      "[CACHE]/builder/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/mac/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"build1-a1\", \"buildername\": \"mac_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.mac\", \"slavename\": \"build1-a1\", \"target_platform\": \"mac\"}"
     ],
@@ -313,12 +282,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.fyi.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.fyi.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -328,12 +297,12 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.mac.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.mac.json",
       "/path/to/tmp/json"
     ],
     "name": "read test spec (chromium.mac.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.mac.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.mac.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@SET_BUILD_PROPERTY@target_buildername@\"Mac Builder\"@@@"
@@ -346,7 +315,7 @@
       "--format=%H",
       "r0..r6"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "infra_step": true,
     "name": "git commits in range",
     "stdout": "/path/to/tmp/",
@@ -368,24 +337,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/mac"
-    ],
-    "infra_step": true,
-    "name": "test r5.makedirs checkout path",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[GIT_CACHE]'\nsolutions = [{'custom_vars': {'checkout_telemetry_dependencies': 'True'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'url': 'https://chromium.googlesource.com/chromium/src.git'}]",
@@ -400,8 +351,8 @@
       "--revision",
       "src@r5"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -617,12 +568,11 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1 gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1",
-      "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
@@ -639,14 +589,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/testing/scripts/get_compile_targets.py",
+      "[CACHE]/builder/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/mac/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"build1-a1\", \"buildername\": \"mac_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.mac\", \"slavename\": \"build1-a1\", \"target_platform\": \"mac\"}"
     ],
@@ -662,13 +612,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.fyi.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
     "name": "test r5.read test spec (chromium.fyi.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -678,13 +628,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.mac.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.mac.json",
       "/path/to/tmp/json"
     ],
     "name": "test r5.read test spec (chromium.mac.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.mac.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.mac.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Mac10.13 Tests\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
@@ -706,7 +656,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]/mac/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "--clean-isolated-files"
     ],
     "name": "test r5.clean isolated files",
@@ -718,18 +668,18 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "chromium.mac",
       "-b",
       "Mac Builder",
       "--config-file",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -746,21 +696,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.mac",
       "-b",
       "Mac Builder",
       "--config-file",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "gl_tests\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -785,7 +735,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[BUILDER_CACHE]/mac/src",
+      "[CACHE]/builder/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -804,7 +754,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -825,7 +775,7 @@
       "0777",
       "[GOMA_CACHE]/data/mac_chromium_variable"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -842,7 +792,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -881,7 +831,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -905,12 +855,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/mac/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "gl_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -927,7 +877,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/mac/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "gl_tests",
@@ -935,7 +885,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -949,7 +899,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -966,7 +916,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -999,7 +949,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -1021,7 +971,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -1055,9 +1005,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/mac/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/mac/src/out/Release\", \"-j\", 20, \"gl_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 20, \"gl_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1072,6 +1022,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.tryserver.chromium.mac\", \"builder\": \"mac_chromium_variable\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "mac_chromium_variable",
       "--buildbot-mastername",
@@ -1079,7 +1030,7 @@
       "--buildbot-slavename",
       "build1-a1"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -1109,7 +1060,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -1124,7 +1075,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/mac/src/tools/swarming_client",
+      "[CACHE]/builder/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -1139,7 +1090,7 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]/mac/src/out/Release/gl_tests.isolated.gen.json"
+      "[CACHE]/builder/src/out/Release/gl_tests.isolated.gen.json"
     ],
     "name": "test r5.isolate tests",
     "~followup_annotations": [
@@ -1154,7 +1105,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[CACHE]/builder",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -1167,7 +1118,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -1219,6 +1170,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:build1-a1",
@@ -1251,7 +1204,7 @@
       "--gtest_also_run_disabled_tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[CACHE]/builder",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -1276,7 +1229,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[CACHE]/builder",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -1296,7 +1249,7 @@
       "-json-output",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[CACHE]/builder",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -1440,7 +1393,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[CACHE]/builder",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -1452,24 +1405,6 @@
   {
     "cmd": [],
     "name": "test r6"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/mac"
-    ],
-    "infra_step": true,
-    "name": "test r6.makedirs checkout path",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
   },
   {
     "cmd": [
@@ -1489,8 +1424,8 @@
       "--revision",
       "src@r6"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -1706,12 +1641,11 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1 gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1",
-      "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
@@ -1728,14 +1662,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/testing/scripts/get_compile_targets.py",
+      "[CACHE]/builder/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/mac/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"build1-a1\", \"buildername\": \"mac_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.mac\", \"slavename\": \"build1-a1\", \"target_platform\": \"mac\"}"
     ],
@@ -1751,13 +1685,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.fyi.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
     "name": "test r6.read test spec (chromium.fyi.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -1767,13 +1701,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.mac.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.mac.json",
       "/path/to/tmp/json"
     ],
     "name": "test r6.read test spec (chromium.mac.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.mac.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.mac.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Mac10.13 Tests\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
@@ -1795,7 +1729,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]/mac/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "--clean-isolated-files"
     ],
     "name": "test r6.clean isolated files",
@@ -1807,18 +1741,18 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "chromium.mac",
       "-b",
       "Mac Builder",
       "--config-file",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -1835,21 +1769,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.mac",
       "-b",
       "Mac Builder",
       "--config-file",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "gl_tests\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -1874,7 +1808,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[BUILDER_CACHE]/mac/src",
+      "[CACHE]/builder/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -1893,7 +1827,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -1914,7 +1848,7 @@
       "0777",
       "[GOMA_CACHE]/data/mac_chromium_variable"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -1931,7 +1865,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -1970,7 +1904,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -1994,12 +1928,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/mac/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "gl_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -2016,7 +1950,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/mac/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "gl_tests",
@@ -2024,7 +1958,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -2038,7 +1972,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2055,7 +1989,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -2088,7 +2022,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -2110,7 +2044,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -2144,9 +2078,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/mac/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/mac/src/out/Release\", \"-j\", 20, \"gl_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 20, \"gl_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -2161,6 +2095,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.tryserver.chromium.mac\", \"builder\": \"mac_chromium_variable\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "mac_chromium_variable",
       "--buildbot-mastername",
@@ -2168,7 +2103,7 @@
       "--buildbot-slavename",
       "build1-a1"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2198,7 +2133,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2213,7 +2148,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/mac/src/tools/swarming_client",
+      "[CACHE]/builder/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -2228,7 +2163,7 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]/mac/src/out/Release/gl_tests.isolated.gen.json"
+      "[CACHE]/builder/src/out/Release/gl_tests.isolated.gen.json"
     ],
     "name": "test r6.isolate tests",
     "~followup_annotations": [
@@ -2243,7 +2178,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[CACHE]/builder",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -2256,7 +2191,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -2308,6 +2243,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:build1-a1",
@@ -2340,7 +2277,7 @@
       "--gtest_also_run_disabled_tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[CACHE]/builder",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -2486,7 +2423,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[CACHE]/builder",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -2498,24 +2435,6 @@
   {
     "cmd": [],
     "name": "test r2"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/mac"
-    ],
-    "infra_step": true,
-    "name": "test r2.makedirs checkout path",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
   },
   {
     "cmd": [
@@ -2535,8 +2454,8 @@
       "--revision",
       "src@r2"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -2752,12 +2671,11 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1 gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1",
-      "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
@@ -2774,14 +2692,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/testing/scripts/get_compile_targets.py",
+      "[CACHE]/builder/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/mac/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"build1-a1\", \"buildername\": \"mac_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.mac\", \"slavename\": \"build1-a1\", \"target_platform\": \"mac\"}"
     ],
@@ -2797,13 +2715,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.fyi.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
     "name": "test r2.read test spec (chromium.fyi.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -2813,13 +2731,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.mac.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.mac.json",
       "/path/to/tmp/json"
     ],
     "name": "test r2.read test spec (chromium.mac.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.mac.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.mac.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Mac10.13 Tests\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
@@ -2841,7 +2759,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]/mac/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "--clean-isolated-files"
     ],
     "name": "test r2.clean isolated files",
@@ -2853,18 +2771,18 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "chromium.mac",
       "-b",
       "Mac Builder",
       "--config-file",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -2881,21 +2799,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.mac",
       "-b",
       "Mac Builder",
       "--config-file",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "gl_tests\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -2920,7 +2838,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[BUILDER_CACHE]/mac/src",
+      "[CACHE]/builder/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -2939,7 +2857,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2960,7 +2878,7 @@
       "0777",
       "[GOMA_CACHE]/data/mac_chromium_variable"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -2977,7 +2895,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -3016,7 +2934,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -3040,12 +2958,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/mac/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "gl_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -3062,7 +2980,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/mac/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "gl_tests",
@@ -3070,7 +2988,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -3084,7 +3002,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -3101,7 +3019,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -3134,7 +3052,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -3156,7 +3074,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -3190,9 +3108,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/mac/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/mac/src/out/Release\", \"-j\", 20, \"gl_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 20, \"gl_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -3207,6 +3125,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.tryserver.chromium.mac\", \"builder\": \"mac_chromium_variable\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "mac_chromium_variable",
       "--buildbot-mastername",
@@ -3214,7 +3133,7 @@
       "--buildbot-slavename",
       "build1-a1"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -3244,7 +3163,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -3259,7 +3178,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/mac/src/tools/swarming_client",
+      "[CACHE]/builder/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -3274,7 +3193,7 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]/mac/src/out/Release/gl_tests.isolated.gen.json"
+      "[CACHE]/builder/src/out/Release/gl_tests.isolated.gen.json"
     ],
     "name": "test r2.isolate tests",
     "~followup_annotations": [
@@ -3289,7 +3208,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[CACHE]/builder",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -3302,7 +3221,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -3354,6 +3273,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:build1-a1",
@@ -3386,7 +3307,7 @@
       "--gtest_also_run_disabled_tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[CACHE]/builder",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -3532,7 +3453,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[CACHE]/builder",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -3544,24 +3465,6 @@
   {
     "cmd": [],
     "name": "test r3"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]/mac"
-    ],
-    "infra_step": true,
-    "name": "test r3.makedirs checkout path",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
   },
   {
     "cmd": [
@@ -3581,8 +3484,8 @@
       "--revision",
       "src@r3"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -3798,12 +3701,11 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
       "GYP_DEFINES": "clang=1 gomadir='[GOMA_CACHE]/client' target_arch=x64 use_goma=1",
-      "MAC_TOOLCHAIN_CREDS": "/creds/service_accounts/service-account-xcode-cipd-access.json",
       "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
@@ -3820,14 +3722,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/testing/scripts/get_compile_targets.py",
+      "[CACHE]/builder/src/testing/scripts/get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/mac/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[CACHE]/builder/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"build1-a1\", \"buildername\": \"mac_chromium_variable\", \"buildnumber\": 1, \"mastername\": \"tryserver.chromium.mac\", \"slavename\": \"build1-a1\", \"target_platform\": \"mac\"}"
     ],
@@ -3843,13 +3745,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.fyi.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.fyi.json",
       "/path/to/tmp/json"
     ],
     "name": "test r3.read test spec (chromium.fyi.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.fyi.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.fyi.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -3859,13 +3761,13 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/mac/src/testing/buildbot/chromium.mac.json",
+      "[CACHE]/builder/src/testing/buildbot/chromium.mac.json",
       "/path/to/tmp/json"
     ],
     "name": "test r3.read test spec (chromium.mac.json)",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]/mac/src/testing/buildbot/chromium.mac.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]/builder/src/testing/buildbot/chromium.mac.json@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"Mac10.13 Tests\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"gtest_tests\": [@@@",
@@ -3887,7 +3789,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[BUILDER_CACHE]/mac/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "--clean-isolated-files"
     ],
     "name": "test r3.clean isolated files",
@@ -3899,18 +3801,18 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "chromium.mac",
       "-b",
       "Mac Builder",
       "--config-file",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -3927,21 +3829,21 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb.py",
+      "[CACHE]/builder/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.mac",
       "-b",
       "Mac Builder",
       "--config-file",
-      "[BUILDER_CACHE]/mac/src/tools/mb/mb_config.pyl",
+      "[CACHE]/builder/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
       "gl_tests\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -3966,7 +3868,7 @@
       "python",
       "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
-      "[BUILDER_CACHE]/mac/src",
+      "[CACHE]/builder/src",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -3985,7 +3887,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4006,7 +3908,7 @@
       "0777",
       "[GOMA_CACHE]/data/mac_chromium_variable"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4023,7 +3925,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -4062,7 +3964,7 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4086,12 +3988,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/mac/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "gl_tests"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -4108,7 +4010,7 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/mac/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "-j",
       "20",
       "gl_tests",
@@ -4116,7 +4018,7 @@
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1",
@@ -4130,7 +4032,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4147,7 +4049,7 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -4180,7 +4082,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -4202,7 +4104,7 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
@@ -4236,9 +4138,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/mac/src/out/Release",
+      "[CACHE]/builder/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/mac/src/out/Release\", \"-j\", 20, \"gl_tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release\", \"-j\", 20, \"gl_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -4253,6 +4155,7 @@
       "[TMP_BASE]/crash_report_id",
       "--builder-id-json",
       "{\"bucket\": \"master.tryserver.chromium.mac\", \"builder\": \"mac_chromium_variable\", \"project\": \"\"}",
+      "--is-luci",
       "--buildbot-buildername",
       "mac_chromium_variable",
       "--buildbot-mastername",
@@ -4260,7 +4163,7 @@
       "--buildbot-slavename",
       "build1-a1"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4290,7 +4193,7 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
-    "cwd": "[BUILDER_CACHE]/mac/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -4305,7 +4208,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/mac/src/tools/swarming_client",
+      "[CACHE]/builder/src/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -4320,7 +4223,7 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]/mac/src/out/Release/gl_tests.isolated.gen.json"
+      "[CACHE]/builder/src/out/Release/gl_tests.isolated.gen.json"
     ],
     "name": "test r3.isolate tests",
     "~followup_annotations": [
@@ -4335,7 +4238,7 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[CACHE]/builder",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -4348,7 +4251,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/mac/src/tools/swarming_client/swarming.py",
+      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
       "trigger",
       "--swarming",
       "https://chromium-swarm.appspot.com",
@@ -4400,6 +4303,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:luci",
+      "--tag",
       "purpose:post-commit",
       "--tag",
       "slavename:build1-a1",
@@ -4432,7 +4337,7 @@
       "--gtest_also_run_disabled_tests",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[CACHE]/builder",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },
@@ -4590,7 +4495,7 @@
       "--test-results-server",
       "test-results.appspot.com"
     ],
-    "cwd": "[BUILDER_CACHE]/mac",
+    "cwd": "[CACHE]/builder",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "1"
     },

@@ -33,6 +33,7 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/raw_io',
+    'recipe_engine/runtime',
     'recipe_engine/step',
     'swarming',
     'test_results',
@@ -138,7 +139,8 @@ def GenTests(api):
       properties['tests'] = tests
     if buildbucket:
       properties['buildbucket'] = buildbucket
-    return api.properties(**properties) + api.platform.name(platform_name)
+    return api.properties(**properties) + api.platform.name(
+        platform_name) + api.runtime(True, False)
 
   yield (
       api.test('flakiness_isolate_only') +

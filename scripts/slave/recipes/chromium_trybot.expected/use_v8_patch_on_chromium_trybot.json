@@ -51,24 +51,6 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[BUILDER_CACHE]\\win"
-    ],
-    "env": {
-      "CHROME_HEADLESS": "1"
-    },
-    "infra_step": true,
-    "name": "makedirs checkout path"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]\\gerrit_client.py",
       "changes",
       "--host",
@@ -84,7 +66,7 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
-    "cwd": "[BUILDER_CACHE]\\win",
+    "cwd": "[CACHE]\\builder",
     "env": {
       "CHROME_HEADLESS": "1",
       "PATH": "<PATH>;RECIPE_PACKAGE_REPO[depot_tools]"
@@ -128,11 +110,11 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]\\win",
+    "cwd": "[CACHE]\\builder",
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "env_prefixes": {
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -317,7 +299,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\win\\src\\tools\\swarming_client\\swarming.py",
+      "[CACHE]\\builder\\src\\tools\\swarming_client\\swarming.py",
       "--version"
     ],
     "env": {
@@ -336,7 +318,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\win\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GYP_DEFINES": "gomadir='[GOMA_CACHE]\\client' target_arch=ia32 use_goma=1"
@@ -352,14 +334,14 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\win\\src\\testing\\scripts\\get_compile_targets.py",
+      "[CACHE]\\builder\\src\\testing\\scripts\\get_compile_targets.py",
       "--output",
       "/path/to/tmp/json",
       "--",
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]\\\\win\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
+      "{\"checkout\": \"[CACHE]\\\\builder\\\\src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\tools\\\\runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]\\\\scripts\\\\slave\\\\runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"test_bot\", \"buildername\": \"win7-rel\", \"buildnumber\": 0, \"mastername\": \"tryserver.chromium.win\", \"slavename\": \"test_bot\", \"target_platform\": \"win\"}"
     ],
@@ -377,7 +359,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]\\win\\src\\testing\\buildbot\\chromium.gpu.json",
+      "[CACHE]\\builder\\src\\testing\\buildbot\\chromium.gpu.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -385,7 +367,7 @@
     },
     "name": "read test spec (chromium.gpu.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\win\\src\\testing\\buildbot\\chromium.gpu.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]\\builder\\src\\testing\\buildbot\\chromium.gpu.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -395,7 +377,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]\\win\\src\\testing\\buildbot\\chromium.win.json",
+      "[CACHE]\\builder\\src\\testing\\buildbot\\chromium.win.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -403,7 +385,7 @@
     },
     "name": "read test spec (chromium.win.json)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@path: [BUILDER_CACHE]\\win\\src\\testing\\buildbot\\chromium.win.json@@@",
+      "@@@STEP_TEXT@path: [CACHE]\\builder\\src\\testing\\buildbot\\chromium.win.json@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -417,7 +399,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[BUILDER_CACHE]\\win\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -435,7 +417,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]\\win\\src\\testing\\buildbot\\trybot_analyze_config.json",
+      "[CACHE]\\builder\\src\\testing\\buildbot\\trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
     "env": {
@@ -462,20 +444,20 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\win\\src\\tools\\mb\\mb.py",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb.py",
       "analyze",
       "-m",
       "tryserver.chromium.win",
       "-b",
       "win7-rel",
       "--config-file",
-      "[BUILDER_CACHE]\\win\\src\\tools\\mb\\mb_config.pyl",
+      "[CACHE]\\builder\\src\\tools\\mb\\mb_config.pyl",
       "-v",
       "//out/Release",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]\\win\\src",
+    "cwd": "[CACHE]\\builder\\src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json"

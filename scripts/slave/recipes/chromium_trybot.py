@@ -29,6 +29,7 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/raw_io',
   'recipe_engine/step',
+  'recipe_engine/runtime',
   'swarming',
   'test_results',
   'test_utils',
@@ -77,7 +78,10 @@ def GenTests(api):
       buildername=builder,
       swarm_hashes=swarm_hashes,
       **kwargs
-    ) + api.buildbucket.try_build(**bb_kwargs)
+    ) + api.buildbucket.try_build(**bb_kwargs) + api.runtime(
+        # Assume all tests are using LUCI, and are not experimental.
+        # Exceptions should be very rare.
+        is_luci=True, is_experimental=False)
 
   def suppress_analyze(more_exclusions=None):
     """Overrides analyze step data so that all targets get compiled."""
