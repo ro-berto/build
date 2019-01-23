@@ -56,3 +56,9 @@ def GenTests(api):
       api.platform('mac', 64) +
       api.properties(chromium_apply_config=['goma_rbe_prod'])
   )
+
+  yield (
+      api.test('goma_arbitrary_toolchain_support') +
+      api.platform('mac', 64) +
+      api.properties(chromium_apply_config=['goma_arbitrary_toolchain_support'])
+  )
