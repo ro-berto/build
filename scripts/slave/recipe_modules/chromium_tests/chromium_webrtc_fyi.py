@@ -126,7 +126,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64
       },
-      'gclient_apply_config': [],
+      'gclient_apply_config': ['webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc_tot',
       'set_component_rev': {
         'name': 'src/third_party/webrtc',
@@ -218,7 +218,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64
       },
-      'gclient_apply_config': [],
+      'gclient_apply_config': ['webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc_tot',
       'set_component_rev': {
         'name': 'src/third_party/webrtc',
@@ -274,7 +274,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 32
       },
-      'gclient_apply_config': [],
+      'gclient_apply_config': ['webrtc_test_resources'],
       'gclient_config': 'chromium_webrtc_tot',
       'set_component_rev': {
         'name': 'src/third_party/webrtc',
