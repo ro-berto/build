@@ -182,3 +182,44 @@ def GenTests(api):
           'skip collecting coverage data because no source file is changed')
       + api.post_process(post_process.DropExpectation)
   )
+
+  yield (
+      api.test('raise failure')
+      + api.properties.generic(
+          mastername='chromium.fyi',
+          buildername='linux-code-coverage',
+          buildnumber=54)
+      + api.post_process(
+          post_process.MustRunRE, 'ensure profdata dir for .*', 3, 3)
+      + api.post_process(
+          post_process.MustRun, 'merge profile data for 3 targets')
+      + api.post_process(
+          post_process.MustRun, 'gsutil upload merged.profdata')
+      + api.post_process(
+          post_process.DoesNotRun, 'generate git diff locally')
+      + api.post_process(
+          post_process.DoesNotRun, 'fetch git diff from Gerrit')
+      + api.post_process(
+          post_process.DoesNotRun, 'generate diff mapping from local to Gerrit')
+      + api.post_process(
+          post_process.MustRun,
+          'Run component extraction script to generate mapping')
+      + api.post_process(
+          post_process.MustRun, 'generate metadata for 3 targets')
+      + api.post_process(
+          post_process.MustRun, 'gsutil upload metadata')
+      + api.post_process(
+          post_process.DoesNotRun, 'generate html report for 3 targets')
+      + api.post_process(
+          post_process.DoesNotRun, 'gsutil upload html report')
+      + api.post_process(
+          post_process.StepCommandContains, 'Finding merging errors',
+          ['--root-dir'])
+      + api.step_data('generate metadata for 3 targets', retcode=1)
+      + api.post_process(
+          post_process.AnnotationContains,
+          'gsutil upload metadata',
+          ['SET_BUILD_PROPERTY@process_coverage_data_failure@true'])
+      + api.post_process(post_process.StatusFailure)
+      + api.post_process(post_process.DropExpectation)
+  )
