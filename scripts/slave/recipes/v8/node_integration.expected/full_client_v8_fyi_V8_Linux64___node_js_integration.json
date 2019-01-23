@@ -23,8 +23,8 @@
       "--revision",
       "v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration",
-    "env_prefixes": {
+    "cwd": "[BUILDER_CACHE]",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -106,7 +106,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -124,28 +124,28 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Linux64___node_js_integration/v8/tools/node/update_node.py",
-      "[BUILDER_CACHE]/V8_Linux64___node_js_integration/v8",
-      "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js"
+      "[BUILDER_CACHE]/v8/tools/node/update_node.py",
+      "[BUILDER_CACHE]/v8",
+      "[BUILDER_CACHE]/node.js"
     ],
     "name": "update v8"
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js/configure",
+      "[BUILDER_CACHE]/node.js/configure",
       "--build-v8-with-gn",
       "--build-v8-with-gn-max-jobs=20",
       "--build-v8-with-gn-extra-gn-args",
       "use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build.configure node.js",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -156,7 +156,7 @@
       "make",
       "-j8"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build.build node.js",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -167,7 +167,7 @@
       "make",
       "test-addons-clean"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build.clean addons",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -179,7 +179,7 @@
       "-j8",
       "clear-stalled"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build.clear stalled",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -191,7 +191,7 @@
       "-j8",
       "build-addons"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build.build addons",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -203,7 +203,7 @@
       "-j8",
       "build-addons-napi"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build.build addons-napi",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -215,7 +215,7 @@
       "-j8",
       "doc-only"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build.build doc-only",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -225,14 +225,14 @@
     "cmd": [
       "out/Release/cctest"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "run cctest"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js/tools/test.py",
+      "[BUILDER_CACHE]/node.js/tools/test.py",
       "-p",
       "tap",
       "-j8",
@@ -244,7 +244,7 @@
       "addons-napi",
       "doctool"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "run tests"
   },
   {
@@ -258,7 +258,7 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js/configure",
+      "[BUILDER_CACHE]/node.js/configure",
       "--prefix=/",
       "--tag=v8-build-f2cbea7e89a45f46819777bb78a1f5bd0241f64c",
       "--build-v8-with-gn",
@@ -266,7 +266,7 @@
       "--build-v8-with-gn-extra-gn-args",
       "use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build and upload.configure node.js - install",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -297,7 +297,7 @@
       "install",
       "DESTDIR=[CLEANUP]/archive-build"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Linux64___node_js_integration/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build and upload.build and install node.js",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -338,28 +338,49 @@
   },
   {
     "cmd": [
-      "buildbucket",
-      "put",
-      "-host",
-      "cr-buildbucket.appspot.com",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-v8-bot.json",
-      "{\"bucket\": \"luci.v8-internal.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_node_linux64_perf\\\", \\\"changes\\\": [{\\\"author\\\": {\\\"email\\\": \\\"cool_dev1337@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}, {\\\"author\\\": {\\\"email\\\": \\\"hax@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}], \\\"properties\\\": {\\\"parent_buildername\\\": \\\"V8 Linux64 - node.js integration\\\", \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}}\", \"tags\": [\"builder:v8_node_linux64_perf\", \"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:V8 Linux64 - node.js integration\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
+      "prpc",
+      "call",
+      "-format=json",
+      "luci-scheduler.appspot.com",
+      "scheduler.Scheduler.EmitTriggers"
     ],
     "infra_step": true,
     "name": "trigger",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"v8_node_linux64_perf\", \"project\": \"v8\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_buildername\": \"V8 Linux64 - node.js integration\", \"parent_got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"parent_got_revision_cp\": \"refs/heads/master@{#50110}\", \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"}, \"tags\": [\"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:V8 Linux64 - node.js integration\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"TestBuilder/571\"}}], \"timestamp\": 1337000004500000}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"build\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"id\": 10000000@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    }@@@",
-      "@@@STEP_LOG_LINE@json.output@  ]@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_TEXT@input {",
+      "    \"batches\": [",
+      "        {",
+      "            \"jobs\": [",
+      "                {",
+      "                    \"job\": \"v8_node_linux64_perf\", ",
+      "                    \"project\": \"v8\"",
+      "                }",
+      "            ], ",
+      "            \"trigger\": {",
+      "                \"buildbucket\": {",
+      "                    \"properties\": {",
+      "                        \"parent_buildername\": \"V8 Linux64 - node.js integration\", ",
+      "                        \"parent_got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", ",
+      "                        \"parent_got_revision_cp\": \"refs/heads/master@{#50110}\", ",
+      "                        \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"",
+      "                    }, ",
+      "                    \"tags\": [",
+      "                        \"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", ",
+      "                        \"gitiles_ref:refs/heads/master\", ",
+      "                        \"parent_buildername:V8 Linux64 - node.js integration\", ",
+      "                        \"parent_buildnumber:571\", ",
+      "                        \"user_agent:recipe\"",
+      "                    ]",
+      "                }, ",
+      "                \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", ",
+      "                \"title\": \"TestBuilder/571\"",
+      "            }",
+      "        }",
+      "    ], ",
+      "    \"timestamp\": 1337000004500000",
+      "}@@@"
     ]
   },
   {

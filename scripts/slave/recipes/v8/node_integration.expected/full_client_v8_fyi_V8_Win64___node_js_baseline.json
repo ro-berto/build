@@ -23,8 +23,8 @@
       "--revision",
       "v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
-    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_baseline",
-    "env_prefixes": {
+    "cwd": "[BUILDER_CACHE]",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -106,7 +106,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_baseline\\v8",
+    "cwd": "[BUILDER_CACHE]\\v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -122,14 +122,14 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_baseline\\node.js",
+    "cwd": "[BUILDER_CACHE]\\node.js",
     "name": "build"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\V8_Win64___node_js_baseline\\node.js\\configure",
+      "[BUILDER_CACHE]\\node.js\\configure",
       "--build-v8-with-gn",
       "--build-v8-with-gn-max-jobs=20",
       "--build-v8-with-gn-extra-gn-args",
@@ -137,7 +137,7 @@
       "--ninja",
       "--use-clang-cl"
     ],
-    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_baseline\\node.js",
+    "cwd": "[BUILDER_CACHE]\\node.js",
     "env": {
       "DEPOT_TOOLS_WIN_TOOLCHAIN": "1"
     },
@@ -152,7 +152,7 @@
       "-C",
       "out\\Release"
     ],
-    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_baseline\\node.js",
+    "cwd": "[BUILDER_CACHE]\\node.js",
     "name": "build.build node.js",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -162,14 +162,14 @@
     "cmd": [
       "out\\Release\\cctest"
     ],
-    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_baseline\\node.js",
+    "cwd": "[BUILDER_CACHE]\\node.js",
     "name": "run cctest"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]\\V8_Win64___node_js_baseline\\node.js\\tools\\test.py",
+      "[BUILDER_CACHE]\\node.js\\tools\\test.py",
       "-p",
       "tap",
       "-j8",
@@ -178,7 +178,7 @@
       "run",
       "default"
     ],
-    "cwd": "[BUILDER_CACHE]\\V8_Win64___node_js_baseline\\node.js",
+    "cwd": "[BUILDER_CACHE]\\node.js",
     "name": "run tests"
   },
   {

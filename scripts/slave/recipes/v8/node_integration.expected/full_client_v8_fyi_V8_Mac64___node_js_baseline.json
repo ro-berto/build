@@ -23,8 +23,8 @@
       "--revision",
       "v8@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_baseline",
-    "env_prefixes": {
+    "cwd": "[BUILDER_CACHE]",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -106,7 +106,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_baseline/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "1"
@@ -123,20 +123,20 @@
   },
   {
     "cmd": [],
-    "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_baseline/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Mac64___node_js_baseline/node.js/configure",
+      "[BUILDER_CACHE]/node.js/configure",
       "--build-v8-with-gn",
       "--build-v8-with-gn-max-jobs=20",
       "--build-v8-with-gn-extra-gn-args",
       "use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_baseline/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build.configure node.js",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -147,7 +147,7 @@
       "make",
       "-j8"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_baseline/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build.build node.js",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -158,7 +158,7 @@
       "make",
       "test-addons-clean"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_baseline/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build.clean addons",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -170,7 +170,7 @@
       "-j8",
       "clear-stalled"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_baseline/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build.clear stalled",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -182,7 +182,7 @@
       "-j8",
       "build-addons"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_baseline/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build.build addons",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -194,7 +194,7 @@
       "-j8",
       "build-addons-napi"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_baseline/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build.build addons-napi",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -206,7 +206,7 @@
       "-j8",
       "doc-only"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_baseline/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "build.build doc-only",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
@@ -216,14 +216,14 @@
     "cmd": [
       "out/Release/cctest"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_baseline/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "run cctest"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/V8_Mac64___node_js_baseline/node.js/tools/test.py",
+      "[BUILDER_CACHE]/node.js/tools/test.py",
       "-p",
       "tap",
       "-j8",
@@ -235,7 +235,7 @@
       "addons-napi",
       "doctool"
     ],
-    "cwd": "[BUILDER_CACHE]/V8_Mac64___node_js_baseline/node.js",
+    "cwd": "[BUILDER_CACHE]/node.js",
     "name": "run tests"
   },
   {
