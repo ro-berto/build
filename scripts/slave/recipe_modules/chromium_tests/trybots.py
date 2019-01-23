@@ -626,6 +626,10 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.chromiumos': {
     'builders': {
+      'chromeos-amd64-generic-cfi-thin-lto-rel': simple_bot({
+        'mastername': 'chromium.chromiumos',
+        'buildername': 'chromeos-amd64-generic-cfi-thin-lto-rel',
+      }),
       'chromeos-amd64-generic-rel': simple_bot({
         'mastername': 'chromium.chromiumos',
         'buildername': 'chromeos-amd64-generic-rel',
