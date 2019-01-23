@@ -223,15 +223,14 @@ class TestUtilsApi(recipe_api.RecipeApi):
       caller_api: The api object given by the caller of this module.
       tests: A list of test suites to run with the patch.
 
-    Returns: A list of test suites that either have invalid results or failing
-    tests.
+    Returns: A list of test suites that either have invalid results or
+    consistently failing tests.
     """
     failing_tests = self.run_tests(caller_api, tests, 'with patch',
                                    sort_by_shard=True)
     with self.m.step.defer_results():
       for t in tests:
-        valid_results, failures = t.failures_or_invalid_results(
-            caller_api, 'with patch')
+        valid_results, failures = t.with_patch_failures(caller_api)
 
         if not valid_results:
           # An invalid result is fatal if and only if we are not going to run

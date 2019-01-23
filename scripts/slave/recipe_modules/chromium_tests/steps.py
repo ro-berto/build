@@ -349,12 +349,33 @@ class Test(object):
         original_num_shards), num_tests_to_retry))
 
   def failures(self, api, suffix):  # pragma: no cover
-    """Return list of failures (list of strings)."""
-    del api
+    """Return tests that failed at least once (list of strings)."""
     if suffix not in self._test_runs:
-      return []
+      api.python.failing_step(
+        'cannot find failures for non-existent test run',
+        'There is no data for the test run suffix ({0}). This should never '
+        'happen as all calls to failures() should first check that the data '
+        'exists.'.format(suffix))
 
     return self._test_runs[suffix]['failures']
+
+  def deterministic_failures(self, api, suffix):
+    """Return tests that failed on every test run(list of strings)."""
+    if suffix not in self._test_runs: # pragma: no cover
+      api.python.failing_step(
+        'cannot find deterministic_failures for non-existent test run',
+        'There is no data for the test run suffix ({0}). This should never '
+        'happen as all calls to deterministic_failures() should first check '
+        'that the data exists.'.format(suffix))
+
+    deterministic_failures = []
+    for test_name, result in (
+        self._test_runs[suffix]['pass_fail_counts'].iteritems()):
+      success_count = result['pass_count']
+      fail_count = result['fail_count']
+      if fail_count > 0 and success_count == 0:
+        deterministic_failures.append(test_name)
+    return deterministic_failures
 
   @property
   def uses_isolate(self):
@@ -394,6 +415,21 @@ class Test(object):
       # GTestResults.failures is a set whereas TestResults.failures is a dict.
       # In both cases, we want a set.
       return (True, set(self.failures(api, suffix)))
+    return (False, None)
+
+  def with_patch_failures(self, api):
+    """Returns test failures from the 'with_patch' step.
+
+    The 'with_patch' step only considers tests to be failures if every test run
+    fails. Flaky tests are considered successes.
+
+    Returns: A tuple (valid_results, failures).
+      valid_results: A Boolean indicating whether results are valid.
+      failures: A set of strings. Only valid if valid_results is True.
+    """
+    suffix = 'with patch'
+    if self.has_valid_results(api, suffix):
+      return (True, set(self.deterministic_failures(api, suffix)))
     return (False, None)
 
   def tests_to_retry(self, api, suffix):
@@ -499,6 +535,9 @@ class TestWrapper(Test):  # pragma: no cover
   def failures(self, api, suffix):
     return self._test.failures(api, suffix)
 
+  def deterministic_failures(self, api, suffix):
+    return self._test.deterministic_failures(api, suffix)
+
   def pass_fail_counts(self, api, suffix):
     return self._test.pass_fail_counts(api, suffix)
 
@@ -563,6 +602,12 @@ class ExperimentalTest(TestWrapper):
     short = struct.unpack_from('<H', digest)[0]
     return self._experiment_percentage * 0xffff >= short * 100
 
+
+  def _is_in_experiment_and_has_valid_results(self, api, suffix):
+    return (self._is_in_experiment(api) and
+        super(ExperimentalTest, self).has_valid_results(
+            api, self._experimental_suffix(suffix)))
+
   @property
   def abort_on_failure(self):
     return False
@@ -600,23 +645,24 @@ class ExperimentalTest(TestWrapper):
 
   #override
   def failures(self, api, suffix):
-    if (self._is_in_experiment(api)
-        # Only call into the implementation if we have valid results to avoid
-        # violating wrapped class implementations' preconditions.
-        and super(ExperimentalTest, self).has_valid_results(
-            api, self._experimental_suffix(suffix))):
+    if self._is_in_experiment_and_has_valid_results(api, suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
       super(ExperimentalTest, self).failures(
           api, self._experimental_suffix(suffix))
     return []
 
+  #override
+  def deterministic_failures(self, api, suffix):
+    if self._is_in_experiment_and_has_valid_results(api, suffix):
+      # Call the wrapped test's implementation in case it has side effects,
+      # but ignore the result.
+      super(ExperimentalTest, self).deterministic_failures(
+          api, self._experimental_suffix(suffix))
+    return []
+
   def pass_fail_counts(self, api, suffix):
-    if (self._is_in_experiment(api)
-        # Only call into the implementation if we have valid results to avoid
-        # violating wrapped class implementations' preconditions.
-        and super(ExperimentalTest, self).has_valid_results(
-            api, self._experimental_suffix(suffix))):
+    if self._is_in_experiment_and_has_valid_results(api, suffix):
       # Call the wrapped test's implementation in case it has side effects,
       # but ignore the result.
       super(ExperimentalTest, self).pass_fail_counts(
@@ -642,6 +688,9 @@ class SizesStep(Test):
     return True
 
   def failures(self, api, suffix):
+    return []
+
+  def deterministic_failures(self, api, suffix):
     return []
 
   def pass_fail_counts(self, api, suffix): # pragma: no cover
@@ -2531,6 +2580,10 @@ class MockTest(Test):
   def failures(self, api, suffix):
     api.step('failures %s%s' % (self.name, self._mock_suffix(suffix)), None)
     return self._failures
+
+  def deterministic_failures(self, api, suffix):
+    """Use same logic as failures for the Mock test."""
+    return self.failures(api, suffix)
 
   def pass_fail_counts(self, _, suffix):
     return {}
