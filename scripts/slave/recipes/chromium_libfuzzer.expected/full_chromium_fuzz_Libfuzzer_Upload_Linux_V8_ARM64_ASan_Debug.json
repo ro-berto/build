@@ -749,12 +749,12 @@
       "-a",
       "public-read",
       "[CLEANUP]/chrome_staging/libfuzzer-v8-arm64-linux-debug-170242.zip",
-      "gs://chromium-browser-libfuzzer/linux-debug-asan/libfuzzer-v8-arm64-linux-debug-170242.zip"
+      "gs://chromium-browser-libfuzzer/linux-debug-asan-arm64-sim/libfuzzer-v8-arm64-linux-debug-170242.zip"
     ],
     "infra_step": true,
     "name": "gsutil upload",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-libfuzzer/linux-debug-asan/libfuzzer-v8-arm64-linux-debug-170242.zip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-browser-libfuzzer/linux-debug-asan-arm64-sim/libfuzzer-v8-arm64-linux-debug-170242.zip@@@"
     ]
   },
   {

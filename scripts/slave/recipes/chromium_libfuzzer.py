@@ -71,7 +71,7 @@ BUILDERS = freeze({
         },
         'archive_prefix': 'libfuzzer-v8-arm',
         'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'asan',
+        'upload_directory': 'asan-arm-sim',
         'v8_targets_only': True,
       },
       'Libfuzzer Upload Linux32 V8-ARM ASan Debug': {
@@ -84,7 +84,7 @@ BUILDERS = freeze({
         },
         'archive_prefix': 'libfuzzer-v8-arm',
         'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'asan',
+        'upload_directory': 'asan-arm-sim',
         'v8_targets_only': True,
       },
       'Libfuzzer Upload Linux ASan': {
@@ -119,7 +119,7 @@ BUILDERS = freeze({
         },
         'archive_prefix': 'libfuzzer-v8-arm64',
         'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'asan',
+        'upload_directory': 'asan-arm64-sim',
         'v8_targets_only': True,
       },
       'Libfuzzer Upload Linux V8-ARM64 ASan Debug': {
@@ -132,7 +132,7 @@ BUILDERS = freeze({
         },
         'archive_prefix': 'libfuzzer-v8-arm64',
         'upload_bucket': 'chromium-browser-libfuzzer',
-        'upload_directory': 'asan',
+        'upload_directory': 'asan-arm64-sim',
         'v8_targets_only': True,
       },
       'Libfuzzer Upload Linux MSan': {
