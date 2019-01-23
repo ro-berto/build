@@ -25,7 +25,6 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/runtime',
-  'recipe_engine/scheduler',
   'recipe_engine/step',
   'trigger',
   'v8',
@@ -245,12 +244,15 @@ def _build_and_upload(api, goma_dir):
     package.zip('zipping')
 
     # Upload to google storage bucket.
-    api.gsutil.upload(
-      zip_file,
-      'chromium-v8/node-%s-rel' % api.platform.name,
-      archive_name,
-      args=['-a', 'public-read'],
-    )
+    if api.runtime.is_experimental:
+      api.step('fake upload to GS', cmd=None)
+    else:
+      api.gsutil.upload(
+        zip_file,
+        'chromium-v8/node-%s-rel' % api.platform.name,
+        archive_name,
+        args=['-a', 'public-read'],
+      )
 
   parent.presentation.links['download'] = (
       ARCHIVE_LINK % (api.platform.name, archive_name))
@@ -302,23 +304,26 @@ def RunSteps(api):
 
   # Trigger performance bots.
   if api.v8.bot_config.get('triggers'):
-    api.scheduler.emit_triggers(
-        [(
-          api.scheduler.BuildbucketTrigger(
-            properties={
-              'revision': api.v8.revision,
-              'parent_got_revision': api.v8.revision,
-              'parent_got_revision_cp': api.v8.revision_cp,
-              'parent_buildername': api.buildbucket.builder_name,
-            },
-            tags={
-              'buildset': 'commit/gitiles/chromium.googlesource.com/v8/'
-                          'v8/+/%s' % api.v8.revision,
-            }
-          ), 'v8', [builder_name],
-        ) for builder_name in api.v8.bot_config['triggers']],
-        step_name='trigger',
-    )
+    if api.runtime.is_experimental:
+      # TODO(sergiyb): Replace this with a trigger to corresponding LUCI builder
+      # once it's configured.
+      api.step('fake trigger', cmd=None)
+    else:
+      api.v8.buildbucket_trigger(
+          'luci.v8-internal.ci',
+          api.v8.get_changes(),
+          [
+            {
+              'properties': {
+                'revision': api.v8.revision,
+                'parent_got_revision': api.v8.revision,
+                'parent_got_revision_cp': api.v8.revision_cp,
+                'parent_buildername': api.buildbucket.builder_name,
+              },
+              'builder_name': builder_name,
+            } for builder_name in api.v8.bot_config['triggers']
+          ]
+      )
 
 
 def _sanitize_nonalpha(*chunks):
@@ -354,9 +359,24 @@ def GenTests(api):
           ) +
           buildbucket_fn(**buildbucket_kwargs) +
           api.platform(bot_config['testing']['platform'], 64) +
-          api.runtime(is_luci=True, is_experimental=False) +
           api.v8.hide_infra_steps()
       )
+
+  yield (
+    api.test('experimental') +
+    api.properties.generic(
+      mastername='client.v8.fyi',
+      path_config='kitchen',
+    ) +
+    api.buildbucket.ci_build(
+      project='v8',
+      git_repo='https://chromium.googlesource.com/v8/v8',
+      builder='V8 Linux64 - node.js integration',
+      revision='a' * 40
+    ) +
+    api.runtime(is_luci=True, is_experimental=True) +
+    api.platform('linux', 64)
+  )
 
   yield (
     api.test('trigger_fail') +
@@ -373,6 +393,5 @@ def GenTests(api):
     ) +
     api.override_step_data(
       'trigger', api.json.output_stream({'error': {'message': 'foobar'}})) +
-    api.runtime(is_luci=True, is_experimental=False) +
     api.post_process(Filter('trigger'))
   )

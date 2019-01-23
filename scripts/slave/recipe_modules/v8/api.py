@@ -1508,7 +1508,7 @@ class V8Api(recipe_api.RecipeApi):
           self.m.v8.test_api.buildbucket_test_data(len(requests))),
     )
 
-    if 'error' in step_result.stdout:  # pragma: no cover
+    if 'error' in step_result.stdout:
       step_result.presentation.status = self.m.step.FAILURE
 
     return step_result

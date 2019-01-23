@@ -1,49 +1,25 @@
 [
   {
     "cmd": [
-      "prpc",
-      "call",
-      "-format=json",
-      "luci-scheduler.appspot.com",
-      "scheduler.Scheduler.EmitTriggers"
+      "buildbucket",
+      "put",
+      "-host",
+      "cr-buildbucket.appspot.com",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-v8-bot.json",
+      "{\"bucket\": \"luci.v8-internal.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_node_linux64_perf\\\", \\\"changes\\\": [{\\\"author\\\": {\\\"email\\\": \\\"cool_dev1337@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}, {\\\"author\\\": {\\\"email\\\": \\\"hax@chromium.org\\\"}, \\\"repo_url\\\": \\\"https://chromium.googlesource.com/v8/v8\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}], \\\"properties\\\": {\\\"parent_buildername\\\": \\\"V8 Linux64 - node.js integration\\\", \\\"parent_got_revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\", \\\"parent_got_revision_cp\\\": \\\"refs/heads/master@{#50110}\\\", \\\"revision\\\": \\\"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\\\"}}\", \"tags\": [\"builder:v8_node_linux64_perf\", \"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:V8 Linux64 - node.js integration\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}"
     ],
     "infra_step": true,
     "name": "trigger",
-    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"v8_node_linux64_perf\", \"project\": \"v8\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_buildername\": \"V8 Linux64 - node.js integration\", \"parent_got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"parent_got_revision_cp\": \"refs/heads/master@{#50110}\", \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"}, \"tags\": [\"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:V8 Linux64 - node.js integration\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"TestBuilder/571\"}}], \"timestamp\": 1337000004500000}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
-      "@@@STEP_TEXT@input {",
-      "    \"batches\": [",
-      "        {",
-      "            \"jobs\": [",
-      "                {",
-      "                    \"job\": \"v8_node_linux64_perf\", ",
-      "                    \"project\": \"v8\"",
-      "                }",
-      "            ], ",
-      "            \"trigger\": {",
-      "                \"buildbucket\": {",
-      "                    \"properties\": {",
-      "                        \"parent_buildername\": \"V8 Linux64 - node.js integration\", ",
-      "                        \"parent_got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", ",
-      "                        \"parent_got_revision_cp\": \"refs/heads/master@{#50110}\", ",
-      "                        \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\"",
-      "                    }, ",
-      "                    \"tags\": [",
-      "                        \"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", ",
-      "                        \"gitiles_ref:refs/heads/master\", ",
-      "                        \"parent_buildername:V8 Linux64 - node.js integration\", ",
-      "                        \"parent_buildnumber:571\", ",
-      "                        \"user_agent:recipe\"",
-      "                    ]",
-      "                }, ",
-      "                \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", ",
-      "                \"title\": \"TestBuilder/571\"",
-      "            }",
-      "        }",
-      "    ], ",
-      "    \"timestamp\": 1337000004500000",
-      "}@@@"
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"error\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"message\": \"foobar\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   }
 ]
