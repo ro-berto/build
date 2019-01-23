@@ -200,7 +200,8 @@ class FilterApi(recipe_api.RecipeApi):
           mb_buildername = mb_buildername or self.m.properties['buildername']
           step_result = self.m.chromium.mb_analyze(
               mb_mastername, mb_buildername, analyze_input,
-              mb_config_path=mb_config_path)
+              mb_config_path=mb_config_path,
+              build_dir=build_output_dir)
         else:
           step_result = self.m.python(
               'analyze',
@@ -256,7 +257,8 @@ class FilterApi(recipe_api.RecipeApi):
   # TODO(phajdan.jr): Merge with does_patch_require_compile.
   def analyze(self, affected_files, test_targets, additional_compile_targets,
               config_file_name, mb_mastername=None, mb_buildername=None,
-              mb_config_path=None, additional_names=None):
+              mb_config_path=None, build_output_dir=None,
+              additional_names=None):
     """Runs "analyze" step to determine targets affected by the patch.
 
     Returns a tuple of:
@@ -267,7 +269,6 @@ class FilterApi(recipe_api.RecipeApi):
       additional_names = ['chromium']
 
     use_mb = (self.m.chromium.c.project_generator.tool == 'mb')
-    build_output_dir = '//out/%s' % self.m.chromium.c.build_config_fs
     self.does_patch_require_compile(
         affected_files,
         test_targets=test_targets,

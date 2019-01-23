@@ -1114,7 +1114,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   @_with_chromium_layout
   def mb_analyze(self, mastername, buildername, analyze_input,
                  name=None, mb_path=None, mb_config_path=None,
-                 chromium_config=None, phase=None, **kwargs):
+                 chromium_config=None, build_dir=None, phase=None, **kwargs):
     """Determine which targets need to be built and tested.
 
     Args:
@@ -1135,7 +1135,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     name = name or 'analyze'
     mb_args = ['-v']
     mb_args.extend(self._mb_isolate_map_file_args())
-    mb_args.extend(self._mb_build_dir_args(None))
+    mb_args.extend(self._mb_build_dir_args(build_dir))
     mb_args.extend([self.m.json.input(analyze_input), self.m.json.output()])
     return self.run_mb_cmd(
         name, 'analyze', mastername, buildername,

@@ -464,6 +464,10 @@ class iOSApi(recipe_api.RecipeApi):
             'trybot_analyze_config.json',
             additional_names=['chromium', 'ios'],
             mb_mastername=self.__config['mastername'],
+            # Don't re-use the build directory: filter.analyze ignores goma and
+            # it calls 'mb analyze' which results in the args.gn file having
+            # incorrect values for the goma variables
+            build_output_dir='//out/%s-analysis' % build_sub_path,
           )
         )
 

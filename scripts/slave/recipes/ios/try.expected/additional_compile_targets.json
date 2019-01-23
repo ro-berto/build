@@ -440,7 +440,7 @@
       "--config-file",
       "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
       "-v",
-      "//out/None",
+      "//out/Debug-iphonesimulator-analysis",
       "{\"additional_compile_targets\": [\"fake_target\"], \"files\": [\"foo.cc\"], \"test_targets\": []}",
       "/path/to/tmp/json"
     ],
