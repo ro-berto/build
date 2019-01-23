@@ -230,7 +230,6 @@ def main(argv):
       'master.tryserver.chromium.mac': 'TryServerChromiumMac',
       'master.tryserver.chromium.win': 'TryServerChromiumWin',
       'master.tryserver.chromium.perf': 'ChromiumPerfTryServer',
-      'master.tryserver.client.catapult': 'CatapultTryserver',
   }
   all_masters = {base_dir: public_masters}
   if os.path.exists(build_internal):
