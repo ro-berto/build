@@ -95,7 +95,11 @@ def _RunStepsInternal(api):
       # 8 minutes seems like a reasonable upper bound on presubmit timings.
       # According to event mon data we have, it seems like anything longer than
       # this is a bug, and should just instant fail.
-      api.presubmit(*presubmit_args, venv=venv, timeout=8 * 60)
+      #
+      # https://crbug.com/917479 This is a problem on luci-py, bump to 12
+      # minutes.
+      timeout = 720 if repo_name == 'luci_py' else 480
+      api.presubmit(*presubmit_args, venv=venv, timeout=timeout)
   except api.step.StepTimeout:
     raise
   except api.step.StepFailure as step_failure:
