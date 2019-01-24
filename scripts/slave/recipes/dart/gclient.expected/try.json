@@ -70,7 +70,7 @@
       "--no-nag-max",
       "--with_branch_heads",
       "--with_tags",
-      "--patch_ref",
+      "--patch-ref",
       "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/89/456789/12",
       "--delete_unversioned_trees",
       "--output-json",

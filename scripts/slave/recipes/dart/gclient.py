@@ -20,7 +20,7 @@ def RunSteps(api):
   if repo_url and fetch_ref and target_ref:
     # Apply the patch on the target branch if it's a CL.
     extra_sync_flags.extend(
-        ['--patch_ref', '%s@%s:%s' % (repo_url, target_ref, fetch_ref)])
+        ['--patch-ref', '%s@%s:%s' % (repo_url, target_ref, fetch_ref)])
   else:
     # Check out the commit if it's not a CL.
     revision = api.buildbucket.gitiles_commit.id
