@@ -260,39 +260,41 @@ def _UploadToPerfDashboard(name, api, step_result):
     }
   task_output_dir = step_result.raw_io.output_dir
 
-  perf_results = {}
-  for filepath in task_output_dir:
-    if filepath.endswith('perftest-output.json'):
+  results_to_upload = []
+  for filepath in sorted(task_output_dir):
+    # File names are 'perftest-output.json', 'perftest-output_1.json', ...
+    if re.search(r'perftest-output.*\.json$', filepath):
       perf_results = api.json.loads(task_output_dir[filepath])
-      break
-  else:
-    if step_result.retcode == 0: # pragma: no cover
-      raise step_result.InfraFailure(
-          'Cannot find JSON performance data for a test that succeeded.')
-    return
+      if perf_results:
+        results_to_upload.append(perf_results)
+
+  if not results_to_upload and step_result.retcode == 0: # pragma: no cover
+    raise api.step.InfraFailure(
+        'Cannot find JSON performance data for a test that succeeded.')
 
   perf_bot_group = 'WebRTCPerf'
   if api.runtime.is_experimental:
     perf_bot_group = 'Experimental' + perf_bot_group
 
-  args = [
-      '--build-url', api.webrtc.build_url,
-      '--name', name,
-      '--perf-id', api.webrtc.c.PERF_ID,
-      '--output-json-file', api.json.output(),
-      '--results-file', api.json.input(perf_results),
-      '--results-url', DASHBOARD_UPLOAD_URL,
-      '--commit-position', api.webrtc.revision_number,
-      '--got-webrtc-revision', api.webrtc.revision,
-      '--perf-dashboard-machine-group', perf_bot_group,
-  ]
+  for perf_results in results_to_upload:
+    args = [
+        '--build-url', api.webrtc.build_url,
+        '--name', name,
+        '--perf-id', api.webrtc.c.PERF_ID,
+        '--output-json-file', api.json.output(),
+        '--results-file', api.json.input(perf_results),
+        '--results-url', DASHBOARD_UPLOAD_URL,
+        '--commit-position', api.webrtc.revision_number,
+        '--got-webrtc-revision', api.webrtc.revision,
+        '--perf-dashboard-machine-group', perf_bot_group,
+    ]
 
-  api.build.python(
-      '%s Dashboard Upload' % name,
-      api.webrtc.resource('upload_perf_dashboard_results.py'),
-      args,
-      step_test_data=lambda: api.json.test_api.output({}),
-      infra_step=True)
+    api.build.python(
+        '%s Dashboard Upload' % name,
+        api.webrtc.resource('upload_perf_dashboard_results.py'),
+        args,
+        step_test_data=lambda: api.json.test_api.output({}),
+        infra_step=True)
 
 
 # TODO(kjellander): Continue refactoring an integrate the classes in the
