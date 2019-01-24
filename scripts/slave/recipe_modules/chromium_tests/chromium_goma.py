@@ -54,6 +54,19 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'Chromium Linux Goma RBE ToT (ATS)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'goma_arbitrary_toolchain_support', 'goma_rbe_tot', 'mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'testing': {
+        'platform': 'linux',
+      },
+    },
     'Chromium Linux Goma RBE Staging (clobber)': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['goma_mixer_staging', 'clobber', 'mb'],
