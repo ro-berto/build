@@ -112,6 +112,8 @@ def _GetTargetCMakeArgs(buildername, path, ninja_path, platform):
     args['BUILD_SHARED_LIBS'] = '1'
   if _HasToken(buildername, 'rel'):
     args['CMAKE_BUILD_TYPE'] = 'Release'
+  if _HasToken(buildername, 'relwithasserts'):
+    args['CMAKE_BUILD_TYPE'] = 'RelWithAsserts'
   # 32-bit builds are cross-compiled on the 64-bit bots.
   if _HasToken(buildername, 'win32') and _UsesClang(buildername):
     args['CMAKE_SYSTEM_NAME'] = 'Windows'
@@ -144,6 +146,8 @@ def _GetTargetCMakeArgs(buildername, path, ninja_path, platform):
     args['MSAN'] = '1'
   if _HasToken(buildername, 'tsan'):
     args['TSAN'] = '1'
+  if _HasToken(buildername, 'ubsan'):
+    args['UBSAN'] = '1'
   if _UsesCustomLibCXX(buildername):
     args['USE_CUSTOM_LIBCXX'] = '1'
   if _HasToken(buildername, 'small'):
@@ -377,7 +381,8 @@ def GenTests(api):
     ('linux_rel', api.platform('linux', 64)),
     ('linux32_rel', api.platform('linux', 64)),
     ('linux_clang_rel', api.platform('linux', 64)),
-    ('linux_clang_rel_msan', api.platform('linux', 64)),
+    ('linux_clang_relwithasserts_msan', api.platform('linux', 64)),
+    ('linux_clang_relwithasserts_ubsan', api.platform('linux', 64)),
     ('linux_clang_cfi', api.platform('linux', 64)),
     ('linux_fuzz', api.platform('linux', 64)),
     ('linux_fips', api.platform('linux', 64)),
@@ -431,11 +436,11 @@ def GenTests(api):
     )
 
   unit_test_only_tests = [
-    ('linux_sde', api.platform('linux', 64)),
-    ('linux32_sde', api.platform('linux', 64)),
-    ('linux_clang_rel_tsan', api.platform('linux', 64)),
-    ('win32_sde', api.platform('win', 64)),
-    ('win64_sde', api.platform('win', 64)),
+    ('linux_relwithasserts_sde', api.platform('linux', 64)),
+    ('linux32_relwithasserts_sde', api.platform('linux', 64)),
+    ('linux_clang_relwithasserts_tsan', api.platform('linux', 64)),
+    ('win32_relwithasserts_sde', api.platform('win', 64)),
+    ('win64_relwithasserts_sde', api.platform('win', 64)),
   ]
   for (buildername, host_platform) in unit_test_only_tests:
     yield (
