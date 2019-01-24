@@ -785,7 +785,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def run_sharded_perf_tests(self, config, test_type_transform=None,
                              upload_archives_to_bucket=None,
-                             timestamp_as_point_id=False, venv=False):
+                             timestamp_as_point_id=False, venv=True):
     """Run the perf tests from the given config file.
 
     config: the path of the config file containing perf tests.
