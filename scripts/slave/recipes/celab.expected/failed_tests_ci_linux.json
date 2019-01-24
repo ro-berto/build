@@ -259,10 +259,48 @@
       "-vv"
     ],
     "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
-    "name": "run all tests"
+    "name": "run all tests",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
-    "jsonResult": null,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::zip]/resources/zip.py"
+    ],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "name": "zip logs archive",
+    "stdin": "{\"entries\": [{\"path\": \"[START_DIR]/logs\", \"type\": \"dir\"}], \"output\": \"[START_DIR]/logs.zip\", \"root\": \"[START_DIR]/logs\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/logs.zip",
+      "gs://celab-ci-logs/builder/2012/05/14/8945511751514863184/logs.zip"
+    ],
+    "cwd": "[START_DIR]/go/src/chromium.googlesource.com/enterprise/cel",
+    "infra_step": true,
+    "name": "gsutil upload CELab test logs",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Test logs@https://storage.cloud.google.com/celab-ci-logs/builder/2012/05/14/8945511751514863184/logs.zip@@@"
+    ]
+  },
+  {
+    "failure": {
+      "failure": {
+        "step": "run all tests"
+      },
+      "humanReason": "Step('run all tests') failed with return_code 1"
+    },
     "name": "$result"
   }
 ]

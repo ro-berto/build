@@ -21,6 +21,9 @@ from recipe_engine.recipe_api import Property
 
 CELAB_REPO = "https://chromium.googlesource.com/enterprise/cel"
 
+POOL_NAME = "celab-ci"
+POOL_SIZE = 6
+
 
 def _get_bin_directory(api, checkout):
   bin_dir = checkout.join('out')
@@ -91,6 +94,71 @@ def RunSteps(api):
       name='upload CELab binaries',
       link_name='CELab binaries')
 
+    # Run tests for Linux CI builds.
+    if api.platform.is_linux:
+      _RunTests(api, checkout)
+
+
+def _RunTests(api, checkout):
+  host_dir = api.path['start_dir'].join('hosts')
+  error_logs_dir = api.path['start_dir'].join('logs')
+  api.file.ensure_directory('init host_dir if not exists', host_dir)
+  api.file.ensure_directory('init error_logs_dir if not exists', error_logs_dir)
+
+  # Get a unique storage prefix for these tests (diff runs share the bucket)
+  storage_prefix = 'test-run-%s' % api.buildbucket.build.id
+
+  # Generate the host files that we'll use in ./run_tests.py.
+  with api.context(cwd=checkout.join('scripts', 'tests')):
+    api.python('generate host files',
+      'generate_host_files.py',
+      [
+        '--template', '../../examples/schema/host/example.host.textpb',
+        '--projects', ';'.join(["%s-%03d" % (POOL_NAME, i) for i in xrange(1, POOL_SIZE)]),
+        '--storage_bucket', '%s-assets' % POOL_NAME,
+        '--storage_prefix', storage_prefix,
+        '--destination_dir', host_dir
+      ],
+      venv=True)
+
+  # Run our tests and catch test failures.
+  with api.context(cwd=checkout):
+    try:
+      api.python('run all tests',
+        'run_tests.py',
+        [
+          '--hosts', host_dir,
+          # TODO: Use SharedProviderStorage when its checked in.
+          #'--shared_provider_storage', '%s-assets' % POOL_NAME,
+          '--error_logs_dir', error_logs_dir,
+          '--noprogress', '-vv'
+        ],
+        venv=True)
+    except:
+      # Save the error logs in our logs bucket.
+      zip_out = api.path['start_dir'].join('logs.zip')
+      pkg = api.zip.make_package(error_logs_dir, zip_out)
+      pkg.add_directory(error_logs_dir)
+      pkg.zip('zip logs archive')
+
+      today = api.time.utcnow().date()
+      gs_dest = '%s/%s/%s/logs.zip' % (
+        api.buildbucket.builder_name,
+        today.strftime('%Y/%m/%d'),
+        api.buildbucket.build.id)
+      api.gsutil.upload(
+        source=zip_out,
+        bucket='%s-logs' % POOL_NAME,
+        dest=gs_dest,
+        name='upload CELab test logs',
+        link_name='Test logs')
+
+      raise
+    finally:
+      # TODO: Clean up storage prefix when the test run ends.
+      #       It's already automatically deleted after 1 day.
+      pass
+
 
 def GenTests(api):
   yield (
@@ -106,4 +174,10 @@ def GenTests(api):
       api.test('basic_ci_windows') +
       api.platform('win', 64) +
       api.buildbucket.ci_build(project='celab', bucket='ci', git_repo=CELAB_REPO)
+  )
+  yield (
+      api.test('failed_tests_ci_linux') +
+      api.platform('linux', 64) +
+      api.buildbucket.ci_build(project='celab', bucket='ci', git_repo=CELAB_REPO) +
+      api.step_data('run all tests', retcode=1)
   )
