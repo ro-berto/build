@@ -39,8 +39,6 @@ _COMPILE_TARGETS = [
 _APK_NAME = 'MonochromePublic.apk'
 _PATCH_FIXED_BUILD_STEP_NAME = (
     'Not measuring binary size because build is broken without patch.')
-_FOOTER_PRESENT_STEP_NAME = (
-    'Not measuring binary size because Binary-Size justification was provided.')
 _NDJSON_GS_BUCKET = 'chromium-binary-size-trybot-results'
 _ARCHIVED_URL_PREFIX = (
     'https://storage.googleapis.com/' + _NDJSON_GS_BUCKET + '/')
@@ -71,13 +69,6 @@ def RunSteps(api):
     # get_footer returns a list of footer values.
     size_footers = api.tryserver.get_footer(
         'Binary-Size', patch_text=revision_info['commit']['message'])
-    # Short-circuit early so that the bot is fast when disabled via header.
-    # Although the bot is also meant to test compiles of official builds,
-    # headers are generally only added when a previous job compiles fine and
-    # fails with the "You need to add the header" message.
-    if size_footers:
-      api.python.succeeding_step(_FOOTER_PRESENT_STEP_NAME, '')
-      return
 
     suffix = ' (with patch)'
     bot_config = {}
@@ -121,7 +112,8 @@ def RunSteps(api):
 
         _CreateDiffs(api, author, without_results_dir, with_results_dir,
                      results_path, staging_dir)
-        _CheckForUndocumentedIncrease(api, results_path, staging_dir)
+        _CheckForUndocumentedIncrease(api, results_path, staging_dir,
+                                      size_footers)
 
 
 def _BuildAndMeasure(api, with_patch, staging_dir):
@@ -154,7 +146,7 @@ def _BuildAndMeasure(api, with_patch, staging_dir):
   return results_dir
 
 
-def _CheckForUndocumentedIncrease(api, results_path, staging_dir):
+def _CheckForUndocumentedIncrease(api, results_path, staging_dir, size_footers):
   step_result = api.json.read(
       _RESULT_JSON_STEP_NAME, results_path,
       step_test_data=lambda: api.json.test_api.output({
@@ -194,7 +186,7 @@ def _CheckForUndocumentedIncrease(api, results_path, staging_dir):
         url = url.replace('{{' + filename + '}}', archived_url)
       step_result.presentation.links[link['name']] = url
 
-  if result_json['status_code'] != 0:
+  if result_json['status_code'] != 0 and not size_footers:
     step_result.presentation.status = api.step.FAILURE
     raise api.step.StepFailure('Undocumented size increase detected')
 
@@ -276,11 +268,6 @@ def GenTests(api):
             'test_targets': [] if no_changes else _COMPILE_TARGETS}))
 
   yield (
-      props('noop_because_of_size_footer', size_footer=True) +
-      api.post_process(post_process.MustRun, _FOOTER_PRESENT_STEP_NAME) +
-      api.post_process(post_process.DropExpectation)
-  )
-  yield (
       props('noop_because_of_analyze') +
       override_analyze(no_changes=True) +
       api.post_process(post_process.MustRun, 'analyze') +
@@ -302,14 +289,33 @@ def GenTests(api):
           _RESULTS_STEP_NAME,
           ['https://foo.com/{}{}/{}/{}/result.ndjson'.format(
                _ARCHIVED_URL_PREFIX, _TEST_BUILDER, _TEST_TIME_FMT,
-               _TEST_BUILDNUMBER)])
+               _TEST_BUILDNUMBER)]) +
+      api.post_process(post_process.StepSuccess, _RESULTS_STEP_NAME)
   )
-  yield (props('unexpected_increase') + override_analyze() +
-         api.override_step_data(
-             _RESULT_JSON_STEP_NAME,
-             api.json.output({
-                 'status_code': 1,
-                 'summary': '\n!summary!',
-                 'archive_filenames': [],
-                 'links': [],
-             })))
+  yield (
+      props('unexpected_increase') +
+      override_analyze() +
+      api.override_step_data(
+         _RESULT_JSON_STEP_NAME,
+         api.json.output({
+             'status_code': 1,
+             'summary': '\n!summary!',
+             'archive_filenames': [],
+             'links': [],
+         })) +
+      api.post_process(post_process.StepFailure, _RESULTS_STEP_NAME)
+  )
+  yield (
+      props('pass_because_of_size_footer', size_footer=True) +
+      override_analyze() +
+      api.override_step_data(
+         _RESULT_JSON_STEP_NAME,
+         api.json.output({
+             'status_code': 1,
+             'summary': '\n!summary!',
+             'archive_filenames': [],
+             'links': [],
+         })) +
+      api.post_process(post_process.StepSuccess, _RESULTS_STEP_NAME) +
+      api.post_process(post_process.DropExpectation)
+  )
