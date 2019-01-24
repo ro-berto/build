@@ -91,6 +91,14 @@ class BotConfig(object):
       if 'source_side_spec' in bot_config: # pragma: no cover
         return { self._bot_ids[0].buildername: bot_config['source_side_spec'] }
 
+      # Similar to the source_side_spec special case above, but expected to
+      # contain the spec for every builder on the waterfall. This is necessary
+      # because only having one builder like in the source_side_spec approach
+      # breaks parent/child builder relationships due to the parent not knowing
+      # which targets to build and isolate for its children.
+      elif 'downstream_spec' in bot_config: # pragma: no cover
+        return bot_config['downstream_spec']
+
     # TODO(phajdan.jr): Get rid of disable_tests.
     if self.get('disable_tests'):
       return {}
