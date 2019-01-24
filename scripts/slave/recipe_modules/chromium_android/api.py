@@ -783,7 +783,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def run_sharded_perf_tests(self, config, test_type_transform=None,
                              upload_archives_to_bucket=None,
-                             timestamp_as_point_id=False):
+                             timestamp_as_point_id=False, venv=False):
     """Run the perf tests from the given config file.
 
     config: the path of the config file containing perf tests.
@@ -866,7 +866,8 @@ class AndroidApi(recipe_api.RecipeApi):
               annotate=annotate,
               results_url='https://chromeperf.appspot.com',
               perf_id=self.m.buildbucket.builder_name,
-              chartjson_file=True)
+              chartjson_file=True,
+              venv=venv)
       except self.m.step.StepFailure as f:
         # Only warn for failures on reference builds.
         if test_name.endswith('.reference'):
