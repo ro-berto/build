@@ -41,40 +41,10 @@
   },
 
   "builders": {
-    "ToTLinux": {
-      "mixins": ["trusty"],
-      "bot": "slave162-c1",
-      "category": "0ToTLinux",
-    },
-    "ToTLinux (dbg)": {
-      "mixins": ["trusty"],
-      "bot": "slave164-c1",
-      "category": "0ToTLinux",
-    },
-    "ToTLinuxThinLTO": {
-      "mixins": ["trusty"],
-      "bot": "slave167-c1",
-      "category": "0ToTLinux",
-    },
 
     "ToTAndroidASan": {
       "mixins": ["trusty"],
       "bot": "build3-b1",
-      "category": "1ToTAndroid",
-    },
-    "ToTAndroid (dbg)": {
-      "mixins": ["trusty"],
-      "bot": "slave135-c1",
-      "category": "1ToTAndroid",
-    },
-    "ToTAndroid": {
-      "mixins": ["trusty"],
-      "bot": "slave144-c1",
-      "category": "1ToTAndroid",
-    },
-    "ToTAndroid64": {
-      "mixins": ["trusty"],
-      "bot": "slave172-c1",
       "category": "1ToTAndroid",
     },
     "ToTAndroidCFI": {
