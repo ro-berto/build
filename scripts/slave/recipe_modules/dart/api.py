@@ -637,14 +637,18 @@ class DartApi(recipe_api.RecipeApi):
       ['none', 'd8', 'jsshell', 'edge', 'ie11', 'firefox', 'safari', 'chrome'],
       None)
     with self.m.context(cwd=self.m.path['checkout']):
-      result = self.m.gclient('get checked-in SDK version',
+      checked_in_sdk_version = self.m.gclient('get checked-in SDK version',
           ['getdep', '-r', 'sdk/tools/sdks:dart/dart-sdk/${platform}'],
-          stdout=self.m.raw_io.output_text(add_output_log=True))
+          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
+      co19_version = self.m.gclient('get co19 version',
+          ['getdep', '-r', 'sdk/tests/co19_2/src:dart/third_party/co19'],
+          stdout=self.m.raw_io.output_text(add_output_log=True)).stdout
     environment = {'system': system,
                    'mode': mode,
                    'arch': arch,
                    'copy-coredumps': False,
-                   'checked_in_sdk_version': result.stdout}
+                   'checked_in_sdk_version': checked_in_sdk_version,
+                   'co19_version': co19_version}
     environment['commit'] = {
       'commit_hash': self.m.buildbucket.gitiles_commit.id,
       'commit_time': self.m.git.get_timestamp(test_data='1234567')
@@ -949,6 +953,11 @@ class DartApi(recipe_api.RecipeApi):
     cipd_packages.append(('tools/sdks',
         'dart/dart-sdk/${platform}',
         environment['checked_in_sdk_version']))
+    if 'co19_2' in args:
+      cipd_packages.append(('tests/co19_2/src',
+          'dart/third_party/co19',
+          environment['co19_version']))
+
     ok_ret = 'any' if ignore_failure else {0}
     runtime = self._get_specific_argument(args, ['-r', '--runtime'])
     if runtime is None:

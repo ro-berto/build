@@ -978,7 +978,8 @@
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/test.py\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"shards\": 2, @@@",
       "@@@STEP_LOG_LINE@json.output@          \"tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@            \"language_2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"language_2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"co19_2\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ]@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
@@ -1164,6 +1165,28 @@
     },
     "infra_step": true,
     "name": "gclient get checked-in SDK version",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "getdep",
+      "-r",
+      "sdk/tests/co19_2/src:dart/third_party/co19"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "gclient get co19 version",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_LOG_END@raw_io.output_text@@@"

@@ -87,7 +87,7 @@ TEST_MATRIX = {
         "name": "Test-step 1",
         "script": "tools/test.py",
         "arguments": ["foo", "-n${runtime}-foo-${mode}-${arch}-bar"],
-        "tests": ["language_2"],
+        "tests": ["language_2", "co19_2"],
         "exclude_tests": ["co19"],
         "shards": 2,
         "fileset": "nameoffileset"
