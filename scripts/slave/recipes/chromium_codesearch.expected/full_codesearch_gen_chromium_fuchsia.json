@@ -688,12 +688,12 @@
       "----",
       "cp",
       "[CACHE]/builder/src/out/fuchsia-Debug/chromium_fuchsia.kzip",
-      "gs://chrome-codesearch/prod/chromium_fuchsia_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9+1337000003_experimental.kzip"
+      "gs://chrome-codesearch/prod/chromium_fuchsia_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9+1337000003.kzip"
     ],
     "infra_step": true,
     "name": "gsutil upload kythe index pack",
     "~followup_annotations": [
-      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_fuchsia_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9+1337000003_experimental.kzip@@@"
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/prod/chromium_fuchsia_170242_f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9+1337000003.kzip@@@"
     ]
   },
   {

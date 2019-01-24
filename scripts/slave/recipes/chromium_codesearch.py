@@ -52,8 +52,7 @@ SPEC = freeze({
         'all',
       ],
       'platform': 'fuchsia',
-      # Mark Fuchsia kzip files as experimental until we know they work.
-      'experimental': True,
+      # Don't sync generated files for Fuchsia until they're verified.
       'sync_generated_files': False,
       'gen_repo_branch': 'master',
       # Generated files will end up in out/fuchsia-Debug/gen.
