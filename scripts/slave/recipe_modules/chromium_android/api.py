@@ -196,7 +196,9 @@ class AndroidApi(recipe_api.RecipeApi):
                 self.m.path['checkout']] + repos,
                 allow_subannotations=False)
 
-  def git_number(self, commitrefs=None, **kwargs):
+  def git_number(self, commitrefs=None, step_test_data=None, **kwargs):
+    if not step_test_data:
+      step_test_data = lambda: self.m.raw_io.test_api.stream_output('3000\n')
     with self.m.context(cwd=self.m.path['checkout'],
                         env={'CHROME_HEADLESS': '1'}):
       return self.m.python(
@@ -204,10 +206,7 @@ class AndroidApi(recipe_api.RecipeApi):
           self.m.depot_tools.package_repo_resource('git_number.py'),
           commitrefs,
           stdout=self.m.raw_io.output_text(),
-          step_test_data=(
-            lambda:
-              self.m.raw_io.test_api.stream_output('3000\n')
-          ),
+          step_test_data=step_test_data,
           infra_step=True,
           **kwargs)
 
