@@ -8,6 +8,7 @@ DEPS = [
   'depot_tools/git',
   'depot_tools/infra_paths',
   'depot_tools/presubmit',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/file',
   'recipe_engine/json',
@@ -60,9 +61,9 @@ def _RunStepsInternal(api):
       api.gclient.runhooks()
 
   presubmit_args = [
-    '--issue', api.properties['patch_issue'],
-    '--patchset', api.properties['patch_set'],
-    '--gerrit_url', api.properties['patch_gerrit_url'],
+    '--issue', api.tryserver.gerrit_change.change,
+    '--patchset', api.tryserver.gerrit_change.patchset,
+    '--gerrit_url', 'https://%s' % api.tryserver.gerrit_change.host,
     '--gerrit_fetch',
   ]
   if api.properties.get('dry_run'):
@@ -115,7 +116,7 @@ def _RunStepsInternal(api):
 def RunSteps(api):
   try:
     safe_buildername = ''.join(
-        c if c.isalnum() else '_' for c in api.properties['buildername'])
+        c if c.isalnum() else '_' for c in api.buildbucket.builder_name)
     # HACK to avoid invalidating caches when PRESUBMIT running
     # on special infra/config branch, which is typically orphan.
     if api.tryserver.gerrit_change_target_ref == 'refs/heads/infra/config':
