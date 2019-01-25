@@ -471,7 +471,7 @@
     "name": "upload testing fileset dart_testing_fileset",
     "stdout": "/path/to/tmp/out",
     "~followup_annotations": [
-      "@@@STEP_TEXT@swarming fileset hash: @@@"
+      "@@@STEP_TEXT@swarming fileset hash: dtf_hash@@@"
     ]
   },
   {
@@ -1184,7 +1184,7 @@
     "name": "upload testing fileset fileset1",
     "stdout": "/path/to/tmp/out",
     "~followup_annotations": [
-      "@@@STEP_TEXT@swarming fileset hash: test isolate hash@@@"
+      "@@@STEP_TEXT@swarming fileset hash: fs1_hash@@@"
     ]
   },
   {
@@ -1471,8 +1471,8 @@
       "put",
       "-host",
       "cr-buildbucket.appspot.com",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win-debug-x64-firefox\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\"}}\", \"tags\": [\"builder:foo-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:dart2js-win-debug-x64-firefox\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win-debug-x64-firefox\\\", \\\"parent_fileset\\\": \\\"test isolate hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\"}}\", \"tags\": [\"builder:bar-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:dart2js-win-debug-x64-firefox\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win-debug-x64-firefox\\\", \\\"parent_fileset\\\": \\\"fs1_hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\"}}\", \"tags\": [\"builder:foo-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:dart2js-win-debug-x64-firefox\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}",
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"dart2js-win-debug-x64-firefox\\\", \\\"parent_fileset\\\": \\\"fs1_hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\"}}\", \"tags\": [\"builder:bar-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:dart2js-win-debug-x64-firefox\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
     "env": {
@@ -1573,7 +1573,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test-step 3_shard_1/Windows/test isola",
+      "Test-step 3_shard_1/Windows/fs1_hash",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1597,7 +1597,7 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "data:test isolate hash",
+      "data:fs1_hash",
       "--tag",
       "name:Test-step",
       "--tag",
@@ -1626,7 +1626,7 @@
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
       "--isolated",
-      "test isolate hash",
+      "fs1_hash",
       "--raw-cmd",
       "--",
       "tools/test.py",
@@ -1661,9 +1661,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Windows'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 3_shard_1/Windows/test isola\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 3_shard_1/Windows/fs1_hash\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test-step 3_shard_1/Windows/test isola\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test-step 3_shard_1/Windows/fs1_hash\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"120000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"@@@",
@@ -1924,7 +1924,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test-step 3_shard_1/Windows/test isola\", \"tasks\": {\"Test-step 3_shard_1/Windows/test isola\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}",
+      "{\"base_task_name\": \"Test-step 3_shard_1/Windows/fs1_hash\", \"tasks\": {\"Test-step 3_shard_1/Windows/fs1_hash\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],

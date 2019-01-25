@@ -473,7 +473,7 @@
     "name": "upload testing fileset dart_testing_fileset",
     "stdout": "/path/to/tmp/out",
     "~followup_annotations": [
-      "@@@STEP_TEXT@swarming fileset hash: @@@"
+      "@@@STEP_TEXT@swarming fileset hash: dtf_hash@@@"
     ]
   },
   {
@@ -1147,7 +1147,7 @@
     "name": "upload testing fileset nameoffileset",
     "stdout": "/path/to/tmp/out",
     "~followup_annotations": [
-      "@@@STEP_TEXT@swarming fileset hash: test isolate hash@@@"
+      "@@@STEP_TEXT@swarming fileset hash: nof_hash@@@"
     ]
   },
   {
@@ -1165,7 +1165,7 @@
     "name": "upload testing fileset fileset1",
     "stdout": "/path/to/tmp/out",
     "~followup_annotations": [
-      "@@@STEP_TEXT@swarming fileset hash: @@@"
+      "@@@STEP_TEXT@swarming fileset hash: fs1_hash@@@"
     ]
   },
   {
@@ -1196,7 +1196,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test-step 1_shard_1/Linux/test isola",
+      "Test-step 1_shard_1/Linux/nof_hash",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1220,7 +1220,7 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "data:test isolate hash",
+      "data:nof_hash",
       "--tag",
       "name:Test-step",
       "--tag",
@@ -1251,7 +1251,7 @@
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
       "--isolated",
-      "test isolate hash",
+      "nof_hash",
       "--raw-cmd",
       "--",
       "tools/test.py",
@@ -1287,9 +1287,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 1_shard_1/Linux/test isola\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 1_shard_1/Linux/nof_hash\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_1/Linux/test isola\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_1/Linux/nof_hash\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -1315,7 +1315,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test-step 1_shard_2/Linux/test isola",
+      "Test-step 1_shard_2/Linux/nof_hash",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -1339,7 +1339,7 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "data:test isolate hash",
+      "data:nof_hash",
       "--tag",
       "name:Test-step",
       "--tag",
@@ -1370,7 +1370,7 @@
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
       "--isolated",
-      "test isolate hash",
+      "nof_hash",
       "--raw-cmd",
       "--",
       "tools/test.py",
@@ -1406,9 +1406,9 @@
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 1_shard_2/Linux/test isola\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 1_shard_2/Linux/nof_hash\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_2/Linux/test isola\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test-step 1_shard_2/Linux/nof_hash\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
@@ -1464,8 +1464,8 @@
       "put",
       "-host",
       "cr-buildbucket.appspot.com",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-none-linux-release-be\\\", \\\"revision\\\": \\\"3456abce78ef\\\"}}\", \"tags\": [\"builder:foo-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/3456abce78ef\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:analyzer-none-linux-release-be\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}",
-      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-none-linux-release-be\\\", \\\"revision\\\": \\\"3456abce78ef\\\"}}\", \"tags\": [\"builder:bar-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/3456abce78ef\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:analyzer-none-linux-release-be\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}"
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"foo-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-none-linux-release-be\\\", \\\"parent_fileset\\\": \\\"fs1_hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"3456abce78ef\\\"}}\", \"tags\": [\"builder:foo-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/3456abce78ef\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:analyzer-none-linux-release-be\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}",
+      "{\"bucket\": \"luci.dart.ci\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"bar-builder\\\", \\\"changes\\\": [], \\\"properties\\\": {\\\"parent_build_id\\\": \\\"\\\", \\\"parent_buildername\\\": \\\"analyzer-none-linux-release-be\\\", \\\"parent_fileset\\\": \\\"fs1_hash\\\", \\\"parent_fileset_name\\\": \\\"fileset1\\\", \\\"revision\\\": \\\"3456abce78ef\\\"}}\", \"tags\": [\"builder:bar-builder\", \"buildset:commit/gitiles/dart.googlesource.com/sdk/+/3456abce78ef\", \"gitiles_ref:refs/heads/master\", \"parent_buildername:analyzer-none-linux-release-be\", \"parent_buildnumber:1357\", \"user_agent:recipe\"]}"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "env": {
@@ -1539,6 +1539,144 @@
     "name": "Test-step dart"
   },
   {
+    "cmd": [],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "name": "trigger shards for Test-step 3"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[CACHE]/builder/sdk/tools/swarming_client/swarming.py",
+      "trigger",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--priority",
+      "25",
+      "--shards",
+      "1",
+      "--task-name",
+      "Test-step 3_shard_1/Linux/fs1_hash",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--expiration",
+      "3600",
+      "--io-timeout",
+      "1200",
+      "--hard-timeout",
+      "3600",
+      "--dimension",
+      "cpu",
+      "x86-64",
+      "--dimension",
+      "os",
+      "Linux",
+      "--dimension",
+      "pool",
+      "dart.tests",
+      "--named-cache",
+      "swarming_module_cache_vpython",
+      ".swarming_module_cache/vpython",
+      "--tag",
+      "build_is_experimental:false",
+      "--tag",
+      "data:fs1_hash",
+      "--tag",
+      "name:Test-step",
+      "--tag",
+      "slavename:trusty-dart-123",
+      "--tag",
+      "spec_name:dart.ci:analyzer-none-linux-release-be",
+      "--tag",
+      "stepname:Test-step 3_shard_1",
+      "--cipd-package",
+      "browsers:dart/browsers/firefox/${platform}:version:61",
+      "--cipd-package",
+      "tools/sdks:dart/dart-sdk/${platform}:",
+      "--cipd-package",
+      ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
+      "--cipd-package",
+      ".swarming_module:infra/tools/luci/logdog/butler/${platform}:TEST_VERSION",
+      "--cipd-package",
+      ".swarming_module:infra/tools/luci/vpython-native/${platform}:TEST_VERSION",
+      "--cipd-package",
+      ".swarming_module:infra/tools/luci/vpython/${platform}:TEST_VERSION",
+      "--env-prefix",
+      "PATH",
+      ".swarming_module",
+      "--env-prefix",
+      "PATH",
+      ".swarming_module/bin",
+      "--env-prefix",
+      "VPYTHON_VIRTUALENV_ROOT",
+      ".swarming_module_cache/vpython",
+      "--isolated",
+      "fs1_hash",
+      "--raw-cmd",
+      "--",
+      "/usr/bin/xvfb-run",
+      "-a",
+      "--server-args=-screen 0 1024x768x24",
+      "python",
+      "-u",
+      "tools/test.py",
+      "-ax64",
+      "-mrelease",
+      "--progress=status",
+      "--report",
+      "--time",
+      "--write-debug-log",
+      "--write-results",
+      "--write-logs",
+      "--clean-exit",
+      "foo",
+      "--bar",
+      "-rfirefox",
+      "--copy-coredumps",
+      "--firefox=browsers/firefox/firefox",
+      "--shards=2",
+      "--shard=1",
+      "--output_directory=${ISOLATED_OUTDIR}"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "env": {
+      "BUILDBOT_BUILDERNAME": "analyzer-none-linux-release-be"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "trigger shards for Test-step 3.[trigger] Test-step 3_shard_1",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Linux'@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test-step 3_shard_1/Linux/fs1_hash\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"Test-step 3_shard_1/Linux/fs1_hash\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"120000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/120000@@@"
+    ]
+  },
+  {
     "cmd": [
       "/usr/bin/xvfb-run",
       "-a",
@@ -1560,6 +1698,8 @@
       "-rfirefox",
       "--copy-coredumps",
       "--firefox=browsers/firefox/firefox",
+      "--shards=2",
+      "--shard=2",
       "--output_directory",
       "/path/to/tmp/"
     ],
@@ -1572,7 +1712,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "Test-step 3"
+    "name": "Test-step 3_shard_2"
   },
   {
     "cmd": [],
@@ -1637,7 +1777,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test-step 1_shard_1/Linux/test isola\", \"tasks\": {\"Test-step 1_shard_1/Linux/test isola\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
+      "{\"base_task_name\": \"Test-step 1_shard_1/Linux/nof_hash\", \"tasks\": {\"Test-step 1_shard_1/Linux/nof_hash\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1721,7 +1861,7 @@
       "--decorate",
       "--print-status-updates",
       "--json",
-      "{\"base_task_name\": \"Test-step 1_shard_2/Linux/test isola\", \"tasks\": {\"Test-step 1_shard_2/Linux/test isola\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
+      "{\"base_task_name\": \"Test-step 1_shard_2/Linux/nof_hash\", \"tasks\": {\"Test-step 1_shard_2/Linux/nof_hash\": {\"shard_index\": 0, \"task_id\": \"110000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"}}}",
       "--task-summary-json",
       "/path/to/tmp/json"
     ],
@@ -1765,6 +1905,83 @@
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
       "@@@STEP_LINK@test stdout of shard #0@https://chromium-swarm.appspot.com/user/task/110000@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
+      "--verbose",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "/path/to/tmp/",
+      "--merge-script",
+      "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--",
+      "python",
+      "-u",
+      "[CACHE]/builder/sdk/tools/swarming_client/swarming.py",
+      "collect",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--decorate",
+      "--print-status-updates",
+      "--json",
+      "{\"base_task_name\": \"Test-step 3_shard_1/Linux/fs1_hash\", \"tasks\": {\"Test-step 3_shard_1/Linux/fs1_hash\": {\"shard_index\": 0, \"task_id\": \"120000\", \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"}}}",
+      "--task-summary-json",
+      "/path/to/tmp/json"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
+    "name": "Test-step 3_shard_1",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Run on OS: 'Linux'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"abandoned_ts\": null, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"exit_code\": \"0\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"outputs_ref\": {@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        \"isolated\": \"abc123\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        \"namespace\": \"default-gzip\"@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@}@@@",
+      "@@@STEP_LOG_END@swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
+      "@@@STEP_LINK@test stdout of shard #0@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {

@@ -208,8 +208,10 @@ def GenTests(api):
                     api.raw_io.output_dir(CANNED_OUTPUT_DIR)) +
       api.step_data('Test-step 2',
                     api.raw_io.output_dir(CANNED_OUTPUT_DIR)) +
+      api.step_data('upload testing fileset dart_testing_fileset',
+                    stdout=api.raw_io.output('dtf_hash')) +
       api.step_data('upload testing fileset fileset1',
-                    stdout=api.raw_io.output('test isolate hash')) +
+                    stdout=api.raw_io.output('fs1_hash')) +
       api.step_data('gsutil find latest build',
                     api.raw_io.output_text('123', name='latest')))
 
@@ -226,8 +228,12 @@ def GenTests(api):
                     api.raw_io.output_dir(CANNED_OUTPUT_DIR)) +
       api.step_data('Test-step 2',
                     api.raw_io.output_dir(CANNED_OUTPUT_DIR)) +
+      api.step_data('upload testing fileset dart_testing_fileset',
+                    stdout=api.raw_io.output('dtf_hash')) +
       api.step_data('upload testing fileset nameoffileset',
-                    stdout=api.raw_io.output('test isolate hash')) +
+                    stdout=api.raw_io.output('nof_hash')) +
+      api.step_data('upload testing fileset fileset1',
+                    stdout=api.raw_io.output('fs1_hash')) +
       api.step_data('buildbucket.put',
                     stdout=api.json.output(TRIGGER_RESULT)))
 
@@ -238,6 +244,8 @@ def GenTests(api):
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
       api.step_data('Build', retcode=1) +
+      api.step_data('upload testing fileset dart_testing_fileset',
+                    stdout=api.raw_io.output('dtf_hash')) +
       api.post_process(DoesNotRun, 'Test-step 1') +
       api.post_process(DropExpectation))
 
@@ -266,8 +274,12 @@ def GenTests(api):
           builder='vm-kernel-win-release-x64',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
+      api.step_data('upload testing fileset dart_testing_fileset',
+                    stdout=api.raw_io.output('dtf_hash')) +
+      api.step_data('upload testing fileset nameoffileset',
+                    stdout=api.raw_io.output('nof_hash')) +
       api.step_data('upload testing fileset fileset1',
-                    stdout=api.raw_io.output('test isolate hash')) +
+                    stdout=api.raw_io.output('fs1 hash')) +
       api.step_data('buildbucket.put',
                     stdout=api.json.output(TRIGGER_RESULT)))
 
@@ -279,8 +291,12 @@ def GenTests(api):
           builder='dart2js-win-debug-x64-firefox-stable',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
+      api.step_data('upload testing fileset dart_testing_fileset',
+                    stdout=api.raw_io.output('dtf_hash')) +
       api.step_data('upload testing fileset fileset1',
-                    stdout=api.raw_io.output('test isolate hash')) +
+                    stdout=api.raw_io.output('fs1_hash')) +
+      api.step_data('upload testing fileset nameoffileset',
+                    stdout=api.raw_io.output('nof_hash')) +
       api.step_data('buildbucket.put',
                     stdout=api.json.output(TRIGGER_RESULT)))
 
@@ -293,8 +309,10 @@ def GenTests(api):
       api.properties(
           parent_fileset='isolate_hash_123',
           parent_fileset_name='nameoffileset') +
+      api.step_data('upload testing fileset dart_testing_fileset',
+                    stdout=api.raw_io.output('dtf_hash')) +
       api.step_data('upload testing fileset fileset1',
-                    stdout=api.raw_io.output('test isolate hash')) +
+                    stdout=api.raw_io.output('fs1_hash')) +
       api.step_data('buildbucket.put',
                     stdout=api.json.output(TRIGGER_RESULT)))
 
@@ -307,8 +325,10 @@ def GenTests(api):
       api.properties(
           parent_fileset='isolate_hash_123',
           parent_fileset_name='nameoffileset') +
+      api.step_data('upload testing fileset dart_testing_fileset',
+                    stdout=api.raw_io.output('dtf_hash')) +
       api.step_data('upload testing fileset fileset1',
-                    stdout=api.raw_io.output('test isolate hash')) +
+                    stdout=api.raw_io.output('fs1_hash')) +
       api.step_data('buildbucket.put',
                     stdout=api.json.output(TRIGGER_RESULT)))
 
@@ -321,5 +341,7 @@ def GenTests(api):
       api.buildbucket.ci_build(builder='example-android',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
+      api.step_data('upload testing fileset dart_testing_fileset',
+                    stdout=api.raw_io.output('dtf_hash')) +
       api.step_data('upload testing fileset fileset1',
-          stdout=api.raw_io.output('test isolate hash')))
+                    stdout=api.raw_io.output('fs1_hash')))
