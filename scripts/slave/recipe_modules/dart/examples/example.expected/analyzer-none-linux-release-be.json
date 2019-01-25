@@ -2646,6 +2646,19 @@
     ]
   },
   {
+    "cmd": [
+      "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
+      "tools/approve_results.dart",
+      "--automated-approver",
+      "-b",
+      "analyzer-none-linux-release-be",
+      "--successes-only",
+      "-y"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "approve unapproved successes"
+  },
+  {
     "jsonResult": null,
     "name": "$result"
   }

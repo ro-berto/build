@@ -506,6 +506,18 @@ class DartApi(recipe_api.RecipeApi):
       self.m.step.active_result.presentation.logs['results.json'] = [
           results_str]
 
+  def _approve_successes(self):
+    builder_name = self.m.buildbucket.builder_name
+    if builder_name.endswith('-try'):
+      return;
+    args = [self.dart_executable(),
+            "tools/approve_results.dart",
+            "--automated-approver",
+            "-b", builder_name,
+            "--successes-only",
+            "-y"]
+    self.m.step('approve unapproved successes', args)
+
 
   def read_debug_log(self):
     """Reads the debug log file"""
@@ -759,6 +771,11 @@ class DartApi(recipe_api.RecipeApi):
                 (results.runs for results in all_results.itervalues()))
             self._upload_results(
                 flaky_json_str, logs_str, results_str, runs_str)
+        # Approve unapproved successes if the build is green (an exception would
+        # have been thrown above if it was red). If we approve successes when
+        # the builder is red, then a commit that both fixes and breaks tests
+        # would turn the builder red and leave the builder red when reverted.
+        self._approve_successes()
 
 
   def _is_test_py_step(self, script):
