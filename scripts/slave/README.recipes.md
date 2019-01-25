@@ -805,7 +805,7 @@ Uploads the given test results log to Google storage.
 
 #### **class [ChromiteApi](/scripts/slave/recipe_modules/chromite/api.py#10)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [build\_packages](/scripts/slave/recipe_modules/chromite/api.py#195)(self, board, args=None, \*\*kwargs):**
+&mdash; **def [build\_packages](/scripts/slave/recipe_modules/chromite/api.py#199)(self, board, args=None, \*\*kwargs):**
 
 Run the build_packages script inside the chroot.
 
@@ -831,16 +831,16 @@ Args:
   value (str): The value to scan for.
 Returns (bool): True if the value was found.
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/chromite/api.py#156)(self, manifest_url=None, repo_url=None, repo_sync_args=None):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/chromite/api.py#156)(self, manifest_url=None, repo_url=None, branch=None, repo_sync_args=None):**
 
-&mdash; **def [checkout\_chromite](/scripts/slave/recipe_modules/chromite/api.py#249)(self):**
+&mdash; **def [checkout\_chromite](/scripts/slave/recipe_modules/chromite/api.py#253)(self):**
 
 Checks out the configured Chromite branch.
     
 
 &emsp; **@property**<br>&mdash; **def [chromite\_path](/scripts/slave/recipe_modules/chromite/api.py#28)(self):**
 
-&mdash; **def [configure](/scripts/slave/recipe_modules/chromite/api.py#204)(self, properties, config_map, \*\*KWARGS):**
+&mdash; **def [configure](/scripts/slave/recipe_modules/chromite/api.py#208)(self, properties, config_map, \*\*KWARGS):**
 
 Loads configuration from build properties into this recipe config.
 
@@ -849,7 +849,7 @@ Args:
   config_map (dict): The configuration map to use.
   KWARGS: Additional keyword arguments to forward to the configuration.
 
-&mdash; **def [cros\_sdk](/scripts/slave/recipe_modules/chromite/api.py#167)(self, name, cmd, args=None, environ=None, chroot_cmd=None, \*\*kwargs):**
+&mdash; **def [cros\_sdk](/scripts/slave/recipe_modules/chromite/api.py#171)(self, name, cmd, args=None, environ=None, chroot_cmd=None, \*\*kwargs):**
 
 Return a step to run a command inside the cros_sdk.
 
@@ -877,7 +877,7 @@ Args:
   repository (str): The URL of the repository hosting the change.
   revision (str): The revision hash to load the build ID from.
 
-&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#288)(self, args=None):**
+&mdash; **def [run](/scripts/slave/recipe_modules/chromite/api.py#292)(self, args=None):**
 
 Runs the configured 'cbuildbot' build.
 
@@ -900,7 +900,7 @@ Args:
   args (list): Initial argument list, expanded based on other values.
 Returns: (Step) the 'cbuildbot' execution step.
 
-&mdash; **def [run\_cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#231)(self, args=None, goma_canary=False):**
+&mdash; **def [run\_cbuildbot](/scripts/slave/recipe_modules/chromite/api.py#235)(self, args=None, goma_canary=False):**
 
 Performs a Chromite repository checkout, then runs cbuildbot.
 
@@ -908,13 +908,13 @@ Args:
   args (list): Initial argument list, see run() for details.
   goma_canary (bool): Use canary version of goma if True.
 
-&mdash; **def [setup\_board](/scripts/slave/recipe_modules/chromite/api.py#185)(self, board, args=None, \*\*kwargs):**
+&mdash; **def [setup\_board](/scripts/slave/recipe_modules/chromite/api.py#189)(self, board, args=None, \*\*kwargs):**
 
 Run the setup_board script inside the chroot.
 
 Used by the internal goma recipe.
 
-&mdash; **def [with\_system\_python](/scripts/slave/recipe_modules/chromite/api.py#259)(self):**
+&mdash; **def [with\_system\_python](/scripts/slave/recipe_modules/chromite/api.py#263)(self):**
 
 Prepare a directory with the system python binary available.
 
@@ -4328,9 +4328,9 @@ Generates BoringSSL documentation and uploads it to Cloud Storage.
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromedriver/examples/full.py#38)(api):**
 ### *recipes* / [chromite:examples/full](/scripts/slave/recipe_modules/chromite/examples/full.py)
 
-[DEPS](/scripts/slave/recipe_modules/chromite/examples/full.py#5): [chromite](#recipe_modules-chromite), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipe_modules/chromite/examples/full.py#7): [chromite](#recipe_modules-chromite), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromite/examples/full.py#28)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromite/examples/full.py#30)(api):**
 ### *recipes* / [chromium](/scripts/slave/recipes/chromium.py)
 
 [DEPS](/scripts/slave/recipes/chromium.py#5): [adb](#recipe_modules-adb), [bisect\_tester](#recipe_modules-bisect_tester), [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [isolate](#recipe_modules-isolate), [swarming](#recipe_modules-swarming), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]

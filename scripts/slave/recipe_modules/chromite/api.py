@@ -153,14 +153,18 @@ class ChromiteApi(recipe_api.RecipeApi):
     return self.m.step(name, cmd, allow_subannotations=True, **kwargs)
 
   # Only used by the internal goma recipe.
-  def checkout(self, manifest_url=None, repo_url=None, repo_sync_args=None):
+  def checkout(self, manifest_url=None, repo_url=None, branch=None,
+               repo_sync_args=None):
     if repo_sync_args is None:
       repo_sync_args = []
 
     manifest_url = manifest_url or self.manifest_url
     repo_url = repo_url or self.repo_url
 
-    self.m.repo.init(manifest_url, '--repo-url', repo_url)
+    if branch:
+      self.m.repo.init(manifest_url, '--repo-url', repo_url, '-b', branch)
+    else:
+      self.m.repo.init(manifest_url, '--repo-url', repo_url)
     self.m.repo.sync(*repo_sync_args)
 
   # Only used by the internal goma recipe.
