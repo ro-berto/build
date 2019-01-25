@@ -253,7 +253,9 @@ def _MergeFiles(output_dir, suffix):
 
 
 def _UploadToPerfDashboard(name, api, step_result):
-  if api.webrtc._test_data.enabled and step_result.retcode == 0:
+  test_succeeded = (step_result.presentation.status == api.step.SUCCESS)
+
+  if api.webrtc._test_data.enabled and test_succeeded:
     step_result.raw_io.output_dir = {
       '0/perftest-output.json': api.webrtc.test_api.example_chartjson(),
       'logcats': 'foo',
@@ -268,7 +270,7 @@ def _UploadToPerfDashboard(name, api, step_result):
       if perf_results:
         results_to_upload.append(perf_results)
 
-  if not results_to_upload and step_result.retcode == 0: # pragma: no cover
+  if not results_to_upload and test_succeeded: # pragma: no cover
     raise api.step.InfraFailure(
         'Cannot find JSON performance data for a test that succeeded.')
 
