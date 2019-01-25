@@ -394,6 +394,11 @@ class V8Test(BaseTest):
       # non-flakes) present.
       step_result.presentation.status = self.api.step.FAILURE
 
+    infra_failures = []
+    if 'UNRELIABLE_RESULTS' in json_output[0]['tags']:
+      infra_failures.append('One ore more shards did not complete.')
+      step_result.presentation.status = self.api.step.EXCEPTION
+
     if flake_log and flakes:
       # Emit a separate step to show flakes from the previous step
       # to not close the tree.
@@ -407,7 +412,7 @@ class V8Test(BaseTest):
 
     coverage_context.post_run()
 
-    return TestResults(failures, flakes, [])
+    return TestResults(failures, flakes, infra_failures)
 
   def _setup_rerun_config(self, failure_dict):
     """Return: A test config that reproduces a specific failure."""

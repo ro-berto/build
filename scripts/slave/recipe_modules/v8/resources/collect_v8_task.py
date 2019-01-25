@@ -57,6 +57,7 @@ def merge_shard_results(
   # Merge all JSON files together.
   archs = []
   modes = []
+  tags = set()
   slowest_tests = []
   results = []
   missing_shards = []
@@ -79,18 +80,17 @@ def merge_shard_results(
   # should be red anyway, since swarming.py return non-zero exit code in that
   # case.
   if missing_shards:
+    # Not all tests run, combined JSON summary can not be trusted.
+    tags.add('UNRELIABLE_RESULTS')
     as_str = ', '.join(map(str, missing_shards))
     emit_warning(
         'some shards did not complete: %s' % as_str,
         MISSING_SHARDS_MSG % as_str)
-    # Not all tests run, combined JSON summary can not be trusted.
-    # TODO(machenbach): Implement using a tag in the test results that makes
-    # the step know they're incomplete.
 
   # Handle the case when all shards fail. Return minimalistic dict that has all
   # fields that a calling recipe expects to avoid recipe-level exceptions.
   if len(missing_shards) == len(summary['shards']):
-    return [{'slowest_tests': [], 'results': []}]
+    return [{'slowest_tests': [], 'results': [], 'tags': sorted(tags)}]
 
   # Each shard must have used the same arch and mode configuration.
   assert len(set(archs)) == 1
@@ -112,6 +112,7 @@ def merge_shard_results(
     'slowest_tests': sorted(
         slowest_tests, key=lambda t: t['duration'], reverse=True)[:10],
     'results': results,
+    'tags': sorted(tags),
   }]
 
 

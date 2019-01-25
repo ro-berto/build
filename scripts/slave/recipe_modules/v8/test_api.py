@@ -62,6 +62,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         'mode': 'theMode',
         'results': [],
         'slowest_tests': slowest_tests,
+        'tags': [],
       }])
     if wrong_results:
       return self.m.json.output([{
@@ -69,12 +70,14 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         'mode': 'theMode1',
         'results': [],
         'slowest_tests': slowest_tests,
+        'tags': [],
       },
       {
         'arch': 'theArch2',
         'mode': 'theMode2',
         'results': [],
         'slowest_tests': slowest_tests,
+        'tags': [],
       }])
     if flakes:
       return self.m.json.output([{
@@ -139,6 +142,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           },
         ],
         'slowest_tests': slowest_tests,
+        'tags': [],
       }])
 
 
@@ -193,6 +197,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       'mode': 'theMode',
       'results': results,
       'slowest_tests': slowest_tests,
+      'tags': [],
     }])
 
   def one_failure(self):
@@ -217,6 +222,16 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         },
       ],
       'slowest_tests': V8TestApi.SLOWEST_TESTS(),
+      'tags': [],
+    }])
+
+  def infra_failure(self):
+    return self.m.json.output([{
+      'arch': 'theArch',
+      'mode': 'theMode',
+      'results': [],
+      'slowest_tests': V8TestApi.SLOWEST_TESTS(),
+      'tags': ['UNRELIABLE_RESULTS'],
     }])
 
   def failures_example(self, variant='default'):
@@ -256,6 +271,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
         },
       ],
       'slowest_tests': V8TestApi.SLOWEST_TESTS(),
+      'tags': [],
     }])
 
   def example_buildbot_changes(self):

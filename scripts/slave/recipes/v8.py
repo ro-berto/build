@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 from recipe_engine.post_process import (
-    Filter, DoesNotRun, DropExpectation, MustRun)
+    Filter, DoesNotRun, DropExpectation, MustRun, ResultReasonRE, StepException)
 from recipe_engine.recipe_api import Property
 
 DEPS = [
@@ -367,6 +367,19 @@ def GenTests(api):
     ) +
     api.override_step_data('Check', api.v8.one_failure()) +
     api.properties(parent_build_environment=None)
+  )
+
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'infra_failure',
+    ) +
+    api.v8.test_spec_in_checkout('V8 Foobar', test_spec) +
+    api.override_step_data('Check', api.v8.infra_failure()) +
+    api.post_process(StepException, 'Check') +
+    api.post_process(ResultReasonRE, 'Failures or flakes in build.') +
+    api.post_process(DropExpectation)
   )
 
   # Test flako command line with interesting data.
