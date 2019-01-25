@@ -18,8 +18,8 @@ from slave import cipd
 CLIENT_NAME = 'cipd' + infra_platform.exe_suffix()
 
 
-DEFAULT_CIPD_VERSION = 'git_revision:66410e06ff82b4e79e849977e4e58c0a261d9953'
-STAGING_CIPD_VERSION = 'git_revision:66410e06ff82b4e79e849977e4e58c0a261d9953'
+DEFAULT_CIPD_VERSION = 'git_revision:6e4acf51a635665e54acaceb8bd073e5c7b8259a'
+STAGING_CIPD_VERSION = 'git_revision:6e4acf51a635665e54acaceb8bd073e5c7b8259a'
 
 PROD = None
 STAGING = 'staging'
