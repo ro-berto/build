@@ -237,10 +237,6 @@ def RunSteps(api):
                                          api.path.join('%(PROGRAMFILES)s',
                                                        '7-Zip-A', 'x64')))
 
-  # To get gsutil into the PATH for use by the packaging script.
-  gsutil_path = str(api.package_repo_resource('scripts', 'slave'))
-  path_prefix = api.path.pathsep.join((path_prefix, gsutil_path))
-
   # TODO(eseidel): This is named exactly '.pub-cache' as a hack around
   # a regexp in flutter_tools analyze.dart which is in turn a hack around:
   # https://github.com/dart-lang/sdk/issues/25722
@@ -250,6 +246,8 @@ def RunSteps(api):
       # Setup our own pub_cache to not affect other slaves on this machine,
       # and so that the pre-populated pub cache is contained in the package.
       'PUB_CACHE': pub_cache,
+      # Needed for Windows to be able to refer to Python scripts in depot_tools.
+      'DEPOT_TOOLS': str(api.depot_tools.root),
       'ANDROID_HOME': checkout.join('dev', 'bots', 'android_tools'),
   }
 
