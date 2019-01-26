@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from contextlib import contextmanager
 import contextlib
 
 DEPS = [
@@ -10,6 +11,7 @@ DEPS = [
   'depot_tools/depot_tools',
   'depot_tools/gclient',
   'depot_tools/gsutil',
+  'depot_tools/osx_sdk',
   'goma',
   'recipe_engine/context',
   'recipe_engine/file',
@@ -322,6 +324,13 @@ def RunFindXcode(api, ios_tools_path, target_version):
       args)
   return result.json.output
 
+@contextmanager
+def _PlatformSDK(api):
+  if api.runtime.is_luci and api.platform.is_mac:
+    with api.osx_sdk('mac'):
+      yield
+  else:
+    yield
 
 def SetupXcode(api):
   ios_tools_path = api.path['start_dir'].join('src', 'ios_tools')
@@ -676,11 +685,12 @@ def RunSteps(api):
       VerifyExportedSymbols(api)
 
     if api.platform.is_mac:
-      SetupXcode(api)
-      BuildMac(api)
-      BuildIOS(api)
-      BuildObjcDoc(api)
-      VerifyExportedSymbols(api)
+      with _PlatformSDK(api):
+        SetupXcode(api)
+        BuildMac(api)
+        BuildIOS(api)
+        BuildObjcDoc(api)
+        VerifyExportedSymbols(api)
 
     if api.platform.is_win:
       BuildWindows(api)
