@@ -395,7 +395,7 @@ class V8Test(BaseTest):
       step_result.presentation.status = self.api.step.FAILURE
 
     infra_failures = []
-    if 'UNRELIABLE_RESULTS' in json_output[0]['tags']:
+    if 'UNRELIABLE_RESULTS' in json_output[0].get('tags', []):
       infra_failures.append('One ore more shards did not complete.')
       step_result.presentation.status = self.api.step.EXCEPTION
 
