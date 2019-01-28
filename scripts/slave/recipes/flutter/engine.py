@@ -325,20 +325,17 @@ def RunFindXcode(api, ios_tools_path, target_version):
   return result.json.output
 
 @contextmanager
-def _PlatformSDK(api):
-  if api.runtime.is_luci and api.platform.is_mac:
+def SetupXcode(api):
+  if api.runtime.is_luci:
     with api.osx_sdk('mac'):
       yield
   else:
+    ios_tools_path = api.path['start_dir'].join('src', 'ios_tools')
+    target_version = '9.0.1'
+    xcode_json = RunFindXcode(api, ios_tools_path, target_version)
+    if not xcode_json['matches']:
+      raise api.step.StepFailure('Xcode %s not found' % target_version)
     yield
-
-def SetupXcode(api):
-  ios_tools_path = api.path['start_dir'].join('src', 'ios_tools')
-  target_version = '9.0.1'
-  xcode_json = RunFindXcode(api, ios_tools_path, target_version)
-  if not xcode_json['matches']:
-    raise api.step.StepFailure('Xcode %s not found' % target_version)
-
 
 def BuildMac(api):
   RunGN(api, '--runtime-mode', 'debug', '--no-lto')
@@ -685,8 +682,7 @@ def RunSteps(api):
       VerifyExportedSymbols(api)
 
     if api.platform.is_mac:
-      with _PlatformSDK(api):
-        SetupXcode(api)
+      with SetupXcode(api):
         BuildMac(api)
         BuildIOS(api)
         BuildObjcDoc(api)
@@ -706,7 +702,7 @@ def GenTests(api):
               bot_id='fake-m1', clobber=''))
     if platform.endswith('luci'):
       test += (api.runtime(is_luci=True, is_experimental=True))
-    if platform_name == 'mac':
+    if platform_name == 'mac' and not platform.endswith('luci'):
       test += (
         api.step_data('set_xcode_version', api.json.output({
           'matches': {
