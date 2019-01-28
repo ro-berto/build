@@ -553,7 +553,8 @@ _CONFIG_MAP = {
       'serial': 'FA7BN1A04406',
       'device': 'walleye-armv7',
       'debug': True,
-      'heap_poisoning': True
+      # TODO(b/123499955): Put back to True.
+      'heap_poisoning': False,
     },
     'walleye-armv8-poison-ndebug': {
       'serial': 'FA7BN1A04412',
