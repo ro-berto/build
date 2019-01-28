@@ -327,7 +327,7 @@ def RunFindXcode(api, ios_tools_path, target_version):
 @contextmanager
 def SetupXcode(api):
   if api.runtime.is_luci:
-    with api.osx_sdk('mac'):
+    with api.osx_sdk('ios'):
       yield
   else:
     ios_tools_path = api.path['start_dir'].join('src', 'ios_tools')

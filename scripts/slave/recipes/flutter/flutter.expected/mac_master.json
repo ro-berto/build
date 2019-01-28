@@ -161,7 +161,7 @@
       "[CACHE]/osx_sdk/mac_toolchain",
       "install",
       "-kind",
-      "mac",
+      "ios",
       "-xcode-version",
       "9c40b",
       "-output-dir",

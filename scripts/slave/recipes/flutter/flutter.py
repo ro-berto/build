@@ -38,7 +38,7 @@ def _PlatformSDK(api):
     if api.platform.is_win:
       sdk = api.windows_sdk()
     elif api.platform.is_mac:
-      sdk = api.osx_sdk('mac')
+      sdk = api.osx_sdk('ios')
 
   if sdk is None:
     yield
