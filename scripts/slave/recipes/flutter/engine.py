@@ -607,6 +607,17 @@ def BuildJavadoc(api):
                     GetCloudPath(api, 'android-javadoc.zip'),
                     name='upload javadoc')
 
+@contextmanager
+def InstallJazzy(api):
+  if api.runtime.is_luci:
+    gem_dir = api.path['start_dir'].join('gems')
+    api.file.ensure_directory('mkdir gems', gem_dir)
+    with api.context(cwd=gem_dir):
+      api.step('install gems', ['gem', 'install', 'jazzy:0.9.5', '--install-dir', '.'])
+    with api.context(env={"GEM_HOME": gem_dir}):
+      yield
+  else:
+    yield
 
 def BuildObjcDoc(api):
   """Builds documentation for the Objective-C variant of engine."""
@@ -685,7 +696,8 @@ def RunSteps(api):
       with SetupXcode(api):
         BuildMac(api)
         BuildIOS(api)
-        BuildObjcDoc(api)
+        with InstallJazzy(api):
+          BuildObjcDoc(api)
         VerifyExportedSymbols(api)
 
     if api.platform.is_win:

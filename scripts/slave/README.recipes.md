@@ -5260,15 +5260,17 @@ world-readable cloud location.
 
 &mdash; **def [BuildMac](/scripts/slave/recipes/flutter/engine.py#340)(api):**
 
-&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#611)(api):**
+&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#622)(api):**
 
 Builds documentation for the Objective-C variant of engine.
 
 &mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#516)(api):**
 
-&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#627)(api):**
+&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#638)(api):**
 
 &mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/engine.py#32)(api, path):**
+
+&emsp; **@contextmanager**<br>&mdash; **def [InstallJazzy](/scripts/slave/recipes/flutter/engine.py#610)(api):**
 
 &emsp; **@contextlib.contextmanager**<br>&mdash; **def [MakeTempDir](/scripts/slave/recipes/flutter/engine.py#144)(api, label):**
 
@@ -5282,11 +5284,11 @@ Locates and switches to a version of Xcode matching target_version.
 
 &mdash; **def [RunHostTests](/scripts/slave/recipes/flutter/engine.py#48)(api, out_dir, exe_extension=''):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#654)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#665)(api):**
 
 &emsp; **@contextmanager**<br>&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/engine.py#327)(api):**
 
-&mdash; **def [SkipUpload](/scripts/slave/recipes/flutter/engine.py#647)(local_file, bucket, remote_file, \*\*kwargs):**
+&mdash; **def [SkipUpload](/scripts/slave/recipes/flutter/engine.py#658)(local_file, bucket, remote_file, \*\*kwargs):**
 
 &mdash; **def [TestObservatory](/scripts/slave/recipes/flutter/engine.py#297)(api):**
 
