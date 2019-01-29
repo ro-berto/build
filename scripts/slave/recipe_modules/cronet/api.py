@@ -94,6 +94,12 @@ class CronetApi(recipe_api.RecipeApi):
                             version['BUILD'], version['PATCH'])
 
 
+  def get_bucket(self, platform):
+    if self.m.runtime.is_experimental:
+      return 'chromium-cronet/experimental/%s' % platform
+    return 'chromium-cronet/%s' % platform
+
+
   def upload_package(self, build_config, cronetdir=None, platform='android'):
     cronetdir = cronetdir or self.m.path['checkout'].join(
         'out', self.m.chromium_android.c.BUILD_CONFIG, 'cronet')
@@ -101,13 +107,13 @@ class CronetApi(recipe_api.RecipeApi):
     # Upload cronet version first to ensure that destdir is created.
     self.m.gsutil.upload(
         source=cronetdir.join('VERSION'),
-        bucket='chromium-cronet/%s' % platform,
+        bucket=self.get_bucket(platform),
         dest=destdir + '/VERSION',
         name='upload_cronet_version',
         link_name='Cronet version')
     self.m.gsutil.upload(
         source=cronetdir,
-        bucket='chromium-cronet/%s' % platform,
+        bucket=self.get_bucket(platform),
         dest=destdir,
         args=['-R'],
         name='upload_cronet_package',
@@ -115,6 +121,9 @@ class CronetApi(recipe_api.RecipeApi):
 
 
   def sizes(self, perf_id):
+    # Don't track sizes on experimental bots.
+    if self.m.runtime.is_experimental:
+      return
     # Measures native .so size.
     self.m.chromium.sizes(results_url=self.DASHBOARD_UPLOAD_URL,
                           perf_id=perf_id, platform='android-cronet')
@@ -153,6 +162,9 @@ class CronetApi(recipe_api.RecipeApi):
       droid.common_tests_final_steps()
 
   def run_perf_tests(self, perf_id):
+    # Don't track performance on experimental bots.
+    if self.m.runtime.is_experimental:
+      return
     # Before running the perf test, build quic_server and quic_client for this
     # host machine.
     self.m.chromium.set_config('chromium')

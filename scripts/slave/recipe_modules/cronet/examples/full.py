@@ -8,6 +8,7 @@ from recipe_engine.recipe_api import Property
 DEPS = [
   'chromium',
   'cronet',
+  'recipe_engine/runtime',
   'recipe_engine/properties',
 ]
 
@@ -77,4 +78,7 @@ def GenTests(api):
       got_revision_cp='refs/heads/master@{#291141}',
       git_revision='a' * 40
     )
+    # Test regular bot.
     yield api.test(bot_id) + props
+    # Test experimental bot.
+    yield api.runtime(is_luci=True, is_experimental=True) + api.test(bot_id + "_experimental") + props
