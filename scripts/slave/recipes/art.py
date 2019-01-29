@@ -585,17 +585,17 @@ _CONFIG_MAP = {
       'generational_cc': False,
     },
     'angler-armv8-ndebug': {
-      'serial': '84B7N16728001299',
+      'serial': 'HT7BH1A06559',
       'device': 'angler-armv8',
       'debug': False,
     },
     'angler-armv8-debug': {
-      'serial': '84B7N15B03000660',
+      'serial': 'HT7BG1A03823',
       'device': 'angler-armv8',
       'debug': True,
     },
     'angler-armv8-non-gen-cc': {
-      'serial': '84B7N15B03000641',
+      'serial': 'HT7BG1A03952',
       'device': 'angler-armv8',
       'debug': True,
       'generational_cc': False,
