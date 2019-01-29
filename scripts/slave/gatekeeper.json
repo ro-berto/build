@@ -233,7 +233,8 @@
               "thomasanderson@chromium.org"
             ]
           },
-          "*": {}
+          "Google Chrome Mac": {},
+          "Google Chrome Win": {}
         }
       }
     ],
