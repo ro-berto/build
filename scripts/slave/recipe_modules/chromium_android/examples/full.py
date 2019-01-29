@@ -9,6 +9,7 @@ DEPS = [
     'build',
     'chromium',
     'chromium_android',
+    'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/json',
     'recipe_engine/path',
@@ -159,7 +160,8 @@ def RunSteps(api, buildername):
   else:
     api.chromium_android.download_build('build-bucket',
                                         'build_product.zip')
-  api.chromium_android.git_number()
+  with api.context(cwd=api.path['checkout']):
+    api.chromium_android.git_number()
 
   if config.get('specific_install'):
     api.chromium_android.adb_install_apk(
