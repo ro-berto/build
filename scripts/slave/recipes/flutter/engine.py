@@ -340,7 +340,7 @@ def SetupXcode(api):
 def BuildMac(api):
   RunGN(api, '--runtime-mode', 'debug', '--no-lto')
   RunGN(api, '--runtime-mode', 'debug', '--unoptimized', '--no-lto')
-  RunGN(api, '--runtime-mode', 'release', '--dynamic')
+  RunGN(api, '--runtime-mode', 'release', '--dynamic', '--no-lto')
   RunGN(api, '--runtime-mode', 'profile', '--android')
   RunGN(api, '--runtime-mode', 'profile', '--android', '--android-cpu=arm64')
   RunGN(api, '--runtime-mode', 'release', '--android')

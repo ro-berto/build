@@ -253,7 +253,8 @@
       "--goma",
       "--runtime-mode",
       "release",
-      "--dynamic"
+      "--dynamic",
+      "--no-lto"
     ],
     "env": {
       "GOMA_DIR": "[CACHE]/goma/client"
@@ -268,7 +269,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "gn --runtime-mode release --dynamic"
+    "name": "gn --runtime-mode release --dynamic --no-lto"
   },
   {
     "cmd": [
