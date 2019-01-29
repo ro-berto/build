@@ -256,8 +256,6 @@ ENABLED_MASTERS = [
     'chromium.perf.fyi',
     'chromium.swarm',
     'chromium.webkit',
-    'chromium.webrtc',
-    'chromium.webrtc.fyi',
     'chromium.win',
     'client.catapult',
     'client.dart',
@@ -272,8 +270,6 @@ ENABLED_MASTERS = [
     'client.v8.branches',
     'client.v8.fyi',
     'client.v8.ports',
-    'client.webrtc',
-    'client.webrtc.fyi',
     'tryserver.blink',
     'tryserver.client.catapult',
     'tryserver.chromium.android',
@@ -283,7 +279,6 @@ ENABLED_MASTERS = [
     'tryserver.chromium.win',
     'tryserver.nacl',
     'tryserver.v8',
-    'tryserver.webrtc',
 ]
 ENABLED_MASTERS += internal_data.get('ENABLED_MASTERS', [])
 
