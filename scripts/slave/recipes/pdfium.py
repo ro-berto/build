@@ -8,6 +8,7 @@ DEPS = [
   'depot_tools/gclient',
   'depot_tools/gsutil',
   'depot_tools/osx_sdk',
+  'depot_tools/tryserver',
   'goma',
   'recipe_engine/buildbucket',
   'recipe_engine/context',
@@ -311,25 +312,20 @@ def get_gold_params(api, build_config, revision):
       (properties_str, key_str)
   These strings can be passed directly into run_corpus_tests.py.
   """
-  builder_name = api.m.properties['buildername'].strip()
+  builder_name = api.m.buildbucket.builder_name.strip()
   props = [
     'gitHash', revision,
     'master', api.m.properties['mastername'],
     'builder', builder_name,
-    'build_number', str(api.m.properties['buildnumber'])
+    'build_number', str(api.m.buildbucket.build.number),
   ]
 
   # Add the trybot information if this is a trybot run.
-  issue = str(api.m.properties.get('issue', ''))
-  patchset = str(api.m.properties.get('patchset', ''))
-  if api.m.properties.get('patch_storage', '') == 'gerrit':
-    issue = str(api.m.properties['patch_issue'])
-    patchset = str(api.m.properties['patch_set'])
-  if issue and patchset:
+  if api.m.tryserver.gerrit_change:
     props.extend([
-      'issue', issue,
-      'patchset', patchset,
-      'patch_storage', api.m.properties.get('patch_storage', 'rietveld'),
+      'issue', str(api.m.tryserver.gerrit_change.change),
+      'patchset', str(api.m.tryserver.gerrit_change.patchset),
+      'patch_storage', 'gerrit',
       'buildbucket_build_id', str(api.buildbucket.build.id),
     ])
 
@@ -441,7 +437,7 @@ def upload_dm_results(api, results_dir, revision, test_type):
   https://skia.googlesource.com/skia/+/master/infra/bots/recipes/upload_dm_results.py
   test_type is expected to be 'corpus', 'javascript', or 'pixel'
   """
-  builder_name = api.m.properties['buildername'].strip()
+  builder_name = api.m.buildbucket.builder_name.strip()
 
   # Upload the images.
   files_to_upload = api.file.glob_paths(
@@ -469,14 +465,11 @@ def upload_dm_results(api, results_dir, revision, test_type):
        test_type])
 
   # Trybot results are further siloed by issue/patchset.
-  issue = str(api.m.properties.get('issue', ''))
-  patchset = str(api.m.properties.get('patchset', ''))
-  if api.m.properties.get('patch_storage', '') == 'gerrit':
-    issue = str(api.m.properties['patch_issue'])
-    patchset = str(api.m.properties['patch_set'])
-  if issue and patchset:
+  if api.m.tryserver.gerrit_change:
     summary_dest_path = '/'.join((
-        'trybot', summary_dest_path, issue, patchset))
+        'trybot', summary_dest_path,
+        str(api.m.tryserver.gerrit_change.change),
+        str(api.m.tryserver.gerrit_change.patchset)))
 
   summary_dest_path = '/'.join([summary_dest_path, DM_JSON])
   local_dmjson = results_dir.join(DM_JSON)
@@ -852,43 +845,15 @@ def GenTests(api):
   )
 
   yield (
-       api.test('try-linux_xfa_asan_lsan') +
-       api.platform('linux', 64) +
-       api.properties.tryserver(xfa=True,
-                                memory_tool='asan',
-                                mastername='tryserver.client.pdfium',
-                                buildnumber='1234',
-                                buildername='linux_xfa_asan_lsan')
-  )
-
-  yield (
        api.test('try-linux-gerrit_xfa_asan_lsan') +
        api.buildbucket.try_build(
           project='pdfium',
           builder='linux_xfa_asan_lsan',
-       ) +
+          build_number=1234) +
        api.platform('linux', 64) +
-       api.properties.tryserver(xfa=True,
-                                memory_tool='asan',
-                                mastername='tryserver.client.pdfium',
-                                buildnumber='1234',
-                                buildername='linux_xfa_asan_lsan',
-                                patch_issue='1234',
-                                patch_set=5,
-                                patch_storage='gerrit')
-  )
-
-  yield (
-       api.test('try-linux-gerrit_xfa_asan_lsan_fail') +
-       api.platform('linux', 64) +
-       api.properties.tryserver(xfa=True,
-                                memory_tool='asan',
-                                mastername='tryserver.client.pdfium',
-                                buildnumber='1234',
-                                buildername='linux_xfa_asan_lsan',
-                                patch_issue='1234',
-                                patch_set=5,
-                                patch_storage='gerrit')
+       api.properties(xfa=True,
+                      memory_tool='asan',
+                      mastername='tryserver.client.pdfium')
   )
 
   yield (

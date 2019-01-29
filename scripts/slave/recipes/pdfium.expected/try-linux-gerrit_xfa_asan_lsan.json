@@ -366,9 +366,7 @@
       "--buildbot-buildername",
       "linux_xfa_asan_lsan",
       "--buildbot-mastername",
-      "tryserver.client.pdfium",
-      "--buildbot-slavename",
-      "test_bot"
+      "tryserver.client.pdfium"
     ],
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
@@ -430,7 +428,7 @@
       "--build-dir",
       "out/debug_xfa_v8_asan",
       "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master tryserver.client.pdfium builder linux_xfa_asan_lsan build_number 1234 issue 1234 patchset 5 patch_storage gerrit buildbucket_build_id 8945511751514863184",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master tryserver.client.pdfium builder linux_xfa_asan_lsan build_number 1234 issue 123456 patchset 7 patch_storage gerrit buildbucket_build_id 8945511751514863184",
       "--gold_key",
       "asan true debug true is_standalone true lsan true os linux skia false skia_paths false v8 true xfa true",
       "--gold_output_dir",
@@ -494,7 +492,7 @@
       "--build-dir",
       "out/debug_xfa_v8_asan",
       "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master tryserver.client.pdfium builder linux_xfa_asan_lsan build_number 1234 issue 1234 patchset 5 patch_storage gerrit buildbucket_build_id 8945511751514863184",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master tryserver.client.pdfium builder linux_xfa_asan_lsan build_number 1234 issue 123456 patchset 7 patch_storage gerrit buildbucket_build_id 8945511751514863184",
       "--gold_key",
       "asan true debug true is_standalone true lsan true os linux skia false skia_paths false v8 true xfa true",
       "--gold_output_dir",
@@ -553,7 +551,7 @@
       "-z",
       "json,log",
       "[START_DIR]/pdfium/out/debug_xfa_v8_asan/gold_output/dm.json",
-      "gs://skia-pdfium-gm/trybot/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux_xfa_asan_lsan/1337000003/pixel/1234/5/dm.json"
+      "gs://skia-pdfium-gm/trybot/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux_xfa_asan_lsan/1337000003/pixel/123456/7/dm.json"
     ],
     "infra_step": true,
     "name": "gsutil upload JSON"
@@ -566,7 +564,7 @@
       "--build-dir",
       "out/debug_xfa_v8_asan",
       "--gold_properties",
-      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master tryserver.client.pdfium builder linux_xfa_asan_lsan build_number 1234 issue 1234 patchset 5 patch_storage gerrit buildbucket_build_id 8945511751514863184",
+      "gitHash d69d97171c17fdb12a52f78847e2ee2f0594eff1 master tryserver.client.pdfium builder linux_xfa_asan_lsan build_number 1234 issue 123456 patchset 7 patch_storage gerrit buildbucket_build_id 8945511751514863184",
       "--gold_key",
       "asan true debug true is_standalone true lsan true os linux skia false skia_paths false v8 true xfa true",
       "--gold_output_dir",
@@ -625,7 +623,7 @@
       "-z",
       "json,log",
       "[START_DIR]/pdfium/out/debug_xfa_v8_asan/gold_output/dm.json",
-      "gs://skia-pdfium-gm/trybot/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux_xfa_asan_lsan/1337000006/corpus/1234/5/dm.json"
+      "gs://skia-pdfium-gm/trybot/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux_xfa_asan_lsan/1337000006/corpus/123456/7/dm.json"
     ],
     "infra_step": true,
     "name": "gsutil upload JSON (2)"
