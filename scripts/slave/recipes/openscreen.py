@@ -8,7 +8,9 @@ DEPS = [
   'depot_tools/depot_tools',
   'depot_tools/git',
   'depot_tools/osx_sdk',
+  'depot_tools/tryserver',
   'goma',
+  'recipe_engine/buildbucket',
   'recipe_engine/context',
   'recipe_engine/path',
   'recipe_engine/platform',
@@ -34,10 +36,10 @@ def RunSteps(api):
   build_root = api.path['start_dir']
   openscreen_root = build_root.join('openscreen')
   repository = api.properties['repository']
-  ref = api.properties.get('patch_ref', None)
   is_debug = api.properties.get('debug', False)
   api.git.checkout(
-      repository, dir_path=openscreen_root, ref=ref, recursive=True)
+      repository, dir_path=openscreen_root,
+      ref=api.tryserver.gerrit_change_fetch_ref, recursive=True)
   api.goma.ensure_goma()
   checkout_path = api.path['checkout']
   output_path = checkout_path.join('out', BUILD_CONFIG)
@@ -64,18 +66,18 @@ def GenTests(api):
   yield (
       api.test('linux64_debug') +
       api.platform('linux', 64) +
+      api.buildbucket.try_build('openscreen', 'try') +
       api.properties(
           repository=OPENSCREEN_REPO,
-          patch_ref='refs/changes/123/456/1',
-          debug=True
+          debug=True,
       )
   )
   yield (
       api.test('mac_debug') +
       api.platform('mac', 64) +
+      api.buildbucket.try_build('openscreen', 'try') +
       api.properties(
           repository=OPENSCREEN_REPO,
-          patch_ref='refs/changes/123/456/1',
-          debug=True
+          debug=True,
       )
   )

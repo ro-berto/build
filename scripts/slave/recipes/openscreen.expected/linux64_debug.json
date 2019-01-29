@@ -3,6 +3,45 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gerrit_client.py",
+      "changes",
+      "--host",
+      "https://chromium-review.googlesource.com",
+      "--json_file",
+      "/path/to/tmp/json",
+      "--limit",
+      "1",
+      "-p",
+      "change=123456",
+      "-o",
+      "ALL_REVISIONS",
+      "-o",
+      "DOWNLOAD_COMMANDS"
+    ],
+    "env": {
+      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    },
+    "infra_step": true,
+    "name": "gerrit fetch current CL info",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"branch\": \"master\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"7\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/56/123456/7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
       "--path",
       "[START_DIR]/openscreen",
@@ -17,7 +56,7 @@
       "retry",
       "fetch",
       "origin",
-      "refs/changes/123/456/1",
+      "refs/changes/56/123456/7",
       "--recurse-submodules",
       "--progress"
     ],
@@ -152,7 +191,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[CACHE]/goma/data"
+      "[CACHE]/goma/data/builder"
     ],
     "cwd": "[START_DIR]/openscreen",
     "infra_step": true,
@@ -171,7 +210,7 @@
     "cwd": "[START_DIR]/openscreen",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -241,7 +280,7 @@
     "cwd": "[START_DIR]/openscreen",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -274,7 +313,7 @@
     "cwd": "[START_DIR]/openscreen",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -296,7 +335,7 @@
     "cwd": "[START_DIR]/openscreen",
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[CACHE]/goma/data",
+      "GOMA_CACHE_DIR": "[CACHE]/goma/data/builder",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -340,8 +379,12 @@
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"\", \"builder\": \"\", \"project\": \"\"}"
+      "{\"bucket\": \"try\", \"builder\": \"builder\", \"project\": \"openscreen\"}",
+      "--buildbot-buildername",
+      "builder"
     ],
     "cwd": "[START_DIR]/openscreen",
     "name": "postprocess_for_goma.upload_log",
