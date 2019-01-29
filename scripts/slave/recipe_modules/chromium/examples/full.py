@@ -36,8 +36,6 @@ def RunSteps(api):
 
     if ninja_confirm_noop:
       api.chromium.apply_config('ninja_confirm_noop')
-    else:
-      api.chromium.apply_config('ninja_confirm_noop_warn')
 
     for config in configs:
       api.chromium.apply_config(config)

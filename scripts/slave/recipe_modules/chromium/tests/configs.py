@@ -55,12 +55,6 @@ def GenTests(api):
   )
 
   yield (
-      api.test('ninja_confirm_noop_warn') +
-      api.properties(chromium_apply_config=['ninja_confirm_noop_warn']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
       api.test('gcc') +
       api.properties(chromium_config='gcc') +
       api.post_process(post_process.DropExpectation)

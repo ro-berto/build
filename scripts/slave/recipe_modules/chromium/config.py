@@ -51,7 +51,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
                                                   required=False),
       goma_enable_global_file_stat_cache = Single(bool, empty_val=False,
                                                   required=False),
-      ninja_confirm_noop = Single(bool, empty_val=True, required=False),
+      ninja_confirm_noop = Single(bool, empty_val=False, required=False),
       # TODO(tandrii): delete goma_high_parallel from here and use goma recipe
       # module property, configured per builder in cr-buildbucket.cfg.
       goma_high_parallel = Single(bool, empty_val=False, required=False),
@@ -329,10 +329,6 @@ def goma_arbitrary_toolchain_support(c):
 @config_ctx()
 def ninja_confirm_noop(c):
   c.compile_py.ninja_confirm_noop = True
-
-@config_ctx()
-def ninja_confirm_noop_warn(c):
-  c.compile_py.ninja_confirm_noop = False
 
 @config_ctx()
 def use_autoninja(c):

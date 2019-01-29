@@ -157,11 +157,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'chromium_apply_config': [
-          'mb',
-          # TODO(tiktua): remove this (https://crbug.com/921902)
-          'ninja_confirm_noop_warn',
-      ],
+      'chromium_apply_config': ['mb'],
       'bot_type': 'builder',
       'testing': {'platform': 'mac'},
       'checkout_dir': 'mac',
@@ -173,11 +169,7 @@ SPEC = {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
       },
-      'chromium_apply_config': [
-          'mb',
-          # TODO(tiktua): remove this (https://crbug.com/921902)
-          'ninja_confirm_noop_warn',
-      ],
+      'chromium_apply_config': ['mb'],
       'bot_type': 'tester',
       'parent_buildername': 'Mac ASan 64 Builder',
       'testing': {'platform': 'mac'},
