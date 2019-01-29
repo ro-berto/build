@@ -50,6 +50,10 @@ nonessential_dirs = {
 
 ESSENTIAL_FILES = (
     'chrome/test/data/webui/i18n_process_css_test.html',
+
+    # TODO(rockot): Remove this once web_ui_test.mojom is no longer in the
+    # chrome/test directory (https://crbug.com/926270).
+    'chrome/test/data/webui/web_ui_test.mojom',
     'v8/test/torque/test-torque.tq',
 )
 
