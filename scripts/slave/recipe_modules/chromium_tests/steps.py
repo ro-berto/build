@@ -1264,7 +1264,7 @@ class SwarmingTest(Test):
                hard_timeout=None, io_timeout=None,
                waterfall_mastername=None, waterfall_buildername=None,
                set_up=None, tear_down=None, optional_dimensions=None,
-               isolate_coverage_data=None, merge=None,
+               service_account=None, isolate_coverage_data=None, merge=None,
                ignore_task_failure=None, shards=1,
                **kwargs):
     super(SwarmingTest, self).__init__(
@@ -1286,6 +1286,7 @@ class SwarmingTest(Test):
     self._isolate_coverage_data = isolate_coverage_data
     self._ignore_task_failure = ignore_task_failure
     self._shards = shards
+    self._service_account = service_account
     if dimensions and not extra_suffix:
       if dimensions.get('gpu'):
         self._extra_suffix = self._get_gpu_suffix(dimensions)
@@ -1451,6 +1452,7 @@ class SwarmingTest(Test):
         shards=shards,
         title=self._step_name(suffix),
         trigger_script=self._trigger_script,
+        service_account=self._service_account,
     )
 
   def get_task(self, suffix):
@@ -1586,7 +1588,7 @@ class SwarmingGTestTest(SwarmingTest):
                cipd_packages=None, waterfall_mastername=None,
                waterfall_buildername=None, merge=None, trigger_script=None,
                set_up=None, tear_down=None, isolate_coverage_data=False,
-               optional_dimensions=None):
+               optional_dimensions=None, service_account=None):
     super(SwarmingGTestTest, self).__init__(
         name, dimensions, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -1595,7 +1597,8 @@ class SwarmingGTestTest(SwarmingTest):
         override_isolate_target=override_isolate_target,
         isolate_coverage_data=isolate_coverage_data,
         merge=merge, shards=shards,
-        optional_dimensions=optional_dimensions)
+        optional_dimensions=optional_dimensions,
+        service_account=service_account)
     self._args = args or []
     self._upload_test_results = upload_test_results
     self._override_compile_targets = override_compile_targets
@@ -1832,7 +1835,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
                merge=None, trigger_script=None, results_handler=None,
                set_up=None, tear_down=None, idempotent=True,
                cipd_packages=None, isolate_coverage_data=False,
-               optional_dimensions=None):
+               optional_dimensions=None, service_account=None):
     super(SwarmingIsolatedScriptTest, self).__init__(
         name, dimensions, target_name, extra_suffix, priority, expiration,
         hard_timeout, io_timeout, waterfall_mastername=waterfall_mastername,
@@ -1841,7 +1844,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         isolate_coverage_data=isolate_coverage_data,
         merge=merge, shards=shards,
         ignore_task_failure=ignore_task_failure,
-        optional_dimensions=optional_dimensions)
+        optional_dimensions=optional_dimensions,
+        service_account=service_account)
     self._args = args or []
     self._upload_test_results = upload_test_results
     self._override_compile_targets = override_compile_targets

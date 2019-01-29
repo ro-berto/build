@@ -105,6 +105,32 @@ def GenTests(api):
   )
 
   yield (
+      api.test('service_account') +
+      api.properties(
+          single_spec={
+              'test': 'base_unittests',
+              'swarming': {
+                  'can_use_on_swarming_builders': True,
+                  'service_account': 'test-account@serviceaccount.com',
+              },
+          },
+          mastername='test_mastername',
+          buildername='test_buildername',
+          buildnumber=123,
+          bot_id='test_bot_id',
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          },
+        ) +
+      api.post_process(
+          post_process.StepCommandContains, '[trigger] base_unittests', [
+              '--service-account',
+              'test-account@serviceaccount.com',
+          ]) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
       api.test('disable_retry_with_patch') +
       api.properties(
           single_spec={

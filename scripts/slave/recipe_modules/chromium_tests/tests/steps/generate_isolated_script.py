@@ -134,6 +134,27 @@ def GenTests(api):
   )
 
   yield (
+      api.test('service_account') +
+      api.properties(single_spec={
+          'name': 'base_unittests',
+          'isolate_name': 'base_unittests_run',
+          'swarming': {
+              'can_use_on_swarming_builders': True,
+              'service_account': 'test-account@serviceaccount.com',
+          },
+        }, swarm_hashes={
+            'base_unittests_run': 'deadbeef',
+        },
+        mastername='test_mastername',
+        buildername='test_buildername',
+        buildnumber=1) +
+      api.post_process(post_process.StepCommandContains,
+          '[trigger] base_unittests', [
+              '--service-account', 'test-account@serviceaccount.com']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
       api.test('bad set up') +
       api.properties(single_spec={
           'name': 'base_unittests',

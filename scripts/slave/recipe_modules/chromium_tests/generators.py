@@ -151,6 +151,10 @@ def generator_common(api, spec, swarming_delegate, local_delegate,
           for p in packages
       ]
 
+    service_account = swarming_spec.get('service_account')
+    if service_account:
+      kwargs['service_account'] = service_account
+
     merge = dict(spec.get('merge', {}))
     if merge:
       merge_script = merge.get('script')
