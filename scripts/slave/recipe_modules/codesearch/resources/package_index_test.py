@@ -23,7 +23,7 @@ TEST2_H_FILE_CONTENT = '#ifndef TEST2_H\n#define TEST2_H\n#endif\n'
 COMPILE_ARGUMENTS = (r'clang++ -fsyntax-only -DFOO=\"foo\ bar\" -std=c++11 '
                      '-Wno-c++11-narrowing  -Wall -c test.cc -o test.o')
 
-COMPILE_ARGUMENTS_WIN = 'clang-cl.exe /c test.cc /Fotest.obj'
+COMPILE_ARGUMENTS_WIN = 'clang-cl.exe --driver-mode=cl /c test.cc /Fotest.obj'
 
 # Test values for corpus, root, and out dir
 CORPUS = 'chromium-test'
@@ -180,12 +180,12 @@ class PackageIndexTest(unittest.TestCase):
       self.assertEquals(test2_h_entry['v_name']['corpus'], CORPUS)
       self.assertEquals(test2_h_entry['v_name']['root'], VNAME_ROOT)
 
-      real_compile_arguments = [
-          u'-fsyntax-only', u'-DFOO="foo bar"', u'-std=c++11', u'-c',
-          u'test.cc', u'-o', u'test.o', u'-w',
+      expected_compile_arguments = [
+          u'clang++', u'-fsyntax-only', u'-DFOO="foo bar"', u'-std=c++11',
+          u'-c', u'test.cc', u'-o', u'test.o', u'-w',
       ]
       self.assertEquals(compilation_unit_dictionary['argument'],
-                        real_compile_arguments)
+                        expected_compile_arguments)
 
   def testGenerateUnitFilesWindows(self):
     # Write a new compdb with Windows args, and re-create the index pack.
@@ -228,6 +228,13 @@ class PackageIndexTest(unittest.TestCase):
       compilation_unit_wrapper = json.loads(unit_file_content)
       compilation_unit_dictionary = compilation_unit_wrapper['unit']
       self.assertEquals(compilation_unit_dictionary['output_key'], 'test.obj')
+
+      expected_compile_arguments = [
+          u'clang-cl.exe', u'--driver-mode=cl', u'/c', u'test.cc',
+          u'/Fotest.obj', u'-w',
+      ]
+      self.assertEquals(compilation_unit_dictionary['argument'],
+                        expected_compile_arguments)
 
   def testCreateArchive(self):
     self.index_pack._GenerateDataFiles()

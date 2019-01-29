@@ -181,18 +181,14 @@ class IndexPack(object):
         print 'Compile command: %s' % compile_command
 
       command_list = shlex.split(compile_command, posix=sys.platform != 'win32')
-      # The |command_list| starts with the compiler that was used for the
-      # compilation. In the unit file we want to have just the parameters passed
-      # to the compiler (which always needs to be clang/clang++). Currently,
-      # |command_list| starts with the path to the goma executable followed by
-      # the path to the clang executable, but it is safe to assume that the
-      # first entry in the list after the clang executable will be the first
-      # real parameter.
+      # On some platforms, the |command_list| starts with the goma executable,
+      # followed by the path to the clang executable (either clang++ or
+      # clang-cl.exe). We want the clang executable to be the first parameter.
       for i in range(len(command_list)):
         if 'clang' in command_list[i]:
-          # Shorten the list of commands such that it starts after the path to
-          # the clang executable with the first real parameter.
-          command_list = command_list[i + 1:]
+          # Shorten the list of commands such that it starts with the path to
+          # the clang executable.
+          command_list = command_list[i:]
           break
 
       # Extract the output file argument
