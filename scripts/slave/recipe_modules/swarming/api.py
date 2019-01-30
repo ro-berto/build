@@ -186,7 +186,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     self._verbose = False
 
     # TODO(tikuta): Remove this after switch (crbug.com/894045).
-    self._use_go_client = False
+    self._use_go_client = True
 
     # Record all durations of shards for aggregation.
     self._shards_durations = []
@@ -1458,7 +1458,7 @@ class SwarmingTask(object):
                build_properties=None, merge=None, trigger_script=None,
                named_caches=None, service_account=None, raw_cmd=None,
                env_prefixes=None, optional_dimensions=None,
-               use_go_client=False):
+               use_go_client=True):
     """Configuration of a swarming task.
 
     Args:

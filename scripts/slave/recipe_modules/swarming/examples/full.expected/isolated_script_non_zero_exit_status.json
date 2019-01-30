@@ -284,24 +284,22 @@
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
       "[]",
-      "--use-go-client",
-      "--summary-json-file",
-      "/path/to/tmp/json",
       "--",
-      "swarming",
+      "python",
+      "-u",
+      "[START_DIR]/swarming.client/swarming.py",
       "collect",
-      "-server",
+      "--swarming",
       "https://chromium-swarm-dev.appspot.com",
-      "-worker",
-      "50",
-      "-task-summary-python",
-      "-task-output-stdout",
-      "json",
-      "-verbose",
-      "-requests-json",
-      "{\"tasks\": [{\"task_id\": \"10000\"}]}",
-      "-service-account-json",
-      "/creds/service_accounts/service-account-chromium-builder.json"
+      "--decorate",
+      "--print-status-updates",
+      "--verbose",
+      "--json",
+      "{\"base_task_name\": \"hello_world/Windows-7-SP1/hash_for_w\", \"tasks\": {\"hello_world/Windows-7-SP1/hash_for_w\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}}}",
+      "--auth-service-account-json",
+      "/creds/service_accounts/service-account-chromium-builder.json",
+      "--task-summary-json",
+      "/path/to/tmp/json"
     ],
     "env_prefixes": {
       "PATH": [
@@ -374,17 +372,39 @@
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
       "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"try_number\\\": null, \\\"created_ts\\\": \\\"2014-09-25T01:41:00.123\\\", \\\"name\\\": \\\"heartbeat-canary-2014-09-25_01:41:55-os=Windows\\\", \\\"internal_failure\\\": false, \\\"outputs\\\": [], \\\"outputs_ref\\\": null, \\\"exit_code\\\": \\\"1\\\", \\\"id\\\": \\\"148aa78d7aa0100\\\", \\\"abandoned_ts\\\": \\\"2014-09-25T01:41:00.123\\\", \\\"failure\\\": false, \\\"state\\\": \\\"COMPLETED\\\", \\\"modified_ts\\\": \\\"2014-09-25 01:42:00\\\", \\\"user\\\": \\\"unknown\\\", \\\"duration\\\": 60, \\\"started_ts\\\": \\\"2014-09-25T01:42:11.123\\\", \\\"completed_ts\\\": null, \\\"bot_id\\\": \\\"vm30\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
-      "@@@STEP_LOG_END@outdir_json@@@",
-      "@@@STEP_FAILURE@@@"
+      "@@@STEP_LOG_END@outdir_json@@@"
     ]
   },
   {
-    "failure": {
-      "failure": {
-        "step": "There are failed tasks."
-      },
-      "humanReason": "Step('There are failed tasks.') failed with return_code 0"
-    },
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "Tests statistics",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 0:01:00 <br/>@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 0:01:00 @@@",
+      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 0:01:00 / 0:01:00 / 0:01:00@@@",
+      "@@@STEP_LOG_END@detailed stats@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]/hello_isolated_world_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "remove temp dir"
+  },
+  {
+    "jsonResult": null,
     "name": "$result"
   }
 ]
