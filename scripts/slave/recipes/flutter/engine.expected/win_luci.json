@@ -3856,21 +3856,6 @@
   },
   {
     "cmd": [
-      "[START_DIR]\\src\\out\\host_debug\\embedder_unittests.exe"
-    ],
-    "cwd": "[START_DIR]\\src\\out\\host_debug",
-    "env": {
-      "GOMA_DIR": "[CACHE]\\goma\\client"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
-      ]
-    },
-    "name": "Test Embedder API"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::zip]\\resources\\zip.py"
