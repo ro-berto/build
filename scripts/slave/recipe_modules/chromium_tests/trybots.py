@@ -642,6 +642,10 @@ TRYBOTS = freeze({
         'mastername': 'chromium.fyi',
         'buildername': 'chromeos-kevin-rel-hw-tests',
       }),
+      'chromeos-kevin-compile-rel': simple_bot({
+        'mastername': 'chromium.fyi',
+        'buildername': 'chromeos-kevin-rel-hw-tests',
+      }, analyze_mode='compile'),
       'linux-chromeos-compile-dbg': simple_bot({
         'mastername': 'chromium.chromiumos',
         'buildername': 'linux-chromeos-dbg',
