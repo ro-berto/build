@@ -47,7 +47,6 @@ def GitExe():
 
 class NotGitWorkingCopy(Exception): pass
 class NotAnyWorkingCopy(Exception): pass
-class NoCommitPosition(Exception): pass
 
 
 def GitHash(wc_dir):
@@ -715,10 +714,10 @@ def GetMainRevision(build_properties, build_dir, revision=None):
   commit_pos_num = _GetCommitPos(build_properties)
   if commit_pos_num is not None:
     return commit_pos_num
-
-  raise NoCommitPosition(
-    'No valid revision supplied, and the build has no commit position.\n'
-    'revision: %s\n' % revision)
+  # TODO(sullivan,qyearsley): Don't fall back to _GetRevision if it returns
+  # a git commit, since this should be a numerical revision. Instead, abort
+  # and fail.
+  return GetRevision(os.path.dirname(os.path.abspath(build_dir)))
 
 
 def GetRevision(in_directory):
@@ -757,9 +756,9 @@ def GetRevision(in_directory):
 
 def _GetCommitPos(build_properties):
   """Extracts the commit position from the build properties, if its there."""
-  if 'got_src_revision_cp' not in build_properties:
+  if 'got_revision_cp' not in build_properties:
     return None
-  commit_pos = build_properties['got_src_revision_cp']
+  commit_pos = build_properties['got_revision_cp']
   return int(re.search(r'{#(\d+)}', commit_pos).group(1))
 
 
