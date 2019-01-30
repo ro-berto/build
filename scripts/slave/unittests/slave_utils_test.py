@@ -183,7 +183,7 @@ class GetGitRevisionTest(unittest.TestCase):
     """Tests related to getting a commit position from build properties."""
     # pylint: disable=W0212
     self.assertEqual(slave_utils._GetCommitPos(
-        {'got_revision_cp': 'refs/heads/master@{#12345}'}), 12345)
+        {'got_src_revision_cp': 'refs/heads/master@{#12345}'}), 12345)
     # pylint: disable=W0212
     self.assertIsNone(slave_utils._GetCommitPos({'got_revision': 12345}))
 
