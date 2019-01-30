@@ -615,7 +615,7 @@ def InstallJazzy(api):
     gem_dir = api.path['start_dir'].join('gems')
     api.file.ensure_directory('mkdir gems', gem_dir)
     with api.context(cwd=gem_dir):
-      api.step('install gems', ['gem', 'install', 'jazzy:0.9.5', '--install-dir', '.'])
+      api.step('install gems', ['gem', 'install', 'jazzy:' + api.properties['jazzy_version'],  '--install-dir', '.'])
     with api.context(env={"GEM_HOME": gem_dir}):
       yield
   else:
@@ -716,6 +716,8 @@ def GenTests(api):
               bot_id='fake-m1', clobber=''))
     if platform.endswith('luci'):
       test += (api.runtime(is_luci=True, is_experimental=True))
+      if platform_name == 'mac':
+        test += (api.properties(jazzy_version='0.8.4'))
     if platform_name == 'mac' and not platform.endswith('luci'):
       test += (
         api.step_data('set_xcode_version', api.json.output({

@@ -7396,7 +7396,7 @@
     "cmd": [
       "gem",
       "install",
-      "jazzy:0.9.5",
+      "jazzy:0.8.4",
       "--install-dir",
       "."
     ],
