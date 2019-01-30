@@ -140,6 +140,12 @@ class CodesearchApi(recipe_api.RecipeApi):
     self._upload_kythe_index_pack(self.c.bucket_name, index_pack_kythe_name,
                                   index_pack_kythe_name_with_revision)
 
+    # Also upload compile_commands.json for debugging purposes.
+    compdb_name_with_revision = 'compile_commands_%s_%s.json' % (
+        self.c.PLATFORM, commit_position)
+    self._upload_compile_commands_json(self.c.bucket_name,
+                                       compdb_name_with_revision)
+
   def _create_kythe_index_pack(self, index_pack_kythe_name):
     """Create the kythe index pack.
 
@@ -175,6 +181,25 @@ class CodesearchApi(recipe_api.RecipeApi):
         bucket=bucket_name,
         dest='prod/%s' % index_pack_kythe_name_with_revision
     )
+
+  def _upload_compile_commands_json(self, bucket_name,
+                                    destination_filename):
+    """Upload the compile_commands.json file to Google Storage.
+
+    This is useful for debugging.
+
+    Args:
+      bucket_name: Name of the Google Storage bucket to upload to
+      destination_filename: Name to use for the compile_commands file in
+                            Google Storage
+    """
+    self.m.gsutil.upload(
+        name='upload compile_commands.json',
+        source=self.c.compile_commands_json_file,
+        bucket=bucket_name,
+        dest='debug/%s' % destination_filename
+    )
+
 
   def checkout_generated_files_repo_and_sync(self):
     """Check out the generated files repo and sync the generated files

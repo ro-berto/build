@@ -697,6 +697,24 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[CACHE]/builder/src/out/fuchsia-Debug/compile_commands.json",
+      "gs://chrome-codesearch/debug/compile_commands_fuchsia_170242.json"
+    ],
+    "infra_step": true,
+    "name": "gsutil upload compile_commands.json",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chrome-codesearch/debug/compile_commands_fuchsia_170242.json@@@"
+    ]
+  },
+  {
     "jsonResult": null,
     "name": "$result"
   }
