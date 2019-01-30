@@ -101,6 +101,11 @@ DETERMINISTIC_BUILDERS = freeze({
   },
 })
 
+# Trybots to mirror the actions of builders
+DETERMINISTIC_TRYBOTS = freeze({
+  'android-deterministic-rel': 'Deterministic Android',
+  'android-deterministic-dbg': 'Deterministic Android (dbg)',
+})
 
 def MoveBuildDirectory(api, src_dir, dst_dir):
   api.python.inline('Move %s to %s' % (src_dir, dst_dir),
@@ -139,7 +144,10 @@ PROPERTIES = {
 
 
 def RunSteps(api, buildername):
-  recipe_config = DETERMINISTIC_BUILDERS[buildername]
+  if buildername in DETERMINISTIC_BUILDERS:
+    recipe_config = DETERMINISTIC_BUILDERS[buildername]
+  else:
+    recipe_config = DETERMINISTIC_BUILDERS[DETERMINISTIC_TRYBOTS[buildername]]
 
   if recipe_config.get('chromium_config_kwargs'):
     target_platform = recipe_config['chromium_config_kwargs'].get(
@@ -221,7 +229,6 @@ def RunSteps(api, buildername):
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
 
-
 def GenTests(api):
   mastername = 'chromium.swarm'
   for buildername in DETERMINISTIC_BUILDERS:
@@ -244,3 +251,25 @@ def GenTests(api):
       api.properties(configuration='Release') +
       api.step_data('compare_build_artifacts', retcode=1)
     )
+
+  for trybotname in DETERMINISTIC_TRYBOTS:
+    test_name = 'full_%s_%s' % (_sanitize_nonalpha(mastername),
+                                _sanitize_nonalpha(trybotname))
+    yield (
+      api.test(test_name) +
+      api.properties.scheduled() +
+      api.properties.generic(buildername=trybotname,
+                             mastername=mastername) +
+      api.platform(DETERMINISTIC_BUILDERS[DETERMINISTIC_TRYBOTS[trybotname]]['platform'], 32) +
+      api.properties(configuration='Release')
+    )
+    yield (
+      api.test(test_name + '_fail') +
+      api.properties.scheduled() +
+      api.properties.generic(buildername=trybotname,
+                              mastername=mastername) +
+      api.platform(DETERMINISTIC_BUILDERS[DETERMINISTIC_TRYBOTS[trybotname]]['platform'], 32) +
+      api.properties(configuration='Release') +
+      api.step_data('compare_build_artifacts', retcode=1)
+    )
+
