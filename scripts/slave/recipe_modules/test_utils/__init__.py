@@ -18,7 +18,7 @@ DEPS = [
 
 
 PROPERTIES = {
-  'max_reported_gtest_failures': Property(
+  'max_reported_failures': Property(
       default=30,
       kind=Single((int, float)),
   ),

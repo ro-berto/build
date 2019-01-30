@@ -51,12 +51,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
   # This magic string is depended on by other infra tools.
   INVALID_RESULTS_MAGIC = 'TEST RESULTS WERE INVALID'
 
-  def __init__(self, max_reported_gtest_failures, *args, **kwargs):
+  def __init__(self, max_reported_failures, *args, **kwargs):
     super(TestUtilsApi, self).__init__(*args, **kwargs)
-    self._max_reported_gtest_failures = int(max_reported_gtest_failures)
+    self._max_reported_failures = int(max_reported_failures)
 
-  @staticmethod
-  def limit_failures(failures, limit):
+  def limit_failures(self, failures, limit=None):
     """Limit failures of a step to prevent large results JSON.
 
     Args:
@@ -72,6 +71,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
            *failures* contains more elements than *limit*, it will contain an
            element indicating the number of additional failures.
     """
+    if limit is None:
+      limit = self._max_reported_failures
     if len(failures) <= limit:
       return failures, failures
     overflow_line = '... %d more (%d total) ...' % (
@@ -118,8 +119,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     presentation will be updated to include information about the failing
     tests, including logs for the individual failures.
 
-    The max_reported_gtest_failures property modifies this behavior by limiting
-    the number of tests that will appear in the step text and have their logs
+    The max_reported_failures property modifies this behavior by limiting the
+    number of tests that will appear in the step text and have their logs
     included. If the limit is exceeded the step text will indicate the number
     of additional failures.
 
@@ -136,8 +137,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     if r and r.valid:
       p = presentation or step_result.presentation
-      failures, text_failures = self.limit_failures(
-          r.failures, self._max_reported_gtest_failures)
+      failures, text_failures = self.limit_failures(r.failures)
       for f in failures:
         # FIXME: We could theoretically split up each run more. This would
         # require some refactoring in util.py to store each individual run's
@@ -294,6 +294,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       }, dest_file)
 
     step_name = '%s (%s)' % (test.name, suffix)
+    _, new_failures = self.limit_failures(new_failures)
+    _, ignored_failures = self.limit_failures(ignored_failures)
     step_text = self.format_step_text([
         [failure_text, new_failures],
         [ignored_text, ignored_failures]

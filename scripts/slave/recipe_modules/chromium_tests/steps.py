@@ -15,7 +15,6 @@ from recipe_engine.types import freeze
 
 
 RESULTS_URL = 'https://chromeperf.appspot.com'
-MAX_FAILS = 30
 
 # When we retry failing tests, we try to choose a high repeat count so that
 # flaky tests will produce both failures and successes. The tradeoff is with
@@ -805,7 +804,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
           'pass_fail_counts': pass_fail_counts,
       }
 
-      _, failures = api.test_utils.limit_failures(failures, MAX_FAILS)
+      _, failures = api.test_utils.limit_failures(failures)
       result.presentation.step_text += (
           api.test_utils.format_step_text([
             ['failures:', failures]
@@ -1992,7 +1991,7 @@ class PythonBasedTest(Test):
         step_result.retcode <= api.test_utils.MAX_FAILURES_EXIT_STATUS):
       self._test_runs[suffix] = test_results.canonical_result_format()
       _, failures = api.test_utils.limit_failures(
-          test_results.unexpected_failures.keys(), MAX_FAILS)
+          test_results.unexpected_failures.keys())
       presentation.step_text += api.test_utils.format_step_text([
           ['unexpected_failures:', failures],
       ])
