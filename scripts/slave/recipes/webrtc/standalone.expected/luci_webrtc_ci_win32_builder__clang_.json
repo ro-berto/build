@@ -92,27 +92,6 @@
     "name": "download audio quality tools"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::webrtc]\\resources\\cleanup_files.py",
-      "[CACHE]\\builder\\src\\out"
-    ],
-    "infra_step": true,
-    "name": "clean test output files"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
-      "--build-dir",
-      "[CACHE]\\builder\\src\\out\\Release",
-      "--clean-isolated-files"
-    ],
-    "name": "clean isolated files"
-  },
-  {
     "cmd": [],
     "name": "ensure_goma"
   },
@@ -162,6 +141,17 @@
       ]
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
+      "--build-dir",
+      "[CACHE]\\builder\\src\\out\\Release",
+      "--clean-isolated-files"
+    ],
+    "name": "clean isolated files"
   },
   {
     "cmd": [

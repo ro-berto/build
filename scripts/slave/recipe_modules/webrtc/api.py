@@ -310,11 +310,12 @@ class WebRTCApi(recipe_api.RecipeApi):
       isolated_targets=self._isolated_targets)
 
   def compile(self, phase=None):
-    self.run_mb(phase)
-
     targets = self._isolated_targets
     if targets:
+      self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
       targets = ['default'] + targets
+
+    self.run_mb(phase)
 
     self.m.chromium.compile(targets=targets, use_goma_module=True)
 
@@ -432,18 +433,3 @@ class WebRTCApi(recipe_api.RecipeApi):
     if not self.m.runtime.is_experimental:
       self.m.gsutil.upload(zip_path, WEBRTC_GS_BUCKET, apk_upload_url,
                            args=['-a', 'public-read'], unauthenticated_url=True)
-
-  def cleanup(self):
-    self.clean_test_output()
-    if self.m.chromium.c.TARGET_PLATFORM == 'android':
-      self.m.chromium_android.clean_local_files(clean_pyc_files=False)
-    if self.bot.should_test or list(self.bot.triggered_bots()):
-      self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
-
-  def clean_test_output(self):
-    """Remove all test output in out/, since we have tests leaking files."""
-    out_dir = self.m.path['checkout'].join('out')
-    self.m.python('clean test output files',
-                  script=self.resource('cleanup_files.py'),
-                  args=[out_dir],
-                  infra_step=True)

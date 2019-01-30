@@ -118,6 +118,17 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
+      "--build-dir",
+      "[CACHE]\\builder\\src\\out\\Debug_x64",
+      "--clean-isolated-files"
+    ],
+    "name": "clean isolated files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[CACHE]\\builder\\src\\tools_webrtc\\mb\\mb.py",
       "lookup",
       "-m",
@@ -1169,6 +1180,17 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
+      "--build-dir",
+      "[CACHE]\\builder\\src\\out\\dummy_audio_file_devices_no_protobuf",
+      "--clean-isolated-files"
+    ],
+    "name": "clean isolated files (2)"
   },
   {
     "cmd": [

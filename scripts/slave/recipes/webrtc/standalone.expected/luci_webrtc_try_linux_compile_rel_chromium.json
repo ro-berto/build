@@ -154,16 +154,6 @@
     "stdin": "diff --git a/a b/a\nnew file mode 100644\n"
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[build::webrtc]/resources/cleanup_files.py",
-      "[CACHE]/builder/src/out"
-    ],
-    "infra_step": true,
-    "name": "clean test output files"
-  },
-  {
     "cmd": [],
     "name": "ensure_goma"
   },

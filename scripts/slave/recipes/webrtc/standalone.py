@@ -48,7 +48,6 @@ def RunSteps(api):
     webrtc.download_audio_quality_tools()
   if webrtc.should_download_video_quality_tools:
     webrtc.download_video_quality_tools()
-  webrtc.cleanup()
 
   if webrtc.bot.should_build:
     api.chromium.ensure_goma()
