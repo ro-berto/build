@@ -36,7 +36,8 @@
       "--revision",
       "src@HEAD"
     ],
-    "env_prefixes": {
+    "cwd": "[CACHE]/builder",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -96,11 +97,11 @@
       "-p",
       "project=src",
       "-p",
-      "owner=buildbot@webrtc.org",
+      "owner=chromium-webrtc-autoroll@webrtc-ci.iam.gserviceaccount.com",
       "-p",
       "status=open"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -132,7 +133,7 @@
       "-p",
       "label=Commit-Queue>=1"
     ],
-    "cwd": "[START_DIR]/src",
+    "cwd": "[CACHE]/builder/src",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },

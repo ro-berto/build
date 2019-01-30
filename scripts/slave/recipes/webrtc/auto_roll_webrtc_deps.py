@@ -48,11 +48,9 @@ def RunSteps(api):
   api.webrtc.checkout()
 
   with api.context(cwd=api.path['checkout']):
-    push_account = (
-        # TODO(oprypin): Replace with api.service_account.default().get_email()
-        # when https://crbug.com/846923 is resolved.
-        'chromium-webrtc-autoroll@webrtc-ci.iam.gserviceaccount.com'
-        if api.runtime.is_luci else 'buildbot@webrtc.org')
+    # TODO(oprypin): Replace with api.service_account.default().get_email()
+    # when https://crbug.com/846923 is resolved.
+    push_account = 'chromium-webrtc-autoroll@webrtc-ci.iam.gserviceaccount.com'
 
     # Check for an open auto-roller CL.
     commits = api.gerrit.get_changes(
@@ -105,32 +103,36 @@ def RunSteps(api):
 
 
 def GenTests(api):
+  base = (
+      api.properties.generic() +
+      api.runtime(is_luci=True, is_experimental=False)
+  )
   yield (
       api.test('rolling_activated') +
-      api.properties.generic() +
+      base +
       api.override_step_data('gerrit changes', api.json.output([]))
   )
   yield (
-      api.test('rolling_activated_luci') +
-      api.properties.generic() +
+      api.test('rolling_activated_experimental') +
+      base +
       api.override_step_data('gerrit changes', api.json.output([])) +
       api.runtime(is_luci=True, is_experimental=True)
   )
   yield (
       api.test('rolling_deactivated') +
-      api.properties.generic() +
+      base +
       api.url.text('check roll status', '0')
   )
   yield (
       api.test('stale_roll') +
-      api.properties.generic() +
+      base +
       api.override_step_data(
           'gerrit changes', api.json.output([{'_number': '123'}])) +
       api.override_step_data('gerrit changes (2)', api.json.output([]))
   )
   yield (
       api.test('previous_roll_in_cq') +
-      api.properties.generic() +
+      base +
       api.override_step_data(
           'gerrit changes', api.json.output([{'_number': '123'}])) +
       api.override_step_data(

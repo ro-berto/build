@@ -183,36 +183,6 @@ def generate_tests(api, phase, revision, revision_number, bot):
       add_test('video_quality_loopback_test')
     add_test('webrtc_perf_tests')
 
-  if test_suite == 'android_perf':
-    perf_id = bot.config['perf_id']
-
-    tests.append(AndroidPerfTest(
-        'webrtc_perf_tests',
-        args=['--save_worst_frame'],
-        revision=revision,
-        revision_number=revision_number,
-        perf_id=perf_id,
-        upload_test_artifacts=True))
-
-    tests.append(PerfTest(
-        str(api.path['checkout'].join('audio', 'test',
-                                        'low_bandwidth_audio_test.py')),
-        name='low_bandwidth_audio_test',
-        args=[api.chromium.output_dir, '--remove',
-              '--android', '--adb-path', api.adb.adb_path()],
-        revision=revision, revision_number=revision_number,
-        perf_id=perf_id))
-
-    # Skip video_quality_loopback_test on Android K bot (not supported).
-    # TODO(oprypin): Re-enable on Nexus 4 once webrtc:7724 is fixed.
-    if 'kitkat' not in perf_id and 'nexus4' not in perf_id:
-      tests.append(PerfTest(
-          str(api.path['checkout'].join('examples', 'androidtests',
-                                        'video_quality_loopback_test.py')),
-          name='video_quality_loopback_test',
-          args=['--adb-path', api.adb.adb_path(), build_out_dir],
-          revision=revision, revision_number=revision_number, perf_id=perf_id))
-
   if test_suite == 'android':
     for test, extra_args in sorted(ANDROID_DEVICE_TESTS.items() +
                                    ANDROID_INSTRUMENTATION_TESTS.items()):
@@ -400,90 +370,8 @@ class SwarmingPerfTest(SwarmingIsolatedScriptTest):
     return valid
 
 
-class PerfTest(Test):
-  """A WebRTC test that needs consistent hardware performance."""
-  def __init__(self, test, name=None, args=None, revision=None,
-               revision_number=None, perf_id=None, upload_test_artifacts=False,
-               python_mode=False):
-    super(PerfTest, self).__init__(test, name)
-    assert revision, 'Revision is mandatory for perf tests'
-    assert revision_number, (
-        'A revision number must be specified for perf tests as they upload '
-        'data to the perf dashboard.')
-
-    self._revision_number = revision_number
-    self._perf_id = perf_id
-    self._args = args or []
-    self._python_mode = python_mode
-
-    self._should_upload_test_artifacts = upload_test_artifacts
-    self._test_artifacts_path = None
-    self._test_artifacts_name = self._name + '_test_artifacts'
-
-    self._perf_config= PERF_CONFIG
-    self._perf_config['r_webrtc_git'] = revision
-
-  def run(self, api, suffix):
-    assert self._perf_id
-    # Some of the perf tests depend on depot_tools for
-    # download_from_google_storage and gsutil usage.
-    with api.depot_tools.on_path():
-      api.chromium.runtest(
-          test=self._test, name=self._name, args=self._args,
-          results_url=DASHBOARD_UPLOAD_URL, annotate='graphing', xvfb=True,
-          perf_dashboard_id=self._name, test_type=self._name,
-          revision=self._revision_number, perf_id=self._perf_id,
-          perf_config=self._perf_config, python_mode=self._python_mode)
-
-
 class AndroidJunitTest(Test):
   """Runs an Android Junit test."""
 
   def run(self, api, suffix):
     api.chromium_android.run_java_unit_test_suite(self._name)
-
-
-class AndroidPerfTest(PerfTest):
-  """A performance test to run on Android devices.
-
-    Basically just wrap what happens in chromium_android.run_test_suite to run
-    inside runtest.py so we can scrape perf data. This way we can get perf data
-    from the gtest binaries since the way of running perf tests with telemetry
-    is entirely different.
-  """
-
-  def __init__(self, test, name=None, args=None, revision=None,
-               revision_number=None, perf_id=None, upload_test_artifacts=False):
-    args = (args or []) + ['--verbose']
-    super(AndroidPerfTest, self).__init__(
-        test, name, args=args, revision=revision,
-        revision_number=revision_number, perf_id=perf_id,
-        upload_test_artifacts=upload_test_artifacts, python_mode=True)
-
-  def _prepare_test_artifacts_upload(self, api):
-    gtest_results_file = api.test_utils.gtest_results(add_json_log=False)
-    self._args.extend(['--gs-test-artifacts-bucket',
-                       api.webrtc.WEBRTC_GS_BUCKET, '--json-results-file',
-                       gtest_results_file])
-
-  def _upload_test_artifacts(self, api):
-    step_result = api.step.active_result
-    if (hasattr(step_result, 'test_utils') and
-        hasattr(step_result.test_utils, 'gtest_results')):
-      json_results = api.json.input(step_result.test_utils.gtest_results.raw)
-      details_link = api.chromium_android.create_result_details(
-          self._name, json_results)
-      api.step.active_result.presentation.links['result_details'] = (
-          details_link)
-
-  @recipe_api.composite_step
-  def run(self, api, suffix):
-    wrapper_script = api.chromium.output_dir.join('bin', 'run_%s' % self._name)
-    self._test = wrapper_script
-    if self._should_upload_test_artifacts:
-      self._prepare_test_artifacts_upload(api)
-    try:
-      super(AndroidPerfTest, self).run(api, suffix)
-    finally:
-      if self._should_upload_test_artifacts:
-        self._upload_test_artifacts(api)

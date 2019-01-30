@@ -40,13 +40,6 @@ RECIPE_CONFIGS = freeze({
     'gclient_apply_config': ['android'],
     'test_suite': 'android',
   },
-  'webrtc_android_perf': {
-    'chromium_config': 'webrtc_default',
-    'chromium_android_config': 'webrtc',
-    'gclient_config': 'webrtc',
-    'gclient_apply_config': ['android'],
-    'test_suite': 'android_perf',
-  },
   'webrtc_android_perf_swarming': {
     'chromium_config': 'webrtc_default',
     'chromium_android_config': 'webrtc',
@@ -78,7 +71,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86',
@@ -92,7 +84,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86',
@@ -111,7 +102,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -125,7 +115,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -148,7 +137,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86',
@@ -167,7 +155,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'triggers': [
           'luci.webrtc.perf/Perf Win7',
         ],
@@ -199,7 +186,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -222,7 +208,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.11',
           'cpu': 'x86-64',
@@ -236,7 +221,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.11',
           'cpu': 'x86-64',
@@ -255,7 +239,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'mac'},
-        'enable_swarming': True,
         'triggers': [
           'luci.webrtc.perf/Perf Mac 10.11',
         ],
@@ -269,7 +252,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.11',
           'cpu': 'x86-64',
@@ -283,7 +265,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86',
@@ -297,7 +278,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86',
@@ -333,7 +313,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -347,7 +326,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -369,7 +347,6 @@ BUILDERS = freeze({
         'binary_size_files': [
           'obj/libwebrtc.a'
         ],
-        'enable_swarming': True,
         'triggers': [
           'luci.webrtc.perf/Perf Linux Trusty',
         ],
@@ -415,7 +392,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -430,7 +406,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -445,7 +420,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -460,7 +434,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -475,7 +448,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -525,7 +497,6 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'archive_apprtc': True,
-        'enable_swarming': True,
         'swarming_dimensions': {
           'device_os': 'MMB29Q', # 6.0.1
           'device_type': 'bullhead', # Nexus 5X
@@ -547,7 +518,6 @@ BUILDERS = freeze({
         'build_android_archive': True,
         # TODO(bugs.webrtc.org/8642): Re-enable when it is fixed and stable.
         # 'test_android_studio_project_generation': True,
-        'enable_swarming': True,
         'swarming_dimensions': {
           'device_os': 'MMB29Q', # 6.0.1
           'device_type': 'bullhead', # Nexus 5X
@@ -565,7 +535,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'binary_size_files': [
           'libjingle_peerconnection_so.so',
           'libjingle_peerconnection_datachannelonly_so.so',
@@ -591,7 +560,6 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'archive_apprtc': True,
-        'enable_swarming': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
           'device_os': 'MMB29Q', # 6.0.1
@@ -610,7 +578,6 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'archive_apprtc': True,
-        'enable_swarming': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
           'device_os': 'MMB29Q', # 6.0.1
@@ -628,7 +595,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'binary_size_files': [
           'libjingle_peerconnection_so.so',
           'libjingle_peerconnection_datachannelonly_so.so',
@@ -641,7 +607,7 @@ BUILDERS = freeze({
       },
     },
   },
-  'client.webrtc.branches': {
+  'luci.webrtc.branches': {
     'settings': {
       'build_gs_bucket': 'chromium-webrtc',
     },
@@ -654,7 +620,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86',
@@ -668,7 +633,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86',
@@ -682,7 +646,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.12',
           'cpu': 'x86-64',
@@ -696,7 +659,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.12',
           'cpu': 'x86-64',
@@ -710,7 +672,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -724,7 +685,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -748,7 +708,6 @@ BUILDERS = freeze({
         'bot_type': 'tester',
         'parent_buildername': 'Win32 Builder (Clang)',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
           'gpu': None,
@@ -766,7 +725,6 @@ BUILDERS = freeze({
         'bot_type': 'tester',
         'parent_buildername': 'Mac64 Builder',
         'testing': {'platform': 'mac'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
           'gpu': None,
@@ -784,7 +742,6 @@ BUILDERS = freeze({
         'bot_type': 'tester',
         'parent_buildername': 'Linux64 Builder',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
           'gpu': None,
@@ -804,7 +761,6 @@ BUILDERS = freeze({
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder arm',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
           'os': 'Android',
@@ -826,7 +782,6 @@ BUILDERS = freeze({
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder arm',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
           'os': 'Android',
@@ -848,7 +803,6 @@ BUILDERS = freeze({
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder arm',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
           'os': 'Android',
@@ -870,7 +824,6 @@ BUILDERS = freeze({
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder arm',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
           'os': 'Android',
@@ -892,7 +845,6 @@ BUILDERS = freeze({
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder arm',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
           'os': 'Android',
@@ -914,7 +866,6 @@ BUILDERS = freeze({
         'bot_type': 'tester',
         'parent_buildername': 'Android32 Builder arm',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
           'os': 'Android',
@@ -936,7 +887,6 @@ BUILDERS = freeze({
         'bot_type': 'tester',
         'parent_buildername': 'Android64 Builder arm64',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
           'os': 'Android',
@@ -958,7 +908,6 @@ BUILDERS = freeze({
         'bot_type': 'tester',
         'parent_buildername': 'Android64 Builder arm64',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'pool': 'WebRTC-perf',
           'os': 'Android',
@@ -967,206 +916,6 @@ BUILDERS = freeze({
           'device_os': 'N',
         },
         'swarming_timeout': 4500,  # 1h15m
-      },
-    },
-  },
-  'client.webrtc.perf': {
-    'settings': {
-      'build_gs_bucket': 'chromium-webrtc',
-    },
-    'builders': {
-      # TODO(oprypin): Remove the Buildbot builders below.
-      'Win7': {
-        'recipe_config': 'webrtc_desktop_perf_swarming',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 32,
-        },
-        'perf_id': 'webrtc-win-large-tests',
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'win'},
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'pool': 'WebRTC',
-          'gpu': None,
-          'os': 'Windows',
-          'id': 'build18-m3',
-        },
-        'swarming_timeout': 4500,  # 1h15m
-      },
-      'Mac 10.11': {
-        'recipe_config': 'webrtc_desktop_perf_swarming',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'perf_id': 'webrtc-mac-large-tests',
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'pool': 'WebRTC',
-          'gpu': None,
-          'os': 'Mac-10.12',
-          'id': 'build16-m3',
-        },
-        'swarming_timeout': 4500,  # 1h15m
-      },
-      'Linux Trusty': {
-        'recipe_config': 'webrtc_desktop_perf_swarming',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_BITS': 64,
-        },
-        'perf_id': 'webrtc-linux-large-tests',
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'linux'},
-        'enable_swarming': True,
-        'swarming_dimensions': {
-          'pool': 'WebRTC',
-          'gpu': None,
-          'os': 'Ubuntu-14.04',
-          'id': 'build17-m3',
-        },
-        'swarming_timeout': 4500,  # 1h15m
-      },
-      'Android32 Builder': {
-        'recipe_config': 'webrtc_android_perf',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-        'buildbot_triggers': [
-          'Android32 Tests (K Nexus5)',
-          'Android32 Tests (L Nexus4)',
-          'Android32 Tests (L Nexus5)',
-          'Android32 Tests (L Nexus6)',
-          'Android32 Tests (L Nexus7.2)',
-          'Android32 Tests (N Nexus6)',
-        ],
-      },
-      'Android64 Builder': {
-        'recipe_config': 'webrtc_android_perf',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder',
-        'testing': {'platform': 'linux'},
-        'buildbot_triggers': [
-          'Android64 Tests (L Nexus9)',
-          'Android64 Tests (N Pixel)',
-        ],
-      },
-      'Android32 Tests (L Nexus4)': {
-        'recipe_config': 'webrtc_android_perf',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'perf_id': 'webrtc-android-tests-nexus4-lollipop',
-        'bot_type': 'tester',
-        'parent_buildername': 'Android32 Builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Android32 Tests (K Nexus5)': {
-        'recipe_config': 'webrtc_android_perf',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'perf_id': 'webrtc-android-tests-nexus5-kitkat',
-        'bot_type': 'tester',
-        'parent_buildername': 'Android32 Builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Android32 Tests (L Nexus5)': {
-        'recipe_config': 'webrtc_android_perf',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'perf_id': 'webrtc-android-tests-nexus5',
-        'bot_type': 'tester',
-        'parent_buildername': 'Android32 Builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Android32 Tests (L Nexus6)': {
-        'recipe_config': 'webrtc_android_perf',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'perf_id': 'webrtc-android-tests-nexus6-lollipop',
-        'bot_type': 'tester',
-        'parent_buildername': 'Android32 Builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Android32 Tests (L Nexus7.2)': {
-        'recipe_config': 'webrtc_android_perf',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'perf_id': 'webrtc-android-tests-nexus72',
-        'bot_type': 'tester',
-        'parent_buildername': 'Android32 Builder Release',
-        'testing': {'platform': 'linux'},
-      },
-      'Android32 Tests (N Nexus6)': {
-        'recipe_config': 'webrtc_android_perf',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 32,
-        },
-        'perf_id': 'webrtc-android-tests-nexus6-nougat',
-        'bot_type': 'tester',
-        'parent_buildername': 'Android32 Builder Release',
-        'testing': {'platform': 'linux'},
-      },
-      'Android64 Tests (L Nexus9)': {
-        'recipe_config': 'webrtc_android_perf',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 64,
-        },
-        'perf_id': 'webrtc-android-tests-nexus9',
-        'bot_type': 'tester',
-        'parent_buildername': 'Android64 Builder',
-        'testing': {'platform': 'linux'},
-      },
-      'Android64 Tests (N Pixel)': {
-        'recipe_config': 'webrtc_android_perf',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Release',
-          'TARGET_PLATFORM': 'android',
-          'TARGET_ARCH': 'arm',
-          'TARGET_BITS': 64,
-        },
-        'perf_id': 'webrtc-android-tests-pixel-nougat',
-        'bot_type': 'tester',
-        'parent_buildername': 'Android64 Builder',
-        'testing': {'platform': 'linux'},
       },
     },
   },
@@ -1220,7 +969,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86',
@@ -1234,7 +982,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86',
@@ -1253,7 +1000,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -1267,7 +1013,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -1317,7 +1062,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86',
@@ -1331,7 +1075,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86',
@@ -1350,7 +1093,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -1364,7 +1106,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -1388,7 +1129,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86-64',
@@ -1402,7 +1142,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-8.1-SP0',
           'cpu': 'x86-64',
@@ -1416,7 +1155,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-10',
           'cpu': 'x86-64',
@@ -1430,7 +1168,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'win'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Windows-7-SP1',
           'cpu': 'x86',
@@ -1462,7 +1199,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.11',
           'cpu': 'x86-64',
@@ -1476,7 +1212,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.11',
           'cpu': 'x86-64',
@@ -1496,7 +1231,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.11',
           'cpu': 'x86-64',
@@ -1519,7 +1253,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'mac'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Mac-10.11',
           'cpu': 'x86-64',
@@ -1545,7 +1278,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -1559,7 +1291,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -1600,7 +1331,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86',
@@ -1614,7 +1344,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86',
@@ -1651,7 +1380,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -1676,7 +1404,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -1691,7 +1418,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -1706,7 +1432,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -1721,7 +1446,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -1736,7 +1460,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'os': 'Ubuntu-14.04',
           'cpu': 'x86-64',
@@ -1850,7 +1573,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
           'device_os': 'MMB29Q', # 6.0.1
@@ -1871,7 +1593,6 @@ BUILDERS = freeze({
         'build_android_archive': True,
         # TODO(bugs.webrtc.org/8642): Re-enable when it is fixed and stable.
         # 'test_android_studio_project_generation': True,
-        'enable_swarming': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
           'device_os': 'MMB29Q', # 6.0.1
@@ -1889,7 +1610,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
           'device_os': 'MMB29Q', # 6.0.1
@@ -1907,7 +1627,6 @@ BUILDERS = freeze({
         },
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
-        'enable_swarming': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
           'device_os': 'MMB29Q', # 6.0.1
@@ -1926,7 +1645,6 @@ BUILDERS = freeze({
         'bot_type': 'builder_tester',
         'testing': {'platform': 'linux'},
         'test_android_studio_project_generation': True,
-        'enable_swarming': True,
         'swarming_dimensions': {
           'device_type': 'bullhead', # Nexus 5X
           'device_os': 'MMB29Q', # 6.0.1

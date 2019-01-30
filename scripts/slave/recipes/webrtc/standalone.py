@@ -52,7 +52,7 @@ def RunSteps(api):
 
   if webrtc.bot.should_build:
     api.chromium.ensure_goma()
-  if webrtc.bot.should_build or not webrtc.c.enable_swarming:
+  if webrtc.bot.should_build:
     api.chromium.runhooks()
   webrtc.check_swarming_version()
   webrtc.configure_isolate()
@@ -61,11 +61,6 @@ def RunSteps(api):
     webrtc.compile()
 
   webrtc.get_binary_sizes()
-
-  if webrtc.bot.should_upload_build:
-    webrtc.package_build()
-  if webrtc.bot.should_download_build:
-    webrtc.extract_build()
 
   if webrtc.bot.should_test:
     webrtc.runtests()
