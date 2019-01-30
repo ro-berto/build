@@ -32,7 +32,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
   def generate_builder(self, builders, bucketname, buildername, revision,
                        parent_got_revision=None, failing_test=None,
                        suffix='', fail_android_archive=False,
-                       is_chromium=False):
+                       is_chromium=False, is_experimental=False):
     mastername = builders[bucketname]['settings'].get('mastername', bucketname)
     bot_config = builders[bucketname]['builders'][buildername]
     bot_type = bot_config.get('bot_type', 'builder_tester')
@@ -43,8 +43,6 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
               (buildername, bucketname))
 
     is_luci = ('luci' in bucketname)
-    # TODO(crbug.com/908001): Remove this:
-    is_experimental = (bucketname == 'luci.webrtc.perf')
 
     chromium_kwargs = bot_config.get('chromium_config_kwargs', {})
     test = (

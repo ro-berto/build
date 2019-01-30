@@ -126,7 +126,7 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--priority",
-      "40",
+      "25",
       "--shards",
       "1",
       "--task-name",
@@ -152,7 +152,7 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
-      "build_is_experimental:true",
+      "build_is_experimental:false",
       "--tag",
       "buildername:Perf Win7",
       "--tag",
@@ -230,7 +230,7 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--priority",
-      "40",
+      "25",
       "--shards",
       "1",
       "--task-name",
@@ -256,7 +256,7 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
-      "build_is_experimental:true",
+      "build_is_experimental:false",
       "--tag",
       "buildername:Perf Win7",
       "--tag",
@@ -334,7 +334,7 @@
       "--isolate-server",
       "https://isolateserver.appspot.com",
       "--priority",
-      "40",
+      "25",
       "--shards",
       "1",
       "--task-name",
@@ -360,7 +360,7 @@
       "swarming_module_cache_vpython",
       ".swarming_module_cache/vpython",
       "--tag",
-      "build_is_experimental:true",
+      "build_is_experimental:false",
       "--tag",
       "buildername:Perf Win7",
       "--tag",
@@ -442,7 +442,7 @@
       "-root",
       "[CACHE]\\swarming_client",
       "-ensure-file",
-      "infra/tools/luci/swarming/${platform} latest",
+      "infra/tools/luci/swarming/${platform} git_revision:0592590977f837a12f6dad2614a4ae469796b8ec",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -455,7 +455,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:059\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/luci/swarming/resolved-platform\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
@@ -625,7 +625,7 @@
       "--got-webrtc-revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--perf-dashboard-machine-group",
-      "ExperimentalWebRTCPerf"
+      "WebRTCPerf"
     ],
     "cwd": "[CACHE]\\builder",
     "infra_step": true,
@@ -655,7 +655,7 @@
       "--build-id",
       "8945511751514863184",
       "--test-results-server",
-      "test-results-test.appspot.com"
+      "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [isac_fix_test]"
@@ -821,7 +821,7 @@
       "--got-webrtc-revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--perf-dashboard-machine-group",
-      "ExperimentalWebRTCPerf"
+      "WebRTCPerf"
     ],
     "cwd": "[CACHE]\\builder",
     "infra_step": true,
@@ -851,7 +851,7 @@
       "--build-id",
       "8945511751514863184",
       "--test-results-server",
-      "test-results-test.appspot.com"
+      "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [low_bandwidth_audio_perf_test]"
@@ -1017,7 +1017,7 @@
       "--got-webrtc-revision",
       "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "--perf-dashboard-machine-group",
-      "ExperimentalWebRTCPerf"
+      "WebRTCPerf"
     ],
     "cwd": "[CACHE]\\builder",
     "infra_step": true,
@@ -1047,7 +1047,7 @@
       "--build-id",
       "8945511751514863184",
       "--test-results-server",
-      "test-results-test.appspot.com"
+      "test-results.appspot.com"
     ],
     "cwd": "[CACHE]\\builder",
     "name": "Upload to test-results [webrtc_perf_tests]"
