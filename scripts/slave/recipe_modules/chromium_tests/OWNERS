@@ -9,6 +9,7 @@ jbudorick@chromium.org
 martiniss@chromium.org
 sergeyberezin@chromium.org
 sergiyb@chromium.org
+tikuta@chromium.org
 
 per-file chromium_android*=bpastene@chromium.org
 per-file chromium_android*=jbudorick@chromium.org
@@ -41,12 +42,10 @@ per-file trybots.py=thakis@chromium.org
 
 # For goma canary bots config.
 per-file chromium_fyi.py=shinyak@chromium.org
-per-file chromium_fyi.py=tikuta@chromium.org
 per-file chromium_fyi.py=ukai@chromium.org
 per-file chromium_fyi.py=yyanagisawa@chromium.org
 
 # for goma staging bots config.
 per-file chromium_goma.py=shinyak@chromium.org
-per-file chromium_goma.py=tikuta@chromium.org
 per-file chromium_goma.py=ukai@chromium.org
 per-file chromium_goma.py=yyanagisawa@chromium.org
