@@ -12,7 +12,11 @@ SPEC = {
       # TODO(mmoss): These should all use 'chromium_official_internal', once
       # that's fixed to set the correct mb_config.pyl path.
       'chromium_config': 'chromium_official',
-      'chromium_apply_config': ['mb'],
+      'chromium_apply_config': [
+          'mb',
+          # TODO(tiktua): remove this if https://crbug.com/926053 is fixed.
+          'ninja_confirm_noop_warn',
+      ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'chromeos'],
       'chromium_config_kwargs': {
