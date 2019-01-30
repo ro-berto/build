@@ -5303,7 +5303,7 @@ Locates and switches to a version of Xcode matching target_version.
 
 &mdash; **def [BuildExamples](/scripts/slave/recipes/flutter/flutter.py#65)(api, git_hash, flutter_executable):**
 
-&mdash; **def [CreateAndUploadFlutterPackage](/scripts/slave/recipes/flutter/flutter.py#181)(api, git_hash, branch):**
+&mdash; **def [CreateAndUploadFlutterPackage](/scripts/slave/recipes/flutter/flutter.py#179)(api, git_hash, branch):**
 
 Prepares, builds, and uploads an all-inclusive archive package.
 
@@ -5315,17 +5315,17 @@ Returns the path to a the token file
 
 The file is located where ChromeOps Puppet drops generic secrets.
 
-&mdash; **def [InstallGradle](/scripts/slave/recipes/flutter/flutter.py#141)(api, checkout):**
+&mdash; **def [InstallGradle](/scripts/slave/recipes/flutter/flutter.py#139)(api, checkout):**
 
 &mdash; **def [RunFindXcode](/scripts/slave/recipes/flutter/flutter.py#108)(api, ios_tools_path, target_version):**
 
 Locates and switches to a version of Xcode matching target_version.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/flutter.py#214)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/flutter.py#212)(api):**
 
 &mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/flutter.py#122)(api):**
 
-&mdash; **def [UploadFlutterCoverage](/scripts/slave/recipes/flutter/flutter.py#158)(api):**
+&mdash; **def [UploadFlutterCoverage](/scripts/slave/recipes/flutter/flutter.py#156)(api):**
 
 Uploads the Flutter coverage output to cloud storage and Coveralls.
   

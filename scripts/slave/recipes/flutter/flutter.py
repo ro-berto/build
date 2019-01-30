@@ -131,8 +131,6 @@ def SetupXcode(api):
       step_suffix='ios_tools')
 
   target_version = '9.0.1'
-  if api.runtime.is_luci:
-    target_version = '9.2'
   xcode_json = RunFindXcode(api, ios_tools_path, target_version)
   if not xcode_json['matches']:
     raise api.step.StepFailure('Xcode %s not found' % target_version)
@@ -269,7 +267,9 @@ def RunSteps(api):
     api.step('download dependencies', [flutter_executable, 'update-packages'])
 
   with _PlatformSDK(api):
-    if api.platform.is_mac:
+    # LUCI method of getting Xcode uses CIPD and already validates the version.
+    # See the properties_j for the Mac builder in cr-buildbucket.cfg
+    if api.platform.is_mac and not api.runtime.is_luci:
       SetupXcode(api)
     with api.depot_tools.on_path():
       api.python('download android tools',
@@ -278,48 +278,65 @@ def RunSteps(api):
       InstallGradle(api, checkout)
 
     with api.context(env=env, cwd=checkout):
-      shards = ['tests'] if not api.platform.is_linux else ['tests', 'coverage']
-      for shard in shards:
+      if api.runtime.is_luci:
+        shard = api.properties['shard']
         shard_env = env
         shard_env['SHARD'] = shard
         with api.context(env=shard_env):
           api.step('run test.dart for %s shard' % shard,
-                   [dart_executable,
+                  [dart_executable,
                     checkout.join('dev', 'bots', 'test.dart')])
         if shard == 'coverage':
           UploadFlutterCoverage(api)
-
-      BuildExamples(api, git_hash, flutter_executable)
+        elif shard == 'tests':
+          BuildExamples(api, git_hash, flutter_executable)
+      else:
+        shards = ['tests'] if not api.platform.is_linux else ['tests', 'coverage']
+        for shard in shards:
+          shard_env = env
+          shard_env['SHARD'] = shard
+          with api.context(env=shard_env):
+            api.step('run test.dart for %s shard' % shard,
+                    [dart_executable,
+                      checkout.join('dev', 'bots', 'test.dart')])
+          if shard == 'coverage':
+            UploadFlutterCoverage(api)
+        BuildExamples(api, git_hash, flutter_executable)
 
 
 def GenTests(api):
-  for platform in ('mac', 'linux', 'win'):
-    for branch in ('master', 'dev', 'beta', 'stable'):
-      git_ref = 'refs/heads/' + branch
-      test = (
-          api.test('%s_%s' % (platform, branch)) + api.platform(platform, 64) +
-          api.buildbucket.ci_build(git_ref=git_ref, revision=None) +
-          api.properties(clobber='') +
-          api.runtime(is_luci=True, is_experimental=False))
-      if platform == 'mac' and branch == 'master':
-        test += (
-            api.step_data('set_xcode_version',
-                          api.json.output({
-                              'matches': {
-                                  '/Applications/Xcode9.0.app': '9.0.1 (9A1004)'
-                              }
-                          })))
-      if platform == 'linux' and branch == 'master':
-        test += (
-            api.override_step_data('upload coverage data to Coveralls',
-                                   api.raw_io.output('')))
-      yield test
+  for luci in (True, False):
+    for experimental in (True, False):
+      for platform in ('mac', 'linux', 'win'):
+        for branch in ('master', 'dev', 'beta', 'stable'):
+          git_ref = 'refs/heads/' + branch
+          test = (
+              api.test('%s_%s_%s_%s' % (platform, branch, luci, experimental)) + api.platform(platform, 64) +
+              api.buildbucket.ci_build(git_ref=git_ref, revision=None) +
+              api.properties(clobber='', shard='tests') +
+              api.runtime(is_luci=luci, is_experimental=experimental))
+          if platform == 'mac' and branch == 'master' and not luci:
+            test += (
+                api.step_data('set_xcode_version',
+                              api.json.output({
+                                  'matches': {
+                                      '/Applications/Xcode9.0.app': '9.0.1 (9A1004)'
+                                  }
+                              })))
+          if platform == 'linux' and branch == 'master' and not luci:
+            test += (
+                api.override_step_data('upload coverage data to Coveralls',
+                                      api.raw_io.output('')))
+          yield test
 
-  yield (api.test('linux_master_exp') +
-         api.runtime(is_luci=False, is_experimental=True))
+  yield (api.test('linux_master_coverage') +
+         api.runtime(is_luci=True, is_experimental=True) +
+         api.properties(clobber='', shard='coverage') +
+         api.override_step_data('upload coverage data to Coveralls',
+                                      api.raw_io.output('')))
 
   yield (api.test('mac_cannot_find_xcode') + api.platform('mac', 64) +
-         api.properties(clobber='') +
+         api.properties(clobber='', shard='tests') +
          api.step_data('set_xcode_version', api.json.output({
              'matches': {}
          })))

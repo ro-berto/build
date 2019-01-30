@@ -27,6 +27,7 @@
   {
     "cmd": [
       "git",
+      "retry",
       "fetch",
       "origin",
       "master",
@@ -131,175 +132,13 @@
   },
   {
     "cmd": [
-      "cipd",
-      "ensure",
-      "-root",
-      "[CACHE]/osx_sdk",
-      "-ensure-file",
-      "infra/tools/mac_toolchain/${platform} git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
-      "-json-output",
-      "/path/to/tmp/json"
-    ],
-    "infra_step": true,
-    "name": "ensure_installed",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:796\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "[CACHE]/osx_sdk/mac_toolchain",
-      "install",
-      "-kind",
-      "ios",
-      "-xcode-version",
-      "9c40b",
-      "-output-dir",
-      "[CACHE]/osx_sdk/XCode.app"
-    ],
-    "infra_step": true,
-    "name": "install xcode"
-  },
-  {
-    "cmd": [
-      "sudo",
-      "xcode-select",
-      "--switch",
-      "[CACHE]/osx_sdk/XCode.app"
-    ],
-    "infra_step": true,
-    "name": "select XCode"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::git]/resources/git_setup.py",
-      "--path",
-      "[START_DIR]/ios",
-      "--url",
-      "https://chromium.googlesource.com/chromium/src/ios"
-    ],
-    "name": "git setup (ios_tools)"
-  },
-  {
-    "cmd": [
-      "git",
-      "fetch",
-      "origin",
-      "--recurse-submodules",
-      "--progress"
-    ],
-    "cwd": "[START_DIR]/ios",
-    "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:<PATH>"
-    },
-    "infra_step": true,
-    "name": "git fetch (ios_tools)"
-  },
-  {
-    "cmd": [
-      "git",
-      "checkout",
-      "-f",
-      "69b7c1b160e7107a6a98d948363772dc9caea46f"
-    ],
-    "cwd": "[START_DIR]/ios",
-    "infra_step": true,
-    "name": "git checkout (ios_tools)"
-  },
-  {
-    "cmd": [
-      "git",
-      "rev-parse",
-      "HEAD"
-    ],
-    "cwd": "[START_DIR]/ios",
-    "infra_step": true,
-    "name": "read revision (2)",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>checked out 'deadbeef'<br/>@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "git",
-      "clean",
-      "-f",
-      "-d",
-      "-x"
-    ],
-    "cwd": "[START_DIR]/ios",
-    "infra_step": true,
-    "name": "git clean (ios_tools)"
-  },
-  {
-    "cmd": [
-      "git",
-      "submodule",
-      "sync"
-    ],
-    "cwd": "[START_DIR]/ios",
-    "infra_step": true,
-    "name": "submodule sync (ios_tools)"
-  },
-  {
-    "cmd": [
-      "git",
-      "submodule",
-      "update",
-      "--init",
-      "--recursive"
-    ],
-    "cwd": "[START_DIR]/ios",
-    "infra_step": true,
-    "name": "submodule update (ios_tools)"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "[START_DIR]/ios/build/bots/scripts/find_xcode.py",
-      "--json-file",
-      "/path/to/tmp/json",
-      "--version",
-      "9.2"
-    ],
-    "name": "set_xcode_version",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"matches\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"/Applications/Xcode9.0.app\": \"9.0.1 (9A1004)\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "[START_DIR]/flutter/dev/bots/download_android_tools.py",
       "-t",
       "sdk"
     ],
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -318,7 +157,7 @@
       "--outfile",
       "[START_DIR]/flutter/dev/bots/gradle-2.14.1-bin.zip"
     ],
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -331,7 +170,7 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -345,7 +184,7 @@
       "-c",
       "[START_DIR]/flutter/dev/bots/android_tools/sdk/tools/bin/sdkmanager --list"
     ],
-    "env_suffixes": {
+    "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
@@ -369,6 +208,68 @@
   },
   {
     "cmd": [
+      "dart",
+      "[START_DIR]/flutter/dev/bots/test.dart"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache",
+      "SHARD": "coverage"
+    },
+    "name": "run test.dart for coverage shard"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/flutter/packages/flutter/coverage/lcov.info",
+      "gs://flutter_infra/flutter/experimental/coverage/lcov.info"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "infra_step": true,
+    "name": "gsutil upload coverage data",
+    "~followup_annotations": [
+      "@@@STEP_LINK@lcov.info@https://storage.cloud.google.com/flutter_infra/flutter/experimental/coverage/lcov.info@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE[build::flutter/flutter].resources/upload_to_coveralls.py",
+      "--token-file=/creds/generic/generic-flutter-coveralls-api-token",
+      "--coverage-path=[START_DIR]/flutter/packages/flutter/coverage/lcov.info"
+    ],
+    "cwd": "[START_DIR]/flutter/packages/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "name": "upload coverage data to Coveralls"
+  },
+  {
+    "cmd": [
       "flutter",
       "-v",
       "build",
@@ -385,55 +286,28 @@
   },
   {
     "cmd": [
-      "flutter",
-      "-v",
-      "build",
-      "ios",
-      "--no-codesign"
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/flutter/examples/stocks/build/app/outputs/apk/app.apk",
+      "gs://flutter_infra/flutter/experimental/deadbeef/examples/Stocks.apk"
     ],
-    "cwd": "[START_DIR]/flutter/examples/stocks",
+    "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
-    "name": "flutter build ios stocks"
-  },
-  {
-    "cmd": [
-      "flutter",
-      "-v",
-      "build",
-      "ios",
-      "--no-codesign",
-      "--debug"
-    ],
-    "cwd": "[START_DIR]/flutter/examples/stocks",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "name": "flutter build ios debug stocks"
-  },
-  {
-    "cmd": [
-      "flutter",
-      "-v",
-      "build",
-      "ios",
-      "--simulator"
-    ],
-    "cwd": "[START_DIR]/flutter/examples/stocks",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "name": "flutter build ios simulator stocks"
+    "infra_step": true,
+    "name": "gsutil upload Stocks.apk",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Stocks.apk@https://storage.cloud.google.com/flutter_infra/flutter/experimental/deadbeef/examples/Stocks.apk@@@"
+    ]
   },
   {
     "cmd": [
@@ -453,64 +327,28 @@
   },
   {
     "cmd": [
-      "flutter",
-      "-v",
-      "build",
-      "ios",
-      "--no-codesign"
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "[START_DIR]/flutter/examples/flutter_gallery/build/app/outputs/apk/app.apk",
+      "gs://flutter_infra/flutter/experimental/deadbeef/examples/Gallery.apk"
     ],
-    "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
+    "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
-    "name": "flutter build ios flutter_gallery"
-  },
-  {
-    "cmd": [
-      "flutter",
-      "-v",
-      "build",
-      "ios",
-      "--no-codesign",
-      "--debug"
-    ],
-    "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "name": "flutter build ios debug flutter_gallery"
-  },
-  {
-    "cmd": [
-      "flutter",
-      "-v",
-      "build",
-      "ios",
-      "--simulator"
-    ],
-    "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "name": "flutter build ios simulator flutter_gallery"
-  },
-  {
-    "cmd": [
-      "sudo",
-      "xcode-select",
-      "--reset"
-    ],
     "infra_step": true,
-    "name": "reset XCode"
+    "name": "gsutil upload Gallery.apk",
+    "~followup_annotations": [
+      "@@@STEP_LINK@Gallery.apk@https://storage.cloud.google.com/flutter_infra/flutter/experimental/deadbeef/examples/Gallery.apk@@@"
+    ]
   },
   {
     "jsonResult": null,
