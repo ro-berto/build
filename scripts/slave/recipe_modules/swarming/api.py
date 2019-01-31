@@ -435,10 +435,11 @@ class SwarmingApi(recipe_api.RecipeApi):
     }[platform]
 
   def task(self, title, isolated_hash, ignore_task_failure=False, shards=1,
-           task_output_dir=None, extra_args=None, idempotent=None,
-           cipd_packages=None, build_properties=None, merge=None,
-           trigger_script=None, named_caches=None, service_account=None,
-           raw_cmd=None, env_prefixes=None, env=None, optional_dimensions=None):
+           shard_index=None, task_output_dir=None, extra_args=None,
+           idempotent=None, cipd_packages=None, build_properties=None,
+           merge=None, trigger_script=None, named_caches=None,
+           service_account=None, raw_cmd=None, env_prefixes=None, env=None,
+           optional_dimensions=None):
     """Returns a new SwarmingTask instance to run an isolated executable on
     Swarming.
 
@@ -459,6 +460,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         tasks. By default, this is set to False.
       * shards: if defined, the number of shards to use for the task. By default
           this value is either 1 or based on the title.
+      * shard_index: Which shard to run. If None, all shards are run.
       * task_output_dir: if defined, the directory where task results are
           placed. The caller is responsible for removing this folder when
           finished.
@@ -532,6 +534,7 @@ class SwarmingApi(recipe_api.RecipeApi):
         env=init_env,
         priority=self.default_priority,
         shards=shards,
+        shard_index=shard_index,
         spec_name=spec_name,
         buildername=self.m.properties.get('buildername'),
         buildnumber=self.m.properties.get('buildnumber'),
@@ -706,7 +709,22 @@ class SwarmingApi(recipe_api.RecipeApi):
       '--swarming', self.swarming_server,
       '--isolate-server', self.m.isolate.isolate_server,
       '--priority', str(task.priority),
-      '--shards', str(task.shards),
+    ]
+
+    # Trigger a specific shard rather than all shards.
+    if task.shard_index is not None:
+      # We must use different logic for swarming.py vs. custom trigger script.
+      if task.trigger_script:
+        args += ['--shard-index', str(task.shard_index)]
+        args += ['--shards', str(task.shards)]
+      else:
+        args += ['--env', 'GTEST_SHARD_INDEX', str(task.shard_index)]
+        args += ['--env', 'GTEST_TOTAL_SHARDS', str(task.shards)]
+    else:
+      args += ['--shards', str(task.shards)]
+
+    # More trigger parameters.
+    args += [
       '--task-name', task.task_name,
       '--dump-json', self.m.json.output(),
       '--expiration', str(task.expiration),
@@ -820,7 +838,7 @@ class SwarmingApi(recipe_api.RecipeApi):
       if step_result.presentation != self.m.step.FAILURE:
         task._trigger_output = step_result.json.output
         links = step_result.presentation.links
-        for index in xrange(task.shards):
+        for index in task.shard_indices():
           url = task.get_shard_view_url(index)
           if url:
             links['shard #%d' % index] = url
@@ -982,7 +1000,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     #  3) a merge script stdout/stderr log emitted by the task
     # This builds an instance of StepTestData that covers all of them.
     step_test_data = step_test_data or (
-      self.test_api.canned_summary_output(task.shards) +
+      self.test_api.canned_summary_output(task.shards, task.shard_index) +
       self.m.json.test_api.output({}) +
       self.m.raw_io.test_api.output(
         'Successfully merged all data'))
@@ -1054,7 +1072,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     #  3) a log file that stores stdout/stderr of task
     # This builds an instance of StepTestData that covers all three.
     step_test_data = (
-        self.test_api.canned_summary_output(shards=task.shards) +
+        self.test_api.canned_summary_output(task.shards, task.shard_index) +
         gtest_results_test_data +
         self.test_api.merge_script_log_file('Gtest merged successfully'))
     try:
@@ -1108,7 +1126,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # Therefore, all entries should be the same and we should only need to merge
     # the chart from each shard.
     collected_results = []
-    for i in xrange(task.shards):
+    for i in task.shard_indices():
       path = self.m.path.join(str(i), 'perftest-output.json')
       if path not in step_result.raw_io.output_dir:
         # perf test results were not written for this shard, not an error,
@@ -1201,14 +1219,15 @@ class SwarmingApi(recipe_api.RecipeApi):
       isolated_script_results_test_data = (
           self.m.test_utils.test_api.canned_isolated_script_output(
               passing=True, is_win=self.m.platform.is_win, swarming=True,
-              use_json_test_format=True, shards=task.shards))
+              use_json_test_format=True, shards=task.shards,
+              shard_index=task.shard_index))
 
     # The call to collect_isolated_script_task emits two JSON files:
     #  1) a task summary JSON emitted by swarming
     #  2) a test results JSON emitted by the task
     # This builds an instance of StepTestData that covers both.
     step_test_data = (
-        self.test_api.canned_summary_output(task.shards) +
+        self.test_api.canned_summary_output(task.shards, task.shard_index) +
         isolated_script_results_test_data +
         self.test_api.merge_script_log_file('Merged succesfully'))
 
@@ -1381,9 +1400,10 @@ class SwarmingApi(recipe_api.RecipeApi):
     # Suffixes of shard subtask names.
     subtasks = []
     if task.shards == 1:
-      subtasks = ['']
+      subtasks = [('', 0)]
     else:
-      subtasks = [':%d:%d' % (task.shards, i) for i in range(task.shards)]
+      subtasks = [(':%d:%d' % (task.shards, i), i)
+                  for i in task.shard_indices()]
     self._task_test_data_id_offset += len(subtasks)
     tid = lambda i: '1%02d00' % (
         i + 100*(self._task_test_data_id_offset - len(subtasks)))
@@ -1394,7 +1414,7 @@ class SwarmingApi(recipe_api.RecipeApi):
           'task_id': tid(i),
           'shard_index': i,
           'view_url': '%s/user/task/%s' % (self.swarming_server, tid(i)),
-        } for i, suffix in enumerate(subtasks)
+        } for (suffix, i) in subtasks
       },
     })
 
@@ -1403,12 +1423,12 @@ class SwarmingTask(object):
   """Definition of a task to run on swarming."""
 
   def __init__(self, title, isolated_hash, ignore_task_failure, dimensions,
-               env, priority, shards, spec_name, buildername, buildnumber,
-               expiration, user, io_timeout, hard_timeout, idempotent,
-               extra_args, collect_step, task_output_dir, cipd_packages=None,
-               build_properties=None, merge=None, trigger_script=None,
-               named_caches=None, service_account=None, raw_cmd=None,
-               env_prefixes=None, optional_dimensions=None):
+               env, priority, shards, shard_index, spec_name, buildername,
+               buildnumber, expiration, user, io_timeout, hard_timeout,
+               idempotent, extra_args, collect_step, task_output_dir,
+               cipd_packages=None, build_properties=None, merge=None,
+               trigger_script=None, named_caches=None, service_account=None,
+               raw_cmd=None, env_prefixes=None, optional_dimensions=None):
     """Configuration of a swarming task.
 
     Args:
@@ -1441,6 +1461,7 @@ class SwarmingTask(object):
           isolated tests based on gtest. Swarming uses GTEST_SHARD_INDEX
           and GTEST_TOTAL_SHARDS environment variables to tell the executable
           what shard to run.
+      * shard_index: Which shard to run. If None, all shards are run.
       * spec_name: task spec name. Used in monitoring.
       * buildername: buildbot builder this task was triggered from.
       * buildnumber: build number of a build this task was triggered from.
@@ -1522,6 +1543,7 @@ class SwarmingTask(object):
     self.priority = priority
     self.raw_cmd = tuple(raw_cmd or [])
     self.shards = shards
+    self.shard_index = shard_index
     self.tags = set()
     self.task_output_dir = task_output_dir
     self.title = title
@@ -1573,6 +1595,16 @@ class SwarmingTask(object):
       for shard_dict in self._trigger_output['tasks'].itervalues():
         if shard_dict['shard_index'] == index:
           return shard_dict['view_url']
+
+  def shard_indices(self):
+    """Returns the indices of the shards that were triggered.
+
+    Even if a task has multiple shards, it's possible that only some of them
+    will be triggered.
+    """
+    if self.shard_index is None:
+      return range(self.shards)
+    return [self.shard_index]
 
   def get_task_ids(self):
     """Returns task id of all shards.

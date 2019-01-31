@@ -11,7 +11,8 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
     return self.m.json.output(data)
 
   def canned_summary_output_raw(
-      self, shards=1, failure=False, internal_failure=False):
+      self, shards=1, shard_index=None, failure=False, internal_failure=False):
+    shard_indices = range(shards) if shard_index is None else [shard_index]
     return {
       'shards': [
         {
@@ -38,14 +39,14 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
           },
           'started_ts': '2014-09-25T01:42:11.123',
           'state': 'COMPLETED',
-        } for i in xrange(shards)
+        } for i in shard_indices
       ],
     }
 
   def canned_summary_output(
-      self, shards=1, failure=False, internal_failure=False):
-    return self.summary(
-      self.canned_summary_output_raw( shards, failure, internal_failure))
+      self, shards=1, shard_index=None, failure=False, internal_failure=False):
+    return self.summary(self.canned_summary_output_raw(
+        shards, shard_index, failure, internal_failure))
 
   def merge_script_log_file(self, data):
     return self.m.raw_io.output(data)

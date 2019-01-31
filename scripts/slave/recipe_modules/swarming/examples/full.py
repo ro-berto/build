@@ -25,6 +25,7 @@ from recipe_engine import post_process
 
 PROPERTIES = {
   'platforms': Property(default=('win',)),
+  'custom_trigger_script': Property(default=False),
   'show_outputs_ref_in_collect_step': Property(default=True),
   'show_shards_in_collect_step': Property(default=False),
   'gtest_task': Property(default=False),
@@ -36,10 +37,10 @@ PROPERTIES = {
   'wait_for_tasks': Property(default=None),
 }
 
-def RunSteps(api, platforms, show_outputs_ref_in_collect_step,
-             show_shards_in_collect_step, gtest_task, isolated_script_task,
-             merge, trigger_script, named_caches, service_account,
-             wait_for_tasks):
+def RunSteps(api, platforms, custom_trigger_script,
+             show_outputs_ref_in_collect_step, show_shards_in_collect_step,
+             gtest_task, isolated_script_task, merge, trigger_script,
+             named_caches, service_account, wait_for_tasks):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
@@ -126,7 +127,15 @@ def RunSteps(api, platforms, show_outputs_ref_in_collect_step,
                                 ('', 'cool/package', 'vers'),
                               ])
     task.dimensions['os'] = api.swarming.prefered_os_dimension(platform)
-    task.shards = 2 if platform == 'linux' else 1
+    if platform == 'linux':
+      task.shards = 2
+    elif platform == 'mac':
+      task.shards = 3
+      task.shard_index = 1
+    else:
+      task.shards = 1
+    if custom_trigger_script:
+      task.trigger_script = {'script': 'custom_trigger.py'}
     task.tags.add('os:' + platform)
     if api.swarming_client.get_script_version('swarming.py') >= (0, 8, 6):
       task.cipd_packages.append(
@@ -136,7 +145,7 @@ def RunSteps(api, platforms, show_outputs_ref_in_collect_step,
   # Launch all tasks.
   for task in tasks:
     step_result = api.swarming.trigger_task(task)
-    assert len(task.get_task_shard_output_dirs()) == task.shards
+    assert len(task.get_task_shard_output_dirs()) == len(task.shard_indices())
     assert step_result.swarming_task in tasks
 
   # Recipe can do something useful here locally while tasks are
@@ -177,6 +186,40 @@ def GenTests(api):
           'archive for mac',
           stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
       api.properties(platforms=('win', 'linux', 'mac')))
+
+  yield (
+      api.test('custom_trigger_script') +
+      api.step_data(
+          'archive for mac',
+          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
+      api.properties(platforms=('mac',), custom_trigger_script=True) +
+      api.post_process(
+          post_process.StepCommandContains,
+          '[trigger] hello_world on Mac-10.13',
+          ['--shard-index', '1']) +
+      api.post_process(
+          post_process.StepCommandContains,
+          '[trigger] hello_world on Mac-10.13',
+          ['--shards', '3']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('default_trigger_script') +
+      api.step_data(
+          'archive for mac',
+          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
+      api.properties(platforms=('mac',), custom_trigger_script=False) +
+      api.post_process(
+          post_process.StepCommandContains,
+          '[trigger] hello_world on Mac-10.13',
+          ['--env', 'GTEST_SHARD_INDEX', '1']) +
+      api.post_process(
+          post_process.StepCommandContains,
+          '[trigger] hello_world on Mac-10.13',
+          ['--env', 'GTEST_TOTAL_SHARDS', '3']) +
+      api.post_process(post_process.DropExpectation)
+  )
 
   yield (
       api.test('wait_for_tasks') +
@@ -411,7 +454,7 @@ def GenTests(api):
 
   big_output_dir = {'summary.json': json.dumps(data)}
   for i, shard_data in enumerate(
-        api.test_utils.generate_simplified_json_results(4, True, True)):
+        api.test_utils.generate_simplified_json_results(range(4), True, True)):
     big_output_dir['%s/output.json' % i] = json.dumps(shard_data)
   # Will cause unicode decode error if tried to decode.
   big_output_dir['0/binary.png'] = '\x00\x00\x89'

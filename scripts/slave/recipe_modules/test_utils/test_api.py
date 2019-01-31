@@ -132,10 +132,10 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     return self.gtest_results(json.dumps(canned_jsonish), retcode)
 
   # TODO(tansell): https://crbug.com/704066 - Kill simplified JSON format.
-  def generate_simplified_json_results(self, shards, isolated_script_passing,
-                                       valid):
+  def generate_simplified_json_results(self, shard_indices,
+                                       isolated_script_passing, valid):
     per_shard_results = []
-    for i in xrange(shards):
+    for i in shard_indices:
       jsonish_results = {}
       jsonish_results['valid'] = valid
       # Keep shard 0's results equivalent to the old code to minimize
@@ -153,10 +153,11 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       per_shard_results.append(jsonish_results)
     return per_shard_results
 
-  def generate_json_test_results(self, shards, isolated_script_passing,
-                                 benchmark_enabled, customized_test_results):
+  def generate_json_test_results(self, shard_indices,
+                                 isolated_script_passing, benchmark_enabled,
+                                 customized_test_results):
     per_shard_results = []
-    for i in xrange(shards):
+    for i in shard_indices:
       if customized_test_results:
         per_shard_results.append(customized_test_results)
         continue
@@ -224,7 +225,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     return per_shard_results
 
   def canned_isolated_script_output(self, passing, is_win=False, swarming=False,
-                                    shards=1, swarming_internal_failure=False,
+                                    shards=1, shard_index=None,
+                                    swarming_internal_failure=False,
                                     isolated_script_passing=True,
                                     isolated_script_retcode=None,
                                     valid=None,
@@ -245,7 +247,8 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
       empty_shards = []
     per_shard_results = []
     per_shard_chartjson_results = []
-    for i in xrange(shards):
+    shard_indices = range(shards) if shard_index is None else [shard_index]
+    for i in shard_indices:
       if output_histograms:
         histogramish_results = []
         idx = 1 + (2 * i)
@@ -263,13 +266,13 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     if use_json_test_format:
       assert valid is None, "valid flag not used in full JSON format."
       per_shard_results = self.generate_json_test_results(
-          shards, isolated_script_passing, benchmark_enabled,
+          shard_indices, isolated_script_passing, benchmark_enabled,
           customized_test_results)
     else:
       if valid is None:
         valid = True
       per_shard_results = self.generate_simplified_json_results(
-          shards, isolated_script_passing, valid)
+          shard_indices, isolated_script_passing, valid)
 
     if unknown:
       per_shard_results[0]['tests']['test1']['Test1']['actual'] = 'UNKNOWN'
@@ -279,7 +282,7 @@ class TestUtilsTestApi(recipe_test_api.RecipeTestApi):
     if swarming:
       jsonish_shards = []
       files_dict = {}
-      for i in xrange(shards):
+      for i in shard_indices:
         if isolated_script_retcode is None:
             exit_code = '1' if not passing or swarming_internal_failure else '0'
         else:
