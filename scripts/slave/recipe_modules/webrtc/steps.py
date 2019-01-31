@@ -15,7 +15,7 @@ THIS_DIR = os.path.dirname(__file__)
 sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
 
 from chromium_tests.steps import SwarmingGTestTest
-from chromium_tests.steps import SwarmingIsolatedScriptTest
+from chromium_tests.steps import SwarmingIsolatedScriptTest as SwarmingIsolatedTest
 from chromium_tests.steps import SwarmingTest
 
 PERF_CONFIG = {'a_default_rev': 'r_webrtc_git'}
@@ -23,117 +23,12 @@ DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 # adb path relative to out dir (e.g. out/Release)
 ADB_PATH = '../../third_party/android_tools/sdk/platform-tools/adb'
 
-NORMAL_TESTS = freeze({
-  'audio_decoder_unittests': {},
-  'common_audio_unittests': {},
-  'common_video_unittests': {},
-  'low_bandwidth_audio_test': {},
-  'modules_tests': {
-    'shards': 2,
-  },
-  'modules_unittests': {
-    'shards': 6,
-  },
-  'peerconnection_unittests': {
-    'shards': 4,
-  },
-  'rtc_media_unittests': {},
-  'rtc_pc_unittests': {},
-  'rtc_stats_unittests': {},
-  'rtc_unittests': {
-    'shards': 6,
-  },
-  'slow_tests': {},
-  'system_wrappers_unittests': {},
-  'test_support_unittests': {},
-  'tools_unittests': {},
-  'video_engine_tests': {
-    'shards': 4,
-  },
-  'webrtc_nonparallel_tests': {},
-})
-
-ANDROID_DEVICE_TESTS = freeze({
-  'audio_decoder_unittests': {},
-  'common_audio_unittests': {},
-  'common_video_unittests': {},
-  'modules_tests': {
-    'shards': 2,
-  },
-  'modules_unittests': {
-    'shards': 6,
-  },
-  'peerconnection_unittests': {
-    'shards': 4,
-  },
-  'rtc_stats_unittests': {},
-  'rtc_unittests': {
-    'shards': 6,
-  },
-  'system_wrappers_unittests': {},
-  'test_support_unittests': {},
-  'tools_unittests': {},
-  'video_engine_tests': {
-    'shards': 4,
-  },
-  'webrtc_nonparallel_tests': {},
-})
-
-BAREMETAL_TESTS = freeze({
-  'isac_fix_test': {},
-  'video_capture_tests': {},
-  'webrtc_perf_tests': {
-      'args': ['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/'],
-  },
-})
-
-ANDROID_INSTRUMENTATION_TESTS = freeze({
-  'AppRTCMobile_test_apk': {},
-  'android_instrumentation_test_apk': {},
-})
-
-ANDROID_JUNIT_TESTS = freeze({
-  'android_junit_tests': {
-    'shards': 1,
-  },
-})
-
 ANDROID_CIPD_PACKAGES = [
     ("bin",
      "infra/tools/luci/logdog/butler/${platform}",
      "git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c",
     )
 ]
-
-PERF_TESTS = freeze({
-    'isac_fix_test': {},
-    'low_bandwidth_audio_perf_test': {},
-    'webrtc_perf_tests': {
-        'args': [
-            '--test-artifacts-dir', '${ISOLATED_OUTDIR}',
-            '--save_worst_frame',
-        ],
-    },
-})
-
-ANDROID_PERF_TESTS = freeze({
-    'webrtc_perf_tests': {
-        'args': [
-            '--save_worst_frame',
-        ],
-    },
-    'low_bandwidth_audio_perf_test': {
-        'args': [
-            '--android',
-            '--adb-path', ADB_PATH,
-        ],
-    },
-    'video_quality_loopback_test': {
-        'args': [
-            '--adb-path', ADB_PATH,
-        ],
-    },
-})
 
 
 def generate_tests(api, phase, revision, revision_number, bot):
@@ -143,23 +38,37 @@ def generate_tests(api, phase, revision, revision_number, bot):
   test_suite = bot.test_suite
 
   if test_suite in ('webrtc', 'webrtc_and_baremetal'):
-    for test, extra_args in sorted(NORMAL_TESTS.items()):
-      tests.append(SwarmingIsolatedScriptTest(test, **extra_args))
+    tests += [
+        SwarmingIsolatedTest('audio_decoder_unittests'),
+        SwarmingIsolatedTest('common_audio_unittests'),
+        SwarmingIsolatedTest('common_video_unittests'),
+        SwarmingIsolatedTest('low_bandwidth_audio_test'),
+        SwarmingIsolatedTest('modules_tests', shards=2),
+        SwarmingIsolatedTest('modules_unittests', shards=6),
+        SwarmingIsolatedTest('peerconnection_unittests', shards=4),
+        SwarmingIsolatedTest('rtc_media_unittests'),
+        SwarmingIsolatedTest('rtc_pc_unittests'),
+        SwarmingIsolatedTest('rtc_stats_unittests'),
+        SwarmingIsolatedTest('rtc_unittests', shards=6),
+        SwarmingIsolatedTest('slow_tests'),
+        SwarmingIsolatedTest('system_wrappers_unittests'),
+        SwarmingIsolatedTest('test_support_unittests'),
+        SwarmingIsolatedTest('tools_unittests'),
+        SwarmingIsolatedTest('video_engine_tests', shards=4),
+        SwarmingIsolatedTest('webrtc_nonparallel_tests'),
+    ]
 
   if test_suite == 'webrtc_and_baremetal':
-    def add_test(name):
-      tests.append(SwarmingIsolatedScriptTest(
-          name,
-          dimensions=bot.config['baremetal_swarming_dimensions'],
-          **BAREMETAL_TESTS[name]))
+    baremetal_test = functools.partial(
+        SwarmingIsolatedTest,
+        dimensions=bot.config['baremetal_swarming_dimensions'])
 
-
-    add_test('video_capture_tests')
+    tests.append(baremetal_test('video_capture_tests'))
 
     # Cover tests only running on perf tests on our trybots:
     if api.tryserver.is_tryserver:
       if api.platform.is_linux:
-        add_test('isac_fix_test')
+        tests.append(baremetal_test('isac_fix_test'))
 
       is_win_clang = (api.platform.is_win and
                       'clang' in bot.recipe_config['chromium_config'])
@@ -167,49 +76,77 @@ def generate_tests(api, phase, revision, revision_number, bot):
       # TODO(kjellander): Enable on Mac when bugs.webrtc.org/7322 is fixed.
       # TODO(oprypin): Enable on MSVC when bugs.webrtc.org/9290 is fixed.
       if api.platform.is_linux or is_win_clang:
-        add_test('webrtc_perf_tests')
+        tests.append(baremetal_test('webrtc_perf_tests', args=[
+            '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/'
+        ]))
 
   if test_suite == 'desktop_perf_swarming':
-    for test, extra_args in sorted(PERF_TESTS.items()):
-      tests.append(SwarmingPerfTest(test, **extra_args))
+    tests += [
+        SwarmingPerfTest('isac_fix_test'),
+        SwarmingPerfTest('low_bandwidth_audio_perf_test'),
+        SwarmingPerfTest('webrtc_perf_tests', args=[
+            '--test-artifacts-dir', '${ISOLATED_OUTDIR}',
+            '--save_worst_frame',
+        ]),
+    ]
 
   if test_suite == 'android_perf_swarming':
-    def add_test(name):
-      tests.append(SwarmingAndroidPerfTest(name, **ANDROID_PERF_TESTS[name]))
-
-    add_test('low_bandwidth_audio_perf_test')
+    tests.append(SwarmingAndroidPerfTest('low_bandwidth_audio_perf_test', args=[
+        '--android',
+        '--adb-path', ADB_PATH,
+    ]))
     # Skip video_quality_loopback_test on Android K bot (not supported).
     if not re.search(r'Android.+\bK\b', bot.builder):
-      add_test('video_quality_loopback_test')
-    add_test('webrtc_perf_tests')
+      tests.append(SwarmingAndroidPerfTest('video_quality_loopback_test', args=[
+          '--adb-path', ADB_PATH,
+      ]))
+    tests.append(SwarmingAndroidPerfTest('webrtc_perf_tests', args=[
+        '--save_worst_frame',
+    ]))
 
   if test_suite == 'android':
-    for test, extra_args in sorted(ANDROID_DEVICE_TESTS.items() +
-                                   ANDROID_INSTRUMENTATION_TESTS.items()):
-      tests.append(AndroidTest(test, **extra_args))
-    for test, extra_args in sorted(ANDROID_JUNIT_TESTS.items()):
-      tests.append(AndroidJunitTest(test))
+    tests += [
+        AndroidTest('AppRTCMobile_test_apk'),
+        AndroidTest('android_instrumentation_test_apk'),
+
+        AndroidTest('audio_decoder_unittests'),
+        AndroidTest('common_audio_unittests'),
+        AndroidTest('common_video_unittests'),
+        AndroidTest('modules_tests', shards=2),
+        AndroidTest('modules_unittests', shards=6),
+        AndroidTest('peerconnection_unittests', shards=4),
+        AndroidTest('rtc_stats_unittests'),
+        AndroidTest('rtc_unittests', shards=6),
+        AndroidTest('system_wrappers_unittests'),
+        AndroidTest('test_support_unittests'),
+        AndroidTest('tools_unittests'),
+        AndroidTest('video_engine_tests', shards=4),
+        AndroidTest('webrtc_nonparallel_tests'),
+
+        AndroidJunitTest('android_junit_tests'),
+    ]
 
     if bot.should_test_android_studio_project_generation:
-       tests.append(PythonTest(
+      tests.append(PythonTest(
           test='gradle_project_test',
           script=str(api.path['checkout'].join('examples',  'androidtests',
                                                'gradle_project_test.py')),
           args=[build_out_dir],
           env={'GOMA_DISABLED': True}))
+
     if api.tryserver.is_tryserver:
-      tests.append(AndroidTest(
-          'webrtc_perf_tests',
-          args=['--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/']))
+      tests.append(AndroidTest('webrtc_perf_tests', args=[
+          '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/'
+      ]))
 
   if test_suite == 'more_configs':
     if 'bwe_test_logging' in phase:
-      tests.append(SwarmingIsolatedScriptTest(
+      tests.append(SwarmingIsolatedTest(
           'bwe_simulations_tests',
           args=['--gtest_filter=VideoSendersTest/'
                 'BweSimulation.Choke1000kbps500kbps1000kbps/1']))
     if 'no_sctp' in phase:
-      tests.append(SwarmingIsolatedScriptTest('peerconnection_unittests'))
+      tests.append(SwarmingIsolatedTest('peerconnection_unittests'))
 
   return tests
 
@@ -353,7 +290,7 @@ class SwarmingAndroidPerfTest(SwarmingTest):
     return []
 
 
-class SwarmingPerfTest(SwarmingIsolatedScriptTest):
+class SwarmingPerfTest(SwarmingIsolatedTest):
   def __init__(self, *args, **kwargs):
     # Perf tests are not idempotent, because for almost all tests the binary
     # will not return the exact same perf result each time. We want to get those

@@ -19,7 +19,6 @@ def _sanitize_nonalpha(text):
 class WebRTCTestApi(recipe_test_api.RecipeTestApi):
   BUILDERS = webrtc_builders.BUILDERS
   RECIPE_CONFIGS = webrtc_builders.RECIPE_CONFIGS
-  NORMAL_TESTS = steps.NORMAL_TESTS
 
   def example_binary_sizes(self):
     return self.m.json.output({'some_binary': 123456})
