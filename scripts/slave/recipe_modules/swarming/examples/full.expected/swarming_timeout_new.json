@@ -278,22 +278,23 @@
       "/path/to/tmp/merge_script_log",
       "--merge-additional-args",
       "[]",
+      "--summary-json-file",
+      "/path/to/tmp/json",
       "--",
-      "python",
-      "-u",
-      "[START_DIR]/swarming.client/swarming.py",
+      "swarming",
       "collect",
-      "--swarming",
+      "-server",
       "https://chromium-swarm-dev.appspot.com",
-      "--decorate",
-      "--print-status-updates",
-      "--verbose",
-      "--json",
-      "{\"base_task_name\": \"hello_world/Windows-7-SP1/hash_for_w\", \"tasks\": {\"hello_world/Windows-7-SP1/hash_for_w\": {\"shard_index\": 0, \"task_id\": \"10000\", \"view_url\": \"https://chromium-swarm-dev.appspot.com/user/task/10000\"}}}",
-      "--auth-service-account-json",
-      "/creds/service_accounts/service-account-chromium-builder.json",
-      "--task-summary-json",
-      "/path/to/tmp/json"
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "json",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"10000\"}]}",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-chromium-builder.json"
     ],
     "env_prefixes": {
       "PATH": [
@@ -329,39 +330,17 @@
       "@@@STEP_LOG_LINE@swarming.summary@}@@@",
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
-      "@@@STEP_LOG_END@Merge script log@@@"
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "import sys; sys.exit(0)"
-    ],
-    "name": "Tests statistics",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 1<br/>Total runtime: 0:01:00 <br/>@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total shards: 1@@@",
-      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 0:01:00 @@@",
-      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 0:01:00 / 0:01:00 / 0:01:00@@@",
-      "@@@STEP_LOG_END@detailed stats@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "rmtree",
-      "[CLEANUP]/hello_isolated_world_tmp_1"
-    ],
-    "infra_step": true,
-    "name": "remove temp dir"
-  },
-  {
-    "jsonResult": null,
+    "failure": {
+      "failure": {
+        "step": "There are failed tasks."
+      },
+      "humanReason": "Step('There are failed tasks.') failed with return_code 0"
+    },
     "name": "$result"
   }
 ]

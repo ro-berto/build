@@ -34,13 +34,12 @@ PROPERTIES = {
   'named_caches': Property(default=None),
   'service_account': Property(default=None),
   'wait_for_tasks': Property(default=None),
-  'use_go_client': Property(default=False),
 }
 
 def RunSteps(api, platforms, show_outputs_ref_in_collect_step,
              show_shards_in_collect_step, gtest_task, isolated_script_task,
              merge, trigger_script, named_caches, service_account,
-             wait_for_tasks, use_go_client):
+             wait_for_tasks):
   # Checkout swarming client.
   api.swarming_client.checkout('master')
 
@@ -68,8 +67,6 @@ def RunSteps(api, platforms, show_outputs_ref_in_collect_step,
   api.swarming.show_shards_in_collect_step = show_shards_in_collect_step
   api.swarming.show_outputs_ref_in_collect_step = (
       show_outputs_ref_in_collect_step)
-
-  api.swarming.use_go_client = use_go_client
 
   try:
     # Testing ReadOnlyDict.__setattr__() coverage.
@@ -141,7 +138,6 @@ def RunSteps(api, platforms, show_outputs_ref_in_collect_step,
     step_result = api.swarming.trigger_task(task)
     assert len(task.get_task_shard_output_dirs()) == task.shards
     assert step_result.swarming_task in tasks
-    api.swarming.get_collect_cmd_args(task)
 
   # Recipe can do something useful here locally while tasks are
   # running on swarming.
@@ -203,31 +199,6 @@ def GenTests(api):
             ['130000']], 1),
       ]) +
       api.properties(platforms=('win', 'linux', 'mac'), wait_for_tasks=True) +
-      api.post_process(post_process.Filter(
-          'wait for tasks', 'wait for tasks (2)')))
-
-  yield (
-      api.test('wait_for_tasks_python') +
-      api.step_data(
-          'archive for win',
-          stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data(
-          'archive for linux',
-          stdout=api.raw_io.output_text(
-            'hash_for_linux hello_world.isolated')) +
-      api.step_data(
-          'archive for mac',
-          stdout=api.raw_io.output_text('hash_for_mac hello_world.isolated')) +
-      # This is probably how you'd use the test api; testing what happens if one
-      # set of tasks finishes first. This example code doesn't care what is
-      # returned, but calling code of this usually does.
-      api.swarming.wait_for_finished_task_set([
-          ([['110000', '110100']], 1),
-          ([['100000'],
-            ['130000']], 1),
-      ]) +
-      api.properties(platforms=('win', 'linux', 'mac'), wait_for_tasks=True,
-                     use_go_client=False) +
       api.post_process(post_process.Filter(
           'wait for tasks', 'wait for tasks (2)')))
 
