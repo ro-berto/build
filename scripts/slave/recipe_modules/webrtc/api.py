@@ -288,21 +288,15 @@ class WebRTCApi(recipe_api.RecipeApi):
     if self.bot.should_test:
       self.m.swarming.check_client_version()
 
-  @classmethod
-  def _sanitize_dir_name(cls, name):
-    safe_with_spaces = ''.join(c if c.isalnum() else ' ' for c in name)
-    return '_'.join(safe_with_spaces.split())
-
   def run_mb(self, phase=None):
     if phase:
       # Set the out folder to be the same as the phase name, so caches of
       # consecutive builds don't interfere with each other.
-      self.m.chromium.c.build_config_fs = self._sanitize_dir_name(phase)
+      self.m.chromium.c.build_config_fs = sanitize_file_name(phase)
     else:
       # Set the out folder to be the same as the builder name, so the whole
       # 'src' folder can be shared between builder types.
-      self.m.chromium.c.build_config_fs = (
-          self._sanitize_dir_name(self.buildername))
+      self.m.chromium.c.build_config_fs = sanitize_file_name(self.buildername)
 
     self.m.chromium.mb_gen(
       self.mastername, self.buildername, phase=phase, use_goma=True,
@@ -433,3 +427,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     if not self.m.runtime.is_experimental:
       self.m.gsutil.upload(zip_path, WEBRTC_GS_BUCKET, apk_upload_url,
                            args=['-a', 'public-read'], unauthenticated_url=True)
+
+
+def sanitize_file_name(name):
+  safe_with_spaces = ''.join(c if c.isalnum() else ' ' for c in name)
+  return '_'.join(safe_with_spaces.split())

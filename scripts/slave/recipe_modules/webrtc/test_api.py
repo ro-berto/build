@@ -8,12 +8,9 @@ import base64
 import json
 
 from recipe_engine import recipe_test_api
+from . import api
 from . import builders as webrtc_builders
 from . import steps
-
-
-def _sanitize_nonalpha(text):
-  return ''.join(c if c.isalnum() else '_' for c in text.lower())
 
 
 class WebRTCTestApi(recipe_test_api.RecipeTestApi):
@@ -43,8 +40,8 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
 
     chromium_kwargs = bot_config.get('chromium_config_kwargs', {})
     test = (
-      self.test('%s_%s%s' % (_sanitize_nonalpha(bucketname),
-                             _sanitize_nonalpha(buildername), suffix)) +
+      self.test('%s_%s%s' % (_sanitize_builder_name(bucketname),
+                             _sanitize_builder_name(buildername), suffix)) +
       self.m.properties(mastername=mastername,
                         buildername=buildername,
                         bot_id='bot_id',
@@ -122,3 +119,7 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
         }
       }
     })
+
+
+def _sanitize_builder_name(name):
+  return api.sanitize_file_name(name.lower())
