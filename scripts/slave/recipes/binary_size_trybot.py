@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from recipe_engine import post_process
+from recipe_engine import recipe_api
 
 DEPS = [
   'chromium',
@@ -28,11 +29,11 @@ DEPS = [
   'recipe_engine/time',
 ]
 
-_ANALYZE_TARGETS = [
+_DEFAULT_ANALYZE_TARGETS = [
     '//chrome/android:monochrome_public_apk',
     '//tools/binary_size:binary_size_trybot_py',
 ]
-_COMPILE_TARGETS = [
+_DEFAULT_COMPILE_TARGETS = [
     'monochrome_public_apk',
     'monochrome_static_initializers',
 ]
@@ -51,7 +52,17 @@ _TEST_BUILDNUMBER = '200'
 _TEST_TIME_FMT = '2016/02/02'
 
 
-def RunSteps(api):
+PROPERTIES = {
+    'analyze_targets': recipe_api.Property(
+        kind=list, default=_DEFAULT_ANALYZE_TARGETS,
+        help='Fully-qualified GN targets to analyze.'),
+    'compile_targets': recipe_api.Property(
+        kind=list, default=_DEFAULT_COMPILE_TARGETS,
+        help='Unqualified targets to compile.'),
+}
+
+
+def RunSteps(api, analyze_targets, compile_targets):
   assert api.tryserver.is_tryserver
 
   with api.chromium.chromium_layout():
@@ -78,13 +89,14 @@ def RunSteps(api):
     api.chromium.runhooks(name='runhooks' + suffix)
 
     affected_files = api.chromium_checkout.get_files_affected_by_patch()
-    if not api.filter.analyze(affected_files, _ANALYZE_TARGETS, None,
+    if not api.filter.analyze(affected_files, analyze_targets, None,
                               'trybot_analyze_config.json')[0]:
       return
 
     api.chromium.ensure_goma()
     with api.tempfile.temp_dir('binary-size-trybot') as staging_dir:
-      with_results_dir = _BuildAndMeasure(api, True, staging_dir)
+      with_results_dir = _BuildAndMeasure(
+          api, True, compile_targets, staging_dir)
 
       with api.context(cwd=api.chromium_checkout.working_dir):
         api.bot_update.deapply_patch(bot_update_step)
@@ -93,7 +105,8 @@ def RunSteps(api):
         suffix = ' (without patch)'
         try:
           api.chromium.runhooks(name='runhooks' + suffix)
-          without_results_dir = _BuildAndMeasure(api, False, staging_dir)
+          without_results_dir = _BuildAndMeasure(
+              api, False, compile_targets, staging_dir)
         except api.step.StepFailure:
           api.python.succeeding_step(_PATCH_FIXED_BUILD_STEP_NAME, '')
           return
@@ -116,11 +129,11 @@ def RunSteps(api):
                                       size_footers)
 
 
-def _BuildAndMeasure(api, with_patch, staging_dir):
+def _BuildAndMeasure(api, with_patch, compile_targets, staging_dir):
   suffix = ' (with patch)' if with_patch else ' (without patch)'
   results_basename = 'with_patch' if with_patch else 'without_patch'
 
-  api.chromium_tests.run_mb_and_compile(_COMPILE_TARGETS, None, suffix)
+  api.chromium_tests.run_mb_and_compile(compile_targets, None, suffix)
 
   results_dir = staging_dir.join(results_basename)
   api.file.ensure_directory('mkdir ' + results_basename, results_dir)
@@ -264,8 +277,8 @@ def GenTests(api):
         'analyze',
         api.json.output({
             'status': 'Found dependency',
-            'compile_targets': _ANALYZE_TARGETS,
-            'test_targets': [] if no_changes else _COMPILE_TARGETS}))
+            'compile_targets': _DEFAULT_ANALYZE_TARGETS,
+            'test_targets': [] if no_changes else _DEFAULT_COMPILE_TARGETS}))
 
   yield (
       props('noop_because_of_analyze') +
