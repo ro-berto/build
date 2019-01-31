@@ -35,6 +35,8 @@ PROPERTIES = {
   'build_config': Property(default=None, kind=str),
   # Switch to clobber build dir before runhooks.
   'clobber': Property(default=False, kind=bool),
+  # Switch to clobber build dir before bot_update.
+  'clobber_all': Property(default=False, kind=bool),
   # Additional configurations set for archiving builds to GS buckets for
   # clusterfuzz. The mapping consists of "name", "bucket" and optional
   # "bitness".
@@ -69,7 +71,7 @@ PROPERTIES = {
 }
 
 
-def RunSteps(api, binary_size_tracking, build_config, clobber,
+def RunSteps(api, binary_size_tracking, build_config, clobber, clobber_all,
              clusterfuzz_archive, coverage, custom_deps, default_targets,
              enable_swarming, mb_config_path, set_gclient_var, target_arch,
              target_platform, track_build_dependencies, triggers,
@@ -126,9 +128,10 @@ def RunSteps(api, binary_size_tracking, build_config, clobber,
         # When collecting code coverage, we need to sync to the revision that
         # fits to the patch for the line numbers to match.
         revision = v8.calculate_patch_base_gerrit()
-        update_step = v8.checkout(revision=revision, suffix='with patch base')
+        update_step = v8.checkout(
+            revision=revision, suffix='with patch base', clobber=clobber_all)
       else:
-        update_step = v8.checkout()
+        update_step = v8.checkout(clobber=clobber_all)
 
       update_properties = update_step.json.output['properties']
 
@@ -913,6 +916,18 @@ def GenTests(api):
         'genhtml',
         'gsutil coverage report',
     ))
+  )
+
+  # Test using clobber_all property.
+  yield (
+    api.v8.test(
+        'client.v8',
+        'V8 Foobar',
+        'clobber_all',
+        clobber_all=True
+    ) +
+    api.v8.check_in_any_arg('initialization.bot_update', '--clobber') +
+    api.post_process(DropExpectation)
   )
 
   # Test switching goma on and off. Goma steps are asserted in the v8 test api.
