@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import os
+import re
 import sys
 import urllib
 
@@ -23,6 +24,9 @@ CHROMIUM_REPO = 'https://chromium.googlesource.com/chromium/src'
 # WebRTC's dependencies on Chromium's subtree mirrors like
 # https://chromium.googlesource.com/chromium/src/build.git
 CHROMIUM_DEPS = ['base', 'build', 'ios', 'testing', 'third_party', 'tools']
+
+PERF_CONFIG = {'a_default_rev': 'r_webrtc_git'}
+DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
 
 
 class Bot(object):
@@ -427,6 +431,52 @@ class WebRTCApi(recipe_api.RecipeApi):
     if not self.m.runtime.is_experimental:
       self.m.gsutil.upload(zip_path, WEBRTC_GS_BUCKET, apk_upload_url,
                            args=['-a', 'public-read'], unauthenticated_url=True)
+
+  def upload_to_perf_dashboard(self, name, step_result):
+    test_succeeded = (step_result.presentation.status == self.m.step.SUCCESS)
+
+    if self._test_data.enabled and test_succeeded:
+      step_result.raw_io.output_dir = {
+        '0/perftest-output.json': self.test_api.example_chartjson(),
+        'logcats': 'foo',
+      }
+    task_output_dir = step_result.raw_io.output_dir
+
+    results_to_upload = []
+    for filepath in sorted(task_output_dir):
+      # File names are 'perftest-output.json', 'perftest-output_1.json', ...
+      if re.search(r'perftest-output.*\.json$', filepath):
+        perf_results = self.m.json.loads(task_output_dir[filepath])
+        if perf_results:
+          results_to_upload.append(perf_results)
+
+    if not results_to_upload and test_succeeded: # pragma: no cover
+      raise self.m.step.InfraFailure(
+          'Cannot find JSON performance data for a test that succeeded.')
+
+    perf_bot_group = 'WebRTCPerf'
+    if self.m.runtime.is_experimental:
+      perf_bot_group = 'Experimental' + perf_bot_group
+
+    for perf_results in results_to_upload:
+      args = [
+          '--build-url', self.build_url,
+          '--name', name,
+          '--perf-id', self.c.PERF_ID,
+          '--output-json-file', self.m.json.output(),
+          '--results-file', self.m.json.input(perf_results),
+          '--results-url', DASHBOARD_UPLOAD_URL,
+          '--commit-position', self.revision_number,
+          '--got-webrtc-revision', self.revision,
+          '--perf-dashboard-machine-group', perf_bot_group,
+      ]
+
+      self.m.build.python(
+          '%s Dashboard Upload' % name,
+          self.resource('upload_perf_dashboard_results.py'),
+          args,
+          step_test_data=lambda: self.m.json.test_api.output({}),
+          infra_step=True)
 
 
 def sanitize_file_name(name):
