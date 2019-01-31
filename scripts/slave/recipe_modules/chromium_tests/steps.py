@@ -1440,7 +1440,7 @@ class SwarmingTest(Test):
         self._merge = api.chromium_tests.m.clang_coverage.shard_merge(
             self._step_name(suffix))
 
-    return task_func(
+    task = task_func(
         build_properties=api.chromium.build_properties,
         cipd_packages=self._cipd_packages,
         env=env,
@@ -1453,6 +1453,40 @@ class SwarmingTest(Test):
         trigger_script=self._trigger_script,
         service_account=self._service_account,
     )
+
+    if self._priority in self.PRIORITY_ADJUSTMENTS:
+      task.priority += self.PRIORITY_ADJUSTMENTS[self._priority]
+
+    if self._expiration:
+      task.expiration = self._expiration
+
+    if self._hard_timeout:
+      task.hard_timeout = self._hard_timeout
+
+    if self._io_timeout:
+      task.io_timeout = self._io_timeout
+
+    # Add custom dimensions.
+    if self._dimensions:  # pragma: no cover
+      #TODO(stip): concoct a test case that will trigger this codepath
+      for k, v in self._dimensions.iteritems():
+         if v is None:
+           # Remove key if it exists. This allows one to use None to remove
+           # default dimensions.
+           task.dimensions.pop(k, None)
+         else:
+           task.dimensions[k] = v
+
+    # Add optional dimensions.
+    if self._optional_dimensions:
+        task.optional_dimensions = self._optional_dimensions
+
+    # Set default value.
+    if 'os' not in task.dimensions:
+      task.dimensions['os'] = api.swarming.prefered_os_dimension(
+          api.platform.name)
+
+    return task
 
   def get_task(self, suffix):
     return self._tasks.get(suffix)
@@ -1472,38 +1506,6 @@ class SwarmingTest(Test):
 
     # Create task.
     self._tasks[suffix] = self.create_task(api, suffix, isolated_hash)
-
-    if self._priority in self.PRIORITY_ADJUSTMENTS:
-      self._tasks[suffix].priority += self.PRIORITY_ADJUSTMENTS[self._priority]
-
-    if self._expiration:
-      self._tasks[suffix].expiration = self._expiration
-
-    if self._hard_timeout:
-      self._tasks[suffix].hard_timeout = self._hard_timeout
-
-    if self._io_timeout:
-      self._tasks[suffix].io_timeout = self._io_timeout
-
-    # Add custom dimensions.
-    if self._dimensions:  # pragma: no cover
-      #TODO(stip): concoct a test case that will trigger this codepath
-      for k, v in self._dimensions.iteritems():
-         if v is None:
-           # Remove key if it exists. This allows one to use None to remove
-           # default dimensions.
-           self._tasks[suffix].dimensions.pop(k, None)
-         else:
-           self._tasks[suffix].dimensions[k] = v
-
-    # Add optional dimensions.
-    if self._optional_dimensions:
-        self._tasks[suffix].optional_dimensions = self._optional_dimensions
-
-    # Set default value.
-    if 'os' not in self._tasks[suffix].dimensions:
-      self._tasks[suffix].dimensions['os'] = api.swarming.prefered_os_dimension(
-          api.platform.name)
 
     return api.swarming.trigger_task(self._tasks[suffix])
 
