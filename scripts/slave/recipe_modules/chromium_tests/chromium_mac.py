@@ -14,7 +14,6 @@ SPEC = {
       'gclient_config': 'chromium',
       'chromium_apply_config': [
           'mb',
-          'ninja_confirm_noop',
       ],
       'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
@@ -28,7 +27,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -45,7 +43,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -62,7 +59,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -79,7 +75,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -96,7 +91,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -113,7 +107,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -130,7 +123,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -147,7 +139,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {

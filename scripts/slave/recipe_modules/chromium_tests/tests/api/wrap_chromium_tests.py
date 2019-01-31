@@ -68,7 +68,6 @@ def GenTests(api):
                   'android_config': 'main_builder',
                   'chromium_apply_config': [
                       'mb',
-                      'ninja_confirm_noop',
                   ],
                   'chromium_config': 'android',
                   'chromium_config_kwargs': {

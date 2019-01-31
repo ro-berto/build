@@ -139,7 +139,6 @@ def GenTests(api):
                         'chromium_config': 'chromium',
                         'chromium_apply_config': [
                           'mb',
-                          'ninja_confirm_noop',
                           'goma_high_parallel',
                         ],
                         'gclient_config': 'chromium',
@@ -156,7 +155,7 @@ def GenTests(api):
                     },
                     'findit_tester': {
                         'chromium_config': 'chromium',
-                        'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+                        'chromium_apply_config': ['mb'],
                         'gclient_config': 'chromium',
                         'chromium_config_kwargs': {
                           'BUILD_CONFIG': 'Release',
@@ -173,7 +172,7 @@ def GenTests(api):
                     },
                     'findit_builder_tester': {
                         'chromium_config': 'chromium',
-                        'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+                        'chromium_apply_config': ['mb'],
                         'gclient_config': 'chromium',
                         'chromium_config_kwargs': {
                           'BUILD_CONFIG': 'Release',

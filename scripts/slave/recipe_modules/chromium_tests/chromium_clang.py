@@ -47,8 +47,8 @@ def config(name,
       cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
       cfg['gclient_apply_config'] = ['android']
 
-  if ninja_confirm_noop:
-      cfg['chromium_apply_config'].append('ninja_confirm_noop')
+  if not ninja_confirm_noop:
+      cfg['chromium_apply_config'].append('ninja_confirm_noop_warn')
 
   return name, cfg
 

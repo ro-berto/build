@@ -11,7 +11,7 @@ SPEC = {
   'builders': {
     'Linux ChromiumOS Full': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chromeos'],
       'chromium_config_kwargs': {
@@ -76,7 +76,7 @@ def _config(name,
   cfg = {
     'chromium_config': 'chromium',
     'chromium_apply_config': [
-      'mb', 'ninja_confirm_noop',
+      'mb',
     ],
     'gclient_config': 'chromium',
     'gclient_apply_config': gclient_apply_config,

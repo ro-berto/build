@@ -20,7 +20,6 @@ KITCHEN_TEST_SPEC = {
   'chromium_config': 'chromium',
   'chromium_apply_config': [
     'mb',
-    'ninja_confirm_noop',
   ],
   'gclient_config': 'chromium',
   'chromium_config_kwargs': {
@@ -50,7 +49,6 @@ def stock_config(name, config='Release', target_bits=64, staging=True,
       'gclient_config': 'chromium',
       'chromium_apply_config': [
           'mb',
-          'ninja_confirm_noop',
       ],
       'chromium_config_kwargs': {
           'BUILD_CONFIG': config,
@@ -140,7 +138,7 @@ SPEC = {
     'mac-osxbeta-rel': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -180,7 +178,7 @@ SPEC = {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
       'gclient_apply_config': ['arm'],
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_ARCH': 'arm',
@@ -198,7 +196,7 @@ SPEC = {
     # is here so that a try bot can be added.
     'WebKit Linux composite_after_paint Dummy Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb','ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -215,7 +213,7 @@ SPEC = {
     },
     'WebKit Linux layout_ng Dummy Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb','ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -234,7 +232,7 @@ SPEC = {
     # crrev.com/c/1367655 lands.
     'WebKit Linux slimming_paint_v2 Dummy Builder': {
       'chromium_config': 'chromium',
-      'chromium_apply_config': ['mb','ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
@@ -418,7 +416,7 @@ SPEC = {
     'WinMSVC64 Goma Canary': chromium_apply_configs(
         {
           'chromium_config': 'chromium',
-          'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+          'chromium_apply_config': ['mb'],
           'gclient_config': 'chromium',
           'chromium_config_kwargs': {
             'BUILD_CONFIG': 'Release',
@@ -486,7 +484,7 @@ SPEC = {
     'WinMSVC64 Goma Latest Client': chromium_apply_configs(
         {
           'chromium_config': 'chromium',
-          'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+          'chromium_apply_config': ['mb'],
           'gclient_config': 'chromium',
           'chromium_config_kwargs': {
             'BUILD_CONFIG': 'Release',
@@ -512,7 +510,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
         'goma_high_parallel',
       ],
       'gclient_config': 'chromium',
@@ -751,7 +748,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -768,7 +764,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
       ],
       'gclient_config': 'chromium',
       'chromium_config_kwargs': {
@@ -899,7 +894,7 @@ SPEC = {
     'chromeos-amd64-generic-rel-vm-tests': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'mb', 'ninja_confirm_noop',
+        'mb',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chromeos_amd64_generic'],
@@ -920,7 +915,7 @@ SPEC = {
     'chromeos-kevin-rel-hw-tests': {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
-        'mb', 'ninja_confirm_noop',
+        'mb',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chromeos_kevin'],
@@ -941,7 +936,7 @@ SPEC = {
     'linux-autofill-captured-sites-rel': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -957,7 +952,7 @@ SPEC = {
     'mac-autofill-captured-sites-rel': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,
@@ -976,7 +971,7 @@ SPEC = {
     'win-autofill-captured-sites-rel': {
       'chromium_config': 'chromium',
       'gclient_config': 'chromium',
-      'chromium_apply_config': ['mb', 'ninja_confirm_noop'],
+      'chromium_apply_config': ['mb'],
       'chromium_config_kwargs': {
         'BUILD_CONFIG': 'Release',
         'TARGET_BITS': 64,

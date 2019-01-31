@@ -23,7 +23,7 @@ def RunSteps(api):
   use_goma_module = api.properties.get('use_goma_module', False)
   out_dir = api.properties.get('out_dir', None)
   failfast = api.properties.get('failfast', False);
-  ninja_confirm_noop = api.properties.get('ninja_confirm_noop', False)
+  ninja_confirm_noop_warn = api.properties.get('ninja_confirm_noop_warn', False)
   configs = api.properties.get('configs', [])
 
   with api.chromium.chromium_layout():
@@ -34,9 +34,7 @@ def RunSteps(api):
     if failfast:
       api.chromium.apply_config('goma_failfast')
 
-    if ninja_confirm_noop:
-      api.chromium.apply_config('ninja_confirm_noop')
-    else:
+    if ninja_confirm_noop_warn:
       api.chromium.apply_config('ninja_confirm_noop_warn')
 
     for config in configs:
@@ -155,7 +153,7 @@ def GenTests(api):
              buildnumber='77457',
              out_dir='/tmp',
              use_goma_module=True,
-             ninja_confirm_noop=False,
+             ninja_confirm_noop_warn=True,
          ) + api.override_step_data(
              'compile confirm no-op',
              stdout=api.raw_io.output(

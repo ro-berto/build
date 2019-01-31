@@ -9,7 +9,6 @@ SPEC = {
       'chromium_config': 'chromium',
       'chromium_apply_config': [
         'mb',
-        'ninja_confirm_noop',
         'goma_high_parallel',
       ],
       'gclient_config': 'chromium',

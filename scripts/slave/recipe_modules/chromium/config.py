@@ -327,10 +327,6 @@ def goma_arbitrary_toolchain_support(c):
   c.env.GOMA_ARBITRARY_TOOLCHAIN_SUPPORT = 1
 
 @config_ctx()
-def ninja_confirm_noop(c):
-  c.compile_py.ninja_confirm_noop = True
-
-@config_ctx()
 def ninja_confirm_noop_warn(c):
   c.compile_py.ninja_confirm_noop = False
 
