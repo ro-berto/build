@@ -184,8 +184,6 @@ class GetGitRevisionTest(unittest.TestCase):
     # pylint: disable=W0212
     self.assertEqual(slave_utils._GetCommitPos(
         {'got_revision_cp': 'refs/heads/master@{#12345}'}), 12345)
-    self.assertEqual(slave_utils._GetCommitPos(
-        {'got_src_revision_cp': 'refs/heads/master@{#54321}'}), 54321)
     # pylint: disable=W0212
     self.assertIsNone(slave_utils._GetCommitPos({'got_revision': 12345}))
 
