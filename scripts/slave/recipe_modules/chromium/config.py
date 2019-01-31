@@ -286,6 +286,7 @@ def goma_rbe_tot(c):
       'https://cxx-compiler-service.appspot.com/settings')
   c.env.GOMA_USE_CASE = 'rbe-tot'
   c.compile_py.use_autoninja = True
+  c.compile_py.goma_client_type = 'candidate'
 
 @config_ctx()
 def goma_mixer_staging(c):
