@@ -178,7 +178,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
       tests - iterable of objects implementing the Test interface above
       suffix - custom suffix, e.g. "with patch", "without patch" indicating
                context of the test run
-      sort_by_shard - sort the order of triggering depends on the number ofshard.
+      sort_by_shard - sort the order of triggering depends on the number of
+                      shards.
     Returns:
       The list of failed tests.
 
@@ -198,8 +199,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
         local_tests.append(test)
 
     if sort_by_shard:
-      # Trigger tests having large number of shards earlier to utilize swarming's
-      # scalability.
+      # Trigger tests which have a large number of shards earlier. They usually
+      # take longer to complete, and triggering take a few minutes, so this
+      # should get us a few extra minutes of speed.
       swarming_tests.sort(key=lambda t: -t.shards)
 
     groups = [LocalGroup(local_tests), SwarmingGroup(swarming_tests)]
