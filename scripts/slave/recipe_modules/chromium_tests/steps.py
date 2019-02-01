@@ -1584,8 +1584,7 @@ class SwarmingGTestTest(SwarmingTest):
   def __init__(self, name, args=None, target_name=None, shards=1,
                dimensions=None, extra_suffix=None, priority=None,
                expiration=None, hard_timeout=None, io_timeout=None,
-               upload_test_results=True, override_compile_targets=None,
-               override_isolate_target=None,
+               override_compile_targets=None, override_isolate_target=None,
                cipd_packages=None, waterfall_mastername=None,
                waterfall_buildername=None, merge=None, trigger_script=None,
                set_up=None, tear_down=None, isolate_coverage_data=False,
@@ -1601,7 +1600,6 @@ class SwarmingGTestTest(SwarmingTest):
         optional_dimensions=optional_dimensions,
         service_account=service_account)
     self._args = args or []
-    self._upload_test_results = upload_test_results
     self._override_compile_targets = override_compile_targets
     self._cipd_packages = cipd_packages
     self._gtest_results = {}
@@ -1662,7 +1660,7 @@ class SwarmingGTestTest(SwarmingTest):
         gtest_results = getattr(step_result.test_utils, 'gtest_results', None)
         self._gtest_results[suffix] = gtest_results
         # Only upload test results if we have gtest results.
-        if self._upload_test_results and gtest_results and gtest_results.raw:
+        if gtest_results and gtest_results.raw:
           parsed_gtest_data = gtest_results.raw
           chrome_revision_cp = api.bot_update.last_returned_properties.get(
               'got_revision_cp', 'x@{#0}')
@@ -1829,9 +1827,8 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
   def __init__(self, name, args=None, target_name=None, shards=1,
                dimensions=None, extra_suffix=None,
                ignore_task_failure=False, priority=None, expiration=None,
-               hard_timeout=None, upload_test_results=True,
-               override_compile_targets=None, perf_id=None, results_url=None,
-               perf_dashboard_id=None, io_timeout=None,
+               hard_timeout=None, override_compile_targets=None, perf_id=None,
+               results_url=None, perf_dashboard_id=None, io_timeout=None,
                waterfall_mastername=None, waterfall_buildername=None,
                merge=None, trigger_script=None, results_handler=None,
                set_up=None, tear_down=None, idempotent=True,
@@ -1848,7 +1845,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         optional_dimensions=optional_dimensions,
         service_account=service_account)
     self._args = args or []
-    self._upload_test_results = upload_test_results
     self._override_compile_targets = override_compile_targets
     self._perf_id=perf_id
     self._results_url = results_url
@@ -1948,7 +1944,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         self._test_results[suffix] = (
             api.test_utils.create_results_from_json_if_needed(results))
 
-      if results and self._upload_test_results:
+      if results:
         self.results_handler.upload_results(
             api, results, self._step_name(suffix), suffix)
 
