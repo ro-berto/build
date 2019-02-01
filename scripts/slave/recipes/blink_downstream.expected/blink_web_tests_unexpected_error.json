@@ -1859,12 +1859,11 @@
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(1)"
+      "import sys; sys.exit(0)"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64",
     "name": "webkit_layout_tests (retry summary)",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>Failed with patch, succeeded without patch:<br/>test2.Test2<br/>test1.Test1<br/><br/>Tests ignored as they also fail without patch:<br/>test_common.Test1<br/>@@@",
       "@@@STEP_FAILURE@@@"
     ]
@@ -1874,7 +1873,7 @@
       "failure": {
         "step": "Aggregate step failure."
       },
-      "humanReason": "1 out of 1 aggregated steps failed: Step('webkit_layout_tests (retry summary)') failed with return_code 1"
+      "humanReason": "1 out of 1 aggregated steps failed: webkit_layout_tests failed."
     },
     "name": "$result"
   }

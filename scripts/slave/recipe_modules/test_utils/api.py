@@ -242,7 +242,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
           # TODO(erikchen): This is a temporary placeholder as part of a larger
           # refactor to simplify the control flow. https://crbug.com/927524.
           if not t.should_retry_with_patch:
-            raise caller_api.step.StepFailure(t.name)
+            raise caller_api.step.StepFailure(t.name + ' failed.')
 
         # No need to re-add a test_suite that is already in the return list.
         if t in failing_tests:
@@ -264,8 +264,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
     self.m.python.succeeding_step(test.name, self.INVALID_RESULTS_MAGIC)
 
   def _summarize_new_and_ignored_failures(
-      self, test, new_failures, ignored_failures, suffix, failure_is_fatal,
-      failure_text, ignored_text):
+      self, test, new_failures, ignored_failures, suffix, failure_text,
+      ignored_text):
     """Summarizes new and ignored failures in the test_suite |test|.
 
     Args:
@@ -273,7 +273,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
       new_failures: Failures that are potentially caused by the patched CL.
       ignored_failures: Failures that are not caused by the patched CL.
       suffix: Should be either 'retry with patch summary' or 'retry summary'.
-      failure_is_fatal: Whether a failure should be fatal.
       failure_text: A user-visible string describing new_failures.
       ignored_text: A user-visible string describing ignored_failures.
 
@@ -305,23 +304,17 @@ class TestUtilsApi(recipe_api.RecipeApi):
         [ignored_text, ignored_failures]
     ])
 
-    if new_failures and failure_is_fatal:
-      try:
-        self.m.python.failing_step(step_name, step_text)
-      finally:
-        self.m.tryserver.set_test_failure_tryjob_result()
-    else:
-      result = self.m.python.succeeding_step(step_name, step_text)
-      if new_failures:
-        result.presentation.status = self.m.step.FAILURE
-        self.m.tryserver.set_test_failure_tryjob_result()
-      elif ignored_failures:
-        result.presentation.status = self.m.step.WARNING
+    result = self.m.python.succeeding_step(step_name, step_text)
+    if new_failures:
+      result.presentation.status = self.m.step.FAILURE
+      self.m.tryserver.set_test_failure_tryjob_result()
+    elif ignored_failures:
+      result.presentation.status = self.m.step.WARNING
 
     return not bool(new_failures)
 
 
-  def summarize_test_with_patch_deapplied(self, caller_api, test,
+  def summarize_test_with_patch_deapplied(self, caller_api, test_suite,
                                           failure_is_fatal):
     """Summarizes test results after a CL has been retried with patch deapplied.
 
@@ -339,8 +332,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
       suggests that the error is due to an issue with top of tree, and should
       not cause the CL to fail.
     """
-    if test.has_valid_results(caller_api, 'without patch'):
-      pass_fail_counts = test.pass_fail_counts(caller_api, 'without patch')
+    if test_suite.has_valid_results(caller_api, 'without patch'):
+      pass_fail_counts = test_suite.pass_fail_counts(caller_api,
+                                                     'without patch')
       ignored_failures = set()
       for test_name, results in pass_fail_counts.iteritems():
         # If a test fails at least once, then it's flaky on tip of tree and we
@@ -348,19 +342,19 @@ class TestUtilsApi(recipe_api.RecipeApi):
         if results['fail_count'] > 0:
           ignored_failures.add(test_name)
     else:
-      self._invalid_test_results(test)
+      self._invalid_test_results(test_suite)
 
       # TODO(erikchen): This is a temporary placeholder as part of a larger
       # refactor to simplify the control flow. https://crbug.com/927524.
       if failure_is_fatal: # pragma: nocover
-        raise caller_api.step.StepFailure(test.name)
+        raise caller_api.step.StepFailure(test_suite.name + ' failed.')
 
       # If there are invalid results from the deapply patch step, treat this as
       # if all tests passed which prevents us from ignoring any test failures
       # from 'with patch'.
       ignored_failures = set()
 
-    valid_results, failures = test.failures_or_invalid_results(
+    valid_results, failures = test_suite.failures_or_invalid_results(
         caller_api, 'with patch')
     if valid_results:
       new_failures = failures - ignored_failures
@@ -369,11 +363,17 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     failure_text = ('Failed with patch, succeeded without patch:')
     ignored_text = ('Tests ignored as they also fail without patch:')
-    return self._summarize_new_and_ignored_failures(
-        test, new_failures, ignored_failures,
-        'retry summary', failure_is_fatal, failure_text, ignored_text)
+    success = self._summarize_new_and_ignored_failures(
+        test_suite, new_failures, ignored_failures, 'retry summary',
+        failure_text, ignored_text)
+    # TODO(erikchen): This is a temporary placeholder as part of a larger
+    # refactor to simplify the control flow. https://crbug.com/927524.
+    if failure_is_fatal and not success:
+      raise caller_api.step.StepFailure(test_suite.name + ' failed.')
+    return success
 
-  def summarize_test_with_patch_reapplied(self, caller_api, test):
+
+  def summarize_test_with_patch_reapplied(self, caller_api, test_suite):
     """Summarizes test results after a CL has been retried with patch reapplied.
 
     Returns:
@@ -381,22 +381,22 @@ class TestUtilsApi(recipe_api.RecipeApi):
       there are tests that failed in 'with patch' and 'retry with patch', but
       not in 'without patch'.
     """
-    valid_results, new_failures = test.failures_or_invalid_results(
+    valid_results, new_failures = test_suite.failures_or_invalid_results(
         caller_api, 'retry with patch')
 
     # We currently do not attempt to recover from invalid test results on the
     # retry. Record a failing step with INVALID_RESULTS_MAGIC, which
     # chromium_try_flakes uses for analysis.
     if not valid_results:
-      self._invalid_test_results(test)
+      self._invalid_test_results(test_suite)
 
       # TODO(erikchen): This is a temporary placeholder as part of a larger
       # refactor to simplify the control flow. https://crbug.com/927524.
-      raise caller_api.step.StepFailure(test.name)
+      raise caller_api.step.StepFailure(test_suite.name + ' failed.')
 
     # Assuming both 'with patch' and 'retry with patch' produced valid results,
     # look for the intersection of failures.
-    valid_results, initial_failures = test.failures_or_invalid_results(
+    valid_results, initial_failures = test_suite.failures_or_invalid_results(
         caller_api, 'with patch')
     if valid_results:
       repeated_failures = new_failures & initial_failures
@@ -405,8 +405,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     # Assuming 'without patch' produced valid results, subtract those from
     # repeated failures, as they're likely problems with tip of tree.
-    valid_results, without_patch_failures = test.failures_or_invalid_results(
-        caller_api, 'without patch')
+    valid_results, without_patch_failures = (
+        test_suite.failures_or_invalid_results(caller_api, 'without patch'))
     if valid_results:
       new_failures = repeated_failures - without_patch_failures
       ignored_failures = without_patch_failures
@@ -416,29 +416,38 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     failure_text = ('Failed with patch twice, succeeded without patch:')
     ignored_text = ('Tests ignored as they succeeded on retry:')
-    return self._summarize_new_and_ignored_failures(
-        test, new_failures, ignored_failures, 'retry with patch summary',
-        failure_is_fatal=True, failure_text=failure_text,
-        ignored_text=ignored_text)
+    success = self._summarize_new_and_ignored_failures(
+        test_suite, new_failures, ignored_failures, 'retry with patch summary',
+        failure_text=failure_text, ignored_text=ignored_text)
+    if not success:
+      # TODO(erikchen): This is a temporary placeholder as part of a larger
+      # refactor to simplify the control flow. https://crbug.com/927524.
+      raise caller_api.step.StepFailure(test_suite.name + ' failed.')
 
-  def summarize_failing_test_with_no_retries(self, caller_api, test):
-    """Summarizes a failing test that is not going to be retried."""
-    valid_results, new_failures = test.failures_or_invalid_results(
+    return success
+
+  def summarize_failing_test_with_no_retries(self, caller_api, test_suite):
+    """Summarizes a failing test suite that is not going to be retried."""
+    valid_results, new_failures = test_suite.failures_or_invalid_results(
         caller_api, 'with patch')
 
     if not valid_results: # pragma: nocover
       self.m.python.infra_failing_step(
-          '{} assertion'.format(test.name),
+          '{} assertion'.format(test_suite.name),
           'This line should never be reached. If a test has invalid results '
           'and is not going to be retried, then a failing step should have '
           'already been emitted.')
 
     failure_text = ('Tests failed, not being retried')
     ignored_text = ('Tests ignored')
-    return self._summarize_new_and_ignored_failures(
-        test, new_failures, set(), 'with patch summary',
-        failure_is_fatal=True, failure_text=failure_text,
-        ignored_text=ignored_text)
+    success = self._summarize_new_and_ignored_failures(
+        test_suite, new_failures, set(), 'with patch summary',
+        failure_text=failure_text, ignored_text=ignored_text)
+    if not success:
+      # TODO(erikchen): This is a temporary placeholder as part of a larger
+      # refactor to simplify the control flow. https://crbug.com/927524.
+      raise caller_api.step.StepFailure(test_suite.name + ' failed.')
+    return success  # pragma: no cover
 
   def _archive_retry_summary(self, retry_summary, dest_filename):
     """Archives the retry summary as JSON, storing it alongside the results
