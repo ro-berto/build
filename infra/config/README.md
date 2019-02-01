@@ -1,1 +1,1 @@
-This directory contains configuration files for infra services.
+This directory contains configuration file for recipes.
