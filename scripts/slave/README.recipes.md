@@ -5615,9 +5615,9 @@ test_type is expected to be 'corpus', 'javascript', or 'pixel'
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/perf_dashboard/examples/full.py#21)(api):**
 ### *recipes* / [pinpoint/builder](/scripts/slave/recipes/pinpoint/builder.py)
 
-[DEPS](/scripts/slave/recipes/pinpoint/builder.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipes/pinpoint/builder.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/pinpoint/builder.py#13)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/pinpoint/builder.py#14)(api):**
 ### *recipes* / [puppet\_service\_account:examples/full](/scripts/slave/recipe_modules/puppet_service_account/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/puppet_service_account/examples/full.py#7): [puppet\_service\_account](#recipe_modules-puppet_service_account), [recipe\_engine/platform][recipe_engine/recipe_modules/platform]
