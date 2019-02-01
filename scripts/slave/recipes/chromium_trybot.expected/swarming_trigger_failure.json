@@ -2281,7 +2281,7 @@
     "cmd": [
       "python",
       "-u",
-      "import sys; sys.exit(1)"
+      "import sys; sys.exit(0)"
     ],
     "cwd": "[CACHE]/builder",
     "env": {
@@ -2289,10 +2289,8 @@
     },
     "name": "base_unittests (3)",
     "~followup_annotations": [
-      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
-      "@@@STEP_FAILURE@@@",
-      "@@@SET_BUILD_PROPERTY@failure_hash@\"d539af4ee37a34409e88b691273c3adba1983124\"@@@"
+      "@@@SET_BUILD_PROPERTY@failure_hash@\"53a73da59c349fad809960223142f295cb7b1f27\"@@@"
     ]
   },
   {
@@ -2300,7 +2298,7 @@
       "failure": {
         "step": "Aggregate step failure."
       },
-      "humanReason": "1 out of 1 aggregated steps failed: Step('base_unittests (3)') failed with return_code 1"
+      "humanReason": "1 out of 1 aggregated steps failed: base_unittests"
     },
     "name": "$result"
   }

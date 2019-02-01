@@ -237,7 +237,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
         if not valid_results:
           # An invalid result is fatal if and only if we are not going to run
           # 'retry with patch'.
-          self._invalid_test_results(t, fatal=not t.should_retry_with_patch)
+          self._invalid_test_results(t)
+
+          # TODO(erikchen): This is a temporary placeholder as part of a larger
+          # refactor to simplify the control flow. https://crbug.com/927524.
+          if not t.should_retry_with_patch:
+            raise caller_api.step.StepFailure(t.name)
 
         # No need to re-add a test_suite that is already in the return list.
         if t in failing_tests:
@@ -247,7 +252,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
           failing_tests.append(t)
     return failing_tests
 
-  def _invalid_test_results(self, test, fatal):
+  def _invalid_test_results(self, test):
     """Marks test results as invalid.
 
     If |fatal| is True, emits a failing step. Otherwise emits a succeeding step.
@@ -256,10 +261,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     # Record a step with INVALID_RESULTS_MAGIC, which chromium_try_flakes uses
     # for analysis.
-    if fatal:
-      self.m.python.failing_step(test.name, self.INVALID_RESULTS_MAGIC)
-    else:
-      self.m.python.succeeding_step(test.name, self.INVALID_RESULTS_MAGIC)
+    self.m.python.succeeding_step(test.name, self.INVALID_RESULTS_MAGIC)
 
   def _summarize_new_and_ignored_failures(
       self, test, new_failures, ignored_failures, suffix, failure_is_fatal,
@@ -346,7 +348,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
         if results['fail_count'] > 0:
           ignored_failures.add(test_name)
     else:
-      self._invalid_test_results(test, fatal=failure_is_fatal)
+      self._invalid_test_results(test)
+
+      # TODO(erikchen): This is a temporary placeholder as part of a larger
+      # refactor to simplify the control flow. https://crbug.com/927524.
+      if failure_is_fatal: # pragma: nocover
+        raise caller_api.step.StepFailure(test.name)
 
       # If there are invalid results from the deapply patch step, treat this as
       # if all tests passed which prevents us from ignoring any test failures
@@ -381,7 +388,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
     # retry. Record a failing step with INVALID_RESULTS_MAGIC, which
     # chromium_try_flakes uses for analysis.
     if not valid_results:
-      self._invalid_test_results(test, fatal=True)
+      self._invalid_test_results(test)
+
+      # TODO(erikchen): This is a temporary placeholder as part of a larger
+      # refactor to simplify the control flow. https://crbug.com/927524.
+      raise caller_api.step.StepFailure(test.name)
 
     # Assuming both 'with patch' and 'retry with patch' produced valid results,
     # look for the intersection of failures.
