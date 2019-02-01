@@ -759,7 +759,7 @@ class GatekeeperTest(unittest.TestCase):
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
                                 {'closing_optional': ['step1'],
-                                 'excluded_steps': ['ste*']})
+                                 'excluded_steps': ['*tep*']})
 
     urls = self.call_gatekeeper()
     self.assertNotIn(self.set_status_url, urls)

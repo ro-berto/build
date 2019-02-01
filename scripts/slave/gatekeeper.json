@@ -1062,7 +1062,7 @@
 
     "experimental_tests": {
       "excluded_steps": [
-        "* (experimental)"
+        "*(experimental)*"
       ]
     },
 
