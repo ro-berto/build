@@ -14,8 +14,6 @@ SPEC = {
       'chromium_config': 'chromium_official',
       'chromium_apply_config': [
           'mb',
-          # TODO(tiktua): remove this if https://crbug.com/926053 is fixed.
-          'ninja_confirm_noop_warn',
       ],
       'gclient_config': 'chromium',
       'gclient_apply_config': ['chrome_internal', 'chromeos'],
