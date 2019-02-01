@@ -181,12 +181,10 @@ class GetGitRevisionTest(unittest.TestCase):
 
   def test_GetCommitPosFromBuildPropTest(self):
     """Tests related to getting a commit position from build properties."""
+    # pylint: disable=W0212
     self.assertEqual(slave_utils._GetCommitPos(
         {'got_revision_cp': 'refs/heads/master@{#12345}'}), 12345)
-    self.assertEqual(slave_utils._GetCommitPos(
-        {'got_src_revision_cp': 'refs/heads/master@{#54321}'}), 54321)
-    self.assertIsNone(slave_utils._GetCommitPos(
-        {'got_src_revision_cp': 'malformed'}))
+    # pylint: disable=W0212
     self.assertIsNone(slave_utils._GetCommitPos({'got_revision': 12345}))
 
 class TelemetryRevisionTest(unittest.TestCase):
