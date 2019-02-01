@@ -31,6 +31,8 @@ ICU_DATA_PATH = 'third_party/icu/flutter/icudtl.dat'
 
 def GetCloudPath(api, path):
   git_hash = api.properties.get('revision')
+  if api.runtime.is_experimental:
+    return 'flutter/experimental/%s/%s' % (git_hash, path)
   return 'flutter/%s/%s' % (git_hash, path)
 
 
@@ -656,22 +658,10 @@ def GetCheckout(api):
   api.bot_update.ensure_checkout()
   api.gclient.runhooks()
 
-# TODO(dnfield): remove when we cut over to LUCI.
-def SkipUpload(local_file, bucket, remote_file, **kwargs):
-  class Presentation(object):
-    links = {}
-  class Result(object):
-    presentation = Presentation()
-  return Result()
-
 def RunSteps(api):
   # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
   if 'clobber' in api.properties:
     api.file.rmcontents('everything', api.path['start_dir'])
-
-  # TODO(dnfield): Remove when we cut over to LUCI.
-  if api.runtime.is_luci:
-    api.gsutil.upload = SkipUpload
 
   GetCheckout(api)
 

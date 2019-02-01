@@ -3875,6 +3875,32 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]\\tmp_tmp_1\\artifacts.zip",
+      "gs://flutter_infra/flutter/experimental/None/windows-x64/artifacts.zip"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"windows-x64/artifacts.zip\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/experimental/None/windows-x64/artifacts.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
@@ -3908,6 +3934,32 @@
     },
     "name": "Zip windows-x64 windows-x64-embedder.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"flutter_embedder.h\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_embedder.h\", \"type\": \"file\"}, {\"archive_name\": \"flutter_engine.dll\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_engine.dll\", \"type\": \"file\"}, {\"archive_name\": \"flutter_engine.dll.exp\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_engine.dll.exp\", \"type\": \"file\"}, {\"archive_name\": \"flutter_engine.dll.lib\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_engine.dll.lib\", \"type\": \"file\"}, {\"archive_name\": \"flutter_engine.dll.pdb\", \"path\": \"[START_DIR]\\\\src\\\\out/host_debug/flutter_engine.dll.pdb\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_2\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]\\tmp_tmp_2\\artifacts.zip",
+      "gs://flutter_infra/flutter/experimental/None/windows-x64/windows-x64-embedder.zip"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"windows-x64/windows-x64-embedder.zip\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/experimental/None/windows-x64/windows-x64-embedder.zip@@@"
+    ]
   },
   {
     "cmd": [
@@ -3951,6 +4003,32 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]\\tmp_tmp_3\\artifacts.zip",
+      "gs://flutter_infra/flutter/experimental/None/android-arm-profile/windows-x64.zip"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"android-arm-profile/windows-x64.zip\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/experimental/None/android-arm-profile/windows-x64.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
@@ -3984,6 +4062,32 @@
     },
     "name": "Zip android-arm64-profile windows-x64.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_profile_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_4\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]\\tmp_tmp_4\\artifacts.zip",
+      "gs://flutter_infra/flutter/experimental/None/android-arm64-profile/windows-x64.zip"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"android-arm64-profile/windows-x64.zip\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/experimental/None/android-arm64-profile/windows-x64.zip@@@"
+    ]
   },
   {
     "cmd": [
@@ -4027,6 +4131,32 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]\\tmp_tmp_5\\artifacts.zip",
+      "gs://flutter_infra/flutter/experimental/None/android-arm-release/windows-x64.zip"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"android-arm-release/windows-x64.zip\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/experimental/None/android-arm-release/windows-x64.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
@@ -4060,6 +4190,32 @@
     },
     "name": "Zip android-arm64-release windows-x64.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_release_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_6\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]\\tmp_tmp_6\\artifacts.zip",
+      "gs://flutter_infra/flutter/experimental/None/android-arm64-release/windows-x64.zip"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"android-arm64-release/windows-x64.zip\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/experimental/None/android-arm64-release/windows-x64.zip@@@"
+    ]
   },
   {
     "cmd": [
@@ -4103,6 +4259,32 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]\\tmp_tmp_7\\artifacts.zip",
+      "gs://flutter_infra/flutter/experimental/None/android-arm-dynamic-profile/windows-x64.zip"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"android-arm-dynamic-profile/windows-x64.zip\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/experimental/None/android-arm-dynamic-profile/windows-x64.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
@@ -4136,6 +4318,32 @@
     },
     "name": "Zip android-arm64-dynamic-profile windows-x64.zip",
     "stdin": "{\"entries\": [{\"archive_name\": \"gen_snapshot.exe\", \"path\": \"[START_DIR]\\\\src\\\\out/android_dynamic_profile_arm64/gen_snapshot.exe\", \"type\": \"file\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_8\\\\artifacts.zip\", \"root\": \"[START_DIR]\\\\src\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]\\tmp_tmp_8\\artifacts.zip",
+      "gs://flutter_infra/flutter/experimental/None/android-arm64-dynamic-profile/windows-x64.zip"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"android-arm64-dynamic-profile/windows-x64.zip\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/experimental/None/android-arm64-dynamic-profile/windows-x64.zip@@@"
+    ]
   },
   {
     "cmd": [
@@ -4179,6 +4387,32 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]\\tmp_tmp_9\\artifacts.zip",
+      "gs://flutter_infra/flutter/experimental/None/android-arm-dynamic-release/windows-x64.zip"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"android-arm-dynamic-release/windows-x64.zip\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/experimental/None/android-arm-dynamic-release/windows-x64.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
@@ -4217,6 +4451,32 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]\\tmp_tmp_10\\artifacts.zip",
+      "gs://flutter_infra/flutter/experimental/None/android-arm64-dynamic-release/windows-x64.zip"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload \"android-arm64-dynamic-release/windows-x64.zip\"",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/experimental/None/android-arm64-dynamic-release/windows-x64.zip@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
       "--json-output",
       "/path/to/tmp/json",
@@ -4250,6 +4510,32 @@
     },
     "name": "Zip dart-sdk",
     "stdin": "{\"entries\": [{\"path\": \"[START_DIR]\\\\src/out/host_debug\\\\dart-sdk\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]\\\\tmp_tmp_11\\\\dart-sdk-windows-x64.zip\", \"root\": \"[START_DIR]\\\\src/out/host_debug\"}"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "----",
+      "cp",
+      "[CLEANUP]\\tmp_tmp_11\\dart-sdk-windows-x64.zip",
+      "gs://flutter_infra/flutter/experimental/None/dart-sdk-windows-x64.zip"
+    ],
+    "env": {
+      "GOMA_DIR": "[CACHE]\\goma\\client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]\\src\\third_party\\dart\\tools\\sdks\\dart-sdk\\bin"
+      ]
+    },
+    "infra_step": true,
+    "name": "gsutil upload dart-sdk-windows-x64.zip",
+    "~followup_annotations": [
+      "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/flutter_infra/flutter/experimental/None/dart-sdk-windows-x64.zip@@@"
+    ]
   },
   {
     "cmd": [

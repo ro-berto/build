@@ -13,6 +13,7 @@ DEPS = [
     'depot_tools/osx_sdk',
     'depot_tools/windows_sdk',
     'recipe_engine/buildbucket',
+    'recipe_engine/cipd',
     'recipe_engine/context',
     'recipe_engine/file',
     'recipe_engine/json',
@@ -33,19 +34,28 @@ PACKAGED_REF_RE = re.compile(r'^refs/heads/(dev|beta|stable)$')
 
 @contextmanager
 def _PlatformSDK(api):
-  sdk = None
   if api.runtime.is_luci:
     if api.platform.is_win:
-      sdk = api.windows_sdk()
+      with api.windows_sdk():
+        with InstallOpenJDK(api):
+          yield
     elif api.platform.is_mac:
-      sdk = api.osx_sdk('ios')
-
-  if sdk is None:
-    yield
-  else:
-    with sdk:
+      with api.osx_sdk('ios'):
+        yield
+    else:
       yield
+  else:
+    yield
 
+def InstallOpenJDK(api):
+  java_cache_dir = api.path['cache'].join('java')
+  api.cipd.ensure(java_cache_dir, api.cipd.EnsureFile()
+    .add_package('flutter_internal/java/openjdk/${platform}', 'version:1.8.0.201-1.b09')
+  )
+  return api.context(
+    env={'JAVA_HOME': java_cache_dir},
+    env_prefixes={'PATH': [java_cache_dir.join('bin')]}
+  )
 
 def GetPuppetApiTokenPath(api, token_name):
   """Returns the path to a the token file
