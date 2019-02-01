@@ -60,15 +60,10 @@ def merge_shard_results(
   tags = set()
   slowest_tests = []
   results = []
-  incomplete_shards = []
   missing_shards = []
   for index, result in enumerate(summary['shards']):
     if result is not None:
       json_data = load_shard_json(output_dir, result['task_id'])
-      if result['exit_code']:
-        # When receiving a sigterm, the test runner terminates gracefully
-        # with json output, but has a non-zero return code.
-        incomplete_shards.append(index)
       if json_data:
         # On continuous bots, the test driver outputs exactly one item in the
         # test results list for one architecture.
@@ -84,10 +79,10 @@ def merge_shard_results(
   # If some shards are missing, make it known. Continue parsing anyway. Step
   # should be red anyway, since swarming.py return non-zero exit code in that
   # case.
-  if missing_shards or incomplete_shards:
+  if missing_shards:
     # Not all tests run, combined JSON summary can not be trusted.
     tags.add('UNRELIABLE_RESULTS')
-    as_str = ', '.join(map(str, sorted(missing_shards + incomplete_shards)))
+    as_str = ', '.join(map(str, missing_shards))
     emit_warning(
         'some shards did not complete: %s' % as_str,
         MISSING_SHARDS_MSG % as_str)
