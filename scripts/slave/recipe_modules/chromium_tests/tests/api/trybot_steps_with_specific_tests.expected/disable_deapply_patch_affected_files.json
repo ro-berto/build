@@ -319,6 +319,14 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "mark: before_tests"
+  },
+  {
     "cmd": [],
     "name": "test_pre_run (with patch)"
   },
@@ -472,7 +480,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"affected_files\": [\"testing/buildbot/chromium.linux.json\"], \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"linux-rel\", \"buildnumber\": 571, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"tryserver.chromium.linux\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"recipe\": \"chromium_tests:tests/api/run_tests_on_tryserver\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"base_unittests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"affected_files\": [\"testing/buildbot/chromium.linux.json\"], \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"linux-rel\", \"buildnumber\": 571, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"tryserver.chromium.linux\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"recipe\": \"chromium_tests:tests/api/trybot_steps_with_specific_tests\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"base_unittests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -497,7 +505,7 @@
     "name": "base_unittests (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00<br/>failures:<br/>Test.Two<br/>@@@",
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
@@ -526,6 +534,16 @@
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@Test 'Test.Two' completed with the following status(es): 'FAILURE'@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@Test 'Test.Two' had the following logs when run:@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@================================================================================@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@:(@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@@@@",
+      "@@@STEP_LOG_LINE@Test.Two (status FAILURE)@================================================================================@@@",
+      "@@@STEP_LOG_END@Test.Two (status FAILURE)@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"canonical_step_name\": \"base_unittests\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"dimensions\": {@@@",
@@ -553,7 +571,7 @@
       "-u",
       "RECIPE_MODULE[build::test_results]/resources/upload_test_results.py",
       "--input-json",
-      "{\"per_iteration_data\": []}",
+      "{\"per_iteration_data\": [{\"Test.One\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":)\", \"status\": \"SUCCESS\"}], \"Test.Three\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \"\", \"status\": \"SUCCESS\"}], \"Test.Two\": [{\"elapsed_time_ms\": 0, \"output_snippet\": \":(\", \"status\": \"FAILURE\"}]}]}",
       "--master-name",
       "tryserver.chromium.linux",
       "--builder-name",
@@ -1241,6 +1259,10 @@
       "--isolated",
       "ffffffffffffffffffffffffffffffffffffffff",
       "--",
+      "--gtest_repeat=10",
+      "--test-launcher-retry-limit=0",
+      "--test-launcher-batch-limit=1",
+      "--gtest_filter=Test.Two",
       "--test-launcher-summary-output=${ISOLATED_OUTDIR}/output.json"
     ],
     "infra_step": true,
@@ -1285,7 +1307,7 @@
       "--merge-additional-args",
       "[]",
       "--build-properties",
-      "{\"affected_files\": [\"testing/buildbot/chromium.linux.json\"], \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"linux-rel\", \"buildnumber\": 571, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"tryserver.chromium.linux\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"recipe\": \"chromium_tests:tests/api/run_tests_on_tryserver\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"base_unittests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"affected_files\": [\"testing/buildbot/chromium.linux.json\"], \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildbotURL\": \"http://c.org/p/cr/\", \"buildername\": \"linux-rel\", \"buildnumber\": 571, \"got_angle_revision\": \"fac9503c46405f77757b9a728eb85b8d7bc6080c\", \"got_angle_revision_cp\": \"refs/heads/master@{#297276}\", \"got_buildtools_revision\": \"f0319a328b2809876916353cb994259692140934\", \"got_buildtools_revision_cp\": \"refs/heads/master@{#182578}\", \"got_dawn_revision\": \"1b5c932bc9a9a35c66edea3914fb675742d57cc2\", \"got_dawn_revision_cp\": \"refs/heads/master@{#51819}\", \"got_nacl_revision\": \"d998e125e8253980d76e269b7982aeeefc1b9b50\", \"got_nacl_revision_cp\": \"refs/heads/master@{#274981}\", \"got_revision\": \"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\", \"got_revision_cp\": \"refs/heads/master@{#170242}\", \"got_swarming_client_revision\": \"a0ee5d99f1d4b38ddaa4c759c837980b63b99566\", \"got_swarming_client_revision_cp\": \"refs/heads/master@{#276089}\", \"got_v8_revision\": \"801ada225ddc271c132c3a35f03975671d43e399\", \"got_v8_revision_cp\": \"refs/heads/master@{#43426}\", \"got_webrtc_revision\": \"0f90628433546e61d9268596da93418c623137f4\", \"got_webrtc_revision_cp\": \"refs/heads/master@{#120644}\", \"mastername\": \"tryserver.chromium.linux\", \"patch_branch\": \"master\", \"patch_gerrit_url\": \"https://chromium-review.googlesource.com\", \"patch_issue\": 456789, \"patch_project\": \"chromium/src\", \"patch_ref\": \"refs/changes/89/456789/12\", \"patch_repository_url\": \"https://chromium.googlesource.com/chromium/src\", \"patch_set\": 12, \"patch_storage\": \"gerrit\", \"recipe\": \"chromium_tests:tests/api/trybot_steps_with_specific_tests\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"base_unittests\": \"ffffffffffffffffffffffffffffffffffffffff\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--summary-json-file",
       "/path/to/tmp/json",
       "--",
@@ -1387,6 +1409,21 @@
       "import sys; sys.exit(0)"
     ],
     "name": "base_unittests (retry with patch summary)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "Tests statistics",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>Stats<br/>Total shards: 2<br/>Total runtime: 0:01:03 <br/>@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total shards: 2@@@",
+      "@@@STEP_LOG_LINE@detailed stats@Total runtime: 0:01:03 @@@",
+      "@@@STEP_LOG_LINE@detailed stats@Min/mean/max: 31s / 31s / 31s@@@",
+      "@@@STEP_LOG_END@detailed stats@@@"
+    ]
   },
   {
     "jsonResult": null,

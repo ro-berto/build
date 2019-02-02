@@ -895,6 +895,10 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     This function runs tests with the CL patched in. On failure, this will
     deapply the patch, rebuild/isolate binaries, and run the failing tests.
+
+    Returns:
+      An array of test suites which irrecoverably failed. If all test suites
+      succeeded, returns an empty array.
     """
     with self.wrap_chromium_tests(bot_config, tests):
       # Run the test. The isolates have already been created.
@@ -908,16 +912,12 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         if not test_suite.should_retry_with_patch:
           unrecoverable_test_suites.append(test_suite)
       if unrecoverable_test_suites:
-        # TODO(erikchen): This is a temporary placeholder as part of a larger
-        # refactor to simplify the control flow. https://crbug.com/927524.
-        exit_message = ' '.join(
-            [x.name + ' failed.' for x in unrecoverable_test_suites])
-        raise self.m.step.StepFailure(exit_message)
+        return unrecoverable_test_suites
 
       # If there are no failures or if the config says that we only care about
       # the results with patch, we are done.
       if not failing_tests or self.c.only_with_patch:
-        return
+        return []
 
       # If there are failures but we shouldn't deapply the patch, then skip the
       # 'deapply patch' step.
@@ -934,11 +934,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
             unrecoverable_test_suites.append(t)
         if unrecoverable_test_suites:
-          # TODO(erikchen): This is a temporary placeholder as part of a larger
-          # refactor to simplify the control flow. https://crbug.com/927524.
-          exit_message = ' '.join(
-              [x.name + ' failed.' for x in unrecoverable_test_suites])
-          raise self.m.step.StepFailure(exit_message)
+          return unrecoverable_test_suites
 
       if should_deapply_patch:
         # Deapply the patch. Then rerun failing tests.
@@ -962,11 +958,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             test_suites_to_retry_with_patch.append(t)
 
         if unrecoverable_test_suites:
-          # TODO(erikchen): This is a temporary placeholder as part of a larger
-          # refactor to simplify the control flow. https://crbug.com/927524.
-          exit_message = ' '.join(
-              [x.name + ' failed.' for x in unrecoverable_test_suites])
-          raise self.m.step.StepFailure(exit_message)
+          return unrecoverable_test_suites
       else:
         test_suites_to_retry_with_patch = failing_tests
 
@@ -985,12 +977,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
             self.m.test_utils.summarize_test_with_patch_reapplied(self.m, t))
         if not success:
           unrecoverable_test_suites.append(t)
-      if unrecoverable_test_suites:
-        # TODO(erikchen): This is a temporary placeholder as part of a larger
-        # refactor to simplify the control flow. https://crbug.com/927524.
-        exit_message = ' '.join(
-            [x.name + ' failed.' for x in unrecoverable_test_suites])
-        raise self.m.step.StepFailure(exit_message)
+      return unrecoverable_test_suites
 
   def _build_bisect_gs_archive_url(self, master_config):
     return self.m.archive.legacy_upload_url(
@@ -1220,9 +1207,13 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       self.m.python.succeeding_step('mark: before_tests', '')
       if tests:
-        self._run_tests_on_tryserver(
+        unrecoverable_test_suites = self._run_tests_on_tryserver(
             bot_config_object, tests, bot_update_step, affected_files)
         self.m.swarming.report_stats()
+        if unrecoverable_test_suites:
+          exit_message = ' '.join(
+              [x.name + ' failed.' for x in unrecoverable_test_suites])
+          raise self.m.step.StepFailure(exit_message)
 
   def _trybot_steps_internal(self, builders=None, trybots=None):
     """Initial configuration for all trybots.

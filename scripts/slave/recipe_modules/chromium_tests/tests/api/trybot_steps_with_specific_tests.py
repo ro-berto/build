@@ -9,6 +9,7 @@ from recipe_engine import post_process
 DEPS = [
     'chromium_tests',
     'recipe_engine/properties',
+    'recipe_engine/step',
     'swarming',
     'test_utils',
 ]
@@ -35,11 +36,15 @@ def RunSteps(api):
   if api.properties.get('disable_retry_with_patch'):
     test._should_retry_with_patch = False
 
-  api.chromium_tests._run_tests_on_tryserver(
-      bot_config_object,
-      tests=[test],
-      bot_update_step=update_step,
-      affected_files=api.properties.get('affected_files', []))
+  affected_files = api.properties.get('affected_files', [])
+
+  # Override _trybot_steps_internal to run the desired test, in the desired
+  # configuration.
+  def config_override(**kwargs):
+    return (bot_config_object, update_step, affected_files, [test])
+  api.chromium_tests._trybot_steps_internal = config_override
+
+  api.chromium_tests.trybot_steps()
 
 
 def GenTests(api):

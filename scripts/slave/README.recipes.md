@@ -151,12 +151,12 @@
   * [chromium_tests:tests/api/main_waterfall_steps](#recipes-chromium_tests_tests_api_main_waterfall_steps)
   * [chromium_tests:tests/api/package_build](#recipes-chromium_tests_tests_api_package_build)
   * [chromium_tests:tests/api/prepare_checkout](#recipes-chromium_tests_tests_api_prepare_checkout)
-  * [chromium_tests:tests/api/run_tests_on_tryserver](#recipes-chromium_tests_tests_api_run_tests_on_tryserver)
   * [chromium_tests:tests/api/runhooks](#recipes-chromium_tests_tests_api_runhooks)
   * [chromium_tests:tests/api/set_up_swarming](#recipes-chromium_tests_tests_api_set_up_swarming)
   * [chromium_tests:tests/api/swarming_details](#recipes-chromium_tests_tests_api_swarming_details)
   * [chromium_tests:tests/api/trigger_child_builds](#recipes-chromium_tests_tests_api_trigger_child_builds)
   * [chromium_tests:tests/api/trybot_steps](#recipes-chromium_tests_tests_api_trybot_steps)
+  * [chromium_tests:tests/api/trybot_steps_with_specific_tests](#recipes-chromium_tests_tests_api_trybot_steps_with_specific_tests)
   * [chromium_tests:tests/api/wrap_chromium_tests](#recipes-chromium_tests_tests_api_wrap_chromium_tests)
   * [chromium_tests:tests/builders](#recipes-chromium_tests_tests_builders) &mdash; Test to ensure the validity of the entries within BUILDERS.
   * [chromium_tests:tests/configs](#recipes-chromium_tests_tests_configs)
@@ -1509,11 +1509,11 @@ Returns:
 
 &mdash; **def [generate\_tests\_from\_test\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#276)(self, \*args):**
 
-&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1026)(self, bot_config=None):**
+&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1013)(self, bot_config=None):**
 
 &mdash; **def [get\_compile\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#336)(self, bot_config, bot_db, tests):**
 
-&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1060)(self, bot_config=None):**
+&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1047)(self, bot_config=None):**
 
 This gets the combined compile_targets information from the
 //testing/scripts/get_compile_targets.py script.
@@ -1550,7 +1550,7 @@ are committed.
 
 &mdash; **def [log](/scripts/slave/recipe_modules/chromium_tests/api.py#79)(self, message):**
 
-&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1092)(self, mb_config_path=None, builders=None):**
+&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1079)(self, mb_config_path=None, builders=None):**
 
 &mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#458)(self, mastername, buildername, update_step, bot_db):**
 
@@ -1593,7 +1593,7 @@ Usage is generally discouraged.
 
 &mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#548)(self, mastername, buildername, update_step, bot_db, additional_properties=None):**
 
-&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1216)(self, builders=None, trybots=None):**
+&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1203)(self, builders=None, trybots=None):**
 
 &emsp; **@property**<br>&mdash; **def [trybots](/scripts/slave/recipe_modules/chromium_tests/api.py#68)(self):**
 
@@ -4681,11 +4681,6 @@ index packs (used to generate xrefs) are all generated from the same revision.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/prepare_checkout.py#5): [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/prepare_checkout.py#39)(api):**
-### *recipes* / [chromium\_tests:tests/api/run\_tests\_on\_tryserver](/scripts/slave/recipe_modules/chromium_tests/tests/api/run_tests_on_tryserver.py)
-
-[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/run_tests_on_tryserver.py#9): [chromium\_tests](#recipe_modules-chromium_tests), [swarming](#recipe_modules-swarming), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
-
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/run_tests_on_tryserver.py#17)(api):**
 ### *recipes* / [chromium\_tests:tests/api/runhooks](/scripts/slave/recipe_modules/chromium_tests/tests/api/runhooks.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/runhooks.py#5): [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
@@ -4711,6 +4706,11 @@ index packs (used to generate xrefs) are all generated from the same revision.
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py#8): [chromium\_tests](#recipe_modules-chromium_tests), [filter](#recipe_modules-filter), [swarming](#recipe_modules-swarming), [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps.py#59)(api):**
+### *recipes* / [chromium\_tests:tests/api/trybot\_steps\_with\_specific\_tests](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_with_specific_tests.py)
+
+[DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_with_specific_tests.py#9): [chromium\_tests](#recipe_modules-chromium_tests), [swarming](#recipe_modules-swarming), [test\_utils](#recipe_modules-test_utils), [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/chromium_tests/tests/api/trybot_steps_with_specific_tests.py#18)(api):**
 ### *recipes* / [chromium\_tests:tests/api/wrap\_chromium\_tests](/scripts/slave/recipe_modules/chromium_tests/tests/api/wrap_chromium_tests.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_tests/tests/api/wrap_chromium_tests.py#7): [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
