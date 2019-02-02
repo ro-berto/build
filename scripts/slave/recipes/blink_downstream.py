@@ -25,6 +25,7 @@ Revision Y will be the revision property as provided by buildbot or HEAD (i.e.
 in a forced build with no revision provided).
 """
 
+from recipe_engine import post_process
 from recipe_engine.types import freeze
 
 DEPS = [
@@ -156,7 +157,13 @@ class DetermineFailuresTool(object):
     # builders more reliable.
     test._should_retry_with_patch = False
 
-    failing_tests = self.api.test_utils.run_tests_with_patch(self.api, [test])
+    invalid_test_suites, failing_tests = (
+        self.api.test_utils.run_tests_with_patch(self.api, [test]))
+
+    # There's no point in running 'without patch' if the initial test run failed
+    # to produce valid results.
+    if invalid_test_suites:
+      raise self.api.step.StepFailure(test.name + ' failed.')
 
     if not failing_tests:
       return
@@ -325,6 +332,17 @@ def GenTests(api):
         passing=False, isolated_script_passing=False)) +
     api.override_step_data(without_patch, canned_test(
         passing=True, isolated_script_passing=True))
+  )
+
+  # If with_patch produces invalid results, then the whole build should fail.
+  yield (
+    api.test('invalid_results') +
+    properties('client.v8.fyi', 'V8-Blink Linux 64') +
+    api.override_step_data(with_patch,
+        api.test_utils.canned_isolated_script_output(passing=False,
+                                                     valid=False)) +
+    api.post_process(post_process.StatusFailure) +
+    api.post_process(post_process.DropExpectation)
   )
 
   # This tests what happens if something goes horribly wrong in

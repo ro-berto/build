@@ -898,7 +898,21 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
     """
     with self.wrap_chromium_tests(bot_config, tests):
       # Run the test. The isolates have already been created.
-      failing_tests = self.m.test_utils.run_tests_with_patch(self.m, tests)
+      invalid_test_suites, failing_tests = (
+          self.m.test_utils.run_tests_with_patch(self.m, tests))
+
+      # An invalid result is unrecoverable if and only if we are not going to
+      # run 'retry with patch'.
+      unrecoverable_test_suites = []
+      for test_suite in invalid_test_suites:
+        if not test_suite.should_retry_with_patch:
+          unrecoverable_test_suites.append(test_suite)
+      if unrecoverable_test_suites:
+        # TODO(erikchen): This is a temporary placeholder as part of a larger
+        # refactor to simplify the control flow. https://crbug.com/927524.
+        exit_message = ' '.join(
+            [x.name + ' failed.' for x in unrecoverable_test_suites])
+        raise self.m.step.StepFailure(exit_message)
 
       # If there are no failures or if the config says that we only care about
       # the results with patch, we are done.

@@ -225,32 +225,32 @@ class TestUtilsApi(recipe_api.RecipeApi):
       caller_api: The api object given by the caller of this module.
       tests: A list of test suites to run with the patch.
 
-    Returns: A list of test suites that either have invalid results or
-    consistently failing tests.
+    Returns: A tuple (invalid_test_suites, all_failing_test_suites).
+      invalid_test_suites: Test suites that do not have valid test results.
+      all_failing_test_suites:
+          This includes test suites than ran but have failing tests, test suites
+          that do not have valid test results, and test suites that failed with
+          otherwise unspecified reasons. This is a superset of
+          invalid_test_suites.
     """
-    failing_tests = self.run_tests(caller_api, tests, 'with patch',
-                                   sort_by_shard=True)
-    with self.m.step.defer_results():
-      for t in tests:
-        valid_results, failures = t.with_patch_failures(caller_api)
+    all_failing_tests = self.run_tests(caller_api, tests, 'with patch',
+                                       sort_by_shard=True)
+    invalid_test_suites = []
 
-        if not valid_results:
-          # An invalid result is fatal if and only if we are not going to run
-          # 'retry with patch'.
-          self._invalid_test_results(t)
+    for t in tests:
+      valid_results, failures = t.with_patch_failures(caller_api)
 
-          # TODO(erikchen): This is a temporary placeholder as part of a larger
-          # refactor to simplify the control flow. https://crbug.com/927524.
-          if not t.should_retry_with_patch:
-            raise caller_api.step.StepFailure(t.name + ' failed.')
+      if not valid_results:
+        self._invalid_test_results(t)
+        invalid_test_suites.append(t)
 
-        # No need to re-add a test_suite that is already in the return list.
-        if t in failing_tests:
-          continue
+      # No need to re-add a test_suite that is already in the return list.
+      if t in all_failing_tests:
+        continue
 
-        if not valid_results or failures:
-          failing_tests.append(t)
-    return failing_tests
+      if not valid_results or failures:
+        all_failing_tests.append(t)
+    return (invalid_test_suites, all_failing_tests)
 
   def _invalid_test_results(self, test):
     """Marks test results as invalid.

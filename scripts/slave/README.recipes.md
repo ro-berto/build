@@ -1509,11 +1509,11 @@ Returns:
 
 &mdash; **def [generate\_tests\_from\_test\_spec](/scripts/slave/recipe_modules/chromium_tests/api.py#276)(self, \*args):**
 
-&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1012)(self, bot_config=None):**
+&mdash; **def [get\_common\_args\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1026)(self, bot_config=None):**
 
 &mdash; **def [get\_compile\_targets](/scripts/slave/recipe_modules/chromium_tests/api.py#336)(self, bot_config, bot_db, tests):**
 
-&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1046)(self, bot_config=None):**
+&mdash; **def [get\_compile\_targets\_for\_scripts](/scripts/slave/recipe_modules/chromium_tests/api.py#1060)(self, bot_config=None):**
 
 This gets the combined compile_targets information from the
 //testing/scripts/get_compile_targets.py script.
@@ -1550,7 +1550,7 @@ are committed.
 
 &mdash; **def [log](/scripts/slave/recipe_modules/chromium_tests/api.py#79)(self, message):**
 
-&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1078)(self, mb_config_path=None, builders=None):**
+&mdash; **def [main\_waterfall\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1092)(self, mb_config_path=None, builders=None):**
 
 &mdash; **def [package\_build](/scripts/slave/recipe_modules/chromium_tests/api.py#458)(self, mastername, buildername, update_step, bot_db):**
 
@@ -1593,7 +1593,7 @@ Usage is generally discouraged.
 
 &mdash; **def [trigger\_child\_builds](/scripts/slave/recipe_modules/chromium_tests/api.py#548)(self, mastername, buildername, update_step, bot_db, additional_properties=None):**
 
-&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1202)(self, builders=None, trybots=None):**
+&mdash; **def [trybot\_steps](/scripts/slave/recipe_modules/chromium_tests/api.py#1216)(self, builders=None, trybots=None):**
 
 &emsp; **@property**<br>&mdash; **def [trybots](/scripts/slave/recipe_modules/chromium_tests/api.py#68)(self):**
 
@@ -3609,8 +3609,13 @@ Args:
   caller_api: The api object given by the caller of this module.
   tests: A list of test suites to run with the patch.
 
-Returns: A list of test suites that either have invalid results or
-consistently failing tests.
+Returns: A tuple (invalid_test_suites, all_failing_test_suites).
+  invalid_test_suites: Test suites that do not have valid test results.
+  all_failing_test_suites:
+      This includes test suites than ran but have failing tests, test suites
+      that do not have valid test results, and test suites that failed with
+      otherwise unspecified reasons. This is a superset of
+      invalid_test_suites.
 
 &mdash; **def [summarize\_failing\_test\_with\_no\_retries](/scripts/slave/recipe_modules/test_utils/api.py#405)(self, caller_api, test_suite):**
 
@@ -4240,7 +4245,7 @@ Checks that properties get to recipes from annotated_run properly
 &mdash; **def [RunSteps](/scripts/slave/recipes/bisection/desktop_bisect_staging.py#21)(api):**
 ### *recipes* / [blink\_downstream](/scripts/slave/recipes/blink_downstream.py)
 
-[DEPS](/scripts/slave/recipes/blink_downstream.py#30): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [isolate](#recipe_modules-isolate), [swarming](#recipe_modules-swarming), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+[DEPS](/scripts/slave/recipes/blink_downstream.py#31): [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_tests](#recipe_modules-chromium_tests), [isolate](#recipe_modules-isolate), [swarming](#recipe_modules-swarming), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 This recipe can be used by components like v8 to verify blink tests with a
 low false positive rate. Similar to a trybot, this recipe compares test
@@ -4263,11 +4268,11 @@ Summary of the recipe flow:
 Revision Y will be the revision property as provided by buildbot or HEAD (i.e.
 in a forced build with no revision provided).
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/blink_downstream.py#219)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/blink_downstream.py#226)(api):**
 
-&mdash; **def [V8Builder](/scripts/slave/recipes/blink_downstream.py#48)(config, bits, platform, swarming_shards, swarming_priority=35):**
+&mdash; **def [V8Builder](/scripts/slave/recipes/blink_downstream.py#49)(config, bits, platform, swarming_shards, swarming_priority=35):**
 
-&mdash; **def [build](/scripts/slave/recipes/blink_downstream.py#89)(api, suffix):**
+&mdash; **def [build](/scripts/slave/recipes/blink_downstream.py#90)(api, suffix):**
 
 Compiles and isolates the checked-out code.
 
