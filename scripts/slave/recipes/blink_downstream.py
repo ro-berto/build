@@ -168,9 +168,11 @@ class DetermineFailuresTool(object):
       self.set_baseline(failing_tests[0])
       self.api.test_utils.run_tests(self.api, failing_tests, 'without patch')
     finally:
-      with self.api.step.defer_results():
-        self.api.test_utils.summarize_test_with_patch_deapplied(
-            self.api, failing_tests[0], failure_is_fatal=True)
+      success = self.api.test_utils.summarize_test_with_patch_deapplied(
+          self.api, failing_tests[0])
+      if not success:
+        raise self.api.step.StepFailure(failing_tests[0].name + ' failed.')
+
 
 
 class DetermineFutureFailuresTool(DetermineFailuresTool):

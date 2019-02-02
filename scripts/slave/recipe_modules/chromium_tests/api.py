@@ -914,34 +914,45 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       # If there are tests that failed, for which we are skipping both
       # 'without patch' and 'retry with patch', then the failures are fatal.
       if not should_deapply_patch:
+        unrecoverable_test_suites = []
         for t in failing_tests:
           if not t.should_retry_with_patch:
             self.m.test_utils.summarize_failing_test_with_no_retries(self.m, t)
+            unrecoverable_test_suites.append(t)
+        if unrecoverable_test_suites:
+          # TODO(erikchen): This is a temporary placeholder as part of a larger
+          # refactor to simplify the control flow. https://crbug.com/927524.
+          exit_message = ' '.join(
+              [x.name + ' failed.' for x in unrecoverable_test_suites])
+          raise self.m.step.StepFailure(exit_message)
 
       if should_deapply_patch:
-        deferred_retry_results = []
         # Deapply the patch. Then rerun failing tests.
         self._deapply_patch_build_isolate(failing_tests, bot_update_step)
         self.m.test_utils.run_tests(self.m, failing_tests, 'without patch',
                                     sort_by_shard=True)
 
-        # Summarize results.
-        with self.m.step.defer_results():
-          for t in failing_tests:
-            # If we are not planning to run 'retry with patch', then failures
-            # are fatal.
-            failure_is_fatal = not t.should_retry_with_patch
-            deferred_result = (self.m.test_utils.
-              summarize_test_with_patch_deapplied(
-                  self.m, t, failure_is_fatal=failure_is_fatal))
+        unrecoverable_test_suites = []
+        for t in failing_tests:
+          # Summarize results.
+          success = (self.m.test_utils.
+            summarize_test_with_patch_deapplied(self.m, t))
 
-            if t.should_retry_with_patch:
-              deferred_retry_results.append((deferred_result, t))
+          # If we are not planning to run 'retry with patch', then failures
+          # are fatal.
+          failure_is_fatal = not t.should_retry_with_patch
+          if not success and failure_is_fatal:
+            unrecoverable_test_suites.append(t)
 
-        # Looks for test suites that have to be retried.
-        for deferred_result, test in deferred_retry_results:
-          if not deferred_result.get_result():
-            test_suites_to_retry_with_patch.append(test)
+          if not success:
+            test_suites_to_retry_with_patch.append(t)
+
+        if unrecoverable_test_suites:
+          # TODO(erikchen): This is a temporary placeholder as part of a larger
+          # refactor to simplify the control flow. https://crbug.com/927524.
+          exit_message = ' '.join(
+              [x.name + ' failed.' for x in unrecoverable_test_suites])
+          raise self.m.step.StepFailure(exit_message)
       else:
         test_suites_to_retry_with_patch = failing_tests
 
@@ -954,9 +965,18 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
                                         bot_config)
       self.m.test_utils.run_tests(self.m, test_suites_to_retry_with_patch,
                                   'retry with patch', sort_by_shard=True)
-      with self.m.step.defer_results():
-        for t in test_suites_to_retry_with_patch:
-          self.m.test_utils.summarize_test_with_patch_reapplied(self.m, t)
+      unrecoverable_test_suites = []
+      for t in test_suites_to_retry_with_patch:
+        success = (
+            self.m.test_utils.summarize_test_with_patch_reapplied(self.m, t))
+        if not success:
+          unrecoverable_test_suites.append(t)
+      if unrecoverable_test_suites:
+        # TODO(erikchen): This is a temporary placeholder as part of a larger
+        # refactor to simplify the control flow. https://crbug.com/927524.
+        exit_message = ' '.join(
+            [x.name + ' failed.' for x in unrecoverable_test_suites])
+        raise self.m.step.StepFailure(exit_message)
 
   def _build_bisect_gs_archive_url(self, master_config):
     return self.m.archive.legacy_upload_url(

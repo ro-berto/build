@@ -1871,9 +1871,9 @@
   {
     "failure": {
       "failure": {
-        "step": "Aggregate step failure."
+        "step": ""
       },
-      "humanReason": "1 out of 1 aggregated steps failed: webkit_layout_tests failed."
+      "humanReason": "webkit_layout_tests failed."
     },
     "name": "$result"
   }
