@@ -184,10 +184,44 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[START_DIR]/gems"
+    ],
+    "infra_step": true,
+    "name": "mkdir gems"
+  },
+  {
+    "cmd": [
+      "gem",
+      "install",
+      "cocoapods:1.5.3",
+      "--install-dir",
+      "."
+    ],
+    "cwd": "[START_DIR]/gems",
+    "name": "install cocoapods"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[START_DIR]/flutter/dev/bots/download_android_tools.py",
       "-t",
       "sdk"
     ],
+    "env": {
+      "GEM_HOME": "[START_DIR]/gems"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -207,6 +241,14 @@
       "--outfile",
       "[START_DIR]/flutter/dev/bots/gradle-2.14.1-bin.zip"
     ],
+    "env": {
+      "GEM_HOME": "[START_DIR]/gems"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -220,6 +262,14 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
+    "env": {
+      "GEM_HOME": "[START_DIR]/gems"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -234,6 +284,14 @@
       "-c",
       "[START_DIR]/flutter/dev/bots/android_tools/sdk/tools/bin/sdkmanager --list"
     ],
+    "env": {
+      "GEM_HOME": "[START_DIR]/gems"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -250,9 +308,15 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache",
       "SHARD": "tests"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
     },
     "name": "run test.dart for tests shard"
   },
@@ -267,8 +331,14 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
     },
     "name": "flutter build apk stocks"
   },
@@ -284,8 +354,14 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
     },
     "name": "flutter build ios stocks"
   },
@@ -302,8 +378,14 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
     },
     "name": "flutter build ios debug stocks"
   },
@@ -319,8 +401,14 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
     },
     "name": "flutter build ios simulator stocks"
   },
@@ -335,8 +423,14 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
     },
     "name": "flutter build apk flutter_gallery"
   },
@@ -352,8 +446,14 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
     },
     "name": "flutter build ios flutter_gallery"
   },
@@ -370,8 +470,14 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
     },
     "name": "flutter build ios debug flutter_gallery"
   },
@@ -387,8 +493,14 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "GEM_HOME": "[START_DIR]/gems",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
     },
     "name": "flutter build ios simulator flutter_gallery"
   },

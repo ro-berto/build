@@ -7813,6 +7813,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -7830,6 +7831,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -7852,6 +7854,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },
@@ -7876,6 +7879,7 @@
     },
     "env_prefixes": {
       "PATH": [
+        "[START_DIR]/gems/bin",
         "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
       ]
     },

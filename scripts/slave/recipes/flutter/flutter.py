@@ -41,7 +41,8 @@ def _PlatformSDK(api):
           yield
     elif api.platform.is_mac:
       with api.osx_sdk('ios'):
-        yield
+        with InstallGem(api, 'cocoapods', api.properties['cocoapods_version']):
+          yield
     else:
       yield
   else:
@@ -56,6 +57,35 @@ def InstallOpenJDK(api):
     env={'JAVA_HOME': java_cache_dir},
     env_prefixes={'PATH': [java_cache_dir.join('bin')]}
   )
+
+@contextmanager
+def InstallGem(api, gem_name, gem_version):
+  gem_dir = api.path['start_dir'].join('gems')
+  api.file.ensure_directory('mkdir gems', gem_dir)
+  with api.context(cwd=gem_dir):
+    api.step('install ' + gem_name, ['gem', 'install', gem_name + ':' + gem_version, '--install-dir', '.'])
+  with api.context(env={"GEM_HOME": gem_dir}, env_prefixes={'PATH': [gem_dir.join('bin')]}):
+    yield
+
+def EnsureCloudKMS(api, version=None):
+  with api.step.nest('ensure_cloudkms'):
+    with api.context(infra_steps=True):
+      pkgs = api.cipd.EnsureFile()
+      pkgs.add_package('infra/tools/luci/cloudkms/${platform}', version or 'latest')
+      cipd_dir = api.path['start_dir'].join('cipd', 'cloudkms')
+      api.cipd.ensure(cipd_dir, pkgs)
+      return cipd_dir.join('cloudkms')
+
+def DecryptKMS(api, step_name, crypto_key_path, ciphertext_file,
+            plaintext_file):
+  kms_path = EnsureCloudKMS(api)
+  return api.step(step_name, [
+      kms_path,
+      'decrypt',
+      '-input', ciphertext_file,
+      '-output', plaintext_file,
+      crypto_key_path,
+  ])
 
 def GetPuppetApiTokenPath(api, token_name):
   """Returns the path to a the token file
@@ -176,14 +206,25 @@ def UploadFlutterCoverage(api):
       link_name='lcov.info',
       name='upload coverage data')
 
-  # Upload latest coverage to Coveralls.
-  token_path = GetPuppetApiTokenPath(api, 'flutter-coveralls-api-token')
-  with api.context(cwd=checkout.join('packages', 'flutter')):
-    api.build.python(
-        'upload coverage data to Coveralls',
-        api.resource('upload_to_coveralls.py'),
-        ['--token-file=%s' % token_path,
-         '--coverage-path=%s' % coverage_path])
+  def CoverallsUpload(token_path):
+    with api.context(cwd=checkout.join('packages', 'flutter')):
+      api.build.python(
+          'upload coverage data to Coveralls',
+          api.resource('upload_to_coveralls.py'),
+          ['--token-file=%s' % token_path,
+          '--coverage-path=%s' % coverage_path])
+
+  if api.runtime.is_luci:
+    with InstallGem(api, 'coveralls-lcov', api.properties['coveralls_lcov_version']):
+      token_path = api.path.mkstemp(prefix='coveralls')
+      DecryptKMS(api, 'decrypt coveralls token',
+              'flutter-infra/global/luci/coveralls',
+              api.resource('coveralls-token.enc'),
+              token_path)
+      CoverallsUpload(token_path)
+  else:
+    CoverallsUpload(GetPuppetApiTokenPath(api, 'flutter-coveralls-api-token'))
+
 
 
 def CreateAndUploadFlutterPackage(api, git_hash, branch):
@@ -323,7 +364,7 @@ def GenTests(api):
           test = (
               api.test('%s_%s_%s_%s' % (platform, branch, luci, experimental)) + api.platform(platform, 64) +
               api.buildbucket.ci_build(git_ref=git_ref, revision=None) +
-              api.properties(clobber='', shard='tests') +
+              api.properties(clobber='', shard='tests', cocoapods_version='1.5.3') +
               api.runtime(is_luci=luci, is_experimental=experimental))
           if platform == 'mac' and branch == 'master' and not luci:
             test += (
@@ -340,10 +381,16 @@ def GenTests(api):
           yield test
 
   yield (api.test('linux_master_coverage') +
-         api.runtime(is_luci=True, is_experimental=True) +
+         api.runtime(is_luci=False, is_experimental=True) +
          api.properties(clobber='', shard='coverage') +
          api.override_step_data('upload coverage data to Coveralls',
                                       api.raw_io.output('')))
+  yield (api.test('linux_master_coverage_luci') +
+         api.runtime(is_luci=True, is_experimental=True) +
+         api.properties(clobber='', shard='coverage', coveralls_lcov_version='1.5.1') +
+         api.override_step_data('upload coverage data to Coveralls',
+                                      api.raw_io.output('')))
+
 
   yield (api.test('mac_cannot_find_xcode') + api.platform('mac', 64) +
          api.properties(clobber='', shard='tests') +

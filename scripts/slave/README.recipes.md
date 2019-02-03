@@ -5297,33 +5297,39 @@ Locates and switches to a version of Xcode matching target_version.
 
 [DEPS](/scripts/slave/recipes/flutter/flutter.py#8): [build](#recipe_modules-build), [zip](#recipe_modules-zip), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/windows\_sdk][depot_tools/recipe_modules/windows_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
-&mdash; **def [BuildExamples](/scripts/slave/recipes/flutter/flutter.py#75)(api, git_hash, flutter_executable):**
+&mdash; **def [BuildExamples](/scripts/slave/recipes/flutter/flutter.py#105)(api, git_hash, flutter_executable):**
 
-&mdash; **def [CreateAndUploadFlutterPackage](/scripts/slave/recipes/flutter/flutter.py#189)(api, git_hash, branch):**
+&mdash; **def [CreateAndUploadFlutterPackage](/scripts/slave/recipes/flutter/flutter.py#230)(api, git_hash, branch):**
 
 Prepares, builds, and uploads an all-inclusive archive package.
 
-&mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/flutter.py#69)(api, git_hash, path):**
+&mdash; **def [DecryptKMS](/scripts/slave/recipes/flutter/flutter.py#79)(api, step_name, crypto_key_path, ciphertext_file, plaintext_file):**
 
-&mdash; **def [GetPuppetApiTokenPath](/scripts/slave/recipes/flutter/flutter.py#60)(api, token_name):**
+&mdash; **def [EnsureCloudKMS](/scripts/slave/recipes/flutter/flutter.py#70)(api, version=None):**
+
+&mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/flutter.py#99)(api, git_hash, path):**
+
+&mdash; **def [GetPuppetApiTokenPath](/scripts/slave/recipes/flutter/flutter.py#90)(api, token_name):**
 
 Returns the path to a the token file
 
 The file is located where ChromeOps Puppet drops generic secrets.
 
-&mdash; **def [InstallGradle](/scripts/slave/recipes/flutter/flutter.py#149)(api, checkout):**
+&emsp; **@contextmanager**<br>&mdash; **def [InstallGem](/scripts/slave/recipes/flutter/flutter.py#61)(api, gem_name, gem_version):**
 
-&mdash; **def [InstallOpenJDK](/scripts/slave/recipes/flutter/flutter.py#50)(api):**
+&mdash; **def [InstallGradle](/scripts/slave/recipes/flutter/flutter.py#179)(api, checkout):**
 
-&mdash; **def [RunFindXcode](/scripts/slave/recipes/flutter/flutter.py#118)(api, ios_tools_path, target_version):**
+&mdash; **def [InstallOpenJDK](/scripts/slave/recipes/flutter/flutter.py#51)(api):**
+
+&mdash; **def [RunFindXcode](/scripts/slave/recipes/flutter/flutter.py#148)(api, ios_tools_path, target_version):**
 
 Locates and switches to a version of Xcode matching target_version.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/flutter.py#222)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/flutter.py#263)(api):**
 
-&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/flutter.py#132)(api):**
+&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/flutter.py#162)(api):**
 
-&mdash; **def [UploadFlutterCoverage](/scripts/slave/recipes/flutter/flutter.py#166)(api):**
+&mdash; **def [UploadFlutterCoverage](/scripts/slave/recipes/flutter/flutter.py#196)(api):**
 
 Uploads the Flutter coverage output to cloud storage and Coveralls.
   
