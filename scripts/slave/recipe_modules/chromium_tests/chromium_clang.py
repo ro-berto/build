@@ -12,7 +12,8 @@ def config(name,
            build_config='Release',
            chromium_config='clang_tot_linux',
            target_arch='intel',
-           target_bits=64):
+           target_bits=64,
+           official=False):
   cfg = {
     'chromium_config': chromium_config,
     'chromium_apply_config': [
@@ -45,6 +46,9 @@ def config(name,
       cfg['android_config'] = android_config
       cfg['chromium_config_kwargs']['TARGET_PLATFORM'] = 'android'
       cfg['gclient_apply_config'] = ['android']
+
+  if official:
+      cfg['gclient_apply_config'] = ['chrome_internal']
 
   return name, cfg
 
@@ -573,6 +577,8 @@ SPEC['builders'].update([
            target_bits=32),
 
     config('ToTLinux'),
+
+    config('ToTLinuxOfficial', official=True),
 
     config('ToTLinux (dbg)',
            build_config='Debug'),
