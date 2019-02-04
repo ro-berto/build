@@ -56,14 +56,17 @@ def GenTests(api):
   def props(mastername='chromium.linux',
             builder='Linux Tests',
             parent_buildername='Linux Builder',
+            build_number=None,
             **kwargs):
     bb_kwargs = {
         'project': 'chromium/src',
         'builder': builder,
     }
+    if build_number is not None:
+      bb_kwargs['build_number'] = build_number
+
     kwargs.update({
         'mastername': mastername,
-        'buildername':builder,
     })
     if parent_buildername:
       kwargs['parent_buildername'] = parent_buildername
@@ -538,7 +541,7 @@ def GenTests(api):
 
   yield (
     api.test('dynamic_swarmed_sharded_passed_isolated_script_test') +
-    props(buildnumber='1234',
+    props(build_number=1234,
           version='v23523',
           git_revision='a' * 40,
           swarm_hashes={
@@ -1380,7 +1383,7 @@ def GenTests(api):
 
   yield (
     api.test('buildnumber_zero') +
-    props(buildnumber=0) +
+    props(build_number=0) +
     api.platform('linux', 64) +
     api.chromium_tests.read_source_side_spec(
         'chromium.linux', {
@@ -1466,7 +1469,7 @@ def GenTests(api):
     props(
         mastername='chromium.fyi',
         builder='Linux remote_run Builder',
-        buildnumber='77457',
+        build_number=77457,
         path_config='kitchen')
   )
 
@@ -1475,7 +1478,7 @@ def GenTests(api):
     props(
         mastername='chromium.fyi',
         builder='Linux remote_run Builder',
-        buildnumber='77457',
+        build_number=77457,
         path_config='generic')
   )
 
@@ -1484,7 +1487,7 @@ def GenTests(api):
     props(
         mastername='chromium.fyi',
         builder='Linux remote_run Builder',
-        buildnumber='77457',
+        build_number=77457,
         path_config='kitchen') +
     api.override_step_data('ensure_goma.ensure_installed', retcode=1)
   )
