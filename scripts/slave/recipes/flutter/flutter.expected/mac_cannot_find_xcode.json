@@ -111,7 +111,7 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "name": "flutter doctor"
@@ -125,7 +125,7 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "name": "download dependencies"

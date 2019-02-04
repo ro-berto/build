@@ -110,7 +110,7 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "name": "flutter doctor"
@@ -124,7 +124,7 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "name": "download dependencies"
@@ -208,6 +208,22 @@
   },
   {
     "cmd": [
+      "pod",
+      "setup"
+    ],
+    "env": {
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
+      "GEM_HOME": "[START_DIR]/gems"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/gems/bin"
+      ]
+    },
+    "name": "pod setup"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[START_DIR]/flutter/dev/bots/download_android_tools.py",
@@ -215,6 +231,7 @@
       "sdk"
     ],
     "env": {
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
       "GEM_HOME": "[START_DIR]/gems"
     },
     "env_prefixes": {
@@ -235,13 +252,14 @@
       "-u",
       "RECIPE_MODULE[recipe_engine::url]/resources/pycurl.py",
       "--url",
-      "https://services.gradle.org/distributions/gradle-2.14.1-bin.zip",
+      "https://services.gradle.org/distributions/gradle-4.10.2-all.zip",
       "--status-json",
       "/path/to/tmp/json",
       "--outfile",
-      "[START_DIR]/flutter/dev/bots/gradle-2.14.1-bin.zip"
+      "[START_DIR]/flutter/dev/bots/gradle-4.10.2-all.zip"
     ],
     "env": {
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
       "GEM_HOME": "[START_DIR]/gems"
     },
     "env_prefixes": {
@@ -263,6 +281,7 @@
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
     "env": {
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
       "GEM_HOME": "[START_DIR]/gems"
     },
     "env_prefixes": {
@@ -276,7 +295,7 @@
       ]
     },
     "name": "unzip gradle",
-    "stdin": "{\"output\": \"[START_DIR]/flutter/dev/bots/gradle\", \"quiet\": false, \"zip_file\": \"[START_DIR]/flutter/dev/bots/gradle-2.14.1-bin.zip\"}"
+    "stdin": "{\"output\": \"[START_DIR]/flutter/dev/bots/gradle\", \"quiet\": false, \"zip_file\": \"[START_DIR]/flutter/dev/bots/gradle-4.10.2-all.zip\"}"
   },
   {
     "cmd": [
@@ -285,6 +304,7 @@
       "[START_DIR]/flutter/dev/bots/android_tools/sdk/tools/bin/sdkmanager --list"
     ],
     "env": {
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
       "GEM_HOME": "[START_DIR]/gems"
     },
     "env_prefixes": {
@@ -307,9 +327,10 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
       "GEM_HOME": "[START_DIR]/gems",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache",
       "SHARD": "tests"
     },
@@ -330,9 +351,10 @@
     "cwd": "[START_DIR]/flutter/examples/stocks",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
       "GEM_HOME": "[START_DIR]/gems",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -353,9 +375,10 @@
     "cwd": "[START_DIR]/flutter/examples/stocks",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
       "GEM_HOME": "[START_DIR]/gems",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -377,9 +400,10 @@
     "cwd": "[START_DIR]/flutter/examples/stocks",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
       "GEM_HOME": "[START_DIR]/gems",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -400,9 +424,10 @@
     "cwd": "[START_DIR]/flutter/examples/stocks",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
       "GEM_HOME": "[START_DIR]/gems",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -422,9 +447,10 @@
     "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
       "GEM_HOME": "[START_DIR]/gems",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -445,9 +471,10 @@
     "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
       "GEM_HOME": "[START_DIR]/gems",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -469,9 +496,10 @@
     "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
       "GEM_HOME": "[START_DIR]/gems",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {
@@ -492,9 +520,10 @@
     "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
       "GEM_HOME": "[START_DIR]/gems",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-2.14.1/bin:<PATH>",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
     "env_prefixes": {

@@ -110,7 +110,7 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-4.10.2-all\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "name": "flutter doctor"
@@ -124,7 +124,7 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-4.10.2-all\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache"
     },
     "name": "download dependencies"
@@ -253,11 +253,11 @@
       "-u",
       "RECIPE_MODULE[recipe_engine::url]\\resources\\pycurl.py",
       "--url",
-      "https://services.gradle.org/distributions/gradle-2.14.1-bin.zip",
+      "https://services.gradle.org/distributions/gradle-4.10.2-all.zip",
       "--status-json",
       "/path/to/tmp/json",
       "--outfile",
-      "[START_DIR]\\flutter\\dev\\bots\\gradle-2.14.1-bin.zip"
+      "[START_DIR]\\flutter\\dev\\bots\\gradle-4.10.2-all.zip"
     ],
     "env": {
       "JAVA_HOME": "[CACHE]\\java",
@@ -298,7 +298,7 @@
       ]
     },
     "name": "unzip gradle",
-    "stdin": "{\"output\": \"[START_DIR]\\\\flutter\\\\dev\\\\bots\\\\gradle\", \"quiet\": false, \"zip_file\": \"[START_DIR]\\\\flutter\\\\dev\\\\bots\\\\gradle-2.14.1-bin.zip\"}"
+    "stdin": "{\"output\": \"[START_DIR]\\\\flutter\\\\dev\\\\bots\\\\gradle\", \"quiet\": false, \"zip_file\": \"[START_DIR]\\\\flutter\\\\dev\\\\bots\\\\gradle-4.10.2-all.zip\"}"
   },
   {
     "cmd": [
@@ -333,7 +333,7 @@
       "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
       "JAVA_HOME": "[CACHE]\\java",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-4.10.2-all\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
       "SHARD": "tests",
       "VSINSTALLDIR": "[CACHE]\\windows_sdk"
@@ -358,7 +358,7 @@
       "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
       "JAVA_HOME": "[CACHE]\\java",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-4.10.2-all\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
       "VSINSTALLDIR": "[CACHE]\\windows_sdk"
     },
@@ -382,7 +382,7 @@
       "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
       "JAVA_HOME": "[CACHE]\\java",
-      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-2.14.1\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-4.10.2-all\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
       "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
       "VSINSTALLDIR": "[CACHE]\\windows_sdk"
     },

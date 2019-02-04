@@ -4,6 +4,7 @@
 
 from contextlib import contextmanager
 import re
+from urlparse import urlparse
 
 DEPS = [
     'build',
@@ -30,7 +31,8 @@ DEPS = [
 
 BUCKET_NAME = 'flutter_infra'
 PACKAGED_REF_RE = re.compile(r'^refs/heads/(dev|beta|stable)$')
-
+DEFAULT_GRADLE_DIST_URL = \
+    'https://services.gradle.org/distributions/gradle-4.10.2-all.zip'
 
 @contextmanager
 def _PlatformSDK(api):
@@ -42,7 +44,11 @@ def _PlatformSDK(api):
     elif api.platform.is_mac:
       with api.osx_sdk('ios'):
         with InstallGem(api, 'cocoapods', api.properties['cocoapods_version']):
-          yield
+          with api.context(env={
+            'CP_REPOS_DIR': api.path['cache'].join('cocoapods', 'repos')
+          }):
+            api.step('pod setup', ['pod', 'setup'])
+            yield
     else:
       yield
   else:
@@ -51,7 +57,9 @@ def _PlatformSDK(api):
 def InstallOpenJDK(api):
   java_cache_dir = api.path['cache'].join('java')
   api.cipd.ensure(java_cache_dir, api.cipd.EnsureFile()
-    .add_package('flutter_internal/java/openjdk/${platform}', 'version:1.8.0.201-1.b09')
+    .add_package(
+      'flutter_internal/java/openjdk/${platform}',
+      'version:1.8.0.201-1.b09')
   )
   return api.context(
     env={'JAVA_HOME': java_cache_dir},
@@ -63,15 +71,19 @@ def InstallGem(api, gem_name, gem_version):
   gem_dir = api.path['start_dir'].join('gems')
   api.file.ensure_directory('mkdir gems', gem_dir)
   with api.context(cwd=gem_dir):
-    api.step('install ' + gem_name, ['gem', 'install', gem_name + ':' + gem_version, '--install-dir', '.'])
-  with api.context(env={"GEM_HOME": gem_dir}, env_prefixes={'PATH': [gem_dir.join('bin')]}):
+    api.step('install ' + gem_name, ['gem', 'install', gem_name + ':' +
+      gem_version, '--install-dir', '.'])
+  with api.context(env={"GEM_HOME": gem_dir}, env_prefixes={
+    'PATH': [gem_dir.join('bin')]
+  }):
     yield
 
 def EnsureCloudKMS(api, version=None):
   with api.step.nest('ensure_cloudkms'):
     with api.context(infra_steps=True):
       pkgs = api.cipd.EnsureFile()
-      pkgs.add_package('infra/tools/luci/cloudkms/${platform}', version or 'latest')
+      pkgs.add_package(
+        'infra/tools/luci/cloudkms/${platform}', version or 'latest')
       cipd_dir = api.path['start_dir'].join('cipd', 'cloudkms')
       api.cipd.ensure(cipd_dir, pkgs)
       return cipd_dir.join('cloudkms')
@@ -175,16 +187,30 @@ def SetupXcode(api):
   if not xcode_json['matches']:
     raise api.step.StepFailure('Xcode %s not found' % target_version)
 
+def GetGradleDistributionUrl(api):
+  if api.runtime.is_luci:
+    return api.properties['gradle_dist_url']
+  else:
+    return DEFAULT_GRADLE_DIST_URL
+
+def GetGradleZipFileName(api):
+  url = urlparse(GetGradleDistributionUrl(api))
+  return url.path.split('/')[-1]
+
+def GetGradleDirName(api):
+  return GetGradleZipFileName(api).replace('.zip', '')
 
 def InstallGradle(api, checkout):
+  gradle_zip_file_name = GetGradleZipFileName(api)
   api.url.get_file(
-      'https://services.gradle.org/distributions/gradle-2.14.1-bin.zip',
-      checkout.join('dev', 'bots', 'gradle-2.14.1-bin.zip'),
+      GetGradleDistributionUrl(api),
+      checkout.join('dev', 'bots', gradle_zip_file_name),
       step_name='download gradle')
   api.zip.unzip('unzip gradle',
-                checkout.join('dev', 'bots', 'gradle-2.14.1-bin.zip'),
+                checkout.join('dev', 'bots', gradle_zip_file_name),
                 checkout.join('dev', 'bots', 'gradle'))
-  sdkmanager_executable = 'sdkmanager.bat' if api.platform.is_win else 'sdkmanager'
+  sdkmanager_executable = 'sdkmanager.bat' if api.platform.is_win \
+                                           else 'sdkmanager'
   sdkmanager_list_cmd = ['cmd.exe',
                          '/C'] if api.platform.is_win else ['sh', '-c']
   sdkmanager_list_cmd.append(
@@ -215,7 +241,8 @@ def UploadFlutterCoverage(api):
           '--coverage-path=%s' % coverage_path])
 
   if api.runtime.is_luci:
-    with InstallGem(api, 'coveralls-lcov', api.properties['coveralls_lcov_version']):
+    with InstallGem(api, 'coveralls-lcov',
+                    api.properties['coveralls_lcov_version']):
       token_path = api.path.mkstemp(prefix='coveralls')
       DecryptKMS(api, 'decrypt coveralls token',
               'flutter-infra/global/luci/coveralls',
@@ -276,7 +303,8 @@ def RunSteps(api):
 
   dart_bin = checkout.join('bin', 'cache', 'dart-sdk', 'bin')
   flutter_bin = checkout.join('bin')
-  gradle_bin = checkout.join('dev', 'bots', 'gradle', 'gradle-2.14.1', 'bin')
+  gradle_bin = checkout.join('dev', 'bots', 'gradle', GetGradleDirName(api),
+                             'bin')
   path_prefix = api.path.pathsep.join((str(flutter_bin), str(dart_bin),
                                        str(gradle_bin)))
 
@@ -342,7 +370,8 @@ def RunSteps(api):
         elif shard == 'tests':
           BuildExamples(api, git_hash, flutter_executable)
       else:
-        shards = ['tests'] if not api.platform.is_linux else ['tests', 'coverage']
+        shards = ['tests'] if not api.platform.is_linux \
+                           else ['tests', 'coverage']
         for shard in shards:
           shard_env = env
           shard_env['SHARD'] = shard
@@ -362,16 +391,20 @@ def GenTests(api):
         for branch in ('master', 'dev', 'beta', 'stable'):
           git_ref = 'refs/heads/' + branch
           test = (
-              api.test('%s_%s_%s_%s' % (platform, branch, luci, experimental)) + api.platform(platform, 64) +
+              api.test('%s_%s_%s_%s' % (platform, branch, luci, experimental)) +
+                api.platform(platform, 64) +
               api.buildbucket.ci_build(git_ref=git_ref, revision=None) +
-              api.properties(clobber='', shard='tests', cocoapods_version='1.5.3') +
+              api.properties(clobber='', shard='tests',
+                             cocoapods_version='1.5.3',
+                             gradle_dist_url=DEFAULT_GRADLE_DIST_URL) +
               api.runtime(is_luci=luci, is_experimental=experimental))
           if platform == 'mac' and branch == 'master' and not luci:
             test += (
                 api.step_data('set_xcode_version',
                               api.json.output({
                                   'matches': {
-                                      '/Applications/Xcode9.0.app': '9.0.1 (9A1004)'
+                                      '/Applications/Xcode9.0.app':
+                                      '9.0.1 (9A1004)'
                                   }
                               })))
           if platform == 'linux' and branch == 'master' and not luci:
@@ -382,18 +415,22 @@ def GenTests(api):
 
   yield (api.test('linux_master_coverage') +
          api.runtime(is_luci=False, is_experimental=True) +
-         api.properties(clobber='', shard='coverage') +
+         api.properties(clobber='', shard='coverage',
+                        gradle_dist_url=DEFAULT_GRADLE_DIST_URL) +
          api.override_step_data('upload coverage data to Coveralls',
                                       api.raw_io.output('')))
   yield (api.test('linux_master_coverage_luci') +
          api.runtime(is_luci=True, is_experimental=True) +
-         api.properties(clobber='', shard='coverage', coveralls_lcov_version='1.5.1') +
+         api.properties(clobber='', shard='coverage',
+                        coveralls_lcov_version='1.5.1',
+                        gradle_dist_url=DEFAULT_GRADLE_DIST_URL) +
          api.override_step_data('upload coverage data to Coveralls',
                                       api.raw_io.output('')))
 
 
   yield (api.test('mac_cannot_find_xcode') + api.platform('mac', 64) +
-         api.properties(clobber='', shard='tests') +
+         api.properties(clobber='', shard='tests',
+                        gradle_dist_url=DEFAULT_GRADLE_DIST_URL) +
          api.step_data('set_xcode_version', api.json.output({
              'matches': {}
          })))
