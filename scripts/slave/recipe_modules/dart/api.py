@@ -50,7 +50,7 @@ class DartApi(recipe_api.RecipeApi):
                              'GIT_REDACT_COOKIES': 'o,SSO,GSSO_UberProxy'}):
       try:
         self.m.bot_update.ensure_checkout(root_solution_revision=revision)
-      except self.m.step.InfraFailure:
+      except self.m.step.StepFailure:
         if not revision:
           raise
         # Maybe we failed to because of the revision, try the latest instead.
