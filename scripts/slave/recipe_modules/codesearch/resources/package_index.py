@@ -22,6 +22,7 @@ import time
 import zipfile
 
 from contextlib import closing
+from windows_shell_split import WindowsShellSplit
 
 
 class IndexPack(object):
@@ -180,7 +181,7 @@ class IndexPack(object):
         print 'Generating Translation Unit data for %s' % entry['file']
         print 'Compile command: %s' % compile_command
 
-      command_list = shlex.split(compile_command, posix=sys.platform != 'win32')
+      command_list = _ShellSplit(compile_command)
       # On some platforms, the |command_list| starts with the goma executable,
       # followed by the path to the clang executable (either clang++ or
       # clang-cl.exe). We want the clang executable to be the first parameter.
@@ -349,6 +350,14 @@ def _RemoveFilepathsFiles(root):
       except OSError, e:
         if e.errno != errno.ENOENT:
           raise
+
+
+def _ShellSplit(command):
+  """Splits a shell command into separate args."""
+  if sys.platform == 'win32':
+    return WindowsShellSplit(command)
+  else:
+    return shlex.split(command)
 
 
 def main():
