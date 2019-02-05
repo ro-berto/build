@@ -1805,7 +1805,7 @@ Kills leftover tasks from previous runs or steps.
 
 Reads the debug log file
 
-&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#950)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=None, ignore_failure=False):**
+&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#951)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=None, ignore_failure=False):**
 
 Runs a specific script with current working directory to be checkout. If
 the runtime (passed in environment) is a browser, and the system is linux,
@@ -1823,7 +1823,7 @@ Args:
     to be downloaded
   * ignore_failure - Do not turn step red if this script fails.
 
-&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#864)(self, step_name, step, isolate_hash, shards, local_shard, environment, tasks, global_config, all_results):**
+&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#865)(self, step_name, step, isolate_hash, shards, local_shard, environment, tasks, global_config, all_results):**
 
 Runs test.py with default arguments, based on configuration from.
 Args:
@@ -1838,7 +1838,7 @@ Args:
   * global_config (dict) - The global section from test_matrix.json.
     Contains version tags for the pinned browsers Firefox and Chrome.
 
-&mdash; **def [run\_trigger](/scripts/slave/recipe_modules/dart/api.py#828)(self, step_name, step, isolate_hash):**
+&mdash; **def [run\_trigger](/scripts/slave/recipe_modules/dart/api.py#829)(self, step_name, step, isolate_hash):**
 
 &mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#169)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='dart.tests', num_shards=0, last_shard_is_local=False, cipd_packages=None, ignore_failure=False):**
 
@@ -2474,7 +2474,7 @@ Args:
 
 Checks out Chromium.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#978)(self, tasks, upload_test_results=True):**
+&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#980)(self, tasks, upload_test_results=True):**
 
 Collects the given Swarming task results.
 
@@ -2484,15 +2484,15 @@ Collects the given Swarming task results.
 
 &mdash; **def [get\_mac\_toolchain\_cmd](/scripts/slave/recipe_modules/ios/api.py#331)(self):**
 
-&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1166)(self, path):**
+&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1168)(self, path):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/ios/api.py#601)(test):**
 
-&mdash; **def [isolate](/scripts/slave/recipe_modules/ios/api.py#771)(self, scripts_dir='src/ios/build/bots/scripts'):**
+&mdash; **def [isolate](/scripts/slave/recipe_modules/ios/api.py#773)(self, scripts_dir='src/ios/build/bots/scripts'):**
 
 Isolates the tests specified in this bot's build config.
 
-&mdash; **def [isolate\_earlgrey\_test](/scripts/slave/recipe_modules/ios/api.py#716)(self, test, shard_size, tmp_dir, isolate_template):**
+&mdash; **def [isolate\_earlgrey\_test](/scripts/slave/recipe_modules/ios/api.py#718)(self, test, shard_size, tmp_dir, isolate_template):**
 
 Isolate earlgrey test into small shards
 
@@ -2500,16 +2500,16 @@ Isolate earlgrey test into small shards
 
 Isolates a single test.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1251)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1253)(self):**
 
 Returns the path (relative to checkout working dir) of the most recently
 compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1238)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1240)(self):**
 
 Returns the Path to the directory of the most recently compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1266)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1268)(self):**
 
 Returns the path to the most recently compiled iossim.
 
@@ -2543,11 +2543,11 @@ Args:
     out directory, so must have already been compiled.
   url: URL of the symbol server to upload to.
 
-&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1215)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
+&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1217)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
 
 Runs tests on Swarming as instructed by this bot's build config.
 
-&mdash; **def [trigger](/scripts/slave/recipe_modules/ios/api.py#858)(self, tasks):**
+&mdash; **def [trigger](/scripts/slave/recipe_modules/ios/api.py#860)(self, tasks):**
 
 Triggers the given Swarming tasks.
 
@@ -4200,7 +4200,7 @@ Checks that properties get to recipes from annotated_run properly
 
 [DEPS](/scripts/slave/recipes/art.py#5): [repo](#recipe_modules-repo), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/art.py#639)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/art.py#648)(api):**
 
 &mdash; **def [checkout](/scripts/slave/recipes/art.py#58)(api):**
 
@@ -4208,11 +4208,11 @@ Checks that properties get to recipes from annotated_run properly
 
 &mdash; **def [full\_checkout](/scripts/slave/recipes/art.py#63)(api):**
 
-&mdash; **def [setup\_aosp\_builder](/scripts/slave/recipes/art.py#462)(api, read_barrier):**
+&mdash; **def [setup\_aosp\_builder](/scripts/slave/recipes/art.py#470)(api, read_barrier):**
 
 &mdash; **def [setup\_host\_x86](/scripts/slave/recipes/art.py#73)(api, debug, bitness, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False, cdex_level='none'):**
 
-&mdash; **def [setup\_target](/scripts/slave/recipes/art.py#228)(api, serial, device, debug, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False):**
+&mdash; **def [setup\_target](/scripts/slave/recipes/art.py#230)(api, serial, device, debug, concurrent_collector=True, generational_cc=True, heap_poisoning=False, gcstress=False):**
 ### *recipes* / [auto\_bisect:examples/full](/scripts/slave/recipe_modules/auto_bisect/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/auto_bisect/examples/full.py#7): [auto\_bisect](#recipe_modules-auto_bisect), [chromium](#recipe_modules-chromium), [chromium\_tests](#recipe_modules-chromium_tests), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -4590,7 +4590,7 @@ This recipe picks a commit at HEAD, and then triggers the other codesearch
 recipes with the chosen commit hash as a parameter. This ensures that codesearch
 index packs (used to generate xrefs) are all generated from the same revision.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch_initiator.py#56)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/chromium_codesearch_initiator.py#57)(api):**
 ### *recipes* / [chromium\_gsutil:examples/full](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py)
 
 [DEPS](/scripts/slave/recipe_modules/chromium_gsutil/examples/full.py#5): [chromium\_gsutil](#recipe_modules-chromium_gsutil), [recipe\_engine/path][recipe_engine/recipe_modules/path]
@@ -5036,17 +5036,17 @@ Generates the sequence of steps that will be run by the slave.
 
 &mdash; **def [Build](/scripts/slave/recipes/dart/flutter_engine.py#27)(api, checkout_dir, config, \*targets):**
 
-&mdash; **def [BuildAndTest](/scripts/slave/recipes/dart/flutter_engine.py#227)(api, start_dir, checkout_dir):**
+&mdash; **def [BuildAndTest](/scripts/slave/recipes/dart/flutter_engine.py#239)(api, start_dir, checkout_dir):**
 
-&mdash; **def [BuildLinux](/scripts/slave/recipes/dart/flutter_engine.py#69)(api, checkout_dir):**
+&mdash; **def [BuildLinux](/scripts/slave/recipes/dart/flutter_engine.py#70)(api, checkout_dir):**
 
 &mdash; **def [BuildLinuxAndroidArm](/scripts/slave/recipes/dart/flutter_engine.py#55)(api, checkout_dir):**
 
 &mdash; **def [BuildLinuxAndroidx86](/scripts/slave/recipes/dart/flutter_engine.py#50)(api, checkout_dir):**
 
-&mdash; **def [CopyArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#115)(api, engine_src, cached_dest, file_paths):**
+&mdash; **def [CopyArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#116)(api, engine_src, cached_dest, file_paths):**
 
-&mdash; **def [GetCheckout](/scripts/slave/recipes/dart/flutter_engine.py#88)(api):**
+&mdash; **def [GetCheckout](/scripts/slave/recipes/dart/flutter_engine.py#89)(api):**
 
 &mdash; **def [KillTasks](/scripts/slave/recipes/dart/flutter_engine.py#20)(api, checkout_dir, ok_ret='any'):**
 
@@ -5054,15 +5054,15 @@ Kills leftover tasks from previous runs or steps.
 
 &mdash; **def [RunGN](/scripts/slave/recipes/dart/flutter_engine.py#35)(api, checkout_dir, \*args):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/flutter_engine.py#205)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/flutter_engine.py#216)(api):**
 
 &mdash; **def [TestEngine](/scripts/slave/recipes/dart/flutter_engine.py#46)(api, checkout_dir):**
 
-&mdash; **def [TestFlutter](/scripts/slave/recipes/dart/flutter_engine.py#176)(api, start_dir, just_built_dart_sdk):**
+&mdash; **def [TestFlutter](/scripts/slave/recipes/dart/flutter_engine.py#186)(api, start_dir, just_built_dart_sdk):**
 
-&mdash; **def [TestObservatory](/scripts/slave/recipes/dart/flutter_engine.py#79)(api, checkout_dir):**
+&mdash; **def [TestObservatory](/scripts/slave/recipes/dart/flutter_engine.py#80)(api, checkout_dir):**
 
-&mdash; **def [UpdateCachedEngineArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#126)(api, flutter, engine_src):**
+&mdash; **def [UpdateCachedEngineArtifacts](/scripts/slave/recipes/dart/flutter_engine.py#128)(api, flutter, engine_src):**
 ### *recipes* / [dart/forward\_branch](/scripts/slave/recipes/dart/forward_branch.py)
 
 [DEPS](/scripts/slave/recipes/dart/forward_branch.py#8): [dart](#recipe_modules-dart), [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5245,33 +5245,33 @@ world-readable cloud location.
 
 &mdash; **def [Build](/scripts/slave/recipes/flutter/engine.py#39)(api, config, \*targets, \*\*kwargs):**
 
-&mdash; **def [BuildIOS](/scripts/slave/recipes/flutter/engine.py#492)(api):**
+&mdash; **def [BuildIOS](/scripts/slave/recipes/flutter/engine.py#512)(api):**
 
-&mdash; **def [BuildJavadoc](/scripts/slave/recipes/flutter/engine.py#599)(api):**
+&mdash; **def [BuildJavadoc](/scripts/slave/recipes/flutter/engine.py#624)(api):**
 
-&mdash; **def [BuildLinux](/scripts/slave/recipes/flutter/engine.py#266)(api):**
+&mdash; **def [BuildLinux](/scripts/slave/recipes/flutter/engine.py#282)(api):**
 
-&mdash; **def [BuildLinuxAndroid](/scripts/slave/recipes/flutter/engine.py#193)(api):**
+&mdash; **def [BuildLinuxAndroid](/scripts/slave/recipes/flutter/engine.py#203)(api):**
 
-&mdash; **def [BuildMac](/scripts/slave/recipes/flutter/engine.py#344)(api):**
+&mdash; **def [BuildMac](/scripts/slave/recipes/flutter/engine.py#361)(api):**
 
-&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#626)(api):**
+&mdash; **def [BuildObjcDoc](/scripts/slave/recipes/flutter/engine.py#654)(api):**
 
 Builds documentation for the Objective-C variant of engine.
 
-&mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#520)(api):**
+&mdash; **def [BuildWindows](/scripts/slave/recipes/flutter/engine.py#542)(api):**
 
-&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#642)(api):**
+&mdash; **def [GetCheckout](/scripts/slave/recipes/flutter/engine.py#670)(api):**
 
 &mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/engine.py#32)(api, path):**
 
-&emsp; **@contextmanager**<br>&mdash; **def [InstallJazzy](/scripts/slave/recipes/flutter/engine.py#614)(api):**
+&emsp; **@contextmanager**<br>&mdash; **def [InstallJazzy](/scripts/slave/recipes/flutter/engine.py#639)(api):**
 
 &emsp; **@contextlib.contextmanager**<br>&mdash; **def [MakeTempDir](/scripts/slave/recipes/flutter/engine.py#148)(api, label):**
 
-&mdash; **def [PackageIOSVariant](/scripts/slave/recipes/flutter/engine.py#427)(api, label, arm64_out, armv7_out, sim_out, bucket_name):**
+&mdash; **def [PackageIOSVariant](/scripts/slave/recipes/flutter/engine.py#447)(api, label, arm64_out, armv7_out, sim_out, bucket_name):**
 
-&mdash; **def [RunFindXcode](/scripts/slave/recipes/flutter/engine.py#319)(api, ios_tools_path, target_version):**
+&mdash; **def [RunFindXcode](/scripts/slave/recipes/flutter/engine.py#336)(api, ios_tools_path, target_version):**
 
 Locates and switches to a version of Xcode matching target_version.
 
@@ -5279,11 +5279,11 @@ Locates and switches to a version of Xcode matching target_version.
 
 &mdash; **def [RunHostTests](/scripts/slave/recipes/flutter/engine.py#50)(api, out_dir, exe_extension=''):**
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#661)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/engine.py#689)(api):**
 
-&emsp; **@contextmanager**<br>&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/engine.py#331)(api):**
+&emsp; **@contextmanager**<br>&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/engine.py#348)(api):**
 
-&mdash; **def [TestObservatory](/scripts/slave/recipes/flutter/engine.py#301)(api):**
+&mdash; **def [TestObservatory](/scripts/slave/recipes/flutter/engine.py#318)(api):**
 
 &mdash; **def [UploadArtifacts](/scripts/slave/recipes/flutter/engine.py#98)(api, platform, file_paths, archive_name='artifacts.zip'):**
 
@@ -5295,7 +5295,7 @@ Locates and switches to a version of Xcode matching target_version.
 
 &mdash; **def [UploadFolder](/scripts/slave/recipes/flutter/engine.py#112)(api, dir_label, parent_dir, folder_name, zip_name):**
 
-&mdash; **def [UploadTreeMap](/scripts/slave/recipes/flutter/engine.py#176)(api, upload_dir, lib_flutter_path, android_triple):**
+&mdash; **def [UploadTreeMap](/scripts/slave/recipes/flutter/engine.py#177)(api, upload_dir, lib_flutter_path, android_triple):**
 
 &mdash; **def [VerifyExportedSymbols](/scripts/slave/recipes/flutter/engine.py#166)(api):**
 ### *recipes* / [flutter/flutter](/scripts/slave/recipes/flutter/flutter.py)
@@ -5879,7 +5879,7 @@ Args:
 
 Recipe to test v8/node.js integration.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/node_integration.py#261)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/node_integration.py#263)(api):**
 
 &emsp; **@contextmanager**<br>&mdash; **def [goma\_wrapper](/scripts/slave/recipes/v8/node_integration.py#113)(api):**
 ### *recipes* / [v8/presubmit](/scripts/slave/recipes/v8/presubmit.py)
@@ -5955,19 +5955,19 @@ The changes are:
 
 &mdash; **def [RunSteps](/scripts/slave/recipe_modules/zip/examples/full.py#14)(api):**
 
-[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/26ffa944643443f809b6eed9646821abe1d706ee/recipes/README.recipes.md#recipe_modules-bot_update
-[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/26ffa944643443f809b6eed9646821abe1d706ee/recipes/README.recipes.md#recipe_modules-cipd
-[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/26ffa944643443f809b6eed9646821abe1d706ee/recipes/README.recipes.md#recipe_modules-depot_tools
-[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/26ffa944643443f809b6eed9646821abe1d706ee/recipes/README.recipes.md#recipe_modules-gclient
-[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/26ffa944643443f809b6eed9646821abe1d706ee/recipes/README.recipes.md#recipe_modules-gerrit
-[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/26ffa944643443f809b6eed9646821abe1d706ee/recipes/README.recipes.md#recipe_modules-git
-[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/26ffa944643443f809b6eed9646821abe1d706ee/recipes/README.recipes.md#recipe_modules-gitiles
-[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/26ffa944643443f809b6eed9646821abe1d706ee/recipes/README.recipes.md#recipe_modules-gsutil
-[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/26ffa944643443f809b6eed9646821abe1d706ee/recipes/README.recipes.md#recipe_modules-infra_paths
-[depot_tools/recipe_modules/osx_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/26ffa944643443f809b6eed9646821abe1d706ee/recipes/README.recipes.md#recipe_modules-osx_sdk
-[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/26ffa944643443f809b6eed9646821abe1d706ee/recipes/README.recipes.md#recipe_modules-presubmit
-[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/26ffa944643443f809b6eed9646821abe1d706ee/recipes/README.recipes.md#recipe_modules-tryserver
-[depot_tools/recipe_modules/windows_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/26ffa944643443f809b6eed9646821abe1d706ee/recipes/README.recipes.md#recipe_modules-windows_sdk
+[depot_tools/recipe_modules/bot_update]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bc6617a165bf721817fc002ab87a2732f2a8ef1a/recipes/README.recipes.md#recipe_modules-bot_update
+[depot_tools/recipe_modules/cipd]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bc6617a165bf721817fc002ab87a2732f2a8ef1a/recipes/README.recipes.md#recipe_modules-cipd
+[depot_tools/recipe_modules/depot_tools]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bc6617a165bf721817fc002ab87a2732f2a8ef1a/recipes/README.recipes.md#recipe_modules-depot_tools
+[depot_tools/recipe_modules/gclient]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bc6617a165bf721817fc002ab87a2732f2a8ef1a/recipes/README.recipes.md#recipe_modules-gclient
+[depot_tools/recipe_modules/gerrit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bc6617a165bf721817fc002ab87a2732f2a8ef1a/recipes/README.recipes.md#recipe_modules-gerrit
+[depot_tools/recipe_modules/git]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bc6617a165bf721817fc002ab87a2732f2a8ef1a/recipes/README.recipes.md#recipe_modules-git
+[depot_tools/recipe_modules/gitiles]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bc6617a165bf721817fc002ab87a2732f2a8ef1a/recipes/README.recipes.md#recipe_modules-gitiles
+[depot_tools/recipe_modules/gsutil]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bc6617a165bf721817fc002ab87a2732f2a8ef1a/recipes/README.recipes.md#recipe_modules-gsutil
+[depot_tools/recipe_modules/infra_paths]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bc6617a165bf721817fc002ab87a2732f2a8ef1a/recipes/README.recipes.md#recipe_modules-infra_paths
+[depot_tools/recipe_modules/osx_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bc6617a165bf721817fc002ab87a2732f2a8ef1a/recipes/README.recipes.md#recipe_modules-osx_sdk
+[depot_tools/recipe_modules/presubmit]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bc6617a165bf721817fc002ab87a2732f2a8ef1a/recipes/README.recipes.md#recipe_modules-presubmit
+[depot_tools/recipe_modules/tryserver]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bc6617a165bf721817fc002ab87a2732f2a8ef1a/recipes/README.recipes.md#recipe_modules-tryserver
+[depot_tools/recipe_modules/windows_sdk]: https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/bc6617a165bf721817fc002ab87a2732f2a8ef1a/recipes/README.recipes.md#recipe_modules-windows_sdk
 [recipe_engine/recipe_modules/buildbucket]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/1886f5a16a7736b63988858884cf7f7f7adf3637/README.recipes.md#recipe_modules-buildbucket
 [recipe_engine/recipe_modules/cipd]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/1886f5a16a7736b63988858884cf7f7f7adf3637/README.recipes.md#recipe_modules-cipd
 [recipe_engine/recipe_modules/context]: https://chromium.googlesource.com/infra/luci/recipes-py.git/+/1886f5a16a7736b63988858884cf7f7f7adf3637/README.recipes.md#recipe_modules-context
