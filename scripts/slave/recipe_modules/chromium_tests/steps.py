@@ -1805,10 +1805,6 @@ class LocalIsolatedScriptTest(Test):
 
       self.results_handler.render_results(api, results, presentation)
 
-      if self._isolate_coverage_data:
-        api.chromium_tests.m.clang_coverage.get_local_isolated_coverage(
-            self.name, step_result)
-
       if valid:
         self._test_runs[suffix] = test_results.canonical_result_format()
       else:

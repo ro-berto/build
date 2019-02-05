@@ -1610,15 +1610,6 @@ This module contains apis to interact with llvm-cov and llvm-profdata.
 
 Returns the path to the llvm-cov executable.
 
-&mdash; **def [get\_local\_isolated\_coverage](/scripts/slave/recipe_modules/clang_coverage/api.py#456)(self, step_name, local_run_isolate_step):**
-
-Collect coverage data from local isolated run.
-
-Analogous to the merge script that we pass for the swarming collect step,
-this api finds the output isolate from the stdout of the step that ran the
-isolated test locally, downloads it and merges the raw profile(s) into a
-single profdata.
-
 &mdash; **def [instrument](/scripts/slave/recipe_modules/clang_coverage/api.py#171)(self, affected_files):**
 
 Saves source paths to generate coverage instrumentation for to a file.
