@@ -5823,7 +5823,7 @@ Ensures a clean state of the git checkout.
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/v8/auto_tag.py#165)(api):**
 
-&mdash; **def [UpdateRef](/scripts/slave/recipes/v8/auto_tag.py#224)(api, repo, head, lkgr_ref):**
+&mdash; **def [UpdateRef](/scripts/slave/recipes/v8/auto_tag.py#223)(api, repo, head, lkgr_ref):**
 ### *recipes* / [v8/flako](/scripts/slave/recipes/v8/flako.py)
 
 [DEPS](/scripts/slave/recipes/v8/flako.py#31): [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]

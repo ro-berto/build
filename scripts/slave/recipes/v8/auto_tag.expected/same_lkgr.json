@@ -210,29 +210,6 @@
     "name": "log"
   },
   {
-    "cmd": [
-      "git",
-      "ls-remote",
-      "https://chromium.googlesource.com/v8/v8",
-      "refs/tags/lkgr/3.4"
-    ],
-    "cwd": "[BUILDER_CACHE]/v8",
-    "infra_step": true,
-    "name": "git ls-remote refs_tags_lkgr_3.4",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@ref@74882b7a8e55268d1658f83efefa1c2585cee723@@@",
-      "@@@STEP_LOG_END@ref@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "echo",
-      "There is no new lkgr."
-    ],
-    "name": "log (2)"
-  },
-  {
     "jsonResult": null,
     "name": "$result"
   }

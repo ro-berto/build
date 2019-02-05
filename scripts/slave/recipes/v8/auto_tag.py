@@ -215,10 +215,9 @@ def RunSteps(api):
         api.git('tag', str(head_version), head)
         api.git('push', repo, str(head_version))
 
-  # Update lkgr ref. Both legacy and new ref location.
-  # TODO(machenbach): Remove legacy version after M68.
+  # Update lkgr ref.
+  # TODO(machenbach): Add updating refs/heads/release/%s instead.
   UpdateRef(api, repo, head, 'refs/heads/%s-lkgr' % branch)
-  UpdateRef(api, repo, head, 'refs/tags/lkgr/%s' % branch)
 
 
 def UpdateRef(api, repo, head, lkgr_ref):
@@ -265,10 +264,6 @@ def GenTests(api):
         stdout(
             'git ls-remote refs_heads_3.4-lkgr',
             current_lkgr + '\trefs/heads/3.4-lkgr',
-        ) +
-        stdout(
-            'git ls-remote refs_tags_lkgr_3.4',
-            current_lkgr + '\trefs/tags/lkgr/3.4',
         )
     )
     if dry_run:
@@ -373,7 +368,6 @@ def GenTests(api):
         MustRun,
         'Dry-run commit',
         'Dry-run tag 3.4.3.3',
-        'Dry-run lkgr update c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6',
-        'Dry-run lkgr update c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6 (2)') +
+        'Dry-run lkgr update c1a7fd0c98a80c52fcf6763850d2ee1c41cfe8d6') +
       api.post_process(DropExpectation)
   )
