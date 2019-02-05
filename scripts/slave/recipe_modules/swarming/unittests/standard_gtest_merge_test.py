@@ -450,7 +450,8 @@ class MergeShardResultsTest(_StandardGtestMergeTest):
       if isinstance(key_or_value, str):
         return unicode(key_or_value)
       if isinstance(key_or_value, dict):
-        return {convert_to_unicode(k): convert_to_unicode(v) for k, v in key_or_value.items()}
+        return {convert_to_unicode(k): convert_to_unicode(v)
+                for k, v in key_or_value.items()}
       if isinstance(key_or_value, list):
         return [convert_to_unicode(x) for x in key_or_value]
       return key_or_value

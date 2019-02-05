@@ -260,7 +260,8 @@ def GenTests(api):
       api.properties.scheduled() +
       api.properties.generic(buildername=trybotname,
                              mastername=mastername) +
-      api.platform(DETERMINISTIC_BUILDERS[DETERMINISTIC_TRYBOTS[trybotname]]['platform'], 32) +
+      api.platform(DETERMINISTIC_BUILDERS[
+          DETERMINISTIC_TRYBOTS[trybotname]]['platform'], 32) +
       api.properties(configuration='Release')
     )
     yield (
@@ -268,7 +269,8 @@ def GenTests(api):
       api.properties.scheduled() +
       api.properties.generic(buildername=trybotname,
                               mastername=mastername) +
-      api.platform(DETERMINISTIC_BUILDERS[DETERMINISTIC_TRYBOTS[trybotname]]['platform'], 32) +
+      api.platform(DETERMINISTIC_BUILDERS[
+          DETERMINISTIC_TRYBOTS[trybotname]]['platform'], 32) +
       api.properties(configuration='Release') +
       api.step_data('compare_build_artifacts', retcode=1)
     )

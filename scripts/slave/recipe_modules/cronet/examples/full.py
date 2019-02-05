@@ -81,4 +81,8 @@ def GenTests(api):
     # Test regular bot.
     yield api.test(bot_id) + props
     # Test experimental bot.
-    yield api.runtime(is_luci=True, is_experimental=True) + api.test(bot_id + "_experimental") + props
+    yield (
+        api.runtime(is_luci=True, is_experimental=True) +
+        api.test(bot_id + "_experimental") +
+        props
+    )

@@ -66,7 +66,8 @@ def RunSteps(api, revision, buildername):
     if api.platform.name == 'win':
       triggers = [{'builder_name': name,
                    'properties': { 'revision': revision }
-                  } for name in BuildBuilderNames('dart2js-win7-ie11', channel, 4)]
+                  } for name in BuildBuilderNames(
+                      'dart2js-win7-ie11', channel, 4)]
       api.trigger(*triggers)
 
     # Step 8) Create and upload the API docs

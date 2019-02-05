@@ -169,7 +169,8 @@ def _SendResultsFromCache(cache_file_name, url, oauth_token):
 
     try:
       if is_histogramset:
-        # TODO(eakuefner): Remove this discard logic once all bots use histograms.
+        # TODO(eakuefner): Remove this discard logic once all bots use
+        # histograms.
         if oauth_token is None:
           oauth_token = LuciAuthTokenGeneratorCallback(None)
 

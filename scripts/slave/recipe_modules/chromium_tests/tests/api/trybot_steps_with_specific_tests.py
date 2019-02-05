@@ -260,7 +260,8 @@ def GenTests(api):
       api.override_step_data(
           'base_unittests (with patch)',
           api.swarming.canned_summary_output(failure=True, shards=20) +
-          api.test_utils.gtest_results(generate_results_for_failure_many_shards(), retcode=1)) +
+          api.test_utils.gtest_results(
+              generate_results_for_failure_many_shards(), retcode=1)) +
       api.override_step_data(
           'base_unittests (without patch)',
           api.swarming.canned_summary_output(failure=False) +

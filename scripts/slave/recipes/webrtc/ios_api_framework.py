@@ -98,7 +98,8 @@ def GenTests(api):
     api.test('trybot_build') +
     api.properties.tryserver(mastername='tryserver.webrtc',
                              buildername='ios_api_framework',
-                             gerrit_url='https://webrtc-review.googlesource.com',
+                             gerrit_url=
+                                 'https://webrtc-review.googlesource.com',
                              gerrit_project='src',
                              path_config='kitchen')
   )

@@ -91,7 +91,8 @@ def setup_host_x86(api,
           'ANDROID_BUILD_TOP': build_top_dir,
           'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
                   api.path.pathsep +
-                  str(build_top_dir.join('prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
+                  str(build_top_dir.join(
+                      'prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
                   api.path.pathsep +
                   '%(PATH)s',
           'ART_TEST_RUN_TEST_2ND_ARCH': 'false',
@@ -221,7 +222,8 @@ def setup_host_x86(api,
 
       # Disable interpreter jdwp runs with gcstress, they time out.
       if not gcstress:
-        api.step('test libjdwp interpreter', libjdwp_common_command + ['--no-jit'])
+        api.step(
+            'test libjdwp interpreter', libjdwp_common_command + ['--no-jit'])
 
       api.step('test dx', ['./dalvik/dx/tests/run-all-tests'])
 
@@ -258,7 +260,8 @@ def setup_target(api,
          'ANDROID_SERIAL': serial,
          'ANDROID_BUILD_TOP': build_top_dir,
          'ADB': str(build_top_dir.join('prebuilts', 'runtime', 'adb')),
-         'PATH': str(build_top_dir.join('prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
+         'PATH': str(build_top_dir.join(
+             'prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
                  api.path.pathsep +
                  # Add adb in the path.
                  str(build_top_dir.join('prebuilts', 'runtime')) +
@@ -307,7 +310,8 @@ def setup_target(api,
   test_env.update(
       { 'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
                 api.path.pathsep +
-                str(build_top_dir.join('prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
+                str(build_top_dir.join(
+                    'prebuilts', 'jdk', 'jdk9', 'linux-x86', 'bin')) +
                 api.path.pathsep +
                 # Add adb in the path.
                 str(build_top_dir.join('prebuilts', 'runtime')) +
@@ -324,7 +328,8 @@ def setup_target(api,
 
   with api.step.defer_results():
     with api.context(env=test_env):
-      api.step('device pre-run cleanup', [art_tools.join('cleanup-buildbot-device.sh')])
+      api.step('device pre-run cleanup', [
+          art_tools.join('cleanup-buildbot-device.sh')])
 
       api.step('setup device', [art_tools.join('setup-buildbot-device.sh')])
 
@@ -341,7 +346,8 @@ def setup_target(api,
 
 
     with api.context(env=gtest_env):
-      api.step('test gtest', [art_tools.join('run-gtests.sh'), '-j%d' % (make_jobs)])
+      api.step('test gtest', [
+          art_tools.join('run-gtests.sh'), '-j%d' % (make_jobs)])
     test_logging(api, 'test gtest')
 
     optimizing_make_jobs = make_jobs
@@ -455,9 +461,11 @@ def setup_target(api,
       test_logging(api, 'test libjdwp interpreter')
 
     with api.context(env=test_env):
-      api.step('tear down device', [art_tools.join('teardown-buildbot-device.sh')])
+      api.step('tear down device', [
+          art_tools.join('teardown-buildbot-device.sh')])
 
-      api.step('device post-run cleanup', [art_tools.join('cleanup-buildbot-device.sh')])
+      api.step('device post-run cleanup', [
+          art_tools.join('cleanup-buildbot-device.sh')])
 
 def setup_aosp_builder(api, read_barrier):
   full_checkout(api)
@@ -473,7 +481,8 @@ def setup_aosp_builder(api, read_barrier):
               'JACK_SERVER': 'false',
               'JACK_REPOSITORY': str(build_top_dir.join('prebuilts', 'sdk',
                                                         'tools', 'jacks')),
-              'PATH': str(build_top_dir.join('out', 'host', 'linux-x86', 'bin')) +
+              'PATH': str(build_top_dir.join(
+                  'out', 'host', 'linux-x86', 'bin')) +
                       api.path.pathsep + '%(PATH)s',
               'ART_USE_READ_BARRIER': 'true' if read_barrier else 'false'}
       with api.context(env=env):

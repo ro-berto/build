@@ -257,8 +257,8 @@ def RunSteps(api):
     raise api.step.StepFailure(
         'Failed to update deps: %s' % ', '.join(failed_deps))
 
-
 def GenTests(api):
+  # pylint: disable=line-too-long
   v8_deps_info = """v8: https://chromium.googlesource.com/v8/v8.git
 v8/base/trace_event/common: https://chromium.googlesource.com/chromium/src/base/trace_event/common.git@08b7b94e88aecc99d435af7f29fda86bd695c4bd
 v8/build: https://chromium.googlesource.com/chromium/src/build.git@d3f34f8dfaecc23202a6ef66957e83462d6c826d

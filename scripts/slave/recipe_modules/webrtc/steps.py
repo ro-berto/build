@@ -15,7 +15,8 @@ THIS_DIR = os.path.dirname(__file__)
 sys.path.append(os.path.join(os.path.dirname(THIS_DIR)))
 
 from chromium_tests.steps import SwarmingGTestTest
-from chromium_tests.steps import SwarmingIsolatedScriptTest as SwarmingIsolatedTest
+from chromium_tests.steps import (
+    SwarmingIsolatedScriptTest as SwarmingIsolatedTest)
 from chromium_tests.steps import SwarmingTest
 
 # adb path relative to out dir (e.g. out/Release)

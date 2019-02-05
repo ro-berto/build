@@ -149,7 +149,8 @@ class TestResults(object):
       The logic here should match the calculation of is_regression: cannot use
       is_regression directly though because is_regression only reflects the
       *last* result.
-      Reference: https://chromium.googlesource.com/chromium/src/+/f481306ad989755ebe61cfed4ab2a4fa53044b29/third_party/blink/tools/blinkpy/web_tests/models/test_expectations.py
+      Reference:
+        https://chromium.googlesource.com/chromium/src/+/f481306ad989755ebe61cfed4ab2a4fa53044b29/third_party/blink/tools/blinkpy/web_tests/models/test_expectations.py
 
       Args:
         actual_result: actual result of a test execution.

@@ -98,8 +98,9 @@ class AggregateComponentsTest(unittest.TestCase):
     for entry in data:
       generate_coverage_metadata._add_file_to_directory_summary(
           dir_summaries, '/b/src/', entry)
-    component_summaries = generate_coverage_metadata._aggregate_dirs_and_components(
-        dir_summaries, mapping)
+    component_summaries = (
+        generate_coverage_metadata._aggregate_dirs_and_components(
+            dir_summaries, mapping))
     # HACK: Make this assertFalse, to examine output, or assertEqual to {} for
     # formatted output.
     self.assertTrue({

@@ -43,8 +43,8 @@ def _checkout_steps(api):
     # Standalone developer dawn builds want the dawn checkout in the same
     # directory the .gclient file is in.  Bots want it in a directory called
     # 'dawn'.  To make both cases work, the dawn DEPS file pulls deps and runs
-    # hooks relative to the variable "root" which is set to . by default and then
-    # to 'dawn' on bots here:
+    # hooks relative to the variable "root" which is set to . by default and
+    # then to 'dawn' on bots here:
     api.gclient.c.solutions[0].custom_vars = {'dawn_root': 'dawn'}
     api.bot_update.ensure_checkout()
     api.gclient.runhooks()
@@ -124,29 +124,34 @@ def GenTests(api):
   yield (
       api.test('linux') +
       api.platform('linux', 64) +
-      api.buildbucket.ci_build(project='dawn', builder='linux', git_repo=DAWN_REPO)
+      api.buildbucket.ci_build(project='dawn', builder='linux',
+                               git_repo=DAWN_REPO)
   )
   yield (
       api.test('linux_gcc') +
       api.platform('linux', 64) +
       api.properties(clang=False) +
-      api.buildbucket.ci_build(project='dawn', builder='linux', git_repo=DAWN_REPO)
+      api.buildbucket.ci_build(project='dawn', builder='linux',
+                               git_repo=DAWN_REPO)
   )
   yield (
       api.test('mac') +
       api.platform('mac', 64) +
-      api.buildbucket.ci_build(project='dawn', builder='mac', git_repo=DAWN_REPO)
+      api.buildbucket.ci_build(project='dawn', builder='mac',
+                               git_repo=DAWN_REPO)
   )
   yield (
       api.test('win') +
       api.platform('win', 64) +
-      api.buildbucket.ci_build(project='dawn', builder='win', git_repo=DAWN_REPO)
+      api.buildbucket.ci_build(project='dawn', builder='win',
+                               git_repo=DAWN_REPO)
   )
   yield (
       api.test('win_clang') +
       api.platform('win', 64) +
       api.properties(clang=True) +
-      api.buildbucket.ci_build(project='dawn', builder='win', git_repo=DAWN_REPO)
+      api.buildbucket.ci_build(project='dawn', builder='win',
+                               git_repo=DAWN_REPO)
   )
   yield (
       api.test('win_rel_msvc_x86') +
@@ -154,5 +159,6 @@ def GenTests(api):
       api.properties(clang=False,
                      debug=False,
                      target_cpu='x86') +
-      api.buildbucket.ci_build(project='dawn', builder='win', git_repo=DAWN_REPO)
+      api.buildbucket.ci_build(project='dawn', builder='win',
+                               git_repo=DAWN_REPO)
   )

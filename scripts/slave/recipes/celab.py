@@ -114,7 +114,8 @@ def _RunTests(api, checkout):
       'generate_host_files.py',
       [
         '--template', '../../examples/schema/host/example.host.textpb',
-        '--projects', ';'.join(["%s-%03d" % (POOL_NAME, i) for i in xrange(1, POOL_SIZE)]),
+        '--projects', ';'.join(["%s-%03d" % (POOL_NAME, i) for i in xrange(
+            1, POOL_SIZE)]),
         '--storage_bucket', '%s-assets' % POOL_NAME,
         '--storage_prefix', storage_prefix,
         '--destination_dir', host_dir
@@ -163,21 +164,25 @@ def _RunTests(api, checkout):
 def GenTests(api):
   yield (
       api.test('basic_try') +
-      api.buildbucket.try_build(project='celab', bucket='try', git_repo=CELAB_REPO)
+      api.buildbucket.try_build(project='celab', bucket='try',
+                                git_repo=CELAB_REPO)
   )
   yield (
       api.test('basic_ci_linux') +
       api.platform('linux', 64) +
-      api.buildbucket.ci_build(project='celab', bucket='ci', git_repo=CELAB_REPO)
+      api.buildbucket.ci_build(project='celab', bucket='ci',
+                               git_repo=CELAB_REPO)
   )
   yield (
       api.test('basic_ci_windows') +
       api.platform('win', 64) +
-      api.buildbucket.ci_build(project='celab', bucket='ci', git_repo=CELAB_REPO)
+      api.buildbucket.ci_build(project='celab', bucket='ci',
+                               git_repo=CELAB_REPO)
   )
   yield (
       api.test('failed_tests_ci_linux') +
       api.platform('linux', 64) +
-      api.buildbucket.ci_build(project='celab', bucket='ci', git_repo=CELAB_REPO) +
+      api.buildbucket.ci_build(project='celab', bucket='ci',
+                               git_repo=CELAB_REPO) +
       api.step_data('run all tests', retcode=1)
   )

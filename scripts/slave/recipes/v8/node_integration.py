@@ -163,7 +163,8 @@ def _build_and_test(api, goma_dir):
 
       with goma_wrapper(api):
         if api.platform.is_win:
-          # TODO(machenbach): Figure out what to do with clear-stalled and addons.
+          # TODO(machenbach): Figure out what to do with clear-stalled and
+          # addons.
           api.step(
             'build node.js',
             ['ninja', '-C', api.path.join('out', build_config)],
@@ -224,7 +225,8 @@ def _build_and_upload(api, goma_dir):
 
     archive_dir = api.path['cleanup'].join('archive-build')
     archive_name = ('node-%s-rel-%s-%s.zip' %
-                    (api.platform.name, api.v8.revision_number, api.v8.revision))
+                    (api.platform.name, api.v8.revision_number,
+                     api.v8.revision))
     zip_file = api.path['cleanup'].join(archive_name)
 
     # Make archive directory.

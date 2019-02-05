@@ -549,9 +549,10 @@ def GenTests(api):
     props() +
     api.platform.name('linux') +
     api.chromium_tests.read_source_side_spec('chromium.linux', {}) +
-    suppress_analyze() + 
-    base_unittests_additional_compile_target() + 
-    api.post_process(Filter('analyze', 'analyze_matched_exclusion', 'compile (with patch)'))
+    suppress_analyze() +
+    base_unittests_additional_compile_target() +
+    api.post_process(Filter(
+        'analyze', 'analyze_matched_exclusion', 'compile (with patch)'))
   )
 
   # This should result in a compile.
@@ -577,7 +578,7 @@ def GenTests(api):
       'analyze',
       api.json.output({'status': 'Found dependency',
                        'compile_targets': ['browser_tests', 'base_unittests'],
-                       'test_targets': ['browser_tests', 'base_unittests']})) + 
+                       'test_targets': ['browser_tests', 'base_unittests']})) +
     api.post_process(Filter('analyze', 'compile (with patch)'))
   )
 

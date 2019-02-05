@@ -27,7 +27,8 @@ def RunSteps(api):
     'DOCKER_CONFIG': api.path['cleanup'].join('.docker'),
   }
   with api.context(cwd=api.path['cleanup'], env=env):
-    sdk = 'channels/%s/release/%s/sdk/dartsdk-linux-x64-release.zip' % (channel, version)
+    sdk = 'channels/%s/release/%s/sdk/dartsdk-linux-x64-release.zip' % (
+        channel, version)
     sdk_zip = api.path['cleanup'].join('dartsdk-linux-x64-release.zip')
     api.gsutil.download('dart-archive', sdk, sdk_zip, name='download dart sdk')
     api.zip.unzip('unzip sdk', sdk_zip, api.path['cleanup'].join('sdk'))

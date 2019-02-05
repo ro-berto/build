@@ -56,7 +56,8 @@ def BuildLinuxAndroidArm(api, checkout_dir):
   RunGN(api, checkout_dir, '--android')
   Build(api, checkout_dir, 'android_debug')
   Build(api, checkout_dir, 'android_debug', ':dist')
-  RunGN(api, checkout_dir, '--android', '--runtime-mode=release', '--android-cpu=arm')
+  RunGN(api, checkout_dir, '--android', '--runtime-mode=release',
+        '--android-cpu=arm')
   Build(api, checkout_dir, 'android_release', 'gen_snapshot')
 
   # Build and upload engines for the runtime modes that use AOT compilation.
@@ -121,7 +122,8 @@ def CopyArtifacts(api, engine_src, cached_dest, file_paths):
       source, target = path, api.path.basename(path)
 
     api.file.remove('remove %s' % target, cached_dest.join(target))
-    api.file.copy('copy %s' % target, engine_src.join(source), cached_dest.join(target))
+    api.file.copy('copy %s' % target, engine_src.join(source),
+                  cached_dest.join(target))
 
 def UpdateCachedEngineArtifacts(api, flutter, engine_src):
   ICU_DATA_PATH = 'third_party/icu/flutter/icudtl.dat'
@@ -140,35 +142,43 @@ def UpdateCachedEngineArtifacts(api, flutter, engine_src):
     # related to development tools.
     ('out/host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin',
      'product_isolate_snapshot.bin'),
-    ('out/host_dynamic_release/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+    ('out/host_dynamic_release/gen/flutter/lib/snapshot/'
+     'vm_isolate_snapshot.bin',
      'product_vm_isolate_snapshot.bin'),
     ]
   )
 
   CopyArtifacts(api, engine_src,
-    flutter.join('bin', 'cache', 'artifacts', 'engine', 'android-arm-release', 'linux-x64'),
+    flutter.join('bin', 'cache', 'artifacts', 'engine', 'android-arm-release',
+                 'linux-x64'),
     ['out/android_release/clang_x86/gen_snapshot'])
 
-  flutter_patched_sdk = flutter.join('bin', 'cache', 'artifacts', 'engine', 'common', 'flutter_patched_sdk')
+  flutter_patched_sdk = flutter.join('bin', 'cache', 'artifacts', 'engine',
+                                     'common', 'flutter_patched_sdk')
   dart_sdk = flutter.join('bin', 'cache', 'dart-sdk')
   # In case dart-sdk symlink was left from previous run we need to [remove] it,
-  # rather than [rmtree] because rmtree is going to remove symlink target folder.
-  # We are not able to use api.file classes for this because there is no
-  # support for symlink checks or handling of error condition.
+  # rather than [rmtree] because rmtree is going to remove symlink target
+  # folder. We are not able to use api.file classes for this because there is
+  # no support for symlink checks or handling of error condition.
   api.step('cleanup dart-sdk', [
-    '/bin/bash', '-c', 'if [ -L "%(dir)s" ]; then rm "%(dir)s"; else rm -rf "%(dir)s"; fi' %
+    '/bin/bash', '-c',
+    'if [ -L "%(dir)s" ]; then rm "%(dir)s"; else rm -rf "%(dir)s"; fi' %
     {'dir': dart_sdk}])
   api.step('cleanup flutter_patched_sdk', [
-    '/bin/bash', '-c', 'if [ -L "%(dir)s" ]; then rm "%(dir)s"; else rm -rf "%(dir)s"; fi' %
+    '/bin/bash', '-c',
+    'if [ -L "%(dir)s" ]; then rm "%(dir)s"; else rm -rf "%(dir)s"; fi' %
     {'dir': flutter_patched_sdk}])
   api.file.symlink('make cached dart-sdk point to just built dart sdk',
     engine_src.join('out', 'host_debug', 'dart-sdk'), dart_sdk)
-  api.file.symlink('make cached flutter_patched_sdk point to just built flutter_patched_sdk',
-    engine_src.join('out', 'host_debug', 'flutter_patched_sdk'), flutter_patched_sdk)
+  api.file.symlink(
+      'make cached flutter_patched_sdk point to just built flutter_patched_sdk',
+    engine_src.join('out', 'host_debug', 'flutter_patched_sdk'),
+    flutter_patched_sdk)
 
   # In case there is a cached version of "flutter_tools.snapshot" we have to
   # delete it.
-  flutter_tools_snapshot = flutter.join('bin', 'cache', 'flutter_tools.snapshot')
+  flutter_tools_snapshot = flutter.join(
+      'bin', 'cache', 'flutter_tools.snapshot')
   api.step('cleanup', [
     '/bin/bash', '-c', 'if [ -f "%(file)s" ]; then rm "%(file)s"; fi' %
     {'file': flutter_tools_snapshot}])
@@ -184,15 +194,16 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
   test_cmd = [
     'dart', 'dev/bots/test.dart',
   ]
-  api.step('disable flutter analytics', [flutter_cmd, 'config', '--no-analytics'])
+  api.step('disable flutter analytics', [
+      flutter_cmd, 'config', '--no-analytics'])
   with api.context(cwd=flutter):
     api.step('flutter update-packages',
              [flutter_cmd, 'update-packages'] + test_args)
 
-    # analyze.dart and test.dart have hardcoded references to bin/cache/dart-sdk.
-    # So we overwrite bin/cache/dart-sdk and tightly-coupled frontend_server.dart.snapshot
-    # with links that point to corresponding entries from binaries generated into
-    # [engine_src]
+    # analyze.dart and test.dart have hardcoded references to
+    # bin/cache/dart-sdk.  So we overwrite bin/cache/dart-sdk and
+    # tightly-coupled frontend_server.dart.snapshot with links that point to
+    # corresponding entries from binaries generated into [engine_src]
     UpdateCachedEngineArtifacts(api, flutter, engine_src)
 
     # runs all flutter tests similar to Cirrus as described on this page:
@@ -209,7 +220,8 @@ def RunSteps(api):
     start_dir = api.path['start_dir']
 
   with api.context(cwd=start_dir):
-    # buildbot sets 'clobber' to the empty string which is falsey, check with 'in'
+    # buildbot sets 'clobber' to the empty string which is falsey, check with
+    # 'in'
     if 'clobber' in api.properties:
       api.file.rmcontents('everything', start_dir)
     GetCheckout(api)
@@ -241,7 +253,8 @@ def BuildAndTest(api, start_dir, checkout_dir):
       '%(PATH)s')) }
     just_built_dart_sdk = checkout_dir.join('out', 'host_debug', 'dart-sdk')
     flutter_env = {
-      'PATH': api.path.pathsep.join((str(just_built_dart_sdk.join('bin')), '%(PATH)s')),
+      'PATH': api.path.pathsep.join((
+          str(just_built_dart_sdk.join('bin')), '%(PATH)s')),
       # Prevent test.dart from using git merge-base to determine a fork point.
       # git merge-base doesn't work without a FETCH_HEAD, which isn't available
       # on the first run of a bot. The builder tests a single revision, so use

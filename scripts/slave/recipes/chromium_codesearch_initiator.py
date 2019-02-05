@@ -50,7 +50,8 @@ GERRIT_TEST_DATA_BAD_TIMESTAMP = {
     }
 }
 
-GERRIT_URL = 'https://chromium.googlesource.com/chromium/src/+show/master?format=JSON'
+GERRIT_URL = (
+    'https://chromium.googlesource.com/chromium/src/+show/master?format=JSON')
 GERRIT_DATETIME_FORMAT = '%a %b %d %H:%M:%S %Y'
 
 def RunSteps(api):
@@ -88,15 +89,18 @@ def GenTests(api):
   yield (
       api.test('missing_commit') +
       api.runtime(is_luci=True, is_experimental=False) +
-      api.url.json('Get hash of HEAD commit on master', GERRIT_TEST_DATA_NO_COMMIT)
+      api.url.json('Get hash of HEAD commit on master',
+                   GERRIT_TEST_DATA_NO_COMMIT)
   )
   yield (
       api.test('missing_timestamp') +
       api.runtime(is_luci=True, is_experimental=False) +
-      api.url.json('Get hash of HEAD commit on master', GERRIT_TEST_DATA_NO_TIMESTAMP)
+      api.url.json('Get hash of HEAD commit on master',
+                   GERRIT_TEST_DATA_NO_TIMESTAMP)
   )
   yield (
       api.test('bad_timestamp') +
       api.runtime(is_luci=True, is_experimental=False) +
-      api.url.json('Get hash of HEAD commit on master', GERRIT_TEST_DATA_BAD_TIMESTAMP)
+      api.url.json('Get hash of HEAD commit on master',
+                   GERRIT_TEST_DATA_BAD_TIMESTAMP)
   )

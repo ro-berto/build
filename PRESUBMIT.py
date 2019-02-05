@@ -46,7 +46,6 @@ def CommonChecks(input_api, output_api):
   infra_path = input_api.subprocess.check_output(
       [vpython, 'scripts/common/env.py', 'print']).split()
   disabled_warnings = [
-    'C0301',  # Line too long (NN/80)
     'C0321',  # More than one statement on a single line
     'W0613',  # Unused argument
   ]

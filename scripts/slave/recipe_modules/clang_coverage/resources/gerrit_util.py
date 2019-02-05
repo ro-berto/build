@@ -68,7 +68,8 @@ def fetch_diff(host, project, change, patchset):
 
   # Uses the Get Change API to get and parse the revision of the patchset.
   # https://gerrit-review.googlesource.com/Documentation/rest-api-changes.html#get-change.
-  template_to_get_revisions = 'https://%s/changes/%s~%d?o=ALL_REVISIONS&o=SKIP_MERGEABLE'
+  template_to_get_revisions = (
+      'https://%s/changes/%s~%d?o=ALL_REVISIONS&o=SKIP_MERGEABLE')
   url_to_get_reivisions = template_to_get_revisions % (host, project_quoted,
                                                        change)
   response = _retry_urlopen(url_to_get_reivisions)

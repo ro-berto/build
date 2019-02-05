@@ -105,7 +105,9 @@ class ResultsDashboardFormatTest(unittest.TestCase):
          'add_reserved_diagnostics', '--benchmarks', 'foo.test', '--bots',
          'bot', '--builds', '1', '--masters', 'ChromiumPerf',
          '--is_reference_build', '', '--log_urls_k', 'Buildbot stdio',
-         '--log_urls_v', 'http://build.chromium.org/p/my.master/builders/builder/builds/1/steps/foo.test/logs/stdio',
+         '--log_urls_v',
+         'http://build.chromium.org/p/my.master/'
+         'builders/builder/builds/1/steps/foo.test/logs/stdio',
          f.name])
       call.side_effect = _mock_call
 

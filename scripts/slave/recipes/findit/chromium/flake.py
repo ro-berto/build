@@ -144,7 +144,8 @@ def GenTests(api):
 
   yield (
       api.test('flakiness_isolate_only') +
-      props({'browser_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', skip_tests=True) +
+      props({'browser_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
+            skip_tests=True) +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {

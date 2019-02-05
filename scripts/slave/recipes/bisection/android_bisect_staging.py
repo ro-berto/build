@@ -212,7 +212,8 @@ m/cloudstorage/b/chromium-telemetry/o/html-results/results-without
       "status": "COMPLETED",
       "status_changed_utc": "Mon Jun 13 19:32:37 2016",
       "updated_utc": "Mon Jun 13 19:32:37 2016",
-      "url": "http://build.chromium.org/p/tryserver.chromium.perf/builders/linux_perf_bisect/builds/6537",
+      "url": "http://build.chromium.org/p/tryserver.chromium.perf/"
+             "builders/linux_perf_bisect/builds/6537",
       "utcnow_utc": "Tue Jun 21 21:33:56 2016"
     }
 }

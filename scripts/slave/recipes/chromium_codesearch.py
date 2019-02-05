@@ -283,7 +283,8 @@ def GenTests(api):
 
   yield (
     api.test(
-        'full_%s_translation_unit_fail' % _sanitize_nonalpha('codesearch-gen-chromium-chromiumos')) +
+        'full_%s_translation_unit_fail' % _sanitize_nonalpha(
+            'codesearch-gen-chromium-chromiumos')) +
     api.step_data('run translation_unit clang tool', retcode=2) +
     api.properties.generic(buildername='codesearch-gen-chromium-chromiumos') +
     api.runtime(is_luci=True, is_experimental=False)

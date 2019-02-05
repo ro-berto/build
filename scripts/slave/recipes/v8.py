@@ -726,8 +726,10 @@ def GenTests(api):
         parent_test_spec=android_test_spec,
         swarm_hashes={'mjsunit': 'hash'},
     ) +
-    api.v8.check_not_in_any_arg('trigger tests.[trigger] Mjsunit on Android', 'cpu') +
-    api.v8.check_not_in_any_arg('trigger tests.[trigger] Mjsunit on Android', 'gpu') +
+    api.v8.check_not_in_any_arg('trigger tests.[trigger] Mjsunit on Android',
+                                'cpu') +
+    api.v8.check_not_in_any_arg('trigger tests.[trigger] Mjsunit on Android',
+                                'gpu') +
     api.post_process(DropExpectation)
   )
 

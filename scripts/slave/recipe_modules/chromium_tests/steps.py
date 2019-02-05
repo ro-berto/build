@@ -1434,11 +1434,11 @@ class SwarmingTest(Test):
     shards = self._shards
 
     if tests_to_retry:
-      # The filter list is eventually passed to the binary over the command line.
-      # On Windows, the command line max char limit is 8191 characters. On other
-      # OSes, the max char limit is over 100,000 characters. We avoid sending the
-      # filter list if we're close to the limit -- this causes all tests to be
-      # run.
+      # The filter list is eventually passed to the binary over the command
+      # line.  On Windows, the command line max char limit is 8191 characters.
+      # On other OSes, the max char limit is over 100,000 characters. We avoid
+      # sending the filter list if we're close to the limit -- this causes all
+      # tests to be run.
       char_limit = 7000 if self._dispatches_to_windows() else 90000
       expected_filter_length = (sum(len(x) for x in tests_to_retry) +
           len(tests_to_retry) * len(filter_delimiter))

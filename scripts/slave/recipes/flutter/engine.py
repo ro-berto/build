@@ -170,24 +170,34 @@ def VerifyExportedSymbols(api):
   script_path = script_dir.join('verify_exported.dart')
   with api.context(cwd=script_dir):
     api.step('pub get for verify_exported.dart', ['pub', 'get'])
-  api.step('Verify exported symbols on release binaries', ['dart', script_path, out_dir])
+  api.step('Verify exported symbols on release binaries', [
+      'dart', script_path, out_dir])
 
 
 def UploadTreeMap(api, upload_dir, lib_flutter_path, android_triple):
   with MakeTempDir(api, 'treemap') as temp_dir:
     checkout = api.path['start_dir'].join('src')
-    script_path = checkout.join('third_party/dart/runtime/third_party/binary_size/src/run_binary_size_analysis.py')
+    script_path = checkout.join(
+        'third_party/dart/runtime/'
+        'third_party/binary_size/src/run_binary_size_analysis.py')
     library_path = checkout.join(lib_flutter_path)
     destionation_dir = temp_dir.join('sizes')
-    addr2line = checkout.join('third_party/android_tools/ndk/toolchains/' + android_triple +'-4.9/prebuilt/linux-x86_64/bin/' + android_triple + '-addr2line')
-    args = ['--library', library_path, '--destdir', destionation_dir, "--addr2line-binary", addr2line ]
+    addr2line = checkout.join(
+        'third_party/android_tools/ndk/toolchains/' + android_triple +
+        '-4.9/prebuilt/linux-x86_64/bin/' + android_triple + '-addr2line')
+    args = [
+        '--library', library_path, '--destdir', destionation_dir,
+        "--addr2line-binary", addr2line ]
 
     api.python('generate treemap for %s' % upload_dir, script_path, args)
 
     remote_name = GetCloudPath(api, upload_dir)
     result = api.gsutil.upload(destionation_dir, BUCKET_NAME, remote_name,
-        args=['-r'], name='upload treemap for %s' % lib_flutter_path, link_name=None)
-    result.presentation.links['Open Treemap'] = 'https://storage.googleapis.com/%s/%s/sizes/index.html' % (BUCKET_NAME, remote_name)
+        args=['-r'], name='upload treemap for %s' % lib_flutter_path,
+                               link_name=None)
+    result.presentation.links['Open Treemap'] = (
+        'https://storage.googleapis.com/%s/%s/sizes/index.html' % (
+            BUCKET_NAME, remote_name))
 
 
 def BuildLinuxAndroid(api):
@@ -209,7 +219,8 @@ def BuildLinuxAndroid(api):
 
   jit_variants = [
     ('arm', 'android_dynamic_%s', 'android-arm-dynamic-%s', 'clang_x86'),
-    ('arm64', 'android_dynamic_%s_arm64', 'android-arm64-dynamic-%s', 'clang_x64'),
+    ('arm64', 'android_dynamic_%s_arm64', 'android-arm64-dynamic-%s',
+     'clang_x64'),
   ]
   for android_cpu, out_dir, artifact_dir, clang_dir in jit_variants:
     for runtime_mode in ['profile', 'release']:
@@ -232,15 +243,19 @@ def BuildLinuxAndroid(api):
 
   # Build and upload engines for the runtime modes that use AOT compilation.
   aot_variants = [
-    ('arm', 'android_%s', 'android-arm-%s', 'clang_x86', 'arm-linux-androideabi'),
-    ('arm64', 'android_%s_arm64', 'android-arm64-%s', 'clang_x64', 'aarch64-linux-android'),
+    ('arm', 'android_%s', 'android-arm-%s', 'clang_x86',
+     'arm-linux-androideabi'),
+    ('arm64', 'android_%s_arm64', 'android-arm64-%s', 'clang_x64',
+     'aarch64-linux-android'),
   ]
-  for android_cpu, out_dir, artifact_dir, clang_dir, android_triple in aot_variants:
+  for (android_cpu, out_dir, artifact_dir, clang_dir,
+       android_triple) in aot_variants:
     for runtime_mode in ['profile', 'release']:
       build_output_dir = out_dir % runtime_mode
       upload_dir = artifact_dir % runtime_mode
 
-      RunGN(api, '--android', '--runtime-mode=' + runtime_mode, '--android-cpu=%s' % android_cpu)
+      RunGN(api, '--android', '--runtime-mode=' + runtime_mode,
+            '--android-cpu=%s' % android_cpu)
       Build(api, build_output_dir)
 
       UploadArtifacts(api, upload_dir, [
@@ -257,7 +272,8 @@ def BuildLinuxAndroid(api):
       ], archive_name='symbols.zip')
 
       if runtime_mode == 'release':
-        UploadTreeMap(api, upload_dir, unstripped_lib_flutter_path, android_triple);
+        UploadTreeMap(
+            api, upload_dir, unstripped_lib_flutter_path, android_triple)
 
   Build(api, 'android_debug', ':dist')
   UploadDartPackage(api, 'sky_engine')
@@ -287,7 +303,8 @@ def BuildLinux(api):
     # related to development tools.
     ('out/host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin',
      'product_isolate_snapshot.bin'),
-    ('out/host_dynamic_release/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+    ('out/host_dynamic_release/gen/flutter/lib/snapshot/'
+     'vm_isolate_snapshot.bin',
      'product_vm_isolate_snapshot.bin'),
   ])
   UploadArtifacts(api, 'linux-x64', [
@@ -350,9 +367,11 @@ def BuildMac(api):
   RunGN(api, '--runtime-mode', 'release', '--android')
   RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
   RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic')
-  RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic', '--android-cpu=arm64')
+  RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic',
+        '--android-cpu=arm64')
   RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic')
-  RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic', '--android-cpu=arm64')
+  RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic',
+        '--android-cpu=arm64')
   RunGN(api, '--runtime-mode', 'release', '--android', '--enable-vulkan')
 
   Build(api, 'host_debug_unopt')
@@ -384,7 +403,8 @@ def BuildMac(api):
     'out/host_debug_unopt/gen/frontend_server.dart.snapshot',
     ('out/host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin',
      'product_isolate_snapshot.bin'),
-    ('out/host_dynamic_release/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+    ('out/host_dynamic_release/gen/flutter/lib/snapshot/'
+     'vm_isolate_snapshot.bin',
      'product_vm_isolate_snapshot.bin'),
   ])
 
@@ -512,9 +532,11 @@ def BuildIOS(api):
   PackageIOSVariant(api,
       'debug',   'ios_debug',   'ios_debug_arm',   'ios_debug_sim', 'ios')
   PackageIOSVariant(api,
-      'profile', 'ios_profile', 'ios_profile_arm', 'ios_debug_sim', 'ios-profile')
+      'profile', 'ios_profile', 'ios_profile_arm', 'ios_debug_sim',
+                    'ios-profile')
   PackageIOSVariant(api,
-      'release', 'ios_release', 'ios_release_arm', 'ios_debug_sim', 'ios-release')
+      'release', 'ios_release', 'ios_release_arm', 'ios_debug_sim',
+                    'ios-release')
 
 
 def BuildWindows(api):
@@ -526,9 +548,11 @@ def BuildWindows(api):
   RunGN(api, '--runtime-mode', 'release', '--android')
   RunGN(api, '--runtime-mode', 'release', '--android', '--android-cpu=arm64')
   RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic')
-  RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic', '--android-cpu=arm64')
+  RunGN(api, '--runtime-mode', 'profile', '--android', '--dynamic',
+        '--android-cpu=arm64')
   RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic')
-  RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic', '--android-cpu=arm64')
+  RunGN(api, '--runtime-mode', 'release', '--android', '--dynamic',
+        '--android-cpu=arm64')
 
   Build(api, 'host_debug_unopt')
   Build(api, 'host_debug')
@@ -552,7 +576,8 @@ def BuildWindows(api):
     'out/host_debug/gen/frontend_server.dart.snapshot',
     ('out/host_dynamic_release/gen/flutter/lib/snapshot/isolate_snapshot.bin',
      'product_isolate_snapshot.bin'),
-    ('out/host_dynamic_release/gen/flutter/lib/snapshot/vm_isolate_snapshot.bin',
+    ('out/host_dynamic_release/gen/flutter/lib/snapshot/'
+     'vm_isolate_snapshot.bin',
      'product_vm_isolate_snapshot.bin'),
   ])
 
@@ -617,8 +642,11 @@ def InstallJazzy(api):
     gem_dir = api.path['start_dir'].join('gems')
     api.file.ensure_directory('mkdir gems', gem_dir)
     with api.context(cwd=gem_dir):
-      api.step('install gems', ['gem', 'install', 'jazzy:' + api.properties['jazzy_version'], '--install-dir', '.'])
-    with api.context(env={"GEM_HOME": gem_dir}, env_prefixes={'PATH': [gem_dir.join('bin')]}):
+      api.step('install gems', [
+          'gem', 'install', 'jazzy:' + api.properties['jazzy_version'],
+          '--install-dir', '.'])
+    with api.context(env={"GEM_HOME": gem_dir}, env_prefixes={
+        'PATH': [gem_dir.join('bin')]}):
       yield
   else:
     yield
@@ -666,7 +694,8 @@ def RunSteps(api):
   GetCheckout(api)
 
   checkout = api.path['start_dir'].join('src')
-  dart_bin = checkout.join('third_party', 'dart', 'tools', 'sdks', 'dart-sdk', 'bin')
+  dart_bin = checkout.join(
+      'third_party', 'dart', 'tools', 'sdks', 'dart-sdk', 'bin')
 
   api.goma.ensure_goma()
 
@@ -731,11 +760,13 @@ def GenTests(api):
 
   yield (
     api.test('linux_on_alternate_branch') +
-    api.properties(mastername='client.flutter', buildername='Linux Engine', bot_id='fake-m1', clobber='', branch='some_branch')
+    api.properties(mastername='client.flutter', buildername='Linux Engine',
+                   bot_id='fake-m1', clobber='', branch='some_branch')
   )
 
   yield (
     api.test('linux_on_master_luci') +
-    api.properties(mastername='client.flutter', buildername='Linux Engine', bot_id='fake-m1', clobber='', branch='refs/heads/master') +
+    api.properties(mastername='client.flutter', buildername='Linux Engine',
+                   bot_id='fake-m1', clobber='', branch='refs/heads/master') +
     api.runtime(is_luci=True, is_experimental=True)
   )

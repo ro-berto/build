@@ -598,8 +598,9 @@ def GenTests(api):
   yield (
       api.test('findit_culprit_in_last_sub_range') +
       props(
-          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', use_analyze=False,
-           good_revision='r0', bad_revision='r6', suspected_revisions=['r3']) +
+          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
+          use_analyze=False, good_revision='r0', bad_revision='r6',
+          suspected_revisions=['r3']) +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -640,9 +641,9 @@ def GenTests(api):
   yield (
       api.test('findit_culprit_in_middle_sub_range') +
       props(
-          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', use_analyze=False,
-           good_revision='r0', bad_revision='r6',
-           suspected_revisions=['r3', 'r6']) +
+          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
+          use_analyze=False, good_revision='r0', bad_revision='r6',
+          suspected_revisions=['r3', 'r6']) +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -715,9 +716,9 @@ def GenTests(api):
   yield (
       api.test('findit_culprit_in_first_sub_range') +
       props(
-          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', use_analyze=False,
-           good_revision='r0', bad_revision='r6',
-           suspected_revisions=['r6'], test_on_good_revision=False) +
+          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
+          use_analyze=False, good_revision='r0', bad_revision='r6',
+          suspected_revisions=['r6'], test_on_good_revision=False) +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {
@@ -1269,9 +1270,9 @@ def GenTests(api):
   yield (
       api.test('use_abbreviated_revision_in_step_name') +
       props(
-          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests', use_analyze=False,
-           good_revision='1234567890abcdefg', bad_revision='gfedcba0987654321',
-           test_on_good_revision=False) +
+          {'gl_tests': ['Test.One']}, 'mac', 'Mac10.13 Tests',
+          use_analyze=False, good_revision='1234567890abcdefg',
+          bad_revision='gfedcba0987654321', test_on_good_revision=False) +
       api.chromium_tests.read_source_side_spec(
           'chromium.mac', {
               'Mac10.13 Tests': {

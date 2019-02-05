@@ -627,7 +627,8 @@ class DartApi(recipe_api.RecipeApi):
           return None
 
 
-  def _run_steps(self, config, isolate_hashes, builder_name, global_config, latest):
+  def _run_steps(self, config, isolate_hashes, builder_name, global_config,
+                 latest):
     """Executes all steps from a json test-matrix builder entry"""
     # Find information from the builder name. It should be in the form
     # <info>-<os>-<mode>-<arch>-<runtime> or <info>-<os>-<mode>-<arch>.
@@ -1053,7 +1054,8 @@ class StepResults:
         str(self.commit['commit_hash']), self.build_number,
         self.builder_name, bot_name)
     all_matches = re.finditer(r'(^{.*)(?:})', results_str, flags=re.MULTILINE)
-    all_chunks = (chunk for match in all_matches for chunk in (match.group(1), extra))
+    all_chunks = (chunk for match in all_matches for chunk in (
+        match.group(1), extra))
     self.results += ''.join(all_chunks)
 
 

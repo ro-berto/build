@@ -52,8 +52,8 @@ class iOSApi(recipe_api.RecipeApi):
   MAC_TOOLCHAIN_ROOT    = '.'
   XCODE_APP_PATH        = 'Xcode.app'
 
-  # CIPD package containing various static test utilities and binaries for WPR testing.
-  # Used with WprProxySimulatorTestRunner.
+  # CIPD package containing various static test utilities and binaries for WPR
+  # testing.  Used with WprProxySimulatorTestRunner.
   WPR_TOOLS_PACKAGE = 'chromium/ios/autofill/wpr-ios-tools'
   WPR_TOOLS_VERSION = 'version:1.0'
   WPR_TOOLS_ROOT = 'wpr-ios-tools'
@@ -671,7 +671,8 @@ class iOSApi(recipe_api.RecipeApi):
       '--path-variable', 'app_path', app_path,
     ]
 
-    use_wpr_tools = test.get('use trusted cert') or test.get('replay package name')
+    use_wpr_tools = test.get('use trusted cert') or test.get(
+        'replay package name')
     args.extend([
       '--config-variable', 'wpr_tools_path', (
           self.WPR_TOOLS_ROOT if use_wpr_tools else 'NO_PATH'),
@@ -679,7 +680,8 @@ class iOSApi(recipe_api.RecipeApi):
 
     args.extend([
       '--config-variable', 'replay_path', (
-          self.WPR_REPLAY_DATA_ROOT if test.get('replay package name') else 'NO_PATH'),
+          self.WPR_REPLAY_DATA_ROOT if test.get(
+              'replay package name') else 'NO_PATH'),
     ])
 
     args.extend([
@@ -962,8 +964,8 @@ class iOSApi(recipe_api.RecipeApi):
       if expiration:
         swarming_task.expiration = expiration
 
-      hard_timeout = task['test'].get('max runtime seconds') or self.__config.get(
-          'max runtime seconds')
+      hard_timeout = task['test'].get(
+          'max runtime seconds') or self.__config.get('max runtime seconds')
       if hard_timeout:
         swarming_task.hard_timeout = hard_timeout
 

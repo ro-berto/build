@@ -60,7 +60,8 @@ def _GetDashboardJson(options):
       results,
       revisions, stripped_test_name, options.perf_id,
       options.buildername, options.buildnumber,
-      {}, reference_build, perf_dashboard_machine_group=_GetMachineGroup(options))
+      {}, reference_build,
+      perf_dashboard_machine_group=_GetMachineGroup(options))
   return dashboard_json
 
 
@@ -95,7 +96,8 @@ def _GetDashboardHistogramData(options):
   return results_dashboard.MakeHistogramSetWithDiagnostics(
       options.results_file, options.chromium_checkout_dir, stripped_test_name,
       options.perf_id, options.buildername, options.buildnumber, revisions,
-      is_reference_build, perf_dashboard_machine_group=_GetMachineGroup(options))
+      is_reference_build,
+      perf_dashboard_machine_group=_GetMachineGroup(options))
 
 
 def _CreateParser():

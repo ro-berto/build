@@ -21,12 +21,13 @@ def RunSteps(api):
   api.gclient.apply_config('depot_tools')
   checkout_root = api.path['builder_cache']
   with api.context(cwd=checkout_root):
-    # We trigger builds on WASM infrastructure based on commits in llvm repository, which means
-    # that the repository and revision properties are set to llvm repository URL and corresponding
-    # commit in it. However, that repository is checked out by the annotated script below, which
-    # does not integrate with bot_update/gclient and that results in errors when the latter tries
-    # to apply that revision. Hence we need to instruct it to ignore input commit specified in
-    # properties.
+    # We trigger builds on WASM infrastructure based on commits in llvm
+    # repository, which means that the repository and revision properties are
+    # set to llvm repository URL and corresponding commit in it. However, that
+    # repository is checked out by the annotated script below, which does not
+    # integrate with bot_update/gclient and that results in errors when the
+    # latter tries to apply that revision. Hence we need to instruct it to
+    # ignore input commit specified in properties.
     result = api.bot_update.ensure_checkout(ignore_input_commit=True)
   got_revision = result.presentation.properties['got_waterfall_revision']
   goma_dir = api.goma.ensure_goma()
