@@ -48,7 +48,6 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  # yapf: disable
   yield (
       api.test('basic')
       + api.properties.generic(
@@ -62,11 +61,8 @@ def GenTests(api):
       + api.post_process(
           post_process.MustRun, 'gsutil upload merged.profdata')
       + api.post_process(
-          post_process.DoesNotRun, 'generate git diff locally')
-      + api.post_process(
-          post_process.DoesNotRun, 'fetch git diff from Gerrit')
-      + api.post_process(
-          post_process.DoesNotRun, 'generate diff mapping from local to Gerrit')
+          post_process.DoesNotRun,
+          'generate line number mapping from bot to Gerrit')
       + api.post_process(
           post_process.MustRun,
           'Run component extraction script to generate mapping')
@@ -111,11 +107,8 @@ def GenTests(api):
       + api.post_process(
           post_process.MustRun, 'gsutil upload html report')
       + api.post_process(
-          post_process.MustRun, 'generate git diff locally')
-      + api.post_process(
-          post_process.MustRun, 'fetch git diff from Gerrit')
-      + api.post_process(
-          post_process.MustRun, 'generate diff mapping from local to Gerrit')
+          post_process.MustRun,
+          'generate line number mapping from bot to Gerrit')
       + api.post_process(
           post_process.MustRun, 'generate metadata for 3 targets')
       + api.post_process(
@@ -147,11 +140,8 @@ def GenTests(api):
       + api.post_process(
           post_process.MustRun, 'merge profile data for 3 targets')
       + api.post_process(
-          post_process.DoesNotRun, 'generate git diff locally')
-      + api.post_process(
-          post_process.DoesNotRun, 'fetch git diff from Gerrit')
-      + api.post_process(
-          post_process.DoesNotRun, 'generate diff mapping from local to Gerrit')
+          post_process.DoesNotRun,
+          'generate line number mapping from bot to Gerrit')
       + api.post_process(
           post_process.MustRun,
           'Run component extraction script to generate mapping')
@@ -196,11 +186,8 @@ def GenTests(api):
       + api.post_process(
           post_process.MustRun, 'gsutil upload merged.profdata')
       + api.post_process(
-          post_process.DoesNotRun, 'generate git diff locally')
-      + api.post_process(
-          post_process.DoesNotRun, 'fetch git diff from Gerrit')
-      + api.post_process(
-          post_process.DoesNotRun, 'generate diff mapping from local to Gerrit')
+          post_process.DoesNotRun,
+          'generate line number mapping from bot to Gerrit')
       + api.post_process(
           post_process.MustRun,
           'Run component extraction script to generate mapping')
