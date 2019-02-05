@@ -198,8 +198,8 @@
   {
     "cmd": [
       "gem",
-      "-V",
       "install",
+      "-V",
       "cocoapods:1.5.3",
       "--install-dir",
       "."

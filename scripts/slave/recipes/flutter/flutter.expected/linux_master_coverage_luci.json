@@ -255,8 +255,8 @@
   {
     "cmd": [
       "gem",
-      "-V",
       "install",
+      "-V",
       "coveralls-lcov:1.5.1",
       "--install-dir",
       "."
