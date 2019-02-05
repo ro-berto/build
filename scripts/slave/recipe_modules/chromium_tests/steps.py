@@ -417,7 +417,7 @@ class Test(object):
     return (False, None)
 
   def with_patch_failures(self, api):
-    """Returns test failures from the 'with_patch' step.
+    """Returns test failures from the 'with patch' step.
 
     The 'with_patch' step only considers tests to be failures if every test run
     fails. Flaky tests are considered successes.
@@ -430,6 +430,30 @@ class Test(object):
     if self.has_valid_results(api, suffix):
       return (True, set(self.deterministic_failures(api, suffix)))
     return (False, None)
+
+
+  def retry_with_patch_successes(self, api):
+    """Returns tests that passed in the 'retry with patch' step.
+
+    The 'retry with patch' step only considers tests to be successes if every
+    test run passes. Flaky tests are considered failures.
+
+    Returns: A tuple (valid_results, passing_tests).
+      valid_results: A Boolean indicating whether results are present and valid.
+      passing_tests: A set of strings. Only valid if valid_results is True.
+    """
+    suffix = 'retry with patch'
+    if not self.has_valid_results(api, suffix):
+      return (False, None)
+
+    passing_tests = set()
+    for test_name, result in (
+        self.pass_fail_counts(api, 'retry with patch').iteritems()):
+      success_count = result['pass_count']
+      fail_count = result['fail_count']
+      if fail_count == 0 and success_count > 0:
+        passing_tests.add(test_name)
+    return (True, passing_tests)
 
   def tests_to_retry(self, api, suffix):
     """Computes the tests to run on an invocation of the test suite.
@@ -693,7 +717,7 @@ class SizesStep(Test):
     return []
 
   def pass_fail_counts(self, api, suffix): # pragma: no cover
-    raise NotImplementedError("SizesStep doesn't support pass/fail counts")
+    return {}
 
 
 class ScriptTest(Test):  # pylint: disable=W0232
@@ -2416,8 +2440,7 @@ class IncrementalCoverageTest(Test):
     return []
 
   def pass_fail_counts(self, api, suffix): # pragma: no cover
-    raise NotImplementedError(
-        "IncrementalCoverageTest doesn't support pass/fail counts")
+    return {}
 
   def compile_targets(self, api):
     """List of compile targets needed by this test."""

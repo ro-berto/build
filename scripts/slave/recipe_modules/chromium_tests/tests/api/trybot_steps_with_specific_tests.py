@@ -194,6 +194,29 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
+  yield (
+      api.test('findit_step_layer_flakiness') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          use_gtest=False,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'blink_web_tests (with patch)',
+          api.test_utils.canned_test_output(passing=False)) +
+      api.override_step_data(
+          'blink_web_tests (without patch)',
+          api.test_utils.canned_test_output(passing=True)) +
+      api.override_step_data(
+          'blink_web_tests (retry with patch)',
+          api.test_utils.canned_test_output(passing=True)) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['bad/totally-bad-probably.html']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
   # To simulate a real test suite, we create results for 100 tests, 3 of
   # which fail. We rerun failing tests 10 times, so the equivalent load is 3*10
   # = 30 tests, which is 30% of the original load of 100 tests. We start with 20

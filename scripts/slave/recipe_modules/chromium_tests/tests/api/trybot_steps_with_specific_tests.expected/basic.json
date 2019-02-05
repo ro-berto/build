@@ -2236,6 +2236,25 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "import sys; sys.exit(0)"
+    ],
+    "name": "FindIt Flakiness",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@Metadata for FindIt post processing.@@@",
+      "@@@STEP_LOG_LINE@step_metadata@{@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"Step Layer Flakiness: \": {@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"base_unittests\": [@@@",
+      "@@@STEP_LOG_LINE@step_metadata@      \"Test.Two\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    ]@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  }@@@",
+      "@@@STEP_LOG_LINE@step_metadata@}@@@",
+      "@@@STEP_LOG_END@step_metadata@@@"
+    ]
+  },
+  {
     "jsonResult": null,
     "name": "$result"
   }

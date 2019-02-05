@@ -1202,14 +1202,17 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
   def trybot_steps(self, builders=None, trybots=None):
     with self.m.tryserver.set_failure_hash():
-      (bot_config_object, bot_update_step, affected_files, tests) = (
+      (bot_config_object, bot_update_step, affected_files, test_suites) = (
           self._trybot_steps_internal(builders=builders, trybots=trybots))
 
       self.m.python.succeeding_step('mark: before_tests', '')
-      if tests:
+      if test_suites:
         unrecoverable_test_suites = self._run_tests_on_tryserver(
-            bot_config_object, tests, bot_update_step, affected_files)
+            bot_config_object, test_suites, bot_update_step, affected_files)
         self.m.swarming.report_stats()
+
+        self.m.test_utils.summarize_findit_flakiness(self.m, test_suites)
+
         if unrecoverable_test_suites:
           exit_message = ' '.join(
               [x.name + ' failed.' for x in unrecoverable_test_suites])

@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import itertools
+import json
 
 from recipe_engine import recipe_api
 from recipe_engine import util as recipe_util
@@ -419,6 +420,46 @@ class TestUtilsApi(recipe_api.RecipeApi):
     return self._summarize_new_and_ignored_failures(
         test_suite, new_failures, set(), 'with patch summary',
         failure_text=failure_text, ignored_text=ignored_text)
+
+  def summarize_findit_flakiness(self, caller_api, test_suites):
+    """Exports a summary of flakiness for post-processing by FindIt.
+
+    There are several types of test flakiness. FindIt categories these by the
+    layer at which the flakiness is discovered. One of these categories is for a
+    test that fails, but when retried in a separate step, succeeds. This
+    currently applies to 'retry with patch', but will also apply to shard-layer
+    retries when those are introduced.
+
+    This function emits a step with a fixed name, and metadata for FindIt.
+    Before making changes to this function, check with the FindIt team to ensure
+    that their post-processing will still work correctly.
+    """
+    results = {}
+    for test_suite in test_suites:
+      valid_results, with_patch_failures = (
+          test_suite.with_patch_failures(caller_api))
+      if not valid_results:
+        continue
+
+      valid_results, retry_with_patch_successes = (
+          test_suite.retry_with_patch_successes(caller_api))
+      if not valid_results:
+        continue
+
+      # We only want to consider tests that failed in 'with patch' and succeeded
+      # in 'retry with patch'. If a test didn't run in both of these steps, then
+      # we ignore it.
+      flaky_tests = with_patch_failures & retry_with_patch_successes
+      if flaky_tests:
+        results[test_suite.name] = sorted(flaky_tests)
+
+    if results:
+      output = { 'Step Layer Flakiness: ' : results }
+      step = caller_api.python.succeeding_step(
+          'FindIt Flakiness', 'Metadata for FindIt post processing.')
+      step.presentation.logs['step_metadata'] = (
+          json.dumps(output, sort_keys=True, indent=2)
+      ).splitlines()
 
   def _archive_retry_summary(self, retry_summary, dest_filename):
     """Archives the retry summary as JSON, storing it alongside the results
