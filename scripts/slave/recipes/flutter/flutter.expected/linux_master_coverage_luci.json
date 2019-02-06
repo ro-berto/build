@@ -231,59 +231,13 @@
     ]
   },
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "ensure-directory",
-      "--mode",
-      "0777",
-      "[START_DIR]/gems"
-    ],
-    "cwd": "[START_DIR]/flutter",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "infra_step": true,
-    "name": "mkdir gems"
-  },
-  {
-    "cmd": [
-      "gem",
-      "install",
-      "-V",
-      "coveralls-lcov:1.5.1",
-      "--install-dir",
-      "."
-    ],
-    "cwd": "[START_DIR]/gems",
-    "env": {
-      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
-      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
-      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "name": "install coveralls-lcov"
-  },
-  {
     "cmd": [],
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
-      "GEM_HOME": "[START_DIR]/gems",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/gems/bin"
-      ]
     },
     "name": "ensure_cloudkms"
   },
@@ -302,14 +256,8 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
-      "GEM_HOME": "[START_DIR]/gems",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/gems/bin"
-      ]
     },
     "infra_step": true,
     "name": "ensure_cloudkms.ensure_installed",
@@ -335,51 +283,52 @@
       "-input",
       "RECIPE[build::flutter/flutter].resources/coveralls-token.enc",
       "-output",
-      "[CLEANUP]/coveralls_tmp_1",
-      "flutter-infra/global/luci/coveralls"
+      "[START_DIR]/flutter/packages/flutter/.coveralls.yml",
+      "projects/flutter-infra/locations/global/keyRings/luci/cryptoKeys/coveralls"
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
-      "GEM_HOME": "[START_DIR]/gems",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
-    },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/gems/bin"
-      ]
     },
     "name": "decrypt coveralls token"
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE[build::flutter/flutter].resources/upload_to_coveralls.py",
-      "--token-file=[CLEANUP]/coveralls_tmp_1",
-      "--coverage-path=[START_DIR]/flutter/packages/flutter/coverage/lcov.info"
+      "pub",
+      "global",
+      "activate",
+      "coveralls",
+      "5.1.0",
+      "--no-executables"
+    ],
+    "cwd": "[START_DIR]/flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
+      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
+      "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "name": "pub global activate coveralls"
+  },
+  {
+    "cmd": [
+      "pub",
+      "global",
+      "run",
+      "coveralls:main",
+      "[START_DIR]/flutter/packages/flutter/coverage/lcov.info"
     ],
     "cwd": "[START_DIR]/flutter/packages/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
-      "GEM_HOME": "[START_DIR]/gems",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
-    "env_prefixes": {
-      "PATH": [
-        "[START_DIR]/gems/bin"
-      ]
-    },
-    "name": "upload coverage data to Coveralls"
+    "name": "upload to coveralls"
   },
   {
     "jsonResult": null,

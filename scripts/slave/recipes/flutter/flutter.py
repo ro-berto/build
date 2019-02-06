@@ -118,6 +118,18 @@ def BuildExamples(api, git_hash, flutter_executable):
 
   def BuildAndArchive(api, app_dir, apk_name):
     app_path = api.path['checkout'].join(app_dir)
+    gradle_zip_path = api.path['checkout'].join('dev', 'bots',
+                                                GetGradleZipFileName(api))
+    gradlew_properties = app_path.join('android', 'gradle', 'wrapper',
+                                       'gradle-wrapper.properties')
+    gradlew_contents = api.file.read_text('read gradle-wrapper.properties',
+                                          gradlew_properties)
+    api.file.write_text('set gradle-wrapper.properties', gradlew_properties,
+                        re.sub(r'distributionUrl=http.+\.zip',
+                                'distributionUrl=file\:' +
+                                re.escape(str(gradle_zip_path)),
+                                re.escape(gradlew_contents)))
+
     with api.context(cwd=app_path):
       api.step('flutter build apk %s' % api.path.basename(app_dir),
                [flutter_executable, '-v', 'build', 'apk'])
@@ -153,8 +165,9 @@ def BuildExamples(api, git_hash, flutter_executable):
           name='upload %s' % apk_name)
 
   # TODO(eseidel): We should not have to hard-code the desired apk name here.
-  BuildAndArchive(api, 'examples/stocks', 'Stocks.apk')
-  BuildAndArchive(api, 'examples/flutter_gallery', 'Gallery.apk')
+  BuildAndArchive(api, api.path.join('examples', 'stocks'), 'Stocks.apk')
+  BuildAndArchive(api, api.path.join('examples', 'flutter_gallery'),
+                  'Gallery.apk')
 
 
 def RunFindXcode(api, ios_tools_path, target_version):
@@ -224,7 +237,8 @@ def UploadFlutterCoverage(api):
   """
   # Upload latest coverage to cloud storage.
   checkout = api.path['checkout']
-  coverage_path = checkout.join('packages', 'flutter', 'coverage', 'lcov.info')
+  flutter_package_dir = checkout.join('packages', 'flutter')
+  coverage_path = flutter_package_dir.join('coverage', 'lcov.info')
   api.gsutil.upload(
       coverage_path,
       BUCKET_NAME,
@@ -232,25 +246,28 @@ def UploadFlutterCoverage(api):
       link_name='lcov.info',
       name='upload coverage data')
 
-  def CoverallsUpload(token_path):
+  if api.runtime.is_luci:
+    token_path = flutter_package_dir.join('.coveralls.yml')
+    DecryptKMS(api, 'decrypt coveralls token',
+            'projects/flutter-infra/locations/global' \
+            '/keyRings/luci/cryptoKeys/coveralls',
+            api.resource('coveralls-token.enc'),
+            token_path)
+    pub_executable = 'pub' if not api.platform.is_win else 'pub.exe'
+    api.step('pub global activate coveralls', [pub_executable, 'global',
+             'activate', 'coveralls', '5.1.0', '--no-executables'])
+    with api.context(cwd=flutter_package_dir):
+      api.step('upload to coveralls', [pub_executable, 'global',
+               'run', 'coveralls:main', coverage_path])
+
+  else:
+    token_path = GetPuppetApiTokenPath(api, 'flutter-coveralls-api-token')
     with api.context(cwd=checkout.join('packages', 'flutter')):
       api.build.python(
           'upload coverage data to Coveralls',
           api.resource('upload_to_coveralls.py'),
           ['--token-file=%s' % token_path,
           '--coverage-path=%s' % coverage_path])
-
-  if api.runtime.is_luci:
-    with InstallGem(api, 'coveralls-lcov',
-                    api.properties['coveralls_lcov_version']):
-      token_path = api.path.mkstemp(prefix='coveralls')
-      DecryptKMS(api, 'decrypt coveralls token',
-              'flutter-infra/global/luci/coveralls',
-              api.resource('coveralls-token.enc'),
-              token_path)
-      CoverallsUpload(token_path)
-  else:
-    CoverallsUpload(GetPuppetApiTokenPath(api, 'flutter-coveralls-api-token'))
 
 
 
@@ -419,13 +436,12 @@ def GenTests(api):
                         gradle_dist_url=DEFAULT_GRADLE_DIST_URL) +
          api.override_step_data('upload coverage data to Coveralls',
                                       api.raw_io.output('')))
+
   yield (api.test('linux_master_coverage_luci') +
          api.runtime(is_luci=True, is_experimental=True) +
          api.properties(clobber='', shard='coverage',
-                        coveralls_lcov_version='1.5.1',
-                        gradle_dist_url=DEFAULT_GRADLE_DIST_URL) +
-         api.override_step_data('upload coverage data to Coveralls',
-                                      api.raw_io.output('')))
+                        coveralls_lcov_version='5.1.0',
+                        gradle_dist_url=DEFAULT_GRADLE_DIST_URL))
 
 
   yield (api.test('mac_cannot_find_xcode') + api.platform('mac', 64) +

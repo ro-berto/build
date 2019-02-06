@@ -348,12 +348,70 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]\\flutter\\examples\\stocks\\android\\gradle\\wrapper\\gradle-wrapper.properties",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]\\flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
+      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]\\java",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-4.10.2-all\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
+      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
+      "VSINSTALLDIR": "[CACHE]\\windows_sdk"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\java\\bin",
+        "[CACHE]\\windows_sdk\\win_sdk\\bin\\x64"
+      ]
+    },
+    "infra_step": true,
+    "name": "read gradle-wrapper.properties"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[START_DIR]\\flutter\\examples\\stocks\\android\\gradle\\wrapper\\gradle-wrapper.properties"
+    ],
+    "cwd": "[START_DIR]\\flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
+      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]\\java",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-4.10.2-all\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
+      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
+      "VSINSTALLDIR": "[CACHE]\\windows_sdk"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\java\\bin",
+        "[CACHE]\\windows_sdk\\win_sdk\\bin\\x64"
+      ]
+    },
+    "infra_step": true,
+    "name": "set gradle-wrapper.properties"
+  },
+  {
+    "cmd": [
       "flutter.bat",
       "-v",
       "build",
       "apk"
     ],
-    "cwd": "[START_DIR]\\flutter\\examples/stocks",
+    "cwd": "[START_DIR]\\flutter\\examples\\stocks",
     "env": {
       "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
@@ -372,12 +430,70 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "[START_DIR]\\flutter\\examples\\flutter_gallery\\android\\gradle\\wrapper\\gradle-wrapper.properties",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[START_DIR]\\flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
+      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]\\java",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-4.10.2-all\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
+      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
+      "VSINSTALLDIR": "[CACHE]\\windows_sdk"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\java\\bin",
+        "[CACHE]\\windows_sdk\\win_sdk\\bin\\x64"
+      ]
+    },
+    "infra_step": true,
+    "name": "read gradle-wrapper.properties (2)"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]\\resources\\fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[START_DIR]\\flutter\\examples\\flutter_gallery\\android\\gradle\\wrapper\\gradle-wrapper.properties"
+    ],
+    "cwd": "[START_DIR]\\flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
+      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]\\java",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-4.10.2-all\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
+      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
+      "VSINSTALLDIR": "[CACHE]\\windows_sdk"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\java\\bin",
+        "[CACHE]\\windows_sdk\\win_sdk\\bin\\x64"
+      ]
+    },
+    "infra_step": true,
+    "name": "set gradle-wrapper.properties (2)"
+  },
+  {
+    "cmd": [
       "flutter.bat",
       "-v",
       "build",
       "apk"
     ],
-    "cwd": "[START_DIR]\\flutter\\examples/flutter_gallery",
+    "cwd": "[START_DIR]\\flutter\\examples\\flutter_gallery",
     "env": {
       "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",

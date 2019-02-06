@@ -5314,7 +5314,7 @@ Locates and switches to a version of Xcode matching target_version.
 
 &mdash; **def [BuildExamples](/scripts/slave/recipes/flutter/flutter.py#117)(api, git_hash, flutter_executable):**
 
-&mdash; **def [CreateAndUploadFlutterPackage](/scripts/slave/recipes/flutter/flutter.py#257)(api, git_hash, branch):**
+&mdash; **def [CreateAndUploadFlutterPackage](/scripts/slave/recipes/flutter/flutter.py#274)(api, git_hash, branch):**
 
 Prepares, builds, and uploads an all-inclusive archive package.
 
@@ -5324,11 +5324,11 @@ Prepares, builds, and uploads an all-inclusive archive package.
 
 &mdash; **def [GetCloudPath](/scripts/slave/recipes/flutter/flutter.py#111)(api, git_hash, path):**
 
-&mdash; **def [GetGradleDirName](/scripts/slave/recipes/flutter/flutter.py#200)(api):**
+&mdash; **def [GetGradleDirName](/scripts/slave/recipes/flutter/flutter.py#212)(api):**
 
-&mdash; **def [GetGradleDistributionUrl](/scripts/slave/recipes/flutter/flutter.py#190)(api):**
+&mdash; **def [GetGradleDistributionUrl](/scripts/slave/recipes/flutter/flutter.py#202)(api):**
 
-&mdash; **def [GetGradleZipFileName](/scripts/slave/recipes/flutter/flutter.py#196)(api):**
+&mdash; **def [GetGradleZipFileName](/scripts/slave/recipes/flutter/flutter.py#208)(api):**
 
 &mdash; **def [GetPuppetApiTokenPath](/scripts/slave/recipes/flutter/flutter.py#102)(api, token_name):**
 
@@ -5338,19 +5338,19 @@ The file is located where ChromeOps Puppet drops generic secrets.
 
 &emsp; **@contextmanager**<br>&mdash; **def [InstallGem](/scripts/slave/recipes/flutter/flutter.py#69)(api, gem_name, gem_version):**
 
-&mdash; **def [InstallGradle](/scripts/slave/recipes/flutter/flutter.py#203)(api, checkout):**
+&mdash; **def [InstallGradle](/scripts/slave/recipes/flutter/flutter.py#215)(api, checkout):**
 
 &mdash; **def [InstallOpenJDK](/scripts/slave/recipes/flutter/flutter.py#57)(api):**
 
-&mdash; **def [RunFindXcode](/scripts/slave/recipes/flutter/flutter.py#160)(api, ios_tools_path, target_version):**
+&mdash; **def [RunFindXcode](/scripts/slave/recipes/flutter/flutter.py#172)(api, ios_tools_path, target_version):**
 
 Locates and switches to a version of Xcode matching target_version.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/flutter.py#290)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/flutter/flutter.py#307)(api):**
 
-&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/flutter.py#174)(api):**
+&mdash; **def [SetupXcode](/scripts/slave/recipes/flutter/flutter.py#186)(api):**
 
-&mdash; **def [UploadFlutterCoverage](/scripts/slave/recipes/flutter/flutter.py#222)(api):**
+&mdash; **def [UploadFlutterCoverage](/scripts/slave/recipes/flutter/flutter.py#234)(api):**
 
 Uploads the Flutter coverage output to cloud storage and Coveralls.
   
