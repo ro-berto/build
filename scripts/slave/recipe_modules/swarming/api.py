@@ -192,7 +192,7 @@ class SwarmingApi(recipe_api.RecipeApi):
     # triggers.
     self._task_test_data_id_offset = 0
 
-    self._task_output_stdout = 'json'
+    self._task_output_stdout = 'all'
 
   def initialize(self):
     self.add_default_tag(

@@ -4219,7 +4219,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"10000\"}]}"
@@ -4298,7 +4298,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"110000\"}]}"
@@ -4377,7 +4377,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"120000\"}]}"
@@ -4456,7 +4456,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"130000\"}]}"
@@ -4535,7 +4535,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"140000\"}]}"
@@ -4614,7 +4614,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"150000\"}]}"
@@ -4693,7 +4693,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"160000\"}]}"
@@ -4772,7 +4772,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"170000\"}]}"
@@ -4851,7 +4851,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"180000\"}]}"
@@ -4930,7 +4930,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"190000\"}]}"
@@ -5009,7 +5009,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1100000\"}]}"
@@ -5088,7 +5088,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1110000\"}]}"
@@ -5167,7 +5167,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1120000\"}]}"
@@ -5246,7 +5246,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1130000\"}]}"
@@ -5325,7 +5325,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1140000\"}]}"
@@ -5404,7 +5404,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1150000\"}]}"
@@ -5483,7 +5483,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1160000\"}]}"
@@ -5562,7 +5562,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1170000\"}]}"

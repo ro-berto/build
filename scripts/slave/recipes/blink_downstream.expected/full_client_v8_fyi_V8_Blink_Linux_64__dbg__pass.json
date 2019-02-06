@@ -865,7 +865,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"10000\"}, {\"task_id\": \"10100\"}, {\"task_id\": \"10200\"}, {\"task_id\": \"10300\"}, {\"task_id\": \"10400\"}, {\"task_id\": \"10500\"}, {\"task_id\": \"10600\"}, {\"task_id\": \"10700\"}, {\"task_id\": \"10800\"}, {\"task_id\": \"10900\"}]}"

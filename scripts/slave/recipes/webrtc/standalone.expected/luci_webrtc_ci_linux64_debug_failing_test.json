@@ -2615,7 +2615,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"10000\"}]}"
@@ -2774,7 +2774,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"110000\"}]}"
@@ -2933,7 +2933,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"120000\"}]}"
@@ -3092,7 +3092,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"130000\"}]}"
@@ -3251,7 +3251,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"140000\"}, {\"task_id\": \"140100\"}]}"
@@ -3435,7 +3435,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"160000\"}, {\"task_id\": \"160100\"}, {\"task_id\": \"160200\"}, {\"task_id\": \"160300\"}, {\"task_id\": \"160400\"}, {\"task_id\": \"160500\"}]}"
@@ -3719,7 +3719,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1120000\"}, {\"task_id\": \"1120100\"}, {\"task_id\": \"1120200\"}, {\"task_id\": \"1120300\"}]}"
@@ -3953,7 +3953,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1160000\"}]}"
@@ -4112,7 +4112,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1170000\"}]}"
@@ -4271,7 +4271,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1180000\"}]}"
@@ -4430,7 +4430,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1190000\"}, {\"task_id\": \"1190100\"}, {\"task_id\": \"1190200\"}, {\"task_id\": \"1190300\"}, {\"task_id\": \"1190400\"}, {\"task_id\": \"1190500\"}]}"
@@ -4716,7 +4716,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1250000\"}]}"
@@ -4875,7 +4875,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1260000\"}]}"
@@ -5034,7 +5034,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1270000\"}]}"
@@ -5193,7 +5193,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1280000\"}]}"
@@ -5352,7 +5352,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1290000\"}, {\"task_id\": \"1290100\"}, {\"task_id\": \"1290200\"}, {\"task_id\": \"1290300\"}]}"
@@ -5586,7 +5586,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1330000\"}]}"

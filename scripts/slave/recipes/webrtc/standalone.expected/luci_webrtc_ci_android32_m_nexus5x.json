@@ -2788,7 +2788,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"10000\"}]}"
@@ -2911,7 +2911,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"110000\"}]}"
@@ -3034,7 +3034,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"120000\"}]}"
@@ -3157,7 +3157,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"130000\"}]}"
@@ -3280,7 +3280,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"140000\"}]}"
@@ -3403,7 +3403,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"150000\"}, {\"task_id\": \"150100\"}]}"
@@ -3550,7 +3550,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"170000\"}, {\"task_id\": \"170100\"}, {\"task_id\": \"170200\"}, {\"task_id\": \"170300\"}, {\"task_id\": \"170400\"}, {\"task_id\": \"170500\"}]}"
@@ -3793,7 +3793,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1130000\"}, {\"task_id\": \"1130100\"}, {\"task_id\": \"1130200\"}, {\"task_id\": \"1130300\"}]}"
@@ -3988,7 +3988,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1170000\"}]}"
@@ -4111,7 +4111,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1180000\"}, {\"task_id\": \"1180100\"}, {\"task_id\": \"1180200\"}, {\"task_id\": \"1180300\"}, {\"task_id\": \"1180400\"}, {\"task_id\": \"1180500\"}]}"
@@ -4354,7 +4354,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1240000\"}]}"
@@ -4477,7 +4477,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1250000\"}]}"
@@ -4600,7 +4600,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1260000\"}]}"
@@ -4723,7 +4723,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1270000\"}, {\"task_id\": \"1270100\"}, {\"task_id\": \"1270200\"}, {\"task_id\": \"1270300\"}]}"
@@ -4918,7 +4918,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"1310000\"}]}"

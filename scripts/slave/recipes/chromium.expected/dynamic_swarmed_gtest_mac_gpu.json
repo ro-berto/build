@@ -777,7 +777,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"110000\"}]}"
@@ -909,7 +909,7 @@
       "50",
       "-task-summary-python",
       "-task-output-stdout",
-      "json",
+      "all",
       "-verbose",
       "-requests-json",
       "{\"tasks\": [{\"task_id\": \"10000\"}]}"
