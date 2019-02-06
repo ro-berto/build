@@ -302,6 +302,9 @@ class WebRTCApi(recipe_api.RecipeApi):
       # 'src' folder can be shared between builder types.
       self.m.chromium.c.build_config_fs = sanitize_file_name(self.buildername)
 
+    if self._isolated_targets:
+      self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
+
     self.m.chromium.mb_gen(
       self.mastername, self.buildername, phase=phase, use_goma=True,
       mb_path=self.m.path['checkout'].join('tools_webrtc', 'mb'),
@@ -310,10 +313,7 @@ class WebRTCApi(recipe_api.RecipeApi):
   def compile(self, phase=None):
     targets = self._isolated_targets
     if targets:
-      self.m.isolate.clean_isolated_files(self.m.chromium.output_dir)
       targets = ['default'] + targets
-
-    self.run_mb(phase)
 
     self.m.chromium.compile(targets=targets, use_goma_module=True)
 

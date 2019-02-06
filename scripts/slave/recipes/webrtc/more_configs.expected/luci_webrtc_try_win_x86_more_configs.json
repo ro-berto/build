@@ -164,7 +164,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[CACHE]\\builder\\src\\out\\Debug_x64",
+      "[CACHE]\\builder\\src\\out\\bwe_test_logging",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files"
@@ -1232,7 +1232,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]\\resources\\find_isolated_tests.py",
       "--build-dir",
-      "[CACHE]\\builder\\src\\out\\dummy_audio_file_devices_no_protobuf",
+      "[CACHE]\\builder\\src\\out\\rtti_no_sctp",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files (2)"

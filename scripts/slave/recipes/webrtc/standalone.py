@@ -57,6 +57,7 @@ def RunSteps(api):
   webrtc.configure_isolate()
 
   if webrtc.bot.should_build:
+    webrtc.run_mb()
     webrtc.compile()
 
   webrtc.get_binary_sizes()

@@ -4067,7 +4067,7 @@ Capture coverage data and upload a report.
 
 &mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#231)(self, \*\*kwargs):**
 
-&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#310)(self, phase=None):**
+&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#313)(self, phase=None):**
 
 &mdash; **def [configure\_isolate](/scripts/slave/recipe_modules/webrtc/api.py#182)(self, phase=None):**
 

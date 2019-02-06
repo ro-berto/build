@@ -134,7 +134,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/Android32_M_Nexus5X_dbg",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files"

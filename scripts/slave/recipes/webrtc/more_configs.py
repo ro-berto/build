@@ -138,6 +138,7 @@ def RunSteps(api):
             'rtti_no_sctp']
   for phase in phases:
     webrtc.configure_isolate(phase)
+    webrtc.run_mb(phase)
     webrtc.compile(phase)
 
     if webrtc.bot.should_test:

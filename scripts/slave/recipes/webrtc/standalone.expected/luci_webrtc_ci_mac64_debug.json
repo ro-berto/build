@@ -164,7 +164,7 @@
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/find_isolated_tests.py",
       "--build-dir",
-      "[CACHE]/builder/src/out/Debug",
+      "[CACHE]/builder/src/out/Mac64_Debug",
       "--clean-isolated-files"
     ],
     "name": "clean isolated files"
