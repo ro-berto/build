@@ -1439,7 +1439,7 @@ class SwarmingTest(Test):
       # On other OSes, the max char limit is over 100,000 characters. We avoid
       # sending the filter list if we're close to the limit -- this causes all
       # tests to be run.
-      char_limit = 7000 if self._dispatches_to_windows() else 90000
+      char_limit = 6000 if self._dispatches_to_windows() else 90000
       expected_filter_length = (sum(len(x) for x in tests_to_retry) +
           len(tests_to_retry) * len(filter_delimiter))
 
