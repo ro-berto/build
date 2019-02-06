@@ -385,7 +385,7 @@ class Test(object):
   def uses_local_devices(self):
     return False # pragma: no cover
 
-  def _step_name(self, suffix):
+  def step_name(self, suffix):
     """Helper to uniformly combine tests's name with a suffix."""
     if not suffix:
       return self.name
@@ -932,7 +932,7 @@ class LocalGTestTest(Test):
     step_test_data = lambda: api.test_utils.test_api.canned_gtest_output(True)
 
     kwargs = {
-      'name': self._step_name(suffix),
+      'name': self.step_name(suffix),
       'args': args,
       'step_test_data': step_test_data,
     }
@@ -1462,7 +1462,7 @@ class SwarmingTest(Test):
 
       if not self._merge:
         self._merge = api.chromium_tests.m.clang_coverage.shard_merge(
-            self._step_name(suffix))
+            self.step_name(suffix))
 
     task = task_func(
         build_properties=api.chromium.build_properties,
@@ -1473,7 +1473,7 @@ class SwarmingTest(Test):
         isolated_hash=isolated_hash,
         merge=self._merge,
         shards=shards,
-        title=self._step_name(suffix),
+        title=self.step_name(suffix),
         trigger_script=self._trigger_script,
         service_account=self._service_account,
     )
@@ -1518,14 +1518,14 @@ class SwarmingTest(Test):
   def pre_run(self, api, suffix):
     """Launches the test on Swarming."""
     assert suffix not in self._tasks, (
-        'Test %s was already triggered' % self._step_name(suffix))
+        'Test %s was already triggered' % self.step_name(suffix))
 
     # *.isolated may be missing if *_run target is misconfigured. It's a error
     # in gyp, not a recipe failure. So carry on with recipe execution.
     isolated_hash = api.isolate.isolated_tests.get(self.isolate_target)
     if not isolated_hash:
       return api.python.failing_step(
-          '[error] %s' % self._step_name(suffix),
+          '[error] %s' % self.step_name(suffix),
           '*.isolated file for target %s is missing' % self.isolate_target)
 
     # Create task.
@@ -1556,13 +1556,13 @@ class SwarmingTest(Test):
   def run(self, api, suffix):
     """Waits for launched test to finish and collects the results."""
     assert suffix not in self._test_runs, (
-        'Results of %s were already collected' % self._step_name(suffix))
+        'Results of %s were already collected' % self.step_name(suffix))
 
     # Emit error if test wasn't triggered. This happens if *.isolated is not
     # found. (The build is already red by this moment anyway).
     if suffix not in self._tasks:
       return api.python.failing_step(
-          '[collect error] %s' % self._step_name(suffix),
+          '[collect error] %s' % self.step_name(suffix),
           '%s wasn\'t triggered' % self.target_name)
 
     try:
@@ -1966,7 +1966,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
 
       if results:
         self.results_handler.upload_results(
-            api, results, self._step_name(suffix), suffix)
+            api, results, self.step_name(suffix), suffix)
 
   def _output_perf_results_if_present(self, api, step_result):
     # webrtc overrides this method in recipe_modules/webrtc/steps.py
@@ -2297,7 +2297,7 @@ class BlinkTest(Test):
   def run(self, api, suffix):
     results_dir = api.path['start_dir'].join('layout-test-results')
 
-    step_name = self._step_name(suffix)
+    step_name = self.step_name(suffix)
     args = [
         '--target', api.chromium.c.BUILD_CONFIG,
         '--results-directory', results_dir,
@@ -2389,7 +2389,7 @@ class MiniInstallerTest(PythonBasedTest):  # pylint: disable=W0232
     ]
     args.extend(cmd_args)
     return api.python(
-      self._step_name(suffix),
+      self.step_name(suffix),
       test_path.join('test_installer.py'),
       args,
       **kwargs)

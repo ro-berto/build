@@ -2224,7 +2224,7 @@
       "@@@STEP_TEXT@Metadata for FindIt post processing.@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"Step Layer Flakiness: \": {@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"base_unittests\": [@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"base_unittests (with patch)\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@      \"Test.Two\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@    ]@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }@@@",

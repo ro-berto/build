@@ -451,7 +451,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # we ignore it.
       flaky_tests = with_patch_failures & retry_with_patch_successes
       if flaky_tests:
-        results[test_suite.name] = sorted(flaky_tests)
+        results[test_suite.step_name('with patch')] = sorted(flaky_tests)
 
     if results:
       output = { 'Step Layer Flakiness: ' : results }

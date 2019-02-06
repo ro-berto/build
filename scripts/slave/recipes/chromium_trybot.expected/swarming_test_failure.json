@@ -3026,7 +3026,7 @@
       "@@@STEP_TEXT@Metadata for FindIt post processing.@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"Step Layer Flakiness: \": {@@@",
-      "@@@STEP_LOG_LINE@step_metadata@    \"gl_tests\": [@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"gl_tests (with patch)\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@      \"Test.Two\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@    ]@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }@@@",

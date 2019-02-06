@@ -214,6 +214,8 @@ def GenTests(api):
           api.test_utils.canned_test_output(passing=True)) +
       api.post_process(post_process.AnnotationContains,
           'FindIt Flakiness', ['bad/totally-bad-probably.html']) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['blink_web_tests (with patch)']) +
       api.post_process(post_process.DropExpectation)
   )
 

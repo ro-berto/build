@@ -241,7 +241,7 @@ class SwarmingAndroidPerfTest(SwarmingTest):
 
   def create_task(self, api, suffix, isolated_hash):
     return api.swarming.task(
-        title=self._step_name(suffix),
+        title=self.step_name(suffix),
         isolated_hash=isolated_hash,
         shards=self._shards,
         cipd_packages=self._cipd_packages,
