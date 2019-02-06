@@ -118,17 +118,18 @@ def BuildExamples(api, git_hash, flutter_executable):
 
   def BuildAndArchive(api, app_dir, apk_name):
     app_path = api.path['checkout'].join(app_dir)
-    gradle_zip_path = api.path['checkout'].join('dev', 'bots',
-                                                GetGradleZipFileName(api))
-    gradlew_properties = app_path.join('android', 'gradle', 'wrapper',
-                                       'gradle-wrapper.properties')
-    gradlew_contents = api.file.read_text('read gradle-wrapper.properties',
-                                          gradlew_properties)
-    api.file.write_text('set gradle-wrapper.properties', gradlew_properties,
-                        re.sub(r'distributionUrl=http.+\.zip',
-                                'distributionUrl=file\:' +
-                                re.escape(str(gradle_zip_path)),
-                                re.escape(gradlew_contents)))
+    if api.runtime.is_luci:
+      gradle_zip_path = api.path['checkout'].join('dev', 'bots',
+                                                  GetGradleZipFileName(api))
+      gradlew_properties = app_path.join('android', 'gradle', 'wrapper',
+                                        'gradle-wrapper.properties')
+      gradlew_contents = api.file.read_text('read gradle-wrapper.properties',
+                                            gradlew_properties)
+      api.file.write_text('set gradle-wrapper.properties', gradlew_properties,
+                          re.sub(r'distributionUrl=http.+\.zip',
+                                  'distributionUrl=file\:' +
+                                  re.escape(str(gradle_zip_path)),
+                                  re.escape(gradlew_contents)))
 
     with api.context(cwd=app_path):
       api.step('flutter build apk %s' % api.path.basename(app_dir),
