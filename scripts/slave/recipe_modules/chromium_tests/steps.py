@@ -1949,9 +1949,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       # raise it as a step failure.
       raise api.step.StepFailure(api.test_utils.INVALID_RESULTS_MAGIC)
 
-    # Check for perf results and upload to results dashboard if present.
-    self._output_perf_results_if_present(api, step_result)
-
     return valid, failures, total_tests_ran, pass_fail_counts
 
   def run(self, api, suffix):
@@ -1967,10 +1964,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       if results:
         self.results_handler.upload_results(
             api, results, self.step_name(suffix), suffix)
-
-  def _output_perf_results_if_present(self, api, step_result):
-    # webrtc overrides this method in recipe_modules/webrtc/steps.py
-    pass
 
 
 class PythonBasedTest(Test):
