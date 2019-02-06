@@ -177,6 +177,7 @@ PERF_BROWSER_TESTS_FILTER = [
   'WebRtcInternalsPerfBrowserTest.*',
   'WebRtcStatsPerfBrowserTest.*',
   'WebRtcVideoDisplayPerfBrowserTests*',
+  'WebRtcVideoHighBitrateBrowserTest*',
   'WebRtcVideoQualityBrowserTests*',
 ]
 
