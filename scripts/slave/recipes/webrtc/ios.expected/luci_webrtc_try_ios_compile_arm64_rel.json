@@ -6,13 +6,13 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
-      "https://chromium-review.googlesource.com",
+      "https://webrtc-review.googlesource.com",
       "--json_file",
       "/path/to/tmp/json",
       "--limit",
       "1",
       "-p",
-      "change=456789",
+      "change=123456",
       "-o",
       "ALL_REVISIONS",
       "-o",
@@ -30,8 +30,8 @@
       "@@@STEP_LOG_LINE@json.output@    \"branch\": \"master\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"revisions\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"184ebe53805e102605d11f6b143486d15c23a09c\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"12\", @@@",
-      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/89/456789/12\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"_number\": \"7\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"ref\": \"refs/changes/56/123456/7\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
@@ -57,9 +57,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/webrtc@refs/changes/89/456789/12",
+      "https://webrtc.googlesource.com/src@refs/changes/56/123456/7",
       "--revision",
-      "src@HEAD"
+      "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ],
     "cwd": "[CACHE]/builder",
     "env_suffixes": {
@@ -74,7 +74,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src\": \"HEAD\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src\": {@@@",
@@ -105,37 +105,6 @@
       "@@@STEP_LOG_END@json.output@@@",
       "@@@SET_BUILD_PROPERTY@got_revision@\"f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9\"@@@",
       "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#170242}\"@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[CACHE]/builder/src/tools_webrtc/ios/chromium.fake/ios_compile_arm64_rel.json",
-      "/path/to/tmp/json"
-    ],
-    "name": "read build config",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"additional_compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"all\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"gn_args\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"goma_dir=\\\"$(goma_dir)\\\"\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dcheck_always_on=true\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"ios_enable_code_signing=false\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"is_debug=false\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"target_cpu=\\\"arm64\\\"\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"target_os=\\\"ios\\\"\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"use_goma=true\"@@@",
-      "@@@STEP_LOG_LINE@json.output@  ], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphoneos10.3\", @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"tests\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@  \"xcode build version\": \"10l232m\"@@@",
-      "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
     ]
   },
   {
@@ -171,13 +140,6 @@
     ]
   },
   {
-    "cmd": [],
-    "name": "ensure xcode",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@Ensuring Xcode version 10l232m in [CACHE]/xcode_ios_10l232m.app@@@"
-    ]
-  },
-  {
     "cmd": [
       "cipd",
       "ensure",
@@ -190,9 +152,11 @@
       "-service-account-json",
       "/creds/service_accounts/service-account-goma-client.json"
     ],
-    "name": "ensure xcode.ensure_installed",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "name": "ensure_installed",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
@@ -206,36 +170,6 @@
   },
   {
     "cmd": [
-      "[START_DIR]/mac_toolchain",
-      "install",
-      "-kind",
-      "ios",
-      "-xcode-version",
-      "10l232m",
-      "-output-dir",
-      "[CACHE]/xcode_ios_10l232m.app"
-    ],
-    "infra_step": true,
-    "name": "ensure xcode.install xcode",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "sudo",
-      "xcode-select",
-      "-switch",
-      "[CACHE]/xcode_ios_10l232m.app"
-    ],
-    "infra_step": true,
-    "name": "ensure xcode.select xcode",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
-    ]
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
@@ -243,8 +177,9 @@
     ],
     "cwd": "[CACHE]/builder/src",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "",
-      "LANDMINES_VERBOSE": "1"
+      "CHROME_HEADLESS": "1",
+      "GYP_DEFINES": "clang=1 gomadir='[GOMA_CACHE]/client' target_arch=arm64 use_goma=1",
+      "MAC_TOOLCHAIN_INSTALLER": "[START_DIR]/mac_toolchain"
     },
     "env_suffixes": {
       "PATH": [
@@ -254,13 +189,179 @@
     "name": "gclient runhooks"
   },
   {
+    "cmd": [],
+    "name": "apply build config"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CLEANUP]/ios_tmp_1/luci.webrtc.try"
+    ],
+    "infra_step": true,
+    "name": "apply build config.create temp directory",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "{\n  \"configuration\": \"Release\",\n  \"gn_args\": [\n    \"is_debug=false\",\n    \"target_cpu=\\\"arm\\\"\",\n    \"use_goma=true\"\n  ],\n  \"sdk\": \"iphoneos10.3\",\n  \"tests\": [],\n  \"xcode build version\": \"10l232m\"\n}",
+      "[CLEANUP]/ios_tmp_1/luci.webrtc.try/ios_compile_arm64_rel.json"
+    ],
+    "infra_step": true,
+    "name": "apply build config.generate ios_compile_arm64_rel.json",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[CLEANUP]/ios_tmp_1/luci.webrtc.try/ios_compile_arm64_rel.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "apply build config.read build config",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"configuration\": \"Release\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"gn_args\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"is_debug=false\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"target_cpu=\\\"arm\\\"\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"use_goma=true\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  ], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"sdk\": \"iphoneos10.3\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tests\": [], @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"xcode build version\": \"10l232m\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "apply build config.ensure_goma",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[GOMA_CACHE]/client",
+      "-ensure-file",
+      "infra_internal/goma/client/mac-amd64 release",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-goma-client.json"
+    ],
+    "infra_step": true,
+    "name": "apply build config.ensure_goma.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-release---------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra_internal/goma/client/mac-amd64\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "rmtree",
+      "[CLEANUP]/ios_tmp_1"
+    ],
+    "infra_step": true,
+    "name": "apply build config.rmtree [CLEANUP]/ios_tmp_1",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/osx_sdk",
+      "-ensure-file",
+      "infra/tools/mac_toolchain/${platform} git_revision:796d2b92cff93fc2059623ce0a66284373ceea0a",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "infra_step": true,
+    "name": "ensure_installed (2)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-git_revision:796\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"infra/tools/mac_toolchain/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/osx_sdk/mac_toolchain",
+      "install",
+      "-kind",
+      "ios",
+      "-xcode-version",
+      "10l232m",
+      "-output-dir",
+      "[CACHE]/osx_sdk/XCode.app"
+    ],
+    "infra_step": true,
+    "name": "install xcode"
+  },
+  {
+    "cmd": [
+      "sudo",
+      "xcode-select",
+      "--switch",
+      "[CACHE]/osx_sdk/XCode.app"
+    ],
+    "infra_step": true,
+    "name": "select XCode"
+  },
+  {
     "cmd": [
       "python",
       "-u",
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "lookup",
       "-m",
-      "chromium.fake",
+      "tryserver.webrtc",
       "-b",
       "ios_compile_arm64_rel",
       "--config-file",
@@ -272,8 +373,7 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "",
-      "GOMA_USE_LOCAL": "false",
-      "LANDMINES_VERBOSE": "1"
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "lookup GN args",
     "stdout": "/path/to/tmp/",
@@ -288,7 +388,7 @@
       "[CACHE]/builder/src/tools_webrtc/mb/mb.py",
       "gen",
       "-m",
-      "chromium.fake",
+      "tryserver.webrtc",
       "-b",
       "ios_compile_arm64_rel",
       "--config-file",
@@ -301,13 +401,44 @@
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "",
-      "GOMA_USE_LOCAL": "false",
-      "LANDMINES_VERBOSE": "1"
+      "GOMA_USE_LOCAL": "false"
     },
-    "name": "generate build files (mb)"
+    "name": "generate_build_files"
+  },
+  {
+    "allow_subannotations": true,
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
+      "--src-dir",
+      "[CACHE]/builder/src",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1"
+    },
+    "name": "clang_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"clang_revision\": \"123456-7\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "preprocess_for_goma"
   },
   {
@@ -322,6 +453,10 @@
       "0777",
       "[GOMA_CACHE]/data/ios_compile_arm64_rel"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
     "~followup_annotations": [
@@ -335,12 +470,17 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "restart"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
       "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/ios_compile_arm64_rel",
+      "GOMA_DEPS_CACHE_FILE": "goma_deps_cache",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
+      "GOMA_FAIL_FAST": "true",
       "GOMA_HERMETIC": "error",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
     },
@@ -369,6 +509,10 @@
       "--pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "preprocess_for_goma.start cloudtail",
     "~followup_annotations": [
@@ -377,22 +521,58 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--",
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
       "-C",
       "[CACHE]/builder/src/out/Release-iphoneos",
       "-j",
-      "50",
-      "all"
+      "20"
     ],
-    "cwd": "[CACHE]/builder/src/out/Release-iphoneos",
+    "cwd": "[CACHE]/builder/src",
     "env": {
-      "FORCE_MAC_TOOLCHAIN": "",
-      "LANDMINES_VERBOSE": "1"
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
     },
     "name": "compile"
   },
   {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[CACHE]/builder/src/out/Release-iphoneos",
+      "-j",
+      "20",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "FORCE_MAC_TOOLCHAIN": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "name": "compile confirm no-op",
+    "stdout": "/path/to/tmp/"
+  },
+  {
     "cmd": [],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma"
   },
   {
@@ -403,9 +583,10 @@
       "jsonstatus",
       "[TMP_BASE]/goma_jsonstatus.json"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/ios_compile_arm64_rel",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -435,9 +616,10 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stat"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/ios_compile_arm64_rel",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -456,9 +638,10 @@
       "[GOMA_CACHE]/client/goma_ctl.py",
       "stop"
     ],
+    "cwd": "[CACHE]/builder/src",
     "env": {
+      "CHROME_HEADLESS": "1",
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/ios_compile_arm64_rel",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -491,27 +674,35 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/Release-iphoneos",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/src/out/Release-iphoneos\", \"-j\", \"50\", \"all\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/Release-iphoneos\", \"-j\", 20]",
       "--build-exit-status",
       "0",
+      "--build-step-name",
+      "compile",
       "--ninja-log-compiler",
-      "goma",
+      "goma-clang",
       "--goma-stats-file",
       "[TMP_BASE]/goma_stats",
       "--goma-counterz-file",
       "[TMP_BASE]/goma_counterz",
       "--goma-crash-report-id-file",
       "[TMP_BASE]/crash_report_id",
+      "--build-id",
+      "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"master.chromium.fake\", \"builder\": \"ios_compile_arm64_rel\", \"project\": \"\"}",
+      "{\"bucket\": \"try\", \"builder\": \"ios_compile_arm64_rel\", \"project\": \"webrtc\"}",
       "--is-luci",
       "--buildbot-buildername",
       "ios_compile_arm64_rel",
       "--buildbot-mastername",
-      "chromium.fake",
+      "tryserver.webrtc",
       "--buildbot-slavename",
-      "fake-vm"
+      "bot_id"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "name": "postprocess_for_goma.upload_log",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
@@ -538,6 +729,10 @@
       "--killed-pid-file",
       "[TMP_BASE]/cloudtail.pid"
     ],
+    "cwd": "[CACHE]/builder/src",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
     "infra_step": true,
     "name": "postprocess_for_goma.stop cloudtail",
     "~followup_annotations": [
@@ -545,91 +740,13 @@
     ]
   },
   {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/src",
-    "name": "bootstrap swarming"
-  },
-  {
     "cmd": [
-      "python",
-      "-u",
-      "[CACHE]/builder/src/tools/swarming_client/swarming.py",
-      "--version"
+      "sudo",
+      "xcode-select",
+      "--reset"
     ],
-    "cwd": "[CACHE]/builder/src",
-    "name": "bootstrap swarming.swarming.py --version",
-    "stdout": "/path/to/tmp/",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@1.2.3@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/src",
-    "name": "isolate"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
-      "--json-output",
-      "/path/to/tmp/json",
-      "copy",
-      "{'conditions': [['OS == \"ios\"', {'variables': {'files': ['<(app_path)/', 'src/ios/build/bots/scripts/'], 'command': ['src/ios/build/bots/scripts/run.py', '--app', '<(app_path)', '--args-json', '{\"test_args\": <(test_args),         \"xctest\": <(xctest),         \"test_cases\": <(test_cases),         \"restart\": <(restart),         \"xcode_parallelization\": <(xcode_parallelization)}', '--out-dir', '${ISOLATED_OUTDIR}', '--retries', '3', '--shards', '<(shards)', '--<(xcode_arg_name)', '<(xcode_version)', '--mac-toolchain-cmd', './mac_toolchain', '--xcode-path', 'Xcode.app', '--wpr-tools-path', '<(wpr_tools_path)', '--replay-path', '<(replay_path)']}}]]}",
-      "[CACHE]/builder/template.isolate"
-    ],
-    "cwd": "[CACHE]/builder/src",
     "infra_step": true,
-    "name": "isolate.generate template.isolate",
-    "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_LOG_LINE@template.isolate@{@@@",
-      "@@@STEP_LOG_LINE@template.isolate@  \"conditions\": [@@@",
-      "@@@STEP_LOG_LINE@template.isolate@    [@@@",
-      "@@@STEP_LOG_LINE@template.isolate@      \"OS == \\\"ios\\\"\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@      {@@@",
-      "@@@STEP_LOG_LINE@template.isolate@        \"variables\": {@@@",
-      "@@@STEP_LOG_LINE@template.isolate@          \"command\": [@@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"src/ios/build/bots/scripts/run.py\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"--app\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"<(app_path)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"--args-json\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"{\\\"test_args\\\": <(test_args),         \\\"xctest\\\": <(xctest),         \\\"test_cases\\\": <(test_cases),         \\\"restart\\\": <(restart),         \\\"xcode_parallelization\\\": <(xcode_parallelization)}\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"--out-dir\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"${ISOLATED_OUTDIR}\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"--retries\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"3\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"--shards\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"<(shards)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"--<(xcode_arg_name)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"<(xcode_version)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"--mac-toolchain-cmd\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"./mac_toolchain\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"--xcode-path\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"Xcode.app\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"--wpr-tools-path\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"<(wpr_tools_path)\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"--replay-path\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"<(replay_path)\"@@@",
-      "@@@STEP_LOG_LINE@template.isolate@          ], @@@",
-      "@@@STEP_LOG_LINE@template.isolate@          \"files\": [@@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"<(app_path)/\", @@@",
-      "@@@STEP_LOG_LINE@template.isolate@            \"src/ios/build/bots/scripts/\"@@@",
-      "@@@STEP_LOG_LINE@template.isolate@          ]@@@",
-      "@@@STEP_LOG_LINE@template.isolate@        }@@@",
-      "@@@STEP_LOG_LINE@template.isolate@      }@@@",
-      "@@@STEP_LOG_LINE@template.isolate@    ]@@@",
-      "@@@STEP_LOG_LINE@template.isolate@  ]@@@",
-      "@@@STEP_LOG_LINE@template.isolate@}@@@",
-      "@@@STEP_LOG_END@template.isolate@@@"
-    ]
-  },
-  {
-    "cmd": [],
-    "cwd": "[CACHE]/builder/src",
-    "name": "trigger"
+    "name": "reset XCode"
   },
   {
     "jsonResult": null,

@@ -140,6 +140,7 @@ def RunSteps(api):
     webrtc.configure_isolate(phase)
     webrtc.run_mb(phase)
     webrtc.compile(phase)
+    webrtc.isolate()
 
     if webrtc.bot.should_test:
       webrtc.runtests(phase)

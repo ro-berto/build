@@ -138,6 +138,28 @@ def generate_tests(api, phase, revision, revision_number, bot):
           '--force_fieldtrials=WebRTC-QuickPerfTest/Enabled/'
       ]))
 
+  if test_suite == 'ios':
+    tests += [
+        IosTest('apprtcmobile_tests', xctest=True),
+        IosTest('sdk_unittests', xctest=True),
+        IosTest('sdk_framework_unittests', xctest=True),
+        IosTest('audio_decoder_unittests'),
+        IosTest('common_audio_unittests'),
+        IosTest('common_video_unittests'),
+        IosTest('modules_tests'),
+        IosTest('modules_unittests'),
+        IosTest('rtc_media_unittests'),
+        IosTest('rtc_pc_unittests'),
+        IosTest('rtc_stats_unittests'),
+        IosTest('rtc_unittests'),
+        IosTest('system_wrappers_unittests'),
+        IosTest('test_support_unittests'),
+        IosTest('tools_unittests'),
+        IosTest('video_capture_tests'),
+        IosTest('video_engine_tests'),
+        IosTest('webrtc_nonparallel_tests'),
+    ]
+
   if test_suite == 'more_configs':
     if 'bwe_test_logging' in phase:
       tests.append(SwarmingIsolatedTest(
@@ -264,3 +286,12 @@ class AndroidJunitTest(Test):
 
   def run(self, api, suffix):
     api.chromium_android.run_java_unit_test_suite(self._name)
+
+
+class IosTest(object):
+  """A fake shell of an iOS test. It is only read by apply_ios_config."""
+  def __init__(self, name, xctest=False):
+    self._name = name
+    self.config = {'app': name}
+    if xctest:
+      self.config['xctest'] = True
