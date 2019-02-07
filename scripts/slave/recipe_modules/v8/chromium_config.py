@@ -63,3 +63,10 @@ def v8_static_library(c):
 @CONFIG_CTX(includes=['v8'])
 def slow_dchecks(c):
   c.gn_args.append('v8_enable_slow_dchecks=true')
+
+
+@CONFIG_CTX(includes=['ninja'])
+def node_ci(c):
+  c.project_generator.tool = 'gn'
+  c.build_dir = c.CHECKOUT_PATH.join('out')
+  c.use_gyp_env = False

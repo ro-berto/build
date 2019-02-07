@@ -36,6 +36,21 @@ def llvm_compiler_rt(c):
 
 
 @CONFIG_CTX()
+def node_ci(c):
+  soln = c.solutions.add()
+  soln.name = 'node-ci'
+  soln.url = ChromiumGitURL(c, 'v8', 'node-ci')
+  c.got_revision_reverse_mapping['got_node_js_revision'] = 'node-ci/node'
+  c.got_revision_reverse_mapping['got_v8_revision'] = 'node-ci/v8'
+  c.repo_path_map['https://chromium.googlesource.com/v8/v8'] = (
+      'node-ci/v8', 'HEAD')
+
+  # Show V8-centric revisions in UI.
+  c.got_revision_reverse_mapping['got_node_ci_revision'] = 'node-ci'
+  c.got_revision_reverse_mapping['got_revision'] = 'node-ci/v8'
+
+
+@CONFIG_CTX()
 def node_js(c):
   soln = c.solutions.add()
   soln.name = 'node.js'
