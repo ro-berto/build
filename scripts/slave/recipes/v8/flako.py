@@ -53,6 +53,10 @@ PROPERTIES = {
   'extra_args': Property(default=None, kind=list),
   # Number of commits, backwards bisection will initially leap over.
   'initial_commit_offset': Property(default=1, kind=Single((int, float))),
+  # The maximum number of calibration attempts (safeguard to prevent infinite
+  # loops). Repetitions are doubled on each attempt until there's enough
+  # confidence.
+  'max_calibration_attempts': Property(default=5, kind=Single((int, float))),
   # Name of the isolated file (e.g. bot_default, mjsunit).
   'isolated_name': Property(kind=str),
   # Initial number of swarming shards.
@@ -65,6 +69,10 @@ PROPERTIES = {
   # Swarming dimensions classifying the type of bot the tests should run on.
   # Passed as list of strings, each in the format name:value.
   'swarming_dimensions': Property(default=None, kind=list),
+  # Swarming priority to be used for swarming tasks. The priority is lowered by
+  # 10 (actual numberic value increases) when using higher time than the one
+  # specified in the total_timeout_sec.
+  'swarming_priority': Property(default=25, kind=Single((int, float))),
   # Fully qualified test name passed to run-tests.py. E.g. mjsunit/foobar.
   'test_name': Property(kind=str),
   # Timeout parameter passed to run-tests.py. Keep small when bisecting
@@ -83,11 +91,6 @@ PROPERTIES = {
 # The maximum number of steps for backwards and inwards bisection (safeguard to
 # prevent infinite loops).
 MAX_BISECT_STEPS = 16
-
-# The maximum number of calibration attempts (safeguard to prevent infinite
-# loops). Repetitions are doubled on each attempt until there's enough
-# confidence.
-MAX_CALIBRATION_ATTEMPTS = 5
 
 # A build with isolates must be within a distance of maximum 32 revisions for
 # any revision that should be tested. We don't look further as a safeguard.
@@ -271,13 +274,15 @@ class Depot(object):
 
 class Runner(object):
   """Helper class for executing the V8 test runner to check for flakes."""
-  def __init__(self, api, depot, command, num_shards, repro_only):
+  def __init__(self, api, depot, command, num_shards, repro_only,
+               max_calibration_attempts):
     self.api = api
     self.depot = depot
     self.command = command
     self.num_shards = min(num_shards, MAX_SWARMING_SHARDS)
     self.repro_only = repro_only
     self.multiplier = 1
+    self.max_calibration_attempts = max_calibration_attempts
 
   def calibrate(self, offset):
     """Calibrates the multiplier for test time or repetitions of the runner for
@@ -290,7 +295,7 @@ class Runner(object):
     Args:
       offset (int): Distance to the start commit.
     """
-    for i in range(MAX_CALIBRATION_ATTEMPTS):
+    for i in range(self.max_calibration_attempts):
       # Nest to disambiguate step names during calibration.
       with self.api.step.nest('calibration attempt %d' % (i + 1)):
         num_failures = self.check_num_flakes(offset)
@@ -301,9 +306,6 @@ class Runner(object):
         # First double the swarming shards until reaching the maximum.
         self.num_shards = min(self.num_shards * 2, MAX_SWARMING_SHARDS)
       else:
-        # Then double the repetition multiplier. Use lower swarming priority
-        # given the number and time of the tasks.
-        self.api.swarming.default_priority = 35
         self.multiplier *= 2
     return False
 
@@ -346,6 +348,10 @@ class Runner(object):
           task_output_dir=path.join('task_output_dir_%d' % shard),
           raw_cmd=self.command.raw_cmd(self.multiplier, offset),
       )
+
+      # Use lower swarming priority given the increased time of the task.
+      if self.multiplier > 1:
+        task.priority = max(task.priority + 10, 255)
 
       # Override cpu and gpu defaults for Android as such devices don't have
       # these dimensions.
@@ -392,6 +398,9 @@ class Runner(object):
         assert match
         return int(match.group(1))
 
+    # TODO(sergiyb): Make bisect more robust to infra failures, e.g. we trigger
+    # several dozen of tasks during bisect and currently if one expires, the
+    # whole thing goes purple.
     with self.api.tempfile.temp_dir('v8-flake-bisect-') as path:
       with self.api.step.nest(step_prefix) as parent:
         tasks = [
@@ -499,13 +508,13 @@ def bisect(api, depot, initial_commit_offset, is_bad_func, offset):
   from_offset, to_offset = bisect_into(from_offset, to_offset)
   report_range('Result: Suspecting %s', from_offset, to_offset)
 
-def setup_swarming(api, swarming_dimensions):
+def setup_swarming(api, swarming_dimensions, swarming_priority):
   api.swarming_client.checkout('master')
   api.swarming.default_expiration = 60 * 60
   api.swarming.default_hard_timeout = 60 * 60
   api.swarming.default_io_timeout = 20 * 60
   api.swarming.default_idempotent = False
-  api.swarming.default_priority = 25
+  api.swarming.default_priority = swarming_priority
   api.swarming.default_user = 'v8-flake-bisect'
   api.swarming.add_default_tag('purpose:v8-flake-bisect')
   api.swarming.set_default_dimension('pool', 'Chrome')
@@ -521,18 +530,21 @@ def setup_swarming(api, swarming_dimensions):
 
 
 def RunSteps(api, bisect_mastername, bisect_buildername, build_config,
-             extra_args, initial_commit_offset, isolated_name, num_shards,
-             repetitions, repro_only, swarming_dimensions, test_name,
-             timeout_sec, total_timeout_sec, to_revision, variant):
+             extra_args, initial_commit_offset, max_calibration_attempts,
+             isolated_name, num_shards, repetitions, repro_only,
+             swarming_dimensions, swarming_priority, test_name, timeout_sec,
+             total_timeout_sec, to_revision, variant):
   # Convert floats to ints.
   initial_commit_offset = int(initial_commit_offset)
+  max_calibration_attempts = max(min(int(max_calibration_attempts), 5), 1)
   num_shards = int(num_shards)
   repetitions = int(repetitions)
   timeout_sec = int(timeout_sec)
+  swarming_priority = max(min(int(swarming_priority), 255), 10)
   total_timeout_sec = int(total_timeout_sec)
 
   # Set up swarming client.
-  setup_swarming(api, swarming_dimensions)
+  setup_swarming(api, swarming_dimensions, swarming_priority)
 
   # Set up bisection helpers.
   depot = Depot(
@@ -540,7 +552,8 @@ def RunSteps(api, bisect_mastername, bisect_buildername, build_config,
   command = Command(
       test_name, build_config, variant, repetitions, repro_only,
       total_timeout_sec, timeout_sec, extra_args)
-  runner = Runner(api, depot, command, num_shards, repro_only)
+  runner = Runner(
+      api, depot, command, num_shards, repro_only, max_calibration_attempts)
 
   to_offset = depot.find_closest_build(0)
 
@@ -780,4 +793,21 @@ def GenTests(api):
       is_flaky(0, 0, 3, calibration_attempt=5, test_name=shortened_test_name) +
       api.post_process(ResultReasonRE, 'Could not reach enough confidence.') +
       api.post_process(DropExpectation)
+  )
+
+  # Simulate triggering of the recipe by the flake verification bot.
+  yield (
+      test('verify_flake') +
+      api.properties(
+        repro_only=True, swarming_priority=40, num_shards=2,
+        total_timeout_sec=240, max_calibration_attempts=1) +
+      isolated_lookup(0, True) +
+      is_flaky(0, 0, 0, calibration_attempt=1) +
+      is_flaky(0, 1, 1, calibration_attempt=1) +
+      api.post_process(MustRun, 'Flake still reproduces.') +
+      api.post_process(Filter(
+          'calibration attempt 1.check mjsunit/foobar at #0.'
+          '[trigger] check mjsunit/foobar at #0 - shard 1',
+          'calibration attempt 1.check mjsunit/foobar at #0.'
+          'check mjsunit/foobar at #0 - shard 1'))
   )
