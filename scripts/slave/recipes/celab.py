@@ -21,8 +21,11 @@ from recipe_engine.recipe_api import Property
 
 CELAB_REPO = "https://chromium.googlesource.com/enterprise/cel"
 
-POOL_NAME = "celab-ci"
-POOL_SIZE = 6
+CI_POOL_NAME = "celab-ci"
+CI_POOL_SIZE = 5
+
+TRY_POOL_NAME = "celab-try"
+TRY_POOL_SIZE = 5
 
 
 def _get_bin_directory(api, checkout):
@@ -73,7 +76,8 @@ def RunSteps(api):
     api.python('build', 'build.py', ['build', '--verbose'])
 
   # Upload binaries (cel_ctl and resources/*) for CI builds
-  if api.buildbucket.build.builder.bucket == 'ci':
+  bucket = api.buildbucket.build.builder.bucket
+  if bucket == 'ci':
     output_dir = _get_bin_directory(api, checkout)
     cel_ctl = _get_ctl_binary_name(api)
     zip_out = api.path['start_dir'].join('cel.zip')
@@ -94,12 +98,15 @@ def RunSteps(api):
       name='upload CELab binaries',
       link_name='CELab binaries')
 
-    # Run tests for Linux CI builds.
-    if api.platform.is_linux:
-      _RunTests(api, checkout)
+  # Run tests for specific Linux CI/Try builds.
+  if api.platform.is_linux:
+    if bucket == 'ci':
+      _RunTests(api, checkout, CI_POOL_NAME, CI_POOL_SIZE)
+    elif bucket == 'try' and api.buildbucket.builder_name == "tests":
+      _RunTests(api, checkout, TRY_POOL_NAME, TRY_POOL_SIZE)
 
 
-def _RunTests(api, checkout):
+def _RunTests(api, checkout, pool_name, pool_size):
   host_dir = api.path['start_dir'].join('hosts')
   error_logs_dir = api.path['start_dir'].join('logs')
   api.file.ensure_directory('init host_dir if not exists', host_dir)
@@ -114,9 +121,9 @@ def _RunTests(api, checkout):
       'generate_host_files.py',
       [
         '--template', '../../examples/schema/host/example.host.textpb',
-        '--projects', ';'.join(["%s-%03d" % (POOL_NAME, i) for i in xrange(
-            1, POOL_SIZE)]),
-        '--storage_bucket', '%s-assets' % POOL_NAME,
+        '--projects', ';'.join(["%s-%03d" % (pool_name, i) for i in xrange(
+            1, pool_size + 1)]),
+        '--storage_bucket', '%s-assets' % pool_name,
         '--storage_prefix', storage_prefix,
         '--destination_dir', host_dir
       ],
@@ -130,7 +137,7 @@ def _RunTests(api, checkout):
         [
           '--hosts', host_dir,
           # TODO: Use SharedProviderStorage when its checked in.
-          #'--shared_provider_storage', '%s-assets' % POOL_NAME,
+          #'--shared_provider_storage', '%s-assets' % pool_name,
           '--error_logs_dir', error_logs_dir,
           '--noprogress', '-vv'
         ],
@@ -149,7 +156,7 @@ def _RunTests(api, checkout):
         api.buildbucket.build.id)
       api.gsutil.upload(
         source=zip_out,
-        bucket='%s-logs' % POOL_NAME,
+        bucket='%s-logs' % pool_name,
         dest=gs_dest,
         name='upload CELab test logs',
         link_name='Test logs')
@@ -165,6 +172,12 @@ def GenTests(api):
   yield (
       api.test('basic_try') +
       api.buildbucket.try_build(project='celab', bucket='try',
+                                git_repo=CELAB_REPO)
+  )
+  yield (
+      api.test('tests_try') +
+      api.buildbucket.try_build(project='celab', bucket='try',
+                                builder='tests',
                                 git_repo=CELAB_REPO)
   )
   yield (
