@@ -333,47 +333,6 @@ def GenTests(api):
   )
 
   yield (
-    api.test('perf_test')
-    + api.platform('mac', 64)
-    + api.properties(
-      mastername='chromium.fake',
-      bot_id='fake-vm',
-      got_revision_cp='123456',
-    )
-    + api.buildbucket.ci_build(
-      project='chromium',
-      builder='ios',
-      build_number=1,
-      revision='HEAD',
-      git_repo='https://chromium.googlesource.com/chromium/src',
-    )
-    + api.ios.make_test_build_config({
-      'xcode build version': '9abc',
-      'gn_args': [
-        'is_debug=true',
-        'target_cpu="x86"',
-      ],
-      'tests': [
-        {
-          'app': 'fake test',
-          'bot id': 'fake99-b1',
-          'device type': 'fake device',
-          'os': '8.1',
-          'pool': 'fake-pool',
-        },
-      ],
-    })
-    + api.step_data(
-        'bootstrap swarming.swarming.py --version',
-        stdout=api.raw_io.output_text('1.2.3'),
-    )
-    + api.path.exists(
-        api.path['cleanup'].join('0_tmp_2', '10000', 'Documents',
-                                 'perf_result.json'),
-    )
-  )
-
-  yield (
     api.test('infra_failure')
     + api.platform('mac', 64)
     + api.properties(

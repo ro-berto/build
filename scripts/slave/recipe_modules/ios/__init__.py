@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'build/build',
   'build/chromium',
   'build/chromium_checkout',
   'build/filter',

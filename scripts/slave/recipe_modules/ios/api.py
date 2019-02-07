@@ -60,12 +60,6 @@ class iOSApi(recipe_api.RecipeApi):
 
   WPR_REPLAY_DATA_ROOT = 'wpr-replay-data'
 
-  DASHBOARD_UPLOAD_URL = 'https://chromeperf.appspot.com'
-  UPLOAD_DASHBOARD_API_PROPERTIES = [
-      'got_revision_cp',
-      'git_revision',
-  ]
-
   def __init__(self, *args, **kwargs):
     super(iOSApi, self).__init__(*args, **kwargs)
     self.__config = None
@@ -1095,54 +1089,20 @@ class iOSApi(recipe_api.RecipeApi):
         shard_output_dir, 'Documents', 'perf_result.json')
       if self.m.path.exists(perf_results):
         data = self.get_perftest_data(perf_results)
-        if 'Perf Data' in data:
-          data_decode = data['Perf Data']
-          data_result = []
-          for testcase in data_decode:
-            for trace in data_decode[testcase]['value']:
-              data_point = self.m.perf_dashboard.get_skeleton_point(
-                'chrome_ios_perf/%s/%s' % (testcase, trace),
-                # TODO(huangml): Use revision.
-                int(self.m.time.time()),
-                data_decode[testcase]['value'][trace]
-              )
-              data_point['units'] = data_decode[testcase]['unit']
-              data_result.extend([data_point])
-          self.m.perf_dashboard.set_default_config()
-          self.m.perf_dashboard.add_point(data_result)
-        else:
-          data['benchmark_name'] = task['test']['app']
-          args = [
-              '--build-dir', self.m.path['checkout'].join('out'),
-              '--buildername', self.m.buildbucket.builder_name,
-              '--buildnumber', self.m.buildbucket.build.number,
-              '--name', task['test']['app'],
-              '--perf-id', self.m.buildbucket.builder_name,
-              '--results-file', self.m.json.input(data),
-              '--results-url', self.DASHBOARD_UPLOAD_URL,
-          ]
-
-          for revision_name in self.UPLOAD_DASHBOARD_API_PROPERTIES:
-            if revision_name in self.m.properties:
-              args.extend(('--%s' % revision_name.replace('_', '-'),
-                           self.m.properties[revision_name]))
-
-          args.append('--output-json-dashboard-url')
-          args.append(self.m.json.output(
-              add_json_log=False, name='dashboard_url'))
-
-          step_result = self.m.build.python(
-              '%s Dashboard Upload' % task['test']['app'],
-              self.m.chromium.package_repo_resource(
-                  'scripts', 'slave', 'upload_perf_dashboard_results.py'),
-              args,
-              step_test_data=(
-                  lambda: self.m.json.test_api.output('chromeperf.appspot.com',
-                                                   name='dashboard_url') +
-                  self.m.json.test_api.output({})))
-
-          step_result.presentation.links['Results Dashboard'] = (
-              step_result.json.outputs.get('dashboard_url', ''))
+        data_decode = data['Perf Data']
+        data_result = []
+        for testcase in data_decode:
+          for trace in data_decode[testcase]['value']:
+            data_point = self.m.perf_dashboard.get_skeleton_point(
+              'chrome_ios_perf/%s/%s' % (testcase, trace),
+              # TODO(huangml): Use revision.
+              int(self.m.time.time()),
+              data_decode[testcase]['value'][trace]
+            )
+            data_point['units'] = data_decode[testcase]['unit']
+            data_result.extend([data_point])
+        self.m.perf_dashboard.set_default_config()
+        self.m.perf_dashboard.add_point(data_result)
 
     self.m.swarming.report_stats()
 
@@ -1155,47 +1115,17 @@ class iOSApi(recipe_api.RecipeApi):
   def get_perftest_data(self, path):
     # Use fake data for recipe testing.
     if self._test_data.enabled:
-      data = None
-      if 'got_revision_cp' not in self.m.properties:
-        data = {
-          'Perf Data' : {
-            'startup test' : {
-              'unit' : 'seconds',
-              'value' : {
-                'finish_launching' : 0.55,
-                'become_active' : 0.68,
-              }
+      data = {
+        'Perf Data' : {
+          'startup test' : {
+            'unit' : 'seconds',
+            'value' : {
+              'finish_launching' : 0.55,
+              'become_active' : 0.68,
             }
           }
         }
-      else:
-        data = {
-          "format_version": "1.0",
-          "charts": {
-            "warm_times": {
-              "http://www.google.com/": {
-                "type": "list_of_scalar_values",
-                "values": [9, 9, 8, 9],
-                "units": "sec"
-              },
-            },
-            "html_size": {
-              "http://www.google.com/": {
-                "type": "scalar",
-                "value": 13579,
-                "units": "bytes"
-              }
-            },
-            "load_times": {
-              "http://www.google.com/": {
-                "type": "list_of_scalar_values",
-                "value": [4.2],
-                "std": 1.25,
-                "units": "sec"
-              }
-            }
-          }
-        }
+      }
     else:
       with open(path) as f: # pragma: no cover
         data = self.m.json.loads(f.read())
