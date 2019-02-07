@@ -460,32 +460,6 @@
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/sdk/tools/swarming_client/isolate.py",
-      "archive",
-      "--blacklist=(^(out|xcodebuild)[/\\\\](Release|Debug|Product)\\w*[/\\\\](clang_\\w*[/\\\\])?(generated_tests|obj)[/\\\\])|(^tools[/\\\\]sdks)",
-      "--ignore_broken_items",
-      "-Ihttps://isolateserver.appspot.com",
-      "-i[CACHE]/builder/sdk/dart_testing_fileset",
-      "-s[CACHE]/builder/sdk/dart_testing_fileset.isolated"
-    ],
-    "name": "upload testing fileset dart_testing_fileset",
-    "stdout": "/path/to/tmp/out",
-    "~followup_annotations": [
-      "@@@STEP_TEXT@swarming fileset hash: dtf_hash@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "echo",
-      "hello",
-      "world"
-    ],
-    "name": "Print Hello World"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
       "[CACHE]/builder/sdk/tools/task_kill.py",
       "--kill_browsers=True",
       "--kill_vsbuild=True"
@@ -525,7 +499,7 @@
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--bar\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Build\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"build\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/build.py\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
@@ -536,8 +510,8 @@
       "@@@STEP_LOG_LINE@json.output@            \"co19_2\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--exclude_suite=co19\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"nameoffileset\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"test\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"test1\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/test.py\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"shards\": 2@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
@@ -547,11 +521,11 @@
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"-n${runtime}-foo-${mode}-${arch}-bar\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"test2\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"fileset1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Trigger step\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"trigger\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"trigger\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"trigger\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo-builder\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"bar-builder\"@@@",
@@ -562,7 +536,7 @@
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo.dart\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step dart\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"dart\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"out/ReleaseX64/dart\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
@@ -571,8 +545,8 @@
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"-rfirefox\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"fileset1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 3\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"test\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"test3\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"shards\": 2@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
@@ -589,8 +563,8 @@
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"-e co19, language_2\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"fileset1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"test\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"test1\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/test.py\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"shards\": 2@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
@@ -600,7 +574,7 @@
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--buildername\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step custom\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"custom\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/custom_thing.py\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
@@ -609,7 +583,7 @@
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"co19\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 2\"@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"test2\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
@@ -621,7 +595,7 @@
       "@@@STEP_LOG_LINE@json.output@      \"steps\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Build\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"build\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/build.py\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
@@ -630,7 +604,7 @@
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"--buildername\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step custom\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"custom\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"out/custom_thing\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
@@ -642,16 +616,16 @@
       "@@@STEP_LOG_LINE@json.output@      \"meta\": {}, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"steps\": [@@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
-      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"fileset1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test on android device\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"test\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"android\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"shards\": 2@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"filesets\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"fileset1\": \"[]\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"nameoffileset\": \"[]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"test\": \"[]\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"trigger\": \"[]\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"global\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"chrome\": \"66.0.3359.139\", @@@",
@@ -683,10 +657,10 @@
       "/path/to/tmp/json",
       "copy",
       "{'variables': {'files': '[]'}}",
-      "[CACHE]/builder/sdk/nameoffileset"
+      "[CACHE]/builder/sdk/test"
     ],
     "infra_step": true,
-    "name": "write fileset nameoffileset to sdk root"
+    "name": "write fileset test to sdk root"
   },
   {
     "cmd": [
@@ -697,10 +671,10 @@
       "/path/to/tmp/json",
       "copy",
       "{'variables': {'files': '[]'}}",
-      "[CACHE]/builder/sdk/fileset1"
+      "[CACHE]/builder/sdk/trigger"
     ],
     "infra_step": true,
-    "name": "write fileset fileset1 to sdk root"
+    "name": "write fileset trigger to sdk root"
   },
   {
     "cmd": [
@@ -768,13 +742,13 @@
       "--blacklist=(^(out|xcodebuild)[/\\\\](Release|Debug|Product)\\w*[/\\\\](clang_\\w*[/\\\\])?(generated_tests|obj)[/\\\\])|(^tools[/\\\\]sdks)",
       "--ignore_broken_items",
       "-Ihttps://isolateserver.appspot.com",
-      "-i[CACHE]/builder/sdk/fileset1",
-      "-s[CACHE]/builder/sdk/fileset1.isolated"
+      "-i[CACHE]/builder/sdk/test",
+      "-s[CACHE]/builder/sdk/test.isolated"
     ],
-    "name": "upload testing fileset fileset1",
+    "name": "upload testing fileset test",
     "stdout": "/path/to/tmp/out",
     "~followup_annotations": [
-      "@@@STEP_TEXT@swarming fileset hash: fs1_hash@@@"
+      "@@@STEP_TEXT@swarming fileset hash: test_hash@@@"
     ]
   },
   {
@@ -788,7 +762,7 @@
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
-    "name": "trigger shards for Test on android device"
+    "name": "trigger shards for android"
   },
   {
     "cmd": [
@@ -805,7 +779,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test on android device_shard_1/Android/fs1_hash",
+      "android_shard_1/Android/test_hash",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -826,13 +800,13 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "data:fs1_hash",
+      "data:test_hash",
       "--tag",
-      "name:Test",
+      "name:android_shard_1",
       "--tag",
       "spec_name:dart.ci:example-android",
       "--tag",
-      "stepname:Test on android device_shard_1 on Android",
+      "stepname:android_shard_1 on Android",
       "--cipd-package",
       "tools/sdks:dart/dart-sdk/${platform}:",
       "--cipd-package",
@@ -853,7 +827,7 @@
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
       "--isolated",
-      "fs1_hash",
+      "test_hash",
       "--raw-cmd",
       "--",
       "tools/test.py",
@@ -879,14 +853,14 @@
       ]
     },
     "infra_step": true,
-    "name": "trigger shards for Test on android device.[trigger] Test on android device_shard_1 on Android",
+    "name": "trigger shards for android.[trigger] android_shard_1 on Android",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test on android device_shard_1/Android/fs1_hash\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"android_shard_1/Android/test_hash\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test on android device_shard_1/Android/fs1_hash\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"android_shard_1/Android/test_hash\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"10000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/10000\"@@@",
@@ -912,7 +886,7 @@
       "--shards",
       "1",
       "--task-name",
-      "Test on android device_shard_2/Android/fs1_hash",
+      "android_shard_2/Android/test_hash",
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
@@ -933,13 +907,13 @@
       "--tag",
       "build_is_experimental:false",
       "--tag",
-      "data:fs1_hash",
+      "data:test_hash",
       "--tag",
-      "name:Test",
+      "name:android_shard_2",
       "--tag",
       "spec_name:dart.ci:example-android",
       "--tag",
-      "stepname:Test on android device_shard_2 on Android",
+      "stepname:android_shard_2 on Android",
       "--cipd-package",
       "tools/sdks:dart/dart-sdk/${platform}:",
       "--cipd-package",
@@ -960,7 +934,7 @@
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
       "--isolated",
-      "fs1_hash",
+      "test_hash",
       "--raw-cmd",
       "--",
       "tools/test.py",
@@ -986,14 +960,14 @@
       ]
     },
     "infra_step": true,
-    "name": "trigger shards for Test on android device.[trigger] Test on android device_shard_2 on Android",
+    "name": "trigger shards for android.[trigger] android_shard_2 on Android",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_TEXT@Run on OS: 'Android'@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"Test on android device_shard_2/Android/fs1_hash\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"android_shard_2/Android/test_hash\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"Test on android device_shard_2/Android/fs1_hash\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"android_shard_2/Android/test_hash\": {@@@",
       "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
       "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"110000\", @@@",
       "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/110000\"@@@",
@@ -1078,7 +1052,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "Test on android device_shard_1 on Android",
+    "name": "android_shard_1 on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -1111,6 +1085,13 @@
       "@@@STEP_LOG_END@swarming.summary@@@",
       "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test1\"}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test2\"}@@@",
+      "@@@STEP_LOG_END@results.json@@@",
+      "@@@STEP_LOG_LINE@run.json@{\"build\":123}@@@",
+      "@@@STEP_LOG_END@run.json@@@",
+      "@@@STEP_LOG_LINE@logs.json@{\"test\":\"log\"}@@@",
+      "@@@STEP_LOG_END@logs.json@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
       "@@@STEP_LINK@test stdout of shard #0@https://chromium-swarm.appspot.com/user/task/10000@@@"
     ]
@@ -1157,7 +1138,7 @@
         "[CACHE]/swarming_client"
       ]
     },
-    "name": "Test on android device_shard_2 on Android",
+    "name": "android_shard_2 on Android",
     "~followup_annotations": [
       "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
       "@@@STEP_LOG_LINE@json.output@{}@@@",
@@ -1308,21 +1289,93 @@
       "--count",
       "50",
       "LATEST/results.json",
-      ""
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "deflaking.list tests to deflake (Test on android device)",
+    "name": "deflaking.list tests to deflake (android)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@Flaky/Test/1@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text@Flaky/Test/2@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "deflaking.trigger shards for android",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
     ]
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[CACHE]/builder/sdk/tools/test.py",
+      "[CACHE]/builder/sdk/tools/swarming_client/swarming.py",
+      "trigger",
+      "--swarming",
+      "https://chromium-swarm.appspot.com",
+      "--isolate-server",
+      "https://isolateserver.appspot.com",
+      "--priority",
+      "25",
+      "--shards",
+      "1",
+      "--task-name",
+      "android_shard_1/Android/test_hash",
+      "--dump-json",
+      "/path/to/tmp/json",
+      "--expiration",
+      "3600",
+      "--io-timeout",
+      "1200",
+      "--hard-timeout",
+      "3600",
+      "--dimension",
+      "os",
+      "Android",
+      "--dimension",
+      "pool",
+      "dart.tests",
+      "--named-cache",
+      "swarming_module_cache_vpython",
+      ".swarming_module_cache/vpython",
+      "--tag",
+      "build_is_experimental:false",
+      "--tag",
+      "data:test_hash",
+      "--tag",
+      "name:android_shard_1",
+      "--tag",
+      "spec_name:dart.ci:example-android",
+      "--tag",
+      "stepname:android_shard_1 on Android",
+      "--cipd-package",
+      "tools/sdks:dart/dart-sdk/${platform}:",
+      "--cipd-package",
+      ".swarming_module:infra/python/cpython/${platform}:TEST_VERSION",
+      "--cipd-package",
+      ".swarming_module:infra/tools/luci/logdog/butler/${platform}:TEST_VERSION",
+      "--cipd-package",
+      ".swarming_module:infra/tools/luci/vpython-native/${platform}:TEST_VERSION",
+      "--cipd-package",
+      ".swarming_module:infra/tools/luci/vpython/${platform}:TEST_VERSION",
+      "--env-prefix",
+      "PATH",
+      ".swarming_module",
+      "--env-prefix",
+      "PATH",
+      ".swarming_module/bin",
+      "--env-prefix",
+      "VPYTHON_VIRTUALENV_ROOT",
+      ".swarming_module_cache/vpython",
+      "--isolated",
+      "test_hash",
+      "--raw-cmd",
+      "--",
+      "tools/test.py",
       "-ax64",
       "-mrelease",
       "--progress=status",
@@ -1333,14 +1386,117 @@
       "--write-logs",
       "--repeat=5",
       "--test-list",
-      "",
-      "--output_directory",
-      "/path/to/tmp/"
+      "Flaky/Test/1\nFlaky/Test/2",
+      "--shards=1",
+      "--shard=1",
+      "--output_directory=${ISOLATED_OUTDIR}"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "deflaking.Test on android device",
+    "infra_step": true,
+    "name": "deflaking.trigger shards for android.[trigger] android_shard_1 on Android",
     "~followup_annotations": [
-      "@@@STEP_NEST_LEVEL@1@@@"
+      "@@@STEP_NEST_LEVEL@2@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"base_task_name\": \"android_shard_1/Android/test_hash\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"tasks\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"android_shard_1/Android/test_hash\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"shard_index\": 0, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"task_id\": \"120000\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"view_url\": \"https://chromium-swarm.appspot.com/user/task/120000\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LINK@shard #0@https://chromium-swarm.appspot.com/user/task/120000@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "--show-path",
+      "--with-third-party-lib",
+      "--",
+      "python",
+      "RECIPE_MODULE[build::swarming]/resources/collect_task.py",
+      "--verbose",
+      "-o",
+      "/path/to/tmp/json",
+      "--task-output-dir",
+      "/path/to/tmp/",
+      "--merge-script",
+      "RECIPE_MODULE[build::swarming]/resources/noop_merge.py",
+      "--merge-script-stdout-file",
+      "/path/to/tmp/merge_script_log",
+      "--merge-additional-args",
+      "[]",
+      "--summary-json-file",
+      "/path/to/tmp/json",
+      "--",
+      "swarming",
+      "collect",
+      "-server",
+      "https://chromium-swarm.appspot.com",
+      "-worker",
+      "50",
+      "-task-summary-python",
+      "-task-output-stdout",
+      "all",
+      "-verbose",
+      "-requests-json",
+      "{\"tasks\": [{\"task_id\": \"120000\"}]}"
+    ],
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/swarming_client"
+      ]
+    },
+    "name": "deflaking.android_shard_1 on Android",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Run on OS: 'Android'<br>Pending time: 0:01:11<br>Shard duration: 0:01:00@@@",
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@{@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"abandoned_ts\": null, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"bot_id\": \"vm30\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"duration\": 31.5, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"exit_code\": \"0\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"failure\": false, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"internal_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"modified_ts\": \"2014-09-25 01:42:00\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"name\": \"heartbeat-canary-2014-09-25_01:41:55-os=Windows\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"output\": \"Heart beat succeeded on win32.\\nFoo\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"outputs_ref\": {@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        \"isolated\": \"abc123\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        \"isolatedserver\": \"https://isolateserver.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@        \"namespace\": \"default-gzip\"@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      }, @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"started_ts\": \"2014-09-25T01:42:11.123\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"state\": \"COMPLETED\", @@@",
+      "@@@STEP_LOG_LINE@swarming.summary@      \"task_id\": \"148aa78d7aa0000\"@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@    }@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@  ]@@@",
+      "@@@STEP_LOG_LINE@swarming.summary@}@@@",
+      "@@@STEP_LOG_END@swarming.summary@@@",
+      "@@@STEP_LOG_LINE@Merge script log@Successfully merged all data@@@",
+      "@@@STEP_LOG_END@Merge script log@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"Flaky/Test/1\"}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"Flaky/Test/2\"}@@@",
+      "@@@STEP_LOG_END@results.json@@@",
+      "@@@STEP_LOG_LINE@run.json@{\"build\":123}@@@",
+      "@@@STEP_LOG_END@run.json@@@",
+      "@@@STEP_LOG_LINE@logs.json@{\"Flaky/Test/1\":\"log\"}@@@",
+      "@@@STEP_LOG_LINE@logs.json@{\"Flaky/Test/2\":\"log\"}@@@",
+      "@@@STEP_LOG_END@logs.json@@@",
+      "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
+      "@@@STEP_LINK@test stdout of shard #0@https://chromium-swarm.appspot.com/user/task/120000@@@"
     ]
   },
   {
@@ -1355,7 +1511,7 @@
       "8945511751514863184",
       "--commit",
       "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      ""
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n"
     ],
     "cwd": "[CACHE]/builder/sdk",
     "name": "update flakiness information",
@@ -1372,7 +1528,7 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--changed",
       "--failing",
@@ -1395,10 +1551,10 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
-      "",
+      "{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
       "--logs-only",
       "--changed",
       "--failing"
@@ -1419,7 +1575,7 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--changed",
       "--passing",
@@ -1442,7 +1598,7 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--unapproved",
       "--failing"
@@ -1463,10 +1619,10 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
-      "",
+      "{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
       "--logs-only",
       "--unapproved",
       "--failing"
@@ -1487,7 +1643,7 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--unapproved",
       "--passing"
@@ -1508,10 +1664,10 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--logs",
-      "",
+      "{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
       "--logs-only",
       "--flaky"
     ],
@@ -1531,7 +1687,7 @@
       "--human",
       "--verbose",
       "[CACHE]/builder/sdk/LATEST/results.json",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "[CACHE]/builder/sdk/LATEST/approved_results.json",
       "--failing",
       "--unapproved"
@@ -1539,7 +1695,10 @@
     "cwd": "[CACHE]/builder/sdk",
     "name": "test results",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@results.json@@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}@@@",
+      "@@@STEP_LOG_LINE@results.json@{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}@@@",
       "@@@STEP_LOG_END@results.json@@@"
     ]
   },
@@ -1577,7 +1736,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "",
+      "{\"test\":\"log\"}\n{\"Flaky/Test/1\":\"log\"}\n{\"Flaky/Test/2\":\"log\"}",
       "gs://dart-test-results/builders/example-android/0/logs.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
@@ -1597,7 +1756,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "",
+      "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
       "gs://dart-test-results/builders/example-android/0/results.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
@@ -1677,7 +1836,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
-      "",
+      "{\"builder_name\": \"example-android\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}\n{\"builder_name\": \"example-android\", \"bot_name\": \"vm30\", \"build\": 123, \"commit_time\": \"1234567\", \"commit_hash\": \"2d72510e447ab60a9728aeea2362d8be2cbd7789\"}\n",
       "gs://dart-test-results/builders/example-android/0/runs.json"
     ],
     "cwd": "[CACHE]/builder/sdk",
@@ -1706,6 +1865,55 @@
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/dart-test-results/builders/example-android/latest@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/builder/sdk/bqupload",
+      "-ensure-file",
+      "infra/tools/bqupload/${platform} latest",
+      "-json-output",
+      "/path/to/tmp/json",
+      "-service-account-json",
+      "/creds/service_accounts/service-account-goma-client.json"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "upload new results.ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@    {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"instance_id\": \"resolved-instance_id-of-latest----------\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"package\": \"infra/tools/bqupload/${platform}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "upload new results.upload test results to big query",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[CACHE]/builder/sdk/bqupload/bqupload",
+      "dart-ci.results.results"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
+    "name": "upload new results.upload test results to big query.upload results chunk to big query",
+    "stdin": "{\"name\":\"test1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"test2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/1\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n{\"name\":\"Flaky/Test/2\",\"commit_time\":1234567,\"commit_hash\":\"2d72510e447ab60a9728aeea2362d8be2cbd7789\",\"build_number\":0,\"builder_name\":\"example-android\",\"bot_name\":\"vm30\"}\n",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@2@@@"
     ]
   },
   {

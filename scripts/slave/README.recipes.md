@@ -1776,7 +1776,7 @@ Builds dart using the specified build_args
 
 Checks out the dart code and prepares it for building.
 
-&mdash; **def [collect\_all](/scripts/slave/recipe_modules/dart/api.py#232)(self, steps):**
+&mdash; **def [collect\_all](/scripts/slave/recipe_modules/dart/api.py#227)(self, steps):**
 
 Collects the results of a sharded test run.
 
@@ -1784,13 +1784,13 @@ Collects the results of a sharded test run.
 
 Returns the path to the checked-in SDK dart executable.
 
-&mdash; **def [delete\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#521)(self):**
+&mdash; **def [delete\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#515)(self):**
 
 Deletes the debug log file
 
 &mdash; **def [download\_parent\_isolate](/scripts/slave/recipe_modules/dart/api.py#152)(self):**
 
-&mdash; **def [get\_latest\_tested\_commit](/scripts/slave/recipe_modules/dart/api.py#267)(self):**
+&mdash; **def [get\_latest\_tested\_commit](/scripts/slave/recipe_modules/dart/api.py#264)(self):**
 
 &mdash; **def [get\_secret](/scripts/slave/recipe_modules/dart/api.py#68)(self, name):**
 
@@ -1800,17 +1800,16 @@ Decrypts the specified secret and returns the location of the result
 
 Kills leftover tasks from previous runs or steps.
 
-&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#509)(self):**
+&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#503)(self):**
 
 Reads the debug log file
 
-&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#167)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='dart.tests', num_shards=0, last_shard_is_local=False, cipd_packages=None, ignore_failure=False):**
+&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#167)(self, title, isolate_hash, test_args, os, cpu='x86-64', pool='dart.tests', num_shards=0, last_shard_is_local=False, cipd_packages=None, ignore_failure=False):**
 
 Runs test.py in the given isolate, sharded over several swarming tasks.
-The 'shards' build property can override the number of tasks.
 Returns the created tasks, which can be collected with collect_all().
 
-&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#527)(self, latest, test_data):**
+&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#521)(self, latest, test_data):**
 
 Reads the test-matrix.json file in checkout and runs each step listed
 in the file.
@@ -5078,7 +5077,7 @@ Kills leftover tasks from previous runs or steps.
 
 [DEPS](/scripts/slave/recipe_modules/dart/examples/example.py#9): [dart](#recipe_modules-dart), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/dart/examples/example.py#162)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/dart/examples/example.py#170)(api):**
 ### *recipes* / [dart:examples/example-checkout](/scripts/slave/recipe_modules/dart/examples/example-checkout.py)
 
 [DEPS](/scripts/slave/recipe_modules/dart/examples/example-checkout.py#7): [dart](#recipe_modules-dart), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]

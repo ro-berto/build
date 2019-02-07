@@ -164,21 +164,16 @@ class DartApi(recipe_api.RecipeApi):
         stdout=self.m.raw_io.output('out'))
 
 
-  def shard(self, title, isolate_hash, test_args, os=None, cpu='x86-64',
+  def shard(self, title, isolate_hash, test_args, os, cpu='x86-64',
             pool='dart.tests', num_shards=0, last_shard_is_local=False,
             cipd_packages=None, ignore_failure=False):
     """Runs test.py in the given isolate, sharded over several swarming tasks.
-       The 'shards' build property can override the number of tasks.
        Returns the created tasks, which can be collected with collect_all().
     """
     if not cipd_packages: # pragma: no cover
       cipd_packages = []
-    if 'shards' in self.m.properties:
-      num_shards = int(self.m.properties['shards'])
     assert(num_shards > 0)
     tasks = []
-    if os is None:
-      os = self.m.platform.name
     # TODO(athom) use built-in sharding to remove for loop
     for shard in range(num_shards):
       if last_shard_is_local and shard == num_shards - 1:
@@ -235,7 +230,9 @@ class DartApi(recipe_api.RecipeApi):
     with self.m.step.defer_results():
       # TODO(athom) collect all the output, and present as a single step
       for step in steps:
-        for shard in step.tasks:
+        tasks = step.tasks
+        step.tasks = []
+        for shard in tasks:
           shard.task_output_dir = self.m.raw_io.output_dir()
           self.m.swarming.collect_task(shard)
           active_result = self.m.step.active_result
@@ -332,11 +329,8 @@ class DartApi(recipe_api.RecipeApi):
                 self.m.raw_io.input_text(step.results.results)],
                 stdout=self.m.raw_io.output_text(add_output_log=True),
                 ok_ret='any' if self._report_new_results() else {0}).stdout
-    # TODO(athom): Do not modify the step, although it is harmless here
-    step.args += ['--repeat=5', '--test-list',
-                self.m.raw_io.input_text(deflake_list)]
-    step.isolate_hash = None
-    self._run_test_py(step, global_config)
+    if deflake_list:
+      self._run_test_py(step, global_config, deflake_list)
 
 
   def _update_flakiness_information(self, results_str):
@@ -725,6 +719,7 @@ class DartApi(recipe_api.RecipeApi):
         with self.m.step.nest('deflaking'):
           for step in steps:
             self._deflake_results(step, global_config)
+          self.collect_all(steps)
         logs_str = ''.join(
             (step.results.logs for step in steps))
         results_str = ''.join(
@@ -821,7 +816,7 @@ class DartApi(recipe_api.RecipeApi):
           build['build']['url'])
 
 
-  def _run_test_py(self, step, global_config):
+  def _run_test_py(self, step, global_config, deflake_list=None):
     """Runs test.py with default arguments, based on configuration from.
     Args:
       * step (TestMatrixStep) - The test-matrix step.
@@ -830,6 +825,12 @@ class DartApi(recipe_api.RecipeApi):
     """
     environment = step.environment
     args = step.args
+    shards = step.shards
+    if deflake_list:
+      args = args + ['--repeat=5', '--test-list',
+                     self.m.raw_io.input_text(deflake_list)]
+      shards = min(shards, 1)
+
     test_args = ['--progress=status',
                  '--report',
                  '--time',
@@ -884,23 +885,24 @@ class DartApi(recipe_api.RecipeApi):
       # on firefox.
       firefox_bug = 'firefox' in self.m.buildbucket.builder_name
       self._run_script(step, args, cipd_packages=cipd_packages,
-                       ignore_failure=firefox_bug)
+                       ignore_failure=firefox_bug, shards=shards)
       if not step.isolate_hash or step.local_shard:
         self._add_results_and_links(self.m.properties.get('bot_id'),
                                     step.results)
 
 
   def _run_script(self, step, args=None, cipd_packages=None,
-                  ignore_failure=False):
+                  ignore_failure=False, shards=None):
     """Runs a specific script with current working directory to be checkout. If
     the runtime (passed in environment) is a browser, and the system is linux,
     xvfb is used. If an isolate_hash is passed in, it will swarm the command.
     Args:
       * step (TestMatrixStep) - The test-matrix step.
-      * args ([str]) - Additional arguments to test.py
+      * args ([str]) - Overrides the arguments specified in the step.
       * cipd_packages ([tuple]) - list of 3-tuples specifying a cipd package
         to be downloaded
-      * ignore_failure - Do not turn step red if this script fails.
+      * ignore_failure ([bool]) - Do not turn step red if this script fails.
+      * shards ([int]) - Overrides the number of shards specified in the step.
     """
     environment = step.environment
     if not args:
@@ -933,8 +935,8 @@ class DartApi(recipe_api.RecipeApi):
         xvfb_cmd += ['python', '-u']
 
     step_name = step.name
-    if step.isolate_hash:
-      shards = step.shards
+    shards = shards or step.shards
+    if step.isolate_hash and not (step.local_shard and shards < 2):
       with self.m.step.nest('trigger shards for %s' % step_name):
         cpu = 'arm64' if environment['arch'] == 'arm64' else 'x86-64'
         # Android bots don't have a "cpu" dimension

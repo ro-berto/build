@@ -25,6 +25,14 @@ CANNED_OUTPUT_DIR = {
 }
 
 
+CANNED_FLAKY_OUTPUT_DIR = {
+  'logs.json': '{"Flaky/Test/1":"log"}\n{"Flaky/Test/2":"log"}',
+  'results.json': '{"name":"Flaky/Test/1"}\n{"name":"Flaky/Test/2"}\n',
+  'run.json': '{"build":123}\n',
+  'result.log': '{}\n'
+}
+
+
 TRIGGER_RESULT = {
   "results": [
     {
@@ -63,8 +71,8 @@ TRIGGER_RESULT = {
 
 TEST_MATRIX = {
   "filesets": {
-    "fileset1": "[]",
-    "nameoffileset": "[]"
+    "test": "[]",
+    "trigger": "[]"
   },
   "global": {
     "chrome": "66.0.3359.139",
@@ -80,32 +88,32 @@ TEST_MATRIX = {
       ],
       "meta": {},
       "steps": [{
-        "name": "Build",
+        "name": "build",
         "script": "tools/build.py",
         "arguments": ["foo", "--bar"]
       }, {
-        "name": "Test-step 1",
+        "name": "test1",
         "script": "tools/test.py",
         "arguments": ["foo", "-n${runtime}-foo-${mode}-${arch}-bar",
                       "language_2", "co19_2", "--exclude_suite=co19"],
         "shards": 2,
-        "fileset": "nameoffileset"
+        "fileset": "test"
       }, {
-        "name": "Test-step 2",
+        "name": "test2",
         "arguments": ["foo", "--bar",
                       "-n${runtime}-foo-${mode}-${arch}-bar"],
       }, {
-        "name": "Trigger step",
-        "fileset": "fileset1",
+        "name": "trigger",
+        "fileset": "trigger",
         "trigger": ["foo-builder", "bar-builder"]
       }, {
-        "name": "Test-step dart",
+        "name": "dart",
         "script": "out/ReleaseX64/dart",
         "arguments": ["--bar", "foo.dart"]
       }, {
-        "name": "Test-step 3",
+        "name": "test3",
         "arguments": ["foo", "--bar", "-rfirefox"],
-        "fileset": "fileset1",
+        "fileset": "test",
         "shards": 2
       }]
     },
@@ -115,17 +123,17 @@ TEST_MATRIX = {
       ],
       "meta": {},
       "steps": [{
-        "name": "Test-step 1",
+        "name": "test1",
         "script": "tools/test.py",
         "arguments": ["foo", "--bar", "-e co19, language_2"],
         "shards": 2,
-        "fileset": "fileset1"
+        "fileset": "test"
       }, {
-        "name": "Test-step custom",
+        "name": "custom",
         "script": "tools/custom_thing.py",
         "arguments": ["foo", "--bar", "--buildername"]
       }, {
-        "name": "Test-step 2",
+        "name": "test2",
         "arguments": ["foo", "--bar", "co19"],
       }]
     },
@@ -135,11 +143,11 @@ TEST_MATRIX = {
       ],
       "meta": {},
       "steps": [{
-        "name": "Build",
+        "name": "build",
         "script": "tools/build.py",
         "arguments": []
       }, {
-        "name": "Test-step custom",
+        "name": "custom",
         "script": "out/custom_thing",
         "arguments": ["foo", "--bar", "--buildername"]
       }]
@@ -150,9 +158,9 @@ TEST_MATRIX = {
       ],
       "meta": {},
       "steps": [{
-        "name": "Test on android device",
+        "name": "android",
         "shards": 2,
-        "fileset": "fileset1"
+        "fileset": "test"
       }]
     }
   ]
@@ -165,23 +173,6 @@ def RunSteps(api):
 
   build_args = ['--super-fast']
   api.dart.build(build_args, name='can_time_out')
-  isolate_hash = api.dart.upload_isolate('dart_testing_fileset')
-
-  test_args = ['--all']
-  if 'shards' in api.properties:
-    tasks = api.dart.shard('vm_tests', isolate_hash, test_args)
-    environment = {
-        'commit': {'commit_hash':'deadbeef', 'commit_time': '12124546'},
-        'copy-coredumps': False}
-    step_json = {'name': 'example sharded step', 'args': ['--test_arg']}
-    config = {'steps': [step_json, step_json]}
-    step = api.dart.TestMatrixStep(api, 'dart2js-linux-release-chrome',
-                                   config, step_json, environment, 1)
-    step.tasks = tasks
-    api.dart.collect_all([step])
-
-  with api.step.defer_results():
-    api.step('Print Hello World', ['echo', 'hello', 'world'])
 
   api.dart.kill_tasks()
   api.dart.read_debug_log()
@@ -191,27 +182,40 @@ def RunSteps(api):
   if 'parent_fileset' in api.properties:
     api.dart.download_parent_isolate()
 
+def _canned_step(api, name, shards=0, local_shard=True, suffix=''):
+  data = api.step_data('deflaking.list tests to deflake (%s)' % name,
+                stdout=api.raw_io.output('Flaky/Test/1\nFlaky/Test/2'))
+  if shards == 0:
+    data += api.step_data(name, api.raw_io.output_dir(CANNED_OUTPUT_DIR))
+    data += api.step_data('deflaking.%s' % name,
+                          api.raw_io.output_dir(CANNED_FLAKY_OUTPUT_DIR))
+  else:
+    for i in range(1, shards):
+      data += api.step_data('%s_shard_%s%s' % (name, i, suffix),
+                            api.raw_io.output_dir(CANNED_OUTPUT_DIR))
+    deflaking_name = ('deflaking.%s' % name if local_shard
+                      else 'deflaking.%s_shard_1%s' % (name, suffix))
+    data += api.step_data(deflaking_name,
+                          api.raw_io.output_dir(CANNED_FLAKY_OUTPUT_DIR))
+
+  return data
 
 def GenTests(api):
   yield (api.test('basic') +
       api.properties(
-          shards='2', shard_timeout='600',
+          shard_timeout='600',
           new_workflow_enabled=True) +
       api.buildbucket.try_build(revision = '3456abce78ef',
           build_number=1357,
           builder='dart2js-linux-release-chrome-try',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
-      api.step_data('Test-step 1_shard_1',
-                    api.raw_io.output_dir(CANNED_OUTPUT_DIR)) +
-      api.step_data('Test-step 2',
-                    api.raw_io.output_dir(CANNED_OUTPUT_DIR)) +
-      api.step_data('upload testing fileset dart_testing_fileset',
-                    stdout=api.raw_io.output('dtf_hash')) +
-      api.step_data('upload testing fileset fileset1',
-                    stdout=api.raw_io.output('fs1_hash')) +
+      _canned_step(api, 'test1', 2, False) +
+      _canned_step(api, 'test2') +
+      api.step_data('upload testing fileset test',
+          stdout=api.raw_io.output('test_hash')) +
       api.step_data('gsutil find latest build',
-                    api.raw_io.output_text('123', name='latest')))
+          api.raw_io.output_text('123', name='latest')))
 
   yield (api.test('analyzer-none-linux-release-be') +
       api.properties(
@@ -222,16 +226,13 @@ def GenTests(api):
           builder='analyzer-none-linux-release-be',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
-      api.step_data('Test-step 1_shard_1',
-                    api.raw_io.output_dir(CANNED_OUTPUT_DIR)) +
-      api.step_data('Test-step 2',
-                    api.raw_io.output_dir(CANNED_OUTPUT_DIR)) +
-      api.step_data('upload testing fileset dart_testing_fileset',
-                    stdout=api.raw_io.output('dtf_hash')) +
-      api.step_data('upload testing fileset nameoffileset',
-                    stdout=api.raw_io.output('nof_hash')) +
-      api.step_data('upload testing fileset fileset1',
-                    stdout=api.raw_io.output('fs1_hash')) +
+      _canned_step(api, 'test1', 2, False) +
+      _canned_step(api, 'test2') +
+      _canned_step(api, 'test3', 2) +
+      api.step_data('upload testing fileset test',
+                    stdout=api.raw_io.output('test_hash')) +
+      api.step_data('upload testing fileset trigger',
+                    stdout=api.raw_io.output('trigger_hash')) +
       api.step_data('buildbucket.put',
                     stdout=api.json.output(TRIGGER_RESULT)))
 
@@ -241,10 +242,8 @@ def GenTests(api):
           builder='analyzer-none-linux-release-be',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
-      api.step_data('Build', retcode=1) +
-      api.step_data('upload testing fileset dart_testing_fileset',
-                    stdout=api.raw_io.output('dtf_hash')) +
-      api.post_process(DoesNotRun, 'Test-step 1') +
+      api.step_data('build', retcode=1) +
+      api.post_process(DoesNotRun, 'test1') +
       api.post_process(DropExpectation))
 
   yield (api.test('basic-missing-name') +
@@ -272,44 +271,10 @@ def GenTests(api):
           builder='vm-kernel-win-release-x64',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
-      api.step_data('upload testing fileset dart_testing_fileset',
-                    stdout=api.raw_io.output('dtf_hash')) +
-      api.step_data('upload testing fileset nameoffileset',
-                    stdout=api.raw_io.output('nof_hash')) +
-      api.step_data('upload testing fileset fileset1',
-                    stdout=api.raw_io.output('fs1 hash')) +
-      api.step_data('buildbucket.put',
-                    stdout=api.json.output(TRIGGER_RESULT)))
-
-  yield (api.test('basic-win-stable') +
-      api.platform('win', 64) +
-      api.buildbucket.ci_build(revision = '3456abce78ef',
-          build_number=1357,
-          builder='dart2js-win-debug-x64-firefox-stable',
-          git_repo='https://dart.googlesource.com/sdk',
-          project='dart') +
-      api.step_data('upload testing fileset dart_testing_fileset',
-                    stdout=api.raw_io.output('dtf_hash')) +
-      api.step_data('upload testing fileset fileset1',
-                    stdout=api.raw_io.output('fs1_hash')) +
-      api.step_data('upload testing fileset nameoffileset',
-                    stdout=api.raw_io.output('nof_hash')) +
-      api.step_data('buildbucket.put',
-                    stdout=api.json.output(TRIGGER_RESULT)))
-
-  yield (api.test('basic-win') + api.platform('win', 64) +
-      api.buildbucket.ci_build(revision='a' * 40,
-          build_number=1357,
-          builder='dart2js-win-debug-x64-firefox',
-          git_repo='https://dart.googlesource.com/sdk',
-          project='dart') +
-      api.properties(
-          parent_fileset='isolate_hash_123',
-          parent_fileset_name='nameoffileset') +
-      api.step_data('upload testing fileset dart_testing_fileset',
-                    stdout=api.raw_io.output('dtf_hash')) +
-      api.step_data('upload testing fileset fileset1',
-                    stdout=api.raw_io.output('fs1_hash')) +
+      api.step_data('upload testing fileset test',
+                    stdout=api.raw_io.output('test_hash')) +
+      api.step_data('upload testing fileset trigger',
+                    stdout=api.raw_io.output('trigger_hash')) +
       api.step_data('buildbucket.put',
                     stdout=api.json.output(TRIGGER_RESULT)))
 
@@ -321,11 +286,9 @@ def GenTests(api):
           project='dart') +
       api.properties(
           parent_fileset='isolate_hash_123',
-          parent_fileset_name='nameoffileset') +
-      api.step_data('upload testing fileset dart_testing_fileset',
-                    stdout=api.raw_io.output('dtf_hash')) +
-      api.step_data('upload testing fileset fileset1',
-                    stdout=api.raw_io.output('fs1_hash')) +
+          parent_fileset_name='test') +
+      api.step_data('upload testing fileset trigger',
+                    stdout=api.raw_io.output('trigger_hash')) +
       api.step_data('buildbucket.put',
                     stdout=api.json.output(TRIGGER_RESULT)))
 
@@ -338,7 +301,6 @@ def GenTests(api):
       api.buildbucket.ci_build(builder='example-android',
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
-      api.step_data('upload testing fileset dart_testing_fileset',
-                    stdout=api.raw_io.output('dtf_hash')) +
-      api.step_data('upload testing fileset fileset1',
-                    stdout=api.raw_io.output('fs1_hash')))
+      _canned_step(api, 'android', 2, False, ' on Android') +
+      api.step_data('upload testing fileset test',
+                    stdout=api.raw_io.output('test_hash')))
