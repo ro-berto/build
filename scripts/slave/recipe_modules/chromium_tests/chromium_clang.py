@@ -393,6 +393,8 @@ SPEC = {
         steps.MiniInstallerTest(),
         steps.SizesStep(RESULTS_URL, 'ToTWin'),
       ],
+      'isolate_server': 'https://chrome-isolated.appspot.com',
+      'isolate_service_account': 'chrome-ci-builder',
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
