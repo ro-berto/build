@@ -830,6 +830,8 @@ class DartApi(recipe_api.RecipeApi):
       args = args + ['--repeat=5', '--test-list',
                      self.m.raw_io.input_text(deflake_list)]
       shards = min(shards, 1)
+      # TODO(athom): Remove this hack when sharded deflaking works
+      step.local_shard = True
 
     test_args = ['--progress=status',
                  '--report',

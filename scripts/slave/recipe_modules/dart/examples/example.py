@@ -193,6 +193,8 @@ def _canned_step(api, name, shards=0, local_shard=True, suffix=''):
     for i in range(1, shards):
       data += api.step_data('%s_shard_%s%s' % (name, i, suffix),
                             api.raw_io.output_dir(CANNED_OUTPUT_DIR))
+    # TODO(athom): Remove this hack when sharded deflaking works
+    local_shard = True
     deflaking_name = ('deflaking.%s' % name if local_shard
                       else 'deflaking.%s_shard_1%s' % (name, suffix))
     data += api.step_data(deflaking_name,
