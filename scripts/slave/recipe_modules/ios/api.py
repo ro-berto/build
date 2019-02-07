@@ -958,8 +958,19 @@ class iOSApi(recipe_api.RecipeApi):
 
     return tasks
 
-  def collect(self, tasks, upload_test_results=True):
-    """Collects the given Swarming task results."""
+  def collect(self, tasks, upload_test_results=True, result_callback=None):
+    """Collects the given Swarming task results.
+
+    Args:
+      tasks: A list of dicts with task attributes (produced by isolate method).
+      upload_test_results: Upload test results JSON to the flakiness dashboard.
+      result_callback: A function to call whenever a task finishes.
+        It is called with these named args:
+        * name: Name of the test ('test'->'app' attribute).
+        * step_result: Step result object from the collect step.
+        If the function is not provided, the default is to upload performance
+        results from perf_result.json.
+    """
     failures = set()
     infra_failure = False
 
@@ -1087,7 +1098,9 @@ class iOSApi(recipe_api.RecipeApi):
       # Upload performance data result to the perf dashboard.
       perf_results = self.m.path.join(
         shard_output_dir, 'Documents', 'perf_result.json')
-      if self.m.path.exists(perf_results):
+      if result_callback:
+        result_callback(name=task['test']['app'], step_result=step_result)
+      elif self.m.path.exists(perf_results):
         data = self.get_perftest_data(perf_results)
         data_decode = data['Perf Data']
         data_result = []

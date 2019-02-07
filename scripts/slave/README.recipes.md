@@ -2437,9 +2437,19 @@ Args:
 
 Checks out Chromium.
 
-&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#961)(self, tasks, upload_test_results=True):**
+&mdash; **def [collect](/scripts/slave/recipe_modules/ios/api.py#961)(self, tasks, upload_test_results=True, result_callback=None):**
 
 Collects the given Swarming task results.
+
+Args:
+  tasks: A list of dicts with task attributes (produced by isolate method).
+  upload_test_results: Upload test results JSON to the flakiness dashboard.
+  result_callback: A function to call whenever a task finishes.
+    It is called with these named args:
+    * name: Name of the test ('test'->'app' attribute).
+    * step_result: Step result object from the collect step.
+    If the function is not provided, the default is to upload performance
+    results from perf_result.json.
 
 &emsp; **@property**<br>&mdash; **def [configuration](/scripts/slave/recipe_modules/ios/api.py#77)(self):**
 
@@ -2447,7 +2457,7 @@ Collects the given Swarming task results.
 
 &mdash; **def [get\_mac\_toolchain\_cmd](/scripts/slave/recipe_modules/ios/api.py#325)(self):**
 
-&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1115)(self, path):**
+&mdash; **def [get\_perftest\_data](/scripts/slave/recipe_modules/ios/api.py#1128)(self, path):**
 
 &emsp; **@staticmethod**<br>&mdash; **def [get\_step\_name](/scripts/slave/recipe_modules/ios/api.py#596)(test):**
 
@@ -2463,16 +2473,16 @@ Isolate earlgrey test into small shards
 
 Isolates a single test.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1170)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_dir](/scripts/slave/recipe_modules/ios/api.py#1183)(self):**
 
 Returns the path (relative to checkout working dir) of the most recently
 compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1157)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_app\_path](/scripts/slave/recipe_modules/ios/api.py#1170)(self):**
 
 Returns the Path to the directory of the most recently compiled apps.
 
-&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1185)(self):**
+&emsp; **@property**<br>&mdash; **def [most\_recent\_iossim](/scripts/slave/recipe_modules/ios/api.py#1198)(self):**
 
 Returns the path to the most recently compiled iossim.
 
@@ -2506,7 +2516,7 @@ Args:
     out directory, so must have already been compiled.
   url: URL of the symbol server to upload to.
 
-&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1134)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
+&mdash; **def [test\_swarming](/scripts/slave/recipe_modules/ios/api.py#1147)(self, scripts_dir='src/ios/build/bots/scripts', upload_test_results=True):**
 
 Runs tests on Swarming as instructed by this bot's build config.
 
@@ -4018,70 +4028,70 @@ Capture coverage data and upload a report.
 
 [DEPS](/scripts/slave/recipe_modules/webrtc/__init__.py#1): [adb](#recipe_modules-adb), [archive](#recipe_modules-archive), [build](#recipe_modules-build), [chromium](#recipe_modules-chromium), [chromium\_android](#recipe_modules-chromium_android), [chromium\_checkout](#recipe_modules-chromium_checkout), [chromium\_swarming](#recipe_modules-chromium_swarming), [chromium\_tests](#recipe_modules-chromium_tests), [commit\_position](#recipe_modules-commit_position), [goma](#recipe_modules-goma), [ios](#recipe_modules-ios), [isolate](#recipe_modules-isolate), [swarming](#recipe_modules-swarming), [test\_results](#recipe_modules-test_results), [test\_utils](#recipe_modules-test_utils), [trigger](#recipe_modules-trigger), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/scheduler][recipe_engine/recipe_modules/scheduler], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
 
-#### **class [WebRTCApi](/scripts/slave/recipe_modules/webrtc/api.py#78)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [WebRTCApi](/scripts/slave/recipe_modules/webrtc/api.py#81)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/webrtc/api.py#102)(self, builders, recipe_configs):**
+&mdash; **def [apply\_bot\_config](/scripts/slave/recipe_modules/webrtc/api.py#105)(self, builders, recipe_configs):**
 
-&mdash; **def [apply\_ios\_config](/scripts/slave/recipe_modules/webrtc/api.py#137)(self):**
+&mdash; **def [apply\_ios\_config](/scripts/slave/recipe_modules/webrtc/api.py#140)(self):**
 
 Generate a JSON config from bot config, apply it to ios recipe module.
 
-&emsp; **@property**<br>&mdash; **def [bucketname](/scripts/slave/recipe_modules/webrtc/api.py#201)(self):**
+&emsp; **@property**<br>&mdash; **def [bucketname](/scripts/slave/recipe_modules/webrtc/api.py#204)(self):**
 
-&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#464)(self):**
+&mdash; **def [build\_android\_archive](/scripts/slave/recipe_modules/webrtc/api.py#467)(self):**
 
-&emsp; **@property**<br>&mdash; **def [build\_url](/scripts/slave/recipe_modules/webrtc/api.py#209)(self):**
+&emsp; **@property**<br>&mdash; **def [build\_url](/scripts/slave/recipe_modules/webrtc/api.py#212)(self):**
 
-&emsp; **@property**<br>&mdash; **def [buildername](/scripts/slave/recipe_modules/webrtc/api.py#205)(self):**
+&emsp; **@property**<br>&mdash; **def [buildername](/scripts/slave/recipe_modules/webrtc/api.py#208)(self):**
 
-&mdash; **def [check\_swarming\_version](/scripts/slave/recipe_modules/webrtc/api.py#356)(self):**
+&mdash; **def [check\_swarming\_version](/scripts/slave/recipe_modules/webrtc/api.py#359)(self):**
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#296)(self, \*\*kwargs):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/webrtc/api.py#299)(self, \*\*kwargs):**
 
-&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#398)(self, phase=None):**
+&mdash; **def [compile](/scripts/slave/recipe_modules/webrtc/api.py#401)(self, phase=None):**
 
-&mdash; **def [configure\_isolate](/scripts/slave/recipe_modules/webrtc/api.py#247)(self, phase=None):**
+&mdash; **def [configure\_isolate](/scripts/slave/recipe_modules/webrtc/api.py#250)(self, phase=None):**
 
-&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/webrtc/api.py#261)(self):**
+&mdash; **def [configure\_swarming](/scripts/slave/recipe_modules/webrtc/api.py#264)(self):**
 
-&mdash; **def [download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#328)(self):**
+&mdash; **def [download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#331)(self):**
 
-&mdash; **def [download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#336)(self):**
+&mdash; **def [download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#339)(self):**
 
-&emsp; **@contextlib.contextmanager**<br>&mdash; **def [ensure\_sdk](/scripts/slave/recipe_modules/webrtc/api.py#360)(self):**
+&emsp; **@contextlib.contextmanager**<br>&mdash; **def [ensure\_sdk](/scripts/slave/recipe_modules/webrtc/api.py#363)(self):**
 
-&mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#409)(self, files=None, base_dir=None):**
+&mdash; **def [get\_binary\_sizes](/scripts/slave/recipe_modules/webrtc/api.py#412)(self, files=None, base_dir=None):**
 
-&mdash; **def [get\_bot](/scripts/slave/recipe_modules/webrtc/api.py#217)(self, bucketname, buildername):**
+&mdash; **def [get\_bot](/scripts/slave/recipe_modules/webrtc/api.py#220)(self, bucketname, buildername):**
 
-&mdash; **def [isolate](/scripts/slave/recipe_modules/webrtc/api.py#405)(self):**
+&mdash; **def [isolate](/scripts/slave/recipe_modules/webrtc/api.py#408)(self):**
 
-&emsp; **@property**<br>&mdash; **def [master\_config](/scripts/slave/recipe_modules/webrtc/api.py#220)(self):**
+&emsp; **@property**<br>&mdash; **def [master\_config](/scripts/slave/recipe_modules/webrtc/api.py#223)(self):**
 
-&emsp; **@property**<br>&mdash; **def [mastername](/scripts/slave/recipe_modules/webrtc/api.py#224)(self):**
+&emsp; **@property**<br>&mdash; **def [mastername](/scripts/slave/recipe_modules/webrtc/api.py#227)(self):**
 
-&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#448)(self):**
+&mdash; **def [maybe\_trigger](/scripts/slave/recipe_modules/webrtc/api.py#451)(self):**
 
-&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#505)(self):**
+&mdash; **def [package\_apprtcmobile](/scripts/slave/recipe_modules/webrtc/api.py#508)(self):**
 
-&mdash; **def [related\_bots](/scripts/slave/recipe_modules/webrtc/api.py#228)(self):**
+&mdash; **def [related\_bots](/scripts/slave/recipe_modules/webrtc/api.py#231)(self):**
 
-&mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#365)(self, phase=None):**
+&mdash; **def [run\_mb](/scripts/slave/recipe_modules/webrtc/api.py#368)(self, phase=None):**
 
-&mdash; **def [run\_mb\_ios](/scripts/slave/recipe_modules/webrtc/api.py#383)(self):**
+&mdash; **def [run\_mb\_ios](/scripts/slave/recipe_modules/webrtc/api.py#386)(self):**
 
-&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#425)(self, phase=None):**
+&mdash; **def [runtests](/scripts/slave/recipe_modules/webrtc/api.py#428)(self, phase=None):**
 
 Add a suite of test steps.
 
 Args:
   test_suite=The name of the test suite.
 
-&emsp; **@property**<br>&mdash; **def [should\_download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#233)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_download\_audio\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#236)(self):**
 
-&emsp; **@property**<br>&mdash; **def [should\_download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#240)(self):**
+&emsp; **@property**<br>&mdash; **def [should\_download\_video\_quality\_tools](/scripts/slave/recipe_modules/webrtc/api.py#243)(self):**
 
-&mdash; **def [upload\_to\_perf\_dashboard](/scripts/slave/recipe_modules/webrtc/api.py#521)(self, name, step_result):**
+&mdash; **def [upload\_to\_perf\_dashboard](/scripts/slave/recipe_modules/webrtc/api.py#524)(self, name, step_result):**
 ### *recipe_modules* / [zip](/scripts/slave/recipe_modules/zip)
 
 [DEPS](/scripts/slave/recipe_modules/zip/__init__.py#5): [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/python][recipe_engine/recipe_modules/python]
@@ -5902,7 +5912,7 @@ The changes are:
 
 [DEPS](/scripts/slave/recipes/webrtc/ios.py#10): [chromium](#recipe_modules-chromium), [ios](#recipe_modules-ios), [webrtc](#recipe_modules-webrtc), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/ios.py#246)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/webrtc/ios.py#272)(api):**
 ### *recipes* / [webrtc/ios\_api\_framework](/scripts/slave/recipes/webrtc/ios_api_framework.py)
 
 [DEPS](/scripts/slave/recipes/webrtc/ios_api_framework.py#5): [archive](#recipe_modules-archive), [chromium\_checkout](#recipe_modules-chromium_checkout), [commit\_position](#recipe_modules-commit_position), [goma](#recipe_modules-goma), [ios](#recipe_modules-ios), [webrtc](#recipe_modules-webrtc), [zip](#recipe_modules-zip), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step]

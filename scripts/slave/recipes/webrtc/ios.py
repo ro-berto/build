@@ -240,6 +240,32 @@ BUILDERS = freeze({
       },
     },
   },
+  'luci.webrtc.fake': {
+    'settings': {
+      'mastername': 'client.webrtc.fake',
+    },
+    'builders': {
+      'Fake Perf Tester': {
+        'recipe_config': 'webrtc_ios',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'ios',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'perf_id': 'webrtc-ios-fake',
+        'testing': {'platform': 'mac'},
+        'ensure_sdk': 'ios',
+        'ios_config': {},
+        'ios_testing': {
+          'device type': 'iPhone 6s',
+          'os': '10.3',
+          'host os': 'Mac-10.13',
+        },
+      },
+    },
+  },
 })
 
 
@@ -269,7 +295,10 @@ def RunSteps(api):
       tasks = api.ios.isolate()
     with api.step.nest('trigger'):
       api.ios.trigger(tasks)
-    api.ios.collect(tasks)
+    if webrtc.bot.should_upload_perf_results:
+      api.ios.collect(tasks, result_callback=webrtc.upload_to_perf_dashboard)
+    else:
+      api.ios.collect(tasks)
 
 
 def GenTests(api):

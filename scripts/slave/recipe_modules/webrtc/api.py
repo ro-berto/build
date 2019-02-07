@@ -73,6 +73,9 @@ class Bot(object):
   def should_test_android_studio_project_generation(self):
     return self.config.get('test_android_studio_project_generation', False)
 
+  @property
+  def should_upload_perf_results(self):
+    return bool(self.config.get('perf_id'))
 
 
 class WebRTCApi(recipe_api.RecipeApi):
@@ -531,7 +534,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     results_to_upload = []
     for filepath in sorted(task_output_dir):
       # File names are 'perftest-output.json', 'perftest-output_1.json', ...
-      if re.search(r'perftest-output.*\.json$', filepath):
+      # And 'perf_result.json' for iOS.
+      if re.search(r'(perftest-output.*|perf_result)\.json$', filepath):
         perf_results = self.m.json.loads(task_output_dir[filepath])
         if perf_results:
           results_to_upload.append(perf_results)
