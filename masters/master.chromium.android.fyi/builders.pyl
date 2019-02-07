@@ -38,20 +38,6 @@
       "slave_pools": ["memory_bot"],
       "category": "4Memory",
     },
-    "NDK Next arm Builder": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["ndk_next_builders"],
-      "category": "3NDKBuilders",
-    },
-    "NDK Next arm64 Builder": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["ndk_next_builders"],
-      "category": "3NDKBuilders",
-    },
     "Nougat Phone Tester": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -93,18 +79,6 @@
         "bits": "64",
       },
       "slaves": ["slave195-c1"],
-    },
-    "ndk_next_builders": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": [
-        "slave192-c1",
-        "slave193-c1",
-        "slave194-c1",
-      ],
     },
     "nougat_phone": {
       "slave_data": {
