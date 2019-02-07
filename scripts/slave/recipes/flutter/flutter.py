@@ -124,8 +124,8 @@ def BuildExamples(api, git_hash, flutter_executable):
                                       'gradle-wrapper.properties')
     gradlew_contents = api.file.read_text('read gradle-wrapper.properties',
                                           gradlew_properties)
-    replacement = r'distributionUrl=file\:' + \
-                  str(gradle_zip_path).replace('\\', '/')
+    replacement = r'distributionUrl=file\:///' + \
+                  str(gradle_zip_path).replace('\\', '/').lstrip('/')
     api.file.write_text('set gradle-wrapper.properties', gradlew_properties,
                         re.sub(r'distributionUrl=http.+\.zip',
                                 replacement,
