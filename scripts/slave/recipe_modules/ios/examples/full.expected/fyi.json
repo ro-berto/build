@@ -596,7 +596,7 @@
       "--tag",
       "slavename:fake-vm",
       "--tag",
-      "spec_name:chromium.fyi:ios:fake test:simulator:fake device:8.1:9abc",
+      "spec_name:chromium.ci:ios",
       "--tag",
       "stepname:fake test (fake device iOS 8.1)",
       "--tag",

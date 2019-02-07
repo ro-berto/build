@@ -238,7 +238,7 @@ class iOSApi(recipe_api.RecipeApi):
       build_config_base_dir: Directory to search for build config master and
         test include directories.
     """
-    buildername = buildername or self.m.properties['buildername']
+    buildername = buildername or self.m.buildbucket.builder_name
     master_name = master_name or self.m.properties['mastername']
     build_config_base_dir = build_config_base_dir or (
         self.m.path['checkout'].join('ios', 'build', 'bots'))
@@ -407,7 +407,7 @@ class iOSApi(recipe_api.RecipeApi):
       with self.m.context(env=env):
         self.m.chromium.mb_gen(
             self.__config['mastername'],
-            self.m.properties['buildername'],
+            self.m.buildbucket.builder_name,
             build_dir='//out/%s' % build_sub_path,
             mb_path=mb_path,
             name='generate build files (mb)' + suffix,
@@ -464,6 +464,7 @@ class iOSApi(recipe_api.RecipeApi):
             'trybot_analyze_config.json',
             additional_names=['chromium', 'ios'],
             mb_mastername=self.__config['mastername'],
+            mb_buildername=self.m.buildbucket.builder_name,
             # Don't re-use the build directory: filter.analyze ignores goma and
             # it calls 'mb analyze' which results in the args.gn file having
             # incorrect values for the goma variables
@@ -565,7 +566,7 @@ class iOSApi(recipe_api.RecipeApi):
 
     if not base_path:
       base_path = '%s/%s' % (
-          self.m.properties['buildername'],
+          self.m.buildbucket.builder_name,
           str(self.m.time.utcnow().strftime('%Y%m%d%H%M%S')),
       )
 
@@ -767,7 +768,7 @@ class iOSApi(recipe_api.RecipeApi):
     for i, sublist in enumerate(sublists):
       tasks.append(self.isolate_test(
           test, tmp_dir, isolate_template, sublist, i))
-      tasks[-1]['buildername'] = self.m.properties['buildername']
+      tasks[-1]['buildername'] = self.m.buildbucket.builder_name
     return tasks
 
   def isolate(self, scripts_dir='src/ios/build/bots/scripts'):
@@ -839,7 +840,7 @@ class iOSApi(recipe_api.RecipeApi):
                                             tmp_dir, isolate_template)
       else:
         tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
-        tasks[-1]['buildername'] = self.m.properties['buildername']
+        tasks[-1]['buildername'] = self.m.buildbucket.builder_name
     for bot, tests in self.__config['triggered tests'].iteritems():
       for test in tests:
         tasks.append(self.isolate_test(test, tmp_dir, isolate_template))
@@ -862,7 +863,7 @@ class iOSApi(recipe_api.RecipeApi):
     for task in tasks:
       if not task['isolated hash']: # pragma: no cover
         continue
-      if task['buildername'] != self.m.properties['buildername']:
+      if task['buildername'] != self.m.buildbucket.builder_name:
         continue
 
       self._ensure_xcode_version(task)
@@ -939,20 +940,6 @@ class iOSApi(recipe_api.RecipeApi):
 
       swarming_task.priority = task['test'].get('priority', 200)
 
-      spec = [
-        self.m.properties['mastername'],
-        self.m.properties['buildername'],
-        task['test']['app'],
-        self.platform,
-        task['test']['device type'],
-        task['test']['os'],
-        task['xcode build version'],
-      ]
-
-      # e.g.
-      # chromium.mac:ios-simulator:base_unittests:simulator:iPad Air:10.0:8.0
-      swarming_task.tags.add('spec_name:%s' % str(':'.join(spec)))
-
       swarming_task.tags.add(
           'device_type:%s' % str(task['test']['device type']))
       swarming_task.tags.add('ios_version:%s' % str(task['test']['os']))
@@ -983,7 +970,7 @@ class iOSApi(recipe_api.RecipeApi):
     infra_failure = False
 
     for task in tasks:
-      if task['buildername'] != self.m.properties['buildername']:
+      if task['buildername'] != self.m.buildbucket.builder_name:
         # This task isn't for this builder to collect.
         continue
 
@@ -1127,10 +1114,10 @@ class iOSApi(recipe_api.RecipeApi):
           data['benchmark_name'] = task['test']['app']
           args = [
               '--build-dir', self.m.path['checkout'].join('out'),
-              '--buildername', self.m.properties['buildername'],
-              '--buildnumber', self.m.properties['buildnumber'],
+              '--buildername', self.m.buildbucket.builder_name,
+              '--buildnumber', self.m.buildbucket.build.number,
               '--name', task['test']['app'],
-              '--perf-id', self.m.properties['buildername'],
+              '--perf-id', self.m.buildbucket.builder_name,
               '--results-file', self.m.json.input(data),
               '--results-url', self.DASHBOARD_UPLOAD_URL,
           ]

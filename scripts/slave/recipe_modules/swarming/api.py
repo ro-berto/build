@@ -437,6 +437,7 @@ class SwarmingApi(recipe_api.RecipeApi):
   def task(self, title, isolated_hash, ignore_task_failure=False, shards=1,
            shard_index=None, task_output_dir=None, extra_args=None,
            idempotent=None, cipd_packages=None, build_properties=None,
+           builder_name=None, build_number=None,
            merge=None, trigger_script=None, named_caches=None,
            service_account=None, raw_cmd=None, env_prefixes=None, env=None,
            optional_dimensions=None):
@@ -479,6 +480,10 @@ class SwarmingApi(recipe_api.RecipeApi):
       * build_properties: An optional dict containing various build properties.
           These are typically but not necessarily the properties emitted by
           bot_update.
+      * builder_name: An optional builder name. Defaults to builder name passed
+          by buildbucket or to the recipe property (in that order).
+      * build_number: An optional build number. Defaults to build number passed
+          by buildbucket or to the recipe property (in that order).
       * merge: An optional dict containing:
         * "script": path to a script to call to post process and merge the
               collected outputs from the tasks. The script should take one
@@ -527,6 +532,11 @@ class SwarmingApi(recipe_api.RecipeApi):
     if env:
       init_env.update(env)
 
+    builder_name = (builder_name or self.m.buildbucket.builder_name
+                    or self.m.properties.get('buildername'))
+    build_number = (build_number or self.m.buildbucket.build.number
+                    or self.m.properties.get('buildnumber'))
+
     return SwarmingTask(
         title=title,
         isolated_hash=isolated_hash,
@@ -536,8 +546,8 @@ class SwarmingApi(recipe_api.RecipeApi):
         shards=shards,
         shard_index=shard_index,
         spec_name=spec_name,
-        buildername=self.m.properties.get('buildername'),
-        buildnumber=self.m.properties.get('buildnumber'),
+        buildername=builder_name,
+        buildnumber=build_number,
         user=self.default_user,
         expiration=self.default_expiration,
         io_timeout=self.default_io_timeout,

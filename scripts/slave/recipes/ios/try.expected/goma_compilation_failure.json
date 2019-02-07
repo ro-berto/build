@@ -9,7 +9,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/linux"
+      "[BUILDER_CACHE]/ios_simulator_gn"
     ],
     "infra_step": true,
     "name": "makedirs checkout path"
@@ -33,7 +33,7 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
-    "cwd": "[BUILDER_CACHE]/linux",
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -76,7 +76,7 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/linux",
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -225,7 +225,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/linux/src/ios/build/bots/chromium.mac/ios-simulator-gn.json",
+      "[BUILDER_CACHE]/ios_simulator_gn/src/ios/build/bots/chromium.mac/ios-simulator-gn.json",
       "/path/to/tmp/json"
     ],
     "name": "read build config",
@@ -365,7 +365,7 @@
       "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[BUILDER_CACHE]/linux/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
@@ -381,18 +381,18 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/linux/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb.py",
       "lookup",
       "-m",
       "chromium.mac",
       "-b",
       "ios-simulator-gn",
       "--config-file",
-      "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client"
     ],
-    "cwd": "[BUILDER_CACHE]/linux/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "",
@@ -409,19 +409,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/linux/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.mac",
       "-b",
       "ios-simulator-gn",
       "--config-file",
-      "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb_config.pyl",
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "//out/Debug-iphonesimulator"
     ],
-    "cwd": "[BUILDER_CACHE]/linux/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "FORCE_MAC_TOOLCHAIN": "",
@@ -439,7 +439,7 @@
       "--cached",
       "--name-only"
     ],
-    "cwd": "[BUILDER_CACHE]/linux/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
     "infra_step": true,
     "name": "git diff to analyze patch",
     "stdout": "/path/to/tmp/",
@@ -453,7 +453,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "[BUILDER_CACHE]/linux/src/testing/buildbot/trybot_analyze_config.json",
+      "[BUILDER_CACHE]/ios_simulator_gn/src/testing/buildbot/trybot_analyze_config.json",
       "/path/to/tmp/json"
     ],
     "name": "read filter exclusion spec",
@@ -479,20 +479,20 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/linux/src/tools/mb/mb.py",
+      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb.py",
       "analyze",
       "-m",
       "chromium.mac",
       "-b",
       "ios-simulator-gn",
       "--config-file",
-      "[BUILDER_CACHE]/linux/src/tools/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/ios_simulator_gn/src/tools/mb/mb_config.pyl",
       "-v",
       "//out/Debug-iphonesimulator-analysis",
       "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"fake tests\"]}",
       "/path/to/tmp/json"
     ],
-    "cwd": "[BUILDER_CACHE]/linux/src",
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src",
     "env": {
       "CHROME_HEADLESS": "1",
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "/creds/service_accounts/service-account-goma-client.json"
@@ -550,7 +550,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[GOMA_CACHE]/data/linux"
+      "[GOMA_CACHE]/data/ios_simulator_gn"
     ],
     "infra_step": true,
     "name": "preprocess_for_goma.goma cache directory",
@@ -567,7 +567,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/ios_simulator_gn",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -609,12 +609,12 @@
     "cmd": [
       "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
       "-C",
-      "[BUILDER_CACHE]/linux/src/out/Debug-iphonesimulator",
+      "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
       "-j",
       "50",
       "fake tests"
     ],
-    "cwd": "[BUILDER_CACHE]/linux/src/out/Debug-iphonesimulator",
+    "cwd": "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
     "env": {
       "FORCE_MAC_TOOLCHAIN": "",
       "LANDMINES_VERBOSE": "1"
@@ -639,7 +639,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/ios_simulator_gn",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -671,7 +671,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/ios_simulator_gn",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -692,7 +692,7 @@
     ],
     "env": {
       "GOMACTL_CRASH_REPORT_ID_FILE": "[TMP_BASE]/crash_report_id",
-      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/linux",
+      "GOMA_CACHE_DIR": "[GOMA_CACHE]/data/ios_simulator_gn",
       "GOMA_DUMP_COUNTERZ_FILE": "[TMP_BASE]/goma_counterz",
       "GOMA_DUMP_STATS_FILE": "[TMP_BASE]/goma_stats",
       "GOMA_ENABLE_COUNTERZ": "true",
@@ -723,9 +723,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/linux/src/out/Debug-iphonesimulator",
+      "[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-C\", \"[BUILDER_CACHE]/linux/src/out/Debug-iphonesimulator\", \"-j\", \"50\", \"fake tests\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-C\", \"[BUILDER_CACHE]/ios_simulator_gn/src/out/Debug-iphonesimulator\", \"-j\", \"50\", \"fake tests\"]",
       "--build-exit-status",
       "1",
       "--ninja-log-compiler",
@@ -739,9 +739,9 @@
       "--build-id",
       "8945511751514863184",
       "--builder-id-json",
-      "{\"bucket\": \"try\", \"builder\": \"linux\", \"project\": \"ios\"}",
+      "{\"bucket\": \"try\", \"builder\": \"ios-simulator-gn\", \"project\": \"chromium\"}",
       "--buildbot-buildername",
-      "linux",
+      "ios-simulator-gn",
       "--buildbot-mastername",
       "tryserver.fake",
       "--buildbot-slavename",

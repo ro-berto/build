@@ -9,7 +9,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/linux"
+      "[BUILDER_CACHE]/ios_simulator"
     ],
     "infra_step": true,
     "name": "makedirs checkout path"
@@ -33,7 +33,7 @@
       "-o",
       "DOWNLOAD_COMMANDS"
     ],
-    "cwd": "[BUILDER_CACHE]/linux",
+    "cwd": "[BUILDER_CACHE]/ios_simulator",
     "env": {
       "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
     },
@@ -76,7 +76,7 @@
       "--revision",
       "src@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/linux",
+    "cwd": "[BUILDER_CACHE]/ios_simulator",
     "env_prefixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -229,7 +229,7 @@
       "-u",
       "import sys; sys.exit(1)"
     ],
-    "cwd": "[BUILDER_CACHE]/linux",
+    "cwd": "[BUILDER_CACHE]/ios_simulator",
     "name": "Patch failure",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",

@@ -4,6 +4,7 @@
 
 DEPS = [
   'ios',
+  'recipe_engine/buildbucket',
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
@@ -27,11 +28,16 @@ def GenTests(api):
   basic_common = (
     api.platform('mac', 64)
     + api.properties(
-      buildername='ios',
-      buildnumber='0',
       mastername='chromium.fake',
       bot_id='fake-vm',
       path_config='kitchen',
+    )
+    + api.buildbucket.try_build(
+      project='chromium',
+      builder='ios',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -95,11 +101,16 @@ def GenTests(api):
     api.test('goma')
     + api.platform('mac', 64)
     + api.properties(
-      buildername='ios',
-      buildnumber='0',
       mastername='chromium.fake',
       bot_id='fake-vm',
       path_config='kitchen',
+    )
+    + api.buildbucket.try_build(
+      project='chromium',
+      builder='ios',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -121,11 +132,16 @@ def GenTests(api):
     api.test('goma_canary')
     + api.platform('mac', 64)
     + api.properties(
-      buildername='ios',
-      buildnumber='0',
       mastername='chromium.fake',
       bot_id='fake-vm',
       path_config='kitchen',
+    )
+    + api.buildbucket.try_build(
+      project='chromium',
+      builder='ios',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -148,10 +164,15 @@ def GenTests(api):
     api.test('goma_compilation_failure')
     + api.platform('mac', 64)
     + api.properties(
-      buildername='ios',
-      buildnumber='0',
       mastername='chromium.fake',
       bot_id='fake-vm',
+    )
+    + api.buildbucket.try_build(
+      project='chromium',
+      builder='ios',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
     )
     + api.ios.make_test_build_config({
       'xcode version': '6.1.1',

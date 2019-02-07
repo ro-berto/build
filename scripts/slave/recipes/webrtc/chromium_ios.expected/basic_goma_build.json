@@ -899,8 +899,6 @@
       "--tag",
       "slavename:fake-vm",
       "--tag",
-      "spec_name:chromium.fake:ios:fake test:device:iPhone X:8.0:9c40b",
-      "--tag",
       "stepname:fake test (iPhone X iOS 8.0) on iOS-8.0",
       "--tag",
       "test:fake test",

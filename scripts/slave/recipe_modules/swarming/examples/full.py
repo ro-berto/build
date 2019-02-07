@@ -294,6 +294,7 @@ def GenTests(api):
       api.buildbucket.try_build(
           project='chromium',
           builder='linux',
+          build_number=1,
           git_repo='https://chromium.googlesource.com/chromium/src') +
       api.step_data(
           'archive for win',

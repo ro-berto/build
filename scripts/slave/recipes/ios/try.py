@@ -52,14 +52,18 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      buildername='ios-simulator',
-      buildnumber='0',
       issue=123456,
       mastername='tryserver.fake',
       patchset=1,
-      rietveld='fake://rietveld.url',
       bot_id='fake-vm',
       path_config='kitchen',
+    )
+    + api.buildbucket.try_build(
+      project='chromium',
+      builder='ios-simulator',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -88,14 +92,18 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      buildername='ios-simulator',
-      buildnumber='0',
       issue=123456,
       mastername='tryserver.fake',
       patchset=1,
-      rietveld='fake://rietveld.url',
       bot_id='fake-vm',
       path_config='kitchen',
+    )
+    + api.buildbucket.try_build(
+      project='chromium',
+      builder='ios-simulator',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -123,14 +131,18 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      buildername='ios-simulator',
-      buildnumber='0',
       issue=123456,
       mastername='tryserver.fake',
       patchset=1,
-      rietveld='fake://rietveld.url',
       bot_id='fake-vm',
       path_config='kitchen',
+    )
+    + api.buildbucket.try_build(
+      project='chromium',
+      builder='ios-simulator',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -154,15 +166,19 @@ def GenTests(api):
     + try_build(git_repo='https://chromium.googlesource.com/chromium/deps/icu')
     + api.platform('mac', 64)
     + api.properties(
-      buildername='ios-simulator',
-      buildnumber='0',
       issue=123456,
       mastername='tryserver.fake',
       patchset=1,
       patch_project='icu',
-      rietveld='fake://rietveld.url',
       bot_id='fake-vm',
       path_config='kitchen',
+    )
+    + api.buildbucket.try_build(
+      project='chromium',
+      builder='ios-simulator',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -190,14 +206,18 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      buildername='ios',
-      buildnumber='0',
       issue=123456,
       mastername='tryserver.fake',
       patchset=1,
-      rietveld='fake://rietveld.url',
       bot_id='fake-vm',
       path_config='kitchen',
+    )
+    + api.buildbucket.try_build(
+      project='chromium',
+      builder='ios',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
     )
     + api.ios.make_test_build_config({
       'triggered by': 'parent',
@@ -228,14 +248,18 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      buildername='ios-simulator-gn',
-      buildnumber='0',
       issue=123456,
       mastername='tryserver.fake',
       patchset=1,
-      rietveld='fake://rietveld.url',
       bot_id='fake-vm',
       path_config='kitchen',
+    )
+    + api.buildbucket.try_build(
+      project='chromium',
+      builder='ios-simulator-gn',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -268,14 +292,18 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      buildername='ios-simulator-gn',
-      buildnumber='0',
       issue=123456,
       mastername='tryserver.fake',
       patchset=1,
-      rietveld='fake://rietveld.url',
       bot_id='fake-vm',
       path_config='kitchen',
+    )
+    + api.buildbucket.try_build(
+      project='chromium',
+      builder='ios-simulator-gn',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -305,14 +333,18 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      buildername='ios-simulator',
-      buildnumber='0',
       issue=123456,
       mastername='tryserver.fake',
       patchset=1,
-      rietveld='fake://rietveld.url',
       bot_id='fake-vm',
       path_config='kitchen',
+    )
+    + api.buildbucket.try_build(
+      project='chromium',
+      builder='ios-simulator',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',
@@ -336,15 +368,19 @@ def GenTests(api):
     + try_build()
     + api.platform('mac', 64)
     + api.properties(
-      buildername='ios-simulator',
-      buildnumber='0',
       issue=123456,
       mastername='tryserver.fake',
       patchset=1,
-      rietveld='fake://rietveld.url',
       bot_id='fake-vm',
       path_config='kitchen',
       fail_patch='apply',
+    )
+    + api.buildbucket.try_build(
+      project='chromium',
+      builder='ios-simulator',
+      build_number=1,
+      revision='HEAD',
+      git_repo='https://chromium.googlesource.com/chromium/src',
     )
     + api.ios.make_test_build_config({
       'xcode version': 'fake xcode version',

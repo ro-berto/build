@@ -586,7 +586,7 @@
       "--tag",
       "slavename:fake-vm",
       "--tag",
-      "spec_name:chromium.fyi:ios:build-global xcode build version:device:iPhone X:10.0:9a123",
+      "spec_name:chromium.ci:ios",
       "--tag",
       "stepname:build-global xcode build version (iPhone X iOS 10.0) on iOS-10.0",
       "--tag",
