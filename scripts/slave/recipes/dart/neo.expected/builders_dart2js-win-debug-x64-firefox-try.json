@@ -212,14 +212,12 @@
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"--bar\"@@@",
-      "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/test.py\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"-e co19\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"language_2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@          ]@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/test.py\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
@@ -228,8 +226,7 @@
       "@@@STEP_LOG_LINE@json.output@            \"-mdebug\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"-n${runtime}-foo-${mode}-${arch}-bar\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"tests\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 2\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
@@ -242,15 +239,12 @@
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"--bar\"@@@",
-      "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"excludeTests\": [], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 1\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/test.py\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"-e co19\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"language_2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@          ]@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 1\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/test.py\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
@@ -263,12 +257,10 @@
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"--bar\"@@@",
-      "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"co19\"@@@",
-      "@@@STEP_LOG_LINE@json.output@          ]@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 2\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
@@ -803,9 +795,9 @@
       "-rfirefox",
       "foo",
       "--bar",
-      "--firefox=browsers\\firefox\\firefox.exe",
       "-e co19",
       "language_2",
+      "--firefox=browsers\\firefox\\firefox.exe",
       "--output_directory",
       "/path/to/tmp/"
     ],
@@ -949,6 +941,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[CACHE]/builder/sdk",
+    "name": "deflaking"
+  },
+  {
     "cmd": [
       "[CACHE]/builder/sdk/tools/sdks/dart-sdk/bin/dart",
       "tools/bots/compare_results.dart",
@@ -963,9 +960,10 @@
       ""
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "list tests to deflake (Test-step 1)",
+    "name": "deflaking.list tests to deflake (Test-step 1)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
@@ -986,17 +984,20 @@
       "-rfirefox",
       "foo",
       "--bar",
-      "--firefox=browsers\\firefox\\firefox.exe",
       "-e co19",
       "language_2",
       "--repeat=5",
       "--test-list",
       "",
+      "--firefox=browsers\\firefox\\firefox.exe",
       "--output_directory",
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "deflake Test-step 1"
+    "name": "deflaking.Test-step 1",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -1013,9 +1014,10 @@
       ""
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "list tests to deflake (Test-step 2)",
+    "name": "deflaking.list tests to deflake (Test-step 2)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
@@ -1035,15 +1037,18 @@
       "--bar",
       "-mdebug",
       "-nfirefox-foo-debug-x64-bar",
-      "--firefox=browsers\\firefox\\firefox.exe",
       "--repeat=5",
       "--test-list",
       "",
+      "--firefox=browsers\\firefox\\firefox.exe",
       "--output_directory",
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]/builder/sdk",
-    "name": "deflake Test-step 2"
+    "name": "deflaking.Test-step 2",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [

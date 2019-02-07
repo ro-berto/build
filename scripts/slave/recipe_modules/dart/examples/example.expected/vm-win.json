@@ -533,19 +533,15 @@
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"-n${runtime}-foo-${mode}-${arch}-bar\"@@@",
-      "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"exclude_tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@            \"co19\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"-n${runtime}-foo-${mode}-${arch}-bar\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"language_2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"co19_2\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--exclude_suite=co19\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
       "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"nameoffileset\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 1\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/test.py\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"shards\": 2, @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@            \"language_2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"co19_2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@          ]@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"shards\": 2@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
@@ -553,8 +549,7 @@
       "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"-n${runtime}-foo-${mode}-${arch}-bar\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"tests\": []@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 2\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"fileset1\", @@@",
@@ -593,15 +588,13 @@
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"--bar\"@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
+      "@@@STEP_LOG_LINE@json.output@            \"-e co19, language_2\"@@@",
       "@@@STEP_LOG_LINE@json.output@          ], @@@",
       "@@@STEP_LOG_LINE@json.output@          \"fileset\": \"fileset1\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 1\", @@@",
       "@@@STEP_LOG_LINE@json.output@          \"script\": \"tools/test.py\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"shards\": 2, @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"tests\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@            \"-e co19, language_2\"@@@",
-      "@@@STEP_LOG_LINE@json.output@          ]@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"shards\": 2@@@",
       "@@@STEP_LOG_LINE@json.output@        }, @@@",
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
@@ -615,12 +608,10 @@
       "@@@STEP_LOG_LINE@json.output@        {@@@",
       "@@@STEP_LOG_LINE@json.output@          \"arguments\": [@@@",
       "@@@STEP_LOG_LINE@json.output@            \"foo\", @@@",
-      "@@@STEP_LOG_LINE@json.output@            \"--bar\"@@@",
-      "@@@STEP_LOG_LINE@json.output@          ], @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 2\", @@@",
-      "@@@STEP_LOG_LINE@json.output@          \"tests\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@            \"--bar\", @@@",
       "@@@STEP_LOG_LINE@json.output@            \"co19\"@@@",
-      "@@@STEP_LOG_LINE@json.output@          ]@@@",
+      "@@@STEP_LOG_LINE@json.output@          ], @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"name\": \"Test-step 2\"@@@",
       "@@@STEP_LOG_LINE@json.output@        }@@@",
       "@@@STEP_LOG_LINE@json.output@      ]@@@",
       "@@@STEP_LOG_LINE@json.output@    }, @@@",
@@ -1272,10 +1263,10 @@
       "--write-logs",
       "foo",
       "-n-foo-release-x64-bar",
-      "--copy-coredumps",
-      "--exclude_suite=co19",
       "language_2",
       "co19_2",
+      "--exclude_suite=co19",
+      "--copy-coredumps",
       "--shards=2",
       "--shard=1",
       "--output_directory=${ISOLATED_OUTDIR}"
@@ -1389,10 +1380,10 @@
       "--write-logs",
       "foo",
       "-n-foo-release-x64-bar",
-      "--copy-coredumps",
-      "--exclude_suite=co19",
       "language_2",
       "co19_2",
+      "--exclude_suite=co19",
+      "--copy-coredumps",
       "--shards=2",
       "--shard=2",
       "--output_directory=${ISOLATED_OUTDIR}"
@@ -2072,6 +2063,11 @@
     ]
   },
   {
+    "cmd": [],
+    "cwd": "[CACHE]\\builder\\sdk",
+    "name": "deflaking"
+  },
+  {
     "cmd": [
       "[CACHE]\\builder\\sdk\\tools\\sdks\\dart-sdk\\bin\\dart.exe",
       "tools/bots/compare_results.dart",
@@ -2086,9 +2082,10 @@
       ""
     ],
     "cwd": "[CACHE]\\builder\\sdk",
-    "name": "list tests to deflake (Test-step 1)",
+    "name": "deflaking.list tests to deflake (Test-step 1)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
@@ -2105,18 +2102,21 @@
       "--write-logs",
       "foo",
       "-n-foo-release-x64-bar",
-      "--copy-coredumps",
-      "--exclude_suite=co19",
       "language_2",
       "co19_2",
+      "--exclude_suite=co19",
       "--repeat=5",
       "--test-list",
       "",
+      "--copy-coredumps",
       "--output_directory",
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
-    "name": "deflake Test-step 1"
+    "name": "deflaking.Test-step 1",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -2133,9 +2133,10 @@
       ""
     ],
     "cwd": "[CACHE]\\builder\\sdk",
-    "name": "list tests to deflake (Test-step 2)",
+    "name": "deflaking.list tests to deflake (Test-step 2)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
@@ -2153,15 +2154,18 @@
       "foo",
       "--bar",
       "-n-foo-release-x64-bar",
-      "--copy-coredumps",
       "--repeat=5",
       "--test-list",
       "",
+      "--copy-coredumps",
       "--output_directory",
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
-    "name": "deflake Test-step 2"
+    "name": "deflaking.Test-step 2",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [
@@ -2178,9 +2182,10 @@
       ""
     ],
     "cwd": "[CACHE]\\builder\\sdk",
-    "name": "list tests to deflake (Test-step 3)",
+    "name": "deflaking.list tests to deflake (Test-step 3)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_END@raw_io.output_text@@@"
     ]
   },
@@ -2200,16 +2205,19 @@
       "foo",
       "--bar",
       "-rfirefox",
-      "--copy-coredumps",
-      "--firefox=browsers\\firefox\\firefox.exe",
       "--repeat=5",
       "--test-list",
       "",
+      "--copy-coredumps",
+      "--firefox=browsers\\firefox\\firefox.exe",
       "--output_directory",
       "/path/to/tmp/"
     ],
     "cwd": "[CACHE]\\builder\\sdk",
-    "name": "deflake Test-step 3"
+    "name": "deflaking.Test-step 3",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
   },
   {
     "cmd": [

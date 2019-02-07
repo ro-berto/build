@@ -42,13 +42,11 @@ TEST_MATRIX = {
       }, {
         "name": "Test-step 1",
         "script": "tools/test.py",
-        "arguments": ["foo", "--bar"],
-        "tests": ["-e co19", "language_2"]
+        "arguments": ["foo", "--bar", "-e co19", "language_2"],
       }, {
         "name": "Test-step 2",
         "arguments": ["foo", "--bar", "-mdebug",
                       "-n${runtime}-foo-${mode}-${arch}-bar"],
-        "tests": []
       }]
     },
     {
@@ -59,17 +57,14 @@ TEST_MATRIX = {
       "steps": [{
         "name": "Test-step 1",
         "script": "tools/test.py",
-        "arguments": ["foo", "--bar"],
-        "tests": ["-e co19", "language_2"],
-        "excludeTests": []
+        "arguments": ["foo", "--bar", "-e co19", "language_2"],
       }, {
         "name": "Test-step custom",
         "script": "tools/custom_thing.py",
         "arguments": ["foo", "--bar"]
       }, {
         "name": "Test-step 2",
-        "arguments": ["foo", "--bar"],
-        "tests": ["co19"]
+        "arguments": ["foo", "--bar", "co19"],
       }]
     }
   ]
@@ -94,7 +89,7 @@ def _run_steps_impl(api):
     builder_name = api.buildbucket.builder_name
     builder_fragments = builder_name.split('-')
     channel = builder_fragments[-1]
-    if channel not in ['be', 'dev', 'stable', 'integration', 'try']:
+    if channel not in ['be', 'dev', 'stable', 'try']:
       channel = 'be'
     clobber = 'clobber' in api.properties
     # todo(athom): remove the new workflow check when enabled by default
@@ -116,16 +111,15 @@ def _run_steps_impl(api):
     elif 'parent_fileset' not in api.properties:
       api.dart.build()
     try_commands.sort()
-    with api.step.defer_results():
-      with api.context(cwd=api.path['checkout']):
-        for cmd_key in try_commands:
-          try_test_cmd = api.properties[cmd_key].split()
-          if try_test_cmd[0] == "xvfb":
-            try_test_cmd = ['/usr/bin/xvfb-run','-a',
-              '--server-args=-screen 0 1024x768x24'] + try_test_cmd[1:]
-          try_test_repeat = api.properties.get(cmd_key + '_repeat', '1')
-          for x in range(0, int(try_test_repeat)):
-            api.step("%s %s" % (api.properties[cmd_key],x), try_test_cmd)
+    with api.step.defer_results(), api.context(cwd=api.path['checkout']):
+      for cmd_key in try_commands:
+        try_test_cmd = api.properties[cmd_key].split()
+        if try_test_cmd[0] == "xvfb":
+          try_test_cmd = ['/usr/bin/xvfb-run','-a',
+            '--server-args=-screen 0 1024x768x24'] + try_test_cmd[1:]
+        try_test_repeat = api.properties.get(cmd_key + '_repeat', '1')
+        for x in range(0, int(try_test_repeat)):
+          api.step("%s %s" % (api.properties[cmd_key],x), try_test_cmd)
   else:
     with api.step.defer_results():
       api.dart.test(latest=latest, test_data=TEST_MATRIX)
@@ -142,13 +136,6 @@ def GenTests(api):
           git_repo='https://dart.googlesource.com/sdk',
           project='dart')
    )
-   yield (
-      api.test('builders/vm-linux-release-x64-try') +
-      api.properties.generic(clobber='true') +
-      api.buildbucket.try_build(
-          builder='builders/vm-linux-release-x64-try',
-          git_repo='https://dart.googlesource.com/sdk',
-          project='dart'))
    yield (
       api.test('builders/dart2js-win-debug-x64-firefox-try') +
       api.buildbucket.try_build(

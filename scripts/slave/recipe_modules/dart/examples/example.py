@@ -86,16 +86,14 @@ TEST_MATRIX = {
       }, {
         "name": "Test-step 1",
         "script": "tools/test.py",
-        "arguments": ["foo", "-n${runtime}-foo-${mode}-${arch}-bar"],
-        "tests": ["language_2", "co19_2"],
-        "exclude_tests": ["co19"],
+        "arguments": ["foo", "-n${runtime}-foo-${mode}-${arch}-bar",
+                      "language_2", "co19_2", "--exclude_suite=co19"],
         "shards": 2,
         "fileset": "nameoffileset"
       }, {
         "name": "Test-step 2",
         "arguments": ["foo", "--bar",
                       "-n${runtime}-foo-${mode}-${arch}-bar"],
-        "tests": []
       }, {
         "name": "Trigger step",
         "fileset": "fileset1",
@@ -119,8 +117,7 @@ TEST_MATRIX = {
       "steps": [{
         "name": "Test-step 1",
         "script": "tools/test.py",
-        "arguments": ["foo", "--bar"],
-        "tests": ["-e co19, language_2"],
+        "arguments": ["foo", "--bar", "-e co19, language_2"],
         "shards": 2,
         "fileset": "fileset1"
       }, {
@@ -129,8 +126,7 @@ TEST_MATRIX = {
         "arguments": ["foo", "--bar", "--buildername"]
       }, {
         "name": "Test-step 2",
-        "arguments": ["foo", "--bar"],
-        "tests": ["co19"]
+        "arguments": ["foo", "--bar", "co19"],
       }]
     },
     {
@@ -174,13 +170,15 @@ def RunSteps(api):
   test_args = ['--all']
   if 'shards' in api.properties:
     tasks = api.dart.shard('vm_tests', isolate_hash, test_args)
-    api.dart.collect_all([{'shards':tasks,
-                            'args': ['--test_arg'],
-                            'environment': {},
-                            'step_name': 'example sharded step'}],
-                          {'commit_hash':'deadbeef',
-                            'commit_time': '12124546'},
-                          {})
+    environment = {
+        'commit': {'commit_hash':'deadbeef', 'commit_time': '12124546'},
+        'copy-coredumps': False}
+    step_json = {'name': 'example sharded step', 'args': ['--test_arg']}
+    config = {'steps': [step_json, step_json]}
+    step = api.dart.TestMatrixStep(api, 'dart2js-linux-release-chrome',
+                                   config, step_json, environment, 1)
+    step.tasks = tasks
+    api.dart.collect_all([step])
 
   with api.step.defer_results():
     api.step('Print Hello World', ['echo', 'hello', 'world'])
@@ -282,7 +280,6 @@ def GenTests(api):
                     stdout=api.raw_io.output('fs1 hash')) +
       api.step_data('buildbucket.put',
                     stdout=api.json.output(TRIGGER_RESULT)))
-
 
   yield (api.test('basic-win-stable') +
       api.platform('win', 64) +

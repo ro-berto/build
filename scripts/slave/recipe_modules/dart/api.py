@@ -17,6 +17,7 @@ SWARMING_CLIENT_REPO = (
 SWARMING_CLIENT_REV = '88229872dd17e71658fe96763feaa77915d8cbd6'
 
 TEST_PY_PATH = 'tools/test.py'
+BUILD_PY_PATH = 'tools/build.py'
 
 CHROME_PATH_ARGUMENT = {
   'linux': '--chrome=browsers/chrome/google-chrome',
@@ -101,33 +102,30 @@ class DartApi(recipe_api.RecipeApi):
 
 
   def build(self, build_args=None, name='build dart'):
-    """Builds dart using the specified build_args
-       and optionally isolates the sdk for testing using the specified isolate.
-       If an isolate is specified, it returns the hash of the isolated archive.
-    """
+    """Builds dart using the specified build_args"""
     if not build_args: # pragma: no cover
       build_args = []
     build_args = build_args + ['--no-start-goma', '-j200']
-    with self.m.context(cwd=self.m.path['checkout'],
-                        env={'GOMA_DIR':self.m.goma.goma_dir}):
-      with self.m.depot_tools.on_path():
-        self.kill_tasks()
-        build_exit_status = None
-        try:
-          self.m.goma.start()
-          self.m.python(name,
-                        self.m.path['checkout'].join('tools', 'build.py'),
-                        args=build_args,
-                        timeout=20 * 60)
-          build_exit_status = 0
-        except self.m.step.StepTimeout as e:
-          raise self.m.step.StepFailure(
-              'Step "%s" timed out after 20 minutes' % name)
-        except self.m.step.StepFailure as e:
-          build_exit_status = e.retcode
-          raise e
-        finally:
-          self.m.goma.stop(build_exit_status=build_exit_status)
+    with self.m.depot_tools.on_path(), self.m.context(
+        cwd=self.m.path['checkout'],
+        env={'GOMA_DIR':self.m.goma.goma_dir}):
+      self.kill_tasks()
+      build_exit_status = None
+      try:
+        self.m.goma.start()
+        self.m.python(name,
+                      self.m.path['checkout'].join('tools', 'build.py'),
+                      args=build_args,
+                      timeout=20 * 60)
+        build_exit_status = 0
+      except self.m.step.StepTimeout as e:
+        raise self.m.step.StepFailure(
+            'Step "%s" timed out after 20 minutes' % name)
+      except self.m.step.StepFailure as e:
+        build_exit_status = e.retcode
+        raise e
+      finally:
+        self.m.goma.stop(build_exit_status=build_exit_status)
 
 
   def upload_isolate(self, isolate_fileset):
@@ -170,8 +168,8 @@ class DartApi(recipe_api.RecipeApi):
             pool='dart.tests', num_shards=0, last_shard_is_local=False,
             cipd_packages=None, ignore_failure=False):
     """Runs test.py in the given isolate, sharded over several swarming tasks.
-       Requires the 'shards' build property to be set to the number of tasks.
-       Returns the created task(s), which are meant to be passed into collect().
+       The 'shards' build property can override the number of tasks.
+       Returns the created tasks, which can be collected with collect_all().
     """
     if not cipd_packages: # pragma: no cover
       cipd_packages = []
@@ -181,8 +179,8 @@ class DartApi(recipe_api.RecipeApi):
     tasks = []
     if os is None:
       os = self.m.platform.name
+    # TODO(athom) use built-in sharding to remove for loop
     for shard in range(num_shards):
-      # TODO(athom) collect all the triggers, and present as a single step
       if last_shard_is_local and shard == num_shards - 1:
         break
       task = self.m.swarming.task('%s_shard_%s' % (title, (shard + 1)),
@@ -231,17 +229,13 @@ class DartApi(recipe_api.RecipeApi):
         not self.m.buildbucket.builder_name.endswith('-try'))
 
 
-  def collect_all(self, tasks, commit, all_results):
+  def collect_all(self, steps):
     """Collects the results of a sharded test run."""
     # Defer results in case one of the shards has a non-zero exit code.
     with self.m.step.defer_results():
       # TODO(athom) collect all the output, and present as a single step
-      for task in tasks:
-        shards = task['shards']
-        # All shards share the same step name, so just use the first
-        step_name = shards[0].title.split('_shard')[0]
-        results = StepResults(step_name, self.m, commit)
-        for shard in shards:
+      for step in steps:
+        for shard in step.tasks:
           shard.task_output_dir = self.m.raw_io.output_dir()
           self.m.swarming.collect_task(shard)
           active_result = self.m.step.active_result
@@ -249,9 +243,7 @@ class DartApi(recipe_api.RecipeApi):
           bot_name = active_result.swarming.summary['shards'][0]['bot_id']
           active_result.presentation.links['test stdout of shard #0'] = (
             shard.get_shard_view_url(index=0))
-          self._add_results_and_links(bot_name, results)
-        if results.runs or results.results:
-          self._add_to_all_results(all_results, results)
+          self._add_results_and_links(bot_name, step.results)
 
 
   def _add_results_and_links(self, bot_name, results):
@@ -279,7 +271,7 @@ class DartApi(recipe_api.RecipeApi):
         'builders/%s/latest' % builder,
         self.m.raw_io.output_text(name='latest', add_output_log=True),
         name='find latest build',
-        ok_ret='any') # todo(athom): succeed only if file does not exist
+        ok_ret='any') # TODO(athom): succeed only if file does not exist
     latest = latest_result.raw_io.output_texts.get('latest')
     revision = None
     if latest:
@@ -289,7 +281,7 @@ class DartApi(recipe_api.RecipeApi):
           'builders/%s/%s/revision' % (builder, latest),
           self.m.raw_io.output_text(name='revision', add_output_log=True),
           name='get revision for latest build',
-          ok_ret='any') # todo(athom): succeed only if file does not exist
+          ok_ret='any') # TODO(athom): succeed only if file does not exist
       revision = revision_result.raw_io.output_texts.get('revision')
 
     return (latest, revision)
@@ -325,31 +317,26 @@ class DartApi(recipe_api.RecipeApi):
         ok_ret='any')
 
 
-  def _deflake_results(self, results):
-    step_name = results.step_name
-    environment = results.environment
-    deflake_list = self.m.step('list tests to deflake (%s)' % step_name,
+  def _deflake_results(self, step, global_config):
+    deflake_list = self.m.step('list tests to deflake (%s)' % step.name,
                 [self.dart_executable(),
-                 'tools/bots/compare_results.dart',
-                 '--flakiness-data',
-                 'LATEST/flaky.json',
-                 '--changed',
-                 '--passing',
-                 '--failing',
-                 '--count',
-                 '50',
-                 'LATEST/results.json',
-                 self.m.raw_io.input_text(results.results)],
+                'tools/bots/compare_results.dart',
+                '--flakiness-data',
+                'LATEST/flaky.json',
+                '--changed',
+                '--passing',
+                '--failing',
+                '--count',
+                '50',
+                'LATEST/results.json',
+                self.m.raw_io.input_text(step.results.results)],
                 stdout=self.m.raw_io.output_text(add_output_log=True),
                 ok_ret='any' if self._report_new_results() else {0}).stdout
-    args = results.args + ['--repeat=5', '--test-list',
-                           self.m.raw_io.input_text(deflake_list)]
-    self.run_script(
-        'deflake %s' % step_name, TEST_PY_PATH,
-        args,
-        None, None,
-        False, environment, None, ignore_failure=True)
-    self._add_results_and_links(self.m.properties.get('bot_id'), results)
+    # TODO(athom): Do not modify the step, although it is harmless here
+    step.args += ['--repeat=5', '--test-list',
+                self.m.raw_io.input_text(deflake_list)]
+    step.isolate_hash = None
+    self._run_test_py(step, global_config)
 
 
   def _update_flakiness_information(self, results_str):
@@ -538,8 +525,8 @@ class DartApi(recipe_api.RecipeApi):
 
 
   def test(self, latest, test_data):
-    """Reads the test-matrix.json file in checkout and performs each step listed
-    in the file
+    """Reads the test-matrix.json file in checkout and runs each step listed
+    in the file.
 
     Raises StepFailure.
     """
@@ -552,7 +539,7 @@ class DartApi(recipe_api.RecipeApi):
       step_test_data=lambda: self.m.json.test_api.output(test_data))
     test_matrix = read_json.json.output
     builder = str(self.m.buildbucket.builder_name)
-    if builder.endswith(('-be', '-try', '-stable', 'dev')):
+    if builder.endswith(('-be', '-try', '-stable', '-dev')):
       builder = builder[0:builder.rfind('-')]
     isolate_hashes = {}
     global_config = test_matrix['global']
@@ -584,12 +571,12 @@ class DartApi(recipe_api.RecipeApi):
 
 
   def _build_isolates(self, config, isolate_hashes):
-    """Isolate filesets from all steps in config and returns a dictionary with a
-    mapping from fileset to isolate_hash.
+    """Isolate filesets from all steps in config and populates a dictionary
+    with a mapping from fileset to isolate_hash.
     Args:
       * config (dict) - Configuration of the builder, including the steps
-
-    Returns (dict) - A mapping from fileset to isolate_hashes
+      * isolate_hashes (dict) - A dict that will contain a mapping from
+            fileset name to isolate hash upon completion of this method.
     """
     for step in config['steps']:
       if 'fileset' in step and step['fileset'] not in isolate_hashes:
@@ -677,91 +664,71 @@ class DartApi(recipe_api.RecipeApi):
       environment['runtime'] = runtime
       if runtime == 'chrome' or runtime == 'firefox':
         self._download_browser(runtime, global_config[runtime])
-    channels = {
-      "refs/heads/master": "be",
-      "refs/heads/stable": "stable",
-      "refs/heads/dev": "dev"
-    }
-    channel = channels.get(self.m.buildbucket.gitiles_commit.ref, 'try')
-    build_py_path = 'tools/build.py'
-    tasks = []
-    all_results = {}
+    steps = []
     with self.m.step.defer_results():
-      for index,step in enumerate(config['steps']):
-        step_name = step['name']
-        # If script is not defined, use test.py.
-        script = step.get('script', TEST_PY_PATH)
-        args = step.get('arguments', [])
-        is_build_step = script.endswith(build_py_path)
-        is_trigger = 'trigger' in step
-
-        if self.m.platform.name == 'mac' and script.startswith('out/'):
-          script = script.replace('out/', 'xcodebuild/', 1)
-
-        is_dart = script.endswith('/dart')
-        if is_dart:
-          executable_suffix = '.exe' if self.m.platform.name == 'win' else ''
-          script += executable_suffix
-
-        isolate_hash = None
-        shards = step.get('shards', 0)
-        local_shard = (shards > 1 and index == len(config['steps']) - 1
-            and not environment['system'] == 'android')
-        if 'fileset' in step:
+      for index,step_json in enumerate(config['steps']):
+        step = self.TestMatrixStep(self.m, builder_name, config, step_json,
+                                   environment, index)
+        if step.fileset:
           # We build isolates here, every time we see fileset, to wait for the
           # building of Dart, which may be included in the fileset.
           self._build_isolates(config, isolate_hashes)
-          isolate_hash = isolate_hashes[step['fileset']]
+          step.isolate_hash = isolate_hashes[step.fileset]
 
-        environment_variables = step.get('environment', {})
-        environment_variables['BUILDBOT_BUILDERNAME'] = (
-            builder_name + "-%s" % channel)
-
-        # Enable Crashpad integration if a Windows bot wants to copy coredumps.
-        if environment['copy-coredumps'] and self.m.platform.name == 'win':
-          environment_variables['DART_USE_CRASHPAD'] = '1'
-
-        with self.m.context(cwd=self.m.path['checkout'],
-                            env=environment_variables):
-          with self.m.depot_tools.on_path():
-            if is_build_step:
-              if not self._has_specific_argument(args, ['-m', '--mode']):
-                args = ['-m%s' % mode] + args
-              if not self._has_specific_argument(args, ['-a', '--arch']):
-                args = ['-a%s' % arch] + args
-              deferred_result = self.build(name=step_name, build_args=args)
-              deferred_result.get_result() # raises build errors
-            elif is_trigger:
-              self.run_trigger(step_name, step, isolate_hash)
-            elif self._is_test_py_step(script):
-              self.run_test_py(step_name, step, isolate_hash,
-                               shards, local_shard, environment,
-                               tasks, global_config, all_results)
-            else:
-              self.run_script(step_name, script, args, isolate_hash, shards,
-                  local_shard, environment, tasks)
-      self.collect_all(tasks, environment['commit'], all_results)
-      # todo(athom): remove this when the new workflow is fully rolled out.
+        if not step.is_trigger and self._is_test_py_step(step.script):
+          steps.append(step)
+        self._run_step(step, global_config)
+      self.collect_all(steps)
+      # TODO(athom): remove this when the new workflow is fully rolled out.
       # Old workflow test.py steps throw on failing tests and results need to
       # be processed in the defer_results block.
       if not self._report_new_results():
-        self._process_test_results(all_results, latest)
+        self._process_test_results(steps, global_config, latest)
     if self._report_new_results():
-      self._process_test_results(all_results, latest)
+      self._process_test_results(steps, global_config, latest)
 
 
-  def _process_test_results(self, all_results, latest):
-    # If there are no test steps, all_results will be empty.
-    if self._run_new_steps() and all_results:
+  @recipe_api.non_step
+  def _run_step(self, step, global_config):
+    with self.m.depot_tools.on_path(), self.m.context(
+        cwd=self.m.path['checkout'],
+        env=step.environment_variables):
+      if step.is_build_step:
+        self._run_build(step)
+      elif step.is_trigger:
+        self._run_trigger(step)
+      elif self._is_test_py_step(step.script):
+        self._run_test_py(step, global_config)
+      else:
+        self._run_script(step)
+
+
+  @recipe_api.non_step
+  def _run_build(self, step):
+    mode = step.environment['mode']
+    arch = step.environment['arch']
+    args = step.args
+    if not self._has_specific_argument(args, ['-m', '--mode']):
+      args = ['-m%s' % mode] + args
+    if not self._has_specific_argument(args, ['-a', '--arch']):
+      args = ['-a%s' % arch] + args
+    deferred_result = self.build(name=step.name, build_args=args)
+    deferred_result.get_result() # raises build errors
+
+
+  def _process_test_results(self, steps, global_config, latest):
+    # If there are no test steps, steps will be empty.
+    if self._run_new_steps() and steps:
       with self.m.context(cwd=self.m.path['checkout']):
         with self.m.step.nest('download previous results'):
           self._download_results(latest)
-        for results in all_results.itervalues():
-          self._deflake_results(results)
+        with self.m.step.nest('deflaking'):
+          for step in steps:
+            self._deflake_results(step, global_config)
         logs_str = ''.join(
-            (results.logs for results in all_results.itervalues()))
+            (step.results.logs for step in steps))
         results_str = ''.join(
-            (results.results for results in all_results.itervalues()))
+            (step.results.results for step in steps))
         flaky_json_str = self._update_flakiness_information(results_str)
         try:
           self._present_results(logs_str, results_str, flaky_json_str)
@@ -769,7 +736,7 @@ class DartApi(recipe_api.RecipeApi):
           # Upload even if present_results fails the build
           with self.m.step.nest('upload new results'):
             runs_str = ''.join(
-                (results.runs for results in all_results.itervalues()))
+                (step.results.runs for step in steps))
             self._upload_results(
                 flaky_json_str, logs_str, results_str, runs_str)
         # Approve unapproved successes if the build is green (an exception would
@@ -781,14 +748,6 @@ class DartApi(recipe_api.RecipeApi):
 
   def _is_test_py_step(self, script):
     return script.endswith(TEST_PY_PATH)
-
-
-  def _add_to_all_results(self, all_results, results):
-    step_name = results.step_name
-    if all_results.get(step_name) is None:
-      all_results[step_name] = results
-    else:
-      all_results[step_name].merge(results)
 
 
   def _download_browser(self, runtime, version):
@@ -826,14 +785,14 @@ class DartApi(recipe_api.RecipeApi):
             ok_ret='any' if self._report_new_results() else {0})
 
 
-  def run_trigger(self, step_name, step, isolate_hash):
+  def _run_trigger(self, step):
     trigger_props = {}
     trigger_props['revision'] = self.m.buildbucket.gitiles_commit.id
     trigger_props['parent_buildername'] = self.m.buildbucket.builder_name
     trigger_props['parent_build_id'] = self.m.properties.get('build_id', '')
-    if isolate_hash:
-      trigger_props['parent_fileset'] = isolate_hash
-      trigger_props['parent_fileset_name'] = step['fileset']
+    if step.isolate_hash:
+      trigger_props['parent_fileset'] = step.isolate_hash
+      trigger_props['parent_fileset_name'] = step.fileset
     put_result = self.m.buildbucket.put(
         [
           {
@@ -851,9 +810,9 @@ class DartApi(recipe_api.RecipeApi):
               ],
             },
           }
-          for builder_name in step['trigger']
+          for builder_name in step.triggered_builders
         ])
-    self.m.step.active_result.presentation.step_text = step_name
+    self.m.step.active_result.presentation.step_text = step.name
     for build in put_result.stdout['results']:
       builder_tag = (
           x for x in build['build']['tags'] if x.startswith('builder:')).next()
@@ -862,22 +821,15 @@ class DartApi(recipe_api.RecipeApi):
           build['build']['url'])
 
 
-  def run_test_py(self, step_name, step, isolate_hash, shards, local_shard,
-                  environment, tasks, global_config, all_results):
+  def _run_test_py(self, step, global_config):
     """Runs test.py with default arguments, based on configuration from.
     Args:
-      * step_name (str) - Name of the step
-      * step (dict) - Test-matrix step
-      * isolate_hash (String) - Hash of uploadet fileset/isolate if the
-        process is to be sharded
-      * shards (int) - The number of shards
-      * local_shard (bool) - Should the current builder be one of the shards.
-      * environment (dict) - Environment with runtime, arch, system etc
-      * tasks ([task]) - placeholder to put all swarming tasks in
+      * step (TestMatrixStep) - The test-matrix step.
       * global_config (dict) - The global section from test_matrix.json.
         Contains version tags for the pinned browsers Firefox and Chrome.
     """
-    args = step.get('arguments', [])
+    environment = step.environment
+    args = step.args
     test_args = ['--progress=status',
                  '--report',
                  '--time',
@@ -885,7 +837,7 @@ class DartApi(recipe_api.RecipeApi):
                  '--write-results',
                  '--write-logs']
     if self._report_new_results():
-      test_args.append("--clean-exit")
+      test_args.append('--clean-exit')
     template = self._get_specific_argument(args, ['-n'])
     if template is not None:
       for term in ['runtime', 'system', 'mode', 'arch']:
@@ -912,22 +864,18 @@ class DartApi(recipe_api.RecipeApi):
     # specific test steps with runtime chrome in a bot without that
     # global runtime.
     cipd_packages = []
-    if any('chrome' in arg for arg in args):
+    if any('chrome' in arg for arg in args if isinstance(arg, basestring)):
       version_tag = 'version:%s' % global_config['chrome']
       cipd_packages.append(('browsers',
                             'dart/browsers/chrome/${platform}',
                             version_tag))
       args = args + [CHROME_PATH_ARGUMENT[environment['system']]]
-    if any('firefox' in arg for arg in args):
+    if any('firefox' in arg for arg in args if isinstance(arg, basestring)):
       version_tag = 'version:%s' % global_config['firefox']
       cipd_packages.append(('browsers',
                             'dart/browsers/firefox/${platform}',
                             version_tag))
       args = args + [FIREFOX_PATH_ARGUMENT[environment['system']]]
-    if 'exclude_tests' in step:
-        args = args + ['--exclude_suite=' + ','.join(step['exclude_tests'])]
-    if 'tests' in step:
-      args = args + step['tests']
 
     with self.m.step.defer_results():
       # TODO(https://github.com/dart-lang/sdk/issues/34158): The Firefox
@@ -935,38 +883,28 @@ class DartApi(recipe_api.RecipeApi):
       # despite the results having been written out. Temporarily ignore failures
       # on firefox.
       firefox_bug = 'firefox' in self.m.buildbucket.builder_name
-      self.run_script(step_name, TEST_PY_PATH, args, isolate_hash, shards,
-                      local_shard, environment, tasks,
-                      cipd_packages=cipd_packages,
-                      ignore_failure=firefox_bug)
-      results = StepResults(step_name, self.m, environment['commit'])
-      results.args = args
-      results.environment = environment
-      if shards == 0 or local_shard:
-        self._add_results_and_links(self.m.properties.get('bot_id'), results)
-      # Add even if we don't have a local shard to record args and environment
-      self._add_to_all_results(all_results, results)
+      self._run_script(step, args, cipd_packages=cipd_packages,
+                       ignore_failure=firefox_bug)
+      if not step.isolate_hash or step.local_shard:
+        self._add_results_and_links(self.m.properties.get('bot_id'),
+                                    step.results)
 
 
-  def run_script(self, step_name, script, args, isolate_hash, shards,
-                 local_shard, environment, tasks,
-                 cipd_packages=None, ignore_failure=False):
+  def _run_script(self, step, args=None, cipd_packages=None,
+                  ignore_failure=False):
     """Runs a specific script with current working directory to be checkout. If
     the runtime (passed in environment) is a browser, and the system is linux,
     xvfb is used. If an isolate_hash is passed in, it will swarm the command.
     Args:
-      * step_name (str) - Name of the step
-      * script (str) - The script to invoke
+      * step (TestMatrixStep) - The test-matrix step.
       * args ([str]) - Additional arguments to test.py
-      * isolate_hash (str) - The isolate hash if the script should be swarmed
-      * shards (int) - The number of shards to invoke
-      * local_shard (bool) - Should the current builder be used as a shard
-      * environment (dict) - Environment with runtime, arch, system etc
-      * tasks ([task]) - placeholder to hold swarming tasks
       * cipd_packages ([tuple]) - list of 3-tuples specifying a cipd package
         to be downloaded
       * ignore_failure - Do not turn step red if this script fails.
     """
+    environment = step.environment
+    if not args:
+      args = step.args
     if not cipd_packages: # pragma: no cover
       cipd_packages = []
     cipd_packages.append(('tools/sdks',
@@ -983,6 +921,7 @@ class DartApi(recipe_api.RecipeApi):
       runtime = environment.get('runtime', None)
     use_xvfb = (runtime in ['chrome', 'firefox'] and
                 environment['system'] == 'linux')
+    script = step.script
     is_python = str(script).endswith('.py')
     xvfb_cmd = []
     if use_xvfb:
@@ -993,24 +932,22 @@ class DartApi(recipe_api.RecipeApi):
       if is_python:
         xvfb_cmd += ['python', '-u']
 
-    if isolate_hash:
+    step_name = step.name
+    if step.isolate_hash:
+      shards = step.shards
       with self.m.step.nest('trigger shards for %s' % step_name):
         cpu = 'arm64' if environment['arch'] == 'arm64' else 'x86-64'
         # Android bots don't have a "cpu" dimension
         cpu = None if environment['system'] == 'android' else cpu
-        tasks.append({
-            'shards': self.shard(step_name, isolate_hash,
+        step.tasks += self.shard(step_name, step.isolate_hash,
                                   xvfb_cmd + [script] + args,
                                   num_shards=shards,
-                                  last_shard_is_local=local_shard,
+                                  last_shard_is_local=step.local_shard,
                                   cipd_packages=cipd_packages,
                                   ignore_failure=ignore_failure,
                                   cpu=cpu,
-                                  os=environment['system']),
-            'args': args,
-            'environment': environment,
-            'step_name': step_name})
-      if local_shard:
+                                  os=environment['system'])
+      if step.local_shard:
         args = args + [
           '--shards=%s' % shards,
           '--shard=%s' % shards,
@@ -1032,14 +969,53 @@ class DartApi(recipe_api.RecipeApi):
       self.m.step(step_name, xvfb_cmd + [cmd] + args, ok_ret=ok_ret)
 
 
+  class TestMatrixStep:
+    def __init__(self, m, builder_name, config, step_json, environment, index):
+      self.m = m
+      self.name = step_json['name']
+      self.results = StepResults(m, environment['commit'])
+      self.args = step_json.get('arguments', [])
+      self.environment = environment
+      self.tasks = []
+      self.is_trigger = 'trigger' in step_json
+      self.triggered_builders = step_json.get('trigger', [])
+      # If script is not defined, use test.py.
+      self.script = step_json.get('script', TEST_PY_PATH)
+      if self.m.platform.name == 'mac' and self.script.startswith('out/'):
+        self.script = self.script.replace('out/', 'xcodebuild/', 1)
+      is_dart = self.script.endswith('/dart')
+      if is_dart:
+        executable_suffix = '.exe' if self.m.platform.name == 'win' else ''
+        self.script += executable_suffix
+      self.is_build_step = self.script.endswith(BUILD_PY_PATH)
+
+      self.isolate_hash = None
+      self.fileset = step_json.get('fileset')
+      self.shards = step_json.get('shards', 0)
+      self.local_shard = (self.shards > 1 and index == len(config['steps']) - 1
+          and not environment['system'] == 'android')
+
+      self.environment_variables = step_json.get('environment', {})
+
+      channels = {
+        "refs/heads/master": "be",
+        "refs/heads/stable": "stable",
+        "refs/heads/dev": "dev"
+      }
+      channel = channels.get(self.m.buildbucket.gitiles_commit.ref, 'try')
+      self.environment_variables['BUILDBOT_BUILDERNAME'] = (
+          builder_name + "-%s" % channel)
+
+      # Enable Crashpad integration if a Windows bot wants to copy coredumps.
+      if self.environment['copy-coredumps'] and self.m.platform.name == 'win':
+        self.environment_variables['DART_USE_CRASHPAD'] = '1'
+
+
 class StepResults:
-  def __init__(self, step_name, m, commit):
-    self.step_name = step_name
+  def __init__(self, m, commit):
     self.logs = ''
     self.results = ''
     self.runs = ''
-    self.args = None
-    self.environment = None
     self.commit = commit
     self.builder_name = str(m.buildbucket.builder_name)
     self.build_number = str(m.buildbucket.build.number)
@@ -1066,12 +1042,3 @@ class StepResults:
     run['builder_name'] = self.builder_name
     run['bot_name'] = bot_name
     self.runs += json.dumps(run) + '\n'
-
-
-  def merge(self, other):
-    self.logs += other.logs
-    self.results += other.results
-    self.runs += other.runs
-    # Environment and Args are the same for all shards
-    self.args = self.args or other.args
-    self.environment = self.environment or other.environment

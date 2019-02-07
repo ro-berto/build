@@ -1762,99 +1762,62 @@ Fetches a commit position string given a commit hash.
 
 [DEPS](/scripts/slave/recipe_modules/dart/__init__.py#1): [goma](#recipe_modules-goma), [swarming](#recipe_modules-swarming), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/cipd][depot_tools/recipe_modules/cipd], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-#### **class [DartApi](/scripts/slave/recipe_modules/dart/api.py#34)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [DartApi](/scripts/slave/recipe_modules/dart/api.py#35)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 Recipe module for code commonly used in dart recipes.
 
 Shouldn't be used elsewhere.
 
-&mdash; **def [build](/scripts/slave/recipe_modules/dart/api.py#103)(self, build_args=None, name='build dart'):**
+&mdash; **def [build](/scripts/slave/recipe_modules/dart/api.py#104)(self, build_args=None, name='build dart'):**
 
 Builds dart using the specified build_args
-and optionally isolates the sdk for testing using the specified isolate.
-If an isolate is specified, it returns the hash of the isolated archive.
 
-&mdash; **def [checkout](/scripts/slave/recipe_modules/dart/api.py#38)(self, clobber=False, revision=None):**
+&mdash; **def [checkout](/scripts/slave/recipe_modules/dart/api.py#39)(self, clobber=False, revision=None):**
 
 Checks out the dart code and prepares it for building.
 
-&mdash; **def [collect\_all](/scripts/slave/recipe_modules/dart/api.py#234)(self, tasks, commit, all_results):**
+&mdash; **def [collect\_all](/scripts/slave/recipe_modules/dart/api.py#232)(self, steps):**
 
 Collects the results of a sharded test run.
 
-&mdash; **def [dart\_executable](/scripts/slave/recipe_modules/dart/api.py#96)(self):**
+&mdash; **def [dart\_executable](/scripts/slave/recipe_modules/dart/api.py#97)(self):**
 
 Returns the path to the checked-in SDK dart executable.
 
-&mdash; **def [delete\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#534)(self):**
+&mdash; **def [delete\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#521)(self):**
 
 Deletes the debug log file
 
-&mdash; **def [download\_parent\_isolate](/scripts/slave/recipe_modules/dart/api.py#154)(self):**
+&mdash; **def [download\_parent\_isolate](/scripts/slave/recipe_modules/dart/api.py#152)(self):**
 
-&mdash; **def [get\_latest\_tested\_commit](/scripts/slave/recipe_modules/dart/api.py#275)(self):**
+&mdash; **def [get\_latest\_tested\_commit](/scripts/slave/recipe_modules/dart/api.py#267)(self):**
 
-&mdash; **def [get\_secret](/scripts/slave/recipe_modules/dart/api.py#67)(self, name):**
+&mdash; **def [get\_secret](/scripts/slave/recipe_modules/dart/api.py#68)(self, name):**
 
 Decrypts the specified secret and returns the location of the result
 
-&mdash; **def [kill\_tasks](/scripts/slave/recipe_modules/dart/api.py#88)(self, ok_ret='any'):**
+&mdash; **def [kill\_tasks](/scripts/slave/recipe_modules/dart/api.py#89)(self, ok_ret='any'):**
 
 Kills leftover tasks from previous runs or steps.
 
-&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#522)(self):**
+&mdash; **def [read\_debug\_log](/scripts/slave/recipe_modules/dart/api.py#509)(self):**
 
 Reads the debug log file
 
-&mdash; **def [run\_script](/scripts/slave/recipe_modules/dart/api.py#951)(self, step_name, script, args, isolate_hash, shards, local_shard, environment, tasks, cipd_packages=None, ignore_failure=False):**
-
-Runs a specific script with current working directory to be checkout. If
-the runtime (passed in environment) is a browser, and the system is linux,
-xvfb is used. If an isolate_hash is passed in, it will swarm the command.
-Args:
-  * step_name (str) - Name of the step
-  * script (str) - The script to invoke
-  * args ([str]) - Additional arguments to test.py
-  * isolate_hash (str) - The isolate hash if the script should be swarmed
-  * shards (int) - The number of shards to invoke
-  * local_shard (bool) - Should the current builder be used as a shard
-  * environment (dict) - Environment with runtime, arch, system etc
-  * tasks ([task]) - placeholder to hold swarming tasks
-  * cipd_packages ([tuple]) - list of 3-tuples specifying a cipd package
-    to be downloaded
-  * ignore_failure - Do not turn step red if this script fails.
-
-&mdash; **def [run\_test\_py](/scripts/slave/recipe_modules/dart/api.py#865)(self, step_name, step, isolate_hash, shards, local_shard, environment, tasks, global_config, all_results):**
-
-Runs test.py with default arguments, based on configuration from.
-Args:
-  * step_name (str) - Name of the step
-  * step (dict) - Test-matrix step
-  * isolate_hash (String) - Hash of uploadet fileset/isolate if the
-    process is to be sharded
-  * shards (int) - The number of shards
-  * local_shard (bool) - Should the current builder be one of the shards.
-  * environment (dict) - Environment with runtime, arch, system etc
-  * tasks ([task]) - placeholder to put all swarming tasks in
-  * global_config (dict) - The global section from test_matrix.json.
-    Contains version tags for the pinned browsers Firefox and Chrome.
-
-&mdash; **def [run\_trigger](/scripts/slave/recipe_modules/dart/api.py#829)(self, step_name, step, isolate_hash):**
-
-&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#169)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='dart.tests', num_shards=0, last_shard_is_local=False, cipd_packages=None, ignore_failure=False):**
+&mdash; **def [shard](/scripts/slave/recipe_modules/dart/api.py#167)(self, title, isolate_hash, test_args, os=None, cpu='x86-64', pool='dart.tests', num_shards=0, last_shard_is_local=False, cipd_packages=None, ignore_failure=False):**
 
 Runs test.py in the given isolate, sharded over several swarming tasks.
-Requires the 'shards' build property to be set to the number of tasks.
-Returns the created task(s), which are meant to be passed into collect().
+The 'shards' build property can override the number of tasks.
+Returns the created tasks, which can be collected with collect_all().
 
-&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#540)(self, latest, test_data):**
+&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#527)(self, latest, test_data):**
 
-Reads the test-matrix.json file in checkout and performs each step listed
-in the file
+Reads the test-matrix.json file in checkout and runs each step listed
+in the file.
 
 Raises StepFailure.
 
-&mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/dart/api.py#133)(self, isolate_fileset):**
+&mdash; **def [upload\_isolate](/scripts/slave/recipe_modules/dart/api.py#131)(self, isolate_fileset):**
 
 Builds an isolate
 ### *recipe_modules* / [disk](/scripts/slave/recipe_modules/disk)
@@ -5093,7 +5056,7 @@ Kills leftover tasks from previous runs or steps.
 
 [DEPS](/scripts/slave/recipes/dart/neo.py#5): [dart](#recipe_modules-dart), [swarming\_client](#recipe_modules-swarming_client), [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/osx\_sdk][depot_tools/recipe_modules/osx_sdk], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/dart/neo.py#79)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/neo.py#74)(api):**
 ### *recipes* / [dart/package\_co19](/scripts/slave/recipes/dart/package_co19.py)
 
 [DEPS](/scripts/slave/recipes/dart/package_co19.py#8): [depot\_tools/git][depot_tools/recipe_modules/git], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/cipd][recipe_engine/recipe_modules/cipd], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5115,7 +5078,7 @@ Kills leftover tasks from previous runs or steps.
 
 [DEPS](/scripts/slave/recipe_modules/dart/examples/example.py#9): [dart](#recipe_modules-dart), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
 
-&mdash; **def [RunSteps](/scripts/slave/recipe_modules/dart/examples/example.py#166)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipe_modules/dart/examples/example.py#162)(api):**
 ### *recipes* / [dart:examples/example-checkout](/scripts/slave/recipe_modules/dart/examples/example-checkout.py)
 
 [DEPS](/scripts/slave/recipe_modules/dart/examples/example-checkout.py#7): [dart](#recipe_modules-dart), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
