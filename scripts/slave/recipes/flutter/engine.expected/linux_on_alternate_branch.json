@@ -28,7 +28,9 @@
       "--output_json",
       "/path/to/tmp/json",
       "--revision",
-      "src/flutter@origin/some_branch"
+      "src/flutter@refs/heads/some_branch",
+      "--refs",
+      "refs/heads/some_branch"
     ],
     "env_prefixes": {
       "PATH": [
@@ -42,7 +44,7 @@
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"src/flutter\": \"origin/some_branch\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/flutter\": \"refs/heads/some_branch\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"src/flutter\": {@@@",

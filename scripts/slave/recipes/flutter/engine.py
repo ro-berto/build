@@ -673,11 +673,7 @@ def GetCheckout(api):
   soln.name = 'src/flutter'
   soln.url = \
       'https://chromium.googlesource.com/external/github.com/flutter/engine'
-  if api.runtime.is_luci:
-    soln.revision = api.properties.get('revision')
-  else:
-    if api.properties.get('branch'):
-      soln.revision = 'origin/' + api.properties['branch']
+  soln.revision = api.properties.get('revision')
   # TODO(eseidel): What does parent_got_revision_mapping do?  Do I care?
   src_cfg.parent_got_revision_mapping['parent_got_revision'] = 'got_revision'
   src_cfg.target_os = set(['android'])
