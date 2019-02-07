@@ -558,10 +558,6 @@ TRYBOTS = freeze({
         'buildername': 'Linux TSan Builder',
         'tester': 'Linux TSan Tests',
       }),
-      'linux_chromium_headless_rel': simple_bot({
-        'mastername': 'chromium.fyi',
-        'buildername': 'Headless Linux (dbg)',
-      }),
       'linux_chromium_cfi_rel_ng': simple_bot({
         'mastername': 'chromium.memory',
         'buildername': 'Linux CFI',

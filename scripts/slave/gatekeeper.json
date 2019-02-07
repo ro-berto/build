@@ -877,12 +877,6 @@
           "fuchsia-fyi-x64-rel": {
             "forgiving_optional": ["*"]
           },
-          "Headless Linux (dbg)": {
-            "tree_notify": [
-              "thomasanderson@chromium.org"
-            ],
-            "forgiving_optional": ["*"]
-          },
           "Linux ARM": {
             "tree_notify": [
               "thomasanderson@chromium.org"

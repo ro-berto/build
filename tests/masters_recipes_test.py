@@ -170,7 +170,6 @@ FAKE_BUILDERS = {
         'linux_chromium_compile_dbg_ng',
         'linux_chromium_compile_rel_ng',
         'linux_chromium_dbg_ng',
-        'linux_chromium_headless_rel',
         # TODO(crbug.com/888810): Remove this entry once bot named is switched
         # source side.
         'linux_chromium_rel_ng',
