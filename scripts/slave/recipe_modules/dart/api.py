@@ -885,7 +885,7 @@ class DartApi(recipe_api.RecipeApi):
       # on firefox.
       firefox_bug = 'firefox' in self.m.buildbucket.builder_name
       self._run_script(step, args, cipd_packages=cipd_packages,
-                       ignore_failure=firefox_bug, shards=shards)
+          ignore_failure=firefox_bug or deflake_list, shards=shards)
       if not step.isolate_hash or step.local_shard:
         self._add_results_and_links(self.m.properties.get('bot_id'),
                                     step.results)
