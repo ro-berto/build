@@ -214,6 +214,8 @@ class ClangCoverageApi(recipe_api.RecipeApi):
       merged_profdata = self._merge_profdata()
       self._surface_merging_errors()
       binaries = self._get_binaries(tests)
+      binaries = self._get_binaries_with_valid_coverage_data_on_trybot(
+          binaries, merged_profdata)
 
       self._generate_and_upload_metadata(binaries, merged_profdata)
       self._generate_and_upload_html_report_on_trybot(binaries, merged_profdata)
@@ -249,6 +251,50 @@ class ClangCoverageApi(recipe_api.RecipeApi):
     upload_step.presentation.properties['merged_profdata_gs_path'] = gs_path
 
     return merged_profdata
+
+  # TODO(crbug.com/929769): Remove this method when the fix is landed upstream.
+  def _get_binaries_with_valid_coverage_data_on_trybot(self, binaries,
+                                                       profdata_path):
+    """Gets binaries with valid coverage data.
+
+    llvm-cov bails out with error message "No coverage data found" if an
+    included binary does not exercise any instrumented file. The long-term
+    solution should be making llvm-cov being able to proceed by ignoring the
+    binaries without coverage data, however, for short-term, this method
+    implements a solution to filter out binaries without coverage data by trying
+    to invoke llvm-cov on each binary and decide if there is coverage data based
+    on the return code and error message.
+
+    This method is expected to run fast for per-cl coverage because only a small
+    number of files are instrumented.
+
+    Args:
+      binaryes (list): A list of absolute paths to binaries.
+      profdata_path (str): Path to the merged profdata file.
+
+    Returns:
+      A list of absolute paths to the binaries with valid coverage data.
+    """
+    if not (self.m.buildbucket.build.builder.bucket == 'try' and
+            self._is_per_cl_coverage and self._affected_source_files):
+      # Only gets binaries with valid coverage data for per-cl coverage.
+      return binaries
+
+    args = [
+        '--profdata-path', profdata_path, '--llvm-cov', self.cov_executable,
+        '--output-json',
+        self.m.json.output()
+    ]
+
+    args.extend(binaries)
+    step_result = self.m.python(
+        'get binaries with valid coverage data',
+        self.resource('get_binaries_with_valid_coverage_data.py'),
+        args=args,
+        step_test_data=lambda: self.m.json.test_api.output([
+            '/path/to/base_unittests',
+            '/path/to/content_shell',]))
+    return step_result.json.output
 
   def _generate_and_upload_html_report_on_trybot(self, binaries, profdata_path):
     """Generate html coverage report for the given binaries.
