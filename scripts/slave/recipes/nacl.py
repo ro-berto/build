@@ -115,6 +115,7 @@ def _AnnotatedStepsSteps(api, got_revision):
           api.python('annotated steps',
                      api.path['checkout'].join(
                         'buildbot', 'buildbot_selector.py'),
+                     venv=True,
                      allow_subannotations=True)
     exit_status = 0
   except api.step.StepFailure as e:

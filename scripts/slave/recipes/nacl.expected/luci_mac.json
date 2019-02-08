@@ -300,7 +300,7 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "python",
+      "vpython",
       "-u",
       "[START_DIR]/native_client/buildbot/buildbot_selector.py"
     ],
