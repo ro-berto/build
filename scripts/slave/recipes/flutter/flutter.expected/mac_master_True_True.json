@@ -210,7 +210,8 @@
   {
     "cmd": [
       "pod",
-      "setup"
+      "setup",
+      "--verbose"
     ],
     "env": {
       "CP_REPOS_DIR": "[CACHE]/cocoapods/repos",

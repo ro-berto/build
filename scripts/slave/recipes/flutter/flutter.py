@@ -47,7 +47,7 @@ def _PlatformSDK(api):
           with api.context(env={
             'CP_REPOS_DIR': api.path['cache'].join('cocoapods', 'repos')
           }):
-            api.step('pod setup', ['pod', 'setup'])
+            api.step('pod setup', ['pod', 'setup', '--verbose'])
             yield
     elif api.platform.is_linux:
       with InstallOpenJDK(api):
@@ -308,14 +308,16 @@ def CreateAndUploadFlutterPackage(api, git_hash, branch):
   api.file.rmtree('clean archive work directory', work_dir)
   api.file.ensure_directory('(re)create archive work directory', work_dir)
   with api.context(cwd=api.path['start_dir']):
-    api.step('prepare, create and publish a flutter archive', [
+    step_args = [
         dart_executable,
         prepare_script,
         '--temp_dir=%s' % work_dir,
         '--revision=%s' % git_hash,
-        '--branch=%s' % branch,
-        '--publish'
-    ])
+        '--branch=%s' % branch
+    ]
+    if not api.runtime.is_experimental:
+      step_args.append('--publish')
+    api.step('prepare, create and publish a flutter archive', step_args)
 
 
 def RunSteps(api):

@@ -300,8 +300,7 @@
       "[START_DIR]/flutter/dev/bots/prepare_package.dart",
       "--temp_dir=[START_DIR]/archive",
       "--revision=deadbeef",
-      "--branch=beta",
-      "--publish"
+      "--branch=beta"
     ],
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
