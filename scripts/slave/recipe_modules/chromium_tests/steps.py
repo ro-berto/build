@@ -431,6 +431,27 @@ class Test(object):
       return (True, set(self.deterministic_failures(api, suffix)))
     return (False, None)
 
+  def without_patch_failures_to_ignore(self, api):
+    """Returns test failures that should be ignored.
+
+    Tests that fail in 'without patch' should be ignored, since they're failing
+    without the CL patched in.
+
+    Returns: A tuple (valid_results, failures_to_ignore).
+      valid_results: A Boolean indicating whether failures_to_ignore is valid.
+      failures_to_ignore: A set of strings. Only valid if valid_results is True.
+    """
+    if not self.has_valid_results(api, 'without patch'):
+      return (False, None)
+
+    pass_fail_counts = self.pass_fail_counts(api, 'without patch')
+    ignored_failures = set()
+    for test_name, results in pass_fail_counts.iteritems():
+      # If a test fails at least once, then it's flaky on tip of tree and we
+      # should ignore it.
+      if results['fail_count'] > 0:
+        ignored_failures.add(test_name)
+    return (True, ignored_failures)
 
   def retry_with_patch_successes(self, api):
     """Returns tests that passed in the 'retry with patch' step.

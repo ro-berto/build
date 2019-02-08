@@ -329,16 +329,9 @@ class TestUtilsApi(recipe_api.RecipeApi):
       suggests that the error is due to an issue with top of tree, and should
       not cause the CL to fail.
     """
-    if test_suite.has_valid_results(caller_api, 'without patch'):
-      pass_fail_counts = test_suite.pass_fail_counts(caller_api,
-                                                     'without patch')
-      ignored_failures = set()
-      for test_name, results in pass_fail_counts.iteritems():
-        # If a test fails at least once, then it's flaky on tip of tree and we
-        # should ignore it.
-        if results['fail_count'] > 0:
-          ignored_failures.add(test_name)
-    else:
+    valid_results, ignored_failures = (
+        test_suite.without_patch_failures_to_ignore(caller_api))
+    if not valid_results:
       self._invalid_test_results(test_suite)
 
       # If there are invalid results from the deapply patch step, treat this as
@@ -428,13 +421,19 @@ class TestUtilsApi(recipe_api.RecipeApi):
     layer at which the flakiness is discovered. One of these categories is for a
     test that fails, but when retried in a separate step, succeeds. This
     currently applies to 'retry with patch', but will also apply to shard-layer
-    retries when those are introduced.
+    retries when those are introduced. These are labeled 'Step Layer Flakiness'.
+
+    FindIt also wants to know about 'with patch' tests that caused the build to
+    fail. If a future build with the same CL succeeds, then the tests are
+    potential flakes. Although it's also possible that rolling tip of tree
+    caused the results to change. These are labeled
+    'Failing With Patch Tests That Caused Build Failure'.
 
     This function emits a step with a fixed name, and metadata for FindIt.
     Before making changes to this function, check with the FindIt team to ensure
     that their post-processing will still work correctly.
     """
-    results = {}
+    step_layer_flakiness = {}
     for test_suite in test_suites:
       valid_results, with_patch_failures = (
           test_suite.with_patch_failures(caller_api))
@@ -451,10 +450,39 @@ class TestUtilsApi(recipe_api.RecipeApi):
       # we ignore it.
       flaky_tests = with_patch_failures & retry_with_patch_successes
       if flaky_tests:
-        results[test_suite.step_name('with patch')] = sorted(flaky_tests)
+        step_layer_flakiness[test_suite.step_name('with patch')] = sorted(
+            flaky_tests)
 
-    if results:
-      output = { 'Step Layer Flakiness: ' : results }
+    potential_build_flakiness = {}
+    for test_suite in test_suites:
+      valid_results, with_patch_failures = (
+          test_suite.with_patch_failures(caller_api))
+      if not valid_results:
+        continue
+
+      # Tests that also failed in 'without patch' should be ignored, as they are
+      # flaky or failing on tip of tree/
+      valid_results, ignored_failures = (
+          test_suite.without_patch_failures_to_ignore(caller_api))
+      if valid_results:
+        with_patch_failures = with_patch_failures - ignored_failures
+
+      # If the test suite was supposed to run retry with patch, then exclude all
+      # tests that passed in retry with patch.
+      if test_suite.should_retry_with_patch:
+        valid_results, retry_with_patch_successes = (
+            test_suite.retry_with_patch_successes(caller_api))
+        if valid_results:
+          with_patch_failures = with_patch_failures - retry_with_patch_successes
+
+      if with_patch_failures:
+        potential_build_flakiness[test_suite.step_name('with patch')] = sorted(
+            with_patch_failures)
+
+    if step_layer_flakiness or potential_build_flakiness:
+      output = { 'Step Layer Flakiness: ' : step_layer_flakiness,
+                 'Failing With Patch Tests That Caused Build Failure' :
+                    potential_build_flakiness }
       step = caller_api.python.succeeding_step(
           'FindIt Flakiness', 'Metadata for FindIt post processing.')
       step.presentation.logs['step_metadata'] = (

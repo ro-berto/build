@@ -219,6 +219,68 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
+
+  yield (
+      api.test('findit_potential_build_layer_flakiness_skip_retry_with_patch') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          disable_retry_with_patch=True,
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=True)) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['"Step Layer Flakiness: ": {}']) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', [
+              'Failing With Patch Tests That Caused Build Failure']) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['base_unittests (with patch)']) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['Test.Two']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
+  yield (
+      api.test('findit_potential_build_layer_flakiness_retry_with_patch') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.swarming.canned_summary_output(failure=False) +
+          api.test_utils.canned_gtest_output(passing=True)) +
+      api.override_step_data(
+          'base_unittests (retry with patch)',
+          api.swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['"Step Layer Flakiness: ": {}']) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', [
+              'Failing With Patch Tests That Caused Build Failure']) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['base_unittests (with patch)']) +
+      api.post_process(post_process.AnnotationContains,
+          'FindIt Flakiness', ['Test.Two']) +
+      api.post_process(post_process.DropExpectation)
+  )
+
   # To simulate a real test suite, we create results for 100 tests, 3 of
   # which fail. We rerun failing tests 10 times, so the equivalent load is 3*10
   # = 30 tests, which is 30% of the original load of 100 tests. We start with 20

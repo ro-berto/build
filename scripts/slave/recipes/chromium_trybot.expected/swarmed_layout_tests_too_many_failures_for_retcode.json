@@ -3199,6 +3199,11 @@
     "~followup_annotations": [
       "@@@STEP_TEXT@Metadata for FindIt post processing.@@@",
       "@@@STEP_LOG_LINE@step_metadata@{@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"Failing With Patch Tests That Caused Build Failure\": {@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    \"blink_web_tests (with patch)\": [@@@",
+      "@@@STEP_LOG_LINE@step_metadata@      \"test2.Test2\"@@@",
+      "@@@STEP_LOG_LINE@step_metadata@    ]@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"Step Layer Flakiness: \": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"blink_web_tests (with patch)\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@      \"test1.Test1\"@@@",
