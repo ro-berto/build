@@ -49,8 +49,9 @@ def _PlatformSDK(api):
           }):
             api.step('pod setup', ['pod', 'setup'])
             yield
-    else:
-      yield
+    elif api.platform.is_linux:
+      with InstallOpenJDK(api):
+          yield
   else:
     yield
 
@@ -59,7 +60,7 @@ def InstallOpenJDK(api):
   api.cipd.ensure(java_cache_dir, api.cipd.EnsureFile()
     .add_package(
       'flutter_internal/java/openjdk/${platform}',
-      'version:1.8.0.201-1.b09')
+      'version:1.8.0u202-b08')
   )
   return api.context(
     env={'JAVA_HOME': java_cache_dir},
@@ -169,6 +170,18 @@ def BuildExamples(api, git_hash, flutter_executable):
   BuildAndArchive(api, api.path.join('examples', 'stocks'), 'Stocks.apk')
   BuildAndArchive(api, api.path.join('examples', 'flutter_gallery'),
                   'Gallery.apk')
+
+  # Windows uses exclusive file locking.  On LUCI, if these processes remain
+  # they will cause the build to fail because the builder won't be able to
+  # clean up.
+  # This might fail if there's not actually a process running, which is fine.
+  # If it actually fails to kill the task, the job will just fail anyway.
+  if api.platform.is_win and api.runtime.is_luci:
+    def KillAll(name, exe_name):
+      api.step(name, ['taskkill', '/f', '/im', exe_name, '/t'], ok_ret='any')
+    KillAll('stop gradle daemon', 'java.exe')
+    KillAll('stop dart', 'dart.exe')
+    KillAll('stop adb', 'adb.exe')
 
 
 def RunFindXcode(api, ios_tools_path, target_version):

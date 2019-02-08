@@ -195,7 +195,7 @@
       "-root",
       "[CACHE]\\java",
       "-ensure-file",
-      "flutter_internal/java/openjdk/${platform} version:1.8.0.201-1.b09",
+      "flutter_internal/java/openjdk/${platform} version:1.8.0u202-b08",
       "-json-output",
       "/path/to/tmp/json"
     ],
@@ -213,7 +213,7 @@
       "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
       "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
       "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-version:1.8.0.20\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-version:1.8.0u20\", @@@",
       "@@@STEP_LOG_LINE@json.output@        \"package\": \"flutter_internal/java/openjdk/resolved-platform\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    ]@@@",
@@ -509,6 +509,81 @@
       ]
     },
     "name": "flutter build apk flutter_gallery"
+  },
+  {
+    "cmd": [
+      "taskkill",
+      "/f",
+      "/im",
+      "java.exe",
+      "/t"
+    ],
+    "cwd": "[START_DIR]\\flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
+      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]\\java",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-4.10.2-all\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
+      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
+      "VSINSTALLDIR": "[CACHE]\\windows_sdk"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\java\\bin",
+        "[CACHE]\\windows_sdk\\win_sdk\\bin\\x64"
+      ]
+    },
+    "name": "stop gradle daemon"
+  },
+  {
+    "cmd": [
+      "taskkill",
+      "/f",
+      "/im",
+      "dart.exe",
+      "/t"
+    ],
+    "cwd": "[START_DIR]\\flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
+      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]\\java",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-4.10.2-all\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
+      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
+      "VSINSTALLDIR": "[CACHE]\\windows_sdk"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\java\\bin",
+        "[CACHE]\\windows_sdk\\win_sdk\\bin\\x64"
+      ]
+    },
+    "name": "stop dart"
+  },
+  {
+    "cmd": [
+      "taskkill",
+      "/f",
+      "/im",
+      "adb.exe",
+      "/t"
+    ],
+    "cwd": "[START_DIR]\\flutter",
+    "env": {
+      "ANDROID_HOME": "[START_DIR]\\flutter\\dev\\bots\\android_tools",
+      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]\\java",
+      "PATH": "[START_DIR]\\flutter\\bin;[START_DIR]\\flutter\\bin\\cache\\dart-sdk\\bin;[START_DIR]\\flutter\\dev\\bots\\gradle\\gradle-4.10.2-all\\bin;<PROGRAMFILES>\\7-Zip-A\\x64;<PATH>",
+      "PUB_CACHE": "[START_DIR]\\flutter\\.pub-cache",
+      "VSINSTALLDIR": "[CACHE]\\windows_sdk"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]\\java\\bin",
+        "[CACHE]\\windows_sdk\\win_sdk\\bin\\x64"
+      ]
+    },
+    "name": "stop adb"
   },
   {
     "cmd": [

@@ -131,12 +131,46 @@
   },
   {
     "cmd": [
+      "cipd",
+      "ensure",
+      "-root",
+      "[CACHE]/java",
+      "-ensure-file",
+      "flutter_internal/java/openjdk/${platform} version:1.8.0u202-b08",
+      "-json-output",
+      "/path/to/tmp/json"
+    ],
+    "name": "ensure_installed",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"result\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"instance_id\": \"resolved-instance_id-of-version:1.8.0u20\", @@@",
+      "@@@STEP_LOG_LINE@json.output@        \"package\": \"flutter_internal/java/openjdk/resolved-platform\"@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "[START_DIR]/flutter/dev/bots/download_android_tools.py",
       "-t",
       "sdk"
     ],
+    "env": {
+      "JAVA_HOME": "[CACHE]/java"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/java/bin"
+      ]
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -156,6 +190,14 @@
       "--outfile",
       "[START_DIR]/flutter/dev/bots/gradle-4.10.2-all.zip"
     ],
+    "env": {
+      "JAVA_HOME": "[CACHE]/java"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/java/bin"
+      ]
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -169,6 +211,14 @@
       "-u",
       "RECIPE_MODULE[build::zip]/resources/unzip.py"
     ],
+    "env": {
+      "JAVA_HOME": "[CACHE]/java"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/java/bin"
+      ]
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -183,6 +233,14 @@
       "-c",
       "[START_DIR]/flutter/dev/bots/android_tools/sdk/tools/bin/sdkmanager --list"
     ],
+    "env": {
+      "JAVA_HOME": "[CACHE]/java"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/java/bin"
+      ]
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
@@ -199,9 +257,15 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]/java",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache",
       "SHARD": "tests"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/java/bin"
+      ]
     },
     "name": "run test.dart for tests shard"
   },
@@ -220,8 +284,14 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]/java",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/java/bin"
+      ]
     },
     "infra_step": true,
     "name": "read gradle-wrapper.properties"
@@ -241,8 +311,14 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]/java",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/java/bin"
+      ]
     },
     "infra_step": true,
     "name": "set gradle-wrapper.properties"
@@ -258,8 +334,14 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]/java",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/java/bin"
+      ]
     },
     "name": "flutter build apk stocks"
   },
@@ -279,8 +361,14 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]/java",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/java/bin"
+      ]
     },
     "infra_step": true,
     "name": "gsutil upload Stocks.apk",
@@ -303,8 +391,14 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]/java",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/java/bin"
+      ]
     },
     "infra_step": true,
     "name": "read gradle-wrapper.properties (2)"
@@ -324,8 +418,14 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]/java",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/java/bin"
+      ]
     },
     "infra_step": true,
     "name": "set gradle-wrapper.properties (2)"
@@ -341,8 +441,14 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]/java",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/java/bin"
+      ]
     },
     "name": "flutter build apk flutter_gallery"
   },
@@ -362,8 +468,14 @@
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
       "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "JAVA_HOME": "[CACHE]/java",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[CACHE]/java/bin"
+      ]
     },
     "infra_step": true,
     "name": "gsutil upload Gallery.apk",
