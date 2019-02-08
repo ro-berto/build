@@ -393,6 +393,10 @@ SPEC = {
         steps.MiniInstallerTest(),
         steps.SizesStep(RESULTS_URL, 'ToTWin'),
       ],
+      'swarming_server': 'https://chrome-swarming.appspot.com',
+      # TODO(929099): check if 'swarming_service_account' is required, or can be
+      # removed
+      'swarming_service_account': 'chrome-ci-builder',
       'isolate_server': 'https://chrome-isolated.appspot.com',
       'isolate_service_account': 'chrome-ci-builder',
       # Workaround so that recipes doesn't add random build targets to our
