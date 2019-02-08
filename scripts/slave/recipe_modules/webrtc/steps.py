@@ -160,6 +160,26 @@ def generate_tests(api, phase, revision, revision_number, bot):
         IosTest('webrtc_nonparallel_tests'),
     ]
 
+  if test_suite == 'ios_device':
+    tests += [
+        IosTest('common_audio_unittests'),
+        IosTest('common_video_unittests'),
+        IosTest('modules_tests'),
+        IosTest('modules_unittests'),
+        IosTest('rtc_pc_unittests'),
+        IosTest('rtc_stats_unittests'),
+        IosTest('system_wrappers_unittests'),
+        IosTest('test_support_unittests'),
+        IosTest('tools_unittests'),
+        IosTest('video_capture_tests'),
+        IosTest('video_engine_tests'),
+    ]
+
+  if test_suite == 'ios_perf':
+    tests += [
+        IosTest('webrtc_perf_tests', args=['--save_chartjson_result']),
+    ]
+
   if test_suite == 'more_configs':
     if 'bwe_test_logging' in phase:
       tests.append(SwarmingIsolatedTest(
@@ -290,8 +310,10 @@ class AndroidJunitTest(Test):
 
 class IosTest(object):
   """A fake shell of an iOS test. It is only read by apply_ios_config."""
-  def __init__(self, name, xctest=False):
+  def __init__(self, name, args=None, xctest=False):
     self._name = name
     self.config = {'app': name}
+    if args:
+      self.config['test args'] = args
     if xctest:
       self.config['xctest'] = True

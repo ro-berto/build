@@ -72,17 +72,17 @@ class WebRTCTestApi(recipe_test_api.RecipeTestApi):
     git_repo = 'https://webrtc.googlesource.com/src'
     if is_chromium:
       git_repo = 'https://chromium.googlesource.com/chromium/src'
-    short_bucket = bucketname.split('.')[-1]
+    _, project, short_bucket = bucketname.split('.')
     if 'try' in bucketname:
       test += self.m.buildbucket.try_build(
-          project='webrtc',
+          project=project,
           bucket=short_bucket,
           builder=buildername,
           git_repo=git_repo,
           revision=revision or None)
     else:
       test += self.m.buildbucket.ci_build(
-          project='webrtc',
+          project=project,
           bucket=short_bucket,
           builder=buildername,
           git_repo=git_repo,

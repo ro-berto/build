@@ -23,6 +23,16 @@ RECIPE_CONFIGS = freeze({
     'gclient_config': 'webrtc_ios',
     'test_suite': 'ios',
   },
+  'webrtc_ios_device': {
+    'chromium_config': 'webrtc_default',
+    'gclient_config': 'webrtc_ios',
+    'test_suite': 'ios_device',
+  },
+  'webrtc_ios_perf': {
+    'chromium_config': 'webrtc_default',
+    'gclient_config': 'webrtc_ios',
+    'test_suite': 'ios_perf',
+  },
 })
 
 BUILDERS = freeze({
@@ -240,13 +250,35 @@ BUILDERS = freeze({
       },
     },
   },
-  'luci.webrtc.fake': {
+  'luci.webrtc-internal.ci': {
     'settings': {
-      'mastername': 'client.webrtc.fake',
+      'mastername': 'internal.client.webrtc',
     },
     'builders': {
-      'Fake Perf Tester': {
-        'recipe_config': 'webrtc_ios',
+      'iOS64 Debug': {
+        'recipe_config': 'webrtc_ios_device',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'ios',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+        'isolate_server': 'https://chrome-isolated.appspot.com',
+        'swarming_server': 'https://chrome-swarming.appspot.com',
+        'ensure_sdk': 'ios',
+        'ios_config': {
+          'bucket': 'chromium-webrtc',
+        },
+        'ios_testing': {
+          'device type': 'iPhone 6s',
+          'os': '12.0',
+          'pool': 'chrome.tests',
+        },
+      },
+      'iOS64 Release': {
+        'recipe_config': 'webrtc_ios_device',
         'chromium_config_kwargs': {
           'BUILD_CONFIG': 'Release',
           'TARGET_PLATFORM': 'ios',
@@ -254,14 +286,117 @@ BUILDERS = freeze({
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder_tester',
-        'perf_id': 'webrtc-ios-fake',
         'testing': {'platform': 'mac'},
+        'isolate_server': 'https://chrome-isolated.appspot.com',
+        'swarming_server': 'https://chrome-swarming.appspot.com',
         'ensure_sdk': 'ios',
-        'ios_config': {},
+        'ios_config': {
+          'bucket': 'chromium-webrtc',
+        },
         'ios_testing': {
           'device type': 'iPhone 6s',
-          'os': '10.3',
-          'host os': 'Mac-10.13',
+          'os': '11.4.1',
+          'pool': 'chrome.tests',
+        },
+      },
+      'iOS64 Perf': {
+        'recipe_config': 'webrtc_ios_perf',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'ios',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'perf_id': 'webrtc-ios-tests',
+        'testing': {'platform': 'mac'},
+        'isolate_server': 'https://chrome-isolated.appspot.com',
+        'swarming_server': 'https://chrome-swarming.appspot.com',
+        'ensure_sdk': 'ios',
+        'ios_config': {
+          'bucket': 'chromium-webrtc',
+        },
+        'ios_testing': {
+          'device type': 'iPhone 7',
+          'os': '12.1.3',
+          'bot id': 'build15-a7',
+          'pool': 'WebRTC',
+          'max runtime seconds': '7200',
+        },
+      },
+    },
+  },
+  'luci.webrtc-internal.try': {
+    'settings': {
+      'mastername': 'internal.tryserver.webrtc',
+    },
+    'builders': {
+      'ios_arm64_dbg': {
+        'recipe_config': 'webrtc_ios_device',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_PLATFORM': 'ios',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+        'isolate_server': 'https://chrome-isolated.appspot.com',
+        'swarming_server': 'https://chrome-swarming.appspot.com',
+        'ensure_sdk': 'ios',
+        'ios_config': {
+          'bucket': 'chromium-webrtc',
+        },
+        'ios_testing': {
+          'device type': 'iPhone 6s',
+          'os': '12.0',
+          'pool': 'chrome.tests',
+        },
+      },
+      'ios_arm64_rel': {
+        'recipe_config': 'webrtc_ios_device',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'ios',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+        'isolate_server': 'https://chrome-isolated.appspot.com',
+        'swarming_server': 'https://chrome-swarming.appspot.com',
+        'ensure_sdk': 'ios',
+        'ios_config': {
+          'bucket': 'chromium-webrtc',
+        },
+        'ios_testing': {
+          'device type': 'iPhone 6s',
+          'os': '11.4.1',
+          'pool': 'chrome.tests',
+        },
+      },
+      'ios_arm64_perf': {
+        'recipe_config': 'webrtc_ios_perf',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_PLATFORM': 'ios',
+          'TARGET_ARCH': 'arm',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'testing': {'platform': 'mac'},
+        'isolate_server': 'https://chrome-isolated.appspot.com',
+        'swarming_server': 'https://chrome-swarming.appspot.com',
+        'ensure_sdk': 'ios',
+        'ios_config': {
+          'bucket': 'chromium-webrtc',
+        },
+        'ios_testing': {
+          'device type': 'iPhone 7',
+          'os': '12.1.3',
+          'bot id': 'build16-a7',
+          'pool': 'WebRTC',
+          'max runtime seconds': '7200',
         },
       },
     },

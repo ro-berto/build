@@ -248,6 +248,9 @@ class WebRTCApi(recipe_api.RecipeApi):
     return False
 
   def configure_isolate(self, phase=None):
+    if self.bot.config.get('isolate_server'):
+      self.m.isolate.isolate_server = self.bot.config['isolate_server']
+
     isolated_targets = set()
     for bot in self.related_bots():
       if bot.should_test:
@@ -262,6 +265,9 @@ class WebRTCApi(recipe_api.RecipeApi):
       self.m.isolate.check_swarm_hashes(self._isolated_targets)
 
   def configure_swarming(self):
+    if self.bot.config.get('swarming_server'):
+      self.m.swarming.swarming_server = self.bot.config['swarming_server']
+
     self.m.chromium_swarming.configure_swarming(
         'webrtc',
         precommit=self.m.tryserver.is_tryserver,
