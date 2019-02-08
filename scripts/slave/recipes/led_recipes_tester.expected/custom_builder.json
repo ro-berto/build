@@ -6,9 +6,10 @@
       "arbitrary.blah"
     ],
     "cwd": "[CACHE]/build/build",
-    "name": "led get-builder",
+    "name": "analyze+launch arbitrary.blah.led get-builder",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"job_slices\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",

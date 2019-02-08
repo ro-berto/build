@@ -37,6 +37,7 @@ BUILDER_FOOTER = 'Led-Recipes-Tester-Builder'
 
 DEFAULT_BUILDERS = [
   'luci.chromium.try:linux-rel',
+  'luci.chromium.try:win-rel',
 ]
 
 
@@ -74,7 +75,7 @@ def trigger_cl(api, recipe, repo_path, recipes_py_path):
 
   affected_files = api.tryserver.get_files_affected_by_patch(repo_path)
   try:
-    roll_step = api.python(
+    analyze_step = api.python(
       'analyze %s' % recipe,
       recipes_py_path, [
         '--package', recipes_cfg_path,
@@ -86,17 +87,18 @@ def trigger_cl(api, recipe, repo_path, recipes_py_path):
         api.json.output()],
       venv=True)
   except api.step.StepFailure:
-    roll_step = api.step.active_result
-    if roll_step.json.output:
-      roll_step.presentation.logs['error'] = roll_step.json.output['error']
+    analyze_step = api.step.active_result
+    if analyze_step.json.output:
+      analyze_step.presentation.logs['error'] = (
+        analyze_step.json.output['error'])
 
-  if recipe in roll_step.json.output.get('invalid_recipes', []):
+  if recipe in analyze_step.json.output.get('invalid_recipes', []):
     api.python.failing_step(
         'recipe invalid',
         'analyze reported that the recipe \'%s\' was invalid. Something may'
         ' be wrong with the swarming task this is based on.' % recipe)
 
-  if recipe in roll_step.json.output['recipes']:
+  if recipe in analyze_step.json.output['recipes']:
     return 'slow'
 
   if str(repo_path.join('infra', 'config', 'recipes.cfg')) in affected_files:
@@ -132,44 +134,47 @@ def RunSteps(api, repo_name):
   # possibility for running a tryjob on itself.
 
   for builder in builders:
-    with api.context(cwd=cl_workdir.join('build')):
-      # intermediate result
-      ir = (api.
-            led('get-builder', builder))
-      # Recipe we run probably doesn't change between slices.
-      job_slice = ir.result['job_slices'][0]
-      # TODO(martiniss): Use recipe_cipd_source to determine which repo this
-      # recipe lives in. For now we assume the recipe lives in the repo the CL
-      # lives in.
-      recipe = job_slice['userland']['recipe_name']
-      cl = trigger_cl(
-          api, recipe, cl_workdir.join(repo_name),
-          recipes_dir.join('recipes.py'))
-      if not cl:
-        result = api.python.succeeding_step(
-            'not running a tryjob for %s' % recipe,
-            '`recipes.py analyze` indicates this recipe is not affected by the'
-            ' files changed by the CL, and the CL does not affect recipes.cfg')
-        continue
+    with api.step.nest('analyze+launch '+builder):
+      with api.context(cwd=cl_workdir.join('build')):
+        # intermediate result
+        ir = api.led('get-builder', builder)
+        # Recipe we run probably doesn't change between slices.
+        job_slice = ir.result['job_slices'][0]
+        # TODO(martiniss): Use recipe_cipd_source to determine which repo this
+        # recipe lives in. For now we assume the recipe lives in the repo the CL
+        # lives in.
+        recipe = job_slice['userland']['recipe_name']
 
-      # FIXME: We should check if the recipe we're testing tests patches to
-      # chromium/src. For now just assume this works.
-      ir = ir.then('edit-cr-cl', CHROMIUM_SRC_TEST_CLS[cl])
-      preso = api.step.active_result.presentation
-      preso.step_text += 'Using %s testing CL' % cl
-      preso.links['Test CL'] = CHROMIUM_SRC_TEST_CLS[cl]
+        # FIXME: If we collect all the recipes-to-run up front, we can do
+        # a single analysis pass, instead of one per builder.
+        cl = trigger_cl(
+            api, recipe, cl_workdir.join(repo_name),
+            recipes_dir.join('recipes.py'))
+        if not cl:
+          result = api.python.succeeding_step(
+              'not running a tryjob for %s' % recipe,
+              '`recipes.py analyze` indicates this recipe is not affected by '
+              'the files changed by the CL, and the CL does not affect '
+              'recipes.cfg')
+          continue
 
-      result = (ir.
-                then('edit-recipe-bundle').
-                # We used to set `is_experimental` to true, but the chromium
-                # recipe currently uses that to deprioritize swarming tasks,
-                # which results in very slow runtimes for the led task. Because
-                # this recipe blocks the build.git CQ, we decided the tradeoff
-                # to run these edited recipes in production mode instead would
-                # be better.
-                then('launch')).result
+        # FIXME: We should check if the recipe we're testing tests patches to
+        # chromium/src. For now just assume this works.
+        ir = ir.then('edit-cr-cl', CHROMIUM_SRC_TEST_CLS[cl])
+        preso = api.step.active_result.presentation
+        preso.step_text += 'Using %s testing CL' % cl
+        preso.links['Test CL'] = CHROMIUM_SRC_TEST_CLS[cl]
 
-      triggered_jobs[builder] = result['swarming']
+        result = (
+          ir.then('edit-recipe-bundle').
+          # We used to set `is_experimental` to true, but the chromium recipe
+          # currently uses that to deprioritize swarming tasks, which results in
+          # very slow runtimes for the led task. Because this recipe blocks the
+          # build.git CQ, we decided the tradeoff to run these edited recipes in
+          # production mode instead would be better.
+          then('launch')).result
+
+        triggered_jobs[builder] = result['swarming']
 
   if not triggered_jobs:
     api.python.succeeding_step('exiting', 'no tryjobs to run, exiting')
@@ -203,28 +208,54 @@ def RunSteps(api, repo_name):
 
 
 def GenTests(api):
+  def prefix(name):
+    return 'analyze+launch %s.' % (name,)
+
+
+  def led_get_builder(name):
+    return api.step_data(
+        prefix(name) + 'led get-builder',
+        stdout=api.json.output({
+          'job_slices': [{
+            'userland': {
+              'recipe_name': 'foo_recipe',
+            },
+          }],
+        }))
+
+  def analyze(name, ret_recipe):
+    return api.step_data(
+        prefix(name) + 'analyze foo_recipe',
+        api.json.output({
+          'recipes': ([ret_recipe] if ret_recipe else []),
+        }))
+
+  def led_launch(name):
+    return api.step_data(
+        prefix(name) + 'led launch',
+        stdout=api.json.output({
+          'swarming':{
+            'host_name': 'chromium-swarm.appspot.com',
+            'task_id': 'beeeeeeeee5',
+          }
+        }))
+
+
+  def git_diff(name, files):
+    return api.override_step_data(
+        prefix(name) + 'git diff to analyze patch',
+        stdout=api.raw_io.output('\n'.join(files)))
+
+
   yield (
       api.test('basic') +
       api.properties.tryserver(repo_name='build') +
-      api.step_data('led launch',
-                    stdout=api.json.output({
-                      'swarming':{
-                          'host_name': 'chromium-swarm.appspot.com',
-                          'task_id': 'beeeeeeeee5',
-                      }
-                    })) +
-      api.step_data('led get-builder',
-                    stdout=api.json.output({
-                      'job_slices': [{
-                        'userland': {
-                            'recipe_name': 'foo_recipe',
-                        },
-                      }],
-                    })) +
-      api.step_data('analyze foo_recipe',
-                    api.json.output({
-                      'recipes': ['foo_recipe'],
-                    })) +
+    led_get_builder('luci.chromium.try:linux-rel') +
+      analyze('luci.chromium.try:linux-rel', 'foo_recipe') +
+      led_launch('luci.chromium.try:linux-rel') +
+      led_get_builder('luci.chromium.try:win-rel') +
+      analyze('luci.chromium.try:win-rel', 'foo_recipe') +
+      led_launch('luci.chromium.try:win-rel') +
       api.override_step_data(
         'gerrit changes', api.json.output(
           [{'revisions': {1: {'_number': 12, 'commit': {
@@ -236,18 +267,10 @@ def GenTests(api):
   yield (
       api.test('no_jobs_to_run') +
       api.properties.tryserver(repo_name='build') +
-      api.step_data('led get-builder',
-                    stdout=api.json.output({
-                      'job_slices': [{
-                        'userland': {
-                            'recipe_name': 'foo_recipe',
-                        },
-                      }],
-                    })) +
-      api.step_data('analyze foo_recipe',
-                    api.json.output({
-                      'recipes': [],
-                    })) +
+      led_get_builder('luci.chromium.try:linux-rel') +
+      analyze('luci.chromium.try:linux-rel', None) +
+      led_get_builder('luci.chromium.try:win-rel') +
+      analyze('luci.chromium.try:win-rel', None) +
       api.override_step_data(
         'gerrit changes', api.json.output(
           [{'revisions': {1: {'_number': 12, 'commit': {
@@ -260,28 +283,20 @@ def GenTests(api):
   yield (
       api.test('recipe_roller') +
       api.properties.tryserver(repo_name='build') +
-      api.step_data('led launch',
-                    stdout=api.json.output({
-                      'swarming':{
-                          'host_name': 'chromium-swarm.appspot.com',
-                          'task_id': 'beeeeeeeee5',
-                      }
-                    })) +
-      api.step_data('led get-builder',
-                    stdout=api.json.output({
-                      'job_slices': [{
-                        'userland': {
-                            'recipe_name': 'foo_recipe',
-                        },
-                      }],
-                    })) +
-      api.override_step_data('git diff to analyze patch',
-                             stdout=api.raw_io.output('\n'.join([
-                               'random/file.py',
-                               'infra/config/recipes.cfg',
-                             ]))) +
-      api.step_data('analyze foo_recipe',
-                    api.json.output({'recipes': []})) +
+      led_get_builder('luci.chromium.try:linux-rel') +
+      led_launch('luci.chromium.try:linux-rel') +
+      analyze('luci.chromium.try:linux-rel', None) +
+      git_diff('luci.chromium.try:linux-rel', [
+        'random/file.py',
+        'infra/config/recipes.cfg',
+      ]) +
+      led_get_builder('luci.chromium.try:win-rel') +
+      led_launch('luci.chromium.try:win-rel') +
+      analyze('luci.chromium.try:win-rel', None) +
+      git_diff('luci.chromium.try:win-rel', [
+        'random/file.py',
+        'infra/config/recipes.cfg',
+      ]) +
       api.override_step_data(
         'gerrit changes', api.json.output(
           [{'revisions': {1: {'_number': 12, 'commit': {
@@ -293,28 +308,20 @@ def GenTests(api):
   yield (
       api.test('manual_roll_with_changes') +
       api.properties.tryserver(repo_name='build') +
-      api.step_data('led launch',
-                    stdout=api.json.output({
-                      'swarming':{
-                          'host_name': 'chromium-swarm.appspot.com',
-                          'task_id': 'beeeeeeeee5',
-                      }
-                    })) +
-      api.step_data('led get-builder',
-                    stdout=api.json.output({
-                      'job_slices': [{
-                        'userland': {
-                            'recipe_name': 'foo_recipe',
-                        },
-                      }],
-                    })) +
-      api.override_step_data('git diff to analyze patch',
-                             stdout=api.raw_io.output('\n'.join([
-                               'random/file.py',
-                               'infra/config/recipes.cfg',
-                             ]))) +
-      api.step_data('analyze foo_recipe',
-                    api.json.output({'recipes': ['foo_recipe']})) +
+      led_get_builder('luci.chromium.try:linux-rel') +
+      analyze('luci.chromium.try:linux-rel', 'foo_recipe') +
+      led_launch('luci.chromium.try:linux-rel') +
+      git_diff('luci.chromium.try:linux-rel', [
+        'random/file.py',
+        'infra/config/recipes.cfg',
+      ]) +
+      led_get_builder('luci.chromium.try:win-rel') +
+      analyze('luci.chromium.try:win-rel', 'foo_recipe') +
+      led_launch('luci.chromium.try:win-rel') +
+      git_diff('luci.chromium.try:win-rel', [
+        'random/file.py',
+        'infra/config/recipes.cfg',
+      ]) +
       api.override_step_data(
         'gerrit changes', api.json.output(
           [{'revisions': {1: {'_number': 12, 'commit': {
@@ -326,15 +333,8 @@ def GenTests(api):
   yield (
       api.test('analyze_failure') +
       api.properties.tryserver(repo_name='build') +
-      api.step_data('led get-builder',
-                    stdout=api.json.output({
-                      'job_slices': [{
-                        'userland': {
-                            'recipe_name': 'foo_recipe',
-                        },
-                      }],
-                    })) +
-      api.step_data('analyze foo_recipe',
+      led_get_builder('luci.chromium.try:linux-rel') +
+      api.step_data(prefix('luci.chromium.try:linux-rel')+'analyze foo_recipe',
                     api.json.output({
                       'error': 'Bad analyze!!!!',
                       'invalid_recipes': ['foo_recipe'],
@@ -345,31 +345,13 @@ def GenTests(api):
             'message': 'nothing important'}}}}])) +
       api.override_step_data(
           'parse description', api.json.output({})) +
-      api.post_process(Filter('recipe invalid'))
+      api.post_process(Filter(
+          prefix('luci.chromium.try:linux-rel')+'recipe invalid'))
   )
 
   yield (
       api.test('custom_builder') +
       api.properties.tryserver(repo_name='build') +
-      api.step_data('led launch',
-                    stdout=api.json.output({
-                      'swarming':{
-                          'host_name': 'chromium-swarm.appspot.com',
-                          'task_id': 'beeeeeeeee5',
-                      }
-                    })) +
-      api.step_data('led get-builder',
-                    stdout=api.json.output({
-                      'job_slices': [{
-                        'userland': {
-                            'recipe_name': 'foo_recipe',
-                        },
-                      }],
-                    })) +
-      api.step_data('analyze foo_recipe',
-                    api.json.output({
-                      'recipes': ['foo_recipe'],
-                    })) +
       api.override_step_data(
         'gerrit changes', api.json.output(
           [{'revisions': {1: {'_number': 12, 'commit': {
@@ -377,5 +359,8 @@ def GenTests(api):
       api.override_step_data(
           'parse description', api.json.output(
               {BUILDER_FOOTER: ['arbitrary.blah']})) +
-      api.post_process(Filter('led get-builder'))
+      led_get_builder('arbitrary.blah') +
+      analyze('arbitrary.blah', 'foo_recipe')+
+      led_launch('arbitrary.blah') +
+      api.post_process(Filter(prefix('arbitrary.blah')+'led get-builder'))
   )
