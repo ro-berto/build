@@ -166,7 +166,8 @@ class WebRTCApi(recipe_api.RecipeApi):
     xcode_version = self.m.properties['$depot_tools/osx_sdk']['sdk_version']
     ios_config['xcode build version'] = xcode_version
 
-    ios_config.update(self.bot.config['ios_config'])
+    if 'ios_config' in self.bot.config:
+      ios_config.update(self.bot.config['ios_config'])
 
     ios_config['tests'] = []
     if self.bot.should_test:
