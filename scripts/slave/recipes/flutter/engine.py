@@ -395,6 +395,10 @@ def BuildMac(api):
     host_debug_path.join('FlutterEmbedder.framework'),
     host_debug_path.join('FlutterEmbedder.framework.zip'))
 
+  api.zip.directory('Archive FlutterMacOS.framework',
+    host_debug_path.join('FlutterMacOS.framework'),
+    host_debug_path.join('FlutterMacOS.framework.zip'))
+
   UploadArtifacts(api, 'darwin-x64', [
     ICU_DATA_PATH,
     'out/host_debug_unopt/flutter_tester',
@@ -411,6 +415,10 @@ def BuildMac(api):
   UploadArtifacts(api, 'darwin-x64', [
     'out/host_debug/FlutterEmbedder.framework.zip'
   ], archive_name='FlutterEmbedder.framework.zip')
+
+  UploadArtifacts(api, 'darwin-x64', [
+    'out/host_debug/FlutterMacOS.framework.zip'
+  ], archive_name='FlutterMacOS.framework.zip')
 
   UploadArtifacts(api, "android-arm-profile" , [
     'out/android_profile/clang_x86/gen_snapshot',
