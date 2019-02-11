@@ -188,7 +188,7 @@ class PackageIndexTest(unittest.TestCase):
                         expected_compile_arguments)
 
   def testGenerateUnitFilesWindows(self):
-    # Write a new compdb with Windows args, and re-create the index pack.
+    # Write a new compdb with Windows args.
     compdb_dictionary = {
         'directory': self.build_dir,
         'command': COMPILE_ARGUMENTS_WIN,
@@ -196,10 +196,22 @@ class PackageIndexTest(unittest.TestCase):
     }
     with open(self.compdb_file.name, 'w') as compdb_file:
       compdb_file.write(json.dumps([compdb_dictionary]))
+
+    # Write a new test.cc.filepaths file for Windows (using backslash as a path
+    # separator).
+    with open(self.test_cc_file_name + '.filepaths', 'wb') as filepaths_file:
+      filepaths_file.write('\n'.join([
+          os.path.join('..\\..\\..\\', self.test_cc_file_name),
+          os.path.join('..\\..\\..\\', self.test_h_file_name),
+          os.path.join('..\\..\\..\\', self.test2_h_file_name),
+          'missing_file_name',
+      ]))
+
+    # Recreate the index pack.
     self.index_pack.close()
     self.index_pack = package_index.IndexPack(
         os.path.realpath(self.compdb_file.name), corpus=CORPUS, root=VNAME_ROOT,
-        out_dir=OUT_DIR)
+        out_dir=OUT_DIR, verbose=True)
 
     # Set up the filehashes dict which is usually filled by _GenerateDataFiles()
     self.index_pack.filehashes = {
@@ -228,6 +240,30 @@ class PackageIndexTest(unittest.TestCase):
       compilation_unit_wrapper = json.loads(unit_file_content)
       compilation_unit_dictionary = compilation_unit_wrapper['unit']
       self.assertEquals(compilation_unit_dictionary['output_key'], 'test.obj')
+
+      test_cc_entry = compilation_unit_dictionary['required_input'][0]
+      self.assertEquals(test_cc_entry['info']['digest'],
+                        hashlib.sha256(TEST_CC_FILE_CONTENT).hexdigest())
+      self.assertEquals(test_cc_entry['info']['path'], '../../../test.cc')
+      self.assertEquals(test_cc_entry['v_name']['path'], 'src/test.cc')
+      self.assertEquals(test_cc_entry['v_name']['corpus'], CORPUS)
+      self.assertEquals(test_cc_entry['v_name']['root'], VNAME_ROOT)
+
+      test_h_entry = compilation_unit_dictionary['required_input'][1]
+      self.assertEquals(test_h_entry['info']['digest'],
+                        hashlib.sha256(TEST_H_FILE_CONTENT).hexdigest())
+      self.assertEquals(test_h_entry['info']['path'], '../../../test.h')
+      self.assertEquals(test_h_entry['v_name']['path'], 'src/test.h')
+      self.assertEquals(test_h_entry['v_name']['corpus'], CORPUS)
+      self.assertEquals(test_h_entry['v_name']['root'], VNAME_ROOT)
+
+      test2_h_entry = compilation_unit_dictionary['required_input'][2]
+      self.assertEquals(test2_h_entry['info']['digest'],
+                        hashlib.sha256(TEST2_H_FILE_CONTENT).hexdigest())
+      self.assertEquals(test2_h_entry['info']['path'], '../../../test2.h')
+      self.assertEquals(test2_h_entry['v_name']['path'], 'src/test2.h')
+      self.assertEquals(test2_h_entry['v_name']['corpus'], CORPUS)
+      self.assertEquals(test2_h_entry['v_name']['root'], VNAME_ROOT)
 
       expected_compile_arguments = [
           u'clang-cl.exe', u'--driver-mode=cl', u'/c', u'test.cc',

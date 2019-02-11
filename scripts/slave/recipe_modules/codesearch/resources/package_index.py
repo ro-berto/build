@@ -205,6 +205,13 @@ class IndexPack(object):
       if not output_file:
         print 'No output file path found for %s' % entry['file']
 
+      # Convert any args starting with -imsvc to use forward slashes, since this
+      # is what Kythe expects.
+      if sys.platform == 'win32':
+        for i in range(len(command_list)):
+          if command_list[i].startswith('-imsvc'):
+            command_list[i] = command_list[i].replace('\\', '/')
+
       required_inputs = []
       with open(filepath, 'rb') as filepaths_file:
         for line in filepaths_file:
@@ -230,6 +237,9 @@ class IndexPack(object):
             fname = os.path.relpath(fname, entry['directory'])
 
           normalized_fname = os.path.normpath(os.path.join(self.out_dir, fname))
+          if sys.platform == 'win32':
+            # Kythe expects all paths to use forward slashes.
+            normalized_fname = normalized_fname.replace('\\', '/')
           required_input = {
               'v_name': {
                   'corpus': self.corpus,
@@ -241,6 +251,9 @@ class IndexPack(object):
           if self.root:
             required_input['v_name']['root'] = self.root
 
+          if sys.platform == 'win32':
+            # Kythe expects all paths to use forward slashes.
+            fname = fname.replace('\\', '/')
           required_input['info'] = {
               'path': fname,
               'digest': self.filehashes[fname_fullpath],
