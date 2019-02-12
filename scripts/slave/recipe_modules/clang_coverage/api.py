@@ -476,9 +476,9 @@ class ClangCoverageApi(recipe_api.RecipeApi):
             '--host', gerrit_change.host, '--project', gerrit_change.project,
             '--change', gerrit_change.change, '--patchset',
             gerrit_change.patchset, '--src-path', self.m.path['checkout'],
-            '--output-file',
-            self.m.json.output(leak_to=local_to_gerrit_diff_mapping_file)
-        ] + source_files)
+            '--output-file', local_to_gerrit_diff_mapping_file
+        ] + source_files,
+        stdout=self.m.json.output())
 
   def _surface_merging_errors(self):
     test_data = {

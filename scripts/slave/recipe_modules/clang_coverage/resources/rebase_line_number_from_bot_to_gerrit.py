@@ -150,8 +150,12 @@ def main():
   file_to_line_num_mapping = _filter_out_unchanged_lines(
       file_to_line_num_mapping, args.host, args.project, args.change,
       args.patchset)
+
+  json_mapping = json.dumps(file_to_line_num_mapping)
   with open(args.output_file, 'w') as f:
-    json.dump(file_to_line_num_mapping, f)
+    f.write(json_mapping)
+
+  sys.stdout.write(json_mapping)
 
 
 if __name__ == '__main__':
