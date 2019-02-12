@@ -442,7 +442,12 @@
     ]
   },
   {
-    "jsonResult": null,
+    "failure": {
+      "failure": {
+        "step": ""
+      },
+      "humanReason": "1 tests failed: ['test_script_with_broken_tests']"
+    },
     "name": "$result"
   }
 ]

@@ -1198,7 +1198,7 @@ class JSONResultsHandler(ResultsHandler):
       results = api.test_utils.create_results_from_json_if_needed(
           results)
     except Exception as e:
-      return False, [str(e), '\n', api.traceback.format_exc()], 0, None
+      return False, [str(e), '\n', api.traceback.format_exc()], 0, {}
     # If results were interrupted, we can't trust they have all the tests in
     # them. For this reason we mark them as invalid.
     return (results.valid and not results.interrupted,
@@ -1938,13 +1938,13 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     # If we didn't get a step_result object at all, we can safely
     # assume that something definitely went wrong.
     if step_result is None:  # pragma: no cover
-      return False, None, 0, None
+      return False, None, 0, {}
 
     results = getattr(step_result, 'isolated_script_results', None) or {}
 
     global_tags = results.get('global_tags', [])
     if 'UNRELIABLE_RESULTS' in global_tags:
-      return False, None, 0, None
+      return False, None, 0, {}
 
     valid, failures, total_tests_ran, pass_fail_counts = (
         self.results_handler.validate_results(api, results))
@@ -1956,14 +1956,14 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     # If we got no results and a nonzero exit code, the test probably
     # did not run correctly.
     if step_result.retcode != 0 and not results:
-      return False, failures, total_tests_ran, None
+      return False, failures, total_tests_ran, {}
 
     # Even if the output is valid, if the return code is greater than
     # MAX_FAILURES_EXIT_STATUS then the test did not complete correctly and the
     # results can't be trusted. It probably exited early due to a large number
     # of failures or an environment setup issue.
     if step_result.retcode > api.test_utils.MAX_FAILURES_EXIT_STATUS:
-      return False, failures, total_tests_ran, None
+      return False, failures, total_tests_ran, {}
 
     if step_result.retcode == 0 and not valid:
       # This failure won't be caught automatically. Need to manually
@@ -2588,6 +2588,7 @@ class MockTest(Test):
         i = api.step.InfraFailure(f.name, result=f.result)
         i.result.presentation.status = api.step.EXCEPTION
         raise i
+      self._failures.append('test_failure')
       raise
 
   def _mock_suffix(self, suffix):
