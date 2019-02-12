@@ -2174,9 +2174,6 @@ class AndroidInstrumentationTest(AndroidTest):
     'ChromePublicTest': {
       'compile_target': 'chrome_public_test_apk',
     },
-    'ChromeSyncShellTest': {
-      'compile_target': 'chrome_sync_shell_test_apk',
-    },
     'ChromotingTest': {
       'compile_target': 'remoting_test_apk',
     },
@@ -2206,7 +2203,6 @@ class AndroidInstrumentationTest(AndroidTest):
 
   _DEFAULT_SUITES_BY_TARGET = {
     'chrome_public_test_apk': _DEFAULT_SUITES['ChromePublicTest'],
-    'chrome_sync_shell_test_apk': _DEFAULT_SUITES['ChromeSyncShellTest'],
     'content_shell_test_apk': _DEFAULT_SUITES['ContentShellTest'],
     'mojo_test_apk': _DEFAULT_SUITES['MojoTest'],
     'remoting_test_apk': _DEFAULT_SUITES['ChromotingTest'],
@@ -2468,7 +2464,6 @@ class IncrementalCoverageTest(Test):
 class FindAnnotatedTest(Test):
   _TEST_APKS = {
       'chrome_public_test_apk': 'ChromePublicTest',
-      'chrome_sync_shell_test_apk': 'ChromeSyncShellTest',
       'content_shell_test_apk': 'ContentShellTest',
       'system_webview_shell_layout_test_apk': 'SystemWebViewShellLayoutTest',
       'webview_instrumentation_test_apk': 'WebViewInstrumentationTest',

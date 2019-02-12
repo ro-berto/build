@@ -3,7 +3,7 @@
     "cmd": [],
     "name": "details",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@details@compile_targets: ['chrome_public_test_apk', 'content_shell_test_apk', 'system_webview_shell_layout_test_apk', 'webview_instrumentation_test_apk', 'chrome_sync_shell_test_apk']@@@",
+      "@@@STEP_LOG_LINE@details@compile_targets: ['chrome_public_test_apk', 'content_shell_test_apk', 'webview_instrumentation_test_apk', 'system_webview_shell_layout_test_apk']@@@",
       "@@@STEP_LOG_END@details@@@"
     ]
   },
@@ -22,9 +22,8 @@
       "--test-apks",
       "ChromePublicTest",
       "ContentShellTest",
-      "SystemWebViewShellLayoutTest",
       "WebViewInstrumentationTest",
-      "ChromeSyncShellTest"
+      "SystemWebViewShellLayoutTest"
     ],
     "cwd": "None",
     "name": "run find_annotated_tests.py"
