@@ -399,6 +399,9 @@ SPEC = {
       'swarming_service_account': 'chrome-ci-builder',
       'isolate_server': 'https://chrome-isolated.appspot.com',
       'isolate_service_account': 'chrome-ci-builder',
+      'swarming_dimensions': {
+        'pool': 'chrome.tests',
+      },
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
