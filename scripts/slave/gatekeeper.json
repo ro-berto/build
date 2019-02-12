@@ -708,19 +708,14 @@
         ],
 
         "comment": [
-          "TODO(dpranke): crbug.com/486089, crbug.com/439402",
-          "Until the GN bots are in the CQ, they should not close the tree."
+          "Bot should be sheriffed, but is very broken and flaky, and hasn't",
+          "been fixed. Excluding it so it doesn't show up on SOM. See ",
+          "crbug.com/876224 for more details."
+        ],
+        "excluded_builders" : [
+            "Win10 Tests x64 (dbg)"
         ],
         "builders": {
-          "Win x64 GN": {
-            "close_tree": false
-          },
-          "Win x64 GN (dbg)": {
-            "close_tree": false
-          },
-          "Win8 GN (dbg)": {
-            "close_tree": false
-          },
           "*": {}
         }
       }
