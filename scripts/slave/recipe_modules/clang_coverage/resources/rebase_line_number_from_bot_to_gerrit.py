@@ -123,6 +123,7 @@ def _filter_out_unchanged_lines(file_to_line_num_mapping, host, project, change,
   filtered_file_to_line_num_mapping = {}
   for file_path in file_to_line_num_mapping:
     if file_path not in file_to_added_lines:
+      filtered_file_to_line_num_mapping[file_path] = {}
       continue
 
     filtered_file_to_line_num_mapping[file_path] = {}
