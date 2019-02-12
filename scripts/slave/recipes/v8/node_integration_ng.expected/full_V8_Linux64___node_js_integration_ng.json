@@ -114,12 +114,104 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/node-ci/third_party/depot_tools"
+      ]
+    },
     "env_suffixes": {
       "PATH": [
         "RECIPE_PACKAGE_REPO[depot_tools]"
       ]
     },
     "name": "initialization.gclient runhooks",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_PACKAGE_REPO[depot_tools]/gn.py",
+      "--root=[BUILDER_CACHE]/node-ci",
+      "gen",
+      "//out/Release",
+      "--args=is_clang=true use_sysroot=true use_custom_libcxx=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/node-ci/third_party/depot_tools"
+      ]
+    },
+    "name": "initialization.gn",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--",
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/node-ci/out/Release",
+      "-j",
+      "20"
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/node-ci/third_party/depot_tools"
+      ]
+    },
+    "name": "initialization.compile",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/node-ci/out/Release",
+      "-j",
+      "20",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/node-ci/third_party/depot_tools"
+      ]
+    },
+    "name": "initialization.compile confirm no-op",
+    "stdout": "/path/to/tmp/",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]

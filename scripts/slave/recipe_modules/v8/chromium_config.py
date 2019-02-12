@@ -65,8 +65,8 @@ def slow_dchecks(c):
   c.gn_args.append('v8_enable_slow_dchecks=true')
 
 
-@CONFIG_CTX(includes=['ninja'])
+@CONFIG_CTX(includes=['ninja', 'gn', 'clang', 'goma'])
 def node_ci(c):
-  c.project_generator.tool = 'gn'
-  c.build_dir = c.CHECKOUT_PATH.join('out')
   c.use_gyp_env = False
+  c.gn_args.append('use_sysroot=true')
+  c.gn_args.append('use_custom_libcxx=true')
