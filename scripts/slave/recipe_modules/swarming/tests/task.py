@@ -27,30 +27,15 @@ def RunSteps(api):
 
 def GenTests(api):
 
-  # TODO(jbudorick): Remove this after upstreaming it into post_process.
-  def command_line_contains(check, step_odict, step_name, argument_sequence):
-    def subsequence(containing, contained):
-      for i in xrange(len(containing) - len(contained)):
-        if containing[i:i+len(contained)] == contained:
-          return True
-      return False  # pragma: no cover
-
-    check('No step named "%s"' % step_name,
-          step_name in step_odict)
-    check('Command line for step "%s" did not contain "%s"' % (
-              step_name, ' '.join(argument_sequence)),
-          subsequence(step_odict[step_name]['cmd'], argument_sequence))
-    return step_odict
-
   yield (
     api.test('wait_for_capacity') +
     api.properties(
         task_name='capacity-constrained task',
         wait_for_capacity=True) +
     api.post_process(
-        command_line_contains,
-        step_name='[trigger] capacity-constrained task',
-        argument_sequence=['--wait-for-capacity']) +
+        post_process.StepCommandContains,
+        '[trigger] capacity-constrained task',
+        ['--wait-for-capacity']) +
     api.post_process(post_process.DropExpectation)
   )
 
@@ -60,9 +45,8 @@ def GenTests(api):
         task_name='optional-dimension task',
         wait_for_capacity=True) +
     api.post_process(
-        command_line_contains,
-        step_name='[trigger] optional-dimension task',
-        argument_sequence=[
-            '--optional-dimension', 'os', 'Ubuntu-14.04', '60']) +
+        post_process.StepCommandContains,
+        '[trigger] optional-dimension task',
+        ['--optional-dimension', 'os', 'Ubuntu-14.04', '60']) +
     api.post_process(post_process.DropExpectation)
   )
