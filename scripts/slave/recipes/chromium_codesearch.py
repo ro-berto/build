@@ -122,8 +122,6 @@ SPEC = freeze({
         'all',
       ],
       'platform': 'win',
-      # Mark Windows kzip files as experimental until we know they work.
-      'experimental': True,
       'sync_generated_files': True,
       'gen_repo_branch': 'master',
       # Generated files will end up in out/win-Debug/gen.
