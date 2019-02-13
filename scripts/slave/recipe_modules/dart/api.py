@@ -827,11 +827,8 @@ class DartApi(recipe_api.RecipeApi):
     args = step.args
     shards = step.shards
     if deflake_list:
-      args = args + ['--repeat=5', '--test-list',
-                     self.m.raw_io.input_text(deflake_list)]
+      args = args + ['--repeat=5', '--tests', deflake_list]
       shards = min(shards, 1)
-      # TODO(athom): Remove this hack when sharded deflaking works
-      step.local_shard = True
 
     test_args = ['--progress=status',
                  '--report',
@@ -839,7 +836,7 @@ class DartApi(recipe_api.RecipeApi):
                  '--write-debug-log',
                  '--write-results',
                  '--write-logs']
-    if self._report_new_results():
+    if self._report_new_results() or deflake_list:
       test_args.append('--clean-exit')
     template = self._get_specific_argument(args, ['-n'])
     if template is not None:
