@@ -489,7 +489,8 @@ def RunSteps(api):
     if webrtc.bot.should_upload_perf_results:
       api.ios.collect(tasks, result_callback=webrtc.upload_to_perf_dashboard)
     else:
-      api.ios.collect(tasks)
+      # Collect with empty callback because we don't need to do anything
+      api.ios.collect(tasks, result_callback=lambda **kw: True)
 
 
 def GenTests(api):
