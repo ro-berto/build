@@ -1347,7 +1347,7 @@ Returns:
 
 &mdash; **def [supersize\_archive](/scripts/slave/recipe_modules/chromium_android/api.py#232)(self, apk_path, size_path, step_suffix=''):**
 
-Creates a .size file for the given .apk.
+Creates a .size file for the given .apk or .minimal.apks.
 
 &mdash; **def [test\_report](/scripts/slave/recipe_modules/chromium_android/api.py#1203)(self):**
 

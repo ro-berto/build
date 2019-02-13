@@ -445,11 +445,11 @@
       "-j",
       "20",
       "android_tools",
-      "chrome_modern_public_apk",
+      "chrome_modern_public_minimal_apks",
       "chrome_public_apk",
       "dump_syms",
       "microdump_stackwalk",
-      "monochrome_public_apk",
+      "monochrome_public_minimal_apks",
       "push_apps_to_background_apk",
       "system_webview_apk",
       "system_webview_shell_apk",
@@ -473,11 +473,11 @@
       "-j",
       "20",
       "android_tools",
-      "chrome_modern_public_apk",
+      "chrome_modern_public_minimal_apks",
       "chrome_public_apk",
       "dump_syms",
       "microdump_stackwalk",
-      "monochrome_public_apk",
+      "monochrome_public_minimal_apks",
       "push_apps_to_background_apk",
       "system_webview_apk",
       "system_webview_shell_apk",
@@ -602,7 +602,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Release\", \"-j\", 20, \"android_tools\", \"chrome_modern_public_apk\", \"chrome_public_apk\", \"dump_syms\", \"microdump_stackwalk\", \"monochrome_public_apk\", \"push_apps_to_background_apk\", \"system_webview_apk\", \"system_webview_shell_apk\", \"chromium_builder_perf\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Release\", \"-j\", 20, \"android_tools\", \"chrome_modern_public_minimal_apks\", \"chrome_public_apk\", \"dump_syms\", \"microdump_stackwalk\", \"monochrome_public_minimal_apks\", \"push_apps_to_background_apk\", \"system_webview_apk\", \"system_webview_shell_apk\", \"chromium_builder_perf\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -686,10 +686,10 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=resource_sizes (ChromeModernPublic.apk)",
+      "--perf-dashboard-id=resource_sizes (ChromeModernPublic.minimal.apks)",
       "--perf-id=Android Builder Perf",
-      "--test-type=resource_sizes (ChromeModernPublic.apk)",
-      "--step-name=resource_sizes (ChromeModernPublic.apk)",
+      "--test-type=resource_sizes (ChromeModernPublic.minimal.apks)",
+      "--step-name=resource_sizes (ChromeModernPublic.minimal.apks)",
       "--chartjson-file",
       "/path/to/tmp/json",
       "--builder-name=Android Builder Perf",
@@ -697,14 +697,14 @@
       "--build-number=257",
       "--run-python-script",
       "[START_DIR]/src/build/android/resource_sizes.py",
-      "[START_DIR]/src/out/Release/apks/ChromeModernPublic.apk",
+      "[START_DIR]/src/out/Release/apks/ChromeModernPublic.minimal.apks",
       "--chartjson"
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "resource_sizes (ChromeModernPublic.apk)",
+    "name": "resource_sizes (ChromeModernPublic.minimal.apks)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -725,15 +725,15 @@
     "cmd": [
       "[START_DIR]/src/tools/binary_size/supersize",
       "archive",
-      "[START_DIR]/src/out/Release/apks/ChromeModernPublic.apk.size",
-      "--apk-file",
-      "[START_DIR]/src/out/Release/apks/ChromeModernPublic.apk",
+      "[START_DIR]/src/out/Release/apks/ChromeModernPublic.minimal.apks.size",
+      "-f",
+      "[START_DIR]/src/out/Release/apks/ChromeModernPublic.minimal.apks",
       "-v"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "supersize archive (ChromeModernPublic.apk)"
+    "name": "supersize archive (ChromeModernPublic.minimal.apks)"
   },
   {
     "allow_subannotations": true,
@@ -797,7 +797,7 @@
       "[START_DIR]/src/tools/binary_size/supersize",
       "archive",
       "[START_DIR]/src/out/Release/apks/ChromePublic.apk.size",
-      "--apk-file",
+      "-f",
       "[START_DIR]/src/out/Release/apks/ChromePublic.apk",
       "-v"
     ],
@@ -828,10 +828,10 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"bot_id\": \"test_bot\", \"buildername\": \"Android Builder Perf\", \"buildnumber\": 257, \"got_revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"issue\": \"8675309\", \"mastername\": \"chromium.perf\", \"patchset\": \"1\", \"recipe\": \"android/builder\", \"repository\": \"svn://svn.chromium.org/chrome/trunk/src\", \"revision\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
-      "--perf-dashboard-id=resource_sizes (MonochromePublic.apk)",
+      "--perf-dashboard-id=resource_sizes (MonochromePublic.minimal.apks)",
       "--perf-id=Android Builder Perf",
-      "--test-type=resource_sizes (MonochromePublic.apk)",
-      "--step-name=resource_sizes (MonochromePublic.apk)",
+      "--test-type=resource_sizes (MonochromePublic.minimal.apks)",
+      "--step-name=resource_sizes (MonochromePublic.minimal.apks)",
       "--chartjson-file",
       "/path/to/tmp/json",
       "--builder-name=Android Builder Perf",
@@ -839,14 +839,14 @@
       "--build-number=257",
       "--run-python-script",
       "[START_DIR]/src/build/android/resource_sizes.py",
-      "[START_DIR]/src/out/Release/apks/MonochromePublic.apk",
+      "[START_DIR]/src/out/Release/apks/MonochromePublic.minimal.apks",
       "--chartjson"
     ],
     "env": {
       "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
-    "name": "resource_sizes (MonochromePublic.apk)",
+    "name": "resource_sizes (MonochromePublic.minimal.apks)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -867,15 +867,15 @@
     "cmd": [
       "[START_DIR]/src/tools/binary_size/supersize",
       "archive",
-      "[START_DIR]/src/out/Release/apks/MonochromePublic.apk.size",
-      "--apk-file",
-      "[START_DIR]/src/out/Release/apks/MonochromePublic.apk",
+      "[START_DIR]/src/out/Release/apks/MonochromePublic.minimal.apks.size",
+      "-f",
+      "[START_DIR]/src/out/Release/apks/MonochromePublic.minimal.apks",
       "-v"
     ],
     "env": {
       "PATH": "[START_DIR]/src/third_party/android_tools/sdk/platform-tools:[START_DIR]/src/build/android:<PATH>"
     },
-    "name": "supersize archive (MonochromePublic.apk)"
+    "name": "supersize archive (MonochromePublic.minimal.apks)"
   },
   {
     "allow_subannotations": true,
@@ -939,7 +939,7 @@
       "[START_DIR]/src/tools/binary_size/supersize",
       "archive",
       "[START_DIR]/src/out/Release/apks/SystemWebView.apk.size",
-      "--apk-file",
+      "-f",
       "[START_DIR]/src/out/Release/apks/SystemWebView.apk",
       "-v"
     ],

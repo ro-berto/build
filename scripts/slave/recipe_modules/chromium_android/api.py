@@ -230,7 +230,7 @@ class AndroidApi(recipe_api.RecipeApi):
         chartjson_file=chartjson_file)
 
   def supersize_archive(self, apk_path, size_path, step_suffix=''):
-    """Creates a .size file for the given .apk."""
+    """Creates a .size file for the given .apk or .minimal.apks."""
     step_name = 'supersize archive ({}){}'.format(
         self.m.path.basename(apk_path), step_suffix)
     download_objdump_path = self.m.path['checkout'].join(
@@ -241,7 +241,7 @@ class AndroidApi(recipe_api.RecipeApi):
       self.m.python('download objdump', download_objdump_path)
       return self.m.step(
           step_name,
-          [supersize_path, 'archive', size_path, '--apk-file', apk_path, '-v'])
+          [supersize_path, 'archive', size_path, '-f', apk_path, '-v'])
 
   def upload_apks_for_bisect(self, update_properties, bucket, path):
     """Uploads android apks for functional bisects."""

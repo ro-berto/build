@@ -898,7 +898,7 @@
       "[BUILDER_CACHE]/android_binary_size/src/tools/binary_size/supersize",
       "archive",
       "[CLEANUP]/binary-size-trybot_tmp_1/with_patch/MonochromePublic.apk.size",
-      "--apk-file",
+      "-f",
       "[BUILDER_CACHE]/android_binary_size/src/out/Release/apks/MonochromePublic.apk",
       "-v"
     ],
@@ -1503,7 +1503,7 @@
       "[BUILDER_CACHE]/android_binary_size/src/tools/binary_size/supersize",
       "archive",
       "[CLEANUP]/binary-size-trybot_tmp_1/without_patch/MonochromePublic.apk.size",
-      "--apk-file",
+      "-f",
       "[BUILDER_CACHE]/android_binary_size/src/out/Release/apks/MonochromePublic.apk",
       "-v"
     ],

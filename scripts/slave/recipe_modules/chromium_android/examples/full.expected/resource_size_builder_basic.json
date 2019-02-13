@@ -1053,7 +1053,7 @@
       "[START_DIR]/src/tools/binary_size/supersize",
       "archive",
       "[START_DIR]/src/out/Release/apks/Example.apk.size",
-      "--apk-file",
+      "-f",
       "[START_DIR]/src/out/Release/apks/Example.apk",
       "-v"
     ],
