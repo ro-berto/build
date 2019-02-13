@@ -144,8 +144,10 @@
       "--upstream",
       "cf7b8d09b4eb1791bceecb9b7d0a8e4799175a4e"
     ],
-    "env": {
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "presubmit",
     "timeout": 480

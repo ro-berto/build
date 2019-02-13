@@ -176,8 +176,10 @@
       "f2cbea7e89a45f46819777bb78a1f5bd0241f64c"
     ],
     "cwd": "[BUILDER_CACHE]/v8_presubmit",
-    "env": {
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "presubmit",
     "timeout": 480

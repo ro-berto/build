@@ -145,8 +145,12 @@
       "80754af91bfb6d1073585b046fe0a474ce868509"
     ],
     "env": {
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]",
       "PYTHONPATH": ""
+    },
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_PACKAGE_REPO[depot_tools]"
+      ]
     },
     "name": "presubmit",
     "timeout": 480
