@@ -10,6 +10,7 @@ DEPS = [
   'depot_tools/presubmit',
   'recipe_engine/buildbucket',
   'recipe_engine/context',
+  'recipe_engine/cq',
   'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
@@ -66,7 +67,7 @@ def _RunStepsInternal(api):
     '--gerrit_url', 'https://%s' % api.tryserver.gerrit_change.host,
     '--gerrit_fetch',
   ]
-  if api.properties.get('dry_run'):
+  if api.cq.state == api.cq.DRY:
     presubmit_args.append('--dry_run')
 
   presubmit_args.extend([
@@ -181,12 +182,25 @@ def GenTests(api):
 
   yield (
     api.test('chromium_dry_run') +
+    api.cq(dry_run=True) +
     api.properties.tryserver(
         mastername='tryserver.chromium.linux',
         buildername='chromium_presubmit',
         repo_name='chromium',
         gerrit_project='chromium/src',
         dry_run=True) +
+    api.step_data('presubmit', api.json.output([['chromium_presubmit',
+                                                 ['compile']]]))
+  )
+
+  # TODO(cbrug/893955): delete after CQ switches entirely to new property.
+  yield (
+    api.test('chromium_dry_run_legacy') +
+    api.properties.tryserver(
+        mastername='tryserver.chromium.linux',
+        buildername='chromium_presubmit',
+        repo_name='chromium',
+        gerrit_project='chromium/src') +
     api.step_data('presubmit', api.json.output([['chromium_presubmit',
                                                  ['compile']]]))
   )
