@@ -163,7 +163,6 @@
         "masters": {
             "https://build.chromium.org/p/chromium.fyi": ["*"],
             "https://build.chromium.org/p/chromium.infra.cron": ["*"],
-            "https://build.chromium.org/p/chromium.lkgr": ["*"],
             "https://build.chromium.org/p/client.boringssl": ["*"],
             "https://build.chromium.org/p/client.catapult": ["*"],
             "https://build.chromium.org/p/client.crashpad": ["*"]
