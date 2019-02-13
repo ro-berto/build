@@ -2,10 +2,15 @@
 /annotation_utils.py              recipes
 /bootstrap.py                     recipes
 /build_directory.py               recipes
+/build_scan.py                    recipes
+/build_scan_db.py                 recipes
 /clang_revision.py                recipes
 /crash_utils.py                   recipes
 /daemonizer.py                    recipes
 /extract_build.py                 recipes
+/gatekeeper.json                  recipes
+/gatekeeper_ng.py                 recipes
+/gatekeeper_ng_config.py          recipes
 /gatekeeper_trees.json            recipes
 /goma_bq_utils.py                 recipes
 /goma_utils.py                    recipes
