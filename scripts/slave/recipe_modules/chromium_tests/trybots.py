@@ -372,6 +372,14 @@ TRYBOTS = freeze({
       }),
     },
   },
+  'tryserver.chromium.chrome': {
+    'builders': {
+        'google-chrome-chromeos': simple_bot({
+          'mastername': 'chromium.chrome',
+          'buildername': 'Google Chrome ChromeOS',
+        }),
+    },
+  },
   'tryserver.chromium.linux': {
     'builders': {
       'cast_shell_linux': simple_bot({
