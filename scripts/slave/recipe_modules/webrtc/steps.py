@@ -94,11 +94,6 @@ def generate_tests(api, phase, revision, revision_number, bot):
         '--android',
         '--adb-path', ADB_PATH,
     ]))
-    # Skip video_quality_loopback_test on Android K bot (not supported).
-    if not re.search(r'Android.+\bK\b', bot.builder):
-      tests.append(SwarmingAndroidPerfTest('video_quality_loopback_test', args=[
-          '--adb-path', ADB_PATH,
-      ]))
     tests.append(SwarmingAndroidPerfTest('webrtc_perf_tests', args=[
         '--save_worst_frame',
     ]))
