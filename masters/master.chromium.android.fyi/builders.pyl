@@ -31,13 +31,6 @@
       "category": "5Cronet",
       "mergeRequests": True,
     },
-    "Memory Infra Tester": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": "chromium_commits",
-      "slave_pools": ["memory_bot"],
-      "category": "4Memory",
-    },
     "Nougat Phone Tester": {
       "recipe": "chromium",
       "use_remote_run": True,
@@ -71,14 +64,6 @@
         "bits": "64",
       },
       "slaves": ["slave221-c1"],
-    },
-    "memory_bot": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": "64",
-      },
-      "slaves": ["slave195-c1"],
     },
     "nougat_phone": {
       "slave_data": {
