@@ -30,14 +30,15 @@ DEPS = [
 ]
 
 _DEFAULT_ANALYZE_TARGETS = [
-    '//chrome/android:monochrome_public_apk',
+    '//chrome/android:monochrome_public_minimal_apks',
     '//tools/binary_size:binary_size_trybot_py',
 ]
 _DEFAULT_COMPILE_TARGETS = [
-    'monochrome_public_apk',
+    'monochrome_public_minimal_apks',
     'monochrome_static_initializers',
 ]
-_APK_NAME = 'MonochromePublic.apk'
+_DEFAULT_APK_NAME = 'MonochromePublic.minimal.apks'
+
 _PATCH_FIXED_BUILD_STEP_NAME = (
     'Not measuring binary size because build is broken without patch.')
 _NDJSON_GS_BUCKET = 'chromium-binary-size-trybot-results'
@@ -59,10 +60,13 @@ PROPERTIES = {
     'compile_targets': recipe_api.Property(
         kind=list, default=_DEFAULT_COMPILE_TARGETS,
         help='Unqualified targets to compile.'),
+    'apk_name': recipe_api.Property(
+        kind=str, default=_DEFAULT_APK_NAME,
+        help='Filename of the built apk or .minimal.apks to measure'),
 }
 
 
-def RunSteps(api, analyze_targets, compile_targets):
+def RunSteps(api, analyze_targets, compile_targets, apk_name):
   assert api.tryserver.is_tryserver
 
   with api.chromium.chromium_layout():
@@ -96,7 +100,7 @@ def RunSteps(api, analyze_targets, compile_targets):
     api.chromium.ensure_goma()
     with api.tempfile.temp_dir('binary-size-trybot') as staging_dir:
       with_results_dir = _BuildAndMeasure(
-          api, True, compile_targets, staging_dir)
+          api, True, compile_targets, apk_name, staging_dir)
 
       with api.context(cwd=api.chromium_checkout.working_dir):
         api.bot_update.deapply_patch(bot_update_step)
@@ -106,7 +110,7 @@ def RunSteps(api, analyze_targets, compile_targets):
         try:
           api.chromium.runhooks(name='runhooks' + suffix)
           without_results_dir = _BuildAndMeasure(
-              api, False, compile_targets, staging_dir)
+              api, False, compile_targets, apk_name, staging_dir)
         except api.step.StepFailure:
           api.python.succeeding_step(_PATCH_FIXED_BUILD_STEP_NAME, '')
           return
@@ -123,13 +127,13 @@ def RunSteps(api, analyze_targets, compile_targets):
       with api.context(cwd=api.path['checkout']):
         results_path = staging_dir.join('results.json')
 
-        _CreateDiffs(api, author, without_results_dir, with_results_dir,
-                     results_path, staging_dir)
+        _CreateDiffs(api, apk_name, author, without_results_dir,
+                     with_results_dir, results_path, staging_dir)
         _CheckForUndocumentedIncrease(api, results_path, staging_dir,
                                       size_footers)
 
 
-def _BuildAndMeasure(api, with_patch, compile_targets, staging_dir):
+def _BuildAndMeasure(api, with_patch, compile_targets, apk_name, staging_dir):
   suffix = ' (with patch)' if with_patch else ' (without patch)'
   results_basename = 'with_patch' if with_patch else 'without_patch'
 
@@ -138,7 +142,7 @@ def _BuildAndMeasure(api, with_patch, compile_targets, staging_dir):
   results_dir = staging_dir.join(results_basename)
   api.file.ensure_directory('mkdir ' + results_basename, results_dir)
 
-  apk_path = api.chromium_android.apk_path(_APK_NAME)
+  apk_path = api.chromium_android.apk_path(apk_name)
   # Can't use api.chromium_android.resource_sizes() without it trying to upload
   # the results.
   api.python(
@@ -153,7 +157,7 @@ def _BuildAndMeasure(api, with_patch, compile_targets, staging_dir):
       'resource_sizes result{}'.format(suffix),
       results_dir.join('results-chart.json'))
 
-  size_path = results_dir.join(_APK_NAME + '.size')
+  size_path = results_dir.join(apk_name + '.size')
   api.chromium_android.supersize_archive(
       apk_path, size_path, step_suffix=suffix)
   return results_dir
@@ -204,7 +208,8 @@ def _CheckForUndocumentedIncrease(api, results_path, staging_dir, size_footers):
     raise api.step.StepFailure('Undocumented size increase detected')
 
 
-def _CreateDiffs(api, author, before_dir, after_dir, results_path, staging_dir):
+def _CreateDiffs(api, apk_name, author, before_dir, after_dir, results_path,
+                 staging_dir):
   checker_script = api.path['checkout'].join(
       'tools', 'binary_size', 'trybot_commit_size_checker.py')
 
@@ -212,7 +217,7 @@ def _CreateDiffs(api, author, before_dir, after_dir, results_path, staging_dir):
       '--author',
       author,
       '--apk-name',
-      _APK_NAME,
+      apk_name,
       '--before-dir',
       before_dir,
       '--after-dir',

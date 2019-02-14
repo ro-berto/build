@@ -390,7 +390,7 @@
       "[BUILDER_CACHE]/android_binary_size/src/tools/mb/mb_config.pyl",
       "-v",
       "//out/Release",
-      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"//chrome/android:monochrome_public_apk\", \"//tools/binary_size:binary_size_trybot_py\"]}",
+      "{\"additional_compile_targets\": [], \"files\": [\"foo.cc\"], \"test_targets\": [\"//chrome/android:monochrome_public_minimal_apks\", \"//tools/binary_size:binary_size_trybot_py\"]}",
       "/path/to/tmp/json"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
@@ -402,12 +402,12 @@
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"//chrome/android:monochrome_public_apk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"//chrome/android:monochrome_public_minimal_apks\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"//tools/binary_size:binary_size_trybot_py\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ], @@@",
       "@@@STEP_LOG_LINE@json.output@  \"status\": \"Found dependency\", @@@",
       "@@@STEP_LOG_LINE@json.output@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"monochrome_public_apk\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"monochrome_public_minimal_apks\", @@@",
       "@@@STEP_LOG_LINE@json.output@    \"monochrome_static_initializers\"@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
@@ -415,23 +415,23 @@
       "@@@STEP_LOG_LINE@analyze_details@{@@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"additional_compile_targets\": null, @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"//chrome/android:monochrome_public_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"//chrome/android:monochrome_public_minimal_apks\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"//tools/binary_size:binary_size_trybot_py\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"monochrome_public_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"monochrome_public_minimal_apks\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"monochrome_static_initializers\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.compile_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"//chrome/android:monochrome_public_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"//chrome/android:monochrome_public_minimal_apks\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"//tools/binary_size:binary_size_trybot_py\", @@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"monochrome_public_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"monochrome_public_minimal_apks\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"monochrome_static_initializers\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"self.m.filter.test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"monochrome_public_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"monochrome_public_minimal_apks\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"monochrome_static_initializers\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ], @@@",
       "@@@STEP_LOG_LINE@analyze_details@  \"test_targets\": [@@@",
-      "@@@STEP_LOG_LINE@analyze_details@    \"//chrome/android:monochrome_public_apk\", @@@",
+      "@@@STEP_LOG_LINE@analyze_details@    \"//chrome/android:monochrome_public_minimal_apks\", @@@",
       "@@@STEP_LOG_LINE@analyze_details@    \"//tools/binary_size:binary_size_trybot_py\"@@@",
       "@@@STEP_LOG_LINE@analyze_details@  ]@@@",
       "@@@STEP_LOG_LINE@analyze_details@}@@@",
@@ -627,7 +627,7 @@
       "[BUILDER_CACHE]/android_binary_size/src/out/Release",
       "-j",
       "20",
-      "monochrome_public_apk",
+      "monochrome_public_minimal_apks",
       "monochrome_static_initializers"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
@@ -646,7 +646,7 @@
       "[BUILDER_CACHE]/android_binary_size/src/out/Release",
       "-j",
       "20",
-      "monochrome_public_apk",
+      "monochrome_public_minimal_apks",
       "monochrome_static_initializers",
       "-d",
       "explain",
@@ -767,7 +767,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/android_binary_size/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/android_binary_size/src/out/Release\", \"-j\", 20, \"monochrome_public_apk\", \"monochrome_static_initializers\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/android_binary_size/src/out/Release\", \"-j\", 20, \"monochrome_public_minimal_apks\", \"monochrome_static_initializers\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -852,7 +852,7 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/android_binary_size/src/build/android/resource_sizes.py",
-      "[BUILDER_CACHE]/android_binary_size/src/out/Release/apks/MonochromePublic.apk",
+      "[BUILDER_CACHE]/android_binary_size/src/out/Release/apks/MonochromePublic.minimal.apks",
       "--chartjson",
       "--output-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1/with_patch",
@@ -862,7 +862,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "resource_sizes (MonochromePublic.apk) (with patch)"
+    "name": "resource_sizes (MonochromePublic.minimal.apks) (with patch)"
   },
   {
     "cmd": [
@@ -897,15 +897,15 @@
     "cmd": [
       "[BUILDER_CACHE]/android_binary_size/src/tools/binary_size/supersize",
       "archive",
-      "[CLEANUP]/binary-size-trybot_tmp_1/with_patch/MonochromePublic.apk.size",
+      "[CLEANUP]/binary-size-trybot_tmp_1/with_patch/MonochromePublic.minimal.apks.size",
       "-f",
-      "[BUILDER_CACHE]/android_binary_size/src/out/Release/apks/MonochromePublic.apk",
+      "[BUILDER_CACHE]/android_binary_size/src/out/Release/apks/MonochromePublic.minimal.apks",
       "-v"
     ],
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "supersize archive (MonochromePublic.apk) (with patch)"
+    "name": "supersize archive (MonochromePublic.minimal.apks) (with patch)"
   },
   {
     "cmd": [
@@ -1228,7 +1228,7 @@
       "[BUILDER_CACHE]/android_binary_size/src/out/Release",
       "-j",
       "20",
-      "monochrome_public_apk",
+      "monochrome_public_minimal_apks",
       "monochrome_static_initializers"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
@@ -1247,7 +1247,7 @@
       "[BUILDER_CACHE]/android_binary_size/src/out/Release",
       "-j",
       "20",
-      "monochrome_public_apk",
+      "monochrome_public_minimal_apks",
       "monochrome_static_initializers",
       "-d",
       "explain",
@@ -1368,7 +1368,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]/android_binary_size/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/android_binary_size/src/out/Release\", \"-j\", 20, \"monochrome_public_apk\", \"monochrome_static_initializers\"]",
+      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/android_binary_size/src/out/Release\", \"-j\", 20, \"monochrome_public_minimal_apks\", \"monochrome_static_initializers\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1454,7 +1454,7 @@
       "python",
       "-u",
       "[BUILDER_CACHE]/android_binary_size/src/build/android/resource_sizes.py",
-      "[BUILDER_CACHE]/android_binary_size/src/out/Release/apks/MonochromePublic.apk",
+      "[BUILDER_CACHE]/android_binary_size/src/out/Release/apks/MonochromePublic.minimal.apks",
       "--chartjson",
       "--output-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1/without_patch",
@@ -1465,7 +1465,7 @@
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "resource_sizes (MonochromePublic.apk) (without patch)"
+    "name": "resource_sizes (MonochromePublic.minimal.apks) (without patch)"
   },
   {
     "cmd": [
@@ -1502,16 +1502,16 @@
     "cmd": [
       "[BUILDER_CACHE]/android_binary_size/src/tools/binary_size/supersize",
       "archive",
-      "[CLEANUP]/binary-size-trybot_tmp_1/without_patch/MonochromePublic.apk.size",
+      "[CLEANUP]/binary-size-trybot_tmp_1/without_patch/MonochromePublic.minimal.apks.size",
       "-f",
-      "[BUILDER_CACHE]/android_binary_size/src/out/Release/apks/MonochromePublic.apk",
+      "[BUILDER_CACHE]/android_binary_size/src/out/Release/apks/MonochromePublic.minimal.apks",
       "-v"
     ],
     "cwd": "[BUILDER_CACHE]/android_binary_size/src",
     "env": {
       "CHROME_HEADLESS": "1"
     },
-    "name": "supersize archive (MonochromePublic.apk) (without patch)"
+    "name": "supersize archive (MonochromePublic.minimal.apks) (without patch)"
   },
   {
     "cmd": [
@@ -1709,7 +1709,7 @@
       "--author",
       "foo@bar.com",
       "--apk-name",
-      "MonochromePublic.apk",
+      "MonochromePublic.minimal.apks",
       "--before-dir",
       "[CLEANUP]/binary-size-trybot_tmp_1/without_patch",
       "--after-dir",
