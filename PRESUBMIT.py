@@ -36,12 +36,13 @@ def GetBlackList(input_api):
   ]
 
 
-def CommonChecks(input_api, output_api):
+def CommitChecks(input_api, output_api):
   def join(*args):
     return input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
 
   output = []
 
+  # Run pylint.
   vpython = 'vpython.bat' if input_api.is_windows else 'vpython'
   infra_path = input_api.subprocess.check_output(
       [vpython, 'scripts/common/env.py', 'print']).split()
@@ -65,12 +66,6 @@ def CommonChecks(input_api, output_api):
 
   output.extend(CheckExternalBuildersPylMastersAreInSync(input_api, output_api))
 
-  return output
-
-
-def CommitChecks(input_api, output_api):
-  def join(*args):
-    return input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
   tests = []
 
   # masters_test can be very slow, so only add it if relevant files have been
@@ -145,13 +140,13 @@ def CommitChecks(input_api, output_api):
 
   # Fetch recipe dependencies once in serial so that we don't hit a race
   # condition where multiple tests are trying to fetch at once.
-  output = input_api.RunTests([input_api.Command(
+  output.extend(input_api.RunTests([input_api.Command(
       name='recipes fetch',
       cmd=[input_api.python_executable,
            input_api.os_path.join('scripts', 'slave', 'recipes.py'), 'fetch'],
       kwargs={},
       message=output_api.PresubmitError,
-  )])
+  )]))
   # Run the tests.
   output.extend(input_api.RunTests(tests))
 
@@ -170,6 +165,7 @@ def BuildInternalCheck(output, input_api, output_api):
           'Updating it may resolve some issues.')]
   return []
 
+
 def CheckExternalBuildersPylMastersAreInSync(input_api, output_api):
   script_path = input_api.os_path.join('scripts', 'tools', 'buildbot-tool')
   proc = input_api.subprocess.Popen([
@@ -184,12 +180,8 @@ def CheckExternalBuildersPylMastersAreInSync(input_api, output_api):
                                       '%d:\n%s\n' % (proc.returncode, out))]
   return []
 
-def CheckChangeOnUpload(input_api, output_api):
-  return CommonChecks(input_api, output_api)
-
 
 def CheckChangeOnCommit(input_api, output_api):
-  output = CommonChecks(input_api, output_api)
-  output.extend(CommitChecks(input_api, output_api))
+  output = CommitChecks(input_api, output_api)
   output.extend(BuildInternalCheck(output, input_api, output_api))
   return output
