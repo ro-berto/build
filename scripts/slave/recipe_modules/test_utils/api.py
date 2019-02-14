@@ -182,8 +182,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
       sort_by_shard - sort the order of triggering depends on the number of
                       shards.
     Returns:
-      A tuple of (list of tests with invalid results,
-                  list of tests which failed)
+      The list of failed tests.
 
 
     """
@@ -214,20 +213,11 @@ class TestUtilsApi(recipe_api.RecipeApi):
       for group in groups:
         group.pre_run(caller_api, suffix)
 
-    for group in groups:
-      group.run(caller_api, suffix)
-
     failed_tests = []
-    invalid_results = []
-    for test in tests:
-      # Note that this is technically O(n^2). We expect n to be small.
-      if not test.has_valid_results(caller_api, suffix):
-        invalid_results.append(test)
-      elif test.deterministic_failures(
-          caller_api, suffix) and test not in failed_tests:
-        failed_tests.append(test)
+    for group in groups:
+      failed_tests.extend(group.run(caller_api, suffix))
 
-    return invalid_results, failed_tests
+    return failed_tests
 
   def run_tests_with_patch(self, caller_api, tests):
     """Run tests and returns failures.
@@ -244,16 +234,23 @@ class TestUtilsApi(recipe_api.RecipeApi):
           otherwise unspecified reasons. This is a superset of
           invalid_test_suites.
     """
-    invalid_test_suites, all_failing_tests = self.run_tests(
-        caller_api, tests, 'with patch', sort_by_shard=True)
+    all_failing_tests = self.run_tests(caller_api, tests, 'with patch',
+                                       sort_by_shard=True)
+    invalid_test_suites = []
 
-    for t in invalid_test_suites:
-      self._invalid_test_results(t)
+    for t in tests:
+      valid_results, failures = t.with_patch_failures(caller_api)
 
-      # No need to re-add a test_suite that is already in the list.
-      if t not in all_failing_tests:
+      if not valid_results:
+        self._invalid_test_results(t)
+        invalid_test_suites.append(t)
+
+      # No need to re-add a test_suite that is already in the return list.
+      if t in all_failing_tests:
+        continue
+
+      if not valid_results or failures:
         all_failing_tests.append(t)
-
     return (invalid_test_suites, all_failing_tests)
 
   def _invalid_test_results(self, test):
@@ -559,6 +556,8 @@ class TestGroup(object):
     Args:
       caller_api - The api object given by the caller of this module.
       suffix - The test name suffix.
+    Returns:
+      A list of failed tests.
     """
     raise NotImplementedError()
 
@@ -587,6 +586,8 @@ class LocalGroup(TestGroup):
     """Executes the |run| method of each test."""
     for t in self._tests:
       self._run_func(t, t.run, caller_api, suffix, True)
+
+    return self._failed_tests
 
 
 class SwarmingGroup(TestGroup):
@@ -645,3 +646,5 @@ class SwarmingGroup(TestGroup):
         # We won't collect any already collected tasks, as they're removed from
         # self._task_ids_to_test
         self._run_func(test, test.run, caller_api, suffix, True)
+
+    return self._failed_tests

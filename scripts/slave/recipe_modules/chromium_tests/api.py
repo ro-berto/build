@@ -312,12 +312,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
       failed_tests = []
       for tl in tests_list:
-        invalid_ts, failed_ts = self.m.test_utils.run_tests(self.m, tl, suffix)
+        failed_ts = self.m.test_utils.run_tests(self.m, tl, suffix)
         failed_tests.extend(failed_ts)
-        # TODO(martiniss): Cover this line
-        for t in invalid_ts: # pragma: no cover
-          if t not in failed_tests:
-            failed_tests.append(t)
 
       self.m.swarming.report_stats()
 

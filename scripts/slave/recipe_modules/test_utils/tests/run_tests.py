@@ -42,7 +42,7 @@ def RunSteps(api, test_swarming, test_name, abort_on_failure):
         api.chromium_tests.steps.MockTest(name='test2')
     ]
 
-  _, failed_tests = api.test_utils.run_tests(
+  failed_tests = api.test_utils.run_tests(
       api.chromium_tests.m, tests, '')
   if failed_tests:
     raise api.step.StepFailure(
