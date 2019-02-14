@@ -691,6 +691,8 @@
       "--tag",
       "purpose:CI",
       "--tag",
+      "purpose:layout-test",
+      "--tag",
       "purpose:luci",
       "--tag",
       "purpose:post-commit",

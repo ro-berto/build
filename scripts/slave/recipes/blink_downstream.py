@@ -252,6 +252,7 @@ def RunSteps(api):
   api.swarming.add_default_tag('purpose:CI')
   api.swarming.add_default_tag('purpose:luci')
   api.swarming.add_default_tag('purpose:post-commit')
+  api.swarming.add_default_tag('purpose:layout-test')
 
   # Sync component to current component revision.
   component_revision = api.buildbucket.gitiles_commit.id or 'HEAD'
