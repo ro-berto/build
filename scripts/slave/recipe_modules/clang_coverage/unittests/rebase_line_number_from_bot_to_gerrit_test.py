@@ -55,15 +55,34 @@ class RebaseLineNumberFromBotToGerritTest(unittest.TestCase):
         [os.path.basename(file_on_bot_path)])
 
   @mock.patch.object(gerrit_util, 'fetch_files_content')
-  def test_rebase_line_number_deleted_file(self, mocked_fetch_files_content):
-    file_on_gerrit_content = ('line one\n')
-    mocked_fetch_files_content.return_value = [file_on_gerrit_content]
+  def test_rebase_line_number_with_deleted_file(self,
+                                                mocked_fetch_files_content):
+    mocked_fetch_files_content.return_value = ['test line\n']
+    file_on_bot = tempfile.NamedTemporaryFile()
+    file_on_bot.write('test line\n')
+    file_on_bot.flush()
+
+    file_on_bot_path = file_on_bot.name
+    rebase_line_number_from_bot_to_gerrit.rebase_line_number(
+            self.host, self.project, self.change, self.patchset,
+            os.path.dirname(file_on_bot_path),
+            [os.path.basename(file_on_bot_path), 'non_exist_file'])
+
+    mocked_fetch_files_content.assert_called_with(
+        self.host, self.project, self.change, self.patchset,
+        [os.path.basename(file_on_bot_path)])
+
+  @mock.patch.object(gerrit_util, 'fetch_files_content')
+  def test_rebase_line_number_with_deleted_file_only(
+      self, mocked_fetch_files_content):
     file_to_line_num_mapping = (
         rebase_line_number_from_bot_to_gerrit.rebase_line_number(
             self.host, self.project, self.change, self.patchset, '/checkout',
             ['non_exist_file']))
 
-    self.assertEqual({}, file_to_line_num_mapping)
+    mocked_fetch_files_content.assert_called_with(
+        self.host, self.project, self.change, self.patchset, [])
+    self.assertDictEqual({}, file_to_line_num_mapping)
 
 
 if __name__ == '__main__':
