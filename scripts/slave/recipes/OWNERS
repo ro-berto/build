@@ -37,6 +37,7 @@ per-file gpu.py=kbr@chromium.org
 per-file nacl.py=bradnelson@chromium.org
 per-file nacl.py=dschuff@chromium.org
 per-file nacl.py=sbc@chromium.org
+per-file openscreen.py=file:openscreen.expected/OWNERS
 per-file pdfium.py=file:pdfium.expected/OWNERS
 per-file polymer.py=dfreedm@chromium.org
 per-file polymer.py=mmcnulty@chromium.org

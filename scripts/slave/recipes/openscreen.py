@@ -36,7 +36,7 @@ def RunSteps(api):
   build_root = api.path['start_dir']
   openscreen_root = build_root.join('openscreen')
   repository = api.properties['repository']
-  is_debug = api.properties.get('debug', False)
+
   api.git.checkout(
       repository, dir_path=openscreen_root,
       ref=api.tryserver.gerrit_change_fetch_ref, recursive=True)
@@ -47,9 +47,14 @@ def RunSteps(api):
     api.step('install build tools',
              [checkout_path.join('tools', 'install-build-tools.sh'),
               _GetHostToolLabel(api.platform)])
+
+    is_debug = str(api.properties.get('debug', False)).lower()
+    is_asan = str(api.properties.get('is_asan', False)).lower()
     api.step('gn gen',
              [checkout_path.join('gn'), 'gen', output_path,
-              '--args=is_debug=' + str(is_debug).lower()])
+              '--args=is_debug={} is_asan={}'.format(is_debug, is_asan)
+              ])
+
     # NOTE: The following just runs Ninja without setting up the Mac toolchain
     # if this is being run on a non-Mac platform.
     with api.osx_sdk('mac'):
@@ -70,6 +75,7 @@ def GenTests(api):
       api.properties(
           repository=OPENSCREEN_REPO,
           debug=True,
+          is_asan=True
       )
   )
   yield (
@@ -79,5 +85,6 @@ def GenTests(api):
       api.properties(
           repository=OPENSCREEN_REPO,
           debug=True,
+          is_asan=False
       )
   )
