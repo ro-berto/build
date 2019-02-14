@@ -47,12 +47,6 @@
       "bot": "build3-b1",
       "category": "1ToTAndroid",
     },
-    "ToTAndroidCFI": {
-      "mixins": ["trusty"],
-      "bot": "slave153-c1",
-      "category": "1ToTAndroid",
-      "no_output_timeout_s": 24000,
-    },
 
     "ToTMac": {
       "bot_pool": "build98-m1",
