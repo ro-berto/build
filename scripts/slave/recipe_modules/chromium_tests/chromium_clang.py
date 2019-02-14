@@ -192,6 +192,16 @@ SPEC = {
         steps.MiniInstallerTest(),
         steps.SizesStep(RESULTS_URL, 'ToTWinThinLTO64')
       ],
+      'swarming_server': 'https://chrome-swarming.appspot.com',
+      # TODO(929099): check if 'swarming_service_account' is required, or can be
+      # removed
+      'swarming_service_account': 'chrome-ci-builder',
+      'isolate_server': 'https://chrome-isolated.appspot.com',
+      'isolate_service_account': 'chrome-ci-builder',
+      'swarming_dimensions': {
+        'pool': 'chrome.tests',
+        'os': 'Windows-10',
+      },
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
@@ -401,6 +411,7 @@ SPEC = {
       'isolate_service_account': 'chrome-ci-builder',
       'swarming_dimensions': {
         'pool': 'chrome.tests',
+        'os': 'Windows-10',
       },
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
@@ -468,6 +479,16 @@ SPEC = {
         steps.MiniInstallerTest(),
         steps.SizesStep(RESULTS_URL, 'ToTWin64'),
       ],
+      'swarming_server': 'https://chrome-swarming.appspot.com',
+      # TODO(929099): check if 'swarming_service_account' is required, or can be
+      # removed
+      'swarming_service_account': 'chrome-ci-builder',
+      'isolate_server': 'https://chrome-isolated.appspot.com',
+      'isolate_service_account': 'chrome-ci-builder',
+      'swarming_dimensions': {
+        'pool': 'chrome.tests',
+        'os': 'Windows-10',
+      },
       # Workaround so that recipes doesn't add random build targets to our
       # compile line. We want to build everything.
       'add_tests_as_compile_targets': False,
