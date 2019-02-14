@@ -273,7 +273,7 @@
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
-      "webkit_layout_tests_exparchive\n",
+      "blink_web_tests_exparchive\n",
       "//out/Debug"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src",
@@ -283,7 +283,7 @@
     },
     "name": "generate_build_files (with patch)",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@webkit_layout_tests_exparchive@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@blink_web_tests_exparchive@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
@@ -612,19 +612,19 @@
       "--blacklist",
       ".git",
       "--isolate",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src/out/Debug/webkit_layout_tests_exparchive.isolate",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src/out/Debug/blink_web_tests_exparchive.isolate",
       "--isolated",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src/out/Debug/webkit_layout_tests_exparchive.isolated"
+      "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src/out/Debug/blink_web_tests_exparchive.isolated"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
-    "name": "isolate webkit_layout_tests_exparchive (with patch)",
+    "name": "isolate blink_web_tests_exparchive (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"webkit_layout_tests_exparchive\": \"[dummy hash for webkit_layout_tests_exparchive]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"blink_web_tests_exparchive\": \"[dummy hash for blink_web_tests_exparchive]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"webkit_layout_tests_exparchive\": \"[dummy hash for webkit_layout_tests_exparchive]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"blink_web_tests_exparchive\": \"[dummy hash for blink_web_tests_exparchive]\"}@@@"
     ]
   },
   {
@@ -678,7 +678,7 @@
       "--tag",
       "buildnumber:571",
       "--tag",
-      "data:[dummy hash for webkit_layout_tests_exparchive]",
+      "data:[dummy hash for blink_web_tests_exparchive]",
       "--tag",
       "master:client.v8.fyi",
       "--tag",
@@ -718,7 +718,7 @@
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
       "--isolated",
-      "[dummy hash for webkit_layout_tests_exparchive]",
+      "[dummy hash for blink_web_tests_exparchive]",
       "--",
       "--num-retries=3",
       "--additional-expectations",
@@ -920,7 +920,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"webkit_layout_tests (with patch)\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"webkit_layout_tests_exparchive\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"blink_web_tests_exparchive\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": true, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"10000\", @@@",
@@ -1163,7 +1163,7 @@
       "--goma-dir",
       "[GOMA_CACHE]/client",
       "--swarming-targets-file",
-      "webkit_layout_tests_exparchive\n",
+      "blink_web_tests_exparchive\n",
       "//out/Debug"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src",
@@ -1173,7 +1173,7 @@
     },
     "name": "generate_build_files (without patch)",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@swarming-targets-file.txt@webkit_layout_tests_exparchive@@@",
+      "@@@STEP_LOG_LINE@swarming-targets-file.txt@blink_web_tests_exparchive@@@",
       "@@@STEP_LOG_END@swarming-targets-file.txt@@@"
     ]
   },
@@ -1502,19 +1502,19 @@
       "--blacklist",
       ".git",
       "--isolate",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src/out/Debug/webkit_layout_tests_exparchive.isolate",
+      "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src/out/Debug/blink_web_tests_exparchive.isolate",
       "--isolated",
-      "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src/out/Debug/webkit_layout_tests_exparchive.isolated"
+      "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_/src/out/Debug/blink_web_tests_exparchive.isolated"
     ],
     "cwd": "[BUILDER_CACHE]/V8_Blink_Linux_64__dbg_",
-    "name": "isolate webkit_layout_tests_exparchive (without patch)",
+    "name": "isolate blink_web_tests_exparchive (without patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"webkit_layout_tests_exparchive\": \"[dummy hash for webkit_layout_tests_exparchive]\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"blink_web_tests_exparchive\": \"[dummy hash for blink_web_tests_exparchive]\"@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
       "@@@STEP_LOG_END@json.output@@@",
       "@@@SET_BUILD_PROPERTY@isolate_server@\"https://isolateserver.appspot.com\"@@@",
-      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"webkit_layout_tests_exparchive\": \"[dummy hash for webkit_layout_tests_exparchive]\"}@@@"
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"blink_web_tests_exparchive\": \"[dummy hash for blink_web_tests_exparchive]\"}@@@"
     ]
   },
   {
@@ -1568,7 +1568,7 @@
       "--tag",
       "buildnumber:571",
       "--tag",
-      "data:[dummy hash for webkit_layout_tests_exparchive]",
+      "data:[dummy hash for blink_web_tests_exparchive]",
       "--tag",
       "master:client.v8.fyi",
       "--tag",
@@ -1608,7 +1608,7 @@
       "VPYTHON_VIRTUALENV_ROOT",
       ".swarming_module_cache/vpython",
       "--isolated",
-      "[dummy hash for webkit_layout_tests_exparchive]",
+      "[dummy hash for blink_web_tests_exparchive]",
       "--",
       "--num-retries=3",
       "--additional-expectations",
@@ -1731,7 +1731,7 @@
       "@@@STEP_LOG_LINE@step_metadata@    \"pool\": \"Chrome\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"full_step_name\": \"webkit_layout_tests (without patch)\", @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"webkit_layout_tests_exparchive\", @@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"isolate_target_name\": \"blink_web_tests_exparchive\", @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"patched\": false, @@@",
       "@@@STEP_LOG_LINE@step_metadata@  \"swarm_task_ids\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"1100100\", @@@",

@@ -95,14 +95,14 @@ def build(api, suffix):
     suffix: Step name suffix to disambiguate repeated calls.
   """
   api.chromium_tests.run_mb_and_compile(
-      ['blink_tests'], ['webkit_layout_tests_exparchive'],
+      ['blink_tests'], ['blink_web_tests_exparchive'],
       name_suffix=suffix,
   )
 
   api.isolate.isolate_tests(
           api.chromium.output_dir,
           suffix=suffix,
-          targets=['webkit_layout_tests_exparchive'],
+          targets=['blink_web_tests_exparchive'],
           verbose=True)
 
 
@@ -141,7 +141,7 @@ class DetermineFailuresTool(object):
     test = self.api.chromium_tests.steps.SwarmingIsolatedScriptTest(
         name='webkit_layout_tests',
         args=self.test_args,
-        target_name='webkit_layout_tests_exparchive',
+        target_name='blink_web_tests_exparchive',
         shards=num_shards,
         merge={
           'args': ['--verbose'],
