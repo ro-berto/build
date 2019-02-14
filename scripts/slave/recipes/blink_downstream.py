@@ -241,6 +241,10 @@ def RunSteps(api):
 
   # Set up swarming.
   api.swarming.default_priority = bot_config['swarming_priority']
+  if api.swarming.default_priority > 25:
+    # Allow builders with low priority testing tasks to wait longer for their
+    # tasks. I.e. prefer slow build cycle time to infra failure.
+    api.swarming.default_expiration = 7200
   api.swarming.set_default_dimension('gpu', 'none')
   api.swarming.set_default_dimension('os', OS_MAPPING[api.platform.name])
   api.swarming.set_default_dimension('pool', 'Chrome')

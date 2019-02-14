@@ -654,7 +654,7 @@
       "--dump-json",
       "/path/to/tmp/json",
       "--expiration",
-      "3600",
+      "7200",
       "--io-timeout",
       "1200",
       "--hard-timeout",
