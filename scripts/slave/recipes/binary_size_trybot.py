@@ -73,9 +73,9 @@ def RunSteps(api, analyze_targets, compile_targets):
     api.chromium_android.set_config('base_config')
 
     revision_info = api.gerrit.get_revision_info(
-        api.properties['patch_gerrit_url'],
-        api.properties['patch_issue'],
-        api.properties['patch_set'])
+        'https://%s' % api.tryserver.gerrit_change.host,
+        api.tryserver.gerrit_change.change,
+        api.tryserver.gerrit_change.patchset)
     author = revision_info['commit']['author']['email']
     # get_footer returns a list of footer values.
     size_footers = api.tryserver.get_footer(
