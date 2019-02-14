@@ -53,12 +53,39 @@ def RunSteps(api):
       update_step = api.bot_update.ensure_checkout()
       assert update_step.json.output['did_run']
 
+    api.chromium.runhooks()
+    api.chromium.ensure_goma()
+
+  with api.step.nest('build'):
     depot_tools_path = api.path['checkout'].join('third_party', 'depot_tools')
     with api.context(env_prefixes={'PATH': [depot_tools_path]}):
-      api.chromium.runhooks()
-      api.chromium.ensure_goma()
       api.chromium.run_gn(use_goma=True)
       api.chromium.compile(use_goma_module=True)
+
+  build_output_path = api.chromium.c.build_dir.join(
+      api.chromium.c.build_config_fs)
+
+  with api.context(cwd=api.path['checkout']):
+    api.step('run cctest', [build_output_path.join('node_cctest')])
+
+    suites = [
+      'default',
+      # TODO(machenbach): Add those suites once they are built.
+      # 'addons',
+      # 'addons-napi',
+      # 'doctool',
+    ]
+
+    api.python(
+      name='run tests',
+      script=api.path.join('tools', 'test.py'),
+      args=[
+        '-p', 'tap',
+        '-j8',
+        '--mode=%s' % api.chromium.c.build_config_fs.lower(),
+        '--flaky-tests', 'run',
+      ] + suites,
+    )
 
 
 def _sanitize_nonalpha(*chunks):
