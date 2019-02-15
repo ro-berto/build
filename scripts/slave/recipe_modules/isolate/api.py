@@ -8,6 +8,13 @@ import sys
 from recipe_engine import recipe_api
 
 
+# Only surface up to these many isolate hashes via properties, to avoid
+# overflowing the field for a build.
+# This arbitrary number was selected to be the least surprising value that
+# is likely to work for the purpose above.
+_MAX_SWARM_HASHES_PROPERTY_LENGTH = 200
+
+
 class IsolateApi(recipe_api.RecipeApi):
   """APIs for interacting with isolates."""
 
@@ -265,7 +272,8 @@ class IsolateApi(recipe_api.RecipeApi):
       step_result.presentation.properties[
           'isolate_server'] = self._isolate_server
 
-      if swarm_hashes_property_name:
+      if (swarm_hashes_property_name
+          and len(swarm_hashes) <= _MAX_SWARM_HASHES_PROPERTY_LENGTH):
         step_result.presentation.properties[
             swarm_hashes_property_name] = swarm_hashes
 

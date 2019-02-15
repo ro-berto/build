@@ -2545,11 +2545,11 @@ Args:
 
 [DEPS](/scripts/slave/recipe_modules/isolate/__init__.py#5): [chromium](#recipe_modules-chromium), [swarming\_client](#recipe_modules-swarming_client), [depot\_tools/depot\_tools][depot_tools/recipe_modules/depot_tools], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/tempfile][recipe_engine/recipe_modules/tempfile]
 
-#### **class [IsolateApi](/scripts/slave/recipe_modules/isolate/api.py#11)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
+#### **class [IsolateApi](/scripts/slave/recipe_modules/isolate/api.py#18)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
 APIs for interacting with isolates.
 
-&mdash; **def [check\_swarm\_hashes](/scripts/slave/recipe_modules/isolate/api.py#54)(self, targets):**
+&mdash; **def [check\_swarm\_hashes](/scripts/slave/recipe_modules/isolate/api.py#61)(self, targets):**
 
 Asserts that all the targets in the passed list are present as keys in
 the 'swarm_hashes' property.
@@ -2560,18 +2560,18 @@ just fail later, on a 'trigger' step. But the main usefulness of this is
 that it automatically populates the 'swarm_hashes' property in testing
 context, so that it doesn't need to be manually specified through test_api.
 
-&mdash; **def [clean\_isolated\_files](/scripts/slave/recipe_modules/isolate/api.py#40)(self, build_dir):**
+&mdash; **def [clean\_isolated\_files](/scripts/slave/recipe_modules/isolate/api.py#47)(self, build_dir):**
 
 Cleans out all *.isolated files from the build directory in
 preparation for the compile. Needed in order to ensure isolates
 are rebuilt properly because their dependencies are currently not
 completely described to gyp.
 
-&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#320)(self, first_dir, second_dir):**
+&mdash; **def [compare\_build\_artifacts](/scripts/slave/recipe_modules/isolate/api.py#328)(self, first_dir, second_dir):**
 
 Compare the artifacts from 2 builds.
 
-&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#342)(self, isolate_hashes, step_name=None, \*\*kwargs):**
+&mdash; **def [compose](/scripts/slave/recipe_modules/isolate/api.py#350)(self, isolate_hashes, step_name=None, \*\*kwargs):**
 
 Creates and uploads a new isolate composing multiple existing isolates.
 
@@ -2585,7 +2585,7 @@ Args:
 Returns:
   Hash of the uploaded composite isolate.
 
-&mdash; **def [find\_isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#76)(self, build_dir, targets=None, \*\*kwargs):**
+&mdash; **def [find\_isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#83)(self, build_dir, targets=None, \*\*kwargs):**
 
 Returns a step which finds all *.isolated files in a build directory.
 
@@ -2600,11 +2600,11 @@ If |targets| is None, the step will use all *.isolated files it finds.
 Otherwise, it will verify that all |targets| are found and will use only
 them. If some expected targets are missing, will abort the build.
 
-&emsp; **@isolate_server.setter**<br>&mdash; **def [isolate\_server](/scripts/slave/recipe_modules/isolate/api.py#25)(self, value):**
+&emsp; **@isolate_server.setter**<br>&mdash; **def [isolate\_server](/scripts/slave/recipe_modules/isolate/api.py#32)(self, value):**
 
 Changes URL of Isolate server to use.
 
-&mdash; **def [isolate\_tests](/scripts/slave/recipe_modules/isolate/api.py#136)(self, build_dir, targets=None, verbose=False, swarm_hashes_property_name='swarm_hashes', step_name=None, suffix='', \*\*kwargs):**
+&mdash; **def [isolate\_tests](/scripts/slave/recipe_modules/isolate/api.py#143)(self, build_dir, targets=None, verbose=False, swarm_hashes_property_name='swarm_hashes', step_name=None, suffix='', \*\*kwargs):**
 
 Archives prepared tests in |build_dir| to isolate server.
 
@@ -2627,18 +2627,18 @@ Args:
     suffix: suffix of isolate_tests step.
         e.g. ' (with patch)', ' (without patch)'.
 
-&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#283)(self):**
+&emsp; **@property**<br>&mdash; **def [isolated\_tests](/scripts/slave/recipe_modules/isolate/api.py#291)(self):**
 
 The dictionary of 'target name -> isolated hash' for this run.
 
 These come either from the incoming swarm_hashes build property,
 or from calling find_isolated_tests, above, at some point during the run.
 
-&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#305)(self, name, isolate_hash, args=None, \*\*kwargs):**
+&mdash; **def [run\_isolated](/scripts/slave/recipe_modules/isolate/api.py#313)(self, name, isolate_hash, args=None, \*\*kwargs):**
 
 Runs an isolated test.
 
-&emsp; **@service_account_json.setter**<br>&mdash; **def [service\_account\_json](/scripts/slave/recipe_modules/isolate/api.py#35)(self, value):**
+&emsp; **@service_account_json.setter**<br>&mdash; **def [service\_account\_json](/scripts/slave/recipe_modules/isolate/api.py#42)(self, value):**
 
 Service account json to use.
 ### *recipe_modules* / [legion](/scripts/slave/recipe_modules/legion)
