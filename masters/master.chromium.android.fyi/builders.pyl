@@ -31,14 +31,6 @@
       "category": "5Cronet",
       "mergeRequests": True,
     },
-    "Nougat Phone Tester": {
-      "recipe": "chromium",
-      "use_remote_run": True,
-      "scheduler": None,
-      "slave_pools": ["nougat_phone"],
-      "category": "2Testers",
-      "mergeRequests": True,
-    },
   },
 
   "schedulers": {
@@ -64,16 +56,6 @@
         "bits": "64",
       },
       "slaves": ["slave221-c1"],
-    },
-    "nougat_phone": {
-      "slave_data": {
-        "os": "linux",
-        "version": "trusty",
-        "bits": 64,
-      },
-      "slaves": [
-        "slave13-c1",
-      ],
     },
   }
 }
