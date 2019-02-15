@@ -443,9 +443,6 @@ class V8Api(recipe_api.RecipeApi):
     self.m.swarming.default_idempotent = True
     self.m.swarming.task_output_stdout = 'all'
 
-    # TODO(tikuta): Remove this after the switch (crbug.com/894045).
-    self.m.swarming.use_go_client = True
-
     if self.m.properties['mastername'] == 'tryserver.v8':
       self.m.swarming.add_default_tag('purpose:pre-commit')
       self.m.swarming.default_priority = 30

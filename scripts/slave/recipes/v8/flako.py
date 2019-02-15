@@ -521,9 +521,6 @@ def setup_swarming(api, swarming_dimensions, swarming_priority):
   api.swarming.set_default_dimension('gpu', 'none')
   api.swarming.task_output_stdout = 'all'
 
-  # TODO(tikuta): Remove this after the switch (crbug.com/894045).
-  api.swarming.use_go_client = True
-
   for item in swarming_dimensions:
     k, v = item.split(':')
     api.swarming.set_default_dimension(k, v)
