@@ -197,7 +197,7 @@ class SendResultsToDashboardTest(unittest.TestCase):
         histograms_file='foo.json',
         chromium_checkout_path='/some/path/',
         test_name='sunspider',
-        bot='linux',
+        bot='Builder',
         buildername='Builder',
         buildnumber=123,
         revisions_dict={'--chromium_commit_positions': 343},

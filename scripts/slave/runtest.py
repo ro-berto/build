@@ -476,7 +476,7 @@ def _SendResultsToDashboard(log_processor, args):
     histograms_file = log_processor.HistogramFilename()
     chromium_checkout = os.getcwd()
     testname = args['test']
-    bot = args['system']
+    bot = args['buildername']
     buildername = args['buildername']
     buildnumber = args['buildnumber']
     revisions_dict = {
