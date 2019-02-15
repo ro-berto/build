@@ -316,7 +316,6 @@
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    null, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"exit_code\": \"0\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"internal_failure\": false, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"state\": \"COMPLETED\"@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    }@@@",

@@ -477,7 +477,6 @@ def GenTests(api):
       {
         'state': 'COMPLETED',
         'internal_failure': False,
-        'exit_code': '0',
       }
     ]
   }
@@ -530,7 +529,6 @@ def GenTests(api):
       {
         'state': 'COMPLETED',
         'internal_failure': False,
-        'exit_code': '0',
       },
     ]
   }
@@ -567,18 +565,15 @@ def GenTests(api):
       {
         'state': 'COMPLETED',
         'internal_failure': False,
-        'exit_code': '0',
       },
       {
         'state': 'COMPLETED',
         'internal_failure': False,
-        'exit_code': '0',
         'deduped_from': None,
       },
       {
         'state': 'COMPLETED',
         'internal_failure': False,
-        'exit_code': '0',
         'deduped_from': 'deadbeef',
       },
     ]

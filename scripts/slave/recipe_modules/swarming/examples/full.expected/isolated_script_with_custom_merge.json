@@ -325,7 +325,6 @@
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"exit_code\": \"0\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"internal_failure\": false, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"state\": \"COMPLETED\"@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    }@@@",
@@ -335,7 +334,7 @@
       "@@@STEP_LOG_LINE@Merge script log@Merged succesfully@@@",
       "@@@STEP_LOG_END@Merge script log@@@",
       "@@@STEP_LOG_LINE@outdir_json@{@@@",
-      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"state\\\": \\\"COMPLETED\\\", \\\"exit_code\\\": \\\"0\\\"}]}\"@@@",
+      "@@@STEP_LOG_LINE@outdir_json@  \"summary.json\": \"{\\\"shards\\\": [{\\\"internal_failure\\\": false, \\\"state\\\": \\\"COMPLETED\\\"}]}\"@@@",
       "@@@STEP_LOG_LINE@outdir_json@}@@@",
       "@@@STEP_LOG_END@outdir_json@@@",
       "@@@STEP_LINK@custom_link@http://example.com@@@"
