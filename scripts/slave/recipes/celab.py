@@ -136,8 +136,7 @@ def _RunTests(api, checkout, pool_name, pool_size):
         'run_tests.py',
         [
           '--hosts', host_dir,
-          # TODO: Use SharedProviderStorage when its checked in.
-          #'--shared_provider_storage', '%s-assets' % pool_name,
+          '--shared_provider_storage', '%s-assets' % pool_name,
           '--error_logs_dir', error_logs_dir,
           '--noprogress', '-vv'
         ],

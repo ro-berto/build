@@ -253,6 +253,8 @@
       "run_tests.py",
       "--hosts",
       "[START_DIR]/hosts",
+      "--shared_provider_storage",
+      "celab-ci-assets",
       "--error_logs_dir",
       "[START_DIR]/logs",
       "--noprogress",
