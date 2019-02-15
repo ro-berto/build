@@ -306,10 +306,6 @@ def UploadNinjaLog(
   if compiler:
     info['compiler'] = compiler
 
-  # TODO(tikuta): Remove this after compile.py removed.
-  if os.path.basename(sys.argv[0]) == 'compile.py':
-    info['argv'] = sys.argv
-
   compiler_proxy_info = GetLatestGomaCompilerProxyInfo()
   if compiler_proxy_info:
     info['compiler_proxy_info'] = compiler_proxy_info
