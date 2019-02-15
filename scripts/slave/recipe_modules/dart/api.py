@@ -36,7 +36,7 @@ class DartApi(recipe_api.RecipeApi):
   """Recipe module for code commonly used in dart recipes.
 
   Shouldn't be used elsewhere."""
-  def checkout(self, clobber=False, revision=None):
+  def checkout(self, clobber=False):
     """Checks out the dart code and prepares it for building."""
     self.m.gclient.set_config('dart')
     sdk = self.m.gclient.c.solutions[0]
@@ -49,14 +49,7 @@ class DartApi(recipe_api.RecipeApi):
                              'GIT_TRACE_CURL': '1',
                              'GIT_TRACE_CURL_NO_DATA': '1',
                              'GIT_REDACT_COOKIES': 'o,SSO,GSSO_UberProxy'}):
-      try:
-        self.m.bot_update.ensure_checkout(root_solution_revision=revision)
-      except self.m.step.StepFailure:
-        if not revision:
-          raise
-        # Maybe we failed to because of the revision, try the latest instead.
-        self.m.bot_update.ensure_checkout()
-
+      self.m.bot_update.ensure_checkout()
       with self.m.context(cwd=self.m.path['checkout']):
         if clobber:
           self.m.python('clobber',

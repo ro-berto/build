@@ -168,8 +168,8 @@ TEST_MATRIX = {
 
 
 def RunSteps(api):
-  latest, latest_revision = api.dart.get_latest_tested_commit()
-  api.dart.checkout(False, revision=latest_revision)
+  latest, _ = api.dart.get_latest_tested_commit()
+  api.dart.checkout('clobber' in api.properties)
 
   build_args = ['--super-fast']
   api.dart.build(build_args, name='can_time_out')
@@ -285,6 +285,7 @@ def GenTests(api):
           git_repo='https://dart.googlesource.com/sdk',
           project='dart') +
       api.properties(
+          clobber='True',
           parent_fileset='isolate_hash_123',
           parent_fileset_name='test') +
       api.step_data('upload testing fileset trigger',

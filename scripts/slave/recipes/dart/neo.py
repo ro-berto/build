@@ -77,7 +77,7 @@ def RunSteps(api):
 
 
 def _run_steps_impl(api):
-  latest, latest_revision = api.dart.get_latest_tested_commit()
+  latest, _ = api.dart.get_latest_tested_commit()
   # If parent_fileset is set, the bot is triggered by
   # another builder, and we should not download the sdk.
   # We rely on all files being in the isolate
@@ -92,11 +92,7 @@ def _run_steps_impl(api):
     if channel not in ['be', 'dev', 'stable', 'try']:
       channel = 'be'
     clobber = 'clobber' in api.properties
-    # todo(athom): remove the new workflow check when enabled by default
-    if channel == 'try' and 'new_workflow_enabled' in api.properties:
-      api.dart.checkout(clobber, revision=latest_revision)
-    else:
-      api.dart.checkout(clobber)
+    api.dart.checkout(clobber)
 
   api.dart.kill_tasks()
 
