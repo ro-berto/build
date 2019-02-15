@@ -192,7 +192,8 @@
       "BUILDBOT_GOT_WATERFALL_REVISION": "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
       "BUILDBOT_MASTERNAME": "client.wasm.llvm",
       "BUILDBOT_REVISION": "2d72510e447ab60a9728aeea2362d8be2cbd7789",
-      "GOMA_DIR": "[GOMA_CACHE]/client"
+      "GOMA_DIR": "[GOMA_CACHE]/client",
+      "PYTHONUNBUFFERED": "1"
     },
     "env_suffixes": {
       "PATH": [

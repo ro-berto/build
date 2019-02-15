@@ -38,6 +38,7 @@ def RunSteps(api):
       'BUILDBOT_BUILDNUMBER': api.buildbucket.build.number,
       'BUILDBOT_GOT_WATERFALL_REVISION': got_revision,
       'GOMA_DIR': goma_dir,
+      'PYTHONUNBUFFERED': '1',
   }
 
   api.goma.start()
@@ -48,7 +49,8 @@ def RunSteps(api):
                      env_suffixes={'PATH': [depot_tools_path]}):
       api.python('annotated steps',
                  api.path['checkout'].join('src', 'build.py'),
-                 allow_subannotations=True)
+                 allow_subannotations=True,
+                 unbuffered=True)
     exit_status = 0
   except api.step.StepFailure as e:
     exit_status = e.retcode
