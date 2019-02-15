@@ -69,23 +69,25 @@ def RunSteps(api):
     api.step('run cctest', [build_output_path.join('node_cctest')])
 
     suites = [
-      'default',
-      # TODO(machenbach): Add those suites once they are built.
-      # 'addons',
-      # 'addons-napi',
-      # 'doctool',
+      ('addons', True),
+      ('default', False),
+      ('js-native-api', True),
+      ('node-api', True),
     ]
-
-    api.python(
-      name='run tests',
-      script=api.path.join('tools', 'test.py'),
-      args=[
+    for suite, use_test_root in suites:
+      args = [
         '-p', 'tap',
         '-j8',
         '--mode=%s' % api.chromium.c.build_config_fs.lower(),
         '--flaky-tests', 'run',
-      ] + suites,
-    )
+      ]
+      if use_test_root:
+        args += ['--test-root', build_output_path.join('gen', 'node', 'test')]
+      api.python(
+        name='test ' + suite,
+        script=api.path.join('tools', 'test.py'),
+        args=args + [suite],
+      )
 
 
 def _sanitize_nonalpha(*chunks):

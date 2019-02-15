@@ -278,10 +278,64 @@
       "--mode=release",
       "--flaky-tests",
       "run",
+      "--test-root",
+      "[BUILDER_CACHE]/node-ci/out/Release/gen/node/test",
+      "addons"
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci",
+    "name": "test addons"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "tools/test.py",
+      "-p",
+      "tap",
+      "-j8",
+      "--mode=release",
+      "--flaky-tests",
+      "run",
       "default"
     ],
     "cwd": "[BUILDER_CACHE]/node-ci",
-    "name": "run tests"
+    "name": "test default"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "tools/test.py",
+      "-p",
+      "tap",
+      "-j8",
+      "--mode=release",
+      "--flaky-tests",
+      "run",
+      "--test-root",
+      "[BUILDER_CACHE]/node-ci/out/Release/gen/node/test",
+      "js-native-api"
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci",
+    "name": "test js-native-api"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "tools/test.py",
+      "-p",
+      "tap",
+      "-j8",
+      "--mode=release",
+      "--flaky-tests",
+      "run",
+      "--test-root",
+      "[BUILDER_CACHE]/node-ci/out/Release/gen/node/test",
+      "node-api"
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci",
+    "name": "test node-api"
   },
   {
     "jsonResult": null,
