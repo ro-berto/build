@@ -208,9 +208,9 @@ def TestFlutter(api, start_dir, just_built_dart_sdk):
 
     # runs all flutter tests similar to Cirrus as described on this page:
     # https://github.com/flutter/flutter/blob/master/CONTRIBUTING.md
-    api.step('flutter analyze', ['dart', 'dev/bots/analyze.dart',
-             '--dart-sdk', just_built_dart_sdk
-             ], timeout=20*60) # 20 minutes
+    api.step('flutter analyze', [
+        'dart', '--enable-asserts', 'dev/bots/analyze.dart', '--dart-sdk',
+        just_built_dart_sdk], timeout=20*60) # 20 minutes
     api.step('flutter test', test_cmd + test_args, timeout=120*60) # 2 hours
 
 def RunSteps(api):

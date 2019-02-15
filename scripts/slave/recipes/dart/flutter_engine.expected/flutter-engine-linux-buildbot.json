@@ -3721,6 +3721,7 @@
   {
     "cmd": [
       "dart",
+      "--enable-asserts",
       "dev/bots/analyze.dart",
       "--dart-sdk",
       "[START_DIR]/src/out/host_debug/dart-sdk"

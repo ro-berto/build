@@ -3867,6 +3867,7 @@
   {
     "cmd": [
       "dart",
+      "--enable-asserts",
       "dev/bots/analyze.dart",
       "--dart-sdk",
       "[CACHE]/builder/src/out/host_debug/dart-sdk"
