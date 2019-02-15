@@ -19,7 +19,7 @@
     ],
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -66,13 +66,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
+      "RECIPE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[START_DIR]\\native_client",
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gclient runhooks"
@@ -155,8 +155,8 @@
       "GOMA_SERVICE_ACCOUNT_JSON_FILE": "C:\\creds\\service_accounts\\service-account-goma-client.json",
       "GOMA_TMP_DIR": "[TMP_BASE]\\goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]\\scripts;RECIPE_PACKAGE_REPO[build]\\site_config",
-      "RUNTEST": "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py"
+      "PYTHONPATH": "RECIPE_REPO[build]\\scripts;RECIPE_REPO[build]\\site_config",
+      "RUNTEST": "RECIPE_REPO[build]\\scripts\\slave\\runtest.py"
     },
     "infra_step": true,
     "name": "preprocess_for_goma.start_goma",
@@ -169,7 +169,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -211,12 +211,12 @@
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "GOMA_TMP_DIR": "[TMP_BASE]\\goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]\\scripts;RECIPE_PACKAGE_REPO[build]\\site_config",
-      "RUNTEST": "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py"
+      "PYTHONPATH": "RECIPE_REPO[build]\\scripts;RECIPE_REPO[build]\\site_config",
+      "RUNTEST": "RECIPE_REPO[build]\\scripts\\slave\\runtest.py"
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -254,12 +254,12 @@
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "GOMA_TMP_DIR": "[TMP_BASE]\\goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]\\scripts;RECIPE_PACKAGE_REPO[build]\\site_config",
-      "RUNTEST": "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py"
+      "PYTHONPATH": "RECIPE_REPO[build]\\scripts;RECIPE_REPO[build]\\site_config",
+      "RUNTEST": "RECIPE_REPO[build]\\scripts\\slave\\runtest.py"
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "read SetEnv.x64.json",
@@ -304,8 +304,8 @@
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "GOMA_TMP_DIR": "[TMP_BASE]\\goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]\\scripts;RECIPE_PACKAGE_REPO[build]\\site_config",
-      "RUNTEST": "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py",
+      "PYTHONPATH": "RECIPE_REPO[build]\\scripts;RECIPE_REPO[build]\\site_config",
+      "RUNTEST": "RECIPE_REPO[build]\\scripts\\slave\\runtest.py",
       "VSINSTALLDIR": "[CACHE]\\windows_sdk"
     },
     "env_prefixes": {
@@ -315,7 +315,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "annotated steps"
@@ -339,12 +339,12 @@
       "GOMA_DIR": "[CACHE]\\goma\\client",
       "GOMA_TMP_DIR": "[TMP_BASE]\\goma",
       "NOCONTROL_GOMA": "1",
-      "PYTHONPATH": "RECIPE_PACKAGE_REPO[build]\\scripts;RECIPE_PACKAGE_REPO[build]\\site_config",
-      "RUNTEST": "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\runtest.py"
+      "PYTHONPATH": "RECIPE_REPO[build]\\scripts;RECIPE_REPO[build]\\site_config",
+      "RUNTEST": "RECIPE_REPO[build]\\scripts\\slave\\runtest.py"
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "taskkill mspdbsrv"
@@ -435,16 +435,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -481,7 +481,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",

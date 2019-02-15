@@ -11,7 +11,7 @@
       "--target-platform",
       "linux",
       "--ninja-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "--use-isolate-files"
     ],
     "name": "compare_build_artifacts"

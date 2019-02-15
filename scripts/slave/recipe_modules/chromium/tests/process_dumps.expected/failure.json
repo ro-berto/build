@@ -3,12 +3,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/process_dumps.py",
+      "RECIPE_REPO[build]/scripts/slave/process_dumps.py",
       "--target",
       "Release"
     ],

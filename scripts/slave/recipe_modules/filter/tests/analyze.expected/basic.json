@@ -144,7 +144,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/cros",
+      "RECIPE_REPO[depot_tools]/cros",
       "chrome-sdk",
       "--nogn-gen",
       "--board=x86-generic",

@@ -32,7 +32,7 @@
     ],
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -79,13 +79,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
+      "RECIPE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[START_DIR]\\src/flutter",
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gclient runhooks"
@@ -140,7 +140,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode debug"
@@ -164,7 +164,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode debug --unoptimized"
@@ -188,7 +188,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode release --dynamic"
@@ -212,7 +212,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode profile --android"
@@ -237,7 +237,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode profile --android --android-cpu=arm64"
@@ -261,7 +261,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode release --android"
@@ -286,7 +286,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode release --android --android-cpu=arm64"
@@ -311,7 +311,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode profile --android --dynamic"
@@ -337,7 +337,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode profile --android --dynamic --android-cpu=arm64"
@@ -362,7 +362,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode release --android --dynamic"
@@ -388,7 +388,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gn --runtime-mode release --android --dynamic --android-cpu=arm64"
@@ -464,7 +464,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -494,7 +494,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -619,16 +619,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -676,7 +676,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -771,7 +771,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -801,7 +801,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -926,16 +926,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -983,7 +983,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -1078,7 +1078,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -1108,7 +1108,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -1233,16 +1233,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -1290,7 +1290,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -1385,7 +1385,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -1415,7 +1415,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -1541,16 +1541,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -1598,7 +1598,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -1693,7 +1693,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -1723,7 +1723,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -1849,16 +1849,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -1906,7 +1906,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -2001,7 +2001,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -2031,7 +2031,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -2157,16 +2157,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -2214,7 +2214,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -2309,7 +2309,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -2339,7 +2339,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -2465,16 +2465,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -2522,7 +2522,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -2617,7 +2617,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -2647,7 +2647,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -2773,16 +2773,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -2830,7 +2830,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -2925,7 +2925,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -2955,7 +2955,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -3081,16 +3081,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -3138,7 +3138,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -3233,7 +3233,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -3263,7 +3263,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -3389,16 +3389,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -3446,7 +3446,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -3541,7 +3541,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -3571,7 +3571,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-j",
       "200",
       "-C",
@@ -3697,16 +3697,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -3754,7 +3754,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -3877,7 +3877,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
       "[CLEANUP]\\tmp_tmp_1\\artifacts.zip",
@@ -3941,7 +3941,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
       "[CLEANUP]\\tmp_tmp_2\\artifacts.zip",
@@ -4005,7 +4005,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
       "[CLEANUP]\\tmp_tmp_3\\artifacts.zip",
@@ -4069,7 +4069,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
       "[CLEANUP]\\tmp_tmp_4\\artifacts.zip",
@@ -4133,7 +4133,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
       "[CLEANUP]\\tmp_tmp_5\\artifacts.zip",
@@ -4197,7 +4197,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
       "[CLEANUP]\\tmp_tmp_6\\artifacts.zip",
@@ -4261,7 +4261,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
       "[CLEANUP]\\tmp_tmp_7\\artifacts.zip",
@@ -4325,7 +4325,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
       "[CLEANUP]\\tmp_tmp_8\\artifacts.zip",
@@ -4389,7 +4389,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
       "[CLEANUP]\\tmp_tmp_9\\artifacts.zip",
@@ -4453,7 +4453,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
       "[CLEANUP]\\tmp_tmp_10\\artifacts.zip",
@@ -4517,7 +4517,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
       "[CLEANUP]\\tmp_tmp_11\\dart-sdk-windows-x64.zip",

@@ -492,7 +492,7 @@ class GomaApi(recipe_api.RecipeApi):
 
     result = self.m.build.python(
       name=name or 'upload_log',
-      script=self.package_repo_resource('scripts', 'slave',
+      script=self.repo_resource('scripts', 'slave',
                                         'upload_goma_logs.py'),
       args=args,
       venv=True,

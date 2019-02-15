@@ -7,7 +7,7 @@
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"None\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"None\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"test_bot_id\", \"buildername\": \"test_buildername\", \"buildnumber\": 123, \"mastername\": \"test_mastername\", \"slavename\": \"test_bot_id\", \"target_platform\": \"linux\"}",
       "--args",

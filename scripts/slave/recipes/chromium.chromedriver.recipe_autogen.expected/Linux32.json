@@ -19,7 +19,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -108,12 +108,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runhooks_wrapper.py"
+      "RECIPE_REPO[build]/scripts/slave/runhooks_wrapper.py"
     ],
     "env": {
       "DEPOT_TOOLS_UPDATE": "0",
@@ -218,7 +218,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -240,7 +240,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-C",
       "[START_DIR]/src/out/Default",
       "-j",
@@ -334,16 +334,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "RECIPE_REPO[build]/scripts/slave/upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "--bigquery-service-account-json",
       "/creds/service_accounts/service-account-goma-bigquery.json",
       "--json-status",
@@ -351,7 +351,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Default",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/src/out/Default\", \"-j\", 20, \"chromedriver\", \"chromedriver_tests\", \"chromedriver_unittests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/src/out/Default\", \"-j\", 20, \"chromedriver\", \"chromedriver_tests\", \"chromedriver_unittests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -389,7 +389,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -417,15 +417,15 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "-s",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--run-python-script",
       "[START_DIR]/src/chrome/test/chromedriver/run_buildbot_steps.py",
       "--revision",

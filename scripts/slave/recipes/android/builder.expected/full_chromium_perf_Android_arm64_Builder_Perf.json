@@ -51,7 +51,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -238,7 +238,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
     "cwd": "[START_DIR]/src",
@@ -249,7 +249,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gclient runhooks"
@@ -316,7 +316,7 @@
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[START_DIR]/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"test_bot\", \"buildername\": \"Android arm64 Builder Perf\", \"buildnumber\": 257, \"mastername\": \"chromium.perf\", \"slavename\": \"test_bot\", \"target_platform\": \"android\"}"
     ],
@@ -403,7 +403,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -437,7 +437,7 @@
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -464,7 +464,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -583,16 +583,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "RECIPE_REPO[build]/scripts/slave/upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "--bigquery-service-account-json",
       "/creds/service_accounts/service-account-goma-bigquery.json",
       "--json-status",
@@ -600,7 +600,7 @@
       "--ninja-log-outdir",
       "[START_DIR]/src/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Release\", \"-j\", 20, \"android_tools\", \"chrome_modern_public_minimal_apks\", \"chrome_public_apk\", \"dump_syms\", \"microdump_stackwalk\", \"push_apps_to_background_apk\", \"system_webview_apk\", \"system_webview_shell_apk\", \"chromium_builder_perf\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[START_DIR]/src/out/Release\", \"-j\", 20, \"android_tools\", \"chrome_modern_public_minimal_apks\", \"chrome_public_apk\", \"dump_syms\", \"microdump_stackwalk\", \"push_apps_to_background_apk\", \"system_webview_apk\", \"system_webview_shell_apk\", \"chromium_builder_perf\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -642,7 +642,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -667,12 +667,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -699,7 +699,7 @@
       "--chartjson"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
     "name": "resource_sizes (ChromeModernPublic.minimal.apks)",
@@ -738,12 +738,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -770,7 +770,7 @@
       "--chartjson"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
     "name": "resource_sizes (ChromePublic.apk)",
@@ -809,12 +809,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -841,7 +841,7 @@
       "--chartjson"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1"
     },
     "name": "resource_sizes (SystemWebView.apk)",
@@ -879,12 +879,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/archive_build.py",
+      "RECIPE_REPO[build]/scripts/slave/android/archive_build.py",
       "--target",
       "Release",
       "--name",
@@ -903,7 +903,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "[START_DIR]/src/out/build_product.zip",
@@ -919,12 +919,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/archive_build.py",
+      "RECIPE_REPO[build]/scripts/slave/android/archive_build.py",
       "--target",
       "Release",
       "--name",
@@ -958,7 +958,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "[START_DIR]/src/out/build_product.zip",

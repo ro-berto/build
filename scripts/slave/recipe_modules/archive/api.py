@@ -92,7 +92,7 @@ class ArchiveApi(recipe_api.RecipeApi):
     kwargs['allow_subannotations'] = True
     return self.m.build.python(
       step_name,
-      self.package_repo_resource('scripts', 'slave', 'zip_build.py'),
+      self.repo_resource('scripts', 'slave', 'zip_build.py'),
       args,
       infra_step=True,
       **kwargs
@@ -340,7 +340,7 @@ class ArchiveApi(recipe_api.RecipeApi):
 
     self.m.build.python(
       step_name,
-      self.package_repo_resource('scripts', 'slave', 'extract_build.py'),
+      self.repo_resource('scripts', 'slave', 'extract_build.py'),
       args,
       infra_step=True,
       **kwargs

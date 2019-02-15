@@ -2,12 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from recipe_engine.config import BadConf
-from recipe_engine.config_types import Path
-from recipe_engine import config as recipe_config
-
-import DEPS
-CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
+from RECIPE_MODULES.build.chromium import CONFIG_CTX
 
 
 @CONFIG_CTX(includes=['ninja'])

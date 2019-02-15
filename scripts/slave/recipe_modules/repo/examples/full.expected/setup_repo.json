@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "RECIPE_REPO[depot_tools]/repo",
       "init",
       "-u",
       "http://manifest_url"
@@ -11,7 +11,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "RECIPE_REPO[depot_tools]/repo",
       "init",
       "-u",
       "http://manifest_url/manifest",
@@ -23,7 +23,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "RECIPE_REPO[depot_tools]/repo",
       "forall",
       "-c",
       "git",
@@ -35,7 +35,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "RECIPE_REPO[depot_tools]/repo",
       "forall",
       "-c",
       "git",
@@ -48,7 +48,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "RECIPE_REPO[depot_tools]/repo",
       "forall",
       "-c",
       "git",
@@ -62,7 +62,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "RECIPE_REPO[depot_tools]/repo",
       "sync"
     ],
     "infra_step": true,
@@ -70,7 +70,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "RECIPE_REPO[depot_tools]/repo",
       "list"
     ],
     "name": "repo list",

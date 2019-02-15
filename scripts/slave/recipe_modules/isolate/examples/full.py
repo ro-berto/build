@@ -35,7 +35,7 @@ def RunSteps(api):
   step_result = api.step('read test spec', ['cat'], stdout=api.json.output())
   expected_targets = step_result.stdout
 
-  build_path = api.isolate.package_repo_resource()
+  build_path = api.isolate.repo_resource()
   # Generates code coverage for find_isolated_tests corner cases.
   # TODO(vadimsh): This step doesn't actually make any sense when the recipe
   # is running for real.

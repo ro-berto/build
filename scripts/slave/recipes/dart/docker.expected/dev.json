@@ -5,7 +5,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "gs://dart-archive/channels/dev/release/2.0.0-dev.51.0/sdk/dartsdk-linux-x64-release.zip",

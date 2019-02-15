@@ -50,7 +50,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gerrit_client.py",
+      "RECIPE_REPO[depot_tools]/gerrit_client.py",
       "changes",
       "--host",
       "https://chromium-review.googlesource.com",
@@ -67,7 +67,7 @@
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env": {
-      "PATH": "<PATH>:RECIPE_PACKAGE_REPO[depot_tools]"
+      "PATH": "<PATH>:RECIPE_REPO[depot_tools]"
     },
     "infra_step": true,
     "name": "gerrit fetch current CL info",
@@ -112,7 +112,7 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -306,7 +306,7 @@
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"[BUILDER_CACHE]/android_one_perf_bisect/src\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"[BUILDER_CACHE]/android_one_perf_bisect/src\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"test_bot\", \"buildername\": \"android_one_perf_bisect\", \"buildnumber\": 571, \"mastername\": \"tryserver.chromium.perf\", \"slavename\": \"test_bot\", \"target_platform\": \"android\"}"
     ],
@@ -384,12 +384,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "RECIPE_REPO[build]/scripts/slave/daemonizer.py",
       "--",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/build/android/adb_logcat_monitor.py",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/out/logcat",
@@ -406,12 +406,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "RECIPE_REPO[build]/scripts/slave/daemonizer.py",
       "--action",
       "restart",
       "--pid-file-path",
@@ -431,12 +431,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/authorize_adb_devices.py",
+      "RECIPE_REPO[build]/scripts/slave/android/authorize_adb_devices.py",
       "--verbose",
       "--adb-path",
       "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/catapult/devil/bin/deps/linux2/x86_64/bin/adb"
@@ -667,7 +667,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect/src",
@@ -678,7 +678,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gclient runhooks"
@@ -961,7 +961,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--with-third-party-lib",
       "--",
       "python",
@@ -987,7 +987,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--with-third-party-lib",
       "--",
       "python",
@@ -1075,7 +1075,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip"
@@ -1113,7 +1113,7 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -1292,7 +1292,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip",
@@ -1393,16 +1393,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -1427,7 +1427,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -1504,16 +1504,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -1538,7 +1538,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -1615,16 +1615,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -1649,7 +1649,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -1726,16 +1726,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -1760,7 +1760,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -1837,16 +1837,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -1871,7 +1871,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -1948,16 +1948,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -1982,7 +1982,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -2063,7 +2063,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "ls",
       "gs://chrome-perf/Linux Builder/full-build-linux_fc6dfc7ff5b1073408499478969261b826441144.zip"
@@ -2101,7 +2101,7 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -2280,7 +2280,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "gs://chrome-perf/Linux Builder/full-build-linux_fc6dfc7ff5b1073408499478969261b826441144.zip",
@@ -2361,16 +2361,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -2395,7 +2395,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -2472,16 +2472,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -2506,7 +2506,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -2583,16 +2583,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -2617,7 +2617,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -2694,16 +2694,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -2728,7 +2728,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -2805,16 +2805,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -2839,7 +2839,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -2916,16 +2916,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -2950,7 +2950,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -3102,7 +3102,7 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -3281,7 +3281,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip",
@@ -3362,16 +3362,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -3396,7 +3396,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -3473,16 +3473,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -3507,7 +3507,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -3584,16 +3584,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -3618,7 +3618,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -3766,7 +3766,7 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -3945,7 +3945,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "gs://chrome-perf/Linux Builder/full-build-linux_fc6dfc7ff5b1073408499478969261b826441144.zip",
@@ -4026,16 +4026,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -4060,7 +4060,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -4137,16 +4137,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -4171,7 +4171,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -4248,16 +4248,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -4282,7 +4282,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -4430,7 +4430,7 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -4609,7 +4609,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip",
@@ -4690,16 +4690,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -4724,7 +4724,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -4801,16 +4801,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -4835,7 +4835,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -4912,16 +4912,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -4946,7 +4946,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -5023,16 +5023,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -5057,7 +5057,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -5134,16 +5134,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -5168,7 +5168,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -5316,7 +5316,7 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -5495,7 +5495,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "gs://chrome-perf/Linux Builder/full-build-linux_fc6dfc7ff5b1073408499478969261b826441144.zip",
@@ -5576,16 +5576,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -5610,7 +5610,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -5687,16 +5687,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -5721,7 +5721,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -5798,16 +5798,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -5832,7 +5832,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -5909,16 +5909,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -5943,7 +5943,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -6020,16 +6020,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -6054,7 +6054,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -6202,7 +6202,7 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -6381,7 +6381,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "gs://chrome-perf/Linux Builder/full-build-linux_e28dc0d49c331def2a3bbf3ddd0096eb51551155.zip",
@@ -6462,16 +6462,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -6496,7 +6496,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -6573,16 +6573,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -6607,7 +6607,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -6684,16 +6684,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -6718,7 +6718,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -6795,16 +6795,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -6829,7 +6829,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -6906,16 +6906,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -6940,7 +6940,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -7017,16 +7017,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -7051,7 +7051,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -7128,16 +7128,16 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/tee.py",
+      "RECIPE_REPO[build]/scripts/slave/tee.py",
       "/path/to/tmp/",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py",
+      "RECIPE_REPO[build]/scripts/slave/runtest.py",
       "--target",
       "Release",
       "--test-platform",
@@ -7162,7 +7162,7 @@
       "--output-dir=[START_DIR]/bisect_results/dummy"
     ],
     "env": {
-      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "BUILD_SLAVE_UTILS_GSUTIL_PY_PATH": "RECIPE_REPO[depot_tools]/gsutil.py",
       "CHROME_HEADLESS": "1",
       "PATH": "[BUILDER_CACHE]/android_one_perf_bisect/src/third_party/android_tools/sdk/platform-tools:[BUILDER_CACHE]/android_one_perf_bisect/src/build/android:<PATH>"
     },
@@ -7467,7 +7467,7 @@
     "cwd": "[BUILDER_CACHE]/android_one_perf_bisect",
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -7626,12 +7626,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/daemonizer.py",
+      "RECIPE_REPO[build]/scripts/slave/daemonizer.py",
       "--action",
       "stop",
       "--pid-file-path",
@@ -7660,7 +7660,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "-o",
       "GSUtil:parallel_composite_upload_threshold=50M",
       "----",

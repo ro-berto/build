@@ -19,7 +19,7 @@ def RunSteps(api):
   ]
 
   for plat in api.gae_sdk.platforms:
-    out = api.gae_sdk.package_repo_resource(
+    out = api.gae_sdk.repo_resource(
         'gae_sdk', '%s_%s' % (plat, api.platform.name))
     try:
       api.gae_sdk.fetch(plat, out)

@@ -20,7 +20,7 @@
     "cwd": "[CACHE]/builder",
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -210,7 +210,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
     "cwd": "[CACHE]/builder/src",
@@ -220,7 +220,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gclient runhooks"
@@ -334,12 +334,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/clang_revision.py",
+      "RECIPE_REPO[build]/scripts/slave/clang_revision.py",
       "--src-dir",
       "[CACHE]/builder/src",
       "--output-json",
@@ -417,7 +417,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -451,7 +451,7 @@
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -501,7 +501,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-w",
       "dupbuild=err",
       "-C",
@@ -643,16 +643,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/upload_goma_logs.py",
+      "RECIPE_REPO[build]/scripts/slave/upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "--bigquery-service-account-json",
       "/creds/service_accounts/service-account-goma-bigquery.json",
       "--json-status",
@@ -660,7 +660,7 @@
       "--ninja-log-outdir",
       "[CACHE]/builder/src/out/chromeos-Debug",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/chromeos-Debug\", \"-k\", \"0\", \"-j\", 20, \"app_list_unittests\", \"base_unittests\", \"browser_tests\", \"cacheinvalidation_unittests\", \"chromeos_unittests\", \"components_unittests\", \"compositor_unittests\", \"content_browsertests\", \"content_unittests\", \"crypto_unittests\", \"dbus_unittests\", \"device_unittests\", \"gcm_unit_tests\", \"google_apis_unittests\", \"gpu_unittests\", \"interactive_ui_tests\", \"ipc_tests\", \"jingle_unittests\", \"media_unittests\", \"message_center_unittests\", \"nacl_loader_unittests\", \"net_unittests\", \"ppapi_unittests\", \"printing_unittests\", \"remoting_unittests\", \"sandbox_linux_unittests\", \"sql_unittests\", \"ui_base_unittests\", \"unit_tests\", \"url_unittests\", \"views_unittests\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]/builder/src/out/chromeos-Debug\", \"-k\", \"0\", \"-j\", 20, \"app_list_unittests\", \"base_unittests\", \"browser_tests\", \"cacheinvalidation_unittests\", \"chromeos_unittests\", \"components_unittests\", \"compositor_unittests\", \"content_browsertests\", \"content_unittests\", \"crypto_unittests\", \"dbus_unittests\", \"device_unittests\", \"gcm_unit_tests\", \"google_apis_unittests\", \"gpu_unittests\", \"interactive_ui_tests\", \"ipc_tests\", \"jingle_unittests\", \"media_unittests\", \"message_center_unittests\", \"nacl_loader_unittests\", \"net_unittests\", \"ppapi_unittests\", \"printing_unittests\", \"remoting_unittests\", \"sandbox_linux_unittests\", \"sql_unittests\", \"ui_base_unittests\", \"unit_tests\", \"url_unittests\", \"views_unittests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -703,7 +703,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -748,7 +748,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -774,7 +774,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "[CACHE]/builder/src/out/chromeos-Debug/chromium_chromeos.kzip",
@@ -792,7 +792,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "[CACHE]/builder/src/out/chromeos-Debug/compile_commands.json",
@@ -826,7 +826,7 @@
     ],
     "cwd": "[CACHE]/generated",
     "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:<PATH>"
+      "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
     },
     "infra_step": true,
     "name": "git fetch"
@@ -894,7 +894,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",

@@ -1017,8 +1017,8 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
     paths = {
       'checkout': self.m.path['checkout'],
-      'runit.py': self.package_repo_resource('scripts', 'tools', 'runit.py'),
-      'runtest.py': self.package_repo_resource(
+      'runit.py': self.repo_resource('scripts', 'tools', 'runit.py'),
+      'runtest.py': self.repo_resource(
           'scripts', 'slave', 'runtest.py'),
     }
     args.extend(['--paths', self.m.json.input(paths)])

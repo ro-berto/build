@@ -512,7 +512,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         ]
         self.m.build.python(
             name='upload_ninja_log',
-            script=self.package_repo_resource(
+            script=self.repo_resource(
                 'scripts', 'slave', 'upload_goma_logs.py'),
             args=upload_ninja_log_args,
             venv=True)
@@ -676,10 +676,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     full_args.extend(self.c.runtests.test_args)
     full_args.extend(args)
 
-    runtest_path = self.package_repo_resource('scripts', 'slave', 'runtest.py')
+    runtest_path = self.repo_resource('scripts', 'slave', 'runtest.py')
     if tee_stdout_file:
       full_args = [tee_stdout_file, '--', 'python', runtest_path] + full_args
-      runtest_path = self.package_repo_resource(
+      runtest_path = self.repo_resource(
           'scripts', 'slave', 'tee.py')
     with self.m.build.gsutil_py_env():
       # We need this, as otherwise runtest.py fails due to expecting the cwd to
@@ -748,7 +748,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     full_args = run_tests_args + [sizes_script] + sizes_args
 
     return self.m.build.python(
-        'sizes', self.package_repo_resource('scripts', 'slave', 'runtest.py'),
+        'sizes', self.repo_resource('scripts', 'slave', 'runtest.py'),
         full_args, allow_subannotations=True, **kwargs)
 
   @_with_chromium_layout
@@ -756,7 +756,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     with self.m.context(env=self.get_env()):
       step_result = self.m.build.python(
           'clang_revision',
-          self.package_repo_resource('scripts', 'slave', 'clang_revision.py'),
+          self.repo_resource('scripts', 'slave', 'clang_revision.py'),
           args=['--src-dir', self.m.path['checkout'],
                 '--output-json', self.m.json.output()],
           step_test_data=lambda:
@@ -1326,7 +1326,7 @@ class ChromiumApi(recipe_api.RecipeApi):
   def taskkill(self):
     self.m.build.python(
       'taskkill',
-      self.package_repo_resource('scripts', 'slave', 'kill_processes.py'),
+      self.repo_resource('scripts', 'slave', 'kill_processes.py'),
       infra_step=True)
 
   def process_dumps(self, **kwargs):
@@ -1334,7 +1334,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     try:
       self.m.build.python(
           'process_dumps',
-          self.package_repo_resource('scripts', 'slave', 'process_dumps.py'),
+          self.repo_resource('scripts', 'slave', 'process_dumps.py'),
           ['--target', self.c.build_config_fs],
           infra_step=True,
           **kwargs)
@@ -1378,7 +1378,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       args.extend(['--mode', mode])
     self.m.build.python(
       step_name,
-      self.package_repo_resource(
+      self.repo_resource(
           'scripts', 'slave', 'chromium', 'archive_build.py'),
       args,
       infra_step=True,

@@ -10,9 +10,7 @@ from recipe_engine import util as recipe_util
 
 from .util import GTestResults, TestResults
 
-# TODO(luqui): Destroy this DEPS hack.
-import DEPS
-JsonOutputPlaceholder = DEPS['json'].api.JsonOutputPlaceholder
+from RECIPE_MODULES.recipe_engine.json.api import JsonOutputPlaceholder
 
 
 class TestResultsOutputPlaceholder(JsonOutputPlaceholder):
@@ -492,7 +490,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
   def _archive_retry_summary(self, retry_summary, dest_filename):
     """Archives the retry summary as JSON, storing it alongside the results
     from the first run."""
-    script = self.m.chromium.package_repo_resource(
+    script = self.m.chromium.repo_resource(
         'scripts', 'slave', 'chromium', 'archive_layout_test_retry_summary.py')
     args = [
         '--retry-summary-json', self.m.json.input(retry_summary),

@@ -1253,7 +1253,7 @@ class LayoutTestResultsHandler(JSONResultsHandler):
     buildername = api.buildbucket.builder_name
     buildnumber = api.buildbucket.build.number
 
-    archive_layout_test_results = api.chromium.package_repo_resource(
+    archive_layout_test_results = api.chromium.repo_resource(
         'scripts', 'slave', 'chromium', 'archive_layout_test_results.py')
 
     archive_layout_test_args = [

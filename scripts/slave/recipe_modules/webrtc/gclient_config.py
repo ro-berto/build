@@ -2,10 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import DEPS
-CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
-ChromeInternalGitURL = DEPS['gclient'].config.ChromeInternalGitURL
-ChromiumGitURL = DEPS['gclient'].config.ChromiumGitURL
+
+from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX
+from RECIPE_MODULES.depot_tools.gclient.config import ChromiumGitURL
+
 
 def WebRTCGitURL(_c, *pieces):
   return '/'.join(('https://webrtc.googlesource.com',) + pieces)

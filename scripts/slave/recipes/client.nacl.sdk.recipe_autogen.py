@@ -54,7 +54,7 @@ def sdk_multi_steps(api):
     # annotated_steps step
     api.build.python(
         "annotated_steps",
-        api.package_repo_resource("scripts", "slave", "chromium",
+        api.repo_resource("scripts", "slave", "chromium",
                                "nacl_sdk_buildbot_run.py"),
         allow_subannotations=True)
 
@@ -98,7 +98,7 @@ def sdk_multirel_steps(api):
     # annotated_steps step
     api.build.python(
         "annotated_steps",
-        api.package_repo_resource("scripts", "slave", "chromium",
+        api.repo_resource("scripts", "slave", "chromium",
                                "nacl_sdk_buildbot_run.py"),
         allow_subannotations=True)
 

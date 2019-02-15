@@ -49,7 +49,7 @@ class EmulatorApi(recipe_api.RecipeApi):
 
     self.m.build.python(
         launch_step_name,
-        self.package_repo_resource('scripts', 'slave', 'daemonizer.py'),
+        self.repo_resource('scripts', 'slave', 'daemonizer.py'),
         ['--', self.c.avd_script_path] + args,
         **kwargs)
 

@@ -48,7 +48,7 @@
     ],
     "cwd": "[START_DIR]/android_tools",
     "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:<PATH>"
+      "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
     },
     "infra_step": true,
     "name": "git fetch"
@@ -135,7 +135,7 @@
     ],
     "cwd": "[START_DIR]/android_ndk",
     "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:<PATH>"
+      "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
     },
     "infra_step": true,
     "name": "git fetch (2)"
@@ -223,7 +223,7 @@
     ],
     "cwd": "[START_DIR]/libvpx",
     "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:<PATH>"
+      "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
     },
     "infra_step": true,
     "name": "git fetch (3)"
@@ -350,12 +350,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/android/transfer_files.py",
+      "RECIPE_REPO[build]/scripts/slave/android/transfer_files.py",
       "[START_DIR]/android_tools/sdk/platform-tools/adb",
       "/data/local/tmp",
       "[START_DIR]/test_data"

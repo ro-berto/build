@@ -64,12 +64,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_layout_test_results.py",
+      "RECIPE_REPO[build]/scripts/slave/chromium/archive_layout_test_results.py",
       "--results-dir",
       "[START_DIR]/layout-test-results",
       "--build-dir",
@@ -86,7 +86,7 @@
       "--step-name",
       "blink_web_tests (with patch)",
       "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "RECIPE_REPO[depot_tools]/gsutil.py"
     ],
     "name": "archive results for blink_web_tests (with patch)",
     "~followup_annotations": [
@@ -169,12 +169,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]/scripts/slave/chromium/archive_layout_test_results.py",
+      "RECIPE_REPO[build]/scripts/slave/chromium/archive_layout_test_results.py",
       "--results-dir",
       "[START_DIR]/layout-test-results",
       "--build-dir",
@@ -191,7 +191,7 @@
       "--step-name",
       "blink_web_tests (without patch)",
       "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py"
+      "RECIPE_REPO[depot_tools]/gsutil.py"
     ],
     "name": "archive results for blink_web_tests (without patch)",
     "~followup_annotations": [

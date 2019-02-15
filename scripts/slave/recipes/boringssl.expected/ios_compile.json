@@ -70,7 +70,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -100,13 +100,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
     "cwd": "[START_DIR]/boringssl",
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gclient runhooks"
@@ -146,7 +146,7 @@
       "[START_DIR]/boringssl/util/bot/go/env.py",
       "[START_DIR]/boringssl/util/bot/cmake-mac/bin/cmake",
       "-GNinja",
-      "-DCMAKE_MAKE_PROGRAM=RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-DCMAKE_MAKE_PROGRAM=RECIPE_REPO[depot_tools]/ninja",
       "-DCMAKE_OSX_ARCHITECTURES=armv7",
       "-DCMAKE_OSX_SYSROOT=iphoneos",
       "[START_DIR]/boringssl"
@@ -159,7 +159,7 @@
       "python",
       "-u",
       "[START_DIR]/boringssl/util/bot/go/env.py",
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-C",
       "[START_DIR]/boringssl/build"
     ],

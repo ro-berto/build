@@ -44,7 +44,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "RECIPE_REPO[depot_tools]/repo",
       "init",
       "-u",
       "https://googlesource.com/manifest.xml"
@@ -55,7 +55,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "RECIPE_REPO[depot_tools]/repo",
       "sync",
       "--no-clone-bundle"
     ],
@@ -65,7 +65,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "RECIPE_REPO[depot_tools]/repo",
       "list"
     ],
     "cwd": "[START_DIR]/git_clone_bundler/repo/baa8c54f5ad38fa45e904e6bdfb6b484",
@@ -93,7 +93,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "[START_DIR]/git_clone_bundler/bundles/b30c7a01edcf711e48356dd038d8c03e.bundle",
@@ -135,7 +135,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "[START_DIR]/git_clone_bundler/bundles/4e9dd63391c5eb1884b9b449679dfa16.bundle",

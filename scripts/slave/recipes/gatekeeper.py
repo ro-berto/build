@@ -18,8 +18,8 @@ def RunSteps(api):
   api.gatekeeper.c.use_new_logic = True
 
   api.gatekeeper(
-    api.package_repo_resource('scripts', 'slave', 'gatekeeper.json'),
-    api.package_repo_resource('scripts', 'slave', 'gatekeeper_trees.json'),
+    api.repo_resource('scripts', 'slave', 'gatekeeper.json'),
+    api.repo_resource('scripts', 'slave', 'gatekeeper_trees.json'),
   )
 
 

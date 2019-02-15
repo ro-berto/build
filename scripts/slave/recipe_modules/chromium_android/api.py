@@ -101,7 +101,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     self.m.build.python(
       step_name,
-      self.package_repo_resource(
+      self.repo_resource(
           'scripts', 'slave', 'android', 'archive_build.py'),
       archive_args,
       infra_step=True,
@@ -202,7 +202,7 @@ class AndroidApi(recipe_api.RecipeApi):
     with self.m.context(env={'CHROME_HEADLESS': '1'}):
       return self.m.python(
           'git_number',
-          self.m.depot_tools.package_repo_resource('git_number.py'),
+          self.m.depot_tools.repo_resource('git_number.py'),
           commitrefs,
           stdout=self.m.raw_io.output_text(),
           step_test_data=step_test_data,
@@ -351,14 +351,14 @@ class AndroidApi(recipe_api.RecipeApi):
     with self.m.context(env=self.m.chromium.get_env()):
       self.m.build.python(
           'spawn_logcat_monitor',
-          self.package_repo_resource('scripts', 'slave', 'daemonizer.py'),
+          self.repo_resource('scripts', 'slave', 'daemonizer.py'),
           ['--', self.c.cr_build_android.join('adb_logcat_monitor.py'),
            self.m.chromium.c.build_dir.join('logcat'),
            self.m.adb.adb_path()],
           infra_step=True)
 
   def spawn_device_monitor(self):
-    script = self.package_repo_resource('scripts', 'slave', 'daemonizer.py')
+    script = self.repo_resource('scripts', 'slave', 'daemonizer.py')
     args = [
         '--action', 'restart',
         '--pid-file-path', '/tmp/device_monitor.pid', '--',
@@ -371,7 +371,7 @@ class AndroidApi(recipe_api.RecipeApi):
     self.m.build.python('spawn_device_monitor', script, args, infra_step=True)
 
   def shutdown_device_monitor(self):
-    script = self.package_repo_resource('scripts', 'slave', 'daemonizer.py')
+    script = self.repo_resource('scripts', 'slave', 'daemonizer.py')
     args = [
         '--action', 'stop',
         '--pid-file-path', '/tmp/device_monitor.pid',
@@ -380,7 +380,7 @@ class AndroidApi(recipe_api.RecipeApi):
                         infra_step=True)
 
   def authorize_adb_devices(self):
-    script = self.package_repo_resource(
+    script = self.repo_resource(
         'scripts', 'slave', 'android', 'authorize_adb_devices.py')
     args = ['--verbose', '--adb-path', self.m.adb.adb_path()]
     with self.m.context(env=self.m.chromium.get_env()):
@@ -1077,7 +1077,7 @@ class AndroidApi(recipe_api.RecipeApi):
     else:
       self.m.python(
           'logcat_dump',
-          self.package_repo_resource('scripts', 'slave', 'tee.py'),
+          self.repo_resource('scripts', 'slave', 'tee.py'),
           [self.m.chromium.output_dir.join('full_log'),
            '--',
            self.m.path['checkout'].join('build', 'android',

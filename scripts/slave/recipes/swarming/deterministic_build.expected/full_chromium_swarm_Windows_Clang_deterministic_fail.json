@@ -35,7 +35,7 @@
     "cwd": "[CACHE]\\builder",
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -266,7 +266,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
+      "RECIPE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[CACHE]\\builder",
@@ -276,7 +276,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gclient runhooks"
@@ -358,12 +358,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\clang_revision.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\clang_revision.py",
       "--src-dir",
       "[CACHE]\\builder\\src",
       "--output-json",
@@ -441,7 +441,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -475,7 +475,7 @@
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-w",
       "dupbuild=err",
       "-C",
@@ -493,7 +493,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-w",
       "dupbuild=err",
       "-C",
@@ -603,16 +603,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -620,7 +620,7 @@
       "--ninja-log-outdir",
       "[CACHE]\\builder\\src\\out\\Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release\", \"-j\", 20, \"all\"]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release\", \"-j\", 20, \"all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -662,7 +662,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -759,12 +759,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\clang_revision.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\clang_revision.py",
       "--src-dir",
       "[CACHE]\\builder\\src",
       "--output-json",
@@ -842,7 +842,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -876,7 +876,7 @@
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-w",
       "dupbuild=err",
       "-C",
@@ -894,7 +894,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-w",
       "dupbuild=err",
       "-C",
@@ -1004,16 +1004,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -1021,7 +1021,7 @@
       "--ninja-log-outdir",
       "[CACHE]\\builder\\src\\out\\Release.2",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release.2\", \"-j\", 20, \"all\"]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[CACHE]\\\\builder\\\\src\\\\out\\\\Release.2\", \"-j\", 20, \"all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1063,7 +1063,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -1095,7 +1095,7 @@
       "--target-platform",
       "win",
       "--ninja-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "--use-isolate-files"
     ],
     "name": "compare_build_artifacts",

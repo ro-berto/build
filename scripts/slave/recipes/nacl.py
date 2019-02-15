@@ -74,11 +74,11 @@ def _AnnotatedStepsSteps(api, got_revision):
       'BUILDBOT_REVISION': api.buildbucket.gitiles_commit.id,
       'BUILDBOT_BUILDNUMBER': api.buildbucket.build.number,
       'BUILDBOT_GOT_REVISION': got_revision,
-      'RUNTEST': api.package_repo_resource('scripts', 'slave', 'runtest.py'),
+      'RUNTEST': api.repo_resource('scripts', 'slave', 'runtest.py'),
       'BUILDBOT_SLAVE_TYPE': api.properties['slavetype'],
       'PYTHONPATH': api.path.pathsep.join([
-          str(api.package_repo_resource('scripts')),
-          str(api.package_repo_resource('site_config'))
+          str(api.repo_resource('scripts')),
+          str(api.repo_resource('site_config'))
       ]),
   }
   # Set up env for the triggered builders.

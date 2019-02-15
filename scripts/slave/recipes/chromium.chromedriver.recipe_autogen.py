@@ -75,7 +75,7 @@ def Linux32_steps(api):
   env = {'LANDMINES_VERBOSE': '1', 'DEPOT_TOOLS_UPDATE': '0'}
   with api.context(env=env):
     api.build.python("gclient runhooks wrapper",
-        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+        api.repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   # meta build step
   goma_dir = api.goma.ensure_goma()
   api.python("meta build", api.path["checkout"].join("tools", "mb", "mb.py"),
@@ -136,7 +136,7 @@ def Mac_10_6_steps(api):
   env = {'LANDMINES_VERBOSE': '1', 'DEPOT_TOOLS_UPDATE': '0'}
   with api.context(env=env):
     api.build.python("gclient runhooks wrapper",
-        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+        api.repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   # meta build step
   goma_dir = api.goma.ensure_goma()
   api.python("meta build", api.path["checkout"].join("tools", "mb", "mb.py"),
@@ -157,7 +157,7 @@ def Mac_10_6_steps(api):
 def Win7_steps(api):
   # update scripts step; implicitly run by recipe engine.
   # taskkill step
-  api.build.python("taskkill", api.package_repo_resource("scripts", "slave",
+  api.build.python("taskkill", api.repo_resource("scripts", "slave",
     "kill_processes.py"))
   # bot_update step
   src_cfg = api.gclient.make_config()
@@ -200,7 +200,7 @@ def Win7_steps(api):
   env = {'LANDMINES_VERBOSE': '1', 'DEPOT_TOOLS_UPDATE': '0'}
   with api.context(env=env):
     api.build.python("gclient runhooks wrapper",
-        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+        api.repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   # meta build step
   goma_dir = api.goma.ensure_goma()
   api.python("meta build", api.path["checkout"].join("tools", "mb", "mb.py"),
@@ -257,7 +257,7 @@ def Linux_steps(api):
   env = {'LANDMINES_VERBOSE': '1', 'DEPOT_TOOLS_UPDATE': '0'}
   with api.context(env=env):
     api.build.python("gclient runhooks wrapper",
-        api.package_repo_resource("scripts", "slave", "runhooks_wrapper.py"))
+        api.repo_resource("scripts", "slave", "runhooks_wrapper.py"))
   # meta build step
   goma_dir = api.goma.ensure_goma()
   api.python("meta build", api.path["checkout"].join("tools", "mb", "mb.py"),
@@ -285,11 +285,11 @@ dispatch_directory = {
 
 def annotated_steps(api, got_revision):
   api.build.python('chromedriver buildbot steps',
-      api.package_repo_resource('scripts', 'tools', 'runit.py'),
+      api.repo_resource('scripts', 'tools', 'runit.py'),
       args=[
         '-s',
         'python',
-        api.package_repo_resource('scripts', 'slave', 'runtest.py'),
+        api.repo_resource('scripts', 'slave', 'runtest.py'),
         '--run-python-script',
         api.path['checkout'].join('chrome', 'test', 'chromedriver',
                                   'run_buildbot_steps.py'),

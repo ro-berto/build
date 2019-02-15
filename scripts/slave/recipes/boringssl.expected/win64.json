@@ -19,7 +19,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -49,13 +49,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
+      "RECIPE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[START_DIR]\\boringssl",
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gclient runhooks"
@@ -99,7 +99,7 @@
       "[START_DIR]\\boringssl\\util\\bot\\cmake-win32\\bin\\cmake.exe",
       "-GNinja",
       "-DCMAKE_ASM_NASM_COMPILER=[START_DIR]/boringssl/util/bot/yasm-win32.exe",
-      "-DCMAKE_MAKE_PROGRAM=RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "-DCMAKE_MAKE_PROGRAM=RECIPE_REPO[depot_tools]\\ninja.exe",
       "-DPERL_EXECUTABLE=[START_DIR]\\boringssl\\util\\bot\\perl-win32\\perl\\bin\\perl.exe",
       "[START_DIR]\\boringssl"
     ],
@@ -114,7 +114,7 @@
       "python",
       "[START_DIR]\\boringssl\\util\\bot\\vs_env.py",
       "x64",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-C",
       "[START_DIR]\\boringssl\\build"
     ],

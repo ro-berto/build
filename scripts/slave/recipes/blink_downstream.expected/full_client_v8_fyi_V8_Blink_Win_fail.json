@@ -39,7 +39,7 @@
     "cwd": "[BUILDER_CACHE]\\V8_Blink_Win",
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -220,7 +220,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
+      "RECIPE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Blink_Win\\src",
@@ -230,7 +230,7 @@
     },
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gclient runhooks"
@@ -351,7 +351,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -385,7 +385,7 @@
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-w",
       "dupbuild=err",
       "-C",
@@ -403,7 +403,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-w",
       "dupbuild=err",
       "-C",
@@ -513,16 +513,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -530,7 +530,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\V8_Blink_Win\\src\\out\\Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]\\\\V8_Blink_Win\\\\src\\\\out\\\\Release\", \"-j\", 20, \"blink_tests\"]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]\\\\V8_Blink_Win\\\\src\\\\out\\\\Release\", \"-j\", 20, \"blink_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -574,7 +574,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -829,7 +829,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -933,12 +933,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\archive_layout_test_results.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\chromium\\archive_layout_test_results.py",
       "--results-dir",
       "[START_DIR]\\layout-test-results",
       "--build-dir",
@@ -955,7 +955,7 @@
       "--step-name",
       "webkit_layout_tests (with patch)",
       "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "RECIPE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Blink_Win",
     "name": "archive results for webkit_layout_tests (with patch)",
@@ -985,7 +985,7 @@
     "cwd": "[BUILDER_CACHE]\\V8_Blink_Win",
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -1226,7 +1226,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -1260,7 +1260,7 @@
       "--failure_output",
       "/path/to/tmp/",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-w",
       "dupbuild=err",
       "-C",
@@ -1278,7 +1278,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-w",
       "dupbuild=err",
       "-C",
@@ -1388,16 +1388,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -1405,7 +1405,7 @@
       "--ninja-log-outdir",
       "[BUILDER_CACHE]\\V8_Blink_Win\\src\\out\\Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]\\\\V8_Blink_Win\\\\src\\\\out\\\\Release\", \"-j\", 20, \"blink_tests\"]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]\\\\V8_Blink_Win\\\\src\\\\out\\\\Release\", \"-j\", 20, \"blink_tests\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -1449,7 +1449,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -1637,7 +1637,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -1735,12 +1735,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\archive_layout_test_results.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\chromium\\archive_layout_test_results.py",
       "--results-dir",
       "[START_DIR]\\layout-test-results",
       "--build-dir",
@@ -1757,7 +1757,7 @@
       "--step-name",
       "webkit_layout_tests (without patch)",
       "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "RECIPE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Blink_Win",
     "name": "archive results for webkit_layout_tests (without patch)",
@@ -1770,12 +1770,12 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\chromium\\archive_layout_test_retry_summary.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\chromium\\archive_layout_test_retry_summary.py",
       "--retry-summary-json",
       "{\"failures\": [], \"ignored\": [\"test1.Test1\", \"test2.Test2\"]}",
       "--build-number",
@@ -1787,7 +1787,7 @@
       "--dest-filename",
       "retry_summary.json",
       "--slave-utils-gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py"
+      "RECIPE_REPO[depot_tools]\\gsutil.py"
     ],
     "cwd": "[BUILDER_CACHE]\\V8_Blink_Win",
     "name": "archive_retry_summary"

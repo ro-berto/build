@@ -7,7 +7,7 @@
       "--build-config-fs",
       "Release",
       "--paths",
-      "{\"checkout\": \"None\", \"runit.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_PACKAGE_REPO[build]/scripts/slave/runtest.py\"}",
+      "{\"checkout\": \"None\", \"runit.py\": \"RECIPE_REPO[build]/scripts/tools/runit.py\", \"runtest.py\": \"RECIPE_REPO[build]/scripts/slave/runtest.py\"}",
       "--properties",
       "{\"bot_id\": \"test_bot\", \"buildername\": \"linux-perf\", \"buildnumber\": 571, \"mastername\": \"chromium.perf\", \"slavename\": \"test_bot\", \"target_platform\": \"linux\"}"
     ],

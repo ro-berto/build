@@ -24,7 +24,7 @@ class RepoApi(recipe_api.RecipeApi):
   @property
   def repo_path(self):
     if not self._repo_path:
-      self._repo_path = self.m.depot_tools.package_repo_resource('repo')
+      self._repo_path = self.m.depot_tools.repo_resource('repo')
     return self._repo_path
 
   def __call__(self, args, name=None, **kwargs):

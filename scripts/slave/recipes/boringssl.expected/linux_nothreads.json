@@ -26,7 +26,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -56,13 +56,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gclient.py",
+      "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
     "cwd": "[START_DIR]/boringssl",
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gclient runhooks"
@@ -104,7 +104,7 @@
       "-GNinja",
       "-DCMAKE_CXX_FLAGS=-DOPENSSL_NO_THREADS_CORRUPT_MEMORY_AND_LEAK_SECRETS_IF_THREADED=1",
       "-DCMAKE_C_FLAGS=-DOPENSSL_NO_THREADS_CORRUPT_MEMORY_AND_LEAK_SECRETS_IF_THREADED=1",
-      "-DCMAKE_MAKE_PROGRAM=RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "-DCMAKE_MAKE_PROGRAM=RECIPE_REPO[depot_tools]/ninja",
       "[START_DIR]/boringssl"
     ],
     "cwd": "[START_DIR]/boringssl/build",
@@ -115,7 +115,7 @@
       "python",
       "-u",
       "[START_DIR]/boringssl/util/bot/go/env.py",
-      "RECIPE_PACKAGE_REPO[depot_tools]/ninja",
+      "RECIPE_REPO[depot_tools]/ninja",
       "-C",
       "[START_DIR]/boringssl/build"
     ],

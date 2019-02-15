@@ -223,7 +223,7 @@ class CronetApi(recipe_api.RecipeApi):
 
     self.m.build.python(
         'Perf Dashboard Upload',
-        self.m.chromium.package_repo_resource(
+        self.m.chromium.repo_resource(
             'scripts', 'slave', 'upload_perf_dashboard_results.py'),
         args,
         step_test_data=(

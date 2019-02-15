@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "RECIPE_REPO[depot_tools]/repo",
       "init",
       "-u",
       "https://android.googlesource.com/platform/manifest",
@@ -13,7 +13,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]/repo",
+      "RECIPE_REPO[depot_tools]/repo",
       "sync"
     ],
     "infra_step": true,

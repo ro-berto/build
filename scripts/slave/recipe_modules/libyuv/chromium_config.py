@@ -4,9 +4,7 @@
 
 from recipe_engine.config import BadConf
 
-import DEPS
-CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
-from recipe_engine.config_types import Path
+from RECIPE_MODULES.build.chromium import CONFIG_CTX
 
 
 @CONFIG_CTX(includes=['ninja', 'default_compiler'])

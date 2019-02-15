@@ -13,8 +13,8 @@ def RunSteps(api):
   api.gatekeeper.set_config('basic')
 
   api.gatekeeper(
-      api.package_repo_resource('scripts', 'slave', 'gatekeeper.json'),
-      api.package_repo_resource('scripts', 'slave', 'gatekeeper_trees.json'))
+      api.repo_resource('scripts', 'slave', 'gatekeeper.json'),
+      api.repo_resource('scripts', 'slave', 'gatekeeper_trees.json'))
 
 
 def GenTests(api):

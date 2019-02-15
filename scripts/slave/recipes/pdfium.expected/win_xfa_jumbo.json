@@ -19,7 +19,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "infra_step": true,
@@ -66,13 +66,13 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gclient.py",
+      "RECIPE_REPO[depot_tools]\\gclient.py",
       "runhooks"
     ],
     "cwd": "[START_DIR]\\pdfium",
     "env_suffixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "gclient runhooks"
@@ -113,7 +113,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gn.py",
+      "RECIPE_REPO[depot_tools]\\gn.py",
       "--check",
       "--root=[START_DIR]\\pdfium",
       "gen",
@@ -172,7 +172,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -194,7 +194,7 @@
   },
   {
     "cmd": [
-      "RECIPE_PACKAGE_REPO[depot_tools]\\ninja.exe",
+      "RECIPE_REPO[depot_tools]\\ninja.exe",
       "-C",
       "[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo",
       "-j",
@@ -286,16 +286,16 @@
     "cmd": [
       "vpython",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--",
       "python",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
+      "RECIPE_REPO[build]\\scripts\\slave\\upload_goma_logs.py",
       "--upload-compiler-proxy-info",
       "--log-url-json-file",
       "/path/to/tmp/json",
       "--gsutil-py-path",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "--bigquery-service-account-json",
       "C:\\creds\\service_accounts\\service-account-goma-bigquery.json",
       "--json-status",
@@ -303,7 +303,7 @@
       "--ninja-log-outdir",
       "[START_DIR]\\pdfium\\out\\debug_xfa_v8_jumbo",
       "--ninja-log-command-file",
-      "[\"RECIPE_PACKAGE_REPO[depot_tools]\\\\ninja.exe\", \"-C\", \"[START_DIR]\\\\pdfium\\\\out\\\\debug_xfa_v8_jumbo\", \"-j\", 20, \"pdfium_all\"]",
+      "[\"RECIPE_REPO[depot_tools]\\\\ninja.exe\", \"-C\", \"[START_DIR]\\\\pdfium\\\\out\\\\debug_xfa_v8_jumbo\", \"-j\", 20, \"pdfium_all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -341,7 +341,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]\\scripts\\tools\\runit.py",
+      "RECIPE_REPO[build]\\scripts\\tools\\runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -474,7 +474,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "-m",
       "----",
       "cp",
@@ -490,7 +490,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
       "-z",
@@ -543,7 +543,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "-m",
       "----",
       "cp",
@@ -559,7 +559,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]\\resources\\gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]\\gsutil.py",
+      "RECIPE_REPO[depot_tools]\\gsutil.py",
       "----",
       "cp",
       "-z",

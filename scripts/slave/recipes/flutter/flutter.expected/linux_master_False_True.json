@@ -37,7 +37,7 @@
     ],
     "cwd": "[START_DIR]/flutter",
     "env": {
-      "PATH": "RECIPE_PACKAGE_REPO[depot_tools]:<PATH>"
+      "PATH": "RECIPE_REPO[depot_tools]:<PATH>"
     },
     "infra_step": true,
     "name": "git fetch"
@@ -110,7 +110,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
@@ -124,7 +124,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
@@ -140,7 +140,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "download android tools"
@@ -159,7 +159,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "download gradle"
@@ -172,7 +172,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "unzip gradle",
@@ -186,7 +186,7 @@
     ],
     "env_prefixes": {
       "PATH": [
-        "RECIPE_PACKAGE_REPO[depot_tools]"
+        "RECIPE_REPO[depot_tools]"
       ]
     },
     "name": "print installed android SDK components"
@@ -199,7 +199,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache",
       "SHARD": "tests"
@@ -214,7 +214,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache",
       "SHARD": "coverage"
@@ -227,7 +227,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "[START_DIR]/flutter/packages/flutter/coverage/lcov.info",
@@ -236,7 +236,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
@@ -250,7 +250,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_PACKAGE_REPO[build]/scripts/tools/runit.py",
+      "RECIPE_REPO[build]/scripts/tools/runit.py",
       "--show-path",
       "--with-third-party-lib",
       "--",
@@ -262,7 +262,7 @@
     "cwd": "[START_DIR]/flutter/packages/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
@@ -282,7 +282,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
@@ -303,7 +303,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
@@ -320,7 +320,7 @@
     "cwd": "[START_DIR]/flutter/examples/stocks",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
@@ -332,7 +332,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "[START_DIR]/flutter/examples/stocks/build/app/outputs/apk/app.apk",
@@ -341,7 +341,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
@@ -365,7 +365,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
@@ -386,7 +386,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
@@ -403,7 +403,7 @@
     "cwd": "[START_DIR]/flutter/examples/flutter_gallery",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },
@@ -415,7 +415,7 @@
       "-u",
       "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
       "--",
-      "RECIPE_PACKAGE_REPO[depot_tools]/gsutil.py",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
       "----",
       "cp",
       "[START_DIR]/flutter/examples/flutter_gallery/build/app/outputs/apk/app.apk",
@@ -424,7 +424,7 @@
     "cwd": "[START_DIR]/flutter",
     "env": {
       "ANDROID_HOME": "[START_DIR]/flutter/dev/bots/android_tools",
-      "DEPOT_TOOLS": "RECIPE_PACKAGE_REPO[depot_tools]",
+      "DEPOT_TOOLS": "RECIPE_REPO[depot_tools]",
       "PATH": "[START_DIR]/flutter/bin:[START_DIR]/flutter/bin/cache/dart-sdk/bin:[START_DIR]/flutter/dev/bots/gradle/gradle-4.10.2-all/bin:<PATH>",
       "PUB_CACHE": "[START_DIR]/flutter/.pub-cache"
     },

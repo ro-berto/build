@@ -2,12 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import DEPS
-CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
-ChromiumGitURL = DEPS['gclient'].config.ChromiumGitURL
-ChromeInternalGitURL = DEPS['gclient'].config.ChromeInternalGitURL
-
-gclient_api = DEPS['gclient'].api
+from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX
+from RECIPE_MODULES.depot_tools.gclient import api as gclient_api
+from RECIPE_MODULES.depot_tools.gclient.config import (
+  ChromiumGitURL, ChromeInternalGitURL)
 
 def mirror_only(c, obj, default=None):
   return obj if c.USE_MIRROR else (default or obj.__class__())

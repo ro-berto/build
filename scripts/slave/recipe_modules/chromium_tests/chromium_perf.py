@@ -6,9 +6,8 @@ import collections
 
 from . import steps
 
-import DEPS
-CHROMIUM_CONFIG_CTX = DEPS['chromium'].CONFIG_CTX
-GCLIENT_CONFIG_CTX = DEPS['gclient'].CONFIG_CTX
+from RECIPE_MODULES.build.chromium import CONFIG_CTX as CHROMIUM_CONFIG_CTX
+from RECIPE_MODULES.depot_tools.gclient import CONFIG_CTX as GCLIENT_CONFIG_CTX
 
 
 SPEC = {

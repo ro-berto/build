@@ -10,7 +10,7 @@ class ToolsBuildApi(recipe_api.RecipeApi):
 
   @property
   def runit_py(self):
-    return self.package_repo_resource('scripts', 'tools', 'runit.py')
+    return self.repo_resource('scripts', 'tools', 'runit.py')
 
   @property
   def slave_utils_args(self):

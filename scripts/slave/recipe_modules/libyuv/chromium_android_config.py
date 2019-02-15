@@ -2,9 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import DEPS
-CONFIG_CTX = DEPS['chromium_android'].CONFIG_CTX
-from recipe_engine.config_types import Path
+from RECIPE_MODULES.build.chromium_android import CONFIG_CTX
 
 
 @CONFIG_CTX(includes=['base_config'])
