@@ -922,7 +922,6 @@
       "@@@STEP_LOG_LINE@swarming.summary@{@@@",
       "@@@STEP_LOG_LINE@swarming.summary@  \"shards\": [@@@",
       "@@@STEP_LOG_LINE@swarming.summary@    {@@@",
-      "@@@STEP_LOG_LINE@swarming.summary@      \"abandoned_ts\": null, @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"bot_id\": \"vm30\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"completed_ts\": \"2014-09-25T01:43:11.123\", @@@",
       "@@@STEP_LOG_LINE@swarming.summary@      \"created_ts\": \"2014-09-25T01:41:00.123\", @@@",

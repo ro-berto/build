@@ -16,7 +16,6 @@ class SwarmingTestApi(recipe_test_api.RecipeTestApi):
     return {
       'shards': [
         {
-          'abandoned_ts': None,
           'bot_id': 'vm30',
           'completed_ts': '2014-09-25T01:43:11.123',
           'created_ts': '2014-09-25T01:41:00.123',
