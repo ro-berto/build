@@ -24,6 +24,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   serialized_pb=_b('\n\x14\x63ompile_events.proto\x12\rdevtools_goma\x1a\x10goma_stats.proto\x1a\x0e\x63ounterz.proto\"\xb6\x02\n\x08StepInfo\x12.\n\x06status\x18\x01 \x01(\x0e\x32\x1e.devtools_goma.StepInfo.Status\x12\x46\n\x13goma_failure_reason\x18\x02 \x01(\x0e\x32).devtools_goma.StepInfo.GomaFailureReason\"1\n\x06Status\x12\x0b\n\x07SUCCESS\x10\x00\x12\x0b\n\x07\x46\x41ILURE\x10\x01\x12\r\n\tEXCEPTION\x10\x02\"\x7f\n\x11GomaFailureReason\x12\x0b\n\x07GOMA_OK\x10\x00\x12\x18\n\x14GOMA_UNKNOWN_FAILURE\x10\x01\x12\x16\n\x12GOMA_SETUP_FAILRUE\x10\x02\x12\x15\n\x11GOMA_PING_FAILURE\x10\x03\x12\x14\n\x10GOMA_BUILD_ERROR\x10\x04\"\xee\x02\n\x0c\x43ompileEvent\x12\x10\n\x08\x62uild_id\x18\x01 \x01(\x03\x12\x11\n\tstep_name\x18\x02 \x01(\t\x12*\n\tstep_info\x18\x07 \x01(\x0b\x32\x17.devtools_goma.StepInfo\x12\'\n\x05stats\x18\x03 \x01(\x0b\x32\x18.devtools_goma.GomaStats\x12?\n\x0b\x65xit_status\x18\x04 \x01(\x0e\x32*.devtools_goma.CompileEvent.GomaExitStatus\x12\x10\n\x08\x63rash_id\x18\x05 \x01(\t\x12\x34\n\x0e\x63ounterz_stats\x18\x06 \x01(\x0b\x32\x1c.devtools_goma.CounterzStats\"[\n\x0eGomaExitStatus\x12\x06\n\x02OK\x10\x00\x12\x1b\n\x17\x44IED_WITH_UNKOWN_REASON\x10\x01\x12\x0b\n\x07\x43RASHED\x10\x02\x12\x17\n\x13\x44IED_WITH_LOG_FATAL\x10\x03\x62\x06proto3')
   ,
   dependencies=[goma__stats__pb2.DESCRIPTOR,counterz__pb2.DESCRIPTOR,])
+_sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 
 
@@ -242,7 +243,6 @@ _COMPILEEVENT.fields_by_name['counterz_stats'].message_type = counterz__pb2._COU
 _COMPILEEVENT_GOMAEXITSTATUS.containing_type = _COMPILEEVENT
 DESCRIPTOR.message_types_by_name['StepInfo'] = _STEPINFO
 DESCRIPTOR.message_types_by_name['CompileEvent'] = _COMPILEEVENT
-_sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 StepInfo = _reflection.GeneratedProtocolMessageType('StepInfo', (_message.Message,), dict(
   DESCRIPTOR = _STEPINFO,
