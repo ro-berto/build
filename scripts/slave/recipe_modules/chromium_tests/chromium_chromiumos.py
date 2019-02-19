@@ -109,4 +109,7 @@ SPEC['builders'].update([
     _config('chromeos-daisy-rel', cros_board='daisy',
             target_arch='arm', target_bits=32,
             gclient_apply_config=['arm', 'chromeos_daisy']),
+    _config('chromeos-kevin-rel', cros_board='kevin',
+            target_arch='arm', target_bits=32,
+            gclient_apply_config=['arm', 'chromeos_kevin']),
 ])
