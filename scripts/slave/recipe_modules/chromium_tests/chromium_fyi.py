@@ -583,6 +583,20 @@ SPEC = {
         'platform': 'win',
       },
     },
+    'win32-arm64-rel': {
+      'chromium_config': 'chromium',
+      'gclient_config': 'chromium',
+      'chromium_apply_config': ['mb'],
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+        'TARGET_ARCH': 'arm'
+      },
+      'bot_type': 'builder',
+      'testing': {
+        'platform': 'win',
+      },
+    },
 
     'Android Builder (dbg)': {
       'chromium_config': 'android',

@@ -149,7 +149,7 @@ def BASE(c):
       if arch not in ('arm', 'intel'):  # pragma: no cover
         raise BadConf('%s/%s arch is not supported on %s' % (arch, bits, plat))
     elif plat in ('win', 'mac'):
-      if arch != 'intel':  # pragma: no cover
+      if arch not in ('arm', 'intel'):  # pragma: no cover
         raise BadConf('%s arch is not supported on %s' % (arch, plat))
     elif plat in ('chromeos', 'android', 'linux', 'fuchsia'):
       pass  # no arch restrictions
