@@ -25,12 +25,27 @@ DEPS = [
 ]
 
 BUILDERS = freeze({
+  # Node-CI master.
+  'Node-CI Linux64': {
+    'testing': {
+      'platform': 'linux',
+    },
+  },
+  'node_ci_linux64_rel': {
+    'testing': {
+      'platform': 'linux',
+      'is_trybot': True,
+    },
+  },
+  # V8 integration.
   'V8 Linux64 - node.js integration ng': {
+    'v8_tot': True,
     'testing': {
       'platform': 'linux',
     },
   },
   'v8_node_linux64_rel_ng': {
+    'v8_tot': True,
     'testing': {
       'platform': 'linux',
       'is_trybot': True,
@@ -40,13 +55,18 @@ BUILDERS = freeze({
 
 
 def RunSteps(api):
+  bot_config = BUILDERS[api.buildbucket.builder_name]
+
   with api.step.nest('initialization'):
     # Set up dependent modules.
     api.chromium.set_config('node_ci')
     api.gclient.set_config('node_ci')
     revision = api.buildbucket.gitiles_commit.id or 'HEAD'
-    api.gclient.c.revisions['node-ci'] = 'HEAD'
-    api.gclient.c.revisions['node-ci/v8'] = revision
+    if bot_config.get('v8_tot', False):
+      api.gclient.c.revisions['node-ci'] = 'HEAD'
+      api.gclient.c.revisions['node-ci/v8'] = revision
+    else:
+      api.gclient.c.revisions['node-ci'] = revision
 
     # Check out.
     with api.context(cwd=api.path['builder_cache']):

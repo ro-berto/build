@@ -1,0 +1,296 @@
+[
+  {
+    "cmd": [],
+    "name": "initialization"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
+      "--spec-path",
+      "cache_dir = '[GIT_CACHE]'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'node-ci', 'url': 'https://chromium.googlesource.com/v8/node-ci'}]",
+      "--revision_mapping_file",
+      "{\"got_node_ci_revision\": \"node-ci\", \"got_node_js_revision\": \"node-ci/node\", \"got_revision\": \"node-ci/v8\", \"got_v8_revision\": \"node-ci/v8\"}",
+      "--git-cache-dir",
+      "[GIT_CACHE]",
+      "--cleanup-dir",
+      "[CLEANUP]/bot_update",
+      "--output_json",
+      "/path/to/tmp/json",
+      "--revision",
+      "node-ci@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    ],
+    "cwd": "[BUILDER_CACHE]",
+    "env_prefixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "infra_step": true,
+    "name": "initialization.bot_update",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_TEXT@Some step text@@@",
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"did_run\": true, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"fixed_revisions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"node-ci\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"node-ci\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/node-ci.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"26b4242c11f52eac1e139481a42b37af885e0933\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"node-ci/node\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/node-ci/node.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"0e2b6ce987a657f9aa60e5664f22b91e3f71e6bc\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"node-ci/v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"repository\": \"https://fake.org/node-ci/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": \"755026aeca7807904c14c88d165594b337f73f46\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_failure\": false, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"patch_root\": \"node-ci\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_node_ci_revision\": \"26b4242c11f52eac1e139481a42b37af885e0933\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_node_ci_revision_cp\": \"refs/heads/master@{#139948}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_node_js_revision\": \"0e2b6ce987a657f9aa60e5664f22b91e3f71e6bc\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_node_js_revision_cp\": \"refs/heads/master@{#126953}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision\": \"755026aeca7807904c14c88d165594b337f73f46\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_revision_cp\": \"refs/heads/master@{#187054}\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision\": \"755026aeca7807904c14c88d165594b337f73f46\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"got_v8_revision_cp\": \"refs/heads/master@{#187054}\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"root\": \"node-ci\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"source_manifest\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"directories\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"node-ci\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/node-ci.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"26b4242c11f52eac1e139481a42b37af885e0933\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"node-ci/node\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/node-ci/node.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"0e2b6ce987a657f9aa60e5664f22b91e3f71e6bc\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }, @@@",
+      "@@@STEP_LOG_LINE@json.output@      \"node-ci/v8\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@        \"git_checkout\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@          \"repo_url\": \"https://fake.org/node-ci/v8.git\", @@@",
+      "@@@STEP_LOG_LINE@json.output@          \"revision\": \"755026aeca7807904c14c88d165594b337f73f46\"@@@",
+      "@@@STEP_LOG_LINE@json.output@        }@@@",
+      "@@@STEP_LOG_LINE@json.output@      }@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"version\": 0@@@",
+      "@@@STEP_LOG_LINE@json.output@  }, @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"step_text\": \"Some step text\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_node_ci_revision@\"26b4242c11f52eac1e139481a42b37af885e0933\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_node_ci_revision_cp@\"refs/heads/master@{#139948}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_node_js_revision@\"0e2b6ce987a657f9aa60e5664f22b91e3f71e6bc\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_node_js_revision_cp@\"refs/heads/master@{#126953}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@\"755026aeca7807904c14c88d165594b337f73f46\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision_cp@\"refs/heads/master@{#187054}\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_v8_revision@\"755026aeca7807904c14c88d165594b337f73f46\"@@@",
+      "@@@SET_BUILD_PROPERTY@got_v8_revision_cp@\"refs/heads/master@{#187054}\"@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gclient.py",
+      "runhooks"
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci",
+    "env": {
+      "CHROME_HEADLESS": "1"
+    },
+    "env_suffixes": {
+      "PATH": [
+        "RECIPE_REPO[depot_tools]"
+      ]
+    },
+    "name": "initialization.gclient runhooks",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [],
+    "name": "build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gn.py",
+      "--root=[BUILDER_CACHE]/node-ci",
+      "gen",
+      "//out/Release",
+      "--args=is_clang=true use_sysroot=true use_custom_libcxx=true is_debug=false target_cpu=\"x64\" use_goma=true goma_dir=\"[GOMA_CACHE]/client\""
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/node-ci/third_party/depot_tools"
+      ]
+    },
+    "name": "build.gn",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[build::chromium]/resources/ninja_wrapper.py",
+      "--ninja_info_output",
+      "/path/to/tmp/json",
+      "--failure_output",
+      "/path/to/tmp/",
+      "--",
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/node-ci/out/Release",
+      "-j",
+      "20"
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/node-ci/third_party/depot_tools"
+      ]
+    },
+    "name": "build.compile",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "RECIPE_REPO[depot_tools]/ninja",
+      "-w",
+      "dupbuild=err",
+      "-C",
+      "[BUILDER_CACHE]/node-ci/out/Release",
+      "-j",
+      "20",
+      "-d",
+      "explain",
+      "-n"
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci",
+    "env": {
+      "CHROME_HEADLESS": "1",
+      "GOMA_USE_LOCAL": "false"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[BUILDER_CACHE]/node-ci/third_party/depot_tools"
+      ]
+    },
+    "name": "build.compile confirm no-op",
+    "stdout": "/path/to/tmp/",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILDER_CACHE]/node-ci/out/Release/node_cctest"
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci",
+    "name": "run cctest"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "tools/test.py",
+      "-p",
+      "tap",
+      "-j8",
+      "--mode=release",
+      "--flaky-tests",
+      "run",
+      "--test-root",
+      "[BUILDER_CACHE]/node-ci/out/Release/gen/node/test",
+      "addons"
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci",
+    "name": "test addons"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "tools/test.py",
+      "-p",
+      "tap",
+      "-j8",
+      "--mode=release",
+      "--flaky-tests",
+      "run",
+      "default"
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci",
+    "name": "test default"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "tools/test.py",
+      "-p",
+      "tap",
+      "-j8",
+      "--mode=release",
+      "--flaky-tests",
+      "run",
+      "--test-root",
+      "[BUILDER_CACHE]/node-ci/out/Release/gen/node/test",
+      "js-native-api"
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci",
+    "name": "test js-native-api"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "tools/test.py",
+      "-p",
+      "tap",
+      "-j8",
+      "--mode=release",
+      "--flaky-tests",
+      "run",
+      "--test-root",
+      "[BUILDER_CACHE]/node-ci/out/Release/gen/node/test",
+      "node-api"
+    ],
+    "cwd": "[BUILDER_CACHE]/node-ci",
+    "name": "test node-api"
+  },
+  {
+    "jsonResult": null,
+    "name": "$result"
+  }
+]

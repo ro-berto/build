@@ -311,6 +311,7 @@
   * [traceback:examples/full](#recipes-traceback_examples_full)
   * [trigger:examples/full](#recipes-trigger_examples_full)
   * [v8](#recipes-v8)
+  * [v8/PRESUBMIT](#recipes-v8_PRESUBMIT) &mdash; Presubmit script for changes in the infrastructure configs.
   * [v8/archive](#recipes-v8_archive) &mdash; Recipe for archiving officially tagged v8 builds.
   * [v8/auto_roll_deps](#recipes-v8_auto_roll_deps)
   * [v8/auto_roll_push](#recipes-v8_auto_roll_push)
@@ -5745,6 +5746,15 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 [DEPS](/scripts/slave/recipes/v8.py#9): [archive](#recipe_modules-archive), [chromium](#recipe_modules-chromium), [swarming\_client](#recipe_modules-swarming_client), [v8](#recipe_modules-v8), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime], [recipe\_engine/step][recipe_engine/recipe_modules/step], [recipe\_engine/time][recipe_engine/recipe_modules/time], [recipe\_engine/url][recipe_engine/recipe_modules/url]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/v8.py#74)(api, binary_size_tracking, build_config, clobber, clobber_all, clusterfuzz_archive, coverage, custom_deps, default_targets, enable_swarming, mb_config_path, set_gclient_var, target_arch, target_platform, track_build_dependencies, triggers, triggers_proxy, use_goma):**
+### *recipes* / [v8/PRESUBMIT](/scripts/slave/recipes/v8/PRESUBMIT.py)
+
+Presubmit script for changes in the infrastructure configs.
+See http://dev.chromium.org/developers/how-tos/depottools/presubmit-scripts
+for more details about the presubmit API built into gcl.
+
+&mdash; **def [CheckChangeOnCommit](/scripts/slave/recipes/v8/PRESUBMIT.py#25)(input_api, output_api):**
+
+&mdash; **def [CheckChangeOnUpload](/scripts/slave/recipes/v8/PRESUBMIT.py#19)(input_api, output_api):**
 ### *recipes* / [v8/archive](/scripts/slave/recipes/v8/archive.py)
 
 [DEPS](/scripts/slave/recipes/v8/archive.py#16): [chromium](#recipe_modules-chromium), [v8](#recipe_modules-v8), [zip](#recipe_modules-zip), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gsutil][depot_tools/recipe_modules/gsutil], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/raw\_io][recipe_engine/recipe_modules/raw_io], [recipe\_engine/step][recipe_engine/recipe_modules/step]
@@ -5875,7 +5885,7 @@ Recipe to test v8/node.js integration.
 
 Recipe to test v8/node.js integration.
 
-&mdash; **def [RunSteps](/scripts/slave/recipes/v8/node_integration_ng.py#42)(api):**
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/node_integration_ng.py#57)(api):**
 ### *recipes* / [v8/presubmit](/scripts/slave/recipes/v8/presubmit.py)
 
 [DEPS](/scripts/slave/recipes/v8/presubmit.py#11): [chromium](#recipe_modules-chromium), [v8](#recipe_modules-v8), [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/infra\_paths][depot_tools/recipe_modules/infra_paths], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
