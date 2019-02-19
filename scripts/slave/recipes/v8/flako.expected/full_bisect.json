@@ -1293,6 +1293,36 @@
     ]
   },
   {
+    "cmd": [],
+    "name": "flakes.pyl entry",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@config@[@@@",
+      "@@@STEP_LOG_LINE@config@  {@@@",
+      "@@@STEP_LOG_LINE@config@    \"bisect_buildername\": \"V8 Foobar\",@@@",
+      "@@@STEP_LOG_LINE@config@    \"bisect_mastername\": \"foo.v8\",@@@",
+      "@@@STEP_LOG_LINE@config@    \"bug_url\": \"<bug-url>\",@@@",
+      "@@@STEP_LOG_LINE@config@    \"build_config\": \"Debug\",@@@",
+      "@@@STEP_LOG_LINE@config@    \"extra_args\": [@@@",
+      "@@@STEP_LOG_LINE@config@      \"--foo-flag\",@@@",
+      "@@@STEP_LOG_LINE@config@      \"--bar-flag\",@@@",
+      "@@@STEP_LOG_LINE@config@    ],@@@",
+      "@@@STEP_LOG_LINE@config@    \"isolated_name\": \"foo_isolated\",@@@",
+      "@@@STEP_LOG_LINE@config@    \"num_shards\": 4,@@@",
+      "@@@STEP_LOG_LINE@config@    \"repetitions\": 64,@@@",
+      "@@@STEP_LOG_LINE@config@    \"swarming_dimensions\": [@@@",
+      "@@@STEP_LOG_LINE@config@      \"os:Ubuntu-14.04\",@@@",
+      "@@@STEP_LOG_LINE@config@      \"cpu:x86-64\",@@@",
+      "@@@STEP_LOG_LINE@config@    ],@@@",
+      "@@@STEP_LOG_LINE@config@    \"test_name\": \"mjsunit/foobar\",@@@",
+      "@@@STEP_LOG_LINE@config@    \"timeout_sec\": 20,@@@",
+      "@@@STEP_LOG_LINE@config@    \"total_timeout_sec\": 0,@@@",
+      "@@@STEP_LOG_LINE@config@    \"variant\": \"stress_foo\",@@@",
+      "@@@STEP_LOG_LINE@config@  },@@@",
+      "@@@STEP_LOG_LINE@config@]@@@",
+      "@@@STEP_LOG_END@config@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
