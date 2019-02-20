@@ -65,6 +65,7 @@ def RunSteps(api):
     if bot_config.get('v8_tot', False):
       api.gclient.c.revisions['node-ci'] = 'HEAD'
       api.gclient.c.revisions['node-ci/v8'] = revision
+      api.gclient.c.got_revision_reverse_mapping['got_revision'] = 'node-ci/v8'
     else:
       api.gclient.c.revisions['node-ci'] = revision
 
