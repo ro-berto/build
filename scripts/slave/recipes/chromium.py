@@ -690,10 +690,9 @@ def GenTests(api):
       'telemetry_gpu_unittests',
       api.swarming.canned_summary_output(2)
       + api.test_utils.canned_isolated_script_output(
-        passing=True, is_win=False, swarming=True,
-        shards=2, isolated_script_passing=True, valid=True,
-        missing_shards=[1]),
-      retcode=1)
+        passing=False, is_win=False, swarming=True,
+        shards=2, isolated_script_passing=False, valid=True,
+        missing_shards=[1]))
   )
 
   yield (
@@ -722,10 +721,9 @@ def GenTests(api):
       'telemetry_gpu_unittests',
       api.swarming.canned_summary_output(2)
       + api.test_utils.canned_isolated_script_output(
-        passing=True, is_win=False, swarming=True,
-        shards=2, isolated_script_passing=True, valid=True,
-        empty_shards=[1]),
-      retcode=1)
+        passing=False, is_win=False, swarming=True,
+        shards=2, isolated_script_passing=False, valid=True,
+        empty_shards=[1]))
   )
 
   yield (
@@ -755,11 +753,10 @@ def GenTests(api):
       'telemetry_gpu_unittests',
       api.swarming.canned_summary_output(2)
       + api.test_utils.canned_isolated_script_output(
-        passing=True, is_win=False, swarming=True,
-        shards=4, isolated_script_passing=True,
+        passing=False, is_win=False, swarming=True,
+        shards=4, isolated_script_passing=False,
         empty_shards=[1], output_chartjson=True,
-        use_json_test_format=True),
-      retcode=1)
+        use_json_test_format=True))
   )
 
   yield (

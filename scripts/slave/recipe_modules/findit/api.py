@@ -245,7 +245,7 @@ class FinditApi(recipe_api.RecipeApi):
               } for x in requested_tests.keys()
           }, defaultdict(list)
 
-        failed_tests = api.m.test_utils.run_tests(
+        _, failed_tests = api.m.test_utils.run_tests(
             api.chromium_tests.m, actual_tests_to_run,
             suffix=abbreviated_revision)
 
