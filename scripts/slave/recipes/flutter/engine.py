@@ -52,7 +52,15 @@ def RunHostTests(api, out_dir, exe_extension=''):
   with api.context(cwd=directory):
     # Cross platform tests.
     api.step('Test Flow',
-      [directory.join('flow_unittests' + exe_extension)])
+      [
+        directory.join('flow_unittests' + exe_extension),
+        '--golden-dir',
+        api.path['start_dir'].join('src', 'flutter', 'testing', 'resources'),
+        '--font-file',
+        api.path['start_dir'].join('src', 'flutter', 'third_party', 'txt',
+                                   'third_party', 'fonts',
+                                   'Roboto-Regular.ttf'),
+      ])
     api.step('Test FML', [
       directory.join('fml_unittests' + exe_extension),
       '--gtest_filter="-*TimeSensitiveTest*"'

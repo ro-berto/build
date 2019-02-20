@@ -1796,7 +1796,11 @@
   },
   {
     "cmd": [
-      "[START_DIR]/src/out/host_debug_unopt/flow_unittests"
+      "[START_DIR]/src/out/host_debug_unopt/flow_unittests",
+      "--golden-dir",
+      "[START_DIR]/src/flutter/testing/resources",
+      "--font-file",
+      "[START_DIR]/src/flutter/third_party/txt/third_party/fonts/Roboto-Regular.ttf"
     ],
     "cwd": "[START_DIR]/src/out/host_debug_unopt",
     "env": {
