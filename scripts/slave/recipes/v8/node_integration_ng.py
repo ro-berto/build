@@ -44,13 +44,6 @@ BUILDERS = freeze({
       'platform': 'linux',
     },
   },
-  'v8_node_linux64_rel_ng': {
-    'v8_tot': True,
-    'testing': {
-      'platform': 'linux',
-      'is_trybot': True,
-    },
-  },
 })
 
 
