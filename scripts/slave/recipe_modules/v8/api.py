@@ -1400,31 +1400,21 @@ class V8Api(recipe_api.RecipeApi):
         ci_properties = dict(properties)
         if self.should_upload_build:
           ci_properties['archive'] = self._get_default_archive()
-        if self.m.runtime.is_luci:
-          self.m.scheduler.emit_triggers(
-              [(
-                self.m.scheduler.BuildbucketTrigger(
-                  properties=dict(
-                    ci_properties,
-                    **test_spec.as_properties_dict(builder_name)
-                  ),
-                  tags={
-                    'buildset': 'commit/gitiles/chromium.googlesource.com/v8/'
-                                'v8/+/%s' % ci_properties['revision']
-                  }
-                ), 'v8', [builder_name],
-              ) for builder_name in triggers],
-              step_name='trigger'
-          )
-        else:
-          self.m.trigger(*[{
-            'builder_name': builder_name,
-            # Attach additional builder-specific test-spec properties.
-            'properties': dict(
-                ci_properties,
-                **test_spec.as_properties_dict(builder_name)
-            ),
-          } for builder_name in triggers])
+        self.m.scheduler.emit_triggers(
+            [(
+              self.m.scheduler.BuildbucketTrigger(
+                properties=dict(
+                  ci_properties,
+                  **test_spec.as_properties_dict(builder_name)
+                ),
+                tags={
+                  'buildset': 'commit/gitiles/chromium.googlesource.com/v8/'
+                              'v8/+/%s' % ci_properties['revision']
+                }
+              ), 'v8', [builder_name],
+            ) for builder_name in triggers],
+            step_name='trigger'
+        )
 
     if triggers_proxy:
       proxy_properties = {'archive': self._get_default_archive()}
@@ -1474,9 +1464,16 @@ class V8Api(recipe_api.RecipeApi):
       self.m.buildbucket.use_service_account_key(
           self.m.puppet_service_account.get_key_path(service_account))
 
+    # Tag child builds as triggered by CQ if the parent is also triggered by CQ.
+    if any(tag.key == 'user_agent' and tag.value == 'cq'
+           for tag in self.m.buildbucket.build.tags):
+      child_user_agent = 'cq'
+    else:
+      child_user_agent = 'recipe'
+
     requests = [{
       'bucket': bucket,
-      'tags': request.get('tags', {}),
+      'tags': dict(request.get('tags', {}), user_agent=child_user_agent),
       'parameters': {
         'builder_name': request['builder_name'],
         'properties': request['properties'],

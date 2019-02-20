@@ -9,7 +9,7 @@
       "ensure-directory",
       "--mode",
       "0777",
-      "[BUILDER_CACHE]/TestBuilder"
+      "[BUILDER_CACHE]"
     ],
     "infra_step": true,
     "name": "ensure builder cache dir"
@@ -32,8 +32,8 @@
       "--revision",
       "v8@HEAD"
     ],
-    "cwd": "[BUILDER_CACHE]/TestBuilder",
-    "env_prefixes": {
+    "cwd": "[BUILDER_CACHE]",
+    "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
       ]
@@ -96,16 +96,16 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/TestBuilder/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
       "lookup",
       "-m",
       "chromium.testing.master",
       "-b",
       "TestBuilder",
       "--config-file",
-      "[BUILDER_CACHE]/TestBuilder/v8/infra/mb/mb_config.pyl"
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl"
     ],
-    "cwd": "[BUILDER_CACHE]/TestBuilder/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -122,19 +122,19 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILDER_CACHE]/TestBuilder/v8/tools/mb/mb.py",
+      "[BUILDER_CACHE]/v8/tools/mb/mb.py",
       "gen",
       "-m",
       "chromium.testing.master",
       "-b",
       "TestBuilder",
       "--config-file",
-      "[BUILDER_CACHE]/TestBuilder/v8/infra/mb/mb_config.pyl",
+      "[BUILDER_CACHE]/v8/infra/mb/mb_config.pyl",
       "--swarming-targets-file",
       "bot_default\n",
       "//out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/TestBuilder/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -160,9 +160,9 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/TestBuilder/v8/out/Release"
+      "[BUILDER_CACHE]/v8/out/Release"
     ],
-    "cwd": "[BUILDER_CACHE]/TestBuilder/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -174,12 +174,12 @@
       "-w",
       "dupbuild=err",
       "-C",
-      "[BUILDER_CACHE]/TestBuilder/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "-d",
       "explain",
       "-n"
     ],
-    "cwd": "[BUILDER_CACHE]/TestBuilder/v8",
+    "cwd": "[BUILDER_CACHE]/v8",
     "env": {
       "CHROME_HEADLESS": "1"
     },
@@ -199,9 +199,9 @@
       "RECIPE_REPO[depot_tools]/gsutil.py",
       "--skip-sendgomatsmon",
       "--ninja-log-outdir",
-      "[BUILDER_CACHE]/TestBuilder/v8/out/Release",
+      "[BUILDER_CACHE]/v8/out/Release",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/TestBuilder/v8/out/Release\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-w\", \"dupbuild=err\", \"-C\", \"[BUILDER_CACHE]/v8/out/Release\"]",
       "--build-exit-status",
       "0",
       "--ninja-log-compiler",
@@ -217,7 +217,7 @@
       "python",
       "-u",
       "RECIPE_MODULE[build::isolate]/resources/isolate.py",
-      "[BUILDER_CACHE]/TestBuilder/v8/tools/swarming_client",
+      "[BUILDER_CACHE]/v8/tools/swarming_client",
       "batcharchive",
       "--dump-json",
       "/path/to/tmp/json",
@@ -232,7 +232,7 @@
       "*.swp",
       "--blacklist",
       ".git",
-      "[BUILDER_CACHE]/TestBuilder/v8/out/Release/bot_default.isolated.gen.json"
+      "[BUILDER_CACHE]/v8/out/Release/bot_default.isolated.gen.json"
     ],
     "name": "isolate tests",
     "~followup_annotations": [
@@ -261,6 +261,59 @@
     "name": "gsutil upload",
     "~followup_annotations": [
       "@@@STEP_LINK@gsutil.upload@https://storage.cloud.google.com/chromium-v8/isolated/chromium.testing.master/TestBuilder/f2cbea7e89a45f46819777bb78a1f5bd0241f64c.json@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "prpc",
+      "call",
+      "-format=json",
+      "luci-scheduler.appspot.com",
+      "scheduler.Scheduler.EmitTriggers"
+    ],
+    "infra_step": true,
+    "name": "trigger",
+    "stdin": "{\"batches\": [{\"jobs\": [{\"job\": \"v8_triggered_bot\", \"project\": \"v8\"}], \"trigger\": {\"buildbucket\": {\"properties\": {\"parent_build_config\": \"Release\", \"parent_build_environment\": {\"gn_args\": \"target_cpu = \\\"x86\\\" use_goma = true\"}, \"parent_buildername\": \"TestBuilder\", \"parent_got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"parent_got_revision_cp\": \"refs/heads/master@{#50110}\", \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"swarm_hashes\": {\"bot_default\": \"[dummy hash for bot_default]\"}}, \"tags\": [\"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", \"parent_buildername:TestBuilder\", \"parent_buildnumber:571\", \"user_agent:recipe\"]}, \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", \"title\": \"TestBuilder/571\"}}], \"timestamp\": 1337000001500000}",
+    "stdout": "/path/to/tmp/json",
+    "~followup_annotations": [
+      "@@@STEP_TEXT@input {",
+      "    \"batches\": [",
+      "        {",
+      "            \"jobs\": [",
+      "                {",
+      "                    \"job\": \"v8_triggered_bot\", ",
+      "                    \"project\": \"v8\"",
+      "                }",
+      "            ], ",
+      "            \"trigger\": {",
+      "                \"buildbucket\": {",
+      "                    \"properties\": {",
+      "                        \"parent_build_config\": \"Release\", ",
+      "                        \"parent_build_environment\": {",
+      "                            \"gn_args\": \"target_cpu = \\\"x86\\\" use_goma = true\"",
+      "                        }, ",
+      "                        \"parent_buildername\": \"TestBuilder\", ",
+      "                        \"parent_got_revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", ",
+      "                        \"parent_got_revision_cp\": \"refs/heads/master@{#50110}\", ",
+      "                        \"revision\": \"f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", ",
+      "                        \"swarm_hashes\": {",
+      "                            \"bot_default\": \"[dummy hash for bot_default]\"",
+      "                        }",
+      "                    }, ",
+      "                    \"tags\": [",
+      "                        \"buildset:commit/gitiles/chromium.googlesource.com/v8/v8/+/f2cbea7e89a45f46819777bb78a1f5bd0241f64c\", ",
+      "                        \"parent_buildername:TestBuilder\", ",
+      "                        \"parent_buildnumber:571\", ",
+      "                        \"user_agent:recipe\"",
+      "                    ]",
+      "                }, ",
+      "                \"id\": \"6a0a73b0-070b-492b-9135-9f26a2a00001\", ",
+      "                \"title\": \"TestBuilder/571\"",
+      "            }",
+      "        }",
+      "    ], ",
+      "    \"timestamp\": 1337000001500000",
+      "}@@@"
     ]
   },
   {

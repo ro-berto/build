@@ -18,7 +18,6 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/raw_io',
-  'recipe_engine/runtime',
   'recipe_engine/step',
   'recipe_engine/url',
   'swarming_client',
@@ -821,15 +820,6 @@ def GenTests(api):
           '--spec-path', 'target_os = [\'fuchsia\']') +
       api.v8.check_in_any_arg('build.generate_build_files', 'Debug') +
       api.v8.check_in_any_arg('build.compile', 'Debug') +
-      api.post_process(Filter('trigger'))
-  )
-
-  # Test triggering a non-luci builder.
-  yield (
-      api.v8.test('client.v8', 'V8 Foobar - builder', 'non_luci',
-                  build_config='Release',
-                  triggers='V8 Foobar') +
-      api.runtime(is_luci=False, is_experimental=False) +
       api.post_process(Filter('trigger'))
   )
 
