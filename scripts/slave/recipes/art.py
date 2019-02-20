@@ -331,7 +331,8 @@ def setup_target(api,
       api.step('device pre-run cleanup', [
           art_tools.join('cleanup-buildbot-device.sh')])
 
-      api.step('setup device', [art_tools.join('setup-buildbot-device.sh')])
+      api.step('setup device', [art_tools.join('setup-buildbot-device.sh'),
+                                '--verbose'])
 
     with api.context(env=env):
       api.step('sync target', [art_tools.join('buildbot-sync.sh')])

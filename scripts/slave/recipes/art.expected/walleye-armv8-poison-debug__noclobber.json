@@ -78,7 +78,8 @@
   },
   {
     "cmd": [
-      "[START_DIR]/art/tools/setup-buildbot-device.sh"
+      "[START_DIR]/art/tools/setup-buildbot-device.sh",
+      "--verbose"
     ],
     "env": {
       "ADB": "[START_DIR]/prebuilts/runtime/adb",
