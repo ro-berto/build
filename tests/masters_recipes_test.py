@@ -17,7 +17,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 MAIN_WATERFALL_MASTERS = [
     'master.chromium',
-    'master.chromium.chrome',
 ]
 
 
@@ -29,12 +28,6 @@ TRYSERVER_MASTERS = [
 
 
 SUPPRESSIONS = {
-    'master.chromium.chrome': [
-        'Google Chrome ChromeOS',
-        'Google Chrome Linux x64',
-        'Google Chrome Mac',
-        'Google Chrome Win',
-    ],
 }
 
 
@@ -529,10 +522,6 @@ def main(argv):
           if mw_builder in chromium_recipe_builders.get(
               main_waterfall_master, []):
             covered_builders.add((main_waterfall_master, mw_builder))
-
-  # TODO(phajdan.jr): Add a way to only count trybots launched by CQ by default.
-  print 'Main waterfall ng-trybot coverage: %.2f' % (
-      100.0 * len(covered_builders) / len(all_builders))
 
   not_covered_builders = all_builders.difference(covered_builders)
   suppressed_builders = set()
