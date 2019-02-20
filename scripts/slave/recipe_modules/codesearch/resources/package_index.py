@@ -28,12 +28,14 @@ from windows_shell_split import WindowsShellSplit
 class IndexPack(object):
   """Class used to create an index pack to be indexed by Kythe."""
 
-  def __init__(self, compdb_path, corpus=None, root=None,
+  def __init__(self, compdb_path, gn_targets_path, corpus=None, root=None,
                out_dir='src/out/Debug', verbose=False):
     """Initializes IndexPack.
 
     Args:
       compdb_path: path to the compilation database.
+      gn_targets_path: path to a json file contains gn target information, as
+        produced by 'gn desc --format=json'. See 'gn help desc' for more info.
       corpus: the corpus to use for the generated Kythe VNames, e.g. 'chromium'.
         A VName identifies a node in the Kythe index. For more details, see:
         https://kythe.io/docs/kythe-storage.html
@@ -45,7 +47,22 @@ class IndexPack(object):
 
     with open(compdb_path, 'rb') as json_commands_file:
       # The list of JSON dictionaries, each describing one compilation unit.
-      self.json_dictionaries = json.load(json_commands_file)
+      self.compdb = json.load(json_commands_file)
+    with open(gn_targets_path, 'rb') as json_gn_targets_file:
+      gn_targets_dict = json.load(json_gn_targets_file)
+
+      # We only care about certain mojom targets. Filter it down here so we
+      # don't need to do so both times we iterate over it.
+      self.mojom_targets = [
+          # Flatten targets with multiple sources. Invoking the bindings
+          # generator with multiple files is equivalent to invoking it on each
+          # of those files individually in sequence.
+          dict(gn_target, sources=[source])
+          for gn_target in gn_targets_dict.itervalues()
+          if self._IsMojomTarget(gn_target)
+          for source in gn_target['sources']
+      ]
+
     self.corpus = corpus
     self.root = root
     self.out_dir = out_dir
@@ -66,9 +83,95 @@ class IndexPack(object):
     os.makedirs(self.files_directory)
     os.makedirs(self.units_directory)
 
+  def _IsMojomTarget(self, gn_target):
+    """Predicate to check if a GN target is a Mojom target.
+
+    Note that there are multiple GN targets for each Mojom build rule, due to
+    how the mojom.gni rules are defined. We pick a single canonical one out of
+    this set, namely the __generator target, which generates the standard C++
+    bindings."""
+    return (
+        'script' in gn_target and
+        gn_target['script'].endswith('/mojom_bindings_generator.py') and
+        'generate' in gn_target['args'] and
+        '--variant' not in gn_target['args'] and
+        '--generate_non_variant_code' not in gn_target['args'] and
+        # For now we don't support xrefs for languages other than C++, so
+        # the mojom analyzer only bothers with the C++ output.
+        any(gn_target['args'][i:i + 2] == ['-g', 'c++']
+            for i in range(len(gn_target['args']) - 1)) and
+        '--generate_message_ids' not in gn_target['args'])
+
   def close(self):
     """Cleans up any temporary dirs created in the constructor."""
     shutil.rmtree(self.index_directory)
+
+  def _AddDataFile(self, fname):
+    """Adds a data file to the archive.
+
+    Adds it into the list of filehashes, and writes it into the kzip with the
+    appropriate name."""
+    fname = os.path.normpath(fname)
+
+    if fname not in self.filehashes:
+      # We don't want to fail completely if the file doesn't exist.
+      if not os.path.exists(fname):
+        print 'missing ' + fname
+        return
+      # Derive the new filename from the SHA256 hash.
+      with open(fname, 'rb') as source_file:
+        content = source_file.read()
+      content_hash = hashlib.sha256(content).hexdigest()
+      self.filehashes[fname] = content_hash
+      hash_fname = os.path.join(self.files_directory, content_hash)
+      if self.verbose:
+        print ' Including source file %s as %s for compilation' % (fname,
+                                                                   hash_fname)
+      with open(hash_fname, 'wb') as f:
+        f.write(content)
+
+  def _AddUnitFile(self, unit_dictionary):
+    if self.verbose:
+      print "Unit argument: %s" % unit_dictionary['argument']
+
+    wrapper = {'unit': unit_dictionary}
+
+    # Dump the dictionary in JSON format.
+    unit_file_content = json.dumps(wrapper)
+    unit_file_content_hash = hashlib.sha256(unit_file_content).hexdigest()
+    unit_file_path = os.path.join(self.units_directory,
+                                  unit_file_content_hash)
+    with open(unit_file_path, 'wb') as unit_file:
+      unit_file.write(unit_file_content)
+    if self.verbose:
+      print 'Wrote compilation unit file %s' % unit_file_path
+
+  def _ConvertGnPath(self, gn_path):
+    """Converts gn paths into output-directory-relative paths.
+
+    gn paths begin with a //, which represents the root of the repository."""
+    return os.path.relpath(os.path.join('src', *gn_path[2:].split('/')),
+                           self.out_dir)
+
+  def _NormalisePath(self, path):
+    """Normalise a path.
+
+    For our purposes, "normalised" means relative to the root dir (the one
+    containing src/), and passed through os.path.normpath (which eliminates
+    double slashes, unnecessary '.' and '..'s, etc.
+    """
+
+    return os.path.normpath(os.path.join(self.out_dir, path))
+
+  def _CorrespondingGeneratedHeader(self, gn_target):
+    """Given a mojom gn target, return the corresponding generated header
+    filename.
+
+    e.g. //foo/bar.mojom -> gen/foo/bar.mojom.h
+    """
+
+    source_mojom = gn_target['sources'][0]
+    return 'gen/%s.h' % source_mojom[len('//'):]
 
   def _GenerateDataFiles(self):
     """A function which produces the data files for the index pack.
@@ -79,8 +182,7 @@ class IndexPack(object):
 
     # Keeps track of the '*.filepaths' files already processed.
     filepaths = set()
-    # Process all entries in the compilation database.
-    for entry in self.json_dictionaries:
+    for entry in self.compdb:
       filepath = os.path.join(entry['directory'], entry['file'] + '.filepaths')
       if self.verbose:
         print 'Extract source files from %s' % filepath
@@ -111,29 +213,28 @@ class IndexPack(object):
           # crbug.com/513826
           if 'third_party/llvm-build' in fname:
             continue
-          if fname not in self.filehashes:
-            # We don't want to fail completely if the file doesn't exist.
-            if not os.path.exists(fname):
-              print 'missing ' + fname
-              continue
-            # Derive the new filename from the SHA256 hash.
-            with open(fname, 'rb') as source_file:
-              content = source_file.read()
-            content_hash = hashlib.sha256(content).hexdigest()
-            self.filehashes[fname] = content_hash
-            file_name = os.path.join(self.files_directory, content_hash)
-            if self.verbose:
-              print ' Including source file %s as %s for compilation' % (
-                  fname, file_name)
-            with open(file_name, 'wb') as f:
-              f.write(content)
+
+          self._AddDataFile(fname)
+
+    for target in self.mojom_targets:
+      # Add the .mojom file itself.
+      self._AddDataFile(
+          os.path.join(os.getcwd(), self.out_dir,
+                       self._ConvertGnPath(target['sources'][0])))
+
+      # Add the C++ header file generated from this mojom file. The Kythe mojom
+      # analyser can't generate this itself, so it needs it supplied in order to
+      # wire up the mojom identifiers to their generated C++ counterparts.
+      self._AddDataFile(
+          os.path.join(os.getcwd(), self.out_dir,
+                       self._CorrespondingGeneratedHeader(target)))
 
   def _GenerateUnitFiles(self):
     """A function which produces the unit files for the index pack.
 
     A unit file consists of a JSON dump of this format:
     {
-      'source_file': [<name of the cc or c file>],
+      'source_file': [<name of the cc, c, or mojom file>],
       'output_key': <path to the file generated by this compilation unit>,
       'argument': <list of compilation parameters>,
       'v_name': {
@@ -161,8 +262,7 @@ class IndexPack(object):
     # Keeps track of the '*.filepaths' files already processed.
     filepaths = set()
 
-    # Process all entries in the compilation database.
-    for entry in self.json_dictionaries:
+    for entry in self.compdb:
       filepath = os.path.join(entry['directory'], entry['file'] + '.filepaths')
       if not os.path.exists(filepath) or filepath in filepaths:
         continue
@@ -236,7 +336,8 @@ class IndexPack(object):
           if '//' in fname:
             path = fname.split('//')
             fname = '/'.join(path)
-          fname_fullpath = os.path.join(entry['directory'], fname)
+          fname_fullpath = os.path.normpath(
+              os.path.join(entry['directory'], fname))
           if fname_fullpath not in self.filehashes:
             print 'No information about required input file %s' % fname_fullpath
             continue
@@ -246,7 +347,7 @@ class IndexPack(object):
           if os.path.isabs(fname):
             fname = os.path.relpath(fname, entry['directory'])
 
-          normalized_fname = os.path.normpath(os.path.join(self.out_dir, fname))
+          normalized_fname = self._NormalisePath(fname)
           if sys.platform == 'win32':
             # Kythe expects all paths to use forward slashes.
             normalized_fname = normalized_fname.replace('\\', '/')
@@ -287,22 +388,56 @@ class IndexPack(object):
       unit_dictionary['argument'] = command_list + ['-w']
       unit_dictionary['required_input'] = required_inputs
 
-      if self.verbose:
-        print "Unit argument: %s" % unit_dictionary['argument']
+      self._AddUnitFile(unit_dictionary)
 
-      wrapper = {
-          'unit': unit_dictionary
+    for target in self.mojom_targets:
+      unit_dictionary = {}
+
+      source_file = self._ConvertGnPath(target['sources'][0])
+      unit_dictionary['source_file'] = [source_file]
+      generated_header = self._CorrespondingGeneratedHeader(target)
+      unit_dictionary['output_key'] = generated_header
+
+      # gn produces an unsubstituted {{response_file_name}} for filelist. We
+      # can't work with this, so we remove it and add the source file as a
+      # positional argument instead.
+      unit_dictionary['argument'] = [
+          arg for arg in target['args'] if not arg.startswith('--filelist=')
+      ] + [source_file]
+
+      unit_dictionary['v_name'] = {
+          'corpus': self.corpus,
+          'language': 'mojom',
       }
+      if self.root:
+        unit_dictionary['v_name']['root'] = self.root
 
-      # Dump the dictionary in JSON format.
-      unit_file_content = json.dumps(wrapper)
-      unit_file_content_hash = hashlib.sha256(unit_file_content).hexdigest()
-      unit_file_path = os.path.join(self.units_directory,
-                                    unit_file_content_hash)
-      with open(unit_file_path, 'wb') as unit_file:
-        unit_file.write(unit_file_content)
-      if self.verbose:
-        print 'Wrote compilation unit file %s' % unit_file_path
+      # TODO(orodley): In order to do name resolution we'll need to add all the
+      # files that are directly referenced (not the full transitive closure
+      # though).
+      required_inputs = []
+      for required_file in [source_file, generated_header]:
+        required_input = {
+            'v_name': {
+                'corpus': self.corpus,
+                'path': self._NormalisePath(required_file),
+            },
+            'info': {
+                'path':
+                    required_file,
+                'digest':
+                    self.filehashes[os.path.normpath(
+                        os.path.join(os.getcwd(), self.out_dir,
+                                     required_file))],
+            },
+        }
+        if self.root:
+          required_input['v_name']['root'] = self.root
+
+        required_inputs.append(required_input)
+      unit_dictionary['required_input'] = required_inputs
+
+      self._AddUnitFile(unit_dictionary)
 
   def GenerateIndexPack(self):
     """Generates the index pack.
@@ -391,6 +526,9 @@ def main():
   parser.add_argument('--path-to-compdb',
                       required=True,
                       help='path to the compilation database')
+  parser.add_argument('--path-to-gn-targets',
+                      required=True,
+                      help='path to the gn targets json file')
   parser.add_argument('--corpus',
                       default='chromium-linux',
                       help='the kythe corpus to use for the vname')
@@ -410,7 +548,8 @@ def main():
   options = parser.parse_args()
 
   print '%s: Index generation...' % time.strftime('%X')
-  with closing(IndexPack(options.path_to_compdb, options.corpus, options.root,
+  with closing(IndexPack(options.path_to_compdb, options.path_to_gn_targets,
+                         options.corpus, options.root,
                          options.out_dir, options.verbose)) as index_pack:
     index_pack.GenerateIndexPack()
 

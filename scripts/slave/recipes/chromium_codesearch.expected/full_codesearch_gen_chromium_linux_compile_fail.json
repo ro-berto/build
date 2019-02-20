@@ -300,6 +300,33 @@
     "name": "generate compilation database"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gn.py",
+      "desc",
+      "[CACHE]/builder/src/out/Debug",
+      "*",
+      "--format=json"
+    ],
+    "name": "generate gn target list",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[CACHE]/builder/src/out/Debug/gn_targets.json"
+    ],
+    "infra_step": true,
+    "name": "write gn target list"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",

@@ -300,6 +300,33 @@
     "name": "generate compilation database"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gn.py",
+      "desc",
+      "[CACHE]/builder/src/out/android-Debug",
+      "*",
+      "--format=json"
+    ],
+    "name": "generate gn target list",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "\n{\n   \"//ipc:mojom_constants__generator\": {\n      \"args\": [ \"--use_bundled_pylibs\", \"generate\", \"-d\", \"../../\", \"-I\", \"../../\", \"-o\", \"gen\", \"--bytecode_path\", \"gen/mojo/public/tools/bindings\", \"--filelist={{response_file_name}}\", \"-g\", \"c++\", \"--typemap\", \"gen/ipc/mojom_constants__type_mappings\" ],\n      \"deps\": [ \"//ipc:mojom_constants__parsed\", \"//ipc:mojom_constants__type_mappings\", \"//ipc:mojom_constants__verify_deps\", \"//mojo/public/tools/bindings:precompile_templates\" ],\n      \"inputs\": [ \"//mojo/public/tools/bindings/generators/mojom_cpp_generator.py\" ],\n      \"outputs\": [ \"//out/Debug/gen/ipc/constants.mojom.cc\", \"//out/Debug/gen/ipc/constants.mojom.h\", \"//out/Debug/gen/ipc/constants.mojom-test-utils.cc\", \"//out/Debug/gen/ipc/constants.mojom-test-utils.h\" ],\n      \"public\": \"*\",\n      \"script\": \"//mojo/public/tools/bindings/mojom_bindings_generator.py\",\n      \"sources\": [ \"//ipc/constants.mojom\" ],\n      \"testonly\": false,\n      \"toolchain\": \"//build/toolchain/linux:clang_x64\",\n      \"type\": \"action\",\n      \"visibility\": [ \"//ipc:*\" ]\n   }\n}\n",
+      "[CACHE]/builder/src/out/android-Debug/gn_targets.json"
+    ],
+    "infra_step": true,
+    "name": "write gn target list"
+  },
+  {
     "allow_subannotations": true,
     "cmd": [
       "python",
@@ -666,6 +693,8 @@
       "RECIPE_MODULE[build::codesearch]/resources/package_index.py",
       "--path-to-compdb",
       "[CACHE]/builder/src/out/android-Debug/compile_commands.json",
+      "--path-to-gn-targets",
+      "[CACHE]/builder/src/out/android-Debug/gn_targets.json",
       "--path-to-archive-output",
       "[CACHE]/builder/src/out/android-Debug/chromium_android.kzip",
       "--corpus",

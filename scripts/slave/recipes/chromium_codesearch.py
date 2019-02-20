@@ -204,6 +204,7 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
   api.codesearch.generate_compilation_database(
       targets, mastername='chromium.infra.codesearch',
       buildername=api.buildbucket.builder_name)
+  api.codesearch.generate_gn_target_list()
 
   # If the compile fails, abort execution and don't upload the pack. When we
   # upload an incomplete (due to compile failures) pack to Kythe, it fails
@@ -243,11 +244,31 @@ def _RunStepWithRetry(api, step_function, max_tries=3):
 def _sanitize_nonalpha(text):
   return ''.join(c if c.isalnum() else '_' for c in text)
 
+SAMPLE_GN_DESC_OUTPUT = '''
+{
+   "//ipc:mojom_constants__generator": {
+      "args": [ "--use_bundled_pylibs", "generate", "-d", "../../", "-I", "../../", "-o", "gen", "--bytecode_path", "gen/mojo/public/tools/bindings", "--filelist={{response_file_name}}", "-g", "c++", "--typemap", "gen/ipc/mojom_constants__type_mappings" ],
+      "deps": [ "//ipc:mojom_constants__parsed", "//ipc:mojom_constants__type_mappings", "//ipc:mojom_constants__verify_deps", "//mojo/public/tools/bindings:precompile_templates" ],
+      "inputs": [ "//mojo/public/tools/bindings/generators/mojom_cpp_generator.py" ],
+      "outputs": [ "//out/Debug/gen/ipc/constants.mojom.cc", "//out/Debug/gen/ipc/constants.mojom.h", "//out/Debug/gen/ipc/constants.mojom-test-utils.cc", "//out/Debug/gen/ipc/constants.mojom-test-utils.h" ],
+      "public": "*",
+      "script": "//mojo/public/tools/bindings/mojom_bindings_generator.py",
+      "sources": [ "//ipc/constants.mojom" ],
+      "testonly": false,
+      "toolchain": "//build/toolchain/linux:clang_x64",
+      "type": "action",
+      "visibility": [ "//ipc:*" ]
+   }
+}
+'''
 
 def GenTests(api):
   for buildername, _ in SPEC['builders'].iteritems():
     yield (
         api.test('full_%s' % (_sanitize_nonalpha(buildername))) +
+        api.step_data('generate gn target list',
+                      api.raw_io.stream_output(
+                          SAMPLE_GN_DESC_OUTPUT, stream='stdout')) +
         api.properties.generic(buildername=buildername) +
         api.runtime(is_luci=True, is_experimental=False)
     )
@@ -255,6 +276,9 @@ def GenTests(api):
   for buildername, _ in SPEC['builders'].iteritems():
     yield (
         api.test('full_%s_with_revision' % (_sanitize_nonalpha(buildername))) +
+        api.step_data('generate gn target list',
+                      api.raw_io.stream_output(
+                          SAMPLE_GN_DESC_OUTPUT, stream='stdout')) +
         api.properties.generic(buildername=buildername) +
         api.properties(root_solution_revision='a' * 40,
                        root_solution_revision_timestamp=1531887759) +
@@ -266,6 +290,9 @@ def GenTests(api):
         'full_%s_delete_generated_files_fail' %
         _sanitize_nonalpha('codesearch-gen-chromium-win')) +
     api.step_data('delete old generated files', retcode=1) +
+    api.step_data('generate gn target list',
+                  api.raw_io.stream_output(
+                      SAMPLE_GN_DESC_OUTPUT, stream='stdout')) +
     api.properties.generic(buildername='codesearch-gen-chromium-win') +
     api.runtime(is_luci=True, is_experimental=False)
   )
@@ -284,6 +311,9 @@ def GenTests(api):
         'full_%s_translation_unit_fail' % _sanitize_nonalpha(
             'codesearch-gen-chromium-chromiumos')) +
     api.step_data('run translation_unit clang tool', retcode=2) +
+    api.step_data('generate gn target list',
+                  api.raw_io.stream_output(
+                      SAMPLE_GN_DESC_OUTPUT, stream='stdout')) +
     api.properties.generic(buildername='codesearch-gen-chromium-chromiumos') +
     api.runtime(is_luci=True, is_experimental=False)
   )
@@ -302,6 +332,9 @@ def GenTests(api):
         'full_%s_sync_generated_files_fail' %
         _sanitize_nonalpha('codesearch-gen-chromium-linux')) +
     api.step_data('sync generated files', retcode=1) +
+    api.step_data('generate gn target list',
+                  api.raw_io.stream_output(
+                      SAMPLE_GN_DESC_OUTPUT, stream='stdout')) +
     api.properties.generic(buildername='codesearch-gen-chromium-linux') +
     api.runtime(is_luci=True, is_experimental=False)
   )

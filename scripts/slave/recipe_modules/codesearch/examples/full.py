@@ -89,6 +89,7 @@ def RunSteps(api):
   api.codesearch.generate_compilation_database(
       targets, mastername='chromium.infra.codesearch',
       buildername=buildername)
+  api.codesearch.generate_gn_target_list()
 
   api.codesearch.cleanup_old_generated()
 

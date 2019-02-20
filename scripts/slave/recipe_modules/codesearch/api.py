@@ -72,6 +72,15 @@ class CodesearchApi(recipe_api.RecipeApi):
 
     return step_result
 
+  def generate_gn_target_list(self, output_file=None):
+    output_file = output_file or self.c.gn_targets_json_file
+    output = self.m.python(
+        'generate gn target list', self.m.depot_tools.gn_py_path,
+        ['desc', self.c.debug_path, '*', '--format=json'],
+        stdout=self.m.raw_io.output_text()
+    ).stdout
+    self.m.file.write_raw('write gn target list', output_file, output)
+
   def run_clang_tool(self):
     """Download and run the clang tool."""
     # Download the clang tool.
@@ -153,6 +162,7 @@ class CodesearchApi(recipe_api.RecipeApi):
       index_pack_kythe_name: Name of the Kythe index pack
     """
     args = ['--path-to-compdb', self.c.compile_commands_json_file,
+            '--path-to-gn-targets', self.c.gn_targets_json_file,
             '--path-to-archive-output',
             self.c.debug_path.join(index_pack_kythe_name),
             '--corpus', self.c.CORPUS,

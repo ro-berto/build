@@ -288,6 +288,33 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "RECIPE_REPO[depot_tools]/gn.py",
+      "desc",
+      "[START_DIR]/src/out/Debug",
+      "*",
+      "--format=json"
+    ],
+    "name": "generate gn target list",
+    "stdout": "/path/to/tmp/"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "copy",
+      "",
+      "[START_DIR]/src/out/Debug/gn_targets.json"
+    ],
+    "infra_step": true,
+    "name": "write gn target list"
+  },
+  {
+    "cmd": [
       "find",
       "[START_DIR]/src/out",
       "-mtime",
@@ -665,6 +692,8 @@
       "RECIPE_MODULE[build::codesearch]/resources/package_index.py",
       "--path-to-compdb",
       "[START_DIR]/src/out/Debug/compile_commands.json",
+      "--path-to-gn-targets",
+      "[START_DIR]/src/out/Debug/gn_targets.json",
       "--path-to-archive-output",
       "[START_DIR]/src/out/Debug/chromium_linux.kzip",
       "--corpus",
