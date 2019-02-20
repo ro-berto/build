@@ -211,6 +211,16 @@ class IndexPack(object):
         for i in range(len(command_list)):
           if command_list[i].startswith('-imsvc'):
             command_list[i] = command_list[i].replace('\\', '/')
+        # HACK ALERT: Here we define header guards to prevent Kythe from using
+        # the CUDA wrapper headers, which cause indexing errors.
+        # The standard Kythe extractor dumps header search state to help the
+        # indexer find the right headers, but we don't do that in this script.
+        # The below lines work around it by excluding the CUDA headers entirely.
+        command_list += [
+            '-D__CLANG_CUDA_WRAPPERS_NEW',
+            '-D__CLANG_CUDA_WRAPPERS_COMPLEX',
+            '-D__CLANG_CUDA_WRAPPERS_ALGORITHM',
+        ]
 
       required_inputs = []
       with open(filepath, 'rb') as filepaths_file:
