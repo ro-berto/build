@@ -14,6 +14,7 @@ DEPS = [
   'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
+  'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/python',
   'recipe_engine/step',
@@ -45,7 +46,9 @@ def _RunStepsInternal(api):
   relative_root = api.gclient.get_gerrit_patch_root(
       gclient_config=gclient_config).rstrip('/')
   got_revision_properties = api.bot_update.get_project_revision_properties(
-      relative_root, gclient_config or api.gclient.c)
+      # Replace path.sep with '/', since most recipes are written assuming '/'
+      # as the delimiter. This breaks on windows otherwise.
+      relative_root.replace(api.path.sep, '/'), gclient_config or api.gclient.c)
   upstream = bot_update_step.json.output['properties'].get(
       got_revision_properties[0])
 
@@ -213,6 +216,19 @@ def GenTests(api):
         repo_name='recipes_py',
         gerrit_project='infra/luci/recipes-py',
         runhooks=True) +
+    api.step_data('presubmit', api.json.output([['infra_presubmit',
+                                                 ['compile']]]))
+  )
+
+  yield (
+    api.test('recipes-py-windows') +
+    api.properties.tryserver(
+        mastername='tryserver.infra',
+        buildername='infra_presubmit',
+        repo_name='recipes_py',
+        gerrit_project='infra/luci/recipes-py',
+        runhooks=True) +
+    api.platform('win', 64) +
     api.step_data('presubmit', api.json.output([['infra_presubmit',
                                                  ['compile']]]))
   )
