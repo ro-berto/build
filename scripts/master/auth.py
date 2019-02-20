@@ -44,9 +44,6 @@ discoveryServiceUrl.
 import json
 import logging
 
-from twisted.python import log
-import apiclient
-import httplib2
 import oauth2client
 
 
@@ -105,7 +102,7 @@ def create_service_account_credentials(json_key_filename, scope=None):
   except Exception as ex:
     msg = ('Invalid service account json key in %s: %s' %
            (json_key_filename, ex))
-    log.msg(msg, loglevel=logging.ERROR)
+    logging.error(msg)
     raise Error(msg)
 
 
