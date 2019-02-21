@@ -129,11 +129,13 @@ def RunSteps(api, platforms, custom_trigger_script,
     task.dimensions['os'] = api.swarming.prefered_os_dimension(platform)
     if platform == 'linux':
       task.shards = 2
+      task.shard_indices = range(task.shards)
     elif platform == 'mac':
       task.shards = 3
-      task.shard_index = 1
+      task.shard_indices = [1]
     else:
       task.shards = 1
+      task.shard_indices = [0]
     if custom_trigger_script:
       task.trigger_script = {'script': 'custom_trigger.py'}
     task.tags.add('os:' + platform)
@@ -144,9 +146,10 @@ def RunSteps(api, platforms, custom_trigger_script,
 
   # Launch all tasks.
   for task in tasks:
-    step_result = api.swarming.trigger_task(task)
-    assert len(task.get_task_shard_output_dirs()) == len(task.shard_indices())
-    assert step_result.swarming_task in tasks
+    step_results = api.swarming.trigger_task(task)
+    for step_result in step_results:
+      assert len(task.get_task_shard_output_dirs()) == len(task.shard_indices)
+      assert step_result.swarming_task in tasks
 
   # Recipe can do something useful here locally while tasks are
   # running on swarming.
