@@ -4,7 +4,8 @@
 
 """Recipe to test v8/node.js integration."""
 
-from recipe_engine.types import freeze
+from recipe_engine.recipe_api import Property
+from recipe_engine.post_process import Filter
 
 
 DEPS = [
@@ -24,38 +25,19 @@ DEPS = [
   'v8',
 ]
 
-BUILDERS = freeze({
-  # Node-CI master.
-  'Node-CI Linux64': {
-    'testing': {
-      'platform': 'linux',
-    },
-  },
-  'node_ci_linux64_rel': {
-    'testing': {
-      'platform': 'linux',
-      'is_trybot': True,
-    },
-  },
-  # V8 integration.
-  'V8 Linux64 - node.js integration ng': {
-    'v8_tot': True,
-    'testing': {
-      'platform': 'linux',
-    },
-  },
-})
+PROPERTIES = {
+  # Use V8 ToT (HEAD) revision instead of pinned.
+  'v8_tot': Property(default=False, kind=bool),
+}
 
 
-def RunSteps(api):
-  bot_config = BUILDERS[api.buildbucket.builder_name]
-
+def RunSteps(api, v8_tot):
   with api.step.nest('initialization'):
     # Set up dependent modules.
     api.chromium.set_config('node_ci')
     api.gclient.set_config('node_ci')
     revision = api.buildbucket.gitiles_commit.id or 'HEAD'
-    if bot_config.get('v8_tot', False):
+    if v8_tot:
       api.gclient.c.revisions['node-ci'] = 'HEAD'
       api.gclient.c.revisions['node-ci/v8'] = revision
       api.gclient.c.got_revision_reverse_mapping['got_revision'] = 'node-ci/v8'
@@ -112,7 +94,7 @@ def _sanitize_nonalpha(*chunks):
 
 
 def GenTests(api):
-  for buildername, bot_config in BUILDERS.iteritems():
+  def test(buildername, platform, is_trybot=False, **properties):
     buildbucket_kwargs = {
         'project': 'v8',
         'git_repo': 'https://chromium.googlesource.com/v8/node-ci',
@@ -120,7 +102,7 @@ def GenTests(api):
         'build_number': 571,
         'revision': 'a' * 40,
     }
-    if bot_config['testing'].get('is_trybot'):
+    if is_trybot:
       properties_fn = api.properties.tryserver
       buildbucket_fn = api.buildbucket.try_build
       buildbucket_kwargs['change_number'] = 456789
@@ -128,12 +110,33 @@ def GenTests(api):
     else:
       properties_fn = api.properties.generic
       buildbucket_fn = api.buildbucket.ci_build
-    yield (
+    return (
         api.test(_sanitize_nonalpha('full', buildername)) +
         properties_fn(
             path_config='kitchen',
+            **properties
         ) +
         buildbucket_fn(**buildbucket_kwargs) +
-        api.platform(bot_config['testing']['platform'], 64) +
+        api.platform(platform, 64) +
         api.v8.hide_infra_steps()
     )
+
+  # Test CI builder on node-ci master.
+  yield test(
+      'Node-CI Foobar',
+      platform='linux',
+  )
+
+  # Test try builder on node-ci master.
+  yield test(
+      'node_ci_foobar_rel',
+      platform='linux',
+      is_trybot=True,
+  )
+
+  # Test CI builder on V8 master.
+  yield test(
+      'V8 Foobar',
+      platform='linux',
+      v8_tot=True,
+  ) + api.post_process(Filter('initialization.bot_update'))
