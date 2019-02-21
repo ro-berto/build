@@ -44,7 +44,7 @@ discoveryServiceUrl.
 import json
 import logging
 
-import oauth2client
+from oauth2client.client import SignedJwtAssertionCredentials
 
 
 DEFAULT_SCOPES = ['email']
@@ -97,7 +97,7 @@ def create_service_account_credentials(json_key_filename, scope=None):
     with open(json_key_filename, 'r') as f:
       key = json.load(f)
     validate_json_key(key)
-    return oauth2client.client.SignedJwtAssertionCredentials(
+    return SignedJwtAssertionCredentials(
         key['client_email'], key['private_key'], scope)
   except Exception as ex:
     msg = ('Invalid service account json key in %s: %s' %
