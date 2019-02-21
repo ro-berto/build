@@ -123,17 +123,13 @@ def make_archive(api, ref, version, archive_type, step_suffix='',
           name='update refbuild binaries',
       )
       api.v8.buildbucket_trigger(
-          'luci.v8-internal.ci',
-          api.v8.get_changes(),
-          [{
-            'builder_name': 'v8_refbuild_bundler',
-            'properties': {
+          [('v8_refbuild_bundler', {
               'revision': api.v8.revision,
               'platform': platform,
-            },
-          }],
-          step_name='trigger refbuild bundler',
-      )
+          })],
+          project='v8-internal',
+          bucket='ci',
+          step_name='trigger refbuild bundler')
 
     parent.presentation.links['download'] = (
         ARCHIVE_LINK % (gs_path_suffix, archive_name))
