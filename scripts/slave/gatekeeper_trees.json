@@ -15,7 +15,6 @@
         "build-db": "waterfall_build_db.json",
         "masters": {
             "https://build.chromium.org/p/chromium": ["*"],
-            "https://build.chromium.org/p/chromium.chrome": ["*"],
             "https://build.chromium.org/p/chromium.chromiumos": ["*"],
             "https://build.chromium.org/p/chromium.gpu": ["*"],
             "https://build.chromium.org/p/chromium.linux": ["*"],

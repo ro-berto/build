@@ -221,22 +221,6 @@
         }
       }
     ],
-    "https://build.chromium.org/p/chromium.chrome": [
-      {
-        "categories": [
-          "chromium_tree_closer",
-          "experimental_tests"
-        ],
-        "builders": {
-          "Google Chrome Linux x64": {
-            "tree_notify": [
-              "thomasanderson@chromium.org"
-            ]
-          },
-          "*": {}
-        }
-      }
-    ],
     "https://build.chromium.org/p/chromiumos": [
       {
         "comment": ["master.chromiumos"],
