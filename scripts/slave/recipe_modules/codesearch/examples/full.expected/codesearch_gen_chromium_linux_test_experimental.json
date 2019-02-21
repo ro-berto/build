@@ -296,6 +296,7 @@
       "*",
       "--format=json"
     ],
+    "cwd": "[START_DIR]/src",
     "name": "generate gn target list",
     "stdout": "/path/to/tmp/"
   },

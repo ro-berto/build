@@ -74,11 +74,12 @@ class CodesearchApi(recipe_api.RecipeApi):
 
   def generate_gn_target_list(self, output_file=None):
     output_file = output_file or self.c.gn_targets_json_file
-    output = self.m.python(
-        'generate gn target list', self.m.depot_tools.gn_py_path,
-        ['desc', self.c.debug_path, '*', '--format=json'],
-        stdout=self.m.raw_io.output_text()
-    ).stdout
+    with self.m.context(cwd=self.m.path['checkout']):
+      output = self.m.python(
+          'generate gn target list', self.m.depot_tools.gn_py_path,
+          ['desc', self.c.debug_path, '*', '--format=json'],
+          stdout=self.m.raw_io.output_text()
+      ).stdout
     self.m.file.write_raw('write gn target list', output_file, output)
 
   def run_clang_tool(self):

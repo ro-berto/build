@@ -312,6 +312,7 @@
       "*",
       "--format=json"
     ],
+    "cwd": "[CACHE]/builder/src",
     "name": "generate gn target list",
     "stdout": "/path/to/tmp/"
   },
