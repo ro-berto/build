@@ -546,7 +546,10 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           git_repo='https://chromium.googlesource.com/v8/v8',
           change_number=456789,
           patch_set=12,
-          tags=self.m.buildbucket.tags(user_agent='cq'),
+          tags=self.m.buildbucket.tags(
+              user_agent='cq',
+              buildset='patch/gerrit/chromium-review.googlesource.com/456789/12'
+          ),
       )
     else:
       test += self.m.buildbucket.ci_build(
@@ -556,6 +559,11 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           git_ref=git_ref,
           build_number=571,
           revision='deadbeef'*5,
+          tags=self.m.buildbucket.tags(
+              user_agent='luci-scheduler',
+              buildset='commit/gitiles/chromium.googlesource.com/v8/v8/+/'
+                       'deadbeefdeadbeefdeadbeefdeadbeefdeadbeef'
+          ),
       )
 
     # If use_goma is provided (not None), check if relevant steps either are
@@ -654,12 +662,3 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
       if self._check_step(check, steps, step):
         check(not any(value in arg for arg in steps[step]['cmd']))
     return self.post_process(check_any, step, value)
-
-  def buildbucket_test_data(self, num_requests):
-    return self.m.json.output_stream({
-      'results': [{
-        'build': {
-          'id': 10000000 + i,
-        },
-      } for i in range(num_requests)]
-    })
