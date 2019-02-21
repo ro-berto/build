@@ -1793,8 +1793,6 @@ Deletes the debug log file
 
 &mdash; **def [download\_parent\_isolate](/scripts/slave/recipe_modules/dart/api.py#145)(self):**
 
-&mdash; **def [get\_latest\_tested\_commit](/scripts/slave/recipe_modules/dart/api.py#257)(self):**
-
 &mdash; **def [get\_secret](/scripts/slave/recipe_modules/dart/api.py#61)(self, name):**
 
 Decrypts the specified secret and returns the location of the result
@@ -1812,7 +1810,7 @@ Reads the debug log file
 Runs test.py in the given isolate, sharded over several swarming tasks.
 Returns the created tasks, which can be collected with collect_all().
 
-&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#514)(self, latest, test_data):**
+&mdash; **def [test](/scripts/slave/recipe_modules/dart/api.py#514)(self, test_data):**
 
 Reads the test-matrix.json file in checkout and runs each step listed
 in the file.

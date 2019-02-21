@@ -77,7 +77,6 @@ def RunSteps(api):
 
 
 def _run_steps_impl(api):
-  latest, _ = api.dart.get_latest_tested_commit()
   # If parent_fileset is set, the bot is triggered by
   # another builder, and we should not download the sdk.
   # We rely on all files being in the isolate
@@ -118,7 +117,7 @@ def _run_steps_impl(api):
           api.step("%s %s" % (api.properties[cmd_key],x), try_test_cmd)
   else:
     with api.step.defer_results():
-      api.dart.test(latest=latest, test_data=TEST_MATRIX)
+      api.dart.test(test_data=TEST_MATRIX)
       api.dart.kill_tasks()
       with api.context(cwd=api.path['checkout']):
         api.dart.read_debug_log()

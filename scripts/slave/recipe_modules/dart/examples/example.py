@@ -168,7 +168,6 @@ TEST_MATRIX = {
 
 
 def RunSteps(api):
-  latest, _ = api.dart.get_latest_tested_commit()
   api.dart.checkout('clobber' in api.properties)
 
   build_args = ['--super-fast']
@@ -177,7 +176,7 @@ def RunSteps(api):
   api.dart.kill_tasks()
   api.dart.read_debug_log()
 
-  api.dart.test(latest=latest, test_data=TEST_MATRIX)
+  api.dart.test(test_data=TEST_MATRIX)
 
   if 'parent_fileset' in api.properties:
     api.dart.download_parent_isolate()
@@ -214,7 +213,7 @@ def GenTests(api):
       _canned_step(api, 'test2') +
       api.step_data('upload testing fileset test',
           stdout=api.raw_io.output('test_hash')) +
-      api.step_data('gsutil find latest build',
+      api.step_data('download previous results.gsutil find latest build',
           api.raw_io.output_text('123', name='latest')))
 
   yield (api.test('analyzer-none-linux-release-be') +

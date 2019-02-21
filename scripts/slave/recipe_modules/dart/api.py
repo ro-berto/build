@@ -254,7 +254,7 @@ class DartApi(recipe_api.RecipeApi):
           results.add_run(bot_name, contents)
 
 
-  def get_latest_tested_commit(self):
+  def _get_latest_tested_commit(self):
     builder = self._get_builder_dir()
     latest_result = self.m.gsutil.download(
         'dart-test-results',
@@ -511,7 +511,7 @@ class DartApi(recipe_api.RecipeApi):
                        self.m.path['checkout'].join('.debug.log'))
 
 
-  def test(self, latest, test_data):
+  def test(self, test_data):
     """Reads the test-matrix.json file in checkout and runs each step listed
     in the file.
 
@@ -540,7 +540,7 @@ class DartApi(recipe_api.RecipeApi):
           'Error, could not find builder by name %s in test-matrix' % builder)
     self.delete_debug_log()
     self._write_file_sets(test_matrix['filesets'])
-    self._run_steps(config, isolate_hashes, builder, global_config, latest)
+    self._run_steps(config, isolate_hashes, builder, global_config)
 
 
   def _write_file_sets(self, filesets):
@@ -601,8 +601,7 @@ class DartApi(recipe_api.RecipeApi):
           return None
 
 
-  def _run_steps(self, config, isolate_hashes, builder_name, global_config,
-                 latest):
+  def _run_steps(self, config, isolate_hashes, builder_name, global_config):
     """Executes all steps from a json test-matrix builder entry"""
     # Find information from the builder name. It should be in the form
     # <info>-<os>-<mode>-<arch>-<runtime> or <info>-<os>-<mode>-<arch>.
@@ -670,9 +669,9 @@ class DartApi(recipe_api.RecipeApi):
       # Old workflow test.py steps throw on failing tests and results need to
       # be processed in the defer_results block.
       if not self._report_new_results():
-        self._process_test_results(steps, global_config, latest)
+        self._process_test_results(steps, global_config)
     if self._report_new_results():
-      self._process_test_results(steps, global_config, latest)
+      self._process_test_results(steps, global_config)
 
 
   @recipe_api.non_step
@@ -703,11 +702,12 @@ class DartApi(recipe_api.RecipeApi):
     deferred_result.get_result() # raises build errors
 
 
-  def _process_test_results(self, steps, global_config, latest):
+  def _process_test_results(self, steps, global_config):
     # If there are no test steps, steps will be empty.
     if self._run_new_steps() and steps:
       with self.m.context(cwd=self.m.path['checkout']):
         with self.m.step.nest('download previous results'):
+          latest, _ = self._get_latest_tested_commit()
           self._download_results(latest)
         with self.m.step.nest('deflaking'):
           for step in steps:

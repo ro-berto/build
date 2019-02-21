@@ -1,42 +1,5 @@
 [
   {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "gs://dart-test-results/builders/dart2js-linux-release-chrome/latest",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "gsutil find latest build",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@raw_io.output_text[latest]@123@@@",
-      "@@@STEP_LOG_END@raw_io.output_text[latest]@@@"
-    ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
-      "--",
-      "RECIPE_REPO[depot_tools]/gsutil.py",
-      "----",
-      "cp",
-      "gs://dart-test-results/builders/dart2js-linux-release-chrome/123/revision",
-      "/path/to/tmp/"
-    ],
-    "infra_step": true,
-    "name": "gsutil get revision for latest build",
-    "~followup_annotations": [
-      "@@@STEP_LOG_END@raw_io.output_text[revision]@@@"
-    ]
-  },
-  {
     "cmd": [],
     "name": "ensure_goma"
   },
@@ -1396,6 +1359,47 @@
     "cmd": [],
     "cwd": "[CACHE]/builder/sdk",
     "name": "download previous results"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/builders/dart2js-linux-release-chrome/latest",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
+    "name": "download previous results.gsutil find latest build",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_LINE@raw_io.output_text[latest]@123@@@",
+      "@@@STEP_LOG_END@raw_io.output_text[latest]@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "RECIPE_MODULE[depot_tools::gsutil]/resources/gsutil_smart_retry.py",
+      "--",
+      "RECIPE_REPO[depot_tools]/gsutil.py",
+      "----",
+      "cp",
+      "gs://dart-test-results/builders/dart2js-linux-release-chrome/123/revision",
+      "/path/to/tmp/"
+    ],
+    "cwd": "[CACHE]/builder/sdk",
+    "infra_step": true,
+    "name": "download previous results.gsutil get revision for latest build",
+    "~followup_annotations": [
+      "@@@STEP_NEST_LEVEL@1@@@",
+      "@@@STEP_LOG_END@raw_io.output_text[revision]@@@"
+    ]
   },
   {
     "cmd": [
