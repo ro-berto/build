@@ -242,7 +242,7 @@ def _build_and_upload(api, goma_dir):
 
     # Zip build.
     package = api.zip.make_package(archive_dir, zip_file)
-    package.add_directory(archive_dir)
+    package.add_file(archive_dir.join('bin', 'node'))
     package.zip('zipping')
 
     # Upload to google storage bucket.

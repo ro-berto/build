@@ -310,7 +310,7 @@
       "RECIPE_MODULE[build::zip]/resources/zip.py"
     ],
     "name": "build and upload.zipping",
-    "stdin": "{\"entries\": [{\"path\": \"[CLEANUP]/archive-build\", \"type\": \"dir\"}], \"output\": \"[CLEANUP]/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip\", \"root\": \"[CLEANUP]/archive-build\"}",
+    "stdin": "{\"entries\": [{\"archive_name\": null, \"path\": \"[CLEANUP]/archive-build/bin/node\", \"type\": \"file\"}], \"output\": \"[CLEANUP]/node-linux-rel-50110-f2cbea7e89a45f46819777bb78a1f5bd0241f64c.zip\", \"root\": \"[CLEANUP]/archive-build\"}",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@"
     ]
