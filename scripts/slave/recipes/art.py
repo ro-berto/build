@@ -8,6 +8,7 @@ DEPS = [
   'recipe_engine/file',
   'recipe_engine/path',
   'recipe_engine/properties',
+  'recipe_engine/runtime',
   'recipe_engine/step',
   'repo',
 ]
@@ -322,9 +323,14 @@ def setup_target(api,
   if debug and device == 'fugu':
     make_jobs = 1
 
+  build_jobs = 8
+  if api.runtime.is_luci:
+    # Limit to 2 for the current experimental luci bot.
+    build_jobs = 2
+
   with api.context(env=env):
     api.step('build target', [art_tools.join('buildbot-build.sh'),
-                              '-j8', '--target'])
+                              '-j%d' % (build_jobs), '--target'])
 
   with api.step.defer_results():
     with api.context(env=test_env):
@@ -669,7 +675,8 @@ def GenTests(api):
             project='art',
             builder=builder,
         ) +
-        api.properties(bot_id='TestSlave')
+        api.properties(bot_id='TestSlave') +
+        api.runtime(is_luci=True, is_experimental=True)
     )
 
   for builders in _CONFIG_MAP.values():

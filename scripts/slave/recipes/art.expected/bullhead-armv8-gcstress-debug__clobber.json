@@ -35,7 +35,7 @@
   {
     "cmd": [
       "[START_DIR]/art/tools/buildbot-build.sh",
-      "-j8",
+      "-j2",
       "--target"
     ],
     "env": {
