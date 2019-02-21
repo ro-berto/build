@@ -322,6 +322,7 @@
   * [v8/node_integration](#recipes-v8_node_integration) &mdash; Recipe to test v8/node.
   * [v8/node_integration_ng](#recipes-v8_node_integration_ng) &mdash; Recipe to test v8/node.
   * [v8/presubmit](#recipes-v8_presubmit) &mdash; Recipe for running presubmit in V8 CI.
+  * [v8/verify_flakes](#recipes-v8_verify_flakes) &mdash; Recipe to verify flaky tests (aka progression testing).
   * [v8:tests/example](#recipes-v8_tests_example)
   * [wasm_llvm](#recipes-wasm_llvm)
   * [webrtc/auto_roll_webrtc_deps](#recipes-webrtc_auto_roll_webrtc_deps)
@@ -5892,6 +5893,17 @@ Recipe to test v8/node.js integration.
 Recipe for running presubmit in V8 CI.
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/v8/presubmit.py#23)(api):**
+### *recipes* / [v8/verify\_flakes](/scripts/slave/recipes/v8/verify_flakes.py)
+
+[DEPS](/scripts/slave/recipes/v8/verify_flakes.py#19): [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/step][recipe_engine/recipe_modules/step]
+
+Recipe to verify flaky tests (aka progression testing).
+
+The recipe reads flake config and for each entry triggers flako recipe in
+reproduce_only mode. If any flake fails to reproduce, the build is marked as
+failed, which can then be used to alert sheriffs via a gatekeeper rule.
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/v8/verify_flakes.py#29)(api):**
 ### *recipes* / [v8:tests/example](/scripts/slave/recipe_modules/v8/tests/example.py)
 
 [DEPS](/scripts/slave/recipe_modules/v8/tests/example.py#7): [v8](#recipe_modules-v8), [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/runtime][recipe_engine/recipe_modules/runtime]
