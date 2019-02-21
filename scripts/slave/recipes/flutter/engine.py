@@ -50,17 +50,21 @@ def Build(api, config, *targets, **kwargs):
 def RunHostTests(api, out_dir, exe_extension=''):
   directory = api.path['start_dir'].join('src', out_dir)
   with api.context(cwd=directory):
-    # Cross platform tests.
+    # Only run flow gold tests on Linux
+    flow_gold_args = ["--gtest_filter=-PerformanceOverlayLayer.Gold"]
+    if api.platform.is_linux:
+      flow_gold_args = [
+        '--golden-dir="%s"' %
+          api.path['start_dir'].join('src', 'flutter', 'testing', 'resources'),
+        '--font-file="%s"' %
+          api.path['start_dir'].join('src', 'flutter', 'third_party', 'txt',
+                                     'third_party', 'fonts',
+                                     'Roboto-Regular.ttf')
+      ]
     api.step('Test Flow',
-      [
-        directory.join('flow_unittests' + exe_extension),
-        '--golden-dir',
-        api.path['start_dir'].join('src', 'flutter', 'testing', 'resources'),
-        '--font-file',
-        api.path['start_dir'].join('src', 'flutter', 'third_party', 'txt',
-                                   'third_party', 'fonts',
-                                   'Roboto-Regular.ttf'),
-      ])
+      [directory.join('flow_unittests' + exe_extension)] + flow_gold_args)
+
+    # Cross platform tests.
     api.step('Test FML', [
       directory.join('fml_unittests' + exe_extension),
       '--gtest_filter="-*TimeSensitiveTest*"'

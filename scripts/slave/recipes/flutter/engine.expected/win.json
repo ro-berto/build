@@ -3715,10 +3715,7 @@
   {
     "cmd": [
       "[START_DIR]\\src\\out\\host_debug\\flow_unittests.exe",
-      "--golden-dir",
-      "[START_DIR]\\src\\flutter\\testing\\resources",
-      "--font-file",
-      "[START_DIR]\\src\\flutter\\third_party\\txt\\third_party\\fonts\\Roboto-Regular.ttf"
+      "--gtest_filter=-PerformanceOverlayLayer.Gold"
     ],
     "cwd": "[START_DIR]\\src\\out\\host_debug",
     "env": {
