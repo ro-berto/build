@@ -75,6 +75,8 @@ def RunHostTests(api, out_dir, exe_extension=''):
     if not api.platform.is_win:
       api.step('Test Embedder API',
         [directory.join('embedder_unittests' + exe_extension)])
+      api.step('Test Embedder a11y API',
+        [directory.join('embedder_a11y_unittests' + exe_extension)])
 
     if api.platform.is_mac:
       api.step('Test Flutter Channels',

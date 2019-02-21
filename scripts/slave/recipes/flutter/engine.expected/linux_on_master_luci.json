@@ -1891,6 +1891,21 @@
   },
   {
     "cmd": [
+      "[START_DIR]/src/out/host_debug_unopt/embedder_a11y_unittests"
+    ],
+    "cwd": "[START_DIR]/src/out/host_debug_unopt",
+    "env": {
+      "GOMA_DIR": "[CACHE]/goma/client"
+    },
+    "env_prefixes": {
+      "PATH": [
+        "[START_DIR]/src/third_party/dart/tools/sdks/dart-sdk/bin"
+      ]
+    },
+    "name": "Test Embedder a11y API"
+  },
+  {
+    "cmd": [
       "python",
       "-u",
       "RECIPE_MODULE[build::zip]/resources/zip.py"
