@@ -26,31 +26,12 @@ def RunSteps(api):
 
 
 def GenTests(api):
-  def test(name, **kwargs):
-    return (
-        api.test(name) +
-        api.properties.generic(
-          path_config='kitchen',
-          **kwargs
-        ) +
-        api.runtime(is_luci=True, is_experimental=False)
-    )
-
-  yield test('basic')
+  yield api.v8.test('client.v8', 'V8 Foobar')
 
   yield (
-      test('custom_out_dir', out_dir='out-ref') +
+      api.v8.test(
+        'client.v8', 'V8 Foobar', 'custom_out_dir', out_dir='out-ref') +
       api.v8.check_in_any_arg('compile', 'v8/out-ref/Release') +
       api.v8.check_in_any_arg('isolate tests', 'v8/out-ref/Release') +
-      api.post_process(DropExpectation)
-  )
-
-  yield (
-      test('correct_user_agent_for_cq_triggered_trybots') +
-      api.buildbucket.try_build(
-        project='v8',
-        git_repo='https://chromium.googlesource.com/v8/v8',
-        tags=api.buildbucket.tags(user_agent='cq')) +
-      api.v8.check_in_any_arg('trigger', 'user_agent:cq') +
       api.post_process(DropExpectation)
   )

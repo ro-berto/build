@@ -546,6 +546,7 @@ class V8TestApi(recipe_test_api.RecipeTestApi):
           git_repo='https://chromium.googlesource.com/v8/v8',
           change_number=456789,
           patch_set=12,
+          tags=self.m.buildbucket.tags(user_agent='cq'),
       )
     else:
       test += self.m.buildbucket.ci_build(
