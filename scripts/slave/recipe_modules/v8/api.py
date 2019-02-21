@@ -1353,6 +1353,9 @@ class V8Api(recipe_api.RecipeApi):
       properties.update(testfilter=list(self.m.properties['testfilter']))
     self._copy_property(self.m.properties, properties, 'extra_flags')
 
+    # TODO(machenbach): Also set meaningful buildbucket tags of triggering
+    # parent.
+
     # Pass build environment to testers if it doesn't exceed buildbot's
     # limits.
     # TODO(machenbach): Remove the check in the after-buildbot age.
@@ -1370,13 +1373,29 @@ class V8Api(recipe_api.RecipeApi):
         trigger_props = {}
         self._copy_property(self.m.properties, trigger_props, 'revision')
         trigger_props.update(properties)
-        builds = self.buildbucket_trigger(
-            [(builder_name, dict(
-              trigger_props,
-              **test_spec.as_properties_dict(builder_name)
-            )) for builder_name in triggers]
+        bucket_name = (
+            self.m.buildbucket.bucket_v1 or
+            'master.%s' % self.m.properties['mastername'])
+        # Generate a list of fake changes from the blamelist property to have
+        # correct blamelist displayed on the child build. Unfortunately, this
+        # only copies author names, but additional details about the list of
+        # changes associated with the build are currently not accessible from
+        # the recipe code.
+        step_result = self.buildbucket_trigger(
+            bucket_name, self.get_changes(),
+            [{
+              'builder_name': builder_name,
+              'properties': dict(
+                  trigger_props,
+                  **test_spec.as_properties_dict(builder_name)
+              ),
+            } for builder_name in triggers],
+            # Tryserver uses custom buildset that is set by the buildbucket
+            # module itself.
+            add_buildset_tag=False,
         )
-        triggered_build_ids.extend(build.id for build in builds)
+        triggered_build_ids.extend(
+            build['build']['id'] for build in step_result.stdout['results'])
       else:
         ci_properties = dict(properties)
         if self.should_upload_build:
@@ -1388,6 +1407,10 @@ class V8Api(recipe_api.RecipeApi):
                   ci_properties,
                   **test_spec.as_properties_dict(builder_name)
                 ),
+                tags={
+                  'buildset': 'commit/gitiles/chromium.googlesource.com/v8/'
+                              'v8/+/%s' % ci_properties['revision']
+                }
               ), 'v8', [builder_name],
             ) for builder_name in triggers],
             step_name='trigger'
@@ -1397,48 +1420,92 @@ class V8Api(recipe_api.RecipeApi):
       proxy_properties = {'archive': self._get_default_archive()}
       proxy_properties.update(properties)
       self.buildbucket_trigger(
-          [('v8_trigger_proxy', proxy_properties)],
-          project='v8-internal',
-          bucket='ci',
-          step_name='trigger_internal')
+          'luci.v8-internal.ci', self.get_changes(),
+          [{
+            'properties': proxy_properties,
+            'builder_name': 'v8_trigger_proxy'
+          }],
+          step_name='trigger_internal'
+      )
 
     if triggered_build_ids:
       output_properties = self.m.step.active_result.presentation.properties
       output_properties['triggered_build_ids'] = triggered_build_ids
 
-  def buildbucket_trigger(
-      self, requests, project=None, bucket=None, step_name='trigger'):
+  def get_changes(self):
+    # TODO(sergiyb): Remove this after migrating all builders to LUCI as
+    # there the revision from the buildset will be used instead.
+    blamelist = self.m.properties.get('blamelist', ['fake-author'])
+    return [{'author': email} for email in blamelist]
+
+  def buildbucket_trigger(self, bucket, changes, requests, step_name='trigger',
+                          service_account='v8-bot', add_buildset_tag=True):
     """Triggers builds via buildbucket.
 
     Args:
-      requests: List of 2-tuples (builder_name, properties).
-      project: Project to trigger builds in (defaults to same as parent).
-      bucket: Bucket to trigger builds in (defaults to same as parent).
+      bucket: Name of the bucket to add builds to.
+      changes: List of changes to be associated with the scheduled build. Each
+          entry is a dictionary like this: {'author': ..., 'revision': ...}. The
+          revision is optional and will be extracted from build propeties if not
+          provided. The author is an arbitrary string or an email address.
+      requests: List of requests, where each request is a dictionary like this:
+          {'builder_name': ..., 'properties': {'revision': ..., ...}}. Note that
+          builder_name and revision are mandatory, whereas additional properties
+          are optional.
       step_name: Name of the triggering step that appear on the build.
+      service_account: Puppet service account to be used for authentication to
+          buildbucket.
+      add_buildset_tag: Adds a buildset tag based on revision property.
     """
-    # Add user_agent:cq to child builds if the parent is also triggered by CQ.
-    extra_tags = {}
+    # TODO(sergiyb): Remove this line after migrating all builders to swarming.
+    # There an implicit task account (specified in the cr-buildbucket.cfg) will
+    # be used instead.
+    if not self.m.runtime.is_luci:
+      self.m.buildbucket.use_service_account_key(
+          self.m.puppet_service_account.get_key_path(service_account))
+
+    # Tag child builds as triggered by CQ if the parent is also triggered by CQ.
     if any(tag.key == 'user_agent' and tag.value == 'cq'
            for tag in self.m.buildbucket.build.tags):
-      extra_tags['user_agent'] = 'cq'
+      child_user_agent = 'cq'
+    else:
+      child_user_agent = 'recipe'
 
-    builds = self.m.buildbucket.schedule([
-      self.m.buildbucket.schedule_request(
-        project=project,
-        bucket=bucket,
-        builder=builder_name,
-        tags=self.m.buildbucket.tags(**extra_tags),
-        properties=properties,
-      ) for builder_name, properties in requests
-    ], step_name=step_name)
+    requests = [{
+      'bucket': bucket,
+      'tags': dict(request.get('tags', {}), user_agent=child_user_agent),
+      'parameters': {
+        'builder_name': request['builder_name'],
+        'properties': request['properties'],
+        # This is required by Buildbot to correctly set 'revision' and
+        # 'repository' properties, which are used by Milo and the recipe.
+        # TODO(sergiyb): Remove this after migrating to LUCI/Swarming.
+        'changes': [{
+          'author': {'email': change['author']},
+          'revision': change.get(
+            'revision', request['properties']['revision']),
+          'repo_url': 'https://chromium.googlesource.com/v8/v8'
+        } for change in changes],
+      },
+    } for request in requests]
 
-    # TODO(sergiyb): Remove this when recipe simulation will start throwing
-    # InfraFailure for a non-zero retcode. See https://crbug.com/931473.
-    if any(not b.id for b in builds):
-      self.m.step.active_result.presentation.status = self.m.step.EXCEPTION
-      raise self.m.step.InfraFailure('buildbucket.schedule failed')
+    if add_buildset_tag:
+      for request in requests:
+        request['tags']['buildset'] = (
+            'commit/gitiles/chromium.googlesource.com/v8/v8/+/%s' %
+            request['parameters']['properties']['revision'])
 
-    return builds
+    step_result = self.m.buildbucket.put(
+        requests,
+        name=step_name,
+        step_test_data=lambda: (
+          self.m.v8.test_api.buildbucket_test_data(len(requests))),
+    )
+
+    if 'error' in step_result.stdout:
+      step_result.presentation.status = self.m.step.FAILURE
+
+    return step_result
 
   def get_change_range(self):
     if self.m.properties.get('override_changes'):
