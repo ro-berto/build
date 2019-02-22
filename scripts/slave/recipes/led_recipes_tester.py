@@ -41,6 +41,13 @@ DEFAULT_BUILDERS = [
 ]
 
 
+# We run the fast CL on Windows to speed up cycle time. Most of the
+# recipe functionality is tested by the slow CL on Linux.
+FAST_BUILDERS = [
+  'luci.chromium.try:win7-rel',
+]
+
+
 # CL to use when testing a recipe which touches chromium source.
 CHROMIUM_SRC_TEST_CLS = {
   # This slow CL touches `DEPS` which causes analyze to compile and test all
@@ -65,7 +72,7 @@ def _checkout_project(api, workdir, gclient_config, patch):
         patch=patch, gclient_config=gclient_config)
 
 
-def trigger_cl(api, recipe, repo_path, recipes_py_path):
+def trigger_cl(api, recipe, repo_path, recipes_py_path, builder):
   """Calculates the chromium testing CL for the current CL.
 
   Returns None if we shouldn't trigger anything.
@@ -99,6 +106,8 @@ def trigger_cl(api, recipe, repo_path, recipes_py_path):
         ' be wrong with the swarming task this is based on.' % recipe)
 
   if recipe in analyze_step.json.output['recipes']:
+    if builder in FAST_BUILDERS:
+      return 'fast'
     return 'slow'
 
   if str(repo_path.join('infra', 'config', 'recipes.cfg')) in affected_files:
@@ -149,7 +158,7 @@ def RunSteps(api, repo_name):
         # a single analysis pass, instead of one per builder.
         cl = trigger_cl(
             api, recipe, cl_workdir.join(repo_name),
-            recipes_dir.join('recipes.py'))
+            recipes_dir.join('recipes.py'), builder)
         if not cl:
           result = api.python.succeeding_step(
               'not running a tryjob for %s' % recipe,

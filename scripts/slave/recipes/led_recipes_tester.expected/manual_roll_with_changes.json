@@ -487,7 +487,7 @@
     "cmd": [
       "[CACHE]/led/led",
       "edit-cr-cl",
-      "https://chromium-review.googlesource.com/c/chromium/src/+/1286761"
+      "https://chromium-review.googlesource.com/c/chromium/src/+/1406154"
     ],
     "cwd": "[CACHE]/build/build",
     "name": "analyze+launch luci.chromium.try:win7-rel.led edit-cr-cl",
@@ -495,11 +495,11 @@
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_NEST_LEVEL@1@@@",
-      "@@@STEP_TEXT@Using slow testing CL@@@",
+      "@@@STEP_TEXT@Using fast testing CL@@@",
       "@@@STEP_LOG_END@json.output (invalid)@@@",
       "@@@STEP_LOG_LINE@json.output (exception)@No JSON object could be decoded@@@",
       "@@@STEP_LOG_END@json.output (exception)@@@",
-      "@@@STEP_LINK@Test CL@https://chromium-review.googlesource.com/c/chromium/src/+/1286761@@@"
+      "@@@STEP_LINK@Test CL@https://chromium-review.googlesource.com/c/chromium/src/+/1406154@@@"
     ]
   },
   {
