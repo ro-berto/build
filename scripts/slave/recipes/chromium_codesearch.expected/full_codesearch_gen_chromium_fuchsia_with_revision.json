@@ -692,6 +692,8 @@
       "--",
       "python",
       "RECIPE_MODULE[build::codesearch]/resources/package_index.py",
+      "--checkout-dir",
+      "[CACHE]/builder/src",
       "--path-to-compdb",
       "[CACHE]/builder/src/out/fuchsia-Debug/compile_commands.json",
       "--path-to-gn-targets",

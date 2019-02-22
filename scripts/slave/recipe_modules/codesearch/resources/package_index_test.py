@@ -50,7 +50,6 @@ class PackageIndexTest(unittest.TestCase):
     # "out/chromium-linux/Debug" build directory which all the compilation DB
     # entries are relative to.
     self.root_dir = tempfile.mkdtemp()
-    os.chdir(self.root_dir)
     src_dir = os.path.join(self.root_dir, 'src/')
     self.build_dir = os.path.join(src_dir, 'out/chromium-linux/Debug/')
     os.makedirs(self.build_dir)
@@ -114,6 +113,7 @@ class PackageIndexTest(unittest.TestCase):
       self.archive_path = archive_file.name
 
     self.index_pack = package_index.IndexPack(
+        self.root_dir,
         os.path.realpath(self.compdb_file.name),
         os.path.realpath(self.gn_targets_file.name),
         corpus=CORPUS,
@@ -303,6 +303,7 @@ class PackageIndexTest(unittest.TestCase):
     # Recreate the index pack.
     self.index_pack.close()
     self.index_pack = package_index.IndexPack(
+        self.root_dir,
         os.path.realpath(self.compdb_file.name),
         os.path.realpath(self.gn_targets_file.name),
         corpus=CORPUS,

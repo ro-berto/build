@@ -694,6 +694,8 @@
       "--",
       "python",
       "RECIPE_MODULE[build::codesearch]/resources/package_index.py",
+      "--checkout-dir",
+      "[START_DIR]/src",
       "--path-to-compdb",
       "[START_DIR]/src/out/win-Debug/compile_commands.json",
       "--path-to-gn-targets",

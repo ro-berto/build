@@ -162,7 +162,8 @@ class CodesearchApi(recipe_api.RecipeApi):
     Args:
       index_pack_kythe_name: Name of the Kythe index pack
     """
-    args = ['--path-to-compdb', self.c.compile_commands_json_file,
+    args = ['--checkout-dir', self.m.path['checkout'],
+            '--path-to-compdb', self.c.compile_commands_json_file,
             '--path-to-gn-targets', self.c.gn_targets_json_file,
             '--path-to-archive-output',
             self.c.debug_path.join(index_pack_kythe_name),

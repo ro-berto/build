@@ -1671,7 +1671,7 @@ Checks if the current build is running coverage-instrumented targets.
 
 #### **class [CodesearchApi](/scripts/slave/recipe_modules/codesearch/api.py#12)([RecipeApi][recipe_engine/wkt/RecipeApi]):**
 
-&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#215)(self):**
+&mdash; **def [checkout\_generated\_files\_repo\_and\_sync](/scripts/slave/recipe_modules/codesearch/api.py#216)(self):**
 
 Check out the generated files repo and sync the generated files
 into this checkout.

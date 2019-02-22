@@ -28,11 +28,13 @@ from windows_shell_split import WindowsShellSplit
 class IndexPack(object):
   """Class used to create an index pack to be indexed by Kythe."""
 
-  def __init__(self, compdb_path, gn_targets_path, corpus=None, root=None,
-               out_dir='src/out/Debug', verbose=False):
+  def __init__(self, root_dir, compdb_path, gn_targets_path, corpus=None,
+               root=None, out_dir='src/out/Debug', verbose=False):
     """Initializes IndexPack.
 
     Args:
+      root_dir: path to the root of the checkout (i.e. the path containing
+        src/). out_dir is relative to this.
       compdb_path: path to the compilation database.
       gn_targets_path: path to a json file contains gn target information, as
         produced by 'gn desc --format=json'. See 'gn help desc' for more info.
@@ -63,6 +65,7 @@ class IndexPack(object):
           for source in gn_target['sources']
       ]
 
+    self.root_dir = root_dir
     self.corpus = corpus
     self.root = root
     self.out_dir = out_dir
@@ -219,14 +222,14 @@ class IndexPack(object):
     for target in self.mojom_targets:
       # Add the .mojom file itself.
       self._AddDataFile(
-          os.path.join(os.getcwd(), self.out_dir,
+          os.path.join(self.root_dir, self.out_dir,
                        self._ConvertGnPath(target['sources'][0])))
 
       # Add the C++ header file generated from this mojom file. The Kythe mojom
       # analyser can't generate this itself, so it needs it supplied in order to
       # wire up the mojom identifiers to their generated C++ counterparts.
       self._AddDataFile(
-          os.path.join(os.getcwd(), self.out_dir,
+          os.path.join(self.root_dir, self.out_dir,
                        self._CorrespondingGeneratedHeader(target)))
 
   def _GenerateUnitFiles(self):
@@ -427,7 +430,7 @@ class IndexPack(object):
                     required_file,
                 'digest':
                     self.filehashes[os.path.normpath(
-                        os.path.join(os.getcwd(), self.out_dir,
+                        os.path.join(self.root_dir, self.out_dir,
                                      required_file))],
             },
         }
@@ -534,6 +537,9 @@ def main():
                       help='the kythe corpus to use for the vname')
   parser.add_argument('--root',
                       help='the kythe root to use for the vname')
+  parser.add_argument('--checkout-dir',
+                      required=True,
+                      help='The root of the repository.')
   parser.add_argument('--out_dir',
                       default='src/out/Debug',
                       help='the output directory from which compilation is run')
@@ -547,15 +553,18 @@ def main():
                       action='store_true')
   options = parser.parse_args()
 
+  root_dir = os.path.normpath(os.path.join(options.checkout_dir, '..'))
+
   print '%s: Index generation...' % time.strftime('%X')
-  with closing(IndexPack(options.path_to_compdb, options.path_to_gn_targets,
-                         options.corpus, options.root,
-                         options.out_dir, options.verbose)) as index_pack:
+  with closing(
+      IndexPack(root_dir, options.path_to_compdb, options.path_to_gn_targets,
+                options.corpus, options.root, options.out_dir,
+                options.verbose)) as index_pack:
     index_pack.GenerateIndexPack()
 
     if not options.keep_filepaths_files:
       # Clean up the *.filepaths files.
-      _RemoveFilepathsFiles(os.path.join(os.getcwd(), 'src'))
+      _RemoveFilepathsFiles(os.path.join(root_dir, 'src'))
 
     # Create the archive containing the generated files.
     index_pack.CreateArchive(options.path_to_archive_output)
