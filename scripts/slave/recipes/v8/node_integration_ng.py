@@ -9,9 +9,11 @@ from recipe_engine.post_process import Filter
 
 
 DEPS = [
+  'commit_position',
   'chromium',
   'depot_tools/bot_update',
   'depot_tools/gclient',
+  'depot_tools/gsutil',
   'goma',
   'recipe_engine/buildbucket',
   'recipe_engine/context',
@@ -23,12 +25,17 @@ DEPS = [
   'recipe_engine/python',
   'recipe_engine/step',
   'v8',
+  'zip',
 ]
 
 PROPERTIES = {
   # Use V8 ToT (HEAD) revision instead of pinned.
   'v8_tot': Property(default=False, kind=bool),
 }
+
+# TODO(machenbach): Remove experimental location.
+ARCHIVE_PATH = 'chromium-v8/experimental/node-%s-rel'
+ARCHIVE_LINK = 'https://storage.googleapis.com/%s/%%s' % ARCHIVE_PATH
 
 
 def RunSteps(api, v8_tot):
@@ -60,6 +67,34 @@ def RunSteps(api, v8_tot):
 
   build_output_path = api.chromium.c.build_dir.join(
       api.chromium.c.build_config_fs)
+
+  # Archive node executable on V8 ToT builders.
+  if v8_tot:
+    with api.step.nest('archive') as parent:
+      revision = api.bot_update.last_returned_properties['got_revision']
+      revision_number = str(api.commit_position.parse_revision(
+          api.bot_update.last_returned_properties['got_revision_cp']))
+
+      archive_name = ('node-%s-rel-%s-%s.zip' %
+                      (api.platform.name, revision_number, revision))
+      zip_file = api.path['cleanup'].join(archive_name)
+
+      # Zip build.
+      package = api.zip.make_package(build_output_path, zip_file)
+      package.add_file(
+          build_output_path.join('node'), api.path.join('bin', 'node'))
+      package.zip('zipping')
+
+      # Upload to google storage bucket.
+      api.gsutil.upload(
+        zip_file,
+        ARCHIVE_PATH % api.platform.name,
+        archive_name,
+        args=['-a', 'public-read'],
+      )
+
+    parent.presentation.links['download'] = (
+        ARCHIVE_LINK % (api.platform.name, archive_name))
 
   with api.context(cwd=api.path['checkout']):
     api.step('run cctest', [build_output_path.join('node_cctest')])
@@ -125,7 +160,7 @@ def GenTests(api):
   yield test(
       'Node-CI Foobar',
       platform='linux',
-  )
+  ) + api.post_process(Filter('initialization.bot_update'))
 
   # Test try builder on node-ci master.
   yield test(
@@ -139,4 +174,4 @@ def GenTests(api):
       'V8 Foobar',
       platform='linux',
       v8_tot=True,
-  ) + api.post_process(Filter('initialization.bot_update'))
+  )
