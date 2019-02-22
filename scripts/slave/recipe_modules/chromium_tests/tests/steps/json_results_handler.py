@@ -15,18 +15,18 @@ DEPS = [
 def RunSteps(api):
   results_step = api.step('results', [api.json.output()])
   results = results_step.json.output
+  test_results = api.test_utils.create_results_from_json(results)
 
   handler = api.chromium_tests.steps.JSONResultsHandler()
 
   presentation_step = api.step('presentation_step', [])
-  handler.render_results(api, results, presentation_step.presentation)
+  handler.render_results(api, test_results, presentation_step.presentation)
 
-  valid, unexpected_failures, _, _ = handler.validate_results(api, results)
-
+  validated_results = handler.validate_results(api, results)
   api.step('details', [])
   api.step.active_result.presentation.logs['details'] = [
-      'valid: %r' % valid,
-      'unexpected_failures: %r' % unexpected_failures,
+      'valid: %r' % validated_results['valid'],
+      'unexpected_failures: %r' % validated_results['failures'],
   ]
 
 

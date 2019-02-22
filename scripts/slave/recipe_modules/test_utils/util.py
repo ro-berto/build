@@ -41,18 +41,24 @@ class TestResults(object):
       self.valid = False
       return
 
-    self.version = self.raw.get('version', 'simplified')
-    tests = self.raw.get('tests', {})
-    sep = self.raw.get('path_delimiter', '/')
-    self.tests = convert_trie_to_flat_paths(tests, prefix=None, sep=sep)
+    try:
+      self.version = self.raw.get('version', 'simplified')
+      tests = self.raw.get('tests', {})
+      sep = self.raw.get('path_delimiter', '/')
+      self.tests = convert_trie_to_flat_paths(tests, prefix=None, sep=sep)
 
-    # TODO(dpranke): https://crbug.com/357866 - we should simplify the handling
-    # of both the return code and parsing the actual results.
+      # TODO(dpranke): https://crbug.com/357866 - we should simplify the
+      # handling of both the return code and parsing the actual results.
 
-    if self.version == 'simplified':
-      self._simplified_json_results()
-    else:
-      self._json_results()
+      if self.version == 'simplified':
+        self._simplified_json_results()
+      else:
+        self._json_results()
+    except Exception:
+      # On parsing failure, mark the result as invalid. This will be presented
+      # to users as INVALID_TEST_RESULTS.
+      self.valid = False
+
     assert self.valid is not None, ("TestResults.valid must be set to a "
         "non-None value when the constructor returns.")
 
@@ -69,8 +75,18 @@ class TestResults(object):
           'test3': { 'PASS_COUNT': 3, 'FAIL_COUNT': 2 }
         }
     """
+    unreliable = False
+    if self.raw:
+      global_tags = self.raw.get('global_tags', [])
+      unreliable = 'UNRELIABLE_RESULTS' in global_tags if global_tags else False
+
+    # If the results are interrupted or unreliable, then they're not valid
+    valid = self.valid
+    if self.interrupted or unreliable:
+      valid = False
+
     return {
-      'valid': self.valid,
+      'valid': valid,
       'failures': self.unexpected_failures,
       'total_tests_ran': self.total_test_runs,
       'pass_fail_counts': self.pass_fail_counts,

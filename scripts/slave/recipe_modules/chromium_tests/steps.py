@@ -21,6 +21,14 @@ RESULTS_URL = 'https://chromeperf.appspot.com'
 # total run time, which we want to keep low.
 REPEAT_COUNT_FOR_FAILING_TESTS = 10
 
+def _create_test_run_invalid_dictionary():
+  """Returns the dictionary for an invalid test run."""
+  return {
+    'valid': False,
+    'failures': [],
+    'total_tests_ran': 0,
+    'pass_fail_counts': {},
+  }
 
 class TestOptions(object):
   """Abstracts command line flags to be passed to the test."""
@@ -255,15 +263,6 @@ class Test(object):
   @property
   def runs_on_swarming(self):
     return False
-
-  def _create_test_run_invalid_dictionary(self):
-    """Returns the dictionary for an invalid test run."""
-    return {
-      'valid': False,
-      'failures': [],
-      'total_tests_ran': 0,
-      'pass_fail_counts': {},
-    }
 
   def compile_targets(self, api):
     """List of compile targets needed by this test."""
@@ -824,7 +823,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
 
       failures = result.json.output.get('failures')
       if failures is None:
-        self._test_runs[suffix] = self._create_test_run_invalid_dictionary()
+        self._test_runs[suffix] = _create_test_run_invalid_dictionary()
         api.python.failing_step(
             '%s with suffix %s had an invalid result' % (self.name, suffix),
             'The recipe expected the result to contain the key \'failures\'.'
@@ -987,7 +986,7 @@ class LocalGTestTest(Test):
     finally:
       step_result = api.step.active_result
       if not hasattr(step_result, 'test_utils'): # pragma: no cover
-        self._test_runs[suffix] = self._create_test_run_invalid_dictionary()
+        self._test_runs[suffix] = _create_test_run_invalid_dictionary()
       else:
         gtest_results = step_result.test_utils.gtest_results
         self._test_runs[suffix] = gtest_results.canonical_result_format()
@@ -1029,7 +1028,7 @@ class ResultsHandler(object):
 
     Args:
       api: Recipe API object.
-      results: Results returned by the step.
+      results: A TestResults object.
       presentation: Presentation output of the step.
     """
     raise NotImplementedError()
@@ -1100,17 +1099,6 @@ class JSONResultsHandler(ResultsHandler):
   def render_results(self, api, results, presentation):
     failure_status = (
         api.step.WARNING if self._ignore_task_failure else api.step.FAILURE)
-    try:
-      results = api.test_utils.create_results_from_json_if_needed(
-          results)
-    except Exception as e:
-      presentation.status = api.step.EXCEPTION
-      presentation.step_text += api.test_utils.format_step_text([
-          ("Exception while processing test results: %s" % str(e),),
-      ])
-      presentation.logs['no_results_exc'] = [
-          str(e), '\n', api.traceback.format_exc()]
-      return
 
     if not results.valid:
       # TODO(tansell): Change this to api.step.EXCEPTION after discussion.
@@ -1194,23 +1182,17 @@ class JSONResultsHandler(ResultsHandler):
     presentation.step_text += api.test_utils.format_step_text(step_text)
 
   def validate_results(self, api, results):
-    try:
-      results = api.test_utils.create_results_from_json_if_needed(
-          results)
-    except Exception as e:
-      return False, [str(e), '\n', api.traceback.format_exc()], 0, {}
-    # If results were interrupted, we can't trust they have all the tests in
-    # them. For this reason we mark them as invalid.
-    return (results.valid and not results.interrupted,
-            results.unexpected_failures, results.total_test_runs,
-            results.pass_fail_counts)
+    test_results = api.test_utils.create_results_from_json(results)
+    return test_results.canonical_result_format()
 
 
 class FakeCustomResultsHandler(ResultsHandler):
   """Result handler just used for testing."""
 
   def validate_results(self, api, results):
-    return True, [], 0, {}
+    invalid_dictionary = _create_test_run_invalid_dictionary()
+    invalid_dictionary['valid'] = True
+    return invalid_dictionary
 
   def render_results(self, api, results, presentation):
     presentation.step_text += api.test_utils.format_step_text([
@@ -1564,7 +1546,8 @@ class SwarmingTest(Test):
       step_result: StepResult object to examine.
 
     Returns:
-      A tuple (valid, failures, total_tests_ran, pass_fail_counts), where:
+      A dictionary with the keys: (valid, failures, total_tests_ran,
+      pass_fail_counts), where:
         * valid is True if valid results are available
         * failures is a list of names of failed tests (ignored if valid is
             False).
@@ -1596,16 +1579,9 @@ class SwarmingTest(Test):
                      indent=2)
       ).splitlines()
 
-      valid, failures, total_tests_ran, pass_fail_counts = (
-          self.validate_task_results(api, step_result))
-      self._test_runs[suffix] = {
-          'valid': valid,
-          'failures': failures,
-          'total_tests_ran': total_tests_ran,
-          'pass_fail_counts': pass_fail_counts
-      }
+      self._test_runs[suffix] = self.validate_task_results(api, step_result)
 
-      if step_result.retcode == 0 and not valid:
+      if step_result.retcode == 0 and not self._test_runs[suffix]['valid']:
         # This failure won't be caught automatically. Need to manually
         # raise it as a step failure.
         raise api.step.StepFailure(api.test_utils.INVALID_RESULTS_MAGIC)
@@ -1674,19 +1650,7 @@ class SwarmingGTestTest(SwarmingTest):
         _create_swarming_task)
 
   def validate_task_results(self, api, step_result):
-    if not hasattr(step_result, 'test_utils'):
-      return False, None, 0, None  # pragma: no cover
-
-    gtest_results = step_result.test_utils.gtest_results
-    if not gtest_results:
-      return False, None, 0, None  # pragma: no cover
-
-    global_tags = gtest_results.raw.get('global_tags', [])
-    if 'UNRELIABLE_RESULTS' in global_tags:
-      return False, None, 0, None  # pragma: no cover
-
-    return (gtest_results.valid, gtest_results.failures,
-            gtest_results.total_tests_ran, gtest_results.pass_fail_counts)
+    return step_result.test_utils.gtest_results.canonical_result_format()
 
   def pass_fail_counts(self, _, suffix):
     if self._gtest_results.get(suffix):
@@ -1756,7 +1720,6 @@ class LocalIsolatedScriptTest(Test):
     self._set_up = set_up
     self._tear_down = tear_down
     self.results_handler = results_handler or JSONResultsHandler()
-    self._test_results = {}
     self._isolate_coverage_data = isolate_coverage_data
 
   @property
@@ -1783,12 +1746,6 @@ class LocalIsolatedScriptTest(Test):
     if self._override_compile_targets:
       return self._override_compile_targets
     return [self.target_name]
-
-  def pass_fail_counts(self, _, suffix):
-    if self._test_results.get(suffix):
-      # test_result exists and is not None.
-      return self._test_results[suffix].pass_fail_counts
-    return {}
 
   @Test.test_options.setter
   def test_options(self, value):
@@ -1843,19 +1800,15 @@ class LocalIsolatedScriptTest(Test):
       step_result = api.step.active_result
       results = step_result.json.output
       presentation = step_result.presentation
-      valid, _, _, _ = self.results_handler.validate_results(api, results)
-      test_results = (api.test_utils.create_results_from_json_if_needed(
-          results) if valid else None)
-      self._test_results[suffix] = test_results
 
-      self.results_handler.render_results(api, results, presentation)
+      test_results = api.test_utils.create_results_from_json(results)
+      self.results_handler.render_results(api, test_results, presentation)
 
-      if valid:
-        self._test_runs[suffix] = test_results.canonical_result_format()
-      else:
-        self._test_runs[suffix] = self._create_test_run_invalid_dictionary()
+      self._test_runs[suffix] = (
+          self.results_handler.validate_results(api, results))
 
-      if api.step.active_result.retcode == 0 and not valid:
+      if (api.step.active_result.retcode == 0 and
+          not self._test_runs[suffix]['valid']):
         # This failure won't be caught automatically. Need to manually
         # raise it as a step failure.
         raise api.step.StepFailure(api.test_utils.INVALID_RESULTS_MAGIC)
@@ -1894,7 +1847,6 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
     self._trigger_script = trigger_script
     self.results_handler = results_handler or JSONResultsHandler(
         ignore_task_failure=ignore_task_failure)
-    self._test_results = {}
     self._idempotent = idempotent
     self._cipd_packages = cipd_packages
 
@@ -1928,59 +1880,31 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
         api, suffix, isolated_hash, '--isolated-script-test-filter', '::',
         _create_swarming_task)
 
-  def pass_fail_counts(self, _, suffix):
-    if self._test_results.get(suffix):
-      # test_result exists and is not None.
-      return self._test_results[suffix].pass_fail_counts
-    return {}
-
   def validate_task_results(self, api, step_result):
-    # If we didn't get a step_result object at all, we can safely
-    # assume that something definitely went wrong.
-    if step_result is None:  # pragma: no cover
-      return False, None, 0, {}
+    results_json = getattr(step_result, 'isolated_script_results', None) or {}
 
-    results = getattr(step_result, 'isolated_script_results', None) or {}
-
-    global_tags = results.get('global_tags', [])
-    if 'UNRELIABLE_RESULTS' in global_tags:
-      return False, None, 0, {}
-
-    valid, failures, total_tests_ran, pass_fail_counts = (
-        self.results_handler.validate_results(api, results))
+    test_run_dictionary = (
+        self.results_handler.validate_results(api, results_json))
     presentation = step_result.presentation
-    self.results_handler.render_results(api, results, presentation)
+    test_results = api.test_utils.create_results_from_json(results_json)
+    self.results_handler.render_results(api, test_results, presentation)
 
-    self._isolated_script_results = results
-
-    # If we got no results and a nonzero exit code, the test probably
-    # did not run correctly.
-    if step_result.retcode != 0 and not results:
-      return False, failures, total_tests_ran, {}
+    self._isolated_script_results = results_json
 
     # Even if the output is valid, if the return code is greater than
     # MAX_FAILURES_EXIT_STATUS then the test did not complete correctly and the
     # results can't be trusted. It probably exited early due to a large number
     # of failures or an environment setup issue.
     if step_result.retcode > api.test_utils.MAX_FAILURES_EXIT_STATUS:
-      return False, failures, total_tests_ran, {}
+      test_run_dictionary['valid'] = False
 
-    if step_result.retcode == 0 and not valid:
-      # This failure won't be caught automatically. Need to manually
-      # raise it as a step failure.
-      raise api.step.StepFailure(api.test_utils.INVALID_RESULTS_MAGIC)
-
-    return valid, failures, total_tests_ran, pass_fail_counts
+    return test_run_dictionary
 
   def run(self, api, suffix):
     try:
       super(SwarmingIsolatedScriptTest, self).run(api, suffix)
     finally:
       results = self._isolated_script_results
-
-      if self._test_runs.get(suffix, {}).get('valid'):
-        self._test_results[suffix] = (
-            api.test_utils.create_results_from_json_if_needed(results))
 
       if results:
         self.results_handler.upload_results(
@@ -2030,7 +1954,7 @@ class PythonBasedTest(Test):
       if failures:
         presentation.status = api.step.FAILURE
     else:
-      self._test_runs[suffix] = self._create_test_run_invalid_dictionary()
+      self._test_runs[suffix] = _create_test_run_invalid_dictionary()
       presentation.status = api.step.EXCEPTION
       presentation.step_text = api.test_utils.INVALID_RESULTS_MAGIC
 
@@ -2066,7 +1990,7 @@ class BisectTest(Test):
   def run(self, api, suffix):
     self.run_results = api.bisect_tester.run_test(
         self.test_config, **self.kwargs)
-    self._test_runs[suffix] = self._create_test_run_invalid_dictionary()
+    self._test_runs[suffix] = _create_test_run_invalid_dictionary()
     self._test_runs[suffix]['valid'] = bool(self.run_results.get('retcodes'))
 
 
@@ -2099,7 +2023,7 @@ class BisectTestStaging(Test):
   def run(self, api, suffix):
     self.run_results = api.bisect_tester_staging.run_test(
         self.test_config, **self.kwargs)
-    self._test_runs[suffix] = self._create_test_run_invalid_dictionary()
+    self._test_runs[suffix] = _create_test_run_invalid_dictionary()
     self._test_runs[suffix]['valid'] = bool(self.run_results.get('retcodes'))
 
 
@@ -2131,7 +2055,7 @@ class AndroidTest(Test):
       step_result = f.result
       raise
     finally:
-      self._test_runs[suffix] = self._create_test_run_invalid_dictionary()
+      self._test_runs[suffix] = _create_test_run_invalid_dictionary()
       presentation_step = api.python.succeeding_step(
           'Report %s results' % self.name, '')
       gtest_results = api.test_utils.present_gtest_failures(
@@ -2368,7 +2292,7 @@ class BlinkTest(Test):
       # if we bailed out after 100 crashes w/ -exit-after-n-crashes, in
       # which case the retcode is actually 130
       if step_result.retcode > api.test_utils.MAX_FAILURES_EXIT_STATUS:
-        self._test_runs[suffix] = self._create_test_run_invalid_dictionary()
+        self._test_runs[suffix] = _create_test_run_invalid_dictionary()
       else:
         self._test_runs[suffix] = (step_result.test_utils.test_results.
             canonical_result_format())

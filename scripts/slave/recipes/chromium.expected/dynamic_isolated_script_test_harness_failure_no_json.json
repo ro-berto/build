@@ -405,21 +405,10 @@
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
       "step returned non-zero exit code: -11",
-      "@@@STEP_TEXT@<br/>Exception while processing test results: Invalid data given<br/>@@@",
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
       "@@@STEP_LOG_LINE@json.output@null@@@",
       "@@@STEP_LOG_END@json.output@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@Invalid data given@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@Traceback (most recent call last):@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/chromium_tests/steps.py\", line NA, in render_results@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    results)@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_engine/recipe_api.py\", line NA, in _inner@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    return func(*a, **kw)@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/test_utils/api.py\", line NA, in create_results_from_json_if_needed@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    raise TypeError('Invalid data given')@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@TypeError: Invalid data given@@@",
-      "@@@STEP_LOG_END@no_results_exc@@@",
-      "@@@STEP_EXCEPTION@@@"
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {

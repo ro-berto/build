@@ -825,7 +825,7 @@
     },
     "name": "telemetry_gpu_unittests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@Run on OS: 'Ubuntu-14.04'<br>Max pending time: 0:01:11 (shard #0)<br>Max shard duration: 0:01:00 (shard #0)<br>Min shard duration: 0:01:00 (shard #0)<br/>Exception while processing test results: 'str' object has no attribute 'iteritems'<br/>@@@",
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
       "@@@STEP_LOG_LINE@json.output@{@@@",
       "@@@STEP_LOG_LINE@json.output@  \"interrupted\": false, @@@",
       "@@@STEP_LOG_LINE@json.output@  \"num_failures_by_type\": {@@@",
@@ -933,28 +933,13 @@
       "@@@STEP_LOG_LINE@step_metadata@  \"waterfall_mastername\": \"chromium.linux\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@}@@@",
       "@@@STEP_LOG_END@step_metadata@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@'str' object has no attribute 'iteritems'@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@Traceback (most recent call last):@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/chromium_tests/steps.py\", line NA, in render_results@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    results)@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_engine/recipe_api.py\", line NA, in _inner@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    return func(*a, **kw)@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/test_utils/api.py\", line NA, in create_results_from_json_if_needed@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    return TestResults(data)@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/test_utils/util.py\", line NA, in __init__@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    self.tests = convert_trie_to_flat_paths(tests, prefix=None, sep=sep)@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/test_utils/util.py\", line NA, in convert_trie_to_flat_paths@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    for name, data in trie.iteritems():@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@AttributeError: 'str' object has no attribute 'iteritems'@@@",
-      "@@@STEP_LOG_END@no_results_exc@@@",
       "@@@STEP_LINK@shard #0 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
       "@@@STEP_LINK@shard #0 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/10000@@@",
       "@@@STEP_LINK@shard #1 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
       "@@@STEP_LINK@shard #1 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/130100@@@",
       "@@@STEP_LINK@shard #2 isolated out@https://isolateserver.appspot.com/browse?namespace=default-gzip&hash=abc123@@@",
       "@@@STEP_LINK@shard #2 (31.5 sec)@https://chromium-swarm.appspot.com/user/task/160200@@@",
-      "@@@STEP_EXCEPTION@@@"
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {

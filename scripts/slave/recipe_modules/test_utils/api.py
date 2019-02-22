@@ -508,13 +508,6 @@ class TestUtilsApi(recipe_api.RecipeApi):
   def create_results_from_json(self, data):
     return TestResults(data)
 
-  def create_results_from_json_if_needed(self, data):
-    if data is None:
-      raise TypeError('Invalid data given')
-    if isinstance(data, TestResults):
-      return data
-    return TestResults(data)
-
   @recipe_util.returns_placeholder
   def test_results(self, add_json_log=True):
     """A placeholder which will expand to '/tmp/file'.

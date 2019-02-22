@@ -14,19 +14,8 @@
     "cmd": [],
     "name": "presentation_step",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Exception while processing test results: Invalid data given<br/>@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@Invalid data given@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@Traceback (most recent call last):@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/chromium_tests/steps.py\", line NA, in render_results@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    results)@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_engine/recipe_api.py\", line NA, in _inner@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    return func(*a, **kw)@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@  File \"<...>/recipe_modules/test_utils/api.py\", line NA, in create_results_from_json_if_needed@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@    raise TypeError('Invalid data given')@@@",
-      "@@@STEP_LOG_LINE@no_results_exc@TypeError: Invalid data given@@@",
-      "@@@STEP_LOG_END@no_results_exc@@@",
-      "@@@STEP_EXCEPTION@@@"
+      "@@@STEP_TEXT@TEST RESULTS WERE INVALID@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   },
   {
@@ -34,7 +23,7 @@
     "name": "details",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@details@valid: False@@@",
-      "@@@STEP_LOG_LINE@details@unexpected_failures: ['Invalid data given', '\\n', 'Traceback (most recent call last):\\n  File \"<...>/recipe_modules/chromium_tests/steps.py\", line NA, in validate_results\\n    results)\\n  File \"<...>/recipe_engine/recipe_api.py\", line NA, in _inner\\n    return func(*a, **kw)\\n  File \"<...>/recipe_modules/test_utils/api.py\", line NA, in create_results_from_json_if_needed\\n    raise TypeError(\\'Invalid data given\\')\\nTypeError: Invalid data given\\n']@@@",
+      "@@@STEP_LOG_LINE@details@unexpected_failures: {}@@@",
       "@@@STEP_LOG_END@details@@@"
     ]
   },
