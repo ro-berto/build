@@ -21,6 +21,6 @@
 /tee.py                           recipes
 /telemetry_utils.py               recipes
 /upload_perf_dashboard_results.py recipes
-/upload_goma_logs.py              recipes
+/upload_goma_logs.py*             recipes
 /xvfb.py                          recipes
 /zip_build.py                     recipes
