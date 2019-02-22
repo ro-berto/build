@@ -328,7 +328,7 @@ def GenTests(api):
     + api.post_process(
         post_process.MustRun,
         'Unrecognized exit_code from swarming')
-    + api.post_process(post_process.StatusFailure)
+    + api.post_process(post_process.StatusAnyFailure)
     + api.post_process(post_process.DropExpectation)
   )
 

@@ -76,7 +76,7 @@ def GenTests(api):
                          ['Failed to extract GN args'])
       + api.post_process(post_process.LogContains, 'lookup GN args',
                          'mb lookup output', [output])
-      + api.post_process(post_process.StatusFailure)
+      + api.post_process(post_process.StatusAnyFailure)
       + api.post_process(post_process.ResultReasonRE,
                          'Failed to extract GN args')
       + api.post_process(post_process.DropExpectation)

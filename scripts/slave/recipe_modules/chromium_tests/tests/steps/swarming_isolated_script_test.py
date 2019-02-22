@@ -174,7 +174,7 @@ def GenTests(api):
       api.step_data(
           '[trigger] base_unittests on Intel GPU on Linux (with patch)',
           retcode=1) +
-      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.StatusAnyFailure) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -196,7 +196,7 @@ def GenTests(api):
       api.step_data(
           '[trigger] base_unittests on Intel GPU on Linux (with patch)',
           retcode=1, ) +
-      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.StatusAnyFailure) +
       api.post_process(post_process.Filter(
           '[trigger] base_unittests on Intel GPU on Linux (without patch)'))
   )

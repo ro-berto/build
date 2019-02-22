@@ -180,7 +180,7 @@ def GenTests(api):
           test_name='base_unittests') +
       api.override_step_data('base_unittests', retcode=infra_code) +
       api.post_process(post_process.DoesNotRun, 'test2') +
-      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.StatusException) +
       api.post_process(post_process.DropExpectation)
   )
 
@@ -213,6 +213,6 @@ def GenTests(api):
           'test_pre_run.pre_run base_unittests',
           retcode=infra_code) +
       api.post_process(post_process.DoesNotRun, 'base_unittests') +
-      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.StatusException) +
       api.post_process(post_process.DropExpectation)
   )
