@@ -258,7 +258,6 @@ def setup_target(api,
          'TARGET_BUILD_TYPE': 'release',
          'SOONG_ALLOW_MISSING_DEPENDENCIES': 'true',
          'TEMPORARY_DISABLE_PATH_RESTRICTIONS': 'true',
-         'ANDROID_SERIAL': serial,
          'ANDROID_BUILD_TOP': build_top_dir,
          'ADB': str(build_top_dir.join('prebuilts', 'runtime', 'adb')),
          'PATH': str(build_top_dir.join(
@@ -271,6 +270,9 @@ def setup_target(api,
          'USE_DEX2OAT_DEBUG': 'false',
          'ART_BUILD_HOST_DEBUG': 'false',
          'ART_TEST_KEEP_GOING': 'true'}
+
+  if not api.runtime.is_luci:
+    env.update({ 'ANDROID_SERIAL' : serial })
 
   if concurrent_collector:
     env.update({ 'ART_USE_READ_BARRIER' : 'true' })
@@ -323,10 +325,10 @@ def setup_target(api,
   if debug and device == 'fugu':
     make_jobs = 1
 
-  build_jobs = 8
-  if api.runtime.is_luci:
-    # Limit to 2 for the current experimental luci bot.
-    build_jobs = 2
+  build_jobs = 2
+  if not api.runtime.is_luci:
+    # Non-luci bot can have more jobs.
+    build_jobs = 8
 
   with api.context(env=env):
     api.step('build target', [art_tools.join('buildbot-build.sh'),
@@ -675,8 +677,7 @@ def GenTests(api):
             project='art',
             builder=builder,
         ) +
-        api.properties(bot_id='TestSlave') +
-        api.runtime(is_luci=True, is_experimental=True)
+        api.properties(bot_id='TestSlave')
     )
 
   for builders in _CONFIG_MAP.values():
