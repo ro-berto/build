@@ -171,7 +171,7 @@
       "[START_DIR]/openscreen/gn",
       "gen",
       "[START_DIR]/openscreen/out/Default",
-      "--args=is_debug=true is_asan=true"
+      "--args=is_debug=true is_asan=true is_gcc=false"
     ],
     "cwd": "[START_DIR]/openscreen",
     "name": "gn gen"

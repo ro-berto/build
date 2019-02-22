@@ -50,9 +50,11 @@ def RunSteps(api):
 
     is_debug = str(api.properties.get('debug', False)).lower()
     is_asan = str(api.properties.get('is_asan', False)).lower()
+    is_gcc = str(api.properties.get('is_gcc', False)).lower()
     api.step('gn gen',
              [checkout_path.join('gn'), 'gen', output_path,
-              '--args=is_debug={} is_asan={}'.format(is_debug, is_asan)
+              '--args=is_debug={} is_asan={} is_gcc={}'.format(
+                  is_debug, is_asan, is_gcc)
               ])
 
     # NOTE: The following just runs Ninja without setting up the Mac toolchain
@@ -76,6 +78,17 @@ def GenTests(api):
           repository=OPENSCREEN_REPO,
           debug=True,
           is_asan=True
+      )
+  )
+  yield (
+      api.test('linux64_debug_gcc') +
+      api.platform('linux', 64) +
+      api.buildbucket.try_build('openscreen', 'try') +
+      api.properties(
+          repository=OPENSCREEN_REPO,
+          debug=True,
+          is_asan=False,
+          is_gcc=True
       )
   )
   yield (
