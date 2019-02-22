@@ -28,6 +28,7 @@ def _create_test_run_invalid_dictionary():
     'failures': [],
     'total_tests_ran': 0,
     'pass_fail_counts': {},
+    'findit_notrun': set()
   }
 
 class TestOptions(object):
@@ -188,6 +189,10 @@ class Test(object):
     #     {
     #       'test3': { 'PASS_COUNT': 3, 'FAIL_COUNT': 2 }
     #     }
+    #   'findit_notrun': A temporary field for FindIt. Lists tests for which
+    #   every test run had result NOTRUN or UNKNOWN. The CATS team expects to
+    #   move this logic back into FindIt in Q3 2019, after the test results
+    #   datastore has been cleaned up. https://crbug.com/934599.
     self._test_runs = {}
     self._waterfall_mastername = waterfall_mastername
     self._waterfall_buildername = waterfall_buildername
@@ -430,6 +435,21 @@ class Test(object):
       return (True, set(self.deterministic_failures(api, suffix)))
     return (False, None)
 
+  def findit_notrun(self, api, suffix):
+    """Returns tests that had status NOTRUN/UNKNOWN.
+
+    FindIt has special logic for handling for tests with status NOTRUN/UNKNOWN.
+    This method returns test for which every test run had a result of either
+    NOTRUN or UNKNOWN.
+
+    Returns:
+      not_run_tests: A set of strings. Only valid if valid_results is True.
+    """
+    assert self.has_valid_results(api, suffix), (
+        'findit_notrun must only be called when the test run is known to have '
+        'valid results.')
+    return self._test_runs[suffix]['findit_notrun']
+
   def without_patch_failures_to_ignore(self, api):
     """Returns test failures that should be ignored.
 
@@ -581,6 +601,9 @@ class TestWrapper(Test):  # pragma: no cover
   def deterministic_failures(self, api, suffix):
     return self._test.deterministic_failures(api, suffix)
 
+  def findit_notrun(self, api, suffix):
+    return self._test.findit_notrun(api, suffix)
+
   def pass_fail_counts(self, api, suffix):
     return self._test.pass_fail_counts(api, suffix)
 
@@ -704,6 +727,15 @@ class ExperimentalTest(TestWrapper):
           api, self._experimental_suffix(suffix))
     return []
 
+  #override
+  def findit_notrun(self, api, suffix): # pragma: no cover
+    if self._is_in_experiment_and_has_valid_results(api, suffix):
+      # Call the wrapped test's implementation in case it has side effects,
+      # but ignore the result.
+      super(ExperimentalTest, self).findit_notrun(
+          api, self._experimental_suffix(suffix))
+    return set()
+
   def pass_fail_counts(self, api, suffix):
     if self._is_in_experiment_and_has_valid_results(api, suffix):
       # Call the wrapped test's implementation in case it has side effects,
@@ -735,6 +767,9 @@ class SizesStep(Test):
 
   def deterministic_failures(self, api, suffix):
     return []
+
+  def findit_notrun(self, api, suffix):
+    return set()
 
   def pass_fail_counts(self, api, suffix): # pragma: no cover
     return {}
@@ -846,6 +881,7 @@ class ScriptTest(Test):  # pylint: disable=W0232
           'valid': result.json.output['valid'],
           'total_tests_ran': len(failures),
           'pass_fail_counts': pass_fail_counts,
+          'findit_notrun': set(),
       }
 
       _, failures = api.test_utils.limit_failures(failures)
@@ -1554,6 +1590,8 @@ class SwarmingTest(Test):
         * total_tests_ran counts the number of tests executed.
         * pass_fail_counts is a dictionary that includes the number of passes
             and fails for each test.
+        * findit_notrun is a set of tests for which every test result was NOTRUN
+          or UNKNOWN. This is a temporary placeholder to simplify FindIt logic.
     """
     raise NotImplementedError()  # pragma: no cover
 

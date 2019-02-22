@@ -415,6 +415,36 @@ class TestUtilsApi(recipe_api.RecipeApi):
         test_suite, new_failures, set(), 'with patch summary',
         failure_text=failure_text, ignored_text=ignored_text)
 
+  def _findit_potential_test_flakes(self, caller_api, test_suite):
+    """Returns test failures that FindIt views as potential flakes.
+
+    This method returns tests that:
+      * Failed in 'with patch', but not because of UNKNOWN/NOTRUN
+      * Succeeded in 'without patch'
+
+    Returns:
+      findit_potential_flakes: A set of test names that should be considered
+                               candidates as flaky tests.
+    """
+    valid_results, with_patch_failures = (
+        test_suite.with_patch_failures(caller_api))
+    if not valid_results:
+      return set()
+
+    # FindIt wants to ignore failures that have status UNKNOWN/NOTRUN. This
+    # logic will eventually live in FindIt, but for now, is implemented here.
+    with_patch_not_run = test_suite.findit_notrun(caller_api, 'with patch')
+    with_patch_failures = with_patch_failures - with_patch_not_run
+
+    # To reduce false positives, FindIt only wants tests to be marked as
+    # potentially flaky if the the test passed in 'without patch'.
+    valid_results, ignored_failures = (
+        test_suite.without_patch_failures_to_ignore(caller_api))
+    if not valid_results:
+      return set()
+
+    return with_patch_failures - ignored_failures
+
   def summarize_findit_flakiness(self, caller_api, test_suites):
     """Exports a summary of flakiness for post-processing by FindIt.
 
@@ -436,37 +466,26 @@ class TestUtilsApi(recipe_api.RecipeApi):
     """
     step_layer_flakiness = {}
     for test_suite in test_suites:
-      valid_results, with_patch_failures = (
-          test_suite.with_patch_failures(caller_api))
-      if not valid_results:
-        continue
+      potential_test_flakes = self._findit_potential_test_flakes(caller_api,
+                                                                 test_suite)
 
+      # We only want to consider tests that failed in 'with patch' and succeeded
+      # in 'retry with patch'. If a test didn't run in both of these steps, then
+      # we ignore it.
       valid_results, retry_with_patch_successes = (
           test_suite.retry_with_patch_successes(caller_api))
       if not valid_results:
         continue
 
-      # We only want to consider tests that failed in 'with patch' and succeeded
-      # in 'retry with patch'. If a test didn't run in both of these steps, then
-      # we ignore it.
-      flaky_tests = with_patch_failures & retry_with_patch_successes
+      flaky_tests = potential_test_flakes & retry_with_patch_successes
       if flaky_tests:
         step_layer_flakiness[test_suite.step_name('with patch')] = sorted(
             flaky_tests)
 
     potential_build_flakiness = {}
     for test_suite in test_suites:
-      valid_results, with_patch_failures = (
-          test_suite.with_patch_failures(caller_api))
-      if not valid_results:
-        continue
-
-      # Tests that also failed in 'without patch' should be ignored, as they are
-      # flaky or failing on tip of tree/
-      valid_results, ignored_failures = (
-          test_suite.without_patch_failures_to_ignore(caller_api))
-      if valid_results:
-        with_patch_failures = with_patch_failures - ignored_failures
+      potential_test_flakes = self._findit_potential_test_flakes(caller_api,
+                                                                 test_suite)
 
       # If the test suite was supposed to run retry with patch, then exclude all
       # tests that passed in retry with patch.
@@ -474,11 +493,12 @@ class TestUtilsApi(recipe_api.RecipeApi):
         valid_results, retry_with_patch_successes = (
             test_suite.retry_with_patch_successes(caller_api))
         if valid_results:
-          with_patch_failures = with_patch_failures - retry_with_patch_successes
+          potential_test_flakes = (
+              potential_test_flakes - retry_with_patch_successes)
 
-      if with_patch_failures:
+      if potential_test_flakes:
         potential_build_flakiness[test_suite.step_name('with patch')] = sorted(
-            with_patch_failures)
+            potential_test_flakes)
 
     if step_layer_flakiness or potential_build_flakiness:
       output = { 'Step Layer Flakiness: ' : step_layer_flakiness,

@@ -35,6 +35,10 @@ class TestResults(object):
     self.unknown = {}
     self.pass_fail_counts = {}
 
+    # Both simplified JSON results and blink layout test results do not support
+    # the NOTRUN/UNKNOWN tags. We do not need any additional FindIt logic here.
+    self.findit_notrun = set()
+
     if self.raw is None:
       self.version = 'simplified'
       self.tests = {}
@@ -65,15 +69,18 @@ class TestResults(object):
   def canonical_result_format(self):
     """Returns a dictionary with results in canonical format.
 
-    There are three keys:
+    Keys:
       'valid': A Boolean indicating whether the test run was valid.
       'failures': An iterable of strings -- each the name of a test that
       failed.
+      'total_tests_ran': The total number of tests that were run.
       'pass_fail_counts': A dictionary that provides the number of passes and
       failures for each test. e.g.
         {
           'test3': { 'PASS_COUNT': 3, 'FAIL_COUNT': 2 }
         }
+      'findit_notrun': A temporary field for FindIt. Lists tests for which every
+      test run had result NOTRUN or UNKNOWN.
     """
     unreliable = False
     if self.raw:
@@ -90,6 +97,7 @@ class TestResults(object):
       'failures': self.unexpected_failures,
       'total_tests_ran': self.total_test_runs,
       'pass_fail_counts': self.pass_fail_counts,
+      'findit_notrun': self.findit_notrun
     }
 
   @property
@@ -267,6 +275,16 @@ class GTestResults(object):
 
     self.passes = set()
     self.failures = set()
+
+    # In the short term, the FindIt logic for ignoring NOTRUN/UNKNOWN tests
+    # [treating them as equivalent to a passing test] is implemented in the
+    # chromium tests recipe.
+    # https://bugs.chromium.org/p/chromium/issues/detail?id=872042#c32
+
+    # A set of tests which were never run [every test result was NOTRUN or
+    # UNKNOWN].
+    self.findit_notrun = set()
+
     # Stores raw results of each test. Used to display test results in build
     # step logs.
     self.raw_results = collections.defaultdict(list)
@@ -308,6 +326,14 @@ class GTestResults(object):
           self.logs[test_fullname].extend(
               self._compress_list(ascii_log.splitlines()))
 
+
+    for test_fullname, results in self.raw_results.iteritems():
+      # These strings are defined by base/test/launcher/test_result.cc.
+      # https://cs.chromium.org/chromium/src/base/test/launcher/test_result.cc
+      unique_results = set(results)
+      if unique_results.issubset(set(['UNKNOWN', 'NOTRUN'])):
+        self.findit_notrun.add(test_fullname)
+
     # With multiple iterations a test could have passed in one but failed
     # in another. Remove tests that ever failed from the passing set.
     self.passes -= self.failures
@@ -333,4 +359,5 @@ class GTestResults(object):
       'failures': sorted(self.failures),
       'total_tests_ran': self.total_tests_ran,
       'pass_fail_counts': self.pass_fail_counts,
+      'findit_notrun': self.findit_notrun
     }

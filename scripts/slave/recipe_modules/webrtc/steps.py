@@ -41,6 +41,7 @@ def _create_test_run_results_dictionary(valid):
     'failures': [],
     'total_tests_ran': 0,
     'pass_fail_counts': {},
+    'findit_notrun': set()
   }
 
 def generate_tests(api, phase, revision, revision_number, bot):

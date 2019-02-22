@@ -219,6 +219,65 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
+  def generate_single_failing_gtest_json(status):
+    cur_iteration_data = {
+      'Test.Two': [
+        {
+          'elapsed_time_ms': 0,
+          'output_snippet': ':(',
+          'status': status,
+        },
+      ],
+    }
+    all_iteration_data = {
+      'per_iteration_data': [cur_iteration_data]
+    }
+    return json.dumps(all_iteration_data)
+
+  # A test that fails in 'with patch', and subsequently succeeds in 'retry with
+  # patch' should have a FindIt metadata emission. However, if the test fails
+  # with 'NOTRUN', then FindIt wants the test to be ignored.
+  for status in ['FAILURE', 'NOTRUN']:
+    if status == 'FAILURE':
+      expectations = (
+        api.post_process(post_process.AnnotationContains,
+            'FindIt Flakiness', ['"Step Layer Flakiness: ": {}']) +
+        api.post_process(post_process.AnnotationContains,
+            'FindIt Flakiness', [
+                'Failing With Patch Tests That Caused Build Failure']) +
+        api.post_process(post_process.AnnotationContains,
+            'FindIt Flakiness', ['base_unittests (with patch)']) +
+        api.post_process(post_process.AnnotationContains,
+            'FindIt Flakiness', ['Test.Two']))
+    else:
+      expectations = api.post_process(
+          post_process.DoesNotRun, 'FindIt Flakiness')
+
+    yield (
+        api.test('findit_build_layer_flakiness_' + status) +
+        api.properties.tryserver(
+            mastername='tryserver.chromium.linux',
+            buildername='linux-rel',
+            swarm_hashes={
+              'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+            }) +
+        api.override_step_data(
+            'base_unittests (with patch)',
+            api.swarming.canned_summary_output(failure=True) +
+            api.test_utils.gtest_results(
+                generate_single_failing_gtest_json(status), retcode=1)) +
+        api.override_step_data(
+            'base_unittests (without patch)',
+            api.swarming.canned_summary_output(failure=False) +
+            api.test_utils.canned_gtest_output(passing=True)) +
+        api.override_step_data(
+            'base_unittests (retry with patch)',
+            api.swarming.canned_summary_output(failure=True) +
+            api.test_utils.canned_gtest_output(passing=False)) +
+        expectations +
+        api.post_process(post_process.DropExpectation)
+    )
+
 
   yield (
       api.test('findit_potential_build_layer_flakiness_skip_retry_with_patch') +
@@ -237,38 +296,6 @@ def GenTests(api):
           'base_unittests (without patch)',
           api.swarming.canned_summary_output(failure=False) +
           api.test_utils.canned_gtest_output(passing=True)) +
-      api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', ['"Step Layer Flakiness: ": {}']) +
-      api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', [
-              'Failing With Patch Tests That Caused Build Failure']) +
-      api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', ['base_unittests (with patch)']) +
-      api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', ['Test.Two']) +
-      api.post_process(post_process.DropExpectation)
-  )
-
-  yield (
-      api.test('findit_potential_build_layer_flakiness_retry_with_patch') +
-      api.properties.tryserver(
-          mastername='tryserver.chromium.linux',
-          buildername='linux-rel',
-          swarm_hashes={
-            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
-          }) +
-      api.override_step_data(
-          'base_unittests (with patch)',
-          api.swarming.canned_summary_output(failure=True) +
-          api.test_utils.canned_gtest_output(passing=False)) +
-      api.override_step_data(
-          'base_unittests (without patch)',
-          api.swarming.canned_summary_output(failure=False) +
-          api.test_utils.canned_gtest_output(passing=True)) +
-      api.override_step_data(
-          'base_unittests (retry with patch)',
-          api.swarming.canned_summary_output(failure=True) +
-          api.test_utils.canned_gtest_output(passing=False)) +
       api.post_process(post_process.AnnotationContains,
           'FindIt Flakiness', ['"Step Layer Flakiness: ": {}']) +
       api.post_process(post_process.AnnotationContains,
