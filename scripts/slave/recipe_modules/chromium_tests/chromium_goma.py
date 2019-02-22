@@ -163,6 +163,18 @@ SPEC = {
         'platform': 'linux',
       },
     },
+    'Chromium Mac Goma RBE ToT': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': ['goma_rbe_tot', 'mb'],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'testing': {
+        'platform': 'mac',
+      },
+    },
     'Chromium Mac Goma RBE Staging': {
       'chromium_config': 'chromium',
       'chromium_apply_config': ['goma_mixer_staging', 'mb'],
