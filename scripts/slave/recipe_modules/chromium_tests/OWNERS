@@ -42,10 +42,12 @@ per-file trybots.py=thakis@chromium.org
 
 # For goma canary bots config.
 per-file chromium_fyi.py=shinyak@chromium.org
+per-file chromium_fyi.py=sque@chromium.org
 per-file chromium_fyi.py=ukai@chromium.org
 per-file chromium_fyi.py=yyanagisawa@chromium.org
 
 # for goma staging bots config.
 per-file chromium_goma.py=shinyak@chromium.org
+per-file chromium_goma.py=sque@chromium.org
 per-file chromium_goma.py=ukai@chromium.org
 per-file chromium_goma.py=yyanagisawa@chromium.org
