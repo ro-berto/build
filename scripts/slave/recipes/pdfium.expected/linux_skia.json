@@ -3,6 +3,21 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder"
+    ],
+    "infra_step": true,
+    "name": "init cache if not exists"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'pdfium', 'url': 'https://pdfium.googlesource.com/pdfium.git'}]",
@@ -17,6 +32,7 @@
       "--revision",
       "pdfium@HEAD"
     ],
+    "cwd": "[CACHE]/builder",
     "env_prefixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -69,7 +85,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/pdfium",
+    "cwd": "[CACHE]/builder",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -115,12 +131,12 @@
       "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "--check",
-      "--root=[START_DIR]/pdfium",
+      "--root=[CACHE]/builder/pdfium",
       "gen",
       "//out/debug_skia_xfa_v8",
       "--args=is_debug=true is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=true pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\" use_cxx11=false"
     ],
-    "cwd": "[START_DIR]/pdfium",
+    "cwd": "[CACHE]/builder/pdfium",
     "name": "gn gen"
   },
   {
@@ -196,7 +212,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-C",
-      "[START_DIR]/pdfium/out/debug_skia_xfa_v8",
+      "[CACHE]/builder/pdfium/out/debug_skia_xfa_v8",
       "-j",
       "20",
       "pdfium_all"
@@ -301,9 +317,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/pdfium/out/debug_skia_xfa_v8",
+      "[CACHE]/builder/pdfium/out/debug_skia_xfa_v8",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/pdfium/out/debug_skia_xfa_v8\", \"-j\", 20, \"pdfium_all\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/pdfium/out/debug_skia_xfa_v8\", \"-j\", 20, \"pdfium_all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",

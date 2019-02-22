@@ -3,6 +3,21 @@
     "cmd": [
       "python",
       "-u",
+      "RECIPE_MODULE[recipe_engine::file]/resources/fileutil.py",
+      "--json-output",
+      "/path/to/tmp/json",
+      "ensure-directory",
+      "--mode",
+      "0777",
+      "[CACHE]/builder"
+    ],
+    "infra_step": true,
+    "name": "init cache if not exists"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "RECIPE_MODULE[depot_tools::bot_update]/resources/bot_update.py",
       "--spec-path",
       "cache_dir = '[CACHE]/git'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'pdfium', 'url': 'https://pdfium.googlesource.com/pdfium.git'}]",
@@ -17,6 +32,7 @@
       "--revision",
       "pdfium@HEAD"
     ],
+    "cwd": "[CACHE]/builder",
     "env_prefixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -69,7 +85,7 @@
       "RECIPE_REPO[depot_tools]/gclient.py",
       "runhooks"
     ],
-    "cwd": "[START_DIR]/pdfium",
+    "cwd": "[CACHE]/builder",
     "env_suffixes": {
       "PATH": [
         "RECIPE_REPO[depot_tools]"
@@ -115,12 +131,12 @@
       "-u",
       "RECIPE_REPO[depot_tools]/gn.py",
       "--check",
-      "--root=[START_DIR]/pdfium",
+      "--root=[CACHE]/builder/pdfium",
       "gen",
       "//out/release_xfa_v8_ubsan",
       "--args=is_debug=false is_component_build=false pdf_enable_v8=true pdf_enable_xfa=true pdf_use_skia=false pdf_use_skia_paths=false pdf_is_standalone=true use_goma=true goma_dir=\"[CACHE]/goma/client\" is_ubsan_security=true"
     ],
-    "cwd": "[START_DIR]/pdfium",
+    "cwd": "[CACHE]/builder/pdfium",
     "name": "gn gen"
   },
   {
@@ -196,7 +212,7 @@
     "cmd": [
       "RECIPE_REPO[depot_tools]/ninja",
       "-C",
-      "[START_DIR]/pdfium/out/release_xfa_v8_ubsan",
+      "[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan",
       "-j",
       "20",
       "pdfium_all"
@@ -301,9 +317,9 @@
       "--json-status",
       "[TMP_BASE]/goma_jsonstatus.json",
       "--ninja-log-outdir",
-      "[START_DIR]/pdfium/out/release_xfa_v8_ubsan",
+      "[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan",
       "--ninja-log-command-file",
-      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[START_DIR]/pdfium/out/release_xfa_v8_ubsan\", \"-j\", 20, \"pdfium_all\"]",
+      "[\"RECIPE_REPO[depot_tools]/ninja\", \"-C\", \"[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan\", \"-j\", 20, \"pdfium_all\"]",
       "--build-exit-status",
       "0",
       "--build-step-name",
@@ -359,9 +375,9 @@
   },
   {
     "cmd": [
-      "[START_DIR]/pdfium/out/release_xfa_v8_ubsan/pdfium_unittests"
+      "[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan/pdfium_unittests"
     ],
-    "cwd": "[START_DIR]/pdfium",
+    "cwd": "[CACHE]/builder/pdfium",
     "env": {
       "UBSAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
@@ -369,9 +385,9 @@
   },
   {
     "cmd": [
-      "[START_DIR]/pdfium/out/release_xfa_v8_ubsan/pdfium_embeddertests"
+      "[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan/pdfium_embeddertests"
     ],
-    "cwd": "[START_DIR]/pdfium",
+    "cwd": "[CACHE]/builder/pdfium",
     "env": {
       "UBSAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
@@ -381,7 +397,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/pdfium/testing/tools/run_javascript_tests.py",
+      "[CACHE]/builder/pdfium/testing/tools/run_javascript_tests.py",
       "--build-dir",
       "out/release_xfa_v8_ubsan",
       "--gold_properties",
@@ -389,9 +405,9 @@
       "--gold_key",
       "debug false is_standalone true os linux skia false skia_paths false ubsan_security true v8 true xfa true",
       "--gold_output_dir",
-      "[START_DIR]/pdfium/out/release_xfa_v8_ubsan/gold_output"
+      "[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan/gold_output"
     ],
-    "cwd": "[START_DIR]/pdfium",
+    "cwd": "[CACHE]/builder/pdfium",
     "env": {
       "UBSAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
@@ -402,9 +418,9 @@
       "python",
       "-u",
       "\nimport contextlib\nimport math\nimport socket\nimport sys\nimport time\nimport urllib2\n\nHASHES_URL = 'https://pdfium-gold.skia.org/_/hashes'\nRETRIES = 5\nTIMEOUT = 60\nWAIT_BASE = 15\n\nsocket.setdefaulttimeout(TIMEOUT)\nfor retry in range(RETRIES):\n  try:\n    with contextlib.closing(\n        urllib2.urlopen(HASHES_URL, timeout=TIMEOUT)) as w:\n      hashes = w.read()\n      with open(sys.argv[1], 'w') as f:\n        f.write(hashes)\n        break\n  except Exception as e:\n    print 'Failed to get uninteresting hashes from %s:' % HASHES_URL\n    print e\n    if retry == RETRIES:\n      raise\n    waittime = WAIT_BASE * math.pow(2, retry)\n    print 'Retry in %d seconds.' % waittime\n    time.sleep(waittime)\n",
-      "[START_DIR]/pdfium/out/release_xfa_v8_ubsan/ignore_hashes.txt"
+      "[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan/ignore_hashes.txt"
     ],
-    "cwd": "[START_DIR]/pdfium",
+    "cwd": "[CACHE]/builder/pdfium",
     "infra_step": true,
     "name": "get uninteresting hashes",
     "~followup_annotations": [
@@ -445,7 +461,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/pdfium/testing/tools/run_pixel_tests.py",
+      "[CACHE]/builder/pdfium/testing/tools/run_pixel_tests.py",
       "--build-dir",
       "out/release_xfa_v8_ubsan",
       "--gold_properties",
@@ -453,9 +469,9 @@
       "--gold_key",
       "debug false is_standalone true os linux skia false skia_paths false ubsan_security true v8 true xfa true",
       "--gold_output_dir",
-      "[START_DIR]/pdfium/out/release_xfa_v8_ubsan/gold_output"
+      "[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan/gold_output"
     ],
-    "cwd": "[START_DIR]/pdfium",
+    "cwd": "[CACHE]/builder/pdfium",
     "env": {
       "UBSAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
@@ -469,14 +485,14 @@
       "--json-output",
       "/path/to/tmp/json",
       "glob",
-      "[START_DIR]/pdfium/out/release_xfa_v8_ubsan/gold_output",
+      "[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan/gold_output",
       "*.png"
     ],
     "infra_step": true,
     "name": "find images",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@glob@[START_DIR]/pdfium/out/release_xfa_v8_ubsan/gold_output/someimage.png@@@",
+      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan/gold_output/someimage.png@@@",
       "@@@STEP_LOG_END@glob@@@"
     ]
   },
@@ -490,7 +506,7 @@
       "-m",
       "----",
       "cp",
-      "[START_DIR]/pdfium/out/release_xfa_v8_ubsan/gold_output/*.png",
+      "[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan/gold_output/*.png",
       "gs://skia-pdfium-gm/dm-images-v1"
     ],
     "infra_step": true,
@@ -507,7 +523,7 @@
       "cp",
       "-z",
       "json,log",
-      "[START_DIR]/pdfium/out/release_xfa_v8_ubsan/gold_output/dm.json",
+      "[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan/gold_output/dm.json",
       "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux_xfa_ubsan/1337000003/pixel/dm.json"
     ],
     "infra_step": true,
@@ -517,7 +533,7 @@
     "cmd": [
       "python",
       "-u",
-      "[START_DIR]/pdfium/testing/tools/run_corpus_tests.py",
+      "[CACHE]/builder/pdfium/testing/tools/run_corpus_tests.py",
       "--build-dir",
       "out/release_xfa_v8_ubsan",
       "--gold_properties",
@@ -525,9 +541,9 @@
       "--gold_key",
       "debug false is_standalone true os linux skia false skia_paths false ubsan_security true v8 true xfa true",
       "--gold_output_dir",
-      "[START_DIR]/pdfium/out/release_xfa_v8_ubsan/gold_output"
+      "[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan/gold_output"
     ],
-    "cwd": "[START_DIR]/pdfium",
+    "cwd": "[CACHE]/builder/pdfium",
     "env": {
       "UBSAN_OPTIONS": "allocator_may_return_null=1 detect_leaks=1 symbolize=1 external_symbolizer_path=third_party/llvm-build/Release+Asserts/bin/llvm-symbolizer"
     },
@@ -541,14 +557,14 @@
       "--json-output",
       "/path/to/tmp/json",
       "glob",
-      "[START_DIR]/pdfium/out/release_xfa_v8_ubsan/gold_output",
+      "[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan/gold_output",
       "*.png"
     ],
     "infra_step": true,
     "name": "find images (2)",
     "stdout": "/path/to/tmp/",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@glob@[START_DIR]/pdfium/out/release_xfa_v8_ubsan/gold_output/someimage.png@@@",
+      "@@@STEP_LOG_LINE@glob@[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan/gold_output/someimage.png@@@",
       "@@@STEP_LOG_END@glob@@@"
     ]
   },
@@ -562,7 +578,7 @@
       "-m",
       "----",
       "cp",
-      "[START_DIR]/pdfium/out/release_xfa_v8_ubsan/gold_output/*.png",
+      "[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan/gold_output/*.png",
       "gs://skia-pdfium-gm/dm-images-v1"
     ],
     "infra_step": true,
@@ -579,7 +595,7 @@
       "cp",
       "-z",
       "json,log",
-      "[START_DIR]/pdfium/out/release_xfa_v8_ubsan/gold_output/dm.json",
+      "[CACHE]/builder/pdfium/out/release_xfa_v8_ubsan/gold_output/dm.json",
       "gs://skia-pdfium-gm/dm-json-v1/2012/05/14/12/d69d97171c17fdb12a52f78847e2ee2f0594eff1/linux_xfa_ubsan/1337000006/corpus/dm.json"
     ],
     "infra_step": true,

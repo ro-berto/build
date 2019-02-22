@@ -50,15 +50,19 @@ PROPERTIES = {
 
 
 def _CheckoutSteps(api, target_os):
-  # Checkout pdfium and its dependencies (specified in DEPS) using gclient.
-  api.gclient.set_config('pdfium')
-  if target_os:
-    api.gclient.c.target_os = {target_os}
-  api.gclient.c.got_revision_mapping['pdfium'] = 'got_revision'
-  update_step = api.bot_update.ensure_checkout()
+  solution_path = api.path['cache'].join('builder')
+  api.file.ensure_directory('init cache if not exists', solution_path)
 
-  api.gclient.runhooks()
-  return update_step.presentation.properties['got_revision']
+  with api.context(cwd=solution_path):
+    # Checkout pdfium and its dependencies (specified in DEPS) using gclient.
+    api.gclient.set_config('pdfium')
+    if target_os:
+      api.gclient.c.target_os = {target_os}
+    api.gclient.c.got_revision_mapping['pdfium'] = 'got_revision'
+    update_step = api.bot_update.ensure_checkout()
+
+    api.gclient.runhooks()
+    return update_step.presentation.properties['got_revision']
 
 
 def _OutPath(memory_tool, skia, skia_paths, xfa, v8, clang, msvc, rel, jumbo):
@@ -877,7 +881,8 @@ def GenTests(api):
                    target_os='android',
                    buildnumber='1234') +
     api.path.exists(
-      api.path['checkout'].join('out', 'debug', 'ignore_hashes.txt')
+      api.path['cache'].join(
+          'builder', 'pdfium', 'out', 'debug', 'ignore_hashes.txt')
     )
   )
 
