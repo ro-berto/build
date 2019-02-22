@@ -29,16 +29,17 @@ DEPS = [
 ]
 
 PROPERTIES = {
+  # List of tester names to trigger.
+  'triggers': Property(default=None, kind=list),
   # Use V8 ToT (HEAD) revision instead of pinned.
   'v8_tot': Property(default=False, kind=bool),
 }
 
-# TODO(machenbach): Remove experimental location.
-ARCHIVE_PATH = 'chromium-v8/experimental/node-%s-rel'
+ARCHIVE_PATH = 'chromium-v8/node-%s-rel'
 ARCHIVE_LINK = 'https://storage.googleapis.com/%s/%%s' % ARCHIVE_PATH
 
 
-def RunSteps(api, v8_tot):
+def RunSteps(api, triggers, v8_tot):
   with api.step.nest('initialization'):
     # Set up dependent modules.
     api.chromium.set_config('node_ci')
@@ -68,13 +69,13 @@ def RunSteps(api, v8_tot):
   build_output_path = api.chromium.c.build_dir.join(
       api.chromium.c.build_config_fs)
 
-  # Archive node executable on V8 ToT builders.
+  # Archive node executable and trigger performance bots on V8 ToT builders.
   if v8_tot:
-    with api.step.nest('archive') as parent:
-      revision = api.bot_update.last_returned_properties['got_revision']
-      revision_number = str(api.commit_position.parse_revision(
-          api.bot_update.last_returned_properties['got_revision_cp']))
+    revision = api.bot_update.last_returned_properties['got_revision']
+    revision_cp = api.bot_update.last_returned_properties['got_revision_cp']
+    revision_number = str(api.commit_position.parse_revision(revision_cp))
 
+    with api.step.nest('archive') as parent:
       archive_name = ('node-%s-rel-%s-%s.zip' %
                       (api.platform.name, revision_number, revision))
       zip_file = api.path['cleanup'].join(archive_name)
@@ -96,6 +97,18 @@ def RunSteps(api, v8_tot):
     parent.presentation.links['download'] = (
         ARCHIVE_LINK % (api.platform.name, archive_name))
 
+    if triggers:
+      api.v8.buildbucket_trigger(
+          [(builder_name, {
+            'revision': revision,
+            'parent_got_revision': revision,
+            'parent_got_revision_cp': revision_cp,
+            'parent_buildername': api.buildbucket.builder_name,
+          }) for builder_name in triggers],
+          project='v8-internal',
+          bucket='ci')
+
+  # Run tests.
   with api.context(cwd=api.path['checkout']):
     api.step('run cctest', [build_output_path.join('node_cctest')])
 
@@ -129,7 +142,7 @@ def _sanitize_nonalpha(*chunks):
 
 
 def GenTests(api):
-  def test(buildername, platform, is_trybot=False, **properties):
+  def test(buildername, platform, is_trybot=False, suffix='', **properties):
     buildbucket_kwargs = {
         'project': 'v8',
         'git_repo': 'https://chromium.googlesource.com/v8/node-ci',
@@ -146,7 +159,7 @@ def GenTests(api):
       properties_fn = api.properties.generic
       buildbucket_fn = api.buildbucket.ci_build
     return (
-        api.test(_sanitize_nonalpha('full', buildername)) +
+        api.test(_sanitize_nonalpha('full', buildername) + suffix) +
         properties_fn(
             path_config='kitchen',
             **properties
@@ -173,5 +186,21 @@ def GenTests(api):
   yield test(
       'V8 Foobar',
       platform='linux',
+      triggers=['v8_foobar_perf'],
       v8_tot=True,
+  )
+
+  # Test CI builder on V8 master.
+  yield (
+      test(
+          'V8 Foobar',
+          platform='linux',
+          suffix='_trigger_fail',
+          triggers=['v8_foobar_perf'],
+          v8_tot=True,
+      ) + api.buildbucket.simulated_schedule_output(
+          {'responses': [{'error': {'code': 42, 'message': 'foobar'}}]},
+          step_name='trigger',
+      ) +
+      api.post_process(Filter('trigger', '$result'))
   )

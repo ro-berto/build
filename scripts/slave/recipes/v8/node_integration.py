@@ -107,7 +107,7 @@ for _, master_config in BUILDERS.iteritems():
 FLATTENED_BUILDERS = freeze(FLATTENED_BUILDERS)
 
 ARCHIVE_LINK = ('https://storage.googleapis.com'
-                '/chromium-v8/node-%s-rel/%s')
+                '/chromium-v8/experimental/node-%s-rel/%s')
 
 
 @contextmanager
@@ -248,7 +248,7 @@ def _build_and_upload(api, goma_dir):
     # Upload to google storage bucket.
     api.gsutil.upload(
       zip_file,
-      'chromium-v8/node-%s-rel' % api.platform.name,
+      'chromium-v8/experimental/node-%s-rel' % api.platform.name,
       archive_name,
       args=['-a', 'public-read'],
     )
@@ -301,18 +301,6 @@ def RunSteps(api):
   if not api.platform.is_win:
     _build_and_upload(api, goma_dir)
 
-  # Trigger performance bots.
-  if api.v8.bot_config.get('triggers'):
-    api.v8.buildbucket_trigger(
-        [(builder_name, {
-          'revision': api.v8.revision,
-          'parent_got_revision': api.v8.revision,
-          'parent_got_revision_cp': api.v8.revision_cp,
-          'parent_buildername': api.buildbucket.builder_name,
-        }) for builder_name in api.v8.bot_config['triggers']],
-        project='v8-internal',
-        bucket='ci')
-
 
 def _sanitize_nonalpha(*chunks):
   return '_'.join(
@@ -352,26 +340,3 @@ def GenTests(api):
           api.platform(bot_config['testing']['platform'], 64) +
           api.v8.hide_infra_steps()
       )
-
-  yield (
-    api.test('trigger_fail') +
-    api.properties.generic(
-      mastername='client.v8.fyi',
-      path_config='kitchen',
-    ) +
-    api.buildbucket.ci_build(
-      project='v8',
-      git_repo='https://chromium.googlesource.com/v8/v8',
-      builder='V8 Linux64 - node.js integration',
-      build_number=571,
-      revision='a' * 40,
-      tags=api.buildbucket.tags(
-          buildset='commit/gitiles/chromium.googlesource.com/v8/v8/+/'
-          'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
-    ) +
-    api.buildbucket.simulated_schedule_output(
-        {'responses': [{'error': {'code': 42, 'message': 'foobar'}}]},
-        step_name='trigger',
-    ) +
-    api.post_process(Filter('trigger', '$result'))
-  )
