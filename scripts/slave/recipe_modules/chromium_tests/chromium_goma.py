@@ -332,5 +332,61 @@ SPEC = {
         'platform': 'win',
       },
     },
+    'Chromium Win Goma RBE Prod': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'goma_rbe_prod', 'goma_arbitrary_toolchain_support', 'mb'
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'Chromium Win Goma RBE Prod (clobber)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'clobber', 'goma_rbe_prod', 'goma_arbitrary_toolchain_support', 'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Release',
+        'TARGET_BITS': 64,
+      },
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'Chromium Win Goma RBE Prod (dbg) ': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'goma_rbe_prod', 'goma_arbitrary_toolchain_support', 'mb'
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      'testing': {
+        'platform': 'win',
+      },
+    },
+    'Chromium Win Goma RBE Prod (dbg) (clobber)': {
+      'chromium_config': 'chromium',
+      'chromium_apply_config': [
+        'clobber', 'goma_rbe_prod', 'goma_arbitrary_toolchain_support', 'mb',
+      ],
+      'gclient_config': 'chromium',
+      'chromium_config_kwargs': {
+        'BUILD_CONFIG': 'Debug',
+        'TARGET_BITS': 64,
+      },
+      'testing': {
+        'platform': 'win',
+      },
+    },
   },
 }
