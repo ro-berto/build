@@ -15,8 +15,7 @@ import optparse
 import os
 import sys
 
-from common import chromium_utils
-from slave import gatekeeper_ng_config
+import gatekeeper_ng_config
 
 
 DATA_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -68,6 +67,20 @@ class BuildDBBuild(_BuildDBBuild, JsonNode):
 
 class BadConf(Exception):
   pass
+
+
+def move_file(path, new_path):
+  """Moves the file located at 'path' to 'new_path', if it exists."""
+  try:
+    try:
+      os.remove(file_path)
+    except OSError, e:
+      if e.errno != errno.ENOENT:
+        raise
+    os.rename(path, new_path)
+  except OSError, e:
+    if e.errno != errno.ENOENT:
+      raise
 
 
 def gen_db(**kwargs):
@@ -140,7 +153,7 @@ def get_build_db(filename):
       new_fn = '%s.old' % filename
       logging.warn('error loading %s: %s, moving to %s' % (
           filename, e, new_fn))
-      chromium_utils.MoveFile(filename, new_fn)
+      move_file(filename, new_fn)
 
   return build_db
 

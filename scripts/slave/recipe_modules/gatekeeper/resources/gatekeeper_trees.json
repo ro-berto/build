@@ -1,0 +1,170 @@
+{
+    "chromiumos": {
+        "masters": {
+            "https://build.chromium.org/p/chromiumos": ["*"],
+            "https://build.chromium.org/p/chromium.chromiumos": ["*"]
+        }
+    },
+    "build": {
+        "build-db": "build_db.json",
+        "masters": {
+            "https://build.chromium.org/p/chromium.tools.build": ["*"]
+        }
+    },
+    "chromium": {
+        "build-db": "waterfall_build_db.json",
+        "masters": {
+            "https://build.chromium.org/p/chromium": ["*"],
+            "https://build.chromium.org/p/chromium.chromiumos": ["*"],
+            "https://build.chromium.org/p/chromium.gpu": ["*"],
+            "https://build.chromium.org/p/chromium.linux": ["*"],
+            "https://build.chromium.org/p/chromium.mac": ["*"],
+            "https://build.chromium.org/p/chromium.memory": ["*"],
+            "https://build.chromium.org/p/chromium.webkit": ["*"],
+            "https://build.chromium.org/p/chromium.win": ["*"]
+        },
+        "open-tree": true,
+        "password-file": "/creds/gatekeeper/chromium_status_password",
+        "revision-properties": "got_revision_cp",
+        "set-status": true,
+        "status-url": "https://chromium-status.appspot.com",
+        "track-revisions": true
+    },
+    "android": {
+        "open-tree": false,
+        "set-status": false,
+        "masters": {
+            "https://build.chromium.org/p/chromium.android": ["*"],
+            "https://build.chromium.org/p/chromium": ["Android"],
+            "https://build.chromium.org/p/chromium.webkit": [
+                "Android Builder", "Webkit Android (Nexus4)"
+            ]
+        }
+    },
+    "infra": {
+        "build-db": "infra_db.json",
+        "masters": {
+            "https://build.chromium.org/p/chromium.infra": ["*"]
+        },
+        "open-tree": true,
+        "status-url": "https://infra-status.appspot.com",
+        "set-status": true,
+        "password-file": "/creds/gatekeeper/infra_status_password"
+    },
+    "ios": {
+        "build-db": "ios_db.json",
+        "open-tree": false,
+        "set-status": false,
+        "masters": {
+          "https://build.chromium.org/p/chromium.mac": [
+              "ios-device",
+              "ios-device-xcode-clang",
+              "ios-simulator",
+              "ios-simulator-full-configs",
+              "ios-simulator-xcode-clang"
+          ]
+        }
+    },
+    "nacl": {
+        "build-db": "nacl_build_db.json",
+        "masters": {
+            "https://build.chromium.org/p/client.nacl": ["*"]
+        },
+        "open-tree": true,
+        "password-file": "/creds/gatekeeper/nacl_status_password",
+        "revision-properties": "got_revision_cp",
+        "set-status": true,
+        "status-url": "https://nativeclient-status.appspot.com",
+        "track-revisions": true
+    },
+    "nacl-sdk": {
+        "masters": {
+            "https://build.chromium.org/p/client.nacl.sdk": ["*"]
+        },
+        "revision-properties": "got_revision_cp",
+        "track-revisions": true
+    },
+    "nacl-ports": {
+        "build-db": "nacl_ports_build_db.json",
+        "masters": {
+            "https://build.chromium.org/p/client.nacl.ports": ["*"]
+        },
+        "open-tree": true,
+        "password-file": "/creds/gatekeeper/nacl_ports_status_password",
+        "revision-properties": "got_revision_cp",
+        "set-status": true,
+        "status-url": "https://naclports-status.appspot.com",
+        "track-revisions": false
+    },
+    "pdfium": {
+        "build-db": "pdfium_build_db.json",
+        "masters": {
+            "https://build.chromium.org/p/client.pdfium": ["*"]
+        },
+        "open-tree": true,
+        "password-file": "/creds/gatekeeper/pdfium_status_password",
+        "revision-properties": "got_revision_cp",
+        "set-status": true,
+        "status-url": "https://pdfium-status.appspot.com",
+        "track-revisions": true
+    },
+    "v8-tree-closers": {
+        "build-db": "v8_tree_closers_build_db.json",
+        "gitiles-config": {
+          "repo_url": "https://chromium.googlesource.com/v8/v8",
+          "ref": "refs/heads/infra/config",
+          "path": "gatekeeper/tree_closers.json"
+        },
+        "masters": {
+            "https://build.chromium.org/p/client.v8": ["*"],
+            "https://build.chromium.org/p/client.v8.fyi": ["*"],
+            "https://build.chromium.org/p/client.v8.ports": ["*"]
+        },
+        "open-tree": true,
+        "password-file": "/creds/gatekeeper/v8_status_password",
+        "revision-properties": "got_revision_cp",
+        "set-status": true,
+        "status-url": "https://v8-status.appspot.com",
+        "track-revisions": true
+    },
+    "v8-mail-notifiers": {
+        "build-db": "v8_mail_notifiers_build_db.json",
+        "gitiles-config": {
+          "repo_url": "https://chromium.googlesource.com/v8/v8",
+          "ref": "refs/heads/infra/config",
+          "path": "gatekeeper/mail_notifiers.json"
+        },
+        "masters": {
+            "https://build.chromium.org/p/client.v8": ["*"],
+            "https://build.chromium.org/p/client.v8.chromium": ["*"],
+            "https://build.chromium.org/p/client.v8.fyi": ["*"]
+        }
+    },
+    "webrtc": {
+        "build-db": "webrtc_build_db.json",
+        "masters": {
+            "https://build.chromium.org/p/client.webrtc": ["*"]
+        },
+        "open-tree": true,
+        "password-file": "/creds/gatekeeper/webrtc_status_password",
+        "revision-properties": "got_revision",
+        "set-status": true,
+        "status-url": "https://webrtc-status.appspot.com",
+        "track-revisions": true
+    },
+    "chromium.perf": {
+        "masters": {
+            "https://build.chromium.org/p/chromium.perf": ["*"]
+        }
+    },
+    "non-closers": {
+        "filter-domain": "chromium.org,google.com,intel.com,opera.com,vewd.com",
+        "masters": {
+            "https://build.chromium.org/p/chromium.fyi": ["*"],
+            "https://build.chromium.org/p/chromium.infra.cron": ["*"],
+            "https://build.chromium.org/p/client.boringssl": ["*"],
+            "https://build.chromium.org/p/client.catapult": ["*"],
+            "https://build.chromium.org/p/client.crashpad": ["*"]
+        }
+    }
+}

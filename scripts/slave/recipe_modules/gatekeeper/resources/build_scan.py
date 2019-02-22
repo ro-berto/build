@@ -5,11 +5,12 @@
 
 """Scans a list of masters and saves information in a build_db."""
 
-from contextlib import closing
+from contextlib import closing, contextmanager
 import base64
 import httplib2
 import json
 import logging
+import multiprocessing
 import optparse
 import os
 import sys
@@ -17,15 +18,10 @@ import time
 import urllib
 import zlib
 
-from common import chromium_utils
-from slave import build_scan_db
+from infra_libs.luci_auth import LUCICredentials
 
-SCRIPTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                           '..', '..')
+import build_scan_db
 
-# We need master to be on the path to import auth.
-sys.path.insert(0, os.path.join(SCRIPTS_DIR, 'master'))
-from master import auth
 
 # Buildbot status enum.
 SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION, RETRY = range(6)
@@ -36,7 +32,24 @@ URL_TIMEOUT = 60
 BUILDER_WILDCARD = '*'
 
 ENDPOINT_ROOT = 'https://luci-milo.appspot.com/prpc/'
-SCOPES = ['https://www.googleapis.com/auth/userinfo.email']
+
+
+@contextmanager
+def MultiPool(processes):
+  """Manages a multiprocessing.Pool making sure to close the pool when done.
+
+  This will also call pool.terminate() when an exception is raised (and
+  re-raised the exception to the calling procedure can handle it).
+  """
+  try:
+    pool = multiprocessing.Pool(processes=processes)
+    yield pool
+    pool.close()
+  except:
+    pool.terminate()
+    raise
+  finally:
+    pool.join()
 
 
 def _get_from_milo(endpoint, data, milo_creds=None, http=None):
@@ -48,10 +61,7 @@ def _get_from_milo(endpoint, data, milo_creds=None, http=None):
   url =  ENDPOINT_ROOT + endpoint
   if not http:
     http = httplib2.Http()
-  if milo_creds:
-    creds = auth.create_service_account_credentials(milo_creds, SCOPES)
-    http = creds.authorize(http)
-    creds.refresh(http)
+  http = LUCICredentials().authorize(http)
   logging.info('fetching %s with %s' % (url, data))
 
   attempts = 0
@@ -148,7 +158,7 @@ def find_new_builds(master_url, builderlist, root_json, build_db):
               max(finished)] = build_scan_db.gen_build(finished=True)
 
         new_builds[buildername] = current_builds
-  
+
   logging.info('milo output for %s:', master_url)
   for builder in sorted(root_json['builders'].keys()):
     data = root_json['builders'][builder]
@@ -214,7 +224,7 @@ def get_build_jsons(master_builds, processes, milo_creds):
     # The async/get is so that ctrl-c can interrupt the scans.
     # See http://stackoverflow.com/questions/1408356/
     # keyboard-interrupts-with-pythons-multiprocessing-pool
-    with chromium_utils.MultiPool(processes) as pool:
+    with MultiPool(processes) as pool:
       builds = filter(bool, pool.map_async(get_build_json, url_list).get(
           9999999))
   else:

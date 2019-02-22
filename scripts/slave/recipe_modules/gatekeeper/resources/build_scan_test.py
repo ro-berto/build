@@ -16,7 +16,7 @@ import urllib2
 
 import test_env  # pylint: disable=relative-import
 
-from slave import build_scan
+import build_scan
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 

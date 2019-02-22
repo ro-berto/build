@@ -30,10 +30,10 @@ import zlib
 
 import test_env  # pylint: disable=relative-import
 
-from slave import gatekeeper_ng
-from slave import gatekeeper_ng_config
-from slave import build_scan
-from slave import build_scan_db
+import gatekeeper_ng
+import gatekeeper_ng_config
+import build_scan
+import build_scan_db
 
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))

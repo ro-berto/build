@@ -15,7 +15,7 @@ import unittest
 
 import test_env  # pylint: disable=relative-import
 
-from slave import gatekeeper_ng_config
+import gatekeeper_ng_config
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 

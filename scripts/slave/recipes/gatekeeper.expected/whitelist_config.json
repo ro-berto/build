@@ -4,7 +4,7 @@
       "python",
       "-u",
       "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
-      "RECIPE_REPO[build]/scripts/slave/gatekeeper_trees.json",
+      "RECIPE_MODULE[build::gatekeeper]/resources/gatekeeper_trees.json",
       "/path/to/tmp/json"
     ],
     "name": "reading gatekeeper_trees.json",
@@ -51,16 +51,11 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_REPO[build]/scripts/slave/gatekeeper_ng.py",
+      "RECIPE_MODULE[build::gatekeeper]/resources/gatekeeper_ng.py",
       "--json",
-      "RECIPE_REPO[build]/scripts/slave/gatekeeper.json",
+      "RECIPE_MODULE[build::gatekeeper]/resources/gatekeeper.json",
       "--service-account-path",
       "/creds/service_accounts/service-account-gatekeeper.json"
     ],
@@ -68,16 +63,11 @@
   },
   {
     "cmd": [
-      "python",
+      "vpython",
       "-u",
-      "RECIPE_REPO[build]/scripts/tools/runit.py",
-      "--show-path",
-      "--with-third-party-lib",
-      "--",
-      "python",
-      "RECIPE_REPO[build]/scripts/slave/gatekeeper_ng.py",
+      "RECIPE_MODULE[build::gatekeeper]/resources/gatekeeper_ng.py",
       "--json",
-      "RECIPE_REPO[build]/scripts/slave/gatekeeper.json",
+      "RECIPE_MODULE[build::gatekeeper]/resources/gatekeeper.json",
       "--service-account-path",
       "/creds/service_accounts/service-account-gatekeeper.json",
       "--status-url",

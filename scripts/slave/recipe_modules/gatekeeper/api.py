@@ -103,10 +103,11 @@ class Gatekeeper(recipe_api.RecipeApi):
         )
 
       try:
-        self.m.build.python(
-          'gatekeeper: %s' % str(tree_name),
-          self.repo_resource('scripts', 'slave', 'gatekeeper_ng.py'),
-          args,
+        self.m.python(
+          name='gatekeeper: %s' % str(tree_name),
+          script=self.resource('gatekeeper_ng.py'),
+          args=args,
+          venv=True
         )
       except self.m.step.StepFailure:
         pass

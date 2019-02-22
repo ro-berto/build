@@ -31,11 +31,12 @@ import time
 import urllib
 import urllib2
 
-from slave import build_scan
-from slave import build_scan_db
-from slave import gatekeeper_ng_config
+from infra_libs.luci_auth import LUCICredentials
 
-from master import auth
+import build_scan
+import build_scan_db
+import gatekeeper_ng_config
+
 
 DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -471,9 +472,6 @@ def get_sheriffs(classes, base_url):
   return reduce(operator.or_, sheriff_sets, set())
 
 
-SCOPES = ['https://www.googleapis.com/auth/userinfo.email']
-
-
 def _http_req_auth(url, method, body, http):
   http = http or httplib2.Http()
 
@@ -498,10 +496,7 @@ def submit_email(email_app, build_data, simulate, creds):
   }
 
   http = httplib2.Http()
-  if creds:
-    creds = auth.create_service_account_credentials(creds, SCOPES)
-    http = creds.authorize(http)
-    creds.refresh(http)
+  http = LUCICredentials().authorize(http)
 
   code, content = _http_req_auth(
       url, "POST", urllib.urlencode({'json': json.dumps(data)}), http)
@@ -835,7 +830,7 @@ def get_args(argv):
   parser.add_argument('--email-domain', default='google.com',
                       help='default email domain to add to users without one')
   parser.add_argument('--sheriff-url',
-                      default='http://build.chromium.org/p/chromium/%s.js',
+                      default='https://rota-ng.appspot.com/legacy/%s.js',
                       help='URL pattern for the current sheriff list')
   parser.add_argument('--parallelism', default=16,
                       help='up to this many builds can be queried '

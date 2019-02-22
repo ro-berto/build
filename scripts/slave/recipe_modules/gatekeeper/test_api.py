@@ -11,7 +11,7 @@ from recipe_engine import recipe_test_api
 # available as test data whereever the simulation is run.
 PROD_TREES_FILE = os.path.normpath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)),
-    '..', '..', 'gatekeeper_trees.json'))
+    'resources', 'gatekeeper_trees.json'))
 
 class GatekeeperTestApi(recipe_test_api.RecipeTestApi):
   def fake_test_data(self, data=None):
