@@ -85,6 +85,9 @@
     # WebRTC
     'client.webrtc.fyi': {},
     'client.webrtc.perf': {},
+
+    # Flutter
+    'client.flutter': {},
   },
 
   'chromiumos': {
