@@ -181,6 +181,7 @@ def RunSteps(api, repo_name):
           # very slow runtimes for the led task. Because this recipe blocks the
           # build.git CQ, we decided the tradeoff to run these edited recipes in
           # production mode instead would be better.
+          then('edit', '-exp', 'false').
           then('launch')).result
 
         triggered_jobs[builder] = result['swarming']
