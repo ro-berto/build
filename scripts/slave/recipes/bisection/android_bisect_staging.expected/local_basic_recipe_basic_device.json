@@ -104,7 +104,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/chromium/src@refs/changes/89/456789/12",
       "--revision",
       "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--disable-syntax-validation"
@@ -1105,7 +1105,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/chromium/src@refs/changes/89/456789/12",
       "--revision",
       "src@e28dc0d49c331def2a3bbf3ddd0096eb51551155",
       "--disable-syntax-validation"
@@ -2093,7 +2093,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/chromium/src@refs/changes/89/456789/12",
       "--revision",
       "src@fc6dfc7ff5b1073408499478969261b826441144",
       "--disable-syntax-validation"
@@ -3094,7 +3094,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/chromium/src@refs/changes/89/456789/12",
       "--revision",
       "src@e28dc0d49c331def2a3bbf3ddd0096eb51551155",
       "--disable-syntax-validation"
@@ -3758,7 +3758,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/chromium/src@refs/changes/89/456789/12",
       "--revision",
       "src@fc6dfc7ff5b1073408499478969261b826441144",
       "--disable-syntax-validation"
@@ -4422,7 +4422,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/chromium/src@refs/changes/89/456789/12",
       "--revision",
       "src@e28dc0d49c331def2a3bbf3ddd0096eb51551155",
       "--disable-syntax-validation"
@@ -5308,7 +5308,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/chromium/src@refs/changes/89/456789/12",
       "--revision",
       "src@fc6dfc7ff5b1073408499478969261b826441144",
       "--disable-syntax-validation"
@@ -6194,7 +6194,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/chromium/src@refs/changes/89/456789/12",
       "--revision",
       "src@e28dc0d49c331def2a3bbf3ddd0096eb51551155",
       "--disable-syntax-validation"
@@ -7459,7 +7459,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium/src@refs/heads/master:refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/chromium/src@refs/changes/89/456789/12",
       "--revision",
       "src@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "--disable-syntax-validation"

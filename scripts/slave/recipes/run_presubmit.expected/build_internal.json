@@ -56,7 +56,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/build_internal@refs/heads/master:refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/build_internal@refs/changes/89/456789/12",
       "--revision",
       "build_internal@HEAD"
     ],
