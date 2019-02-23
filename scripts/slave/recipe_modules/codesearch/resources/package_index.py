@@ -420,18 +420,21 @@ class IndexPack(object):
       # though).
       required_inputs = []
       for required_file in [source_file, generated_header]:
+        path = os.path.normpath(
+            os.path.join(self.root_dir, self.out_dir, required_file))
+        # We don't want to fail completely if the file doesn't exist.
+        if path not in self.filehashes:
+          print 'missing from filehashes %s' % path
+          continue
+
         required_input = {
             'v_name': {
                 'corpus': self.corpus,
                 'path': self._NormalisePath(required_file),
             },
             'info': {
-                'path':
-                    required_file,
-                'digest':
-                    self.filehashes[os.path.normpath(
-                        os.path.join(self.root_dir, self.out_dir,
-                                     required_file))],
+                'path': required_file,
+                'digest': self.filehashes[path],
             },
         }
         if self.root:
