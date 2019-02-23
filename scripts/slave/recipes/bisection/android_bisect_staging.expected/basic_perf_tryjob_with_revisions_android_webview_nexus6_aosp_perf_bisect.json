@@ -104,7 +104,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium@refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/chromium@refs/heads/master:refs/changes/89/456789/12",
       "--revision",
       "src@HEAD",
       "--disable-syntax-validation"
@@ -1675,7 +1675,7 @@
       "--output_json",
       "/path/to/tmp/json",
       "--patch_ref",
-      "https://chromium.googlesource.com/chromium@refs/changes/89/456789/12",
+      "https://chromium.googlesource.com/chromium@refs/heads/master:refs/changes/89/456789/12",
       "--revision",
       "src@d49c331def2a3bbf3ddd0096eb51551155",
       "--disable-syntax-validation"
