@@ -218,7 +218,6 @@ def main(argv):
       'master.chromium.android.fyi': 'ChromiumAndroidFyi',
       'master.chromium.chromedriver': 'ChromiumChromeDriver',
       'master.chromium.clang': 'ChromiumClang',
-      'master.chromium.gatekeeper': 'Gatekeeper',
       'master.chromium.infra.cron': 'InfraCron',
       'master.chromium.perf': 'ChromiumPerf',
       'master.client.art': 'ART',
