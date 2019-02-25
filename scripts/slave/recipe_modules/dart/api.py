@@ -256,6 +256,8 @@ class DartApi(recipe_api.RecipeApi):
 
   def _get_latest_tested_commit(self):
     builder = self._get_builder_dir()
+    # Note: The pre-approval script relies on this step being named
+    # gsutil_find_latest_build inside the nested step download_previous_results.
     latest_result = self.m.gsutil.download(
         'dart-test-results',
         'builders/%s/latest' % builder,
@@ -706,6 +708,8 @@ class DartApi(recipe_api.RecipeApi):
     # If there are no test steps, steps will be empty.
     if self._run_new_steps() and steps:
       with self.m.context(cwd=self.m.path['checkout']):
+        # Note: The pre-approval script relies on this being a nested step named
+        # download_previous_results that contains gsutil_find_latest_build.
         with self.m.step.nest('download previous results'):
           latest, _ = self._get_latest_tested_commit()
           self._download_results(latest)
