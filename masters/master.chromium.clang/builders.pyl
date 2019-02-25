@@ -68,23 +68,6 @@
       "category": "2ToTMac",
     },
 
-    "ToTWin": {
-      "mixins": ["win7"],
-      "bot": "build127-m1",
-      "category": "3ToTWindows",
-    },
-    "ToTWin64": {
-      "mixins": ["win7"],
-      "bot": "build129-m1",
-      "category": "3ToTWindows",
-    },
-    "ToTWinThinLTO64": {
-      "mixins": ["win10"],
-      "bot": "win76-c1",
-      "category": "3ToTWindows",
-      "no_output_timeout_s": 24000,
-    },
-
     "linux-win_cross-rel": {
       "mixins": ["trusty"],
       "bot": "slave169-c1",
