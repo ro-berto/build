@@ -5,7 +5,9 @@
 """Recipe for building and running tests for Open Screen stand-alone."""
 
 DEPS = [
+  'depot_tools/bot_update',
   'depot_tools/depot_tools',
+  'depot_tools/gclient',
   'depot_tools/git',
   'depot_tools/osx_sdk',
   'depot_tools/tryserver',
@@ -23,7 +25,6 @@ BUILD_CONFIG = 'Default'
 BUILD_TARGET = ['hello', 'gn_all', 'demo', 'unittests']
 OPENSCREEN_REPO = 'https://chromium.googlesource.com/openscreen'
 
-
 def _GetHostToolLabel(platform):
   if platform.is_linux and platform.bits == 64:
     return 'linux64'
@@ -33,13 +34,17 @@ def _GetHostToolLabel(platform):
 
 
 def RunSteps(api):
-  build_root = api.path['start_dir']
-  openscreen_root = build_root.join('openscreen')
-  repository = api.properties['repository']
+  openscreen_config = api.gclient.make_config()
+  solution = openscreen_config.solutions.add()
+  solution.name = 'openscreen'
+  solution.url = OPENSCREEN_REPO
+  solution.deps_file = 'DEPS'
 
-  api.git.checkout(
-      repository, dir_path=openscreen_root,
-      ref=api.tryserver.gerrit_change_fetch_ref, recursive=True)
+  api.gclient.c = openscreen_config
+
+  api.bot_update.ensure_checkout()
+  api.gclient.runhooks()
+
   api.goma.ensure_goma()
   checkout_path = api.path['checkout']
   output_path = checkout_path.join('out', BUILD_CONFIG)
@@ -75,7 +80,6 @@ def GenTests(api):
       api.platform('linux', 64) +
       api.buildbucket.try_build('openscreen', 'try') +
       api.properties(
-          repository=OPENSCREEN_REPO,
           debug=True,
           is_asan=True
       )
@@ -85,7 +89,6 @@ def GenTests(api):
       api.platform('linux', 64) +
       api.buildbucket.try_build('openscreen', 'try') +
       api.properties(
-          repository=OPENSCREEN_REPO,
           debug=True,
           is_asan=False,
           is_gcc=True
@@ -96,7 +99,6 @@ def GenTests(api):
       api.platform('mac', 64) +
       api.buildbucket.try_build('openscreen', 'try') +
       api.properties(
-          repository=OPENSCREEN_REPO,
           debug=True,
           is_asan=False
       )
