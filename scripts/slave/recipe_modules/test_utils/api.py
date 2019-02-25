@@ -501,7 +501,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
             potential_test_flakes)
 
     if step_layer_flakiness or potential_build_flakiness:
-      output = { 'Step Layer Flakiness: ' : step_layer_flakiness,
+      output = { 'Step Layer Flakiness' : step_layer_flakiness,
                  'Failing With Patch Tests That Caused Build Failure' :
                     potential_build_flakiness }
       step = caller_api.python.succeeding_step(

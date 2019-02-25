@@ -241,7 +241,7 @@ def GenTests(api):
     if status == 'FAILURE':
       expectations = (
         api.post_process(post_process.AnnotationContains,
-            'FindIt Flakiness', ['"Step Layer Flakiness: ": {}']) +
+            'FindIt Flakiness', ['"Step Layer Flakiness": {}']) +
         api.post_process(post_process.AnnotationContains,
             'FindIt Flakiness', [
                 'Failing With Patch Tests That Caused Build Failure']) +
@@ -297,7 +297,7 @@ def GenTests(api):
           api.swarming.canned_summary_output(failure=False) +
           api.test_utils.canned_gtest_output(passing=True)) +
       api.post_process(post_process.AnnotationContains,
-          'FindIt Flakiness', ['"Step Layer Flakiness: ": {}']) +
+          'FindIt Flakiness', ['"Step Layer Flakiness": {}']) +
       api.post_process(post_process.AnnotationContains,
           'FindIt Flakiness', [
               'Failing With Patch Tests That Caused Build Failure']) +

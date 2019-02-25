@@ -3027,7 +3027,7 @@
       "@@@STEP_LOG_LINE@step_metadata@      \"test2.Test2\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@    ]@@@",
       "@@@STEP_LOG_LINE@step_metadata@  }, @@@",
-      "@@@STEP_LOG_LINE@step_metadata@  \"Step Layer Flakiness: \": {@@@",
+      "@@@STEP_LOG_LINE@step_metadata@  \"Step Layer Flakiness\": {@@@",
       "@@@STEP_LOG_LINE@step_metadata@    \"telemetry_gpu_unittests (with patch)\": [@@@",
       "@@@STEP_LOG_LINE@step_metadata@      \"test1.Test1\"@@@",
       "@@@STEP_LOG_LINE@step_metadata@    ]@@@",
