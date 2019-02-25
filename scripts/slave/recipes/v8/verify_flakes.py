@@ -21,6 +21,7 @@ DEPS = [
     'recipe_engine/buildbucket',
     'recipe_engine/json',
     'recipe_engine/step',
+    'v8',
 ]
 
 MAX_CONFIGS = 16
@@ -44,31 +45,26 @@ def RunSteps(api):
       'https://chromium.googlesource.com/v8/v8/', 'master', limit=1,
       step_name='read V8 ToT revision')
   v8_tot = v8_commits[0]['commit']
-  put_result = api.buildbucket.put(
-      (
-        {
-          'bucket': 'luci.v8.try',
-          'parameters': {
-            'builder_name': 'v8_flako',
-            'properties': dict(
-              flako_properties,
-              repro_only=True,
-              swarming_priority=40,
-              to_revision=v8_tot,
-              max_calibration_attempts=1,
-            ),
-          },
-        } for flako_properties in configs
-      ),
-      name='trigger flako builds',
-  )
+  builds = api.v8.buildbucket_trigger([
+    (
+      'v8_flako',
+      dict(
+        flako_properties,
+        repro_only=True,
+        swarming_priority=40,
+        to_revision=v8_tot,
+        max_calibration_attempts=1,
+      )
+    ) for flako_properties in configs
+  ], step_name='trigger flako builds')
 
-  results = [
-    api.buildbucket.collect_build(
-      int(build['build']['id']), step_name='build #%d' % index,
-      mirror_status=True, timeout=4*3600).status
-    for index, build in enumerate(put_result.stdout['results'], start=1)
-  ]
+  results = []
+  for index, build in enumerate(builds):
+    results.append(api.buildbucket.collect_build(
+        int(build.id), step_name='build %s' % build.id,
+        mirror_status=True, timeout=4*3600).status)
+    api.step.active_result.presentation.logs['flake config'] = api.json.dumps(
+        configs[index], indent=2).splitlines()
 
   if api.buildbucket.common_pb2.INFRA_FAILURE in results:
     raise api.step.InfraFailure('Some builds failed to execute')
@@ -88,13 +84,13 @@ def GenTests(api):
         api.step_data(
             'read V8 ToT revision',
             api.gitiles.make_log_test_data('deadbeef')) +
-        api.override_step_data(
-            'trigger flako builds',
-            api.json.output_stream({'results': [{'build': {'id': "123"}}]})) +
+        api.buildbucket.simulated_schedule_output(
+            {'responses': [{'scheduleBuild': {'id': '123'}}]},
+            step_name='trigger flako builds') +
         api.buildbucket.simulated_collect_output(
             [api.buildbucket.ci_build_message(build_id=123, status=result)
              for result in results],
-            step_name='build #1')
+            step_name='build 123')
     )
 
   yield (

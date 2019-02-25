@@ -124,25 +124,58 @@
   {
     "cmd": [
       "buildbucket",
-      "put",
+      "batch",
       "-host",
-      "cr-buildbucket.appspot.com",
-      "{\"bucket\": \"luci.v8.try\", \"experimental\": false, \"parameters_json\": \"{\\\"builder_name\\\": \\\"v8_flako\\\", \\\"properties\\\": {\\\"foo\\\": \\\"bar\\\", \\\"max_calibration_attempts\\\": 1, \\\"repro_only\\\": true, \\\"swarming_priority\\\": 40, \\\"to_revision\\\": \\\"f101a15507d17c20051ac2aed50ff8a09a0570cb\\\"}}\", \"tags\": [\"builder:v8_flako\", \"user_agent:recipe\"]}"
+      "cr-buildbucket.appspot.com"
     ],
     "infra_step": true,
     "name": "trigger flako builds",
+    "stdin": "{\"requests\": [{\"scheduleBuild\": {\"builder\": {\"bucket\": \"\", \"builder\": \"v8_flako\", \"project\": \"\"}, \"dimensions\": [], \"experimental\": 2, \"gerritChanges\": [], \"priority\": 0, \"properties\": {\"foo\": \"bar\", \"max_calibration_attempts\": 1, \"repro_only\": true, \"swarming_priority\": 40, \"to_revision\": \"f101a15507d17c20051ac2aed50ff8a09a0570cb\"}, \"requestId\": \"0-00000000-0000-0000-0000-000000001337\", \"tags\": [{\"key\": \"user_agent\", \"value\": \"recipe\"}]}}]}",
     "stdout": "/path/to/tmp/json",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",
-      "@@@STEP_LOG_LINE@json.output@  \"results\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"responses\": [@@@",
       "@@@STEP_LOG_LINE@json.output@    {@@@",
-      "@@@STEP_LOG_LINE@json.output@      \"build\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"scheduleBuild\": {@@@",
       "@@@STEP_LOG_LINE@json.output@        \"id\": \"123\"@@@",
       "@@@STEP_LOG_LINE@json.output@      }@@@",
       "@@@STEP_LOG_LINE@json.output@    }@@@",
       "@@@STEP_LOG_LINE@json.output@  ]@@@",
       "@@@STEP_LOG_LINE@json.output@}@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@request@{@@@",
+      "@@@STEP_LOG_LINE@request@  \"requests\": [@@@",
+      "@@@STEP_LOG_LINE@request@    {@@@",
+      "@@@STEP_LOG_LINE@request@      \"scheduleBuild\": {@@@",
+      "@@@STEP_LOG_LINE@request@        \"dimensions\": [], @@@",
+      "@@@STEP_LOG_LINE@request@        \"tags\": [@@@",
+      "@@@STEP_LOG_LINE@request@          {@@@",
+      "@@@STEP_LOG_LINE@request@            \"value\": \"recipe\", @@@",
+      "@@@STEP_LOG_LINE@request@            \"key\": \"user_agent\"@@@",
+      "@@@STEP_LOG_LINE@request@          }@@@",
+      "@@@STEP_LOG_LINE@request@        ], @@@",
+      "@@@STEP_LOG_LINE@request@        \"builder\": {@@@",
+      "@@@STEP_LOG_LINE@request@          \"project\": \"\", @@@",
+      "@@@STEP_LOG_LINE@request@          \"builder\": \"v8_flako\", @@@",
+      "@@@STEP_LOG_LINE@request@          \"bucket\": \"\"@@@",
+      "@@@STEP_LOG_LINE@request@        }, @@@",
+      "@@@STEP_LOG_LINE@request@        \"gerritChanges\": [], @@@",
+      "@@@STEP_LOG_LINE@request@        \"priority\": 0, @@@",
+      "@@@STEP_LOG_LINE@request@        \"requestId\": \"0-00000000-0000-0000-0000-000000001337\", @@@",
+      "@@@STEP_LOG_LINE@request@        \"properties\": {@@@",
+      "@@@STEP_LOG_LINE@request@          \"max_calibration_attempts\": 1, @@@",
+      "@@@STEP_LOG_LINE@request@          \"to_revision\": \"f101a15507d17c20051ac2aed50ff8a09a0570cb\", @@@",
+      "@@@STEP_LOG_LINE@request@          \"foo\": \"bar\", @@@",
+      "@@@STEP_LOG_LINE@request@          \"swarming_priority\": 40, @@@",
+      "@@@STEP_LOG_LINE@request@          \"repro_only\": true@@@",
+      "@@@STEP_LOG_LINE@request@        }, @@@",
+      "@@@STEP_LOG_LINE@request@        \"experimental\": 2@@@",
+      "@@@STEP_LOG_LINE@request@      }@@@",
+      "@@@STEP_LOG_LINE@request@    }@@@",
+      "@@@STEP_LOG_LINE@request@  ]@@@",
+      "@@@STEP_LOG_LINE@request@}@@@",
+      "@@@STEP_LOG_END@request@@@",
+      "@@@STEP_LINK@build 123@https://cr-buildbucket.appspot.com/build/123@@@"
     ]
   },
   {
@@ -158,7 +191,7 @@
       "123"
     ],
     "infra_step": true,
-    "name": "build #1",
+    "name": "build 123",
     "timeout": 14400,
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
@@ -182,7 +215,11 @@
       "@@@STEP_LOG_LINE@json.output@    \"status\": \"SUCCESS\"@@@",
       "@@@STEP_LOG_LINE@json.output@  }@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
-      "@@@STEP_LOG_END@json.output@@@"
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@flake config@{@@@",
+      "@@@STEP_LOG_LINE@flake config@  \"foo\": \"bar\"@@@",
+      "@@@STEP_LOG_LINE@flake config@}@@@",
+      "@@@STEP_LOG_END@flake config@@@"
     ]
   },
   {

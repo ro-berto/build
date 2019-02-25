@@ -1415,6 +1415,9 @@ class V8Api(recipe_api.RecipeApi):
       project: Project to trigger builds in (defaults to same as parent).
       bucket: Bucket to trigger builds in (defaults to same as parent).
       step_name: Name of the triggering step that appear on the build.
+
+    Returns:
+      List of api.buildbucket.build_pb2.Build messages.
     """
     # Add user_agent:cq to child builds if the parent is also triggered by CQ.
     extra_tags = {}
