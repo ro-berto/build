@@ -25,6 +25,17 @@ def RunSteps(api):
   rev = api.properties.get('revision')
   if rev and branch == 'master':
     cbb_extra_args += ['--cbb_snapshot_revision', rev]
+  findit_json = api.properties.get('findit_bisect')
+  if findit_json:
+    # Parse the string into JSON dict.
+    findit_json = json.loads(findit_json)
+    snapshot_rev = findit_json['revision']
+    if snapshot_rev:
+      cbb_extra_args += ['--cbb_snapshot_revision', snapshot_rev]
+    build_packages = findit_json.get('targets')
+    if build_packages:
+      # Format of flag is a space separated string of packages.
+      cbb_extra_args += ['--cbb_build_packages', ' '.join(build_packages)]
 
   # Apply our adjusted configuration.
   api.chromite.configure(
@@ -164,6 +175,21 @@ def GenTests(api):
           cbb_config='master-postsubmit',
           email='user@google.com',
           revision='hash1111',
+          **common_properties
+      )
+  )
+
+  # Test a ChromeOS Findit invocation from the BuildRerunCompileFailureInput
+  # proto as properties.
+  yield (
+      api.test('findit_integration')
+      + api.properties(
+          cbb_config='caroline-postsubmit',
+          cbb_branch='master',
+          email='user@google.com',
+          findit_bisect=
+              '{ "revision": "cbef1234", '
+              '"targets": [ "sys-apps/mosys", "chromeos-base/cryptohome" ] }',
           **common_properties
       )
   )
