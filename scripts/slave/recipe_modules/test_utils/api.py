@@ -136,7 +136,7 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     if r and r.valid:
       p = presentation or step_result.presentation
-      failures, text_failures = self.limit_failures(r.failures)
+      failures, text_failures = self.limit_failures(r.unique_failures)
       for f in failures:
         # FIXME: We could theoretically split up each run more. This would
         # require some refactoring in util.py to store each individual run's

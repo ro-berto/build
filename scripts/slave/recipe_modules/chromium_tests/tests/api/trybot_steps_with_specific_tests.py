@@ -491,6 +491,34 @@ def GenTests(api):
       api.post_process(post_process.DropExpectation)
   )
 
+  # If a test fails, then passes in 'retry with patch', then the build should be
+  # marked as a failure. Typically tests are run as multiple iterations, but the
+  # behavior should be the same if the test is run multiple times in a single
+  # iteration.
+  yield (
+      api.test('retry_with_patch_failure_then_success_single_iteration') +
+      api.properties.tryserver(
+          mastername='tryserver.chromium.linux',
+          buildername='linux-rel',
+          swarm_hashes={
+            'base_unittests': 'ffffffffffffffffffffffffffffffffffffffff',
+          }) +
+      api.override_step_data(
+          'base_unittests (with patch)',
+          api.chromium_swarming.canned_summary_output(failure=True) +
+          api.test_utils.canned_gtest_output(passing=False)) +
+      api.override_step_data(
+          'base_unittests (without patch)',
+          api.test_utils.canned_isolated_script_output(passing=True,
+                                                       valid=True)) +
+      api.override_step_data(
+          'base_unittests (retry with patch)',
+          api.chromium_swarming.canned_summary_output(failure=False) +
+          api.test_utils.gtest_results(FAILURE_THEN_SUCCESS_DATA, retcode=0)) +
+      api.post_process(post_process.StatusFailure) +
+      api.post_process(post_process.DropExpectation)
+  )
+
   yield (
       api.test('disable_deapply_patch_affected_files') +
       api.properties.tryserver(

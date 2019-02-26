@@ -273,9 +273,6 @@ class GTestResults(object):
     self.raw = jsonish or {}
     self.pass_fail_counts = {}
 
-    self.passes = set()
-    self.failures = set()
-
     # In the short term, the FindIt logic for ignoring NOTRUN/UNKNOWN tests
     # [treating them as equivalent to a passing test] is implemented in the
     # chromium tests recipe.
@@ -297,17 +294,6 @@ class GTestResults(object):
 
     for cur_iteration_data in self.raw.get('per_iteration_data', []):
       for test_fullname, results in cur_iteration_data.iteritems():
-        # Results is a list with one entry per test try. Last one is the final
-        # result, the only we care about for the .passes and .failures
-        # attributes.
-        last_result = results[-1]
-        if last_result['status'] == 'SUCCESS':
-          self.passes.add(test_fullname)
-        elif last_result['status'] != 'SKIPPED':
-          self.failures.add(test_fullname)
-
-        # The pass_fail_counts attribute takes into consideration all runs.
-
         # TODO (robertocn): Consider a failure in any iteration a failure of
         # the whole test, but allow for an override that makes a test pass if
         # it passes at least once.
@@ -334,13 +320,18 @@ class GTestResults(object):
       if unique_results.issubset(set(['UNKNOWN', 'NOTRUN'])):
         self.findit_notrun.add(test_fullname)
 
-    # With multiple iterations a test could have passed in one but failed
-    # in another. Remove tests that ever failed from the passing set.
-    self.passes -= self.failures
-
   @property
   def total_tests_ran(self):
-    return len(self.passes) + len(self.failures)
+    return len(self.pass_fail_counts)
+
+  @property
+  def unique_failures(self):
+    """Returns the set of tests that failed at least once."""
+    failures = set()
+    for test_name, results_dict in self.pass_fail_counts.iteritems():
+      if results_dict['fail_count'] >= 1:
+        failures.add(test_name)
+    return failures
 
   def _compress_list(self, lines):
     if len(lines) > self.MAX_LOG_LINES: # pragma: no cover
@@ -356,7 +347,7 @@ class GTestResults(object):
     unreliable = 'UNRELIABLE_RESULTS' in global_tags if global_tags else False
     return {
       'valid': self.valid and not unreliable,
-      'failures': sorted(self.failures),
+      'failures': sorted(self.unique_failures),
       'total_tests_ran': self.total_tests_ran,
       'pass_fail_counts': self.pass_fail_counts,
       'findit_notrun': self.findit_notrun
