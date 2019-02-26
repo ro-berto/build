@@ -374,7 +374,7 @@ TRYBOTS = freeze({
   },
   'tryserver.chromium.chrome': {
     'builders': {
-        'google-chrome-chromeos': simple_bot({
+        'linux-chromeos-chrome': simple_bot({
           'mastername': 'chromium.chrome',
           'buildername': 'Google Chrome ChromeOS',
         }),
