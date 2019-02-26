@@ -41,31 +41,10 @@
   },
 
   "builders": {
-
     "ToTAndroidASan": {
       "mixins": ["trusty"],
       "bot": "build3-b1",
       "category": "1ToTAndroid",
-    },
-
-    "ToTMac": {
-      "bot_pool": "build98-m1",
-      "category": "2ToTMac",
-    },
-    "ToTMac (dbg)": {
-      "bot_pool": "build99-m1",
-      "category": "2ToTMac",
-    },
-    "ToTMacASan": {
-      "bot_pool": "build99-m1",
-      "category": "2ToTMac",
-    },
-    "ToTMacCoverage": {
-      "recipe": "chromium_clang_coverage_tot",
-      "bot": "build2-m1",
-      "os": "mac",
-      "version": "10.13.3",
-      "category": "2ToTMac",
     },
 
     "linux-win_cross-rel": {
@@ -76,16 +55,6 @@
   },
 
   "bot_pools": {
-    "build98-m1": {
-      "os": "mac",
-      "version": "10.9",
-      "bots": "build98-m1",
-    },
-    "build99-m1": {
-      "os": "mac",
-      "version": "10.9",
-      "bots": "build99-m1",
-    },
   },
 
   "schedulers": {
