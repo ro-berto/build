@@ -8,12 +8,12 @@ import json
 from recipe_engine import post_process
 
 DEPS = [
+    'chromium_swarming',
     'chromium_tests',
     'recipe_engine/json',
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/runtime',
-    'swarming',
 ]
 
 CUSTOM_BUILDERS = {

@@ -13,7 +13,7 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/raw_io',
   'recipe_engine/runtime',
-  'swarming',
+  'chromium_swarming',
 ]
 
 def RunSteps(api):
@@ -226,7 +226,7 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.swarming.summary({
+        api.chromium_swarming.summary({
           'shards': [{
             'exit_code': 1,
             'state': 'COMPLETED',
@@ -271,7 +271,7 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.swarming.summary({
+        api.chromium_swarming.summary({
           'shards': [{
             'exit_code': '1',
             'state': 'COMPLETED',
@@ -317,7 +317,7 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.swarming.summary({
+        api.chromium_swarming.summary({
           'shards': [{
             'exit_code': 'b',
             'state': 'COMPLETED',
@@ -366,7 +366,7 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.swarming.summary({
+        api.chromium_swarming.summary({
           'shards': [{
             'exit_code': 2,
             'state': 'COMPLETED',
@@ -410,7 +410,7 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.swarming.summary({
+        api.chromium_swarming.summary({
           'shards': [{
             'state': 'TIMED_OUT',
           }],
@@ -453,7 +453,7 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.swarming.summary({
+        api.chromium_swarming.summary({
           'shards': [{
             'state': 'EXPIRED',
           }],
@@ -496,7 +496,7 @@ def GenTests(api):
     )
     + api.step_data(
         'fake test (fake device iOS 8.1)',
-        api.swarming.summary({
+        api.chromium_swarming.summary({
           'shards': [{
             'state': 'BOT_DIED',
           }],

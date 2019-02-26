@@ -10,9 +10,9 @@ Waterfall page: https://build.chromium.org/p/chromium.swarm/waterfall
 
 DEPS = [
   'recipe_engine/properties',
-  'swarming',
   'swarming_client',
   'swarming_heartbeat',
+  'chromium_swarming',
 ]
 
 
@@ -21,7 +21,7 @@ def RunSteps(api):
   if api.properties.get('target_environment') == 'staging':
     branch = 'master'
   api.swarming_client.checkout(branch, can_fail_build=False)
-  api.swarming.check_client_version()
+  api.chromium_swarming.check_client_version()
   api.swarming_heartbeat.run()
 
 

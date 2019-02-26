@@ -185,10 +185,10 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
 
     """
-    if not hasattr(caller_api, 'swarming'):
+    if not hasattr(caller_api, 'chromium_swarming'):
       self.m.python.failing_step(
           'invalid caller_api',
-          'caller_api must include the swarming recipe module')
+          'caller_api must include the chromium_swarming recipe module')
 
     local_tests = []
     swarming_tests = []
@@ -626,9 +626,10 @@ class SwarmingGroup(TestGroup):
         del self._task_ids_to_test[key]
         break
 
-      finished_sets, attempts = caller_api.swarming.wait_for_finished_task_set(
-          list(self._task_ids_to_test), suffix=(
-              (' (%s)' % suffix) if suffix else ''), attempts=attempts)
+      finished_sets, attempts = (
+          caller_api.chromium_swarming.wait_for_finished_task_set(
+              list(self._task_ids_to_test), suffix=(
+                  (' (%s)' % suffix) if suffix else ''), attempts=attempts))
       for task_set in finished_sets:
         test = self._task_ids_to_test[tuple(task_set)]
         self._run_func(test, test.run, caller_api, suffix, True)

@@ -1,7 +1,12 @@
+# Copyright 2019 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
 DEPS = [
   'archive',
   'build',
   'chromium',
+  'chromium_swarming',
   'commit_position',
   'depot_tools/bot_update',
   'depot_tools/gclient',
@@ -34,7 +39,6 @@ DEPS = [
   'recipe_engine/tempfile',
   'recipe_engine/time',
   'recipe_engine/url',
-  'swarming',
   'swarming_client',
   'test_utils',
   'trigger',

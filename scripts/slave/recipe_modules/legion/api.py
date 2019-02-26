@@ -93,7 +93,7 @@ class LegionApi(recipe_api.RecipeApi):
         '--controller-isolated', config['path'],
         '--task-name', config['name'],
         '--isolate-server', self.m.isolate.isolate_server,
-        '--swarming-server', self.m.swarming.swarming_server,
+        '--swarming-server', self.m.chromium_swarming.swarming_server,
         '--dimension', 'os', config['os']
     ]
 

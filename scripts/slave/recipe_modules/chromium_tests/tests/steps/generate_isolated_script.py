@@ -5,6 +5,7 @@
 DEPS = [
     'build',
     'chromium',
+    'chromium_swarming',
     'chromium_tests',
     'commit_position',
     'depot_tools/bot_update',
@@ -18,7 +19,6 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/step',
-    'swarming',
     'test_results',
     'test_utils',
 ]

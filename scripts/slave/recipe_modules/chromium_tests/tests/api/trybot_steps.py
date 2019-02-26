@@ -6,6 +6,7 @@ from recipe_engine import post_process
 
 
 DEPS = [
+    'chromium_swarming',
     'chromium_tests',
     'filter',
     'recipe_engine/json',
@@ -13,7 +14,6 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/raw_io',
     'recipe_engine/runtime',
-    'swarming',
 ]
 
 

@@ -29,6 +29,7 @@ from recipe_engine.recipe_api import Property
 
 
 DEPS = [
+  'chromium_swarming',
   'depot_tools/gitiles',
   'depot_tools/gsutil',
   'recipe_engine/json',
@@ -36,7 +37,6 @@ DEPS = [
   'recipe_engine/raw_io',
   'recipe_engine/step',
   'recipe_engine/tempfile',
-  'swarming',
   'swarming_client',
 ]
 
@@ -310,10 +310,10 @@ class Runner(object):
     return False
 
   def _default_task_pass_test_data(self):
-    test_data = self.api.swarming.test_api.canned_summary_output_raw()
+    test_data = self.api.chromium_swarming.test_api.canned_summary_output_raw()
     test_data['shards'][0]['output'] = TEST_PASSED_TEXT
     return (
-        self.api.swarming.test_api.summary(test_data) +
+        self.api.chromium_swarming.test_api.summary(test_data) +
         self.api.json.test_api.output({}) +
         self.api.raw_io.test_api.output('')
     )
@@ -342,7 +342,7 @@ class Runner(object):
       # use our optimization to not collect some tasks. Either properly
       # cancel the task, such that they are not in the list of pending tasks or
       # override the step names.
-      task = self.api.swarming.task(
+      task = self.api.chromium_swarming.task(
           '%s - shard %d' % (step_prefix, shard),
           isolated_hash,
           task_output_dir=path.join('task_output_dir_%d' % shard),
@@ -359,14 +359,14 @@ class Runner(object):
         task.dimensions.pop('cpu')
         task.dimensions.pop('gpu')
 
-      self.api.swarming.trigger_task(task)
+      self.api.chromium_swarming.trigger_task(task)
       return task
 
     def collect_task(task):
       try:
-        step_result = self.api.swarming.collect_task(
+        step_result = self.api.chromium_swarming.collect_task(
             task, step_test_data=self._default_task_pass_test_data())
-        data = step_result.swarming.summary['shards'][0]
+        data = step_result.chromium_swarming.summary['shards'][0]
         # Sanity checks.
         # TODO(machenbach): Add this information to the V8 test runner's json
         # output as parsing stdout is brittle.
@@ -375,7 +375,7 @@ class Runner(object):
         assert TEST_PASSED_TEXT in output
         return 0
       except self.api.step.StepFailure as e:
-        data = e.result.swarming.summary['shards'][0]
+        data = e.result.chromium_swarming.summary['shards'][0]
         assert data['exit_code'], (
             'The bot might have died. Please restart the analysis')
         if data['exit_code'] == EXIT_CODE_NO_TESTS:
@@ -510,20 +510,20 @@ def bisect(api, depot, initial_commit_offset, is_bad_func, offset):
 
 def setup_swarming(api, swarming_dimensions, swarming_priority):
   api.swarming_client.checkout('master')
-  api.swarming.default_expiration = 60 * 60
-  api.swarming.default_hard_timeout = 60 * 60
-  api.swarming.default_io_timeout = 20 * 60
-  api.swarming.default_idempotent = False
-  api.swarming.default_priority = swarming_priority
-  api.swarming.default_user = 'v8-flake-bisect'
-  api.swarming.add_default_tag('purpose:v8-flake-bisect')
-  api.swarming.set_default_dimension('pool', 'Chrome')
-  api.swarming.set_default_dimension('gpu', 'none')
-  api.swarming.task_output_stdout = 'all'
+  api.chromium_swarming.default_expiration = 60 * 60
+  api.chromium_swarming.default_hard_timeout = 60 * 60
+  api.chromium_swarming.default_io_timeout = 20 * 60
+  api.chromium_swarming.default_idempotent = False
+  api.chromium_swarming.default_priority = swarming_priority
+  api.chromium_swarming.default_user = 'v8-flake-bisect'
+  api.chromium_swarming.add_default_tag('purpose:v8-flake-bisect')
+  api.chromium_swarming.set_default_dimension('pool', 'Chrome')
+  api.chromium_swarming.set_default_dimension('gpu', 'none')
+  api.chromium_swarming.task_output_stdout = 'all'
 
   for item in swarming_dimensions:
     k, v = item.split(':')
-    api.swarming.set_default_dimension(k, v)
+    api.chromium_swarming.set_default_dimension(k, v)
 
 
 def RunSteps(api, bisect_mastername, bisect_buildername, build_config,
@@ -638,7 +638,7 @@ def GenTests(api):
 
   def is_flaky(offset, shard, flakes, calibration_attempt=0,
                test_name='mjsunit/foobar'):
-    test_data = api.swarming.canned_summary_output_raw()
+    test_data = api.chromium_swarming.canned_summary_output_raw()
     test_data['shards'][0]['output'] = TEST_FAILED_TEMPLATE % flakes
     test_data['shards'][0]['exit_code'] = 1
     step_prefix = ''
@@ -647,7 +647,7 @@ def GenTests(api):
     step_name = 'check %s at #%d' % (test_name, offset)
     return api.step_data(
         '%s%s.%s - shard %d' % (step_prefix, step_name, step_name, shard),
-        api.swarming.summary(test_data),
+        api.chromium_swarming.summary(test_data),
         retcode=1,
     )
 

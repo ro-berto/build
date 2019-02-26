@@ -30,7 +30,6 @@ DEPS = [
   'recipe_engine/raw_io',
   'recipe_engine/step',
   'recipe_engine/runtime',
-  'swarming',
   'test_results',
   'test_utils',
 ]
@@ -194,7 +193,7 @@ def GenTests(api):
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True
         ) +
-        api.swarming.canned_summary_output()
+        api.chromium_swarming.canned_summary_output()
     )
   )
 
@@ -222,7 +221,7 @@ def GenTests(api):
             passing=True, is_win=False, swarming=True,
             isolated_script_passing=False,
         ) +
-        api.swarming.canned_summary_output(failure=True),
+        api.chromium_swarming.canned_summary_output(failure=True),
     ) +
     api.override_step_data(
         'telemetry_gpu_unittests (without patch)',
@@ -230,7 +229,7 @@ def GenTests(api):
             passing=True, is_win=False, swarming=True,
             isolated_script_passing=True,
         ) +
-        api.swarming.canned_summary_output()
+        api.chromium_swarming.canned_summary_output()
     )
   )
 
@@ -266,7 +265,7 @@ def GenTests(api):
         api.test_utils.canned_isolated_script_output(
             passing=True, is_win=False, swarming=True,
         ) +
-        api.swarming.canned_summary_output(failure=False)
+        api.chromium_swarming.canned_summary_output(failure=False)
     )
   )
 
@@ -291,7 +290,7 @@ def GenTests(api):
     suppress_analyze() +
     api.override_step_data(
         'telemetry_gpu_unittests (with patch)',
-        api.swarming.canned_summary_output(failure=True)
+        api.chromium_swarming.canned_summary_output(failure=True)
         + api.json.output({}),
         retcode=1)
   )
@@ -358,7 +357,7 @@ def GenTests(api):
     suppress_analyze() +
     api.override_step_data(
         'gl_tests (with patch)',
-        api.swarming.canned_summary_output(failure=True) +
+        api.chromium_swarming.canned_summary_output(failure=True) +
         canned_test(passing=False))
   )
 
@@ -381,7 +380,7 @@ def GenTests(api):
     suppress_analyze() +
     api.override_step_data(
         'gl_tests (with patch)',
-        api.swarming.canned_summary_output(failure=True) +
+        api.chromium_swarming.canned_summary_output(failure=True) +
         canned_test(passing=False)) +
     api.override_step_data(
           'git diff to analyze patch',
@@ -724,7 +723,7 @@ def GenTests(api):
             passing=True, swarming=True,
             isolated_script_passing=False,
             isolated_script_retcode=255) +
-        api.swarming.canned_summary_output(failure=True))
+        api.chromium_swarming.canned_summary_output(failure=True))
   )
 
   # TODO(dpranke): crbug.com/357866 . This tests what happens if we exceed the
@@ -740,7 +739,7 @@ def GenTests(api):
             passing=True, swarming=True,
             isolated_script_passing=False,
             isolated_script_retcode=130) +
-        api.swarming.canned_summary_output(failure=True))
+        api.chromium_swarming.canned_summary_output(failure=True))
   )
 
   # This tests what happens if we don't trip the thresholds listed
@@ -755,12 +754,12 @@ def GenTests(api):
             passing=True, swarming=True,
             isolated_script_passing=False,
             isolated_script_retcode=125) +
-        api.swarming.canned_summary_output(failure=True)) +
+        api.chromium_swarming.canned_summary_output(failure=True)) +
     api.override_step_data('blink_web_tests (without patch)',
         api.test_utils.canned_isolated_script_output(
             passing=True,
             isolated_script_passing=True) +
-        api.swarming.canned_summary_output())
+        api.chromium_swarming.canned_summary_output())
   )
 
   yield (

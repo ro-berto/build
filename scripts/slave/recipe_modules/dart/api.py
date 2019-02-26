@@ -171,7 +171,7 @@ class DartApi(recipe_api.RecipeApi):
     for shard in range(num_shards):
       if last_shard_is_local and shard == num_shards - 1:
         break
-      task = self.m.swarming.task('%s_shard_%s' % (title, (shard + 1)),
+      task = self.m.chromium_swarming.task('%s_shard_%s' % (title, (shard + 1)),
                                   isolate_hash,
                                   cipd_packages=cipd_packages,
                                   raw_cmd=test_args +
@@ -196,7 +196,7 @@ class DartApi(recipe_api.RecipeApi):
         task.hard_timeout = int(self.m.properties['shard_timeout'])
       # Set a priority lower than any builder, to prioritize shards.
       task.priority = 25
-      self.m.swarming.trigger_task(task)
+      self.m.chromium_swarming.trigger_task(task)
       tasks.append(task)
     return tasks
 
@@ -227,10 +227,11 @@ class DartApi(recipe_api.RecipeApi):
         step.tasks = []
         for shard in tasks:
           shard.task_output_dir = self.m.raw_io.output_dir()
-          self.m.swarming.collect_task(shard)
+          self.m.chromium_swarming.collect_task(shard)
           active_result = self.m.step.active_result
           # Every shard is only a single task in swarming
-          bot_name = active_result.swarming.summary['shards'][0]['bot_id']
+          bot_name = active_result.chromium_swarming.summary[
+              'shards'][0]['bot_id']
           active_result.presentation.links['test stdout of shard #0'] = (
             shard.get_shard_view_url(index=0))
           self._add_results_and_links(bot_name, step.results)

@@ -336,7 +336,7 @@ class FinditApi(recipe_api.RecipeApi):
     if target_buildername != target_testername:
       for key, value in tester_config.get('swarming_dimensions', {}
                                           ).iteritems():
-        api.swarming.set_default_dimension(key, value)
+        api.chromium_swarming.set_default_dimension(key, value)
     # TODO(stgao): Fix the issue that precommit=False adds the tag 'purpose:CI'.
     api.chromium_swarming.configure_swarming('chromium', precommit=False)
 

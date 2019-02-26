@@ -15,7 +15,7 @@ DEPS = [
   'recipe_engine/raw_io',
   'recipe_engine/runtime',
   'recipe_engine/step',
-  'swarming',
+  'chromium_swarming',
   'swarming_client',
   'test_utils',
 ]
@@ -45,37 +45,39 @@ def RunSteps(api, platforms, custom_trigger_script,
   api.swarming_client.checkout('master')
 
   # Ensure swarming_client version is fresh enough.
-  api.swarming.check_client_version(step_test_data=(0, 8, 6))
+  api.chromium_swarming.check_client_version(step_test_data=(0, 8, 6))
 
   # Configure isolate & swarming modules (this is optional).
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
-  api.swarming.swarming_server = 'https://chromium-swarm-dev.appspot.com'
-  api.swarming.add_default_tag('master:tryserver')
-  api.swarming.default_expiration = 60*60
-  api.swarming.default_hard_timeout = 60*60
-  api.swarming.default_io_timeout = 20*60
-  api.swarming.default_idempotent = True
-  api.swarming.default_priority = 30
-  api.swarming.default_user = 'joe'
-  api.swarming.set_default_env('TESTING', '1')
-  api.swarming.verbose = True
-  api.swarming.task_output_stdout = 'json'
-  api.swarming.service_account_json = (
+  api.chromium_swarming.swarming_server = (
+      'https://chromium-swarm-dev.appspot.com')
+  api.chromium_swarming.add_default_tag('master:tryserver')
+  api.chromium_swarming.default_expiration = 60*60
+  api.chromium_swarming.default_hard_timeout = 60*60
+  api.chromium_swarming.default_io_timeout = 20*60
+  api.chromium_swarming.default_idempotent = True
+  api.chromium_swarming.default_priority = 30
+  api.chromium_swarming.default_user = 'joe'
+  api.chromium_swarming.set_default_env('TESTING', '1')
+  api.chromium_swarming.verbose = True
+  api.chromium_swarming.task_output_stdout = 'json'
+  api.chromium_swarming.service_account_json = (
       '/creds/service_accounts/service-account-chromium-builder.json')
 
-  api.swarming.set_default_dimension('inexistent', None)
+  api.chromium_swarming.set_default_dimension('inexistent', None)
 
-  api.swarming.show_shards_in_collect_step = show_shards_in_collect_step
-  api.swarming.show_outputs_ref_in_collect_step = (
+  api.chromium_swarming.show_shards_in_collect_step = (
+      show_shards_in_collect_step)
+  api.chromium_swarming.show_outputs_ref_in_collect_step = (
       show_outputs_ref_in_collect_step)
 
   try:
     # Testing ReadOnlyDict.__setattr__() coverage.
-    api.swarming.default_dimensions['invalid'] = 'foo'
+    api.chromium_swarming.default_dimensions['invalid'] = 'foo'
   except TypeError:
     pass
   try:
-    api.swarming.default_env['invalid'] = 'foo'
+    api.chromium_swarming.default_env['invalid'] = 'foo'
   except TypeError:
     pass
 
@@ -106,27 +108,28 @@ def RunSteps(api, platforms, custom_trigger_script,
     # Also generate code coverage for multi-shard case by triggering multiple
     # shards on Linux.
     if gtest_task:
-      task = api.swarming.gtest_task(
+      task = api.chromium_swarming.gtest_task(
           'hello_world', isolated_hash,
           task_output_dir=temp_dir.join('task_output_dir'),
           test_launcher_summary_output=api.test_utils.gtest_results(
               add_json_log=False),
           merge=merge)
     elif isolated_script_task:
-      task = api.swarming.isolated_script_task(
+      task = api.chromium_swarming.isolated_script_task(
           'hello_world', isolated_hash,
           task_output_dir=temp_dir.join('task_output_dir'),
           merge=merge, trigger_script=trigger_script, env={
               'IS_GTEST': '', 'IS_SCRIPTTEST': 'True'})
     else:
-      task = api.swarming.task('hello_world', isolated_hash,
+      task = api.chromium_swarming.task('hello_world', isolated_hash,
                               task_output_dir=temp_dir.join('task_output_dir'),
                               named_caches=named_caches,
                               service_account=service_account,
                               cipd_packages=[
                                 ('', 'cool/package', 'vers'),
                               ])
-    task.dimensions['os'] = api.swarming.prefered_os_dimension(platform)
+    task.dimensions['os'] = api.chromium_swarming.prefered_os_dimension(
+        platform)
     if platform == 'linux':
       task.shards = 2
       task.shard_indices = range(task.shards)
@@ -146,7 +149,7 @@ def RunSteps(api, platforms, custom_trigger_script,
 
   # Launch all tasks.
   for task in tasks:
-    step_results = api.swarming.trigger_task(task)
+    step_results = api.chromium_swarming.trigger_task(task)
     for step_result in step_results:
       assert len(task.get_task_shard_output_dirs()) == len(task.shard_indices)
       assert step_result.swarming_task in tasks
@@ -160,16 +163,16 @@ def RunSteps(api, platforms, custom_trigger_script,
         task.get_task_ids() for task in tasks
     ]
 
-    api.swarming.wait_for_finished_task_set(task_ids)
-    api.swarming.wait_for_finished_task_set(task_ids)
+    api.chromium_swarming.wait_for_finished_task_set(task_ids)
+    api.chromium_swarming.wait_for_finished_task_set(task_ids)
     return
 
   # Wait for all tasks to complete.
   for task in tasks:
-    step_result = api.swarming.collect_task(task)
+    step_result = api.chromium_swarming.collect_task(task)
     assert step_result.swarming_task in tasks
 
-  api.swarming.report_stats()
+  api.chromium_swarming.report_stats()
 
   # Cleanup.
   api.file.rmtree('remove temp dir', temp_dir)
@@ -239,7 +242,7 @@ def GenTests(api):
       # This is probably how you'd use the test api; testing what happens if one
       # set of tasks finishes first. This example code doesn't care what is
       # returned, but calling code of this usually does.
-      api.swarming.wait_for_finished_task_set([
+      api.chromium_swarming.wait_for_finished_task_set([
           ([['110000', '110100']], 1),
           ([['100000'],
             ['130000']], 1),
@@ -332,7 +335,7 @@ def GenTests(api):
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
-          api.swarming.canned_summary_output() +
+          api.chromium_swarming.canned_summary_output() +
           api.test_utils.canned_gtest_output(True))
     )
 
@@ -352,11 +355,11 @@ def GenTests(api):
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
-          api.swarming.summary(data) +
+          api.chromium_swarming.summary(data) +
           api.test_utils.canned_gtest_output(True))
     )
 
-  data = api.swarming.canned_summary_output_raw(shards=4)
+  data = api.chromium_swarming.canned_summary_output_raw(shards=4)
   data['shards'][2]['completed_ts'] = '2014-09-25T01:49:23.123'
   data['shards'][3]['completed_ts'] = '2014-09-25T01:48:22.345'
 
@@ -367,7 +370,7 @@ def GenTests(api):
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
       api.step_data(
           'hello_world on Windows-7-SP1',
-          api.swarming.summary(data) +
+          api.chromium_swarming.summary(data) +
           api.test_utils.canned_gtest_output(True))
     )
 
@@ -412,7 +415,8 @@ def GenTests(api):
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data('hello_world on Windows-7-SP1', api.swarming.summary(data)))
+      api.step_data('hello_world on Windows-7-SP1',
+                    api.chromium_swarming.summary(data)))
   yield (
       api.test('isolated_script_expired_new') +
       api.step_data(
@@ -429,7 +433,8 @@ def GenTests(api):
       api.step_data(
           'archive for win',
           stdout=api.raw_io.output_text('hash_for_win hello_world.isolated')) +
-      api.step_data('hello_world on Windows-7-SP1', api.swarming.summary(data)))
+      api.step_data('hello_world on Windows-7-SP1',
+                    api.chromium_swarming.summary(data)))
   yield (
       api.test('isolated_script_timeout_new') +
       api.step_data(
@@ -450,7 +455,7 @@ def GenTests(api):
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.raw_io.output_dir({'summary.json': json.dumps(data)}) +
-          api.swarming.summary(data)) +
+          api.chromium_swarming.summary(data)) +
       api.properties(isolated_script_task=True))
 
   data['shards'][0]['state'] = 'TIMED_OUT'
@@ -500,7 +505,8 @@ def GenTests(api):
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
-          api.json.output(json_results) + api.swarming.summary(summary_data)) +
+          api.json.output(json_results) + api.chromium_swarming.summary(
+              summary_data)) +
       api.properties(
           isolated_script_task=True,
           merge={
@@ -515,7 +521,8 @@ def GenTests(api):
       api.step_data(
           'hello_world on Windows-7-SP1',
           api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
-          api.json.output(json_results) + api.swarming.summary(summary_data)) +
+          api.json.output(json_results) + api.chromium_swarming.summary(
+              summary_data)) +
       api.properties(
           isolated_script_task=True,
           trigger_script={
@@ -543,7 +550,7 @@ def GenTests(api):
       api.step_data(
           'hello_world',
           api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
-          api.swarming.summary(summary_data) +
+          api.chromium_swarming.summary(summary_data) +
           api.test_utils.canned_gtest_output(False)) +
       api.properties(
           platforms=('linux',),
@@ -557,7 +564,7 @@ def GenTests(api):
       api.step_data(
           'hello_world',
           api.raw_io.output_dir({'summary.json': json.dumps(summary_data)}),
-          api.swarming.summary(summary_data)) +
+          api.chromium_swarming.summary(summary_data)) +
       api.properties(
           platforms=('linux',),
           show_shards_in_collect_step=True,
@@ -591,7 +598,7 @@ def GenTests(api):
           'hello_world',
           api.raw_io.output_dir(
               {'summary.json': json.dumps(summary_data_deduped)}),
-          api.swarming.summary(summary_data_deduped) +
+          api.chromium_swarming.summary(summary_data_deduped) +
           api.test_utils.canned_gtest_output(False)) +
       api.properties(
           platforms=('linux',),

@@ -430,35 +430,36 @@ class V8Api(recipe_api.RecipeApi):
 
   def set_up_swarming(self):
     if self.bot_config.get('enable_swarming', True):
-      self.m.swarming.check_client_version()
+      self.m.chromium_swarming.check_client_version()
 
-    self.m.swarming.set_default_dimension('pool', 'Chrome')
-    self.m.swarming.set_default_dimension('os', 'Ubuntu-14.04')
+    self.m.chromium_swarming.set_default_dimension('pool', 'Chrome')
+    self.m.chromium_swarming.set_default_dimension('os', 'Ubuntu-14.04')
     # TODO(machenbach): Investigate if this is causing a priority inversion
     # with tasks not specifying cores=8. See http://crbug.com/735388
-    # self.m.swarming.set_default_dimension('cores', '8')
-    self.m.swarming.add_default_tag('project:v8')
-    self.m.swarming.default_hard_timeout = 45 * 60
+    # self.m.chromium_swarming.set_default_dimension('cores', '8')
+    self.m.chromium_swarming.add_default_tag('project:v8')
+    self.m.chromium_swarming.default_hard_timeout = 45 * 60
 
-    self.m.swarming.default_idempotent = True
-    self.m.swarming.task_output_stdout = 'all'
+    self.m.chromium_swarming.default_idempotent = True
+    self.m.chromium_swarming.task_output_stdout = 'all'
 
     if self.m.properties['mastername'] == 'tryserver.v8':
-      self.m.swarming.add_default_tag('purpose:pre-commit')
-      self.m.swarming.default_priority = 30
+      self.m.chromium_swarming.add_default_tag('purpose:pre-commit')
+      self.m.chromium_swarming.default_priority = 30
 
       changes = self.m.buildbucket.build.input.gerrit_changes
       assert len(changes) <= 1
       if changes and changes[0].project:
-        self.m.swarming.add_default_tag('patch_project:%s' % changes[0].project)
+        self.m.chromium_swarming.add_default_tag(
+            'patch_project:%s' % changes[0].project)
     else:
       if self.m.properties['mastername'] in ['client.v8', 'client.v8.ports']:
-        self.m.swarming.default_priority = 25
+        self.m.chromium_swarming.default_priority = 25
       else:
         # This should be lower than the CQ.
-        self.m.swarming.default_priority = 35
-      self.m.swarming.add_default_tag('purpose:post-commit')
-      self.m.swarming.add_default_tag('purpose:CI')
+        self.m.chromium_swarming.default_priority = 35
+      self.m.chromium_swarming.add_default_tag('purpose:post-commit')
+      self.m.chromium_swarming.add_default_tag('purpose:CI')
 
   def runhooks(self, **kwargs):
     if (self.m.chromium.c.compile_py.compiler and

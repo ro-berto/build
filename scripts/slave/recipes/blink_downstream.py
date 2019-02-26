@@ -32,9 +32,9 @@ DEPS = [
   'build/build',
   'build/chromium',
   'build/chromium_checkout',
+  'build/chromium_swarming',
   'build/chromium_tests',
   'build/isolate',
-  'build/swarming',
   'build/test_utils',
   'depot_tools/bot_update',
   'depot_tools/gclient',
@@ -240,19 +240,20 @@ def RunSteps(api):
   api.chromium_tests.set_config('chromium')
 
   # Set up swarming.
-  api.swarming.default_priority = bot_config['swarming_priority']
-  if api.swarming.default_priority > 25:
+  api.chromium_swarming.default_priority = bot_config['swarming_priority']
+  if api.chromium_swarming.default_priority > 25:
     # Allow builders with low priority testing tasks to wait longer for their
     # tasks. I.e. prefer slow build cycle time to infra failure.
-    api.swarming.default_expiration = 7200
-  api.swarming.set_default_dimension('gpu', 'none')
-  api.swarming.set_default_dimension('os', OS_MAPPING[api.platform.name])
-  api.swarming.set_default_dimension('pool', 'Chrome')
-  api.swarming.add_default_tag('project:v8')
-  api.swarming.add_default_tag('purpose:CI')
-  api.swarming.add_default_tag('purpose:luci')
-  api.swarming.add_default_tag('purpose:post-commit')
-  api.swarming.add_default_tag('purpose:layout-test')
+    api.chromium_swarming.default_expiration = 7200
+  api.chromium_swarming.set_default_dimension('gpu', 'none')
+  api.chromium_swarming.set_default_dimension(
+      'os', OS_MAPPING[api.platform.name])
+  api.chromium_swarming.set_default_dimension('pool', 'Chrome')
+  api.chromium_swarming.add_default_tag('project:v8')
+  api.chromium_swarming.add_default_tag('purpose:CI')
+  api.chromium_swarming.add_default_tag('purpose:luci')
+  api.chromium_swarming.add_default_tag('purpose:post-commit')
+  api.chromium_swarming.add_default_tag('purpose:layout-test')
 
   # Sync component to current component revision.
   component_revision = api.buildbucket.gitiles_commit.id or 'HEAD'

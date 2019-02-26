@@ -9,7 +9,7 @@ DEPS = [
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/step',
-    'swarming',
+    'chromium_swarming',
     'test_results',
     'test_utils',
 ]
@@ -79,7 +79,7 @@ def GenTests(api):
             'base_unittests': '[dummy hash for base_unittests]',
             'base_unittests_2': '[dummy hash for base_unittests_2]',
           }) +
-      api.swarming.wait_for_finished_task_set([
+      api.chromium_swarming.wait_for_finished_task_set([
           ([], 1),
           ([['10000'], ['110000']], 1),
       ]) +
@@ -102,7 +102,7 @@ def GenTests(api):
             'base_unittests': '[dummy hash for base_unittests]',
             'base_unittests_2': '[dummy hash for base_unittests_2]',
           }) +
-      api.swarming.wait_for_finished_task_set([
+      api.chromium_swarming.wait_for_finished_task_set([
           ([], 1),
           ([['110000']], 1),
       ]) +
@@ -129,7 +129,7 @@ def GenTests(api):
             'base_unittests': '[dummy hash for base_unittests]',
             'base_unittests_2': '[dummy hash for base_unittests_2]',
           }) +
-      api.swarming.wait_for_finished_task_set([
+      api.chromium_swarming.wait_for_finished_task_set([
           ([], 1),
           ([], 1),
           ([], 1),

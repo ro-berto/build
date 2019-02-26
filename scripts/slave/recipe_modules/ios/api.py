@@ -586,12 +586,12 @@ class iOSApi(recipe_api.RecipeApi):
 
   def bootstrap_swarming(self):
     """Bootstraps Swarming."""
-    self.m.swarming.show_outputs_ref_in_collect_step = False
-    self.m.swarming.show_shards_in_collect_step = True
+    self.m.chromium_swarming.show_outputs_ref_in_collect_step = False
+    self.m.chromium_swarming.show_shards_in_collect_step = True
     self.m.swarming_client.query_script_version('swarming.py')
 
     # TODO(tikuta): Remove this after the switch (crbug.com/894045).
-    self.m.swarming.use_go_client = True
+    self.m.chromium_swarming.use_go_client = True
 
   @staticmethod
   def get_step_name(test):
@@ -886,7 +886,7 @@ class iOSApi(recipe_api.RecipeApi):
             replay_package_version,
         ))
 
-      swarming_task = self.m.swarming.task(
+      swarming_task = self.m.chromium_swarming.task(
         task['step name'],
         task['isolated hash'],
         task_output_dir=task['tmp_dir'],
@@ -951,7 +951,7 @@ class iOSApi(recipe_api.RecipeApi):
         swarming_task.hard_timeout = hard_timeout
 
       try:
-        self.m.swarming.trigger_task(swarming_task)
+        self.m.chromium_swarming.trigger_task(swarming_task)
         task['task'] = swarming_task
       except self.m.step.StepFailure as f:
         f.result.presentation.status = self.m.step.EXCEPTION
@@ -1000,13 +1000,13 @@ class iOSApi(recipe_api.RecipeApi):
         continue
 
       try:
-        step_result = self.m.swarming.collect_task(task['task'])
+        step_result = self.m.chromium_swarming.collect_task(task['task'])
       except self.m.step.StepFailure as f:
         step_result = f.result
 
       # We only run one shard, so the results we're interested in will
       # always be shard 0.
-      swarming_summary = step_result.swarming.summary['shards'][0]
+      swarming_summary = step_result.chromium_swarming.summary['shards'][0]
       state = swarming_summary['state']
 
       exit_code = None
@@ -1117,7 +1117,7 @@ class iOSApi(recipe_api.RecipeApi):
         self.m.perf_dashboard.set_default_config()
         self.m.perf_dashboard.add_point(data_result)
 
-    self.m.swarming.report_stats()
+    self.m.chromium_swarming.report_stats()
 
     if failures:
       failure = self.m.step.StepFailure

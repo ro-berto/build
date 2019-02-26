@@ -196,20 +196,21 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
 
 
   def set_up_swarming(self, bot_config):
-    self.m.swarming.check_client_version()
+    self.m.chromium_swarming.check_client_version()
 
     if bot_config.get('isolate_server'):
       self.m.isolate.isolate_server = bot_config.get('isolate_server')
 
     if bot_config.get('swarming_server'):
-      self.m.swarming.swarming_server = bot_config.get('swarming_server')
+      self.m.chromium_swarming.swarming_server = bot_config.get(
+          'swarming_server')
 
     for key, value in bot_config.get('swarming_dimensions', {}).iteritems():
-      self.m.swarming.set_default_dimension(key, value)
+      self.m.chromium_swarming.set_default_dimension(key, value)
 
     if (bot_config.get('swarming_service_account') and
         not self.m.runtime.is_luci):
-      self.m.swarming.service_account_json = (
+      self.m.chromium_swarming.service_account_json = (
           self.m.puppet_service_account.get_key_path(
               bot_config.get('swarming_service_account')))
 
@@ -317,7 +318,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
         # TODO(https://crbug.com/932316): Automatically count invalid test
         # results as failed tests.
 
-      self.m.swarming.report_stats()
+      self.m.chromium_swarming.report_stats()
 
       if failed_tests:
         failed_tests_names = [t.name for t in failed_tests]
@@ -1211,7 +1212,7 @@ class ChromiumTestsApi(recipe_api.RecipeApi):
       if test_suites:
         unrecoverable_test_suites = self._run_tests_on_tryserver(
             bot_config_object, test_suites, bot_update_step, affected_files)
-        self.m.swarming.report_stats()
+        self.m.chromium_swarming.report_stats()
 
         self.m.test_utils.summarize_findit_flakiness(self.m, test_suites)
 

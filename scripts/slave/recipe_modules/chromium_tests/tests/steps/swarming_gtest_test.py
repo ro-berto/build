@@ -4,6 +4,7 @@
 
 DEPS = [
     'chromium',
+    'chromium_swarming',
     'chromium_tests',
     'commit_position',
     'depot_tools/bot_update',
@@ -13,7 +14,6 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/step',
-    'swarming',
     'test_results',
     'test_utils',
 ]
@@ -73,7 +73,7 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests',
-          api.swarming.canned_summary_output(failure=False) +
+          api.chromium_swarming.canned_summary_output(failure=False) +
           api.test_utils.canned_gtest_output(passing=True))
   )
 
@@ -113,7 +113,7 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests',
-          api.swarming.canned_summary_output(failure=True),
+          api.chromium_swarming.canned_summary_output(failure=True),
           retcode=1)
   )
 
@@ -128,7 +128,7 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests',
-          api.swarming.canned_summary_output() +
+          api.chromium_swarming.canned_summary_output() +
           api.test_utils.gtest_results(None, 255)) +
       api.post_process(verify_log_fields, {'pass_fail_counts': {}}) +
       api.post_process(post_process.DropExpectation)

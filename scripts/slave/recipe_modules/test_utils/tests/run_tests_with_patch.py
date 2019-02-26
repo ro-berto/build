@@ -6,8 +6,8 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/step',
 
+    'chromium_swarming',
     'chromium_tests',
-    'swarming',
     'test_utils',
 ]
 

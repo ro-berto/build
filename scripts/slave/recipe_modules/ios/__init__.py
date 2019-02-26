@@ -5,11 +5,11 @@
 DEPS = [
   'build/chromium',
   'build/chromium_checkout',
+  'build/chromium_swarming',
   'build/filter',
   'build/goma',
   'build/isolate',
   'build/perf_dashboard',
-  'build/swarming',
   'build/swarming_client',
   'build/test_results',
   'depot_tools/bot_update',

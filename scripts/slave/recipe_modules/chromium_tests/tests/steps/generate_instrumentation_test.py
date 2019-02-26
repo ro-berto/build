@@ -5,6 +5,7 @@
 DEPS = [
     'chromium',
     'chromium_android',
+    'chromium_swarming',
     'chromium_tests',
     'depot_tools/bot_update',
     'depot_tools/gclient',
@@ -17,7 +18,6 @@ DEPS = [
     'recipe_engine/properties',
     'recipe_engine/python',
     'recipe_engine/step',
-    'swarming',
     'test_results',
     'test_utils',
 ]

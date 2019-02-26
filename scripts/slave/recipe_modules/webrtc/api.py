@@ -267,23 +267,25 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def configure_swarming(self):
     if self.bot.config.get('swarming_server'):
-      self.m.swarming.swarming_server = self.bot.config['swarming_server']
+      self.m.chromium_swarming.swarming_server = self.bot.config[
+          'swarming_server']
 
     self.m.chromium_swarming.configure_swarming(
         'webrtc',
         precommit=self.m.tryserver.is_tryserver,
         mastername=self.mastername)
-    self.m.swarming.set_default_dimension(
+    self.m.chromium_swarming.set_default_dimension(
         'os',
-        self.m.swarming.prefered_os_dimension(
+        self.m.chromium_swarming.prefered_os_dimension(
             self.m.platform.name).split('-', 1)[0])
     for key, value in self.bot.config.get(
         'swarming_dimensions', {}).iteritems():
-      self.m.swarming.set_default_dimension(key, value)
+      self.m.chromium_swarming.set_default_dimension(key, value)
     if self.bot.config.get('swarming_timeout'):
-      self.m.swarming.default_hard_timeout = self.bot.config[
+      self.m.chromium_swarming.default_hard_timeout = self.bot.config[
           'swarming_timeout']
-      self.m.swarming.default_io_timeout = self.bot.config['swarming_timeout']
+      self.m.chromium_swarming.default_io_timeout = self.bot.config[
+          'swarming_timeout']
 
   def _apply_patch(self, repository_url, patch_ref, include_subdirs=()):
     """Applies a patch by downloading the text diff from Gitiles."""
@@ -365,7 +367,7 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def check_swarming_version(self):
     if self.bot.should_test:
-      self.m.swarming.check_client_version()
+      self.m.chromium_swarming.check_client_version()
 
   @contextlib.contextmanager
   def ensure_sdk(self):
@@ -406,6 +408,7 @@ class WebRTCApi(recipe_api.RecipeApi):
         isolated_targets=None)
 
   def compile(self, phase=None):
+    del phase
     targets = self._isolated_targets
     if targets:
       targets = ['default'] + targets

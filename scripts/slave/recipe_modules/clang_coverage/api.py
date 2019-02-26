@@ -337,7 +337,7 @@ class ClangCoverageApi(recipe_api.RecipeApi):
   def shard_merge(self, step_name):
     """Returns a merge object understood by the swarming module.
 
-    See the docstring for the `merge` parameter of api.swarming.task.
+    See the docstring for the `merge` parameter of api.chromium_swarming.task.
     """
     return {
         'script':

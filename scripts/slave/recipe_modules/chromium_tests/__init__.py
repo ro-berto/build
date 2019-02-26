@@ -1,3 +1,7 @@
+# Copyright 2019 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
 DEPS = [
   'adb',
   'archive',
@@ -34,7 +38,6 @@ DEPS = [
   'recipe_engine/scheduler',
   'recipe_engine/tempfile',
   'recipe_engine/time',
-  'swarming',
   'test_results',
   'test_utils',
   'traceback',

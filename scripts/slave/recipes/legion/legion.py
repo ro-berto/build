@@ -7,13 +7,13 @@
 from recipe_engine.types import freeze
 
 DEPS = [
+    'chromium_swarming',
     'depot_tools/bot_update',
     'depot_tools/gclient',
     'isolate',
     'legion',
     'recipe_engine/path',
     'recipe_engine/properties',
-    'swarming',
 ]
 
 CONFIG_VARS = {'multi_machine': '1'}
@@ -55,7 +55,7 @@ CONFIGS = freeze({
 def RunSteps(api):
   api.isolate.isolate_server = (
       'https://omnibot-legion-isolate-server.appspot.com')
-  api.swarming.swarming_server = (
+  api.chromium_swarming.swarming_server = (
       'https://omnibot-legion-swarming-server.appspot.com')
   api.gclient.set_config('chromium')
   api.bot_update.ensure_checkout()

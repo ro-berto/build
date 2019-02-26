@@ -1,4 +1,9 @@
+# Copyright 2019 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
 DEPS = [
+  'chromium_swarming',
   'depot_tools/bot_update',
   'depot_tools/cipd',
   'depot_tools/depot_tools',
@@ -17,5 +22,4 @@ DEPS = [
   'recipe_engine/json',
   'recipe_engine/step',
   'swarming_client',
-  'swarming'
 ]

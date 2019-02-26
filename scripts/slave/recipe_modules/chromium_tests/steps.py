@@ -1546,7 +1546,7 @@ class SwarmingTest(Test):
 
     # Set default value.
     if 'os' not in task.dimensions:
-      task.dimensions['os'] = api.swarming.prefered_os_dimension(
+      task.dimensions['os'] = api.chromium_swarming.prefered_os_dimension(
           api.platform.name)
 
     return task
@@ -1570,7 +1570,7 @@ class SwarmingTest(Test):
     # Create task.
     self._tasks[suffix] = self.create_task(api, suffix, isolated_hash)
 
-    return api.swarming.trigger_task(self._tasks[suffix])
+    return api.chromium_swarming.trigger_task(self._tasks[suffix])
 
   def validate_task_results(self, api, step_result):
     """Interprets output of a task (provided as StepResult object).
@@ -1608,7 +1608,7 @@ class SwarmingTest(Test):
           '%s wasn\'t triggered' % self.target_name)
 
     try:
-      api.swarming.collect_task(self._tasks[suffix])
+      api.chromium_swarming.collect_task(self._tasks[suffix])
     finally:
       step_result = api.step.active_result
 
@@ -1631,7 +1631,7 @@ class SwarmingTest(Test):
   def step_metadata(self, api, suffix=None):
     data = super(SwarmingTest, self).step_metadata(api, suffix)
     if suffix is not None:
-      data['full_step_name'] = api.swarming.get_step_name(
+      data['full_step_name'] = api.chromium_swarming.get_step_name(
           prefix=None, task=self._tasks[suffix])
       data['patched'] = suffix in ('with patch', 'retry with patch')
       data['dimensions'] = self._tasks[suffix].dimensions
@@ -1681,7 +1681,7 @@ class SwarmingGTestTest(SwarmingTest):
     def _create_swarming_task(*args, **kwargs):
       kwargs['test_launcher_summary_output'] = (
           api.test_utils.gtest_results(add_json_log=False))
-      return api.swarming.gtest_task(*args, **kwargs)
+      return api.chromium_swarming.gtest_task(*args, **kwargs)
 
     return self._create_task_common(
         api, suffix, isolated_hash, '--gtest_filter', ':',
@@ -1912,7 +1912,7 @@ class SwarmingIsolatedScriptTest(SwarmingTest):
       # parameter once Telemetry tests are idempotent, since that will make all
       # isolated_script_tests idempotent.
       kwargs['idempotent'] = self._idempotent
-      return api.swarming.isolated_script_task(*args, **kwargs)
+      return api.chromium_swarming.isolated_script_task(*args, **kwargs)
 
     return self._create_task_common(
         api, suffix, isolated_hash, '--isolated-script-test-filter', '::',

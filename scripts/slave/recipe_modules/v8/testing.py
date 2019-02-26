@@ -474,7 +474,7 @@ def _trigger_swarming_task(api, task, test_step_config):
   for k, v in test_step_config.swarming_task_attrs.iteritems():
     setattr(task, k, v)
 
-  api.swarming.trigger_task(task)
+  api.chromium_swarming.trigger_task(task)
 
 
 class V8SwarmingTest(V8Test):
@@ -501,7 +501,7 @@ class V8SwarmingTest(V8Test):
 
     # Arguments for actual 'collect' command.
     args.append('--')
-    args.extend(self.api.swarming.get_collect_cmd_args(task))
+    args.extend(self.api.chromium_swarming.get_collect_cmd_args(task))
 
     with self.api.swarming_client.on_path():
       return self.api.build.python(
@@ -537,7 +537,7 @@ class V8SwarmingTest(V8Test):
 
     # Initialize swarming task with custom data-collection step for v8
     # test-runner output.
-    self.task = self.api.swarming.task(
+    self.task = self.api.chromium_swarming.task(
         title=self.test['name'] + self.test_step_config.step_name_suffix,
         idempotent=idempotent,
         isolated_hash=self._get_isolated_hash(self.test),
@@ -557,7 +557,7 @@ class V8SwarmingTest(V8Test):
     try:
       # Collect swarming results. Use the same test simulation data for the
       # swarming collect step like for local testing.
-      self.api.swarming.collect_task(
+      self.api.chromium_swarming.collect_task(
         self.task,
         step_test_data=self.api.v8.test_api.output_json,
       )
@@ -603,7 +603,7 @@ class V8GenericSwarmingTest(BaseTest):
 
   def pre_run(self, test=None, **kwargs):
     self.test = test or self.api.v8.test_configs[self.name]
-    self.task = self.api.swarming.task(
+    self.task = self.api.chromium_swarming.task(
         title=self.title,
         isolated_hash=self._get_isolated_hash(self.test),
         task_output_dir=self.task_output_dir,
@@ -614,7 +614,7 @@ class V8GenericSwarmingTest(BaseTest):
 
   def run(self, **kwargs):
     assert self.task
-    self.api.swarming.collect_task(self.task)
+    self.api.chromium_swarming.collect_task(self.task)
     return TestResults.empty()
 
 

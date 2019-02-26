@@ -17,6 +17,7 @@ from recipe_engine.recipe_api import Property
 DEPS = [
   'chromium',
   'chromium_checkout',
+  'chromium_swarming',
   'chromium_tests',
   'commit_position',
   'depot_tools/gclient',
@@ -26,7 +27,6 @@ DEPS = [
   'recipe_engine/platform',
   'recipe_engine/properties',
   'recipe_engine/step',
-  'swarming',
   'swarming_client',
   'test_results',
   'test_utils',
@@ -42,25 +42,27 @@ PROPERTIES = {
 def RunSteps(api, buildername, mastername):
   # Configure isolate & swarming modules to use staging instances.
   api.isolate.isolate_server = 'https://isolateserver-dev.appspot.com'
-  api.swarming.swarming_server = 'https://chromium-swarm-dev.appspot.com'
-  api.swarming.verbose = True
+  api.chromium_swarming.swarming_server = (
+      'https://chromium-swarm-dev.appspot.com')
+  api.chromium_swarming.verbose = True
 
   # Run tests from chromium.swarm buildbot with a relatively high priority
   # so that they take precedence over manually triggered tasks.
-  api.swarming.default_priority = 20
+  api.chromium_swarming.default_priority = 20
 
   # Do not care about the OS specific version on Canary.
-  api.swarming.set_default_dimension(
+  api.chromium_swarming.set_default_dimension(
       'os',
-      api.swarming.prefered_os_dimension(api.platform.name).split('-', 1)[0])
+      api.chromium_swarming.prefered_os_dimension(
+          api.platform.name).split('-', 1)[0])
   if api.platform.is_win:
     # Force os:Windows-10 instead of os:Windows which may trigger on Windows 7.
-    api.swarming.set_default_dimension('os', 'Windows-10')
+    api.chromium_swarming.set_default_dimension('os', 'Windows-10')
 
-  api.swarming.set_default_dimension('pool', 'Chrome')
-  api.swarming.add_default_tag('project:chromium')
-  api.swarming.add_default_tag('purpose:staging')
-  api.swarming.default_idempotent = True
+  api.chromium_swarming.set_default_dimension('pool', 'Chrome')
+  api.chromium_swarming.add_default_tag('project:chromium')
+  api.chromium_swarming.add_default_tag('purpose:staging')
+  api.chromium_swarming.default_idempotent = True
 
   # We are checking out Chromium with swarming_client dep unpinned and pointing
   # to ToT of swarming_client repo, see recipe_modules/gclient/config.py.
@@ -72,7 +74,7 @@ def RunSteps(api, buildername, mastername):
   update_step = api.chromium_checkout.ensure_checkout(bot_config)
 
   # Ensure swarming_client version is fresh enough.
-  api.swarming.check_client_version()
+  api.chromium_swarming.check_client_version()
 
   bot_db = api.chromium_tests.create_bot_db_object()
   bot_config.initialize_bot_db(api.chromium_tests, bot_db, update_step)
@@ -91,10 +93,10 @@ def RunSteps(api, buildername, mastername):
       'chromeos': 'ChromeOS',
   }
   if api.chromium.c.TARGET_PLATFORM in platform_to_os:
-    api.swarming.set_default_dimension(
+    api.chromium_swarming.set_default_dimension(
         'os', platform_to_os[api.chromium.c.TARGET_PLATFORM])
-    api.swarming.set_default_dimension('gpu', None)
-    api.swarming.set_default_dimension('cpu', None)
+    api.chromium_swarming.set_default_dimension('gpu', None)
+    api.chromium_swarming.set_default_dimension('cpu', None)
 
   test_runner = api.chromium_tests.create_test_runner(test_config.all_tests())
   with api.chromium_tests.wrap_chromium_tests(
@@ -145,7 +147,7 @@ def GenTests(api):
     ) +
     api.override_step_data(
         'browser_tests on Ubuntu',
-        api.swarming.canned_summary_output(failure=True) +
+        api.chromium_swarming.canned_summary_output(failure=True) +
         api.test_utils.canned_gtest_output(
             passing=False,
             minimal=True,

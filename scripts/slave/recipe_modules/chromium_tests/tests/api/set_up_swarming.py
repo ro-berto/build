@@ -3,9 +3,9 @@
 # found in the LICENSE file.
 
 DEPS = [
+    'chromium_swarming',
     'chromium_tests',
     'isolate',
-    'swarming',
     'recipe_engine/platform',
     'recipe_engine/properties',
     'recipe_engine/python',
@@ -18,7 +18,7 @@ from recipe_engine import post_process
 def RunSteps(api):
   api.chromium_tests.set_up_swarming(api.properties['bot_config'])
   api.python.succeeding_step(
-      'swarming_service_account', api.swarming.service_account_json)
+      'swarming_service_account', api.chromium_swarming.service_account_json)
   api.python.succeeding_step(
       'isolate_service_account', api.isolate.service_account_json)
 

@@ -12,6 +12,7 @@ DEPS = [
   'depot_tools/bot_update',
   'chromium',
   'chromium_android',
+  'chromium_swarming',
   'depot_tools/gclient',
   'depot_tools/tryserver',
   'recipe_engine/buildbucket',
@@ -22,7 +23,6 @@ DEPS = [
   'recipe_engine/properties',
   'recipe_engine/runtime',
   'recipe_engine/step',
-  'swarming',
   'test_utils',
   'webrtc',
 ]

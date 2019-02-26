@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'swarming',
+  'chromium_swarming',
   'recipe_engine/platform',
   'recipe_engine/properties',
 ]
@@ -13,16 +13,16 @@ from recipe_engine import post_process
 
 def RunSteps(api):
   opt_dims = {60: [{'os': 'Ubuntu-14.04'}]}
-  task = api.swarming.task(
+  task = api.chromium_swarming.task(
       api.properties.get('task_name', 'sample_task'),
       '0123456789012345678901234567890123456789',
       optional_dimensions=opt_dims)
-  task.dimensions['os'] = api.swarming.prefered_os_dimension(
+  task.dimensions['os'] = api.chromium_swarming.prefered_os_dimension(
       api.platform.name)
   if api.properties.get('wait_for_capacity'):
     task.wait_for_capacity = True
-  api.swarming.trigger_task(task)
-  api.swarming.collect_task(task)
+  api.chromium_swarming.trigger_task(task)
+  api.chromium_swarming.collect_task(task)
 
 
 def GenTests(api):

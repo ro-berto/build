@@ -7,10 +7,10 @@ import json
 from recipe_engine import post_process
 
 DEPS = [
+    'chromium_swarming',
     'chromium_tests',
     'recipe_engine/properties',
     'recipe_engine/step',
-    'swarming',
     'test_utils',
 ]
 
@@ -58,7 +58,7 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.swarming.canned_summary_output(failure=True) +
+          api.chromium_swarming.canned_summary_output(failure=True) +
           api.test_utils.canned_gtest_output(False))
   )
 
@@ -74,11 +74,11 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.swarming.canned_summary_output(failure=True) +
+          api.chromium_swarming.canned_summary_output(failure=True) +
           api.test_utils.canned_gtest_output(passing=False)) +
       api.override_step_data(
           'base_unittests (without patch)',
-          api.swarming.canned_summary_output(failure=False) +
+          api.chromium_swarming.canned_summary_output(failure=False) +
           api.test_utils.canned_gtest_output(passing=True)) +
       api.post_process(retry_with_tests_filter)
   )
@@ -95,7 +95,7 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.swarming.canned_summary_output(failure=True) +
+          api.chromium_swarming.canned_summary_output(failure=True) +
           api.test_utils.canned_gtest_output(passing=False)) +
       api.post_process(post_process.DoesNotRun,
                        'base_unittests (without patch)') +
@@ -138,11 +138,11 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.swarming.canned_summary_output(failure=True) +
+          api.chromium_swarming.canned_summary_output(failure=True) +
           api.test_utils.canned_gtest_output(passing=False)) +
       api.override_step_data(
           'base_unittests (without patch)',
-          api.swarming.canned_summary_output(failure=False) +
+          api.chromium_swarming.canned_summary_output(failure=False) +
           api.test_utils.canned_gtest_output(passing=True)) +
       api.post_process(post_process.DoesNotRun,
                        'base_unittests (retry with patch)') +
@@ -160,11 +160,11 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.swarming.canned_summary_output(failure=True) +
+          api.chromium_swarming.canned_summary_output(failure=True) +
           api.test_utils.canned_gtest_output(passing=False)) +
       api.override_step_data(
           'base_unittests (without patch)',
-          api.swarming.canned_summary_output(failure=True) +
+          api.chromium_swarming.canned_summary_output(failure=True) +
           api.test_utils.canned_gtest_output(passing=False))
   )
 
@@ -263,16 +263,16 @@ def GenTests(api):
             }) +
         api.override_step_data(
             'base_unittests (with patch)',
-            api.swarming.canned_summary_output(failure=True) +
+            api.chromium_swarming.canned_summary_output(failure=True) +
             api.test_utils.gtest_results(
                 generate_single_failing_gtest_json(status), retcode=1)) +
         api.override_step_data(
             'base_unittests (without patch)',
-            api.swarming.canned_summary_output(failure=False) +
+            api.chromium_swarming.canned_summary_output(failure=False) +
             api.test_utils.canned_gtest_output(passing=True)) +
         api.override_step_data(
             'base_unittests (retry with patch)',
-            api.swarming.canned_summary_output(failure=True) +
+            api.chromium_swarming.canned_summary_output(failure=True) +
             api.test_utils.canned_gtest_output(passing=False)) +
         expectations +
         api.post_process(post_process.DropExpectation)
@@ -290,11 +290,11 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.swarming.canned_summary_output(failure=True) +
+          api.chromium_swarming.canned_summary_output(failure=True) +
           api.test_utils.canned_gtest_output(passing=False)) +
       api.override_step_data(
           'base_unittests (without patch)',
-          api.swarming.canned_summary_output(failure=False) +
+          api.chromium_swarming.canned_summary_output(failure=False) +
           api.test_utils.canned_gtest_output(passing=True)) +
       api.post_process(post_process.AnnotationContains,
           'FindIt Flakiness', ['"Step Layer Flakiness": {}']) +
@@ -350,16 +350,16 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.swarming.canned_summary_output(failure=True, shards=20) +
+          api.chromium_swarming.canned_summary_output(failure=True, shards=20) +
           api.test_utils.gtest_results(
               generate_results_for_failure_many_shards(), retcode=1)) +
       api.override_step_data(
           'base_unittests (without patch)',
-          api.swarming.canned_summary_output(failure=False) +
+          api.chromium_swarming.canned_summary_output(failure=False) +
           api.test_utils.canned_gtest_output(passing=True)) +
       api.override_step_data(
           'base_unittests (retry with patch)',
-          api.swarming.canned_summary_output(failure=True) +
+          api.chromium_swarming.canned_summary_output(failure=True) +
           api.test_utils.canned_gtest_output(passing=False)) +
       api.post_process(
           post_process.StepCommandContains,
@@ -379,11 +379,11 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.swarming.canned_summary_output(failure=True) +
+          api.chromium_swarming.canned_summary_output(failure=True) +
           api.test_utils.canned_gtest_output(passing=False)) +
       api.override_step_data(
           'base_unittests (without patch)',
-          api.swarming.canned_summary_output(failure=False) +
+          api.chromium_swarming.canned_summary_output(failure=False) +
           api.test_utils.canned_gtest_output(passing=True)) +
       api.override_step_data(
           'base_unittests (retry with patch)',
@@ -410,7 +410,7 @@ def GenTests(api):
                                                        valid=False)) +
       api.override_step_data(
           'base_unittests (retry with patch)',
-          api.swarming.canned_summary_output() +
+          api.chromium_swarming.canned_summary_output() +
           api.test_utils.canned_gtest_output(passing=True)) +
       api.post_process(
           post_process.MustRun,
@@ -429,7 +429,7 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.swarming.canned_summary_output(failure=True) +
+          api.chromium_swarming.canned_summary_output(failure=True) +
           api.test_utils.canned_gtest_output(passing=False)) +
       api.override_step_data(
           'base_unittests (without patch)',
@@ -437,7 +437,7 @@ def GenTests(api):
                                                        valid=False)) +
       api.override_step_data(
           'base_unittests (retry with patch)',
-          api.swarming.canned_summary_output() +
+          api.chromium_swarming.canned_summary_output() +
           api.test_utils.canned_gtest_output(passing=True)) +
       api.post_process(
           post_process.MustRun,
@@ -475,14 +475,14 @@ def GenTests(api):
       # Test.Two as a failure.
       api.override_step_data(
           'base_unittests (with patch)',
-          api.swarming.canned_summary_output(failure=False) +
+          api.chromium_swarming.canned_summary_output(failure=False) +
           api.test_utils.canned_gtest_output(passing=False)) +
 
       # When running the test without patch, it first fails, then succeeds. This
       # indicates that the test is flaky on tip of tree.
       api.override_step_data(
           'base_unittests (without patch)',
-          api.swarming.canned_summary_output(failure=False) +
+          api.chromium_swarming.canned_summary_output(failure=False) +
           api.test_utils.gtest_results(FAILURE_THEN_SUCCESS_DATA, retcode=0)) +
       api.post_process(post_process.AnnotationContains,
           'base_unittests (retry summary)', ['ignored']) +
@@ -502,7 +502,7 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.swarming.canned_summary_output(failure=True) +
+          api.chromium_swarming.canned_summary_output(failure=True) +
           api.test_utils.canned_gtest_output(False))
   )
 
@@ -517,7 +517,7 @@ def GenTests(api):
           }) +
       api.override_step_data(
           'base_unittests (with patch)',
-          api.swarming.canned_summary_output(failure=True) +
+          api.chromium_swarming.canned_summary_output(failure=True) +
           api.test_utils.gtest_results(json.dumps({'per_iteration_data': []}),
                                        retcode=1))
   )

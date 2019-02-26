@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::swarming]/resources/wait_for_finished_task_set.py",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/wait_for_finished_task_set.py",
       "--swarming-server",
       "https://chromium-swarm-dev.appspot.com",
       "--swarming-py-path",
@@ -36,7 +36,7 @@
     "cmd": [
       "python",
       "-u",
-      "RECIPE_MODULE[build::swarming]/resources/wait_for_finished_task_set.py",
+      "RECIPE_MODULE[build::chromium_swarming]/resources/wait_for_finished_task_set.py",
       "--swarming-server",
       "https://chromium-swarm-dev.appspot.com",
       "--swarming-py-path",
