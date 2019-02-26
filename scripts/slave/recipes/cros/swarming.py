@@ -19,6 +19,13 @@ def RunSteps(api):
   if cbb_extra_args and isinstance(cbb_extra_args, basestring):
     cbb_extra_args = json.loads(cbb_extra_args)
 
+  # Look for the Findit integration properties and set cbuildbot args.
+  branch = api.properties.get('cbb_branch')
+  # gitiles trigger revision of the annealing manifest.
+  rev = api.properties.get('revision')
+  if rev and branch == 'master':
+    cbb_extra_args += ['--cbb_snapshot_revision', rev]
+
   # Apply our adjusted configuration.
   api.chromite.configure(
       api.properties,
@@ -30,7 +37,7 @@ def RunSteps(api):
 
   # Update or install goma client via cipd.
   api.chromite.m.goma.ensure_goma(
-      client_type=api.properties.get('cbb_goma_client_type'))
+      client_type = api.properties.get('cbb_goma_client_type'))
 
   # Use the system python, not "bundled python" so that we have access
   # to system python packages.
@@ -130,6 +137,33 @@ def GenTests(api):
           cbb_config='amd64-generic-goma-canary-chromium-pfq-informational',
           cbb_goma_canary=True,
           email='user@google.com',
+          **common_properties
+      )
+  )
+
+  # Test that gitiles trigger converts the revision property into the
+  # correct cbuildbot flag --cbb_snapshot_revision if triggering a
+  # master-postsubmit job on the master branch.
+  yield (
+      api.test('snapshot_revision')
+      + api.properties(
+          cbb_branch='master',
+          cbb_config='master-postsubmit',
+          email='user@google.com',
+          revision='hash1234',
+          **common_properties
+      )
+  )
+
+  # Test that the gitiles trigger doesn't set the cbb_snapshot_revision flag
+  # if not on master branch.
+  yield (
+      api.test('snapshot_revision_non_master')
+      + api.properties(
+          cbb_branch='some_branch',
+          cbb_config='master-postsubmit',
+          email='user@google.com',
+          revision='hash1111',
           **common_properties
       )
   )
