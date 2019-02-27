@@ -1365,19 +1365,17 @@ class V8Api(recipe_api.RecipeApi):
       properties['swarm_hashes'] = swarm_hashes
     properties.update(**additional_properties)
 
-    triggered_build_ids = []
     if triggers:
       if self.m.tryserver.is_tryserver:
         trigger_props = {}
         self._copy_property(self.m.properties, trigger_props, 'revision')
         trigger_props.update(properties)
-        builds = self.buildbucket_trigger(
+        self.m.cq.record_triggered_builds(*self.buildbucket_trigger(
             [(builder_name, dict(
               trigger_props,
               **test_spec.as_properties_dict(builder_name)
             )) for builder_name in triggers]
-        )
-        triggered_build_ids.extend(build.id for build in builds)
+        ))
       else:
         ci_properties = dict(properties)
         if self.should_upload_build:
@@ -1402,10 +1400,6 @@ class V8Api(recipe_api.RecipeApi):
           project='v8-internal',
           bucket='ci',
           step_name='trigger_internal')
-
-    if triggered_build_ids:
-      output_properties = self.m.step.active_result.presentation.properties
-      output_properties['triggered_build_ids'] = triggered_build_ids
 
   def buildbucket_trigger(
       self, requests, project=None, bucket=None, step_name='trigger'):

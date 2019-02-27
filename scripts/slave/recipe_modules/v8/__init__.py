@@ -26,6 +26,7 @@ DEPS = [
   'puppet_service_account',
   'recipe_engine/buildbucket',
   'recipe_engine/context',
+  'recipe_engine/cq',
   'recipe_engine/file',
   'recipe_engine/json',
   'recipe_engine/path',
