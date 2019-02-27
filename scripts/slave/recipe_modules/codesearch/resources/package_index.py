@@ -29,7 +29,8 @@ class IndexPack(object):
   """Class used to create an index pack to be indexed by Kythe."""
 
   def __init__(self, root_dir, compdb_path, gn_targets_path, corpus=None,
-               root=None, out_dir='src/out/Debug', verbose=False):
+               root=None, build_config=None, out_dir='src/out/Debug',
+               verbose=False):
     """Initializes IndexPack.
 
     Args:
@@ -42,6 +43,8 @@ class IndexPack(object):
         A VName identifies a node in the Kythe index. For more details, see:
         https://kythe.io/docs/kythe-storage.html
       root: the root to use for the generated Kythe VNames (optional)
+      build_config: the build config to specify in the unit file, e.g. 'android'
+        or 'windows' (optional)
       out_dir: The output directory from which compilation was run.
     """
     if corpus is None:
@@ -68,6 +71,7 @@ class IndexPack(object):
     self.root_dir = root_dir
     self.corpus = corpus
     self.root = root
+    self.build_config = build_config
     self.out_dir = out_dir
     self.verbose = verbose
     # Maps from source file name to the SHA256 hash of its content.
@@ -186,27 +190,28 @@ class IndexPack(object):
     # Keeps track of the '*.filepaths' files already processed.
     filepaths = set()
     for entry in self.compdb:
-      filepath = os.path.join(entry['directory'], entry['file'] + '.filepaths')
+      filepaths_fn = os.path.join(entry['directory'],
+                                  entry['file'] + '.filepaths')
       if self.verbose:
-        print 'Extract source files from %s' % filepath
+        print 'Extract source files from %s' % filepaths_fn
 
       # We don't want to fail if one of the filepaths doesn't exist. However we
       # keep track of it.
-      if not os.path.exists(filepath):
-        print 'missing ' + filepath
+      if not os.path.exists(filepaths_fn):
+        print 'missing ' + filepaths_fn
         continue
 
       # For some reason, the compilation database contains the same targets more
       # than once. However we have just one file containing the file paths of
       # the involved files. So we can skip this entry if we already processed
       # it.
-      if filepath in filepaths:
+      if filepaths_fn in filepaths:
         continue
-      filepaths.add(filepath)
+      filepaths.add(filepaths_fn)
 
       # All file paths given in the *.filepaths file are either absolute paths
       # or relative to the directory entry in the compilation database.
-      with open(filepath, 'rb') as filepaths_file:
+      with open(filepaths_fn, 'rb') as filepaths_file:
         # Each line in the '*.filepaths' file references the path to a source
         # file involved in the compilation.
         for line in filepaths_file:
@@ -233,7 +238,7 @@ class IndexPack(object):
                        self._CorrespondingGeneratedHeader(target)))
 
   def _GenerateUnitFiles(self):
-    """A function which produces the unit files for the index pack.
+    """Produces the unit files for the index pack.
 
     A unit file consists of a JSON dump of this format:
     {
@@ -266,132 +271,24 @@ class IndexPack(object):
     filepaths = set()
 
     for entry in self.compdb:
-      filepath = os.path.join(entry['directory'], entry['file'] + '.filepaths')
-      if not os.path.exists(filepath) or filepath in filepaths:
+      filepaths_fn = os.path.join(entry['directory'],
+                                  entry['file'] + '.filepaths')
+      if not os.path.exists(filepaths_fn) or filepaths_fn in filepaths:
         continue
-      filepaths.add(filepath)
+      filepaths.add(filepaths_fn)
 
-      # For each compilation unit, generate a dictionary in the format described
-      # above.
-      unit_dictionary = {}
+      # Add two unit files: one with the build config in the root, and one with
+      # it in the new build config fields. The new one also has a new corpus
+      # name.
+      # TODO(jsca): Remove the legacy unit when nothing is using the old format.
+      self._AddClangUnitFile(entry['file'], entry['directory'],
+                             entry['command'], filepaths_fn,
+                             'chromium',  # legacy corpus name
+                             root=self.root, build_config=None)
+      self._AddClangUnitFile(entry['file'], entry['directory'],
+                             entry['command'], filepaths_fn, self.corpus,
+                             root=None, build_config=self.build_config)
 
-      # Remove warning flags from the command. These are disabled later by
-      # appending -w anyway, so there's no need to bloat the index pack with
-      # them.
-      compile_command = _RemoveWarningSwitches(entry['command'])
-
-      if self.verbose:
-        print 'Generating Translation Unit data for %s' % entry['file']
-        print 'Compile command: %s' % compile_command
-
-      command_list = _ShellSplit(compile_command)
-      # On some platforms, the |command_list| starts with the goma executable,
-      # followed by the path to the clang executable (either clang++ or
-      # clang-cl.exe). We want the clang executable to be the first parameter.
-      for i in range(len(command_list)):
-        if 'clang' in command_list[i]:
-          # Shorten the list of commands such that it starts with the path to
-          # the clang executable.
-          command_list = command_list[i:]
-          break
-
-      # Extract the output file argument
-      output_file = None
-      for i in range(len(command_list)):
-        if command_list[i] == '-o' and i + 1 < len(command_list):
-          output_file = command_list[i + 1]
-          break
-        elif command_list[i].startswith('/Fo'):
-          # Handle the Windows case.
-          output_file = command_list[i][len('/Fo'):]
-          break
-      if not output_file:
-        print 'No output file path found for %s' % entry['file']
-
-      # Convert any args starting with -imsvc to use forward slashes, since this
-      # is what Kythe expects.
-      if sys.platform == 'win32':
-        for i in range(len(command_list)):
-          if command_list[i].startswith('-imsvc'):
-            command_list[i] = command_list[i].replace('\\', '/')
-        # HACK ALERT: Here we define header guards to prevent Kythe from using
-        # the CUDA wrapper headers, which cause indexing errors.
-        # The standard Kythe extractor dumps header search state to help the
-        # indexer find the right headers, but we don't do that in this script.
-        # The below lines work around it by excluding the CUDA headers entirely.
-        command_list += [
-            '-D__CLANG_CUDA_WRAPPERS_NEW',
-            '-D__CLANG_CUDA_WRAPPERS_COMPLEX',
-            '-D__CLANG_CUDA_WRAPPERS_ALGORITHM',
-        ]
-
-      required_inputs = []
-      with open(filepath, 'rb') as filepaths_file:
-        for line in filepaths_file:
-          fname = line.strip()
-          # We should not package builtin clang header files, see
-          # crbug.com/513826
-          if 'third_party/llvm-build' in fname:
-            continue
-          # The clang tool uses '//' to separate the system path where system
-          # headers can be found from the relative path used in the #include
-          # statement.
-          if '//' in fname:
-            path = fname.split('//')
-            fname = '/'.join(path)
-          fname_fullpath = os.path.normpath(
-              os.path.join(entry['directory'], fname))
-          if fname_fullpath not in self.filehashes:
-            print 'No information about required input file %s' % fname_fullpath
-            continue
-
-          # Handle absolute paths - when normalizing we assume paths are
-          # relative to the output directory (e.g. src/out/Debug).
-          if os.path.isabs(fname):
-            fname = os.path.relpath(fname, entry['directory'])
-
-          normalized_fname = self._NormalisePath(fname)
-          if sys.platform == 'win32':
-            # Kythe expects all paths to use forward slashes.
-            normalized_fname = normalized_fname.replace('\\', '/')
-          required_input = {
-              'v_name': {
-                  'corpus': self.corpus,
-                  'path': normalized_fname,
-              }
-          }
-
-          # Add the VName root only if it was specified.
-          if self.root:
-            required_input['v_name']['root'] = self.root
-
-          if sys.platform == 'win32':
-            # Kythe expects all paths to use forward slashes.
-            fname = fname.replace('\\', '/')
-          required_input['info'] = {
-              'path': fname,
-              'digest': self.filehashes[fname_fullpath],
-          }
-
-          required_inputs.append(required_input)
-
-      unit_dictionary['source_file'] = [entry['file']]
-      unit_dictionary['output_key'] = output_file
-      unit_dictionary['v_name'] = {
-          'corpus': self.corpus,
-          'language': 'c++',
-      }
-      # Add the VName root only if it was specified.
-      if self.root:
-        unit_dictionary['v_name']['root'] = self.root
-
-      # Disable all warnings with -w so that the indexer can run successfully.
-      # The job of the indexer is to index the code, not to verify it. Warnings
-      # we actually care about should show up in the compile step.
-      unit_dictionary['argument'] = command_list + ['-w']
-      unit_dictionary['required_input'] = required_inputs
-
-      self._AddUnitFile(unit_dictionary)
 
     for target in self.mojom_targets:
       unit_dictionary = {}
@@ -412,8 +309,11 @@ class IndexPack(object):
           'corpus': self.corpus,
           'language': 'mojom',
       }
-      if self.root:
-        unit_dictionary['v_name']['root'] = self.root
+      if self.build_config:
+        unit_dictionary['details'] = {
+            '@type': 'kythe.io/proto/kythe.proto.BuildDetails',
+            'build_config': self.build_config,
+        }
 
       # TODO(orodley): In order to do name resolution we'll need to add all the
       # files that are directly referenced (not the full transitive closure
@@ -437,13 +337,154 @@ class IndexPack(object):
                 'digest': self.filehashes[path],
             },
         }
-        if self.root:
-          required_input['v_name']['root'] = self.root
 
         required_inputs.append(required_input)
       unit_dictionary['required_input'] = required_inputs
 
       self._AddUnitFile(unit_dictionary)
+
+  def _AddClangUnitFile(self, filename, directory, command, filepaths_fn,
+                        corpus, root=None, build_config=None):
+    """Adds a unit file based on the output of the clang translation_unit tool.
+
+    Args:
+      filename: The relative path to the source file from the output directory.
+      directory: The output directory (e.g. src/out/Debug).
+      command: The command line used to run the compilation.
+      filepaths_file: Path to the .filepaths file for this compilation, which
+        contains a list of all the required dependency files.
+      corpus: The corpus to specify in the unit file.
+      root: The root to specify in the unit file, if any.
+      build_config: The build config to specify in the unit file, if any.
+    """
+    # For each compilation unit, generate a dictionary in the format described
+    # above.
+    unit_dictionary = {}
+
+    # Remove warning flags from the command. These are disabled later by
+    # appending -w anyway, so there's no need to bloat the index pack with
+    # them.
+    compile_command = _RemoveWarningSwitches(command)
+
+    if self.verbose:
+      print 'Generating Translation Unit data for %s' % filename
+      print 'Compile command: %s' % compile_command
+
+    command_list = _ShellSplit(compile_command)
+    # On some platforms, the |command_list| starts with the goma executable,
+    # followed by the path to the clang executable (either clang++ or
+    # clang-cl.exe). We want the clang executable to be the first parameter.
+    for i in range(len(command_list)):
+      if 'clang' in command_list[i]:
+        # Shorten the list of commands such that it starts with the path to
+        # the clang executable.
+        command_list = command_list[i:]
+        break
+
+    # Extract the output file argument
+    output_file = None
+    for i in range(len(command_list)):
+      if command_list[i] == '-o' and i + 1 < len(command_list):
+        output_file = command_list[i + 1]
+        break
+      elif command_list[i].startswith('/Fo'):
+        # Handle the Windows case.
+        output_file = command_list[i][len('/Fo'):]
+        break
+    if not output_file:
+      print 'No output file path found for %s' % filename
+
+    # Convert any args starting with -imsvc to use forward slashes, since this
+    # is what Kythe expects.
+    if sys.platform == 'win32':
+      for i in range(len(command_list)):
+        if command_list[i].startswith('-imsvc'):
+          command_list[i] = command_list[i].replace('\\', '/')
+      # HACK ALERT: Here we define header guards to prevent Kythe from using
+      # the CUDA wrapper headers, which cause indexing errors.
+      # The standard Kythe extractor dumps header search state to help the
+      # indexer find the right headers, but we don't do that in this script.
+      # The below lines work around it by excluding the CUDA headers entirely.
+      command_list += [
+          '-D__CLANG_CUDA_WRAPPERS_NEW',
+          '-D__CLANG_CUDA_WRAPPERS_COMPLEX',
+          '-D__CLANG_CUDA_WRAPPERS_ALGORITHM',
+      ]
+
+    required_inputs = []
+    with open(filepaths_fn, 'rb') as filepaths_file:
+      for line in filepaths_file:
+        fname = line.strip()
+        # We should not package builtin clang header files, see
+        # crbug.com/513826
+        if 'third_party/llvm-build' in fname:
+          continue
+        # The clang tool uses '//' to separate the system path where system
+        # headers can be found from the relative path used in the #include
+        # statement.
+        if '//' in fname:
+          path = fname.split('//')
+          fname = '/'.join(path)
+        fname_fullpath = os.path.normpath(
+            os.path.join(directory, fname))
+        if fname_fullpath not in self.filehashes:
+          print 'No information about required input file %s' % fname_fullpath
+          continue
+
+        # Handle absolute paths - when normalizing we assume paths are
+        # relative to the output directory (e.g. src/out/Debug).
+        if os.path.isabs(fname):
+          fname = os.path.relpath(fname, directory)
+
+        normalized_fname = self._NormalisePath(fname)
+        if sys.platform == 'win32':
+          # Kythe expects all paths to use forward slashes.
+          normalized_fname = normalized_fname.replace('\\', '/')
+        required_input = {
+            'v_name': {
+                'corpus': corpus,
+                'path': normalized_fname,
+            }
+        }
+
+        # Add the VName root only if it was specified.
+        if root:
+          required_input['v_name']['root'] = root
+
+        if sys.platform == 'win32':
+          # Kythe expects all paths to use forward slashes.
+          fname = fname.replace('\\', '/')
+        required_input['info'] = {
+            'path': fname,
+            'digest': self.filehashes[fname_fullpath],
+        }
+
+        required_inputs.append(required_input)
+
+    unit_dictionary['source_file'] = [filename]
+    unit_dictionary['output_key'] = output_file
+    unit_dictionary['v_name'] = {
+        'corpus': corpus,
+        'language': 'c++',
+    }
+    # Add the VName root only if it was specified.
+    if root:
+      unit_dictionary['v_name']['root'] = root
+    # Add the build config if specified.
+    if build_config:
+      unit_dictionary['details'] = {
+          '@type': 'kythe.io/proto/kythe.proto.BuildDetails',
+          'build_config': build_config,
+      }
+
+    # Disable all warnings with -w so that the indexer can run successfully.
+    # The job of the indexer is to index the code, not to verify it. Warnings
+    # we actually care about should show up in the compile step.
+    unit_dictionary['argument'] = command_list + ['-w']
+    unit_dictionary['required_input'] = required_inputs
+
+    self._AddUnitFile(unit_dictionary)
+
 
   def GenerateIndexPack(self):
     """Generates the index pack.
@@ -540,6 +581,8 @@ def main():
                       help='the kythe corpus to use for the vname')
   parser.add_argument('--root',
                       help='the kythe root to use for the vname')
+  parser.add_argument('--build-config',
+                      help='the build config to use in the unit file')
   parser.add_argument('--checkout-dir',
                       required=True,
                       help='The root of the repository.')
@@ -561,8 +604,8 @@ def main():
   print '%s: Index generation...' % time.strftime('%X')
   with closing(
       IndexPack(root_dir, options.path_to_compdb, options.path_to_gn_targets,
-                options.corpus, options.root, options.out_dir,
-                options.verbose)) as index_pack:
+                options.corpus, options.root, options.build_config,
+                options.out_dir, options.verbose)) as index_pack:
     index_pack.GenerateIndexPack()
 
     if not options.keep_filepaths_files:

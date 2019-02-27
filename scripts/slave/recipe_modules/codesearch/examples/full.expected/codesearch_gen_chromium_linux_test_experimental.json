@@ -702,7 +702,9 @@
       "[START_DIR]/src/out/Debug/chromium_linux.kzip",
       "--corpus",
       "chromium-linux",
-      "--verbose"
+      "--verbose",
+      "--build-config",
+      "linux"
     ],
     "name": "create kythe index pack"
   },

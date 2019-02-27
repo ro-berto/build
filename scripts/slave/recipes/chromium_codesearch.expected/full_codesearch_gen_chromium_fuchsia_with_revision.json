@@ -701,10 +701,12 @@
       "--path-to-archive-output",
       "[CACHE]/builder/src/out/fuchsia-Debug/chromium_fuchsia.kzip",
       "--corpus",
-      "chromium",
+      "chromium.googlesource.com/chromium/src",
       "--verbose",
       "--root",
       "chromium-fuchsia",
+      "--build-config",
+      "fuchsia",
       "--out_dir",
       "src/out/fuchsia-Debug"
     ],
