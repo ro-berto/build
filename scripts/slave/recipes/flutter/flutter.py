@@ -40,7 +40,8 @@ def _PlatformSDK(api):
     if api.platform.is_win:
       with api.windows_sdk():
         with InstallOpenJDK(api):
-          yield
+          with Install7za(api):
+            yield
     elif api.platform.is_mac:
       with api.osx_sdk('ios'):
         with InstallGem(api, 'cocoapods', api.properties['cocoapods_version']):
@@ -54,6 +55,17 @@ def _PlatformSDK(api):
           yield
   else:
     yield
+
+def Install7za(api):
+  sevenzip_cache_dir = api.path['cache'].join('builder', '7za')
+  api.cipd.ensure(sevenzip_cache_dir, api.cipd.EnsureFile()
+    .add_package(
+      'flutter_internal/tools/7za/${platform}',
+      'version:19.00')
+  )
+  return api.context(
+    env_prefixes={'PATH': [sevenzip_cache_dir]}
+  )
 
 def InstallOpenJDK(api):
   java_cache_dir = api.path['cache'].join('java')
@@ -341,18 +353,19 @@ def RunSteps(api):
   path_prefix = api.path.pathsep.join((str(flutter_bin), str(dart_bin),
                                        str(gradle_bin)))
 
-  if api.platform.is_win:
+  if api.platform.is_win and not api.runtime.is_luci:
     # To get 7-Zip into the PATH for use by the packaging script.
+    # TODO(dnfield): This no longer applies on LUCI. Remove when we get rid of
+    # is_luci logic.
     path_prefix = api.path.pathsep.join((path_prefix,
-                                         api.path.join('%(PROGRAMFILES)s',
-                                                       '7-Zip-A', 'x64')))
+                                          api.path.join('%(PROGRAMFILES)s',
+                                                        '7-Zip-A', 'x64')))
 
   # TODO(eseidel): This is named exactly '.pub-cache' as a hack around
   # a regexp in flutter_tools analyze.dart which is in turn a hack around:
   # https://github.com/dart-lang/sdk/issues/25722
   pub_cache = checkout.join('.pub-cache')
   env = {
-      'PATH': api.path.pathsep.join((path_prefix, '%(PATH)s')),
       # Setup our own pub_cache to not affect other slaves on this machine,
       # and so that the pre-populated pub cache is contained in the package.
       'PUB_CACHE': pub_cache,
@@ -363,18 +376,20 @@ def RunSteps(api):
 
   flutter_executable = 'flutter' if not api.platform.is_win else 'flutter.bat'
   dart_executable = 'dart' if not api.platform.is_win else 'dart.exe'
+  env_prefixes = {'PATH': path_prefix}
 
-  with api.context(env=env):
-    if git_ref:
-      match = PACKAGED_REF_RE.match(git_ref)
-      if match:
-        branch = match.group(1)
-        CreateAndUploadFlutterPackage(api, git_hash, branch)
-        # Nothing left to do on a packaging branch.
-        return
+  with api.context(env=env, env_prefixes=env_prefixes):
+    with api.depot_tools.on_path():
+      if git_ref:
+        match = PACKAGED_REF_RE.match(git_ref)
+        if match:
+          branch = match.group(1)
+          CreateAndUploadFlutterPackage(api, git_hash, branch)
+          # Nothing left to do on a packaging branch.
+          return
 
   # The context adds dart-sdk tools to PATH and sets PUB_CACHE.
-  with api.context(env=env, cwd=checkout):
+  with api.context(env=env, env_prefixes=env_prefixes, cwd=checkout):
     api.step('flutter doctor', [flutter_executable, 'doctor'])
     api.step('download dependencies', [flutter_executable, 'update-packages'])
 
@@ -389,7 +404,7 @@ def RunSteps(api):
                  ['-t', 'sdk'])
       InstallGradle(api, checkout)
 
-    with api.context(env=env, cwd=checkout):
+    with api.context(env=env, env_prefixes=env_prefixes, cwd=checkout):
       if api.runtime.is_luci:
         shard = api.properties['shard']
         shard_env = env
