@@ -350,16 +350,19 @@ def RunSteps(api):
   flutter_bin = checkout.join('bin')
   gradle_bin = checkout.join('dev', 'bots', 'gradle', GetGradleDirName(api),
                              'bin')
-  path_prefix = api.path.pathsep.join((str(flutter_bin), str(dart_bin),
-                                       str(gradle_bin)))
 
+  path_prefixes = [
+    flutter_bin,
+    dart_bin,
+    gradle_bin,
+  ]
   if api.platform.is_win and not api.runtime.is_luci:
     # To get 7-Zip into the PATH for use by the packaging script.
     # TODO(dnfield): This no longer applies on LUCI. Remove when we get rid of
     # is_luci logic.
-    path_prefix = api.path.pathsep.join((path_prefix,
-                                          api.path.join('%(PROGRAMFILES)s',
-                                                        '7-Zip-A', 'x64')))
+    path_prefixes.append(api.path.join('%(PROGRAMFILES)s', '7-Zip-A', 'x64'))
+
+  env_prefixes = {'PATH': path_prefixes}
 
   # TODO(eseidel): This is named exactly '.pub-cache' as a hack around
   # a regexp in flutter_tools analyze.dart which is in turn a hack around:
@@ -376,7 +379,6 @@ def RunSteps(api):
 
   flutter_executable = 'flutter' if not api.platform.is_win else 'flutter.bat'
   dart_executable = 'dart' if not api.platform.is_win else 'dart.exe'
-  env_prefixes = {'PATH': path_prefix}
 
   with api.context(env=env, env_prefixes=env_prefixes):
     with api.depot_tools.on_path():
