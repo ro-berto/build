@@ -101,23 +101,6 @@ BUILDERS = freeze({
           'sdk': 'iphoneos10.3',
         },
       },
-      'iOS64 Sim Debug (iOS 9.0)': {
-        'recipe_config': 'webrtc_ios',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'ios',
-          'TARGET_ARCH': 'intel',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-        'ensure_sdk': 'ios',
-        'ios_testing': {
-          'device type': 'iPhone 6s',
-          'os': '9.3',
-          'host os': 'Mac-10.13',
-        },
-      },
       'iOS64 Sim Debug (iOS 10.0)': {
         'recipe_config': 'webrtc_ios',
         'chromium_config_kwargs': {
@@ -234,23 +217,6 @@ BUILDERS = freeze({
         'ensure_sdk': 'ios',
         'ios_config': {
           'sdk': 'iphoneos10.3',
-        },
-      },
-      'ios_sim_x64_dbg_ios9': {
-        'recipe_config': 'webrtc_ios',
-        'chromium_config_kwargs': {
-          'BUILD_CONFIG': 'Debug',
-          'TARGET_PLATFORM': 'ios',
-          'TARGET_ARCH': 'intel',
-          'TARGET_BITS': 64,
-        },
-        'bot_type': 'builder_tester',
-        'testing': {'platform': 'mac'},
-        'ensure_sdk': 'ios',
-        'ios_testing': {
-          'device type': 'iPhone 6s',
-          'os': '9.3',
-          'host os': 'Mac-10.13',
         },
       },
       'ios_sim_x64_dbg_ios10': {
