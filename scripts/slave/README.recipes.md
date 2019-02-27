@@ -219,6 +219,7 @@
   * [dart/flutter_engine](#recipes-dart_flutter_engine)
   * [dart/forward_branch](#recipes-dart_forward_branch)
   * [dart/gclient](#recipes-dart_gclient)
+  * [dart/linearize](#recipes-dart_linearize)
   * [dart/misc](#recipes-dart_misc)
   * [dart/neo](#recipes-dart_neo)
   * [dart/package_co19](#recipes-dart_package_co19)
@@ -5076,6 +5077,11 @@ Kills leftover tasks from previous runs or steps.
 [DEPS](/scripts/slave/recipes/dart/gclient.py#7): [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [depot\_tools/tryserver][depot_tools/recipe_modules/tryserver], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
 
 &mdash; **def [RunSteps](/scripts/slave/recipes/dart/gclient.py#15)(api):**
+### *recipes* / [dart/linearize](/scripts/slave/recipes/dart/linearize.py)
+
+[DEPS](/scripts/slave/recipes/dart/linearize.py#8): [dart](#recipe_modules-dart), [depot\_tools/git][depot_tools/recipe_modules/git], [depot\_tools/gitiles][depot_tools/recipe_modules/gitiles], [recipe\_engine/buildbucket][recipe_engine/recipe_modules/buildbucket], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/file][recipe_engine/recipe_modules/file], [recipe\_engine/json][recipe_engine/recipe_modules/json], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/properties][recipe_engine/recipe_modules/properties]
+
+&mdash; **def [RunSteps](/scripts/slave/recipes/dart/linearize.py#24)(api):**
 ### *recipes* / [dart/misc](/scripts/slave/recipes/dart/misc.py)
 
 [DEPS](/scripts/slave/recipes/dart/misc.py#5): [test\_utils](#recipe_modules-test_utils), [depot\_tools/bot\_update][depot_tools/recipe_modules/bot_update], [depot\_tools/gclient][depot_tools/recipe_modules/gclient], [recipe\_engine/context][recipe_engine/recipe_modules/context], [recipe\_engine/path][recipe_engine/recipe_modules/path], [recipe\_engine/platform][recipe_engine/recipe_modules/platform], [recipe\_engine/properties][recipe_engine/recipe_modules/properties], [recipe\_engine/python][recipe_engine/recipe_modules/python]
