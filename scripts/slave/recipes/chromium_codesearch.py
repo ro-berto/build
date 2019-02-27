@@ -35,23 +35,9 @@ SPEC = freeze({
   # - sync_generated_files: Whether to sync generated files into a git repo.
   # - corpus: Kythe corpus to generate index packs under.
   # - root: Kythe VName root to generate index packs under.
-  # - build_config: Kythe build config to put into the kzip.
   # - gen_repo_branch: Which branch in the generated files repo to sync to.
   # - gen_repo_out_dir: Which directory under src/out to write gen files to.
   'builders': {
-    'codesearch-gen-chromium-android': {
-      'compile_targets': [
-        'all',
-      ],
-      'platform': 'android',
-      'sync_generated_files': True,
-      'gen_repo_branch': 'master',
-      # Generated files will end up in out/android-Debug/gen.
-      'gen_repo_out_dir': 'android-Debug',
-      'corpus': 'chromium.googlesource.com/chromium/src',
-      'build_config': 'android',
-      'root': 'chromium-android',
-    },
     'codesearch-gen-chromium-linux': {
       'compile_targets': [
         'all',
@@ -59,8 +45,7 @@ SPEC = freeze({
       'platform': 'linux',
       'sync_generated_files': True,
       'gen_repo_branch': 'master',
-      'corpus': 'chromium.googlesource.com/chromium/src',
-      'build_config': 'linux',
+      'corpus': 'chromium',
     },
     'codesearch-gen-chromium-fuchsia': {
       'compile_targets': [
@@ -72,8 +57,7 @@ SPEC = freeze({
       'gen_repo_branch': 'master',
       # Generated files will end up in out/fuchsia-Debug/gen.
       'gen_repo_out_dir': 'fuchsia-Debug',
-      'corpus': 'chromium.googlesource.com/chromium/src',
-      'build_config': 'fuchsia',
+      'corpus': 'chromium',
       'root': 'chromium-fuchsia',
     },
     'codesearch-gen-chromium-chromiumos': {
@@ -118,9 +102,20 @@ SPEC = freeze({
       'gen_repo_branch': 'master',
       # Generated files will end up in out/chromeos-Debug/gen.
       'gen_repo_out_dir': 'chromeos-Debug',
-      'corpus': 'chromium.googlesource.com/chromium/src',
-      'build_config': 'chromeos',
+      'corpus': 'chromium',
       'root': 'chromium-chromeos',
+    },
+    'codesearch-gen-chromium-android': {
+      'compile_targets': [
+        'all',
+      ],
+      'platform': 'android',
+      'sync_generated_files': True,
+      'gen_repo_branch': 'master',
+      # Generated files will end up in out/android-Debug/gen.
+      'gen_repo_out_dir': 'android-Debug',
+      'corpus': 'chromium',
+      'root': 'chromium-android',
     },
     'codesearch-gen-chromium-win': {
       'compile_targets': [
@@ -131,8 +126,7 @@ SPEC = freeze({
       'gen_repo_branch': 'master',
       # Generated files will end up in out/win-Debug/gen.
       'gen_repo_out_dir': 'win-Debug',
-      'corpus': 'chromium.googlesource.com/chromium/src',
-      'build_config': 'win',
+      'corpus': 'chromium',
       'root': 'chromium-win',
     },
   },
@@ -156,7 +150,6 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
   experimental = bot_config.get('experimental', False)
   corpus = bot_config.get('corpus', 'chromium-linux')
   root = bot_config.get('root', '')
-  build_config = bot_config.get('build_config', '')
   targets = bot_config.get('compile_targets', [])
   gen_repo_branch = bot_config.get('gen_repo_branch', 'master')
   gen_repo_out_dir = bot_config.get('gen_repo_out_dir', '')
@@ -171,7 +164,6 @@ def RunSteps(api, root_solution_revision, root_solution_revision_timestamp):
       GEN_REPO_OUT_DIR=gen_repo_out_dir,
       CORPUS=corpus,
       ROOT=root,
-      BUILD_CONFIG=build_config,
   )
 
   # Checkout the repositories that are needed for the compile.

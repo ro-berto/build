@@ -701,10 +701,8 @@
       "--path-to-archive-output",
       "[CACHE]/builder/src/out/Debug/chromium_linux.kzip",
       "--corpus",
-      "chromium.googlesource.com/chromium/src",
-      "--verbose",
-      "--build-config",
-      "linux"
+      "chromium",
+      "--verbose"
     ],
     "name": "create kythe index pack"
   },

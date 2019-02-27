@@ -171,8 +171,6 @@ class CodesearchApi(recipe_api.RecipeApi):
             '--verbose']
     if self.c.ROOT:
       args.extend(['--root', self.c.ROOT])
-    if self.c.BUILD_CONFIG:
-      args.extend(['--build-config', self.c.BUILD_CONFIG])
     if self.c.GEN_REPO_OUT_DIR:
       args.extend(['--out_dir', 'src/out/%s' % self.c.GEN_REPO_OUT_DIR])
     self.m.build.python('create kythe index pack',

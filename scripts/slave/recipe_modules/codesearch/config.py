@@ -11,7 +11,7 @@ from recipe_engine.config_types import Path
 def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=None, PLATFORM=None,
                EXPERIMENTAL=False, SYNC_GENERATED_FILES=False,
                GEN_REPO_BRANCH='master', GEN_REPO_OUT_DIR='', CORPUS=None,
-               ROOT=None, BUILD_CONFIG=None, **_kwargs):
+               ROOT=None, **_kwargs):
   """Filter out duplicate compilation units.
 
   Args:
@@ -25,7 +25,6 @@ def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=None, PLATFORM=None,
     GEN_REPO_OUT_DIR: Which output dir in the generated files repo to sync to.
     CORPUS: Kythe corpus to generate index packs under.
     ROOT: Kythe root to generate index packs under.
-    BUILD_CONFIG: Kythe build config to use in the kzip.
   """
   if not COMPILE_TARGETS:
     COMPILE_TARGETS = []
@@ -39,7 +38,6 @@ def BaseConfig(CHECKOUT_PATH, COMPILE_TARGETS=None, PLATFORM=None,
     GEN_REPO_OUT_DIR = Static(GEN_REPO_OUT_DIR),
     CORPUS = Static(CORPUS),
     ROOT = Static(ROOT),
-    BUILD_CONFIG = Static(BUILD_CONFIG),
     debug_path = Single(Path),
     compile_commands_json_file = Single(Path),
     gn_targets_json_file = Single(Path),

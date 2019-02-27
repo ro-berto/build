@@ -39,7 +39,6 @@ BUILDERS = freeze({
     'sync_generated_files': True,
     'gen_repo_branch': 'master',
     'corpus': 'chromium-linux',
-    'build_config': 'linux',
   },
   'codesearch-gen-chromium-win': {
     'compile_targets': [
@@ -50,7 +49,6 @@ BUILDERS = freeze({
     'gen_repo_branch': 'win',
     'gen_repo_out_dir': 'win-Debug',
     'corpus': 'chromium-win',
-    'build_config': 'win',
   },
 })
 
@@ -60,7 +58,6 @@ def RunSteps(api):
 
   platform = builder.get('platform', 'linux')
   corpus = builder.get('corpus', 'chromium-linux')
-  build_config = builder.get('build_config', 'linux')
   targets = builder.get('compile_targets', [])
   gen_repo_out_dir = builder.get('gen_repo_out_dir', '')
 
@@ -72,7 +69,6 @@ def RunSteps(api):
       GEN_REPO_BRANCH=builder['gen_repo_branch'],
       GEN_REPO_OUT_DIR=gen_repo_out_dir,
       CORPUS=corpus,
-      BUILD_CONFIG=build_config
   )
 
   # Checkout the repositories that are needed for the compile.

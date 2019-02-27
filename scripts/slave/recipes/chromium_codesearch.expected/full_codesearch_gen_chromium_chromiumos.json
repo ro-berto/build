@@ -791,12 +791,10 @@
       "--path-to-archive-output",
       "[CACHE]/builder/src/out/chromeos-Debug/chromium_chromeos.kzip",
       "--corpus",
-      "chromium.googlesource.com/chromium/src",
+      "chromium",
       "--verbose",
       "--root",
       "chromium-chromeos",
-      "--build-config",
-      "chromeos",
       "--out_dir",
       "src/out/chromeos-Debug"
     ],
