@@ -221,7 +221,6 @@ def main(argv):
       'master.chromium.perf': 'ChromiumPerf',
       'master.client.art': 'ART',
       'master.client.dart': 'Dart',
-      'master.client.flutter': 'ClientFlutter',
       'master.tryserver.chromium.android': 'TryserverChromiumAndroid',
       'master.tryserver.chromium.mac': 'TryServerChromiumMac',
       'master.tryserver.chromium.win': 'TryServerChromiumWin',
